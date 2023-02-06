@@ -2,102 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAEB68C730
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C2468C726
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjBFUAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:00:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S230255AbjBFT7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjBFT7z (ORCPT
+        with ESMTP id S229732AbjBFT7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:59:55 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D9825962;
-        Mon,  6 Feb 2023 11:59:49 -0800 (PST)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 040F5CD0C5;
-        Mon,  6 Feb 2023 19:59:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1675713557; bh=YAA9rHwEkOLJaOcAUYlj6+0wa5Hydp2D/H7mATvbTrs=;
-        h=From:Date:Subject:To:Cc;
-        b=tKqFR6U77OTqstAkqc4vo1XEPa6BWNizx4FrScJppofjOeX8oDMl1P6bDfm7AZo5P
-         5OeVH+6UfkHEj2+J6eFlls6yLabYd3AQTpmixZ0Mx3zouKbOVpQ4xghqYmzKpS2xcK
-         +HZryf651keyUQZrCSeaVEzqZ/y50dikqV8Mi4GQ=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Mon, 06 Feb 2023 20:58:30 +0100
-Subject: [PATCH] backlight: qcom-wled: Add PMI8950 compatible
+        Mon, 6 Feb 2023 14:59:12 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BC42917F;
+        Mon,  6 Feb 2023 11:59:05 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id mc11so37435479ejb.10;
+        Mon, 06 Feb 2023 11:59:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HMN1zat10jBr22fYuOn4khaUn1y+YL7NGcVt8J94/II=;
+        b=qa+wYAR8WuIq5wi0XaKu62WK1I3OHWYPuerrBxWeWFSeCzOossEPHnSt8xOzdQWCIm
+         laN6edncWt4Muu5xihetQGOizGjhu27bFcyOTQLemPJJYgFKkOo9/FHhoEAH+se6NPy+
+         VVG/R61hYxsUnYbGeeV47mxH60V+k7SxiQ2GvEY7Gdiy3koI1L1p7bFnycQFK96DOrTD
+         PSwFBnesZ2yeIHgf8lHpynV4Ok3BQy2kJT2bjppTTBmu4dyp7fs9deQklNdYKXKFzqvB
+         wlxYlK5WgMfBKtllzbmA8LMfFA2/SwddmyMW1PfUqH/LrdeNe0/R3l3evW21qjW51yG9
+         7YGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HMN1zat10jBr22fYuOn4khaUn1y+YL7NGcVt8J94/II=;
+        b=Fp4i7CbZ/Diy4CPqCliq5VAS7jGzKHCioxedYvMn6Ke3Q159UQFgKo1fC8QGg4MpqZ
+         9QHquIufAE3CGBJNNO6oVTSl00He15cuPdqmVddFneN3V2CD8nTfNfN+XkVHzcNM+Sss
+         P6I+ELVMiCTqSl86mltBTKP1uSFFm29cnhuuQ7sCeGXaV8YuKR4JpjeawZaOIUxP+3NM
+         AEUjsDHK/oSF3+RcgaJqtTyI1YYdpylXRfj5OXJOUh80lW4Z/ds1eTY6B6r7YQlvmfk6
+         udGzlWJQJFqvwnujj+cF8WOaYV0KR4cBMjyTazgNb2y/aZ5DdGbK0Iiil/ZFMg5YZW8d
+         OGxg==
+X-Gm-Message-State: AO0yUKWUksjKAPqmq16BUA6EoM6RzxWu0J7/hIxOc6vCzhDO6dcEQ/XM
+        7zaUDZXiniBzLmJV757Spc6IndMpnwrtRH1d9iA=
+X-Google-Smtp-Source: AK7set/r2N3e58ZO16uitn1YASUGRs6MUKw6bQSH/yYT9vZTH21RhrNHpnbwt8x+3DWCQbFtI3ivK1rM4gJQXpbZP5k=
+X-Received: by 2002:a17:906:924c:b0:877:5b9b:b426 with SMTP id
+ c12-20020a170906924c00b008775b9bb426mr163060ejx.12.1675713544043; Mon, 06 Feb
+ 2023 11:59:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221226-msm8953-6-2-wled-v1-1-e318d4c71d05@z3ntu.xyz>
-X-B4-Tracking: v=1; b=H4sIAOVb4WMC/z2NQQrCMBAAv1L27JZka4P1K+IhaTZ2wUbJghZK/
- 97Ug8eBGWYF5SKscG1WKPwRlVeuYE8NjJPPD0aJlYEMkSVyOOt8GfoOHRJ+nxyxT4NzIflzDB3
- ULHhlDMXncTrCv9+a1ppDeBdOsvyet/u27XBJWt2DAAAA
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1141; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=YAA9rHwEkOLJaOcAUYlj6+0wa5Hydp2D/H7mATvbTrs=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj4VwQ1sqTedK0Bt8ocPrVnmBVs5dhpkKuSGowg
- OkxPIbDK4eJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY+FcEAAKCRBy2EO4nU3X
- VlXgD/9WAJwsC+gXcyebNw/UlnmkmjENHKMLER3oY+/btVXL6wnQI3snEaY1rFqi74RDsqZ3rj5
- 2K8E+H4dxIoQaCK048FjXSXb8V0+9AEH1bBkFQ8bSNGXBGPEVnC1uzkY5JpBGvGQeXJgxF9FThI
- f8cjkr0traDKBZWFSFJc6Kzj/h9dsrOSCt0pDoIxzFoyG9yeWet2H1UHYtsW0IeOPeEpGtQaWA/
- 7a6WVB0TeE4FzShG0REzZI1vuEsaogFlf34T+C+GlccDtdv8BTFo78H7PO7rq6B6oBwXgIxqcQ7
- EECX0f/e/unpMd4hsjK4ZNS54ZCLWUWdf39Env2wn7WP2ON4RvUz8t8TQWjhGOB6IM2jJ19K5qM
- eQ4r553HXq77V0DAIDZkHxmutZe9AGxtaY6DSb7zfUJuhAgRofPbXq9uNx0nklPx/VXIRm8haAW
- OogoMTgaZgUh5IP/AU0ZXgI0Z8e59s30P77ylKbwG8mXjL49Jr18Qe/hU6gw2QlXHQ/rwxlFORN
- /88PN8GAes8kd1tUBRA1C51xpnlH2Ixd6D3wxKWVpoWP2n4dlpCz1hltVwA+coAVRtF7MAojRB3
- VRVziIw9Q1SJ2pauruo6xToI/rkqKhsfuVKZHN6rgkmNxkZt2JV0gQb34/iit9CHyE27HPV5clF
- 18SQD/mIOf2ZQoA==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+References: <20230203031742.1730761-1-imagedong@tencent.com> <20230203031742.1730761-2-imagedong@tencent.com>
+In-Reply-To: <20230203031742.1730761-2-imagedong@tencent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 6 Feb 2023 11:58:51 -0800
+Message-ID: <CAEf4Bzbig9DmCEJd0i64gA=jzczK7n=joqiD0MAa6sFSgd=WAw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: add support to set kprobe/uprobe
+ attach mode
+To:     menglong8.dong@gmail.com
+Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PMI8950 contains WLED of version 4. Add support for it to the driver.
+On Thu, Feb 2, 2023 at 7:18 PM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> By default, libbpf will attach the kprobe/uprobe eBPF program in the
+> latest mode that supported by kernel. In this patch, we add the support
+> to let users manually attach kprobe/uprobe in legacy or perf mode.
+>
+> There are 3 mode that supported by the kernel to attach kprobe/uprobe:
+>
+>   LEGACY: create perf event in legacy way and don't use bpf_link
+>   PERF: create perf event with perf_event_open() and don't use bpf_link
+>   LINK: create perf event with perf_event_open() and use bpf_link
+>
+> Users now can manually choose the mode with
+> bpf_program__attach_uprobe_opts()/bpf_program__attach_kprobe_opts().
+>
+> Link: https://lore.kernel.org/bpf/20230113093427.1666466-1-imagedong@tencent.com/
+> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 26 +++++++++++++++++++++++++-
+>  tools/lib/bpf/libbpf.h | 19 ++++++++++++++++---
+>  2 files changed, 41 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index eed5cec6f510..0d20bf1ee301 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -9784,7 +9784,7 @@ struct bpf_link *bpf_program__attach_perf_event_opts(const struct bpf_program *p
+>         link->link.dealloc = &bpf_link_perf_dealloc;
+>         link->perf_event_fd = pfd;
+>
+> -       if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
+> +       if (kernel_supports(prog->obj, FEAT_PERF_LINK) && !opts->no_link) {
+>                 DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
+>                         .perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0));
+>
+> @@ -10148,16 +10148,28 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+>         struct bpf_link *link;
+>         size_t offset;
+>         bool retprobe, legacy;
+> +       enum probe_mode mode;
+>         int pfd, err;
+>
+>         if (!OPTS_VALID(opts, bpf_kprobe_opts))
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> +       mode = OPTS_GET(opts, mode, PROBE_MODE_DEFAULT);
+>         retprobe = OPTS_GET(opts, retprobe, false);
+>         offset = OPTS_GET(opts, offset, 0);
+>         pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+>
+>         legacy = determine_kprobe_perf_type() < 0;
+> +       switch (mode) {
+> +       case PROBE_MODE_LEGACY:
+> +               legacy = true;
+> +       case PROBE_MODE_PERF:
+> +               pe_opts.no_link = true;
+> +               break;
+> +       default:
+> +               break;
+> +       }
+> +
+>         if (!legacy) {
+>                 pfd = perf_event_open_probe(false /* uprobe */, retprobe,
+>                                             func_name, offset,
+> @@ -10817,10 +10829,12 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
+>         int pfd, err;
+>         bool retprobe, legacy;
+>         const char *func_name;
+> +       enum probe_mode mode;
+>
+>         if (!OPTS_VALID(opts, bpf_uprobe_opts))
+>                 return libbpf_err_ptr(-EINVAL);
+>
+> +       mode = OPTS_GET(opts, mode, PROBE_MODE_DEFAULT);
+>         retprobe = OPTS_GET(opts, retprobe, false);
+>         ref_ctr_off = OPTS_GET(opts, ref_ctr_offset, 0);
+>         pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+> @@ -10849,6 +10863,16 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
+>         }
+>
+>         legacy = determine_uprobe_perf_type() < 0;
+> +       switch (mode) {
+> +       case PROBE_MODE_LEGACY:
+> +               legacy = true;
+> +       case PROBE_MODE_PERF:
+> +               pe_opts.no_link = true;
+> +               break;
+> +       default:
+> +               break;
+> +       }
+> +
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-While adding dt-bindings and dts in a previous series I forgot to add the
-compatible to the driver. Fix that now.
----
- drivers/video/backlight/qcom-wled.c | 1 +
- 1 file changed, 1 insertion(+)
+I think this is a good place to also return errors early if, say, user
+requested LINK mode, but that mode is not supported by kernel. Instead
+of returning some -ENOTSUP generic error, we can error out early?
+Similar for PERF mode, if only legacy is supported, and so on. Similar
+for attach_uprobe, of course.
 
-diff --git a/drivers/video/backlight/qcom-wled.c b/drivers/video/backlight/qcom-wled.c
-index 527210e85795..5f504883aca5 100644
---- a/drivers/video/backlight/qcom-wled.c
-+++ b/drivers/video/backlight/qcom-wled.c
-@@ -1731,6 +1731,7 @@ static int wled_remove(struct platform_device *pdev)
- 
- static const struct of_device_id wled_match_table[] = {
- 	{ .compatible = "qcom,pm8941-wled", .data = (void *)3 },
-+	{ .compatible = "qcom,pmi8950-wled", .data = (void *)4 },
- 	{ .compatible = "qcom,pmi8994-wled", .data = (void *)4 },
- 	{ .compatible = "qcom,pmi8998-wled", .data = (void *)4 },
- 	{ .compatible = "qcom,pm660l-wled", .data = (void *)4 },
+>         if (!legacy) {
+>                 pfd = perf_event_open_probe(true /* uprobe */, retprobe, binary_path,
+>                                             func_offset, pid, ref_ctr_off);
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 8777ff21ea1d..7fb474e036a3 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -451,8 +451,10 @@ struct bpf_perf_event_opts {
+>         size_t sz;
+>         /* custom user-provided value fetchable through bpf_get_attach_cookie() */
+>         __u64 bpf_cookie;
+> +       /* don't use bpf_link when attach eBPF pprogram */
 
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20221226-msm8953-6-2-wled-5f966bfa4db3
+typo: pprogram
 
-Best regards,
--- 
-Luca Weiss <luca@z3ntu.xyz>
+> +       bool no_link;
 
+I've been struggling with this "no_link" name a bit. It is quite
+confusing considering that from libbpf's API side we do return `struct
+bpf_link`. So I'm thinking that maybe "force_ioctl_attach" would be a
+better way to describe it (and will be scary enough for people not
+knowing what this is about to not set it to true?)
+
+Also, we'll need size_t: 0 at the end to avoid uninitialized padding
+issues (like we have in kprobe_opts and uprobe_opts)
+
+>  };
+> -#define bpf_perf_event_opts__last_field bpf_cookie
+> +#define bpf_perf_event_opts__last_field no_link
+>
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_perf_event(const struct bpf_program *prog, int pfd);
+> @@ -461,6 +463,13 @@ LIBBPF_API struct bpf_link *
+>  bpf_program__attach_perf_event_opts(const struct bpf_program *prog, int pfd,
+>                                     const struct bpf_perf_event_opts *opts);
+>
+> +enum probe_mode {
+
+shall we call it probe_attach_mode?
+
+also let's elaborate a bit more in doc comment that specifying mode
+will force libbpf to use that, but if kernel doesn't support it --
+then we'll error out.
+
+> +       PROBE_MODE_DEFAULT = 0, /* latest supported by kernel */
+> +       PROBE_MODE_LEGACY,
+> +       PROBE_MODE_PERF,
+> +       PROBE_MODE_LINK,
+> +};
+> +
+>  struct bpf_kprobe_opts {
+>         /* size of this struct, for forward/backward compatiblity */
+>         size_t sz;
+> @@ -470,9 +479,11 @@ struct bpf_kprobe_opts {
+>         size_t offset;
+>         /* kprobe is return probe */
+>         bool retprobe;
+> +       /* kprobe attach mode */
+> +       enum probe_mode mode;
+
+nit: mode -> attach_mode?
+
+>         size_t :0;
+>  };
+> -#define bpf_kprobe_opts__last_field retprobe
+> +#define bpf_kprobe_opts__last_field mode
+>
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
+> @@ -570,9 +581,11 @@ struct bpf_uprobe_opts {
+>          * binary_path.
+>          */
+>         const char *func_name;
+> +       /* uprobe attach mode */
+> +       enum probe_mode mode;
+>         size_t :0;
+>  };
+> -#define bpf_uprobe_opts__last_field func_name
+> +#define bpf_uprobe_opts__last_field mode
+
+ditto
+
+>
+>  /**
+>   * @brief **bpf_program__attach_uprobe()** attaches a BPF program
+> --
+> 2.39.0
+>
