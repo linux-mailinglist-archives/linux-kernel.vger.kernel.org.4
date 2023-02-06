@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B2168B442
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 03:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A6468B444
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 03:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjBFCzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 21:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
+        id S229607AbjBFCzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 21:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBFCzd (ORCPT
+        with ESMTP id S229591AbjBFCzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 21:55:33 -0500
+        Sun, 5 Feb 2023 21:55:51 -0500
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F98196BD;
-        Sun,  5 Feb 2023 18:55:28 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P99mf3gdNzRrpv;
-        Mon,  6 Feb 2023 10:53:06 +0800 (CST)
-Received: from [10.67.110.173] (10.67.110.173) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5051A1A955;
+        Sun,  5 Feb 2023 18:55:50 -0800 (PST)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P99nr73qWzJsFp;
+        Mon,  6 Feb 2023 10:54:08 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 6 Feb 2023 10:55:26 +0800
-Message-ID: <6cb72764-29a3-73f1-cfe3-9e972d975333@huawei.com>
-Date:   Mon, 6 Feb 2023 10:55:26 +0800
+ 15.1.2375.34; Mon, 6 Feb 2023 10:55:48 +0800
+Subject: Re: [PATCH-next v2] loop: loop_set_status_from_info() check before
+ assignment
+To:     Zhong Jinghua <zhongjinghua@huawei.com>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>, <yangerkun@huawei.com>
+References: <20230206020716.2036-1-zhongjinghua@huawei.com>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <d9486c88-33b1-3dc1-d58c-89de73679e50@huawei.com>
+Date:   Mon, 6 Feb 2023 10:55:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 4.19 0/3] Backport handling -ESTALE policy update failure
- to 4.19
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Sasha Levin <sashal@kernel.org>, <stable@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <zohar@linux.ibm.com>,
-        <paul@paul-moore.com>, <luhuaxin1@huawei.com>
-References: <20230201023952.30247-1-guozihua@huawei.com>
- <Y9vw6RhQ6KJ5+E1I@sashalap> <02723ce8-0ad4-7860-b76c-7d2b30710dcf@huawei.com>
- <Y9y7c5sEX5phLybE@kroah.com> <Y9y8cYNR6TnAjnHS@kroah.com>
- <Y9y9tiHoOCkSutJT@kroah.com>
-From:   "Guozihua (Scott)" <guozihua@huawei.com>
-In-Reply-To: <Y9y9tiHoOCkSutJT@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20230206020716.2036-1-zhongjinghua@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.173]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500024.china.huawei.com (7.185.36.203)
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -55,63 +51,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/3 15:54, Greg KH wrote:
-> On Fri, Feb 03, 2023 at 08:49:05AM +0100, Greg KH wrote:
->> On Fri, Feb 03, 2023 at 08:44:51AM +0100, Greg KH wrote:
->>> On Fri, Feb 03, 2023 at 09:10:13AM +0800, Guozihua (Scott) wrote:
->>>> On 2023/2/3 1:20, Sasha Levin wrote:
->>>>> On Wed, Feb 01, 2023 at 10:39:49AM +0800, GUO Zihua wrote:
->>>>>> This series backports patches in order to resolve the issue discussed
->>>>>> here:
->>>>>> https://lore.kernel.org/selinux/389334fe-6e12-96b2-6ce9-9f0e8fcb85bf@huawei.com/
->>>>>>
->>>>>> This required backporting the non-blocking LSM policy update mechanism
->>>>>> prerequisite patches.
->>>>>
->>>>> Do we not need this on newer kernels? Why only 4.19?
->>>>>
->>>> Hi Sasha.
->>>>
->>>> The issue mentioned in this patch was fixed already in the newer kernel.
->>>> All three patches here are backports from mainline.
->>>
->>> Ok, now queued up, thanks.
->>
->> Nope, I've now dropped them all as you did not include the needed fix up
->> commits as well.  We can not add patches to the stable tree that are
->> known broken, right?
->>
->> How well did you test this?  I see at least 3 missing patches that you
->> should have had in this patch series for it to work properly.
-> 
-> Ah, you didn't even test this series, as it breaks the build
-> as-submitted.
-> 
-> {sigh}
-> 
-> In order for us to take this, I think you need to find someone else who
-> will validate your patch series _FIRST_ before submitting it to us.  And
-> I want their tested-by on them validating that it did actually work (if
-> for no other reason than to have someone else be willing to be
-> responsible if things go bad.)
-> 
-> Breaking our builds and forcing me to point out missing patches is not
-> how the stable kernel process works in any sane manner.
-> 
-> greg k-h
-Sorry for the burden. Still trying to work out how things are done here.
 
-It seems that when I test it out, it did not build with the allmodconfig
-which would report an error. And by the "fixes up commit" I supposed it
-mean the commits with the "Fixes" tag points to the three commits I
-submitted.
 
-I'll submit a new patch set soon, which would include the following
-fixes commits.
-
-Again, sorry for the burden.
-
--- 
-Best
-GUO Zihua
+On 2/6/2023 10:07 AM, Zhong Jinghua wrote:
+> In loop_set_status_from_info(), lo->lo_offset and lo->lo_sizelimit should
+> be checked before reassignment, because if an overflow error occurs, the
+> original correct value will be changed to the wrong value, and it will not
+> be changed back.
+>
+> Modifying to the wrong value logic is always not quiet right, we hope to
+> optimize this.
+>
+> Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+LGTM
+> ---
+>  v1->v2: Modify note: overflowing -> overflow 
+>  drivers/block/loop.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index 1518a6423279..1b35cbd029c7 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -977,13 +977,13 @@ loop_set_status_from_info(struct loop_device *lo,
+>  		return -EINVAL;
+>  	}
+>  
+> +	/* Avoid assigning overflow values */
+> +	if (info->lo_offset > LLONG_MAX || info->lo_sizelimit > LLONG_MAX)
+> +		return -EOVERFLOW;
+> +
+>  	lo->lo_offset = info->lo_offset;
+>  	lo->lo_sizelimit = info->lo_sizelimit;
+>  
+> -	/* loff_t vars have been assigned __u64 */
+> -	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
+> -		return -EOVERFLOW;
+> -
+>  	memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
+>  	lo->lo_file_name[LO_NAME_SIZE-1] = 0;
+>  	lo->lo_flags = info->lo_flags;
 
