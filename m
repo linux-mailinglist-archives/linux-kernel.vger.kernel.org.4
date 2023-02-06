@@ -2,96 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837DC68B760
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:30:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBCF68B762
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBFIaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 03:30:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S230113AbjBFIao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 03:30:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjBFIac (ORCPT
+        with ESMTP id S229996AbjBFIaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:30:32 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D051A49F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:30:30 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 75D241C0012;
-        Mon,  6 Feb 2023 08:30:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675672229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OMj5Fs+cE7htz9baKVtZ700BYz9yyPIfXJqXxrqoEi4=;
-        b=SNEwGb9Pn9HOlCtzKReMZNxO+N3A3DzDLn4rSE1lREh4Z5ybrWudDu+Qeky0Bnj4EJQe46
-        7LspwC0yNko51n52GuRycvGg0NFbqR6NVdIciW1TCZSp9pAEB4WEwLI8yWOskN+S/11UDx
-        SFruYQ/YqOC80gNV39hVpAIySvDCpN5lmU3KKTtdxJFqEAbzgk0pLUKX0EjSzUQ6dLN2h7
-        JNhHlbNDcnyzA0uGh0uc9HA4AdkyrEd5S2wEGY8ElYRqBLM0KA6DSYYq4oXPtbFS69U4Bx
-        yK4gs3Z8mfOUhhK1RegMGagcHvfQS7CPz0O6OjP0BuoMaF5kxlQnNwNaYL4TYg==
-Date:   Mon, 6 Feb 2023 09:30:26 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ASoC: codecs: Fix unsigned comparison with less than
- zero
-Message-ID: <20230206093026.6236eea2@bootlin.com>
-In-Reply-To: <20230206075518.84169-1-jiapeng.chong@linux.alibaba.com>
-References: <20230206075518.84169-1-jiapeng.chong@linux.alibaba.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Mon, 6 Feb 2023 03:30:39 -0500
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325C91CF69
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:30:38 -0800 (PST)
+Received: by mail-vk1-xa2d.google.com with SMTP id s76so5713252vkb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 00:30:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6CnRSFC3p2fDgRb6llNDu9VKSx8wKx1SpGxo6gkZyXM=;
+        b=bwyuaQoUpY2O0l8d7Ns6jwCsjwIebS5XZ3D8e7BGgN4g7vP2ZkASqVfiMMVlEHoFfq
+         7bE7WL0jCaQ2S04evk10RulPltaUhjx4WIfg6pW24raGWD2fOufd51ikcExouo1LdFLe
+         g8vXXX1zv+qFHf57uL8MvBAKdJZcaopCjdsN8iSulgg/YScplvBOXMcEu2FcQgj7WRXn
+         Mcxxk+e8iel+HMnvOROuFFu0ce+5TUBQN09uckPtuSHM2M2IBrKIf1UHzjZSjSSMFo2s
+         eS/Nj/GBi9oONWkzEzaEEF3m6oS3K9Y1f5ROdwTufiOTnq3XYnuay7rAx7OY2OKzx9zd
+         dA9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6CnRSFC3p2fDgRb6llNDu9VKSx8wKx1SpGxo6gkZyXM=;
+        b=G4e558Vv6FlKqQEPfFy/SC6rDDErxhPZoYTr3WRFJ19ctL9YDh67fDO+Tud2uQwVZv
+         Go00fiySf+kR9LpDgMSCmMELrjz8F4cRvKVD57HJqJf10LfHPFASHnKz7p4NVUVLZLoA
+         WjT5QAwcZWa7R06IENTY4Qez63l469HpO+aGX9x2wek+swdfTQl24EeXOGpD+WunGGNY
+         y0qhrNgp2+wo+c+7KbMNqRdsawUJVS8vpIDe0wGNWOGPOWTxiilhac9y3gsm7ACDk2f8
+         6IirUeBF6gnXqas0lM2PTYtTiQSdY9r9hO4I8FCbfMuZn/OT/LgVSo9RswQRwDXSHZGe
+         ArZw==
+X-Gm-Message-State: AO0yUKVPzUSzy9nJzpFf3aKf3qJ+NB4/s6ydNZouMI8MItdsCqSUeYLM
+        FV5ZUpPnQHEqM/S9Cv57tUsi83keJihfHSwILiQ/dg==
+X-Google-Smtp-Source: AK7set+M/hRPwmwRWzaEZh8xVMqVX66tLwflJ0kh/yAn6j4lopheNK4Tyuon26Rx0XIXzTBJrrN5HTbyJI0K9sHq2mM=
+X-Received: by 2002:a1f:de81:0:b0:3d5:5b1c:7e9 with SMTP id
+ v123-20020a1fde81000000b003d55b1c07e9mr2807833vkg.40.1675672237161; Mon, 06
+ Feb 2023 00:30:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131-tuntap-sk-uid-v3-0-81188b909685@diag.uniroma1.it> <20230131-tuntap-sk-uid-v3-3-81188b909685@diag.uniroma1.it>
+In-Reply-To: <20230131-tuntap-sk-uid-v3-3-81188b909685@diag.uniroma1.it>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 6 Feb 2023 09:30:26 +0100
+Message-ID: <CANn89iKhRepmwD6UHr3ub5v5U_uNEZ0dTpHKTh4H_RTtTxccJA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 3/3] tap: tap_open(): correctly initialize
+ socket uid
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Feb 2023 15:55:18 +0800
-Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
-
-> The val is defined as unsigned int type, if(val<0) is redundant, so
-> delete it.
->=20
-> sound/soc/codecs/idt821034.c:449 idt821034_kctrl_gain_put() warn: unsigne=
-d 'val' is never less than zero.
->=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D3947
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On Sat, Feb 4, 2023 at 6:39 PM Pietro Borrello
+<borrello@diag.uniroma1.it> wrote:
+>
+> sock_init_data() assumes that the `struct socket` passed in input is
+> contained in a `struct socket_alloc` allocated with sock_alloc().
+> However, tap_open() passes a `struct socket` embedded in a `struct
+> tap_queue` allocated with sk_alloc().
+> This causes a type confusion when issuing a container_of() with
+> SOCK_INODE() in sock_init_data() which results in assigning a wrong
+> sk_uid to the `struct sock` in input.
+> On default configuration, the type confused field overlaps with
+> padding bytes between `int vnet_hdr_sz` and `struct tap_dev __rcu
+> *tap` in `struct tap_queue`, which makes the uid of all tap sockets 0,
+> i.e., the root one.
+> Fix the assignment by using sock_init_data_uid().
+>
+> Fixes: 86741ec25462 ("net: core: Add a UID field to struct sock.")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
 > ---
->  sound/soc/codecs/idt821034.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/sound/soc/codecs/idt821034.c b/sound/soc/codecs/idt821034.c
-> index 5d01787b1c1f..2cc7b9166e69 100644
-> --- a/sound/soc/codecs/idt821034.c
-> +++ b/sound/soc/codecs/idt821034.c
-> @@ -446,8 +446,6 @@ static int idt821034_kctrl_gain_put(struct snd_kcontr=
-ol *kcontrol,
->  	u8 ch;
-> =20
->  	val =3D ucontrol->value.integer.value[0];
-> -	if (val < 0)
-> -		return -EINVAL;
->  	if (val > max - min)
->  		return -EINVAL;
-> =20
 
-Acked-by: Herve Codina <herve.codina@bootlin.com>
-
-Thanks,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Eric Dumazet <edumazet@google.com>
