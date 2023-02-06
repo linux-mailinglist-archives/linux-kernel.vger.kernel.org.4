@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DFF68BC42
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D793768BC62
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjBFMFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S230078AbjBFMHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBFMFu (ORCPT
+        with ESMTP id S230058AbjBFMHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:05:50 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F376215CA9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:05:48 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id h4-20020a056e021d8400b00313b9dcdd96so3017978ila.18
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:05:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yc5TaIw9e/++YKxo1Lt6L/DeNw+M003kD9JJ5QRXvXE=;
-        b=rHm/TtO3tSoGIq2BrOr8fgD61y+bIkfLvZUqb4Vz9k6MGCSRXXhmP5pFuI+yFBRPPq
-         f4FS7ai1xqRJbbEd5kcyKr6uymGNqnzOoq95VvD62lOKSZG4EhNCSfRq432ntoqTr1ce
-         RLmL+B8eYAw3M7/7FBBNjG1P+leQFqxFUSfASVkPF7NKuYz//PTpJgVXCs3YK+zALlDG
-         rWDU4/IV1pFvKGppZrNkhUZ4DCe9grvt7iVtwSvme0umaKctoednkdE38c1dyGkr+S+k
-         NvnBYowMXCl1/In2q3n2jWw7MggJsGlRafpHwLnfLv/PiH4tm8ehZUI37E+MJCdMoIsk
-         0Hqw==
-X-Gm-Message-State: AO0yUKU2mTGDxytWjDo2HTfRt14Ko9V2TKgsOMMfcK0/ZjBlf/V/DFDe
-        eFuplkE+mTPMTLxEhPdFvkvc4zzhrJcp05vDMSNOaIk+e6hZ
-X-Google-Smtp-Source: AK7set/dPyvOs92oygtpg+rFekRsU13zRFjJQ8iXuQiUWttVgG53X9wmWd1NcMn2VZ9uOOp6CjTDGqMSeQLMXYTF3Kgli5ZaW1pH
+        Mon, 6 Feb 2023 07:07:18 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED5C12F1D;
+        Mon,  6 Feb 2023 04:07:15 -0800 (PST)
+X-UUID: c922d038a61611ed945fc101203acc17-20230206
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=DimnXih34BB0ZAqnseU6Ac647p2BGjjyOcF2FMmE3cc=;
+        b=cY4I6scHpN1X3LHkku21TawjWRRhfBIzwmq2DMtZ3iKwXvXa9GBhsWVagBDrXDVxwXWgDwUxVltFZqP8G3Sxb0FpI7gSmfNGNXOpuYxwicGJ/D6K/rTYx9/R15CmUZRtftEwU3Hkwm665kwE6s5oJhuV/fMnK332LipgRE4dyAU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:86d8153d-508a-469a-a3ce-27c0672f5cc4,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.19,REQID:86d8153d-508a-469a-a3ce-27c0672f5cc4,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:885ddb2,CLOUDID:251c9df7-ff42-4fb0-b929-626456a83c14,B
+        ulkID:2302062007126680ITER,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: c922d038a61611ed945fc101203acc17-20230206
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1933444514; Mon, 06 Feb 2023 20:07:11 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 6 Feb 2023 20:07:09 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 6 Feb 2023 20:07:08 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 0/6] media: mediatek: vcodec: Add debugfs file for decode and encode
+Date:   Mon, 6 Feb 2023 20:07:02 +0800
+Message-ID: <20230206120708.19631-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:7011:0:b0:310:a12c:7898 with SMTP id
- l17-20020a927011000000b00310a12c7898mr4056030ilc.24.1675685148369; Mon, 06
- Feb 2023 04:05:48 -0800 (PST)
-Date:   Mon, 06 Feb 2023 04:05:48 -0800
-In-Reply-To: <00000000000043c9a105ef4cccf7@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000062d6005f406daa8@google.com>
-Subject: Re: [syzbot] [hfs?] KMSAN: uninit-value in hfs_brec_find
-From:   syzbot <syzbot+5ce571007a695806e949@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Need to change kernel driver to open decode and encode debug log at current period,
+it's very unreasonable. Adding debugfs common interface to support decode and encode,
+using echo command to control debug log level and getting useful information for each
+instance.
 
-HEAD commit:    eda666ff2276 kmsan: silence -Wmissing-prototypes warnings
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=17bbb96b480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f27365aeb365b358
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ce571007a695806e949
-compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15ac6175480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e00d23480000
+patch 1 add debugfs common interface.
+patch 2~4 support decode.
+patch 5~6 support encode
+---
+Yunfei Dong (6):
+  media: mediatek: vcodec: Add debugfs interface to get debug
+    information
+  media: mediatek: vcodec: Add debug params to control different log
+    level
+  media: mediatek: vcodec: Add a debugfs file to get different useful
+    information
+  media: mediatek: vcodec: Get get each instance format type
+  media: mediatek: vcodec: Change dbgfs interface to support encode
+  media: mediatek: vcodec: Add encode to support dbgfs
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fc16035efde4/disk-eda666ff.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/084efc06a321/vmlinux-eda666ff.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/35c07fcfcbf2/bzImage-eda666ff.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/0f9e3b43e8ac/mount_0.gz
+ .../media/platform/mediatek/vcodec/Makefile   |   6 +
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 157 ++++++++++++++++++
+ .../mediatek/vcodec/mtk_vcodec_dbgfs.h        |  48 ++++++
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   4 +
+ .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   2 +
+ .../mediatek/vcodec/mtk_vcodec_util.c         |   8 +
+ .../mediatek/vcodec/mtk_vcodec_util.h         |  25 ++-
+ 8 files changed, 251 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+ create mode 100644 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5ce571007a695806e949@syzkaller.appspotmail.com
-
-WARNING: The mand mount option has been deprecated and
-         and is ignored by this kernel. Remove the mand
-         option from the mount to silence this warning.
-=======================================================
-hfs: keylen 9474 too large
-=====================================================
-BUG: KMSAN: uninit-value in hfs_brec_find+0x671/0x9b0 fs/hfs/bfind.c:141
- hfs_brec_find+0x671/0x9b0 fs/hfs/bfind.c:141
- hfs_brec_read+0x3b/0x190 fs/hfs/bfind.c:165
- hfs_cat_find_brec+0xfb/0x450 fs/hfs/catalog.c:194
- hfs_fill_super+0x1f49/0x2400 fs/hfs/super.c:419
- mount_bdev+0x508/0x840 fs/super.c:1359
- hfs_mount+0x49/0x60 fs/hfs/super.c:456
- legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
- vfs_get_tree+0xa1/0x500 fs/super.c:1489
- do_new_mount+0x694/0x1580 fs/namespace.c:3145
- path_mount+0x71a/0x1eb0 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount+0x734/0x840 fs/namespace.c:3674
- __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3674
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-Local variable fd created at:
- hfs_fill_super+0x5e/0x2400 fs/hfs/super.c:381
- mount_bdev+0x508/0x840 fs/super.c:1359
-
-CPU: 0 PID: 4991 Comm: syz-executor151 Not tainted 6.2.0-rc6-syzkaller-80422-geda666ff2276 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-=====================================================
+-- 
+2.18.0
 
