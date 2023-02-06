@@ -2,141 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8501968BA4C
+	by mail.lfdr.de (Postfix) with ESMTP id DB5E368BA4D
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjBFKfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S229867AbjBFKfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbjBFKe7 (ORCPT
+        with ESMTP id S231281AbjBFKe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Feb 2023 05:34:59 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3520F74C;
-        Mon,  6 Feb 2023 02:34:19 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 722DC5C00C4;
-        Mon,  6 Feb 2023 05:33:29 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 06 Feb 2023 05:33:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675679609; x=1675766009; bh=Yhoj4RnsjN
-        wKN2xZh2UIOjfZ9pZQfvv4RITKRu8FFow=; b=GfhJooMvkS9m0B3ZP3Jm/DKvb2
-        wvkzZNFlsHdcx5GQqXTOIIdgkW4AGVQucd2TLpM/YV5QsF+MVqoiJIlnUds4bMOz
-        svFuluBDDN8+nSim5Mb/3ZrR2LMvYNKrbfMDG/xNIuAP26843MFZaYN6EEXUJCFC
-        6l8UKBvPYFB16QO3q6t8Vu2jmGzTfA8hUS60QfPeQMq+lskVHTbUcEcNP8g9B4fD
-        qtFEIydIKwI6KAdacJuMeA+RsDd7Mq1Yr99c1Jv37FTsGFCZHB4MtmHdRaiWXKXr
-        Kqjeyxxmx/1REDs7/mPld0JC4yLprMnOCy2qk8ASd51+OAJyS6+s3pqugtlw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675679609; x=1675766009; bh=Yhoj4RnsjNwKN2xZh2UIOjfZ9pZQ
-        fvv4RITKRu8FFow=; b=smvapOgGiyeVDzUGIFSkC6FMHwu8GJl/mQ2mRzFEwfAS
-        1wQFNTRw1ls8AdmAk5o83ay72Q1d24UOpPkqtwJ6fQ9Wmz661+5/TTDBss1ax7el
-        bBoiy+pmhnKFTxkqxAmy4+lBplbrYj/pMZy+/1SBHIC17Mt5UeYADcUnqGqGut5P
-        nEzMVSCQ4hS/ujuNY/Axefumn4MXSHRmljxXrZAGyT2HP45Z233zAL+C2b3+qsA/
-        M3ya1mDoW3yL2zY+YSxrVMQRDwymkIU2KUHehFbDZXOWwP81z6LA55iADxrWjvUm
-        29HePxvSoH37lfDU3PUO74//Cqp92ayWEwcjLTEMjA==
-X-ME-Sender: <xms:eNfgY2VjFZtwvSNVOzZumQuALWJSJkDbt9otapt09R4D1tdz8Zi4rA>
-    <xme:eNfgYykser4L5UfWugKaekgvBVWr2aVuH4rmsdAaY6WHQMtnmkdEhjd65IOVrDdjv
-    Z4iDVwNXuNCr1I2UHQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegiedgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:eNfgY6b73RgmQJC8bndoUUg7foWU12-uYnoR0C1s2zCBVDIqdO0v6w>
-    <xmx:eNfgY9W1hjzrdQLrDp6ke8IneMRoQ4aGwSOgXK_-GRsQXh9hB9KlEQ>
-    <xmx:eNfgYwmOWF-Gc51XNSJaGYCQCq3ncsZ6iHhepHElRY9EiDxspbSs0A>
-    <xmx:edfgY-ZrZiBljwjhr7COVAbRJDx5zMWSAsP1FBiGN7KnrvJQxxaKkw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CEE61B60086; Mon,  6 Feb 2023 05:33:28 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-108-ge995779fee-fm-20230203.001-ge995779f
-Mime-Version: 1.0
-Message-Id: <f90129d9-3262-4e3a-9d78-57f641dbdb64@app.fastmail.com>
-In-Reply-To: <CAAhV-H6kuzfjw5i8-6L_68c50nsXzFipHY5hxtbShuv16bqRbg@mail.gmail.com>
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
- <ccf74ebd-ccc1-4de5-a425-dcde4ac39a8d@app.fastmail.com>
- <CAAhV-H6kuzfjw5i8-6L_68c50nsXzFipHY5hxtbShuv16bqRbg@mail.gmail.com>
-Date:   Mon, 06 Feb 2023 11:33:10 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Huacai Chen" <chenhuacai@kernel.org>
-Cc:     "Huacai Chen" <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666CE144B7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:34:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675679664; x=1707215664;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QuGXFzog/2TLYOIOh3hII8O6V1snANioCocHfYn8yws=;
+  b=ge2+OMUiEiVgKBcxlb6Ol0zgl8Q5VQLske80OQO8aPNU5o1EenO4M7Ll
+   xTdJ3v4L+Dn1Wb4fBYnUjVbKuoVKg+o7vNNeRnRuJkixT/WGizBJQk0eq
+   fKabI5Ic4VfN6ARHWa2VYUPdVx5boj4F85pcjA1J803mhYtymH6v9BERn
+   qlyfNZQyqkT9fJUByQJdsK5HDtGO2QuiOZM5w77py6GFRh1J2UbvhwTF0
+   zjFsx7ciVmbo5PrIhfIdXAOHg5nJNqPL1SsQgTKmoBD5dQlE9WhN0BLWt
+   qbMjqP6lAuIhgp+OMQ9aCy9S9G+Ca4O7sazCFbSLLzxF3ycVt5Mhzvv1Y
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="308818081"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="308818081"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 02:33:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="790393723"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="790393723"
+Received: from abotsiev-mobl.ger.corp.intel.com (HELO [10.252.3.115]) ([10.252.3.115])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 02:33:16 -0800
+Message-ID: <aa8af778-2a40-7fe0-eb14-234469c74523@intel.com>
+Date:   Mon, 6 Feb 2023 10:33:13 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH] drm/i915/gt: Avoid redundant pointer validity check
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Deepak R Varma <drv@mailo.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+References: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
+ <d58fff32-edad-4a7f-7409-7e57593df3ed@linux.intel.com>
+Content-Language: en-GB
+From:   Matthew Auld <matthew.auld@intel.com>
+In-Reply-To: <d58fff32-edad-4a7f-7409-7e57593df3ed@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023, at 03:08, Huacai Chen wrote:
-> On Thu, Feb 2, 2023 at 5:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On 06/02/2023 09:45, Tvrtko Ursulin wrote:
+> 
+> Hi,
+> 
+> Adding Matt & Thomas as potential candidates to review.
+> 
+> Regards,
+> 
+> Tvrtko
+> 
+> On 03/02/2023 19:30, Deepak R Varma wrote:
+>> The macro definition of gen6_for_all_pdes() expands to a for loop such
+>> that it breaks when the page table is null. Hence there is no need to
+>> again test validity of the page table entry pointers in the pde list.
+>> This change is identified using itnull.cocci semantic patch.
 >>
->> On Thu, Feb 2, 2023, at 09:42, Huacai Chen wrote:
->> > Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
->> > configurable.
->> >
->> > Not all LoongArch cores support h/w unaligned access, we can use the
->> > -mstrict-align build parameter to prevent unaligned accesses.
->> >
->> > This option is disabled by default to optimise for performance, but you
->> > can enabled it manually if you want to run kernel on systems without h/w
->> > unaligned access support.
->> >
->> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>> Signed-off-by: Deepak R Varma <drv@mailo.com>
+>> ---
+>> Please note: Proposed change is compile tested only.
 >>
->> This feels like it's a way too low-level option, I would not expect
->> users to be able to answer this correctly.
+>>   drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
 >>
->> What I would do instead is to have Kconfig options for specific
->> CPU implementations and derive the alignment requirements from
->> that.
-> You mean provide something like CONFIG_CPU_XXXX as MIPS do?  That
-> seems not a good idea, too. If there are more than 3 CONFIG_CPU_XXXX,
-> the complexity is more than CONFIG_ARCH_STRICT_ALIGN.
+>> diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c 
+>> b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+>> index 5aaacc53fa4c..787b9e6d9f59 100644
+>> --- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+>> +++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+>> @@ -258,8 +258,7 @@ static void gen6_ppgtt_free_pd(struct gen6_ppgtt 
+>> *ppgtt)
+>>       u32 pde;
+>>       gen6_for_all_pdes(pt, pd, pde)
+>> -        if (pt)
+>> -            free_pt(&ppgtt->base.vm, pt);
+>> +        free_pt(&ppgtt->base.vm, pt);
+>>   }
+>>   static void gen6_ppgtt_cleanup(struct i915_address_space *vm)
+>> @@ -304,7 +303,7 @@ static void pd_vma_unbind(struct 
+>> i915_address_space *vm,
+>>       /* Free all no longer used page tables */
+>>       gen6_for_all_pdes(pt, ppgtt->base.pd, pde) {
+>> -        if (!pt || atomic_read(&pt->used))
+>> +        if (atomic_read(&pt->used))
 
-The way that mips does it is not useful since that forces you to
-pick a single CPU from a 'choice' list in Kconfig, with the CPUs
-being mutually exclusive in that list. What you need here is either
-a strict hierarchy of CPUs like in arch/x86/Kconfig.cpus where each
-option is a superset of the previous one, or a set of options
-like in arch/arm/mm/Kconfig that are not mutually exclusive and
-let you pick any combinations that you want to support in a kernel
-image.
+Wow, I was really confused trying to remember how this all works.
 
-The important bit is that a kernel you build will by default
-always work across all hardware except the ones that are
-explicitly excluded.
+The gen6_for_all_pdes() does:
 
-> Then users are also unable to do a correct selection. On the other
-> hand, we can add more words under CONFIG_ARCH_STRICT_ALIGN to
-> describe which processors support hardware unaligned accesses.
+(pt = i915_pt_entry(pd, iter), true)
 
-Trying to handle this with help texts quickly gets out of hand
-when you get to dozens of CPU specific optimizations that are
-incompatible with other CPU cores. I assume you will need similar
-options e.g. for the broken cpu-idle instruction on early cores
-or the missing sub-word atomics, once these are fixed in new
-CPU cores.
+So NULL pt is expected, and does not 'break' here, since 'true' is 
+always the value that decides whether to terminate the loop. So this 
+patch would lead to NULL ptr deref, AFAICT.
 
-     Arnd
+
+
+>>               continue;
+>>           free_pt(&ppgtt->base.vm, pt);
