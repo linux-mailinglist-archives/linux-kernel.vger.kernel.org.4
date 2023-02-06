@@ -2,80 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BF668B939
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4604A68B951
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjBFKBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S229650AbjBFKCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBFKAe (ORCPT
+        with ESMTP id S230095AbjBFKBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:00:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3F3206A1;
-        Mon,  6 Feb 2023 02:00:17 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3169Hhtn019017;
-        Mon, 6 Feb 2023 10:00:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=gukPO4AglsSWsyYU7ixRfKwe2lBd8CbhvzavI5w21YI=;
- b=M96HcVNS8hcWO0nkLoLFn9QlgeArVCOl79h4pOW48M6Wh6SFrQsj7aobWh0zZ6yi0S+S
- ToTisuUUFMFtFyLgIKS81EgsQIimB8YjRDfcIgGQqFfnwlfo/dNg1ocxR7fjqgz7D8uv
- 0oCdfOl5L98Ey67lon1BnGcei/v6vifAByZHNkHuOz43wl1kqGZu2TXxT+hufShT+s3Q
- B8Ynzq481YBH/1gILyAUHWai22N04GWnfZkhK1kb4e5pT70FGJtjd3iDDmdc/Jd02Amn
- TtgHmFfBt+ANmBL53GmHbRV8dyM6hDOL/l3rOJl5g1cqMSOCppgzVJ40d6oOPJhLlqJg 5g== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3njxsm90h1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 10:00:03 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3161VFcm027110;
-        Mon, 6 Feb 2023 10:00:01 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3nhf06sk99-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 10:00:01 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3169xwPW43975050
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Feb 2023 09:59:58 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B13182004B;
-        Mon,  6 Feb 2023 09:59:58 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5224020043;
-        Mon,  6 Feb 2023 09:59:58 +0000 (GMT)
-Received: from osiris (unknown [9.171.69.162])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon,  6 Feb 2023 09:59:58 +0000 (GMT)
-Date:   Mon, 6 Feb 2023 10:59:56 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Egorenkov <egorenar@linux.ibm.com>
-Subject: Re: [PATCH 0/5] diag288 watchdog fixes and improvements
-Message-ID: <Y+DPnGN9l7Ix+TX7@osiris>
-References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
+        Mon, 6 Feb 2023 05:01:22 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A5C1EFFF;
+        Mon,  6 Feb 2023 02:01:16 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 84D7C6600368;
+        Mon,  6 Feb 2023 10:01:14 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675677675;
+        bh=duZOdncpie1C6AkV6VHZLZr+dP/cQtDdlisJYyTikZU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Wz+D0HXapes31AhNtVqod1g92sOPbKAITwPCL6NoJWFqZqYkkxp61GhP8Yw2S91zS
+         90/Z0Yaq57mjg8YDv+WL6ngA3KGuB6z0aoAuTF0DpAvW/w0+8NBtkpODajR2zjFMSi
+         Fq2mjRn3qwnbeQaeINfHsxySUq/Bgs0lhvW5SqLy5Dl1IsevArsIVwaJXori/bhmkf
+         KqbVjow+UEK1EqtcGztQx1WirTVQXj7beaK8Ul481fmSSPEWeSNx8Cm0g8Z9ynEppj
+         /DS9/hDnNb7qibx38pfO8SG+Jx8TK9n+sQ7U3p88eOz3lyltQ6NglWJnX0c/6EZUtW
+         tFZU7dlB5ZgRw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     sboyd@kernel.org
+Cc:     mturquette@baylibre.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
+        wenst@chromium.org, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        jose.exposito89@gmail.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v3 0/7] MediaTek Frequency Hopping: MT6795/8173/92/95
+Date:   Mon,  6 Feb 2023 11:00:58 +0100
+Message-Id: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203073958.1585738-1-egorenar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: h2_lCqvfpK4eiKS4hLOyxvL-Ri18TvA2
-X-Proofpoint-ORIG-GUID: h2_lCqvfpK4eiKS4hLOyxvL-Ri18TvA2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_05,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=856 clxscore=1015 lowpriorityscore=0 spamscore=0 mlxscore=0
- impostorscore=0 bulkscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302060079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,24 +60,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 08:39:53AM +0100, Alexander Egorenkov wrote:
-> Minor code refactoring to improve readability of the driver,
-> reduce code duplication and remove dead code.
-> 
-> Alexander Egorenkov (5):
->   watchdog: diag288_wdt: get rid of register asm
->   watchdog: diag288_wdt: remove power management
->   watchdog: diag288_wdt: unify command buffer handling for diag288 zvm
->   watchdog: diag288_wdt: de-duplicate diag_stat_inc() calls
->   watchdog: diag288_wdt: unify lpar and zvm diag288 helpers
-> 
->  drivers/watchdog/diag288_wdt.c | 162 ++++++++-------------------------
->  1 file changed, 37 insertions(+), 125 deletions(-)
+Changes in v3:
+ - Added commit to export register/unregister/parse FHCTL functions
+   to allow building clock drivers using FHCTL as modules
 
-Guenter, Wim, how should this go upstream?
+Changes in v2:
+ - Rebased over v4 of my clock drivers cleanups series [1]
 
-I can easily pick this up via the s390 tree for the next merge window.
-Please let me know.
+This series adds support for Frequency Hopping (FHCTL) on more MediaTek
+SoCs, specifically, MT6795, MT8173, MT8192 and MT8195.
 
-Thanks,
-Heiko
+In order to support older platforms like MT6795 and MT8173 it was
+necessary to add a new register layout that is ever-so-slightly
+different from the one that was previously introduced for MT8186.
+
+Since the new layout refers to older SoCs, the one valid for MT8186
+and newer SoCs was renamed to be a "v2" layout, while the new one
+for older chips gets the "v1" name.
+
+Note: These commits won't change any behavior unless FHCTL gets
+      explicitly enabled and configured in devicetrees.
+
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=714059
+AngeloGioacchino Del Regno (7):
+  clk: mediatek: fhctl: Add support for older fhctl register layout
+  clk: mediatek: clk-pllfh: Export register/unregister/parse functions
+  dt-bindings: clock: mediatek,mt8186-fhctl: Support MT6795,
+    MT8173/92/95
+  clk: mediatek: mt6795: Add support for frequency hopping through FHCTL
+  clk: mediatek: mt8173: Add support for frequency hopping through FHCTL
+  clk: mediatek: mt8192: Add support for frequency hopping through FHCTL
+  clk: mediatek: mt8195: Add support for frequency hopping through FHCTL
+
+ .../bindings/clock/mediatek,mt8186-fhctl.yaml |  7 +-
+ drivers/clk/mediatek/clk-fhctl.c              | 26 ++++++-
+ drivers/clk/mediatek/clk-fhctl.h              |  9 ++-
+ drivers/clk/mediatek/clk-mt6795-apmixedsys.c  | 63 ++++++++++++++++-
+ drivers/clk/mediatek/clk-mt8173-apmixedsys.c  | 65 ++++++++++++++++-
+ drivers/clk/mediatek/clk-mt8186-apmixedsys.c  |  2 +
+ drivers/clk/mediatek/clk-mt8192.c             | 67 +++++++++++++++++-
+ drivers/clk/mediatek/clk-mt8195-apmixedsys.c  | 69 ++++++++++++++++++-
+ drivers/clk/mediatek/clk-pllfh.c              | 26 +++++--
+ drivers/clk/mediatek/clk-pllfh.h              |  1 +
+ 10 files changed, 314 insertions(+), 21 deletions(-)
+
+-- 
+2.39.1
+
