@@ -2,117 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574EF68C618
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6BE68C617
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjBFSsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
+        id S230010AbjBFSrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjBFSsE (ORCPT
+        with ESMTP id S229963AbjBFSre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:48:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6495270E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:47:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675709237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hZ8casbfFD6TcKT9nSSfpPqsT0aAOl1x1pNCxblmoQc=;
-        b=QqnWAfCcCTfhcbG6N0wC1ala5VkUHRg8vbImapztsg3lUi1fAcaL8bpE4oPZzDeeyYy+vg
-        hwFMlPhsvpsEBzOTQ7chHgMwj2baOHBVcP8gVTKo5waw8Gt7A/RFpqLfwxGBdZyji3orqB
-        0AfSnraBnVKPT5wJMRWtrRAEie4ytWc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-157-8fw6-7wFPLu2eEFbtPYmzA-1; Mon, 06 Feb 2023 13:47:16 -0500
-X-MC-Unique: 8fw6-7wFPLu2eEFbtPYmzA-1
-Received: by mail-wm1-f72.google.com with SMTP id l38-20020a05600c1d2600b003ddff4b9a40so6964365wms.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:47:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZ8casbfFD6TcKT9nSSfpPqsT0aAOl1x1pNCxblmoQc=;
-        b=mxbDt/pa0pzHIRmcfFTvrO3bl8mL927mzEKXJpGRZTYqA/ImAOYUi8pTi47OOrXn2X
-         oRFdT5qACI/TlB0aoezMJM8mafmaeBAF+w0tmDftQR4cVpePxMRzYY58GCF97vZ65Xz+
-         U27JpLtqkT50040ldNCBBTXPlgiaiH4wLInoQ15jMQ59Sy4XMSlToxLRNvjNgkkrWTNC
-         TAM4lrGLPltpTjSxX36XuGGUClQFqyj6XKk2lRMjmzgxnuyJ6UJeePN1XNP30pRhefge
-         Z+BR81LPP5uyGxpPq3QRiCEQ3g1z5nJAWIzdAJtxneDBwsqirYOjE6xrWShCl2DOLIQB
-         aI6g==
-X-Gm-Message-State: AO0yUKUrpeWq5JmNlPRnAca8FaKaehTfZSl727erNsqYVFtCt1wu3u1i
-        qz3zDSrj1+vE3UzfLAa+6MsM25x4/f+e1AzeW4GrFq225kOLaPh9gZV4H72JftST1c5hl8L+Ymf
-        0Cvr0nFrSpWb0233HBOAZH8mb
-X-Received: by 2002:a05:600c:18a6:b0:3dd:1a8b:7374 with SMTP id x38-20020a05600c18a600b003dd1a8b7374mr702579wmp.5.1675709235680;
-        Mon, 06 Feb 2023 10:47:15 -0800 (PST)
-X-Google-Smtp-Source: AK7set9O+AFBlSx1vEYGijuQNmYcM6SnLQcrjncn2maMR7AxUw5thKkNysCaeGtaTLYwLHkwW2zybw==
-X-Received: by 2002:a05:600c:18a6:b0:3dd:1a8b:7374 with SMTP id x38-20020a05600c18a600b003dd1a8b7374mr702568wmp.5.1675709235494;
-        Mon, 06 Feb 2023 10:47:15 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0ac700b003d1d5a83b2esm16444126wmr.35.2023.02.06.10.47.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 10:47:15 -0800 (PST)
-Message-ID: <a1cd8c74-98f4-bff0-0344-cbece787c6e8@redhat.com>
-Date:   Mon, 6 Feb 2023 19:47:13 +0100
+        Mon, 6 Feb 2023 13:47:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AD059D7;
+        Mon,  6 Feb 2023 10:47:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A0B3B815D1;
+        Mon,  6 Feb 2023 18:47:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6987CC433D2;
+        Mon,  6 Feb 2023 18:47:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675709250;
+        bh=QBQbut+dS9DWWb7cU2SLLEmpT5wVs6vyJKlsVYbSx5Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N35UigjewuSkXwfDWjd3Fs4r+fvjjuqkXTuNIVyYAcbcvr9GONO0uIwCQtnwNJtIz
+         hqgHuxEsCZyiaKYW2jD/3IhLJef33P2YlM8wk56MRo2EDT6eo+hsf4m+n3C235C+Xi
+         YmP530h/A1VRbrhbk94oDaYFN96R7k/br27z+8I5b2BZ4fmrb9O5bEGQS5sV1Qz1rp
+         HECf4i8IxBYW/14Rt+dxz12ltQsrC75xCbjrLdXUJm2Z419JdQaJdtqKHMaSxr+r8H
+         pze5Rh+nSoCQWbo389i7imDSUuCs1CgLXsWvN+lhx1lofws32ONzw0z28imyXVCCW2
+         McqZbAWYOFF0w==
+Date:   Mon, 6 Feb 2023 10:47:28 -0800
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv6 05/11] mfd: rk808: split into core and i2c
+Message-ID: <Y+FLQL08U7wXjqi+@google.com>
+References: <20230127181244.160887-1-sebastian.reichel@collabora.com>
+ <20230127181244.160887-6-sebastian.reichel@collabora.com>
+ <Y95jJYlqDayiaMP1@google.com>
+ <Y95lSpUaOnbSAOIC@google.com>
+ <20230205010632.wt5m3a7w7k62w6se@mercury.elektranox.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] drm/shmem-helper: Fix locking for
- drm_gem_shmem_get_pages_sgt()
-Content-Language: en-US
-To:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20230205125124.2260-1-lina@asahilina.net>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20230205125124.2260-1-lina@asahilina.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230205010632.wt5m3a7w7k62w6se@mercury.elektranox.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Lina,
+On Sun, 05 Feb 2023, Sebastian Reichel wrote:
 
-On 2/5/23 13:51, Asahi Lina wrote:
-> Other functions touching shmem->sgt take the pages lock, so do that here
-> too. drm_gem_shmem_get_pages() & co take the same lock, so move to the
-> _locked() variants to avoid recursive locking.
+> Hi Lee,
 > 
-> Discovered while auditing locking to write the Rust abstractions.
+> On Sat, Feb 04, 2023 at 02:01:46PM +0000, Lee Jones wrote:
+> > On Sat, 04 Feb 2023, Lee Jones wrote:
+> > > On Fri, 27 Jan 2023, Sebastian Reichel wrote:
+> > > > Split rk808 into a core and an i2c part in preperation for
+> > > > SPI support.
+> > > > 
+> > > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > > > ---
+> > > >  drivers/clk/Kconfig                   |   2 +-
+> > > >  drivers/input/misc/Kconfig            |   2 +-
+> > > >  drivers/mfd/Kconfig                   |   7 +-
+> > > >  drivers/mfd/Makefile                  |   3 +-
+> > > >  drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
+> > > >  drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
+> > > >  drivers/pinctrl/Kconfig               |   2 +-
+> > > >  drivers/power/supply/Kconfig          |   2 +-
+> > > >  drivers/regulator/Kconfig             |   2 +-
+> > > >  drivers/rtc/Kconfig                   |   2 +-
+> > > >  include/linux/mfd/rk808.h             |   6 +
+> > > >  sound/soc/codecs/Kconfig              |   2 +-
+> > > >  12 files changed, 256 insertions(+), 183 deletions(-)
+> > > >  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
+> > > >  create mode 100644 drivers/mfd/rk8xx-i2c.c
+> > > 
+> > > Looks like you completely ignored (no response / no action) my review of
+> > > v4.  This submission is therefore not getting one!  All comments can be
+> > > superimposed from v4.
+> > 
+> > s/v4/v5/
 > 
-> Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
-> Fixes: 4fa3d66f132b ("drm/shmem: Do dma_unmap_sg before purging pages")
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
+> not sure what you are talking about. I dropped the PM wrappers and
+> added a new patch moving the driver to use OF match. There were no
+> other comments as far as I can tell. Did I miss a second mail with
+> more comments?
 
-Good catch. The patch looks good to me.
+Ah, the driver was split *then* you implemented my suggestions.
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+That's not what I was expecting, but is also valid.
 
-What about drm_gem_shmem_free() BTW, I believe that the helper should also
-grab the lock before unmap / free the sgtable?
+Very well, ignore my last - this set is back in my to-review queue.
 
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Lee Jones [李琼斯]
