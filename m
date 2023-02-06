@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493EE68C369
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA0968C36B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjBFQcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
+        id S230070AbjBFQea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBFQb6 (ORCPT
+        with ESMTP id S229758AbjBFQe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:31:58 -0500
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A701FBBAE;
-        Mon,  6 Feb 2023 08:31:56 -0800 (PST)
-Received: by soltyk.jannau.net (Postfix, from userid 1000)
-        id DDDA626F72A; Mon,  6 Feb 2023 17:31:54 +0100 (CET)
-Date:   Mon, 6 Feb 2023 17:31:54 +0100
-From:   Janne Grunau <j@jannau.net>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mailing List <devicetree-spec@vger.kernel.org>,
-        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
-        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
-Subject: Re: [PATCH RFC 0/3] dt-bindings: net: Add network-class.yaml schema
-Message-ID: <20230206163154.GA9004@jannau.net>
-References: <20230203-dt-bindings-network-class-v1-0-452e0375200d@jannau.net>
- <CAL_JsqKD7gD86_B93M19rBCWn+rmSw24vOGEhqi9Nvne1Xixwg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqKD7gD86_B93M19rBCWn+rmSw24vOGEhqi9Nvne1Xixwg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 11:34:28 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE71C212B5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:34:27 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 768C03E6F1;
+        Mon,  6 Feb 2023 16:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675701266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nh8rkL2Fn8iK/CduCDo2jK1Hp3nr2Izl3uvgWoHdp58=;
+        b=x60xaEhzJND/zVbDwxWH0uaKK6aUA+2/cVxZtJtGsXoL4mub0a4/VpAJeJ3ObyzW6TB24b
+        WpTD+L+XhZ+1MJvJi2Rt7WVgBdZgKQ8cep0EwXwpJAMgrxNKPf6Pgm/kJWk2dAOymIhAxU
+        YlbOXT+qN04U6VktCxPoORvQOb+k08k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675701266;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nh8rkL2Fn8iK/CduCDo2jK1Hp3nr2Izl3uvgWoHdp58=;
+        b=x4lDOYDnJw6+xDWLqtqfQ8B/NWSKNTjMhiFHx1sEl9DjS544+SOHC7W0xMdSKkyAtddLoE
+        k3D1DbmsZYZAUSCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 516FD138E7;
+        Mon,  6 Feb 2023 16:34:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id olO/EhIs4WPCEAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 06 Feb 2023 16:34:26 +0000
+Date:   Mon, 06 Feb 2023 17:34:25 +0100
+Message-ID: <87v8kezram.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Stefan Binding <sbinding@opensource.cirrus.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH v1] ALSA: hda/realtek: Add quirk for ASUS UM3402 using CS35L41
+In-Reply-To: <20230206150019.3825120-1-sbinding@opensource.cirrus.com>
+References: <20230206150019.3825120-1-sbinding@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-03 08:41:28 -0600, Rob Herring wrote:
-> On Fri, Feb 3, 2023 at 7:56 AM Janne Grunau <j@jannau.net> wrote:
-> >
-> > The Devicetree Specification, Release v0.3 specifies in section 4.3.1
-> > a "Network Class Binding". This covers MAC address and maximal frame
-> > size properties. "local-mac-address" and "mac-address" with a fixed
-> > address-size of 48 bits is already in the ethernet-controller.yaml
-> > schema so move those over.
-> > I think the only commonly used values for address-size are 48 and 64
-> > bits (EUI-48 and EUI-64). Unfortunately I was not able to restrict the
-> > mac-address size based on the address-size. This seems to be an side
-> > effect of the array definition and I was not able to restrict "minItems"
-> > or "maxItems" based on the address-size value in an "if"-"then"-"else"
-> > block.
-> > An easy way out would be to restrict address-size to 48-bits for now.
+On Mon, 06 Feb 2023 16:00:19 +0100,
+Stefan Binding wrote:
 > 
-> I've never seen 64-bits used...
-
-ZigBee and 6LoWPAN use 64-bits for example. Let's hardcode 48 bits for 
-now as that's what all in-tree devicetrees implicitly use. If needed it 
-can be changed later.
-
-> > I've ignored "max-frame-size" since the description in
-> > ethernet-controller.yaml claims there is a contradiction in the
-> > Devicetree specification. I suppose it is describing the property
-> > "max-frame-size" with "Specifies maximum packet length ...".
+> This Asus Zenbook laptop use Realtek HDA codec combined with
+> 2xCS35L41 Amplifiers using I2C with External Boost.
 > 
-> Please include it and we'll fix the spec. It is clearly wrong. 2 nios
-> boards use 1518 and the consumer for them says it is MTU. Everything
-> else clearly uses mtu with 1500 or 9000.
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 
-Ok, the example in the pdf is 'max-frame-size = <1518>;'. I'll include 
-it with the description of ethernet-controller.yaml which specifies it 
-as MTU.
+Thanks, applied now.
 
-Janne
+
+Takashi
