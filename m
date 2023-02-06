@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86FE68C0DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0D568C0E2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjBFPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S230116AbjBFPCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBFPBm (ORCPT
+        with ESMTP id S229990AbjBFPCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:01:42 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6F81E9C0;
-        Mon,  6 Feb 2023 07:01:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675695701; x=1707231701;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Om6WD/1Mx5CxjfHlHObyDLvGRocDTOtSddT1RwDeHp4=;
-  b=cCEnINPQ3hpcNO3ycu3gpSDNwwml053Q8en1iTPvPorEMwM87WKjspBP
-   ajPAS6ECTI9GQZ+/YiwGLLqHx0ZVl9VUaaZRytPg5YX9reXc3M236CvAS
-   U9zVtjUQVkm7K9d57xziUaXRZGy7SzEMZeFeuMhm1BGPJg00RXFmeuhLM
-   Nar31BYNGu1oVlTz9U/uBVssdIe+uroOiaI3GNnxIV9OtSQFYKPynUQII
-   nzCEXOYAT3jOQGTYVnRvxlK89wf7U5vOTtn7mT0jWZZQSd2reCItknSF0
-   6mmsKIKuurom/RTfx2QyzMlpWaBih2RdlpXikJ5IKQbDQ5WoDj9xDfF39
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="331355591"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="331355591"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 07:01:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="735153689"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="735153689"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Feb 2023 07:01:29 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 227451EA; Mon,  6 Feb 2023 17:02:07 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] platform/x86: Add include/linux/platform_data/x86 to MAINTAINERS
-Date:   Mon,  6 Feb 2023 17:02:02 +0200
-Message-Id: <20230206150202.27892-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 6 Feb 2023 10:02:44 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF953C644
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:02:43 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4b718cab0e4so158466287b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 07:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6kD2nBw9wr4ZURcXCv4tl7gixSwW6X6UZTXU1h15hk=;
+        b=BvkV62V/N9+uQ4o58Y23DaIf+ksKPFLkGkImeKdcUVpXkDd0ZqBbq0KGQ9oNJG/pZw
+         QH7UkruSWvOam0/EZBzX5lE4KQIkeglT08UPSV4u76trqdesRCq3Em9KmEjz4TMiOJ3S
+         aHLaB73Y1wPfcJSh7uSRVuiXmNjNWYxx+b3YIZO6Y9+9CYs2DuO3UEOCpdbJvHP1kC7r
+         d+8/vTMyyc+9hDJr3HipzTZt+Y5uq5VgUIkfuwhIisNc/3MVyMvfN/NBAAIuKSfuAkk6
+         Yo8t2jN54NhOo44O03NuejLKzSXfpdxothOeVtzjnzOJr3siI2aM1B/W22NWIKXETJOw
+         9oSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E6kD2nBw9wr4ZURcXCv4tl7gixSwW6X6UZTXU1h15hk=;
+        b=CL+vnCH18jKHFeo9PWafbImO83O/JB3osVltzd3zD7DrdSaUyhVA8uO30gGBXu34OA
+         mmulq0Utxyy1sKeBxSHZZ+l1G1Fof+otjmZYF2wZdzh0C1V2FdBhQY2DRaENqpyTr8wi
+         MV2tgAOXDkFvduD/pcDl5tdd5zEkzdn9/EGijaqQyOM0mlZRHGtHljlrdZtJDgY5n2+z
+         T2JGfSqRXOKoPS0sRinUvTSpg1AwRua5e7W884p+0gPmdiVeJUTHghepMWuKod8VcDmj
+         lSq+Ls3meYEGHo+mEPOcfNaI/RTeZMCKpsj0+UdswmW+z7MoJA3KJqNbXWStGRl7oo9y
+         7miQ==
+X-Gm-Message-State: AO0yUKUuSSadfJg+curz6fNUYjVG8mfHznaOMi11bpvACmH4X3gRdtko
+        zuPuwVHKFHCQqel8KQf5lZuaxUNJlT5+wbpkzPLzwQ==
+X-Google-Smtp-Source: AK7set9YJFx8Qp3l5WOe15WEwG/edOBQA0wNH8MX6CDDWvCRz82S+qTI9YIbBz8FGY9wQsMjpLFcwbd10Asw4Kfz3OA=
+X-Received: by 2002:a0d:cb44:0:b0:527:95bf:db25 with SMTP id
+ n65-20020a0dcb44000000b0052795bfdb25mr931922ywd.273.1675695759139; Mon, 06
+ Feb 2023 07:02:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206141558.20916-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230206141558.20916-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Feb 2023 16:02:27 +0100
+Message-ID: <CACRpkdZaUFiWK_EsQkiKpR7n=VdbW=HnqonZ_GRei6r9Kyg3_Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: intel: Restore the pins that used to be
+ in Direct IRQ mode
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Jim Minter <jimminter@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the files there are being used under PDx86 subsystem or
-tightly related drivers (like drivers/clk/x86/). I think it makes
-sense to assure that PDx86 keeps an eye on the changes there.
+On Mon, Feb 6, 2023 at 3:16 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+> If the firmware mangled the register contents too much,
+> check the saved value for the Direct IRQ mode. If it
+> matches, we will restore the pin state.
+>
+> Reported-by: Jim Minter <jimminter@microsoft.com>
+> Fixes: 6989ea4881c8 ("pinctrl: intel: Save and restore pins in "direct IRQ" mode")
+> Tested-by: Jim Minter <jimminter@microsoft.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>
+> Jim, this is a bit simplified version than what you tested. But it shouldn't
+> be a functional changes. Anyway, it would be nice if you have a chance to give
+> this a try.
+>
+> Linus, I don't expect more to come for this cycle, feel free to apply directly.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4329d6611c20..705ffd15afbe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22598,6 +22598,7 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
- F:	drivers/platform/olpc/
- F:	drivers/platform/x86/
-+F:	include/linux/platform_data/x86/
- 
- X86 PLATFORM DRIVERS - ARCH
- R:	Darren Hart <dvhart@infradead.org>
--- 
-2.39.1
+OK no problem, does it go into fixes pronto or for next (v6.3)?
+I would guess fixes but I never know the difference between urgent
+and nourgent fixes...
 
+Yours,
+Linus Walleij
