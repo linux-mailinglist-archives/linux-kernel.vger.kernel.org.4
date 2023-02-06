@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A8568C032
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE93568C038
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbjBFOee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S230356AbjBFOfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjBFOec (ORCPT
+        with ESMTP id S229508AbjBFOfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:34:32 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC74F23DA0;
-        Mon,  6 Feb 2023 06:34:31 -0800 (PST)
-Date:   Mon, 06 Feb 2023 14:34:30 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675694070;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=lTvjL1KX8h96Jn3F5nqsbDVPXpo9oQm1PefgNz3vkhg=;
-        b=3pAoti8WZuS7RgNMf/03XuCU8LDBBj+ZVV0/LlnthqbkLE+37wyHj4HUna/uNAkWN8D5X6
-        e5sXlZPJxw5DuSlfT1q2ZJb3E8Ck3yY1s8j5x2r+zLhXhvYHhe1nih+rnvFGXPD7cH7gfL
-        3WXrJL17xLsbbWJVZx8VLDYPfz788auv1Z0xHpxeheeW4BFFjgORFDq9V/j/GsFb9z7vHw
-        vN+q8eFRA+KzDsQH7E03U8ZwQPpzpwydrjqUjYpnZhFxo3AWzWm2+PRzzioS++z5wfGMnB
-        AgeZ3It8T20ieO63JsTY4TVU91f2gHVIfTRijZ1U3p2kv000ZLeQZvpbUaRLZQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675694070;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=lTvjL1KX8h96Jn3F5nqsbDVPXpo9oQm1PefgNz3vkhg=;
-        b=KxeRmhxV4cXHkmXmAxf7ZYrPuwQQ3VdmfPgzTK6bEdEQuijUASrPLCo0P6/GZCl2C0LnXG
-        L2nGjQWYWIg8osBw==
-From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] vduse: Remove include of rwlock.h
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Michael S. Tsirkin" <mst@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-MIME-Version: 1.0
-Message-ID: <167569407005.4906.11428635230479765759.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 09:35:53 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CE223DA0;
+        Mon,  6 Feb 2023 06:35:52 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id d2so8138750pjd.5;
+        Mon, 06 Feb 2023 06:35:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V6xEVHTq4BRT21XT3igauxghHQalnR6mzNTQMSRZCcI=;
+        b=PUK6yVSLPoWPtAI6SVLDKNFP6ey/03oHofWOTQaRF2f8HQujwDUcSUf62NWhLKm4Uo
+         YXstcii1NiNg0y/eG5kinLFNV8/+8smrm8PXFNjHOL39IAFe/e5Qof19TQzEdU0TrEOw
+         mdlMMpadPxAlE7b8dGNMwT9HWVEBlwXPR0seRZSCHXiPFMohdT8/u7YqVuWNJwg0RxzX
+         Jv1hUcmReKedzpYn6XFsFMxS35bweAf0/iAnoU3HeOctkI8Snn1LiogH684zEBM1d5R1
+         UKpIZz5VbMcvDXpi+OdMedjl44jR8IbpVh/gl6+z8jyCrTQXrR1rPe23hzpU/Wiuymfd
+         LfeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V6xEVHTq4BRT21XT3igauxghHQalnR6mzNTQMSRZCcI=;
+        b=Ivq1Hhq1+sUuQ/gyv9MEcr5ZqgBYaints97ht5qHGJ+O0v0ZsMu3AJs+6rc1S4wr4x
+         eowOAb3soaF2NCR6PoYg6+/GUbLKSA+68eJQfOsss6O9Tfs1gCZAjuB5A26EnsvmrIaB
+         FWuDSrLSnGbVcTSnsulhL1dhTBAM+6BbCK758DUcHumauNmRTmRznbK7BJBAxBk15nj3
+         S9oPfP7juBACVAo6CkaTOsreGHoXr+fwp5BJl0Y8ZaUC3ngPUgyE0buHAnhLMK+xFOed
+         eE410xHKWVVJI34MwcLNwmIungCgyvh+LIlbfwPouCol76Y6FvyHy+f8aGXvb248xSK1
+         q8yA==
+X-Gm-Message-State: AO0yUKXt1wpv3TzVbdz3FGpJshT7SWofuPo1pcSEug+tbtrDRyUS2n5i
+        DZr25sKWVpQER8ka9IsEjgOCu+PnuT8=
+X-Google-Smtp-Source: AK7set9KvzHJrQ1opQ/69an3pSyuKPBPwGMCbWMp7807AmsrBf9HEFH4jM3ULC8bAMCO2S8nqjIxvw==
+X-Received: by 2002:a17:902:dad2:b0:193:678:df13 with SMTP id q18-20020a170902dad200b001930678df13mr24797027plx.36.1675694151737;
+        Mon, 06 Feb 2023 06:35:51 -0800 (PST)
+Received: from dell-cros.hitronhub.home ([119.77.166.223])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170903248600b00198b0fd363bsm7021181plw.45.2023.02.06.06.35.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 06:35:51 -0800 (PST)
+From:   Ron Lee <ron.lee.intel@gmail.com>
+X-Google-Original-From: Ron Lee <ron.lee@intel.com>
+To:     bhelgaas@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        lmajczak@google.com, rajatja@google.com,
+        Ron Lee <ron.lee@intel.com>
+Subject: [PATCH v3] PCI: Fix up L1SS capability for Intel Apollo Lake PCIe bridge
+Date:   Mon,  6 Feb 2023 22:35:40 +0800
+Message-Id: <20230206143540.15325-1-ron.lee@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+On Google Coral and Reef family Chromebooks with Intel Apollo Lake
+SoC, the PCIe bridge lost its L1 PM Substates capability after resumed
+from D3cold. This patch save the capability header and the pointer
+offset to the L1SS capability after this bridge initialized, and
+recover them every time resuming from D3cold.
 
-Commit-ID:     3b4863fa5b7dd50dab1b10abbed938efd203752f
-Gitweb:        https://git.kernel.org/tip/3b4863fa5b7dd50dab1b10abbed938efd203752f
-Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Wed, 26 Oct 2022 15:44:07 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 06 Feb 2023 15:31:05 +01:00
-
-vduse: Remove include of rwlock.h
-
-rwlock.h should not be included directly. Instead linux/splinlock.h
-should be included. Including it directly will break the RT build.
-
-Remove the rwlock.h include.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
+Link:https://lore.kernel.org/linux-pci/CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com/T/#u
+Signed-off-by: Ron Lee <ron.lee@intel.com>
 ---
- drivers/vdpa/vdpa_user/iova_domain.h | 1 -
- 1 file changed, 1 deletion(-)
+Change from v2: traverse the capability link list to find the L1SS capability header
+and pointer offset to the L1SS capability, save them after the bridge initialized and 
+restore them after resuming from D3cold.
 
-diff --git a/drivers/vdpa/vdpa_user/iova_domain.h b/drivers/vdpa/vdpa_user/iova_domain.h
-index 4e0e50e..173e979 100644
---- a/drivers/vdpa/vdpa_user/iova_domain.h
-+++ b/drivers/vdpa/vdpa_user/iova_domain.h
-@@ -14,7 +14,6 @@
- #include <linux/iova.h>
- #include <linux/dma-mapping.h>
- #include <linux/vhost_iotlb.h>
--#include <linux/rwlock.h>
- 
- #define IOVA_START_PFN 1
- 
+ drivers/pci/quirks.c | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 285acc4aaccc..4e1c8c4c7e9a 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5992,3 +5992,44 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
+ #endif
++
++#ifdef CONFIG_PCIEASPM
++static u16 pos_to_l1ss;
++static u32 l1ss_header;
++static void chromeos_save_apl_pci_l1ss_capability(struct pci_dev *pdev)
++{
++	u32 header;
++	int pos = PCI_CFG_SPACE_SIZE;
++
++	while (pos) {
++		pci_read_config_dword(pdev, pos, &header);
++		if (PCI_EXT_CAP_NEXT(header) == pdev->l1ss)
++			pos_to_l1ss = pos;
++		else if (PCI_EXT_CAP_ID(header) == PCI_EXT_CAP_ID_L1SS)
++			l1ss_header = header;
++
++		pos = PCI_EXT_CAP_NEXT(header);
++	}
++}
++
++static void chromeos_fixup_apl_pci_l1ss_capability(struct pci_dev *pdev)
++{
++	u32 header;
++
++	if (!pos_to_l1ss || !l1ss_header)
++		return;
++
++	pci_info(pdev, "Fixup L1SS Capability\n");
++	/* Fixup the header of L1SS Capability if missing */
++	pci_read_config_dword(pdev, pdev->l1ss, &header);
++	if (PCI_EXT_CAP_ID(header) != PCI_EXT_CAP_ID_L1SS)
++		pci_write_config_dword(pdev, pdev->l1ss, l1ss_header);
++
++	/* Fixup the link to L1SS Capability if missing*/
++	pci_read_config_dword(pdev, pos_to_l1ss, &header);
++	if (PCI_EXT_CAP_NEXT(header) != pdev->l1ss)
++		pci_write_config_dword(pdev, pos_to_l1ss, pdev->l1ss << 20);
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_save_apl_pci_l1ss_capability);
++DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_pci_l1ss_capability);
++#endif
+-- 
+2.17.1
+
