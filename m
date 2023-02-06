@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7CB68B8DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136EC68B8E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjBFJoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 04:44:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        id S229841AbjBFJpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 04:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjBFJoD (ORCPT
+        with ESMTP id S229661AbjBFJpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:44:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1237914492
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:44:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4950B80E0B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:44:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9B0C4339C;
-        Mon,  6 Feb 2023 09:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675676639;
-        bh=BLBlNcQq7iMAgQJd1jPGiu4pcQKBixJyR1fnAst7nOo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UWq7tDV8MbPN/xGCWTaNxObOk86UcoHR/Imxk25zvxp6XRZ6aXkXtIFRqb/IT5SEs
-         lMfabDhNBpFrortm/BlVDphE1HlgpNysK1nLK35cRnG53y94+mRt8Q6I9Mlo2j5icU
-         677CdNQhCQshrEeSJ2DibJ2Gnp04iF/7cMpIyOvU=
-Date:   Mon, 6 Feb 2023 10:43:56 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
- inline function
-Message-ID: <Y+DL3O5lcMyZ/aNR@kroah.com>
-References: <Y9/xXHvOAwfqoDxn@combine-ThinkPad-S1-Yoga>
- <3cb45313-209a-8190-12f8-6a2d49e4173b@wanadoo.fr>
- <Y+A+HF1vDeRIqye5@combine-ThinkPad-S1-Yoga>
+        Mon, 6 Feb 2023 04:45:17 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34F6EFA2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675676715; x=1707212715;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hPsWrNl0e4B6gbmEyflkO0IZqCRbH7g6geB8jiNZ3F8=;
+  b=PVqqzTsL0wE6LRBn68NW4+QHI8zL5tlnalW9vBwRKExPzJgBqJFUOeJk
+   tID7/UWPbCnVJ/ey96ZQUPZPmR7dhNVyV/gAU1ZWSC004FJ0+41z3yg+/
+   6uVzp92pFgT+oW0ls/AtVp8GEfWV0Xdu/cesH5xZVUngx/XGMkY/3MkyL
+   GEzFuseHvu5FZtdB/kB189Foa958QyZaDSr1KnEebc+NsUGRFbAKDsMKk
+   RV7ZA+JTT5pIkU9zJ+5UmecDXUvaZsLo9yD5J5kX8oIxeIVzASd5w4gWW
+   tf51mRZNuuTRga4uJyuTpddL0160vBbmn6rOkQSNlp9f6HnaMkFcaInrE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="317177733"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="317177733"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 01:45:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="666432858"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="666432858"
+Received: from kgurski-mobl3.ger.corp.intel.com (HELO [10.213.203.226]) ([10.213.203.226])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 01:45:12 -0800
+Message-ID: <d58fff32-edad-4a7f-7409-7e57593df3ed@linux.intel.com>
+Date:   Mon, 6 Feb 2023 09:45:10 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y+A+HF1vDeRIqye5@combine-ThinkPad-S1-Yoga>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] drm/i915/gt: Avoid redundant pointer validity check
+Content-Language: en-US
+To:     Deepak R Varma <drv@mailo.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Matthew Auld <matthew.auld@intel.com>,
+        Thomas Hellstrom <thomas.hellstrom@intel.com>
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+References: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 12:39:08AM +0100, Guru Mehar Rachaputi wrote:
-> On Sun, Feb 05, 2023 at 08:12:31PM +0100, Christophe JAILLET wrote:
-> > Le 05/02/2023 à 19:11, Guru Mehar Rachaputi a écrit :
-> > > This patch is to fix checkpatch warning: "Macro argument 'iobase' may be better
-> > > as '(iobase)' to avoid precedence issues" changed to inline function. In
-> > > relation to this, names of the callers of macro are also modified to call
-> > > this function.
-> > > 
-> > > Signed-off-by: Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-> > 
-> > Hi,
-> > 
-> > this patch should be v4.
-> > You re-sent it with a modified commit message (the position of your S-o-b)
-> > 
-> > The idea behind patch versions is to help maintainer. With the way you did,
-> > now 2 patches stating v3 are available.
-> > Which one is the correct one?
-> > The maintainer would need to look at both, search for differences, maybe
-> > look at the date of the mails.
-> > A v4 would be much easier for him.
-> > 
-> > 
-> > Also, when you send an updated version of a patch, it should always be
-> > "complete". I mean that the patch below seems to need v2, and maybe even v1
-> > (which is apparently not on the linux-kernel mailing list).
-> > 
-> > A maintainer can't know by himself what is needed and what is not.
-> > 
-> > So you should resend a new patch.
-> > It should be a v4, and it should include what is needed from (v1?), v2 and
-> > v3 all together.
-> > 
-> > CJ
-> > 
-> > 
-> > > ---
-> > > Changes in v3:
-> > > 	- Whitespace error from checkpatch fixed
-> > > 
-> > > Changes in v2:
-> > > 	- Macros with one statement that is to call 'iowrite8' function changed
-> > > 	to inline function as reviewed by gregkh@linuxfoundation.org.
-> > > 	In relation to this, names of the callers of macro are also modified
-> > > 	to call this function.
-> > > ---
-> > >   drivers/staging/vt6655/card.c    | 3 +--
-> > >   drivers/staging/vt6655/channel.c | 2 +-
-> > >   drivers/staging/vt6655/mac.h     | 4 ++--
-> > >   3 files changed, 4 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/staging/vt6655/card.c b/drivers/staging/vt6655/card.c
-> > > index a6ff496b01b6..d2d122dc16d8 100644
-> > > --- a/drivers/staging/vt6655/card.c
-> > > +++ b/drivers/staging/vt6655/card.c
-> > > @@ -643,8 +643,7 @@ void CARDvSetRSPINF(struct vnt_private *priv, u8 bb_type)
-> > >   				   &byRsvTime);
-> > >   	iowrite16(MAKEWORD(byTxRate, byRsvTime), priv->port_offset + MAC_REG_RSPINF_A_72);
-> > >   	/* Set to Page0 */
-> > > -        vt6655_mac_select_page0(priv->port_offset);
-> > > -
-> > > +	vt6655_mac_select_page0(priv->port_offset);
-> > >   	spin_unlock_irqrestore(&priv->lock, flags);
-> > >   }
-> > > diff --git a/drivers/staging/vt6655/channel.c b/drivers/staging/vt6655/channel.c
-> > > index e9a44bcebe32..60b445c38424 100644
-> > > --- a/drivers/staging/vt6655/channel.c
-> > > +++ b/drivers/staging/vt6655/channel.c
-> > > @@ -121,7 +121,7 @@ bool set_channel(struct vnt_private *priv, struct ieee80211_channel *ch)
-> > >   		iowrite8(priv->byCurPwr, priv->port_offset + MAC_REG_PWRCCK);
-> > >   		RFbSetPower(priv, RATE_6M, priv->byCurrentCh);
-> > >   		iowrite8(priv->byCurPwr, priv->port_offset + MAC_REG_PWROFDM);
-> > > -	        vt6655_mac_select_page0(priv->port_offset);
-> > > +		vt6655_mac_select_page0(priv->port_offset);
-> > >   		spin_unlock_irqrestore(&priv->lock, flags);
-> > >   	}
-> > > diff --git a/drivers/staging/vt6655/mac.h b/drivers/staging/vt6655/mac.h
-> > > index b9a7ca0fe604..ae3064303691 100644
-> > > --- a/drivers/staging/vt6655/mac.h
-> > > +++ b/drivers/staging/vt6655/mac.h
-> > > @@ -539,12 +539,12 @@
-> > >   static inline void vt6655_mac_select_page0(void __iomem *iobase)
-> > >   {
-> > > -        iowrite8(0, iobase + MAC_REG_PAGE1SEL);
-> > > +	iowrite8(0, iobase + MAC_REG_PAGE1SEL);
-> > >   }
-> > >   static inline void  vt6655_mac_select_page1(void __iomem *iobase)
-> > >   {
-> > > -        iowrite8(1, iobase + MAC_REG_PAGE1SEL);
-> > > +	iowrite8(1, iobase + MAC_REG_PAGE1SEL);
-> > >   }
-> > >   #define MAKEWORD(lb, hb) \
-> > 
+
+Hi,
+
+Adding Matt & Thomas as potential candidates to review.
+
+Regards,
+
+Tvrtko
+
+On 03/02/2023 19:30, Deepak R Varma wrote:
+> The macro definition of gen6_for_all_pdes() expands to a for loop such
+> that it breaks when the page table is null. Hence there is no need to
+> again test validity of the page table entry pointers in the pde list.
+> This change is identified using itnull.cocci semantic patch.
 > 
-> Thanks for the explaination.
-> Since I amended commit message and thought as there is no new commit it
-> should still be the same patch.
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Please note: Proposed change is compile tested only.
 > 
-> Is it ok if I send a new patchset based on the previous conversations?
-> I have four commits now, 4th commit being just the commit message and
-> this patchset doesn't have s-o-b issue.
-
-Look at other submissions on the mailing lists.  When you submit a new
-version of a patch, it is stand-alone, with no dependancies on anything
-else, otherwise tracking that would be impossible, right?
-
-I suggest reading through the kernelnewbies.org "first patch submission"
-tutorial first as I think it will answer questions like this.
-
-good luck!
-
-greg k-h
+>   drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> index 5aaacc53fa4c..787b9e6d9f59 100644
+> --- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> +++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
+> @@ -258,8 +258,7 @@ static void gen6_ppgtt_free_pd(struct gen6_ppgtt *ppgtt)
+>   	u32 pde;
+>   
+>   	gen6_for_all_pdes(pt, pd, pde)
+> -		if (pt)
+> -			free_pt(&ppgtt->base.vm, pt);
+> +		free_pt(&ppgtt->base.vm, pt);
+>   }
+>   
+>   static void gen6_ppgtt_cleanup(struct i915_address_space *vm)
+> @@ -304,7 +303,7 @@ static void pd_vma_unbind(struct i915_address_space *vm,
+>   
+>   	/* Free all no longer used page tables */
+>   	gen6_for_all_pdes(pt, ppgtt->base.pd, pde) {
+> -		if (!pt || atomic_read(&pt->used))
+> +		if (atomic_read(&pt->used))
+>   			continue;
+>   
+>   		free_pt(&ppgtt->base.vm, pt);
