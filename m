@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E65568C99D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3852068C9A3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjBFWh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 17:37:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S230057AbjBFWi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 17:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjBFWhZ (ORCPT
+        with ESMTP id S229772AbjBFWiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 17:37:25 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CBB302BD;
-        Mon,  6 Feb 2023 14:37:22 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id m16so2231605qvm.4;
-        Mon, 06 Feb 2023 14:37:22 -0800 (PST)
+        Mon, 6 Feb 2023 17:38:24 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028030287
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:38:23 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id mf7so38584780ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 14:38:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d2oBtxwWwjCPYyU17pu3lBwV9dmGFDQEYRoN+Ty55Io=;
-        b=gbg0RnDrkEtPW9M9RcaDfqIaD3j5DMKgNppT25xHFz30aj9NTwFnwpbnaOLwXXhlRZ
-         QOD2yBmRv+YeFmZkMj+FhGdSwVNXqCmW7skH37un5SuKUUfepwjqwXPCYumStY2RJP1U
-         khj85lSeq3MEz8a0hbKrHO77vVv+3IJVswBqBvqaNW5v7961BQ6YJt7njEEoj5xry82G
-         KoE7kVMauqpDG7hVLzqhTiqX/punkjXxIZ6ogZ0RIoBCEm7LTq4xvEybh0lsQWrxezF/
-         s/gYh+8nSzJWTOnx4yewLISyuXcq+Sy89H36bl0rI5S9xupPWOMaMVVGcS6dYvPPHLpa
-         pk7Q==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Ywdiz8Y63d+k5p5OYSMUxkysdFaESJJzGDG9Fil09g=;
+        b=VPzTwTkNiLkX6zaIOtI1qqgjSmixuflyQj6+2nM2aNmtWkxKQVGGwGKHNHy3wh27Mi
+         P0nfHiuO+NoYeyH1A4kV9RWuttyqRDW4/eHnuNM74+uQrKS7DDrDrC0j9lfb63sNHoMo
+         yJtBumuovg6F+K1rb8XMx69GPjUnngSFs4cH8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d2oBtxwWwjCPYyU17pu3lBwV9dmGFDQEYRoN+Ty55Io=;
-        b=g6ZsnFmeZMBUIWCk5STnS5oiyfq+/rS0Ht3apn0k3x1M4nRzC7wUoMvWRuWCvX/JQn
-         gy2Zgkz2UKWDOml7qLU9P4aRduRez9wCYZuup6R2gdygmyXTtXKttVyqDMaZ8XbQW6++
-         7+m8ho/7YktqKpXvmddm06+Cna/3LuwTzdD/CUpe6LADgGcV1w2Yy0EdVCQGBgFpKWdZ
-         R9tbQd3P6hVdvdqNx7xApcKFNxoNPDBSYx+5JCwUjsxYfPdkT5bS5Q4Y/RRQJlyzqYYQ
-         DIm//Qf2zXqJpEw4KsUdYoi9MmEnCU95J3nh648SwV7TeK1Ie5+oRY56osdJcEmTD9fp
-         5hFQ==
-X-Gm-Message-State: AO0yUKX8RtGiZPcx9qvGSaHyiNHvLSdSmex8LKU2XVPUSQyYlgH2otcE
-        CoC4OkpG1zSpR55H44AZwA8=
-X-Google-Smtp-Source: AK7set/souzQpPd5P9nDBDN5p287ExonEIT5vFztObwMnaHLBbSYhQ0mLbkJiRyT+L9bqtWvcgL78g==
-X-Received: by 2002:a05:6214:400e:b0:537:7566:5098 with SMTP id kd14-20020a056214400e00b0053775665098mr1547455qvb.15.1675723041926;
-        Mon, 06 Feb 2023 14:37:21 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b9-20020a05620a270900b0071df8b60681sm8243934qkp.94.2023.02.06.14.36.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 14:37:21 -0800 (PST)
-Message-ID: <7a21e1fe-82ac-6285-ceaf-6450a7ee4325@gmail.com>
-Date:   Mon, 6 Feb 2023 14:36:51 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Ywdiz8Y63d+k5p5OYSMUxkysdFaESJJzGDG9Fil09g=;
+        b=lH7pdNf6n4/Rag/q1p7dpl2FThZHdHE9PsYllbGDH1rsaY6GrReeGly0Qi6MkiP4Rb
+         5+aCTdiydbC5k9t9IqWuAAjg9KjG3i5nnilpr4XGVkcIEJ436qbXoxVwGdPKF1Q1BW94
+         rjlm/YOYAl5V3s1Pe/FpmNSSct7bUKnMp+g+llb/sF0Rmm9yRSZWPRL70S73XICVj7Bo
+         3TB62efB2tZkcayMyjPfDnRGRVq1Gw3tZV9D8liBQetLKQN7sbd+z9TpY6QM2D4vaB9a
+         PJS4TW6YYO7thli1RvrmclWMm0KxUQ6CLHF01Cp3ZibRRat7O/rWJHq9zlwuOvepkntu
+         s4fw==
+X-Gm-Message-State: AO0yUKWerE1Pere4ivDNo2GjAUN4cXl9C4AWv3ql5grfidJq+KNtOTOq
+        3QSD7zVIkjZw/boEYIkG4XzPpkgbH9myUfs7NUxZWQ==
+X-Google-Smtp-Source: AK7set8B3ImGlsGE4SMJGki/gGVorL2JK8PLiGjCPRIV3hPBifquz+u2hCg/86NIM37S8mjMTQQ4/P1I8KVpe4lgaE8=
+X-Received: by 2002:a17:906:37c2:b0:878:7bc7:958a with SMTP id
+ o2-20020a17090637c200b008787bc7958amr286415ejc.220.1675723101804; Mon, 06 Feb
+ 2023 14:38:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 11/22] mips/cpu: Mark play_dead() __noreturn
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     jgross@suse.com, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-References: <cover.1675461757.git.jpoimboe@kernel.org>
- <829d68d289ad4eeac27c5220be695cfa6ace33f4.1675461757.git.jpoimboe@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <829d68d289ad4eeac27c5220be695cfa6ace33f4.1675461757.git.jpoimboe@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230128-list-entry-null-check-sched-v2-1-d8e010cce91b@diag.uniroma1.it>
+ <20230206112342.223d2c29@rorschach.local.home> <Y+ExcOoHOzSctvue@lorien.usersys.redhat.com>
+In-Reply-To: <Y+ExcOoHOzSctvue@lorien.usersys.redhat.com>
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Mon, 6 Feb 2023 23:38:09 +0100
+Message-ID: <CAEih1qXHjrbMnMKa=DKVNTYbFoBKLi0ji+usRMgjLFqmvrbVeA@mail.gmail.com>
+Subject: Re: [PATCH v2] sched: pick_next_rt_entity(): checked list_entry
+To:     Phil Auld <pauld@redhat.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dmitry Adamushko <dmitry.adamushko@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 14:05, Josh Poimboeuf wrote:
-> play_dead() doesn't return.  Annotate it as such.  By extension this
-> also makes arch_cpu_idle_dead() noreturn.
-> 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+On Mon, 6 Feb 2023 at 17:57, Phil Auld <pauld@redhat.com> wrote:
+>
+> On Mon, Feb 06, 2023 at 11:23:42AM -0500 Steven Rostedt wrote:
+> > On Tue, 31 Jan 2023 13:01:16 +0000
+> > Pietro Borrello <borrello@diag.uniroma1.it> wrote:
+> >
+> > > index ed2a47e4ddae..c024529d8416 100644
+> > > --- a/kernel/sched/rt.c
+> > > +++ b/kernel/sched/rt.c
+> > > @@ -1777,6 +1777,7 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+> > >     BUG_ON(idx >= MAX_RT_PRIO);
+> > >
+> > >     queue = array->queue + idx;
+> > > +   SCHED_WARN_ON(list_empty(queue));
+> >
+> > I wonder if we should make this:
+> >
+> >       if (SCHED_WARN_ON(list_empty(queue)))
+> >               return NULL;
+> >
+> > >     next = list_entry(queue->next, struct sched_rt_entity, run_list);
+> > >
+> > >     return next;
+> > > @@ -1789,7 +1790,6 @@ static struct task_struct *_pick_next_task_rt(struct rq *rq)
+> > >
+> > >     do {
+> > >             rt_se = pick_next_rt_entity(rt_rq);
+> > > -           BUG_ON(!rt_se);
+> >
+> >               if (unlikely(!rt_se))
+> >                       return NULL;
+>
+> I think that's better than taking a digger in one of the subsequent macros.
+>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Thanks for the feedback.
+Fixed in v3: https://lore.kernel.org/all/20230128-list-entry-null-check-sched-v3-1-b1a71bd1ac6b@diag.uniroma1.it/T/#u
 
+Best regards,
+Pietro
