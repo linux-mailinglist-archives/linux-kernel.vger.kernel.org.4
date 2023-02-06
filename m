@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5E368BA4D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252A568BA48
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjBFKfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S229728AbjBFKfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbjBFKe7 (ORCPT
+        with ESMTP id S231219AbjBFKex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:34:59 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666CE144B7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:34:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675679664; x=1707215664;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QuGXFzog/2TLYOIOh3hII8O6V1snANioCocHfYn8yws=;
-  b=ge2+OMUiEiVgKBcxlb6Ol0zgl8Q5VQLske80OQO8aPNU5o1EenO4M7Ll
-   xTdJ3v4L+Dn1Wb4fBYnUjVbKuoVKg+o7vNNeRnRuJkixT/WGizBJQk0eq
-   fKabI5Ic4VfN6ARHWa2VYUPdVx5boj4F85pcjA1J803mhYtymH6v9BERn
-   qlyfNZQyqkT9fJUByQJdsK5HDtGO2QuiOZM5w77py6GFRh1J2UbvhwTF0
-   zjFsx7ciVmbo5PrIhfIdXAOHg5nJNqPL1SsQgTKmoBD5dQlE9WhN0BLWt
-   qbMjqP6lAuIhgp+OMQ9aCy9S9G+Ca4O7sazCFbSLLzxF3ycVt5Mhzvv1Y
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="308818081"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="308818081"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 02:33:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="790393723"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="790393723"
-Received: from abotsiev-mobl.ger.corp.intel.com (HELO [10.252.3.115]) ([10.252.3.115])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 02:33:16 -0800
-Message-ID: <aa8af778-2a40-7fe0-eb14-234469c74523@intel.com>
-Date:   Mon, 6 Feb 2023 10:33:13 +0000
+        Mon, 6 Feb 2023 05:34:53 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F2823675
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:34:08 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id bg26so8321573wmb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:34:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mxcbcYd9yM82GRoEiNqLK6kFAvDnYbetYCZ2WHY7tl0=;
+        b=oOCz+x6xMtkHfCn/UFoxpvWOBqVNrzoSaCRBvDP9ng3efAm12zRu+1g8vQc9nLYS2o
+         SnlRlRqBV9eYnTp+HtlaNFnMvcmf1i4rHputHf4hdYb9Tfn0se5xQ+BNvSenuCGbiIjN
+         2i19dexf8lUESiJZQYX8G5Cg5YVRyG/X6liEmp5Fl/WHI7e4TOzDz11S8iQrxU5Lozwl
+         9fpCaOZTnVq8gDGoc1hhdT26/6SoyRxjoJZZYm5tf5QZablCt2VTrUhOLodL0QKAVSqS
+         c+539e5leueCdsl92RhlquIGJxEUASESTsfbN5nH2n3A4jq/DAtAdQiESNoGoIUUsSAw
+         1xFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mxcbcYd9yM82GRoEiNqLK6kFAvDnYbetYCZ2WHY7tl0=;
+        b=rzdXQk/blbkjmLt1NBCnsgZ3VwPdtnnivOo7zZ6oV5AULnL+ySscPi92Hnh/QF9Ygx
+         /GtFnpzdgez7N8Tb2A7idA6zAjR+LgAOpR4glA4mF6qcqNZjQ+107pl4cZ8WiOL76J+C
+         6ON9V3guWrRgOk7b5QDVOEXJQ2dDFg4bxgGOZd1UkNB/GcFYFXRPbyOJd0mtEJ1pv1a5
+         SWJZ5+gSrpBbCZdtwFAKIyEoGD+yAZhGf48AimvxWSEfVSo8rdD7xZx3pHN7mKv6kL6Z
+         reevsjU1YDOO/7Kr+71jKQg1GbY0VLn3B6ydvW0OZIEsIwgIr6fyb+8atJdIB5mkJ+Xu
+         MjxQ==
+X-Gm-Message-State: AO0yUKVbxX6MKAFInkpMb+lA+TjT+LYBhyHtu7xhEc/Zeoq2aG9RHm45
+        ZxAF0QzYZ458qtFEPy9hlbv5vw==
+X-Google-Smtp-Source: AK7set/vDvn10a+fQdAU96ODN7IXb+vtLvWxhVPv8Zvs8cIL0xewS3e+HPO0gyTVmaYVvrbsaOQTSQ==
+X-Received: by 2002:a05:600c:3c96:b0:3da:516:19ed with SMTP id bg22-20020a05600c3c9600b003da051619edmr18037107wmb.29.1675679604943;
+        Mon, 06 Feb 2023 02:33:24 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c3b8900b003d9aa76dc6asm16715024wms.0.2023.02.06.02.33.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 02:33:24 -0800 (PST)
+Message-ID: <f1665a8f-5b5b-7d98-a94e-d1b1df04afdf@linaro.org>
+Date:   Mon, 6 Feb 2023 11:33:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/i915/gt: Avoid redundant pointer validity check
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/5] dt-bindings: display: msm: dp-controller: document
+ SM8450 compatible
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-References: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
- <d58fff32-edad-4a7f-7409-7e57593df3ed@linux.intel.com>
-Content-Language: en-GB
-From:   Matthew Auld <matthew.auld@intel.com>
-In-Reply-To: <d58fff32-edad-4a7f-7409-7e57593df3ed@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206-topic-sm8450-upstream-dp-controller-v1-0-f1345872ed19@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v1-1-f1345872ed19@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v1-1-f1345872ed19@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02/2023 09:45, Tvrtko Ursulin wrote:
+On 06/02/2023 11:17, Neil Armstrong wrote:
+> The SM8450 & SM350 shares the same DT TX IP version, use the
+> SM8350 compatible as fallback for SM8450.
 > 
-> Hi,
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/display/msm/dp-controller.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Adding Matt & Thomas as potential candidates to review.
-> 
-> Regards,
-> 
-> Tvrtko
-> 
-> On 03/02/2023 19:30, Deepak R Varma wrote:
->> The macro definition of gen6_for_all_pdes() expands to a for loop such
->> that it breaks when the page table is null. Hence there is no need to
->> again test validity of the page table entry pointers in the pde list.
->> This change is identified using itnull.cocci semantic patch.
->>
->> Signed-off-by: Deepak R Varma <drv@mailo.com>
->> ---
->> Please note: Proposed change is compile tested only.
->>
->>   drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 5 ++---
->>   1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c 
->> b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
->> index 5aaacc53fa4c..787b9e6d9f59 100644
->> --- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
->> +++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
->> @@ -258,8 +258,7 @@ static void gen6_ppgtt_free_pd(struct gen6_ppgtt 
->> *ppgtt)
->>       u32 pde;
->>       gen6_for_all_pdes(pt, pd, pde)
->> -        if (pt)
->> -            free_pt(&ppgtt->base.vm, pt);
->> +        free_pt(&ppgtt->base.vm, pt);
->>   }
->>   static void gen6_ppgtt_cleanup(struct i915_address_space *vm)
->> @@ -304,7 +303,7 @@ static void pd_vma_unbind(struct 
->> i915_address_space *vm,
->>       /* Free all no longer used page tables */
->>       gen6_for_all_pdes(pt, ppgtt->base.pd, pde) {
->> -        if (!pt || atomic_read(&pt->used))
->> +        if (atomic_read(&pt->used))
+> diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+> index 0e8d8df686dc..98bae326e655 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+> @@ -25,6 +25,10 @@ properties:
+>        - qcom,sc8280xp-edp
+>        - qcom,sdm845-dp
+>        - qcom,sm8350-dp
+> +      - items:
+> +          - enum:
+> +            - qcom,sm8450-dp
 
-Wow, I was really confused trying to remember how this all works.
+Indentation looks wrong here. Testing should fail, did you test it?
 
-The gen6_for_all_pdes() does:
+Best regards,
+Krzysztof
 
-(pt = i915_pt_entry(pd, iter), true)
-
-So NULL pt is expected, and does not 'break' here, since 'true' is 
-always the value that decides whether to terminate the loop. So this 
-patch would lead to NULL ptr deref, AFAICT.
-
-
-
->>               continue;
->>           free_pt(&ppgtt->base.vm, pt);
