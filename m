@@ -2,132 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CDA68C5DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB06968C5E1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjBFSfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
+        id S229951AbjBFSf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjBFSfB (ORCPT
+        with ESMTP id S229990AbjBFSfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:35:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C9512052
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675708458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8cgTZ19pW0iVDL2Qnv65/qHceF/KDKwiWrxxdH0jwAM=;
-        b=g1rN8Y/JLOKzoRcELBNjcjwxLnnnJehGof2uTVeRwu+rjSBQWqsRIFgEUj6MvIOG+mdaiN
-        phZgBBNuvIl6uV2E5T1JsWWWPjW+3A9uR9tkIMcc7+E+8C4JZy8RvQiOBxvFgjFmX3f1Ev
-        gPR7stuhYlDmdqve9/uIyWfPW8RFPT8=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-391-6vJlnMW9Nke6GzGv_2OhJw-1; Mon, 06 Feb 2023 13:34:16 -0500
-X-MC-Unique: 6vJlnMW9Nke6GzGv_2OhJw-1
-Received: by mail-pf1-f199.google.com with SMTP id s4-20020a056a00194400b0058d9b9fecb6so6795205pfk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:34:16 -0800 (PST)
+        Mon, 6 Feb 2023 13:35:24 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069CD2B0B5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:35:23 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id 141so8865392pgc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:35:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=00L1YIX4H8zKf3PuLUq07QOm26y5Ud4TCvFHdvWnTKQ=;
+        b=ikhdd2Npj6TQEvKy94NLWFo/n/aSnbPjpScVDW1c6xKVtRknrIfjkl46nx8UvIPFX6
+         xV911PqOZ9ZUc6HE08ydc5yEYX02pX/ld5BzLfEWgiPjNK1mw4EnY5wXsKK8cQZ7lWpi
+         4S3hvlULN0StlGnkwyNq/wBn2r8gHr3nnqOXg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8cgTZ19pW0iVDL2Qnv65/qHceF/KDKwiWrxxdH0jwAM=;
-        b=Rf/8Y7/4ZBaQ+qtu5r2Epuii0iKBRehjQxkzbDbFy+dKLdH9ji24ohqBXuUZ58HSn3
-         0xIPNNlYydMXY3UNJjgJF65M0Mb5bB0r8Y5fJ9TgW/v+eyySr29Dll1/X9mUXGzpkCTN
-         /bqJTvSgWZBw80iSHM38HrBjvzevtgLfHDk5AdAs9OjMFiSONQGxJHIhvMHgWLgXQRf0
-         7BqnXnrClhCyHMgNM8wRiXH/9WLfp8mDK270Na5ueJHrEXUs25zCUmjgmtA7uxks+suh
-         M2rvDV0KQHQXY9gPUV+lP2jLcvY7BRo0aScz9vevFXVuzGgBTQyxEM6XHopyP6CfwFhZ
-         cJgg==
-X-Gm-Message-State: AO0yUKU9e/zmnUn8sxp5hlTMr9hqD4omsvJspCE3DGQO7wSlrgBfsCo4
-        RH8w2JM/Zfo9DtHj6+uYhmHpNYOfQEoUtmRts+KxSVjUZ0F9wCQ2ry0vayz6NjAgJOUNta2p9Bw
-        xiMOqT5MUYjETkBgkCBz4e+APyh2xba2CBId3JjTI
-X-Received: by 2002:a17:90a:d70b:b0:230:8730:c1f7 with SMTP id y11-20020a17090ad70b00b002308730c1f7mr2091716pju.27.1675708455518;
-        Mon, 06 Feb 2023 10:34:15 -0800 (PST)
-X-Google-Smtp-Source: AK7set99C69oyk06AxHIzT3fesAXXKUZuijYWDoZHCBV3QRnsJM9HcMtQx/DP//qweF37aJ7AMfpkLmCPzlCfzhvYXA=
-X-Received: by 2002:a17:90a:d70b:b0:230:8730:c1f7 with SMTP id
- y11-20020a17090ad70b00b002308730c1f7mr2091703pju.27.1675708455255; Mon, 06
- Feb 2023 10:34:15 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=00L1YIX4H8zKf3PuLUq07QOm26y5Ud4TCvFHdvWnTKQ=;
+        b=OG+7t2/h4DBLF2AzAMFnisZUCH/FSh/F/mEO76lTy583JuGeUT9+zR1V2u0mq+ACbq
+         ZKmq6AX/ecoKy8v4HFtsROOPcJzozOOO0ZbVsrvx7AJ4/NORjWsNJ+9781Z7z/foWMFf
+         81fA6G6kE7TLZW4w95e0tlJ00XeP2vImb0gI901ar1cWxySZRqxGoJwKvYf5GR90UWhq
+         wGUhOSFurhXVnrPXGngoZkACAag2tBpuq5fagoYJDadm83m10RX//8nd96GzxzX6yWoN
+         tm4dFVblMUGcczNuxBm3jhX6MqFAguMESr2ETZRtVS76bgGcLTbNNBaCU3LbwsXsZJUO
+         d3jA==
+X-Gm-Message-State: AO0yUKXkm5LWylLhhttAN0DyDY1CMGPpMkwCFCu9lGL6MYB+SgacQVQf
+        2uVzYKdwiB4z+UwWvc1Gcba1xQ==
+X-Google-Smtp-Source: AK7set9WEz94AKlTh9/C9AYG20przHY2Z0FJe/l8y9IyrENZ/EkFE2DkTJi5xJd1g7WaQ1QEjgUB8Q==
+X-Received: by 2002:a05:6a00:9:b0:586:a3a9:6163 with SMTP id h9-20020a056a00000900b00586a3a96163mr347726pfk.28.1675708522461;
+        Mon, 06 Feb 2023 10:35:22 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id bt22-20020a056a00439600b0056be1581126sm7712592pfb.143.2023.02.06.10.35.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 10:35:22 -0800 (PST)
+Message-ID: <63e1486a.050a0220.7001.ca15@mx.google.com>
+X-Google-Original-Message-ID: <202302061033.@keescook>
+Date:   Mon, 6 Feb 2023 10:35:21 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Dr. David Alan Gilbert" <linux@treblig.org>
+Cc:     Dave Kleikamp <shaggy@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] jfs: Use unsigned variable for length calculations
+References: <20230204183355.never.877-kees@kernel.org>
+ <Y96/SUlPUl7xH1NO@gallifrey>
 MIME-Version: 1.0
-References: <20230206130449.41360-1-wander@redhat.com> <Y+EVNz4ORkFSvTfP@linutronix.de>
- <20230206152712.GA1487@redhat.com>
-In-Reply-To: <20230206152712.GA1487@redhat.com>
-From:   Wander Lairson Costa <wander@redhat.com>
-Date:   Mon, 6 Feb 2023 15:34:04 -0300
-Message-ID: <CAAq0SUndxzcvaJ+4ELXcWN1hNF+6S7HRDryc4r1VqCiw4W_78A@mail.gmail.com>
-Subject: Re: [PATCH v4] kernel/fork: beware of __put_task_struct calling context
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hu Chunyu <chuhu@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y96/SUlPUl7xH1NO@gallifrey>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 12:27 PM Oleg Nesterov <oleg@redhat.com> wrote:
->
-> On 02/06, Sebastian Andrzej Siewior wrote:
-> >
-> > On 2023-02-06 10:04:47 [-0300], Wander Lairson Costa wrote:
-> >
-> > > @@ -857,6 +857,29 @@ void __put_task_struct(struct task_struct *tsk)
-> > =E2=80=A6
-> > > +void __put_task_struct(struct task_struct *tsk)
-> > > +{
-> > > +   if (IS_ENABLED(CONFIG_PREEMPT_RT) && (!preemptible() || !in_task(=
-)))
-> >
-> > Is it safe to use the rcu member in any case?
->
-> I thinks it is safe but deserves a comment. I guess Wander misunderstood
-> me when I asked him to do this...
->
+On Sat, Feb 04, 2023 at 08:25:45PM +0000, Dr. David Alan Gilbert wrote:
+> * Kees Cook (keescook@chromium.org) wrote:
+> > To avoid confusing the compiler about possible negative sizes, switch
+> > "ssize" which can never be negative from int to u32.  Seen with GCC 13:
+> > 
+> > ../fs/jfs/namei.c: In function 'jfs_symlink': ../include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' pointer overflow between offset 0 and size [-2147483648, -1]
+> > [-Warray-bounds=]
+> >    57 | #define __underlying_memcpy     __builtin_memcpy
+> >       |                                 ^
+> > ...
+> > ../fs/jfs/namei.c:950:17: note: in expansion of macro 'memcpy'
+> >   950 |                 memcpy(ip->i_link, name, ssize);
+> >       |                 ^~~~~~
+> > 
+> > Cc: Dave Kleikamp <shaggy@kernel.org>
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: Dave Chinner <dchinner@redhat.com>
+> > Cc: jfs-discussion@lists.sourceforge.net
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  fs/jfs/namei.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/fs/jfs/namei.c b/fs/jfs/namei.c
+> > index b29d68b5eec5..494b9f4043cf 100644
+> > --- a/fs/jfs/namei.c
+> > +++ b/fs/jfs/namei.c
+> > @@ -876,7 +876,7 @@ static int jfs_symlink(struct mnt_idmap *idmap, struct inode *dip,
+> >  	tid_t tid;
+> >  	ino_t ino = 0;
+> >  	struct component_name dname;
+> > -	int ssize;		/* source pathname size */
+> > +	u32 ssize;		/* source pathname size */
+> 
+> Had you considered using size_t - this is set from a strlen and used by a memcpy
+> that both talk size_t.
 
-Oops, sorry. Next version, I will include this description.
+I considered that, but I've had other maintainers upset about doubling
+the variable size. I opted to keep the variable 32-bit here, so the
+machine code would only change to lose signed-ness.
 
-> __put_task_struct() is called when refcount_dec_and_test(&t->usage) succe=
-eds.
->
-> This means that it can't "conflict" with put_task_struct_rcu_user() which
-> abuses ->rcu the same way; rcu_users has a reference so task->usage can't
-> be zero after rcu_users 1 -> 0 transition.
->
-> > If so why not use it
-> > unconditionally?
->
-> performance ?
->
->
-> And... I still don't like the name of delayed_put_task_struct_rcu() to me
-> ___put_task_struct_rcu() looks a bit less confusing, note that we already
-> have delayed_put_task_struct(). But this is minor.
->
+-Kees
 
-Ok, I will change it.
-
-> Oleg.
->
-
+-- 
+Kees Cook
