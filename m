@@ -2,129 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4715E68BC84
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76BB68BC86
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjBFMLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:11:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S230142AbjBFMMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjBFML1 (ORCPT
+        with ESMTP id S230004AbjBFML5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:11:27 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B973640F3;
-        Mon,  6 Feb 2023 04:11:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675685486; x=1707221486;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Buxqumc71tPCMU+/bMMfLWufol4wdbFjIc0pfWlajJk=;
-  b=YXviQME297C/H6VbIFdx+nFzpVeSauoPTnuFsnwQD/VCTNo3sAfbutND
-   aDyaG+jOzC46jJJnc5KxdgeqrzYVOGIgdKDi7DyOQW0SMSvaRSDBukpIx
-   I49dxpstGuubezcMws78mcS5SwSx3xZg1yDcVPLipdAnPf3ThAhr1Sjz4
-   ClROni/v9qabM1FYZ28xpN2FeIvBqE8yTnANpln4a3q0c1kCUwNxJ07oJ
-   v5NmkDyy1oFQ0yKklk7IqfJyIkvpBoRj4Vq/nL0crJrleJhLk+nYi+xGN
-   j9cKx0rXRMHxcvzUV0gVs8Njdyg+sD2SB40mM+OsN0kmC8KpQzoW5CS5D
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="393788590"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="393788590"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 04:11:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="911902820"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="911902820"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Feb 2023 04:11:11 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pP0Ky-003AEF-1G;
-        Mon, 06 Feb 2023 14:11:08 +0200
-Date:   Mon, 6 Feb 2023 14:11:08 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
-        <nfraprado@collabora.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
-        devicetree@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
-        Lyude Paul <lyude@redhat.com>, linux-acpi@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Xin Ji <xji@analogixsemi.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        chrome-platform@lists.linux.dev, Chen-Yu Tsai <wenst@chromium.org>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH v11 5/9] drm/bridge: anx7625: Check for Type-C during
- panel registration
-Message-ID: <Y+DuXKlcAQfErVik@smile.fi.intel.com>
-References: <20230204133040.1236799-1-treapking@chromium.org>
- <20230204133040.1236799-6-treapking@chromium.org>
+        Mon, 6 Feb 2023 07:11:57 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6622D65BF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:11:32 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id a2so9877935wrd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:11:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jNU2E4rEU6lK6E5UnBCR+OOWZtLTF1apeoMjKMv1xVo=;
+        b=0BJuhb2SP8v0SAx2cFQrOf9KdQKmuD14IU5rp3ELE5hzV++SiFno0c6jIja1iAaH+m
+         KgmbC7JqL38C41B4ROhgq/8gllmhnX1ats4xUrAtUESKykxl4Bhq9bWeoRPNivtxI9Hj
+         nYhDoVCIJPIHrdrEMQD9jB6z9I0tjVPW65Lw5eiG8082b1iH26IIWoMYpIG7ohhhRSDJ
+         d/stbmGlv9lLaLkYKSc/m3vXzRkgZpRnS2l5zo05sO/5/3P16zrp5Plh3DAdTU8VhpER
+         xh44jKllCDz4+tumuIUaqoeH6ccmBeq49305euHcb3bbysnNiJxbA/JqcgkfFtzf6uWD
+         fgkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jNU2E4rEU6lK6E5UnBCR+OOWZtLTF1apeoMjKMv1xVo=;
+        b=5dZtnzoS1NDS+A06PoN5nzCPJOMZV72roejMS7aTSSSzA2sspAh7Y8TLsWSWlpw0ix
+         8s2+04F8JE4T5iAHq/bzPgr63xcDwvRXT+9R07nCOPtB9+KJ+ov0lRtAdKfwMDNwToZl
+         K8dogfNlXyle2aUdhOzBlUbIevpt74tHdhmn3X/68Oj4GJ5lFCp5PLn980zCGWcxzlJ2
+         XJtzHnmPeCc4uPvH5myb1GfvVE356KNkwJw4QJsugquFZ29SZYn8HxWfwpowmlBh23bG
+         GDobYv0W7Va5FzOGuMA1QFeCh+YCFfPyJubvOawZGI5U1A6FNMbQTm94Hx4z/OYYfQPE
+         tbzQ==
+X-Gm-Message-State: AO0yUKUY6XjWlpyb/cqSOa78sg6RHIp7e2degqlGgR2RhfCh5oQMir7G
+        LA4o27Os0WcXkCdg4Ya1RPPZ/w==
+X-Google-Smtp-Source: AK7set+l6WZMcYdFTPEhuqOx7bXf+8SqBlvLrjlLxHBtr5qFvT42GvR0j4f0uSOjBIGP3rZh6CfJbg==
+X-Received: by 2002:a5d:4b50:0:b0:2c3:eaff:aaf1 with SMTP id w16-20020a5d4b50000000b002c3eaffaaf1mr2381474wrs.18.1675685490947;
+        Mon, 06 Feb 2023 04:11:30 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:39c7:f90d:557:dc30? ([2a02:6b6a:b566:0:39c7:f90d:557:dc30])
+        by smtp.gmail.com with ESMTPSA id y10-20020a05600015ca00b002bfd137ecddsm8918926wry.11.2023.02.06.04.11.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 04:11:30 -0800 (PST)
+Message-ID: <de7524ce-563c-2ff6-84a5-6a347c36855b@bytedance.com>
+Date:   Mon, 6 Feb 2023 12:11:29 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230204133040.1236799-6-treapking@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [External] Re: [PATCH v6 07/11] x86/smpboot: Disable parallel
+ boot for AMD CPUs
+Content-Language: en-US
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>, tglx@linutronix.de,
+        rja@hpe.com
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com, Mario Limonciello <Mario.Limonciello@amd.com>
+References: <20230202215625.3248306-1-usama.arif@bytedance.com>
+ <20230202215625.3248306-8-usama.arif@bytedance.com>
+ <b3d9fbbf-e760-5d1d-9182-44c144abd1bf@amd.com>
+ <d3ec562fd2e03c3aef9534f64915a14a8cb89ae1.camel@infradead.org>
+ <5ba476f3-e0ac-d630-ce1d-18ab9885496f@linux.intel.com>
+ <E2286684-F8AD-4708-9A3D-74C5EAE183B4@infradead.org>
+ <434b4b74-54ab-68a3-4a81-9cc02ea75e39@bytedance.com>
+ <411cbdb2c8255e48f3e65c59a98bc02410f5dfc7.camel@infradead.org>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <411cbdb2c8255e48f3e65c59a98bc02410f5dfc7.camel@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 09:30:36PM +0800, Pin-yen Lin wrote:
-> The output port endpoints can be connected to USB-C connectors.
-> Running drm_of_find_panel_or_bridge() with such endpoints leads to
-> a continuous return value of -EPROBE_DEFER, even though there is
-> no panel present.
+
+
+On 06/02/2023 08:05, David Woodhouse wrote:
+> On Sun, 2023-02-05 at 22:13 +0000, Usama Arif wrote:
+>>
+>>
+>> On 04/02/2023 22:31, David Woodhouse wrote:
+>>>
+>>>
+>>> On 4 February 2023 18:18:55 GMT, Arjan van de Ven <arjan@linux.intel.com> wrote:
+>>>>>
+>>>>> However...
+>>>>>
+>>>>> Even though we *can* support non-X2APIC processors, we *might* want to
+>>>>> play it safe and not go back that far; only enabling parallel bringup
+>>>>> on machines with X2APIC which roughly correlates with "lots of CPUs"
+>>>>> since that's where the benefit is.
+>>>>
+>>>> I think that this is the right approach, at least on the initial patch series.
+>>>> KISS principle; do all the easy-but-important cases first, get it stable and working
+>>>> and in later series/kernels the range can be expanded.... if it matters.
+>>>
+>>> Agreed. I'll split it to do it only with X2APIC for the initial series, and then hold the CPUID 0x1 part back for the next phase.
+>>
+>> This was an interesting find! I tested the latest branch
+>> parallel-6.2-rc6 and it works well. The numbers from Russ makes the
+>> patch series look so much better! :)
+>>
+>> If we do it with x2apic only and not support non-x2apic CPUID 0x1 case,
+>> maybe we apply the following diff to part 1?
 > 
-> To avoid this, check for the existence of a "mode-switch" property in
-> the port endpoint, and skip panel registration completely if so.
+> Using x2apic_mode would also disable parallel boot when the CPU *does*
+> have X2APIC support but the kernel just isn't using it at the moment. I
+> think boot_cpu_has(X86_FEATURE_X2APIC) is the better criterion?
+> 
 
-...
+x2apic_mode is set to 0 only in the case when nox2apic is specified in 
+the kernel cmdline or if x2apic_setup fails. As 0xB leaf gets the 
+"x2apic id" and not the "apic id", I thought it would be better to not 
+use the x2apic id if the user doesnt want to use x2apic (cmdline), or 
+the kernel fails to set it up.
 
-> +	/*
-> +	 * Don't bother finding a panel if a Type-C `mode-switch` property is
-> +	 * present in one of the endpoints.
-> +	 */
-> +	for_each_endpoint_of_node(np, sw) {
-> +		if (of_property_read_bool(sw, "mode-switch")) {
+Another thing I noticed from the Intel Architecture Manual CPUID—CPU 
+Identification section:
 
-Might be that the same helper can be used here. Dunno if the endpoint traverse
-should be used for the other driver as well.
+"CPUID leaf 1FH is a preferred superset to leaf 0BH. Intel recommends 
+first checking for the existence of Leaf 1FH before using leaf 0BH."
 
-> +			of_node_put(sw);
-> +			return 0;
-> +		}
-> +	}
+So I think we should switch from 0BH to using the 1FH leaf EDX register.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> I was thinking I'd tweak the 'no_parallel_bringup' command line
+> argument into something that also allows us to *enable* it without
+> X2APIC being supported.
+> 
+> But I've also been pondering the fact that this is all only for 64-bit
+> anyway. It's not like we're doing it for the zoo of ancient i586 and
+> even i486 machines where the APICs were hooked up with blue wire and
+> duct tape.
+> 
+> Maybe "64-bit only" is good enough, with a command line opt-out. And
+> maybe a printk pointing out the existence of that command line option
+> before the bringup, just in case?
+> 
+
+I think that makes sense, the patch only has a significant impact when 
+the core count is high, and x2apic was made to support higher CPU count.
 
 
+>> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+>> index f53a060a899b..f6b89cf40076 100644
+>> --- a/arch/x86/kernel/smpboot.c
+>> +++ b/arch/x86/kernel/smpboot.c
+>> @@ -1564,7 +1564,7 @@ void __init native_smp_prepare_cpus(unsigned int
+>> max_cpus)
+>>            * sufficient). Otherwise it's too hard. And not for SEV-ES
+>>            * guests because they can't use CPUID that early.
+>>            */
+>> -       if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 1 ||
+>> +       if (IS_ENABLED(CONFIG_X86_32) || !x2apic_mode ||
+>>               (x2apic_mode && boot_cpu_data.cpuid_level < 0xb) ||
+>>               cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+>>                   do_parallel_bringup = false;
+>>
+>>
+>>
+>> For reusing timer calibration, calibrate_delay ends up being used in
+>> start_kernel, smp_callin, debug_calc_bogomips and check_cx686_slop. I
+>> think reusing timer calibration would be ok in the first 2 uses?
+>>
+> 
+> It already explicitly allows the calibration to be reused from another
+> CPU in the same *core*, but no further. I think we'd need to be sure
+> about the correctness of extending that further, and which of the mess
+> of constant/invariant/we-really-mean-it-this-time TSC flags need to be
+> set for that to be OK.
+> 
+>> but not really sure about the other 2. cx686 seems to be quite old so not sure
+>> if anyone will have it to test or will ever run 6.2 kernel on it :).  I
+>> guess if unsure, better to leave out initially and try and get part1 merged?
+> 
+> I doubt cx686 advertises constant TSC; the early ones didn't even *have* a TSC.
+> Does it even support SMP?
+
+Just checked the wiki page, and it says core count is 1 :)
