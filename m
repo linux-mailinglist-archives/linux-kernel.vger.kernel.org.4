@@ -2,121 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC12E68C710
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB0B68C718
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjBFTvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S229942AbjBFTzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBFTu7 (ORCPT
+        with ESMTP id S229517AbjBFTzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:50:59 -0500
-Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5F125972;
-        Mon,  6 Feb 2023 11:50:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=jS8Lr/pwA5OrRN4brjkNs2jw0MJnveqWb1qydiq7450=; b=PzcVPmntEcaP6qZgyrdEZDCu1o
-        BesahfN7b/ewF+hA/2B1ezrn+0NTYW7pfNYbLpBxCW/0Er+37lr5bd+5+g/88KxDqsW9aMqls3eMp
-        1peItIsu5okHg3iFOQqp91YyZ7dZhUZm8jSoqMmW3yqFGEa1ikQ6CYnxl+0Prk0pjA+PUBQomT9xb
-        4SA2JMEoek3+9ajzTDbqxpWj37qvrxhOXqhkKDNjHNI4GKMau5mGLg1x83ckJcCBbwN7UVwaWG+Kp
-        KHlE3lBqjfexOCOhZp+w3CNB/K+h2JY0gxlq427EoOaH1KPqt1tsf5oVCnN5EV9r7SNfuGKnWBwWL
-        K3fEGq9A==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1pP7Vi-00530d-MK; Mon, 06 Feb 2023 19:50:42 +0000
-Date:   Mon, 6 Feb 2023 19:50:42 +0000
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Dave Kleikamp <shaggy@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] jfs: Use unsigned variable for length calculations
-Message-ID: <Y+FaEp2blurmgVlH@gallifrey>
-References: <20230204183355.never.877-kees@kernel.org>
- <Y96/SUlPUl7xH1NO@gallifrey>
- <63e1486a.050a0220.7001.ca15@mx.google.com>
+        Mon, 6 Feb 2023 14:55:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E1E2820C;
+        Mon,  6 Feb 2023 11:55:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6DA3B815FB;
+        Mon,  6 Feb 2023 19:55:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A80DC433D2;
+        Mon,  6 Feb 2023 19:55:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675713316;
+        bh=x0oD17S0/1CLJnGLH9iD1hxf62OiooTTKy/Q2s56BYI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sG6C/2gzWM3tYvIrJb8I23pi42ElybXEGbJ7080xrsz5NXdUbbZxw6RpYYkXayqUq
+         Q7/GInr0VJTw6MflBTmrfTVXPL2hYRfUnRb+JVeluhz73VgMk19KQRPIQxDFJ1SxWa
+         1IB+qBRluFfm78oEpWtfBAbF5LckGoHz/GIdCZ1HOPs8MMfH+1b0un2LLL1G9Tmmdg
+         6co+ZS8gqfyr9nUGl8scxNfnWOjOqdi/XsHpx5RKmWsUdDh8/gvP4DZeBfQNzqLvq6
+         u9CmsA3ZTuqizVKNY0l8PxP9E87fp6b4K0T+Tyf5C3XFUkpFTNKEiW3bQCclACBP7s
+         6a5KFO3jSALMw==
+Received: by mail-vs1-f43.google.com with SMTP id y8so13959878vsq.0;
+        Mon, 06 Feb 2023 11:55:16 -0800 (PST)
+X-Gm-Message-State: AO0yUKU9MTkb/juvt3EFSwX0y7RmsBhF9qPnaYrA9KvcCzLxs79q4dsc
+        7GJsyl4ZZPvatOp5mp7e8Cd4naTQOrTH+xEgrA==
+X-Google-Smtp-Source: AK7set93aZD9DhXMsr+HrpYTVLyOGOiqhromt8iBj7FIL5vA7u7EXhitVPK4xRog/7IQcegYFqSmO370ISv83kjze/g=
+X-Received: by 2002:a67:7206:0:b0:3ea:c8c:48a5 with SMTP id
+ n6-20020a677206000000b003ea0c8c48a5mr191202vsc.53.1675713315265; Mon, 06 Feb
+ 2023 11:55:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <63e1486a.050a0220.7001.ca15@mx.google.com>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-12-amd64 (x86_64)
-X-Uptime: 19:49:48 up 332 days,  6:15,  1 user,  load average: 0.05, 0.04,
- 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206153325.43692-1-sunrockers8@gmail.com>
+In-Reply-To: <20230206153325.43692-1-sunrockers8@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 6 Feb 2023 13:55:03 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJoH2EdWxZc115HpGLmqQ3Wu8q3MS85NiqGKu57Y1o6dA@mail.gmail.com>
+Message-ID: <CAL_JsqJoH2EdWxZc115HpGLmqQ3Wu8q3MS85NiqGKu57Y1o6dA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings : misc : aspeed,cvic interrupt controller :
+ convert the binding document to yaml
+To:     Vijaya Anand <sunrockers8@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Kees Cook (keescook@chromium.org) wrote:
-> On Sat, Feb 04, 2023 at 08:25:45PM +0000, Dr. David Alan Gilbert wrote:
-> > * Kees Cook (keescook@chromium.org) wrote:
-> > > To avoid confusing the compiler about possible negative sizes, switch
-> > > "ssize" which can never be negative from int to u32.  Seen with GCC 13:
-> > > 
-> > > ../fs/jfs/namei.c: In function 'jfs_symlink': ../include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' pointer overflow between offset 0 and size [-2147483648, -1]
-> > > [-Warray-bounds=]
-> > >    57 | #define __underlying_memcpy     __builtin_memcpy
-> > >       |                                 ^
-> > > ...
-> > > ../fs/jfs/namei.c:950:17: note: in expansion of macro 'memcpy'
-> > >   950 |                 memcpy(ip->i_link, name, ssize);
-> > >       |                 ^~~~~~
-> > > 
-> > > Cc: Dave Kleikamp <shaggy@kernel.org>
-> > > Cc: Christian Brauner <brauner@kernel.org>
-> > > Cc: Dave Chinner <dchinner@redhat.com>
-> > > Cc: jfs-discussion@lists.sourceforge.net
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  fs/jfs/namei.c | 6 +++---
-> > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/fs/jfs/namei.c b/fs/jfs/namei.c
-> > > index b29d68b5eec5..494b9f4043cf 100644
-> > > --- a/fs/jfs/namei.c
-> > > +++ b/fs/jfs/namei.c
-> > > @@ -876,7 +876,7 @@ static int jfs_symlink(struct mnt_idmap *idmap, struct inode *dip,
-> > >  	tid_t tid;
-> > >  	ino_t ino = 0;
-> > >  	struct component_name dname;
-> > > -	int ssize;		/* source pathname size */
-> > > +	u32 ssize;		/* source pathname size */
-> > 
-> > Had you considered using size_t - this is set from a strlen and used by a memcpy
-> > that both talk size_t.
-> 
-> I considered that, but I've had other maintainers upset about doubling
-> the variable size.
+On Mon, Feb 6, 2023 at 9:35 AM Vijaya Anand <sunrockers8@gmail.com> wrote:
+>
+>     Convert the binding document for ASPEED AST2400 and AST2500 coprocessor interrupt controller
+>     from txt to yaml so one could validate dt-entries correctly and any future additions can go
+>     into yaml format. The options for compatability described according to the example given.
 
-I bet at least on some platforms it's cheaper as the 64 bit.
+Missing DCO (Signed-off-by). checkpatch.pl will tell this for you.
 
-> I opted to keep the variable 32-bit here, so the
-> machine code would only change to lose signed-ness.
+> ---
+>  .../devicetree/bindings/misc/aspeed,cvic.txt  | 35 ----------
+>  .../devicetree/bindings/misc/aspeed,cvic.yaml | 67 +++++++++++++++++++
+>  2 files changed, 67 insertions(+), 35 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.txt
+>  create mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/misc/aspeed,cvic.txt b/Documentation/devicetree/bindings/misc/aspeed,cvic.txt
+> deleted file mode 100644
+> index d62c783d1d5e..000000000000
+> --- a/Documentation/devicetree/bindings/misc/aspeed,cvic.txt
+> +++ /dev/null
+> @@ -1,35 +0,0 @@
+> -* ASPEED AST2400 and AST2500 coprocessor interrupt controller
+> -
+> -This file describes the bindings for the interrupt controller present
+> -in the AST2400 and AST2500 BMC SoCs which provides interrupt to the
+> -ColdFire coprocessor.
+> -
+> -It is not a normal interrupt controller and it would be rather
+> -inconvenient to create an interrupt tree for it as it somewhat shares
+> -some of the same sources as the main ARM interrupt controller but with
+> -different numbers.
+> -
+> -The AST2500 supports a SW generated interrupt
+> -
+> -Required properties:
+> -- reg: address and length of the register for the device.
+> -- compatible: "aspeed,cvic" and one of:
+> -               "aspeed,ast2400-cvic"
+> -             or
+> -               "aspeed,ast2500-cvic"
+> -
+> -- valid-sources: One cell, bitmap of supported sources for the implementation
+> -
+> -Optional properties;
+> -- copro-sw-interrupts: List of interrupt numbers that can be used as
+> -                      SW interrupts from the ARM to the coprocessor.
+> -                      (AST2500 only)
+> -
+> -Example:
+> -
+> -       cvic: copro-interrupt-controller@1e6c2000 {
+> -               compatible = "aspeed,ast2500-cvic";
+> -               valid-sources = <0xffffffff>;
+> -               copro-sw-interrupts = <1>;
+> -               reg = <0x1e6c2000 0x80>;
+> -       };
+> diff --git a/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml b/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
+> new file mode 100644
+> index 000000000000..bbff0418fa2c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/aspeed,cvic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ASPEED AST2400 and AST2500 coprocessor interrupt controller
+> +
+> +maintainers:
+> +  - Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> +  - Rob Herring <robh@kernel.org>
 
-Fair enough.
+Should be someone that has and cares about Aspeed h/w, not me.
 
-Dave
+> +
+> +description: |
+> +  This file describes the bindings for the interrupt controller present
+> +  in the AST2400 and AST2500 BMC SoCs which provides interrupt to the
+> +  ColdFire coprocessor.
+> +
+> +  It is not a normal interrupt controller and it would be rather
+> +  inconvenient to create an interrupt tree for it as it somewhat shares
+> +  some of the same sources as the main ARM interrupt controller but with
+> +  different numbers.
+> +
+> +  The AST2500 supports a SW generated interruptThe Soft Decision Forward Error Correction (SDFEC) Engine is a Hard IP block
+> +  which provides high-throughput LDPC and Turbo Code implementations.
+> +  The LDPC decode & encode functionality is capable of covering a range of
+> +  customer specified Quasi-cyclic (QC) codes. The Turbo decode functionality
+> +  principally covers codes used by LTE. The FEC Engine offers significant
+> +  power and area savings versus implementations done in the FPGA fabric.
+> +
+> +properties:
+> +
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2400-cvic
+> +      - aspeed,ast2500-cvic
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: address and length of the register for the device.
 
-> -Kees
-> 
-> -- 
-> Kees Cook
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+Drop generic descriptions.
+
+> +
+> +  valid-sources:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: One cell, bitmap of supported sources for the implementation
+
+Drop 'one cell'. The type says that.
+
+> +
+> +  copro-sw-interrupts:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+
+Is there a range of number of entries and/or values for entries. If
+so, add constraints.
+
+> +    description: |
+
+Don't need '|' if no formatting to maintain.
+
+> +                  List of interrupt numbers that can be used as
+> +                  SW interrupts from the ARM to the coprocessor.
+> +                  (AST2500 only)
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - valid-sources
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    cvic: copro-interrupt-controller@1e6c2000
+> +    {
+> +        compatible = "aspeed,ast2500-cvic";
+> +        valid-sources = <0xffffffff>;
+> +        copro-sw-interrupts = <1>;
+> +        reg = <0x1e6c2000 0x80>;
+> +    };
+> --
+> 2.37.1 (Apple Git-137.1)
+>
