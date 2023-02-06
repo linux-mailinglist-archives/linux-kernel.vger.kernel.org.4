@@ -2,109 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4882968B46D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E870D68B46F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjBFDTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 22:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S229523AbjBFDTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 22:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBFDTX (ORCPT
+        with ESMTP id S229570AbjBFDTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 22:19:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F4A12041
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 19:18:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675653513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HUnXR7sTsl7YLdib1oIsNCKOxnTEFsrq4tcNXVLT5m4=;
-        b=KxfnIFax/ix7/eaFqrKY0vP/0ojgpbCYLEGoUAdkBP1d10M27S5kz8rrTnPeg1JUCMpYlE
-        UToYvSIGStE60cDD3+/IW2wvXcGHsYhcDQa4oPnvW6gNjkBINAn0HrHH2d7eRMpUD1Cd8c
-        kpGbOEYdqAosydDH0o7MJIi/vNsnees=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-625-ayUrbw4-Pbev7ewDVubn2Q-1; Sun, 05 Feb 2023 22:18:32 -0500
-X-MC-Unique: ayUrbw4-Pbev7ewDVubn2Q-1
-Received: by mail-qt1-f199.google.com with SMTP id hf20-20020a05622a609400b003abcad051d2so5718622qtb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 19:18:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HUnXR7sTsl7YLdib1oIsNCKOxnTEFsrq4tcNXVLT5m4=;
-        b=tWx40KIQUBywy5Qr8goXVYhjl5aOJQjws96WSg3HQS3sv15ZMJxLT+EeG95nsRJl9h
-         6OeL4XASZ9kTklFo442u8fa8EX5w4mgWY24mXPS3hj7pKFCraFfYKnkbPwocMG8ZeDs6
-         U3kYqYAUhzR0JTwt+hBAb7vuqsv9o0y/BT/NxT8js762iVf0IVh5x4AnC2D+ViT/8zKJ
-         xhYJgxtcXI7AMZDhLncx9GCR8hXy9AcRwQP3pWDkkvTgdOOD0Yv/RNWuarp+Xu6jdckE
-         DADuaw/Ugkx9yUvFRFLKFOuHuoesmqKZ/TMa8CbrRT3i0BHQNmYZ69OVcd7LidPxpCcD
-         un/w==
-X-Gm-Message-State: AO0yUKXRkBwuXZ7Np7oULX829joAA2fO4MQYuknXNRuI0X7Xjnf5VDgt
-        OVx2zrpSjICTfonHJxXch16dl4oOJ0e38J9R85GCwtfzKWWdk2iGa4Atb1gTlmrl70qyAkjvf61
-        pxYP2gU2qnjtnDjhqNeWhkutc
-X-Received: by 2002:a05:622a:17c4:b0:3b8:5199:f841 with SMTP id u4-20020a05622a17c400b003b85199f841mr33929529qtk.0.1675653512189;
-        Sun, 05 Feb 2023 19:18:32 -0800 (PST)
-X-Google-Smtp-Source: AK7set/cpAGW2ESxNhYZ0jEVuvvuRs8ZuhdHof+3DnmWont85g1bLMGsUjVwGkO9KhDgbxDFzB1GTQ==
-X-Received: by 2002:a05:622a:17c4:b0:3b8:5199:f841 with SMTP id u4-20020a05622a17c400b003b85199f841mr33929514qtk.0.1675653511960;
-        Sun, 05 Feb 2023 19:18:31 -0800 (PST)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id b6-20020a379906000000b007186c9e167esm6574425qke.52.2023.02.05.19.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 19:18:31 -0800 (PST)
-Date:   Sun, 5 Feb 2023 22:18:30 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 0/3] mm/arch: Fix a few collide definition on private use
- of VM_FAULT_*
-Message-ID: <Y+BxhuGUx1K+3XHb@xz-m1.local>
-References: <20230205231704.909536-1-peterx@redhat.com>
- <Y+BFjQDBIFq5ih+t@casper.infradead.org>
- <Y+BPy3jFcHqOnWL0@x1n>
- <Y+BrJhxeJbAp49QE@casper.infradead.org>
+        Sun, 5 Feb 2023 22:19:31 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FCD1ABF5;
+        Sun,  5 Feb 2023 19:19:28 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P9BLy4ZwBz4f3k67;
+        Mon,  6 Feb 2023 11:19:22 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDn4R+7ceBjzshECw--.31350S3;
+        Mon, 06 Feb 2023 11:19:24 +0800 (CST)
+Subject: Re: [PATCH-next v2] loop: loop_set_status_from_info() check before
+ assignment
+To:     Zhong Jinghua <zhongjinghua@huawei.com>, axboe@kernel.dk,
+        code@siddh.me, Matthew Wilcox <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230206020716.2036-1-zhongjinghua@huawei.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <32179e8a-a3ca-9412-1977-fdaa7f065691@huaweicloud.com>
+Date:   Mon, 6 Feb 2023 11:19:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y+BrJhxeJbAp49QE@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230206020716.2036-1-zhongjinghua@huawei.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDn4R+7ceBjzshECw--.31350S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFWDGFWUWr43Xr1xGw13CFg_yoW8Xw48pF
+        srWFyUAa1rKF4fKF4Dt348XFW5G3W7Gry3uFy7tay8AryIvFn2gr9rG3y5urZ7JrykurWF
+        gF15JFykZF1UGrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+        6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UWE__UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 02:51:18AM +0000, Matthew Wilcox wrote:
-> That wasn't what I meant.  I meant putting VM_FAULT_BADMAP and
-> VM_FAULT_SIGSEGV in mm_types.h.  Not having "Here is a range of reserved
-> arch private ones".
+Hi,
 
-VM_FAULT_SIGSEGV is there already; I assume you meant adding them all
-directly into vm_fault_reason.
+ÔÚ 2023/02/06 10:07, Zhong Jinghua Ð´µÀ:
+> In loop_set_status_from_info(), lo->lo_offset and lo->lo_sizelimit should
+> be checked before reassignment, because if an overflow error occurs, the
+> original correct value will be changed to the wrong value, and it will not
+> be changed back.
+> 
+> Modifying to the wrong value logic is always not quiet right, we hope to
+> optimize this.
+> 
 
-Then I don't think it's a good idea..
+Please add a fix tag and cc stable:
 
-Currently vm_fault_reason is a clear interface for handle_mm_fault() for
-not only arch pffault handlers but also soft faults like GUP.
+Fixes: c490a0b5a4f3 ("loop: Check for overflow while configuring loop")
 
-If handle_mm_fault() doesn't return VM_FAULT_BADMAP at all, I don't think
-we should have it as public API at all.  When arch1 people reading the
-VM_FAULT_ documents, it shouldn't care about some fault reason that only
-happens with arch2.  Gup shouldn't care about it either.
-
-Logically a new page fault handler should handle all the retval of
-vm_fault_reason afaiu.  That shouldn't include e.g. VM_FAULT_BADMAP either.
+This commit doesn't fix the problem it described in commit message.
 
 Thanks,
+Kuai
 
--- 
-Peter Xu
+> Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+> ---
+>   v1->v2: Modify note: overflowing -> overflow
+>   drivers/block/loop.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index 1518a6423279..1b35cbd029c7 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -977,13 +977,13 @@ loop_set_status_from_info(struct loop_device *lo,
+>   		return -EINVAL;
+>   	}
+>   
+> +	/* Avoid assigning overflow values */
+> +	if (info->lo_offset > LLONG_MAX || info->lo_sizelimit > LLONG_MAX)
+> +		return -EOVERFLOW;
+> +
+>   	lo->lo_offset = info->lo_offset;
+>   	lo->lo_sizelimit = info->lo_sizelimit;
+>   
+> -	/* loff_t vars have been assigned __u64 */
+> -	if (lo->lo_offset < 0 || lo->lo_sizelimit < 0)
+> -		return -EOVERFLOW;
+> -
+>   	memcpy(lo->lo_file_name, info->lo_file_name, LO_NAME_SIZE);
+>   	lo->lo_file_name[LO_NAME_SIZE-1] = 0;
+>   	lo->lo_flags = info->lo_flags;
+> 
 
