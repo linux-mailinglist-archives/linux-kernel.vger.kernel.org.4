@@ -2,151 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A7568BB79
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B6468BB7B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjBFL1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:27:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S229791AbjBFL14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjBFL1o (ORCPT
+        with ESMTP id S230054AbjBFL1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:27:44 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2055.outbound.protection.outlook.com [40.92.53.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CA783D3;
-        Mon,  6 Feb 2023 03:27:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FjoyBw5qQeaL+jYBV4glyzJBN3G9Sp0xSo9zGVqjqc8lbYLMNLXkrQ16ZGXc9/sWPsPrD5mhrst55VVgJEX5lx95eQhAN2I3/fSSNr/aVnti8exHbDGlBQ/iy+hzsAoxkGaqrljvBcwI13rbJX60wNJxnwgl9BXpACs5F4bVfhifwqAR25SsLxWCXuwIunAOp2axzVS78vkO9ah5DvdA/xbmEGUwKKT8OXBYweLz9jhshoniHyRORG+rDMlqmr30Cg4DGL0NrqimMEIaHWB4o/ug0EDl/vAx303VzQ/vCLBWZtPvDcpLjlPWVPd6i+TBN+x41z2+BUuJHGw0x26HJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jAU1GBzkjnJ28Es2wg6ahiDXMf9OUh+R0jXzuospCH8=;
- b=TSJYrlfis/GMZF/1z9LLAr6kGVuUTx0JpKvFD8YFoUGtgvHmtgVVoIwnqzSmRzHccTimwiWvlKPeU910d8EQmk5/LqeKH36ZDPZkAUk3x8ShF1gh0K/LMk8t/u6cywFSGZUKkXHeWsbKSI0LgBUi07n6p9kQyuRiqn6/QtnA/h+4V6sz6CkpZcoapZ/58TR0SebohkACypHDLRSpioFyJPme5G7Cvjxc6ZHHRqcbDmTh0p6d4XniOgT25LLcmaOzFEDRAaDEVq6yK/D6qGMLbGawNlO74T/IF1NycAl9ZkjFyhbXeUTaFFW2/vNQACy2YpmDqMG3/jTxtpw4zRXHAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jAU1GBzkjnJ28Es2wg6ahiDXMf9OUh+R0jXzuospCH8=;
- b=UEJh2HkSydeFjSwIR+Gary6uR3U7F2YwtFCCnMCUDDGXnKNAvMOhF3MQs4TCk9EkMS0/v0DDsm+syEk64+4z/8aFQKubzWAErAa8ZbmqGuWRAPQy7bqicOCHuJ9iEdm5aHOzubN8iBeYrwIAMUmctUpylVAF5lyJiGL2PdFj+FdxphUUblV0cQsse9UUdogihEmSuayMDQbUXjDEAvCvE7gB1lrBzDdnWEJMVK55yx6sqMyUxMOqvQ14VrIk6SXT3DdUM6zKVG5IEyhodsuDP9dzarBQ02QUEHBsmtjcQ05uqpNUjh3Mwq6KIKItzuPy5ttFxyd21M8XgBsYG61FAg==
-Received: from TYWP286MB2300.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:179::13)
- by TY1P286MB3405.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:2e2::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
- 2023 11:27:39 +0000
-Received: from TYWP286MB2300.JPNP286.PROD.OUTLOOK.COM
- ([fe80::bafc:f38d:b502:9393]) by TYWP286MB2300.JPNP286.PROD.OUTLOOK.COM
- ([fe80::bafc:f38d:b502:9393%2]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
- 11:27:39 +0000
-Message-ID: <TYWP286MB2300E219495E608BEEB9A2F8F5DA9@TYWP286MB2300.JPNP286.PROD.OUTLOOK.COM>
-Date:   Mon, 6 Feb 2023 19:27:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [ovs-dev] [PATCH net-next v8 1/1] net: openvswitch: reduce
- cpu_used_mask memory
-To:     Eelco Chaudron <echaudro@redhat.com>
-Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <OS3P286MB229570CCED618B20355D227AF5D59@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
- <BB520D08-D1D3-45DB-A3AE-008E8DF48F81@redhat.com>
-Content-Language: en-US
-From:   Eddy Tao <taoyuan_eddy@hotmail.com>
-In-Reply-To: <BB520D08-D1D3-45DB-A3AE-008E8DF48F81@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN:  [ksTkBtQ+4clEHwxn2WWYnAeAjnFbL9np]
-X-ClientProxiedBy: SG2PR03CA0113.apcprd03.prod.outlook.com
- (2603:1096:4:91::17) To TYWP286MB2300.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:179::13)
-X-Microsoft-Original-Message-ID: <ac0cd3f3-fb7f-8606-4cfb-a9a3a3b7d3cc@hotmail.com>
+        Mon, 6 Feb 2023 06:27:50 -0500
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89503C643;
+        Mon,  6 Feb 2023 03:27:44 -0800 (PST)
+Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
+        by mta-01.yadro.com (Proxmox) with ESMTP id 72925341DA6;
+        Mon,  6 Feb 2023 14:27:42 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=mta-01; bh=BeO7USyN2i08XzGSFB
+        uEgqnyOPsIll67svfaIGEnjpE=; b=Q/VkDlbesPls3BKSwkapXHClHL4mz0zQj7
+        2fGqe/BB03R98PYHygUchV6IV7g3ZctXBE7ggqTZY0vskaIIZ+VYHzQ7PLAhJ6++
+        9uSHJ2CFeiuVgKRWRZJ6NjfJ2Uo3qXtJZ62FS3gKZOKEG9enLSoFxFok0qiw82BX
+        gMVKFrhik=
+Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Proxmox) with ESMTPS id 6637F341A69;
+        Mon,  6 Feb 2023 14:27:42 +0300 (MSK)
+Received: from [10.199.16.60] (10.199.16.60) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Mon, 6 Feb 2023
+ 14:27:41 +0300
+Message-ID: <66b01fd7-7466-5d76-c384-0758ceadee8e@yadro.com>
+Date:   Mon, 6 Feb 2023 14:27:41 +0300
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYWP286MB2300:EE_|TY1P286MB3405:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b3e1b10-77e7-4977-b50e-08db0835273d
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S/o333VRK5NplpFkrcg4M6esTQSmHVzlUEYkx5k1I+ZXfK4QjuBTn18j7ItIFNd91vrZY+htG6nqjB7P83vUdOf0Zkqxr+Us70poy9FxOMXE1oPNvXGIUIHsddB/MOUshIBbToCQnaKIY08V/ubTFtcO9EXLlcOtMgmXi4sqoTb4xgK5UsjT9M5+c+AvFESUznOguR6An24oNmBxyi2vQ0D275hGY3pJbFqCdqSjZfJ1oBomWsGu7QXGG3mip1Etd/uKtDYnvnOse5kdgDG8MZa/X9hINsF9UTH07Ri665Ve32Kx6GJFFTYPNyyQTJDWTNq6HHtqh8oafdmCZJtTxz4EQwqunhLiivEGQ2susrOmpf06j95a5c+PgoqvgXChm+7NMVjmKnya2VmX3YFWxKkSq9vGxHuRSE7L4Svymhezxikvo06rFYz01EVu6cWMNB6B+HswC7BcE6FcqbzTXjqzqPnzli8kEF6J9pDbkEE8NDmbFz5x1uKonQnbAgVi7d9n1XZTW4fgj1sQQk9xWzl9ooWizBaDcrfmFeqSalSWkxxZKdIu2eBcUbvAciyHUZng0vex3wNmBF81qJpVaUrTe6L/EnQS2oowsj9sjKmjHmy8rlZ+gNgS2meszMzI6lLOY9RZN3QuNaxXYfTxsA==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?emcvOXFvaHZJTFlTZWVXcWc1Wjk4d1dFMmMzSktuWUtkZ3VaVkpHR2lpVXRY?=
- =?utf-8?B?Ri9IenJQbXlFRm5QbUxjb2NhbWdPeFFtY2w3bUwxKzZsbkVPL3BGbGs4azVC?=
- =?utf-8?B?Sm9VQkgvWlBoL1k2L0M3eHhPMUFXZ1dJaVlxekk1M3A3a3FPN0ZySTdWY2hk?=
- =?utf-8?B?emFIWjRwbTBLQkN4anF1K2o0NmEwQ041a3hBUXNIQzA3MDIzOC9tc0lTZTRy?=
- =?utf-8?B?QjJDMGtaRDgwNmZnc1lYbmhRTUc3c0c1czg3Q3pOS1ZuSUQ5QTluSEc1SEl5?=
- =?utf-8?B?Q1E1UkpHRHlNYW5JR1BPMytUTlJKdTBoMmxiUXk1Nk9yTThBUjNuQW9vRjJQ?=
- =?utf-8?B?UytyZU14N3Z5SnBQdjF5RlEwN1gyeUFzVzE2aW1ibEY2UHBza3FJK2dkUGVz?=
- =?utf-8?B?TUEvYm82UkJuaTFuM0c0N00vMnpuL3lQVzhDRVhQc2dab0xhVnh3SHd6bDE4?=
- =?utf-8?B?Zk40M0pSN1NLb3MxcHI0Znd3clNZcldDY2tBcnNUclJSTFJmRUQxVXhrYjlq?=
- =?utf-8?B?UnNRdkdXWnZ6YXlEajVQOHQ1VWIzZERScUEvVlNRTERrUHB6REtUeS9ueVR0?=
- =?utf-8?B?TG11TE1zcEU0eVdJZXJBN29WSTdncGRoMzgxcjc1V1BSbExjck5QVlhPVEdW?=
- =?utf-8?B?b0QzTnZveEJ2Q2xJOVdzZVJ4aGdBaDYwNVVJVVI1VkhwTGxFV1VEU3dKUEJB?=
- =?utf-8?B?UzZnSmg1cHAvVVIya2o3UVlac0hRek1IREFib2ptaklIcW5CVm85b1JSclhw?=
- =?utf-8?B?OE5EcHZ3UjFZY2Zrc3ZPMWcySnlyKzgzTEFqdGVEVitaZzFFK2RYNGZwRWVQ?=
- =?utf-8?B?bVBLNDdFMmltd09Fekp1RVpQSGwvcmU2Nm5lVTM1dmJoWG1ETnUvdGtGUlZ1?=
- =?utf-8?B?ZC9uWTVCWUI3WVE5T2o1b1J5cE1GOEVNZzRJVkR1VDh0N0s1SGFYTDNPaEpY?=
- =?utf-8?B?ampYcHVqUDhzdUVmNENEMXM4eUZKRlhNWGY1cFBvMC9oT0xNa2xsbzA2dW9K?=
- =?utf-8?B?NmppTHVpNEUzS2t4L3JKUENtQW1kZVVxTUdXQXp2bFlHVFZ1VnJQZ0pKaVJF?=
- =?utf-8?B?RmFLVDQ5aGRtUm83T2xPM1NhNHZsM3NEZG9Mc2hrZE5SVlUxZ0JmNHRjd3VJ?=
- =?utf-8?B?ZXNjZ1dGbEdHc1FPZ0dIek9kK0xFd0tBU2NYTk9mY0FyVXl4WW1pSWxuRmdG?=
- =?utf-8?B?eTdJTXltU0U3M0pzbHYzVXh3S056OTZtamxGMXBzaXB5NVlxdXNHMmhORjFw?=
- =?utf-8?B?TjZhTXorV2VuRk1pOG8vYks3QW9xNDVpbytZakZySWlIU1FBTVhrdGVzVzVV?=
- =?utf-8?B?Uk5qbE9DMmp0SjlhUlE4eDk3K3ZndkFpL1EwTzlDR0dlZm9hcUR4dzA4ZmFi?=
- =?utf-8?B?blhLdkdkSzB3MzBiMHdCOWkreDY1ZTllYUsvYXRxNDdzc0NxcVcxbGJnOGpG?=
- =?utf-8?B?Y09YckQyVnBOVzhOZ28yaXY5cEp5S21xZllUbHFGNDhhRlc3SDVzWDlZdkJQ?=
- =?utf-8?B?SmVpZ0lVYWhHeEM3YTZIbXUrMFR5R1ViVUFDTmVnakxLN0ZFbk90ZHB2WC9R?=
- =?utf-8?B?ZXdSUm9iOXY3eStoSDd1ZUtjNVZRdlllRkI4eXFuNEszQXRQOTZLeTltQ2NK?=
- =?utf-8?B?Q1JiSFg1NGdzMkVEeXQ2ckNzVkFISytqR0ZBeklvZXRoek50YzZLY3JPTi9a?=
- =?utf-8?B?TkJEc1lWREc3dDhSNWZwaFhNMjVnZ1R1a2FrV0ZFRzB1amlOK1R0SFpBPT0=?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b3e1b10-77e7-4977-b50e-08db0835273d
-X-MS-Exchange-CrossTenant-AuthSource: TYWP286MB2300.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 11:27:39.2388
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1P286MB3405
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 0/2] PCI: dwc: Add support for 64-bit MSI target
+ addresses
+Content-Language: en-US
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>, <kernel-team@android.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, <linux@yadro.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Will McVicker <willmcvicker@google.com>
+References: <20220825235404.4132818-1-willmcvicker@google.com>
+ <decae9e4-3446-2384-4fc5-4982b747ac03@yadro.com>
+ <c014b074-6d7f-773b-533a-c0500e239ab8@arm.com>
+ <46ba97c9-85ff-eb47-0d05-79dc3960d7b4@yadro.com>
+ <20230203221216.c2s6ahm52ug5jtqv@mobilestation>
+From:   Evgenii Shatokhin <e.shatokhin@yadro.com>
+In-Reply-To: <20230203221216.c2s6ahm52ug5jtqv@mobilestation>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.199.16.60]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, Eelco, this is the last revision and no further comments for 
-revision came in
+Hi Sergey,
 
-eddy
+First of all, thank you for the detailed explanation. It is clearer now 
+what is going on and why it is that way.
 
-On 2023/2/6 19:21, Eelco Chaudron wrote:
->
-> On 5 Feb 2023, at 2:35, Eddy Tao wrote:
->
->> Use actual CPU number instead of hardcoded value to decide the size
->> of 'cpu_used_mask' in 'struct sw_flow'. Below is the reason.
+On 04.02.2023 01:12, Serge Semin wrote:
+> Hi Evgenii
+> 
+> On Wed, Feb 01, 2023 at 04:54:55PM +0300, Evgenii Shatokhin wrote:
+>> On 31.01.2023 15:42, Robin Murphy wrote:
+>>>
+>>> On 2023-01-31 12:29, Evgenii Shatokhin wrote:
+>>>> Hi,
+>>>>
+>>>> On 26.08.2022 02:54, Will McVicker wrote:
+>>>>> Hi All,
+>>>>>
+>>>>> I've update patch 2/2 to address Robin's suggestions. This includes:
+>>>>>
+>>>>>    * Dropping the while-loop for retrying with a 64-bit mask in favor of
+>>>>>      retrying within the error if-statement.
+>>>>>    * Using an int for the DMA mask instead of a bool and ternary
+>>>>> operation.
+>>>>>
+>>>>> Thanks again for the reviews and sorry for the extra revision today!
+>>>>> Hopefully this is the last one :) If not, I'd be fine to submit
+>>>>> patch 1/2
+>>>>> without 2/2 to avoid resending patch 1/2 for future revisions of patch
+>>>>> 2/2
+>>>>> (unless I don't need to do that anyway).
+>>>>
+>>>> The first patch of the series made it into the mainline kernel, but, it
+>>>> seems, the second one ("PCI: dwc: Add support for 64-bit MSI target
+>>>> address") did not. As of 6.2-rc6, it is still missing.
+>>>>
+>>>> Was it intentionally dropped because of some issues or, perhaps, just by
+>>>> accident? If it was by accident, could you please queue it for inclusion
+>>>> into mainline again?
+>>>
+>>> Yes, it was dropped due to the PCI_MSI_FLAGS_64BIT usage apparently
+>>> being incorrect, and some other open debate (which all happened on the
+>>> v5 thread):
+>>>
+>>> https://lore.kernel.org/linux-pci/YzVTmy9MWh+AjshC@lpieralisi/
 >>
->> 'struct cpumask cpu_used_mask' is embedded in struct sw_flow.
->> Its size is hardcoded to CONFIG_NR_CPUS bits, which can be
->> 8192 by default, it costs memory and slows down ovs_flow_alloc.
+> 
+>> I see. If I understand it correctly, the problem was that
+>> PCI_MSI_FLAGS_64BIT flag did not guarantee that 64-bit mask could be used
+>> for that particular allocation. Right?
 >>
->> To address this:
->>   Redefine cpu_used_mask to pointer.
->>   Append cpumask_size() bytes after 'stat' to hold cpumask.
->>   Initialization cpu_used_mask right after stats_last_writer.
+> 
+> William was trying to utilize for only software cause. Setting
+> PCI_MSI_FLAGS_64BIT didn't actually change the hardware behavior.
+> He could have as well provided just a driver private capability
+> flag. (see below for a more detailed problem description)
+> 
+>>>
+>>> The DMA mask issues have now been sorted out,
 >>
->> APIs like cpumask_next and cpumask_set_cpu never access bits
->> beyond cpu count, cpumask_size() bytes of memory is enough.
+>> I suppose, you mean https://lore.kernel.org/all/20230113171409.30470-26-Sergey.Semin@baikalelectronics.ru/?
+> 
+> Well, the way the DMA-mask issue has been solved was a bit of the
+> hacky. I wouldn't call it a fully proper solution. The problem with
+> pointlessly allocating physical memory for the iMSI-RX engine (it
+> doesn't perform any DMA) and artificially restricting the coherent-DMA
+> mask is still there. The patch in the subject was a compromise in
+> order to at least permit unrestricted streaming DMAs but limiting the
+> coherent DMAs for the MSI setup to work properly for all peripheral
+> devices.
+> 
 >>
->> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
-> The changes look good to me. Hopefully this is the last revision ;)
->
-> Acked-by: Eelco Chaudron <echaudro@redhat.com>
->
+>> It still breaks our particular case when the SoC has no 32-bit-addressable
+>> RAM. We'd set DMA masks to DMA_BIT_MASK(36) in the platform-specific driver
+>> before calling dw_pcie_host_init(). However, dw_pcie_msi_host_init() resets
+>> it to 32-bit, tries dmam_alloc_coherent() and fails.
+> 
+> Yeah. That's another problem with the implemented approach. But are
+> your sure the driver had worked even before this patch? AFAICS the
+> driver allocated the MSI-targeted page from DMA32 zone before this
+> modification. So the allocation must have failed on your platform too.
+
+You are right. I did not notice earlier that the kernel based on 
+6.0-stable we used before did actually contain our SoC-specific 
+workaround for this. Without that custom patch, initialization of PCIe 
+host does not work. So, yes, the problem was present earlier too.
+
+> 
+>>
+>> With 36-bit masks, the kernel seems to play well with the devices in our
+>> case.
+>>
+>> I saw your comment in https://lore.kernel.org/linux-pci/4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com/
+>> that drivers should always explicitly set their masks.
+>>
+> 
+>> Is it a really bad idea to check the current coherent mask's bits in
+>> dw_pcie_msi_host_init() and if it is more than 32 - just issue a warning
+>> rather than reset it to 32-bit unconditionally? That would help in our case.
+>> Or, perhaps, there is a better workaround.
+> 
+> The problem isn't in the value the mask is set to. The problem is
+> two-leveled, but is mainly connected with the PCIe device detected on
+> the PCIe bus. There are some of them which can't send MSI TLPs to the
+> 64-bit addresses. Since we can't predict whether such devices exist on
+> the bus beforehand the LLDD probe is performed together with the
+> MSI-engine initialization, the solution was to just restrict the MSIs
+> base address to be allocated within the lowest 4GB. Moreover as I said
+> above the iMSI-RX engine doesn't actually cause any DMA thus there is
+> no need in any memory allocation. Instead reserving some PCIe-bus
+> space/DWORD for MSIs would be enough. Alas the PCIe-subsystem doesn't
+> provide a way to do so. That's why we have what you see in the driver:
+> DMA mask restriction and coherent DMA memory allocation.
+
+So, if I understand you correctly, what is needed here is a small area 
+of PCIe address space accessible to any of the connected PCIe devices. 
+As the kernel does not know in advance, which restrictions the devices 
+have, it tries to allocate 32-bit-addressable memory, suitable for DMA. 
+This way, it would be OK for any attached PCIe device. Right?
+
+> 
+> If only we had a way to auto-detected the PCIe-bus space with no
+> physical memory behind it and take out a DWORD from it to initialize
+> the iMSI-RX engine we could have immediately got rid from the mask
+> setting operation and the memory allocation. It would have solved your
+> problem too.
+
+Yes, it would solve our issue too. I do not know, however, if a generic 
+solution is possible here, but I am no expert in PCIe.
+
+For now, we are probably better off with SoC-specific patches, when we 
+know which PCIe devices can possibly be used and what their restrictions 
+are.
+
+> 
+> -Serge(y)
+> 
+>>
+>> Looking forward to your comments.
+> 
+> 
+> 
+>>
+>>
+>>> so you, or Will, or anyone
+>>> else interested should be free to rework this on top of linux-next
+>>> (although at this point, more realistically on top of 6.3-rc1 in a few
+>>> weeks).
+>>>
+>>> Thanks,
+>>> Robin.
+>>>
+>>>> Support for 64-bit MSI target addresses is needed for some of our SoCs.
+>>>> I ran into a situation when there was no available RAM in ZONE_DMA32
+>>>> during initialization of PCIe host. Hence, dmam_alloc_coherent() failed
+>>>> in dw_pcie_msi_host_init() and initialization failed with -ENOMEM:
+>>>>
+>>>> [    0.374834] dw-pcie 4000000.pcie0: host bridge /soc/pcie0@4000000
+>>>> ranges:
+>>>> [    0.375813] dw-pcie 4000000.pcie0:      MEM
+>>>> 0x0041000000..0x004fffffff -> 0x0041000000
+>>>> [    0.376171] dw-pcie 4000000.pcie0:   IB MEM
+>>>> 0x0400000000..0x07ffffffff -> 0x0400000000
+>>>> [    0.377914] dw-pcie 4000000.pcie0: Failed to alloc and map MSI data
+>>>> [    0.378191] dw-pcie 4000000.pcie0: Failed to initialize host
+>>>> [    0.378255] dw-pcie: probe of 4000000.pcie0 failed with error -12
+>>>>
+>>>> Mainline kernel 6.2-rc6 was used in that test.
+>>>>
+>>>> The hardware supports 64-bit target addresses, so the patch "PCI: dwc:
+>>>> Add support for 64-bit MSI target address" should help with this
+>>>> particular failure.
+>>>>
+>>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Will
+>>>>>
+>>>>> Will McVicker (2):
+>>>>>     PCI: dwc: Drop dependency on ZONE_DMA32
+>>>>>
+>>>>> v6:
+>>>>>    * Retrying DMA allocation with 64-bit mask within the error
+>>>>> if-statement.
+>>>>>    * Use an int for the DMA mask instead of a bool and ternary operation.
+>>>>>
+>>>>> v5:
+>>>>>    * Updated patch 2/2 to first try with a 32-bit DMA mask. On failure,
+>>>>>      retry with a 64-bit mask if supported.
+>>>>>
+>>>>> v4:
+>>>>>    * Updated commit descriptions.
+>>>>>    * Renamed msi_64b -> msi_64bit.
+>>>>>    * Dropped msi_64bit ternary use.
+>>>>>    * Dropped export of dw_pcie_msi_capabilities.
+>>>>>
+>>>>> v3:
+>>>>>     * Switched to a managed DMA allocation.
+>>>>>     * Simplified the DMA allocation cleanup.
+>>>>>     * Dropped msi_page from struct dw_pcie_rp.
+>>>>>     * Allocating a u64 instead of a full page.
+>>>>>
+>>>>> v2:
+>>>>>     * Fixed build error caught by kernel test robot
+>>>>>     * Fixed error handling reported by Isaac Manjarres
+>>>>>    PCI: dwc: Add support for 64-bit MSI target address
+>>>>>
+>>>>>    .../pci/controller/dwc/pcie-designware-host.c | 43 +++++++++----------
+>>>>>    drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
+>>>>>    drivers/pci/controller/dwc/pcie-designware.h  |  2 +-
+>>>>>    3 files changed, 30 insertions(+), 23 deletions(-)
+>>>>>
+>>>>>
+>>>>> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+>>>>
+>>>> Thank you in advance.
+
+Regards,
+Evgenii
+
+
