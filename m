@@ -2,202 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E436368B323
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645C968B32D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjBFAQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 19:16:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S229662AbjBFARe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 19:17:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBFAQo (ORCPT
+        with ESMTP id S229640AbjBFARa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 19:16:44 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0BA19F33
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 16:16:43 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id r9so8496235oig.12
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 16:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DKiRpszv0N47m/cXAuiRNNzVQEfrL6MW3jLIbHTB504=;
-        b=TlbYQv6qnoHjdMGbPXrdAuGLxHguRXl7Dugr+aI4+u7b637nYzjeEFbSkk5s+qv35k
-         TsVlfH/K2tztLmYQ5e1dJwcyt6ONbZDCXqICapdReRHQv3/jQ/ZpmZz4WrghzAUAhO98
-         ZgblXV9lWjGvF2z9tsXH+SXBqbCTDLd52NPMjKXMFcu1RsF25EMyB8I9+mVgLuByk8og
-         8b5KeEgx/MMCDa8YnMnTA+/F+AujutRK3rP+3p+yeYqnnp27Uul2HWnqYI62qzr86tSA
-         MaIq5YawCaBOw4tV0YzbPfWFVhjRvYlBizNAFjUFA2w5kGpnuwO3+vox3KNxuVgdsMRd
-         DmuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DKiRpszv0N47m/cXAuiRNNzVQEfrL6MW3jLIbHTB504=;
-        b=5SeSWTD6rtTCYjby2fj418aNNF4zdU1UrVTtnQocYbMoEpqRXtgR1qvbtUCMccppp3
-         NFl3wpGmEQJsLvDAWpjIzAewQEZWCbtr6Me894N8Z5XUCUWfLTRMHAfwmF9XaSLCtytc
-         +W/wdAnkP026ctbldcz9BDcEckkhTkeaK9RBwdT1gns3DUKtoKOJ/WuPzbkBLrMx8KPT
-         +j1WqwFIzvbRBespxaOTuOPHynl/oX4hx1BM69kBLfoXBM7rSC0zsrviV14S0GTisLgD
-         eX9UAKjuVun1ljwZulBEuvw7s86+D7jvMweCwj3vMmr3U525rcEJkBl56Sj+v2EyUAhI
-         Pr9Q==
-X-Gm-Message-State: AO0yUKU3yerXiC1wL1NUHx79hRYBkERRrYppXGc6LhnSjL8vPQrFp6Ws
-        61GcM4rhsIxyVOBuaaKOX+pvtQ==
-X-Google-Smtp-Source: AK7set/LrdMOh6Q4R4YhB9Kscv94BT84RuwAt4hkpDRbyy7i+SWv607skdHsaHeTWu2r9Eylly8qMw==
-X-Received: by 2002:a05:6808:238c:b0:37b:38d:eac4 with SMTP id bp12-20020a056808238c00b0037b038deac4mr3009141oib.15.1675642602763;
-        Sun, 05 Feb 2023 16:16:42 -0800 (PST)
-Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id l16-20020a544510000000b003645b64d7b3sm3496098oil.4.2023.02.05.16.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 16:16:42 -0800 (PST)
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: [RESEND PATCH v3 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
-Date:   Sun,  5 Feb 2023 18:16:34 -0600
-Message-Id: <20230206001634.2566-5-steev@kali.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230206001634.2566-1-steev@kali.org>
-References: <20230206001634.2566-1-steev@kali.org>
+        Sun, 5 Feb 2023 19:17:30 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C4A18177;
+        Sun,  5 Feb 2023 16:17:28 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P96Jy2rMwz4xN4;
+        Mon,  6 Feb 2023 11:17:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675642644;
+        bh=thd0k+KOJmz5QA2CBM6ENADwCGJnyT9yH3eN29TIr30=;
+        h=Date:From:To:Cc:Subject:From;
+        b=h6B/hzbQjLljSGry/HuSsD1Gj1MHc+e5UBPVqaIP26Pz/+CTXAtrrGZkKy5TTX0GD
+         jdeh5vin/vJpKMKIJJdyXM7RQTdIeFLk57LTiJMzWQ4vqMaWPxXkgpv34hxeJj4UQZ
+         gb7Kx95GiuiY82/y0j/tbp2u1T9VorDKa+TrzPEBtZwnefhscP1IkZ0Z+qOaERU4wC
+         L0OHiE3119avMZU/wtpw9dHDXuV3AscZrYR0nwoAtI1ZkKL0dpWwfToB1uZ27urF6L
+         De+AR93aBnuP++q864Xa12wYNUjp371RAixGEVLnF/GIP2dueusfj4poTrHdXeBuTe
+         mPcYNJXdQJfYQ==
+Date:   Mon, 6 Feb 2023 11:17:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexandre Torgue <alexandre.torgue@st.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the stm32 tree
+Message-ID: <20230206111721.034f57e6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/gC9tCr.uC=8k1ggQelnWFPT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
----
-Changes since v2:
- - Remove dead code and add TODO comment
- - Make dtbs_check happy with the pin definitions
+--Sig_/gC9tCr.uC=8k1ggQelnWFPT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
----
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
+Hi all,
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index f936b020a71d..d351411d3504 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -24,6 +24,8 @@ / {
- 	aliases {
- 		i2c4 = &i2c4;
- 		i2c21 = &i2c21;
-+		serial0 = &uart17;
-+		serial1 = &uart2;
- 	};
- 
- 	wcd938x: audio-codec {
-@@ -712,6 +714,27 @@ &qup0 {
- 	status = "okay";
- };
- 
-+&uart2 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart2_state>;
-+
-+	bluetooth {
-+		compatible = "qcom,wcn6855-bt";
-+
-+		/* TODO: define regulators */
-+
-+		max-speed = <3200000>;
-+
-+		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
-+		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&bt_en>;
-+	};
-+};
-+
- &qup1 {
- 	status = "okay";
- };
-@@ -720,6 +743,12 @@ &qup2 {
- 	status = "okay";
- };
- 
-+&uart17 {
-+	compatible = "qcom,geni-debug-uart";
-+
-+	status = "okay";
-+};
-+
- &remoteproc_adsp {
- 	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
- 
-@@ -980,6 +1009,19 @@ hastings_reg_en: hastings-reg-en-state {
- &tlmm {
- 	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
- 
-+	bt_en: bt-en-state {
-+		hstp-sw-ctrl-pins {
-+			pins = "gpio132";
-+			function = "gpio";
-+		};
-+
-+		hstp-bt-en-pins {
-+			pins = "gpio133";
-+			function = "gpio";
-+			drive-strength = <16>;
-+		};
-+	};
-+
- 	edp_reg_en: edp-reg-en-state {
- 		pins = "gpio25";
- 		function = "gpio";
-@@ -1001,6 +1043,27 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
- 
-+	uart2_state: uart2-state {
-+		cts-pins {
-+			pins = "gpio122";
-+			function = "qup2";
-+			bias-disable;
-+		};
-+
-+		rts-tx-pins {
-+			pins = "gpio122", "gpio123";
-+			function = "qup2";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		rx-pins {
-+			pins = "gpio124";
-+			function = "qup2";
-+			bias-pull-up;
-+		};
-+	};
-+
- 	i2c21_default: i2c21-default-state {
- 		pins = "gpio81", "gpio82";
- 		function = "qup21";
--- 
-2.39.0
+The following commit is also in the arm-soc tree as a different commit
+(but the same patch):
 
+  4e74ad9f3af6 ("ARM: configs: multi_v7: enable NVMEM driver for STM32")
+
+This is commit
+
+  f46bbb7f9eff ("ARM: configs: multi_v7: enable NVMEM driver for STM32")
+
+in the arm-soc tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gC9tCr.uC=8k1ggQelnWFPT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgRxEACgkQAVBC80lX
+0Gw8Bgf+N0SlS5P9uqf51MzXJoaaD3Hw+SKoLMn5CXCkIdrh3uW5mXH4XYS00423
+Z9hVRCvzDRAQxmqfoKb1LQN/2WP+W7ZJtu1jEfyHwg6VQoHulAmz5T7qjr9cLCiq
+stxOXy2CfKveEvf5fwQQurXeAu0GALRiAITtePDU+iLq+fY67nzvkjjq4gY/gVv0
+ilClAq6zfK/ZY3YWi/Q9Su7ujwbPPRc20TgmjS55SdU0pz8LMK52/cs0B6sPNXiE
+wESQ55DkZWgswXhpENBw+AcUG5fLWwFftE70/0beSoSgS6hQCwqJpKb2vFDoPHLn
+lAJEPfmlNX5px/yRJ0U4MWIFGFlBLg==
+=vO3s
+-----END PGP SIGNATURE-----
+
+--Sig_/gC9tCr.uC=8k1ggQelnWFPT--
