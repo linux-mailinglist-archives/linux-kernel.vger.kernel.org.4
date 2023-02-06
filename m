@@ -2,230 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B710568C329
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2AE68C335
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBFQZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:25:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        id S229771AbjBFQ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjBFQZy (ORCPT
+        with ESMTP id S229887AbjBFQ2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:25:54 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03262005F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:25:52 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 143so8556902pgg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 08:25:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=id8fSN6nCpuUHUWrLfLtNoBqG5vqrIF4k085X9FJUls=;
-        b=EX1ehNIQKPbapcqwRXobBlBRI7Qc4WA0fHQ9k+98pKJp3/u8dYmBjgB/AL6ucgYTJf
-         1IiQHxDMYBTymfbbe8J2vYQ+kIrFZK9kpmWsguhMrJ2ldVORBk6iJ844AuKcV0LXD9rb
-         T/kIoLjhL8KgvAi4NhGoCkI/o/kMWczy2bCDE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=id8fSN6nCpuUHUWrLfLtNoBqG5vqrIF4k085X9FJUls=;
-        b=z0yDV1X4fBps6dUuYQWemvEYuqEFNwH3o5vwJgcE+kyLoay47cyt6UTfjb3KGfB2y6
-         gAEDU3x6D1xp4Yz+SEOqrPNEr5H3gamrpkFeitOM3FwaOjM/2S8GYQIy4Pp1qUXyPxsC
-         4LNK2GT+QoK9u5nfvn2DAMcnm9wBsMvXjzzubERHy2pOi7b2hWgX0n0jU3PoyL6StlKa
-         zEsMejwqIWUshH+g5K4UUHwdGNwNpNUMXOOyda2WAe0p4at9eIXhSF2iUyCrUI7ykdhS
-         OmBRTKBWkfL8xh25MS+ZLUeH7hDL9N/OVk9rBoDss5eXyNQSUl3cZQ9EfLVvbow3OeLP
-         zqxA==
-X-Gm-Message-State: AO0yUKVsBgNFatWhh25Z+LKjsefCebh8ul0LaqTLIQ4/dGhHNPSlvz+L
-        XcgPImSIqcQFdqwDrkeP0TsbIwy2c9zyFchGzwpVzw==
-X-Google-Smtp-Source: AK7set8zr0sS3lchCBKdSsYYwPtgNlfSunzSdRe+cJ0M5xjqOUyQ9+E8UhmyFdPu1nxSCQsMND4O2fS4n864oFLqMNQ=
-X-Received: by 2002:aa7:8f27:0:b0:593:e2fd:ca4f with SMTP id
- y7-20020aa78f27000000b00593e2fdca4fmr37380pfr.0.1675700752311; Mon, 06 Feb
- 2023 08:25:52 -0800 (PST)
+        Mon, 6 Feb 2023 11:28:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2865EBBAE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:28:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675700891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QKvPpE2CBuuZUCMj9SaC3BZ+r7n6t9mttNCgwIV4Ex4=;
+        b=fEcRhX02a2elD2axokB75hEztu1SGUXPmiO/MthoXmpP8GxI0IF5X6yj+18ikIM7YVRw2Y
+        eMr17LKOB1hhMUqDh2y9pQyeCoZ+A17R9IcGErsN+DbJShWtCR+1Ay6WF7DSw+rkMx3NQ7
+        dHym9Y90J5GmnFlG/fIzEM5n32n87P8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-299-rc6AX9phN_We6q8leQ7g7g-1; Mon, 06 Feb 2023 11:28:06 -0500
+X-MC-Unique: rc6AX9phN_We6q8leQ7g7g-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2448887406;
+        Mon,  6 Feb 2023 16:28:05 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-194-30.brq.redhat.com [10.40.194.30])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 741D4440BC;
+        Mon,  6 Feb 2023 16:28:02 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon,  6 Feb 2023 17:28:02 +0100 (CET)
+Date:   Mon, 6 Feb 2023 17:27:58 +0100
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>
+Subject: Re: [PATCH v4] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <20230206162758.GB1487@redhat.com>
+References: <20230206130449.41360-1-wander@redhat.com>
+ <Y+EVNz4ORkFSvTfP@linutronix.de>
+ <20230206152712.GA1487@redhat.com>
+ <Y+Ek98n1xUhTP+8a@linutronix.de>
 MIME-Version: 1.0
-References: <20230201163420.1579014-1-revest@chromium.org> <20230201163420.1579014-8-revest@chromium.org>
- <Y90phLJfnz06Ilb+@FVFF77S0Q05N>
-In-Reply-To: <Y90phLJfnz06Ilb+@FVFF77S0Q05N>
-From:   Florent Revest <revest@chromium.org>
-Date:   Mon, 6 Feb 2023 17:25:41 +0100
-Message-ID: <CABRcYmJ7v0r+Pi5podwX0=zJQPY3S1mWWAdTdtFDVTCVy_PqiQ@mail.gmail.com>
-Subject: Re: [PATCH 7/8] arm64: ftrace: Add direct call support
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+Ek98n1xUhTP+8a@linutronix.de>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 4:34 PM Mark Rutland <mark.rutland@arm.com> wrote:
+On 02/06, Sebastian Andrzej Siewior wrote:
 >
-> On Wed, Feb 01, 2023 at 05:34:19PM +0100, Florent Revest wrote:
-> > This builds up on the CALL_OPS work which extends the ftrace patchsite
-> > on arm64 with an ops pointer usable by the ftrace trampoline.
+> On 2023-02-06 16:27:12 [+0100], Oleg Nesterov wrote:
+>
+> > > If so why not use it
+> > > unconditionally?
 > >
-> > This ops pointer is valid at all time. Indeed, it is either pointing to
-> > ftrace_list_ops or to the single ops which should be called from that
-> > patchsite.
+> > performance ?
+>
+> All the free() part is moved from the caller into rcu.
+
+sorry, I don't understand,
+
+>
 > >
-> > There are a few cases to distinguish:
-> > - If a direct call ops is the only one tracing a function:
-> >   - If the direct called trampoline is within the reach of a BL
-> >     instruction
-> >      -> the ftrace patchsite jumps to the trampoline
-> >   - Else
-> >      -> the ftrace patchsite jumps to the ftrace_caller trampoline which
-> >         reads the ops pointer in the patchsite and jumps to the direct
-> >         call address stored in the ops
-> > - Else
-> >   -> the ftrace patchsite jumps to the ftrace_caller trampoline and its
-> >      ops literal points to ftrace_list_ops so it iterates over all
-> >      registered ftrace ops, including the direct call ops and calls its
-> >      call_direct_funcs handler which stores the direct called
-> >      trampoline's address in the ftrace_regs and the ftrace_caller
-> >      trampoline will return to that address instead of returning to the
-> >      traced function
+> > And... I still don't like the name of delayed_put_task_struct_rcu() to me
+> > ___put_task_struct_rcu() looks a bit less confusing, note that we already
+> > have delayed_put_task_struct(). But this is minor.
 >
-> This looks pretty good!
->
-> Overall I think this is the right shape, but I have a few minor comments that
-> lead to a bit of churn. I've noted those below, and I've also pushed out a
-> branch with suggested fixups (as discrete patches) to my
-> arm64/ftrace/direct-call-testing branch, which you can find at:
->
->   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
->   git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
->
-> Note that's based on a merge of the arm64 tree's for-next/ftrace branch and the
-> trace tree's trace/for-next branch, and there were a couple of trivial
-> conflicts I had to fix up when first picking this series (which I've noted in
-> the affected patches)
->
-> Those trees are at:
->
->   # arm64
->   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
->   git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
->
->   # trace
->   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
->   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
->
+> So if we do it unconditionally then we could get rid of
+> put_task_struct_rcu_user().
 
-Thanks for taking the time to publish these, that helps a lot.
+Yes. But the whole purpose of rcu_users is that we want to avoid the unconditional
+rcu grace period before free_task() ?
 
-> > @@ -80,6 +80,10 @@ struct ftrace_regs {
-> >
-> >       unsigned long sp;
-> >       unsigned long pc;
-> > +
-> > +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> > +     unsigned long custom_tramp;
->
-> Minor nit, but could we please s/custom_tramp/direct_tramp/?
+Just in case... please note that delayed_put_task_struct() delays
+refcount_sub(t->usage), not free_task().
 
-Yes, that's better
+Why do we need this? Consider
 
-> I forgot to add a comment here, but we require that sizeof(struct ftrace_regs)
-> is a multiple of 16, as the AAPCS requires that the stack is 16-byte aligned at
-> function call boundaries (and on arm64 we currently assume that it's *always*
-> aligned).
->
-> I'd suggest we make this:
->
-> | /*
-> |  * Note: sizeof(struct ftrace_regs) must be a multiple of 16 to ensure correct
-> |  * stack alignment
-> |  */
-> | struct ftrace_regs {
-> |       /* x0 - x8 */
-> |       unsigned long regs[9];
-> |
-> | #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> |       unsigned long direct_tramp;
-> | #else
-> |       unsigned long __unused;
-> | #endif
-> |
-> |       unsigned long fp;
-> |       unsigned long lr;
-> |
-> |       unsigned long sp;
-> |       unsigned long pc;
-> | };
+	rcu_read_lock();
 
-Oh good catch, that was easy to miss. I'm surprised I didn't hit
-horrible bugs when testing this in qemu.
+	task = find-task-in-rcu-protected-list;
 
-> For branching to the direct call trampoline, it would be better to use a
-> forward branch (i.e. BR), as that won't unbalance return stack predictors.
-> That'll need to use x16 or x17 to be compatible with a `BTI C` landing pad.
->
-> I'd also prefer if we could move the direct call invocation to a stub at the
-> end of ftrace_caller, e.g.
->
-> | SYM_CODE_START(ftrace_caller)
-> |       ... discover ops pointer here ...
-> |
-> |       ldr     w17, [x11, #FTRACE_OPS_DIRECT_CALL]
-> |       cbnz    ftrace_caller_direct
-> |
-> |       ... usual save and handling logic here ...
-> |
-> |       // just prior to return
-> |       ldr     x17, [sp, #FREGS_DIRECT_CALL]
-> |       cbnz    ftrace_caller_direct_late
-> |
-> |       ...  usual restore logic here ...
-> |
-> |       ret     x9
-> |
-> | SYM_INNER_LABEL(ftrace_caller_direct_late, SYM_L_LOCAL)
-> |
-> |       ... shuffle registers for the trampoline here ...
-> |
-> |       // fallthrough to the usual invocation
-> | SYM_INNER_LABEL(ftrace_caller_direct, SYM_L_LOCAL)
-> |       br      x17
-> | SYM_CODE_END(ftrace_caller)
+	// Safe, task->usage can't be zero
+	get_task_struct(task);
 
-Agreed, it makes things a lot easier to read and your branch makes
-restoring LR and PC more sane too. I squashed your change in and will
-send it as part of v2.
+	rcu_read_unlock();
 
-> > @@ -220,14 +227,21 @@ static bool ftrace_find_callable_addr(struct dyn_ftrace *rec,
-> >                                     unsigned long *addr)
-> >  {
-> >       unsigned long pc = rec->ip;
-> > -     long offset = (long)*addr - (long)pc;
-> >       struct plt_entry *plt;
-> >
-> > +     /*
-> > +      * If a custom trampoline is unreachable, rely on the ftrace_caller
-> > +      * trampoline which knows how to indirectly reach that trampoline
-> > +      * through ops->direct_call.
-> > +      */
-> > +     if (*addr != FTRACE_ADDR && !reachable_by_bl(*addr, pc))
-> > +             *addr = FTRACE_ADDR;
-> > +
->
-> With this, the check in get_ftrace_plt() is now redundant, since that's always
-> called with FTRACE_ADDR as the 'addr' argument. We could probably clean that
-> up, but I'm happy to leave that for now and handle that as a follow-up, since
-> I think that'll imply making some other structural changes, which qould obscure
-> the bulk of this patch.
 
-Fair enough, I'll add an extra patch for this in v2. It's fairly
-simple and if other maintainers think it's too much for the scope of
-the series, we can always pick it up later and merge it separately.
+> Otherwise we could use put_task_struct_rcu_user() in that timer
+> callback because it will lead to lockdep warnings once printk is fixed.
+
+IIUC there are more in-atomic callers of put_task_struct(). But perhaps
+I misunderstood you...
+
+Oleg.
+
