@@ -2,169 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C88968BFB6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B7868BFBA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjBFONq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:13:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S229939AbjBFOOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjBFONc (ORCPT
+        with ESMTP id S231309AbjBFONo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:13:32 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AF5CA19
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:12:52 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id h19so12740427vsv.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oi4fqKc8ViThZjQcyqO7FU4A4DRmVAyIaUuFWO0o8PA=;
-        b=ENMdbCUKsdJeStCp68yuZIVyU4btt9a3NnvqhNk5RTRik9YizwNzF/2VIBmQUL+RBS
-         0ynlpVNAe8zrN7FQF6ypUVdYGrOroz9u2XpvcZiD3+LZ1bMw8mK3ORtvWM4eIw2m08IC
-         wgdL+XCUVRd8n57GvmhdNRduw4VVXuWzuUehpPhg5dhkeRuUDZsekrzkaBF7hNH2iTaU
-         hvacjikDM82a0bZokqre4bb3JsfJWnqK/p0aCjgOqlB1cR2lDGXDSE+uuwAG+2YfkQUd
-         3f7khg7THRhdOBlp36aRaZY712HodWYssDxvviJiOwWqkkOUXZF2rf/9rzU2GvSl/JWd
-         7PFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oi4fqKc8ViThZjQcyqO7FU4A4DRmVAyIaUuFWO0o8PA=;
-        b=yjvlSDt+Kz/SersOPKfns0f66H3qq1OOotpuJ4yWW/femfuV4LZ3Lq0rvs32zz3Q8N
-         LSIB6eCy1k0LG6gRIHgmU71X+bAIG9D6pMA3O0mJ/V4/Ut2EbSJ0V2lG3PCj9WxgE9tO
-         Bhd9kwrvCm1o86YJyXPvM6uCStj/BddBDbv7b4l2o4B888mHhE//yCCr3PtOvhrrx+ny
-         KzK6GOpay4JJ6DCsWanwEooMsK2P5Bmw0pFQxwx3KovxKSg6OEltbcZXeCkknzN+1WYq
-         piRY1a0zYQ01qjNgoUapheNoVwjgG4KNwxcP5An1FIwp/sGvzpCILKrOytJEOleHoEWx
-         SbzA==
-X-Gm-Message-State: AO0yUKWIR3HxZfmIsdky9StZYymZr5my4Sf7YF7fhy9xGa40k0INbIIw
-        qVLV4HhO3VW7frYdTYBlgvocr+FbhXssSnJ+MjiCJw==
-X-Google-Smtp-Source: AK7set9W1cqOslAljm2IbR0q5/qXbpfuRcZDUXKQ9VdbxWjIqw0l7z2qUW2rV1oj8sf/RuL5HumAJyO1vdB31QJ+GPI=
-X-Received: by 2002:a05:6102:204d:b0:3f1:53d4:9e87 with SMTP id
- q13-20020a056102204d00b003f153d49e87mr2718607vsr.34.1675692770852; Mon, 06
- Feb 2023 06:12:50 -0800 (PST)
+        Mon, 6 Feb 2023 09:13:44 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA862658E;
+        Mon,  6 Feb 2023 06:13:06 -0800 (PST)
+Date:   Mon, 06 Feb 2023 14:12:45 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675692766;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hj0Mhlus84qc7jbWOcuoPYl/kpgWwsAus+jEFc07HZo=;
+        b=C0LZxnQxFSP0wZGizyg93du+bTSseKLtNC3wxFlHAeX4xUKOT5eW6rMRDJFSIJuJb9QxUF
+        N79KekZNrkhC30W8u68rQ2MFD4iQNV4wWKElvlG3WTceWqSyMttSaQns+O6rTmLRKIYkyh
+        8YGu25NLOe4Lh+xCq5AG16On1xRAPFhMi/Tnee8gqOusvNSGv7f8ga8fTunBvn+AWWOeqN
+        /3lKgUi+oL5oPRhWukcSZzIWeLA4cMPa5lWad5EVTM318IdvBoeoJfdAfhi2cRDfv0zPMP
+        9RluZEPUvlN3X0cdksgQcd+vlL37yu6y22ziBMf1tNimdwxX9O5lTOaFRDfGUw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675692766;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hj0Mhlus84qc7jbWOcuoPYl/kpgWwsAus+jEFc07HZo=;
+        b=a9gsloaxOMV1e6d6nOv/FFKRBuTrDfdPvbYLmYM5oiFqJTgzi4l1W7BRNtlGyOlVzzihRc
+        fShbNwGf+EcdDFCg==
+From:   "tip-bot2 for Wander Lairson Costa" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/urgent] rtmutex: Ensure that the top waiter is always woken up
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230117172649.52465-1-wander@redhat.com>
+References: <20230117172649.52465-1-wander@redhat.com>
 MIME-Version: 1.0
-References: <20230203101009.946745030@linuxfoundation.org> <CA+G9fYtsSuw=W0LSpzJRzsXB6qGYS3og1v=FOrvPHSAdRPCDPA@mail.gmail.com>
- <Y+AIsz4/7Ms28aWK@dev-arch.thelio-3990X>
-In-Reply-To: <Y+AIsz4/7Ms28aWK@dev-arch.thelio-3990X>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 6 Feb 2023 19:42:39 +0530
-Message-ID: <CA+G9fYtN=0nMkkUE7FAFutK5jLS--fr_ZcrJw0nb5BhMqQoZUA@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/28] 6.1.10-rc1 review
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167569276573.4906.7991545915243537568.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Feb 2023 at 01:21, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Naresh,
->
-> On Sat, Feb 04, 2023 at 12:55:10PM +0530, Naresh Kamboju wrote:
-> > On Fri, 3 Feb 2023 at 15:50, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 6.1.10 release.
-> > > There are 28 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> > >
-> > > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/pa=
-tch-6.1.10-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able-rc.git linux-6.1.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> >
-> > Results from Linaro=E2=80=99s test farm.
-> > No regressions on arm64, arm, x86_64, and i386.
-> >
-> > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > NOTE:
-> >
-> > clang-nightly-allmodconfig - Failed
-> >
-> > Build error:
-> > -----------
-> >   include/linux/fortify-string.h:430:4: error: call to '__write_overflo=
-w_field'
-> >    declared with 'warning' attribute: detected write beyond size of fie=
-ld
-> >    (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warn=
-ing]
-> >
-> > This is already reported upstream,
-> > https://lore.kernel.org/llvm/63d0c141.050a0220.c848b.4e93@mx.google.com=
-/
->
-> I think you copied the wrong warning, as the one upstream is a write
-> warning, whereas the one I see in your build logs is a read error:
+The following commit has been merged into the locking/urgent branch of tip:
 
-You are right !
-Thanks for checking build logs.
+Commit-ID:     db370a8b9f67ae5f17e3d5482493294467784504
+Gitweb:        https://git.kernel.org/tip/db370a8b9f67ae5f17e3d5482493294467784504
+Author:        Wander Lairson Costa <wander@redhat.com>
+AuthorDate:    Thu, 02 Feb 2023 09:30:20 -03:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 06 Feb 2023 14:49:13 +01:00
 
->
-> In file included from /builds/linux/drivers/infiniband/core/cma.c:9:
-> In file included from /builds/linux/include/linux/completion.h:12:
-> In file included from /builds/linux/include/linux/swait.h:7:
-> In file included from /builds/linux/include/linux/spinlock.h:56:
-> In file included from /builds/linux/include/linux/preempt.h:78:
-> In file included from /builds/linux/arch/x86/include/asm/preempt.h:7:
-> In file included from /builds/linux/include/linux/thread_info.h:60:
-> In file included from /builds/linux/arch/x86/include/asm/thread_info.h:53=
-:
-> In file included from /builds/linux/arch/x86/include/asm/cpufeature.h:5:
-> In file included from /builds/linux/arch/x86/include/asm/processor.h:22:
-> In file included from /builds/linux/arch/x86/include/asm/msr.h:11:
-> In file included from /builds/linux/arch/x86/include/asm/cpumask.h:5:
-> In file included from /builds/linux/include/linux/cpumask.h:12:
-> In file included from /builds/linux/include/linux/bitmap.h:11:
-> In file included from /builds/linux/include/linux/string.h:253:
-> /builds/linux/include/linux/fortify-string.h:543:4: error: call to '__rea=
-d_overflow' declared with 'error' attribute: detected read beyond size of o=
-bject (1st parameter)
->                         __read_overflow();
->                         ^
->
-> Regardless, this is still a clang bug that we are actively investigating,=
- so it
-> can still be safely ignored by the kernel folks.
->
-> https://github.com/ClangBuiltLinux/linux/issues/1687
+rtmutex: Ensure that the top waiter is always woken up
 
-Thank you.
+Let L1 and L2 be two spinlocks.
 
-> Cheers,
-> Nathan
+Let T1 be a task holding L1 and blocked on L2. T1, currently, is the top
+waiter of L2.
 
-- Naresh
+Let T2 be the task holding L2.
+
+Let T3 be a task trying to acquire L1.
+
+The following events will lead to a state in which the wait queue of L2
+isn't empty, but no task actually holds the lock.
+
+T1                T2                                  T3
+==                ==                                  ==
+
+                                                      spin_lock(L1)
+                                                      | raw_spin_lock(L1->wait_lock)
+                                                      | rtlock_slowlock_locked(L1)
+                                                      | | task_blocks_on_rt_mutex(L1, T3)
+                                                      | | | orig_waiter->lock = L1
+                                                      | | | orig_waiter->task = T3
+                                                      | | | raw_spin_unlock(L1->wait_lock)
+                                                      | | | rt_mutex_adjust_prio_chain(T1, L1, L2, orig_waiter, T3)
+                  spin_unlock(L2)                     | | | |
+                  | rt_mutex_slowunlock(L2)           | | | |
+                  | | raw_spin_lock(L2->wait_lock)    | | | |
+                  | | wakeup(T1)                      | | | |
+                  | | raw_spin_unlock(L2->wait_lock)  | | | |
+                                                      | | | | waiter = T1->pi_blocked_on
+                                                      | | | | waiter == rt_mutex_top_waiter(L2)
+                                                      | | | | waiter->task == T1
+                                                      | | | | raw_spin_lock(L2->wait_lock)
+                                                      | | | | dequeue(L2, waiter)
+                                                      | | | | update_prio(waiter, T1)
+                                                      | | | | enqueue(L2, waiter)
+                                                      | | | | waiter != rt_mutex_top_waiter(L2)
+                                                      | | | | L2->owner == NULL
+                                                      | | | | wakeup(T1)
+                                                      | | | | raw_spin_unlock(L2->wait_lock)
+T1 wakes up
+T1 != top_waiter(L2)
+schedule_rtlock()
+
+If the deadline of T1 is updated before the call to update_prio(), and the
+new deadline is greater than the deadline of the second top waiter, then
+after the requeue, T1 is no longer the top waiter, and the wrong task is
+woken up which will then go back to sleep because it is not the top waiter.
+
+This can be reproduced in PREEMPT_RT with stress-ng:
+
+while true; do
+    stress-ng --sched deadline --sched-period 1000000000 \
+    	    --sched-runtime 800000000 --sched-deadline \
+    	    1000000000 --mmapfork 23 -t 20
+done
+
+A similar issue was pointed out by Thomas versus the cases where the top
+waiter drops out early due to a signal or timeout, which is a general issue
+for all regular rtmutex use cases, e.g. futex.
+
+The problematic code is in rt_mutex_adjust_prio_chain():
+
+    	// Save the top waiter before dequeue/enqueue
+	prerequeue_top_waiter = rt_mutex_top_waiter(lock);
+
+	rt_mutex_dequeue(lock, waiter);
+	waiter_update_prio(waiter, task);
+	rt_mutex_enqueue(lock, waiter);
+
+	// Lock has no owner?
+	if (!rt_mutex_owner(lock)) {
+	   	// Top waiter changed		      			   
+  ---->		if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))
+  ---->			wake_up_state(waiter->task, waiter->wake_state);
+
+This only takes the case into account where @waiter is the new top waiter
+due to the requeue operation.
+
+But it fails to handle the case where @waiter is not longer the top
+waiter due to the requeue operation.
+
+Ensure that the new top waiter is woken up so in all cases so it can take
+over the ownerless lock.
+
+[ tglx: Amend changelog, add Fixes tag ]
+
+Fixes: c014ef69b3ac ("locking/rtmutex: Add wake_state to rt_mutex_waiter")
+Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20230117172649.52465-1-wander@redhat.com
+Link: https://lore.kernel.org/r/20230202123020.14844-1-wander@redhat.com
+---
+ kernel/locking/rtmutex.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+index 010cf4e..728f434 100644
+--- a/kernel/locking/rtmutex.c
++++ b/kernel/locking/rtmutex.c
+@@ -901,8 +901,9 @@ static int __sched rt_mutex_adjust_prio_chain(struct task_struct *task,
+ 		 * then we need to wake the new top waiter up to try
+ 		 * to get the lock.
+ 		 */
+-		if (prerequeue_top_waiter != rt_mutex_top_waiter(lock))
+-			wake_up_state(waiter->task, waiter->wake_state);
++		top_waiter = rt_mutex_top_waiter(lock);
++		if (prerequeue_top_waiter != top_waiter)
++			wake_up_state(top_waiter->task, top_waiter->wake_state);
+ 		raw_spin_unlock_irq(&lock->wait_lock);
+ 		return 0;
+ 	}
