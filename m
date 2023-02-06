@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A4168B336
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82AC668B333
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjBFAV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 19:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S229628AbjBFAVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 19:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjBFAVy (ORCPT
+        with ESMTP id S229490AbjBFAVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 19:21:54 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33F4D520;
-        Sun,  5 Feb 2023 16:21:51 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso9662651wms.5;
-        Sun, 05 Feb 2023 16:21:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qjr0azLLWyc/F0jSQSgAIjFGJ1vXgdojjuJl2+0tgn0=;
-        b=d8UAhliMdxOqlFoOosQojJDV0O1El13F2gL/9AjRWUTExZqYSWwovsD+7qG7poT98Q
-         XfLBr8ITA/kweSVh0RNn7tSg6uKavnXW3dh5qaJ9ta8ZUuaf4cgqN1vXRoZV+CfAdzHj
-         V2ZBUq/auS/P6/r3Zuo4qq7Fan2YQm4fwCZ/odxXrQA1ax2iv2HaP1dMBzWcgl2O1zOU
-         irWW/AaM9s8l1GNizHRE4OTMwRp3TZufLFtoGbbxTT9t+1jg2hbAbCNc7guuzwrFbJPC
-         kY+ZjZ3ZkIS7sgQ3OjOv8x0fJLUhLfniAniHpBV7PBVGoSvvrNPnmh7Ha8n15Usp1J6Z
-         0sww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qjr0azLLWyc/F0jSQSgAIjFGJ1vXgdojjuJl2+0tgn0=;
-        b=0zSmBCPwULioXmkGKesn0TEGmQaraBzDqS36jzmGNTv7o1wLb6fZAiMVtpPq5pFzEt
-         VewYZhV1UzdvqvKQLidfZ2HdGCKHkPBQhlB5zlQVvvWJzG8Og+cULwj/VRN2xwUTnm1b
-         vsGSEv1x/SaQndwC46h/mBjq7Y6ITHbagep1Gxgi/uO478YhIJEuR6V0nKcFOu5zLhQV
-         SmRSqmxkz0uPSI5xPEjvAhJcBzX9QVT0PXmEvdVvHkYS5X5Q3kooSImNLWNMkuQ/o8ch
-         /Y3eaBSCtyX6gpOargCLvvNRpjaCpEy5n7U4UEZz6tVBDWgnP1PX54K0IasSzKiZTenF
-         /zdQ==
-X-Gm-Message-State: AO0yUKUP1Ql1UJvd9bnSygqeewU75x/Xo7FQSbVOz8PJls0svsflDZAO
-        JY3oIcjrPrVXzaOnIJDFa9c=
-X-Google-Smtp-Source: AK7set+sVpzNPUz3DlSlHFkPUJSeord1K/h7NAmogPFOmbl6j5Bc863cYVN2f1UQgTgxbbTeKNXmlA==
-X-Received: by 2002:a05:600c:a51:b0:3df:f9e6:2c5c with SMTP id c17-20020a05600c0a5100b003dff9e62c5cmr3463935wmq.38.1675642909983;
-        Sun, 05 Feb 2023 16:21:49 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:ad64:1263:d26a:39ae])
-        by smtp.gmail.com with ESMTPSA id m40-20020a05600c3b2800b003dcc82ce53fsm9935504wms.38.2023.02.05.16.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 16:21:49 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] arm64: dts: renesas: Drop specifying the GIC_CPU_MASK_SIMPLE() for GICv3 systems
-Date:   Mon,  6 Feb 2023 00:21:36 +0000
-Message-Id: <20230206002136.29401-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 5 Feb 2023 19:21:48 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A752211E;
+        Sun,  5 Feb 2023 16:21:46 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P96Q008SWz4x1f;
+        Mon,  6 Feb 2023 11:21:43 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675642905;
+        bh=kdSBUm1XzmULWwCbz+MsNw6BwD9DMZRj+DEeYUGV4II=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DN8Ju3eQ0NRl/0/u6o+i5RCg68VN6SMS76jrEXkCYcvY8tcvLxrKs9DeSJxDRmWmo
+         OKuFAHpiHhs0fbnbKsVTT8W4m8Lm3KHG/qG66UB6dDQQ9+FGrOvXmBgEI81ciNhTAR
+         CLd25zQnVB+WPf9hhTlAY+7+b0bHDKugWpeIC8ZyFpLN5+5poN9Dzpq/WLED54qMTG
+         HBmRAB5BfqDWHrsh+VANdUZCgBJb50WxSWYwgy2EHvp/9yTdQXzHJ2ZnMWMiSWzdDd
+         Rer+HibenBRBI+ZppWucyXl/5etHE+3lQ8oTA+4G0XpL9w8tW3VBbjSwn/XE1zBgVe
+         u6j+Pa9HKymfw==
+Date:   Mon, 6 Feb 2023 11:21:43 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
+        Alina Yu <alina_yu@richtek.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: linux-next: manual merge of the battery tree with the arm-soc tree
+Message-ID: <20230206112143.71d626bd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/CEzHtiX6X7NY758jd=lQFyO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,199 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+--Sig_/CEzHtiX6X7NY758jd=lQFyO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The GICv3 interrupts binding does not have a cpumask. The CPU mask only
-applies to pre-GICv3. So just drop using them from GICv3 systems.
+Hi all,
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-Note, this patch applies on top of [0]
+Today's linux-next merge of the battery tree got a conflict in:
 
-[0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
----
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi    | 11 +++++------
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi    | 11 +++++------
- arch/arm64/boot/dts/renesas/r8a779g0.dtsi    | 11 +++++------
- arch/arm64/boot/dts/renesas/r9a07g043u.dtsi  |  8 ++++----
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi   |  8 ++++----
- arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi |  7 -------
- arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi |  7 -------
- arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi |  7 -------
- 8 files changed, 23 insertions(+), 47 deletions(-)
+  drivers/power/supply/Makefile
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-index 41fbb9998cf8..f04792baef80 100644
---- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-@@ -2209,8 +2209,7 @@ gic: interrupt-controller@f1000000 {
- 			interrupt-controller;
- 			reg = <0x0 0xf1000000 0 0x20000>,
- 			      <0x0 0xf1060000 0 0x110000>;
--			interrupts = <GIC_PPI 9
--				      (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_HIGH)>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
- 		fcpvd0: fcp@fea10000 {
-@@ -2857,9 +2856,9 @@ sensor5_crit: sensor5-crit {
- 
- 	timer {
- 		compatible = "arm,armv8-timer";
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
-+		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
- 	};
- };
-diff --git a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-index f20b612b2b9a..52b09e347e13 100644
---- a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-@@ -1108,8 +1108,7 @@ gic: interrupt-controller@f1000000 {
- 			interrupt-controller;
- 			reg = <0x0 0xf1000000 0 0x20000>,
- 			      <0x0 0xf1060000 0 0x110000>;
--			interrupts = <GIC_PPI 9
--				      (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
- 		prr: chipid@fff00044 {
-@@ -1164,10 +1163,10 @@ sensor3_crit: sensor3-crit {
- 
- 	timer {
- 		compatible = "arm,armv8-timer";
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-+		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
- 	};
- 
- 	ufs30_clk: ufs30-clk {
-diff --git a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-index 7a87a5dc1b6a..e84153b18f39 100644
---- a/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779g0.dtsi
-@@ -1205,8 +1205,7 @@ gic: interrupt-controller@f1000000 {
- 			interrupt-controller;
- 			reg = <0x0 0xf1000000 0 0x20000>,
- 			      <0x0 0xf1060000 0 0x110000>;
--			interrupts = <GIC_PPI 9
--				      (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
- 		fcpvd0: fcp@fea10000 {
-@@ -1347,9 +1346,9 @@ prr: chipid@fff00044 {
- 
- 	timer {
- 		compatible = "arm,armv8-timer";
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-+		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
- 	};
- };
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-index 1c9d3193e4ff..2ab231572d95 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-@@ -47,10 +47,10 @@ psci {
- 
- 	timer {
- 		compatible = "arm,armv8-timer";
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
-+		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
- 	};
- };
- 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-index 2c848aad7aea..ed7f330e4a2a 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-@@ -1070,9 +1070,9 @@ target: trip-point {
- 
- 	timer {
- 		compatible = "arm,armv8-timer";
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW)>;
-+		interrupts-extended = <&gic GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-+				      <&gic GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
- 	};
- };
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi
-index 1d57df706939..56a979e82c4f 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044c1.dtsi
-@@ -15,13 +15,6 @@ cpus {
- 		/delete-node/ cpu-map;
- 		/delete-node/ cpu@100;
- 	};
--
--	timer {
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
--	};
- };
- 
- &soc {
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi
-index 9d89d4590358..9cf27ca9f1d2 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044l1.dtsi
-@@ -15,11 +15,4 @@ cpus {
- 		/delete-node/ cpu-map;
- 		/delete-node/ cpu@100;
- 	};
--
--	timer {
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
--	};
- };
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi b/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi
-index c448cc6634c1..d85a6ac0f024 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g054l1.dtsi
-@@ -15,11 +15,4 @@ cpus {
- 		/delete-node/ cpu-map;
- 		/delete-node/ cpu@100;
- 	};
--
--	timer {
--		interrupts-extended = <&gic GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>,
--				      <&gic GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(1) | IRQ_TYPE_LEVEL_LOW)>;
--	};
- };
--- 
-2.25.1
+between commit:
 
+  a0f831756b26 ("power: remove s3c adc battery driver")
+
+from the arm-soc tree and commits:
+
+  4a1a5f6781d8 ("power: supply: rt9471: Add Richtek RT9471 charger driver")
+  6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
+
+from the battery tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/power/supply/Makefile
+index 8cb3c7f5c111,f8f9716d3ba4..000000000000
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@@ -52,8 -54,12 +52,10 @@@ obj-$(CONFIG_BATTERY_DA9150)	+=3D da9150-
+  obj-$(CONFIG_BATTERY_MAX17040)	+=3D max17040_battery.o
+  obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
+  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
+ -obj-$(CONFIG_BATTERY_Z2)	+=3D z2_battery.o
+  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
+  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
++ obj-$(CONFIG_CHARGER_RT9467)	+=3D rt9467-charger.o
++ obj-$(CONFIG_CHARGER_RT9471)	+=3D rt9471.o
+ -obj-$(CONFIG_BATTERY_S3C_ADC)	+=3D s3c_adc_battery.o
+  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+=3D twl4030_madc_battery.o
+  obj-$(CONFIG_CHARGER_88PM860X)	+=3D 88pm860x_charger.o
+  obj-$(CONFIG_CHARGER_PCF50633)	+=3D pcf50633-charger.o
+
+--Sig_/CEzHtiX6X7NY758jd=lQFyO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgSBcACgkQAVBC80lX
+0GzgcAgAjclu0BzM5kku7VdMju5VEq7oVPvkc2p/ZDFq99YPISUuA/MTysfXSmfj
+AbA2Ewqhfpt0DWK82dEGxfmQCbzL/zg4EFdovxQwMa2lrlGPeEFpPoil234lAz7P
+a2JvN1K5M+ZhqY0T5cBEb5PKhSZsyR7M9d2nr0gigJOds2fnVeOT2i8XWPln7JJ1
+M2nkSSJ9hhkBfcDAf4/YRhI4M9WMAGSSCoIxQ+XXLLj//K6CmAqsPH9gqE0+YR5l
+ynrnvHyy7akZ6pEdD7sIwhp0qSMaO9vyHKgGp5HyMOUH1Ccd7Qo5VUDpw8JjnaHA
+4e4Ll/RzE0fE9c83QNE2KAwx6a99rw==
+=8qru
+-----END PGP SIGNATURE-----
+
+--Sig_/CEzHtiX6X7NY758jd=lQFyO--
