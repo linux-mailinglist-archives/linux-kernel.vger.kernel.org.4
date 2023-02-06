@@ -2,111 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9756468C43F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E57368C448
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjBFRKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S230084AbjBFRL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFRKC (ORCPT
+        with ESMTP id S229756AbjBFRL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:10:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9332449C;
-        Mon,  6 Feb 2023 09:10:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Feb 2023 12:11:26 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFD224116;
+        Mon,  6 Feb 2023 09:11:23 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05A68B81588;
-        Mon,  6 Feb 2023 17:10:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B9AC433D2;
-        Mon,  6 Feb 2023 17:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675703398;
-        bh=T6nMlMtjoX6nM1kpqNXBW0g7A7KPs11O2AjUDAhAjpU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U0iz1ivBLo8y3bHaI0HhMvcjLRjKFd7jHbXOPOwRjnOL9QgQLUfpscK36uj77LWqr
-         uMKcdc/u3eiEng7jQJiGj32RvMDS0zXDoIaCraxqTBFcCXxwRTn1qj76FTusigz9Mr
-         dAU5KiZwtk4knDj8wAMj1CBUQpjH1bJV3jomqw3XTks/ABa9u2tnWPWThu3JEXn2di
-         kvhaItUMCgcyDbpvZhIlFwwyRFw3X1RpruZulQWXLgbDs5JGirmZ8+wW+VMqr2kdI3
-         HvtBWmrF5EzVL5patiEo2KmKLbA729GvQWSDjgJo6fZCwT9lzFYAFfcbjx4pmOL41U
-         ENFnNFe3jzyAw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pP50f-0000MO-HS; Mon, 06 Feb 2023 18:10:29 +0100
-Date:   Mon, 6 Feb 2023 18:10:29 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: Re: [PATCH v4 06/19] irqdomain: Drop revmap mutex
-Message-ID: <Y+E0hRcvjMb9bynE@hovoldconsulting.com>
-References: <20230116135044.14998-1-johan+linaro@kernel.org>
- <20230116135044.14998-7-johan+linaro@kernel.org>
- <871qnslut3.ffs@tglx>
- <Y8e6Us0Qgt0p5S4R@hovoldconsulting.com>
- <87r0vshu1y.ffs@tglx>
- <Y8fv3KWoxmaykrP6@hovoldconsulting.com>
- <87zg9rx7o1.ffs@tglx>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 52D8433AE4;
+        Mon,  6 Feb 2023 17:11:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675703482; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JiosyFUMFz7kRTlgHlsP43ogSkUkcL2PJV6W1GvZl3E=;
+        b=h/huH4B2x/yJGg2HFg/LXedjRuFs8CL7GGl8IYft4tEbopr3YFqn7NYQ7ql0K0q/XwktmS
+        IR6lqr0fL1s5ISOfl3N9AQBwEyeg1KYUDGbpp6foFxkS/gqj5q676kyw7XksHMjqmMMACT
+        LX1VkXWK6iVYk3TenEyeln0RUXiAhIM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3017B138E8;
+        Mon,  6 Feb 2023 17:11:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jAN6Cro04WMTJwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 06 Feb 2023 17:11:22 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>,
+        Petr Pavlu <petr.pavlu@suse.com>
+Subject: [RFC PATCH] vfs: Delay root FS switch after UMH completion
+Date:   Mon,  6 Feb 2023 18:10:32 +0100
+Message-Id: <20230206171032.12801-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zg9rx7o1.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 02:09:02PM +0100, Thomas Gleixner wrote:
-> On Wed, Jan 18 2023 at 14:10, Johan Hovold wrote:
-> > On Wed, Jan 18, 2023 at 02:05:29PM +0100, Thomas Gleixner wrote:
-> >> You can do this in a two step approach.
-> >> 
-> >>     1) Add the new locking and ensure that the lock is held when
-> >>        the functions are called
-> >
-> > But the new locking has nothing to do with these functions. They are
-> > added because they fix various races elsewhere. Adding lockdep
-> > assertions in unrelated function as part of those fixes doesn't really
-> > make much sense.
-> 
-> Seriously? The point is that revmap_mutex is not protecting against any
-> of the races which you are trying to protect against. Ergo, any callsite
-> which does not hold the irqdomain mutex is part of the problem you are
-> trying to solve, no?
+We want to make sure no UMHs started with an old root survive into the
+world with the new root (they may fail when it is not expected).
+Therefore, insert a wait for existing UMHs termination (this assumes UMH
+runtime is finite).
 
-The current locking using the revmap_mutex is indeed incomplete as it
-only serialises updates of the revmap structures themselves and
-specifically does not prevent two mappings for the same interrupt to be
-created. It basically just protects the integrity of the revmap tree.
+A motivation are asynchronous module loads that start in initrd and they
+may be (un)intentionally terminated by a userspace cleanup during rootfs
+transition.
 
-The association and disassocation fixes are not sufficient to address the
-mapping race, but those two changes do guarantee that all current paths
-that access the revmap structures hold the irq_domain_mutex.
+This is also inspired by an ancient problem [1].
 
-Once that has been established, there is no point in keeping the
-revmap_mutex around for the update path (lookups are still protected by
-RCU).
+This is just a rough idea, only superficially tested, no broader context
+(VFS locking et al) is considered.
 
-But this change is separate from the race that the disassociation fix
-addressed (e.g. the racy updates of the domain mapcount) and it is also
-independent of the fix for the mapping race (which still exists after
-removing the revmap mutex with the current order of the patches).
+[1] https://kernelnewbies.org/KernelProjects/usermode-helper-enhancements#Filesystem_suspend
 
-Therefore the dropping the revmap mutex belongs in its own patch and I
-placed it here after the disassociation fix to highlight that it is
-indeed independent of the later fixes for the mapping race.
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
 
-It can be moved after, but I still think the lockdep asserts belong in
-the patch that removes the revmap tree lock.
+I'm not amused by this patch. I'm sending it to get some NAck reasons
+(besides indefinite UMH lifetime) and get it off my head. Thanks.
 
-Johan
+ fs/namespace.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/fs/namespace.c b/fs/namespace.c
+index ab467ee58341..48cb658ae10c 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2931,6 +2931,7 @@ static int do_move_mount(struct path *old_path, struct path *new_path)
+ 	struct mount *old;
+ 	struct mount *parent;
+ 	struct mountpoint *mp, *old_mp;
++	struct path ns_root;
+ 	int err;
+ 	bool attached;
+ 
+@@ -2985,6 +2986,14 @@ static int do_move_mount(struct path *old_path, struct path *new_path)
+ 		if (p == old)
+ 			goto out;
+ 
++	ns_root.mnt = &current->nsproxy->mnt_ns->root->mnt;
++	ns_root.dentry = ns_root.mnt->mnt_root;
++	path_get(&ns_root);
++	/* See argument in pivot_root() */
++	if (path_equal(new_path, &ns_root))
++		usermodehelper_disable();
++
++
+ 	err = attach_recursive_mnt(old, real_mount(new_path->mnt), mp,
+ 				   attached);
+ 	if (err)
+@@ -2996,6 +3005,9 @@ static int do_move_mount(struct path *old_path, struct path *new_path)
+ 	if (attached)
+ 		put_mountpoint(old_mp);
+ out:
++	if (path_equal(new_path, &ns_root))
++		usermodehelper_enable();
++
+ 	unlock_mount(mp);
+ 	if (!err) {
+ 		if (attached)
+@@ -3997,6 +4009,8 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
+ 		goto out2;
+ 
+ 	get_fs_root(current->fs, &root);
++	/* UMHs started from old root should finish before we switch root under */
++	usermodehelper_disable(); // XXX error handling
+ 	old_mp = lock_mount(&old);
+ 	error = PTR_ERR(old_mp);
+ 	if (IS_ERR(old_mp))
+@@ -4058,6 +4072,7 @@ SYSCALL_DEFINE2(pivot_root, const char __user *, new_root,
+ 	error = 0;
+ out4:
+ 	unlock_mount(old_mp);
++	usermodehelper_enable();
+ 	if (!error)
+ 		mntput_no_expire(ex_parent);
+ out3:
+-- 
+2.39.1
+
