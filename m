@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A6168C5EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1198468C5E8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjBFSh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        id S229940AbjBFShY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjBFShU (ORCPT
+        with ESMTP id S229677AbjBFShS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:37:20 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EDA2E804
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:37:16 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pP6MU-0006UG-Vd; Mon, 06 Feb 2023 19:37:06 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pP6MU-00012i-CE; Mon, 06 Feb 2023 19:37:06 +0100
-Date:   Mon, 6 Feb 2023 19:37:06 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 00/23] net: add EEE support for KSZ9477 and
- AR8035 with i.MX6
-Message-ID: <20230206183706.GH12366@pengutronix.de>
-References: <20230201145845.2312060-1-o.rempel@pengutronix.de>
- <20230204001332.dd4oq4nxqzmuhmb2@skbuf>
- <20230206054713.GD12366@pengutronix.de>
- <20230206141038.vp5pdkjyco6pyosl@skbuf>
- <Y+EfSKRwQMRgEurL@lunn.ch>
+        Mon, 6 Feb 2023 13:37:18 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6F2B0B5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:37:14 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id iy2so2976428plb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:37:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=KLC/XkXNzAEy7VypcsOB1BhiDn5tCJJ6z4r2FO96gZ4=;
+        b=Z6Xobl+ifCTmy3tuXbCb4/T7KQuqh1+ELYFMFncOG8gjGjYWHYVKBkKWf/hs7705kQ
+         U9pBsHYgyI4LBsQZ4svp9ACnySmMw1lzFGzLx+r5Z3R6I6fYbCXXJfRBQAJhTeaJt2Rd
+         DZ+n9H0FNUIhVcUTh+hGz3QzvSZi2ZTAZCEBA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KLC/XkXNzAEy7VypcsOB1BhiDn5tCJJ6z4r2FO96gZ4=;
+        b=GZuGL9iHaXOYoTpNgvAskCMsh+zdgRBPdoFGHlTzbvSgSTxD/lxrULYIa5nZx4yBd9
+         4smD/1CoKrJTZRsHNuaAyGIVgWLEzVup7t3/S+CQZdn2rrTOnXR7ClCTTj3QEhBpTreU
+         6MgnfYvi21LUz6JHsQ6FwnD3Ol/UvshlPp1Fha8OpoNj1S7nUeCPtOQpMuEjxHiYKkrj
+         CHiS+9fuRw0ostTcN2fVTEg4+hjwcrzH91VjsCKAcgt3UO3k9AKskxBAtKkPVGKKNfkA
+         pJ8Go8xr8/zB8K13tyoNeRpTLZhfVVJccqIOnPD47rAxdeRaVUp8z8g1uYEEcW7/kKg5
+         QM5g==
+X-Gm-Message-State: AO0yUKXtGBMNlDVyAj2exvDuqkiR9Swv2FeNz1Sm91cii2bM9yGw4ZUV
+        JI/GxZvw77hgnGAGP4Zf5U/IPw==
+X-Google-Smtp-Source: AK7set/Rzubn+NGDwIh+RLUe/eGNYmHcdSo19eILBU6BpKaPvO08yVnkIMQkb7RsLOZ4nQQiabKtPQ==
+X-Received: by 2002:a17:902:e749:b0:196:68ee:f363 with SMTP id p9-20020a170902e74900b0019668eef363mr27185847plf.69.1675708634329;
+        Mon, 06 Feb 2023 10:37:14 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y15-20020a17090264cf00b001967580f60fsm7204461pli.260.2023.02.06.10.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 10:37:13 -0800 (PST)
+Message-ID: <63e148d9.170a0220.20379.b4a7@mx.google.com>
+X-Google-Original-Message-ID: <202302061035.@keescook>
+Date:   Mon, 6 Feb 2023 10:37:13 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] btrfs: sysfs: Handle NULL return values
+References: <20230204183510.never.909-kees@kernel.org>
+ <Y99XGrFvXBL32cOO@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+EfSKRwQMRgEurL@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <Y99XGrFvXBL32cOO@kroah.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,51 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 04:39:52PM +0100, Andrew Lunn wrote:
-> > > > What is the code flow through the kernel with EEE? I wasn't able to find
-> > > > a good explanation about it.
-> > > > 
-> > > > Is it advertised by default, if supported? I guess phy_advertise_supported()
-> > > > does that.
+On Sun, Feb 05, 2023 at 08:13:30AM +0100, Greg KH wrote:
+> On Sat, Feb 04, 2023 at 10:35:10AM -0800, Kees Cook wrote:
+> > Each of to_fs_info(), discard_to_fs_info(), and to_space_info() can
+> > return NULL values.
 > 
-> The old flow is poorly defined. If the MAC supports EEE, it should
-> call phy_init_eee(). That looks at the results of auto-neg and returns
-> if EEE has been negotiated or not.
-> 
-> However, i'm not aware of any code which disables by default the
-> advertisement of EEE, or actually enables the negotiation of EEE. So
-> there are probably a number of PHYs which are EEE capable, connected
-> to a MAC driver which does not call phy_init_eee() and are advertising
-> EEE and negotiating EEE. There might also be a subset of that which
-> are actually doing EEE, despite not calling phy_init_eee().
-> 
-> So the current code is not good, and there is a danger we introduce
-> power regressions as we sort this out.
-> 
-> The current MAC/PHY API is pretty broken. We probably should be
-> handling this similar to pause. A MAC which supports pause should call
-> phy_support_asym_pause() or phy_support_sym_pause() which will cause
-> the PHY to advertise its supported Pause modes. So we might want to
-> add a phy_support_eee()? We then want the result of EEE negotiation
-> available in phydev for when the link_adjust() callback is called.
+> The code says it could, but I really do not think that is possible at
+> all, especially based on the fact that there have never been any crashes
+> reported here.
 
-Good point.
+I'm not sure that's a useful measure if we're trying to improve
+robustness under memory corruption, but at least one of those helpers is
+performing a type check, not just a simple container_of(), etc.
 
-SmartEEE will be probably a bit more challenging. If MAC do not
-advertise EEE support, SmartEEE can be enabled. But it would break PTP
-if SmartEEE is active. Except SmartEEE capable PHY implements own PTP
-support. In any case, user space will need extra information to
-identify potential issues.
-
-> A quick look at a few MAC drivers seems to indicate many are getting
-> it wrong and don't actually wait for the result of the auto-neg....
-
-Some ethernet driver trying to do own EEE state detection, and doing
-false positive detection on not supported states - for example half
-duplex.
+Regardless, yeah, if this can be done without NULL returns, sure, let's
+do it. I just don't know this code well enough to say what's possible.
+:)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Kees Cook
