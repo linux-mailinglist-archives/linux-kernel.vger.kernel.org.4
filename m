@@ -2,174 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BFC68C52A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A54CA68C53D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjBFRwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S230241AbjBFRye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjBFRwa (ORCPT
+        with ESMTP id S229744AbjBFRy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:52:30 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7635A27986
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:52:29 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id ge21-20020a17090b0e1500b002308aac5b5eso6150810pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 09:52:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0zyweaVyiMqk4LHuNuzEqryLINLpiUARVWRIcVZa2lw=;
-        b=Jl2YisgLdiqvhpCBOAhNrDu+USOFqPUBAMNQALaN99jC4eqrKpnaVmcdgUI9YgMhb/
-         aE/stlsmeWlkXNJCUgbhkxMsUGClClfb5Za1b31fmi9dZq5NiRNcFC+H03SQxvVd9olz
-         6zKxlpOrHVApTG9OGfoVYx1cN4JgH1yIzdH2ihtigTJub8FlVQAVQI3Eqpx5BEJmJ62a
-         Q13DT/0Jp/lo3RTQISNRzwHFfVUvbugZv01Ym/FHDtp8zIwrNctMRrK33b4DmNrxhwk7
-         ckLCC8si+AltsVqaM3L7xo2IK1ms8CzckQpKM7hj7gdPYMDUlJLr+KBfbjCccSVpOsAC
-         qLmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0zyweaVyiMqk4LHuNuzEqryLINLpiUARVWRIcVZa2lw=;
-        b=68YtKG1UTnU8c8jrx0LnPWrR1Fpp/0iPm1gWTNX1ftxtruznV0TRZXe6sG99v4kfa+
-         R4KrFH+COO078dxoJU1LVehOXDs+Jh4A/RliH94N7TUNsROBBKyxRugFxw+1x4bH7CSy
-         /beQbSkkrdvV42nwlz5I7qNns6TGErdLpyN3pTXprs7tMp75IpnkSrVDyhemM1QcF/KS
-         5U1qRgzQCvPSNxYzjI77dx/JEcZeM5csoNU9in9vMSMuDyvSlcMDLzDoap8/eZew0tvd
-         0fisxCybueKZDzegeHF4AatQt0Hx3ttvAXjJtcn8kvchGCwE1oOVwHNRi9kcj5uR1wZ6
-         jcIw==
-X-Gm-Message-State: AO0yUKWXZ+43HxsdvMqC5RxgGYlGawKojDhkNk+BLTg6OyoCEbAmeKNJ
-        xipuobGvJcNfm/9LCJQcR3i2prcYKfQ2y1etUykdLw==
-X-Google-Smtp-Source: AK7set9V9OdoqOHwLvVsBSh6xMOnS76j0J/EJOguL3f2UWTtjvPiP0ISRA9SUhs+FJhcH6k42DfkTHAvGrK64PYZUa8=
-X-Received: by 2002:a17:902:c215:b0:199:26b1:17a7 with SMTP id
- 21-20020a170902c21500b0019926b117a7mr326393pll.10.1675705948668; Mon, 06 Feb
- 2023 09:52:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20230204183241.never.481-kees@kernel.org>
-In-Reply-To: <20230204183241.never.481-kees@kernel.org>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 6 Feb 2023 09:52:17 -0800
-Message-ID: <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
- flexible array
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 12:54:29 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C19C91F5C8;
+        Mon,  6 Feb 2023 09:54:28 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 409E220C7E04;
+        Mon,  6 Feb 2023 09:54:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 409E220C7E04
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675706068;
+        bh=tuiBN5piFLqNuXyA6aMmxCe72G+tP7oxbCem204BxU4=;
+        h=From:To:Subject:Date:From;
+        b=nxL9N3y0kuvaEKHLAvJtET7+r9F5q7P62gnkjiP04uUrOjGICyl4/+VaytUXsc/M9
+         Ho0/wpKLl40lpKuuf4YM83+az64tuELSuQDgQ3Kh/jn4gOQGnVDIGzYR20Daw0u1wG
+         AS4X+mKhhItjsa/m7T4xryIdtsQDKusrK9zM1RV0=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com, dphadke@linux.microsoft.com
+Subject: [PATCH v3 0/6] Device tree support for Hyper-V VMBus driver
+Date:   Mon,  6 Feb 2023 09:54:14 -0800
+Message-Id: <1675706060-22361-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 4, 2023 at 10:32 AM Kees Cook <keescook@chromium.org> wrote:
->
-> Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-> flexible array. Found with GCC 13:
->
-> ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
->   207 |                                        *(__be16 *)&key->data[i]);
->       |                                                   ^~~~~~~~~~~~~
-> ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
->   102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
->       |                                                      ^
-> ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
->    97 | #define be16_to_cpu __be16_to_cpu
->       |                     ^~~~~~~~~~~~~
-> ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
->   206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-> ^
->       |                            ^~~~~~~~~~~
-> In file included from ../include/linux/bpf.h:7:
-> ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
->    82 |         __u8    data[0];        /* Arbitrary size */
->       |                 ^~~~
->
-> This includes fixing the selftest which was incorrectly using a
-> variable length struct as a header, identified earlier[1]. Avoid this
-> by just explicitly including the prefixlen member instead of struct
-> bpf_lpm_trie_key.
->
-> [1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
->
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> Cc: Song Liu <song@kernel.org>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Hao Luo <haoluo@google.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Mykola Lysenko <mykolal@fb.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Haowen Bai <baihaowen@meizu.com>
-> Cc: bpf@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/uapi/linux/bpf.h                         | 2 +-
->  tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index ba0f0cfb5e42..5930bc5c7e2c 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -79,7 +79,7 @@ struct bpf_insn {
->  /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
->  struct bpf_lpm_trie_key {
->         __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
-> -       __u8    data[0];        /* Arbitrary size */
-> +       __u8    data[];         /* Arbitrary size */
->  };
+This set of patches expands the VMBus driver to include device tree
+support. This feature allows for a kernel boot without the use of ACPI
+tables, resulting in a smaller memory footprint and potentially faster
+boot times. This is tested by enabling CONFIG_FLAT and OF_EARLY_FLATTREE
+for x86.
 
-That's a UAPI change, can we do it? The safest option is probably just
-to remove this field if it's causing any problems (and not do the
-map_ptr_kern.c change below).
-The usual use-case (at least that's what we do) is to define some new
-struct over it:
+The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+build.
 
-struct my_key {
-  struct bpf_lpm_trie_key prefix;
-  int a, b, c;
-};
+The third patch converts the VMBus driver from acpi to more generic
+platform driver.
 
-So I really doubt that the 'data' is ever touched by any programs at all..
+Further to add device tree documentation for VMBus, it needs to club with
+other virtualization driver's documentation. For this rename the virtio
+folder to more generic hypervisor, so that all the hypervisor based
+devices can co-exist in a single place in device tree documentation. The
+fourth patch does this renaming.
 
->
->  struct bpf_cgroup_storage_key {
-> diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> index db388f593d0a..543012deb349 100644
-> --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> @@ -311,7 +311,7 @@ struct lpm_trie {
->  } __attribute__((preserve_access_index));
->
->  struct lpm_key {
-> -       struct bpf_lpm_trie_key trie_key;
-> +       __u32 prefixlen;
->         __u32 data;
->  };
-> --
-> 2.34.1
->
+The fifth patch introduces the device tree documentation for VMBus.
+
+The sixth patch adds device tree support to the VMBus driver. Currently
+this is tested only for x86 and it may not work for other archs.
+
+[V3]
+- Changed the logic to use generic api (for_each_of_range) for parsing "ranges".
+- Remove dependency of ACPI for HYPERV in case of x86.
+- Removed "device tree bindings" from title and patch subject.
+- Removed duplicate vendor prefix, used microsoft instead of msft.
+- Use 'soc' in example of device tree documantation for parent node.
+- Fixed compatible schemas error generated in other modules referring to
+  virtio.
+- Drop hex notation and leading zeros from device tree cell properties.
+- Added missing full stop at the end of commit message.
+- Typos fix: s/Initaly/Initially/ and s/hibernate/hibernation/.
+- Replace to_acpi_device with ACPI_COMPANION which simplify the logic.
+- Added more info in cover letter aboutsystem under test.
+
+[v2]
+- Convert VMBus acpi device to platform device, and added device tree support
+  in separate patch. This enables using same driver structure for both the flows.
+- In Device tree documentation, changed virtio folder to hypervisor and moved
+  VMBus documentation there.
+- Moved bindings before Device tree patch.
+- Removed stale ".data" and ".name" field from of_device match table.
+- Removed debug print.
+
+Saurabh Sengar (6):
+  drivers/clocksource/hyper-v: non ACPI support in hyperv clock
+  Drivers: hv: allow non ACPI compilation for
+    hv_is_hibernation_supported
+  Drivers: hv: vmbus: Convert acpi_device to more generic
+    platform_device
+  dt-bindings: hypervisor: Rename virtio to hypervisor
+  dt-bindings: hypervisor: VMBus
+  Driver: VMBus: Add device tree support
+
+ .../devicetree/bindings/gpio/gpio-virtio.yaml |   4 +-
+ .../bindings/hypervisor/microsoft,vmbus.yaml  |  48 +++++++
+ .../bindings/{virtio => hypervisor}/mmio.yaml |   2 +-
+ .../{virtio => hypervisor}/pci-iommu.yaml     |   2 +-
+ .../{virtio => hypervisor}/virtio-device.yaml |   2 +-
+ .../devicetree/bindings/i2c/i2c-virtio.yaml   |   4 +-
+ MAINTAINERS                                   |   3 +-
+ drivers/clocksource/hyperv_timer.c            |  15 ++-
+ drivers/hv/Kconfig                            |   4 +-
+ drivers/hv/hv_common.c                        |   4 +
+ drivers/hv/vmbus_drv.c                        | 118 ++++++++++++++----
+ 11 files changed, 169 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hypervisor/microsoft,vmbus.yaml
+ rename Documentation/devicetree/bindings/{virtio => hypervisor}/mmio.yaml (95%)
+ rename Documentation/devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml (98%)
+ rename Documentation/devicetree/bindings/{virtio => hypervisor}/virtio-device.yaml (93%)
+
+-- 
+2.25.1
+
