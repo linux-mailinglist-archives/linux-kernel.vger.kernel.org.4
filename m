@@ -2,234 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F7F68BAE0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FC668BAE4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbjBFLBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S229738AbjBFLDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjBFLBL (ORCPT
+        with ESMTP id S229665AbjBFLDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:01:11 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230B716AC2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:01:10 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id u21so11234205edv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:01:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KwRz4A4hQ/J9QIusp/1jXDk64bWoea7Fqenc5+pmfnE=;
-        b=y6vB86/boAJml+m73otGVLoTarM87Pjnj7JSie5PXhii0ogznyY1LDXBtM3uBkReEz
-         lLio7FhDIT90pPPo5XrypDG64iZB6oJlPO56tiQUF07UuZu4VR7goz+k8EG0dC8PLT6H
-         cPK4YTPzN+sL0gI6joEc3TvrRevOmGiL2m9RT/R97S7y25ZsEUlmlwFYU8l4+FOdd3z2
-         3zTfKPsAx/J/V5Ko8ixDEmQcskkn1uIZ1v1QtjkwiyUEwccg66yZxGr1b5L1Z2MYBq/n
-         +PevY1avmoEneGws9pGyTPkGIt7sGd8mfXWwDHLJ0FyisGzXCQ+YajK1Dm5MYTz8vZTM
-         R4Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KwRz4A4hQ/J9QIusp/1jXDk64bWoea7Fqenc5+pmfnE=;
-        b=nnOg6pF0Ojfc8D24YPi0CVF4S6Ip1K28LzKmL0qU9+K/ixtThX7Jhz/R/L9nQME0dn
-         uig3+iovpKRSdVA0QIo6k0ptNISESHA+iBP/+5r/STcgIGF1U8N1sBrHGtWR31H7oGez
-         wrwxbS9OeuTAxexCbNujh6HGf48DXkiPxhkMrLvdML/LkrrXf3ykELIeCLU8f1+sCZS4
-         FhnY0Q4aORZXLdGliralXnazysIWymYap4HWDJgLPnaXyfGld5vKzCYkVv3XkJV6OWQ7
-         xkSgJGYwesUeADmaWTrmJaxSxyUzT0vRKXD7F7q06VOr5VSnbYxjdR8mc5Uj+5QsIw/0
-         g3SA==
-X-Gm-Message-State: AO0yUKWnkAGj/ntf8f+HWC+jLecQnNdtoGpe8yRdzoRDB8duP0IEFOIZ
-        UMYVj/R3eml7LJEgtxu6sh6Kqw==
-X-Google-Smtp-Source: AK7set/fY/ZlQZwJV7YWSAn/cECe7mID+2YbEp9fJdmXkb+zQZoxhhIklg46bHsUIgkCchCuox9cow==
-X-Received: by 2002:a05:6402:1c07:b0:499:70a8:f915 with SMTP id ck7-20020a0564021c0700b0049970a8f915mr17576170edb.21.1675681268625;
-        Mon, 06 Feb 2023 03:01:08 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id f15-20020a50d54f000000b004aac3fd90fbsm222495edj.17.2023.02.06.03.01.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 03:01:08 -0800 (PST)
-Message-ID: <376236b5-9a5d-1c0b-65e4-346cc79e9de6@linaro.org>
-Date:   Mon, 6 Feb 2023 12:01:04 +0100
+        Mon, 6 Feb 2023 06:03:02 -0500
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EE812054;
+        Mon,  6 Feb 2023 03:02:58 -0800 (PST)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3B21761CC457B;
+        Mon,  6 Feb 2023 12:02:57 +0100 (CET)
+Message-ID: <d356a20f-629c-a534-7a80-b96d0940056d@molgen.mpg.de>
+Date:   Mon, 6 Feb 2023 12:02:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 5/5] arm64: dst: qcom: sm8450: add dp controller
+Subject: Re: [Patch V2 2/4] tpm: tegra: Support SPI tpm wait state detect
 Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v1-0-f1345872ed19@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v1-5-f1345872ed19@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v1-5-f1345872ed19@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
+        jgg@ziepe.ca, jarkko@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        skomatineni@nvidia.com, ldewangan@nvidia.com
+References: <20230203130133.32901-1-kyarlagadda@nvidia.com>
+ <20230203130133.32901-3-kyarlagadda@nvidia.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230203130133.32901-3-kyarlagadda@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear Krishna,
 
 
-On 6.02.2023 11:17, Neil Armstrong wrote:
-> Add the Display Port controller subnode to the MDSS node.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Thank you for your patch.
+
+Am 03.02.23 um 14:01 schrieb Krishna Yarlagadda:
+> Tegra234 and Tegra241 chips have QSPI controller that supports TCG
+> TIS hardware flow control. Since the controller only supports half
+> duplex, sw wait polling method implemented in tpm_tis_spi does not
+> suffice. Added extending driver to disable sw flow control and send
+
+I’d use imperative mood and maybe use another verb:
+
+Add dedicated Tegra driver …
+
+> all transfers in single message.
+
+Please add how you tested and benchmarked this patch.
+
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  arch/arm64/boot/dts/qcom/sm8450-hdk.dts |  4 +-
->  arch/arm64/boot/dts/qcom/sm8450.dtsi    | 82 +++++++++++++++++++++++++++++++--
->  2 files changed, 82 insertions(+), 4 deletions(-)
+>   drivers/char/tpm/Makefile            |   1 +
+>   drivers/char/tpm/tpm_tis_spi.h       |   1 +
+>   drivers/char/tpm/tpm_tis_spi_main.c  |   4 +-
+>   drivers/char/tpm/tpm_tis_spi_tegra.c | 123 +++++++++++++++++++++++++++
+>   4 files changed, 128 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/char/tpm/tpm_tis_spi_tegra.c
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> index 5bdc2c1159ae..1b4ef79f74b3 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> @@ -480,7 +480,9 @@ &mdss_dsi0_phy {
->  	status = "okay";
->  };
->  
-> -&mdss_mdp {
-> +&mdss_dp0 {
-> +	data-lanes = <0 1 2 3>;
+> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> index 0222b1ddb310..445b15493cb3 100644
+> --- a/drivers/char/tpm/Makefile
+> +++ b/drivers/char/tpm/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_TCG_TIS_SYNQUACER) += tpm_tis_synquacer.o
+>   
+>   obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
+>   tpm_tis_spi-y := tpm_tis_spi_main.o
+> +tpm_tis_spi-y += tpm_tis_spi_tegra.o
+>   tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+>   
+>   obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
+> diff --git a/drivers/char/tpm/tpm_tis_spi.h b/drivers/char/tpm/tpm_tis_spi.h
+> index d0f66f6f1931..feaea14b428b 100644
+> --- a/drivers/char/tpm/tpm_tis_spi.h
+> +++ b/drivers/char/tpm/tpm_tis_spi.h
+> @@ -31,6 +31,7 @@ extern int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
+>   extern int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+>   				u8 *in, const u8 *out);
+>   
+> +extern int tegra_tpm_spi_probe(struct spi_device *spi);
+>   #ifdef CONFIG_TCG_TIS_SPI_CR50
+>   extern int cr50_spi_probe(struct spi_device *spi);
+>   #else
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+> index a0963a3e92bd..5d4502a4461a 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -198,7 +198,7 @@ static int tpm_tis_spi_driver_probe(struct spi_device *spi)
+>   	const struct spi_device_id *spi_dev_id = spi_get_device_id(spi);
+>   	tpm_tis_spi_probe_func probe_func;
+>   
+> -	probe_func = of_device_get_match_data(&spi->dev);
+> +	probe_func = device_get_match_data(&spi->dev);
+>   	if (!probe_func) {
+>   		if (spi_dev_id) {
+>   			probe_func = (tpm_tis_spi_probe_func)spi_dev_id->driver_data;
+> @@ -227,6 +227,7 @@ static const struct spi_device_id tpm_tis_spi_id[] = {
+>   	{ "tpm_tis_spi", (unsigned long)tpm_tis_spi_probe },
+>   	{ "tpm_tis-spi", (unsigned long)tpm_tis_spi_probe },
+>   	{ "cr50", (unsigned long)cr50_spi_probe },
+> +	{ "tegra-tpm-spi", (unsigned long)tegra_tpm_spi_probe },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(spi, tpm_tis_spi_id);
+> @@ -236,6 +237,7 @@ static const struct of_device_id of_tis_spi_match[] = {
+>   	{ .compatible = "infineon,slb9670", .data = tpm_tis_spi_probe },
+>   	{ .compatible = "tcg,tpm_tis-spi", .data = tpm_tis_spi_probe },
+>   	{ .compatible = "google,cr50", .data = cr50_spi_probe },
+> +	{ .compatible = "nvidia,tegra-tpm-spi", .data = tegra_tpm_spi_probe },
+>   	{}
+>   };
+>   MODULE_DEVICE_TABLE(of, of_tis_spi_match);
+> diff --git a/drivers/char/tpm/tpm_tis_spi_tegra.c b/drivers/char/tpm/tpm_tis_spi_tegra.c
+> new file mode 100644
+> index 000000000000..23f20684513d
+> --- /dev/null
+> +++ b/drivers/char/tpm/tpm_tis_spi_tegra.c
+> @@ -0,0 +1,123 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2023 NVIDIA CORPORATION.
+> + *
+> + * This device driver implements TEGRA QSPI hw wait detection for chips
+> + *
+> + * It is based on tpm_tis_spi driver by Peter Huewe and Christophe Ricard.
+> + */
 > +
->  	status = "okay";
->  };
-This belongs in a separate patch.
+> +#include <linux/completion.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/pm.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/wait.h>
+> +
+> +#include "tpm_tis_core.h"
+> +#include "tpm_tis_spi.h"
+> +
+> +#define MAX_SPI_FRAMESIZE 64
+> +
+> +int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
+> +			       u8 *in, const u8 *out)
+> +{
+> +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
+> +	int ret = 0;
+> +	struct spi_message m;
+> +	struct spi_transfer spi_xfer[3];
+> +	u8 transfer_len;
 
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 757b7c56d5f5..8d83545d5e4a 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -2745,13 +2745,20 @@ ports {
->  
->  					port@0 {
->  						reg = <0>;
-> -						dpu_intf1_out: endpoint {
-> -							remote-endpoint = <&mdss_dsi0_in>;
-> +						dpu_intf0_out: endpoint {
-> +							remote-endpoint = <&mdss_dp0_in>;
->  						};
->  					};
->  
->  					port@1 {
->  						reg = <1>;
-> +						dpu_intf1_out: endpoint {
-> +							remote-endpoint = <&mdss_dsi0_in>;
-> +						};
-> +					};
-> +
-> +					port@2 {
-> +						reg = <2>;
->  						dpu_intf2_out: endpoint {
->  							remote-endpoint = <&mdss_dsi1_in>;
->  						};
-> @@ -2789,6 +2796,75 @@ opp-500000000 {
->  				};
->  			};
->  
-> +			mdss_dp0: displayport-controller@ae90000 {
-> +				compatible = "qcom,sm8350-dp";
-> +				reg = <0 0xae90000 0 0x0fc>,
-Trim the leading zeroes from the size part, please.
+Just use `unsigned int`? [1]
 
-> +				      <0 0xae90200 0 0x0c0>,
-> +				      <0 0xae90400 0 0x770>,
-> +				      <0 0xae91000 0 0x098>;
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <12>;
-> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_AUX_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_INTF_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK>;
-> +				clock-names = "core_iface", "core_aux",
-> +					      "ctrl_link",
-> +			                      "ctrl_link_iface", "stream_pixel";
-Make this a vertical list, please.
+> +
+> +	spi_bus_lock(phy->spi_device->master);
+> +
+> +	while (len) {
+> +		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
+> +
+> +		spi_message_init(&m);
+> +		phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
+> +		phy->iobuf[1] = 0xd4;
+> +		phy->iobuf[2] = addr >> 8;
+> +		phy->iobuf[3] = addr;
+> +
+> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
+> +
+> +		spi_xfer[0].tx_buf = phy->iobuf;
+> +		spi_xfer[0].len = 1;
+> +		spi_message_add_tail(&spi_xfer[0], &m);
+> +
+> +		spi_xfer[1].tx_buf = phy->iobuf + 1;
+> +		spi_xfer[1].len = 3;
+> +		spi_message_add_tail(&spi_xfer[1], &m);
+> +
+> +		if (out) {
+> +			spi_xfer[2].tx_buf = &phy->iobuf[4];
+> +			spi_xfer[2].rx_buf = NULL;
+> +			memcpy(&phy->iobuf[4], out, transfer_len);
+> +			out += transfer_len;
+> +		}
+> +		if (in) {
+> +			spi_xfer[2].tx_buf = NULL;
+> +			spi_xfer[2].rx_buf = &phy->iobuf[4];
+> +		}
+> +		spi_xfer[2].len = transfer_len;
+> +		spi_message_add_tail(&spi_xfer[2], &m);
+> +
+> +		reinit_completion(&phy->ready);
+> +		ret = spi_sync_locked(phy->spi_device, &m);
+> +		if (ret < 0)
+> +			goto exit;
+> +
+> +		if (in) {
+> +			memcpy(in, &phy->iobuf[4], transfer_len);
+> +			in += transfer_len;
+> +		}
+> +
+> +		len -= transfer_len;
+> +	}
+> +
+> +exit:
+> +	spi_bus_unlock(phy->spi_device->master);
+> +	return ret;
+> +}
+> +
+> +static int tpm_tis_spi_tegra_read_bytes(struct tpm_tis_data *data, u32 addr,
+> +					u16 len, u8 *result,
+> +					enum tpm_tis_io_mode io_mode)
+> +{
+> +	return tpm_tis_spi_tegra_transfer(data, addr, len, result, NULL);
+> +}
+> +
+> +static int tpm_tis_spi_tegra_write_bytes(struct tpm_tis_data *data, u32 addr,
+> +					 u16 len, const u8 *value,
+> +					 enum tpm_tis_io_mode io_mode)
+> +{
+> +	return tpm_tis_spi_tegra_transfer(data, addr, len, NULL, value);
+> +}
+> +
+> +static const struct tpm_tis_phy_ops tegra_tpm_spi_phy_ops = {
+> +	.read_bytes = tpm_tis_spi_tegra_read_bytes,
+> +	.write_bytes = tpm_tis_spi_tegra_write_bytes,
+> +};
+> +
+> +int tegra_tpm_spi_probe(struct spi_device *dev)
+> +{
+> +	struct tpm_tis_spi_phy *phy;
+> +	int irq;
+> +
+> +	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_spi_phy),
+> +			   GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	phy->flow_control = NULL;
+> +
+> +	/* If the SPI device has an IRQ then use that */
+> +	if (dev->irq > 0)
+> +		irq = dev->irq;
+> +	else
+> +		irq = -1;
 
-Konrad
+Use ternary operator?
+
+     irq = dev->irq > 0 ? dev->irq : -1;
+
 > +
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK_SRC>,
-> +						  <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC>;
-> +				assigned-clock-parents = <&usb_1_qmpphy 1>,
-> +							 <&usb_1_qmpphy 2>;
-> +
-> +				phys = <&usb_1_qmpphy 1>;
-> +			        phy-names = "dp";
-> +
-> +			        #sound-dai-cells = <0>;
-> +
-> +				operating-points-v2 = <&dp_opp_table>;
-> +				power-domains = <&rpmhpd SM8450_MMCX>;
-> +
-> +				status = "disabled";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						mdss_dp0_in: endpoint {
-> +							remote-endpoint = <&dpu_intf0_out>;
-> +						};
-> +					};
-> +				};
-> +
-> +				dp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-160000000 {
-> +						opp-hz = /bits/ 64 <160000000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-270000000 {
-> +						opp-hz = /bits/ 64 <270000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-540000000 {
-> +						opp-hz = /bits/ 64 <540000000>;
-> +						required-opps = <&rpmhpd_opp_svs_l1>;
-> +					};
-> +
-> +					opp-810000000 {
-> +						opp-hz = /bits/ 64 <810000000>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
-> +				};
-> +			};
-> +
->  			mdss_dsi0: dsi@ae94000 {
->  				compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
->  				reg = <0 0x0ae94000 0 0x400>;
-> @@ -2966,8 +3042,8 @@ dispcc: clock-controller@af00000 {
->  				 <&mdss_dsi0_phy 1>,
->  				 <&mdss_dsi1_phy 0>,
->  				 <&mdss_dsi1_phy 1>,
-> -				 <&usb_1_qmpphy 0>,
->  				 <&usb_1_qmpphy 1>,
-> +				 <&usb_1_qmpphy 2>,
->  				 <0>, /* dp1 */
->  				 <0>,
->  				 <0>, /* dp2 */
-> 
+> +	init_completion(&phy->ready);
+> +	return tpm_tis_spi_init(dev, phy, irq, &tegra_tpm_spi_phy_ops);
+> +}
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://notabs.org/coding/smallIntsBigPenalty.htm
