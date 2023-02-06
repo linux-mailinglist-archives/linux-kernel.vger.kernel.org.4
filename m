@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41C768C0E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CBE68C0E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjBFPGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S230381AbjBFPGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:06:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjBFPF6 (ORCPT
+        with ESMTP id S229490AbjBFPGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:05:58 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADD01F93F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:05:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=mlGOGWttwg8glVHLCfyk5xnLcvgm3/Lpv0FjnC2ocyk=; b=h2yBpA2ZOR+Wtvt3XDZAvM4GY+
-        kPIAV95SOpXLl7D3ODXGuMEzftEbYeBtQDAbiapMl7CbrfoLZ4Xc+NzRk/CvnSOGtujIcvkVTpqR4
-        Phe4c0edY9YbTjtVOe7/Oy588YMXRqrK72iXfs8+PpKetxmiPo7zOBNJYvaNbLZqRz1zPmmI1Lp4G
-        iBJ75aSeTUyPrIyAjzegsCF3h23VcIiji3X51elvP67hQNxKC73qCO8FB4vQ33nNKrEi3COCszGw0
-        yXSoMre8GeNNN+hIKe1bwhRyyLOSli8V8/s3g7PogEz5dxaF7TSdtCkvhhPyp7LqoKsWpgE4g5COg
-        ahjQWqwA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pP33r-00Gqjm-Tx; Mon, 06 Feb 2023 15:05:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AE3CC30013F;
-        Mon,  6 Feb 2023 16:05:38 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8B38E2083457C; Mon,  6 Feb 2023 16:05:38 +0100 (CET)
-Date:   Mon, 6 Feb 2023 16:05:38 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org, Borislav Petkov <bp@alien8.de>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/alternative: Support relocations in alternatives
-Message-ID: <Y+EXQlGSI9WUU8nn@hirez.programming.kicks-ass.net>
+        Mon, 6 Feb 2023 10:06:19 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167C31F93F;
+        Mon,  6 Feb 2023 07:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675695979; x=1707231979;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g0uruuG+lFvdqkb5Rtu42uu4BPfZQuwsVlS8JgTbg9I=;
+  b=gcXh7RVW/8VppduEZBa/D6A2GUHo/0XuN93cS/AEzy4xRBp0ZjxatbD/
+   XH1Q9TCHsIeunKRNejOuQWSH9n7V+q+oaADkzNZCUmJA7D7aiuE0Q3WpL
+   6zoM7Hwgtbo4858G09Gnnli36aexr8XoJOIJZllx5SP7fRM94a/C4963X
+   5eRG0lxYMKJq9tmpyyhUyAZvIdVx4NTzOwRDHYyMP7etU+IwptCAETOWx
+   QELwMN/R+eOPb3JCBLlOm5QywWeh+xXGoejmhUhUaJbfd1dV1wz+aA4Bv
+   8BhuoFyn7JfhLGY1+r3yiXlIF49c/bomRWp97wyLHgpiWYqWn0Tvtb4+S
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="393822692"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="393822692"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 07:06:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="668433852"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="668433852"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 07:06:14 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pP34P-003DW4-1G;
+        Mon, 06 Feb 2023 17:06:13 +0200
+Date:   Mon, 6 Feb 2023 17:06:13 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Minter <jimminter@microsoft.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: intel: Restore the pins that used to be
+ in Direct IRQ mode
+Message-ID: <Y+EXZWp1Q4iMD5xD@smile.fi.intel.com>
+References: <20230206141558.20916-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdZaUFiWK_EsQkiKpR7n=VdbW=HnqonZ_GRei6r9Kyg3_Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <CACRpkdZaUFiWK_EsQkiKpR7n=VdbW=HnqonZ_GRei6r9Kyg3_Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,338 +68,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 06, 2023 at 04:02:27PM +0100, Linus Walleij wrote:
+> On Mon, Feb 6, 2023 at 3:16 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > If the firmware mangled the register contents too much,
+> > check the saved value for the Direct IRQ mode. If it
+> > matches, we will restore the pin state.
+> >
+> > Reported-by: Jim Minter <jimminter@microsoft.com>
+> > Fixes: 6989ea4881c8 ("pinctrl: intel: Save and restore pins in "direct IRQ" mode")
+> > Tested-by: Jim Minter <jimminter@microsoft.com>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> >
+> > Jim, this is a bit simplified version than what you tested. But it shouldn't
+> > be a functional changes. Anyway, it would be nice if you have a chance to give
+> > this a try.
+> >
+> > Linus, I don't expect more to come for this cycle, feel free to apply directly.
+> 
+> OK no problem, does it go into fixes pronto or for next (v6.3)?
+> I would guess fixes but I never know the difference between urgent
+> and nourgent fixes...
 
-A little while ago someone (Kirill) ran into the whole 'alternatives don't
-do relocations nonsense' again and I got annoyed enough to actually look
-at the code.
+Fixes and kinda urgent (bad user experience with touchpad device).
 
-Since the whole alternative machinery already fully decodes the
-instructions it is simple enough to adjust immediates and displacement
-when needed. Specifically, the immediates for IP modifying instructions
-(JMP, CALL, Jcc) and the displacement for RIP-relative instructions.
+Thank you!
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/kernel/alternative.c    |  248 +++++++++++++++++++++++++--------------
- tools/objtool/arch/x86/special.c |    8 -
- 2 files changed, 161 insertions(+), 95 deletions(-)
+-- 
+With Best Regards,
+Andy Shevchenko
 
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -123,71 +123,6 @@ extern s32 __smp_locks[], __smp_locks_en
- void text_poke_early(void *addr, const void *opcode, size_t len);
- 
- /*
-- * Are we looking at a near JMP with a 1 or 4-byte displacement.
-- */
--static inline bool is_jmp(const u8 opcode)
--{
--	return opcode == 0xeb || opcode == 0xe9;
--}
--
--static void __init_or_module
--recompute_jump(struct alt_instr *a, u8 *orig_insn, u8 *repl_insn, u8 *insn_buff)
--{
--	u8 *next_rip, *tgt_rip;
--	s32 n_dspl, o_dspl;
--	int repl_len;
--
--	if (a->replacementlen != 5)
--		return;
--
--	o_dspl = *(s32 *)(insn_buff + 1);
--
--	/* next_rip of the replacement JMP */
--	next_rip = repl_insn + a->replacementlen;
--	/* target rip of the replacement JMP */
--	tgt_rip  = next_rip + o_dspl;
--	n_dspl = tgt_rip - orig_insn;
--
--	DPRINTK("target RIP: %px, new_displ: 0x%x", tgt_rip, n_dspl);
--
--	if (tgt_rip - orig_insn >= 0) {
--		if (n_dspl - 2 <= 127)
--			goto two_byte_jmp;
--		else
--			goto five_byte_jmp;
--	/* negative offset */
--	} else {
--		if (((n_dspl - 2) & 0xff) == (n_dspl - 2))
--			goto two_byte_jmp;
--		else
--			goto five_byte_jmp;
--	}
--
--two_byte_jmp:
--	n_dspl -= 2;
--
--	insn_buff[0] = 0xeb;
--	insn_buff[1] = (s8)n_dspl;
--	add_nops(insn_buff + 2, 3);
--
--	repl_len = 2;
--	goto done;
--
--five_byte_jmp:
--	n_dspl -= 5;
--
--	insn_buff[0] = 0xe9;
--	*(s32 *)&insn_buff[1] = n_dspl;
--
--	repl_len = 5;
--
--done:
--
--	DPRINTK("final displ: 0x%08x, JMP 0x%lx",
--		n_dspl, (unsigned long)orig_insn + n_dspl + repl_len);
--}
--
--/*
-  * optimize_nops_range() - Optimize a sequence of single byte NOPs (0x90)
-  *
-  * @instr: instruction byte stream
-@@ -254,6 +189,127 @@ static void __init_or_module noinline op
- }
- 
- /*
-+ * What we start with is:
-+ *
-+ *   src_imm = target - src_next_ip                  (1)
-+ *
-+ * what we want is:
-+ *
-+ *   dst_imm = target - dst_next_ip                  (2)
-+ *
-+ * so what we do is rework (1) as an expression for target like:
-+ *
-+ *   target = src_imm + src_next_ip                  (1a)
-+ *
-+ * and substitute in (2) to get:
-+ *
-+ *   dst_imm = (src_imm + src_next_ip) - dst_next_ip (3)
-+ *
-+ * Now, since the instruction stream is 'identical' at src and dst (we copy
-+ * after all) we can state that:
-+ *
-+ *   src_next_ip = src + ip_offset
-+ *   dst_next_ip = dst + ip_offset                   (4)
-+ *
-+ * Substitute (4) in (3) and observe ip_offset being cancelled out to
-+ * obtain:
-+ *
-+ *   dst_imm = src_imm + (src + ip_offset) - (dst + ip_offset)
-+ *           = src_imm + src - dst + ip_offset - ip_offset
-+ *           = src_imm + src - dst                   (5)
-+ *
-+ * IOW, only the relative displacement of the code block matters.
-+ */
-+
-+#define apply_reloc_n(n_, p_, d_)				\
-+	do {							\
-+		s32 v = *(s##n_ *)(p_);				\
-+		v += (d_);					\
-+		BUG_ON((v >> 31) != (v >> (n_-1)));		\
-+		*(s##n_ *)(p_) = (s##n_)v;			\
-+	} while (0)
-+
-+
-+static __always_inline
-+void apply_reloc(int n, void *ptr, uintptr_t diff)
-+{
-+	switch (n) {
-+	case 1: apply_reloc_n(8, ptr, diff); break;
-+	case 2: apply_reloc_n(16, ptr, diff); break;
-+	case 4: apply_reloc_n(32, ptr, diff); break;
-+	default: BUG();
-+	}
-+}
-+
-+static __always_inline
-+bool need_reloc(unsigned long offset, u8 *src, size_t src_len)
-+{
-+	u8 *target = src + offset;
-+	/*
-+	 * If the target is inside the patched block, it's relative to the
-+	 * block itself and does not need relocation.
-+	 */
-+	return (target < src || target > src + src_len);
-+}
-+
-+static void __init_or_module noinline
-+apply_relocation(u8 *buf, size_t len, u8 *dest, u8 *src, size_t src_len)
-+{
-+	for (int next, i = 0; i < len; len = next) {
-+		struct insn insn;
-+
-+		if (WARN_ON_ONCE(insn_decode_kernel(&insn, &buf[i])))
-+			return;
-+
-+		next = i + insn.length;
-+
-+		switch (insn.opcode.bytes[0]) {
-+		case 0x0f:
-+			if (insn.opcode.bytes[1] < 0x80 ||
-+			    insn.opcode.bytes[1] > 0x8f)
-+				break;
-+
-+			fallthrough;	/* Jcc.d32 */
-+		case 0x70 ... 0x7f:	/* Jcc.d8 */
-+		case JMP8_INSN_OPCODE:
-+		case JMP32_INSN_OPCODE:
-+		case CALL_INSN_OPCODE:
-+			if (need_reloc(next + insn.immediate.value, src, src_len)) {
-+				apply_reloc(insn.immediate.nbytes,
-+					    buf + i + insn_offset_immediate(&insn),
-+					    src - dest);
-+			}
-+
-+			/*
-+			 * Where possible, convert JMP.d32 into JMP.d8.
-+			 */
-+			if (insn.opcode.bytes[0] == JMP32_INSN_OPCODE) {
-+				s32 imm = insn.immediate.value + src - dest;
-+				if ((imm >> 31) == (imm >> 7)) {
-+					buf[i+0] = JMP8_INSN_OPCODE;
-+					buf[i+1] = (s8)imm;
-+					for (int j = 2; j < insn.length; j++)
-+						buf[i+j] = INT3_INSN_OPCODE;
-+				}
-+			}
-+			break;
-+
-+		case 0x90:		/* nop */
-+			next = i + optimize_nops_range(buf, len, i);
-+			continue;
-+		}
-+
-+		if (insn_rip_relative(&insn)) {
-+			if (need_reloc(next + insn.displacement.value, src, src_len)) {
-+				apply_reloc(insn.displacement.nbytes,
-+					    buf + i + insn_offset_displacement(&insn),
-+					    src - dest);
-+			}
-+		}
-+	}
-+}
-+
-+/*
-  * Replace instructions with better alternatives for this CPU type. This runs
-  * before SMP is initialized to avoid SMP problems with self modifying code.
-  * This implies that asymmetric systems where APs have less capabilities than
-@@ -296,8 +352,10 @@ void __init_or_module noinline apply_alt
- 		 * - feature not present but ALTINSTR_FLAG_INV is set to mean,
- 		 *   patch if feature is *NOT* present.
- 		 */
--		if (!boot_cpu_has(feature) == !(a->cpuid & ALTINSTR_FLAG_INV))
--			goto next;
-+		if (!boot_cpu_has(feature) == !(a->cpuid & ALTINSTR_FLAG_INV)) {
-+			optimize_nops(instr, a->instrlen);
-+			continue;
-+		}
- 
- 		DPRINTK("feat: %s%d*32+%d, old: (%pS (%px) len: %d), repl: (%px, len: %d)",
- 			(a->cpuid & ALTINSTR_FLAG_INV) ? "!" : "",
-@@ -306,37 +364,20 @@ void __init_or_module noinline apply_alt
- 			instr, instr, a->instrlen,
- 			replacement, a->replacementlen);
- 
--		DUMP_BYTES(instr, a->instrlen, "%px:   old_insn: ", instr);
--		DUMP_BYTES(replacement, a->replacementlen, "%px:   rpl_insn: ", replacement);
- 
- 		memcpy(insn_buff, replacement, a->replacementlen);
- 		insn_buff_sz = a->replacementlen;
- 
--		/*
--		 * 0xe8 is a relative jump; fix the offset.
--		 *
--		 * Instruction length is checked before the opcode to avoid
--		 * accessing uninitialized bytes for zero-length replacements.
--		 */
--		if (a->replacementlen == 5 && *insn_buff == 0xe8) {
--			*(s32 *)(insn_buff + 1) += replacement - instr;
--			DPRINTK("Fix CALL offset: 0x%x, CALL 0x%lx",
--				*(s32 *)(insn_buff + 1),
--				(unsigned long)instr + *(s32 *)(insn_buff + 1) + 5);
--		}
--
--		if (a->replacementlen && is_jmp(replacement[0]))
--			recompute_jump(a, instr, replacement, insn_buff);
--
- 		for (; insn_buff_sz < a->instrlen; insn_buff_sz++)
- 			insn_buff[insn_buff_sz] = 0x90;
- 
-+		apply_relocation(insn_buff, a->instrlen, instr, replacement, a->replacementlen);
-+
-+		DUMP_BYTES(instr, a->instrlen, "%px:   old_insn: ", instr);
-+		DUMP_BYTES(replacement, a->replacementlen, "%px:   rpl_insn: ", replacement);
- 		DUMP_BYTES(insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
- 
- 		text_poke_early(instr, insn_buff, insn_buff_sz);
--
--next:
--		optimize_nops(instr, a->instrlen);
- 	}
- }
- 
-@@ -1334,6 +1375,35 @@ static noinline void __init int3_selftes
- 	unregister_die_notifier(&int3_exception_nb);
- }
- 
-+static __initdata int __alt_reloc_selftest_addr;
-+
-+__visible noinline void __init __alt_reloc_selftest(void *arg)
-+{
-+	WARN_ON(arg != &__alt_reloc_selftest_addr);
-+}
-+
-+static noinline void __init alt_reloc_selftest(void)
-+{
-+	/*
-+	 * Tests apply_relocation().
-+	 *
-+	 * This has a relative immediate (CALL) in a place other than the first
-+	 * instruction and additionally on x86_64 we get a RIP-relative LEA:
-+	 *
-+	 *   lea    0x0(%rip),%rdi  # 5d0: R_X86_64_PC32    .init.data+0x5566c
-+	 *   call   +0              # 5d5: R_X86_64_PLT32   __alt_reloc_selftest-0x4
-+	 *
-+	 * Getting this wrong will either crash and burn or tickle the WARN
-+	 * above.
-+	 */
-+	asm_inline volatile (
-+		ALTERNATIVE("", "lea %[mem], %%" _ASM_ARG1 "; call __alt_reloc_selftest;", X86_FEATURE_ALWAYS)
-+		: /* output */
-+		: [mem] "m" (__alt_reloc_selftest_addr)
-+		: _ASM_ARG1
-+	);
-+}
-+
- void __init alternative_instructions(void)
- {
- 	int3_selftest();
-@@ -1421,6 +1491,8 @@ void __init alternative_instructions(voi
- 
- 	restart_nmi();
- 	alternatives_patched = 1;
-+
-+	alt_reloc_selftest();
- }
- 
- /**
---- a/tools/objtool/arch/x86/special.c
-+++ b/tools/objtool/arch/x86/special.c
-@@ -42,13 +42,7 @@ bool arch_support_alt_relocation(struct
- 				 struct instruction *insn,
- 				 struct reloc *reloc)
- {
--	/*
--	 * The x86 alternatives code adjusts the offsets only when it
--	 * encounters a branch instruction at the very beginning of the
--	 * replacement group.
--	 */
--	return insn->offset == special_alt->new_off &&
--	       (insn->type == INSN_CALL || is_jump(insn));
-+	return true;
- }
- 
- /*
+
