@@ -2,240 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65DE68C87F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E717468C87E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjBFVUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S229823AbjBFVUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjBFVUW (ORCPT
+        with ESMTP id S229568AbjBFVUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:20:22 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4302C24132
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:20:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675718418; x=1707254418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=383fGobxKNSFmxYP5/QXybLIpX9L6oHqdyQRfEBUQgQ=;
-  b=JCZ8Hd4ZONWalclOcJDqm0LsRNdJK95aVsFhragRl/ywJLoPBMml9FTZ
-   5LBvJN8fpn6pRv0I5PozNtJD9LE+MqrxlO4clKrkWHdWTzcq1qP96ZapU
-   tltGkoEx++CeAFKtP/osZ/hHKgYkScSsU8lZGCD2Nm1ojCSdjOMFCmn5U
-   AfI8NosreKIJ/tDR2CFTDAnjBW+xZ956riQ0rDt+r2QK6kXtRiOzdt4Ya
-   bYGyKXVoxvt8uOvQT7TTfkB+j9VkTdbjQ3YiLQxE7JpKYRMQIVvmmDIYb
-   pCsvsgpNhpoWDKPSkSnpnn7B+go0DlOenCcTsWtHBqmcgALOgpyFMJSoV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309651861"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="309651861"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 13:20:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668537133"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="668537133"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 13:20:14 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pP8uL-0002nY-1B;
-        Mon, 06 Feb 2023 21:20:13 +0000
-Date:   Tue, 7 Feb 2023 05:19:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        akpm@linux-foundation.org, hughd@google.com,
-        markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
-        shakeelb@google.com, mhocko@suse.com, vbabka@suse.cz,
-        quic_pkondeti@quicinc.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: Re: [PATCH 2/2] shmem: Add shmem_read_folio() and
- shmem_read_folio_gfp()
-Message-ID: <202302070525.Ho0cFITJ-lkp@intel.com>
-References: <20230206162520.4029022-2-willy@infradead.org>
+        Mon, 6 Feb 2023 16:20:12 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E76913D5B;
+        Mon,  6 Feb 2023 13:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1675718388; bh=gBtjdvssNf9n9f0ivSMYdvAOv6l23bSSAPBydFZKfLg=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=kDOKWBRsyFqDzI1QMNzAfVxYHVRc/7HL1giDhA3KCr3IFPyN9B5YqI533KKULhHKd
+         uQ1YVTzkGULHqXaorzvBDVnsvjdfAKY/G6BUdOfqtAd2Y5LUQFcoj2ibtjsasr9yhX
+         rvj8pHJPbt5Edz0HiH/uOD3/sX5QdDAAjkCKBY8adwBAXxnGfrFpZg5d1ORsPKkBQp
+         s876ebbnC4azkBCBxHrm7k7i3BVty0XAYa8HkHSHaVPRBXG8fKz+3NGcNMMkRBhvTs
+         cEVy/btX5h24coZBI+IRHJ5wX6PUq7oh/92O4QQqG8hd1ZzSE+14IqjFhrHXZAlY5j
+         t14pcKE2/iX7w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.14] ([141.30.226.119]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKbgE-1pAlHU2GwG-00KvLR; Mon, 06
+ Feb 2023 22:19:48 +0100
+Subject: Re: [PATCH 1/2] platform/x86: dell-ddv: Add hwmon support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     markgross@kernel.org, jdelvare@suse.com,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230205205456.2364-1-W_Armin@gmx.de>
+ <20230205205456.2364-2-W_Armin@gmx.de>
+ <a7d2e011-142d-88b9-2591-cf4508f1b8c5@redhat.com>
+ <20230206162303.GA195090@roeck-us.net>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <08af724c-8c65-db41-ece8-f330f67a3dc2@gmx.de>
+Date:   Mon, 6 Feb 2023 22:19:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206162520.4029022-2-willy@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230206162303.GA195090@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:NydaLpAeKm/q247J+lHcy0UktCrV7N1pPR5QP4LrMfnndd93t/G
+ L+LmJOBW1FOkRer1j+Vxc6xRHr20vxtNr9sK7riC9qIA56A6t6XInus0QOqVF/i1/oVN0AL
+ cVU+TtXH041ZQrKCMQURUfNWu5+1S1ushMadQkJKuzHXYdP5tywCkkV7CdpaV3ANbwBrvd+
+ r2VYW3EACKnL+UkYLTURw==
+UI-OutboundReport: notjunk:1;M01:P0:rKKXN3+pvtM=;owy0w449dm+D2EMy/Rzxcf04ygy
+ kz5sz8iPjgRTpenrSmA4CRxfgCHL5oEFAD86Pm3/WCwQ2/34ZGbUXe/sd6PhIGInG0nSw1ojc
+ srO1dOFBRx5DfkRpprDantaaco6QL5QdktGLU6P0Qlesb2CbD5urmM/3SchaSVVf/x/5Yog30
+ gEWF1td/ka3hMxwcTztj2Qsfo7oGdQwO/WkGEgt0AnQMHtrbG0w4Ky3mV6pfarm5FATbMaTNi
+ n91sxGFkLs3+MqvqZ8uMqjW1az3KvFWQVAhOmP+NbdgZjxUjIGZ1uC/TXJV00yrseMq2yOpML
+ P6Sx7qaJuDvfAgCcgz0kN7+xSgWTnbh6YrEGVNbDfn/HRU2Zw42FghNUHatL9LR2W810yhn2K
+ CVZC3KwpeMa4C9Nx/XB+wyFg4vQI4FyK46rBWP2+Ulex7swc/pBzu3B7jmQgHpXNB1vnznCdq
+ aznvMMhazOKjg5x6qj2MXDCPPpXsaCimFytLMCDnADPvzCFEc5oMx4bTgyj9YN/f9F176a7mD
+ Y/IYKjjsFI4fhknfXBdLZ/kzzsR3x16S5+EAliYJWhomIZE7xoAzxQ9pgd0HdlKGH1GBWKtVf
+ m7AkQXKIg/OxGGSz1IzOrw7w5KA/yYQNToTzoH8i0kEeRD4x27hjZlR40x0FF4QNcslsy8G69
+ 02yFaBPMoF+w7GIi+R0W7/XYebmSmvrZtwAPSm+nPKW1/acpM7LkcpxDntntLtlG8/Eq3n1H4
+ aCv+W0qI9ATCuvbg+q66XDc9f+W9U22FdLJ9LYzHAI1eOHl/cFuCLv6Pa/VTsfMCXU5/DOsoE
+ NUfn8TTgneCieLufgFW3LXKG/i0ZCIMyBUTUrRb5VYEID/XV7118UVU8EqH49IMG0Su/UXxr4
+ zEK/9E0oWoPvfzRTwRyDkQZYFIx51UFCm+Gmd1OfvKPL6TbDfDCoR89mWm891ddiNZiRRPyUo
+ 3B2/hxxABwLzOsZpal7GwpxxZ3o=
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew,
+Am 06.02.23 um 17:23 schrieb Guenter Roeck:
 
-I love your patch! Perhaps something to improve:
+> On Mon, Feb 06, 2023 at 03:13:25PM +0100, Hans de Goede wrote:
+>> Hi Armin,
+>>
+>> On 2/5/23 21:54, Armin Wolf wrote:
+>>> Thanks to bugreport 216655 on bugzilla triggered by the
+>>> dell-smm-hwmon driver, the contents of the sensor buffers
+>>> could be almost completely decoded.
+>>> Add an hwmon interface for exposing the fan and thermal
+>>> sensor values. Since the WMI interface can be quite slow
+>>> on some machines, the sensor buffers are cached for 1 second
+>>> to lessen the performance impact.
+>>> The debugfs interface remains in place to aid in reverse-engineering
+>>> of unknown sensor types and the thermal buffer.
+>>>
+>>> Tested-by: Anton=C3=ADn Skala <skala.antonin@gmail.com>
+>>> Tested-by: Gustavo Walbon <gustavowalbon@gmail.com>
+>>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> This looks nice and clean to me, thank you:
+>>
+>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>>
+>> I'm going to wait a bit with merging this to see if Guenter
+>> has any remarks. If there are no remarks by next Monday then
+>> I'll merge this for the 6.3 merge window.
+>>
+> I don't have any further remarks. I won't send an Ack, though.
+> I noticed that the empty lines before return statements distract
+> me sufficiently enough that I am not sure about the actual code.
+>
+> Guenter
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.2-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I will send a 3rd revision of the patch series to remove those empty lines=
+ then.
+Speaking of a 3rd revision, i noticed that jiffies are not updated during =
+suspend,
+so the sensor values might be wrong for a short time when resuming after a=
+ long time.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/shmem-Add-shmem_read_folio-and-shmem_read_folio_gfp/20230207-002746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230206162520.4029022-2-willy%40infradead.org
-patch subject: [PATCH 2/2] shmem: Add shmem_read_folio() and shmem_read_folio_gfp()
-config: riscv-randconfig-r023-20230205 (https://download.01.org/0day-ci/archive/20230207/202302070525.Ho0cFITJ-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ceb56c1ceea709ec0b10ed07e327bb4ae566bba5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthew-Wilcox-Oracle/shmem-Add-shmem_read_folio-and-shmem_read_folio_gfp/20230207-002746
-        git checkout ceb56c1ceea709ec0b10ed07e327bb4ae566bba5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+This can be solved by either usingktime_get_boottime_ns(), which does not =
+stop during suspend, or by
+invalidating the sensor cache upon resume. Which method should be used
+in this case? Armin Wolf
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   mm/shmem.c:4164:13: warning: no previous prototype for function 'shmem_init' [-Wmissing-prototypes]
-   void __init shmem_init(void)
-               ^
-   mm/shmem.c:4164:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init shmem_init(void)
-   ^
-   static 
-   mm/shmem.c:4172:5: warning: no previous prototype for function 'shmem_unuse' [-Wmissing-prototypes]
-   int shmem_unuse(unsigned int type)
-       ^
-   mm/shmem.c:4172:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_unuse(unsigned int type)
-   ^
-   static 
-   mm/shmem.c:4177:5: warning: no previous prototype for function 'shmem_lock' [-Wmissing-prototypes]
-   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
-       ^
-   mm/shmem.c:4177:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
-   ^
-   static 
-   mm/shmem.c:4182:6: warning: no previous prototype for function 'shmem_unlock_mapping' [-Wmissing-prototypes]
-   void shmem_unlock_mapping(struct address_space *mapping)
-        ^
-   mm/shmem.c:4182:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void shmem_unlock_mapping(struct address_space *mapping)
-   ^
-   static 
-   mm/shmem.c:4187:15: warning: no previous prototype for function 'shmem_get_unmapped_area' [-Wmissing-prototypes]
-   unsigned long shmem_get_unmapped_area(struct file *file,
-                 ^
-   mm/shmem.c:4187:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long shmem_get_unmapped_area(struct file *file,
-   ^
-   static 
-   mm/shmem.c:4195:6: warning: no previous prototype for function 'shmem_truncate_range' [-Wmissing-prototypes]
-   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
-        ^
-   mm/shmem.c:4195:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void shmem_truncate_range(struct inode *inode, loff_t lstart, loff_t lend)
-   ^
-   static 
-   mm/shmem.c:4255:14: warning: no previous prototype for function 'shmem_kernel_file_setup' [-Wmissing-prototypes]
-   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
-                ^
-   mm/shmem.c:4255:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_kernel_file_setup(const char *name, loff_t size, unsigned long flags)
-   ^
-   static 
-   mm/shmem.c:4266:14: warning: no previous prototype for function 'shmem_file_setup' [-Wmissing-prototypes]
-   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
-                ^
-   mm/shmem.c:4266:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_file_setup(const char *name, loff_t size, unsigned long flags)
-   ^
-   static 
-   mm/shmem.c:4279:14: warning: no previous prototype for function 'shmem_file_setup_with_mnt' [-Wmissing-prototypes]
-   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
-                ^
-   mm/shmem.c:4279:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct file *shmem_file_setup_with_mnt(struct vfsmount *mnt, const char *name,
-   ^
-   static 
-   mm/shmem.c:4290:5: warning: no previous prototype for function 'shmem_zero_setup' [-Wmissing-prototypes]
-   int shmem_zero_setup(struct vm_area_struct *vma)
-       ^
-   mm/shmem.c:4290:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int shmem_zero_setup(struct vm_area_struct *vma)
-   ^
-   static 
->> mm/shmem.c:4328:15: warning: no previous prototype for function 'shmem_read_folio_gfp' [-Wmissing-prototypes]
-   struct folio *shmem_read_folio_gfp(struct address_space *mapping,
-                 ^
-   mm/shmem.c:4328:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct folio *shmem_read_folio_gfp(struct address_space *mapping,
-   ^
-   static 
-   mm/shmem.c:4353:14: warning: no previous prototype for function 'shmem_read_mapping_page_gfp' [-Wmissing-prototypes]
-   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
-                ^
-   mm/shmem.c:4353:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
-   ^
-   static 
-   12 warnings generated.
-
-
-vim +/shmem_read_folio_gfp +4328 mm/shmem.c
-
-  4312	
-  4313	/**
-  4314	 * shmem_read_folio_gfp - read into page cache, using specified page allocation flags.
-  4315	 * @mapping:	the folio's address_space
-  4316	 * @index:	the folio index
-  4317	 * @gfp:	the page allocator flags to use if allocating
-  4318	 *
-  4319	 * This behaves as a tmpfs "read_cache_page_gfp(mapping, index, gfp)",
-  4320	 * with any new page allocations done using the specified allocation flags.
-  4321	 * But read_cache_page_gfp() uses the ->read_folio() method: which does not
-  4322	 * suit tmpfs, since it may have pages in swapcache, and needs to find those
-  4323	 * for itself; although drivers/gpu/drm i915 and ttm rely upon this support.
-  4324	 *
-  4325	 * i915_gem_object_get_pages_gtt() mixes __GFP_NORETRY | __GFP_NOWARN in
-  4326	 * with the mapping_gfp_mask(), to avoid OOMing the machine unnecessarily.
-  4327	 */
-> 4328	struct folio *shmem_read_folio_gfp(struct address_space *mapping,
-  4329			pgoff_t index, gfp_t gfp)
-  4330	{
-  4331	#ifdef CONFIG_SHMEM
-  4332		struct inode *inode = mapping->host;
-  4333		struct folio *folio;
-  4334		int error;
-  4335	
-  4336		BUG_ON(!shmem_mapping(mapping));
-  4337		error = shmem_get_folio_gfp(inode, index, &folio, SGP_CACHE,
-  4338					  gfp, NULL, NULL, NULL);
-  4339		if (error)
-  4340			return ERR_PTR(error);
-  4341	
-  4342		folio_unlock(folio);
-  4343		return folio;
-  4344	#else
-  4345		/*
-  4346		 * The tiny !SHMEM case uses ramfs without swap
-  4347		 */
-  4348		return mapping_read_folio_gfp(mapping, index, gfp);
-  4349	#endif
-  4350	}
-  4351	EXPORT_SYMBOL_GPL(shmem_read_folio_gfp);
-  4352	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
