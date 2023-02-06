@@ -2,261 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B54868C850
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1D268C855
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjBFVLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
+        id S230091AbjBFVMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBFVLt (ORCPT
+        with ESMTP id S229612AbjBFVMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:11:49 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF2D222F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:11:46 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id a2so11440652wrd.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:11:46 -0800 (PST)
+        Mon, 6 Feb 2023 16:12:44 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CEE22781
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:12:42 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id lu11so38085724ejb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:12:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rC86KoAvXpv+8wZFzH+REYSTORb7w+ZYErKX8Nx95k4=;
-        b=aSVunq7LHPF7onCKmJhaCmW36uSCjAfmH491zyI3iOAEpcl2DjyoIWNSiSzrpS6xTN
-         upTQqioc+CftRH4JrFM+YnVw1Fygwo+S/Bmeqrn+FExwLMXGhbighCEImkB3LbEHfxB3
-         pPZEdv3WoqjTjdS4qov4cnpM7+NBDQNjWuCMv5+UH3CEDixCf7Lt6Xjcbj1Mzs/OZvKR
-         NIrWVWjKbBThOFzik29zXn6n1X6BbSxVcjsS+gIYopq+4F5xkjuGoi/EaJf8uHQ77hTV
-         DNFFo8Khah5P/qRfg9uC1+q9FUEOXdBpUgPFZDZUYtrmH9uDxG67PQD0Cf4Aw0YX5lEO
-         5g8Q==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8VkzU+WzES+4hWs1tpdeJJZNbSILfAlysdpX/rlmqHE=;
+        b=ZUeEFMpmBT/SzJvHqj8fRBYau8YeTEyGGmfBc8wwYprLc5Z0bo2KZ7GT8ZIxYJmsSy
+         ZOXfkGS4p2PcoX+1z+FjOSAv3Q22woi5YGgqPVEN4/IXkVXhPSsoFCHNZknNCB6hq8/z
+         HQTWLK//Sab3YYSk02xGSfiqUdbIgoo5kaqgxTfYwfSnVw4T3m9wTCXA30ZrNjfS4Lni
+         K89czUvausOC1LF6vfPuw8GUljxvcFRFaxg0tLAGtQsHiFK+2kw1zk8twK9D2msu3XVG
+         wSPYVb4gPnTRQjAgMi6q8q8GfU2iZO8XYPs4B9f/+cLN6SC1e8b6ESG/sxcw6CUw7IAT
+         lgAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rC86KoAvXpv+8wZFzH+REYSTORb7w+ZYErKX8Nx95k4=;
-        b=yYB8QUx5ieH3Q5Xoe+MYNZY4L9b3vSBf+zYTjGSYrduMgC5yCDPc+PI0Qq3JBBOdE6
-         kjXuZfeE/yHKdv+qh3P/VA/BzCYZgZCnlZbzpj9l40ot3Lpox0Hmf8DK+TzkZESVIm7S
-         bC4AzyfQMxcqGhlevQIBhGKpC7t0stX+1LCDdWwMmVpJEAD4X39hGChcVwnrXqk4IN67
-         ore1bGgpfvbFSJoYK7FRO3UhFVwWIU0TmmFuzxEIEXkLboLrZ9Jyupxwt4gNZwVzJNeL
-         hRuZJqOEsTsW+j+v0c6oxJTtrcmRH2Un+gmrrcFR+u1BDD/6LZKnj5O7obse45Ycibm3
-         wZgA==
-X-Gm-Message-State: AO0yUKXcWa09n9/GsPeI3Kr21vYXiOvU8nlS/niYV9LEW23GeMUiyvEC
-        4iDqdu0gD1eFRaOBMu5Eo2hFCg==
-X-Google-Smtp-Source: AK7set+qn6JxHyM5CZ+BNMLpM0YVwl27RX//R4K9ijKxYLiMqPu6rBJSBm8bbDpbDwvYPgV3Q3MdRQ==
-X-Received: by 2002:a05:6000:1378:b0:2c3:f00c:ebb5 with SMTP id q24-20020a056000137800b002c3f00cebb5mr269377wrz.47.1675717904648;
-        Mon, 06 Feb 2023 13:11:44 -0800 (PST)
-Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
-        by smtp.gmail.com with ESMTPSA id j5-20020a5d5645000000b002c3efee2f4bsm1530879wrw.80.2023.02.06.13.11.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 Feb 2023 13:11:44 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v2 0/6] RISC-V Hardware Probing User Interface
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20230206201455.1790329-1-evan@rivosinc.com>
-Date:   Mon, 6 Feb 2023 21:11:42 +0000
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>, linux-doc@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vineetg@rivosinc.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Ruizhe Pan <c141028@gmail.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kselftest@vger.kernel.org, slewis@rivosinc.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Conor Dooley <conor@kernel.org>, dram <dramforever@live.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Guo Ren <guoren@kernel.org>, Dao Lu <daolu@rivosinc.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <212CC1BD-31FF-4B8B-B05D-89C5245EE8A7@jrtc27.com>
-References: <20230206201455.1790329-1-evan@rivosinc.com>
-To:     Evan Green <evan@rivosinc.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8VkzU+WzES+4hWs1tpdeJJZNbSILfAlysdpX/rlmqHE=;
+        b=XITCey3s+Ud3matqW1lh2SjoRPJi7EzroChlsFeL/ki+fyn/PgW0UMxcrMU7l6E+J3
+         XiPmjPXA9tPjSwF5BT1h7t3t9NPuByvO6jld1m8xvhJnU3OkM2AQOkBb+Fk4AHi5WCud
+         60wcW05IA4cs5xYYS/GkR6G2f6QRLTuGI4djq9rtmthge/eLoiYbz9x/GjkJcEzg8loH
+         zbJC6ynSiQrnjczenAnlwOsD0fY434YpY2BnK+8EVbDYhjMd50o8NgzjiH3y2ileMHY8
+         v5JBMTL/Os3m5qSS9bUv1bsJH2W7uJJOlsN3TRudQRZBy9bFdCxLItJ4xe2vTllAT3r8
+         1fTg==
+X-Gm-Message-State: AO0yUKVqrlIyj2zmVt6q9dg3ucaef0BT4+IQ/bPwNjI7jB7bNH5mF2X8
+        2pk/jxy0dJX1XIY1QObKtLv5YNVEbtoJosR0tBb2Ra2up7BPCvtBJcc=
+X-Google-Smtp-Source: AK7set9NoDxrIurfKvhVlGit1dbMVEEzx52XRqNie2zqLuizKlhQTHK90bJH6p0dSyWSTDJssWI3FW4XE//n3e1qTpc=
+X-Received: by 2002:a17:906:37c2:b0:878:7bc7:958a with SMTP id
+ o2-20020a17090637c200b008787bc7958amr224927ejc.220.1675717961212; Mon, 06 Feb
+ 2023 13:12:41 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
+ <fa58b745a597a32b434b0d92d55cf0b97317cfec.1675669136.git-series.apopple@nvidia.com>
+In-Reply-To: <fa58b745a597a32b434b0d92d55cf0b97317cfec.1675669136.git-series.apopple@nvidia.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 6 Feb 2023 13:12:04 -0800
+Message-ID: <CAJD7tkYxiOZF2F1RxEPTX4nYvAtvHn469JP63KDnifsxR_sQhQ@mail.gmail.com>
+Subject: Re: [PATCH 18/19] mm/mmap: Charge locked memory to pins cgroup
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch,
+        "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6 Feb 2023, at 20:14, Evan Green <evan@rivosinc.com> wrote:
->=20
->=20
-> These are very much up for discussion, as it's a pretty big new user
-> interface and it's quite a bit different from how we've historically
-> done things: this isn't just providing an ISA string to userspace, =
-this
-> has its own format for providing information to userspace.
->=20
-> There's been a bunch of off-list discussions about this, including at
-> Plumbers.  The original plan was to do something involving providing =
-an
-> ISA string to userspace, but ISA strings just aren't sufficient for a
-> stable ABI any more: in order to parse an ISA string users need the
-> version of the specifications that the string is written to, the =
-version
-> of each extension (sometimes at a finer granularity than the RISC-V
-> releases/versions encode), and the expected use case for the ISA =
-string
-> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
-> try and keep ABI compatible and it's probably going to continue to =
-grow,
-> as even if there's no more complexity in the specifications we'll have
-> to deal with the various ISA string parsing oddities that end up all
-> over userspace.
->=20
-> Instead this patch set takes a very different approach and provides a =
-set
-> of key/value pairs that encode various bits about the system.  The big
-> advantage here is that we can clearly define what these mean so we can
-> ensure ABI stability, but it also allows us to encode information =
-that's
-> unlikely to ever appear in an ISA string (see the misaligned access
-> performance, for example).  The resulting interface looks a lot like
-> what arm64 and x86 do, and will hopefully fit well into something like
-> ACPI in the future.
->=20
-> The actual user interface is a syscall.  I'm not really sure that's =
-the
-> right way to go about this, but it makes for flexible prototying.
-> Various other approaches have been talked about like making HWCAP2 a
-> pointer, having a VDSO routine, or exposing this via sysfs.  Those =
-seem
-> like generally reasonable approaches, but I've yet to figure out a way
-> to get the general case working without a syscall as that's the only =
-way
-> I've come up with to deal with the heterogenous CPU case.  Happy to =
-hear
-> if someone has a better idea, though, as I don't really want to add a
-> syscall if we can avoid it.
+On Sun, Feb 5, 2023 at 11:50 PM Alistair Popple <apopple@nvidia.com> wrote:
+>
+> account_locked_vm() is used to account memory to mm->locked_vm. This
+> adds accounting to the pins cgorup as it behaves similarly and should
+> be accounted against the same global limit if set.
+>
+> This means memory must now be unaccounted for correctly, as the cgroup
+> typically outlives both the mm and the task. It is assumed that
+> callers of account_locked_vm() only do accounting against the current
+> task. Callers that need to do accounting against remote tasks should
+> use account_pinned_vm() and associated struct vm_account to hold
+> references to the cgroup.
+>
+> Signed-off-by: Alistair Popple <apopple@nvidia.com>
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  mm/util.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/util.c b/mm/util.c
+> index 1ca0dfe..755bada 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -589,15 +589,21 @@ int __account_locked_vm(struct mm_struct *mm, unsigned long pages,
+>                         struct task_struct *task, bool bypass_rlim)
+>  {
+>         unsigned long locked_vm, limit;
+> +       struct pins_cgroup *pins_cg = get_pins_cg(task);
 
-Please work with https://github.com/riscv-non-isa/riscv-c-api-doc as
-it=E2=80=99s crucial we have a portable standard interface for =
-applications to
-query this information that works on OSes other than Linux. This can be
-backed by whatever you want, whether a syscall, magic VDSO thing,
-sysfs, etc, but it=E2=80=99s key that the exposed interface outside of =
-libc is
-not Linux-specific otherwise we=E2=80=99re going to get fragmentation in =
-this
-space.
+Here we get one ref one the pins cgroup for the entire locked region
+that may contain multiple pages, right? During unlock, we drop the
+ref. Is it possible that we lock a region (acquiring one ref), and
+then unlock it in chunks (dropping multiple refs)?
 
-I would encourage figuring out the right shape for the exposed
-interface first before continuing to refine details of how that
-information gets communicated between the kernel and libc.
+If this is possible, we may have a problem here. We may need to
+acquire one ref per pinned page (not sure if this can overflow). We
+may also want to defer the refcount handling to the pins cgroup
+controller code, similar to charge_memcg(), a function that tries to
+charge and acquires any necessary refs, same for uncharging.
 
-Jess
+WDYT?
 
-> An example series in glibc exposing this syscall and using it in an
-> ifunc selector for memcpy can be found at [1].
->=20
-> [1] =
-https://public-inbox.org/libc-alpha/20230206194819.1679472-1-evan@rivosinc=
-.com/T/#t
->=20
-> Changes in v2:
-> - Changed the interface to look more like poll(). Rather than =
-supplying
->   key_offset and getting back an array of values with numerically
->   contiguous keys, have the user pre-fill the key members of the =
-array,
->   and the kernel will fill in the corresponding values. For any key it
->   doesn't recognize, it will set the key of that element to -1. This
->   allows usermode to quickly ask for exactly the elements it cares
->   about, and not get bogged down in a back and forth about newer keys
->   that older kernels might not recognize. In other words, the kernel
->   can communicate that it doesn't recognize some of the keys while
->   still providing the data for the keys it does know.
-> - Added a shortcut to the cpuset parameters that if a size of 0 and
->   NULL is provided for the CPU set, the kernel will use a cpu mask of
->   all online CPUs. This is convenient because I suspect most callers
->   will only want to act on a feature if it's supported on all CPUs, =
-and
->   it's a headache to dynamically allocate an array of all 1s, not to
->   mention a waste to have the kernel loop over all of the offline =
-bits.
-> - Fixed logic error in if(of_property_read_string...) that caused =
-crash
-> - Include cpufeature.h in cpufeature.h to avoid undeclared variable
->   warning.
-> - Added a _MASK define
-> - Fix random checkpatch complaints
-> - Updated the selftests to the new API and added some more.
-> - Fixed indentation, comments in .S, and general checkpatch =
-complaints.
->=20
-> Evan Green (4):
->  RISC-V: Move struct riscv_cpuinfo to new header
->  RISC-V: Add a syscall for HW probing
->  RISC-V: hwprobe: Support probing of misaligned access performance
->  selftests: Test the new RISC-V hwprobe interface
->=20
-> Palmer Dabbelt (2):
->  RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
->  dt-bindings: Add RISC-V misaligned access performance
->=20
-> .../devicetree/bindings/riscv/cpus.yaml       |  15 ++
-> Documentation/riscv/hwprobe.rst               |  66 ++++++
-> Documentation/riscv/index.rst                 |   1 +
-> arch/riscv/include/asm/cpufeature.h           |  23 +++
-> arch/riscv/include/asm/hwprobe.h              |  13 ++
-> arch/riscv/include/asm/smp.h                  |   9 +
-> arch/riscv/include/asm/syscall.h              |   3 +
-> arch/riscv/include/uapi/asm/hwprobe.h         |  35 ++++
-> arch/riscv/include/uapi/asm/unistd.h          |   8 +
-> arch/riscv/kernel/cpu.c                       |  11 +-
-> arch/riscv/kernel/cpufeature.c                |  31 ++-
-> arch/riscv/kernel/sys_riscv.c                 | 192 +++++++++++++++++-
-> tools/testing/selftests/Makefile              |   1 +
-> tools/testing/selftests/riscv/Makefile        |  58 ++++++
-> .../testing/selftests/riscv/hwprobe/Makefile  |  10 +
-> .../testing/selftests/riscv/hwprobe/hwprobe.c |  89 ++++++++
-> .../selftests/riscv/hwprobe/sys_hwprobe.S     |  12 ++
-> tools/testing/selftests/riscv/libc.S          |  46 +++++
-> 18 files changed, 613 insertions(+), 10 deletions(-)
-> create mode 100644 Documentation/riscv/hwprobe.rst
-> create mode 100644 arch/riscv/include/asm/cpufeature.h
-> create mode 100644 arch/riscv/include/asm/hwprobe.h
-> create mode 100644 arch/riscv/include/uapi/asm/hwprobe.h
-> create mode 100644 tools/testing/selftests/riscv/Makefile
-> create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
-> create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
-> create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
-> create mode 100644 tools/testing/selftests/riscv/libc.S
->=20
-> --=20
-> 2.25.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
+>         int ret = 0;
+>
+>         mmap_assert_write_locked(mm);
+>
+> +       if (pins_cg && !pins_try_charge(pins_cg, pages))
+> +               return -ENOMEM;
+> +
+>         locked_vm = mm->locked_vm;
+>         if (!bypass_rlim) {
+>                 limit = task_rlimit(task, RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+> -               if (locked_vm + pages > limit)
+> +               if (locked_vm + pages > limit) {
+> +                       pins_uncharge(pins_cg, pages);
+>                         ret = -ENOMEM;
+> +               }
+>         }
+>
+>         if (!ret)
+> @@ -607,6 +613,12 @@ int __account_locked_vm(struct mm_struct *mm, unsigned long pages,
+>                  (void *)_RET_IP_, pages << PAGE_SHIFT, locked_vm << PAGE_SHIFT,
+>                 task_rlimit(task, RLIMIT_MEMLOCK), ret ? " - exceeded" : "");
+>
+> +       pr_debug("%s: [%d] caller %ps %lu %lu/%lu%s\n", __func__, task->pid,
+> +                (void *)_RET_IP_, pages << PAGE_SHIFT, locked_vm << PAGE_SHIFT,
+> +               task_rlimit(task, RLIMIT_MEMLOCK), ret ? " - exceeded" : "");
+> +
+> +       if (pins_cg)
+> +               put_pins_cg(pins_cg);
+>         return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(__account_locked_vm);
+> @@ -622,8 +634,18 @@ void __unaccount_locked_vm(struct mm_struct *mm, unsigned long pages)
+>  {
+>         unsigned long locked_vm = mm->locked_vm;
+>
+> +       /*
+> +        * TODO: Convert book3s vio to use pinned vm to ensure
+> +        * unaccounting happens to the correct cgroup.
+> +        */
+> +       struct pins_cgroup *pins_cg = get_pins_cg(current);
+> +
+>         mmap_assert_write_locked(mm);
+>         WARN_ON_ONCE(pages > locked_vm);
+> +       if (pins_cg) {
+> +               pins_uncharge(pins_cg, pages);
+> +               put_pins_cg(pins_cg);
+> +       }
+>         mm->locked_vm = locked_vm - pages;
+>  }
+>  EXPORT_SYMBOL_GPL(__unaccount_locked_vm);
+> --
+> git-series 0.9.1
+>
