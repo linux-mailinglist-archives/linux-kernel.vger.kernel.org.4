@@ -2,209 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A550D68BD53
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8193A68BD5C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjBFMw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S230193AbjBFMzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:55:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjBFMwZ (ORCPT
+        with ESMTP id S229488AbjBFMzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:52:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088BD212D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:51:39 -0800 (PST)
+        Mon, 6 Feb 2023 07:55:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E154222CF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:55:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675687899;
+        s=mimecast20190719; t=1675688105;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ifwcXjffS5iX3Wzgvhzj7ha2xRW0KwSRE7dQCFFOZsM=;
-        b=eb2ZFCyyuvFmniGpmO5l4+6qIFTYPvvhBvobES5ysnjJArjQkpeKEoXic5P2uIK3Q20GkJ
-        zltFzNgdnmZb0X7VHEpGlx1qh6OyFCaSh3RjNewvZHUvp4PzfWEC6kOr4mcchWjolSPvVM
-        /DZMs74OpslFxu9i4H7x46m7u+hfRgg=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=UX1daTOnFKuVGY1erJNvOV1r3LJAnkWkwfFQVfdnZmc=;
+        b=KDeyCPV/ui0Xvm0+HroWy/XQPnPJsSkGfEgJzArPEtQBDE+ugkWSZUE6arjXUHib1/8UY0
+        zekKf2qMnXYk6SQSBjxvK2VNb/HB12AOuZQ5GGFZgfZv1Y67ChMEi17jDMYMElfhI9ASp8
+        etcZzgnYOhAg5AjPout1SFciP+buPSs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-347-r-uxNjurOUqJWRYLwhpKlQ-1; Mon, 06 Feb 2023 07:51:36 -0500
-X-MC-Unique: r-uxNjurOUqJWRYLwhpKlQ-1
-Received: by mail-il1-f197.google.com with SMTP id l5-20020a056e020e4500b00313cbbd4729so1174544ilk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:51:36 -0800 (PST)
+ us-mta-652-aculSU8HNd2epFkM8HMI4Q-1; Mon, 06 Feb 2023 07:55:04 -0500
+X-MC-Unique: aculSU8HNd2epFkM8HMI4Q-1
+Received: by mail-ed1-f69.google.com with SMTP id w6-20020aa7d286000000b004aaa832ef36so2070202edq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:55:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ifwcXjffS5iX3Wzgvhzj7ha2xRW0KwSRE7dQCFFOZsM=;
-        b=EPex1OO46ZLWXPo6RTSFc5v9+tZR/5UhY5CJfFK+/dnrj95hRGC4j9VU59KCXVeQyJ
-         tGtjxr2YCjcDFlV5Wn+9jknF/NKt9naLNim0MBF+F+ZT41Tbc6DfiXJdgYFroWApOXCJ
-         qol8FEyIp0JPnQrfJjbpBcpaLDbVPa39+IKsvSHnGef82teskwNxQaVlc+1zRUvcRPO4
-         /VEVkODNEGL4qMQS2icwaZzjaQlIXsxQgoKjtaU9rkXAIzL53le1tKzGVIUrTSmcRc1p
-         AfrGVyi8cKfOpuK7dghyF8VWpab0yIxSd+xfeEbNiFX8noDxJUbeVDWjeeirXztwqwzw
-         t/nA==
-X-Gm-Message-State: AO0yUKUjSg1inlKaxJdqxeClA2eRUVlyADpWGoxYy3cH2I1x0IOvY2XX
-        uy1u0oIjzqriKGqdq3x7ljd8TVR6kVLyWPj8JhKDBrdZmWIlMi7C7f7AR/3JmS0kReJE6e0CdhE
-        Xmkouw8CzUZvliDDKT39i03mpMPvgnHl99bOHSEtO
-X-Received: by 2002:a92:2003:0:b0:30f:37f5:8520 with SMTP id j3-20020a922003000000b0030f37f58520mr4114745ile.63.1675687895461;
-        Mon, 06 Feb 2023 04:51:35 -0800 (PST)
-X-Google-Smtp-Source: AK7set9u3HxPCFqZR4p4eu29bUB1Xc/eCwyzixc3OaYR9kmU4mT7+cF5MnSKpHeWMeoI5eaWsTgM/mYe+uqceoMm4Uo=
-X-Received: by 2002:a92:2003:0:b0:30f:37f5:8520 with SMTP id
- j3-20020a922003000000b0030f37f58520mr4114732ile.63.1675687895200; Mon, 06 Feb
- 2023 04:51:35 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UX1daTOnFKuVGY1erJNvOV1r3LJAnkWkwfFQVfdnZmc=;
+        b=5UmzhfHMWO/9gL2KRPL3M+CIsmCMGN8atluoLrZzmSav4rYIo0chEMm6kDpRG3AOoO
+         8ECbvPutlVgZcqSCuUyOQD3aMij/I83O1vrMXkuYPhhgywONg6kLdHFCbLVFJzCjil+B
+         6nuaTAgLUovUnO4mMjADmO/vIcekKaI3dA4Ubyx2IZgZprrxdgkxowVhBZ53gZCF4sJJ
+         cmv1dHDtn6yNKRUASCTpcxwU6wuFNGWJNLXPzYLWTUwG3xFvHpqaXcJNSLTUcNRaV20V
+         htC+HOrVVIpPdcBEVMUJoJWfARTqcNugzBDKVAK4SF8bZvkKYNjtWsoLxzp8JauWnocG
+         he8w==
+X-Gm-Message-State: AO0yUKU6XCrEwJOY8gSR6s5iZYTFALrhkegamljljID81CeLPEJWQGqQ
+        ZOtuMkiuneFM2VQ0KilpXSYKk49cCykpKQHEjtrcpj2VStxlm8PuQKvXl8MvMM8qV2dYkPEPiPt
+        JeCufj0qdG9ny1Hm2N3tDS69q
+X-Received: by 2002:a17:906:5658:b0:878:7b5c:3811 with SMTP id v24-20020a170906565800b008787b5c3811mr18145536ejr.42.1675688102742;
+        Mon, 06 Feb 2023 04:55:02 -0800 (PST)
+X-Google-Smtp-Source: AK7set8BAMTxyg8K7m5+aY3GW33lxao9oRWSvbibbghTiKRaybEKgPTSyk9g9sXLTrfSGV9maPvHIw==
+X-Received: by 2002:a17:906:5658:b0:878:7b5c:3811 with SMTP id v24-20020a170906565800b008787b5c3811mr18145526ejr.42.1675688102586;
+        Mon, 06 Feb 2023 04:55:02 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id lv3-20020a170906bc8300b00883410a786csm5350194ejb.207.2023.02.06.04.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 04:55:02 -0800 (PST)
+Message-ID: <14c1201b-7caf-e096-624c-e5ec3597d67f@redhat.com>
+Date:   Mon, 6 Feb 2023 13:55:01 +0100
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
- <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com> <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
- <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
- <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com> <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
- <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com>
- <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
- <5fbca304-369d-aeb8-bc60-fdb333ca7a44@linux.alibaba.com> <CAOQ4uximQZ_DL1atbrCg0bQ8GN8JfrEartxDSP+GB_hFvYQOhg@mail.gmail.com>
-In-Reply-To: <CAOQ4uximQZ_DL1atbrCg0bQ8GN8JfrEartxDSP+GB_hFvYQOhg@mail.gmail.com>
-From:   Alexander Larsson <alexl@redhat.com>
-Date:   Mon, 6 Feb 2023 13:51:23 +0100
-Message-ID: <CAL7ro1ETbWte1dsLY0kFsKdbw5POAahx55Hsk2nNvgGXAWE-CQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/7] Add TPMI support
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230202010738.2186174-1-srinivas.pandruvada@linux.intel.com>
+ <918ac0c5-9f35-0099-5be8-6dbc72aa88e9@redhat.com>
+In-Reply-To: <918ac0c5-9f35-0099-5be8-6dbc72aa88e9@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 5, 2023 at 8:06 PM Amir Goldstein <amir73il@gmail.com> wrote:
->
-> > >>> Apart from that, I still fail to get some thoughts (apart from
-> > >>> unprivileged
-> > >>> mounts) how EROFS + overlayfs combination fails on automative real
-> > >>> workloads
-> > >>> aside from "ls -lR" (readdir + stat).
-> > >>>
-> > >>> And eventually we still need overlayfs for most use cases to do
-> > >>> writable
-> > >>> stuffs, anyway, it needs some words to describe why such < 1s
-> > >>> difference is
-> > >>> very very important to the real workload as you already mentioned
-> > >>> before.
-> > >>>
-> > >>> And with overlayfs lazy lookup, I think it can be close to ~100ms or
-> > >>> better.
-> > >>>
-> > >>
-> > >> If we had an overlay.fs-verity xattr, then I think there are no
-> > >> individual features lacking for it to work for the automotive usecase
-> > >> I'm working on. Nor for the OCI container usecase. However, the
-> > >> possibility of doing something doesn't mean it is the better technical
-> > >> solution.
-> > >>
-> > >> The container usecase is very important in real world Linux use today,
-> > >> and as such it makes sense to have a technically excellent solution for
-> > >> it, not just a workable solution. Obviously we all have different
-> > >> viewpoints of what that is, but these are the reasons why I think a
-> > >> composefs solution is better:
-> > >>
-> > >> * It is faster than all other approaches for the one thing it actually
-> > >> needs to do (lookup and readdir performance). Other kinds of
-> > >> performance (file i/o speed, etc) is up to the backing filesystem
-> > >> anyway.
-> > >>
-> > >> Even if there are possible approaches to make overlayfs perform better
-> > >> here (the "lazy lookup" idea) it will not reach the performance of
-> > >> composefs, while further complicating the overlayfs codebase. (btw, did
-> > >> someone ask Miklos what he thinks of that idea?)
-> > >>
-> > >
-> > > Well, Miklos was CCed (now in TO:)
-> > > I did ask him specifically about relaxing -ouserxarr,metacopy,redirect:
-> > > https://lore.kernel.org/linux-unionfs/20230126082228.rweg75ztaexykejv@wittgenstein/T/#mc375df4c74c0d41aa1a2251c97509c6522487f96
-> > > but no response on that yet.
-> > >
-> > > TBH, in the end, Miklos really is the one who is going to have the most
-> > > weight on the outcome.
-> > >
-> > > If Miklos is interested in adding this functionality to overlayfs, you are going
-> > > to have a VERY hard sell, trying to merge composefs as an independent
-> > > expert filesystem. The community simply does not approve of this sort of
-> > > fragmentation unless there is a very good reason to do that.
-> > >
-> > >> For the automotive usecase we have strict cold-boot time requirements
-> > >> that make cold-cache performance very important to us. Of course, there
-> > >> is no simple time requirements for the specific case of listing files
-> > >> in an image, but any improvement in cold-cache performance for both the
-> > >> ostree rootfs and the containers started during boot will be worth its
-> > >> weight in gold trying to reach these hard KPIs.
-> > >>
-> > >> * It uses less memory, as we don't need the extra inodes that comes
-> > >> with the overlayfs mount. (See profiling data in giuseppes mail[1]).
-> > >
-> > > Understood, but we will need profiling data with the optimized ovl
-> > > (or with the single blob hack) to compare the relevant alternatives.
-> >
-> > My little request again, could you help benchmark on your real workload
-> > rather than "ls -lR" stuff?  If your hard KPI is really what as you
-> > said, why not just benchmark the real workload now and write a detailed
-> > analysis to everyone to explain it's a _must_ that we should upstream
-> > a new stacked fs for this?
-> >
->
-> I agree that benchmarking the actual KPI (boot time) will have
-> a much stronger impact and help to build a much stronger case
-> for composefs if you can prove that the boot time difference really matters.
+Hi,
 
-I will not be able to produce any full comparisons of a car booting
-with this. First of all its customer internal data, and secondly its
-not something that is currently at a stage that is finished enough to
-do such a benchmark. For this discussion, consider it more a weak
-example of why cold-cache performance is important in many cases.
+On 2/6/23 13:49, Hans de Goede wrote:
 
-> In order to test boot time on fair grounds, I prepared for you a POC
-> branch with overlayfs lazy lookup:
-> https://github.com/amir73il/linux/commits/ovl-lazy-lowerdata
+> Thank you for your patch-series, I've applied the series to my
+> review-hans branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+> 
+> Note it will show up in my review-hans branch once I've pushed my
+> local branch there, which might take a while.
+> 
+> Once I've run some tests on this branch the patches there will be
+> added to the platform-drivers-x86/for-next branch and eventually
+> will be included in the pdx86 pull-request to Linus for the next
+> merge-window.
 
-Cool. I'll play around with this. Does this need to be an opt-in
-option in the final version? It feels like this could be useful to
-improve performance in general for overlayfs, for example when
-metacopy is used in container layers.
+One thing which I did notice, which is a pre-existing problem
+is that the IDA accesses in drivers/platform/x86/intel/vsec.c
+are not protected by any locking.
 
-> It is very lightly tested, but should be sufficient for the benchmark.
-> Note that:
-> 1. You need to opt-in with redirect_dir=lazyfollow,metacopy=on
-> 2. The lazyfollow POC only works with read-only overlay that
->     has two lower dirs (1 metadata layer and one data blobs layer)
-> 3. The data layer must be a local blockdev fs (i.e. not a network fs)
-> 4. Only absolute path redirects are lazy (e.g. "/objects/cc/3da...")
->
-> These limitations could be easily lifted with a bit more work.
-> If any of those limitations stand in your way for running the benchmark
-> let me know and I'll see what I can do.
->
-> If there is any issue with the POC branch, please let me know.
->
-> Thanks,
-> Amir.
->
+This is likely ok for now because there is only 1 PCI device
+per type of ida and the enumeration of the vsec devices
+under the PCI device is done in a single loop, so all
+IDA accesses are single threaded atm.
+
+But still IMHO it would be good to protect the IDA accesses
+(ida_alloc() / ida_free()) with a mutex to protect against
+any future races.
+
+I think that a single global static mutex inside
+drivers/platform/x86/intel/vsec.c to protect the
+ida calls there should suffice for this.
+
+Regards,
+
+Hans
 
 
--- 
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- Alexander Larsson                                Red Hat, Inc
-       alexl@redhat.com         alexander.larsson@gmail.com
 
