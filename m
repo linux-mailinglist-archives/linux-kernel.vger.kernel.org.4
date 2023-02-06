@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E8368B306
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A18668B309
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjBFALq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 19:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S229559AbjBFANR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 19:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBFALo (ORCPT
+        with ESMTP id S229484AbjBFANP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 19:11:44 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1602199FD;
-        Sun,  5 Feb 2023 16:11:43 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h3so1121603wrp.10;
-        Sun, 05 Feb 2023 16:11:43 -0800 (PST)
+        Sun, 5 Feb 2023 19:13:15 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEE61816E;
+        Sun,  5 Feb 2023 16:13:14 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso7597809wms.4;
+        Sun, 05 Feb 2023 16:13:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wAbf+uUh8IDhx4P5btdQs6JXwhMK6EMsAdafpHykSig=;
-        b=hqdZOfsXvr3HFzzq+ifhJGaW6E30t/fBH4rx5B2HHJq48dxHVp6ZXJhKfZ1ZN0f1/d
-         3ovY90IS5GAFg8rnvkXruCjZkMtybQhCgRVkPcDdtVN8HYsdIBxP+CXMwCMSoZ3QPgdN
-         L1C6CMjn5ZsYX/Zpq67aGFFPo1dEvmOjM+gBsftkE4t1sMWqlslH2uZD86RSKbS26ISa
-         8brBW90nxyuLBaOMrKxB57KpE9D7am3E0iht3CPjY1F0KCAgNvvEP3iSIFCKH6Na2T52
-         G2NOHL31lYEoXMsKHUmFB0FFd75NXoXhEIqVeEUrXDCeFvTfKkaSMGV3UJVxLbh4BT34
-         B+eQ==
+        bh=FacqhinIE3cYzcHWL+sIHtqTA2GbL6NIBfMucLlCGic=;
+        b=Knf06s8pt8mbdxTpfNvgXKole3+l5jv7IwBSWfA0bGadXS1L+aeX0qDjyvzKoYIEY+
+         2w96V8sVec2Yk+Txg3X8Dzc3ANKzcau4/mwNqhPq2j7hi9NiD1Dt2522tj8BleQJeo32
+         lWtZ4FXHH6MSqAeuzVHtgVaHQsdi5X8WZk0h4xO00zScVi/1+tvoLkJZsNtZMaiQbqP0
+         PXOQfCBdLhefTGcZ+mTrA7mCGjSh59wrgX07uprGVUPMtd7dHowqY5Z8/8C55AG03UNG
+         TZfIHcwxW4+rtzYevyGXi7FB+n3Kz+Uac4oIe6O9UqhnyNydb+z/Vl8AgxhboUEP056G
+         0hNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wAbf+uUh8IDhx4P5btdQs6JXwhMK6EMsAdafpHykSig=;
-        b=d7aVbdOq+mpv0bpki2jCL0x6vX/GcpQY9NhsUe8Fi8XwOP+geUpyEOc+qtMMqaNCMc
-         XrZvYs0ED8mcI0+g6hFs0L5KztbyS9Non6R1U3fIn9KrAXAN0E3LDmmxRFP4BGzb63Ku
-         saICoXNQCEqANi+0oj/Grov3vEFUIX1Zty6FBbgtscUhwir1/uW3CwTJZRWjZohAO60Z
-         ZLSHW5UQJfw4x4pDBGPyoO63ShbCsERBgxbLLQG9JmGDlW01MjZIBQb9W5DGp0uuNP7F
-         X+YeboZULZfJmbKm2bCTNVYs/IqluX57OHDMO2e/1Q8NY8iVeIiCTs4g9phzFcz03k52
-         5zZQ==
-X-Gm-Message-State: AO0yUKXVw/yPVh/RaRvqpuCCVZxl1E10xa7XJukQS5h5qIvFK1maHu7F
-        /s5mtcJP4g18BKmhy+aI7u1tQSgEw4XhlQ==
-X-Google-Smtp-Source: AK7set9EwtA/3dUxOfIHAijqcL24vr09/N1bNDsVbF1CL4pqr6JFbbAJ+dzmJjjcRfwsyEjlaS2wSA==
-X-Received: by 2002:adf:e6c9:0:b0:2c3:e938:d29b with SMTP id y9-20020adfe6c9000000b002c3e938d29bmr2135139wrm.54.1675642302353;
-        Sun, 05 Feb 2023 16:11:42 -0800 (PST)
+        bh=FacqhinIE3cYzcHWL+sIHtqTA2GbL6NIBfMucLlCGic=;
+        b=pdyiV6SxQAdK100AGYM8sZfvGKygjiiDuz8l/1+2hbDzNd6w14NVguVTvU2CfQm6m/
+         CUyrs68Lb3E23JzEjxMYHqVGNBXcngTFKCH7KrgdPprijG8vDCPdKe127qtIMquv0pYU
+         bX1TGpdSkGvLz/kZx4wlX5RxXwd7DZtV+N7OycLSqMAYAZ3G9q34ZuphD3KXjeu/oOc6
+         KCjPIvTEsNYB2iQtStVPkebGzNsqmzqLb5G1M0G1iJ+1dsCtgLgyVet8bmuqu/RyVIuL
+         oQeepw2WIiBRzMXuJj+yv/lKekvv8ZmKo/P+k2uoTNRjOx8xVw8Tc38D11JKGJuVudFg
+         HZ+Q==
+X-Gm-Message-State: AO0yUKUPO75GS/MQ4L2wUl+8Ur1LWulZpGm23nkxZCzFmEkMjyraQITy
+        H83IaVU4RUZAAQ9FlEfvrBY=
+X-Google-Smtp-Source: AK7set/5apFyhhx9Ky/PaYsJhuRV0Sm5j0nwp0xTR6YKGWciD3apNFq27D+biSlLgIiTqgSFUMUSuQ==
+X-Received: by 2002:a05:600c:1c1c:b0:3df:9858:c02f with SMTP id j28-20020a05600c1c1c00b003df9858c02fmr10080938wms.4.1675642393251;
+        Sun, 05 Feb 2023 16:13:13 -0800 (PST)
 Received: from prasmi.home ([2a00:23c8:2501:c701:ad64:1263:d26a:39ae])
-        by smtp.gmail.com with ESMTPSA id j6-20020adfb306000000b002c3d29d83d2sm7015959wrd.63.2023.02.05.16.11.41
+        by smtp.gmail.com with ESMTPSA id v9-20020a05600c470900b003dfe549da4fsm9508994wmo.18.2023.02.05.16.13.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 16:11:41 -0800 (PST)
+        Sun, 05 Feb 2023 16:13:12 -0800 (PST)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -60,9 +60,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2] arm64: dts: renesas: r9a07g043u: Add Cortex-A55 PMU node
-Date:   Mon,  6 Feb 2023 00:11:33 +0000
-Message-Id: <20230206001133.28776-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2] arm64: dts: renesas: r9a07g044: Add Cortex-A55 PMU node
+Date:   Mon,  6 Feb 2023 00:13:00 +0000
+Message-Id: <20230206001300.28937-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,22 +78,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Enable the performance monitor unit for the Cortex-A55 core on the
-RZ/G2UL (r9a07g043u) SoC.
+Enable the performance monitor unit for the Cortex-A55 cores on the
+RZ/G2L (r9a07g044) SoC.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
-v1 -> v2
+v1->v2
 * Fixed interrupt type
 ---
- arch/arm64/boot/dts/renesas/r9a07g043u.dtsi | 5 +++++
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-index 9d854706ada5..1c9d3193e4ff 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-@@ -35,6 +35,11 @@ L3_CA55: cache-controller-0 {
+diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+index 80b2332798d9..2c848aad7aea 100644
+--- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
+@@ -161,6 +161,11 @@ opp-50000000 {
  		};
  	};
  
