@@ -2,371 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FA568C766
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:16:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E31C68C764
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjBFUQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S229700AbjBFUP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjBFUP6 (ORCPT
+        with ESMTP id S230163AbjBFUPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:15:58 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A522B296
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:15:42 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so11921998pjp.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:15:42 -0800 (PST)
+        Mon, 6 Feb 2023 15:15:50 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EDC29E23;
+        Mon,  6 Feb 2023 12:15:36 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id w5so3380038plg.8;
+        Mon, 06 Feb 2023 12:15:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5QMxDhZ75IYuxFalbrxLxVMgMvXcbdvnhnkaLqUhc+4=;
-        b=h/K1xPkYuAladagqvnqdEObwLc3I++hRM7ygnQ2FWJr4dQ+NkKfwjCYv4AZW0J/fwi
-         LQISa+kgp1HPMijrVjeord7FE0i5YBU63rWz5ruKW+VR6fz0mKm4sPzzDQ3b7sHqAJqu
-         5s5FHCgSboqFOPi6+2mRfBVjb6ruhIRiLlcmgbtSOBcG3ugdpGU4nLDiyh5rS6NQjWtG
-         kQKYfhoKgsFC1y4IuUgzY6yhKDZrzXd+Cd50qfizClaXRGR75Ot0gyTLgmirP0lhYesJ
-         0ufnay2uR7KlqVSrC2Gw4rTerieNxMHekKe2rLvJWZHLTB4m0NJU5BYtvJ2l9lgJ2Nsf
-         6lpg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dJb35mhM2Hbo2R5tiLKHQvqDWiCTe8jrz1+VmmZokUg=;
+        b=pBxCY01r9CDzvCb4m4soEW0AV3WnU9oLYZAyLjld3Nb+mxlySjB4wCvRVd9En70iko
+         L/c/CzynnU7bG0S4aKqtD67H/E/jYTZxDQ5AFgyKeyeKJ+rmonw8UjOog8fEntBVAY0A
+         LBQ5uYBcgGg995N5Pqmf08fP/3vPbIpGu96UwjTh8FgKOBInWv+p67r3FDZdKumz3pHZ
+         pISkxr2SlRYJoylU6ag4JfjJoRRubNx4pDVSLHvNU4iXtM57kBmOjKD+Pt9xexDKVW4/
+         zlru3lnpWVsD/Lm+ZHInNDu6+mBvdn5vmhqNHC5UTlg+pvwysYStqLSytggrrYL7eQCC
+         Z0dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5QMxDhZ75IYuxFalbrxLxVMgMvXcbdvnhnkaLqUhc+4=;
-        b=Y7RXnhtqgPEIeWQM4OKOFIvyq5nKbfIekQtT8HRG6X9mqRUFcWy2De2bdHRY0Vsu8q
-         0NVJvsfvbUMSP9Ebq47Jpt/izsCFZhluVk3zaHYMUigzqZv370B9tJ0kRP8oINAIos5p
-         AmgyJL/cGLTtUckZq+UON1ms3DzEZt4SM0trbXvktQ7dFTVsUOno0qEhy4ViaTZY73L4
-         gu5hjJ1IjhR1UZt2NINkcdH44+0br4DVeiX/oVXcQCEH0dJ3uWspmDNNlKb+fYIJbMy7
-         gGcFhGb+6EBAp0d4/r79ClSBJTopuljewur7ysQ1SlGm4gzZ4k0EJUejprQFX5r5fQMd
-         H2hg==
-X-Gm-Message-State: AO0yUKV6ZdRK5A0QOZQcUYcKEJCtpTsNpPTmBF9OqjfXWl3QKD+nJxmH
-        kx0VSjmBwGgtNhYr7nTSZ99U5g==
-X-Google-Smtp-Source: AK7set85zbKwtw5aODIZ5cYO4p8jjvMu57n9mPKmID0sKGJht50D5yMZ8ibBp4s5msYzjPdKfqyc8A==
-X-Received: by 2002:a05:6a20:e688:b0:bc:92cd:1536 with SMTP id mz8-20020a056a20e68800b000bc92cd1536mr259465pzb.61.1675714541445;
-        Mon, 06 Feb 2023 12:15:41 -0800 (PST)
-Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id k10-20020a63ab4a000000b004df4fbb9823sm6425079pgp.68.2023.02.06.12.15.40
+        bh=dJb35mhM2Hbo2R5tiLKHQvqDWiCTe8jrz1+VmmZokUg=;
+        b=tbLx3p7y+A5SPzMBhueOyr469bhOd/alde+LmrPokuWaG05FM/ezht54gAVnoJOKB8
+         6p4rCamOTm9toRP5d4oeHQxx5h5N9F6A32A13e45ioO7sjIpHqz/niIBceDdhUvBedrZ
+         Xt+XwFjVSP+5+pXfG4XUL0+Ucqohho4j3h8DJUHPBWQoR5fHWB8PDQOV02LtYPVk8xr1
+         x96cLZehg7W8UcujzlLtwkIWc3Od3AybfwEH3QBtdkaIF/DIntNg6C75x2+S0MUxh+r6
+         2AdxMvZ7dmFSvgc4tnUGKFod/GR+IW6yE//F9tNjtV5lpBU995zOrqz7CdLd+QYi3SDW
+         dlMw==
+X-Gm-Message-State: AO0yUKWGYsB5TeBp30PSUCoKkh7S/2mHbT+qZEx6hw0JHmO/OD02uovu
+        TeQVi27rkmihAXPx4GEuRrU=
+X-Google-Smtp-Source: AK7set/FPg5UtlcVqKFFhDzRoEcFW7n1dj/21K9rfzkNeY9EIkjuCy6fBmKwwDN31wTnR5OOjFCAOA==
+X-Received: by 2002:a17:90b:4aca:b0:230:b643:1f90 with SMTP id mh10-20020a17090b4aca00b00230b6431f90mr901808pjb.29.1675714535317;
+        Mon, 06 Feb 2023 12:15:35 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id o15-20020a17090a678f00b00230ab56a1f3sm2852672pjj.51.2023.02.06.12.15.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 12:15:41 -0800 (PST)
-From:   Evan Green <evan@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Conor Dooley <conor@kernel.org>, vineetg@rivosinc.com,
-        heiko@sntech.de, slewis@rivosinc.com,
-        Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v2 6/6] selftests: Test the new RISC-V hwprobe interface
-Date:   Mon,  6 Feb 2023 12:14:55 -0800
-Message-Id: <20230206201455.1790329-7-evan@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230206201455.1790329-1-evan@rivosinc.com>
-References: <20230206201455.1790329-1-evan@rivosinc.com>
+        Mon, 06 Feb 2023 12:15:34 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 6 Feb 2023 10:15:32 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2] cgroup/cpuset: Don't filter offline CPUs in
+ cpuset_cpus_allowed() for top cpuset tasks
+Message-ID: <Y+Ff5Hi3S0ftz+XK@slm.duckdns.org>
+References: <20230206034853.330463-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206034853.330463-1-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a test for the recently added RISC-V interface for probing
-hardware capabilities.  It happens to be the first selftest we have for
-RISC-V, so I've added some infrastructure for those as well.  The build
-stuff looks pretty straight-forward, but there's also  a tiny C library
-to avoid coupling this to any userspace implementation.
+On Sun, Feb 05, 2023 at 10:48:53PM -0500, Waiman Long wrote:
+> Since commit 8f9ea86fdf99 ("sched: Always preserve the user
+> requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
+> __sched_setaffinity() unconditionally. This helps to expose a bug in
+> the current cpuset hotplug code where the cpumasks of the tasks in
+> the top cpuset are not updated at all when some CPUs become online or
+> offline. It is likely caused by the fact that some of the tasks in the
+> top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
+> 
+> One way to reproduce this as suggested by Peter is:
+>  - boot machine
+>  - offline all CPUs except one
+>  - taskset -p ffffffff $$
+>  - online all CPUs
+> 
+> Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
+> includes offline CPUs for those tasks that are in the top cpuset. For
+> tasks not in the top cpuset, the old rule applies and only online CPUs
+> will be returned in the mask since hotplug events will update their
+> cpumasks accordingly.
+> 
+> Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
+> Reported-by: Will Deacon <will@kernel.org>
+> Originally-from: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Tested-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Evan Green <evan@rivosinc.com>
+Applied to cgroup/for-6.2-fixes.
 
----
+Thanks.
 
-Changes in v2:
- - Updated the selftests to the new API and added some more.
- - Fixed indentation, comments in .S, and general checkpatch complaints.
-
-
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/riscv/Makefile        | 58 ++++++++++++
- .../testing/selftests/riscv/hwprobe/Makefile  | 10 +++
- .../testing/selftests/riscv/hwprobe/hwprobe.c | 89 +++++++++++++++++++
- .../selftests/riscv/hwprobe/sys_hwprobe.S     | 12 +++
- tools/testing/selftests/riscv/libc.S          | 46 ++++++++++
- 6 files changed, 216 insertions(+)
- create mode 100644 tools/testing/selftests/riscv/Makefile
- create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
- create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
- create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
- create mode 100644 tools/testing/selftests/riscv/libc.S
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 41b649452560..a599ef726310 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -62,6 +62,7 @@ TARGETS += pstore
- TARGETS += ptrace
- TARGETS += openat2
- TARGETS += resctrl
-+TARGETS += riscv
- TARGETS += rlimits
- TARGETS += rseq
- TARGETS += rtc
-diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-new file mode 100644
-index 000000000000..32a72902d045
---- /dev/null
-+++ b/tools/testing/selftests/riscv/Makefile
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Originally tools/testing/arm64/Makefile
-+
-+# When ARCH not overridden for crosscompiling, lookup machine
-+ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-+
-+ifneq (,$(filter $(ARCH),riscv))
-+RISCV_SUBTARGETS ?= hwprobe
-+else
-+RISCV_SUBTARGETS :=
-+endif
-+
-+CFLAGS := -Wall -O2 -g
-+
-+# A proper top_srcdir is needed by KSFT(lib.mk)
-+top_srcdir = $(realpath ../../../../)
-+
-+# Additional include paths needed by kselftest.h and local headers
-+CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
-+
-+CFLAGS += $(KHDR_INCLUDES)
-+
-+export CFLAGS
-+export top_srcdir
-+
-+all:
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		mkdir -p $$BUILD_TARGET;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+install: all
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+run_tests: all
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+# Avoid any output on non riscv on emit_tests
-+emit_tests: all
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+clean:
-+	@for DIR in $(RISCV_SUBTARGETS); do				\
-+		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-+	done
-+
-+.PHONY: all clean install run_tests emit_tests
-diff --git a/tools/testing/selftests/riscv/hwprobe/Makefile b/tools/testing/selftests/riscv/hwprobe/Makefile
-new file mode 100644
-index 000000000000..614501584803
---- /dev/null
-+++ b/tools/testing/selftests/riscv/hwprobe/Makefile
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2021 ARM Limited
-+# Originally tools/testing/arm64/abi/Makefile
-+
-+TEST_GEN_PROGS := hwprobe
-+
-+include ../../lib.mk
-+
-+$(OUTPUT)/hwprobe: hwprobe.c ../libc.S sys_hwprobe.S
-+	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) -nostdlib $^
-diff --git a/tools/testing/selftests/riscv/hwprobe/hwprobe.c b/tools/testing/selftests/riscv/hwprobe/hwprobe.c
-new file mode 100644
-index 000000000000..ddfb61de2938
---- /dev/null
-+++ b/tools/testing/selftests/riscv/hwprobe/hwprobe.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <asm/hwprobe.h>
-+
-+/*
-+ * Rather than relying on having a new enough libc to define this, just do it
-+ * ourselves.  This way we don't need to be coupled to a new-enough libc to
-+ * contain the call.
-+ */
-+long riscv_hwprobe(struct riscv_hwprobe *pairs, long pair_count,
-+		   long cpu_count, unsigned long *cpus, unsigned long flags);
-+
-+int main(int argc, char **argv)
-+{
-+	struct riscv_hwprobe pairs[8];
-+	unsigned long cpus;
-+	long out;
-+
-+	/* Fake the CPU_SET ops. */
-+	cpus = -1;
-+
-+	/*
-+	 * Just run a basic test: pass enough pairs to get up to the base
-+	 * behavior, and then check to make sure it's sane.
-+	 */
-+	for (long i = 0; i < 8; i++)
-+		pairs[i].key = i;
-+	out = riscv_hwprobe(pairs, 8, 1, &cpus, 0);
-+	if (out != 0)
-+		return -1;
-+	for (long i = 0; i < 4; ++i) {
-+		/* Fail if the kernel claims not to recognize a base key. */
-+		if ((i < 4) && (pairs[i].key != i))
-+			return -2;
-+
-+		if (pairs[i].key != RISCV_HWPROBE_KEY_BASE_BEHAVIOR)
-+			continue;
-+
-+		if (pairs[i].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA)
-+			continue;
-+
-+		return -3;
-+	}
-+
-+	/*
-+	 * This should also work with a NULL CPU set, but should not work
-+	 * with an improperly supplied CPU set.
-+	 */
-+	out = riscv_hwprobe(pairs, 8, 0, 0, 0);
-+	if (out != 0)
-+		return -4;
-+
-+	out = riscv_hwprobe(pairs, 8, 0, &cpus, 0);
-+	if (out == 0)
-+		return -5;
-+
-+	out = riscv_hwprobe(pairs, 8, 1, 0, 0);
-+	if (out == 0)
-+		return -6;
-+
-+	/*
-+	 * Check that keys work by providing one that we know exists, and
-+	 * checking to make sure the resultig pair is what we asked for.
-+	 */
-+	pairs[0].key = RISCV_HWPROBE_KEY_BASE_BEHAVIOR;
-+	out = riscv_hwprobe(pairs, 1, 1, &cpus, 0);
-+	if (out != 0)
-+		return -7;
-+	if (pairs[0].key != RISCV_HWPROBE_KEY_BASE_BEHAVIOR)
-+		return -8;
-+
-+	/*
-+	 * Check that an unknown key gets overwritten with -1,
-+	 * but doesn't block elements after it.
-+	 */
-+	pairs[0].key = 0x5555;
-+	pairs[1].key = 1;
-+	pairs[1].value = 0xAAAA;
-+	out = riscv_hwprobe(pairs, 2, 0, 0, 0);
-+	if (out != 0)
-+		return -9;
-+
-+	if (pairs[0].key != -1)
-+		return -10;
-+
-+	if ((pairs[1].key != 1) || (pairs[1].value == 0xAAAA))
-+		return -11;
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S b/tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
-new file mode 100644
-index 000000000000..ed8d28863b27
---- /dev/null
-+++ b/tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2022 Rivos, Inc */
-+
-+.text
-+.global riscv_hwprobe
-+riscv_hwprobe:
-+	# Put __NR_riscv_hwprobe in the syscall number register, then just shim
-+	# back the kernel's return.  This doesn't do any sort of errno
-+	# handling, the caller can deal with it.
-+	li a7, 258
-+	ecall
-+	ret
-diff --git a/tools/testing/selftests/riscv/libc.S b/tools/testing/selftests/riscv/libc.S
-new file mode 100644
-index 000000000000..1041bbea9b6b
---- /dev/null
-+++ b/tools/testing/selftests/riscv/libc.S
-@@ -0,0 +1,46 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (C) 2022 Rivos, Inc */
-+/* A C library */
-+
-+#if __riscv_xlen == 64
-+# define REG_S sd
-+#else
-+# define REG_S sw
-+#endif
-+
-+.text
-+.global _start
-+_start:
-+.option push
-+.option norelax
-+	la gp, __global_pointer$
-+.option pop
-+
-+	la sp, stack
-+
-+	la t0, heap
-+	la t1, brk
-+	REG_S t0, 0(t1)
-+
-+	li a0, 0
-+	li a1, 0
-+
-+	call main
-+
-+	li a7, 93
-+	ecall
-+
-+1:
-+	j 1b
-+
-+.data
-+brk:
-+	.long 0
-+
-+.global heap
-+heap:
-+.rep 65536
-+.byte 0
-+.endr
-+.global stack
-+stack:
 -- 
-2.25.1
-
+tejun
