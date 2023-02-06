@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136EC68B8E3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF2468B8E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjBFJpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 04:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S229897AbjBFJrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 04:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjBFJpR (ORCPT
+        with ESMTP id S229661AbjBFJre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:45:17 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34F6EFA2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:45:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675676715; x=1707212715;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hPsWrNl0e4B6gbmEyflkO0IZqCRbH7g6geB8jiNZ3F8=;
-  b=PVqqzTsL0wE6LRBn68NW4+QHI8zL5tlnalW9vBwRKExPzJgBqJFUOeJk
-   tID7/UWPbCnVJ/ey96ZQUPZPmR7dhNVyV/gAU1ZWSC004FJ0+41z3yg+/
-   6uVzp92pFgT+oW0ls/AtVp8GEfWV0Xdu/cesH5xZVUngx/XGMkY/3MkyL
-   GEzFuseHvu5FZtdB/kB189Foa958QyZaDSr1KnEebc+NsUGRFbAKDsMKk
-   RV7ZA+JTT5pIkU9zJ+5UmecDXUvaZsLo9yD5J5kX8oIxeIVzASd5w4gWW
-   tf51mRZNuuTRga4uJyuTpddL0160vBbmn6rOkQSNlp9f6HnaMkFcaInrE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="317177733"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="317177733"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 01:45:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="666432858"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="666432858"
-Received: from kgurski-mobl3.ger.corp.intel.com (HELO [10.213.203.226]) ([10.213.203.226])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 01:45:12 -0800
-Message-ID: <d58fff32-edad-4a7f-7409-7e57593df3ed@linux.intel.com>
-Date:   Mon, 6 Feb 2023 09:45:10 +0000
+        Mon, 6 Feb 2023 04:47:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DF6F747
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:47:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3EC760DD1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:47:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB7CC433EF;
+        Mon,  6 Feb 2023 09:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675676853;
+        bh=F1zVXNR0pCBjMMQRJ8RZFHCDx+mRQOAL4BbWy1HOY7k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MmtYlDvBA+icC7EHF91v2UQqj137PRgCJeR0R7irElNN2XAQRWYkoPLjOF7YTvLhV
+         d/TyiSSJWOj6PHx822sJRVsxxraMjugfbi/I+hJnpQAtam3RlTnKGg2j+ggl5Gk1xz
+         0yJL0hyh6jgQeOPU1ReWhrmc6yX8gKROOGFPU8r0=
+Date:   Mon, 6 Feb 2023 10:47:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Michael Straube <straube.linux@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] staging: r8188eu: correct error logic of
+ _rtw_init_recv_priv()
+Message-ID: <Y+DMsdD4l2qPpKjM@kroah.com>
+References: <20230204101654.10232-1-straube.linux@gmail.com>
+ <20230204101654.10232-3-straube.linux@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] drm/i915/gt: Avoid redundant pointer validity check
-Content-Language: en-US
-To:     Deepak R Varma <drv@mailo.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-References: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <Y91g081OauhQNxMe@ubun2204.myguest.virtualbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230204101654.10232-3-straube.linux@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi,
-
-Adding Matt & Thomas as potential candidates to review.
-
-Regards,
-
-Tvrtko
-
-On 03/02/2023 19:30, Deepak R Varma wrote:
-> The macro definition of gen6_for_all_pdes() expands to a for loop such
-> that it breaks when the page table is null. Hence there is no need to
-> again test validity of the page table entry pointers in the pde list.
-> This change is identified using itnull.cocci semantic patch.
+On Sat, Feb 04, 2023 at 11:16:54AM +0100, Michael Straube wrote:
+> Convert the function _rtw_init_recv_priv() away from returning _FAIL
+> and _SUCCESS, which uses inverted error logic. Return 0 for success
+> and negative values for failure instead.
 > 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
 > ---
-> Please note: Proposed change is compile tested only.
+>  drivers/staging/r8188eu/core/rtw_recv.c   | 17 +++++------------
+>  drivers/staging/r8188eu/os_dep/os_intfs.c |  2 +-
+>  2 files changed, 6 insertions(+), 13 deletions(-)
 > 
->   drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
-> index 5aaacc53fa4c..787b9e6d9f59 100644
-> --- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
-> +++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
-> @@ -258,8 +258,7 @@ static void gen6_ppgtt_free_pd(struct gen6_ppgtt *ppgtt)
->   	u32 pde;
->   
->   	gen6_for_all_pdes(pt, pd, pde)
-> -		if (pt)
-> -			free_pt(&ppgtt->base.vm, pt);
-> +		free_pt(&ppgtt->base.vm, pt);
->   }
->   
->   static void gen6_ppgtt_cleanup(struct i915_address_space *vm)
-> @@ -304,7 +303,7 @@ static void pd_vma_unbind(struct i915_address_space *vm,
->   
->   	/* Free all no longer used page tables */
->   	gen6_for_all_pdes(pt, ppgtt->base.pd, pde) {
-> -		if (!pt || atomic_read(&pt->used))
-> +		if (atomic_read(&pt->used))
->   			continue;
->   
->   		free_pt(&ppgtt->base.vm, pt);
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index 70d43c10e53d..4c823bbcc22b 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -99,10 +99,8 @@ static int rtl8188eu_init_recv_priv(struct adapter *padapter)
+>  int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
+>  {
+>  	int i;
+> -
+>  	struct recv_frame *precvframe;
+> -
+> -	int	res = _SUCCESS;
+> +	int err = 0;
+>  
+>  	spin_lock_init(&precvpriv->lock);
+>  
+> @@ -115,11 +113,8 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
+>  	precvpriv->free_recvframe_cnt = NR_RECVFRAME;
+>  
+>  	precvpriv->pallocated_frame_buf = vzalloc(NR_RECVFRAME * sizeof(struct recv_frame) + RXFRAME_ALIGN_SZ);
+> -
+> -	if (!precvpriv->pallocated_frame_buf) {
+> -		res = _FAIL;
+> -		goto exit;
+> -	}
+> +	if (!precvpriv->pallocated_frame_buf)
+> +		return -ENOMEM;
+>  
+>  	precvpriv->precv_frame_buf = (u8 *)ALIGN((size_t)(precvpriv->pallocated_frame_buf), RXFRAME_ALIGN_SZ);
+>  
+> @@ -139,16 +134,14 @@ int _rtw_init_recv_priv(struct recv_priv *precvpriv, struct adapter *padapter)
+>  	}
+>  	precvpriv->rx_pending_cnt = 1;
+>  
+> -	if (rtl8188eu_init_recv_priv(padapter))
+> -		res = _FAIL;
+> +	err = rtl8188eu_init_recv_priv(padapter);
+
+You are keeping the original logic here, but this is odd, nothing
+actually changes if this is an error except you return it?  That seems
+wrong, and you might want to fix that up in further patches.
+
+thanks,
+
+greg k-h
