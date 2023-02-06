@@ -2,111 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9720568BAF1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B904068BAFA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjBFLFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S229781AbjBFLJe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 06:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjBFLFt (ORCPT
+        with ESMTP id S229526AbjBFLJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:05:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69A0199E1;
-        Mon,  6 Feb 2023 03:05:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7196160E7F;
-        Mon,  6 Feb 2023 11:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539ABC433D2;
-        Mon,  6 Feb 2023 11:05:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675681546;
-        bh=3ssH3tyyX9Wb/OOZG7J5+HJgVkFrClE5hsZSLWktyNM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VMIa50dZ3HGJEZYNP2DN7M2vNBlXnI3ip7kSC5LkVLi2rS5u1MffbjVgbjrgO6JEj
-         6jD7041iJkFWALRFMCi8CY3dVzG4NpnRIiP29SVxrMDJeESW8qLO1rjyWKoanWnYV8
-         VABXRQwZlOfL27DjJjVy7oqHOEinD0/IxWZlWBxsBct0Ohpob3uF9YgK3iFCMeZJXh
-         bHbQyTbmSMDe8iO/QM5QmAASCEHcw2LFxSNG9hDWHWQ3JK3mSpNnFoI1IYR7AllRE+
-         MWZospnEVhToI9PYoSZK9+1vIRGjqQSTxrpJ5XaAUnSTQYMCyXsQJ+eTSrlrOBO/P3
-         gO1c2xJrjlJZA==
-Date:   Mon, 6 Feb 2023 11:05:41 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH] cgroup/cpuset: Don't filter offline CPUs in
- cpuset_cpus_allowed() for top cpuset tasks
-Message-ID: <20230206110540.GA11024@willie-the-truck>
-References: <20230203164040.213437-1-longman@redhat.com>
- <Y94s8mzrE9VyUJLa@hirez.programming.kicks-ass.net>
- <f356b916-1c10-1565-73fb-34027c6c510a@redhat.com>
+        Mon, 6 Feb 2023 06:09:32 -0500
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B229913D71
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:09:31 -0800 (PST)
+Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay03.hostedemail.com (Postfix) with ESMTP id 59B52A0C66;
+        Mon,  6 Feb 2023 11:09:30 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf04.hostedemail.com (Postfix) with ESMTPA id 0C6A220027;
+        Mon,  6 Feb 2023 11:09:27 +0000 (UTC)
+Message-ID: <bbdf99df867786510f709473fa2c3744dbf27bb4.camel@perches.com>
+Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
+ 12 chars
+From:   Joe Perches <joe@perches.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Mon, 06 Feb 2023 03:09:26 -0800
+In-Reply-To: <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com>
+References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
+         <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
+         <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
+         <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f356b916-1c10-1565-73fb-34027c6c510a@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Queue-Id: 0C6A220027
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: bnxitis48kesjoeto6hdrcmypydkzqmz
+X-Rspamd-Server: rspamout05
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1//DDzdb6fyz0gA5ivMPJw+xCLvCwbCB3Y=
+X-HE-Tag: 1675681767-752193
+X-HE-Meta: U2FsdGVkX19Q90r1YzDwYExj8K7CXjQNFc18ipJ0EFKsYG5TvvbNyI00CKzqWTuvGYpjxP10LFmjpgUpb99OBg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 12:00:25AM -0500, Waiman Long wrote:
-> On 2/4/23 05:01, Peter Zijlstra wrote:
-> > On Fri, Feb 03, 2023 at 11:40:40AM -0500, Waiman Long wrote:
-> > > Since commit 8f9ea86fdf99 ("sched: Always preserve the user
-> > > requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
-> > > __sched_setaffinity() unconditionally. This helps to expose a bug in
-> > > the current cpuset hotplug code where the cpumasks of the tasks in
-> > > the top cpuset are not updated at all when some CPUs become online or
-> > > offline. It is likely caused by the fact that some of the tasks in the
-> > > top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
-> > > 
-> > > One way to reproduce this as suggested by Peter is:
-> > >   - boot machine
-> > >   - offline all CPUs except one
-> > >   - taskset -p ffffffff $$
-> > >   - online all CPUs
-> > > 
-> > > Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
-> > > includes offline CPUs for those tasks that are in the top cpuset. For
-> > > tasks not in the top cpuset, the old rule applies and only online CPUs
-> > > will be returned in the mask since hotplug events will update their
-> > > cpumasks accordingly.
-> > So you get the task_cpu_possible_mask() interaction vs cpusets horribly
-> > wrong here, but given the very sorry state of task_cpu_possible_mask()
-> > correctness of cpuset as a whole that might just not matter at this
-> > point.
-> > 
-> > I do very much hate how you add exceptions on exceptions instead of
-> > looking to do something right :-(
-> > 
-> > Fixing that parition case in my patch is 1 extra line and then I think
-> > it fundamentally does the right thing and can serve as a basis for
-> > fixing cpuset as a whole.
+On Mon, 2023-02-06 at 09:38 +0100, Geert Uytterhoeven wrote:
+> Hi Joe,
 > 
-> I am not saying that your patch is incorrect other than handling the
-> partition case. However, it is rather complex and is hard to understand
-> especially for those that are not that familiar with the cpuset code. From
-> the maintainability point of view, a simpler solution that is easier to
-> understand is better.
+> On Sat, Feb 4, 2023 at 5:59 PM Joe Perches <joe@perches.com> wrote:
+> > On Sun, 2023-01-29 at 09:52 -0800, Joe Perches wrote:
+> > > On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neuschäfer wrote:
+> > > > By now, `git log --pretty=%h` (on my copy of linux.git) prints commit
+> > > > hashes with 13 digits, because of the number of objects.
+> > > > 
+> > > > Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
+> > > 
+> > > NAK without updating the process docs first.
+> > 
+> > btw: it looks like 12 will still be sufficient for awhile yet
+> > 
+> > $ git count
+> > total 1154908
 > 
-> If we want to get it into the next merge windows, there isn't much time left
-> for linux-next testing. So a lower risk solution is better from that
-> perspective too.
+> Hmm, Ubuntu git too old?
 
-This needs to land for 6.2 to fix the regression. The next merge window is
-too late. That's why I cooked the reverts [1] as an alternative.
+Don't think so
 
-Will
+$ git --version
+git version 2.39.1
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=ssa-reverts
+More likely just using Linus' tree and not a
+development tree with a bunch of branches.
+
+I've got a -next tree with history back to next-20151106
+with a bunch of missing dates because I don't fetch it
+every day.  It has:
+
+$ git tag | grep next | wc -l
+1134
+
+There I get:
+
+$ git -c core.abbrev=5 log --pretty=format:%h | \
+  perl -nE 'chomp;say length' | sort | uniq -c | sort -n -k2
+      6 5
+ 542082 6
+ 568573 7
+  51124 8
+   3249 9
+    217 10
+     14 11
+      1 12
+
+> I've been using core.abbrev=16 for a while, and some maintainers
+> reject my patches with Fixes: tags because of that...
+
+Perhaps because that's not the documented format?
+
+> Is it really worthwhile to save on the number of hexits, making lookup
+> of some commits more inconvenient?
+> 
+> Note that while "git show edb9b8" suggests edb9b8f[...],
+> gitweb says bad object id:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=edb9b8
+
+hmm.  Not here.
+
+$ git show edb9b8
+tree edb9b8
+
+Kconfig
+Makefile
+fmvj18x_cs.c
+
+
