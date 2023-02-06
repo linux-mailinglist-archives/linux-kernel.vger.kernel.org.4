@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C046968C736
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC5A68C739
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBFUDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S229663AbjBFUFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBFUDh (ORCPT
+        with ESMTP id S229490AbjBFUE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:03:37 -0500
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AFB1EFED;
-        Mon,  6 Feb 2023 12:03:35 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-4b718cab0e4so169892857b3.9;
-        Mon, 06 Feb 2023 12:03:35 -0800 (PST)
+        Mon, 6 Feb 2023 15:04:59 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC191EFED;
+        Mon,  6 Feb 2023 12:04:58 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id cf42so19345045lfb.1;
+        Mon, 06 Feb 2023 12:04:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zk+ewRFBhXIWi/NAH6JaxjNcUKFG2te5CNQ01jAgjCE=;
+        b=BkRHgrWSUAjfU15CeaXwVzboWNMD5KWAoUgjN1dKzTEO5Xz1Bhy3ePoyPYPHLQ4lE/
+         ckGqry3+R7L0ypILO0CtXJJ/QyI0bDVfDAX02niqoIuuBpk77LzGslSNsW799so3lsfu
+         zJUL4MxlvHzb5wr1quEP2WU2B+itSIOzlmnKyqj2UJsKzch1WCQTPyQaZ/m1IFOahiRQ
+         E7RLpDuoiiExjdWCQGVzmoErqL3jD6PeOYghX8XLiJqGgExB11Oo4l3epyvfdJ+uIxmx
+         IxRqrGCIVo/Oq/ymwTSWzF7XzdUI3pJIixX+LyIab6E3hgkidnxXV0jvuSWMaO5XHdEm
+         CUCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u9SWi5xYTHrRjVguNFjjUy6U7YmMLQk0y/iYmmBjvHE=;
-        b=IapmhMaiVS2Tnsg/VmAp3HiFJFQGBE0zkIAwmaWheGqbyUGZSQvisRaM9lfKTJMIX7
-         NR2zKlkFyH8WQCZlWMzI16rVOwiDA/4bT46LzLvO6FXXpHW2PkLXVh+0dXdkuVBcKMwM
-         3/9YuEwyRVroTFnhpFWSJnj/O/Bfmu/6bmyfXgXVlyHpR9p8C67IkwlrFwpZnx5Frxgp
-         fkORN/uQq+zxUIeeptdZprUfREwWc3DKu4zwj8xRb0Gklphu7l7+s3XosLFH7R5IGvbE
-         y9/UbWztLhDhO2EzHIUi/Tbj3pNML/z7NoUtLAsodjZ8F/9df+nRCAyaJIFQGMFg0ekk
-         CE1A==
-X-Gm-Message-State: AO0yUKV3fXwBQDQAXOme4OJgVGrldCRgWx/wcLSP7QSXWKEP0OhYmQGI
-        wsuogzxXNMskK1bhX/ONLUvk8gpelrVurQ==
-X-Google-Smtp-Source: AK7set9lhlmOh2oWsFNvI/1ZX2VopgHYoXoj88prztbjdObNM86GKe0Iyns304jbOcBSfjR4aNrfmQ==
-X-Received: by 2002:a81:9aca:0:b0:529:8dd1:8c51 with SMTP id r193-20020a819aca000000b005298dd18c51mr179709ywg.43.1675713813834;
-        Mon, 06 Feb 2023 12:03:33 -0800 (PST)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id de8-20020a05620a370800b0071d3e432c9bsm8271748qkb.28.2023.02.06.12.03.32
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zk+ewRFBhXIWi/NAH6JaxjNcUKFG2te5CNQ01jAgjCE=;
+        b=ImyQ1LNrKNn/nABcI5EjQc//kTJg5+yIBY8EudTtLHFb6GrgWuBMzdteTA0rouV2Wl
+         4LWNwJTvbSNnMXb9CIf/09Xm9tVDviSUjOn97qLSvgP93J8+wAh4wjsSw1dU6OoFQiCS
+         uuECJCmxP9i/hO4Vs3inKgQznWYmHg9yv/ezdXE66dLXfNnY7fDeV8qYGHneaqZsYIfA
+         qz9O06bdzmb6C0MtmhWRyU8LUYEiY+qdifxKIa5AgbkptMpehXJ9oMIlbfbSpkGbbHJo
+         8nEW6oAcXEx7Ec4ethxaGJpCDRPT1L7n0yNjFfUmZdLvVxEcAVDTAkBgGOykTDVws5cx
+         pM+Q==
+X-Gm-Message-State: AO0yUKWBRYDGoGStKC6TaOzqdJh8o6Cze0H3urplmRcKZKS3m7CeEokK
+        dTeiYd2cjbIjmioicQVY0fmP5chaGdA=
+X-Google-Smtp-Source: AK7set/VhtyMGalxRjvC49B4taQLrBSwKjz4qGzPJm8AOaXdKY978ZfmKRCdkQvQG8x7pDdDyT8uxw==
+X-Received: by 2002:ac2:5ddc:0:b0:4cc:586b:183b with SMTP id x28-20020ac25ddc000000b004cc586b183bmr38150lfq.60.1675713896919;
+        Mon, 06 Feb 2023 12:04:56 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.73.245])
+        by smtp.gmail.com with ESMTPSA id d30-20020a0565123d1e00b004cc9f7030f3sm835065lfv.292.2023.02.06.12.04.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 12:03:32 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-527979e8670so83253777b3.10;
-        Mon, 06 Feb 2023 12:03:32 -0800 (PST)
-X-Received: by 2002:a81:8285:0:b0:507:86ae:c733 with SMTP id
- s127-20020a818285000000b0050786aec733mr45244ywf.358.1675713811751; Mon, 06
- Feb 2023 12:03:31 -0800 (PST)
+        Mon, 06 Feb 2023 12:04:56 -0800 (PST)
+Subject: Re: [PATCH] usb: storage: sddr55: avoid integer overflow
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Karina Yankevich <k.yankevich@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20230203201821.483477-1-k.yankevich@omp.ru>
+ <Y91zL8OWTUd8iTXt@rowland.harvard.edu>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <53bc0584-51eb-8bb7-de48-ca07fccafc19@gmail.com>
+Date:   Mon, 6 Feb 2023 23:04:54 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20230203193523.never.667-kees@kernel.org> <6c728dfc-d777-4beb-b463-649704c81a5e@app.fastmail.com>
-In-Reply-To: <6c728dfc-d777-4beb-b463-649704c81a5e@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Feb 2023 21:03:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXXSwYYoUMskhcgjF9SVjraZC-UsBT3sN+xkcUAYmJj4Q@mail.gmail.com>
-Message-ID: <CAMuHMdXXSwYYoUMskhcgjF9SVjraZC-UsBT3sN+xkcUAYmJj4Q@mail.gmail.com>
-Subject: Re: [PATCH] uaccess: Add minimum bounds check on kernel buffer size
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y91zL8OWTUd8iTXt@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Hello!
 
-On Fri, Feb 3, 2023 at 10:23 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Fri, Feb 3, 2023, at 20:35, Kees Cook wrote:
-> > --- a/include/linux/uaccess.h
-> > +++ b/include/linux/uaccess.h
-> > @@ -329,6 +329,10 @@ copy_struct_from_user(void *dst, size_t ksize,
-> > const void __user *src,
-> >       size_t size = min(ksize, usize);
-> >       size_t rest = max(ksize, usize) - size;
-> >
-> > +     /* Double check if ksize is larger than a known object size. */
-> > +     if (WARN_ON_ONCE(ksize > __builtin_object_size(dst, 1)))
-> > +             return -E2BIG;
-> > +
->
-> WARN_ON_ONCE() may be a little expensive since that adds two
-> comparisons and a static variable to each copy, but it's probably
-> fine.
+On 2/3/23 11:48 PM, Alan Stern wrote:
+[...]
+>> We're possibly losing information by shifting an int.
+>> Fix it by adding the necessary cast.
+> 
+> Nonsense.  The card's _total_ capacity is no larger than 128 MB, so a 
+> page address can't possibly overflow an int.
 
-When seeing this, I was a bit worried about the size increase.
-Hence I gave it a try on atari_defconfig and ran bloat-o-meter.
-Surprisingly, there was no size increase at all, as all checks
-were optimized away.
+   Then the 'address' variables shouldn't be declared *unsigned long*, right?
+That should fix the SVACE's report as well. Would you accept such a patch?
 
-Hence perhaps this can become a compile-time check?
+> Alan Stern
 
-Gr{oetje,eeting}s,
+[...]
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+MBR, Sergey
