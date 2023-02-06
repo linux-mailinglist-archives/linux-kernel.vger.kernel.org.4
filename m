@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF23768B614
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0AF68B64C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjBFHMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 02:12:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S229490AbjBFHVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 02:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjBFHMq (ORCPT
+        with ESMTP id S229448AbjBFHVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 02:12:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D6CE;
-        Sun,  5 Feb 2023 23:12:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E13C160CE8;
-        Mon,  6 Feb 2023 07:12:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A56D3C433D2;
-        Mon,  6 Feb 2023 07:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675667564;
-        bh=LsLH3jBO12QKh3Xi1FZhgwHQZkDfk6ZGnO+uu7Ij+Cg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Evdhd9dLdsAAmEhE5K/dFDt6VYM5/G2luLtgqLa/xCoawqvnwkQkqNgwxZlu/YhJh
-         r0/QipWMHqBk3ct51Y+zS7rGgy41Wvpw/A0pOeMsYk0E4rWZfPJnCCYd2/PKm5DBh2
-         CzH68o8K5VJHPGUOtVU5WfaJPVzzCu7ZDebw3YGs=
-Date:   Mon, 6 Feb 2023 08:12:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ron Economos <re@w6rz.net>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/20] 5.15.92-rc1 review
-Message-ID: <Y+CoaR9hEzyB+6s5@kroah.com>
-References: <20230203101007.985835823@linuxfoundation.org>
- <de146bc5-50b8-f347-31cf-70b5e93a4541@w6rz.net>
+        Mon, 6 Feb 2023 02:21:46 -0500
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FEA1ABED;
+        Sun,  5 Feb 2023 23:21:43 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vb-4CDB_1675668031;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Vb-4CDB_1675668031)
+          by smtp.aliyun-inc.com;
+          Mon, 06 Feb 2023 15:21:39 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     linkinjeon@kernel.org
+Cc:     sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
+        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] ksmbd: Fix parameter name and comment mismatch
+Date:   Mon,  6 Feb 2023 15:20:29 +0800
+Message-Id: <20230206072029.32574-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de146bc5-50b8-f347-31cf-70b5e93a4541@w6rz.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 12:55:36AM -0800, Ron Economos wrote:
-> On 2/3/23 2:13 AM, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.92 release.
-> > There are 20 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
-> > Anything received after that time might be too late.
-> > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.92-rc1.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
-> 
-> Tested-by: Ron Economos <re@w6rz.net>
-> 
+fs/ksmbd/vfs.c:965: warning: Function parameter or member 'attr_value' not described in 'ksmbd_vfs_setxattr'.
 
-Thanks for testing and letting me know,
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3946
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ fs/ksmbd/vfs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-greg k-h
+diff --git a/fs/ksmbd/vfs.c b/fs/ksmbd/vfs.c
+index aa1300b7bfc2..5ea9229dad2c 100644
+--- a/fs/ksmbd/vfs.c
++++ b/fs/ksmbd/vfs.c
+@@ -952,9 +952,9 @@ ssize_t ksmbd_vfs_getxattr(struct mnt_idmap *idmap,
+  * ksmbd_vfs_setxattr() - vfs helper for smb set extended attributes value
+  * @idmap:	idmap of the relevant mount
+  * @dentry:	dentry to set XATTR at
+- * @name:	xattr name for setxattr
+- * @value:	xattr value to set
+- * @size:	size of xattr value
++ * @attr_name:	xattr name for setxattr
++ * @attr_value:	xattr value to set
++ * @attr_size:	size of xattr value
+  * @flags:	destination buffer length
+  *
+  * Return:	0 on success, otherwise error
+-- 
+2.20.1.7.g153144c
+
