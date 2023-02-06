@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6807068C731
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C046968C736
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjBFUAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S229657AbjBFUDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjBFUAL (ORCPT
+        with ESMTP id S229500AbjBFUDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:00:11 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3391E2B606
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:00:02 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id e22so8165109ejb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:00:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOkKygWO4dfx/Wc4QpfphIFrTmEThHoWMJ1kNrj1PgU=;
-        b=eF0LRchkacajklSZFjbRlJ4l3jdWdY5q+idJXMOsV05Rj8slA3HPoC+tN5iM7k4b+p
-         NJDt8Ep4y9nNcnS5xYPM01qnWWGa/IxxitTsRNwLQXDCmkoabkDahC2zAnanJxNSj3U2
-         4/f6qiTJGkH+OaLuZZ6XWqhHeIXMxRi3LuybI=
+        Mon, 6 Feb 2023 15:03:37 -0500
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AFB1EFED;
+        Mon,  6 Feb 2023 12:03:35 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-4b718cab0e4so169892857b3.9;
+        Mon, 06 Feb 2023 12:03:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOkKygWO4dfx/Wc4QpfphIFrTmEThHoWMJ1kNrj1PgU=;
-        b=lELmOq1UcW10WMEfC0UYIwS52hePICOF6C1cmpIt4wpUddPTmcbIEHLNyT6lI3ptUF
-         jL5gYgxwJy5lUMQJFXCpd2kJ345aD5UtjLpee+ADjjkAY2zwKhRXTm23VEoxm1WxQsdH
-         PRZnlCo4DkM1A6+mbGU34NPowFlYzNg72RriZlzP6mueC92pEAb8QTomjV0i3Dmoc6Mi
-         A2yDd+Wkkiydry9+3H3rE9P0L9NJCYMiMk0NTUdNugeSS5G4RVV5FOhndKSTdM3KiVGx
-         Jps3hj1sLUF6xeB7l9xC0dBj8gdmeRpTvy6qHxeBUT6cD3VDxWtl/0ypbGo/AJSCPNMz
-         6rMg==
-X-Gm-Message-State: AO0yUKWyzj5ue8iDvEBrJqQMiV3aDpnCRdYTYZOXzFQfYjlL1dwyuDTK
-        6/mKTmcA9pDtHVhUJMoVYDjLrv6C0XTO1RBsE1w=
-X-Google-Smtp-Source: AK7set9RHV0QjygX+uikQ5kc0lj4dCK1CC8TmGOidQgts+9c1DKuD8W1Fj6d7POKXkKBHMxfqH+9UQ==
-X-Received: by 2002:a17:906:757:b0:88f:7d3b:b90 with SMTP id z23-20020a170906075700b0088f7d3b0b90mr535923ejb.42.1675713600685;
-        Mon, 06 Feb 2023 12:00:00 -0800 (PST)
-Received: from [192.168.1.149] ([80.208.70.109])
-        by smtp.gmail.com with ESMTPSA id m5-20020a1709062b8500b00872c0bccab2sm5858671ejg.35.2023.02.06.11.59.59
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u9SWi5xYTHrRjVguNFjjUy6U7YmMLQk0y/iYmmBjvHE=;
+        b=IapmhMaiVS2Tnsg/VmAp3HiFJFQGBE0zkIAwmaWheGqbyUGZSQvisRaM9lfKTJMIX7
+         NR2zKlkFyH8WQCZlWMzI16rVOwiDA/4bT46LzLvO6FXXpHW2PkLXVh+0dXdkuVBcKMwM
+         3/9YuEwyRVroTFnhpFWSJnj/O/Bfmu/6bmyfXgXVlyHpR9p8C67IkwlrFwpZnx5Frxgp
+         fkORN/uQq+zxUIeeptdZprUfREwWc3DKu4zwj8xRb0Gklphu7l7+s3XosLFH7R5IGvbE
+         y9/UbWztLhDhO2EzHIUi/Tbj3pNML/z7NoUtLAsodjZ8F/9df+nRCAyaJIFQGMFg0ekk
+         CE1A==
+X-Gm-Message-State: AO0yUKV3fXwBQDQAXOme4OJgVGrldCRgWx/wcLSP7QSXWKEP0OhYmQGI
+        wsuogzxXNMskK1bhX/ONLUvk8gpelrVurQ==
+X-Google-Smtp-Source: AK7set9lhlmOh2oWsFNvI/1ZX2VopgHYoXoj88prztbjdObNM86GKe0Iyns304jbOcBSfjR4aNrfmQ==
+X-Received: by 2002:a81:9aca:0:b0:529:8dd1:8c51 with SMTP id r193-20020a819aca000000b005298dd18c51mr179709ywg.43.1675713813834;
+        Mon, 06 Feb 2023 12:03:33 -0800 (PST)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id de8-20020a05620a370800b0071d3e432c9bsm8271748qkb.28.2023.02.06.12.03.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 12:00:00 -0800 (PST)
-Message-ID: <096fa00d-8625-172c-74ba-134ddb1395ef@rasmusvillemoes.dk>
-Date:   Mon, 6 Feb 2023 20:59:59 +0100
+        Mon, 06 Feb 2023 12:03:32 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-527979e8670so83253777b3.10;
+        Mon, 06 Feb 2023 12:03:32 -0800 (PST)
+X-Received: by 2002:a81:8285:0:b0:507:86ae:c733 with SMTP id
+ s127-20020a818285000000b0050786aec733mr45244ywf.358.1675713811751; Mon, 06
+ Feb 2023 12:03:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] [RESEND v4] printf: fix errname.c list
-Content-Language: en-US, da
-To:     Arnd Bergmann <arnd@kernel.org>, Petr Mladek <pmladek@suse.com>,
+References: <20230203193523.never.667-kees@kernel.org> <6c728dfc-d777-4beb-b463-649704c81a5e@app.fastmail.com>
+In-Reply-To: <6c728dfc-d777-4beb-b463-649704c81a5e@app.fastmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 6 Feb 2023 21:03:19 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXXSwYYoUMskhcgjF9SVjraZC-UsBT3sN+xkcUAYmJj4Q@mail.gmail.com>
+Message-ID: <CAMuHMdXXSwYYoUMskhcgjF9SVjraZC-UsBT3sN+xkcUAYmJj4Q@mail.gmail.com>
+Subject: Re: [PATCH] uaccess: Add minimum bounds check on kernel buffer size
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-References: <20230206194126.380350-1-arnd@kernel.org>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20230206194126.380350-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02/2023 20.40, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> On most architectures, gcc -Wextra warns about the list of error
-> numbers containing both EDEADLK and EDEADLOCK:
-> 
+Hi Arnd,
 
-[...]
+On Fri, Feb 3, 2023 at 10:23 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Fri, Feb 3, 2023, at 20:35, Kees Cook wrote:
+> > --- a/include/linux/uaccess.h
+> > +++ b/include/linux/uaccess.h
+> > @@ -329,6 +329,10 @@ copy_struct_from_user(void *dst, size_t ksize,
+> > const void __user *src,
+> >       size_t size = min(ksize, usize);
+> >       size_t rest = max(ksize, usize) - size;
+> >
+> > +     /* Double check if ksize is larger than a known object size. */
+> > +     if (WARN_ON_ONCE(ksize > __builtin_object_size(dst, 1)))
+> > +             return -E2BIG;
+> > +
+>
+> WARN_ON_ONCE() may be a little expensive since that adds two
+> comparisons and a static variable to each copy, but it's probably
+> fine.
 
-> To ensure these are correct, add static_assert lines that verify
-> all the remaining aliases are in fact identical to the canonical
-> name.
-> 
-> Fixes: 57f5677e535b ("printf: add support for printing symbolic error names")
-> Cc: Petr Mladek <pmladek@suse.com>
-> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+When seeing this, I was a bit worried about the size increase.
+Hence I gave it a try on atari_defconfig and ran bloat-o-meter.
+Surprisingly, there was no size increase at all, as all checks
+were optimized away.
 
-You may also add Acked-by: me.
+Hence perhaps this can become a compile-time check?
 
-> Acked-by: Uwe Kleine-König <uwe@kleine-koenig.org>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Link: https://lore.kernel.org/all/20210514213456.745039-1-arnd@kernel.org/
-> Link: https://lore.kernel.org/all/20210927123409.1109737-1-arnd@kernel.org/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> I sent this a few times, but it never made it in so far. The warning
-> still shows up when enabling extra warnings, and this is an actual bug.
+Gr{oetje,eeting}s,
 
-Petr, please pick this up.
+                        Geert
 
-Rasmus
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
