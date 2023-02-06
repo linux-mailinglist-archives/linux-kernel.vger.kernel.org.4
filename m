@@ -2,193 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9070368C3E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B5D68C3ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjBFQyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S230195AbjBFQ4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjBFQyO (ORCPT
+        with ESMTP id S229834AbjBFQ4l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:54:14 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F74416328;
-        Mon,  6 Feb 2023 08:54:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675702450; x=1707238450;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VAsAX1g8MgazjysNTQpi5y5anirOqI9txAkZG3IpJe8=;
-  b=dOpb9kvanoGHdhnGm6qLU5zhdpzn2Yu1dwwFofqk0wZO0jnMR7tmtACH
-   ZExvhFAN9RxHWvl0ykcbLpWFnfz25CoBJkHnCJGhY3NAfjn3bfymVh0Er
-   IIaVfaCuvvXgD3m9/1y9X+Lg1g2fvPNGq5bhGDMOn74gw2zltGlMd0v9b
-   6e0gNww35p+Vxv0V6VSiWmY4l1u+TZR59oC5BKBH2JgBZOHfIx48WNN9R
-   46wix1EATI1LIPr87y0X3hkN2Eu9wtsws60GPRE0DnlpNk4Zj/WN8UVhJ
-   pQn0vAlZFoXWkvosyPLiFSODDW89fmykZBIHFsrw1DS857Y6yHPKX5REx
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="393852815"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="393852815"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 08:54:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="735197329"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="735197329"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Feb 2023 08:54:07 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pP4ko-0002ge-0m;
-        Mon, 06 Feb 2023 16:54:06 +0000
-Date:   Tue, 7 Feb 2023 00:53:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bastien Nocera <hadess@hadess.net>, linux-input@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-Subject: Re: [PATCH 1/3] HID: logitech-hidpp: Add more debug statements
-Message-ID: <202302070034.GqDB3Cje-lkp@intel.com>
-References: <20230206135808.8840-1-hadess@hadess.net>
+        Mon, 6 Feb 2023 11:56:41 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A9268C;
+        Mon,  6 Feb 2023 08:56:39 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 316GuEqO004598;
+        Mon, 6 Feb 2023 10:56:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675702574;
+        bh=v9ZYSO/ymnvx8bWPKuYYeREqbLf0jUXDtJGQaIeZtvg=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=oBUDxHoeGOaG1FEQnvgsQPGGV+DYB1aj9L670uQuOpPW9hGlmBjvKwTEV9jIueag0
+         cGAPhWnQzW0B0da6TFvfwUqYPjAKcByHDjHxYeVvAWpbOD2gaR+ITAoVbOxvCTlOoh
+         nZWCymQzLXf69YeeT9eToZGqO2biYa9uDxCNiVL0=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 316GuE8i110007
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Feb 2023 10:56:14 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
+ Feb 2023 10:56:14 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 6 Feb 2023 10:56:14 -0600
+Received: from [10.250.235.106] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 316Gu85B046178;
+        Mon, 6 Feb 2023 10:56:08 -0600
+Message-ID: <d0a6be9e-1597-bd1a-84f3-390820e73a98@ti.com>
+Date:   Mon, 6 Feb 2023 22:26:07 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206135808.8840-1-hadess@hadess.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v7 3/6] drm/tidss: Add support for AM625 DSS
+Content-Language: en-US
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230125113529.13952-1-a-bhatia1@ti.com>
+ <20230125113529.13952-4-a-bhatia1@ti.com>
+ <ab6f52bb-a3f5-afda-c037-f009153a0bb6@ideasonboard.com>
+ <1662a593-8a5d-9214-8a3e-ef2699a35265@ti.com>
+ <12ba1f03-d6dd-c9c5-abf0-e9298dc22f28@ideasonboard.com>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <12ba1f03-d6dd-c9c5-abf0-e9298dc22f28@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bastien,
+Hi Tomi,
 
-I love your patch! Perhaps something to improve:
+On 06-Feb-23 16:28, Tomi Valkeinen wrote:
+> On 05/02/2023 16:31, Aradhya Bhatia wrote:
+>>
+>>
+>> On 03-Feb-23 21:03, Tomi Valkeinen wrote:
+>>> On 25/01/2023 13:35, Aradhya Bhatia wrote:
+>>>> Add support for the DSS controller on TI's new AM625 SoC in the tidss
+>>>> driver.
+>>>>
+>>>> The first video port (VP0) in am625-dss can output OLDI signals through
+>>>> 2 OLDI TXes. A 3rd output port has been added with "DISPC_PORT_OLDI" bus
+>>>> type.
+>>>
+>>> Not a big thing here as you add support for a new SoC, but the ordering
+>>> of the patches is not optimal. Here you add the AM625 DSS support, but
+>>> then you continue actually adding the DSS support (well, mainly OLDI) in
+>>> the following patches.
+>>>
+>>> I think patch 6 could be before this patch. Parts of patch 4 could also
+>>> be before this patch. The AM65X renames from patch 5 could be before
+>>> this patch.
+>>
+>> I can move whole of Patch 6 and even of Patch 4 before this one. I have
+>> mentioned 'AM625-DSS' in a couple comments which I can make generic,
+>> and the rest everything is SoC-agnostic.
+>>
+>> I haven't tried this, but my concern is if we break patch 5 into 2
+>> separate patches,
+>>
+>> i. AM65X rename plus SoC based switch case, and
+>> ii. Addition of AM625 SoC case
+>>
+>> then I might have to overwrite some changes implemented during (i) in
+>> (ii). I don't suppose that would be okay, would it?
+> 
+> I'm not sure I follow here. Wouldn't (i) be a valid patch in its own?
+> Nothing wrong in expanding that later (even if you end up changing a lot
+> of it).
+> 
 
-[auto build test WARNING on hid/for-next]
-[also build test WARNING on linus/master v6.2-rc7 next-20230206]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+(i) would be a valid patch, but implementing (ii) would over-write
+certain changes done in (i), albeit small changes in terms of brackets
+and indents. That didn't feel right initially and hence the question.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/HID-logitech-hidpp-Retry-commands-when-device-is-busy/20230206-215940
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20230206135808.8840-1-hadess%40hadess.net
-patch subject: [PATCH 1/3] HID: logitech-hidpp: Add more debug statements
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230207/202302070034.GqDB3Cje-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f201298961e2cb71de94a0c8632cb9376975959f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bastien-Nocera/HID-logitech-hidpp-Retry-commands-when-device-is-busy/20230206-215940
-        git checkout f201298961e2cb71de94a0c8632cb9376975959f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/hid/
+> That said, I don't think this is a very important topic. There are only
+> a few commits in the history that might be problematic. A simple fix
+> would be to add all the features first, and only last add the compatible
+> string for am625.
+> 
+> Or do all the changes for am625 in a single patch, and try to implement
+> all the generic restructuring work before that.
+> 
+> Here we do have to change the vp-to-output mapping management, so maybe
+> the second option won't be simple enough, and it's better to do the
+> am625 changes in pieces, as in the first option.
+> 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Yeah, the first option does seem a little less complicated. Will try to
+re-order this as much clearly as possible.
 
-All warnings (new ones prefixed by >>):
+> So, it's really up to you. Just wanted to raise this possible issue so
+> that you are aware of it and can do any easy fixes (if there are such).
+> 
+>> Also, is it important to keep the compatible-addition patches of
+>> DT-binding and driver next to each other in the series? Or should
+>> the DT-binding patches should be the first ones? Just curious! =)
+> 
+> I believe the convention is to have the DT-binding changes before you
+> add the compatible string to the driver (if I recall right checkpatch or
+> some other checking tool complains if you add a driver for a compatible
+> that doesn't have a DT binding). Generic restructurings could be before
+> the DT patch, of course, but usually I like to keep the DT binding
+> changes at the very beginning of the series.
+> 
 
-   In file included from include/linux/printk.h:566,
-                    from include/asm-generic/bug.h:22,
-                    from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from arch/m68k/include/asm/irqflags.h:6,
-                    from include/linux/irqflags.h:16,
-                    from arch/m68k/include/asm/atomic.h:6,
-                    from include/linux/atomic.h:7,
-                    from include/linux/rcupdate.h:25,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from drivers/hid/hid-logitech-hidpp.c:13:
-   drivers/hid/hid-logitech-hidpp.c: In function 'hidpp_send_fap_command_sync':
->> drivers/hid/hid-logitech-hidpp.c:343:25: warning: format '%ld' expects argument of type 'long int', but argument 5 has type 'unsigned int' [-Wformat=]
-     343 |                         "Invalid number of parameters passed to command (%d != %ld)\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:223:29: note: in definition of macro '__dynamic_func_call_cls'
-     223 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:249:9: note: in expansion of macro '_dynamic_func_call_cls'
-     249 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:272:9: note: in expansion of macro '_dynamic_func_call'
-     272 |         _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                              ^~~~~~~
-   include/linux/hid.h:1202:9: note: in expansion of macro 'dev_dbg'
-    1202 |         dev_dbg(&(hid)->dev, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~
-   drivers/hid/hid-logitech-hidpp.c:342:17: note: in expansion of macro 'hid_dbg'
-     342 |                 hid_dbg(hidpp->hid_dev,
-         |                 ^~~~~~~
-   drivers/hid/hid-logitech-hidpp.c:343:82: note: format string is defined here
-     343 |                         "Invalid number of parameters passed to command (%d != %ld)\n",
-         |                                                                                ~~^
-         |                                                                                  |
-         |                                                                                  long int
-         |                                                                                %d
+Okay, I will keep the compatible-append in the binding as the first
+patch in the series, before the other general structurings.
+
+Thank you!
 
 
-vim +343 drivers/hid/hid-logitech-hidpp.c
-
-   333	
-   334	static int hidpp_send_fap_command_sync(struct hidpp_device *hidpp,
-   335		u8 feat_index, u8 funcindex_clientid, u8 *params, int param_count,
-   336		struct hidpp_report *response)
-   337	{
-   338		struct hidpp_report *message;
-   339		int ret;
-   340	
-   341		if (param_count > sizeof(message->fap.params)) {
-   342			hid_dbg(hidpp->hid_dev,
- > 343				"Invalid number of parameters passed to command (%d != %ld)\n",
-   344				param_count, sizeof(message->fap.params));
-   345			return -EINVAL;
-   346		}
-   347	
-   348		message = kzalloc(sizeof(struct hidpp_report), GFP_KERNEL);
-   349		if (!message)
-   350			return -ENOMEM;
-   351	
-   352		if (param_count > (HIDPP_REPORT_LONG_LENGTH - 4))
-   353			message->report_id = REPORT_ID_HIDPP_VERY_LONG;
-   354		else
-   355			message->report_id = REPORT_ID_HIDPP_LONG;
-   356		message->fap.feature_index = feat_index;
-   357		message->fap.funcindex_clientid = funcindex_clientid | LINUX_KERNEL_SW_ID;
-   358		memcpy(&message->fap.params, params, param_count);
-   359	
-   360		ret = hidpp_send_message_sync(hidpp, message, response);
-   361		kfree(message);
-   362		return ret;
-   363	}
-   364	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards
+Aradhya
