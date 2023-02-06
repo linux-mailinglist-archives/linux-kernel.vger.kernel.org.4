@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC13C68C194
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDEB68C190
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjBFPcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S231402AbjBFPc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjBFPbh (ORCPT
+        with ESMTP id S231272AbjBFPbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:31:37 -0500
+        Mon, 6 Feb 2023 10:31:38 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9362A15D;
-        Mon,  6 Feb 2023 07:30:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080A32A152;
+        Mon,  6 Feb 2023 07:30:32 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 923716602F9D;
-        Mon,  6 Feb 2023 15:30:25 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F1BA46602D99;
+        Mon,  6 Feb 2023 15:30:26 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675697426;
-        bh=cNa8K+0qn+HcT679QB7ARYQ4o3o54C7wLITmFg+Awgw=;
+        s=mail; t=1675697428;
+        bh=oAASzuVx1byGrCnmh1/Av/9a8x6FoBwlTi2SX3re7kQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cbosQlFiEXU0SXl1Vo2fY4UEQMiOsjBjEI5f6eIvDOzs5uJ+OV2uUZ4aedaioShjV
-         lFymHpQ8oXCxUXsKTz+Qm8cEfsOeYalvbnx/i2F6V///rLgo28Yi6SH9Cp+WnpfyC2
-         mC9Em8nlNjziaFHqY9Wn+6CQ8n9fU0JEB4uA5ks7vjudiG1SZUedGOI/phpxeKiaNr
-         xPk/zW2fDm3kWT0GtuZZ8AaLX4eaAMDJLcKKN38Pif1slG0BgB1bP0L/hS7WHA/EOW
-         w/eqJE7vv5yZuFtcm6Aa5AvzxarjMf3+uONrS/y6C0QEGO87ThX/xDyNr3LrY8GsLW
-         GUnW9iLDJtViQ==
+        b=BXnUV9xS5c1Q8UXi8i55B63R/ievJdLHe9Nn3HLG3MHStPItRZg12ymjV/S3s+Q7E
+         q2qNRxLE9DIBehzNi5AlBio3tEjM9PsYMNfAavjv7qiXrI6Uemt/MAh4oBEYQWWolZ
+         jLttiaSPuK1W5SdK9IRBgPJKW8CjRqzXJ1Qyq56RQU4RpDdmrJPR2ekd+mvRk3eBxU
+         3yi+jyKLV3qmTNJE0dL+jnMjgzs6V6LxU56FzDsQUNao7okrWe2VQlezKJTCnqjZyP
+         hgGU9mBkNKHZ/TMXgF4GY4g25L4hVPewyhrTUeE6XP4dUP460GPd1Y5hO0BAsFrUie
+         J7Xvs0y3l8sVA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     mturquette@baylibre.com
@@ -47,9 +47,9 @@ Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
         chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v1 29/45] clk: mediatek: mt7986-apmixed: Use PLL_AO flag to set critical clock
-Date:   Mon,  6 Feb 2023 16:29:12 +0100
-Message-Id: <20230206152928.918562-30-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 30/45] clk: mediatek: mt7986-infracfg: Migrate to common probe mechanism
+Date:   Mon,  6 Feb 2023 16:29:13 +0100
+Message-Id: <20230206152928.918562-31-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
 References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
@@ -64,36 +64,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of calling clk_prepare_enable() at probe time, add the PLL_AO
-flag to CLK_APMIXED_ARMPLL clock: this will set CLK_IS_CRITICAL.
+Convert this driver to use the common mtk_clk_simple_probe() mechanism.
+While at it, also use module_platform_driver() instead, as this driver
+just gained a .remove() callback during the conversion.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/clk/mediatek/clk-mt7986-apmixed.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/clk/mediatek/clk-mt7986-infracfg.c | 61 ++++++----------------
+ 1 file changed, 17 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-apmixed.c b/drivers/clk/mediatek/clk-mt7986-apmixed.c
-index 62080ee4dbe3..227ca572056e 100644
---- a/drivers/clk/mediatek/clk-mt7986-apmixed.c
-+++ b/drivers/clk/mediatek/clk-mt7986-apmixed.c
-@@ -42,7 +42,7 @@
- 		 "clkxtal")
+diff --git a/drivers/clk/mediatek/clk-mt7986-infracfg.c b/drivers/clk/mediatek/clk-mt7986-infracfg.c
+index 7a75cc85769d..ae05bdc2bd20 100644
+--- a/drivers/clk/mediatek/clk-mt7986-infracfg.c
++++ b/drivers/clk/mediatek/clk-mt7986-infracfg.c
+@@ -160,57 +160,30 @@ static const struct mtk_gate infra_clks[] = {
+ 	GATE_INFRA2(CLK_INFRA_IPCIEB_CK, "infra_ipcieb", "sysaxi_sel", 15),
+ };
  
- static const struct mtk_pll_data plls[] = {
--	PLL(CLK_APMIXED_ARMPLL, "armpll", 0x0200, 0x020C, 0x0, 0, 32,
-+	PLL(CLK_APMIXED_ARMPLL, "armpll", 0x0200, 0x020C, 0x0, PLL_AO, 32,
- 	    0x0200, 4, 0, 0x0204, 0),
- 	PLL(CLK_APMIXED_NET2PLL, "net2pll", 0x0210, 0x021C, 0x0, 0, 32,
- 	    0x0210, 4, 0, 0x0214, 0),
-@@ -77,8 +77,6 @@ static int clk_mt7986_apmixed_probe(struct platform_device *pdev)
- 
- 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
- 
--	clk_prepare_enable(clk_data->hws[CLK_APMIXED_ARMPLL]->clk);
+-static int clk_mt7986_infracfg_probe(struct platform_device *pdev)
+-{
+-	struct clk_hw_onecell_data *clk_data;
+-	struct device_node *node = pdev->dev.of_node;
+-	int r;
+-	void __iomem *base;
+-	int nr = ARRAY_SIZE(infra_divs) + ARRAY_SIZE(infra_muxes) +
+-		 ARRAY_SIZE(infra_clks);
 -
- 	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
- 	if (r) {
- 		pr_err("%s(): could not register clock provider: %d\n",
+-	base = of_iomap(node, 0);
+-	if (!base) {
+-		pr_err("%s(): ioremap failed\n", __func__);
+-		return -ENOMEM;
+-	}
+-
+-	clk_data = mtk_alloc_clk_data(nr);
+-
+-	if (!clk_data)
+-		return -ENOMEM;
+-
+-	mtk_clk_register_factors(infra_divs, ARRAY_SIZE(infra_divs), clk_data);
+-	mtk_clk_register_muxes(&pdev->dev, infra_muxes,
+-			       ARRAY_SIZE(infra_muxes), node,
+-			       &mt7986_clk_lock, clk_data);
+-	mtk_clk_register_gates(&pdev->dev, node, infra_clks,
+-			       ARRAY_SIZE(infra_clks), clk_data);
+-
+-	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+-	if (r) {
+-		pr_err("%s(): could not register clock provider: %d\n",
+-		       __func__, r);
+-		goto free_infracfg_data;
+-	}
+-	return r;
+-
+-free_infracfg_data:
+-	mtk_free_clk_data(clk_data);
+-	return r;
+-
+-}
++static const struct mtk_clk_desc infra_desc = {
++	.clks = infra_clks,
++	.num_clks = ARRAY_SIZE(infra_clks),
++	.factor_clks = infra_divs,
++	.num_factor_clks = ARRAY_SIZE(infra_divs),
++	.mux_clks = infra_muxes,
++	.num_mux_clks = ARRAY_SIZE(infra_muxes),
++	.clk_lock = &mt7986_clk_lock,
++};
+ 
+ static const struct of_device_id of_match_clk_mt7986_infracfg[] = {
+-	{ .compatible = "mediatek,mt7986-infracfg", },
+-	{}
++	{ .compatible = "mediatek,mt7986-infracfg", .data = &infra_desc },
++	{ /* sentinel */ }
+ };
+ 
+ static struct platform_driver clk_mt7986_infracfg_drv = {
+-	.probe = clk_mt7986_infracfg_probe,
+ 	.driver = {
+ 		.name = "clk-mt7986-infracfg",
+ 		.of_match_table = of_match_clk_mt7986_infracfg,
+ 	},
++	.probe = mtk_clk_simple_probe,
++	.remove = mtk_clk_simple_remove,
+ };
+-builtin_platform_driver(clk_mt7986_infracfg_drv);
++module_platform_driver(clk_mt7986_infracfg_drv);
++
++MODULE_DESCRIPTION("MediaTek MT7986 infracfg clocks driver");
++MODULE_LICENSE("GPL");
 -- 
 2.39.1
 
