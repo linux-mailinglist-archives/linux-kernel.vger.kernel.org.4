@@ -2,226 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D0C68C79D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4458968C7A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjBFUY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:24:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S230235AbjBFU2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjBFUYy (ORCPT
+        with ESMTP id S229519AbjBFU2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:24:54 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8886517CFF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:24:52 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id 14-20020a9d010e000000b0068bdddfa263so3550900otu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:24:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ii3QWaTSpWqp8nAIBHYKbEzhocMIY28k394B8Gv37po=;
-        b=EIsiXELTDJZsBHSzEz0zei/PUThrVQSlx0895jVSVUXzJ9Ee0VIVViPE29DCHdJQ1I
-         ueoaQxqXV4qHNWNBu6FhGAPMC3i3SsTdk3p9nY7zcUAizG7Zh539bk3rjJFuAQgf02Md
-         wbmyC2j/iNPuVdMqHG0w81geTiflP2FO6+dW+rWN02ZYRuI5dNYXZ2Beh9tTg+cQ/8WW
-         YdfESXCvyBZsWyQjfB+IzEXp15yDOnJvxBaTsuFYjWTVTu8xYibijEZXh2y29ujyQfSa
-         zhVo3saNVNroFTdkrlh+zFCkNITKmkjN1PJ6hl65Vt4RHbE6RDMPKlPrY09T/jeT7Hdh
-         Zc4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ii3QWaTSpWqp8nAIBHYKbEzhocMIY28k394B8Gv37po=;
-        b=KRDZtcMCkM/GJGoZA0vwkhcIAVyI8LaPFHI3LfLEYj8TD4Xdcp2fLi4Rx/wcFI58TV
-         vTHbox/3ABrDwEdLw3QRUiHNq4655VAJdmeZVI0T1xBbkh7adn1QMbZEo0LT8qKFWc/8
-         7iZAaCIrbyff4nQGk5SpD9XdJge8xtRr6Xw/6krW7Fb5UEGrGV4iPxVBL1lLIa6eFa7n
-         s85srUGcmny6bOJl86gTnkri443AtzefJpE/ESdbofVGnu8vyL+KlSCgJjWRJDbdlBhx
-         bTOmkb1GC33qXjUaeYR/thyLgN8lXUBW1x+lvmQ89+dFl5GnGqF8AyccMPAdcotUcEOz
-         ysXQ==
-X-Gm-Message-State: AO0yUKUTAt0Noo2WXjgy6S1x8nso7ZD+/6UrM5u7qRJpOPhM4OK5YkeI
-        f9YhHzDzouFtNBgfYtDRJas3bpwXnZ0sUvO2k4I=
-X-Google-Smtp-Source: AK7set9oYVPJvXFFlrdhnRzD5XmmpUtCk86aL0C9pwbKJGoLMv/n+wmWY4auI9t864Gv+GlUtukuDRtHa2bkjtuBMD4=
-X-Received: by 2002:a05:6830:22e1:b0:686:413a:59ae with SMTP id
- t1-20020a05683022e100b00686413a59aemr40628otc.120.1675715091814; Mon, 06 Feb
- 2023 12:24:51 -0800 (PST)
+        Mon, 6 Feb 2023 15:28:48 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA2329E38;
+        Mon,  6 Feb 2023 12:28:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1675715294; bh=UKZ91KlMlyPDiSEe667DpO0/2hE2Bw/He9ABW0qj/PQ=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=r6tgimBD7+gevlMnjaVPcN0xxlFx/JRazQS7xSIpEWf9JcW2Yv0mwUxBZuq/K5C7x
+         CXEUKNj4xmQLhbvsEPIctTBr7bZRcyoLIks43Fnexd0BhtsatxeO9I8q4NMzZ6zGNd
+         9riOKNPxysaee0eiV6bcu0UjKX1hIm9tIJCbJjGLBiAIeE5L5w/4astqd4CHMMr/IS
+         0BO3JYl7vqLVrrLiWUC3/uR7Ei2KZN0NQUkIzOI42CZNWZkR33VqvZeb6osCXa4LHY
+         slcu/DkgDipyM1xs9iFk824vofDGsjUyYZaLNQ1tS5tz/c47igc7VzX87V2hCBOJK4
+         pEo7uie5gcBKQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.187.227]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Msq6M-1oabqA0u3k-00tBQk; Mon, 06
+ Feb 2023 21:28:14 +0100
+Message-ID: <9ef640ec-e5da-eed0-3707-cd138504e1c1@gmx.de>
+Date:   Mon, 6 Feb 2023 21:28:06 +0100
 MIME-Version: 1.0
-References: <20230206193620.69550-1-arnd@kernel.org>
-In-Reply-To: <20230206193620.69550-1-arnd@kernel.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 6 Feb 2023 15:24:39 -0500
-Message-ID: <CADnq5_OAZ2-sKs8Cr3=t3SjMT9NoGBFRbh2Jtzpy60x_5xsKCQ@mail.gmail.com>
-Subject: Re: [PATCH] [SUBMITTED 20210927] [RESEND^2] drm/amdgpu: fix enum
- odm_combine_mode mismatch
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Aric Cyr <aric.cyr@amd.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Nevenko Stupar <Nevenko.Stupar@amd.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Jun Lei <Jun.Lei@amd.com>, David Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Pavle Kotarac <Pavle.Kotarac@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] parisc: update kbuild doc. aliases for parisc64
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+References: <20230205163752.2535-1-rdunlap@infradead.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230205163752.2535-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:dQ6w6Sso0DynHymSx1sSf884m02Cyx9zEt3tsu+PEwSKWK42qsx
+ td9FbwJILXt6g4/giaaR1Kfrh6xsQjCZYalzxAlqUHuGR/AaYN0uiBTkiqyMYOHEUFxO/mo
+ 2GOo+c5I68ap6NAYKA8JbMKYgEjwKufeb0XFYejmrtgKoY+txzKmE7Y0wtInktqpwJmDh8+
+ 1Rdb3yY4SzcbSpuQiAmsw==
+UI-OutboundReport: notjunk:1;M01:P0:odzB/JznoNo=;V6tBvW1VkD6tcAb7xj9ggL6C2af
+ F2j4Os9fvNB0BI2HvMJKk13hCM/yD8DFlKJr4UGp+wOMSr7vsHEp0dB9HcF8YAiQXqNgzMPkX
+ Sju94fRaOOKSYHB7KGjVk5t1U1hRSff4fwNfyN4ndGsipggBFC0ayJ36gECMKRuSGBOOoCmjX
+ aHNijTsqcOw4KytMtUDoW3qBWRLkAkGcPA2wQxBXYIdSvdGc3EACYIXPAut18sc3yvoy1bC7r
+ WW73vStGJDUi0mky6O7aIYkPSknusNppw02qC5RW2bevzuDQsDmr26Y4Y4aUrRXx8U6BiJ6aK
+ b/r5fudoAtPFniWiOF2Aiz/0IRAu6Rp4+GT4OosIf7H4FIAWd22MC4JFc0GkIVO862kbcc+hG
+ rcyd6phXitHpnQUSJKY87tmLraSKAmYE7poB5rnJvc6aGY2zCSLBzP4+UF1I79fYw5nQUtpmp
+ Bb/GPuTCPVaNbqylx1BQsW+OWZ5XX8/OjfrzO7zCdzRSTK0Jde9pi7a+2WH3g5hvZfs5cwzXm
+ G35JU1mrlbvmo/5lt5u6W7qZKh/2sMScXWmfSMQp+qk5RWSWXTATfQnBdnAKiDRql6wp75A4X
+ Lm6vJdPYmpHKwE7AzXcCSHVsVt0zypX7NnqwBBMzAVlbQfK8/BIVYKXuvWFgRt7ofrVxQ9M74
+ j1agDp0tFz0mQAUhsmsqz8v4vR7ubyLFz9l+FUl8tCRgMdENaiXKhLW1UppN/hSLE5p5RcDpl
+ HBKnfxO1mPuwoLVG+KUhbYDvVgTm0n0KA8DETE+MCpPLiolT55ilfFscqqOPIn+hr0yy0z9w7
+ WU4Lea1+al9hUMyziZ9aWc7uu9+hcN9lYiMSgsfXJEnBTjVPQV5KQinQkVEQYLyYTJDCjSOjw
+ NsL9yxEuiIOmX6KLRfAi9/c3C9b/DXlq81+g3blNDi3YkMA4bXY0CEOJs4x54pAwQ1jr+EvOh
+ nh5rDG0agzVkpyoKlxHJyM9hpS4=
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 2:36 PM Arnd Bergmann <arnd@kernel.org> wrote:
+On 2/5/23 17:37, Randy Dunlap wrote:
+> ARCH=3Dparisc64 is now supported for 64-bit parisc builds, so add
+> this alias to the kbuild.rst documentation.
 >
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A conversion from 'bool' to 'enum odm_combine_mode' was incomplete,
-> and gcc warns about this with many instances of
->
-> display/dc/dml/dcn20/display_mode_vba_20.c:3899:44: warning: implicit conversion from 'enum <anonymous>' to 'enum
-> odm_combine_mode' [-Wenum-conversion]
->  3899 |     locals->ODMCombineEnablePerState[i][k] = false;
->
-> Change the ones that we get a warning for, using the same numerical
-> values to leave the behavior unchanged.
->
-> Fixes: 5fc11598166d ("drm/amd/display: expand dml structs")
-> Link: https://lore.kernel.org/all/20201026210039.3884312-3-arnd@kernel.org/
-> Link: https://lore.kernel.org/all/20210927100659.1431744-1-arnd@kernel.org/
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Fixes: 3dcfb729b5f4 ("parisc: Make CONFIG_64BIT available for ARCH=3Dpar=
+isc64 only")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-parisc@vger.kernel.org
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
 > ---
-> I sent this in 2020 and in 2021, but never got a reply and the warning
-> is still there.
+> v2: drop "parisc for 32 bit" part since "parisc" is not an alias
 
-Applied.  Sorry for the delay.
+Acked-by: Helge Deller <deller@gmx.de>
 
-Alex
+Thank you, Randy!
+I'll aplly it to the parisc tree.
 
-> ---
->  .../amd/display/dc/dml/dcn20/display_mode_vba_20.c   |  8 ++++----
->  .../amd/display/dc/dml/dcn20/display_mode_vba_20v2.c | 10 +++++-----
->  .../amd/display/dc/dml/dcn21/display_mode_vba_21.c   | 12 ++++++------
->  3 files changed, 15 insertions(+), 15 deletions(-)
+Helge
+
 >
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> index f34bc3c8da41..69c41e3e3ba2 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20.c
-> @@ -3901,14 +3901,14 @@ void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->                                         mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine = mode_lib->vba.PixelClock[k] / 2
->                                                         * (1 + mode_lib->vba.DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+>   Documentation/kbuild/kbuild.rst |    1 +
+>   1 file changed, 1 insertion(+)
 >
-> -                               locals->ODMCombineEnablePerState[i][k] = false;
-> +                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
->                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithoutODMCombine;
->                                 if (mode_lib->vba.ODMCapability) {
->                                         if (locals->PlaneRequiredDISPCLKWithoutODMCombine > mode_lib->vba.MaxDispclkRoundedDownToDFSGranularity) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         } else if (locals->HActive[k] > DCN20_MAX_420_IMAGE_WIDTH && locals->OutputFormat[k] == dm_420) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         }
->                                 }
-> @@ -3961,7 +3961,7 @@ void dml20_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->                                 locals->RequiredDISPCLK[i][j] = 0.0;
->                                 locals->DISPCLK_DPPCLK_Support[i][j] = true;
->                                 for (k = 0; k <= mode_lib->vba.NumberOfActivePlanes - 1; k++) {
-> -                                       locals->ODMCombineEnablePerState[i][k] = false;
-> +                                       locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
->                                         if (locals->SwathWidthYSingleDPP[k] <= locals->MaximumSwathWidth[k]) {
->                                                 locals->NoOfDPP[i][j][k] = 1;
->                                                 locals->RequiredDPPCLK[i][j][k] = locals->MinDPPCLKUsingSingleDPP[k]
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-> index 366138df0fe2..f475a0ae946c 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn20/display_mode_vba_20v2.c
-> @@ -4012,17 +4012,17 @@ void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode
->                                         mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine = mode_lib->vba.PixelClock[k] / 2
->                                                         * (1 + mode_lib->vba.DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+> diff -- a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.=
+rst
+> --- a/Documentation/kbuild/kbuild.rst
+> +++ b/Documentation/kbuild/kbuild.rst
+> @@ -160,6 +160,7 @@ directory name found in the arch/ direct
+>   But some architectures such as x86 and sparc have aliases.
 >
-> -                               locals->ODMCombineEnablePerState[i][k] = false;
-> +                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
->                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithoutODMCombine;
->                                 if (mode_lib->vba.ODMCapability) {
->                                         if (locals->PlaneRequiredDISPCLKWithoutODMCombine > MaxMaxDispclkRoundedDown) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         } else if (locals->DSCEnabled[k] && (locals->HActive[k] > DCN20_MAX_DSC_IMAGE_WIDTH)) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         } else if (locals->HActive[k] > DCN20_MAX_420_IMAGE_WIDTH && locals->OutputFormat[k] == dm_420) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         }
->                                 }
-> @@ -4075,7 +4075,7 @@ void dml20v2_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode
->                                 locals->RequiredDISPCLK[i][j] = 0.0;
->                                 locals->DISPCLK_DPPCLK_Support[i][j] = true;
->                                 for (k = 0; k <= mode_lib->vba.NumberOfActivePlanes - 1; k++) {
-> -                                       locals->ODMCombineEnablePerState[i][k] = false;
-> +                                       locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
->                                         if (locals->SwathWidthYSingleDPP[k] <= locals->MaximumSwathWidth[k]) {
->                                                 locals->NoOfDPP[i][j][k] = 1;
->                                                 locals->RequiredDPPCLK[i][j][k] = locals->MinDPPCLKUsingSingleDPP[k]
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-> index eeb4d3441e1d..3a896d0172a9 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn21/display_mode_vba_21.c
-> @@ -4106,17 +4106,17 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->                                         mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine = mode_lib->vba.PixelClock[k] / 2
->                                                         * (1 + mode_lib->vba.DISPCLKDPPCLKDSCCLKDownSpreading / 100.0);
+>   - x86: i386 for 32 bit, x86_64 for 64 bit
+> +- parisc: parisc64 for 64 bit
+>   - sh: sh for 32 bit, sh64 for 64 bit
+>   - sparc: sparc32 for 32 bit, sparc64 for 64 bit
 >
-> -                               locals->ODMCombineEnablePerState[i][k] = false;
-> +                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
->                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithoutODMCombine;
->                                 if (mode_lib->vba.ODMCapability) {
->                                         if (locals->PlaneRequiredDISPCLKWithoutODMCombine > MaxMaxDispclkRoundedDown) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         } else if (locals->DSCEnabled[k] && (locals->HActive[k] > DCN21_MAX_DSC_IMAGE_WIDTH)) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         } else if (locals->HActive[k] > DCN21_MAX_420_IMAGE_WIDTH && locals->OutputFormat[k] == dm_420) {
-> -                                               locals->ODMCombineEnablePerState[i][k] = true;
-> +                                               locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_2to1;
->                                                 mode_lib->vba.PlaneRequiredDISPCLK = mode_lib->vba.PlaneRequiredDISPCLKWithODMCombine;
->                                         }
->                                 }
-> @@ -4169,7 +4169,7 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->                                 locals->RequiredDISPCLK[i][j] = 0.0;
->                                 locals->DISPCLK_DPPCLK_Support[i][j] = true;
->                                 for (k = 0; k <= mode_lib->vba.NumberOfActivePlanes - 1; k++) {
-> -                                       locals->ODMCombineEnablePerState[i][k] = false;
-> +                                       locals->ODMCombineEnablePerState[i][k] = dm_odm_combine_mode_disabled;
->                                         if (locals->SwathWidthYSingleDPP[k] <= locals->MaximumSwathWidth[k]) {
->                                                 locals->NoOfDPP[i][j][k] = 1;
->                                                 locals->RequiredDPPCLK[i][j][k] = locals->MinDPPCLKUsingSingleDPP[k]
-> @@ -5234,7 +5234,7 @@ void dml21_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_l
->                         mode_lib->vba.ODMCombineEnabled[k] =
->                                         locals->ODMCombineEnablePerState[mode_lib->vba.VoltageLevel][k];
->                 } else {
-> -                       mode_lib->vba.ODMCombineEnabled[k] = false;
-> +                       mode_lib->vba.ODMCombineEnabled[k] = dm_odm_combine_mode_disabled;
->                 }
->                 mode_lib->vba.DSCEnabled[k] =
->                                 locals->RequiresDSC[mode_lib->vba.VoltageLevel][k];
-> --
-> 2.39.0
->
+
