@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DA268C949
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E7168C94B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjBFWW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 17:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S229957AbjBFWXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 17:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjBFWW4 (ORCPT
+        with ESMTP id S229961AbjBFWW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 17:22:56 -0500
+        Mon, 6 Feb 2023 17:22:58 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E28593C4;
-        Mon,  6 Feb 2023 14:22:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3942311E9C;
+        Mon,  6 Feb 2023 14:22:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B22161048;
-        Mon,  6 Feb 2023 22:22:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 710EDC433EF;
-        Mon,  6 Feb 2023 22:22:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAB186101A;
+        Mon,  6 Feb 2023 22:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 357E5C433D2;
+        Mon,  6 Feb 2023 22:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675722174;
-        bh=dgjPS/21Jwz0N/kx64aj+v3qbMDzHxH3oN50UI/eATw=;
+        s=k20201202; t=1675722177;
+        bh=77eH0dObGsmGIQ6H5Q/e/w+lwpEpf0OEqQVQWCaEWuw=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=WURzKmJYGUIg+ixUvPRPFYXkgs1cIsWdS92Ee3B4s8vzhP4qSV28Kxm/6vZFC5n0Y
-         kUUSqIamf34CIGZFVNVLQEC5E+FZoDUcuN0jOOkqaynOFteEaZX38YqQqb3GLbPUsl
-         U8CYAL1++XTDE6sXJk8r9QrTpChurz4qSzGwQKyuVPn+YEXZGFQdbRzNHKXIJUWEYj
-         Zjsl9/r6pj5B8zU9pDGO8skeBOmIxT6wbwtZl4013+0pxM2Zmtv5vvAZz0G+HagDgG
-         D0+sK/GK0SbSCVVn5kLyNVdYNk43EcYeYgxlfH1JYoL15/pMudOLMTqYCtg+ASvveD
-         tshdFHsrWJPSA==
+        b=dicnAoPT6MkxCXv2eo5ewyQnaR8dWQZJNxmeFWE6zSCEbeUX2FVIixj7K579AK9DH
+         qP80IcHi9lY8D3Yhcax0qEMh1JmvOPHTkLi6Zx2tdYHU4RTuxEK55aijc+IocnXJP9
+         0ROkmSrZK7oUTZNbbTIMqvc5USR6knwPE+XZIvX5ojUHxMjbKZ7R9Nr4eGtkTeTmUD
+         mWt5rwxMgN+0Ht0CNYkjXgP/7ki2zyR9BSuUoAslncCMy51JAKksiZhRLU5eNnLGxG
+         wBopdj4GRfOGwX9o4aZQnoVFmnai11D0EKF4nCKk42IZnSiernvMZIAARLhkDQk6Ro
+         Nz6KsbVZ+d9dA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E998E55EFB;
-        Mon,  6 Feb 2023 22:22:54 +0000 (UTC)
-Subject: Re: [GIT PULL] Btrfs fixes for v6.2-rc8
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22E39E55EFB;
+        Mon,  6 Feb 2023 22:22:57 +0000 (UTC)
+Subject: Re: [GIT PULL] cgroup fixes for v6.2-rc7
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <cover.1675710734.git.dsterba@suse.com>
-References: <cover.1675710734.git.dsterba@suse.com>
-X-PR-Tracked-List-Id: <linux-btrfs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <cover.1675710734.git.dsterba@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.2-rc7-tag
-X-PR-Tracked-Commit-Id: a9ad4d87aa263de36895402b66115a3a4b88bf1c
+In-Reply-To: <Y+F149pNVNcMJQIn@slm.duckdns.org>
+References: <Y+F149pNVNcMJQIn@slm.duckdns.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Y+F149pNVNcMJQIn@slm.duckdns.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.2-rc7-fixes
+X-PR-Tracked-Commit-Id: 7a2127e66a00e073db8d90f9aac308f4a8a64226
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 66fcf74e5c0d771a456b96ec9aebfb53d648eede
-Message-Id: <167572217437.7822.5688360753712205398.pr-tracker-bot@kernel.org>
-Date:   Mon, 06 Feb 2023 22:22:54 +0000
-To:     David Sterba <dsterba@suse.com>
-Cc:     torvalds@linux-foundation.org, David Sterba <dsterba@suse.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+X-PR-Merge-Commit-Id: 05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
+Message-Id: <167572217713.7822.15849062504890125362.pr-tracker-bot@kernel.org>
+Date:   Mon, 06 Feb 2023 22:22:57 +0000
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon,  6 Feb 2023 20:50:09 +0100:
+The pull request you sent on Mon, 6 Feb 2023 11:49:23 -1000:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.2-rc7-tag
+> git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.2-rc7-fixes
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/66fcf74e5c0d771a456b96ec9aebfb53d648eede
+https://git.kernel.org/torvalds/c/05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
 
 Thank you!
 
