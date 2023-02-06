@@ -2,280 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CDC68C9C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEC768C9CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjBFWsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 17:48:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
+        id S229818AbjBFWyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 17:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjBFWr5 (ORCPT
+        with ESMTP id S229731AbjBFWyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 17:47:57 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8A6FF1C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:47:52 -0800 (PST)
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com [209.85.208.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 6 Feb 2023 17:54:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C842C19697
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:53:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675724001;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+u1OHKdh6SWWXlvEFuLIidGMEw5HN4SNIPpsLH0U2KY=;
+        b=ZJHiAq2fJO97FI3XE0laXntR1TLcD09UWoL0W//N4YzUQEyutM3VnbJC6g0bVIOtBvlydI
+        UwPXrY9agenZNO9UhEiMBMsUrHwfwdGz8be49uU82Zz7aSbqDLhpakV9jwERSWrJ5h2h02
+        BlKFITLykxO209Svq5F3uV0f+sX/m5s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-277-LJNDADelN1u2WiOMFnKnqQ-1; Mon, 06 Feb 2023 17:53:18 -0500
+X-MC-Unique: LJNDADelN1u2WiOMFnKnqQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4502D41AE7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675723670;
-        bh=VjsfREu60pLZr44v0XyMe9ovUs6l2w2CeUG5BdUJPho=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=TsGHYHpXCgbYmIR8YDCwkU0SCYNRKh63eNSPbBDn8Y2lqV8wmuZGOrKhDXhDQTZSk
-         ohTmV7CONpoftvWB2tm18eiK71B9VxxKW8wR9a+7iVwdE8xGVDQrjuTP1we2fxIN65
-         C7yu7gf/qRTycOiKq17m8qn0TnjkbHgmZ7NJU+Q51Wf+Vdf+aMDFyRD5w2bBVeqrjv
-         lbkG7RCcld02vYeo2+Bob4uVazlM0YkU6VB+suK7dtO2iTNgZWCOWjVatps4rQM8Jz
-         AUhdPG56J0ahg0WPTKUV0A3o08xzUsixVhHAnqX4cL6507rZaR7GJipRt7b5txorj1
-         DmjqFlYryh+fQ==
-Received: by mail-lj1-f197.google.com with SMTP id r12-20020a2e80cc000000b002904f4b5fd2so3146967ljg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 14:47:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VjsfREu60pLZr44v0XyMe9ovUs6l2w2CeUG5BdUJPho=;
-        b=0n6NEd1c8YjQRaCUbIotNSjpnv/ujuvgCEWfrZK/jzci3ZIHqFu4B4dl2uhwHkULmm
-         +yYhKMJSiFN1Yozb88IVs8Qphix2ENsyEpdtRKDc0qr1oRFs09aK7Qpg83NBGYkSrS8O
-         2Vn01gZmA1PjvCHs5+BHTVYHmEjYgZnzTxZYVSloPejg+GpBa4E+xrcd1HxQELHv/ZKk
-         KQ0Hw1gAJkzQaDd7RVdmdvArHP6x/aCmFEj6K5xU5bIsGek4G0gJfDgL61oUh+AsJPPq
-         +jjS20y+FYKf7FyFMC0agfT48sxNRwQ7yghuadwptdKyAkNrV8PXVDQW46IC6PFeD/sx
-         /Q5w==
-X-Gm-Message-State: AO0yUKVVF//uyBif1NQTjgS7qWvi07ZXuondqkWt3rfXxqIhdBGp+Rvn
-        BksAdTBTsYGfMH31Cn269l9pLUME3mZoKTotz62LqcUMAYctQAHuDxNDo/cJeLMc9eNLEeZfuBG
-        jvv+XLGf0QxJnHpgu3/1How1iHQZonch0iiM3clMs3w==
-X-Received: by 2002:a05:600c:13c8:b0:3da:28a9:a900 with SMTP id e8-20020a05600c13c800b003da28a9a900mr1079128wmg.41.1675723658698;
-        Mon, 06 Feb 2023 14:47:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set9KRf5TMwnWQSrwLboAv4ZBKRqxffZC1AlZvTLHy48L5l3G8wf2kaChO6RGlC9xmflDOxLzFQ==
-X-Received: by 2002:a05:600c:13c8:b0:3da:28a9:a900 with SMTP id e8-20020a05600c13c800b003da28a9a900mr1079114wmg.41.1675723658250;
-        Mon, 06 Feb 2023 14:47:38 -0800 (PST)
-Received: from [192.168.123.94] (ip-088-152-145-137.um26.pools.vodafone-ip.de. [88.152.145.137])
-        by smtp.gmail.com with ESMTPSA id l16-20020a1c7910000000b003dc1d668866sm16727320wme.10.2023.02.06.14.47.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 14:47:37 -0800 (PST)
-Message-ID: <de7fec14-7c43-6584-db72-b4c3a9f1423a@canonical.com>
-Date:   Mon, 6 Feb 2023 23:47:35 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C7A8E811E6E;
+        Mon,  6 Feb 2023 22:53:17 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.11.79])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B1129400F756;
+        Mon,  6 Feb 2023 22:52:47 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Richard Guy Briggs <rgb@redhat.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v7 0/3] fanotify: Allow user space to pass back additional audit
+ info
+Date:   Mon, 06 Feb 2023 17:52:20 -0500
+Message-ID: <12168436.O9o76ZdvQC@x2>
+Organization: Red Hat
+In-Reply-To: <cover.1675373475.git.rgb@redhat.com>
+References: <cover.1675373475.git.rgb@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 0/6] RISC-V Hardware Probing User Interface
-Content-Language: en-US
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>, linux-doc@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vineetg@rivosinc.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Ruizhe Pan <c141028@gmail.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kselftest@vger.kernel.org, slewis@rivosinc.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Conor Dooley <conor@kernel.org>, dram <dramforever@live.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Guo Ren <guoren@kernel.org>, Dao Lu <daolu@rivosinc.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>
-References: <20230206201455.1790329-1-evan@rivosinc.com>
- <212CC1BD-31FF-4B8B-B05D-89C5245EE8A7@jrtc27.com>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <212CC1BD-31FF-4B8B-B05D-89C5245EE8A7@jrtc27.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/23 22:11, Jessica Clarke wrote:
-> On 6 Feb 2023, at 20:14, Evan Green <evan@rivosinc.com> wrote:
->>
->>
->> These are very much up for discussion, as it's a pretty big new user
->> interface and it's quite a bit different from how we've historically
->> done things: this isn't just providing an ISA string to userspace, this
->> has its own format for providing information to userspace.
->>
->> There's been a bunch of off-list discussions about this, including at
->> Plumbers.  The original plan was to do something involving providing an
->> ISA string to userspace, but ISA strings just aren't sufficient for a
->> stable ABI any more: in order to parse an ISA string users need the
->> version of the specifications that the string is written to, the version
->> of each extension (sometimes at a finer granularity than the RISC-V
->> releases/versions encode), and the expected use case for the ISA string
->> (ie, is it a U-mode or M-mode string).  That's a lot of complexity to
->> try and keep ABI compatible and it's probably going to continue to grow,
->> as even if there's no more complexity in the specifications we'll have
->> to deal with the various ISA string parsing oddities that end up all
->> over userspace.
->>
->> Instead this patch set takes a very different approach and provides a set
->> of key/value pairs that encode various bits about the system.  The big
->> advantage here is that we can clearly define what these mean so we can
->> ensure ABI stability, but it also allows us to encode information that's
->> unlikely to ever appear in an ISA string (see the misaligned access
->> performance, for example).  The resulting interface looks a lot like
->> what arm64 and x86 do, and will hopefully fit well into something like
->> ACPI in the future.
->>
->> The actual user interface is a syscall.  I'm not really sure that's the
->> right way to go about this, but it makes for flexible prototying.
->> Various other approaches have been talked about like making HWCAP2 a
->> pointer, having a VDSO routine, or exposing this via sysfs.  Those seem
->> like generally reasonable approaches, but I've yet to figure out a way
->> to get the general case working without a syscall as that's the only way
->> I've come up with to deal with the heterogenous CPU case.  Happy to hear
->> if someone has a better idea, though, as I don't really want to add a
->> syscall if we can avoid it.
+Hello Richard,
 
-Operating systems tend to reschedule threads moving them between harts. 
-New threads may be created by processes at any time.
-
-It is not clear to me what information the syscall shall convey in the 
-heterogeneous case. I see the following alternatives:
-
-* The syscall describes the current hart.
-* The syscall provides individual properties of all harts.
-* The syscall provides a set of properties that is valid for any hart on 
-which the thread might be scheduled.
-* The syscall provides a set of properties that is valid for any hart 
-that any thread of the current process might be scheduled to.
-
-Describing only the current hart would not be helpful as the thread 
-might be rescheduled to a hart with a smaller set of available extensions.
-
-Describing the properties of all harts would not be helpful if the 
-thread has no control to which hart it is scheduled.
-
-Processes that don't control scheduling would most benefit from a 
-guaranteed set of properties valid for all threads of the process.
-
-Processes that take control of scheduling would probably want 
-information about all harts.
-
-Best regards
-
-Heinrich
-
+On Friday, February 3, 2023 4:35:13 PM EST Richard Guy Briggs wrote:
+> The Fanotify API can be used for access control by requesting permission
+> event notification. The user space tooling that uses it may have a
+> complicated policy that inherently contains additional context for the
+> decision. If this information were available in the audit trail, policy
+> writers can close the loop on debugging policy. Also, if this additional
+> information were available, it would enable the creation of tools that
+> can suggest changes to the policy similar to how audit2allow can help
+> refine labeled security.
 > 
-> Please work with https://github.com/riscv-non-isa/riscv-c-api-doc as
-> it’s crucial we have a portable standard interface for applications to
-> query this information that works on OSes other than Linux. This can be
-> backed by whatever you want, whether a syscall, magic VDSO thing,
-> sysfs, etc, but it’s key that the exposed interface outside of libc is
-> not Linux-specific otherwise we’re going to get fragmentation in this
-> space.
+> This patchset defines a new flag (FAN_INFO) and new extensions that
+> define additional information which are appended after the response
+> structure returned from user space on a permission event.  The appended
+> information is organized with headers containing a type and size that
+> can be delegated to interested subsystems.  One new information type is
+> defined to audit the triggering rule number.
 > 
-> I would encourage figuring out the right shape for the exposed
-> interface first before continuing to refine details of how that
-> information gets communicated between the kernel and libc.
+> A newer kernel will work with an older userspace and an older kernel
+> will behave as expected and reject a newer userspace, leaving it up to
+> the newer userspace to test appropriately and adapt as necessary.  This
+> is done by providing a a fully-formed FAN_INFO extension but setting the
+> fd to FAN_NOFD.  On a capable kernel, it will succeed but issue no audit
+> record, whereas on an older kernel it will fail.
+
+I have taken the patches and built a new kernel. Everything looks good to me 
+on the audit side. It's acting as expected. You can put me down for an ACK or 
+tested-by or whatever is appropriate.
+
+-Steve
+
+> The audit function was updated to log the additional information in the
+> AUDIT_FANOTIFY record. The following are examples of the new record
+> format:
+>   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1
+> fan_info=3137 subj_trust=3 obj_trust=5 type=FANOTIFY
+> msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=0 subj_trust=2
+> obj_trust=2
 > 
-> Jess
+> changelog:
+> v1:
+> - first version by Steve Grubb <sgrubb@redhat.com>
+> Link: https://lore.kernel.org/r/2042449.irdbgypaU6@x2
 > 
->> An example series in glibc exposing this syscall and using it in an
->> ifunc selector for memcpy can be found at [1].
->>
->> [1] https://public-inbox.org/libc-alpha/20230206194819.1679472-1-evan@rivosinc.com/T/#t
->>
->> Changes in v2:
->> - Changed the interface to look more like poll(). Rather than supplying
->>    key_offset and getting back an array of values with numerically
->>    contiguous keys, have the user pre-fill the key members of the array,
->>    and the kernel will fill in the corresponding values. For any key it
->>    doesn't recognize, it will set the key of that element to -1. This
->>    allows usermode to quickly ask for exactly the elements it cares
->>    about, and not get bogged down in a back and forth about newer keys
->>    that older kernels might not recognize. In other words, the kernel
->>    can communicate that it doesn't recognize some of the keys while
->>    still providing the data for the keys it does know.
->> - Added a shortcut to the cpuset parameters that if a size of 0 and
->>    NULL is provided for the CPU set, the kernel will use a cpu mask of
->>    all online CPUs. This is convenient because I suspect most callers
->>    will only want to act on a feature if it's supported on all CPUs, and
->>    it's a headache to dynamically allocate an array of all 1s, not to
->>    mention a waste to have the kernel loop over all of the offline bits.
->> - Fixed logic error in if(of_property_read_string...) that caused crash
->> - Include cpufeature.h in cpufeature.h to avoid undeclared variable
->>    warning.
->> - Added a _MASK define
->> - Fix random checkpatch complaints
->> - Updated the selftests to the new API and added some more.
->> - Fixed indentation, comments in .S, and general checkpatch complaints.
->>
->> Evan Green (4):
->>   RISC-V: Move struct riscv_cpuinfo to new header
->>   RISC-V: Add a syscall for HW probing
->>   RISC-V: hwprobe: Support probing of misaligned access performance
->>   selftests: Test the new RISC-V hwprobe interface
->>
->> Palmer Dabbelt (2):
->>   RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
->>   dt-bindings: Add RISC-V misaligned access performance
->>
->> .../devicetree/bindings/riscv/cpus.yaml       |  15 ++
->> Documentation/riscv/hwprobe.rst               |  66 ++++++
->> Documentation/riscv/index.rst                 |   1 +
->> arch/riscv/include/asm/cpufeature.h           |  23 +++
->> arch/riscv/include/asm/hwprobe.h              |  13 ++
->> arch/riscv/include/asm/smp.h                  |   9 +
->> arch/riscv/include/asm/syscall.h              |   3 +
->> arch/riscv/include/uapi/asm/hwprobe.h         |  35 ++++
->> arch/riscv/include/uapi/asm/unistd.h          |   8 +
->> arch/riscv/kernel/cpu.c                       |  11 +-
->> arch/riscv/kernel/cpufeature.c                |  31 ++-
->> arch/riscv/kernel/sys_riscv.c                 | 192 +++++++++++++++++-
->> tools/testing/selftests/Makefile              |   1 +
->> tools/testing/selftests/riscv/Makefile        |  58 ++++++
->> .../testing/selftests/riscv/hwprobe/Makefile  |  10 +
->> .../testing/selftests/riscv/hwprobe/hwprobe.c |  89 ++++++++
->> .../selftests/riscv/hwprobe/sys_hwprobe.S     |  12 ++
->> tools/testing/selftests/riscv/libc.S          |  46 +++++
->> 18 files changed, 613 insertions(+), 10 deletions(-)
->> create mode 100644 Documentation/riscv/hwprobe.rst
->> create mode 100644 arch/riscv/include/asm/cpufeature.h
->> create mode 100644 arch/riscv/include/asm/hwprobe.h
->> create mode 100644 arch/riscv/include/uapi/asm/hwprobe.h
->> create mode 100644 tools/testing/selftests/riscv/Makefile
->> create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
->> create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
->> create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
->> create mode 100644 tools/testing/selftests/riscv/libc.S
->>
->> -- 
->> 2.25.1
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> v2:
+> - enhancements suggested by Jan Kara <jack@suse.cz>
+> - 1/3 change %d to %u in pr_debug
+> - 2/3 change response from __u32 to __u16
+> - mod struct fanotify_response and fanotify_perm_event add extra_info_type,
+> extra_info_buf - extra_info_buf size max FANOTIFY_MAX_RESPONSE_EXTRA_LEN,
+> add struct fanotify_response_audit_rule - extend debug statements
+> - remove unneeded macros
+> - [internal] change interface to finish_permission_event() and
+> process_access_response() - 3/3 update format of extra information
+> - [internal] change interface to audit_fanotify()
+> - change ctx_type= to fan_type=
+> Link: https://lore.kernel.org/r/cover.1651174324.git.rgb@redhat.com
 > 
+> v3:
+> - 1/3 switch {,__}audit_fanotify() from uint to u32
+> - 2/3 re-add fanotify_get_response switch case FAN_DENY: to avoid
+> unnecessary churn - add FAN_EXTRA flag to indicate more info and break
+> with old kernel - change response from u16 to u32 to avoid endian issues
+> - change extra_info_buf to union
+> - move low-cost fd check earlier
+> - change FAN_RESPONSE_INFO_AUDIT_NONE to FAN_RESPONSE_INFO_NONE
+> - switch to u32 for internal and __u32 for uapi
+> Link: https://lore.kernel.org/all/cover.1652730821.git.rgb@redhat.com
+> 
+> v4:
+> - scrap FAN_INVALID_RESPONSE_MASK in favour of original to catch invalid
+> response == 0 - introduce FANOTIFY_RESPONSE_* macros
+> - uapi: remove union
+> - keep original struct fanotify_response, add fan_info infra starting with
+> audit reason - uapi add struct fanotify_response_info_header{type/pad/len}
+> and struct fanotify_response_info_audit_rule{hdr/rule} - rename fan_ctx=
+> to fan_info=, FAN_EXTRA to FAN_INFO
+> - change event struct from type/buf to len/buf
+> - enable multiple info extensions in one message
+> - hex encode fan_info in __audit_fanotify()
+> - record type FANOTIFY extended to "type=FANOTIFY
+> msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F" Link:
+> https://lore.kernel.org/all/cover.1659996830.git.rgb@redhat.com
+> 
+> v5:
+> - fixed warnings in p2/4 and p3/4 found by <lkp@intel.com>
+> - restore original behaviour for !FAN_INFO case and fanotify_get_response()
+> - rename member audit_rule to rule_number
+> - eliminate memory leak of info_buf on failure (no longer dynamic)
+> - rename buf:info, count:info_len, c:remain, ib:infop
+> - fix pr_debug
+> - return -ENOENT on FAN_INFO and fd==FAN_NOFD to signal new kernel
+> - fanotify_write() remove redundant size check
+> - add u32 subj_trust obj_trust fields with unknown value "2"
+> - split out to helper process_access_response_info()
+> - restore finish_permission_event() response_struct to u32
+> - assume and enforce one rule to audit, pass struct directly to
+> __audit_fanotify() - change fanotify_perm_event struct to union
+> hdr/audir_rule
+> - add vspace to fanotify_write() and process_access_response_info()
+> - squash 3/4 with 4/4
+> - fix v3 and v4 links
+> Link: https://lore.kernel.org/all/cover.1670606054.git.rgb@redhat.com
+> 
+> v6:
+> - simplify __audit_fanotify() from audit_log_format/audit_log_n_hex to
+> audit_log/%X - add comment to clarify {subj,obj}_trust values
+> - remove fd processing from process_access_response_info()
+> - return info_len immediately from process_access_response() on FAN_NOFD
+> after process_access_response_info() Link:
+> https://lore.kernel.org/all/cover.1673989212.git.rgb@redhat.com
+> 
+> v7:
+> - change non FAN_INFO case to "0"
+> - change from if-return to switch(type)-case, which now ignores non-audit
+> info Link: https://lore.kernel.org/all/cover.1675373475.git.rgb@redhat.com
+> 
+> Richard Guy Briggs (3):
+>   fanotify: Ensure consistent variable type for response
+>   fanotify: define struct members to hold response decision context
+>   fanotify,audit: Allow audit to use the full permission event response
+> 
+>  fs/notify/fanotify/fanotify.c      |  8 ++-
+>  fs/notify/fanotify/fanotify.h      |  6 +-
+>  fs/notify/fanotify/fanotify_user.c | 88 ++++++++++++++++++++++--------
+>  include/linux/audit.h              |  9 +--
+>  include/linux/fanotify.h           |  5 ++
+>  include/uapi/linux/fanotify.h      | 30 +++++++++-
+>  kernel/auditsc.c                   | 18 +++++-
+>  7 files changed, 131 insertions(+), 33 deletions(-)
+
+
+
+
