@@ -2,210 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CAA68B3D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B848268B3D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjBFB25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 20:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S229516AbjBFBc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 20:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBFB24 (ORCPT
+        with ESMTP id S229458AbjBFBc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 20:28:56 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A4117CCA;
-        Sun,  5 Feb 2023 17:28:54 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P97rm3xCPzRrZX;
-        Mon,  6 Feb 2023 09:26:32 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 6 Feb 2023 09:28:51 +0800
-Subject: Re: [PATCH v3] perf record: Fix segfault with --overwrite and
- --max-size
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <acme@kernel.org>, <namhyung@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <jiwei.sun@windriver.com>
-References: <20230113073803.102950-1-yangjihong1@huawei.com>
- <29a8e0bc-e90b-b371-962b-58a4b8c87f20@huawei.com>
-Message-ID: <ee213278-7e76-586b-0564-843dc7a3c84f@huawei.com>
-Date:   Mon, 6 Feb 2023 09:28:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Sun, 5 Feb 2023 20:32:57 -0500
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe12::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE1D11156;
+        Sun,  5 Feb 2023 17:32:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hQizGY7sRk50JCXPAJDJIQ/Nzz+rnbKW7SYdWzK/k0jYeZu/tp67k/idzpjALMjKo31cAmdX7R4yQsf26ritWAiO1cUaX8IxrgJlOE9UkRdjRmRNvP5O3wb/nbXBo5u9wORTjSqE2QPgpWAX88xzPIKv0L2wTlMMpxkPpbUn3MLU9kAvH4T0HnZMlheW7gPQFMn/WZBHQw6+7nWk5ya4Zs/EXHdRCOw0KX/eX44NcoPcbehpu3wBqRFnJSuuHB+PIN/3JuJU8Tes8t3X6cOD1U3TtmDQ/TGLoTjwO9NI/zgNL0l/E5pjjZG5vCvus638sCbeuQPHIVmVPkuB5juDjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6vjKPGwmjnNYe+VqL17imo8l2unTtRjKH8TJtazBGr8=;
+ b=Gxjckfg6ZcvM8sFX4qdDXlq/6CNg7Tkt78H/uAbQnWLJXrZYS23IM7CQ1Lmz9cRF7mTzgWJW6pj6V1m4Jhr3WMWPmGgYE90fbLXqbReIWccOroV38LnDygAgevNxrJcfYq17ypAhkeuxR83O/Eqdz8DL0/wZUBsmlEqI5m0I2z1Avqe4/TKn4kbkglCJcQYdySThWdHwactQFfVggIqwPJNsUaUkBGv76vF983GrGR8ywHSu27xDzB3zw+M7/vkzJ6tUL6zK/RESnZAe0lm1yFUbm1cX2DehsZ1DpOnoRfNJCj0Po7sB/2dvgZ1dHOtsHVx6L70EeqN62ztJZYtDDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6vjKPGwmjnNYe+VqL17imo8l2unTtRjKH8TJtazBGr8=;
+ b=qu3N6YUgwCP7VBKLfyCFAeI3a77wRNBXrj7g2Q1Y9aOq+aga3ZQfwSVH/tljerurGGFn7s/D62O/kJ/wBTIK5C96RZEU713zib47uhDWAU1F5Be5YDeJtmwREej1AdmT0hVRL8tXWt1DUN0koBc6TrJBpJESI7CZ3btDuYGXbpk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+ by DU2PR04MB8614.eurprd04.prod.outlook.com (2603:10a6:10:2d9::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 01:32:51 +0000
+Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::7f24:bc0a:acd4:b13f]) by AS8PR04MB8404.eurprd04.prod.outlook.com
+ ([fe80::7f24:bc0a:acd4:b13f%8]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
+ 01:32:50 +0000
+From:   Sherry Sun <sherry.sun@nxp.com>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, peng.fan@nxp.com,
+        festevam@gmail.com
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de
+Subject: [PATCH] tty: serial: imx: disable Ageing Timer interrupt request irq
+Date:   Mon,  6 Feb 2023 09:30:16 +0800
+Message-Id: <20230206013016.29352-1-sherry.sun@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0196.apcprd06.prod.outlook.com (2603:1096:4:1::28)
+ To AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
 MIME-Version: 1.0
-In-Reply-To: <29a8e0bc-e90b-b371-962b-58a4b8c87f20@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|DU2PR04MB8614:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa18e8d4-38e1-464f-135e-08db07e20f54
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5mNLHFSl3bIP35hfY9pwuiDZ9OWvC/i5dGJdAPx5JxvlpraoXwInFQg3GdDyg1HR6gc1NUf4hOAvjbpME0DMRadbvVZCGjOLSL82zeGjlUoMF58yGJcQYorkeYz4Z4M7T8ylk5LNqygFxEwSeAfse6XFmOX3JitgLX1oLLN8XeRykRab7YzzwcB4b0rMI87eNVyJRPz+ikCxxp2Wgl2pu+uXcTr26v2MuDBU/HC4TaUjZd/gD1x0mihvcRAnMkyyyf6dggI/i6C8Xna7HTwFOoWS8gRsBj5+31AerPduzXsMpiwbJr3YPdeKvLwmkP/3jpodfC3XB5AsDhRsvBaVbdccVWPMzSw2tfjMlm0ZdV3jCgqhuacCIxxDkXvsbgYPrLxyYC9KuRg2widZq3OHvc9mr9Q8RdIh/WNCNwnhyKU8khhxsPfMU84rCUwlUzdiq2grVM7IlkFUmb9PqCNAKtsYkxYMZETaVXrRD1fEB9GKzFkN8ZKg8R4JwRQ1m4nMAwaa8qFn0Gh7hkWM7G5VOu6bMsKozry3RVAJWvS80JURIQjbU8JEASQSCmhQmDPRrzvkjqlVMP7s0AQslSgtz2gMCiDYuJ+XocFbW6kqiNIiy733tz+e4vJnuGfg0Pjr2NKkcAi4q7hXKzEHQ0hxk3yCX9SJHEZIWfIHlHXnTWeKYPgCKeGVurdaCxeJuWcD83xKQdAbCeOXVlrNpJYaow==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(346002)(136003)(39860400002)(396003)(451199018)(316002)(36756003)(86362001)(38100700002)(38350700002)(83380400001)(26005)(1076003)(6512007)(2616005)(6666004)(6506007)(186003)(8936002)(52116002)(5660300002)(6486002)(478600001)(45080400002)(41300700001)(44832011)(2906002)(66556008)(4326008)(66476007)(66946007)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eFN2vk3xPxBl7XqxgG4SyOZtyphb4qNH38qxe4znUjgsD+xlApntWpWK3bP1?=
+ =?us-ascii?Q?nIBjgfcJx2Mirp1W5BG9jW19/DwWPh39cOGKHsn/EWmgJhWLClekemrSLbRs?=
+ =?us-ascii?Q?nOq5MKtAqsJfmgj/pKDcw/56VZAnreCSMSXU/uu0DZhqbuCPiAW7DFpIBqUa?=
+ =?us-ascii?Q?t0IeC5l8KGvODUhZegWNla3+caY9JJBiC9XKjuzXeMAf5UPurWMtjHPLsSrk?=
+ =?us-ascii?Q?56ylLkSwkCQzAcs2mouwsg2Ucq3zi5/g0+tECU4vGd0VZqsBr/3DekHIm/p/?=
+ =?us-ascii?Q?se0OpoVhWs0IuMjxUU068z7vm4MxOuPeepAoA41B6wDVfi0eY+T1PT836Yrs?=
+ =?us-ascii?Q?xB0j0wyWaj+ne+6TSRJiyLAdgA3ZGtQ/j+5aEcpignqk4GqVknQf/6tMmaXX?=
+ =?us-ascii?Q?/D7k4ItKmsuyfGamA9Xp2uPSwcnqG2n0HOy80iuvDNjZlqtYHBK/Bo9Vbn3Z?=
+ =?us-ascii?Q?p9u6WL5Hxrc7bu7gklnLJjxjCcscmJwYCHKuOK85YD3JqM3qXpBAssDbL/UD?=
+ =?us-ascii?Q?ZcSjKSdSCfquPwKjwu/JmaGMlYYyPf4ix7+88CqUe9pgmkjeDPMRBKn9V0Qw?=
+ =?us-ascii?Q?G9/98fJ5T5TwRQ45rJOoce509YhoygNrnscEP75sEzaczG4eKj2YzRNMxvBQ?=
+ =?us-ascii?Q?RqMCPrHZh06uFTCFUJyulNlGkKWXXB6ML3NWTxRavp7mLEmGYGlpr+lX46SY?=
+ =?us-ascii?Q?mhvIxIwSnhQSbLKxtmcpoN+cEYXMrTHyseUxsHHzRQNOE4PYnXKsSIOUAh0U?=
+ =?us-ascii?Q?toO/T+BvH76OtZrK3vrIjuO9QZowd+P2F0QMMy4pvKplOf18RkUfd+LJZfO/?=
+ =?us-ascii?Q?YZDwhZAjN8kQ345I4Jlr3IpqfC/pcfyUql5BbT1Fk/jqiZipcmiytO8mUAMp?=
+ =?us-ascii?Q?DYc3Id0MpkV6gwJga43VqVL5YtFvboBa28NDi8OUi2PAODPOv5KFgx3aLMik?=
+ =?us-ascii?Q?trto1ypBjB9DCxwskhlu/0I+VVQZ2z5/q48oSB6BZbZt+dM3ZWJI0tdkJ9GJ?=
+ =?us-ascii?Q?rNMood0B1ns6MqxEZDiSDt/aOwQsxqXmNTcdMjP2ACPrt9RaDg850YpBPxV4?=
+ =?us-ascii?Q?QcybklulqRj0ZSsbJCoWnwAolbDyAn66H65foRg9KaNYFzUA7uW7AehtaUYj?=
+ =?us-ascii?Q?sdUa0lKMZdyjiOyKO5qRugwlZ6Xw64qx3ZrAvBhvmjjb7Jx5rMtavNQFF9Ct?=
+ =?us-ascii?Q?Bc0yPMr3/Opf98FGqUepk6VEyuClvyo6LnT/tX6cdhHusH8g2dKUEPWVcQPs?=
+ =?us-ascii?Q?Qm/4unNdpgW1mDWfe3UQ/WRtJ5iN6aM2cBWgbhHSLDeZo9BRSOjbaHeNWHQy?=
+ =?us-ascii?Q?tACA1/19gyRn6qtD34cf+IOd4PPw6sF3vu3G0hYY4OKSzHJHn/gnowjq5w+u?=
+ =?us-ascii?Q?WjLObbuBKtVs6HupwwAgwl4FHqJe4zwsuWGAzHdXGEtUGHk/UdaPJ8dPLniG?=
+ =?us-ascii?Q?MtzFJ0ghDQo72bQD6c+h2+LMsn5QGVFa5j1ad4yKpa+ivzVsrje0CPdRrUZm?=
+ =?us-ascii?Q?0lF+iEjcaUwclyvhaBnhi10Fd2lqvn9XV95C+4GhZE81XTsyvNsNvJQaE6Rv?=
+ =?us-ascii?Q?a7mDR70689p/YlnXSx17wlw5NDWYmIMw028rakrP?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa18e8d4-38e1-464f-135e-08db07e20f54
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 01:32:50.8758
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AZYuVwiA7Od0UQ9ywHgUEw2FWscrlBXFtmb0LQV5CMtG6gSAV0glaXkrGN1Mr0IFoqrRgmqW9ytOwb/Cd7XQYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8614
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Peng Fan <peng.fan@nxp.com>
 
-Ping again, please take time to review, thanks.
+There maybe pending USR interrupt before requesting irq, however
+uart_add_one_port has not executed, so there will be kernel panic:
+[    0.795668] Unable to handle kernel NULL pointer dereference at virtual addre
+ss 0000000000000080
+[    0.802701] Mem abort info:
+[    0.805367]   ESR = 0x0000000096000004
+[    0.808950]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    0.814033]   SET = 0, FnV = 0
+[    0.816950]   EA = 0, S1PTW = 0
+[    0.819950]   FSC = 0x04: level 0 translation fault
+[    0.824617] Data abort info:
+[    0.827367]   ISV = 0, ISS = 0x00000004
+[    0.831033]   CM = 0, WnR = 0
+[    0.833866] [0000000000000080] user address but active_mm is swapper
+[    0.839951] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[    0.845953] Modules linked in:
+[    0.848869] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.1+g56321e101aca #1
+[    0.855617] Hardware name: Freescale i.MX8MP EVK (DT)
+[    0.860452] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.867117] pc : __imx_uart_rxint.constprop.0+0x11c/0x2c0
+[    0.872283] lr : imx_uart_int+0xf8/0x1ec
 
+The issue only happends in the inmate linux when Jailhouse hypervisor
+enabled. The test procedure is:
+while true; do
+	jailhouse enable imx8mp.cell
+	jailhouse cell linux xxxx
+	sleep 10
+	jailhouse cell destroy 1
+	jailhouse disable
+	sleep 5
+done
 
-Thanks,
-Yang
+And during the upper test, press keys to the 2nd linux console.
+When `jailhouse cell destroy 1`, the 2nd linux has no chance to put
+the uart to a quiese state, so USR1/2 may has pending interrupts. Then
+when `jailhosue cell linux xx` to start 2nd linux again, the issue
+trigger.
 
+In order to disable irqs before requesting them, both UCR1 and UCR2 irqs
+should be disabled, so here fix that, disable the Ageing Timer interrupt
+in UCR2 as UCR1 does.
 
-On 2023/1/28 9:27, Yang Jihong wrote:
-> Hello,
-> 
-> The data written by the thread (data.X file) has been saved as 
-> recommended in v2 patch. Please check whether it is feasible. Thank you.
-> 
-> Thanks,
-> Yang
-> 
-> On 2023/1/13 15:38, Yang Jihong wrote:
->> When --overwrite and --max-size options of perf record are used together,
->> a segmentation fault occurs. The following is an example:
->>
->>    # perf record -e sched:sched* --overwrite --max-size 1K -a -- sleep 1
->>    [ perf record: Woken up 1 times to write data ]
->>    perf: Segmentation fault
->>    Obtained 12 stack frames.
->>    ./perf/perf(+0x197673) [0x55f99710b673]
->>    /lib/x86_64-linux-gnu/libc.so.6(+0x3ef0f) [0x7fa45f3cff0f]
->>    ./perf/perf(+0x8eb40) [0x55f997002b40]
->>    ./perf/perf(+0x1f6882) [0x55f99716a882]
->>    ./perf/perf(+0x794c2) [0x55f996fed4c2]
->>    ./perf/perf(+0x7b7c7) [0x55f996fef7c7]
->>    ./perf/perf(+0x9074b) [0x55f99700474b]
->>    ./perf/perf(+0x12e23c) [0x55f9970a223c]
->>    ./perf/perf(+0x12e54a) [0x55f9970a254a]
->>    ./perf/perf(+0x7db60) [0x55f996ff1b60]
->>    /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xe6) 
->> [0x7fa45f3b2c86]
->>    ./perf/perf(+0x7dfe9) [0x55f996ff1fe9]
->>    Segmentation fault (core dumped)
->>
->> backtrace of the core file is as follows:
->>
->>    (gdb) bt
->>    #0  record__bytes_written (rec=0x55f99755a200 <record>) at 
->> builtin-record.c:234
->>    #1  record__output_max_size_exceeded (rec=0x55f99755a200 <record>) 
->> at builtin-record.c:242
->>    #2  record__write (map=0x0, size=12816, bf=0x55f9978da2e0, 
->> rec=0x55f99755a200 <record>) at builtin-record.c:263
->>    #3  process_synthesized_event (tool=tool@entry=0x55f99755a200 
->> <record>, event=event@entry=0x55f9978da2e0, sample=sample@entry=0x0, 
->> machine=machine@entry=0x55f997893658) at builtin-record.c:618
->>    #4  0x000055f99716a883 in __perf_event__synthesize_id_index 
->> (tool=tool@entry=0x55f99755a200 <record>, 
->> process=process@entry=0x55f997002aa0 <process_synthesized_event>, 
->> evlist=0x55f9978928b0, machine=machine@entry=0x55f997893658,
->>        from=from@entry=0) at util/synthetic-events.c:1895
->>    #5  0x000055f99716a91f in perf_event__synthesize_id_index 
->> (tool=tool@entry=0x55f99755a200 <record>, 
->> process=process@entry=0x55f997002aa0 <process_synthesized_event>, 
->> evlist=<optimized out>, machine=machine@entry=0x55f997893658)
->>        at util/synthetic-events.c:1905
->>    #6  0x000055f996fed4c3 in record__synthesize (tail=tail@entry=true, 
->> rec=0x55f99755a200 <record>) at builtin-record.c:1997
->>    #7  0x000055f996fef7c8 in __cmd_record (argc=argc@entry=2, 
->> argv=argv@entry=0x7ffc67551260, rec=0x55f99755a200 <record>) at 
->> builtin-record.c:2802
->>    #8  0x000055f99700474c in cmd_record (argc=<optimized out>, 
->> argv=0x7ffc67551260) at builtin-record.c:4258
->>    #9  0x000055f9970a223d in run_builtin (p=0x55f997564d88 
->> <commands+264>, argc=10, argv=0x7ffc67551260) at perf.c:330
->>    #10 0x000055f9970a254b in handle_internal_command (argc=10, 
->> argv=0x7ffc67551260) at perf.c:384
->>    #11 0x000055f996ff1b61 in run_argv (argcp=<synthetic pointer>, 
->> argv=<synthetic pointer>) at perf.c:428
->>    #12 main (argc=<optimized out>, argv=0x7ffc67551260) at perf.c:562
->>
->> The reason is that record__bytes_written accesses the freed memory 
->> rec->thread_data,
->> The process is as follows:
->>    __cmd_record
->>      -> record__free_thread_data
->>        -> zfree(&rec->thread_data)         // free rec->thread_data
->>      -> record__synthesize
->>        -> perf_event__synthesize_id_index
->>          -> process_synthesized_event
->>            -> record__write
->>              -> record__bytes_written      // access rec->thread_data
->>
->> We add a member variable "thread_bytes_written" in the struct "record"
->> to save the data size written by the threads.
->>
->> Fixes: 6d57581659f7 ("perf record: Add support for limit perf output 
->> file size")
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->> ---
->>
->> Changes since v2:
->>   - Save data size written by threads to calculate the correct total 
->> data size.
->>   - Update commit message.
->>
->> Changes since v1:
->>   - Add variable check in record__bytes_written for code hardening.
->>   - Save bytes_written separately to reduce one calculation.
->>   - Remove rec->opts.tail_synthesize check.
->>
->>   tools/perf/builtin-record.c | 16 ++++++----------
->>   1 file changed, 6 insertions(+), 10 deletions(-)
->>
->> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->> index 29dcd454b8e2..8374117e66f6 100644
->> --- a/tools/perf/builtin-record.c
->> +++ b/tools/perf/builtin-record.c
->> @@ -154,6 +154,7 @@ struct record {
->>       struct perf_tool    tool;
->>       struct record_opts    opts;
->>       u64            bytes_written;
->> +    u64            thread_bytes_written;
->>       struct perf_data    data;
->>       struct auxtrace_record    *itr;
->>       struct evlist    *evlist;
->> @@ -226,14 +227,7 @@ static bool switch_output_time(struct record *rec)
->>   static u64 record__bytes_written(struct record *rec)
->>   {
->> -    int t;
->> -    u64 bytes_written = rec->bytes_written;
->> -    struct record_thread *thread_data = rec->thread_data;
->> -
->> -    for (t = 0; t < rec->nr_threads; t++)
->> -        bytes_written += thread_data[t].bytes_written;
->> -
->> -    return bytes_written;
->> +    return rec->bytes_written + rec->thread_bytes_written;
->>   }
->>   static bool record__output_max_size_exceeded(struct record *rec)
->> @@ -255,10 +249,12 @@ static int record__write(struct record *rec, 
->> struct mmap *map __maybe_unused,
->>           return -1;
->>       }
->> -    if (map && map->file)
->> +    if (map && map->file) {
->>           thread->bytes_written += size;
->> -    else
->> +        rec->thread_bytes_written += size;
->> +    } else {
->>           rec->bytes_written += size;
->> +    }
->>       if (record__output_max_size_exceeded(rec) && !done) {
->>           fprintf(stderr, "[ perf record: perf size limit reached (%" 
->> PRIu64 " KB),"
->>
-> 
-> .
+Fixes: 8a61f0c70ae6 ("serial: imx: Disable irqs before requesting them")
+Suggested-by: Sherry Sun <sherry.sun@nxp.com>
+Reviewed-by: Sherry Sun <sherry.sun@nxp.com>
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Acked-by: Jason Liu <jason.hui.liu@nxp.com>
+---
+ drivers/tty/serial/imx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index ae75135dccb8..0e0590d1b123 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -2381,6 +2381,11 @@ static int imx_uart_probe(struct platform_device *pdev)
+ 	ucr1 &= ~(UCR1_ADEN | UCR1_TRDYEN | UCR1_IDEN | UCR1_RRDYEN | UCR1_RTSDEN);
+ 	imx_uart_writel(sport, ucr1, UCR1);
+ 
++	/* Disable Ageing Timer interrupt */
++	ucr2 = imx_uart_readl(sport, UCR2);
++	ucr2 &= ~UCR2_ATEN;
++	imx_uart_writel(sport, ucr2, UCR2);
++
+ 	/*
+ 	 * In case RS485 is enabled without GPIO RTS control, the UART IP
+ 	 * is used to control CTS signal. Keep both the UART and Receiver
+-- 
+2.17.1
+
