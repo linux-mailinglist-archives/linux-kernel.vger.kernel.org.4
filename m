@@ -2,141 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29DD68C55C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947A068C562
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjBFSFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S230334AbjBFSHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:07:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjBFSFq (ORCPT
+        with ESMTP id S229960AbjBFSHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:05:46 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9792193DC;
-        Mon,  6 Feb 2023 10:05:45 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id c2so13806129qtw.5;
-        Mon, 06 Feb 2023 10:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TfHweyQypgT88dcV2bDP1Gsm9WfNuarzKmo0tThjIPw=;
-        b=QmIBFvFjPEuuMs7kluLSdEAuJuxt12IW0UIZv2K+BY3Pg7LXI/PdEoitple6kt5q62
-         4KNqoC213XLKUmx0UUVFPyOLe5ps/YZqZFOwIlFlq7YlkL+n3yjOD55leHNoDT3ZYxLe
-         EhNqeW+hmlbpQLinwTz5ROJY1Z/74Zz6Ba9AdRzaDttETXiYMd/Z38oWojtZb+zRR8Z7
-         6B9CC31DAJWyEbryzsA9IkpHB38yEjAzVu2DrBUSEfUo7YJiKNvlBCD3Hg5MUTbWQrll
-         JRQnOLi3X9rzVVf4LNP6ROF672RCrLpYO5KSd2nY9xUZxzKGgLDE10VFr2Mwfhy4vFSJ
-         SWpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TfHweyQypgT88dcV2bDP1Gsm9WfNuarzKmo0tThjIPw=;
-        b=yeKXQYivFwEJIFj8W6f7LI9EY41W8SHkMBlXnxM8QMkSZlFd9Cr+rAMOJpyL3bI+Qc
-         x6690kqWIDsixRw7BeiHpMZU3jBjw+G5TcKnp8KlzztKsy++pzlHyPC9UHQ4AxiuEFzM
-         BIYM8Mmn54TwRIMJmHxZt1f2XTK8gjjoQurMlwT3UyF0rau8mzTPzb84EHSviBIhyOWj
-         6Pdu1KiLkDEoqcwU18UQd/Hi2eSXjqXkq9Ry6OEcW660OswLL8C5+x0JovuL6AcmYnxZ
-         4bOf3fMv6MPzgRZxahyhPBnvh6xLXIuIxo3aIThZ35WnC7wXYa1DydaLH/gS4RwgamPP
-         uB2g==
-X-Gm-Message-State: AO0yUKWjOGF8+BleoMOaF+xIUcQFu87beN6sJJGpYsRdTKKVLTn7ziqR
-        lUwbLPFcC/GrHuxwd0m2VdU=
-X-Google-Smtp-Source: AK7set+JDjyRia7uB1q+yROPDUU/xoNvixXPaC99c+QpibrRazWR6cN0o1/qd+rpqn+zhZ5BBM3Lcg==
-X-Received: by 2002:a05:622a:1052:b0:3b6:313a:e27a with SMTP id f18-20020a05622a105200b003b6313ae27amr303395qte.40.1675706744651;
-        Mon, 06 Feb 2023 10:05:44 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id t66-20020a374645000000b0072862fcbbdcsm803599qka.42.2023.02.06.10.05.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 10:05:43 -0800 (PST)
-Message-ID: <9cf4eb5f-64d8-5e7f-6fa1-39ed08d66e77@gmail.com>
-Date:   Mon, 6 Feb 2023 10:05:31 -0800
+        Mon, 6 Feb 2023 13:07:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922223115;
+        Mon,  6 Feb 2023 10:07:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3935B60FCA;
+        Mon,  6 Feb 2023 18:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30173C433EF;
+        Mon,  6 Feb 2023 18:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675706863;
+        bh=2MrwvqBJt7ukrXEsIn0AtBjS1SbvuoI2iFvjfzPvabw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=erlZBriKGEMMwf2V+6z5b/DS1cJ8/4s5A5zPaUZc7n6oqyMC8KSslYW2xjFug/2dB
+         NevIYzm+2tkaWIPwZjY9KBFoXfWG2xLXUq6SIDTPGjaRZ80gyYSiNTkfE/tC60TsGA
+         d71dcR02N7JIQ10GROCpg33BDK2K3Y/38UDGWZpA=
+Date:   Mon, 6 Feb 2023 19:06:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] interconnect changes for 6.3
+Message-ID: <Y+FBqLt45rWccwXT@kroah.com>
+References: <20230206141200.9789-1-djakov@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU
- port becomes VLAN-aware
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>
-References: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206141200.9789-1-djakov@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/5/23 06:07, Vladimir Oltean wrote:
-> Frank reports that in a mt7530 setup where some ports are standalone and
-> some are in a VLAN-aware bridge, 8021q uppers of the standalone ports
-> lose their VLAN tag on xmit, as seen by the link partner.
+On Mon, Feb 06, 2023 at 04:12:00PM +0200, Georgi Djakov wrote:
+> Hello Greg,
 > 
-> This seems to occur because once the other ports join the VLAN-aware
-> bridge, mt7530_port_vlan_filtering() also calls
-> mt7530_port_set_vlan_aware(ds, cpu_dp->index), and this affects the way
-> that the switch processes the traffic of the standalone port.
+> This is the pull request with interconnect changes for the 6.3-rc1 merge
+> window. In contains new drivers and misc tiny updates. Two of the new
+> drivers are in immutable branches (qcom tree pulls SM8550 and QDU1000 DT
+> header files). The rest of the details are in the signed tag.
 > 
-> Relevant is the PVC_EG_TAG bit. The MT7530 documentation says about it:
+> All patches have been in linux-next for at least one week. Please pull
+> into char-misc-next when possible.
 > 
-> EG_TAG: Incoming Port Egress Tag VLAN Attribution
-> 0: disabled (system default)
-> 1: consistent (keep the original ingress tag attribute)
+> Thanks,
+> Georgi
 > 
-> My interpretation is that this setting applies on the ingress port, and
-> "disabled" is basically the normal behavior, where the egress tag format
-> of the packet (tagged or untagged) is decided by the VLAN table
-> (MT7530_VLAN_EGRESS_UNTAG or MT7530_VLAN_EGRESS_TAG).
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 > 
-> But there is also an option of overriding the system default behavior,
-> and for the egress tagging format of packets to be decided not by the
-> VLAN table, but simply by copying the ingress tag format (if ingress was
-> tagged, egress is tagged; if ingress was untagged, egress is untagged;
-> aka "consistent). This is useful in 2 scenarios:
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 > 
-> - VLAN-unaware bridge ports will always encounter a miss in the VLAN
->    table. They should forward a packet as-is, though. So we use
->    "consistent" there. See commit e045124e9399 ("net: dsa: mt7530: fix
->    tagged frames pass-through in VLAN-unaware mode").
+> are available in the Git repository at:
 > 
-> - Traffic injected from the CPU port. The operating system is in god
->    mode; if it wants a packet to exit as VLAN-tagged, it sends it as
->    VLAN-tagged. Otherwise it sends it as VLAN-untagged*.
-> 
-> *This is true only if we don't consider the bridge TX forwarding offload
-> feature, which mt7530 doesn't support.
-> 
-> So for now, make the CPU port always stay in "consistent" mode to allow
-> software VLANs to be forwarded to their egress ports with the VLAN tag
-> intact, and not stripped.
-> 
-> Link: https://lore.kernel.org/netdev/trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36/
-> Fixes: e045124e9399 ("net: dsa: mt7530: fix tagged frames pass-through in VLAN-unaware mode")
-> Reported-by: Frank Wunderlich <frank-w@public-files.de>
-> Tested-by: Frank Wunderlich <frank-w@public-files.de>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.3-rc1
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Pulled and pushed out, thanks.
 
+greg k-h
