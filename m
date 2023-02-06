@@ -2,335 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1491F68B7C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7285968B7CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjBFIy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 03:54:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        id S229945AbjBFI47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 03:56:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjBFIyZ (ORCPT
+        with ESMTP id S229500AbjBFI4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:54:25 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA05712857;
-        Mon,  6 Feb 2023 00:54:23 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ml19so32240408ejb.0;
-        Mon, 06 Feb 2023 00:54:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5K/+n4xNab3o/nLIaDh95b6yAKziU1tvSQuqOiWt3OA=;
-        b=dP4sWNbjALMahOPsT5Tb6lcwugvRxESmf1F9vvxJGnwe/GzhB5k3TKlb92QjsvsrV9
-         qrKyvnw0hxxKB6biqnP3OIfOoCNKPS+H7YCEnyd+ggtbWFdSxvhwVyuYmz4Ur4UAcw38
-         bHLBcZxdAedA3nnBjQnHpR20jQ9ikXOdur5+NVlvbQeVedMApXVzeQG4eDaedEONOp2m
-         uJ+EBdybvGARjhnURMBe9nm/HDLcPhTHRpSgk8KKoHE7EGFEIIv0ukaklDWn4BEMV4uT
-         Wp4/2lsoYD0Hgv4toHUJpxH+V2DcTmygpfGTMtRJnulvMGFChGcAcsFGpqLEPipYEfUE
-         +0Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5K/+n4xNab3o/nLIaDh95b6yAKziU1tvSQuqOiWt3OA=;
-        b=Bdf7snvPFK7nJUuN7kntdofC6iZ1uvNsd71NAft6yW2nczLg1ha2oqfl0LobzjLnc3
-         DmQe+wx/SiR4nEd+/McA31XvGWGTKDZJjPMiS6nHgcnxF72EwbT5RsTAyK+J2kYW7qnD
-         bv+VwpJ860ZHZ3dMD1Rhl8z/foWD9KgE8LyLcIgFKTD1vUG2TtGMR3qLAuqEHwJzSZhh
-         xYKboa5Pe9O8ekvhNrfDK1dSEhgFboZPjRdMvyBpcNqeKmVNTHHf9wRvWIvpKB3AZVmj
-         +8eyWCzO6tmksEHqSq+TPFv4/74Iyc8wL7LB8v7bXhB2YEXS0bQUfeQHm8wBmPHeF9cu
-         l/Hg==
-X-Gm-Message-State: AO0yUKVaX53W1pguMQ9qfzd05b6ehao98RBllTgspqn1SggpCAZJda8K
-        nXT1OT9Yxs3GF7cvjAwGe1KbBt7GjpdBDQwtmZ0=
-X-Google-Smtp-Source: AK7set8/28B3/8TsdW+DdIKZXThf8UCw64vcxMlprv1Xh/pwk5jbYFTq6/2hdfjxW8972wHzuE0vBS1Pvf46HpmWdx0=
-X-Received: by 2002:a17:906:6d0d:b0:87e:94bb:8174 with SMTP id
- m13-20020a1709066d0d00b0087e94bb8174mr5738984ejr.249.1675673662383; Mon, 06
- Feb 2023 00:54:22 -0800 (PST)
+        Mon, 6 Feb 2023 03:56:55 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2052.outbound.protection.outlook.com [40.107.92.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519FB12857;
+        Mon,  6 Feb 2023 00:56:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QnpNvWcZUY9DIFaq8TJnHw/ahfZ3viUWXXWksNCMwYRoine85/02jxPPyLScqzcAEs81d7812NY7bXQVRyriz77Y8tJZggfyzz4hhemn7qrV8tDbg3Nswk/amRgOqfCg3yGg43TxF5oj1egCpvwM4grPozdq2gIMlFvLsx+33Bcht2wtCnk36t9JrxrYBMilNBDy8JoRI3E5puwH9OoR3HgTtOaztE6zwBQiCVgHFO/beycov/ClbR7R2UL17bdCpJ4VFjjfiqbXZi1FfBs+x66iCi+Hr1dPT/X2+hGC/n2E8HK/J9AOzkcxskBpjTNacmBkB4+krjv3AFIGQNVObA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EnyO9ZjGhTTa7VYqkJZIPvHzvE3jYcMgYvh5p+nZ8y8=;
+ b=VnGtmRUksG+cV2eE0XHb8n8Wed0mcSKgaNeeUQZ4hFJdz2E+ljmv9egjKqxesfXn4O6hBXy1Gc2PCYctNX19oXHVNuXfwlvh0m+Bumt9clLfA7R1dj8xKxnnzm6Pyixqrat/FJQ7LoJ8CVLg8myHOSJwiguF59lGb+pKWQgHWGd7H3k6dhjJaYx9b6jpRaF1FrXUlMzSnMBLRwgkqOoJWfFLsd0hsEhf44MDpNtfZeo/BAMhh5GbO8Ogee8iZju5mX2e5JMqQAoi4xQYXbZNKqzS3BHz8f+D0Vvb/mUp3M/6VVPxe7EeE2YVM1lJojoSelWfGAYykAfdu+tfyAxHOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EnyO9ZjGhTTa7VYqkJZIPvHzvE3jYcMgYvh5p+nZ8y8=;
+ b=Am7pmv4Uu6KUaBFSdCpIcF/+tY9img9Gdz2Muz2i43Sn4kVBedckFnM3tNJaUsajJP5Y+mjC3ZCedaRKP+V6aCAd4irc89WEQFshrDobqkelFWSALT7DFxmvPiT4gvCnwLNwqfad+mtW5h2tnlwcXNWXrKUPpUcEUSGXpZDr4nHWtBUmnOgS2M5ZlL1zD6Cb5jvey9fnHcR9PxcW+PXQgHkcGkK5I/ll5YQhbebr5JS/QXi56mh7e8V//MSUxcrhqk7UcmNr9RQWuuXt2WT7gf6INmXZM9oDpjRNdZuTwTKmbne1ouNE92yjrxVf1j0J+lXciZnoxvyvd9SmWJbj5g==
+Received: from DM6PR07CA0045.namprd07.prod.outlook.com (2603:10b6:5:74::22) by
+ SJ0PR12MB6830.namprd12.prod.outlook.com (2603:10b6:a03:47c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 08:56:52 +0000
+Received: from DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:74:cafe::f9) by DM6PR07CA0045.outlook.office365.com
+ (2603:10b6:5:74::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34 via Frontend
+ Transport; Mon, 6 Feb 2023 08:56:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT049.mail.protection.outlook.com (10.13.172.188) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.34 via Frontend Transport; Mon, 6 Feb 2023 08:56:52 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 00:56:46 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 00:56:45 -0800
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Mon, 6 Feb 2023 00:56:45 -0800
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 5.10 0/9] 5.10.167-rc1 review
+In-Reply-To: <20230203101006.422534094@linuxfoundation.org>
+References: <20230203101006.422534094@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <20230205210751.3842103-1-airlied@gmail.com> <CAOkhzLWSJsDK9Gm-AzeUw7fCpkjDg7d9GuDWyF-6hDr5UZ4DZg@mail.gmail.com>
- <CAPM=9tyaCUmA2bNP1YA1B=cFZP=nKPhQoWR7UwBD2Nfj8ZTODA@mail.gmail.com>
- <CAOkhzLVLbOEp4QnJynxV3cgiqOV5Rm=+dMgexiRmyDs-bRCTPg@mail.gmail.com>
- <CAPM=9tx0D54oQ6QmjF_NxnBBxbLzhXxi5uH2p6fLWfg2L3xPFw@mail.gmail.com>
- <CAOkhzLUspmZjC0x6nJoHyc9nijqZu7BOWc8vsqHSRbQhVzd=Gw@mail.gmail.com> <CAMwc25q9LO0N45DAV6HeONVsWBbOxxYCkSV12Yhr3PVorrr4dg@mail.gmail.com>
-In-Reply-To: <CAMwc25q9LO0N45DAV6HeONVsWBbOxxYCkSV12Yhr3PVorrr4dg@mail.gmail.com>
-From:   Zeno Davatz <zdavatz@gmail.com>
-Date:   Mon, 6 Feb 2023 09:54:11 +0100
-Message-ID: <CAOkhzLXMFwO9hYcwrr9O7xoVs_kprfv4DG8fiNyOsWNLF_VS9g@mail.gmail.com>
-Subject: Re: [PATCH] nvidiafb: detect the hardware support before removing console.
-To:     David Airlie <airlied@redhat.com>
-Cc:     Dave Airlie <airlied@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bjorn@helgaas.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <95a66cb6-25ee-4931-8ce0-ff91b2832156@rnnvmail201.nvidia.com>
+Date:   Mon, 6 Feb 2023 00:56:45 -0800
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT049:EE_|SJ0PR12MB6830:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3905f4a6-2a78-4bc9-bc76-08db0820170f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j2bHLm3h0r5g+beZ+Yi0B3OYDYGsLJjD1zTVx1A6uJygwCjHOQ/BIztK98nyYOiz4WQUXccRLi8rnsY8FxpXynAqXzMtp0NK1uMuF7f7Z9oAhjbgh7FXlXxfeu5gKa8argYeyBHvdVmwjJGZBhS8flCpEY3N0k8CtZNlLGt13UelA0kL0uJGPieR4BTPWk1s4kKR3ezKMnzigxzpSR5InRp4UiQ8i5PM3jawksm/4Hrmr0e0ojEYssYd75MhB2TuJK2AkftcbszR0/oPfNOHKT+hEc4P8dhtuEFHZ8Q7KW1Zbpvn3q5Csv4J8rmMUP44te/iFZh+6ySVSU+8gvou7SK59sftq2ZQ3ZYkx3Njoj9EwOO4WBEhpjTcEfd40sSqEDpvMPRQU6JSBJB0Na0AeZFavtKRA42j0MfgSpuuw1QOldcQiS+gIQRPjMEqUxWlVoCSAq6WbhbRjtNNxOztxsk5ow/zVHyUkNJCqc9Ttz6Cg7ctwoWQmfSgOtaqo9j17v/+atjjvZkorODvA6EAOGpIPh9mQK2D+97r+rHzkasKtvy6rYrhOL8tfGjVKIgugJn3bC6AZyPkP/89BxefGFOSqvz170wb1E3U9/uBJtZw/XTDj5wBIGSw1/y2VllDdKoB8fyyrrXNw8rGlHjykViLW4ytSi/GcIJ+sfkbTC8ou0Ph7S/zv/BJUA6B36DuXLu7XFVYmbMTO56uOCGPIleJ2YzPiE1SOlVkzkYtPEKKrjgtqFLpc4aTsMbIX6vDEZiGijpkx0TicbXqQLrDRUNa6b2DmIGoVT5SN2VUfYQ=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(396003)(39860400002)(451199018)(46966006)(40470700004)(36840700001)(31696002)(36860700001)(86362001)(356005)(82740400003)(7636003)(316002)(4326008)(6916009)(41300700001)(8676002)(8936002)(7416002)(5660300002)(54906003)(70586007)(70206006)(82310400005)(40460700003)(40480700001)(47076005)(426003)(336012)(478600001)(966005)(186003)(26005)(2906002)(31686004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 08:56:52.0533
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3905f4a6-2a78-4bc9-bc76-08db0820170f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT049.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6830
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Dave
+On Fri, 03 Feb 2023 11:13:29 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.167 release.
+> There are 9 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 05 Feb 2023 10:09:58 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.167-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-On Mon, Feb 6, 2023 at 9:40 AM David Airlie <airlied@redhat.com> wrote:
->
-> On Mon, Feb 6, 2023 at 6:38 PM Zeno Davatz <zdavatz@gmail.com> wrote:
-> >
-> > Dear Dave
-> >
-> > On Mon, Feb 6, 2023 at 9:10 AM Dave Airlie <airlied@gmail.com> wrote:
-> > >
-> > > On Mon, 6 Feb 2023 at 18:01, Zeno Davatz <zdavatz@gmail.com> wrote:
-> > > >
-> > > > Dear Dave
-> > > >
-> > > > On Mon, Feb 6, 2023 at 8:54 AM Dave Airlie <airlied@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, 6 Feb 2023 at 17:52, Zeno Davatz <zdavatz@gmail.com> wrote:
-> > > > > >
-> > > > > > Dear Dave
-> > > > > >
-> > > > > > Thank you for your patch.
-> > > > > >
-> > > > > > On Sun, Feb 5, 2023 at 10:07 PM Dave Airlie <airlied@gmail.com> wrote:
-> > > > > > >
-> > > > > > > From: Dave Airlie <airlied@redhat.com>
-> > > > > > >
-> > > > > > > This driver removed the console, but hasn't yet decided if it could
-> > > > > > > take over the console yet. Instead of doing that, probe the hw for
-> > > > > > > support and then remove the console afterwards.
-> > > > > > >
-> > > > > > > Signed-off-by: Dave Airlie <airlied@redhat.com>
-> > > > > > > Fixes: https://bugzilla.kernel.org/show_bug.cgi?id=216859
-> > > > > > > Reported-by: Zeno Davatz <zdavatz@gmail.com>
-> > > > > > > ---
-> > > > > > >  drivers/video/fbdev/nvidia/nvidia.c | 81 +++++++++++++++--------------
-> > > > > > >  1 file changed, 42 insertions(+), 39 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/video/fbdev/nvidia/nvidia.c b/drivers/video/fbdev/nvidia/nvidia.c
-> > > > > > > index 1960916098d4..e60a276b4855 100644
-> > > > > > > --- a/drivers/video/fbdev/nvidia/nvidia.c
-> > > > > > > +++ b/drivers/video/fbdev/nvidia/nvidia.c
-> > > > > > > @@ -1197,17 +1197,17 @@ static int nvidia_set_fbinfo(struct fb_info *info)
-> > > > > > >         return nvidiafb_check_var(&info->var, info);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > -static u32 nvidia_get_chipset(struct fb_info *info)
-> > > > > > > +static u32 nvidia_get_chipset(struct pci_dev *pci_dev,
-> > > > > > > +                             volatile u32 __iomem *REGS)
-> > > > > > >  {
-> > > > > > > -       struct nvidia_par *par = info->par;
-> > > > > > > -       u32 id = (par->pci_dev->vendor << 16) | par->pci_dev->device;
-> > > > > > > +       u32 id = (pci_dev->vendor << 16) | pci_dev->device;
-> > > > > > >
-> > > > > > >         printk(KERN_INFO PFX "Device ID: %x \n", id);
-> > > > > > >
-> > > > > > >         if ((id & 0xfff0) == 0x00f0 ||
-> > > > > > >             (id & 0xfff0) == 0x02e0) {
-> > > > > > >                 /* pci-e */
-> > > > > > > -               id = NV_RD32(par->REGS, 0x1800);
-> > > > > > > +               id = NV_RD32(REGS, 0x1800);
-> > > > > > >
-> > > > > > >                 if ((id & 0x0000ffff) == 0x000010DE)
-> > > > > > >                         id = 0x10DE0000 | (id >> 16);
-> > > > > > > @@ -1220,12 +1220,11 @@ static u32 nvidia_get_chipset(struct fb_info *info)
-> > > > > > >         return id;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > -static u32 nvidia_get_arch(struct fb_info *info)
-> > > > > > > +static u32 nvidia_get_arch(u32 Chipset)
-> > > > > > >  {
-> > > > > > > -       struct nvidia_par *par = info->par;
-> > > > > > >         u32 arch = 0;
-> > > > > > >
-> > > > > > > -       switch (par->Chipset & 0x0ff0) {
-> > > > > > > +       switch (Chipset & 0x0ff0) {
-> > > > > > >         case 0x0100:            /* GeForce 256 */
-> > > > > > >         case 0x0110:            /* GeForce2 MX */
-> > > > > > >         case 0x0150:            /* GeForce2 */
-> > > > > > > @@ -1278,16 +1277,44 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
-> > > > > > >         struct fb_info *info;
-> > > > > > >         unsigned short cmd;
-> > > > > > >         int ret;
-> > > > > > > +       volatile u32 __iomem *REGS;
-> > > > > > > +       int Chipset;
-> > > > > > > +       u32 Architecture;
-> > > > > > >
-> > > > > > >         NVTRACE_ENTER();
-> > > > > > >         assert(pd != NULL);
-> > > > > > >
-> > > > > > > +       if (pci_enable_device(pd)) {
-> > > > > > > +               printk(KERN_ERR PFX "cannot enable PCI device\n");
-> > > > > > > +               return -ENODEV;
-> > > > > > > +       }
-> > > > > > > +
-> > > > > > > +       /* enable IO and mem if not already done */
-> > > > > > > +       pci_read_config_word(pd, PCI_COMMAND, &cmd);
-> > > > > > > +       cmd |= (PCI_COMMAND_IO | PCI_COMMAND_MEMORY);
-> > > > > > > +       pci_write_config_word(pd, PCI_COMMAND, cmd);
-> > > > > > > +
-> > > > > > > +       nvidiafb_fix.mmio_start = pci_resource_start(pd, 0);
-> > > > > > > +       nvidiafb_fix.mmio_len = pci_resource_len(pd, 0);
-> > > > > > > +
-> > > > > > > +       REGS = ioremap(nvidiafb_fix.mmio_start, nvidiafb_fix.mmio_len);
-> > > > > > > +       if (!REGS) {
-> > > > > > > +               printk(KERN_ERR PFX "cannot ioremap MMIO base\n");
-> > > > > > > +               return -ENODEV;
-> > > > > > > +       }
-> > > > > > > +
-> > > > > > > +       Chipset = nvidia_get_chipset(pd, REGS);
-> > > > > > > +       Architecture = nvidia_get_arch(Chipset);
-> > > > > > > +       if (Architecture == 0) {
-> > > > > > > +               printk(KERN_ERR PFX "unknown NV_ARCH\n");
-> > > > > > > +               goto err_out;
-> > > > > > > +       }
-> > > > > > > +
-> > > > > > >         ret = aperture_remove_conflicting_pci_devices(pd, "nvidiafb");
-> > > > > > >         if (ret)
-> > > > > > > -               return ret;
-> > > > > > > +               goto err_out;
-> > > > > > >
-> > > > > > >         info = framebuffer_alloc(sizeof(struct nvidia_par), &pd->dev);
-> > > > > > > -
-> > > > > > >         if (!info)
-> > > > > > >                 goto err_out;
-> > > > > > >
-> > > > > > > @@ -1298,11 +1325,6 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
-> > > > > > >         if (info->pixmap.addr == NULL)
-> > > > > > >                 goto err_out_kfree;
-> > > > > > >
-> > > > > > > -       if (pci_enable_device(pd)) {
-> > > > > > > -               printk(KERN_ERR PFX "cannot enable PCI device\n");
-> > > > > > > -               goto err_out_enable;
-> > > > > > > -       }
-> > > > > > > -
-> > > > > > >         if (pci_request_regions(pd, "nvidiafb")) {
-> > > > > > >                 printk(KERN_ERR PFX "cannot request PCI regions\n");
-> > > > > > >                 goto err_out_enable;
-> > > > > > > @@ -1318,34 +1340,17 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
-> > > > > > >         par->paneltweak = paneltweak;
-> > > > > > >         par->reverse_i2c = reverse_i2c;
-> > > > > > >
-> > > > > > > -       /* enable IO and mem if not already done */
-> > > > > > > -       pci_read_config_word(pd, PCI_COMMAND, &cmd);
-> > > > > > > -       cmd |= (PCI_COMMAND_IO | PCI_COMMAND_MEMORY);
-> > > > > > > -       pci_write_config_word(pd, PCI_COMMAND, cmd);
-> > > > > > > -
-> > > > > > > -       nvidiafb_fix.mmio_start = pci_resource_start(pd, 0);
-> > > > > > >         nvidiafb_fix.smem_start = pci_resource_start(pd, 1);
-> > > > > > > -       nvidiafb_fix.mmio_len = pci_resource_len(pd, 0);
-> > > > > > > -
-> > > > > > > -       par->REGS = ioremap(nvidiafb_fix.mmio_start, nvidiafb_fix.mmio_len);
-> > > > > > >
-> > > > > > > -       if (!par->REGS) {
-> > > > > > > -               printk(KERN_ERR PFX "cannot ioremap MMIO base\n");
-> > > > > > > -               goto err_out_free_base0;
-> > > > > > > -       }
-> > > > > > > +       par->REGS = REGS;
-> > > > > > >
-> > > > > > > -       par->Chipset = nvidia_get_chipset(info);
-> > > > > > > -       par->Architecture = nvidia_get_arch(info);
-> > > > > > > -
-> > > > > > > -       if (par->Architecture == 0) {
-> > > > > > > -               printk(KERN_ERR PFX "unknown NV_ARCH\n");
-> > > > > > > -               goto err_out_arch;
-> > > > > > > -       }
-> > > > > > > +       par->Chipset = Chipset;
-> > > > > > > +       par->Architecture = Architecture;
-> > > > > > >
-> > > > > > >         sprintf(nvidiafb_fix.id, "NV%x", (pd->device & 0x0ff0) >> 4);
-> > > > > > >
-> > > > > > >         if (NVCommonSetup(info))
-> > > > > > > -               goto err_out_arch;
-> > > > > > > +               goto err_out_free_base0;
-> > > > > > >
-> > > > > > >         par->FbAddress = nvidiafb_fix.smem_start;
-> > > > > > >         par->FbMapSize = par->RamAmountKBytes * 1024;
-> > > > > > > @@ -1401,7 +1406,6 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
-> > > > > > >                 goto err_out_iounmap_fb;
-> > > > > > >         }
-> > > > > > >
-> > > > > > > -
-> > > > > > >         printk(KERN_INFO PFX
-> > > > > > >                "PCI nVidia %s framebuffer (%dMB @ 0x%lX)\n",
-> > > > > > >                info->fix.id,
-> > > > > > > @@ -1415,15 +1419,14 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
-> > > > > > >  err_out_free_base1:
-> > > > > > >         fb_destroy_modedb(info->monspecs.modedb);
-> > > > > > >         nvidia_delete_i2c_busses(par);
-> > > > > > > -err_out_arch:
-> > > > > > > -       iounmap(par->REGS);
-> > > > > > > - err_out_free_base0:
-> > > > > > > +err_out_free_base0:
-> > > > > > >         pci_release_regions(pd);
-> > > > > > >  err_out_enable:
-> > > > > > >         kfree(info->pixmap.addr);
-> > > > > > >  err_out_kfree:
-> > > > > > >         framebuffer_release(info);
-> > > > > > >  err_out:
-> > > > > > > +       iounmap(REGS);
-> > > > > > >         return -ENODEV;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > --
-> > > > > > > 2.38.1
-> > > > > >
-> > > > > > This patch fails for me.
-> > > > >
-> > > > > I've based the patch on 6.2-rc7, please make sure to not have the
-> > > > > previous revert committed, this is to replace that patch.
-> > > >
-> > > > Can you guide me through the steps please?
-> > > >
-> > > > I done:
-> > > >
-> > > > 1. cd /usr/src/linux
-> > > > 2. sudo git pull
-> > > > 3. then I applied your patch.
-> > > >
-> > > > Am I doing something wrong?
-> > >
-> > > What is your top of tree commit? (git log)
-> > >
-> > > have you got any commits on top?
-> > >
-> > > git reset --hard origin/master should reset your tree to Linus top.
-> >
-> > 1. git log shows "d2d11f342b179f1894a901f143ec7c008caba43e"
-> > 2. No, no patches on top.
-> > 3. I am doing the following steps:
-> > /usr/src/linux> sudo git reset --hard origin/master
-> > Passwort:
-> > HEAD ist jetzt bei d2d11f342b17 Merge branch 'fixes' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs
-> > /usr/src/linux> sudo patch -p1 < /tmp/patch
-> > patching file drivers/video/fbdev/nvidia/nvidia.c
-> > Hunk #1 FAILED at 1197.
-> > Hunk #2 FAILED at 1220.
-> > Hunk #3 FAILED at 1278.
-> > Hunk #4 FAILED at 1298.
-> > Hunk #5 FAILED at 1318.
-> > Hunk #6 FAILED at 1401.
-> > Hunk #7 FAILED at 1415.
-> > 7 out of 7 hunks FAILED -- saving rejects to file
-> > drivers/video/fbdev/nvidia/nvidia.c.rej
-> >
-> Are you pulling the patch from email? I guess your email service or
-> something is mangling it.
->
-> I've attached it to see if that helps.
+All tests passing for Tegra ...
 
-Thank you! This patch works and I am booting perfectly well now!
+Test results for stable-v5.10:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    75 tests:	75 pass, 0 fail
 
-~/.backup> uname -a
-Linux zenogentoo 6.2.0-rc7-00002-gd2d11f342b17-dirty #144 SMP
-PREEMPT_DYNAMIC Mon Feb  6 09:42:58 CET 2023 x86_64 Intel(R) Core(TM)
-i7 CPU 960 @ 3.20GHz GenuineIntel GNU/Linux
+Linux version:	5.10.167-rc1-g34c96ff6b629
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
 
-Please let me know if the patch makes it into mainline for the 6.2 release ;).
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-Best
-Zeno
+Jon
