@@ -2,109 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A18668B309
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC8468B30C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 01:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjBFANR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 19:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S229565AbjBFANg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 19:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBFANP (ORCPT
+        with ESMTP id S229603AbjBFANe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 19:13:15 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEE61816E;
-        Sun,  5 Feb 2023 16:13:14 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso7597809wms.4;
-        Sun, 05 Feb 2023 16:13:14 -0800 (PST)
+        Sun, 5 Feb 2023 19:13:34 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960DF1ADF5
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 16:13:26 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id f10so11267701qtv.1
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 16:13:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=kali.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FacqhinIE3cYzcHWL+sIHtqTA2GbL6NIBfMucLlCGic=;
-        b=Knf06s8pt8mbdxTpfNvgXKole3+l5jv7IwBSWfA0bGadXS1L+aeX0qDjyvzKoYIEY+
-         2w96V8sVec2Yk+Txg3X8Dzc3ANKzcau4/mwNqhPq2j7hi9NiD1Dt2522tj8BleQJeo32
-         lWtZ4FXHH6MSqAeuzVHtgVaHQsdi5X8WZk0h4xO00zScVi/1+tvoLkJZsNtZMaiQbqP0
-         PXOQfCBdLhefTGcZ+mTrA7mCGjSh59wrgX07uprGVUPMtd7dHowqY5Z8/8C55AG03UNG
-         TZfIHcwxW4+rtzYevyGXi7FB+n3Kz+Uac4oIe6O9UqhnyNydb+z/Vl8AgxhboUEP056G
-         0hNg==
+        bh=MmeAe5uno9wGc5xLwGkJf0jMDPKBNskya1KsnB3Qcn8=;
+        b=WevXsNaV17F5m0//FDGunyGk4JMhe3+jEFZ/RrqrYl3Yoaj5I7Do7vr2dl9yXwm/5r
+         gCDmqR5ktL44Z9SHBO33I3jODB2vS2nralihRBqwymZ9RwlAtjnGavgUMRGnJTboGFIu
+         wf5FZzee6YCgu3V61dnzqGayLJJc7g5ZEvzlOis8rOJLlc9Z97dkILg2YDgXZHqh3oMO
+         ivMydusYX1u3VMgmJriIUTKh88VoNVZ9X9/Loaxl8pslkllXOwZ4LtI1J9byBstD6nB7
+         OyDkqny4e0FQh+08oaeAQAgrZRY8aEQPrCeLQqFvrnZRHFJqN5fJRYyEVmTs1Re3xj4g
+         HDiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FacqhinIE3cYzcHWL+sIHtqTA2GbL6NIBfMucLlCGic=;
-        b=pdyiV6SxQAdK100AGYM8sZfvGKygjiiDuz8l/1+2hbDzNd6w14NVguVTvU2CfQm6m/
-         CUyrs68Lb3E23JzEjxMYHqVGNBXcngTFKCH7KrgdPprijG8vDCPdKe127qtIMquv0pYU
-         bX1TGpdSkGvLz/kZx4wlX5RxXwd7DZtV+N7OycLSqMAYAZ3G9q34ZuphD3KXjeu/oOc6
-         KCjPIvTEsNYB2iQtStVPkebGzNsqmzqLb5G1M0G1iJ+1dsCtgLgyVet8bmuqu/RyVIuL
-         oQeepw2WIiBRzMXuJj+yv/lKekvv8ZmKo/P+k2uoTNRjOx8xVw8Tc38D11JKGJuVudFg
-         HZ+Q==
-X-Gm-Message-State: AO0yUKUPO75GS/MQ4L2wUl+8Ur1LWulZpGm23nkxZCzFmEkMjyraQITy
-        H83IaVU4RUZAAQ9FlEfvrBY=
-X-Google-Smtp-Source: AK7set/5apFyhhx9Ky/PaYsJhuRV0Sm5j0nwp0xTR6YKGWciD3apNFq27D+biSlLgIiTqgSFUMUSuQ==
-X-Received: by 2002:a05:600c:1c1c:b0:3df:9858:c02f with SMTP id j28-20020a05600c1c1c00b003df9858c02fmr10080938wms.4.1675642393251;
-        Sun, 05 Feb 2023 16:13:13 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:ad64:1263:d26a:39ae])
-        by smtp.gmail.com with ESMTPSA id v9-20020a05600c470900b003dfe549da4fsm9508994wmo.18.2023.02.05.16.13.12
+        bh=MmeAe5uno9wGc5xLwGkJf0jMDPKBNskya1KsnB3Qcn8=;
+        b=dO30HqHvLygW1XX89MissmbYueqnyeXWxeNgvhHMsQ0Tpd3PJYrJTsScY5IWTPH01i
+         cNHW9+vbZlXMblSkCIT5vGCOZxxC1ClKJ+7Ut10M30wqnxkhZGCW72ImExFclxIOy7Vn
+         AN6z7VdCvnT+oqh+wPZnMX7FDKzBPf+F02WRVmGdGAJHIhRqdcQ+GXMNMf5MEf9bVL+4
+         esBYBq0bSXTUr1k6dZY/RWM/r0HA0RwItKLtYqHO+h6yNFD5WxxKxVbIZ6MbIqD0BGkv
+         3M+rWkCkRqT3d0GFlwfGUie5B8o2Ak/L/DRiWZMc+A06Zyn6Rnb6pMFnmx1D7aMYUDPk
+         TaKg==
+X-Gm-Message-State: AO0yUKU1IO6WvLH8ex308MUya5zJKM9adDKYmYW60ATjULu1zww+zsJK
+        KCKuYRIAXrmcV1mrkQSzM1aEhg==
+X-Google-Smtp-Source: AK7set8BJRNvbZw5UsDww2zQ2b3xNBVHvDL+phKNASwdNnWujugsUHYTuY15uIuJoGM1rKVTZN1HnA==
+X-Received: by 2002:ac8:5f88:0:b0:3b9:b497:109e with SMTP id j8-20020ac85f88000000b003b9b497109emr18259071qta.18.1675642405870;
+        Sun, 05 Feb 2023 16:13:25 -0800 (PST)
+Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
+        by smtp.gmail.com with ESMTPSA id fz14-20020a05622a5a8e00b003b9e1d3a502sm6177249qtb.54.2023.02.05.16.13.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Feb 2023 16:13:12 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sun, 05 Feb 2023 16:13:25 -0800 (PST)
+From:   Steev Klimaszewski <steev@kali.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2] arm64: dts: renesas: r9a07g044: Add Cortex-A55 PMU node
-Date:   Mon,  6 Feb 2023 00:13:00 +0000
-Message-Id: <20230206001300.28937-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+Subject: [PATCH v3 0/4] Attempt at adding WCN6855 BT support
+Date:   Sun,  5 Feb 2023 18:13:19 -0600
+Message-Id: <20230206001323.2466-1-steev@kali.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+This v3 of the patchset is somewhat of an RFC/RFT, and also just something to
+get this out there.
 
-Enable the performance monitor unit for the Cortex-A55 cores on the
-RZ/G2L (r9a07g044) SoC.
+First things first, I do not have access to the specs nor the schematics, so a
+lot of this was done via guess work, looking at the acpi tables, and looking at
+how a similar device (wcn6750) was added.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1->v2
-* Fixed interrupt type
----
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+There are possibly checkpatch warnings, and I do apologize to those who won't
+review things until there are no warnings for wasting your time, I did try to
+correct the ones I came across and seemed to be needed.
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-index 80b2332798d9..2c848aad7aea 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-@@ -161,6 +161,11 @@ opp-50000000 {
- 		};
- 	};
- 
-+	pmu {
-+		compatible = "arm,cortex-a55-pmu";
-+		interrupts-extended = <&gic GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
- 	psci {
- 		compatible = "arm,psci-1.0", "arm,psci-0.2";
- 		method = "smc";
+One example is that I have the vregs commented out, the dt-bindings say that
+they are required since it's based on the wcn6750 work but also like the 6750,
+I've added defaults into the driver, and those seem to work, at least for the
+initial testing.
+
+The end result is that we do have a working device, but not entirely reliable.
+
+Hopefully by getting this out there, people who do have access to the specs or
+schematics can see where the improvements or fixes need to come.
+
+There are a few things that I am not sure why they happen, and don't have the
+knowledge level to figure out why they happen or debugging it.
+
+Bluetooth: hci0: setting up wcn6855
+Bluetooth: hci0: Frame reassembly failed (-84)
+Bluetooth: hci0: QCA Product ID   :0x00000013
+Bluetooth: hci0: QCA SOC Version  :0x400c0210
+Bluetooth: hci0: QCA ROM Version  :0x00000201
+Bluetooth: hci0: QCA Patch Version:0x000038e6
+Bluetooth: hci0: QCA controller version 0x02100201
+Bluetooth: hci0: unexpected event for opcode 0xfc48
+Bluetooth: hci0: Sending QCA Patch config failed (-110)
+Bluetooth: hci0: QCA Downloading qca/hpbtfw21.tlv
+Bluetooth: hci0: QCA Downloading qca/hpnv21g.bin
+Bluetooth: hci0: QCA setup on UART is completed
+
+I do not know why the Frame assembly failed, nor the unexpected event.
+
+Likewise, I'm not entirely sure why it says the patch config send times out, and
+*then* seems to send it?
+
+The BD Address also seems to be incorrect, and I'm not sure what is going on
+there either.
+
+Testing was done by connecting a Razer Orochi bluetooth mouse, and using it, as
+well as connecting to and using an H2GO bluetooth speaker and playing audio out
+via canberra-gtk-play as well as a couple of YouTube videos in a browser.
+
+The mouse only seems to work when < 2 ft. from the laptop, and for the speaker, only
+"A2DP Sink, codec SBC" would provide audio output, and while I could see that
+data was being sent to the speaker, it wasn't always outputting, and going >
+4ft. away, would often disconnect.
+
+steev@wintermute:~$ hciconfig -a
+hci0:   Type: Primary  Bus: UART
+        BD Address: 00:00:00:00:5A:AD  ACL MTU: 1024:8  SCO MTU: 240:4
+        UP RUNNING PSCAN
+        RX bytes:1492 acl:0 sco:0 events:126 errors:0
+        TX bytes:128743 acl:0 sco:0 commands:597 errors:0
+        Features: 0xff 0xfe 0x8f 0xfe 0xd8 0x3f 0x5b 0x87
+        Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3
+        Link policy: RSWITCH HOLD SNIFF
+        Link mode: PERIPHERAL ACCEPT
+        Name: 'wintermute'
+        Class: 0x0c010c
+        Service Classes: Rendering, Capturing
+        Device Class: Computer, Laptop
+        HCI Version:  (0xc)  Revision: 0x0
+        LMP Version:  (0xc)  Subversion: 0x46f7
+        Manufacturer: Qualcomm (29)
+
+steev@wintermute:~$ dmesg | grep Razer
+[ 3089.235440] input: Razer Orochi as /devices/virtual/misc/uhid/0005:1532:0056.0003/input/input11
+[ 3089.238580] hid-generic 0005:1532:0056.0003: input,hidraw2: BLUETOOTH HID v0.01 Mouse [Razer Orochi] on 00:00:00:00:5a:ad
+steev@wintermute:~$ dmesg | grep H2GO
+[ 3140.959947] input: H2GO Speaker (AVRCP) as /devices/virtual/input/input12
+
+Changes since v2:
+ - Drop unnecessary commit info from patch 2
+ - Remove dead code in patch 4, add TODO note.
+ - Make dtbs_check happy with the pin definitions
+
+Bjorn Andersson (1):
+  arm64: dts: qcom: sc8280xp: Define uart2
+
+Steev Klimaszewski (3):
+  dt-bindings: net: Add WCN6855 Bluetooth
+  Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6855
+  arm64: dts: qcom: thinkpad-x13s: Add bluetooth
+
+ .../net/bluetooth/qualcomm-bluetooth.yaml     |  2 +
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 63 +++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 14 +++++
+ drivers/bluetooth/btqca.c                     | 24 ++++++-
+ drivers/bluetooth/btqca.h                     | 10 +++
+ drivers/bluetooth/hci_qca.c                   | 59 +++++++++++++----
+ 6 files changed, 157 insertions(+), 15 deletions(-)
+
+
+base-commit: 4fafd96910add124586b549ad005dcd179de8a18
 -- 
-2.25.1
+2.39.0
 
