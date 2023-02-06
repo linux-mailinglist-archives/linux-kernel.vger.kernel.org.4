@@ -2,215 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23B468BC8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F6D68BC93
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjBFMNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S229806AbjBFMPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:15:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjBFMNV (ORCPT
+        with ESMTP id S229865AbjBFMPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:13:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E6512051
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:13:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4DDDB80EC0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:13:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3B7C433D2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:13:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675685597;
-        bh=Ks+3bWX8BMBQ1+7CdXHspGcVXJ2Qn/DY7u+Hkp8zSrc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OPWBFefIHR8JRaFXU4l+xk69wU3NZfrWepDWxuheqGJLvbn6l7WlR8677cImYkWLs
-         izbNClwdBlqWMuWlZOuytrpEEFzgCfYD1LQy26MlbEGKCgeZDDJYWE8BCrvJMWiO1P
-         nfbZV5ElQhmngJpI1WXymjizo/zr8bLC9wEU/vWFrKC2BvP5jIWLIKtBJE7VHtJy0W
-         rYfFiYU5wzLFCQ48eBi2AwPDISp8qLtNWX63eWyPbMJIRh6fvsSAlaSp9nvJwQe+re
-         y3y1JUFsbbPgk0aJyp1gQWaD0++sktmqClZPPIzL49CEMsvegkdQqq2MkdUWd3c61h
-         3hx1uEJIo8Zbw==
-Received: by mail-ed1-f48.google.com with SMTP id u21so11438205edv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:13:17 -0800 (PST)
-X-Gm-Message-State: AO0yUKXg98eerTDKtdfN8lA/ScvBUFFu/wMUlvhAdrUnhervMPAfcKIg
-        /xzxa4s663af47q+vrh5LgW4Rl7Q12m1Vk+dbok=
-X-Google-Smtp-Source: AK7set8asN6FOn8+WUmAov8wIo1dn46oFQk0RdBFmZbl0rjD7eA3kd09j/F0iNyrgtzlttyU1SbTIqAVb0C19xb0+g4=
-X-Received: by 2002:a50:cc9a:0:b0:4aa:a4f7:2304 with SMTP id
- q26-20020a50cc9a000000b004aaa4f72304mr1702807edi.38.1675685595641; Mon, 06
- Feb 2023 04:13:15 -0800 (PST)
+        Mon, 6 Feb 2023 07:15:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E0C12051;
+        Mon,  6 Feb 2023 04:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RSckQc2Emh9jJfvS33gHYGvM8sjY/00hI0zuLioFFNM=; b=ntuP4M7dSK2zsWVQTbDs9Ox2Ac
+        V4r4EFjkZ99kyYLqdozZ6xzE+QxqYHoG0WCIaMJeVBoR6Y2BbtLPsYb3i01D2x0modrsfxSX57f8v
+        DF30B1tNGD0ZtMzW6GNbWnE/bcmDfjWi9O6PWHEH/Si4SWWexelyntk5L1wIG2NbBH0WlqmGoT5WP
+        AyMxq8eNX+N/jJLzOfoUuQe06/8Jp7hZdjmobg06aJY4TkJlY21aHVxYTE2KfbswHeSGde/+OdjK2
+        Dlior1hUsskbO4lX904cgjfDDm8i9Mg06fGrnhOO3gfkmEmyQ166CbjhPt5EUYYdvgrPaRfUt5YvB
+        rcxZk8pQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pP0OE-00GkH1-Ik; Mon, 06 Feb 2023 12:14:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6EA2030030F;
+        Mon,  6 Feb 2023 13:14:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 084DE207A0B88; Mon,  6 Feb 2023 13:14:27 +0100 (CET)
+Date:   Mon, 6 Feb 2023 13:14:27 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        dwmw2@infradead.org, Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
+Message-ID: <Y+DvI7ai/wuovjER@hirez.programming.kicks-ass.net>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.494373332@infradead.org>
+ <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
+ <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H4aTd6_cSy45KKjv-KrLTiwT4iG6+fkb84KfCrL3Y+hpg@mail.gmail.com>
- <CAAhV-H5WN5E=0Z9wpbXDc6VO7Nc+j7PGvnyAAGOmCRMJkdwSYw@mail.gmail.com>
- <CAEr6+ECO-=jfhzHrcdKGx0MsjMBMiN6wsBPCfv7CaXo_amAWWg@mail.gmail.com>
- <02806f85-bc09-d316-f058-3947353cb190@loongson.cn> <CAEr6+EBYF2xqZWEuZaz5un5FF3Jb-rSAQp3s3uojsovm9RcUYA@mail.gmail.com>
-In-Reply-To: <CAEr6+EBYF2xqZWEuZaz5un5FF3Jb-rSAQp3s3uojsovm9RcUYA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 6 Feb 2023 20:13:03 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5dJGrL3kEwzC-XwMqJTCsYHq-YVDTDRntGcYg9RMz02w@mail.gmail.com>
-Message-ID: <CAAhV-H5dJGrL3kEwzC-XwMqJTCsYHq-YVDTDRntGcYg9RMz02w@mail.gmail.com>
-Subject: Re: [PATCH v12 0/5] Add kprobe and kretprobe support for LoongArch
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jeff,
+On Mon, Feb 06, 2023 at 12:24:00PM +0100, Peter Zijlstra wrote:
 
-Now I add kprobes on ftrace support in
-https://github.com/loongson/linux/commits/loongarch-next, please test
-again. Thank you.
+> > Unless I have misunderstood what you are doing, my concerns are
+> > still the same:
+> > 
+> > >  #define this_cpu_cmpxchg(pcp, oval, nval) \
+> > > -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> > > +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> > >  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
+> > > nval2) \
+> > >  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
+> > > oval1, oval2, nval1, nval2)
+> > 
+> > Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
+> > and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
+> > like a bad design to me.
+> > 
+> > I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
+> > calls that never trap but fall back to the generic version on CPUs that
+> > are lacking the atomics.
+> 
+> You're thinking acidental usage etc..? Lemme see what I can do.
 
-Huacai
+So lookng at this I remember why I did it like this, currently 32bit
+archs silently fall back to the generics for most/all 64bit ops.
 
-On Thu, Feb 2, 2023 at 11:33 AM Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> On Thu, Feb 2, 2023 at 10:23 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
-> >
-> >
-> >
-> > On 02/01/2023 05:40 PM, Jeff Xie wrote:
-> > > On Wed, Feb 1, 2023 at 12:56 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > >>
-> > >> Hi, Jeff,
-> > >>
-> > >> Could you please pay some time to test this series? Thank you.
-> > >
-> > > Thanks for notifying me about the test.
-> > >
-> > > I have tested the patchset(based on the
-> > > https://github.com/loongson/linux/tree/loongarch-next),
-> > > I found that some functions can't  be probed e.g. scheduler_tick() or
-> > > uart_write_wakeup()
-> > > the two functions have the same point,  they are all run in the hardirq context.
-> > >
-> > > I don't know if it's related to the hardirq context, I haven't had
-> > > time to study this patchset carefully.
-> > > and they can be probed in the x86_64 arch.
-> > >
-> > > root@loongarch modules]# insmod ./kprobe_example.ko symbol=scheduler_tick
-> > > insmod: can't insert './kprobe_example.ko': invalid parameter
-> > >
-> > > dmesg:
-> > > [   39.806435] kprobe_init: register_kprobe failed, returned -22
-> > >
-> >
-> > Thanks for your test.
-> >
-> > On my test environment, I can not reproduce the above issue,
-> > here are the test results, it seems no problem.
-> >
-> > [root@linux loongson]# dmesg -c
-> > [root@linux loongson]# uname -m
-> > loongarch64
-> > [root@linux loongson]# modprobe kprobe_example symbol=scheduler_tick
-> > [root@linux loongson]# rmmod kprobe_example
-> > [root@linux loongson]# dmesg | tail -2
-> > [ 3317.138086] handler_post: <scheduler_tick> p->addr =
-> > 0x0000000065d12f66, estat = 0xc0000
-> > [ 3317.154086] kprobe_exit: kprobe at 0000000065d12f66 unregistered
-> >
-> > [root@linux loongson]# dmesg -c
-> > [root@linux loongson]# uname -m
-> > loongarch64
-> > [root@linux loongson]# modprobe kprobe_example symbol=uart_write_wakeup
-> > [root@linux loongson]# rmmod kprobe_example
-> > [root@linux loongson]# dmesg | tail -2
-> > [ 3433.502092] handler_post: <uart_write_wakeup> p->addr =
-> > 0x0000000019718061, estat = 0xc0000
-> > [ 3433.762085] kprobe_exit: kprobe at 0000000019718061 unregistered
-> >
-> > Additionally, "register_kprobe failed, returned -22" means the symbol
-> > can not be probed, here is the related code:
-> >
-> > register_kprobe()
-> >    check_kprobe_address_safe()
-> >
-> > static int check_kprobe_address_safe(struct kprobe *p,
-> >                                      struct module **probed_mod)
-> > {
-> >         int ret;
-> >
-> >         ret = check_ftrace_location(p);
-> >         if (ret)
-> >                 return ret;
-> >         jump_label_lock();
-> >         preempt_disable();
-> >
-> >         /* Ensure it is not in reserved area nor out of text */
-> >         if (!(core_kernel_text((unsigned long) p->addr) ||
-> >             is_module_text_address((unsigned long) p->addr)) ||
-> >             in_gate_area_no_mm((unsigned long) p->addr) ||
-> >             within_kprobe_blacklist((unsigned long) p->addr) ||
-> >             jump_label_text_reserved(p->addr, p->addr) ||
-> >             static_call_text_reserved(p->addr, p->addr) ||
-> >             find_bug((unsigned long)p->addr)) {
-> >                 ret = -EINVAL;
-> >                 goto out;
-> >         }
-> > ...
-> > }
->
-> Today I looked at the code, this has nothing to do with hardirq :-)
-> because I enabled this kernel option CONFIG_DYNAMIC_FTRACE, the
-> loongarch should not support the option yet.
->
-> #ifdef CONFIG_DYNAMIC_FTRACE
-> unsigned long ftrace_location(unsigned long ip);
->
-> #else /* CONFIG_DYNAMIC_FTRACE */
->
-> static inline unsigned long ftrace_location(unsigned long ip)
-> {
->         return 0;
-> }
->
-> #endif
->
->
-> static int check_ftrace_location(struct kprobe *p)
-> {
->         unsigned long addr = (unsigned long)p->addr;
->
->         if (ftrace_location(addr) == addr) {
-> #ifdef CONFIG_KPROBES_ON_FTRACE
->                 p->flags |= KPROBE_FLAG_FTRACE;
-> #else   /* !CONFIG_KPROBES_ON_FTRACE */
->                 return -EINVAL;  // get error from here
-> #endif
->         }
->         return 0;
-> }
->
-> static int check_kprobe_address_safe(struct kprobe *p,
->                                      struct module **probed_mod)
-> {
->         int ret;
->
->         ret = check_ftrace_location(p);
->         if (ret)
->                 return ret; //  return -EINVAL
-> }
->
->
-> >
-> > Thanks,
-> > Tiezhu
-> >
->
->
-> --
-> Thanks,
-> JeffXie
+And personally I would just as soon drop support for the
+!X86_FEATURE_CX* cpus... :/ Those are some serious museum pieces.
+
+One problem with silent downgrades like this is that semantics vs NMI
+change, which makes for subtle bugs on said museum pieces.
+
+Basically, using 64bit percpu ops on 32bit is already somewhat dangerous
+-- wiring up native cmpxchg64 support in that case seemed an
+improvement.
+
+Anyway... let me get on with doing explicit
+{raw,this}_cpu_cmpxchg{64,128}() thingies.
+
