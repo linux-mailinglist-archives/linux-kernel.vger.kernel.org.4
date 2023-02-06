@@ -2,192 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A0068B587
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDEE68B589
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjBFGNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 01:13:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S229578AbjBFGRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 01:17:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBFGNS (ORCPT
+        with ESMTP id S229448AbjBFGQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 01:13:18 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296BA10431
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 22:13:16 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 7B8FA24E3B3;
-        Mon,  6 Feb 2023 14:13:13 +0800 (CST)
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Feb
- 2023 14:13:13 +0800
-Received: from [192.168.125.89] (183.27.96.33) by EXMBX067.cuchost.com
- (172.16.6.67) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Feb
- 2023 14:13:12 +0800
-Message-ID: <c851138c-148a-bc5f-219b-1573d7e7e318@starfivetech.com>
-Date:   Mon, 6 Feb 2023 14:13:11 +0800
+        Mon, 6 Feb 2023 01:16:58 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A3B1284F
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 22:16:57 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id bs10so5605632vkb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 22:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JDJ7E+5D8G1vnAtYw8jg+ixJnHSubCbLRbjmt87s7Sw=;
+        b=qIIw2mZMMmjo/0FQtz+0yBU5o4G0HgzUkUNKjNDISa/pJ3pED7IhKbQ5d+/wdzzist
+         hY5j6JvXdsUKSZaBV5fNXJXysXOmbI95HOSekuOf6vA+KrRzHDk3bRrh/9SDNLcH9cAw
+         rYp+/iV6lXL1iK75nVcW/164zKTuR1aKE2VKo3iz5QB4Gz3SoQtS5I8YaSfk6sFEB9R+
+         Ln49Ytzqa8HPUortdoOKRew0e2fGnfHC0rMosNTWujpqP3BNV6abkpo+QI5sC90Ff7ua
+         ESnEpaRSa5wAaAnIc99E5NxOVKcpUB6CEzP7QZdcm7U/bdepRoqtCfpHxtTeLyovH2/F
+         DSDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JDJ7E+5D8G1vnAtYw8jg+ixJnHSubCbLRbjmt87s7Sw=;
+        b=uQ7/xK8L8a8E0STlNMntJ6rfZBwkpkI3EniLKtfdzdRocAIkPRHQnVmQdnKsueQiQJ
+         U1tX9ujX5WMeeL/iRJ0pHc0QzHrWCN0+HLR1AHWfJhrMNjaC6J/8JozLEN9vzAzlMMtl
+         D2ZhkscmFCNX50Rn2PBz0M+ae8faPDX6x7LQpC4sQ+uI4NTPAxKC/To8f9O/nlbuuil/
+         GHlvUlm1Kj+LrFI76/+DeYQLyegpve9i1fpuW3D/GNI19finIR07LRV/qUG6PRf5CKBy
+         lqxOChqCkA1vabc8ru73MRtZqGE2slLqzFp16xGqA78Nu/APr9VAG4SAwrg8KWKHqStA
+         6btQ==
+X-Gm-Message-State: AO0yUKU4AKdJW+4z+708KidZC74OIi7FvxZ2kJBO7mPlZzW1gmUuUPxv
+        UJEFuuJXGJSnNt2j8HMqASwxwvMUXnu5ug9dzx50vg==
+X-Google-Smtp-Source: AK7set/39asDmEDee/lAJrh20mhQCcOYI9j6u+CMzu5miOYPEEMIB+bkubutTVEsRHA9kwmgKX17qG/E/QngQK96HWA=
+X-Received: by 2002:a05:6122:216b:b0:3ea:78fc:6dce with SMTP id
+ j11-20020a056122216b00b003ea78fc6dcemr2643281vkr.0.1675664216181; Sun, 05 Feb
+ 2023 22:16:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1] irqchip/irq-sifive-plic: Add syscore callbacks for
- hibernation
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>
-References: <20230113094216.116036-1-mason.huo@starfivetech.com>
- <864js01j26.wl-maz@kernel.org>
-From:   Mason Huo <mason.huo@starfivetech.com>
-In-Reply-To: <864js01j26.wl-maz@kernel.org>
+References: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com> <20230203-get_kernel_pages-v2-2-f1dc4af273f1@intel.com>
+In-Reply-To: <20230203-get_kernel_pages-v2-2-f1dc4af273f1@intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 6 Feb 2023 11:46:45 +0530
+Message-ID: <CAFA6WYMoVHWvzSBeR9xTayqqCXqRqsvMZS7WW0rCXX_VsOVWoA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] tee: Remove vmalloc page support
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org, linux-mm@kvack.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.33]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX067.cuchost.com
- (172.16.6.67)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 4 Feb 2023 at 09:36, Ira Weiny <ira.weiny@intel.com> wrote:
+>
+> The kernel pages used by shm_get_kernel_pages() are allocated using
+> GFP_KERNEL through the following call stack:
+>
+> trusted_instantiate()
+>         trusted_payload_alloc() -> GFP_KERNEL
+>         <trusted key op>
+>                 tee_shm_register_kernel_buf()
+>                         register_shm_helper()
+>                                 shm_get_kernel_pages()
+>
+> Where <trusted key op> is one of:
+>
+>         trusted_key_unseal()
+>         trusted_key_get_random()
+>         trusted_key_seal()
+>
+> Remove the vmalloc page support from shm_get_kernel_pages().  Replace
+> with a warn on once.
+>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+>  drivers/tee/tee_shm.c | 36 ++++++++++++------------------------
+>  1 file changed, 12 insertions(+), 24 deletions(-)
+>
 
+Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
 
-On 2023/2/5 18:51, Marc Zyngier wrote:
-> On Fri, 13 Jan 2023 09:42:16 +0000,
-> Mason Huo <mason.huo@starfivetech.com> wrote:
->> 
->> The priority and enable registers of plic will be reset
->> during hibernation power cycle in poweroff mode,
->> add the syscore callbacks to save/restore those registers.
->> 
->> Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
->> Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
->> Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
->> ---
->>  drivers/irqchip/irq-sifive-plic.c | 93 ++++++++++++++++++++++++++++++-
->>  1 file changed, 91 insertions(+), 2 deletions(-)
->> 
->> diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
->> index ff47bd0dec45..80306de45d2b 100644
->> --- a/drivers/irqchip/irq-sifive-plic.c
->> +++ b/drivers/irqchip/irq-sifive-plic.c
->> @@ -17,6 +17,7 @@
->>  #include <linux/of_irq.h>
->>  #include <linux/platform_device.h>
->>  #include <linux/spinlock.h>
->> +#include <linux/syscore_ops.h>
->>  #include <asm/smp.h>
->>  
->>  /*
->> @@ -67,6 +68,8 @@ struct plic_priv {
->>  	struct irq_domain *irqdomain;
->>  	void __iomem *regs;
->>  	unsigned long plic_quirks;
->> +	unsigned int nr_irqs;
->> +	u32 *priority_reg;
->>  };
->>  
->>  struct plic_handler {
->> @@ -79,10 +82,13 @@ struct plic_handler {
->>  	raw_spinlock_t		enable_lock;
->>  	void __iomem		*enable_base;
->>  	struct plic_priv	*priv;
->> +	/* To record interrupts that are enabled before suspend. */
->> +	u32 enable_reg[MAX_DEVICES / 32];
-> 
-> What does MAX_DEVICES represent here? How is it related to the number
-> of interrupts you're trying to save? It seems to be related to the
-> number of CPUs, so it hardly makes any sense so far.
-> 
-The comment of this macro describes that "The largest number supported
-by devices marked as 'sifive,plic-1.0.0', is 1024, of which
-device 0 is defined as non-existent by the RISC-V Privileged Spec."
-As far as I understand, the *device* here means HW IRQ source,
-and the HW IRQ 0 is non-existent.
+-Sumit
 
->>  };
->>  static int plic_parent_irq __ro_after_init;
->>  static bool plic_cpuhp_setup_done __ro_after_init;
->>  static DEFINE_PER_CPU(struct plic_handler, plic_handlers);
->> +static struct plic_priv *priv_data;
->>  
->>  static int plic_irq_set_type(struct irq_data *d, unsigned int type);
->>  
->> @@ -229,6 +235,78 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
->>  	return IRQ_SET_MASK_OK;
->>  }
->>  
->> +static void plic_irq_resume(void)
->> +{
->> +	unsigned int i, cpu;
->> +	u32 __iomem *reg;
->> +
->> +	for (i = 0; i < priv_data->nr_irqs; i++)
->> +		writel(priv_data->priority_reg[i],
->> +				priv_data->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
-> 
-> From what I can tell, this driver uses exactly 2 priorities: 0 and 1.
-> And yet you use a full 32bit to encode those. Does it seem like a good
-> idea?
-> 
-Yes, currently this driver uses oly 2 priorities.
-But, according to the sifive spec, the priority register is a 32bit register,
-and it supports 7 levels of priority. 
-
->> +
->> +	for_each_cpu(cpu, cpu_present_mask) {
->> +		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
->> +
->> +		if (!handler->present)
->> +			continue;
->> +
->> +		for (i = 0; i < DIV_ROUND_UP(priv_data->nr_irqs, 32); i++) {
->> +			reg = handler->enable_base + i * sizeof(u32);
->> +			raw_spin_lock(&handler->enable_lock);
->> +			writel(handler->enable_reg[i], reg);
->> +			raw_spin_unlock(&handler->enable_lock);
-> 
-> Why do you need to take/release the lock around *each* register
-> access? Isn't that lock constant for a given CPU?
-> 
-OK, will fix it in the next version.
-
->> +		}
->> +	}
->> +}
->> +
->> +static int plic_irq_suspend(void)
->> +{
->> +	unsigned int i, cpu;
->> +	u32 __iomem *reg;
->> +
->> +	for (i = 0; i < priv_data->nr_irqs; i++)
->> +		priv_data->priority_reg[i] =
->> +			readl(priv_data->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
->> +
->> +	for_each_cpu(cpu, cpu_present_mask) {
->> +		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
->> +
->> +		if (!handler->present)
->> +			continue;
->> +
->> +		for (i = 0; i < DIV_ROUND_UP(priv_data->nr_irqs, 32); i++) {
->> +			reg = handler->enable_base + i * sizeof(u32);
->> +			raw_spin_lock(&handler->enable_lock);
->> +			handler->enable_reg[i] = readl(reg);
->> +			raw_spin_unlock(&handler->enable_lock);
-> 
-> Same remarks.
-> 
-> 	M.
-> 
+> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> index 27295bda3e0b..527a6eabc03e 100644
+> --- a/drivers/tee/tee_shm.c
+> +++ b/drivers/tee/tee_shm.c
+> @@ -24,37 +24,25 @@ static void shm_put_kernel_pages(struct page **pages, size_t page_count)
+>  static int shm_get_kernel_pages(unsigned long start, size_t page_count,
+>                                 struct page **pages)
+>  {
+> +       struct kvec *kiov;
+>         size_t n;
+>         int rc;
+>
+> -       if (is_vmalloc_addr((void *)start)) {
+> -               struct page *page;
+> -
+> -               for (n = 0; n < page_count; n++) {
+> -                       page = vmalloc_to_page((void *)(start + PAGE_SIZE * n));
+> -                       if (!page)
+> -                               return -ENOMEM;
+> -
+> -                       get_page(page);
+> -                       pages[n] = page;
+> -               }
+> -               rc = page_count;
+> -       } else {
+> -               struct kvec *kiov;
+> -
+> -               kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
+> -               if (!kiov)
+> -                       return -ENOMEM;
+> +       if (WARN_ON_ONCE(is_vmalloc_addr((void *)start)))
+> +               return -EINVAL;
+>
+> -               for (n = 0; n < page_count; n++) {
+> -                       kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
+> -                       kiov[n].iov_len = PAGE_SIZE;
+> -               }
+> +       kiov = kcalloc(page_count, sizeof(*kiov), GFP_KERNEL);
+> +       if (!kiov)
+> +               return -ENOMEM;
+>
+> -               rc = get_kernel_pages(kiov, page_count, 0, pages);
+> -               kfree(kiov);
+> +       for (n = 0; n < page_count; n++) {
+> +               kiov[n].iov_base = (void *)(start + n * PAGE_SIZE);
+> +               kiov[n].iov_len = PAGE_SIZE;
+>         }
+>
+> +       rc = get_kernel_pages(kiov, page_count, 0, pages);
+> +       kfree(kiov);
+> +
+>         return rc;
+>  }
+>
+>
+> --
+> 2.39.1
