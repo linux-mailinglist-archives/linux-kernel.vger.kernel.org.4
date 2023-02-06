@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1499668B485
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8648D68B487
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBFDgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 22:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
+        id S229565AbjBFDkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 22:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFDgB (ORCPT
+        with ESMTP id S229447AbjBFDkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 22:36:01 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822DD16323;
-        Sun,  5 Feb 2023 19:36:00 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id g2so12446110ybk.8;
-        Sun, 05 Feb 2023 19:36:00 -0800 (PST)
+        Sun, 5 Feb 2023 22:40:20 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279A11421A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 19:40:19 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so9979723pjb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 19:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LGGtA4PNstDo2ZtU+3JdzkWj0NhK3SlJ22hiQduzGTs=;
-        b=ddphka7bOXwqefz5YmH4mO90m3oLNPZEjaDZL0p9U+qNVyha4q4GruGlmAevP41Mlk
-         ZyxPfP+M0tfhheJ4A5wT6D/mdIyFIc6rYW1J2j1FxoFhlxiXj9ZnjcMIb1xbJu60ntfJ
-         Z0spMI/YMK847YUGnCamtsM3acWN3IxtOc1HcYJwHDG/zNJvdEWYd7pEuO8+giZCXTuA
-         jvoazFhkpvb51B9/g071zzjdJQUdHK5csj+jZGY+BC2d5yP13vJZNmO3/7r8cKzKn9/h
-         L9T9gka8NYgw2twjC7KRWWTxsX2o7PMymarQhfexL8LGh3hZgaT6LUSPiYtZoGbHn6QP
-         zhTQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dAM2at24OOBvXTpjluUl1hBo8u80GKWlyMQ4P55j2QQ=;
+        b=aY2poNpFxIkZtr81A02OHx3U2uiwUWOnrvdTtaGLzQNvqmZEAjbiAN6cEL0i8tPB5m
+         ij4IflD78ws/b/mEdIorFvIu7XyMQSkefRWxwMGDE7dudhGiG1kSAiyo01jnXCgmllhO
+         wjHv9qCZm9cVIAOe0nMuaMwaUAoAMkbIis19EPkNh8sW1MqYth5O9hpDXi0uMNrl3eQJ
+         ntxybALFJ+ZtNCPex19nqeKKlMgENJntF4fURagJxxYcDnJKYDmGjrqHdLQcV/lke17c
+         8PITQY3gCb/zzKUTbFn7znrHPc6y//wIxY/pT0QkpzyIZPzTzohbWmdzw7BPbhGUur59
+         UwPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LGGtA4PNstDo2ZtU+3JdzkWj0NhK3SlJ22hiQduzGTs=;
-        b=OPkxIP3XGQVSHb7sTa0xOBPUs/Q8vrzqwel3Qz8cvXQ4n4f6JMLqGXdu4mCHCJzCI4
-         ywcxFP/dVIWpCV49ECz+xsG+n/oipYkH3+yNSmpGiUb6F5SkYtQKaJUHo+kgjSAb1F3o
-         jf9LMsyq/6HKxRYhDkjbgrDDFP06OtfHxifSZ3lpNFyg04ZimpJNzoresnVC4jIoRm9G
-         iF0gAFfRE2urJieIdPELG87b97QtENwNYSAh6z5Wj0D7xzekFlnDxrSwvtXQNSRFBHF/
-         lWKifcYS73df+v2oPhioZtfUx9IoR9hDYczRNc9U5mmb2LM6oLAKS0taMuzyJqlRaxeN
-         jOBg==
-X-Gm-Message-State: AO0yUKWu627S4pL400eGJbl99KtRbtjj8B93TRSaQgg9j5BN2DDtqwIK
-        R+ImMYKylvUIi5uk7gF71Nv6VbIEBmRb2RvB4Ace0Ny3qpQ=
-X-Google-Smtp-Source: AK7set8DrFRnQWTMMC2pkTZ9Dj3WJa94VbSPG24zG+ZoDNiMQW5UInj2b7rsMmmeFeh0TlgvBg+cViyRmDI5oDWE52s=
-X-Received: by 2002:a25:8c8a:0:b0:882:4616:654a with SMTP id
- m10-20020a258c8a000000b008824616654amr378587ybl.589.1675654559752; Sun, 05
- Feb 2023 19:35:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dAM2at24OOBvXTpjluUl1hBo8u80GKWlyMQ4P55j2QQ=;
+        b=rSin8ab3z9TbIRxFBuNUmlot268vNxnxAowC07fAzL2S/LqrE9RRsqxOFCM7wolllw
+         QDzALoNEiGEOpF/DLyc0praME7/Tzih40eYrKcW0KfatmdbWW9vWkfrx7P69uVpou9w8
+         xaMpYGRCAEvrrO3cXzQb+nG79RKuH8GiJekTWCJKL5PiyR4zPlP2tQzKLfBn+EgQQMNe
+         ITiHpsWQlCMDGkEBJAUirUT9e7nxU5GG/HgHDoOVjZN6CfT5mW1nHmig+D7uI1lFNZty
+         Afk5zBC/lifMyUoktCObJ/NaBmau5jSDP304V7Io4dsfaV8vJWjKFZvjHLDryA8tsQPe
+         B7YA==
+X-Gm-Message-State: AO0yUKXnTBoAQgaDykm28xZrNz1emOeki9iM7zEtkgv0qiYreD4hXTvP
+        dEaSsgFew3IhK/VsxhB8zecTAAvG7e4WeUFC
+X-Google-Smtp-Source: AK7set9cxTDhBIK24Q/ce19/XVSdmDYqIZ6PgsBsbhbxej22cUtpZWIApNOIeUqHhyDkr+bPlY+GpQ==
+X-Received: by 2002:a17:90b:3e85:b0:230:3432:31fa with SMTP id rj5-20020a17090b3e8500b00230343231famr19745732pjb.28.1675654818622;
+        Sun, 05 Feb 2023 19:40:18 -0800 (PST)
+Received: from [10.87.52.26] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id r1-20020a17090a690100b00230a50e6eadsm1702653pjj.24.2023.02.05.19.40.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Feb 2023 19:40:18 -0800 (PST)
+Message-ID: <df83098d-1568-109c-a4ac-176fc786d544@bytedance.com>
+Date:   Mon, 6 Feb 2023 11:40:10 +0800
 MIME-Version: 1.0
-References: <20230203072819.3408-1-zhongjiezhu1@gmail.com> <Y90egBL6HSoEdz2P@rowland.harvard.edu>
-In-Reply-To: <Y90egBL6HSoEdz2P@rowland.harvard.edu>
-From:   =?UTF-8?B?5pyx5b+g5p2w?= <zhongjiezhu1@gmail.com>
-Date:   Mon, 6 Feb 2023 11:33:15 +0800
-Message-ID: <CAJnoMhNYDXjfttiio+P7k6W1fDU3N=jbjmZe+ZRVON=bqm0yvw@mail.gmail.com>
-Subject: Re: [PATCH] USB: core: hub: fix usb_hub worker blocking
- drain_all_pages() worker issue
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     davem@davemloft.net, anil.s.keshavamurthy@intel.com,
+        naveen.n.rao@linux.ibm.com, peterz@infradead.org,
+        akpm@linux-foundation.org, sander@svanheule.net,
+        ebiggers@google.com, dan.j.williams@intel.com, jpoimboe@kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com, mattwu@163.com
+References: <20221218050310.1338630-1-wuqiang.matt@bytedance.com>
+ <20221229235220.4044edccae7c9d39798af8e9@kernel.org>
+ <20230205052240.4581ef09@rorschach.local.home>
+Content-Language: en-US
+From:   wuqiang <wuqiang.matt@bytedance.com>
+Subject: Re: [PATCH v8 0/5] lib,kprobes: kretprobe scalability improvement
+In-Reply-To: <20230205052240.4581ef09@rorschach.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yes, this is a very special case.
+Hi Steve,
 
-It will happen only when disconnecting the mass storage if there are
-too many files in the storage, and the scanning operation is running,
-and the file system is not unmounted.
-It looks like this issue should be fixed in the usb mass storage
-driver, but I don't find an appropriate place.
+I'm still working on the v9, but these days I'm a bit tied up with projects
+at work. Hopefully I can figure it out this month.
 
-On Fri, Feb 3, 2023 at 10:47 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Feb 03, 2023 at 03:28:19PM +0800, Zhu Zhongjie wrote:
-> > From: Zhongjie Zhu <zhongjiezhu1@gmail.com>
-> >
-> > When disconnecting a usb mass storege, if there are a lot of inodes
-> > like 10 thousands files need to be freed, the invalidate_inodes() will
-> > run for a loog time to freeing all inodes, this will block other worker
-> > to run in the cpu, so mark the usb_hub workqueue to WQ_CPU_INTENSIVE to
-> > avoid this situation.
->
-> Very infrequently this will happen.  In the vast majority of cases, the
-> usb_hub workqueue uses very little CPU time.  Marking it
-> WQ_CPU_INTENSIVE seems inappropriate.
->
-> Alan Stern
+Thanks,
+Matt
+
+On 2023/2/5 18:22, Steven Rostedt wrote:
+> On Thu, 29 Dec 2022 23:52:20 +0900
+> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> 
+>> Hi Matt,
+>>
+>> Sorry, I missed to commented v7 patch. Anyway, please read
+>> my comments on previous version.
+>>
+>> On Sun, 18 Dec 2022 13:03:05 +0800
+>> wuqiang <wuqiang.matt@bytedance.com> wrote:
+>>
+>>> This patch series introduces a scalable and lockless ring-array based
+>>> object pool and replaces the original freelist (a LIFO queue based on
+>>> singly linked list) to improve scalability of kretprobed routines.
+>>>
+>>> v8:
+>>>    1) objpool: refcount added for objpool lifecycle management
+>>
+>> At least this update part looks good to me.
+>> (But I think this may be useful only for kretprobe/rethook
+>> use cases...)
+>>
+> 
+> Masami,
+> 
+> Were there other updates you expected from this series?
+> 
+> -- Steve
+
