@@ -2,238 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B2768B9A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDC568B9AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjBFKPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:15:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S230167AbjBFKQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:16:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjBFKP1 (ORCPT
+        with ESMTP id S229548AbjBFKQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:15:27 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0399740E2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:15:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RK+13CUko+LcExvZWVqPUr0Gjd0SB5vvAfweSLrRAc7mwqKQWfsr+1YeB1D+MX9JaVBiwyZVdP/3cwYo+4D5h563+4X5I5w6I4zORv5fcIdjDtKEenFVuXX0YPtInLzH5c+Wo1bIO5HCEQuAqkY9AsX5vfnzc5781JSNHZ7ISVK3D4oOXyM3WGQ2jzwPUynWi2hFVbrpbrRYNA34sry7sBZ5bzVSf8HWw4cgzYWQIzt0jen0Plas/RUtyeaQtLyMMxU5532H5QhcaCW5KE4fyv9XLNoNy1E0LU2A5pWesUMrbfUkKodu7wEUt425wGwUwul+qDpBbsimOs27HbFawA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KlQosZJpb9/aNSVY1/+NOqsHh7n5TmsSm15/6p4LFMk=;
- b=XyH8r2Q5neuOpqVMUrd9aAmX93yMflUInHlW8UyjbtfenSPEX0n7cUCVzi+288WOe+5/+N8XKBUk6TzvY7WpBKJIAYEKvp9WhBQlKTODRFuLOqCoL+SFupG1oM9cJB340/QQ6QlIsiTo8nU9tB+ejsJ3B31rSJ2/kridz2WFyUaV9V6Q0yDP4DD372FmGetUikegfusJeTkoNbMoE31As49ZdW+zfDsyuAveFKhVEWjy/v6x9QXFxK6eplV/C+eeUdOAfhu0vdxqkY7nWVuDmbZ/R2DlFUD5hfD5aoiWS5hASCX0+6pNulV3UJv3K8bZtsPY11Xq1ydpbVltnG8fyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KlQosZJpb9/aNSVY1/+NOqsHh7n5TmsSm15/6p4LFMk=;
- b=5RVBcrRsGplPBAxU4dHOzRRRjkT5TYpu3XUMamISxZjY7s2FwapSgfSJyGuJ8HJfVJ1aMbqeRFpVjF7JDt+nz6owMZfiu6V3Tt7W39Qn0jBI9MOtFmkZQX5iM7wypcnriw6V/t3AIVVay02rK1WGtm/N/fKG5oRaWie0VPJgmZk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CH2PR12MB4166.namprd12.prod.outlook.com (2603:10b6:610:78::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
- 2023 10:15:01 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6064.032; Mon, 6 Feb 2023
- 10:15:01 +0000
-Message-ID: <2d5fc6f8-2247-8a8b-1174-eccdc2b08064@amd.com>
-Date:   Mon, 6 Feb 2023 11:14:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] drm/amdgpu: Fix potential race processing vm->freed
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Philip Yang <Philip.Yang@amd.com>, Qiang Yu <qiang.yu@amd.com>,
-        Jammy Zhou <Jammy.Zhou@amd.com>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230203181005.4129175-1-robdclark@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230203181005.4129175-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0041.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4a::17) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 6 Feb 2023 05:16:54 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F25A1;
+        Mon,  6 Feb 2023 02:16:53 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id mc11so32647246ejb.10;
+        Mon, 06 Feb 2023 02:16:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zj0iJ9zJndmf6HAIt6XGl1Fw/U6CT/Qa0nnBg5oFCNU=;
+        b=hdQYMwAbQvxI1WGT//tDVozvUgpX5yddF8Wg6KFQdiqJa2pZAMGaDQsONpF/FIVTDy
+         rUOUJdZdFVWxELBAc9qMJqere11Lp6K9wMvBEVpU3bVtmnRUEIWBzDjuW8XWvSOuH9CK
+         mv7B6UxrA5g3OUn20mZ3Xg0B2xtwzowtwQec9kBlyWOx/8WZzSXb77geyRUVmoT5JTyW
+         tR9jV2fLi/v+gnw1qEzXKmzT99LBanM7VXJbUUFVGhHxVF1e9vLZlcnza9NBzsSvlTCk
+         0homvUbrEyHotUs+s24DaCCFEZcgfmM6oJWpzoNPSXvtj+9eAxbfNgyDLsQD7k+9Rc3B
+         WvMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zj0iJ9zJndmf6HAIt6XGl1Fw/U6CT/Qa0nnBg5oFCNU=;
+        b=Ez1HjRrmrdki3fZOm1+OsANh+gsIPhXTsYzZ6dUNqSB9Gaalj9qkeNNGipfb8ct9PX
+         3Kuy5tQQG18gHijWdVR9V8AC/DvUiLzfmwyE36pkgq/nG8Zi5WnKZNX61OaFh1W+PHlD
+         GYezUwVPF6Dshox5ctSWXQ+VOpqAeqFLD5bEp9cffGfYm5mCSiLZDRzj9oztSLpBPTPG
+         VXiYqvIlbMdBosfrrsh/1NGHBNkbdFZzDX7qetNUudnHULodnN8VntIWRlEQ2ur3UtwM
+         Pau6F6YWtJQ3qVu02rR0bHVtgVvKzSynPjeb2PNG/rG3cTIxtad8mE5zT7A2Lu25aRuP
+         YCYg==
+X-Gm-Message-State: AO0yUKVnyy63ROwOl3l9fK1p7uARQZ6GB6Xjrc6oQuChkeE6Xwl0xDU0
+        ivs7+STTAG1b6EibNcjckIk=
+X-Google-Smtp-Source: AK7set+3bQWTUHdtQKp9Mb9+4ujtU4ZdfHrkX6p+49wHbaqo1A9Gaqcpd5rfSUXqObjvuZrPZvzb4Q==
+X-Received: by 2002:a17:907:1dc2:b0:888:a29:b645 with SMTP id og2-20020a1709071dc200b008880a29b645mr17866345ejc.64.1675678612300;
+        Mon, 06 Feb 2023 02:16:52 -0800 (PST)
+Received: from arinc9-PC.lan ([37.120.152.236])
+        by smtp.gmail.com with ESMTPSA id hz19-20020a1709072cf300b008847d7ed37bsm5285983ejc.100.2023.02.06.02.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 02:16:51 -0800 (PST)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: wdehoog@exalondelft.nl
+To:     =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com
+Subject: [PATCH 0/2] nvmem: brcm_nvram: use buffered nvram data for cell values
+Date:   Mon,  6 Feb 2023 13:16:40 +0300
+Message-Id: <20230206101642.22720-1-wdehoog@exalondelft.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH2PR12MB4166:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1ee179e-4afc-4e03-e7b2-08db082b0217
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kyNrxe+93bAkQS8byEZa12p50OJ7mZ4QJyTzBBjcDAAibtEbH3qlOTudkA8R4C+d7FIacrnCjXwuXVuIL4nUc5N1hyNcVI8brjo4Tiw29oUkloAM79YET2ddtXUqrcJIkj3+BfAJJeNLctmnynzRicESq/Op/lzSBskXjiwOQmiuhFxBNPDC5L6oqX60gzfYjpxtsB7XyRBFrJNBJRRJUxVm2B9VFF+CP2GFQaeWrGEkiep7evD1681owNPn0jQAgGFYg58mF8ns+Hmm2sTTecYyZtZLn79O3/3NQGn8f23FITZNI0YzPPtxP0nZiSYFxi8xpulooaiGZDyMNGIdt5PLBIzdftsyyirtm1GsJuKNLxW6KTi53fb6rBoOrxipUisMIGJEpOB8/SZjlOg0cuo9z3agjCNBJHXgHGg2LOpT677nq+shaiB5Elw9w+JN58xcJRHlMIdrNsQ6yQ+i0mpx/yhWB+e0rxb2rs1ORBogQA6INxp3f2sMl/m4ZCJRZQy7+H7w9lzhymlQSbUlQgam4FFXLbEjB1Fcn0chfdViNY1+D6fVp3PuSkbwtlnp6OmfFQ3OyI9wfxQ3pRhTNpnDOAYJCikQVp05Osr+XQZbgWwSD+/9Lol2DOIBZ9kVSAYZNJ8xUd+q7jib85QfiCwEcMXvs/kJ1dqiIL4gm8uUXDA9DpZk0IZTxj2e0P3Z4J8dRg5WZMck3Xeh52sicaoQmOX5jwsBp/CtQoSgsNc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(376002)(346002)(396003)(451199018)(478600001)(316002)(54906003)(6506007)(6666004)(2616005)(6512007)(26005)(186003)(31686004)(31696002)(36756003)(6486002)(5660300002)(86362001)(38100700002)(83380400001)(66946007)(4326008)(8676002)(2906002)(8936002)(66556008)(41300700001)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SURsWlVYRHFDQ2lKUXJlTkZ4cmhJSy8zQklmWkk1ZDRWSm5EQVRBODE4blkw?=
- =?utf-8?B?OEtyREx6U0lTOXhzbEllRkthUXh3V0xJS0xiU0Nyc1pWZU80MkhYeURuN0pE?=
- =?utf-8?B?ZjVPNlQwdXdGQUZFTFp2ak02Z2NwdStjUjFQSW1yZXA1UG1PMG5xNVJ0K05o?=
- =?utf-8?B?eTZBSVNJOFRWYUNLS2l3anVncWY5RHJtRld3VlJwM0VRcGozSWRqREpLTE9m?=
- =?utf-8?B?bUFkQnFKMkxEVitmdnFMUno5N1EyQlhJbnh4VjlqZkt5VlV6MkJTQ2NyZnhD?=
- =?utf-8?B?N29BTXNNWEVaNXI1TGRsMlAzMTNyMHNIVlFoREUrZWV2dEFmM1BMU0sxRGls?=
- =?utf-8?B?NmhnZzcreGJGZFZCNVR3R2VCQkQrQWhrQU05bHcyOE9rQUVOQUlDMmhsZVRG?=
- =?utf-8?B?NTNycjhCV0JEaStRYXZlZ3RkL3pneEFKdTYyVFc4WnJ4QlEzdjZFcU4wMzll?=
- =?utf-8?B?c3FsUHpWT0pjam5KZmVwRWJNazZlOWpaVE5FNm50ZTEyUTFhRFgrTTg3MHlH?=
- =?utf-8?B?a2w4THFYVVVDOGZ1YldPZitXR1F5QisyMWc5VTEyWGg4b3dVUFQxRU4waDBB?=
- =?utf-8?B?S251dHJickVueDRZdmdGcnZFOWFEZnJHc0tSNDRQTDRxaTMzenRqcHlnSzd3?=
- =?utf-8?B?UU1TckM3Rjk2QWs3elRSVDBrWllKb3o4WHZCeEdoYnFackVBMEk3NGNjQlBi?=
- =?utf-8?B?SDgxbmhqL2tvMDcrOXVBWkVNR2pyZDM2bU9Eb0hxODlRWjNWU3FNQ1JtRnhl?=
- =?utf-8?B?YStibDlmSjZjdEd2aUJ4RGZMY2R6V3NOcSs4emc2RWI5eXRYc0JZNVRJU24y?=
- =?utf-8?B?eGtsNFJFT0VINmV6eEE1VEVXeHlud0x6UkZzdHFtV21OUEpEb3lFUUFPTko2?=
- =?utf-8?B?VWNoT2RTYlIvai9WclRMUDVHVm5iQmsvR05Hc3RqQ3JjMyttVzJMWDNnSnBH?=
- =?utf-8?B?dWpnVVE3ZU00VlQyWXA2TTN0bzRrQXd1K0tMVWpFVDlIWXpvemgxYmZOem9j?=
- =?utf-8?B?Zll0NFhXOUlKakVRZlhqWGwvTUhyQlMvKzJldTJDRGJZTE03RENzbFhGMHpq?=
- =?utf-8?B?dys5dm52eGZPL3M2SFhCUG1QQ0ZQRHZCQ0t4RVRsajVrQXFRY1I0bGNkVnhR?=
- =?utf-8?B?MGl3bDVKNzJUUVpCeUIwQWplc0dVTEtDTVQyQm84RGFxOTAvTFNHNGpUYndm?=
- =?utf-8?B?Uy90NDI3SUdOSUcxYk5rUjIwSWVwWS9PWkhSakd3WUhaRUZLczNPelc1cEE3?=
- =?utf-8?B?d0FTMFlSei9HMkJBK1RxelVuMEJxTjMzTjVqN3I3aDMxNzVHdjZSSjU5Rlkv?=
- =?utf-8?B?NThLc1UvMTBJYzNKWk51aVhJNnRKYXovT1JKK3dtN2diT3ZiOThtTjNsU0Nh?=
- =?utf-8?B?azdqZkQyNUZtVnVXSlVrMG5ZN2I4cGQxZEYvTkkyd3pNRHFzZG0yeDkwOHYv?=
- =?utf-8?B?d2Zxa2dldlZEcFl6Zy9ReVlVM09IcWpXK0NaTjJaZ0lGV293RE8vZEsyZm44?=
- =?utf-8?B?cUt0UWE2WFk3Rjd4VTJlNmpnSVBhQTZVOExoSFArbXM0WUtVK04rQUg0UlFr?=
- =?utf-8?B?OE9ndURyQnRoVUxYZkVjcjBIbDRUR0lMeklMc0lWcDZnODVieDc0VEZmY0Mz?=
- =?utf-8?B?WUJnL3pZcjI4VzNnTktiWUtneVM2VkpOeEV0aFRVL28wbEQvcmVtd2RVSENi?=
- =?utf-8?B?MDBobnIyVlE2WFRrS0FIRW54QjRxMEZuSlZIck1EU3VEL2cwSWd4dW80K3hh?=
- =?utf-8?B?alp3dlhnSElJenN6SUw0enJBWlROSVpxamJkUXp2anF1UXQ0Umg1V01aNGt3?=
- =?utf-8?B?ZzhMRlhQcnRBbVRBN2I5TkFYbnJ0NEp3aUZEeS84eDJZY2lWaDJ2TzNWcTAv?=
- =?utf-8?B?WW9tcGV4SENzMjU4bmtMYnJtam5sTmZrVW1kZWRXQ2JaNm41ZWptSFRiLzBZ?=
- =?utf-8?B?TFdoUEppaitkRVRscEpOZmpPWVM5NGRVSUpINDdlcVV1YVduMkhyNkFzeXAr?=
- =?utf-8?B?S0F6akFXTVg3MmRxL09mb0djMUk1bkhPL0w3SURCVjJvZSs5VTdiTklTQjd4?=
- =?utf-8?B?L1Vyay9IT29pM2pidUZwa0dmeG41aWJ4TmdjRlNtM0xuMDBNNDhrYVREblYv?=
- =?utf-8?Q?ZbOvzQEYKoKCAaPTp15u3mDzQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1ee179e-4afc-4e03-e7b2-08db082b0217
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 10:15:01.6981
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ncMfRGA3MjLy6Gp/fAtGQMt39x1Hfpmx85WdVeSNYgjMcwiMsVRJtnQ2PapJ9GnO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4166
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 03.02.23 um 19:10 schrieb Rob Clark:
-> From: Rob Clark <robdclark@chromium.org>
->
-> If userspace calls the AMDGPU_CS ioctl from multiple threads, because
-> the vm is global to the drm_file, you can end up with multiple threads
-> racing in amdgpu_vm_clear_freed().  So the freed list should be
-> protected with the status_lock, similar to other vm lists.
+Words from Willem-Jan de Hoog:
 
-Well this is nonsense. To process the freed list the VM root PD lock 
-must be held anyway.
+On OpenWrt 22.03.3, Asus RT-AC88U does not boot anymore:
 
-If we have a call path where this isn't true then we have a major bug at 
-a different place here.
+  UBI: auto-attach mtd4
+  ubi0: attaching mtd4
+  ubi0 error: 0xc04f0b3c: PEB 0 contains corrupted VID header, and the
+     data does not contain all 0xFF
+  ubi0 error: 0xc04f0b4c: this may be a non-UBI PEB or a severe VID
+     header corruption which requires manual inspection
 
-Regards,
-Christian.
+The problem seems to be that brcm_nvram_read accesses its (mapped) io
+memory. When doing so the correct data is read but after that the
+mtd/ubi process fails to work.
 
->
-> Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 33 ++++++++++++++++++++++----
->   1 file changed, 29 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> index b9441ab457ea..aeed7bc1512f 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> @@ -1240,10 +1240,19 @@ int amdgpu_vm_clear_freed(struct amdgpu_device *adev,
->   	struct amdgpu_bo_va_mapping *mapping;
->   	uint64_t init_pte_value = 0;
->   	struct dma_fence *f = NULL;
-> +	struct list_head freed;
->   	int r;
->   
-> -	while (!list_empty(&vm->freed)) {
-> -		mapping = list_first_entry(&vm->freed,
-> +	/*
-> +	 * Move the contents of the VM's freed list to a local list
-> +	 * that we can iterate without racing against other threads:
-> +	 */
-> +	spin_lock(&vm->status_lock);
-> +	list_replace_init(&vm->freed, &freed);
-> +	spin_unlock(&vm->status_lock);
-> +
-> +	while (!list_empty(&freed)) {
-> +		mapping = list_first_entry(&freed,
->   			struct amdgpu_bo_va_mapping, list);
->   		list_del(&mapping->list);
->   
-> @@ -1258,6 +1267,15 @@ int amdgpu_vm_clear_freed(struct amdgpu_device *adev,
->   		amdgpu_vm_free_mapping(adev, vm, mapping, f);
->   		if (r) {
->   			dma_fence_put(f);
-> +
-> +			/*
-> +			 * Move any unprocessed mappings back to the freed
-> +			 * list:
-> +			 */
-> +			spin_lock(&vm->status_lock);
-> +			list_splice_tail(&freed, &vm->freed);
-> +			spin_unlock(&vm->status_lock);
-> +
->   			return r;
->   		}
->   	}
-> @@ -1583,11 +1601,14 @@ int amdgpu_vm_bo_unmap(struct amdgpu_device *adev,
->   	mapping->bo_va = NULL;
->   	trace_amdgpu_vm_bo_unmap(bo_va, mapping);
->   
-> -	if (valid)
-> +	if (valid) {
-> +		spin_lock(&vm->status_lock);
->   		list_add(&mapping->list, &vm->freed);
-> -	else
-> +		spin_unlock(&vm->status_lock);
-> +	} else {
->   		amdgpu_vm_free_mapping(adev, vm, mapping,
->   				       bo_va->last_pt_update);
-> +	}
->   
->   	return 0;
->   }
-> @@ -1671,7 +1692,9 @@ int amdgpu_vm_bo_clear_mappings(struct amdgpu_device *adev,
->   		    tmp->last = eaddr;
->   
->   		tmp->bo_va = NULL;
-> +		spin_lock(&vm->status_lock);
->   		list_add(&tmp->list, &vm->freed);
-> +		spin_unlock(&vm->status_lock);
->   		trace_amdgpu_vm_bo_unmap(NULL, tmp);
->   	}
->   
-> @@ -1788,7 +1811,9 @@ void amdgpu_vm_bo_del(struct amdgpu_device *adev,
->   		amdgpu_vm_it_remove(mapping, &vm->va);
->   		mapping->bo_va = NULL;
->   		trace_amdgpu_vm_bo_unmap(bo_va, mapping);
-> +		spin_lock(&vm->status_lock);
->   		list_add(&mapping->list, &vm->freed);
-> +		spin_unlock(&vm->status_lock);
->   	}
->   	list_for_each_entry_safe(mapping, next, &bo_va->invalids, list) {
->   		list_del(&mapping->list);
+The bcm47xx_nvram.c code has buffered the nvram data so the cells value
+can be read from there.
+
+v2: Fix the wrong author information.
+
+Willem-Jan de Hoog (2):
+  firmware: bcm47xx_nvram: allow to read from buffered nvram data
+  nvmem: brcm_nvram: use bcm47xx buffered data
+
+ drivers/firmware/broadcom/bcm47xx_nvram.c | 14 ++++++++++++++
+ drivers/nvmem/brcm_nvram.c                |  8 ++++++++
+ include/linux/bcm47xx_nvram.h             |  6 ++++++
+ 3 files changed, 28 insertions(+)
+
 
