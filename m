@@ -2,123 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DD568BC2D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A763C68BC34
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjBFL6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S229804AbjBFMCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjBFL6s (ORCPT
+        with ESMTP id S229460AbjBFMCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:58:48 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB50E12F28;
-        Mon,  6 Feb 2023 03:58:46 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id r3so1654445edq.13;
-        Mon, 06 Feb 2023 03:58:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ppxjTfPrt+fO380TECKEc+9j8f0qNsSPRjIV/2FlqhQ=;
-        b=aDm4q22FFAJMiLL7psWLsdmiCHHEWeaqe9df4Cj2D05wF/rp53Il86syfJA1cqw67v
-         HUOvdu1YcgM4SPClp8Dd2doiCfEznIjnrbzAqn82morUSGeNbGooGE9blGu0FeFs+gEE
-         7C3zyIBGTzIdj2oEZWCS/ncOj6bKDeXn6VU6W4JdYX/vP6w3pMnjyLdXUV0DCklJxq2i
-         mLc3nyKE4ZwMaVsPqIPEcEldIKluga7OBFj21jfHwkzJJFOYhCl41bMQTcJbpPYdRfsY
-         +otpM+3upWgko7msDXMRnG/EHjeNvmzBNYgrT8P5Z/2kPKEpdDUJZBmNn9TP3swBwqI0
-         yovA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ppxjTfPrt+fO380TECKEc+9j8f0qNsSPRjIV/2FlqhQ=;
-        b=ukBcN+91KNb46B82Emjl3KNpUG8g4QRMIM2rGZKAhn1X3KB/BJbIUwaPqTaLqbtznS
-         2Hi9eQyX2o19kAGKN/m2mUDSCvgo+mvz4TwARFR2SCaAREnMKZQbKcaLSi/fYGfwoJsj
-         gMfIwo7dloZUBOnUNmYbV0Y3t3rYZolN8ukrFi+ZtUlYxu7ZfMjyUuGLHl+L2fSPVpfU
-         2xkSoedXqrqP5Z+hhjJgqNUeqoQ3hHiugSZpF4ogvVOK8z5HSKYjzU+xirqGRo2PLrTa
-         vh/v3GIai+FM9ziTD6V2/3LHYU5g4QBX721jXikdi5SEDONgvmM8R0DEugYIWpqfI+Z6
-         ZTLQ==
-X-Gm-Message-State: AO0yUKVPQ0AAPqtmJkzAtPmtorTw2fbOdz5s+1V/mDu7uEBHq2X+ZX4B
-        MhkhCXHuXI95ol7tijfPGoAvSZem/H8hcSWCFOFrZcAyj/o=
-X-Google-Smtp-Source: AK7set8dT1GLWLBBhtdwxzc0ZvOt+xNblBgmSsJtrdZ2/k4U93LHXST34508M3qaGnCip1/HHUWhGEzFRzwQ5P5nDX0=
-X-Received: by 2002:a50:d71b:0:b0:4aa:ab5b:99e7 with SMTP id
- t27-20020a50d71b000000b004aaab5b99e7mr10418edi.0.1675684725237; Mon, 06 Feb
- 2023 03:58:45 -0800 (PST)
+        Mon, 6 Feb 2023 07:02:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED16313531
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:02:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 993C7B80E8F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA48C433EF;
+        Mon,  6 Feb 2023 12:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675684955;
+        bh=hU9KtWEf3Qt3qg9VhEvrtyjRDwFqQYI+De36C/c8Wf8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DvKsTSrywSo09ZPCManvZbD5+3+UqQqeUpt2Ikd7FeMNRQlcAioVJlzULRnBkVWLG
+         bzHamgwXC6WKwbT4faymPRMGP79JQMLiOWX8+IKVRQ1p+opSNVMey5TkqNftZMG806
+         3R2s82XifcWqC4ND3HpvDIwBq0D6FEnzngWQ6ljw=
+Date:   Mon, 6 Feb 2023 13:02:31 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+Subject: Re: [RESEND PATCH 23/37] nvmem: layouts: add sl28vpd layout
+Message-ID: <Y+DsV3C1M0c/IZta@kroah.com>
+References: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
+ <20230206102759.669838-24-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-References: <20230203141515.125205-1-n.petrova@fintech.ru>
-In-Reply-To: <20230203141515.125205-1-n.petrova@fintech.ru>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Mon, 6 Feb 2023 12:58:33 +0100
-Message-ID: <CAOi1vP_7Oaw8O-p2X1xymzym1Xf_RZeN0u=SeE4Zbc2y+AfgYA@mail.gmail.com>
-Subject: Re: [PATCH] rbd: avoid double free memory on error path in rbd_dev_create()
-To:     Natalia Petrova <n.petrova@fintech.ru>
-Cc:     Dongsheng Yang <dongsheng.yang@easystack.cn>,
-        Jens Axboe <axboe@kernel.dk>, ceph-devel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206102759.669838-24-srinivas.kandagatla@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 3:15 PM Natalia Petrova <n.petrova@fintech.ru> wrote:
->
-> If rbd_dev_create() fails after assignment 'opts' to 'rbd_dev->opts',
-> double free of 'rbd_options' happens:
-> one is in rbd_dev_free() and another one is in do_rbd_add().
->
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
-> Fixes: 1643dfa4c2c8 ("rbd: introduce a per-device ordered workqueue")
-> Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
-> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+On Mon, Feb 06, 2023 at 10:27:45AM +0000, Srinivas Kandagatla wrote:
+> From: Michael Walle <michael@walle.cc>
+> 
+> This layout applies to the VPD of the Kontron sl28 boards. The VPD only
+> contains a base MAC address. Therefore, we have to add an individual
+> offset to it. This is done by taking the second argument of the nvmem
+> phandle into account. Also this let us checking the VPD version and the
+> checksum.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 > ---
->  drivers/block/rbd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
-> index 04453f4a319c..ab6bfc352cde 100644
-> --- a/drivers/block/rbd.c
-> +++ b/drivers/block/rbd.c
-> @@ -5357,7 +5357,6 @@ static struct rbd_device *rbd_dev_create(struct rbd_client *rbdc,
->         if (!rbd_dev)
->                 return NULL;
->
-> -       rbd_dev->opts = opts;
->
->         /* get an id and fill in device name */
->         rbd_dev->dev_id = ida_simple_get(&rbd_dev_id_ida, 0,
-> @@ -5372,6 +5371,7 @@ static struct rbd_device *rbd_dev_create(struct rbd_client *rbdc,
->         if (!rbd_dev->task_wq)
->                 goto fail_dev_id;
->
-> +       rbd_dev->opts = opts;
->         /* we have a ref from do_rbd_add() */
->         __module_get(THIS_MODULE);
->
-> --
-> 2.34.1
->
+>  drivers/nvmem/layouts/Kconfig   |   9 ++
+>  drivers/nvmem/layouts/Makefile  |   2 +
+>  drivers/nvmem/layouts/sl28vpd.c | 153 ++++++++++++++++++++++++++++++++
+>  3 files changed, 164 insertions(+)
+>  create mode 100644 drivers/nvmem/layouts/sl28vpd.c
+> 
+> diff --git a/drivers/nvmem/layouts/Kconfig b/drivers/nvmem/layouts/Kconfig
+> index 9ad3911d1605..75082f6b471d 100644
+> --- a/drivers/nvmem/layouts/Kconfig
+> +++ b/drivers/nvmem/layouts/Kconfig
+> @@ -2,4 +2,13 @@
+>  
+>  menu "Layout Types"
+>  
+> +config NVMEM_LAYOUT_SL28_VPD
+> +	bool "Kontron sl28 VPD layout support"
+> +	select CRC8
+> +	help
+> +	  Say Y here if you want to support the VPD layout of the Kontron
+> +	  SMARC-sAL28 boards.
+> +
+> +	  If unsure, say N.
 
-Hi Natalia,
+Why are we going back to "custom-built" kernel configurations?  Why can
+this not be a loadable module?  Distros are now forced to enable these
+layout and all kernels will have this dead code in the tree without any
+choice in the matter?
 
-It seems like a similar issue is affecting rbd_dev->rbd_client and
-rbd_dev->spec.  Unlike rbd_dev->opts, they are ref-counted and I'm
-guessing that the verification tool doesn't go that deep.
+That's not ok, these need to be auto-loaded based on the hardware
+representation like any other kernel module.  You can't force them to be
+always present, sorry.
 
-I'd prefer all three to be addressed in the same change, since it's the
-same error path.  Would you be willing to look into that and post a new
-revision or should I treat just this patch as a bug report?
+So I'm not going to take this series, sorry.  Srinivas, can you
+regenerate it without the layout code and resend?
 
-Thanks,
+thanks,
 
-                Ilya
+greg k-h
