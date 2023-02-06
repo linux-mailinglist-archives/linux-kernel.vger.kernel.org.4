@@ -2,161 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F9068C49F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEA068C4B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjBFRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
+        id S230285AbjBFR2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjBFRYg (ORCPT
+        with ESMTP id S230220AbjBFR2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:24:36 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D47E2D155
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:24:14 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id bi36so18661104lfb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 09:24:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sS0A0Czb9WxV1S+N4V3EYqAA6ZFJye37GWBGxAs3i/A=;
-        b=cACepK4B4AmB8yeEpssioV1L+mOD8ewu64shYj2TBqsgc+0PB2qHClXuLe7R8qKcjp
-         X5Uy0MDyroxlGGr9NjuMRauLdAHYGy59fOCkmtw34IRatzG40NHxEuit0PvgVak6sDLI
-         cGk/D03z/sxjIRsfc3xNrauCSRi4XZsu7019g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sS0A0Czb9WxV1S+N4V3EYqAA6ZFJye37GWBGxAs3i/A=;
-        b=lopep5HeWXodOV1PxjmfQfnqOtxCQomyPKzh6qBF8GKsFeal6O9qkj0t4/XQvYfKnl
-         lhqpKp84kn/9DUhl2Lwr94lziQSRlUH4AyuKMRglBkEtTmL7Yxz73XTPdqlNvVJ3/cCy
-         YXPpnY/F/wFgogWtP8Xc0KT1vpoTa/0gFupKGJHa1taV6y7N8rc86LyO9I8GFarGn575
-         cdUncGVHbwWJ8mpHDfEVkb4x3kDCWTLzuhWj/ytMjKvw0u1dMsmWCooK+BVPO6wRG4Wb
-         OLl2i+Yn4hK9LYDBoRvOgRx3fF/rni0n/0/SLzc/nqU4N6hMbxliiYZngjYCN1N2QQJb
-         0nHw==
-X-Gm-Message-State: AO0yUKUlbkKnYw/wm9m21Z2sSp4eHbICXxqFWeHercYz7U1NDapYzD5j
-        2eICaDBfOhOuZbwfM/MD5+BR/h0ps3l9T3wMrhkNDw==
-X-Google-Smtp-Source: AK7set/GspoK7qZ5ikAe2UrLJRpGdSd3YUTtughky3DwdCYJoF6bvWrfLL1QDGuCiNEXI7KiIStNE+igcDXMLVWYHuk=
-X-Received: by 2002:a05:6512:3d29:b0:4d5:7655:95db with SMTP id
- d41-20020a0565123d2900b004d5765595dbmr4422124lfv.57.1675704252413; Mon, 06
- Feb 2023 09:24:12 -0800 (PST)
+        Mon, 6 Feb 2023 12:28:02 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27BA04684;
+        Mon,  6 Feb 2023 09:27:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675704450; x=1707240450;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9MpOg/e1tMdiWWJ9lP+bpHqg1Mk6yUXpiIjkXYKqsLQ=;
+  b=KpBiHlZAQVA8zC0wKWkpn11yqhlAAcPm9ga1k6J7rMtFhAzIDFFze5jh
+   zf9YCJQaREMFJFdcangATlILVY3lF8FFWJwhvYC40LW3IXIyhbvMR8eXd
+   sj0qurs4k+o2QOIIXO6b7O+BjesiP6O2XSaGh4DDPsgby/7gg2CnN+iMw
+   MuoG2C3qcA7Nx4SuKx1V3nnlzdf4Nb2PGS/1nobvc0V/FZLI911Gwl9pV
+   XL2+1Fk4VaNGylyJYJ0V04lCz3VvWzG2sKtdhX1j6gaNBkjhlpG2Wi29U
+   rlfz9C7yfOif3N9Xq6qkG8KMpfPfK50LCwFIUYcIwiVl1Jll3PWy4lLGV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="317270844"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="317270844"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 09:25:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="840435152"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="840435152"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 06 Feb 2023 09:25:07 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pP5Ep-0002hI-0F;
+        Mon, 06 Feb 2023 17:25:07 +0000
+Date:   Tue, 7 Feb 2023 01:24:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin Liu <liumartin@google.com>, robh+dt@kernel.org,
+        frowand.list@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, surenb@google.com,
+        minchan@kernel.org, tkjos@google.com, liumartin@google.com
+Subject: Re: [PATCH] of: reserved-mem: expose reserved-mem details via debugfs
+Message-ID: <202302070150.S0t7TNwD-lkp@intel.com>
+References: <20230206142714.4151047-1-liumartin@google.com>
 MIME-Version: 1.0
-References: <20230204022051.2737724-1-joel@joelfernandes.org>
- <PH0PR11MB58800C6FD1C0DDF8EC67DB5DDADA9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <CAEXW_YRwe781s1faLQcRBvL5pBWv9WmRuhcP=PmqHUJcm9Rphg@mail.gmail.com>
-In-Reply-To: <CAEXW_YRwe781s1faLQcRBvL5pBWv9WmRuhcP=PmqHUJcm9Rphg@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 6 Feb 2023 12:24:00 -0500
-Message-ID: <CAEXW_YSY5nYL4LUoAX1Z8kUXtE-GW3Zor__cDWsdPL3OqEe4bA@mail.gmail.com>
-Subject: Re: [PATCH] rcu/tree: Improve comments in rcu_report_qs_rdp()
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206142714.4151047-1-liumartin@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 12:19 PM Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> On Sun, Feb 5, 2023 at 10:09 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
-> >
-> >
-> > >Recent discussion triggered due to a patch linked below, from Qiang,
-> > >shed light on the need to accelerate from QS reporting paths.
-> > >
-> > >Update the comments to capture this piece of knowledge.
-> > >
-> > >Link: https://lore.kernel.org/all/20230118073014.2020743-1-qiang1.zhang@intel.com/
-> > >Cc: Qiang Zhang <Qiang1.zhang@intel.com>
-> > >Cc: Frederic Weisbecker <frederic@kernel.org>
-> > >Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > >
-> > >---
-> > > kernel/rcu/tree.c | 13 ++++++++++++-
-> > > 1 file changed, 12 insertions(+), 1 deletion(-)
-> > >
-> > >diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > >index 93eb03f8ed99..713eb6ca6902 100644
-> > >--- a/kernel/rcu/tree.c
-> > >+++ b/kernel/rcu/tree.c
-> > >@@ -1983,7 +1983,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
-> > >       } else {
-> > >               /*
-> > >                * This GP can't end until cpu checks in, so all of our
-> > >-               * callbacks can be processed during the next GP.
-> > >+               * callbacks can be processed during the next GP. Do
-> > >+               * the acceleration from here otherwise there may be extra
-> > >+               * grace period delays, as any accelerations from rcu_core()
-> >
-> >
-> > Does the extra grace period delays means that if not accelerate callback,
-> > the grace period will take more time to end ? or refers to a delay in the
-> > start time of a new grace period?
->
-> Yes, so IMO it is like this if we don't accelerate:
-> 1. Start GP 1
-> 2. CPU1 queues callback C1 (not accelerated yet)
-> 3. CPU1 reports QS for GP1 (not accelerating anything).
-> 4. GP1 ends
-> 5. CPU1's note_gp_changes() is called, accelerate happens, now the CB
-> will execute after GP3 (or alternately, rcu_core() on CPU1 does
-> accelerate).
-> 6. GP2 ends.
-> 7. GP3 starts.
-> 8. GP3 ends.
-> 9. CB is invoked
->
-> Instead, what we will get the following thanks to the acceleration here is:
-> 1. Start GP 1
-> 2. CPU1 queues callback C1 (not accelerated yet)
-> 3. CPU1 reports QS for GP1 and acceleration happens as done by the
-> code this patch adds comments for.
-> 4. GP1 ends
-> 5. CPU1's note_gp_changes() is called
-> 6. GP2 ends.
-> 7. CB is invoked
+Hi Martin,
 
-Sorry I missed some steps, here is the update:
-1. Start GP 1
-2. CPU1 queues callback C1 (not accelerated yet)
-3. CPU1 reports QS for GP1 (not accelerating anything).
-4. GP1 ends
-5. GP2 starts for some other reason from some other CPU.
-6. CPU1's note_gp_changes() is called, acceleration happens, now the CB
-will execute after GP3.
-7. GP2 ends.
-8. GP3 starts.
-9. GP3 ends.
-10. CB is invoked
+Thank you for the patch! Perhaps something to improve:
 
-Instead, what we will get the following thanks to the acceleration here is:
-1. Start GP 1
-2. CPU1 queues callback C1 (not accelerated yet)
-3. CPU1 reports QS for GP1 and acceleration happens as done by the
-code this patch adds comments for.
-4. GP1 ends
-5. GP2 starts
-6. GP2 ends.
-7. CB is invoked
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.2-rc7 next-20230206]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Does that make sense or is there a subtlety I missed?
+url:    https://github.com/intel-lab-lkp/linux/commits/Martin-Liu/of-reserved-mem-expose-reserved-mem-details-via-debugfs/20230206-222927
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230206142714.4151047-1-liumartin%40google.com
+patch subject: [PATCH] of: reserved-mem: expose reserved-mem details via debugfs
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230207/202302070150.S0t7TNwD-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5d479d32b3863f2ec8d10d756aa57cf29046e334
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Martin-Liu/of-reserved-mem-expose-reserved-mem-details-via-debugfs/20230206-222927
+        git checkout 5d479d32b3863f2ec8d10d756aa57cf29046e334
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
 
-Thanks,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
- - Joel
+All warnings (new ones prefixed by >>):
+
+   drivers/of/of_reserved_mem.c: In function 'of_reserved_mem_debug_show':
+>> drivers/of/of_reserved_mem.c:465:46: warning: format '%lu' expects argument of type 'long unsigned int', but argument 5 has type 'phys_addr_t' {aka 'long long unsigned int'} [-Wformat=]
+     465 |                 seq_printf(m, "%pa..%pa ( %7lu KB ) %5s %12s %s\n", &rmem->base,
+         |                                           ~~~^
+         |                                              |
+         |                                              long unsigned int
+         |                                           %7llu
+     466 |                            &end, rmem->size / 1024,
+         |                                  ~~~~~~~~~~~~~~~~~
+         |                                             |
+         |                                             phys_addr_t {aka long long unsigned int}
+
+
+vim +465 drivers/of/of_reserved_mem.c
+
+   450	
+   451	#if defined(CONFIG_DEBUG_FS)
+   452	static int of_reserved_mem_debug_show(struct seq_file *m, void *private)
+   453	{
+   454		unsigned int i;
+   455		size_t sum = 0;
+   456	
+   457		for (i = 0; i < reserved_mem_count; i++) {
+   458			const struct reserved_mem *rmem = &reserved_mem[i];
+   459			unsigned long node = rmem->fdt_node;
+   460			phys_addr_t end = rmem->base + rmem->size - 1;
+   461			bool nomap = (of_get_flat_dt_prop(node, "no-map", NULL)) != NULL;
+   462			bool reusable = (of_get_flat_dt_prop(node, "reusable", NULL)) != NULL;
+   463	
+   464			sum += rmem->size;
+ > 465			seq_printf(m, "%pa..%pa ( %7lu KB ) %5s %12s %s\n", &rmem->base,
+   466				   &end, rmem->size / 1024,
+   467				   nomap ? "nomap" : "map",
+   468				   reusable ? "reusable" : "non-reusable",
+   469				   rmem->name ? rmem->name : "unknown");
+   470		}
+   471		seq_printf(m, "Total %d regions, %zu KB\n",
+   472			   reserved_mem_count,
+   473			   sum / 1024);
+   474		return 0;
+   475	}
+   476	DEFINE_SHOW_ATTRIBUTE(of_reserved_mem_debug);
+   477	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
