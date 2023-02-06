@@ -2,128 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FA168BCA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B09468BCB5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:20:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjBFMSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S230060AbjBFMUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBFMSE (ORCPT
+        with ESMTP id S229561AbjBFMUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:18:04 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FA711160
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:18:03 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id u10so5464143wmj.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:18:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lx5Ohc1IE89aa70gryDvD7lr6fDgHnr2p/EPj5EPyOU=;
-        b=3VPWF04cu/QdimD3GlaH0mg4J+X+NuCR7o8pHvDUVTqXQyhcuY0kdyizW+yjhVo6/1
-         GLspURgONjRD6aZUy9+r+9ZGBVmxSSYscZDxI/4Lc0XnYbE8stUX4fNl+W/W0H103tlq
-         1BOX2H9YI/u+TsQLkvB6vp1NNQVNYYdim3x1tzahMjeQhT/+tl7irelkp6A90gtO1pa4
-         KuLoBVMyQTb/rseog0S3aRr12rlkKZoAptxdXbTMQnw1OgkKqaiSxt/t5GJyQfe/4n/3
-         gnYe3oz0LCszQf5DRC00W1lufHyismbDSLmcuEVaL9GT8eehLaTmbxNyD390JYKQ/nAv
-         v1cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lx5Ohc1IE89aa70gryDvD7lr6fDgHnr2p/EPj5EPyOU=;
-        b=hU3l+cDAgvLFFXwUTmv3bxsZS0Hpy0+6bhPa0mQKo3YjIz2+IIzv9m9TPK3bswH69O
-         c4n+iODsQlfDI32QGQuR8GrwxzrNja4p+OD98L5UU54WQMngXGOjTdZceDmw1D7C9tQO
-         oNyIlLDEe2r1eeHwInNxtqa+rq/awervwoc3RMGMzwAjxHzCEMQi/g83265FTRecUV8A
-         nNQKw5Zz9ckl9i/dDASQOEmtZ2QV3bLv61jFduD0Nt9WR9dANW2eOtmwOlt5LORZ4A/N
-         PtITEOsrGNtVSRiF2dBiSZ0uRe05TRbRu3+KIdlKKnPk0JhWJcRpcmFf4E5WMnee9tSQ
-         IbVQ==
-X-Gm-Message-State: AO0yUKXSYhT1v3iSx096EAk95r/xIR8OW8of1ZPurzov810EUsvRPPXy
-        Bx6iWOxCeBk2oGpAkPlWvfIlRQ==
-X-Google-Smtp-Source: AK7set9HlkV3ZGPYkKQclq2QCDQpivZwgTcyVZD1/kScTrheRcsJb+knyABqk4hpGfHT0oD64lOn1w==
-X-Received: by 2002:a05:600c:4fd3:b0:3df:eea8:1fe5 with SMTP id o19-20020a05600c4fd300b003dfeea81fe5mr9648629wmq.14.1675685881710;
-        Mon, 06 Feb 2023 04:18:01 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:39c7:f90d:557:dc30? ([2a02:6b6a:b566:0:39c7:f90d:557:dc30])
-        by smtp.gmail.com with ESMTPSA id fc13-20020a05600c524d00b003db01178b62sm17739492wmb.40.2023.02.06.04.18.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 04:18:01 -0800 (PST)
-Message-ID: <ced10a5a-d5d9-ef45-a454-706fff89a672@bytedance.com>
-Date:   Mon, 6 Feb 2023 12:18:00 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v6 00/11] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>, Russ Anderson <rja@hpe.com>
-Cc:     tglx@linutronix.de, arjan@linux.intel.com, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        x86@kernel.org, pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230205191734.GA6027@hpe.com>
- <3b626936ccc4d5123cb9113378bec6f77182def3.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <3b626936ccc4d5123cb9113378bec6f77182def3.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 07:20:03 -0500
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAA3DBF4;
+        Mon,  6 Feb 2023 04:20:02 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id BEDE0581F89;
+        Mon,  6 Feb 2023 07:19:59 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 06 Feb 2023 07:19:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675685999; x=1675693199; bh=EttWCI1bpe
+        AjhBiaJSAzg8VXO8QdUkkL5lYBTi6kKQM=; b=maQtG7CXW2j0vs9LdTv/Far0Kj
+        r+JQ8DrPxOijBj5u/M26nfyCBg3LxOaSsoSj863bQj93nOQt4obnx4yBCRfGWoom
+        VPyhj9PwipzQQmE41f2irREabq1vHc4ubDRvewHR1SzZChLeVlrXH0nfIHWBleeE
+        RO/tfMb77+jVXkYb4Td8o9TS+Fr/9JaIPlh0TKo/wohxWZnBLwn8PUfeH7QVBtCx
+        Wqrq8iqLfP/yc8jgZ0wd6C+KZi1EkperQDi+XjIq/+qyBj282AOUruNzvU+apOiU
+        UrBvkzmnKoxYB2gQP5BM2fjtXoNWI0Wg0pjpuL7zBhyE5qlhjYETNv+Ld2Ng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675685999; x=1675693199; bh=EttWCI1bpeAjhBiaJSAzg8VXO8Qd
+        UkkL5lYBTi6kKQM=; b=HbjcZlBHM73FLUMGEg7g7Txy3GkpYltTnf/zta3DkBCu
+        vVtq6kehTsHtsjC4kcAls1wCwzA/hPgTf1m7qcEXHGNxri+4cilSJgq7EUXgwqnZ
+        9Cx7AO3RuNKm8gvh57qoAZI+7DiggrksU0tGQKZGsndoxp5VyChBY2/2dNuQOI0+
+        7/I/NfA9CM7eDn8EDMmm6HSPztcSgzps4TzOuFyVR8pJYEmd0YxAuc1qjpMy8mcR
+        l8QbPS2Vwyc8TV/DerYXjwbRgpCWytjcTigKukYttUCDZVEH1rzWDdbNeUYTx6VU
+        EZWD42Z2YdEcJHF4ltoafp7TQFLVqoWipL0uxiVVQQ==
+X-ME-Sender: <xms:bPDgY5KzB2ri1Ul3J4ZZ-u0ujckW1ael6I62cn_VIyX43QnGR2WNWw>
+    <xme:bPDgY1K9Kn-IaYAdfhgU412LtP9SdQG1xiY0grMcfY8NtDIa-IhyFe9Wbig3N-y9b
+    vlTK-o2ewogd7npLzs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegiedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:bPDgYxugQiZwrOa8DZy7dYElDk2UcABpqCFI_C0314MlOUG708AHng>
+    <xmx:bPDgY6bZ_W1evxK2IksLFVeC6lvA7NqXGKBJEfyKrID7MKWT2MW5Hw>
+    <xmx:bPDgYwaU7LvC6nJpoeuF95cXIo7XRoCoCG2Fas_NKl7HMaOw82Kk1Q>
+    <xmx:b_DgY1qnEwX0fd-s6xmNm76Jo2tfbVaOegUXXSMsFnzIZaabdBntJA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D47B2B60086; Mon,  6 Feb 2023 07:19:56 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-108-ge995779fee-fm-20230203.001-ge995779f
+Mime-Version: 1.0
+Message-Id: <30e43e0b-4d16-433f-845d-dd026adfb252@app.fastmail.com>
+In-Reply-To: <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.494373332@infradead.org>
+ <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
+ <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
+Date:   Mon, 06 Feb 2023 13:19:38 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Peter Zijlstra" <peterz@infradead.org>
+Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
+        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, "Joerg Roedel" <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com,
+        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
+        "Baolu Lu" <baolu.lu@linux.intel.com>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 6, 2023, at 12:24, Peter Zijlstra wrote:
+> On Fri, Feb 03, 2023 at 06:25:04PM +0100, Arnd Bergmann wrote:
 
+>> Unless I have misunderstood what you are doing, my concerns are
+>> still the same:
+>> 
+>> >  #define this_cpu_cmpxchg(pcp, oval, nval) \
+>> > -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+>> > +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+>> >  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
+>> > nval2) \
+>> >  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
+>> > oval1, oval2, nval1, nval2)
+>> 
+>> Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
+>> and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
+>> like a bad design to me.
+>> 
+>> I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
+>> calls that never trap but fall back to the generic version on CPUs that
+>> are lacking the atomics.
+>
+> You're thinking acidental usage etc..? Lemme see what I can do.
 
-On 06/02/2023 08:28, David Woodhouse wrote:
-> On Sun, 2023-02-05 at 13:17 -0600, Russ Anderson wrote:
->>
->> Gave the v6 patchset a try on a system with 1920 logocal cpus
->> (sixteen 60 core Sapphire Rapids sockets with Hyperthreadding
->> enabled).
->>
->> Without the patchset it took 71 seconds to start all the cpus.
->> With the v6 patchset it took 14 seconds to start all the cpus,
->> a reduction of 57 seconds.  That is impressive.
->>
->> Full boot, to root login prompt, without patches takes 223 seconds.
->> This patchset reduces the full boot time by 57 seconds, a 25%
->> reduction.
-> 
-> Nice; thanks for testing.
-> 
-> Is that with just the "part1" patch series which has been posted, or
-> also with the 'parallel part 2' still taking shape in the tree at
-> https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/parallel-6.2-rc6
-> 
-> I believe Usama said the second phase of parallelism didn't really help
-> much in terms of overall timing? Confirming that *without* all the
-> debug prints would be interesting. And we can look for what still
-> *could* be made parallel.
+I wouldn't even call it accidental when the dependency is so subtle:
 
-I think it would be interesting to get the numbers for such a big 
-machine for 3 cases: part1, part1+reuse timer calibration and part1+part2.
+Having to call system_has_cmpxchg64() beforce calling cmpxchg64()
+is already somewhat awkward but has some logic to it. Having to
+call system_has_cmpxchg64()/system_has_cmpxchg128() before calling
+this_cpu_cmpxchg() depending on the argument size on architectures
+that sometimes have cmpxchg128 but not on architectures that always
+have it or that never have it makes it useless as an abstraction.
 
-Russ mentioned testing v6, so I guess the above numbers are for 
-part1+reuse timer calibration.
-
-For my machine the smpboot times were:
-
-No patches: 700ms
-part 1:100ms
-part1+reuse timer calibration: 30ms
-part1+part2: 30ms
-
-Thanks,
-Usama
-
-
+     Arnd
