@@ -2,57 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52E268B49D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50DB68B49F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjBFDuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 22:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        id S229628AbjBFDuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 22:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjBFDuG (ORCPT
+        with ESMTP id S229526AbjBFDuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 22:50:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D41717CE1
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 19:49:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675655362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IpJlMbJRGMZmMDrtHPjj3U2BT9EG2aPl3b1EE2nsKis=;
-        b=eGu8yv2kdrBsHFNWsAOQPaQtRcHD41phRAFBZ/y3CB5kGVCzH24l5dXkWmpPXlZ1+B+Xvv
-        pCRrTU/etI3bAXeWHYyewH3FB3kmF91kJ5V3Dch0B4Lb0Gqx1wkGz+wcJ7zMNiJ0sd8dFq
-        RjXqQLc3n0vreJV0QwgarK/8bkY/Uog=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-QOt-8scRMVeliyFVaRwIhg-1; Sun, 05 Feb 2023 22:49:21 -0500
-X-MC-Unique: QOt-8scRMVeliyFVaRwIhg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sun, 5 Feb 2023 22:50:09 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275842D5E;
+        Sun,  5 Feb 2023 19:50:08 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0AA0F3C025B3;
-        Mon,  6 Feb 2023 03:49:21 +0000 (UTC)
-Received: from llong.com (unknown [10.22.8.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7B028140EBF4;
-        Mon,  6 Feb 2023 03:49:20 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        kernel-team@android.com, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2] cgroup/cpuset: Don't filter offline CPUs in cpuset_cpus_allowed() for top cpuset tasks
-Date:   Sun,  5 Feb 2023 22:48:53 -0500
-Message-Id: <20230206034853.330463-1-longman@redhat.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P9C2P4Ws0z4xFy;
+        Mon,  6 Feb 2023 14:50:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675655406;
+        bh=5ut9VXfyca1PgxhVxh8rSbXsgHM3j1eFHTyJZvDzSeI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=c5sMgzfsKYtTbqwMaV1fLb6QF2kPCqgf3dKyS8J26CAvAQM/TswM5lirgaQAABHEa
+         XkrpRnmSbJAYtktRlWXC2oUpoaRg1jRFAS3wRigRd5f0WSwAJq15yfAQq/eSd044m+
+         uCyLgfDTQYRir3btoAORCvHVwPrqTi9ITeQr76OQ/vkal0PTTv4xuB36o1+78KLqaR
+         8N7eU64I53USC4+G6Gx12XIkrWVnIp1uMRcRC1E3K3wxapNMlEXWFZpmACcOmCnd91
+         cvPxrxPVO+N2upMD4Y9F2zw28YnWPTxLX9ds6ODsdBT+J5klYVi9naGrKIg9OatTGx
+         BH/2ZWVms2B3A==
+Date:   Mon, 6 Feb 2023 14:50:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Daniel Scally <dan.scally@ideasonboard.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the usb tree
+Message-ID: <20230206145004.6e043ed3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; boundary="Sig_/Dw=70Hk9xqiC0kaAoksB+rX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,82 +51,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8f9ea86fdf99 ("sched: Always preserve the user
-requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
-__sched_setaffinity() unconditionally. This helps to expose a bug in
-the current cpuset hotplug code where the cpumasks of the tasks in
-the top cpuset are not updated at all when some CPUs become online or
-offline. It is likely caused by the fact that some of the tasks in the
-top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
+--Sig_/Dw=70Hk9xqiC0kaAoksB+rX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-One way to reproduce this as suggested by Peter is:
- - boot machine
- - offline all CPUs except one
- - taskset -p ffffffff $$
- - online all CPUs
+Hi all,
 
-Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
-includes offline CPUs for those tasks that are in the top cpuset. For
-tasks not in the top cpuset, the old rule applies and only online CPUs
-will be returned in the mask since hotplug events will update their
-cpumasks accordingly.
+After merging the usb tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Fixes: 8f9ea86fdf99 ("sched: Always preserve the user requested cpumask")
-Reported-by: Will Deacon <will@kernel.org>
-Originally-from: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Will Deacon <will@kernel.org>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+Documentation/ABI/testing/configfs-usb-gadget-uvc:14: ERROR: Malformed tabl=
+e.
+Text in column margin in table line 4.
 
- [v2] Remove "TODO".
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D        =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+bInterfaceNumber        USB interface number for this
+                        streaming interface
+enable_interrupt_ep     flag to enable the interrupt
+                        endpoint for the VC interface
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D        =3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 207bafdb05e8..6630f74967ea 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -3707,15 +3707,38 @@ void __init cpuset_init_smp(void)
-  * Description: Returns the cpumask_var_t cpus_allowed of the cpuset
-  * attached to the specified @tsk.  Guaranteed to return some non-empty
-  * subset of cpu_online_mask, even if this means going outside the
-- * tasks cpuset.
-+ * tasks cpuset, except when the task is in the top cpuset.
-  **/
- 
- void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
- {
- 	unsigned long flags;
-+	struct cpuset *cs;
- 
- 	spin_lock_irqsave(&callback_lock, flags);
--	guarantee_online_cpus(tsk, pmask);
-+	rcu_read_lock();
-+
-+	cs = task_cs(tsk);
-+	if (cs != &top_cpuset)
-+		guarantee_online_cpus(tsk, pmask);
-+	/*
-+	 * Tasks in the top cpuset won't get update to their cpumasks
-+	 * when a hotplug online/offline event happens. So we include all
-+	 * offline cpus in the allowed cpu list.
-+	 */
-+	if ((cs == &top_cpuset) || cpumask_empty(pmask)) {
-+		const struct cpumask *possible_mask = task_cpu_possible_mask(tsk);
-+
-+		/*
-+		 * We first exclude cpus allocated to partitions. If there is no
-+		 * allowable online cpu left, we fall back to all possible cpus.
-+		 */
-+		cpumask_andnot(pmask, possible_mask, top_cpuset.subparts_cpus);
-+		if (!cpumask_intersects(pmask, cpu_online_mask))
-+			cpumask_copy(pmask, possible_mask);
-+	}
-+
-+	rcu_read_unlock();
- 	spin_unlock_irqrestore(&callback_lock, flags);
- }
- 
--- 
-2.31.1
+Introduced by commit
 
+  a36afe780461 ("usb: gadget: uvc: Add new enable_interrupt_ep attribute")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Dw=70Hk9xqiC0kaAoksB+rX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgeOwACgkQAVBC80lX
+0GxbQwf/QM5FnN89MDVbg/2YrcYpeh60z/StTQLRVsIDmg+pf4YhhK+yL6EFG1c6
+mO8cSek4ShC/RlmYOTA7+fFkly01vHwzmbUXS188urqPUDRO9KnnL8np8yTMT7JF
+a7nX00pxN62LMriLzGFQ9CLWfbA++zRVWkyg5j1a/i2DZlYg+EdS+x00fl39U/q3
+Be6pu/nNxapoO80l8rDARU9soMwI7rRGJXgsp9sl3oMsQ4zcsduTcQo9xOh0izgo
+eC5RyG17X+mVAQJULiTq6k+/M4M2Tc5WtJpru3FoizGxbh3oDtPAJQ/mGP4CNLIS
+kb/s+/lgM6KiyvX5GjeUcu/Hhg2rhg==
+=Mreh
+-----END PGP SIGNATURE-----
+
+--Sig_/Dw=70Hk9xqiC0kaAoksB+rX--
