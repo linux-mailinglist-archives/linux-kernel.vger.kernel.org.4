@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D195068BB08
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BAC68BB0B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjBFLMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
+        id S229565AbjBFLMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjBFLMa (ORCPT
+        with ESMTP id S229930AbjBFLMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:12:30 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B4A1E1C9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:12:30 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id a1so13937824ybj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:12:29 -0800 (PST)
+        Mon, 6 Feb 2023 06:12:41 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B891EBC8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:12:40 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id d66so12204011vsd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:12:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b5uYJuiofgMdiSpu26KojixH0Uwt9bY3hD6Ug5k0ArQ=;
-        b=pWYu8zz/JHVVRUaeiFHbrDmMReLewbnXnwZdDEno4rkrQuq2nIkb3UfuaYlK7cY3JW
-         /pId+enbTumilssENS2yxJJPEqVgkx32YCbSyAMJrBv2if0vc3aIa/XbrCJVwjEs4hLO
-         IECJXCrC705VtffNcZ8Pj+ywu36ruSctu7KMBx+FDTY0svzkakj4VOskLGhyyAc6daGM
-         lxOvKa2m49MkLD5JCdvDL93eTFaqRfhtvx0v31aWW26BgFTlQQzbSwds3aG7XhbFUafZ
-         7oAMRJxkjzBuf0P9DkFiq7RdlO/vAYShTj9Pwe6arwy1irCciUmFojcI3OA8x41k8P1Z
-         Ye1w==
+        bh=Dx0rL/jZPMLeHFNkdGq3B0lHEAtTAwxRwYVBdLrzGf4=;
+        b=RpSQ3qkKIePil2cxOGelPztIhxlANWmbbwU9RhBul5avvUPj+q0M4uLMEDT1sHKyEz
+         mjG/rfEWMAlTbf8tcDgE3qtg1IZh5leZoM6yiEzP+c3SziJCoQzPCVrZT7H7+zBMiFqf
+         B7aDf+yrPUXxtDA7GvjM0Qk87Haq0JB4MmbXw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=b5uYJuiofgMdiSpu26KojixH0Uwt9bY3hD6Ug5k0ArQ=;
-        b=xdc3xx/+5Z7NgsHHWaj6sMoV3b2e00kdXJ3FRfKmX7mU6dIp/LyPaYUPGLzMPHWbPV
-         yjIaP6k/kpysKYb2LfArCqEHz8nOOaFsi2i3WWG44dCMxycnA6O0DYvrb9H7tfsICTea
-         AtsvkeVahBOWmyxdn3ZH9TFFBmooZbB0kIyRpzxxbjb9pikuSkC+7yp6gZVrYeut9/5U
-         fHcO8xlSWpi7VGPWusbweygPZhejCNekrC0otGyTsXB9jAguOsby8fD9Gu1kdebaDHQ3
-         YWyMpFEF8FQvcndfs5qA89aasr54M2vqeJWzuvoiuIXRVlRP51gggI03X8OK2uEN8EJ1
-         RZ+g==
-X-Gm-Message-State: AO0yUKXtHzNyEWaQn5qXqeuFv0por8U94DN2ZRyInoSRayCwhpd/g0I2
-        lzFXtGMPqVDfe5IGYjrgTEJlHyFLrTdM9tq6Z8HumA==
-X-Google-Smtp-Source: AK7set/2hz0lVMK+U+w1vtnbkMfVhn5UwbGftM4+jxwW38T4T6bRA0mgFTT0Y9YcJfI0ey5mMQYMrZ8uo2MXhPdqQNM=
-X-Received: by 2002:a25:5bd6:0:b0:80b:66c5:9fc5 with SMTP id
- p205-20020a255bd6000000b0080b66c59fc5mr2147989ybb.210.1675681949264; Mon, 06
- Feb 2023 03:12:29 -0800 (PST)
+        bh=Dx0rL/jZPMLeHFNkdGq3B0lHEAtTAwxRwYVBdLrzGf4=;
+        b=FdsxFu8MtETxrMYRqFvjaqMQMikM2hskysMWWhd7/GZdNf4owjWu6By58o853RSusJ
+         IWBoR0J1E0n7cX2FNpu9Oi1XV+3ap+tk/PnIPMuoTxx4sT19dPlSUbAeHflyjhwcS0Dh
+         lG2xnUdtH3k3658G/S7LcKj/wT5BXIcoiLRxznD0CP5Qyssh4lh+VmcYbglhPWT7r6WP
+         Mp8PHVHVtNzvZ1eZOvHRaAid6QoyIeKwfVvZ2wlippW15Pg/RrbesGHaTsyBarPurAXh
+         YbJzbUvE2QpX7H8y1pjgMNelwI4O1CQ0OUGHbr0sPsI7uOUUF93m2fiysI8AUZHajAFQ
+         ZpXA==
+X-Gm-Message-State: AO0yUKVmyOgz/Y1zlSE+m66tll0odCvtL8HfyYjKUPESGeET4RsjjkHD
+        90os1VGWGvqXVL7nLrWme3bA5fRe5PJbRjJL/bhM4w==
+X-Google-Smtp-Source: AK7set9deAUpwZvkISTP2kzU9X7LTaqj94p/drhOTgA6z/VsK90cwJfx1qsalSnu41+dWRZbIWESyD/aiCDW4pwFflw=
+X-Received: by 2002:a05:6102:322a:b0:3fe:ae88:d22 with SMTP id
+ x10-20020a056102322a00b003feae880d22mr2920661vsf.65.1675681959294; Mon, 06
+ Feb 2023 03:12:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230203132714.1931596-1-claudiu.beznea@microchip.com>
-In-Reply-To: <20230203132714.1931596-1-claudiu.beznea@microchip.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Feb 2023 12:12:17 +0100
-Message-ID: <CACRpkdYX7_rVTp5o8diBSx0JB4iFGjqyzxsqb7etW67SWD=ZRQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: at91: use devm_kasprintf() to avoid potential leaks
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230206091109.1324-1-moudy.ho@mediatek.com> <20230206091109.1324-3-moudy.ho@mediatek.com>
+In-Reply-To: <20230206091109.1324-3-moudy.ho@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 6 Feb 2023 19:12:28 +0800
+Message-ID: <CAGXv+5G+VSV=NLF9-+Z88JR+Cr6t=RGweZ88DA6VJN7-aoAqVg@mail.gmail.com>
+Subject: Re: [PATCH v7 2/6] arm64: dts: mediatek: mt8195: add MMSYS
+ configuration for VPPSYS
+To:     Moudy Ho <moudy.ho@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,16 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 2:29 PM Claudiu Beznea
-<claudiu.beznea@microchip.com> wrote:
-
-> Use devm_kasprintf() instead of kasprintf() to avoid any potential
-> leaks. At the moment drivers have no remove functionality thus
-> there is no need for fixes tag.
+On Mon, Feb 6, 2023 at 5:11 PM Moudy Ho <moudy.ho@mediatek.com> wrote:
 >
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> From: "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
+>
+> With the change of the MMSYS binding file for MT8195, the compatible
+> name of VPPSYS in dts need to be fixed to match the definition.
+>
+> Signed-off-by: Roy-CW.Yeh <roy-cw.yeh@mediatek.com>
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
-Patch applied!
-
-Yours,
-Linus Walleij
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
