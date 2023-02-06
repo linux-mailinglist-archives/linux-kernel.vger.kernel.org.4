@@ -2,105 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1FB68C6D5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E9A68C6DA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjBFTcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S230048AbjBFTdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBFTca (ORCPT
+        with ESMTP id S229930AbjBFTdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:32:30 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7AE65B6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:32:29 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id e22so7962710ejb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:32:29 -0800 (PST)
+        Mon, 6 Feb 2023 14:33:15 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C041EBEC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:33:13 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id iy2so3151376plb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:33:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/2ldZJ25PDZXwhJ16vO/80H+7cdh/CqtwC42vZviYQ=;
-        b=qKBtRH5Teac8nFUMoHFLxSqtrrpPDPleOTN2RvPuzW4R1MfxwXyhZqo3rhc9BK7xIF
-         /6U5clXoJhabWCaiozvN50Wa0sGeU7LR7F6QQUr9zMYDTbd+oIi/MlguNhPW83y+DZs+
-         Y3UXLQXDFF6PQODMbDidFoPJ/dsfcnkCznNZQ=
+        bh=Ozndrp9afhkdbM3aTvMQSUU+gGGmEw8bXKclZh/YFF8=;
+        b=pUN3O7Lp1aWdzxGMgt32Wj7585LyJFaDLuELuVw/HI5/kW4j9V+ioU7tUeWRPQOIUw
+         vb5/ySpmyFRyY0VBTVKT+98zMphr2JtzVS4fBXJ49LiINlI01C659kUyl2CiGnD27uQz
+         k06uddD2pS/3qNQvpm2nJTSW4uHPIGY2gxbDZdYM//BFYbuZD9vqugGr5Mqrmfo3Y9YD
+         915KjuvAasZ3HHccRzyqmW4j1jffUIL8rGtAK17ztKFvJmkDSIgXgjVzi2yuit2jANYZ
+         XKFmb4Jytr1ySKy1lV8VGppr97tcLtvQ35BASxyXGVkvkEjK3QZHYyTA6ohEHFvbjDyV
+         ujcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z/2ldZJ25PDZXwhJ16vO/80H+7cdh/CqtwC42vZviYQ=;
-        b=TVmS2cA+Oibipe2IZIBINfe4gzlMCouUp4jmRhpdyY340thk+OjQHef07KUxDdjNzo
-         Y5RMBckw4CnGa6QCI27JoJpyblVmidc+h7SzbddrguqpZeWCLPIS5mPcxOnjUyLog6NF
-         Dr6G7Apmuv6Pmr8Ht88dtalWJK+2bVNr3SGsUHbxjDgnffSuqywqrQCys43yYHKzC2mz
-         JrEnQAeZrkyZrJggG+iEGj3HVLGcZInpCNsO08IJwsUqCTakiBAjmpj+SfMxpHRkEJsp
-         4fB/og8dsQxLe0yPzCcdCHo/i8KqSvSEXMhBw9nbk7v/gsiYDGTa2Z/ik4j7hgya2uIL
-         xJAw==
-X-Gm-Message-State: AO0yUKU00j9z+0E/XcTK+bUKj/6EfBgF7jEaIJArD5Ps1d5mxySPZ60O
-        2yVjyb+UElpTfR1xDExVobQIIHxDfXC8BCyHOI5JkA==
-X-Google-Smtp-Source: AK7set8ET2HF0RB/HxTmY7RtA1k9SmP6VqIvZdhbv3JFGi1V/ewnfNaUCnezESzTlAKclqA4CzyQIOW4xvur0LsJzgs=
-X-Received: by 2002:a17:906:7242:b0:889:a006:7db5 with SMTP id
- n2-20020a170906724200b00889a0067db5mr153916ejk.138.1675711947888; Mon, 06 Feb
- 2023 11:32:27 -0800 (PST)
+        bh=Ozndrp9afhkdbM3aTvMQSUU+gGGmEw8bXKclZh/YFF8=;
+        b=zDotVLDo3TdzjkYHk4JGGv/cU0LFzJVpHHYk9xKbdI3EjNRxsiDjFJ1fkeUoIWye9r
+         UBtWQ6MDip/c94HUchqhN7CEmlVbjPUWBn8MrZr/AqTwspyGSDAFaHg14UBnLWrO7CaA
+         aDP+QtYXDk4+IxJFDHlZ4LJtDsOItqsOt5O7HZReJbO8N/5XfqH5/P7jeHNdLCmUT/y8
+         wWulQOTWq15MkfR8tRIbHnRKb1xCQNOiJe12JiNxuqbnXRjkqj39z/1bpQgmOaXm4a63
+         sHoPXpwXdqrnzxuC9hEapzLM/WznH73DZfI4HS1/PrV80sedTatjY9W7w9yGB640vu7y
+         t95A==
+X-Gm-Message-State: AO0yUKWxVSZUzkwJIy2wQggOJoN4pFE6n5Nl3xMMpBp0XfRHM8TeIGaG
+        kseKQZbYOlAF4TdkZsoispD2Zq359ai0xQQ1fzDDuvoBtTdTOyamLrA=
+X-Google-Smtp-Source: AK7set+KtnKVLwJYDJqYkK8qj3eZxjPmwm8qA9aUuqtozbNylOwcKEu6pFJFWVgPFc4duiSgTJ+lP96Aj9YI/XjHw1I=
+X-Received: by 2002:a17:90b:344c:b0:230:9e2a:ebd8 with SMTP id
+ lj12-20020a17090b344c00b002309e2aebd8mr1457256pjb.48.1675711992252; Mon, 06
+ Feb 2023 11:33:12 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
- <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com> <de57aefc-30e8-470d-bf61-a1cca6514988@linux.alibaba.com>
- <CAOQ4uxgS+-MxydqgO8+NQfOs9N881bHNbov28uJYX9XpthPPiw@mail.gmail.com>
- <9c8e76a3-a60a-90a2-f726-46db39bc6558@linux.alibaba.com> <02edb5d6-a232-eed6-0338-26f9a63cfdb6@linux.alibaba.com>
- <3d4b17795413a696b373553147935bf1560bb8c0.camel@redhat.com>
- <CAOQ4uxjNmM81mgKOBJeScnmeR9+jG_aWvDWxAx7w_dGh0XHg3Q@mail.gmail.com>
- <5fbca304-369d-aeb8-bc60-fdb333ca7a44@linux.alibaba.com> <CAOQ4uximQZ_DL1atbrCg0bQ8GN8JfrEartxDSP+GB_hFvYQOhg@mail.gmail.com>
- <CAJfpegtRacAoWdhVxCE8gpLVmQege4yz8u11mvXCs2weBBQ4jg@mail.gmail.com>
- <CAOQ4uxiW0=DJpRAu90pJic0qu=pS6f2Eo7v-Uw3pmd0zsvFuuw@mail.gmail.com>
- <CAJfpeguczp-qOWJgsnKqx6CjCJLV49j1BOWs0Yxv93VUsTZ9AQ@mail.gmail.com> <CAOQ4uxg=1zSyTBZ-0_q=5PVuqs=4yQiMQJr1tNk7Kytxv=vuvA@mail.gmail.com>
-In-Reply-To: <CAOQ4uxg=1zSyTBZ-0_q=5PVuqs=4yQiMQJr1tNk7Kytxv=vuvA@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 6 Feb 2023 20:32:16 +0100
-Message-ID: <CAJfpeguq2BH_4WQDb=eGkoVGOUVhNhMRicT4b_PN-t6FTBFUoQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Larsson <alexl@redhat.com>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>
+References: <20230127104054.895129-1-abel.vesa@linaro.org> <Y9v/z8CYik3faHh7@google.com>
+ <Y+ErWTyV8CnE3Hl+@linaro.org> <Y+E3T6bozU1K2sFb@google.com> <Y+E9Z+/+eCpPK6DE@linaro.org>
+In-Reply-To: <Y+E9Z+/+eCpPK6DE@linaro.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 6 Feb 2023 11:32:35 -0800
+Message-ID: <CAGETcx99ev_JdgYoifEdUg6rqNCs5LHc-CfwTc7j3Bd_zeizew@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/2] PM: domains: Skip disabling unused domains if
+ provider has sync_state
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Doug Anderson <dianders@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Feb 2023 at 18:16, Amir Goldstein <amir73il@gmail.com> wrote:
-
-> it's not overlay{erofs+erofs}
-> it's overlay{erofs+ext4} (or another fs-verity [1] supporting fs)
-> the lower layer is a mutable fs with /objects/ dir containing
-> the blobs.
+On Mon, Feb 6, 2023 at 9:48 AM Abel Vesa <abel.vesa@linaro.org> wrote:
 >
-> The way to ensure the integrity of erofs is to setup dm-verity at
-> erofs mount time.
 >
-> The way to ensure the integrity of the blobs is to store an fs-verity
-> signature of each blob file in trusted.overlay.verify xattr on the
-> metacopy and for overlayfs to enable fsverity on the blob file before
-> allowing access to the lowerdata.
+> CC'ed Saravana
+
+Thanks. Please do cc me for stuff like this from the start. I skimmed
+the series and I think it's doing one of my TODO items. So, thanks for
+the patch!
+
+I'll take a closer look within a few days -- trying to get through
+some existing fw_devlink stuff.
+
+But long story short, it is the right thing to keep a supplier on
+indefinitely if there's a consumer device (that's not disabled in DT)
+that never gets probed. It's a pretty common scenario -- for example,
+say a display backlight. The default case should be functional
+correctness. And then we can add stuff that allows changing this
+behavior with command line args or something else that can be done
+from userspace.
+
++1 to what Doug said elsewhere in this thread too. I'm trying to
+consolidate the "when do we give up" decision at the driver core level
+independent of what framework is being used.
+
+-Saravana
+
 >
-> At least this is my understanding of the security model.
-
-So this should work out of the box, right?
-
-Thanks,
-Miklos
+> On 23-02-06 17:22:23, Matthias Kaehlcke wrote:
+> > On Mon, Feb 06, 2023 at 06:31:21PM +0200, Abel Vesa wrote:
+> > > On 23-02-02 18:24:15, Matthias Kaehlcke wrote:
+> > > > Hi Abel,
+> > > >
+> > > > On Fri, Jan 27, 2023 at 12:40:53PM +0200, Abel Vesa wrote:
+> > > > > Currently, there are cases when a domain needs to remain enabled until
+> > > > > the consumer driver probes. Sometimes such consumer drivers may be built
+> > > > > as modules. Since the genpd_power_off_unused is called too early for
+> > > > > such consumer driver modules to get a chance to probe, the domain, since
+> > > > > it is unused, will get disabled. On the other hand, the best time for
+> > > > > an unused domain to be disabled is on the provider's sync_state
+> > > > > callback. So, if the provider has registered a sync_state callback,
+> > > > > assume the unused domains for that provider will be disabled on its
+> > > > > sync_state callback. Also provide a generic sync_state callback which
+> > > > > disables all the domains unused for the provider that registers it.
+> > > > >
+> > > > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > > > > ---
+> > > > >
+> > > > > This approach has been applied for unused clocks as well.
+> > > > > With this patch merged in, all the providers that have sync_state
+> > > > > callback registered will leave the domains enabled unless the provider's
+> > > > > sync_state callback explicitly disables them. So those providers will
+> > > > > need to add the disabling part to their sync_state callback. On the
+> > > > > other hand, the platforms that have cases where domains need to remain
+> > > > > enabled (even if unused) until the consumer driver probes, will be able,
+> > > > > with this patch in, to run without the pd_ignore_unused kernel argument,
+> > > > > which seems to be the case for most Qualcomm platforms, at this moment.
+> > > >
+> > > > I recently encountered a related issue on a Qualcomm platform with a
+> > > > v6.2-rc kernel, which includes 3a39049f88e4 ("soc: qcom: rpmhpd: Use
+> > > > highest corner until sync_state"). The issue involves a DT node with a
+> > > > rpmhpd, the DT node is enabled, however the corresponding device driver
+> > > > is not enabled in the kernel. In such a scenario the sync_state callback
+> > > > is never called, because the genpd consumer never probes. As a result
+> > > > the Always-on subsystem (AOSS) of the SoC doesn't enter sleep mode during
+> > > > system suspend, which results in a substantially higher power consumption
+> > > > in S3.
+> > >
+> > > If I get this correctly, one of the providers is missing (doesn't matter
+> > > the reason), in which case, your kernel needs that driver, period. There
+> > > is no reason why you would expect the consumer to work without the
+> > > provider. Or, you could just remove the property in the devicetree node,
+> > > the property that makes the consumer wait for that provider. Anyway, you
+> > > should never end up with a consumer provider relationship in devicetree
+> > > without providing the provider driver.
+> >
+> > I would agree if it was actually a provider that's missing, however it's a
+> > 'missing' consumer that prevents the sync_state() call.
+>
+> Oh, my bad.
+>
+> Still, why would you keep the consumer node enabled in devicetree if you don't
+> intend to allow its driver to ever probe?
+>
+> >
+> > > > I wonder if genpd (and some other frameworks) needs something like
+> > > > regulator_init_complete(), which turns off unused regulators 30s after
+> > > > system boot. That's conceptually similar to the current
+> > > > genpd_power_off_unused(), but would provide time for modules being loaded.
+> > >
+> > > NACK, timeouts are just another hack in this case, specially when we
+> > > have a pretty reliable mechanism like sync_state.
+> >
+> > It does not work properly unless all consumers are probed successfully. It
+> > makes sense to wait some time for the consumers to probe, but not eternally,
+> > it's perfectly valid that a driver for a (potential) consumer is not enabled.
+>
+> Usually, if you have a consumer devicetree node that you consider it
+> should not probe, you should consider disabling that node in your board
+> dts, specially if you don't intend to provide its driver.
+>
+> Again, timeouts are bad all-around. What happens if rootfs doesn't get
+> mounted in time? Will 30 seconds be enough for every scenario? What
+> happens if I want to load the driver (module) for a consumer a day after boot?
+>
+> IMHO, I think even the regulator_init_complete should be switched to some sync
+> state approach.
