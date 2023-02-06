@@ -2,167 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A10968C2CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB77268C2D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjBFQQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:16:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S231774AbjBFQRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbjBFQPz (ORCPT
+        with ESMTP id S230411AbjBFQRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:15:55 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2051.outbound.protection.outlook.com [40.107.220.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2F39ED4;
-        Mon,  6 Feb 2023 08:15:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lksoR2Z8QRKmeoAvHYHxfRAIObOfGOyxo8cK9oKdKew8w/solzspapbiaORmXPD3rG0XtSk0bkETcgjtIDBP+MQ7Zy8GmEIOgy+HTSiKz+8oqRkiRzbereejEDVUQIWAOb3Vz8Q8r0zqtboCRvJ54P9PCwdDh0f/zM/F4N0sm8ncxRRwGR94vAkHxpGL/yloYvRJYcKv2gBC6wFX94nYlfaSrJFlqkGp0ZB6mJjHdlRpjHREigVGX2D9989COLGOJa2c1G2CDEHDc2/S7PHJHdYFCVt7laopub+BCk7L46/0okV9qtatMRQrb6OlcnAYFJYjBJWsnvn88g3uag53rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ieKBmWLrrQzdTtcMGPgc2sBfRtpXnGnIHgrfCI5toi8=;
- b=aLN+p75XEXlH4B4MvGi3QJWuukAiEKM3XuDkB2hF9YE453wuD+qijyKgTbuWiX6YoPcohs4TOWgQFHXYfRU6oUMOiRKY9XE3Qp5cjQeogcGyqjm2B/Ek5NWbGM8TRX6PDThak1Jx6oxRBySyQGNqG3IEqjZ1hmIuGkFgJlNFCJoPVv5+qPAswrFjeUkFgZbMeHhxHH9Om6SWBd41opncPrw1e4c5qy0XYLNstSCfBXSt4Ij0blAyvfxRM8ZTibi76vGEI0Q696zyPp9Rr7lcEetkw3VjpHg3HKa7DosIjHdAZ/zP9DEKEKY/goINpQpIM6Q3byf7zhYBwV1P1fzkHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ieKBmWLrrQzdTtcMGPgc2sBfRtpXnGnIHgrfCI5toi8=;
- b=3I6M3fE4ZtaRriLndJ8aPJwYRFm4b5tEUQ81APJVLJOj/ggVC/c10RBynCnjR7TNDeAg7cgFT7kavEzBIGLLQ0KQRnVLfky/G3Ojw95LTiBLH5GgTHi9BBODj776sLNOHTOKo4lwAGl8Ftm7f1mB+aZaK5U7jFE4KEasJcVo/2Q=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SJ0PR12MB5408.namprd12.prod.outlook.com (2603:10b6:a03:305::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
- 2023 16:15:01 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6064.032; Mon, 6 Feb 2023
- 16:15:01 +0000
-Message-ID: <c0635ff3-027f-bcd7-afbc-46f4e62d3651@amd.com>
-Date:   Mon, 6 Feb 2023 17:14:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Nouveau] [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi
- interfaces
-Content-Language: en-US
-To:     Danilo Krummrich <dakr@redhat.com>, Dave Airlie <airlied@gmail.com>
-Cc:     Matthew Brost <matthew.brost@intel.com>, daniel@ffwll.ch,
-        corbet@lwn.net, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mripard@kernel.org, bskeggs@redhat.com, jason@jlekstrand.net,
-        nouveau@lists.freedesktop.org, airlied@redhat.com
-References: <20230118061256.2689-1-dakr@redhat.com>
- <20230118061256.2689-6-dakr@redhat.com>
- <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
- <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
- <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com>
- <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
- <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
- <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
- <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com>
- <bc523c5c-efe6-1a7f-b49a-e0867dc1413d@redhat.com>
- <15fb0179-c7c5-8a64-ed08-841189919f5e@redhat.com>
- <1840e9fb-fd1b-79b7-4238-54ae97333d0b@amd.com>
- <CAPM=9txON8VCb3H7vDY_DOgtUg2Ad3mBvYVxgSMyZ1noOu-rBQ@mail.gmail.com>
- <a1c526e0-0df7-12cb-c5a1-06e9cd0d876b@amd.com>
- <3f935a7e-fede-2bad-c029-4a3af850c9b5@redhat.com>
- <95d0631b-545c-ea4d-7439-75422e9a9120@amd.com>
- <67958920-c5bb-a0f5-2306-e3ae4fdbaeb3@redhat.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <67958920-c5bb-a0f5-2306-e3ae4fdbaeb3@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0029.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1c::22) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 6 Feb 2023 11:17:21 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B972D5C;
+        Mon,  6 Feb 2023 08:17:20 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316FYITd023602;
+        Mon, 6 Feb 2023 16:17:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Peiayn3TZDzpZtvrbG7ocZtCxKhQO0i+HE+2mMzaTU4=;
+ b=GoJPFcgowVd3ap3dxcIJ69k+VRB/f8IpDdpZlA62OYXpC9Aq6chyc7QpAbvjgyi5yC5D
+ qiM3qQEEp9pSUn/S92Je4n/Pm+VvEiDYuAcH6eT31MTNtWqe+RtqtW9LbxUYjHng8rph
+ WG7pBJh+PAuyC03u+DgQBllfJ6H4d+pWW/NNSXa07bOF2LOiDAvANM3hXERFCxBldYq5
+ 6rwYvQ8wCjukFR7FUcjtMkgKgYGFudKOpBk0ETobxmwauIu6l6tLPousB5swbxe/F1Mc
+ dMxOQHFrijujVSD/pVVNdFrJzk+HckzWaoWe/VWVuszDcVcCsU917qVBtxu1iu00g+DJ pw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhfkac12x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Feb 2023 16:17:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 316GH5e7017813
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 6 Feb 2023 16:17:05 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 6 Feb 2023 08:16:59 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <alsa-devel@alsa-project.org>,
+        <quic_rjendra@quicinc.com>, <konrad.dybcio@somainline.org>,
+        <mka@chromium.org>, <quic_mohs@quicinc.com>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v5 0/8] Add SC7280 audioreach device tree nodes
+Date:   Mon, 6 Feb 2023 21:46:33 +0530
+Message-ID: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ0PR12MB5408:EE_
-X-MS-Office365-Filtering-Correlation-Id: 545af347-bbb0-4c61-8112-08db085d4c8a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4YgAr/WoUymFYgils929a4WuNmW+HdMTXALlGA9OldJO5cdWKEAXgTI8iw21fpGL6NpqA2YvSK/z2bNLgGjMow8ZaEXlexkr3dOfHn7ccMslRcf8InseVsEqlw2g84Fk7lJywdJvqjvsnVV9TKP9u3HvsIZ9fh/zrMKTQ5WZ/qbc5idwWGGBfMS0Mbuqt8EtLMnyXF6Wd7S7pySMz3TkWvLL2+I5C+LOdY9/yDbd9LkNwgolAYt6NoMRCy029Aemmc+bFqal7f/TbCzY3kwMiUHHu93t2QKBxXgpWEaC9zArBNkb5vKYJzbco8in8Lu3rxRpOIJ2NlnS2D6ypykRGYSkNpq1nc4PilvDtFxQ9LNDsKqN+PA58ha3P+jAx7cJaWPGu9NxerGJfR4reKR0jBi/eT3j2V+pN8AffMf7hCyBRoV2LYsSRmsppPibuwExtE9cm1iI9shxH6RHsPvQEUcW/1cam69DJyKZgigvCz/MxHgIL4P5PqfBicITD/LZwYa5Qqv3UAR0mo8zKvzJan/A2VpYpzUTNA17DWwHLRtXQMo2UCnMpnfC4FIyQuTgri9GhYTNj4CTnptU3ccr6+YtW+upJceFCBu9rOMIyI6g55i71F5caY+bE62S/47FPfdKDiMuDcGC/wkw+cfwmOUb3Bba/RbdFGr+ydSXS4np8tk5wPLZGlIHM+hbom4cz7opYGZoA6amw9Z9lmNn1mwsjoPEJTA2mm5udnfDwzQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199018)(36756003)(316002)(110136005)(6512007)(31696002)(86362001)(31686004)(186003)(6506007)(2906002)(66476007)(4744005)(66556008)(7416002)(4326008)(8936002)(8676002)(5660300002)(41300700001)(2616005)(6486002)(6666004)(478600001)(66946007)(38100700002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RFg0YzhwVSsvelErNXcwcmJ3L2xiTVZxeGlaTDN2a1huNHBwa0NHeXk2NWxk?=
- =?utf-8?B?bGIzaTNLb3BTaFpxeFBtTzFlbUpFMWRDZFJIbWtsTHF4bU1kSnhoSmxGK2NI?=
- =?utf-8?B?NnkreHFuVGdoeWQxUEhtaStiV1UrTmlQcndJOHU5SHNBb0t1TzZLQ0UxaC8z?=
- =?utf-8?B?bDU1NlpMTS9TakJlWWE4TCtFaXQ1a1NqZkdRWFd4R21SQ1NYdTFEc3UwR082?=
- =?utf-8?B?cU9seExYSHo1cE53RlFSa3k1L2NQRUJYdU9VcDNUKzB2SStwNDBQSWJKd0lP?=
- =?utf-8?B?Q09TemF0d3ZuSjZvYTNoRFJMZ0JGSHJrOVpPNEkvNk1YTDYwSi9UY3E5TXF3?=
- =?utf-8?B?T3ZuTWt0eDRIUWZLVmJaTEZsY0s0OGF1U1ZKbStybGdlR2tvZFREZkpKL3Rt?=
- =?utf-8?B?WGFweHAvTVM4MFJtUkYrMm0yU0pCNUVCRTF3UnhkLzJERlZvTFc2UDhBNCtZ?=
- =?utf-8?B?S2xrVEhPSHhaRHA0TVRQenhzbFdoS2JpTDhIakFBdUx4dzJra3dLYkJ5TGFL?=
- =?utf-8?B?Q0lPRHlzNHR5SW1ZN1RHWHFuSWlWc3BSWkpMQkJaR05SZnprVnVRakV1TXpD?=
- =?utf-8?B?VjN1YS9DdmpRaWh4TFUzeHdCOHA1cE5MODRFWTJqbXFCZmxFdksvNXZtSkRy?=
- =?utf-8?B?eEsvby9iaWVQVU9DSUJaeVZDV2pSRlg5RTRpZ3c0M0RGQ3BEaCsrQzgwcks1?=
- =?utf-8?B?bFhUNkhGekl0SUtSaFZMK0xXc3ZBLzkyMi9BbnQraHV4V2RZNG5OMjAyRDY3?=
- =?utf-8?B?amxiQS8rbTVYblYxcDBQQk1ucHJlcnIrYXUvYmM4V2w2eWhOVXZrcllrckFk?=
- =?utf-8?B?dW9aM08vRzdMSVo5K0loYnhxb2E3VXJhWHdDMGRML01MSmJaaHdPYXJuS0Ey?=
- =?utf-8?B?RnhreDhwdUV4cEZXM3NLU2J4dHhMS0l0VHdHREpONmdrMEx4ckRxeFl1c2Rl?=
- =?utf-8?B?T0x0NU1mNnVYZHpCdUZtbTFEbmhaam81dUh6OEMvdk1Yd1lPYWx6YS9JMXhk?=
- =?utf-8?B?NEVTY01tM1lIajNpWm9MOHlQWG9kRmJxSDcwMFNtZloyOGhkL2diOS9FTEc0?=
- =?utf-8?B?NHJ3eldBMU56eGE2Ujc0NzJsZGtLQkNQK3ArdS9HMzV3WHBFYngrcW1mRTZj?=
- =?utf-8?B?amJCMXRzSFhIYVAvVnZqdTB5ajJjZTVuY3JNVjY5T3kzU2NXRkp0THExamFx?=
- =?utf-8?B?eERuQWVrTjlBRWFmdWV1bnBJd0ZGbThCdGVKSTFqcnUrc1JoNUo4QVp5cmZ1?=
- =?utf-8?B?QkpINmdmRnVpNzd1eU01UlI0WlFnS0VHOUo0OStVVm9aQ3VRdUYzUlRQMU01?=
- =?utf-8?B?RXQzNFNyRTY1OW5kUjYvazhkUDVqTmJPaXNuRnNGTkRkZ0ZGbm5zUWFZeGNk?=
- =?utf-8?B?K3lkOHRiOU5zcjNBakVYUFVOMHpQWkJzTkx3OWVWMVlMRzhpRDdDNStqN0gr?=
- =?utf-8?B?TURSV0JWQTJ1MGxPdGdwMlgxWWM2bjFYUHYrWjFrZGpKZmIxR21xN3VGL3pl?=
- =?utf-8?B?QWp0RmdLVXdQQkxYN0JUSFovS2tBVXkydHVTcFpCejNLdGsvSHM1WDZvZEdi?=
- =?utf-8?B?bms4OGIxRWRxdnFyYmwxUGpVYVVDWWt3dnB0aEJ5UFp1UTdPaS9vTzFQa3BT?=
- =?utf-8?B?M1AwbGJ1UU9mQ1JnTmRWWjJ4SWdWNjU4blF1cDdYdms0RXY2WnFYYzBVczFE?=
- =?utf-8?B?dnYvZFhKQmFFUWlETzNCb3FjZng3Nk1vbmRGbmlVb1Vka3Z4Y1FyL213YUJi?=
- =?utf-8?B?ZnZDVzd3akZFbmU5WEtpRGRJcldhdGxPZTl5Q1JKTytPZUY2T0VpZ1dBdE9W?=
- =?utf-8?B?SWN3a1doSkp4TUZpY0lQNGhpTVdzcEh2alYxMTFFWEJQQ0FPSFByUVFCMXl1?=
- =?utf-8?B?dkRjZ0RoaFdLNXRha3M4Y1ZWemZPejB6eEtjWGxjbWJVLzJFYVM3WHBjdGd1?=
- =?utf-8?B?M2NvcHRMdnV2b2tiMm9abi9GY3ZQSm5tZzVGZzFIY1l2RHY4TkpCbnR5dWcx?=
- =?utf-8?B?U01WTmVkeERoNSsyVitoOHRSSytaN2M0WXgvbEM4Y2JJdzNhYXQvT25mS1pB?=
- =?utf-8?B?T0hyTndnSXFnU09nYmtJVk8vM2kreUlmZVh1dHJ3ajR5cEQ1dlBVbFRRaGkv?=
- =?utf-8?B?NUJORmVsNXVIVGp2TFJWMnFwU3JyQVBrN2NSTnB5dncrMXdFbk1XRDEwdnFH?=
- =?utf-8?Q?bsYD+PPXmVE8TSZHBSDzA0lPKG3U9hn117cjOQweEgtt?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 545af347-bbb0-4c61-8112-08db085d4c8a
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 16:15:01.5464
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ny9pO6KBM6hIhN8Oizxqr9RFBcVpgfCL6PbOuG/tYj2OUdvU0Uygdf10N4UZaRzZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5408
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hL3XLMLQYNBNOUpQ0Il4Xp3z3Z6y-9yH
+X-Proofpoint-GUID: hL3XLMLQYNBNOUpQ0Il4Xp3z3Z6y-9yH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ adultscore=0 suspectscore=0 spamscore=0 bulkscore=0 clxscore=1011
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302060141
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Concentrating this discussion on a very big misunderstanding first.
+Add SC7280 audioreach device tree nodes and extract audio specific
+dtsi nodes and add them in new file.
 
-Am 06.02.23 um 14:27 schrieb Danilo Krummrich:
-> [SNIP]
-> My understanding is that userspace is fully responsible on the parts 
-> of the GPU VA space it owns. This means that userspace needs to take 
-> care to *not* ask the kernel to modify mappings that are in use currently.
+This patch series depends on:
+    -- https://patchwork.kernel.org/project/linux-clk/list/?series=717985
+Corresponding dt-bindings not mainlined yet.
+    -- https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/commit/?h=rproc-next&id=8490a99586abd480d7139893f78c019790a58979
 
-This is a completely wrong assumption! Take a look at what games like 
-Forza Horizzon are doing.
+Changes Since v4:
+    -- Modify lpasscc clock controller node name.
+    -- Disable lpass_core node.
+    -- Modify Model name in sound node in "Add sound node for crd-rev3 board" patch.
+    -- Remove protection domain property in "Add LPASS PIL node".
+Changes Since v3:
+    -- Remove deleting digital codecs in crd-rev3 board specific dtsi and upadate them using phandle.
+    -- Update commit message in "Update lpass_tlmm node" patch.
+    -- Change the position of status property in LPASS PIL node.
+    -- Update commit message in "Add sound node" patch.
+Changes Since v2:
+    -- Remove Patch related to Add CGCR reset property.
+    -- Remove Patch related to Disable legacy path clock nodes.
+    -- Add dt-bindings for missing properties.
+    -- Change the order of nodes.
+    -- Move digictal codec macro nodes to root node from soc node.
+    -- Add adsp-pil-mode property in required clock nodes.
+Changes Since v1:
+    -- Move remoteproc node to soc dtsi file.
+    -- Add qcom, adsp-pil-mode reg property in lpasscc node.
+    -- Fix typo errors.
+    -- Remove redundant status properties.
 
-Basically that game allocates a very big sparse area and fills it with 
-pages from BOs while shaders are accessing it. And yes, as far as I know 
-this is completely valid behavior.
+Srinivasa Rao Mandadapu (8):
+  arm64: dts: qcom: sc7280: Extract audio nodes from common idp dtsi
+    file
+  arm64: dts: qcom: sc7280: Add sound node for crd-rev3 board
+  arm64: dts: qcom: sc7280: Add LPASS PIL node
+  arm64: dts: qcom: sc7280: Update VA/RX/TX macro clock nodes
+  arm64: dts: qcom: sc7280: Update lpass_tlmm node
+  arm64: dts: qcom: sc7280: Add qcom,adsp-pil-mode property in clock
+    nodes
+  arm64: dts: qcom: sc7280: Modify lpasscc node name
+  dt-bindings: remoteproc: qcom: sc7280-adsp-pil: Add missing properties
 
-So you need to be able to handle this case anyway and the approach with 
-the regions won't help you at all preventing that.
+ .../bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  |  30 +++-
+ arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi     | 135 ++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts         |  24 +--
+ .../qcom/sc7280-herobrine-audioreach-wcd9385.dtsi  | 171 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 126 ---------------
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  95 +++++++++++-
+ 6 files changed, 427 insertions(+), 154 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
 
-Regards,
-Christian.
+-- 
+2.7.4
 
