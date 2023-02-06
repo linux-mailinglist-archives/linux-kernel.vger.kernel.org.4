@@ -2,161 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510B768C49D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F9068C49F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjBFRYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S230349AbjBFRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjBFRYF (ORCPT
+        with ESMTP id S230284AbjBFRYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:24:05 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61813270C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:23:55 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 200-20020a2505d1000000b0088347752c5fso5527704ybf.18
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 09:23:55 -0800 (PST)
+        Mon, 6 Feb 2023 12:24:36 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D47E2D155
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:24:14 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id bi36so18661104lfb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 09:24:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xe2d5VCHL8knVkIvOOdANfJnEofFJGQpmqgs9ZySRtc=;
-        b=sbrP00/Yk9tKJfGQc4FLq70ucmYmbgy5/lzyIAHSS74GMLHYKuVcEW7frbq41WNd7X
-         O3J9Iifetr3zZa/9AgWSpTNIta3332QfCY58JHRG52qqRnCLTofCIe7Vvk+6CD5vy0tH
-         q/pPLvD9In0+0piPhUnB5gPX5M8nCI1OkVYBDfXwFXyySn2nGpsn3y+Qxe9jDa2s576B
-         tzcD+5DLiJSCgawG0L6rfscpHPOIDdvEB96UGjKAqynaNJju6eHOT/CFpjW8mVqdatcC
-         BNHbAP6Fv21oQE4k9kPEXfVZmc3lrDgDAehHqXKLQ4X1k8i7N1i+CheT9X0b3tSlsNRX
-         3N9A==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sS0A0Czb9WxV1S+N4V3EYqAA6ZFJye37GWBGxAs3i/A=;
+        b=cACepK4B4AmB8yeEpssioV1L+mOD8ewu64shYj2TBqsgc+0PB2qHClXuLe7R8qKcjp
+         X5Uy0MDyroxlGGr9NjuMRauLdAHYGy59fOCkmtw34IRatzG40NHxEuit0PvgVak6sDLI
+         cGk/D03z/sxjIRsfc3xNrauCSRi4XZsu7019g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xe2d5VCHL8knVkIvOOdANfJnEofFJGQpmqgs9ZySRtc=;
-        b=zvpr6U59+AAxeRmxWpI84TvTdbwOJunH4C/Hp8LY8WUBdzZ2/srlAvWABb8TohXhMz
-         Vl3BGaXuP2RuDqM+aeOAgHHLxOapfrqomkqprIGgO3VcqQJrvVSKRvE7fdcNeO54z1Iq
-         4Tx14p+IsCcRQ4wpu4PN9LDVTG/Sfi5GmSZ8DpuWDDxhryP1Og6GB34GuqBnDnOl9t7r
-         no8zF45a38PEEmReR1gpdHrFd1o9wiAOKGyDUvVgJXOVP5pVl9/kGbCI0Lq4sjg8vEdb
-         l1VOs1BswpC+wv7ANjxNsdnKnG4lOhxabeEXbegjsAXS4QW9KixOGsn4WAe7TKHEnkR7
-         uVFQ==
-X-Gm-Message-State: AO0yUKWxkRYUkWivx3lt2GEt2yiarG9DES5ovaSgligceo6JuSjcTKeH
-        Cf0I/W4A4laK48xcFxTcdvgfd0wH87Tj
-X-Google-Smtp-Source: AK7set/7ERS8QZmp236U3VvlNKmAF4kQJ8IiQT3dBm5M8Gtg+WXeMrtq2ewrkogC8KUiVC864iRmNaPt/E6o
-X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:22b5])
- (user=rananta job=sendgmr) by 2002:a05:690c:29d:b0:521:db02:1011 with SMTP id
- bf29-20020a05690c029d00b00521db021011mr0ywb.1.1675704234298; Mon, 06 Feb 2023
- 09:23:54 -0800 (PST)
-Date:   Mon,  6 Feb 2023 17:23:40 +0000
-In-Reply-To: <20230206172340.2639971-1-rananta@google.com>
-Mime-Version: 1.0
-References: <20230206172340.2639971-1-rananta@google.com>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Message-ID: <20230206172340.2639971-8-rananta@google.com>
-Subject: [PATCH v2 7/7] KVM: arm64: Create a fast stage-2 unmap path
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sS0A0Czb9WxV1S+N4V3EYqAA6ZFJye37GWBGxAs3i/A=;
+        b=lopep5HeWXodOV1PxjmfQfnqOtxCQomyPKzh6qBF8GKsFeal6O9qkj0t4/XQvYfKnl
+         lhqpKp84kn/9DUhl2Lwr94lziQSRlUH4AyuKMRglBkEtTmL7Yxz73XTPdqlNvVJ3/cCy
+         YXPpnY/F/wFgogWtP8Xc0KT1vpoTa/0gFupKGJHa1taV6y7N8rc86LyO9I8GFarGn575
+         cdUncGVHbwWJ8mpHDfEVkb4x3kDCWTLzuhWj/ytMjKvw0u1dMsmWCooK+BVPO6wRG4Wb
+         OLl2i+Yn4hK9LYDBoRvOgRx3fF/rni0n/0/SLzc/nqU4N6hMbxliiYZngjYCN1N2QQJb
+         0nHw==
+X-Gm-Message-State: AO0yUKUlbkKnYw/wm9m21Z2sSp4eHbICXxqFWeHercYz7U1NDapYzD5j
+        2eICaDBfOhOuZbwfM/MD5+BR/h0ps3l9T3wMrhkNDw==
+X-Google-Smtp-Source: AK7set/GspoK7qZ5ikAe2UrLJRpGdSd3YUTtughky3DwdCYJoF6bvWrfLL1QDGuCiNEXI7KiIStNE+igcDXMLVWYHuk=
+X-Received: by 2002:a05:6512:3d29:b0:4d5:7655:95db with SMTP id
+ d41-20020a0565123d2900b004d5765595dbmr4422124lfv.57.1675704252413; Mon, 06
+ Feb 2023 09:24:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20230204022051.2737724-1-joel@joelfernandes.org>
+ <PH0PR11MB58800C6FD1C0DDF8EC67DB5DDADA9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <CAEXW_YRwe781s1faLQcRBvL5pBWv9WmRuhcP=PmqHUJcm9Rphg@mail.gmail.com>
+In-Reply-To: <CAEXW_YRwe781s1faLQcRBvL5pBWv9WmRuhcP=PmqHUJcm9Rphg@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 6 Feb 2023 12:24:00 -0500
+Message-ID: <CAEXW_YSY5nYL4LUoAX1Z8kUXtE-GW3Zor__cDWsdPL3OqEe4bA@mail.gmail.com>
+Subject: Re: [PATCH] rcu/tree: Improve comments in rcu_report_qs_rdp()
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Boqun Feng <boqun.feng@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation of the stage-2 unmap walker
-traverses the entire page-table to clear and flush the TLBs
-for each entry. This could be very expensive, especially if
-the VM is not backed by hugepages. The unmap operation could be
-made efficient by disconnecting the table at the very
-top (level at which the largest block mapping can be hosted)
-and do the rest of the unmapping using free_removed_table().
-If the system supports FEAT_TLBIRANGE, flush the entire range
-that has been disconnected from the rest of the page-table.
+On Mon, Feb 6, 2023 at 12:19 PM Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> On Sun, Feb 5, 2023 at 10:09 PM Zhang, Qiang1 <qiang1.zhang@intel.com> wrote:
+> >
+> >
+> > >Recent discussion triggered due to a patch linked below, from Qiang,
+> > >shed light on the need to accelerate from QS reporting paths.
+> > >
+> > >Update the comments to capture this piece of knowledge.
+> > >
+> > >Link: https://lore.kernel.org/all/20230118073014.2020743-1-qiang1.zhang@intel.com/
+> > >Cc: Qiang Zhang <Qiang1.zhang@intel.com>
+> > >Cc: Frederic Weisbecker <frederic@kernel.org>
+> > >Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > >
+> > >---
+> > > kernel/rcu/tree.c | 13 ++++++++++++-
+> > > 1 file changed, 12 insertions(+), 1 deletion(-)
+> > >
+> > >diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > >index 93eb03f8ed99..713eb6ca6902 100644
+> > >--- a/kernel/rcu/tree.c
+> > >+++ b/kernel/rcu/tree.c
+> > >@@ -1983,7 +1983,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+> > >       } else {
+> > >               /*
+> > >                * This GP can't end until cpu checks in, so all of our
+> > >-               * callbacks can be processed during the next GP.
+> > >+               * callbacks can be processed during the next GP. Do
+> > >+               * the acceleration from here otherwise there may be extra
+> > >+               * grace period delays, as any accelerations from rcu_core()
+> >
+> >
+> > Does the extra grace period delays means that if not accelerate callback,
+> > the grace period will take more time to end ? or refers to a delay in the
+> > start time of a new grace period?
+>
+> Yes, so IMO it is like this if we don't accelerate:
+> 1. Start GP 1
+> 2. CPU1 queues callback C1 (not accelerated yet)
+> 3. CPU1 reports QS for GP1 (not accelerating anything).
+> 4. GP1 ends
+> 5. CPU1's note_gp_changes() is called, accelerate happens, now the CB
+> will execute after GP3 (or alternately, rcu_core() on CPU1 does
+> accelerate).
+> 6. GP2 ends.
+> 7. GP3 starts.
+> 8. GP3 ends.
+> 9. CB is invoked
+>
+> Instead, what we will get the following thanks to the acceleration here is:
+> 1. Start GP 1
+> 2. CPU1 queues callback C1 (not accelerated yet)
+> 3. CPU1 reports QS for GP1 and acceleration happens as done by the
+> code this patch adds comments for.
+> 4. GP1 ends
+> 5. CPU1's note_gp_changes() is called
+> 6. GP2 ends.
+> 7. CB is invoked
 
-Suggested-by: Ricardo Koller <ricarkol@google.com>
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
----
- arch/arm64/kvm/hyp/pgtable.c | 44 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Sorry I missed some steps, here is the update:
+1. Start GP 1
+2. CPU1 queues callback C1 (not accelerated yet)
+3. CPU1 reports QS for GP1 (not accelerating anything).
+4. GP1 ends
+5. GP2 starts for some other reason from some other CPU.
+6. CPU1's note_gp_changes() is called, acceleration happens, now the CB
+will execute after GP3.
+7. GP2 ends.
+8. GP3 starts.
+9. GP3 ends.
+10. CB is invoked
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 0858d1fa85d6b..af3729d0971f2 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -1017,6 +1017,49 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
- 	return 0;
- }
- 
-+/*
-+ * The fast walker executes only if the unmap size is exactly equal to the
-+ * largest block mapping supported (i.e. at KVM_PGTABLE_MIN_BLOCK_LEVEL),
-+ * such that the underneath hierarchy at KVM_PGTABLE_MIN_BLOCK_LEVEL can
-+ * be disconnected from the rest of the page-table without the need to
-+ * traverse all the PTEs, at all the levels, and unmap each and every one
-+ * of them. The disconnected table is freed using free_removed_table().
-+ */
-+static int fast_stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
-+			       enum kvm_pgtable_walk_flags visit)
-+{
-+	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
-+	kvm_pte_t *childp = kvm_pte_follow(ctx->old, mm_ops);
-+	struct kvm_s2_mmu *mmu = ctx->arg;
-+
-+	if (!kvm_pte_valid(ctx->old) || ctx->level != KVM_PGTABLE_MIN_BLOCK_LEVEL)
-+		return 0;
-+
-+	if (!stage2_try_break_pte(ctx, mmu))
-+		return -EAGAIN;
-+
-+	/*
-+	 * Gain back a reference for stage2_unmap_walker() to free
-+	 * this table entry from KVM_PGTABLE_MIN_BLOCK_LEVEL - 1.
-+	 */
-+	mm_ops->get_page(ctx->ptep);
-+
-+	mm_ops->free_removed_table(childp, ctx->level);
-+	return 0;
-+}
-+
-+static void kvm_pgtable_try_fast_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
-+{
-+	struct kvm_pgtable_walker walker = {
-+		.cb	= fast_stage2_unmap_walker,
-+		.arg	= pgt->mmu,
-+		.flags	= KVM_PGTABLE_WALK_TABLE_PRE,
-+	};
-+
-+	if (size == kvm_granule_size(KVM_PGTABLE_MIN_BLOCK_LEVEL))
-+		kvm_pgtable_walk(pgt, addr, size, &walker);
-+}
-+
- int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
- {
- 	struct kvm_pgtable_walker walker = {
-@@ -1025,6 +1068,7 @@ int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
- 		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
- 	};
- 
-+	kvm_pgtable_try_fast_stage2_unmap(pgt, addr, size);
- 	return kvm_pgtable_walk(pgt, addr, size, &walker);
- }
- 
--- 
-2.39.1.519.gcb327c4b5f-goog
+Instead, what we will get the following thanks to the acceleration here is:
+1. Start GP 1
+2. CPU1 queues callback C1 (not accelerated yet)
+3. CPU1 reports QS for GP1 and acceleration happens as done by the
+code this patch adds comments for.
+4. GP1 ends
+5. GP2 starts
+6. GP2 ends.
+7. CB is invoked
 
+Does that make sense or is there a subtlety I missed?
+
+Thanks,
+
+ - Joel
