@@ -2,143 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A4C68C69C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B5B68C6A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjBFTRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
+        id S230172AbjBFTS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjBFTRR (ORCPT
+        with ESMTP id S230290AbjBFTSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:17:17 -0500
-Received: from omta37.uswest2.a.cloudfilter.net (omta37.uswest2.a.cloudfilter.net [35.89.44.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6559F23107
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:16:56 -0800 (PST)
-Received: from eig-obgw-6015a.ext.cloudfilter.net ([10.0.30.134])
-        by cmsmtp with ESMTP
-        id OrWtp5qrnYHR1P6z1pSP9Y; Mon, 06 Feb 2023 19:16:55 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTP
-        id P6z0pvLNPSogtP6z1pXsPW; Mon, 06 Feb 2023 19:16:55 +0000
-X-Authority-Analysis: v=2.4 cv=Ov5cdgzt c=1 sm=1 tr=0 ts=63e15227
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10
- a=wYkD_t78qR0A:10 a=UlVX6gWz2MDTxooHeI4A:9 a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1ObxFuiXqXpyZXTg1dGdS/FIxrV/Q7eEElLE6od08UE=; b=udDrHuHpv7MF7SH93SgyDTv2xC
-        jBTuMCI22NGTAOGSsjc1k8SLVfZiYWEt6kinXuB8N4+MaPcqPVDN+WNtdCYRdDKCBcIny7wV2jT2Z
-        uzBKdTnKPz0ptRsEMRfRHrQM2o7b+9vUjDWDOSfoqFXj/TSamsA+mwGp2sJBdQllFao+vMfgPrten
-        oe/eQOKO2kaueD1bkH5xtPDEJQUSGuq8hkvDFiFO6ciQN+WHomDq7AShpPSNIzMRtm0PjCxBrujl3
-        IkikvflaRyjVUmndcV0ebPXvZmjnuNgGSTtu3HSeS/GjlgDHpRSBh6BBEAk2krgt8JBcBPnCuCs7k
-        nitx9XfA==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:58048 helo=[192.168.15.7])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1pP6z0-0015W0-Bv;
-        Mon, 06 Feb 2023 13:16:54 -0600
-Message-ID: <f6bec0de-3d6d-6d59-5ef3-2903f40451d3@embeddedor.com>
-Date:   Mon, 6 Feb 2023 13:17:14 -0600
+        Mon, 6 Feb 2023 14:18:24 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2065.outbound.protection.outlook.com [40.107.237.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C520B6198;
+        Mon,  6 Feb 2023 11:18:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SMUaeTj+qmAChgH0T5fjqjdV8VI3JnPkIE0G2iHVnzFy9HB0P6/ujLe/gxqh2WAu3LRkYzf9Z5udqMJMoPY6DLq2Q60deyiSrxpEq9LLgx0TSWOleW8sgcuI3Vmo3wRlrSlyJJy9by/qIxs+nwgPceg0CUBDHucBLxEbaVOK/k78V/O082/1AYtsg9o/cL+RDTHA/Xb3LfAKh4bJZdioR7JktaY812BQcYwyzUfVCywAOSOmr9kjqDAsK2XzMolj2PbFdwtB2D+KrKOGPSP5jZXCmoOhoJaVFe80Cpc6Q3E3Z93xc20B0DK24+wXINEN5Qew46Od61uAw4pVnzP50Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TAcnrE9RPZcbCqPA7t0lFHOCgOW1cTw9utCy9kBYYFI=;
+ b=SIwQDJJa99hEjGuNuI0ioNYbWbD88yvdfLmZOeIMljkAWgYU2fBLRbyzKdryuCM8jNF4BNUno+QcbGTZnKBb4hhzea4Q93KA+SrBF4sJj7r+B6vaBTtlwA6cc4L8jhLZHsL4APrGvUcb2bXdZMjPhLyh6ewO4aIuCRa4UnlhsH1xG9eXYCVrMSPLsBMnjVGKc+3+ZNDP5NhzIfsovfYMPoHwrX+sb1+hW6D+MjEr6XOHqKYSLJJWnrkh0KESowV5feeLRkonCzwNhAGgvpcRrALstcL2KRAO93bz9ouYbNh7m8BailXUK/Aqzh1neQEyWwj19cfJBqIEy9hTiS/CpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TAcnrE9RPZcbCqPA7t0lFHOCgOW1cTw9utCy9kBYYFI=;
+ b=aElU1tDfmGB4r2d41AoPx+Uw4xH8EBWZgw+QxMMZZjVvoTk2JaRjz9tYwbP0L8bCMACquHs6Y4XkFCrdqmHEtKDnmzVj2mA35a/p4oW/uHskqiAd3nPRZQHRFm7tvyBXpVxfNJUEI+2XrSssYiN4JRAUDnUkvEZffd5Dpksq29C9lioGTHJHo3dz1bNhfaTm+lKXGVSixUyI7T+UG311s2F3Oli3QOf+kmKwkNUIJEZNRMqrVr2Gnc+/H7TGA1Gd6iN2LO3BFVCtS/gwK9eEoLTDu3CoD4zoH2lPXfNUkyAG9SrpxMFnyCv36QwPz1g5hUQPnszOE3a7djGtmkOU4w==
+Received: from MW4PR03CA0155.namprd03.prod.outlook.com (2603:10b6:303:8d::10)
+ by SA0PR12MB4511.namprd12.prod.outlook.com (2603:10b6:806:95::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 19:18:00 +0000
+Received: from CO1NAM11FT077.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8d:cafe::12) by MW4PR03CA0155.outlook.office365.com
+ (2603:10b6:303:8d::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.35 via Frontend
+ Transport; Mon, 6 Feb 2023 19:17:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT077.mail.protection.outlook.com (10.13.175.55) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.34 via Frontend Transport; Mon, 6 Feb 2023 19:17:59 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 11:17:45 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 11:17:45 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Mon, 6 Feb 2023 11:17:44 -0800
+Date:   Mon, 6 Feb 2023 11:17:42 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v1 7/8] iommufd/device: Use iommu_group_replace_domain()
+Message-ID: <Y+FSVoRpVguZUmW9@Asurada-Nvidia>
+References: <cover.1675320212.git.nicolinc@nvidia.com>
+ <de1cec7698e9b4e2ad03b7d9414b25d655fe5a6e.1675320212.git.nicolinc@nvidia.com>
+ <BN9PR11MB52760BBE37B65AAFA0CDCC708CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH][next] xfs: Replace one-element arrays with flexible-array
- members
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Dave Chinner <david@fromorbit.com>
-References: <Y9xiYmVLRIKdpJcC@work>
- <63dd4a37.630a0220.e4652.35de@mx.google.com>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <63dd4a37.630a0220.e4652.35de@mx.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.31.110
-X-Source-L: No
-X-Exim-ID: 1pP6z0-0015W0-Bv
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:58048
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfPPJ1fHbB1JldO9brUBBWp0iOPYzTZ5HJ2XzC6CAiwv//AWIKvkeuVwBN78SZrDfNmGJv6LXvEfziRsNzPBi0pSdpgJAEQTiT4nTO6jh2AtUyKDKtNXG
- jKrkxreb0v0FjV4qwKHsCWaHp6k3W67OFchhtYC4k15PmwoDKgCTnMHVjFMBww1u0cIpf7+E+CcmZMAGgsWMQ2G2adN+qNI76em4i2MP4MngkNfEe3au+51X
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52760BBE37B65AAFA0CDCC708CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT077:EE_|SA0PR12MB4511:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6bcd6092-9cb7-4dba-cac8-08db0876dc50
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UCQZhbNt+pLb/tk7WOt5n8gJx5bitluiHlaJXJX9bNvbKNKVKR61Elkjt0v7e8jApSUmw+QU9mJ8KReutJB5gRSqGkuxLaWQ6tEMVu5kZX3nS3Tm4RV8pTSZsKm0TMEdZMPvJ1Ugxe+qDGshVWG62OJLwcO5RpwHtvaj6UMsFf3FnZlM8w6POShMWzUe8GrVfYXYB5gFdm38AgnEZXQUGgzVk6jzobXjjKN7ua5u4S2I9i5bv8nQkV+MaTDwsvGimPY04gaQeAhxDbrFebRrdKzJP26llBwZFNkqyf5vw3XdYG8MesbBkR4IvxzcsmSnWh5PcLsqnSodWTI+/7IMcy54BzFXPOPDU/OZRXG8CPsISu6skJGRPrOLu+9paO9qUGi+1tanq0e8gF2K71sf6VjwehEqQC0wvqUqfqxDjz0msw6f05VBYaZwflCQoXJvOkottklsfx2jNyZOIlNp8tnF4cnSQDXxYLa4LtGJLAEXwI5KrMru4PAy53SN/NQq23n/tCv465rTf5c/3Zpk9TzS1IpVwh1LnW5knLX2NIMMFK2yuOnNCPrwMyVVuQVmJO2oUGlZRce7J9zVtPGaFmfqU+9zoiYs0mhgo8GHibBsKUHJ4uWtFOkjjwQiqesNAxNoDVw3rsHprRzUMmV9QMI+0zaSKIpr9G9ZOt8N5+g0zguDBVKi3Vsm+Pko+uln1+9Ov4F6A1n4kBxESYHB+IZiXdnDDeaYU17Vzl6jknE=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(376002)(396003)(451199018)(40470700004)(36840700001)(46966006)(82310400005)(47076005)(40460700003)(86362001)(356005)(7636003)(55016003)(40480700001)(82740400003)(26005)(36860700001)(9686003)(426003)(478600001)(33716001)(83380400001)(186003)(336012)(7416002)(8676002)(8936002)(54906003)(316002)(4326008)(70206006)(41300700001)(70586007)(6916009)(5660300002)(2906002)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 19:17:59.6940
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bcd6092-9cb7-4dba-cac8-08db0876dc50
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT077.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4511
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/3/23 11:53, Kees Cook wrote:
-> On Thu, Feb 02, 2023 at 07:24:50PM -0600, Gustavo A. R. Silva wrote:
->> One-element arrays are deprecated, and we are replacing them with flexible
->> array members instead. So, replace one-element arrays with flexible-array
->> members in structures xfs_attr_leaf_name_local and
->> xfs_attr_leaf_name_remote.
->>
->> The only binary differences reported after the changes are all like
->> these:
->>
->> fs/xfs/libxfs/xfs_attr_leaf.o
->> _@@ -435,7 +435,7 @@
->>        3b8:      movzbl 0x2(%rbx),%eax
->>        3bc:      rol    $0x8,%bp
->>        3c0:      movzwl %bp,%ebp
->> -     3c3:      lea    0x2(%rax,%rbp,1),%ebx
->> +     3c3:      lea    0x3(%rax,%rbp,1),%ebx
->>        3c7:      call   3cc <xfs_attr_leaf_entsize+0x8c>
->>                          3c8: R_X86_64_PLT32     __tsan_func_exit-0x4
->>        3cc:      or     $0x3,%ebx
->> _@@ -454,7 +454,7 @@
->>        3ea:      movzbl 0x8(%rbx),%ebx
->>        3ee:      call   3f3 <xfs_attr_leaf_entsize+0xb3>
->>                          3ef: R_X86_64_PLT32     __tsan_func_exit-0x4
->> -     3f3:      add    $0xa,%ebx
->> +     3f3:      add    $0xb,%ebx
->>        3f6:      or     $0x3,%ebx
->>        3f9:      add    $0x1,%ebx
->>        3fc:      mov    %ebx,%eax
->>
->> similar changes in fs/xfs/scrub/attr.o and fs/xfs/xfs.o object files.
+On Mon, Feb 06, 2023 at 08:46:04AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Thursday, February 2, 2023 3:05 PM
+> >
+> > @@ -246,6 +249,18 @@ static int iommufd_device_do_attach(struct
+> > iommufd_device *idev,
+> >               }
+> >       }
+> >
+> > +     if (cur_hwpt) {
+> > +             /* Replace the cur_hwpt */
+> > +             mutex_lock(&cur_hwpt->devices_lock);
+> > +             if (cur_hwpt->ioas != hwpt->ioas)
+> > +                     iopt_remove_reserved_iova(&cur_hwpt->ioas->iopt,
+> > +                                               idev->dev);
+> > +             list_del(&cur_hwpt->hwpt_item);
 > 
-> I usually turn off the sanitizers for the A/B build comparisons to make
+> emmm shouldn't this be done only when the device is the last
+> one attached to the hwpt? and if it's the last one you should
+> also iopt_table_remove_domain() together with list_del, i.e.
+> similar housekeeping as done in iommufd_device_detach().
 
-Oh yes! that's a good point. I'll see that they are turned off next time. :)
+You are right. I had another patch on top of this series,
+moving this list_del() and iopt_table_remove_domain() to
+the destroy() callback, so I overlooked.
 
-> it easier to read the results. It looks like it _grew_ in size here,
-> though?
+And I just found that the list_add_del(hwpt_item) in the
+IOMMUFD_OBJ_HW_PAGETABLE case doesn't seem to call at the
+first device's attachment. So, I think that we might need
+my previous "symmetric" patch in this series too.
 
-Yep; I'm sorry I got it wrong. :/ I had it right in the beginning, then after
-reading the code once again just before sending out a version of this patch
-with only the flex-array transformations, I noticed the entsize functions and
-the "sizeof(struct-with-one-element-array) - 1" and I forgot about the padding,
-removed the "- 1" and got a bit confused with my build-tests.
+Will fix in v2. Thanks!
 
-I'll send v2 with my original changes... the flex-array transformations, only.
-
---
-Gustavo
+Nic
