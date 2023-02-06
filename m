@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B097168C787
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A42C568C789
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjBFUUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S229892AbjBFUVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjBFUUX (ORCPT
+        with ESMTP id S230033AbjBFUVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:20:23 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8722BEE7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:19:52 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id dt8so10814796oib.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:19:52 -0800 (PST)
+        Mon, 6 Feb 2023 15:21:17 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B43626CD4;
+        Mon,  6 Feb 2023 12:21:01 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id j25so8049258wrc.4;
+        Mon, 06 Feb 2023 12:21:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YsphjXkBI0H4ZtiynXrY+CUNXqadHKIdr07YXKhwtfE=;
-        b=YXK1qFlepuupaxVP9x9mjLfXiDnmGMOvZsuRb0hoTLfq5WG6ZXqiDa04ySEr2vqpk9
-         ZF65v0IvW9FA7g3tVwvxFIQ//7YLS+08w79hN02qd/UcUDeqgusRse2b+IKqUwjYGobi
-         1Aqq41lrZGlOd8hnLM/ydHHLA668W8RjuI9tMa3D4Mf8gLTAtnCHvQiz7cnMclU3oRqs
-         HFT7q48YHsHn5tyDUfC5M9amABgZLO0nsTF+YPdrhwrgEHA5JlxGYGrETDEyAz8Obl5P
-         wytUHzUpnxshM3KdrkPqE9nkqskrkN2xl6g9mUR2ZaVMidRaaT0zCMVZp2IYz3VmHDOO
-         chRw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ex4e1gAMfKgJufavu50b5FPTNtgN9MMTywAYUVv/rSo=;
+        b=XPTSpZZrnTnEBrJw4RPKyn08rM4GwX0nBLt0S5ELlaniKrqUEXMWI1czxM8lXshVYC
+         CA8fh3a9gyig1DezP7p8WACDq29+5cWJ1FYsg+7cuS4msR4DzceIc86hNf98AsinqnhP
+         kWjPRJadddk+JOvcJgcd0YYGQDeu8QIw8RtNJF4OUZ36WhcUHWZ/mf1jw/yLXiESFcFq
+         K5kOwBwVgNLAMPwWbztGYqDrdYOGyQWq828mCP1m625n7MdqOnBwd5TPMf0BN1SwggH4
+         4ZXvr4MHB+KCVmSAN3kl+bOJ62eLkecyq4X7NfG6A7sJVzRFciXyTpxoc9bp9NjNmT/z
+         YVGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YsphjXkBI0H4ZtiynXrY+CUNXqadHKIdr07YXKhwtfE=;
-        b=uo+0FoAdk5HCUzeLQhvXuO7/nEfNfps7kel9IgJ57WSBW6Is4TMu0QJWzFuDWAjz6L
-         RhpXZvemPR/hom5pnTrBvn1cIKuEDYvIOtXtbtdum/7qQXsd33xalT4Fe3ABmsj6WzAG
-         kUWHapfatwWDjhSdjXG1j3bYpZLwYCE8Lsugrt57ZTqHTcwbDcofJapVetH7QpSNpXar
-         VjbFXtCbAvfLTNSG1e23tBNKdyxIUwaFIBKtZDPMKE8YSky7IKG9RzQvuo5BeipzKMRc
-         g26uTmqAW54mliR5qDGPfe9jzb1djSzisYCnoARVhS6l+0N2Qv24QxO3ZwVgd1qShwlL
-         S/7g==
-X-Gm-Message-State: AO0yUKXOG2uVriaxpwxOHGTAd/fit0w4qbxBCKwESzOP7iX7nUjYaksT
-        jGqxMgcwuTDH1QVkbqncEENU/W/nFvZvPLgra2Q=
-X-Google-Smtp-Source: AK7set+WPrOO0zrrwk4j2nVGXXhYKvVx98ndm/QUyGFVed5o9F7zj7oMb9r+YqcaGbMDbsjcmb6ZpDLGQB7AfbYBIAU=
-X-Received: by 2002:a05:6808:6242:b0:378:4edd:a89c with SMTP id
- dt2-20020a056808624200b003784edda89cmr1267118oib.46.1675714788680; Mon, 06
- Feb 2023 12:19:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ex4e1gAMfKgJufavu50b5FPTNtgN9MMTywAYUVv/rSo=;
+        b=ntRXbZj3uUcqV4UbnXvEz/E9QFkiNpL35ECXe1eP1nD79ybvxUNvuMX35GWp6qvM12
+         zIEePNay+D8Tt3KT6uwquPmb5iGgVWM8Ljikint19yYKZ3z9+LS8GG6PnIw+tNgF0lsi
+         2g8sojhW01U4snXhvwqp2ZsTv+JQi2Of3LhvSVTVXWuSoV/NCXujhsv0dmTbo4hXraCR
+         y4l4gDVkweYS0jv9uyiHPRe0Q5trqJR3hBWAUgUjBKXp7YF4JFHQ5Sq8lu3I/r60DJiK
+         DLqkt8Ih1bf6h+GBZRNwt9fbOqshj7EwLAAimGwIw8aBE3tydtHzIDd1TJ7Cb4Y2J48G
+         fZkw==
+X-Gm-Message-State: AO0yUKUDVVNhBmrnKc19iMfwJCAj5L4RQLTdDClImFVwzjG7VtHac5Kp
+        RtYJNYTXaHV79SokiGv4io2f5xHzPlo=
+X-Google-Smtp-Source: AK7set8ldoPFjqGbTtujwy62UUH+LAzHrfMrth501Gur6mUru2ZVCWISA8okhMGgHRUBkyYWSasiXQ==
+X-Received: by 2002:a5d:6a08:0:b0:2bf:de97:f3f8 with SMTP id m8-20020a5d6a08000000b002bfde97f3f8mr174292wru.28.1675714859909;
+        Mon, 06 Feb 2023 12:20:59 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id l13-20020a5d4bcd000000b002c3e9cce04csm3180724wrt.111.2023.02.06.12.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 12:20:59 -0800 (PST)
+Message-ID: <8f04f2b5-320e-50d4-9517-6dac989f63b3@gmail.com>
+Date:   Mon, 6 Feb 2023 21:20:57 +0100
 MIME-Version: 1.0
-References: <20230204032735.22509-1-rdunlap@infradead.org>
-In-Reply-To: <20230204032735.22509-1-rdunlap@infradead.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 6 Feb 2023 15:19:37 -0500
-Message-ID: <CADnq5_Ma+0pPtUP5CRpQUyh2NwMyz91D1-L-J5OwRAf9Ty5PXg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/amdgpu: add complete header search path
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Signed-off-by : Sung Joon Kim" <sungkim@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] arm64: dts: mt7986: set Wifi Leds low-active for BPI-R3
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230205174833.107050-1-linux@fw-web.de>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230205174833.107050-1-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,45 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
 
-On Fri, Feb 3, 2023 at 10:27 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> The path for the "mod_info_packet.h" header file is
-> incomplete, so add its location to the header search path
-> in the amdgpu Makefile.
->
-> See on ARCH=3Dalpha (275 times in one build).
->
-> In file included from ../drivers/gpu/drm/amd/amdgpu/amdgpu.h:90,
->                  from ../drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:43:
-> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.h:62:10: fat=
-al error: mod_info_packet.h: No such file or directory
->    62 | #include "mod_info_packet.h"
->       |          ^~~~~~~~~~~~~~~~~~~
-> compilation terminated.
->
-> Fixes: 5b49da02ddbe ("drm/amd/display: Enable Freesync over PCon")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Signed-off-by: Sung Joon Kim <sungkim@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: Christian K=C3=B6nig <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
+
+On 05/02/2023 18:48, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Leds for Wifi are low-active, so add property to devicetree.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->  drivers/gpu/drm/amd/amdgpu/Makefile |    1 +
->  1 file changed, 1 insertion(+)
->
-> diff -- a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgp=
-u/Makefile
-> --- a/drivers/gpu/drm/amd/amdgpu/Makefile
-> +++ b/drivers/gpu/drm/amd/amdgpu/Makefile
-> @@ -34,6 +34,7 @@ ccflags-y :=3D -I$(FULL_AMD_PATH)/include/
->         -I$(FULL_AMD_PATH)/acp/include \
->         -I$(FULL_AMD_DISPLAY_PATH) \
->         -I$(FULL_AMD_DISPLAY_PATH)/include \
-> +       -I$(FULL_AMD_DISPLAY_PATH)/modules/inc \
->         -I$(FULL_AMD_DISPLAY_PATH)/dc \
->         -I$(FULL_AMD_DISPLAY_PATH)/amdgpu_dm \
->         -I$(FULL_AMD_PATH)/amdkfd
+>   arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+> index 33bd6febc160..2b028141f1f7 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+> @@ -446,5 +446,9 @@ &wifi {
+>   	pinctrl-names = "default", "dbdc";
+>   	pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;
+>   	pinctrl-1 = <&wf_dbdc_pins>, <&wf_led_pins>;
+> +
+> +	led {
+> +		led-active-low;
+> +	};
+
+The binding is missing this property also the driver implements it. Could you 
+please update the bindind description properly?
+Thanks
+Matthias
