@@ -2,186 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E0B68BBF6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F052068BC00
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjBFLrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S229964AbjBFLsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjBFLrX (ORCPT
+        with ESMTP id S229625AbjBFLsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:47:23 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01494526B;
-        Mon,  6 Feb 2023 03:47:21 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id mi9so11347343pjb.4;
-        Mon, 06 Feb 2023 03:47:21 -0800 (PST)
+        Mon, 6 Feb 2023 06:48:47 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2110.outbound.protection.outlook.com [40.107.94.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BCD7685;
+        Mon,  6 Feb 2023 03:48:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mr9jcUUgWlkXfyk5e+/Kvt85WU/ryr5T0AsVUW1HKp8T7aDmtEqgAfJ+1b5icqQsO4C3HRWW7GZl0jcxgDJTbnwsrUF+Z518LrD6kHQUCFkMdC3FAytmsEjInjI+zvDsh1IuuqZ5Jbxynbj1ly9ObdraXuOeRGdLZaSECyroMbE7GRl+DDIz6iqaR4la4aYd8BfsxsRjAdejzSW+b/kWvFO9b7B7JGXjwkiPxmh7i/Ycg1qm2MmN6EmVSJ9E4/jpqvB5LcT/ArnRNYavALaFq2f97VbU3F0q3g0kobMhx/0vsPgVEzJ39y48O6MzizypzZwyXOTuW9Cv2tN1oeuY7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jgyhPCL53ukINXveoU5kZ8F09ffqzq6Fwqn420oVK9U=;
+ b=Uh3abL+3/KdkbECGl04rpUndGAEPyMKJVyBey8DEidu2XxGaxuUs4CwmM476W9WBbQ+UQopYwBT+ImueoS5kuq51d25jZRQiwVJVG6OUbLQqw8Ou9rGtDUDYfyYhLZL/2wNxoEEsawrcYIjTu0+sIkxCWMgFzyvn2bNn+R4C3yc97YVcEARVMog+s0vrU1YFC3A/ZZj54RTXsSulcpLmcFbA2P+l2Tvp/9dQW1btxSHpNPwrIZvEa94iqXTpvFPO01X86dVEKhtrnYmSWTYWaLPjKmDWt72nY4Ko2/BOwJXZEC9/zc093GVhBJkvA60xCjFTnMlJjXHShAUDl4Mxeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G1fIGlri3OVagECTjdCYau5vxAhGRYYCU3SOVSoQVck=;
-        b=YEIdJ+T7HSZteCM+8qKysXZWf/v/QjQp0TZDxxcv1fgg5Qw4wWwXkC8RwUTNvUh6O3
-         HJXuNLlZB3yGs32Uux9YxNvka1qO6cYgdfRJvii9J6Q61bl9kSdODl65d570FWrlShbj
-         KUi+iTEryZtOvXL4Sv3Dkih7t9vQsNErjSfoP/3qVG5RN2CpxmeJ3h7ZLOfK1OAavVZp
-         /DN4EOsQGSjVsU5fW2vOGENKjpXtlbpQdE42oP5nEI1EJPRHgkVqKU8rJGqFgIAHMCvl
-         Z4Z0aUO/7bVwyKZ63ki+Ffm95HcZghRQgiOdgXYdhkuaCVMJVQFiVHCGf+5tInqY9ScX
-         ko/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G1fIGlri3OVagECTjdCYau5vxAhGRYYCU3SOVSoQVck=;
-        b=t/HsmM26HdjmbG9q1g0oFHsjXw8rY7SbfL4k5GOUx3YXFdGWnMAS/3UZKHYJ0runpd
-         1dVeoa7uFu5ehxix8izNtLSezqV0tX77YItSUWSZRTcrC5djIJCfOdnA08bp76TPJkoJ
-         56sDLDFVc34vqg3h3dXa228HmL0ZbpZkWm6jFjzjftVkWDEFvLwIdMCb6dK/6tYVUglg
-         o8TBWfkyKtiOgRkEyh2sqJMtcwIPMvQlNKLB948XyeCn/iaydVrH+gGs1Ka0iqEP+9nm
-         NFhZEwpfcutZm5HOe0veTgnnzCBFRhOpmTCcInqprOSUo6CiNQgvMAY+b73PVdVoU8iW
-         xWCQ==
-X-Gm-Message-State: AO0yUKWRLr5cF9kVX4PfUgVut3L7m8HnwyDmOZRvc9+OmecpI3WpqnQ8
-        rtgC+mnaU7Ue25ZblSlY9ts=
-X-Google-Smtp-Source: AK7set9nd6Om68w1IEJLHmaMAFordvyN+KWFDHRAMONESM83Ai3kmly7T2BaGKX4dmxsZALA2rTCwg==
-X-Received: by 2002:a17:903:283:b0:198:de07:f3d with SMTP id j3-20020a170903028300b00198de070f3dmr15118178plr.41.1675684041280;
-        Mon, 06 Feb 2023 03:47:21 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id v17-20020a1709028d9100b00198e948d0ffsm5323750plo.276.2023.02.06.03.47.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 03:47:21 -0800 (PST)
-Message-ID: <4a7fb3b6-f9eb-6cde-7120-7d256d9d288e@gmail.com>
-Date:   Mon, 6 Feb 2023 19:47:13 +0800
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jgyhPCL53ukINXveoU5kZ8F09ffqzq6Fwqn420oVK9U=;
+ b=eE1H8LOmCO9NRm8a6T7e6mfh5cuVAe20YRZO2PMSoYMGpgHXk8ycDytuBxpC7kFbpBX9bElLKrbop2LrjBWQMrEzx9mcIBTPt7PBO1RbW9BttK3hE2uQYBzl78CbugFSo94xLz/G9jIpt5zRnUmLHsbzhelkhG9/luhClJo4Y60=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BL3PR13MB5193.namprd13.prod.outlook.com (2603:10b6:208:340::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 11:48:24 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
+ 11:48:24 +0000
+Date:   Mon, 6 Feb 2023 12:48:17 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Richie Pearn <richard.pearn@nxp.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+Subject: Re: [PATCH net 1/2] net: mscc: ocelot: fix VCAP filters not matching
+ on MAC with "protocol 802.1Q"
+Message-ID: <Y+DpAXdFCj+laoRF@corigine.com>
+References: <20230205192409.1796428-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230205192409.1796428-1-vladimir.oltean@nxp.com>
+X-ClientProxiedBy: AM0PR02CA0219.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28f::26) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v3 5/8] KVM: x86/cpuid: Add X86_FEATURE_AMD_PMU_V2 as a
- KVM-only leaf entry
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221111102645.82001-1-likexu@tencent.com>
- <20221111102645.82001-6-likexu@tencent.com> <Y9A13G5b1tuoIRUq@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y9A13G5b1tuoIRUq@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL3PR13MB5193:EE_
+X-MS-Office365-Filtering-Correlation-Id: b392edc4-bde3-4a95-242e-08db08380d32
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ROo4DWVjBJjLIgRO4XoSR2gTEeHtntSKXGT5jOCOQ1t1SSrM3ePS39aiMSCnaFNHuSwZAZFmqfA0WhNkIutQe4S+Btpdom4b+Ixq+PTHaN9XTjVfEr3ILxblV/CBc/ml4+QQ6tpCMVgE78LjcOX2TwnV97GnuTmSQZIepfryeX92AVqvVR1Q0X5GuD8HpS9FAbDBglwz8KBHnPP7oioXEFRRQIkWBAWC43kOnSnkyVoSG0HxJ6uIs8ChjLHGOB0jF4f9B6IrrRZw1+qnIqT9RYNYgWhN3ZMVGB7zca50q3PLv3eLXOTZPP7T6rCNCjyx2aNcs3cfKaH82MgegjL1IvWkaYr3HirGVLoCHwUCkV8hGVAcQAnNv6Elh7TpvRZtAtvQPeffghQIAEccmJT2z2+Y90sIEqWgza+xtvN5QUw/Vkiq+mGRgZlL6EkNTAg5y4NAthaa04jwMvwxIWYEcCn+VumscnHpejFxq1UWIqhqH61n6qcYezR7OXRniNXgDKegXYk4VFupGrar7O9ppvheiQXxt9nMxqc5ywo8qzWnq0jc2FPYuYnxKNYk/97v351QIkuAOR2CDEGEm5UmylIFjJ2oJilDFa4VTq9ZnKtz22CgtVS4BE6wO9VXlwEtRLovGwfoLWKl6mwG5sVIiw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(396003)(136003)(366004)(39840400004)(451199018)(36756003)(86362001)(38100700002)(2616005)(186003)(83380400001)(6512007)(41300700001)(6486002)(478600001)(6506007)(8676002)(4326008)(7416002)(54906003)(6666004)(66946007)(316002)(8936002)(6916009)(66556008)(44832011)(5660300002)(66476007)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CJ41QYuELEp3henuEL3zI30oWEA1Le/+O4AY3TX7oeUmojNOgNAcdKvLvOWS?=
+ =?us-ascii?Q?FMvnEF7zAK+iHQpbqzHD1NZbWGL2u9W+HB3XxX61nsJ5hZxyyRN3z3IVdRCb?=
+ =?us-ascii?Q?quAqmGSyuciqlEiqY7phzPOhEb5ZVMhWMiipXAWm2I9vZArRQ/FBZMsvjpMB?=
+ =?us-ascii?Q?zh+2hVASm72DG0SmBtKtWzF0klRTOSFzyfXy4oq3lsLyCBzWmEpEZznQ10Ua?=
+ =?us-ascii?Q?Ic5XwTyGaonovvvUR+lgbBW3uD3N6p3O1U2pEEh4DyH07sxwZgQn6Hfks/zh?=
+ =?us-ascii?Q?Vdu7ZUNuEkQfV3yjxaNtuEaRnnenwiKl5ZgVo/LK3x1+se5RHuCv5TVkWHVc?=
+ =?us-ascii?Q?a4J8Ms62Et0n98TCRe7mRFdISBC1uCsTmkKBLxMr4szx9JmRwlBlmntyCqc2?=
+ =?us-ascii?Q?bqUYkw9Wgc1UoW62ZANeaGQNNBnXqcLk3oLgmHFABVrPr5UWv3tcp8wGvmUC?=
+ =?us-ascii?Q?ej866kIzPe6FGJFFGaOXkbg3kPoUYqqhYbKDDY7NwnftECsvvVByBYGM51G1?=
+ =?us-ascii?Q?nnhn84nqle6C62GZ28Fs+nhqYrq9aKs4BHVv4xdjV/2Z8T4KuClomcZAP6yB?=
+ =?us-ascii?Q?mcQEMQnD93/BCqvWuPOyV6rCAaP4KcjkFdJy8tFMGEKpO+FX2aU2SkIST5Fx?=
+ =?us-ascii?Q?sGKAsLFdq2l7JWOu1LxP6HkiTztWygXHZpEizAI15xICyP4oJIAJHSakFXlJ?=
+ =?us-ascii?Q?k5GTBa4qzICGfhR9OkuAFjqWaW8u1/t7b6sfMpmUbRXXHE9eNILmcDmqMlZk?=
+ =?us-ascii?Q?+BRZg+dAydW2tCntaT0PJVa8KrBtgicSnvIZBr/LX71e8zt7LsFLyp58l/5q?=
+ =?us-ascii?Q?9zDr+acKlo7wfZ308J7knKLfWyLzCZR5NbothBwZxNuXWHABlruyRdfMjdYw?=
+ =?us-ascii?Q?GHo1xy0C2+Yv437tG3X6lRXXt+GtEyrkGrcW5/cMvM5ZFGY9oko95sYsP25Z?=
+ =?us-ascii?Q?AwrVzsIrnkoGGSKvXKOJcgqlQt5c3HFZhvh59jn5BLsqA/1no0D/PMboJniW?=
+ =?us-ascii?Q?5qbgTG2EsgyNHMeC0Wytr7wh2BEWxh+CWvG+kIBWC7mhwZjw+0m534fN/sVo?=
+ =?us-ascii?Q?k3cuwtqooah5vdbCxbGshUTDR96fSBQPNl6/sZCPQHjLmpCZd/gNfbGezMZR?=
+ =?us-ascii?Q?r3Eiwywf4Vvd0Yk4xPGBlKzh8Ea0Ny1Vi4kG6+0HY1xVkiRRo2TITlsI+psJ?=
+ =?us-ascii?Q?Feniak9I/Wtofg1+ee2RKgVx5uOrbqhJJJcIrDILR+BEDWtkggjZMzNJsC2b?=
+ =?us-ascii?Q?vtVJdtJ5jL9LKePjI4XAzjckoOOfZ304kNLmyl2kGRGY2uVb+2hw62tG099L?=
+ =?us-ascii?Q?mVZYXMWFN91UwCuh+Q6eCkm3IcBTwOaOrTOJzesUili3BXJn1Sf9ZdZqlFEI?=
+ =?us-ascii?Q?tLEpD+NORSHepzR2jRWp0/WWF0CR2NU66SlLcbq/3MIajkKRbpm0QB7xroxx?=
+ =?us-ascii?Q?tvEV/7N58eroUvsTgJ4w5Z0XS/g5F/u/rkUSpmS3ivpR2c4ZdQ9ks1K6i1OE?=
+ =?us-ascii?Q?z8rBxvX+X69BXa8B9k3xdK/GX+WWGkh2C3rLnRiQ9D9a+p35+H/T64YC1TQZ?=
+ =?us-ascii?Q?VCkxRtebpmxYrN21X9+ma/d3blf0BdSsSPH9lYC8axVaz8/P3yKUZvWS7JCx?=
+ =?us-ascii?Q?k8AAVlRegNWqU6ak3yPsklAjnHd9vXzxpE29KZYm8zEnIFX/AWhvoZMzseaX?=
+ =?us-ascii?Q?TA3brA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b392edc4-bde3-4a95-242e-08db08380d32
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 11:48:23.7981
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lnqJj+uypahuVln3ZbFE79kpqXarNQAN7zRY+tU4cA4zHoxqrNOev8RbZkppFlfkOWP6Xg8m21Sw8oKSn4G10TiW0JYhcBOfJ1jyyY0tYEc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5193
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/1/2023 3:47 am, Sean Christopherson wrote:
-> On Fri, Nov 11, 2022, Like Xu wrote:
->> From: Like Xu <likexu@tencent.com>
->>
->> Alias X86_FEATURE_AMD_PMU_V2 for feature AMD_PMU_V2 in KVM-only leafs that
->> aren't scattered by cpufeatures.h so that it can be used in KVM, e.g. to
->> query guest CPUID.  As a bonus, no translation is needed for these features
->> in __feature_translate().
->>
->> Suggested-by: Sean Christopherson <seanjc@google.com>
->> Signed-off-by: Like Xu <likexu@tencent.com>
->> ---
->>   arch/x86/kvm/reverse_cpuid.h | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
->> index a19d473d0184..7cfedb3e47c0 100644
->> --- a/arch/x86/kvm/reverse_cpuid.h
->> +++ b/arch/x86/kvm/reverse_cpuid.h
->> @@ -13,6 +13,7 @@
->>    */
->>   enum kvm_only_cpuid_leafs {
->>   	CPUID_12_EAX	 = NCAPINTS,
->> +	CPUID_8000_0022_EAX,
->>   	NR_KVM_CPU_CAPS,
->>   
->>   	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
->> @@ -23,7 +24,15 @@ enum kvm_only_cpuid_leafs {
->>   /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
->>   #define KVM_X86_FEATURE_SGX1		KVM_X86_FEATURE(CPUID_12_EAX, 0)
->>   #define KVM_X86_FEATURE_SGX2		KVM_X86_FEATURE(CPUID_12_EAX, 1)
->> +#define KVM_X86_FEATURE_AMD_PMU_V2	KVM_X86_FEATURE(CPUID_8000_0022_EAX, 0)
->>   
->> +/*
->> + * Alias X86_FEATURE_* to the KVM variant for features in KVM-only leafs that
->> + * aren't scattered by cpufeatures.h so that X86_FEATURE_* can be used in KVM,
->> + * e.g. to query guest CPUID.  As a bonus, no translation is needed for these
->> + * features in __feature_translate().
->> + */
->> +#define X86_FEATURE_AMD_PMU_V2      KVM_X86_FEATURE_AMD_PMU_V2
+On Sun, Feb 05, 2023 at 09:24:08PM +0200, Vladimir Oltean wrote:
+> Alternative short title: don't instruct the hardware to match on
+> EtherType with "protocol 802.1Q" flower filters. It doesn't work for the
+> reasons detailed below.
 > 
-> I gave you bad input earlier, for purely KVM-defined flags there's no need for an
-> intermediate KVM_X86_FEATURE_AMD_PMU_V2, this could simply be:
+> With a command such as the following:
 > 
->    #define X86_FEATURE_AMD_PMU_V2         KVM_X86_FEATURE(CPUID_8000_0022_EAX, 0)
+> tc filter add dev $swp1 ingress chain $(IS1 2) pref 3 \
+> 	protocol 802.1Q flower skip_sw vlan_id 200 src_mac $h1_mac \
+> 	action vlan modify id 300 \
+> 	action goto chain $(IS2 0 0)
 > 
-> That's a moot point though because, after much searching because I had a very hard
-> time believing the kernel wouldn't want to know about this flag, I found commit
+> the created filter is set by ocelot_flower_parse_key() to be of type
+> OCELOT_VCAP_KEY_ETYPE, and etype is set to {value=0x8100, mask=0xffff}.
+> This gets propagated all the way to is1_entry_set() which commits it to
+> hardware (the VCAP_IS1_HK_ETYPE field of the key). Compare this to the
+> case where src_mac isn't specified - the key type is OCELOT_VCAP_KEY_ANY,
+> and is1_entry_set() doesn't populate VCAP_IS1_HK_ETYPE.
 > 
->    d6d0c7f681fd ("x86/cpufeatures: Add PerfMonV2 feature bit")
+> The problem is that for VLAN-tagged frames, the hardware interprets the
+> ETYPE field as holding the encapsulated VLAN protocol. So the above
+> filter will only match those packets which have an encapsulated protocol
+> of 0x8100, rather than all packets with VLAN ID 200 and the given src_mac.
 > 
-> from nearly a year ago.  I.e. to avoid confusiong, this needs to be a scattered
-> flag, not a purely KVM flag.
+> The reason why this is allowed to occur is because, although we have a
+> block of code in ocelot_flower_parse_key() which sets "match_protocol"
+> to false when VLAN keys are present, that code executes too late.
+> There is another block of code, which executes for Ethernet addresses,
+> and has a "goto finished_key_parsing" and skips the VLAN header parsing.
+> By skipping it, "match_protocol" remains with the value it was
+> initialized with, i.e. "true", and "proto" is set to f->common.protocol,
+> or 0x8100.
 > 
-> ---
->   arch/x86/kvm/reverse_cpuid.h | 7 +++++++
->   1 file changed, 7 insertions(+)
+> The concept of ignoring some keys rather than erroring out when they are
+> present but can't be offloaded is dubious in itself, but is present
+> since the initial commit fe3490e6107e ("net: mscc: ocelot: Hardware
+> ofload for tc flower filter"), and it's outside of the scope of this
+> patch to change that.
 > 
-> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-> index 4945456fd646..333e28b0a13c 100644
-> --- a/arch/x86/kvm/reverse_cpuid.h
-> +++ b/arch/x86/kvm/reverse_cpuid.h
-> @@ -15,6 +15,7 @@ enum kvm_only_cpuid_leafs {
->   	CPUID_12_EAX	 = NCAPINTS,
->   	CPUID_7_1_EDX,
->   	CPUID_8000_0007_EDX,
-> +	CPUID_8000_0022_EAX,
->   	NR_KVM_CPU_CAPS,
->   
->   	NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
-> @@ -47,6 +48,9 @@ enum kvm_only_cpuid_leafs {
->   /* CPUID level 0x80000007 (EDX). */
->   #define KVM_X86_FEATURE_CONSTANT_TSC	KVM_X86_FEATURE(CPUID_8000_0007_EDX, 8)
->   
-> +/* CPUID level 0x80000022 (EAX) */
-> +#define KVM_X86_FEATURE_PERFMON_V2	KVM_X86_FEATURE(CPUID_8000_0022_EAX, 0)
+> The problem was introduced when the driver started to interpret the
+> flower filter's protocol, and populate the VCAP filter's ETYPE field
+> based on it.
+> 
+> To fix this, it is sufficient to move the code that parses the VLAN keys
+> earlier than the "goto finished_key_parsing" instruction. This will
+> ensure that if we have a flower filter with both VLAN and Ethernet
+> address keys, it won't match on ETYPE 0x8100, because the VLAN key
+> parsing sets "match_protocol = false".
+> 
+> Fixes: 86b956de119c ("net: mscc: ocelot: support matching on EtherType")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-I'm very confused and is this the usage you want to see:
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-	kvm_cpu_cap_set(KVM_X86_FEATURE_PERFMON_V2)
-	kvm_cpu_cap_has(KVM_X86_FEATURE_PERFMON_V2)
-	guest_cpuid_has(vcpu, X86_FEATURE_PERFMON_V2)
-
-? then what about X86_FEATURE_PERFMON_V2 ?
-
-> +
->   struct cpuid_reg {
->   	u32 function;
->   	u32 index;
-> @@ -73,6 +77,7 @@ static const struct cpuid_reg reverse_cpuid[] = {
->   	[CPUID_8000_001F_EAX] = {0x8000001f, 0, CPUID_EAX},
->   	[CPUID_7_1_EDX]       = {         7, 1, CPUID_EDX},
->   	[CPUID_8000_0007_EDX] = {0x80000007, 0, CPUID_EDX},
-> +	[CPUID_8000_0022_EAX] = {0x80000022, 0, CPUID_EAX},
->   };
->   
->   /*
-> @@ -107,6 +112,8 @@ static __always_inline u32 __feature_translate(int x86_feature)
->   		return KVM_X86_FEATURE_SGX_EDECCSSA;
->   	else if (x86_feature == X86_FEATURE_CONSTANT_TSC)
->   		return KVM_X86_FEATURE_CONSTANT_TSC;
-> +	else if (x86_feature == X86_FEATURE_PERFMON_V2)
-> +		return KVM_X86_FEATURE_PERFMON_V2;
->   
->   	return x86_feature;
->   }
-> 
-> base-commit: 5f3f3cc1279cd5cd52d301b97844bd3ce40c8020
