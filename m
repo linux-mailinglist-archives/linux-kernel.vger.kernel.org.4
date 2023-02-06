@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E2768C810
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F5468C817
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjBFUwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:52:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S229984AbjBFUxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjBFUwf (ORCPT
+        with ESMTP id S230360AbjBFUxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:52:35 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CAC2CC75
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:52:34 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id 74so15823926ybl.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:52:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KypDhZVz2qSeMAGxH9f9Ozlfj2EbuuxANzifbY7fWPw=;
-        b=lK8LjcYIVj09SoWXb5ftxHXrEcnFscJgw+rfKm75AK/XSgz31c9CbMkMR1XGNgqssU
-         qRfxI/OGvOpilh87IrsP124kQRsETKU8Q8a8ltGR7EONO0jDJMc9pw7KEdlCX1ViVy/Q
-         hOHuKlF8y+emlRAerrdkKvJ3FsVo9G4pWzI4T+rCyMRzNp1von9Qjo3Mx6H0Iey0lYCz
-         GG8MyjXN67++SvkQcRT4Txnlob992f6Yr6vj1hpRqWutQJ2phHDu49r4wdTAPMMiLf8L
-         0TlldccMtVAwGi4diwZmAs++skbY5Wz04pR743JqghQJ4HR9P4dzCZOkLrWU72GibaH1
-         JooA==
+        Mon, 6 Feb 2023 15:53:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7132E0C3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:52:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675716743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rqLlmct7lX+JFmd+5pxF8+BD7yXad1T5vU6UwHJMxwY=;
+        b=EbVUPG2YEq0LaEWzyoh9Shyd4/UkhoOjyhIsuzrRzIAS13NqSMjpLNuZyC6a+7/aNPKuWu
+        WW3jYQ0GtKUoRfJKYgd7l/f5Rit900Xs5f7CFPMGKBuOomeYH0JiZx7+WnmONnPTN32FKx
+        93ArRIqlanY7IGIzjdzTijk840xBzpY=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-359-oe-RPAn1NgGDGCRRPyJgAw-1; Mon, 06 Feb 2023 15:52:22 -0500
+X-MC-Unique: oe-RPAn1NgGDGCRRPyJgAw-1
+Received: by mail-qk1-f199.google.com with SMTP id v186-20020a37dcc3000000b0072a264a6208so8657574qki.21
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:52:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KypDhZVz2qSeMAGxH9f9Ozlfj2EbuuxANzifbY7fWPw=;
-        b=Q6oTD38q5mmJULHk2LcACzkfsOejc92qfEoL3P0qwlb7z0B/dPtV5DpI3b4BOaMDOd
-         GOZY1kff2e/NsNAveNd+spLmRwGt2bxt8rFX0fy4cThld4vE9/sK4Uw27bwCgrkW9LjC
-         ivoeHb6Ahn1EBr1yNZB57RvKPCOFuwHhuDgNdbKZ/UkD5kKSYn1My/aCBgZ8I1y6kDrq
-         5opAagsEu65qMhfWG8qvFP0QQJ7dgZKtCc2IfxU/GiXTvFHXW2T4n5Gre/7aZpv2I5jD
-         QMtgqDC2RQ2PloK/NfuwvcQBxj3godk1s7ikPLlF1Wk2r6oVHXL8BPUznFJXeu0JOkLJ
-         lPLA==
-X-Gm-Message-State: AO0yUKUdTKasfYr42AeSxWV4ZX4j2BUXktomyITP0ArxOwnSyZ5mkMWc
-        WlnpdOuhCqc+DW0Gg+JPNeKQZO7UGYs/WQVztoUgpg==
-X-Google-Smtp-Source: AK7set8ZK6VKS7OKGzwpw7bBfHr0g2viQDPrXIaRcDDOZelPLV/WzJEl0YZvkglrQVcNwp4NUeKoB0Th1HUbzpKESS4=
-X-Received: by 2002:a25:fe0c:0:b0:80b:69f5:3966 with SMTP id
- k12-20020a25fe0c000000b0080b69f53966mr107483ybe.519.1675716753812; Mon, 06
- Feb 2023 12:52:33 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rqLlmct7lX+JFmd+5pxF8+BD7yXad1T5vU6UwHJMxwY=;
+        b=h5R7NC8zx4BE69sU7uIlk5cKcg5++fzWywxIXlYx/XxM/dSF654i22rJl6z6D+jGNc
+         FgL4awF9PWRTBNydAXFwbC/NLhSbExUq6QQAP41+BhSzpRx/J/ifP2KyYNqIQkimJz0t
+         En5T7OCu2Rfs914KlBbeyjPRHBJxEaY5J/DtkhEG+5OUxZrNODmpGmloSgRHpDMUw55G
+         eGHJQaiqYDTyt5Ts05/pKqAZaesBjwScqZVGSk5e052+E+bhgYICsztFAPJrAekeMvZc
+         7pcuC1vsqdIGtOhLMv5m2t9Leyeedu+BAW/RResXig8xhqCCdaMCOG0NtYc0TVxGO+RL
+         ag2A==
+X-Gm-Message-State: AO0yUKV6fgbFSbh2F5lU8LtCiexdU5V0AEnIs98R2yust4q0yJ0cw1S0
+        q/9wdu8S/c+OMYJ4kVGmjsRpci7iZyIW+RArDZwG26y2DZapN2mlVJG1auf42M3yNy2VdUj4yAy
+        8xwxk/5X9cc2ZKBOm0clkt3TC
+X-Received: by 2002:a05:622a:4b:b0:3b8:6d44:ca7e with SMTP id y11-20020a05622a004b00b003b86d44ca7emr1435594qtw.4.1675716741773;
+        Mon, 06 Feb 2023 12:52:21 -0800 (PST)
+X-Google-Smtp-Source: AK7set+xt3VpKVSjbng5Isjbb9ILCPJQRmOIPFhgB09Fc0XTzyXKXefEhRFVU+CjRKGOYRPbyw2L9Q==
+X-Received: by 2002:a05:622a:4b:b0:3b8:6d44:ca7e with SMTP id y11-20020a05622a004b00b003b86d44ca7emr1435563qtw.4.1675716741494;
+        Mon, 06 Feb 2023 12:52:21 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id x10-20020a05620a12aa00b0071d57a0eb17sm7923473qki.136.2023.02.06.12.52.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 12:52:20 -0800 (PST)
+Date:   Mon, 6 Feb 2023 15:52:19 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Stevens <stevensd@chromium.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm/khugepaged: skip shmem with userfaultfd
+Message-ID: <Y+Fog2dO1kpRBMvr@x1n>
+References: <20230206112856.1802547-1-stevensd@google.com>
+ <Y+FOk+ty7OKmkwLL@casper.infradead.org>
 MIME-Version: 1.0
-References: <20230204014547.583711-1-vipinsh@google.com> <20230204014547.583711-4-vipinsh@google.com>
-In-Reply-To: <20230204014547.583711-4-vipinsh@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 6 Feb 2023 12:51:57 -0800
-Message-ID: <CAHVum0cgjGSKjFWBANeVzNURb0wwj80nn-BdFMYsQ6KdxqO=6g@mail.gmail.com>
-Subject: Re: [Patch v2 3/4] KVM: selftests: Add macro to generate KVM exit
- reason strings
-To:     seanjc@google.com, pbonzini@redhat.com, maz@kernel.org,
-        james.morse@arm.com, suzuki.poulose@arm.com,
-        oliver.upton@linux.dev, yuzenghui@huawei.com,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com
-Cc:     dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y+FOk+ty7OKmkwLL@casper.infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,97 +82,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 5:46 PM Vipin Sharma <vipinsh@google.com> wrote:
->
-> From: Sean Christopherson <seanjc@google.com>
->
-> Add and use a macro to generate the KVM exit reason strings array
-> instead of relying on developers to correctly copy+paste+edit each
-> string.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  tools/testing/selftests/kvm/lib/kvm_util.c | 52 +++++++++++-----------
->  1 file changed, 27 insertions(+), 25 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 56d5ea949cbb..2413ce511d20 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1815,37 +1815,39 @@ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
->                 vcpu_dump(stream, vcpu, indent + 2);
->  }
->
-> +#define KVM_EXIT_STRING(x) {KVM_EXIT_##x, #x}
-> +
->  /* Known KVM exit reasons */
->  static struct exit_reason {
->         unsigned int reason;
->         const char *name;
->  } exit_reasons_known[] = {
-> -       {KVM_EXIT_UNKNOWN, "UNKNOWN"},
-> -       {KVM_EXIT_EXCEPTION, "EXCEPTION"},
-> -       {KVM_EXIT_IO, "IO"},
-> -       {KVM_EXIT_HYPERCALL, "HYPERCALL"},
-> -       {KVM_EXIT_DEBUG, "DEBUG"},
-> -       {KVM_EXIT_HLT, "HLT"},
-> -       {KVM_EXIT_MMIO, "MMIO"},
-> -       {KVM_EXIT_IRQ_WINDOW_OPEN, "IRQ_WINDOW_OPEN"},
-> -       {KVM_EXIT_SHUTDOWN, "SHUTDOWN"},
-> -       {KVM_EXIT_FAIL_ENTRY, "FAIL_ENTRY"},
-> -       {KVM_EXIT_INTR, "INTR"},
-> -       {KVM_EXIT_SET_TPR, "SET_TPR"},
-> -       {KVM_EXIT_TPR_ACCESS, "TPR_ACCESS"},
-> -       {KVM_EXIT_S390_SIEIC, "S390_SIEIC"},
-> -       {KVM_EXIT_S390_RESET, "S390_RESET"},
-> -       {KVM_EXIT_DCR, "DCR"},
-> -       {KVM_EXIT_NMI, "NMI"},
-> -       {KVM_EXIT_INTERNAL_ERROR, "INTERNAL_ERROR"},
-> -       {KVM_EXIT_OSI, "OSI"},
-> -       {KVM_EXIT_PAPR_HCALL, "PAPR_HCALL"},
-> -       {KVM_EXIT_DIRTY_RING_FULL, "DIRTY_RING_FULL"},
-> -       {KVM_EXIT_X86_RDMSR, "RDMSR"},
-> -       {KVM_EXIT_X86_WRMSR, "WRMSR"},
-> -       {KVM_EXIT_XEN, "XEN"},
-> +       KVM_EXIT_STRING(UNKNOWN),
-> +       KVM_EXIT_STRING(EXCEPTION),
-> +       KVM_EXIT_STRING(IO),
-> +       KVM_EXIT_STRING(HYPERCALL),
-> +       KVM_EXIT_STRING(DEBUG),
-> +       KVM_EXIT_STRING(HLT),
-> +       KVM_EXIT_STRING(MMIO),
-> +       KVM_EXIT_STRING(IRQ_WINDOW_OPEN),
-> +       KVM_EXIT_STRING(SHUTDOWN),
-> +       KVM_EXIT_STRING(FAIL_ENTRY),
-> +       KVM_EXIT_STRING(INTR),
-> +       KVM_EXIT_STRING(SET_TPR),
-> +       KVM_EXIT_STRING(TPR_ACCESS),
-> +       KVM_EXIT_STRING(S390_SIEIC),
-> +       KVM_EXIT_STRING(S390_RESET),
-> +       KVM_EXIT_STRING(DCR),
-> +       KVM_EXIT_STRING(NMI),
-> +       KVM_EXIT_STRING(INTERNAL_ERROR),
-> +       KVM_EXIT_STRING(OSI),
-> +       KVM_EXIT_STRING(PAPR_HCALL),
-> +       KVM_EXIT_STRING(DIRTY_RING_FULL),
-> +       KVM_EXIT_STRING(X86_RDMSR),
-> +       KVM_EXIT_STRING(X86_WRMSR),
-> +       KVM_EXIT_STRING(XEN),
->  #ifdef KVM_EXIT_MEMORY_NOT_PRESENT
-> -       {KVM_EXIT_MEMORY_NOT_PRESENT, "MEMORY_NOT_PRESENT"},
-> +       KVM_EXIT_STRING(MEMORY_NOT_PRESENT),
->  #endif
->  };
->
-> --
-> 2.39.1.519.gcb327c4b5f-goog
->
+On Mon, Feb 06, 2023 at 07:01:39PM +0000, Matthew Wilcox wrote:
+> On Mon, Feb 06, 2023 at 08:28:56PM +0900, David Stevens wrote:
+> > This change first makes sure that the intermediate page cache state
+> > during collapse is not visible by moving when gaps are filled to after
+> > the page cache lock is acquired for the final time. This is necessary
+> > because the synchronization provided by locking hpage is insufficient
+> > for functions which operate on the page cache without actually locking
+> > individual pages to examine their content (e.g. shmem_mfill_atomic_pte).
+> 
+> I've been a little scared of touching khugepaged because, well, look at
+> that function.  But if we are going to touch it, how about this patch
+> first?  It does _part_ of what you need by not filling in the holes,
+> but obviously not the part that looks at uffd.  
+> 
+> It leaves the old pages in-place and frozen.  I think this should be
+> safe, but I haven't booted it (not entirely sure what test I'd run
+> to prove that it's not broken)
 
-Sean,
-I had to manually create this commit in my tree, your patch in the
-email was complaining about some non-existent SHA.
-https://lore.kernel.org/lkml/Y9r0q9cuK%2Fifu+OW@google.com/
+That logic existed since Kirill's original commit to add shmem thp support
+on khugepaged, so Kirill should be the best to tell.. but so far it seems
+reasonalbe to me to have that extra operation.
 
-Only difference from your patch is that KVM_EXIT_STRING(HYPERV) is not
-present in the patch above. As this exit reason is not available in
-kvm/queue.
+The problem is khugepaged will release pgtable lock during collapsing, so
+AFAICT there can be a race where some other thread tries to insert pages
+into page cache in parallel with khugepaged right after khugepaged released
+the page cache lock.
+
+For example, it seems to me new page cache can be inserted when khugepaged
+is copying small page content to the new hpage.
+
+-- 
+Peter Xu
+
