@@ -2,93 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C27E68B48B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A8E68B491
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 04:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjBFDk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 22:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S229577AbjBFDko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 22:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjBFDkX (ORCPT
+        with ESMTP id S229521AbjBFDkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 22:40:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4712016320
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 19:40:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEBA8B80D24
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DCEAC4339E;
-        Mon,  6 Feb 2023 03:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675654819;
-        bh=3lsHKYlG0rjr2JlV/zJCvNh38EhpdamnhOGOfmFdU3A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=m8QfoChuBi6UKVquPysZISxu0Gm3T4biqEyZRiJOxk6cxvov4s8ItOhOwMKKUoaE6
-         Ig4FYiVU2JrrvTtQcMgXaCpGlWCxN0ZhQ4DLoOLnbsSa5PTK+7FC1DnJ/xVsk2Zquy
-         1aXXFNk8qZG424XbV7PzHg+jARQiZH7hv33rZ1OcSWkJk6fYfcZVQcRMqLNrDGYwuG
-         5jbsPXeiqsxOSkaDH+QdhYQ9zIdz12Rl3z/QysmNZG3iODJwACI6hTHRvz4b3yd+j8
-         k1h3h7BRcI+PVz2e6w27RqJjcK6mZ20xbO7pEWICiEW1e7skS8tHm+OmihdDuU2Wk9
-         M4lftsW2/5uxQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6B0CBE55EFF;
-        Mon,  6 Feb 2023 03:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 5 Feb 2023 22:40:42 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6D316AC7;
+        Sun,  5 Feb 2023 19:40:35 -0800 (PST)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P9Bk70DdbzkXrj;
+        Mon,  6 Feb 2023 11:35:59 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 6 Feb 2023 11:40:32 +0800
+Subject: Re: [PATCH v3] perf record: Fix segfault with --overwrite and
+ --max-size
+To:     Namhyung Kim <namhyung@kernel.org>
+CC:     <acme@kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <jiwei.sun@windriver.com>
+References: <20230113073803.102950-1-yangjihong1@huawei.com>
+ <29a8e0bc-e90b-b371-962b-58a4b8c87f20@huawei.com>
+ <ee213278-7e76-586b-0564-843dc7a3c84f@huawei.com>
+ <CAM9d7cj1v09Q0_AF2Oaa4+UU_YWB8OaaoeOZ-igoMTTFg4VZGg@mail.gmail.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <0c93a024-b60c-8ea6-37a3-a55e951dbd12@huawei.com>
+Date:   Mon, 6 Feb 2023 11:40:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH v3] f2fs: reduce stack memory cost by using
- bitfield in struct f2fs_io_info
-From:   patchwork-bot+f2fs@kernel.org
-Message-Id: <167565481942.5323.508420128518769085.git-patchwork-notify@kernel.org>
-Date:   Mon, 06 Feb 2023 03:40:19 +0000
-References: <20230202070456.3497513-1-chao@kernel.org>
-In-Reply-To: <20230202070456.3497513-1-chao@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     jaegeuk@kernel.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAM9d7cj1v09Q0_AF2Oaa4+UU_YWB8OaaoeOZ-igoMTTFg4VZGg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This patch was applied to jaegeuk/f2fs.git (dev)
-by Jaegeuk Kim <jaegeuk@kernel.org>:
-
-On Thu,  2 Feb 2023 15:04:56 +0800 you wrote:
-> This patch tries to use bitfield in struct f2fs_io_info to improve
-> memory usage.
+On 2023/2/6 10:44, Namhyung Kim wrote:
+> Hello,
 > 
-> struct f2fs_io_info {
-> ...
-> 	unsigned int need_lock:8;	/* indicate we need to lock cp_rwsem */
-> 	unsigned int version:8;		/* version of the node */
-> 	unsigned int submitted:1;	/* indicate IO submission */
-> 	unsigned int in_list:1;		/* indicate fio is in io_list */
-> 	unsigned int is_por:1;		/* indicate IO is from recovery or not */
-> 	unsigned int retry:1;		/* need to reallocate block address */
-> 	unsigned int encrypted:1;	/* indicate file is encrypted */
-> 	unsigned int post_read:1;	/* require post read */
-> ...
-> };
+> On Sun, Feb 5, 2023 at 5:29 PM Yang Jihong <yangjihong1@huawei.com> wrote:
+>>
+>> Hello,
+>>
+>> Ping again, please take time to review, thanks.
 > 
-> [...]
+> Sorry for the late reply.  Now it looks good to me.
+Thanks for the review.
 
-Here is the summary with links:
-  - [f2fs-dev,v3] f2fs: reduce stack memory cost by using bitfield in struct f2fs_io_info
-    https://git.kernel.org/jaegeuk/f2fs/c/2eae077e6e46
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Yang.
+> 
+>>
+>>
+>> Thanks,
+>> Yang
+>>
+>>
+>> On 2023/1/28 9:27, Yang Jihong wrote:
+>>> Hello,
+>>>
+>>> The data written by the thread (data.X file) has been saved as
+>>> recommended in v2 patch. Please check whether it is feasible. Thank you.
+>>>
+>>> Thanks,
+>>> Yang
+>>>
+>>> On 2023/1/13 15:38, Yang Jihong wrote:
+>>>> When --overwrite and --max-size options of perf record are used together,
+>>>> a segmentation fault occurs. The following is an example:
+>>>>
+>>>>     # perf record -e sched:sched* --overwrite --max-size 1K -a -- sleep 1
+>>>>     [ perf record: Woken up 1 times to write data ]
+>>>>     perf: Segmentation fault
+>>>>     Obtained 12 stack frames.
+>>>>     ./perf/perf(+0x197673) [0x55f99710b673]
+>>>>     /lib/x86_64-linux-gnu/libc.so.6(+0x3ef0f) [0x7fa45f3cff0f]
+>>>>     ./perf/perf(+0x8eb40) [0x55f997002b40]
+>>>>     ./perf/perf(+0x1f6882) [0x55f99716a882]
+>>>>     ./perf/perf(+0x794c2) [0x55f996fed4c2]
+>>>>     ./perf/perf(+0x7b7c7) [0x55f996fef7c7]
+>>>>     ./perf/perf(+0x9074b) [0x55f99700474b]
+>>>>     ./perf/perf(+0x12e23c) [0x55f9970a223c]
+>>>>     ./perf/perf(+0x12e54a) [0x55f9970a254a]
+>>>>     ./perf/perf(+0x7db60) [0x55f996ff1b60]
+>>>>     /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xe6)
+>>>> [0x7fa45f3b2c86]
+>>>>     ./perf/perf(+0x7dfe9) [0x55f996ff1fe9]
+>>>>     Segmentation fault (core dumped)
+>>>>
+>>>> backtrace of the core file is as follows:
+>>>>
+>>>>     (gdb) bt
+>>>>     #0  record__bytes_written (rec=0x55f99755a200 <record>) at
+>>>> builtin-record.c:234
+>>>>     #1  record__output_max_size_exceeded (rec=0x55f99755a200 <record>)
+>>>> at builtin-record.c:242
+>>>>     #2  record__write (map=0x0, size=12816, bf=0x55f9978da2e0,
+>>>> rec=0x55f99755a200 <record>) at builtin-record.c:263
+>>>>     #3  process_synthesized_event (tool=tool@entry=0x55f99755a200
+>>>> <record>, event=event@entry=0x55f9978da2e0, sample=sample@entry=0x0,
+>>>> machine=machine@entry=0x55f997893658) at builtin-record.c:618
+>>>>     #4  0x000055f99716a883 in __perf_event__synthesize_id_index
+>>>> (tool=tool@entry=0x55f99755a200 <record>,
+>>>> process=process@entry=0x55f997002aa0 <process_synthesized_event>,
+>>>> evlist=0x55f9978928b0, machine=machine@entry=0x55f997893658,
+>>>>         from=from@entry=0) at util/synthetic-events.c:1895
+>>>>     #5  0x000055f99716a91f in perf_event__synthesize_id_index
+>>>> (tool=tool@entry=0x55f99755a200 <record>,
+>>>> process=process@entry=0x55f997002aa0 <process_synthesized_event>,
+>>>> evlist=<optimized out>, machine=machine@entry=0x55f997893658)
+>>>>         at util/synthetic-events.c:1905
+>>>>     #6  0x000055f996fed4c3 in record__synthesize (tail=tail@entry=true,
+>>>> rec=0x55f99755a200 <record>) at builtin-record.c:1997
+>>>>     #7  0x000055f996fef7c8 in __cmd_record (argc=argc@entry=2,
+>>>> argv=argv@entry=0x7ffc67551260, rec=0x55f99755a200 <record>) at
+>>>> builtin-record.c:2802
+>>>>     #8  0x000055f99700474c in cmd_record (argc=<optimized out>,
+>>>> argv=0x7ffc67551260) at builtin-record.c:4258
+>>>>     #9  0x000055f9970a223d in run_builtin (p=0x55f997564d88
+>>>> <commands+264>, argc=10, argv=0x7ffc67551260) at perf.c:330
+>>>>     #10 0x000055f9970a254b in handle_internal_command (argc=10,
+>>>> argv=0x7ffc67551260) at perf.c:384
+>>>>     #11 0x000055f996ff1b61 in run_argv (argcp=<synthetic pointer>,
+>>>> argv=<synthetic pointer>) at perf.c:428
+>>>>     #12 main (argc=<optimized out>, argv=0x7ffc67551260) at perf.c:562
+>>>>
+>>>> The reason is that record__bytes_written accesses the freed memory
+>>>> rec->thread_data,
+>>>> The process is as follows:
+>>>>     __cmd_record
+>>>>       -> record__free_thread_data
+>>>>         -> zfree(&rec->thread_data)         // free rec->thread_data
+>>>>       -> record__synthesize
+>>>>         -> perf_event__synthesize_id_index
+>>>>           -> process_synthesized_event
+>>>>             -> record__write
+>>>>               -> record__bytes_written      // access rec->thread_data
+>>>>
+>>>> We add a member variable "thread_bytes_written" in the struct "record"
+>>>> to save the data size written by the threads.
+>>>>
+>>>> Fixes: 6d57581659f7 ("perf record: Add support for limit perf output
+>>>> file size")
+>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> 
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+>>>> ---
+>>>>
+>>>> Changes since v2:
+>>>>    - Save data size written by threads to calculate the correct total
+>>>> data size.
+>>>>    - Update commit message.
+>>>>
+>>>> Changes since v1:
+>>>>    - Add variable check in record__bytes_written for code hardening.
+>>>>    - Save bytes_written separately to reduce one calculation.
+>>>>    - Remove rec->opts.tail_synthesize check.
+>>>>
+>>>>    tools/perf/builtin-record.c | 16 ++++++----------
+>>>>    1 file changed, 6 insertions(+), 10 deletions(-)
+>>>>
+>>>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+>>>> index 29dcd454b8e2..8374117e66f6 100644
+>>>> --- a/tools/perf/builtin-record.c
+>>>> +++ b/tools/perf/builtin-record.c
+>>>> @@ -154,6 +154,7 @@ struct record {
+>>>>        struct perf_tool    tool;
+>>>>        struct record_opts    opts;
+>>>>        u64            bytes_written;
+>>>> +    u64            thread_bytes_written;
+>>>>        struct perf_data    data;
+>>>>        struct auxtrace_record    *itr;
+>>>>        struct evlist    *evlist;
+>>>> @@ -226,14 +227,7 @@ static bool switch_output_time(struct record *rec)
+>>>>    static u64 record__bytes_written(struct record *rec)
+>>>>    {
+>>>> -    int t;
+>>>> -    u64 bytes_written = rec->bytes_written;
+>>>> -    struct record_thread *thread_data = rec->thread_data;
+>>>> -
+>>>> -    for (t = 0; t < rec->nr_threads; t++)
+>>>> -        bytes_written += thread_data[t].bytes_written;
+>>>> -
+>>>> -    return bytes_written;
+>>>> +    return rec->bytes_written + rec->thread_bytes_written;
+>>>>    }
+>>>>    static bool record__output_max_size_exceeded(struct record *rec)
+>>>> @@ -255,10 +249,12 @@ static int record__write(struct record *rec,
+>>>> struct mmap *map __maybe_unused,
+>>>>            return -1;
+>>>>        }
+>>>> -    if (map && map->file)
+>>>> +    if (map && map->file) {
+>>>>            thread->bytes_written += size;
+>>>> -    else
+>>>> +        rec->thread_bytes_written += size;
+>>>> +    } else {
+>>>>            rec->bytes_written += size;
+>>>> +    }
+>>>>        if (record__output_max_size_exceeded(rec) && !done) {
+>>>>            fprintf(stderr, "[ perf record: perf size limit reached (%"
+>>>> PRIu64 " KB),"
+>>>>
+>>>
+>>> .
+> 
+> .
+> 
