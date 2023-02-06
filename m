@@ -2,116 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02EFD68B517
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 06:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785C668B51A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 06:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjBFFHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 00:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S229635AbjBFFKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 00:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjBFFHb (ORCPT
+        with ESMTP id S229572AbjBFFKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 00:07:31 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDB517CD4;
-        Sun,  5 Feb 2023 21:07:30 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3164uUNG006508;
-        Mon, 6 Feb 2023 05:07:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vM7cUNMl2BC3t2I8Sxy4OM5Wwd/GdzfjJt0ki3w0oCA=;
- b=ggBR7wor2ls15Vp420tFKy8Z9Zs+RmT+soA0v/qm2GUarLHloVgPjFwrtacGJMRD0I5H
- MFQj5qMqBheKd16FhuNXYbIseEQWXyNmXlQof8aw4nwAB7jaDxgAu/SYRJc70y0cgPbu
- 0DDe6taDQR5f3TbNFexrIOhwiNBt0GmIs5jCQm12JbmcgI9Q8OZp+o27QWpRLG49ElRu
- 4wBLtexDb5ymG5oZqNJJGiCRDBq+QJpy56gcK+XtJvr3D6vEUXQ2QhaEZ3qA2vCGHtG3
- xzlQtuem+Xnl1tSJ6f33YVQct82hcvDDEOjmKeDFNBv7P5ciiF8xmMdRPfjL/a9p9VhH sg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhfretssq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 05:07:05 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3165746Q029409
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Feb 2023 05:07:04 GMT
-Received: from [10.216.41.141] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 5 Feb 2023
- 21:06:45 -0800
-Message-ID: <bb3f584e-44de-4f81-cac5-fe47bcaeb16b@quicinc.com>
-Date:   Mon, 6 Feb 2023 10:36:32 +0530
+        Mon, 6 Feb 2023 00:10:05 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A5B1BEE;
+        Sun,  5 Feb 2023 21:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=x/vaXmDiISQEbay077BGity4tzOnqmD7ndpsdu1qs8A=; b=nX9Af+4rlwZgUZ6WeRrHLyGzDq
+        7MTeZhdMzCzQ80agG7XygW7yiQT7NcXxClU5K4oaHwppap+EL9b/ah6a5+UjNTAnyfK+/GlMKUF4j
+        6cb9mIDFnVRNqgkhwbF/1KQ8raWUVc/kxMjN0vTn8wKB/xZVOz+XcuSfcJk1yW34uwqXu9Ny+IK+W
+        nPH7KjNi2JUxsixkNHQVocg/QlA8YKYxneiyzRAmmbxJKOn/3ZlYbIPLyPhaFtPtY+/7KaVcyw2RZ
+        okpCyxtfa31XrApkHzNOk3fBt6SpytUFP0QAv9oW6+QXnnoH1sBlRORpIMowCfiEMtg1VRVQ0+SCm
+        1t5RuBUA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pOtlO-00GUEA-00; Mon, 06 Feb 2023 05:09:58 +0000
+Date:   Mon, 6 Feb 2023 05:09:57 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 0/3] mm/arch: Fix a few collide definition on private use
+ of VM_FAULT_*
+Message-ID: <Y+CLpdnOGFg28uMJ@casper.infradead.org>
+References: <20230205231704.909536-1-peterx@redhat.com>
+ <Y+BFjQDBIFq5ih+t@casper.infradead.org>
+ <Y+BPy3jFcHqOnWL0@x1n>
+ <Y+BrJhxeJbAp49QE@casper.infradead.org>
+ <Y+BxhuGUx1K+3XHb@xz-m1.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V2 4/5] arm64: defconfig: Enable scm download mode config
- for IPQ9574 SoC.
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <jassisinghbrar@gmail.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <robimarko@gmail.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <quic_gurus@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-References: <20230201090529.30446-1-quic_poovendh@quicinc.com>
- <20230201090529.30446-5-quic_poovendh@quicinc.com>
- <0186a2c9-35ba-a90d-360f-0f931dda7ed0@linaro.org>
-Content-Language: en-US
-From:   POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
-In-Reply-To: <0186a2c9-35ba-a90d-360f-0f931dda7ed0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: R6azCj9-fQtyVyGM1ytJQm94BfOTbafJ
-X-Proofpoint-GUID: R6azCj9-fQtyVyGM1ytJQm94BfOTbafJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_02,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- malwarescore=0 priorityscore=1501 adultscore=0 mlxlogscore=675
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302060044
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+BxhuGUx1K+3XHb@xz-m1.local>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Feb 05, 2023 at 10:18:30PM -0500, Peter Xu wrote:
+> On Mon, Feb 06, 2023 at 02:51:18AM +0000, Matthew Wilcox wrote:
+> > That wasn't what I meant.  I meant putting VM_FAULT_BADMAP and
+> > VM_FAULT_SIGSEGV in mm_types.h.  Not having "Here is a range of reserved
+> > arch private ones".
+> 
+> VM_FAULT_SIGSEGV is there already; I assume you meant adding them all
+> directly into vm_fault_reason.
+> 
+> Then I don't think it's a good idea..
+> 
+> Currently vm_fault_reason is a clear interface for handle_mm_fault() for
+> not only arch pffault handlers but also soft faults like GUP.
+> 
+> If handle_mm_fault() doesn't return VM_FAULT_BADMAP at all, I don't think
+> we should have it as public API at all.  When arch1 people reading the
+> VM_FAULT_ documents, it shouldn't care about some fault reason that only
+> happens with arch2.  Gup shouldn't care about it either.
+> 
+> Logically a new page fault handler should handle all the retval of
+> vm_fault_reason afaiu.  That shouldn't include e.g. VM_FAULT_BADMAP either.
 
-On 2/1/2023 3:00 PM, Krzysztof Kozlowski wrote:
-> On 01/02/2023 10:05, Poovendhan Selvaraj wrote:
->> Enables scm download mode config.
-> Subject: drop full stop.
->
-> This patch misses explanation why it is needed and why it should be
-> enabled for all SoCs.
+Hmm, right.  Looking specifically at how s390 uses VM_FAULT_BADMAP,
+it just seems to be a badly structured fault.c.  Seems to me that
+do_fault_error() should take an extra si_code argument, and
+instead of returning VM_FAULT_BADACCESS / VM_FAULT_BADMAP from
+various functions, those functions should call do_fault_error()
+directly, passing it VM_FAULT_SIGSEGV and the appropriate si_code.
 
-Sure, will address this in next patch series.
-
-Regards,
-Poovendhan S
-
->
->> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
->> ---
-> Best regards,
-> Krzysztof
->
+But this is all on the s390 people to fix; I don't want to break their
+arch by trying it myself.
