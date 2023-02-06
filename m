@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F8168B3E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8A968B3DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjBFBdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 20:33:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S229617AbjBFBdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 20:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjBFBdg (ORCPT
+        with ESMTP id S229608AbjBFBdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 5 Feb 2023 20:33:36 -0500
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA841ADC4
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 17:33:33 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 775225C012E;
-        Sun,  5 Feb 2023 20:33:32 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E431ABFF
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 17:33:34 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id F23D55C013A;
+        Sun,  5 Feb 2023 20:33:33 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 05 Feb 2023 20:33:32 -0500
+  by compute5.internal (MEProxy); Sun, 05 Feb 2023 20:33:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
         :content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1675647212; x=1675733612; bh=2M
-        /FZOrWxjfHGOTs/u+tXzvp2U//Imf0DNiIU0PoXIE=; b=G7B4JVYDbn9/G0BGz1
-        lI3bpMwjZM9fDtFhM/tR9rBovCAyh887cWTmkBs85AyY7IP90sPpQtBZCp4ndZXd
-        GtdZ35XnQyBcQGJb6HhfNJJimbzmSPCh8AwXb+NGAAkU35wiYU+6U1GVZYiiS/tW
-        QuKanGqXq9t3F2EZ6lnuPVY8V7igmRCpG+wvmgHw5r9KiVGdST8fR8UmaFyQKy3/
-        du70RBav0JKXYRBmLDnnPXEYTj6XoiLUkbBlxm63hoUflUbAUlRDmqcLra+qzTwD
-        xVu0QsxEkjv/+kMJ/rE5WAZwflVGersnQxWfW7/dBUMcVHa5XsluteavPxdxZAwx
-        YIPg==
+        :subject:subject:to:to; s=fm1; t=1675647213; x=1675733613; bh=w0
+        63ixA3VHKfcqn7VyfQPNnKog+0gE3yylZvR0Lv1FA=; b=Ppi4fsQaDAZYw8vqF+
+        j660mo62MpeCs1OsT7LzviMPVA9kF++0cYaVyx9JLY3Vd/Kil6zb2d0cQs7FHRen
+        hs4VEDEAJjDRRDnPr+x+qZ1P4u8qs7fADe/I1lCnGO3x/361AWs++VJ8NgJBhTkD
+        umtw8i3cBnAkDEL1A0w2dDeknJjcMp9i2SlTpYdh/427S3jbUc8fjJEW0WozQJOI
+        J1qR+IbM7NG48jUt1/HN9ugu6bMhhnOBfdk8Aoqbuts9FjbcPsoYvEO+OumIWu0e
+        HtAGz+33LHLkugV8IIRc3T6RDEphcqxbL4nxviOxqDYFklRCAmzDumOjA8etBl2d
+        U+lA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1675647212; x=1675733612; bh=2M/FZOrWxjfHG
-        OTs/u+tXzvp2U//Imf0DNiIU0PoXIE=; b=b/W96titouLSfFt0MUQ2NLU82sTWh
-        aXDVOJPo9KchAmarEwSXTxYsuVWO+fPt+HyIqmxCOm45mYcithETWhoFmSr9L1Y5
-        4gQey+xdNdNu/pOM4zsHrXyUbyGZXVdErO2uvsyRjOQwy3WXVl611zsb/CFkmFem
-        KGS6EUXhQmb6OzuVubcTRgS8t8ElNAvdbhtXrOu83ROx5kLx+a5ytCanJwSPuZgF
-        jVDAaLLVkMR4Yso9/Eqafot1U94y1HDEG0xw7VYOb47gBqWHavJBDeoT2AANhUuy
-        Oib7lWUIY9YarrJKw2aAT7MmmjoEbwmwK4PWcyKLtI4+q43hYbtiJq4mQ==
-X-ME-Sender: <xms:7FjgY7f9R56XoK_ds_TuDW_oQS9LWcw125fuhJNfQzMDmQNMvRVlbA>
-    <xme:7FjgYxONQ_E4WRrdN1JxGncGjUBy9zYS8JjFnQ6J0zb4HyrXUVM4ZbFW1otrD4GzY
-    u1apb6im-3TkNXrmF4>
-X-ME-Received: <xmr:7FjgY0h7ZumBToEtimS1X2-etYWFhLcGct98i3o2iBvWQBblX1-v58JPAEwwQfXewK2nBN2qMdTpH_ZadjBVLUGCzFDp>
+        :x-sasl-enc; s=fm3; t=1675647213; x=1675733613; bh=w063ixA3VHKfc
+        qn7VyfQPNnKog+0gE3yylZvR0Lv1FA=; b=PMsPVCBafUR6KlRBuga1Zw76YEpKz
+        iivwFUsDK5ckZlH00AuhUWINefnRH5jBUmYsbC/9VY3mY92182yHobv4UfTfphyR
+        2orsXsJ+uKXaJQbOKilXO5NHu3WbJZsSe2QSKfXZDg/83EftRSISBh4hU2VaUv0q
+        BRsEs96A+Yb768e21LCfc0fK9bxiWf5/51bl7T6bN6SN1SmX1/i6MoI9n5qxka/P
+        4QUndAB0PMdZ/9sVV4xB4ebfEbPVH20DlkArax6J4/msCFGPRU7tkW3nj4m3gkJ5
+        Lb9/f7IIdKmX02I9AQJwsbmLSxpIKnA+73DoYQSxr2anZx7HnRXiUvCFg==
+X-ME-Sender: <xms:7VjgYxK-CxD1pxM2ThzfwaDe9eAQNLGMYR_OXKGy7t_tgPnvGQAu_A>
+    <xme:7VjgY9I1Un4YnRnBYYVvAP8Nkjytl1R6I4DPy3GSk_qdqWGTeL4w0jqNYucOgp0fg
+    E15zOVY7HDPfhta2Fw>
+X-ME-Received: <xmr:7VjgY5vuU1aBLUKz0bFiqy6MfLh0WQwSRRuf3N-5oUYZ4pjieYyjL3TzuFCqwWavC9lg9yHUVA3Be6wUS6sZRjtULV-z>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeghedgfeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpeggihhntggvnhhtucffrghgohhnnhgvrghuuceovhesvhgu
-    rgdrihhoqeenucggtffrrghtthgvrhhnpeehfeevieevuedtudeivefhjeekhefffeejfe
-    etfeehvefgheetueekheefledvhfenucffohhmrghinhepohhpvghnghhrohhuphdrohhr
-    ghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehvse
-    hvuggrrdhioh
-X-ME-Proxy: <xmx:7FjgY8-ZqM7rtMH2XxbLlcKhoTwEjlCqPlaB2qcExGcJxvvqetFkqw>
-    <xmx:7FjgY3s7EQGonzQjtsc-HlDza3dQBLgsSRoS1r265UdBM-JvXAXcHA>
-    <xmx:7FjgY7FxEfCwJTX6ekC0Cz7X-VPbQ3-MOgIqF3PQZyKUYtmrp2vTvQ>
-    <xmx:7FjgYwVwhUJ34k4OrI-YIFkwOrA4sTWf0UblO56H8DLSZf9och2M_Q>
+    rgdrihhoqeenucggtffrrghtthgvrhhnpedujedtgefgtdelffefjeeggffgiefgjeevve
+    dtjefhuddvleeiudetuedtffefheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
+    mhepmhgrihhlfhhrohhmpehvsehvuggrrdhioh
+X-ME-Proxy: <xmx:7VjgYyZG48-t7aeRXRVsjgKASvyJqI7Dv5yG21AUh41SIqPxXYj3pw>
+    <xmx:7VjgY4bGFpAvEKQN0N_e7k2NaANAQ7v07q1RAcNwdd9nH52REgrPnQ>
+    <xmx:7VjgY2CHfYgl84UjwmVaFGKyBADOsPE2k1JigI9Ao6WiyTn1xNg1AQ>
+    <xmx:7VjgYzywss2LUZMzKzxyN1VN3Ucv7cQI0KDO559FhM0c9u3RyWmn3g>
 Feedback-ID: ic7094478:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 5 Feb 2023 20:33:31 -0500 (EST)
+ 5 Feb 2023 20:33:33 -0500 (EST)
 From:   Vincent Dagonneau <v@vda.io>
 To:     linux-kernel@vger.kernel.org
 Cc:     w@1wt.eu, Vincent Dagonneau <v@vda.io>
-Subject: [PATCH v3 2/4] tools/nolibc: Adding integer types and integer limit macros
-Date:   Sun,  5 Feb 2023 20:32:47 -0500
-Message-Id: <20230206013248.471664-3-v@vda.io>
+Subject: [PATCH v3 3/4] tools/nolibc: Enlarging column width of tests
+Date:   Sun,  5 Feb 2023 20:32:48 -0500
+Message-Id: <20230206013248.471664-4-v@vda.io>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230206013248.471664-1-v@vda.io>
 References: <20230206013248.471664-1-v@vda.io>
@@ -83,89 +82,342 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds some of the missing integer types to stdint.h and adds
-limit macros (e.g. INTN_{MIN,MAX}).
-
-The reference used for adding these types is
-https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdint.h.html.
-
-Note that the maximum size of size_t is implementation-defined (>65535),
-in this case I chose to stick with what the kernel uses in
-linux/include/uapi/asm-generic/posix_types.h: unsigned int on 32bits and
-unsigned long on 64bits.
+This commit enlarges the column width from 40 to 64 characters to make
+room for longer tests
 ---
- tools/include/nolibc/stdint.h | 60 +++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 96 ++++++++++----------
+ 1 file changed, 48 insertions(+), 48 deletions(-)
 
-diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-index 4ba264031df9..e676254d896f 100644
---- a/tools/include/nolibc/stdint.h
-+++ b/tools/include/nolibc/stdint.h
-@@ -21,4 +21,64 @@ typedef unsigned long     uintptr_t;
- typedef   signed long      intptr_t;
- typedef   signed long     ptrdiff_t;
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index f14f5076fb6d..725ee66d059c 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -130,111 +130,111 @@ static int pad_spc(int llen, int cnt, const char *fmt, ...)
+  */
  
-+typedef   int8_t       int_least8_t;
-+typedef  uint8_t      uint_least8_t;
-+typedef  int16_t      int_least16_t;
-+typedef uint16_t     uint_least16_t;
-+typedef  int32_t      int_least32_t;
-+typedef uint32_t     uint_least32_t;
-+typedef  int64_t      int_least64_t;
-+typedef uint64_t     uint_least64_t;
-+
-+typedef  int64_t           intmax_t;
-+typedef uint64_t          uintmax_t;
-+
-+/* limits of integral types */
-+
-+#define        INT8_MIN  (-128)
-+#define       INT16_MIN  (-32767-1)
-+#define       INT32_MIN  (-2147483647-1)
-+#define       INT64_MIN  (-9223372036854775807LL-1)
-+
-+#define        INT8_MAX  (127)
-+#define       INT16_MAX  (32767)
-+#define       INT32_MAX  (2147483647)
-+#define       INT64_MAX  (9223372036854775807LL)
-+
-+#define       UINT8_MAX  (255)
-+#define      UINT16_MAX  (65535)
-+#define      UINT32_MAX  (4294967295U)
-+#define      UINT64_MAX  (18446744073709551615ULL)
-+
-+#define  INT_LEAST8_MIN  INT8_MIN
-+#define INT_LEAST16_MIN  INT16_MIN
-+#define INT_LEAST32_MIN  INT32_MIN
-+#define INT_LEAST64_MIN  INT64_MIN
-+
-+#define  INT_LEAST8_MAX  INT8_MAX
-+#define INT_LEAST16_MAX  INT16_MAX
-+#define INT_LEAST32_MAX  INT32_MAX
-+#define INT_LEAST64_MAX  INT64_MAX
-+
-+#define  UINT_LEAST8_MAX UINT8_MAX
-+#define UINT_LEAST16_MAX UINT16_MAX
-+#define UINT_LEAST32_MAX UINT32_MAX
-+#define UINT_LEAST64_MAX UINT64_MAX
-+
-+#define         SIZE_MAX UINT64_MAX
-+
-+#if __WORDSIZE == 64
-+  #define       INTPTR_MIN  INT64_MIN
-+  #define       INTPTR_MAX  INT64_MAX
-+  #define      UINTPTR_MAX  UINT64_MAX
-+  #define      PTRDIFF_MIN  INT64_MIN
-+  #define      PTRDIFF_MAX  INT64_MAX
-+#else
-+  #define       INTPTR_MIN  INT32_MIN
-+  #define       INTPTR_MAX  INT32_MAX
-+  #define      UINTPTR_MAX  UINT32_MAX
-+  #define      PTRDIFF_MIN  INT32_MIN
-+  #define      PTRDIFF_MAX  INT32_MAX
-+#endif /* __WORDSIZE == 64 */
-+
- #endif /* _NOLIBC_STDINT_H */
+ #define EXPECT_ZR(cond, expr)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_zr(expr, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_zr(expr, llen); } while (0)
+ 
+ static int expect_zr(int expr, int llen)
+ {
+ 	int ret = !(expr == 0);
+ 
+ 	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_NZ(cond, expr, val)			\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_nz(expr, llen; } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_nz(expr, llen; } while (0)
+ 
+ static int expect_nz(int expr, int llen)
+ {
+ 	int ret = !(expr != 0);
+ 
+ 	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_EQ(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_eq(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_eq(expr, llen, val); } while (0)
+ 
+-static int expect_eq(int expr, int llen, int val)
++static int expect_eq(uint64_t expr, int llen, uint64_t val)
+ {
+ 	int ret = !(expr == val);
+ 
+-	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	llen += printf(" = %lld ", expr);
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_NE(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ne(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ne(expr, llen, val); } while (0)
+ 
+ static int expect_ne(int expr, int llen, int val)
+ {
+ 	int ret = !(expr != val);
+ 
+ 	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_GE(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ge(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ge(expr, llen, val); } while (0)
+ 
+ static int expect_ge(int expr, int llen, int val)
+ {
+ 	int ret = !(expr >= val);
+ 
+ 	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_GT(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_gt(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_gt(expr, llen, val); } while (0)
+ 
+ static int expect_gt(int expr, int llen, int val)
+ {
+ 	int ret = !(expr > val);
+ 
+ 	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_LE(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_le(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_le(expr, llen, val); } while (0)
+ 
+ static int expect_le(int expr, int llen, int val)
+ {
+ 	int ret = !(expr <= val);
+ 
+ 	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_LT(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_lt(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_lt(expr, llen, val); } while (0)
+ 
+ static int expect_lt(int expr, int llen, int val)
+ {
+ 	int ret = !(expr < val);
+ 
+ 	llen += printf(" = %d ", expr);
+-	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
++	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_SYSZR(cond, expr)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_syszr(expr, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syszr(expr, llen); } while (0)
+ 
+ static int expect_syszr(int expr, int llen)
+ {
+@@ -243,17 +243,17 @@ static int expect_syszr(int expr, int llen)
+ 	if (expr) {
+ 		ret = 1;
+ 		llen += printf(" = %d %s ", expr, errorname(errno));
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+ 		llen += printf(" = %d ", expr);
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_SYSEQ(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_syseq(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syseq(expr, llen, val); } while (0)
+ 
+ static int expect_syseq(int expr, int llen, int val)
+ {
+@@ -262,17 +262,17 @@ static int expect_syseq(int expr, int llen, int val)
+ 	if (expr != val) {
+ 		ret = 1;
+ 		llen += printf(" = %d %s ", expr, errorname(errno));
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+ 		llen += printf(" = %d ", expr);
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_SYSNE(cond, expr, val)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_sysne(expr, llen, val); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_sysne(expr, llen, val); } while (0)
+ 
+ static int expect_sysne(int expr, int llen, int val)
+ {
+@@ -281,17 +281,17 @@ static int expect_sysne(int expr, int llen, int val)
+ 	if (expr == val) {
+ 		ret = 1;
+ 		llen += printf(" = %d %s ", expr, errorname(errno));
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+ 		llen += printf(" = %d ", expr);
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_SYSER(cond, expr, expret, experr)			\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_syserr(expr, expret, experr, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syserr(expr, expret, experr, llen); } while (0)
+ 
+ static int expect_syserr(int expr, int expret, int experr, int llen)
+ {
+@@ -302,16 +302,16 @@ static int expect_syserr(int expr, int expret, int experr, int llen)
+ 	if (expr != expret || _errno != experr) {
+ 		ret = 1;
+ 		llen += printf(" != (%d %s) ", expret, errorname(experr));
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_PTRZR(cond, expr)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ptrzr(expr, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptrzr(expr, llen); } while (0)
+ 
+ static int expect_ptrzr(const void *expr, int llen)
+ {
+@@ -320,16 +320,16 @@ static int expect_ptrzr(const void *expr, int llen)
+ 	llen += printf(" = <%p> ", expr);
+ 	if (expr) {
+ 		ret = 1;
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_PTRNZ(cond, expr)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ptrnz(expr, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptrnz(expr, llen); } while (0)
+ 
+ static int expect_ptrnz(const void *expr, int llen)
+ {
+@@ -338,16 +338,16 @@ static int expect_ptrnz(const void *expr, int llen)
+ 	llen += printf(" = <%p> ", expr);
+ 	if (!expr) {
+ 		ret = 1;
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_STRZR(cond, expr)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_strzr(expr, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_strzr(expr, llen); } while (0)
+ 
+ static int expect_strzr(const char *expr, int llen)
+ {
+@@ -356,16 +356,16 @@ static int expect_strzr(const char *expr, int llen)
+ 	llen += printf(" = <%s> ", expr);
+ 	if (expr) {
+ 		ret = 1;
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_STRNZ(cond, expr)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_strnz(expr, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_strnz(expr, llen); } while (0)
+ 
+ static int expect_strnz(const char *expr, int llen)
+ {
+@@ -374,16 +374,16 @@ static int expect_strnz(const char *expr, int llen)
+ 	llen += printf(" = <%s> ", expr);
+ 	if (!expr) {
+ 		ret = 1;
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_STREQ(cond, expr, cmp)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_streq(expr, llen, cmp); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_streq(expr, llen, cmp); } while (0)
+ 
+ static int expect_streq(const char *expr, int llen, const char *cmp)
+ {
+@@ -392,16 +392,16 @@ static int expect_streq(const char *expr, int llen, const char *cmp)
+ 	llen += printf(" = <%s> ", expr);
+ 	if (strcmp(expr, cmp) != 0) {
+ 		ret = 1;
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
+ 
+ 
+ #define EXPECT_STRNE(cond, expr, cmp)				\
+-	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_strne(expr, llen, cmp); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_strne(expr, llen, cmp); } while (0)
+ 
+ static int expect_strne(const char *expr, int llen, const char *cmp)
+ {
+@@ -410,9 +410,9 @@ static int expect_strne(const char *expr, int llen, const char *cmp)
+ 	llen += printf(" = <%s> ", expr);
+ 	if (strcmp(expr, cmp) == 0) {
+ 		ret = 1;
+-		llen += pad_spc(llen, 40, "[FAIL]\n");
++		llen += pad_spc(llen, 64, "[FAIL]\n");
+ 	} else {
+-		llen += pad_spc(llen, 40, " [OK]\n");
++		llen += pad_spc(llen, 64, " [OK]\n");
+ 	}
+ 	return ret;
+ }
 -- 
 2.39.1
 
