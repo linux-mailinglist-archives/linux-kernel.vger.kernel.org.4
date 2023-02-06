@@ -2,79 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC7D68B43D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 03:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30D268B440
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 03:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjBFCv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 21:51:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S229578AbjBFCyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 21:54:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBFCv1 (ORCPT
+        with ESMTP id S229448AbjBFCy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 21:51:27 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBB119F01;
-        Sun,  5 Feb 2023 18:51:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=a68BFUw2BpHHhbBBpKoKjQxP6DmREgGnYtbae7m3l1Q=; b=aYT+QrxDV/CJmRjX3L9wcJRC5m
-        CZlCqoXCfhO/WEJsGuKY1Z9qXzdXkMZ3Xua+ucsm1J14JHSdLYjToJbnmkCK4mONdNLiLdxXLm0ci
-        qqPox4IGi7FK7DKbSb2j2GLLwxpoh5M+Hc99CNpXotONm6MCOj/RziZRIcXaDWf8qr77OD2zm0diF
-        0y/g3Guz8DA09pVrGCQ61UsKYxNWJ+zPNggySjJz/vWgmOVwUQTpL57PWzMLwNrtE4lhOBIU9NGs+
-        TBXzcoW3ezmVKVlFqEqfWqj5yiOqTOQk4nxLG6Zm0cr4qA0cFi0k9AUhoqmvMo9OMsE/Pj2iOSF2C
-        1egmrvew==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pOrbC-00GPQT-HK; Mon, 06 Feb 2023 02:51:18 +0000
-Date:   Mon, 6 Feb 2023 02:51:18 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 0/3] mm/arch: Fix a few collide definition on private use
- of VM_FAULT_*
-Message-ID: <Y+BrJhxeJbAp49QE@casper.infradead.org>
-References: <20230205231704.909536-1-peterx@redhat.com>
- <Y+BFjQDBIFq5ih+t@casper.infradead.org>
- <Y+BPy3jFcHqOnWL0@x1n>
+        Sun, 5 Feb 2023 21:54:29 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949C0196BD;
+        Sun,  5 Feb 2023 18:54:28 -0800 (PST)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P99lV2yJ1zRrq8;
+        Mon,  6 Feb 2023 10:52:06 +0800 (CST)
+Received: from [127.0.0.1] (10.174.178.94) by kwepemm600020.china.huawei.com
+ (7.193.23.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 6 Feb
+ 2023 10:54:25 +0800
+Message-ID: <57e180f7-291f-0a26-2680-7033cd47283e@huawei.com>
+Date:   Mon, 6 Feb 2023 10:54:22 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+BPy3jFcHqOnWL0@x1n>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 5.4 000/134] 5.4.231-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <stable@vger.kernel.org>
+CC:     <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>
+References: <20230204143608.813973353@linuxfoundation.org>
+From:   zhouzhixiu <zhouzhixiu@huawei.com>
+In-Reply-To: <20230204143608.813973353@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.94]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 07:54:35PM -0500, Peter Xu wrote:
-> On Mon, Feb 06, 2023 at 12:10:53AM +0000, Matthew Wilcox wrote:
-> > On Sun, Feb 05, 2023 at 06:17:01PM -0500, Peter Xu wrote:
-> > > I noticed a few collision usage on VM_FAULT_* definition in the page fault
-> > > path on arm/arm64/s390 where the VM_FAULT_* can overlap with the generic
-> > > definition of vm_fault_reason.
-> > > 
-> > > The major overlapped part being VM_FAULT_HINDEX_MASK which is used only by
-> > > the hugetlb hwpoisoning.
-> > > 
-> > > I'm not sure whether any of them can have a real impact, but that does not
-> > > look like to be expected.  I didn't copy stable, if anyone thinks it should
-> > > please shoot.  Nor did I test them in any form - I just changed the
-> > > allocations from top bits and added a comment for each of them.
-> > 
-> > This seems like a bad way to do it.  Why not just put these VM_FAULT_*
-> > definitions in linux/mm_types.h?  Then we'll see them when adding new
-> > VM_FAULT codes.  Sure, they won't be used by every architecture, but
-> > so what?
-> 
-> My initial version actually contains a few VM_FAULT_PRIVATE_N there, but I
 
-That wasn't what I meant.  I meant putting VM_FAULT_BADMAP and
-VM_FAULT_SIGSEGV in mm_types.h.  Not having "Here is a range of reserved
-arch private ones".
+On 2023/2/4 22:42, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.231 release.
+> There are 134 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Mon, 06 Feb 2023 14:35:41 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.231-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
+> -------------
+Tested on arm64 and x86 for 5.4.231-rc2,
+
+Kernel 
+repo:https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+Branch: linux-5.4.y
+Version: 5.4.231-rc2
+Commit:  9d36c855cb4a7dd9498bddd4095b51a237b3217f
+Compiler: gcc version 7.3.0 (GCC)
+
+arm64:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9017
+passed: 9017
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+
+x86:
+--------------------------------------------------------------------
+Testcase Result Summary:
+total: 9017
+passed: 9017
+failed: 0
+timeout: 0
+--------------------------------------------------------------------
+Tested-by: Hulk Robot <hulkrobot@huawei.com>
 
