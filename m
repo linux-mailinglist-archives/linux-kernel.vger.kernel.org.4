@@ -2,136 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51D368BF33
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D8868BF38
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbjBFOCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S229672AbjBFODX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjBFOBz (ORCPT
+        with ESMTP id S229488AbjBFODS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:01:55 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75FD298F0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:00:50 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id v1so644328ilg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:00:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MNAVKrJD9jbSiYWr0Av4XwBNw9Kr0TLfkKf5RWu2ymg=;
-        b=wUR9sy+JDUEZABIqipj7je+Jxi8uMtf7oX7nPMQlpkT8/ox6ej+VRwILZLbbgKXWWN
-         XL1hgT77JowdxdoXEa35KEdVdDJU9fClN7aE0GOpoN6avd1zftyPSQVzxqFNtdqWMj7q
-         klb3eePU49zes7W1OLq6MRZcoEUFePHsG4ljB8vdmsSe10rnUDVObJVqL7aVbkuBeG6T
-         Wyi2KMlAWAENJ06BctKWEVsipU39odylGFlQGtNSbw6LWr0umymS5lv20kI/bp5iDUsi
-         Jxvfj6M5ivwUeLtHCBW0okoyXO877pBJ2mMLcGHggsv0ELERZqVXclzPUHZXTBfMTiLl
-         +Mlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MNAVKrJD9jbSiYWr0Av4XwBNw9Kr0TLfkKf5RWu2ymg=;
-        b=xfWlT8xZIFa0p9EhhHz8ODWDkReRtZiQNwyjadxRy5kLG09O43YLN1eAWDVfZ03a4+
-         CUHjlf+Redqb85EFypURAGZOZ8nQOuSk2n4C+shpNb8ys0scMgUPOEXctJfYuvWbmfje
-         qPHjCsIQwQY6ohspSxovS5ilYQQ/vnC/NnKYws8girxls3pYP5Lq1qDdi2XMXGn7hinh
-         8qakIRYvCBi9ugQhbijH+vU397dsdDbgjnMtEdoFzN8YPAvnpDfJ5g9cxkez/NdQdIWQ
-         8YN4FrmDPio11mcu9UplOTQ83OmIKNo1OngFZesnGtMXZSqQ9a02jE8dgxkE2qXH0Zyj
-         hsOA==
-X-Gm-Message-State: AO0yUKXzz0PDW9Plwc13k1/Qyp2BpLjH+yMQ/LabKksKgojCBRtCVSpW
-        905A1EnqR0NplYxcGY/xLgDq0Q==
-X-Google-Smtp-Source: AK7set/p29Wp8Soev71NkNlEXh9ruJp6jse1g9qHoknoiqxAYsdEPVkFawnbnlwb7C4/PRWgpPfYMg==
-X-Received: by 2002:a05:6e02:1c05:b0:310:fd98:1cc2 with SMTP id l5-20020a056e021c0500b00310fd981cc2mr17085411ilh.13.1675692048127;
-        Mon, 06 Feb 2023 06:00:48 -0800 (PST)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id v3-20020a056638250300b0039db6cffcbasm3457082jat.71.2023.02.06.06.00.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 06:00:47 -0800 (PST)
-Message-ID: <5821a8bb-8751-70e8-970f-eb2bf2b077fb@linaro.org>
-Date:   Mon, 6 Feb 2023 08:00:46 -0600
+        Mon, 6 Feb 2023 09:03:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90BF28D3A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:01:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675692112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WkZbQDy++TbR+nJjGfW1Qx+BDYAbmOjoD8BAG4wJE1E=;
+        b=bOc9ioZJqwV5EHAkwQfnGOIzd8tSALRiIguQuswDlkT2SdUx1+aT1FsEv497ldFy+im2bG
+        2LNIxzIlFhNHkVqyi61plU2koqaiRy4UXQLmyG6hgnnzBycmPTpjDyF6Ydw0dH0a6jPfho
+        rLFxkhQpx7unUfnAjraCMZnRmeXqK/c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-94-SVQkEjvgOEGJJsWVuEzg7A-1; Mon, 06 Feb 2023 09:01:49 -0500
+X-MC-Unique: SVQkEjvgOEGJJsWVuEzg7A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D06D1281724D;
+        Mon,  6 Feb 2023 14:01:41 +0000 (UTC)
+Received: from plouf.local (ovpn-192-160.brq.redhat.com [10.40.192.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 92BAB2166B29;
+        Mon,  6 Feb 2023 14:01:40 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-input@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+In-Reply-To: <20230127064005.1558-11-rdunlap@infradead.org>
+References: <20230127064005.1558-1-rdunlap@infradead.org>
+ <20230127064005.1558-11-rdunlap@infradead.org>
+Subject: Re: (subset) [PATCH 10/35] Documentation: hid: correct spelling
+Message-Id: <167569210023.2843115.12634410926456959304.b4-ty@redhat.com>
+Date:   Mon, 06 Feb 2023 15:01:40 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 08/27] mailbox: Add Gunyah message queue mailbox
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-9-quic_eberman@quicinc.com>
- <e5acd00c-7a53-a789-8dab-a69cffda34f5@linaro.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <e5acd00c-7a53-a789-8dab-a69cffda34f5@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 3:59 AM, Srinivas Kandagatla wrote:
->>
->> +static irqreturn_t gh_msgq_rx_irq_handler(int irq, void *data)
->> +{
->> +    struct gh_msgq *msgq = data;
->> +    struct gh_msgq_rx_data rx_data;
->> +    unsigned long gh_err;
->> +    bool ready = true;
->> +
->> +    while (ready) {
->> +        gh_err = gh_hypercall_msgq_recv(msgq->rx_ghrsc->capid,
->> +                (uintptr_t)&rx_data.data, sizeof(rx_data.data),
-> you should proabably use  GH_MSGQ_MAX_MSG_SIZE instead of calling sizeof 
-> for every loop.
-
-I disagree with this comment.
-
-I think sizeof(object) conveys more meaning that CONSTANT_SIZE,
-and both values are known at compile time (so there is no cost
-of "calling sizeof" a lot.
-
-					-Alex
-
+On Thu, 26 Jan 2023 22:39:40 -0800, Randy Dunlap wrote:
+> Correct spelling problems for Documentation/hid/ as reported
+> by codespell.
 > 
->> +                &rx_data.length, &ready);
->> +        if (gh_err == GH_ERROR_OK) {
->> +            mbox_chan_received_data(gh_msgq_chan(msgq), &rx_data);
->> +        } else if (gh_err == GH_ERROR_MSGQUEUE_EMPTY) {
->> +            break;
->> +        } else {
->> +            pr_warn("Failed to receive data from msgq for %s: %zd\n",
->> +                msgq->mbox.dev ? dev_name(msgq->mbox.dev) : "", gh_err);
->> +            break;
->> +        }
->> +    }
->> +
->> +    return IRQ_HANDLED;
->> +} 
+> 
+
+Applied to hid/hid.git (for-6.3/hid-bpf), thanks!
+
+[10/35] Documentation: hid: correct spelling
+        https://git.kernel.org/hid/hid/c/2f7f4efb9411
+
+Cheers,
+-- 
+Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
