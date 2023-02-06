@@ -2,148 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B09468BCB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8147768BCB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjBFMUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S230136AbjBFMUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBFMUD (ORCPT
+        with ESMTP id S230094AbjBFMUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:20:03 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAA3DBF4;
-        Mon,  6 Feb 2023 04:20:02 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id BEDE0581F89;
-        Mon,  6 Feb 2023 07:19:59 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 06 Feb 2023 07:19:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675685999; x=1675693199; bh=EttWCI1bpe
-        AjhBiaJSAzg8VXO8QdUkkL5lYBTi6kKQM=; b=maQtG7CXW2j0vs9LdTv/Far0Kj
-        r+JQ8DrPxOijBj5u/M26nfyCBg3LxOaSsoSj863bQj93nOQt4obnx4yBCRfGWoom
-        VPyhj9PwipzQQmE41f2irREabq1vHc4ubDRvewHR1SzZChLeVlrXH0nfIHWBleeE
-        RO/tfMb77+jVXkYb4Td8o9TS+Fr/9JaIPlh0TKo/wohxWZnBLwn8PUfeH7QVBtCx
-        Wqrq8iqLfP/yc8jgZ0wd6C+KZi1EkperQDi+XjIq/+qyBj282AOUruNzvU+apOiU
-        UrBvkzmnKoxYB2gQP5BM2fjtXoNWI0Wg0pjpuL7zBhyE5qlhjYETNv+Ld2Ng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675685999; x=1675693199; bh=EttWCI1bpeAjhBiaJSAzg8VXO8Qd
-        UkkL5lYBTi6kKQM=; b=HbjcZlBHM73FLUMGEg7g7Txy3GkpYltTnf/zta3DkBCu
-        vVtq6kehTsHtsjC4kcAls1wCwzA/hPgTf1m7qcEXHGNxri+4cilSJgq7EUXgwqnZ
-        9Cx7AO3RuNKm8gvh57qoAZI+7DiggrksU0tGQKZGsndoxp5VyChBY2/2dNuQOI0+
-        7/I/NfA9CM7eDn8EDMmm6HSPztcSgzps4TzOuFyVR8pJYEmd0YxAuc1qjpMy8mcR
-        l8QbPS2Vwyc8TV/DerYXjwbRgpCWytjcTigKukYttUCDZVEH1rzWDdbNeUYTx6VU
-        EZWD42Z2YdEcJHF4ltoafp7TQFLVqoWipL0uxiVVQQ==
-X-ME-Sender: <xms:bPDgY5KzB2ri1Ul3J4ZZ-u0ujckW1ael6I62cn_VIyX43QnGR2WNWw>
-    <xme:bPDgY1K9Kn-IaYAdfhgU412LtP9SdQG1xiY0grMcfY8NtDIa-IhyFe9Wbig3N-y9b
-    vlTK-o2ewogd7npLzs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegiedgfeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:bPDgYxugQiZwrOa8DZy7dYElDk2UcABpqCFI_C0314MlOUG708AHng>
-    <xmx:bPDgY6bZ_W1evxK2IksLFVeC6lvA7NqXGKBJEfyKrID7MKWT2MW5Hw>
-    <xmx:bPDgYwaU7LvC6nJpoeuF95cXIo7XRoCoCG2Fas_NKl7HMaOw82Kk1Q>
-    <xmx:b_DgY1qnEwX0fd-s6xmNm76Jo2tfbVaOegUXXSMsFnzIZaabdBntJA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D47B2B60086; Mon,  6 Feb 2023 07:19:56 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-108-ge995779fee-fm-20230203.001-ge995779f
-Mime-Version: 1.0
-Message-Id: <30e43e0b-4d16-433f-845d-dd026adfb252@app.fastmail.com>
-In-Reply-To: <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.494373332@infradead.org>
- <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
- <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
-Date:   Mon, 06 Feb 2023 13:19:38 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Peter Zijlstra" <peterz@infradead.org>
-Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
-        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, "Joerg Roedel" <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com,
-        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
-        "Baolu Lu" <baolu.lu@linux.intel.com>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Pekka Enberg" <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
+        Mon, 6 Feb 2023 07:20:16 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2054.outbound.protection.outlook.com [40.107.223.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42723DBF4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:20:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LcvlfYdI4HYb1xchLzuuMZ43BfTC1ZufVMwe4OF8QhfsRbtgVJF+2aqB7YEfFByxBf2afDivgy2ZRERS6le3ZcMAyP86JF7XEHq6Ueoq7xr7Tk4Mylh6ijH6fnsFfLcrUfbJiYCaznksivTfsHymXFg7zlI7GjhUQOJ5PNFqN7RCZ7I0ZukGnyIpECGDCbdw54mgwHC/26BIZmoO2dEZFwVPf/jvMrT56MmleyeoozfC6pLkJA1DSlPPl2Qt60A6fMNRcL1C+L9wtNbsBZDPoeiTyxsRIWI/ocKEtd3Vq60svTidaS+nvFg4VD0+bRLf3lWX49mevdY4uahQgHdfhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YO3VNNWM3bQJvY0yQ6/4vFDS411jRWvPlQ3nA847hrM=;
+ b=hHPPcjADj5QMbyknmW8dBszZzyPE80z2bKLHy2ZeS/9IEMnmqmeZIrrmRFyd1eI5WBlxXd4aKFLlKpoFWL/oAkwGkZ5Ufl4MYErYUKUgGCgaR1Ja/3SIjWYLfOE+hsn4fFeazlfzE0s4glhSLl2QAzeluVg8Us2Qf5Y+Idm57l+ONSsLtqjqDwQDU6DWZ7tgV/dzqrp60tp0GLOMvp7Xj8Saz/Nw1y5VYPPGKa/ve9+MoxnBAtmet8Bte8ratXjACIo0A2aOB/k1WhMVJv5xwctsn4revM8Ny8MOu6cZYAZubC1wEwrywO2OgodoLrjNd8xz4xSBDFZEDGCm8ATvzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YO3VNNWM3bQJvY0yQ6/4vFDS411jRWvPlQ3nA847hrM=;
+ b=t0hcTL7Mjx9DGBsuKA0aNdEM4s50ezJVeJETjTwLMrxwNShtylz3lxdG1uuHuwafqjxOyzwjd6v7bMDLn0RboEdlkJ+p/3YWRoThiNA2qM70cgeSK4KD64YPR9x0fiZo58Wg8Kvyd6MpouyNQAAXFJjtZUF3b3Q43xGN7tcKRUYohDjWyWDm5NMWfK313K8nKE8vDj1PuWoQg0jyNlyTp9VnI7qZhTGi/wroXzl0mda7ffvI+S4WmAHMRRoGbb5xRa9QDsXrPQJ0XpIQB0GWrp9Sx9PpQ0vrK/QZAojTV6EF/D6t0AEf2bSPgkQuOSniw72nBkxjEwJ68BnLh6cT/w==
+Received: from DM6PR07CA0115.namprd07.prod.outlook.com (2603:10b6:5:330::6) by
+ IA1PR12MB6282.namprd12.prod.outlook.com (2603:10b6:208:3e6::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 12:20:12 +0000
+Received: from DS1PEPF0000E656.namprd02.prod.outlook.com
+ (2603:10b6:5:330:cafe::2) by DM6PR07CA0115.outlook.office365.com
+ (2603:10b6:5:330::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34 via Frontend
+ Transport; Mon, 6 Feb 2023 12:20:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS1PEPF0000E656.mail.protection.outlook.com (10.167.18.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.21 via Frontend Transport; Mon, 6 Feb 2023 12:20:12 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 04:20:04 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 04:20:04 -0800
+Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Mon, 6 Feb
+ 2023 04:20:02 -0800
+From:   Eli Cohen <elic@nvidia.com>
+To:     <mst@redhat.com>, <jasowang@redhat.com>, <si-wei.liu@oracle.com>,
+        <eperezma@redhat.com>, <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Eli Cohen <elic@nvidia.com>
+Subject: [PATCH 1/2] vdpa/mlx5: Don't clear mr struct on destroy MR
+Date:   Mon, 6 Feb 2023 14:19:56 +0200
+Message-ID: <20230206121956.1149356-1-elic@nvidia.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E656:EE_|IA1PR12MB6282:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7eac2d3-5007-4461-d6ab-08db083c7efe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AuUhWijXEBkE2u94UE7AiridNdTNQJTL6DPBvXvS2neVbv2TPkfO8bz2obQgLmBS2ng7ewDU0PiKEgr4P5b56qykxJXDonvPGTSPyL80FXfqDbWW6A793wtaxZVqHsZ+tdkrvmO4B3p8HarnkJdcIEaVunMYTNVzHVcmpW/P2nzHtwfiGFA9gWavSmUKbia0i8s0EFEG5OVf2YdQs0LvN3JveySgxWHtRxt1HcA65jj0FXOcGu6GVDmoPajnuSSHDqY4Z8Fqxq8rz0Qy/xHEyTpoUV7jQaRY7L48YJ1eB1sTRhO1HB1HIHfr4bBybW+9J0THh+BBKUuni1dAvtS536NQRIARVcr4KwjRYDZpcfiHxtB0jGOj9V9kb+baqarb6M94vMSH9yqSvr6Jn0hu4kmVbmSJlfuxGL6oKX9UFeqeREuUdcG+RZO93LBuXrElWjV57ltMoy96OKSKotwkvlIujtKp3+5H1zSd70vpxgJDZvlqVHTQFBg5bHw1B9h846mlz8bIns92XptMXJSNKdMo51u51/CSXeGbry+/Qtd+yEOYhuxlB2nhIHhwbjgb2l1esclQamgrufnlKlap9fYbi0dbKezKDnGT5XPwnZrdX2DaDWFoKJV29bGAwCS+lFzhyl39m+eOyAtm1nbCYXX/22xqJiuINF112XnNs5p+NdiW2coT2xXmZ2EMpi58CS96aja6+AIcrwq3C+WcWw==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(376002)(396003)(451199018)(40470700004)(46966006)(36840700001)(82310400005)(40460700003)(1076003)(6666004)(40480700001)(107886003)(478600001)(2616005)(8676002)(186003)(26005)(4326008)(70586007)(70206006)(316002)(110136005)(7696005)(36756003)(82740400003)(7636003)(356005)(86362001)(426003)(47076005)(83380400001)(36860700001)(336012)(5660300002)(4744005)(41300700001)(8936002)(2906002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 12:20:12.3184
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7eac2d3-5007-4461-d6ab-08db083c7efe
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E656.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6282
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023, at 12:24, Peter Zijlstra wrote:
-> On Fri, Feb 03, 2023 at 06:25:04PM +0100, Arnd Bergmann wrote:
+Clearing the mr struct erases the lock owner and causes warnings to be
+emitted. It is not required to clear the mr so remove the memset call.
 
->> Unless I have misunderstood what you are doing, my concerns are
->> still the same:
->> 
->> >  #define this_cpu_cmpxchg(pcp, oval, nval) \
->> > -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
->> > +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
->> >  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
->> > nval2) \
->> >  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
->> > oval1, oval2, nval1, nval2)
->> 
->> Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
->> and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
->> like a bad design to me.
->> 
->> I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
->> calls that never trap but fall back to the generic version on CPUs that
->> are lacking the atomics.
->
-> You're thinking acidental usage etc..? Lemme see what I can do.
+Fixes: 94abbccdf291 ("vdpa/mlx5: Add shared memory registration code")
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+---
+ drivers/vdpa/mlx5/core/mr.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-I wouldn't even call it accidental when the dependency is so subtle:
+diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
+index 0a1e0b0dc37e..03e543229791 100644
+--- a/drivers/vdpa/mlx5/core/mr.c
++++ b/drivers/vdpa/mlx5/core/mr.c
+@@ -503,7 +503,6 @@ void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev)
+ 	else
+ 		destroy_dma_mr(mvdev, mr);
+ 
+-	memset(mr, 0, sizeof(*mr));
+ 	mr->initialized = false;
+ out:
+ 	mutex_unlock(&mr->mkey_mtx);
+-- 
+2.38.1
 
-Having to call system_has_cmpxchg64() beforce calling cmpxchg64()
-is already somewhat awkward but has some logic to it. Having to
-call system_has_cmpxchg64()/system_has_cmpxchg128() before calling
-this_cpu_cmpxchg() depending on the argument size on architectures
-that sometimes have cmpxchg128 but not on architectures that always
-have it or that never have it makes it useless as an abstraction.
-
-     Arnd
