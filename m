@@ -2,127 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCAD68BB3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA0168BB40
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjBFLUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
+        id S229743AbjBFLV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjBFLU0 (ORCPT
+        with ESMTP id S229875AbjBFLVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:20:26 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70DECC07
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:20:24 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id m8so11249950edd.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:20:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uhqMPSXHkvCWfILufq4Ld5aNdSejDT2hVXfv3Ko2CUk=;
-        b=raPqjNh3bznGcgDJNpjJBoLmU9KWkSOkMrFpN7R1Hgnir1F0Uqs123HqifgHra8qQi
-         EAMz90ugLBZPLTZ3LmsJD1AT4+N6KRqgbdAoxb+oL860KL+oHsW60dI90Tspq5hhBVcF
-         jgbIJ9LO4oabGBLUewmdyw5AxF+uY634xAsdogI/47oL2guzk4+kGzQePDmJjZCUf1s9
-         qnJjRHiFVMR4FmFqXG5KiLfYDhJZh11oQngLr6eoKjqSnPaCR9T3/yYJHws6sqOpQEQT
-         MniwC2wyCE+o/0l/HWIJPV4rpLL6rSBr/KPhIiqwuL3M6dZZFy0Y6SV7egdvEjH4vrPL
-         Suaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uhqMPSXHkvCWfILufq4Ld5aNdSejDT2hVXfv3Ko2CUk=;
-        b=V9/7ERFDYUe4DG/JOjlAmL3bE+gxE+h0Ci2st1scBYXsBXtH/40X6ebR/98BFbT8eb
-         OalKyd8fnjD/631IdqymxEpwIkV5+slFRecmu2E68YYSZgEPAVU8rjMvsa1eYdFKksVD
-         M8hZ1AqlvZYx5HPbd9kzSfOfRgPBeF5iuVagjEBlzcHtS/g/0InWgxoTCFhCVeyabnN/
-         TvKTOGqq974lahBhRFzoJXTM/b6eqdF6SFebsnxk0v0jZJxN4jjEuffffXa3Hps8uRcz
-         WzlS7Refsz7VRvwwYHpPtJfuthzcrJojKJopADfE1AvQc4aXo5b809w+EURUItVNC9rN
-         2zxQ==
-X-Gm-Message-State: AO0yUKXeEKkqUPfYiq/1kFHTxONylwgj5qprVbx2r6Oeo37L3rdJqFyY
-        tLbx8BBu6IbblhduzemgKORIKg==
-X-Google-Smtp-Source: AK7set/hlkKx+T8IiESp6Csj2ct0GVBLugzKhydhbyw/fPZb4IlnO73KtOwKu/XBQbnVKeR1sPtxPw==
-X-Received: by 2002:a05:6402:3603:b0:4a0:e237:2cef with SMTP id el3-20020a056402360300b004a0e2372cefmr20831204edb.4.1675682423357;
-        Mon, 06 Feb 2023 03:20:23 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id v17-20020aa7dbd1000000b004a249a97d84sm4903348edt.23.2023.02.06.03.20.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 03:20:23 -0800 (PST)
-Message-ID: <a2ad7b78-d848-df9d-2646-476cb306c505@linaro.org>
-Date:   Mon, 6 Feb 2023 13:20:21 +0200
+        Mon, 6 Feb 2023 06:21:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ACA722DE7;
+        Mon,  6 Feb 2023 03:21:02 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 828E5C14;
+        Mon,  6 Feb 2023 03:21:32 -0800 (PST)
+Received: from [10.57.89.151] (unknown [10.57.89.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AD653F8C6;
+        Mon,  6 Feb 2023 03:20:48 -0800 (PST)
+Message-ID: <4d90da14-8c08-62e1-814f-ee14fab375f8@arm.com>
+Date:   Mon, 6 Feb 2023 11:20:44 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/5] dt-bindings: display: msm: dp-controller: document
- SM8450 compatible
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] iommu/vt-d: Avoid superfluous IOTLB tracking in lazy mode
 Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v1-0-f1345872ed19@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v1-1-f1345872ed19@linaro.org>
- <f1665a8f-5b5b-7d98-a94e-d1b1df04afdf@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <f1665a8f-5b5b-7d98-a94e-d1b1df04afdf@linaro.org>
+To:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        stable@vger.kernel.org, Sanjay Kumar <sanjay.k.kumar@intel.com>
+References: <20230203230417.1287325-1-jacob.jun.pan@linux.intel.com>
+ <ef65f1cf-d04c-8c35-7144-d30504bf7a1c@linux.intel.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ef65f1cf-d04c-8c35-7144-d30504bf7a1c@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02/2023 12:33, Krzysztof Kozlowski wrote:
-> On 06/02/2023 11:17, Neil Armstrong wrote:
->> The SM8450 & SM350 shares the same DT TX IP version, use the
->> SM8350 compatible as fallback for SM8450.
+On 2023-02-04 06:32, Baolu Lu wrote:
+> On 2023/2/4 7:04, Jacob Pan wrote:
+>> Intel IOMMU driver implements IOTLB flush queue with domain selective
+>> or PASID selective invalidations. In this case there's no need to track
+>> IOVA page range and sync IOTLBs, which may cause significant performance
+>> hit.
+> 
+> [Add cc Robin]
+> 
+> If I understand this patch correctly, this might be caused by below
+> helper:
+> 
+> /**
+>   * iommu_iotlb_gather_add_page - Gather for page-based TLB invalidation
+>   * @domain: IOMMU domain to be invalidated
+>   * @gather: TLB gather data
+>   * @iova: start of page to invalidate
+>   * @size: size of page to invalidate
+>   *
+>   * Helper for IOMMU drivers to build invalidation commands based on 
+> individual
+>   * pages, or with page size/table level hints which cannot be gathered 
+> if they
+>   * differ.
+>   */
+> static inline void iommu_iotlb_gather_add_page(struct iommu_domain *domain,
+>                                                 struct 
+> iommu_iotlb_gather *gather,
+>                                                 unsigned long iova, 
+> size_t size)
+> {
+>          /*
+>           * If the new page is disjoint from the current range or is 
+> mapped at
+>           * a different granularity, then sync the TLB so that the gather
+>           * structure can be rewritten.
+>           */
+>          if ((gather->pgsize && gather->pgsize != size) ||
+>              iommu_iotlb_gather_is_disjoint(gather, iova, size))
+>                  iommu_iotlb_sync(domain, gather);
+> 
+>          gather->pgsize = size;
+>          iommu_iotlb_gather_add_range(gather, iova, size);
+> }
+> 
+> As the comments for iommu_iotlb_gather_is_disjoint() says,
+> 
+> "...For many IOMMUs, flushing the IOMMU in this case is better
+>   than merging the two, which might lead to unnecessary invalidations.
+>   ..."
+> 
+> So, perhaps the right fix for this performance issue is to add
+> 
+>      if (!gather->queued)
+> 
+> in iommu_iotlb_gather_add_page() or iommu_iotlb_gather_is_disjoint()?
+> It should benefit other arch's as well.
+
+The iotlb_gather helpers are really just that - little tools to help 
+drivers with various common iotlb_gather accounting patterns. The 
+decision whether to bother with that accounting at all should really 
+come beforehand, and whether a driver supports flush queues is 
+orthogonal to whether it uses any particular gather helper(s) or not, so 
+I think the patch as-is is correct.
+
+>> This patch adds a check to avoid IOVA gather page and IOTLB sync for
+>> the lazy path.
 >>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   Documentation/devicetree/bindings/display/msm/dp-controller.yaml | 4 ++++
->>   1 file changed, 4 insertions(+)
+>> The performance difference on Sapphire Rapids 100Gb NIC is improved by
+>> the following (as measured by iperf send):
+> 
+> Which test case have you done? Post the real data if you have any.
+> 
 >>
->> diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
->> index 0e8d8df686dc..98bae326e655 100644
->> --- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
->> +++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
->> @@ -25,6 +25,10 @@ properties:
->>         - qcom,sc8280xp-edp
->>         - qcom,sdm845-dp
->>         - qcom,sm8350-dp
->> +      - items:
->> +          - enum:
->> +            - qcom,sm8450-dp
+>> w/o this fix~48 Gbits/s. with this fix ~54 Gbits/s
+>>
+>> Cc: <stable@vger.kernel.org>
 > 
-> Indentation looks wrong here. Testing should fail, did you test it?
+> Again, add a Fixes tag so that people know how far this fix should be
+> back ported.
 
-Moreover it also breaks dt-schema, see 
-https://github.com/devicetree-org/dt-schema/issues/98
+Note that the overall issue probably dates back to the initial iommu-dma 
+conversion, but if you think it's important enough to go back beyond 
+5.15 when gather->queued was introduced, that'll need a different fix.
 
-> 
-> Best regards,
-> Krzysztof
-> 
-
--- 
-With best wishes
-Dmitry
-
+Cheers,
+Robin.
