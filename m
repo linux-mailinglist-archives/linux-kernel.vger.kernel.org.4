@@ -2,119 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA1268C7B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7D868C7C3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjBFUgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        id S229984AbjBFUjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBFUgF (ORCPT
+        with ESMTP id S229536AbjBFUjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:36:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17204EDB;
-        Mon,  6 Feb 2023 12:36:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DE5260F33;
-        Mon,  6 Feb 2023 20:36:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 393DFC433D2;
-        Mon,  6 Feb 2023 20:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675715761;
-        bh=sQvioVNroLYZbZP6kYyFNgj62DExtljLCs9UmJr/96c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=puprCIQdrg3fvSw5FcPUmYpEZEUd5s4aVouPHIIfOmxlTpojTvqQK9hwDwadAqTnm
-         vmRfFqZoDJFL3QUArfgm+r0eIRzOSIclsPcacn2oi6YPE2wTpex6rn69adsvg/hSQO
-         wSmE2tFd1XvU/hwh2GZvwvj2jaQU4n06eFs1tJMrOeEapavq5PIe33KqKq5rVsfC2z
-         O42e7drOkko3sqs6Vuz7hiL0l5a4wb9/FzqL4b3TUAZkcS+jD5Bno4dRyIgYhFJVsS
-         APgvJrafZgjHjz3CS1Wu1pd02enFnHKIJ0enHdq3nuEH5qjbvFLnst8FviQpRApSh5
-         Z1B3tSZUCqxfQ==
-Date:   Mon, 6 Feb 2023 12:38:16 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     ilia.lin@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
-        rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/4] cpufreq: qcom-nvmem: reuse socinfo SMEM item struct
-Message-ID: <20230206203816.afexndkiqhpk6e7b@ripper>
-References: <20230121112947.53433-1-robimarko@gmail.com>
- <20230121112947.53433-2-robimarko@gmail.com>
+        Mon, 6 Feb 2023 15:39:15 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162AC76A8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:39:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675715955; x=1707251955;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nmVxFoHyHqmgyANxubwgLY3LYXOTpZAFxX3BVyF42cw=;
+  b=ECe8HtuI2dpFGpO7lw0AGsNYAI2ajmbTHik5x+vw5T7ya6sVlpBLJGUH
+   +BLrpgXA2d8gNPuVqmfYJcfo3qb8tb9cu7156YQAWsEPy1k3CdmslEdT9
+   Mfu7X2Z++LFaUcA3F2yTpOIiR2CGNHUeT2FpcYf3VCuG3OH6CCklyLQYR
+   m9ALq+wpL14abfy2RNXrSGip+WBt3eZGwDdDQCW/HW9PtRAkuHA9GkCx0
+   F21dXL5IcqX64oVBYfJGnj77DwvBYVzyd5PcnrmxPBI91akWZPR8Vkje+
+   dBcHH0hzXMCrsvDGlTEGWcWG5eb4QDBEBtcGqqhPwmNF7AZZnKvZIjJ0d
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="327944379"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="327944379"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 12:39:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="790550789"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="790550789"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 06 Feb 2023 12:39:12 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pP8Ge-0002ls-0U;
+        Mon, 06 Feb 2023 20:39:12 +0000
+Date:   Tue, 7 Feb 2023 04:38:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: kernel/trace/rv/monitors/wip/wip.c:20:1: sparse: sparse: symbol
+ 'da_mon_wip' was not declared. Should it be static?
+Message-ID: <202302070454.lIeMcrp3-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230121112947.53433-2-robimarko@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 12:29:45PM +0100, Robert Marko wrote:
-> Now that socinfo SMEM item struct and defines have been moved to a header
-> so we can utilize that instead.
-> 
-> Now the SMEM value can be accesed directly, there is no need for defining
-> the ID for the SMEM request as well.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+Hi Stephen,
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+First bad commit (maybe != root cause):
 
-@Rafael, @Viresh, would you mind providing an Ack for me to take these 3
-patches, together with patch 1, through the Qualcomm tree? I have staged
-changes for 6.3, so we'll otherwise end up with conflicts on the move of
-the struct.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d2d11f342b179f1894a901f143ec7c008caba43e
+commit: 10bde81c74863472047f31304064018c40f488ee rv/monitor: Add the wip monitor
+date:   6 months ago
+config: mips-randconfig-s051-20230206 (https://download.01.org/0day-ci/archive/20230207/202302070454.lIeMcrp3-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=10bde81c74863472047f31304064018c40f488ee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 10bde81c74863472047f31304064018c40f488ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash kernel/trace/rv/
 
-Thanks,
-Bjorn
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index a577586b23be..c0a7841a56c1 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -28,8 +28,7 @@
->  #include <linux/pm_opp.h>
->  #include <linux/slab.h>
->  #include <linux/soc/qcom/smem.h>
-> -
-> -#define MSM_ID_SMEM	137
-> +#include <linux/soc/qcom/socinfo.h>
->  
->  enum _msm_id {
->  	MSM8996V3 = 0xF6ul,
-> @@ -143,17 +142,14 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
->  static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
->  {
->  	size_t len;
-> -	u32 *msm_id;
-> +	struct socinfo *info;
->  	enum _msm8996_version version;
->  
-> -	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
-> -	if (IS_ERR(msm_id))
-> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
-> +	if (IS_ERR(info))
->  		return NUM_OF_MSM8996_VERSIONS;
->  
-> -	/* The first 4 bytes are format, next to them is the actual msm-id */
-> -	msm_id++;
-> -
-> -	switch ((enum _msm_id)*msm_id) {
-> +	switch (info->id) {
->  	case MSM8996V3:
->  	case APQ8096V3:
->  		version = MSM8996_V3;
-> -- 
-> 2.39.1
-> 
+sparse warnings: (new ones prefixed by >>)
+   kernel/trace/rv/monitors/wip/wip.c: note: in included file:
+   kernel/trace/rv/monitors/wip/wip.h:30:22: sparse: sparse: symbol 'automaton_wip' was not declared. Should it be static?
+
+vim +/da_mon_wip +20 kernel/trace/rv/monitors/wip/wip.c
+
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  18  
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @19  struct rv_monitor rv_wip;
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29 @20  DECLARE_DA_MON_PER_CPU(wip, unsigned char);
+8812d21219b9c6 Daniel Bristot de Oliveira 2022-07-29  21  
+
+:::::: The code at line 20 was first introduced by commit
+:::::: 8812d21219b9c649dd25eb93915e00939944aeb7 rv/monitor: Add the wip monitor skeleton created by dot2k
+
+:::::: TO: Daniel Bristot de Oliveira <bristot@kernel.org>
+:::::: CC: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
