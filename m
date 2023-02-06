@@ -2,146 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE0568BD33
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01C968BD30
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:47:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjBFMrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:47:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
+        id S230084AbjBFMrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjBFMrn (ORCPT
+        with ESMTP id S229557AbjBFMq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:47:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F2A5FD1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:46:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675687618;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1d0rh3nWEoqZY/ZNuGhezgAsd8sE5EE9U2j8wF/dmyw=;
-        b=b5Djzwh9SIQVjA5QqtOHOmtT0Xb9OaaPCqJsqeXRcdlRFYADg/S/JpGYY1FCTh9/j1wAl3
-        KluZWF8Kvj059pHjfRU9jyvdhxZFThgLI7fqwHy6/0erLij7SPL29SfwGNRM0ZkyBjz9Ow
-        zNzgAkFtAHz5yysbpe2RsmzqZPh29v8=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-Bdp1HkVkOJ209mxf2GprHg-1; Mon, 06 Feb 2023 07:46:54 -0500
-X-MC-Unique: Bdp1HkVkOJ209mxf2GprHg-1
-Received: by mail-qv1-f70.google.com with SMTP id k15-20020a0cd68f000000b00535261af1b1so5796589qvi.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:46:54 -0800 (PST)
+        Mon, 6 Feb 2023 07:46:58 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557DC21956
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:46:55 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id ud5so33843161ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:46:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gRx1x4R3ZCNW8PHzWzGk99Kr1Ri4nC4SgujcLpkGYRU=;
+        b=JuWGrqbbjwx9BF87VT3l9QlU6FGHIa8PBf7ocrIT9xEzAm4c1NJZpLd0aHn7Kuseg+
+         k+wXf0zmdkOhue9g1tsqYVUdvQrmGuEqsWNRL6k9HL181JnBgtAIv8YbN+6nhorz+Tlp
+         N4sS1j20gZ0nSvhH5PjoJi6LSdC6PxlqdSB5ssbeCi3nX+5o+pkJPwMc88f9N/ZeNxbp
+         eC21KQOB/fzJuZ2X3fFxV/JqFkb9jdSzbvhZSOy715zu0F6yG6nmgSEv6LpmeZordSnj
+         hrooUhysad/2EiqWZK77sJasfxHYcfj9ACc6+ysScxV77HBf1ygxydWwNMn67W9RW3v8
+         rc5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1d0rh3nWEoqZY/ZNuGhezgAsd8sE5EE9U2j8wF/dmyw=;
-        b=FqwhFDr2qUXwoYvY3WdaTCGPt0nXgJgUJoLoOWnmMLcbhau/324CIMXA7cXyX+y1oz
-         T7qqFUhijRTA3jT+7utoqiLtSbENdzqk0GOJEYD6zg4f4j9gzH+nkQxgfm6KXtPyoiPN
-         pvqQD4anhlRn77Rzyy5q7bdMofq8jZB6PBvSMwVCsrVlanptHiPhyK47ey9wBUr5Tivd
-         TI4u0FtYiKMIboixtef0b5yYlzbCMZmm4jOSLWNpHBPQGs78cKrHrsmV47rZpjtMx6Cv
-         tIuvY+/wXBtbdNylAgTvpFFYEP8mo4R9MQo4B/ZZvgsd1OQJ/UpeXyoMYxYzKV1fDWO/
-         5W8Q==
-X-Gm-Message-State: AO0yUKU4r7FvUmbnTNvQIqZfOfZb/UYSZ34EEniEtouQeIpod6NcNOP0
-        R5IBVr4pPAZqFN4D/rzapFoqQjwxzpB0wYiUGn2Ps+h0U0mB7+Ql73ytKwMZqiEba90ilJLQzvR
-        dsmiIfubKXeV29nAq5SLRlYrm
-X-Received: by 2002:ac8:7f8e:0:b0:3b9:2b0:5e7a with SMTP id z14-20020ac87f8e000000b003b902b05e7amr35238656qtj.25.1675687614290;
-        Mon, 06 Feb 2023 04:46:54 -0800 (PST)
-X-Google-Smtp-Source: AK7set+Redv3mmetoUzlPGwkO8XZL0q4qme5pGLoZKixQ1KEVHI8kVvC0q/t9IuGl4QDkecF/nCN4w==
-X-Received: by 2002:ac8:7f8e:0:b0:3b9:2b0:5e7a with SMTP id z14-20020ac87f8e000000b003b902b05e7amr35238629qtj.25.1675687614007;
-        Mon, 06 Feb 2023 04:46:54 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id y18-20020ac87c92000000b003b630ea0ea1sm7093957qtv.19.2023.02.06.04.46.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gRx1x4R3ZCNW8PHzWzGk99Kr1Ri4nC4SgujcLpkGYRU=;
+        b=LmVUQJF8cBUroBVjGRjgqMoPO/wAJ2mbTew8K3Fve04IMDGzHUPKpJDOm1Kxj9YzKA
+         Z1j3rmwyAd2rQ5D60CAqFLIzJR0aUykN1IZ2WHHusnqy8BXgLKNbLzcTETLqYBJBcmMe
+         ss9ijEzHBaj88bqA4Avz5vDJfsExz4tD56obr7TW2P81zZhLWb3HmsB97t7PYanO4PWU
+         9WAQj4uRO82GDPR7kc5+/kKGlNxXU6Xx7W8KYKyDd4OlNu+44HGyuTr2EmAs3W4B73ki
+         1uUMvxYWDOJYfpwT0Y54IyfORL56YYKND70L8l9WWwSZBzlM39jAWRQKeY9wHNIeu6Tz
+         KzqA==
+X-Gm-Message-State: AO0yUKUzOgIZ94P8a+1Q1WOlpol48faugNOAg8VKGEkwPvIrYy81FCqM
+        fv5eMhcEStE/CTwTXV+mg6o10Q==
+X-Google-Smtp-Source: AK7set/dtnTUNxeyVligvd1p437lGQ2KM+5Hf5csI6w742KksWvXp9+BUhBR8go3wL9l3JSEFXBSDQ==
+X-Received: by 2002:a17:907:2c63:b0:88d:f13e:cba3 with SMTP id ib3-20020a1709072c6300b0088df13ecba3mr22186994ejc.36.1675687613920;
         Mon, 06 Feb 2023 04:46:53 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Eder Zulian <ezulian@redhat.com>
-Subject: Re: [RFC PATCH v1] sched/deadline: Add more reschedule cases to
- prio_changed_dl()
-In-Reply-To: <Y9yydSfMvTHhyEqP@localhost.localdomain>
-References: <20230202182854.3696665-1-vschneid@redhat.com>
- <Y9yydSfMvTHhyEqP@localhost.localdomain>
-Date:   Mon, 06 Feb 2023 12:46:51 +0000
-Message-ID: <xhsmhbkm7rmf8.mognet@vschneid.remote.csb>
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id bl11-20020a170906c24b00b0088d0b51f056sm5361176ejb.40.2023.02.06.04.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 04:46:53 -0800 (PST)
+Message-ID: <11baf5db-bc50-8fbc-5725-edd75f319d4b@linaro.org>
+Date:   Mon, 6 Feb 2023 14:46:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/5] dt-bindings: display: msm: dp-controller: document
+ SM8450 compatible
+Content-Language: en-GB
+To:     neil.armstrong@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206-topic-sm8450-upstream-dp-controller-v1-0-f1345872ed19@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v1-1-f1345872ed19@linaro.org>
+ <f1665a8f-5b5b-7d98-a94e-d1b1df04afdf@linaro.org>
+ <a2ad7b78-d848-df9d-2646-476cb306c505@linaro.org>
+ <56e3816e-c317-1772-1ef3-aeaa9ef0c890@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <56e3816e-c317-1772-1ef3-aeaa9ef0c890@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/02/23 08:06, Juri Lelli wrote:
-> Hi,
->
-> On 02/02/23 18:28, Valentin Schneider wrote:
->> I've been tracking down an issue on a ~5.17ish kernel where:
+On 06/02/2023 14:36, Neil Armstrong wrote:
+> On 06/02/2023 12:20, Dmitry Baryshkov wrote:
+>> On 06/02/2023 12:33, Krzysztof Kozlowski wrote:
+>>> On 06/02/2023 11:17, Neil Armstrong wrote:
+>>>> The SM8450 & SM350 shares the same DT TX IP version, use the
+>>>> SM8350 compatible as fallback for SM8450.
+>>>>
+>>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>>> ---
+>>>>   Documentation/devicetree/bindings/display/msm/dp-controller.yaml | 
+>>>> 4 ++++
+>>>>   1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git 
+>>>> a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml 
+>>>> b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>> index 0e8d8df686dc..98bae326e655 100644
+>>>> --- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>> +++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
+>>>> @@ -25,6 +25,10 @@ properties:
+>>>>         - qcom,sc8280xp-edp
+>>>>         - qcom,sdm845-dp
+>>>>         - qcom,sm8350-dp
+>>>> +      - items:
+>>>> +          - enum:
+>>>> +            - qcom,sm8450-dp
+>>>
+>>> Indentation looks wrong here. Testing should fail, did you test it?
 >>
->>   CPUx                           CPUy
->>
->>   <DL task p0 owns an rtmutex M>
->>   <p0 depletes its runtime, gets throttled>
->>   <rq switches to the idle task>
->>                               <DL task p1 blocks on M, boost/replenish p0>
->>                               <No call to resched_curr() happens here>
->>
->>   [idle task keeps running here until *something*
->>    accidentally sets TIF_NEED_RESCHED]
->>
->> On that kernel, it is quite easy to trigger using rt-tests's deadline_test
->> [1] with the test running on isolated CPUs (this reduces the chance of
->> something unrelated setting TIF_NEED_RESCHED on the idle tasks, making the
->> issue even more obvious as the hung task detector chimes in).
->>
->> I haven't been able to reproduce this using a mainline kernel, even if I
->> revert
->>
->>   2972e3050e35 ("tracing: Make trace_marker{,_raw} stream-like")
->>
->> which gets rid of the lock involved in the above test, *but* I cannot
->> convince myself the issue isn't there from looking at the code.
->>
->> Make prio_changed_dl() issue a reschedule if the current task isn't a
->> deadline one. While at it, ensure a reschedule is emitted when a
->> queued-but-not-current task gets boosted with an earlier deadline that
->> current's.
->
-> As discussed offline I agree this needs fixing, but .. :)
->
->> [1]: https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
->> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
->> ---
->>  kernel/sched/deadline.c | 45 ++++++++++++++++++++++++++---------------
->>  1 file changed, 29 insertions(+), 16 deletions(-)
->>
->> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
->> index 0d97d54276cc8..faa382ea084c1 100644
->> --- a/kernel/sched/deadline.c
->> +++ b/kernel/sched/deadline.c
->> @@ -2663,17 +2663,28 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
->>  static void prio_changed_dl(struct rq *rq, struct task_struct *p,
->>                          int oldprio)
->>  {
->> -	if (task_on_rq_queued(p) || task_current(rq, p)) {
->> -#ifdef CONFIG_SMP
->
-> Doesn't this break UP? Don't think earlierst_dl etc are defined in UP.
->
+>> Moreover it also breaks dt-schema, see 
+>> https://github.com/devicetree-org/dt-schema/issues/98
+> 
+> Yep the change totally broke on rebase, will fix it
+> 
+> Sorry for the noise.
 
-Indeed, I thought myself clever by getting rid of the ifdefs...
+N/p.
 
-> Thanks,
-> Juri
+You might want to check the sm8350 GPU patchset. I had to reorder DT nodes.
+
+-- 
+With best wishes
+Dmitry
 
