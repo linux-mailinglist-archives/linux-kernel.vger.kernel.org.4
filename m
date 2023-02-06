@@ -2,216 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C2768C6A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A4C68C69C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjBFTRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:17:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S230310AbjBFTRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjBFTRc (ORCPT
+        with ESMTP id S230282AbjBFTRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:17:32 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B43E2BF0A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:17:19 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id o13so12600158pjg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:17:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HFhCCF6KKc8jrwlIib3xYlcK52nQlU5i7JbQZG5xkXg=;
-        b=WIa7oPHbexPVvg4fvwaR9+kndrbroQz++TujaKD28jY2+pxf0hdMAI3dY/LgXNAy3r
-         Qf5FK0+I9qvhFLMOEo43LueGk5poqBnbYVUnXT0t+Ifb6XFaVyG+8AaZiyAEIC625pot
-         j5zoY+NWeNUrD6vp0+dFxCD4OHCRpwcVf1OmeWPxZ0zzz3Dg5GGORrCgUIr8PZ6IZ/o0
-         tYXlfjF+DeDK+Ae/lA0F56vFNv6gYkD75dK51ejHN3N6XhOMEpgwfYjHaSakMJ1mPjlV
-         e6Lun3AqirDzO4xjcq3dO84B13UX2cnUMP0NyznhT+WZgBIpwXLPOjTmfzCr+0vz16kW
-         iroA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HFhCCF6KKc8jrwlIib3xYlcK52nQlU5i7JbQZG5xkXg=;
-        b=akm935QYSrB4xN0u2DvG2bhwVqwj2Dk7QoAk5QMdK0t7Oj7F0L+HcD40xdWRdB3D7X
-         8G79jKIeqw655XKuI5kSdIHOCJpaSuAGpYzzHtYMLUCjuSCtkiAnAKz4I8RMs+oSFV8a
-         L8GPLNIZUzeVUSAlgObsDFOvBoto4EfNMa52MG208TSCA4ZBQtADC2NWREL1DM7BVJI+
-         ru45isKjusC4QnwIrr2y8x2m1GK6aG4Jg6piPIRsXJenWVP/pNRhjRpyERxoPP/S0BtO
-         3emsfHOKyXNcTknruyBFmNyaWJMNtYYsknzlLhfuCxsp91df6aqKxjTpf8KM3YaEv8P4
-         q4tw==
-X-Gm-Message-State: AO0yUKUfKQUMEfmgQkQrcvVWZHyzZ+5LgJdPuQw1h/2w2offSVVL6SLe
-        C07bDMPMIycfg6ilzNK/WUvgoVXJzWP0xrYagqsAuw==
-X-Google-Smtp-Source: AK7set9Bd4y8RazRLw+FgG1fYKluMFeh9bpugxhLYn9uSsK9r462sJPsTzLTYkh/jbCi2pN9gIlAXA1PsRLtyiap9CM=
-X-Received: by 2002:a17:90a:3d01:b0:230:8961:22c1 with SMTP id
- h1-20020a17090a3d0100b00230896122c1mr167548pjc.95.1675711038558; Mon, 06 Feb
- 2023 11:17:18 -0800 (PST)
+        Mon, 6 Feb 2023 14:17:17 -0500
+Received: from omta37.uswest2.a.cloudfilter.net (omta37.uswest2.a.cloudfilter.net [35.89.44.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6559F23107
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:16:56 -0800 (PST)
+Received: from eig-obgw-6015a.ext.cloudfilter.net ([10.0.30.134])
+        by cmsmtp with ESMTP
+        id OrWtp5qrnYHR1P6z1pSP9Y; Mon, 06 Feb 2023 19:16:55 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTP
+        id P6z0pvLNPSogtP6z1pXsPW; Mon, 06 Feb 2023 19:16:55 +0000
+X-Authority-Analysis: v=2.4 cv=Ov5cdgzt c=1 sm=1 tr=0 ts=63e15227
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10
+ a=wYkD_t78qR0A:10 a=UlVX6gWz2MDTxooHeI4A:9 a=QEXdDO2ut3YA:10
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1ObxFuiXqXpyZXTg1dGdS/FIxrV/Q7eEElLE6od08UE=; b=udDrHuHpv7MF7SH93SgyDTv2xC
+        jBTuMCI22NGTAOGSsjc1k8SLVfZiYWEt6kinXuB8N4+MaPcqPVDN+WNtdCYRdDKCBcIny7wV2jT2Z
+        uzBKdTnKPz0ptRsEMRfRHrQM2o7b+9vUjDWDOSfoqFXj/TSamsA+mwGp2sJBdQllFao+vMfgPrten
+        oe/eQOKO2kaueD1bkH5xtPDEJQUSGuq8hkvDFiFO6ciQN+WHomDq7AShpPSNIzMRtm0PjCxBrujl3
+        IkikvflaRyjVUmndcV0ebPXvZmjnuNgGSTtu3HSeS/GjlgDHpRSBh6BBEAk2krgt8JBcBPnCuCs7k
+        nitx9XfA==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:58048 helo=[192.168.15.7])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1pP6z0-0015W0-Bv;
+        Mon, 06 Feb 2023 13:16:54 -0600
+Message-ID: <f6bec0de-3d6d-6d59-5ef3-2903f40451d3@embeddedor.com>
+Date:   Mon, 6 Feb 2023 13:17:14 -0600
 MIME-Version: 1.0
-References: <20230204183241.never.481-kees@kernel.org> <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
- <63e14abb.170a0220.ca425.b7bc@mx.google.com>
-In-Reply-To: <63e14abb.170a0220.ca425.b7bc@mx.google.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 6 Feb 2023 11:17:06 -0800
-Message-ID: <CAKH8qBtX0HU4_YtnZ3hU4NhGHSQ9VU70niXFFoqf3k67a1+6aA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
- flexible array
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH][next] xfs: Replace one-element arrays with flexible-array
+ members
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Dave Chinner <david@fromorbit.com>
+References: <Y9xiYmVLRIKdpJcC@work>
+ <63dd4a37.630a0220.e4652.35de@mx.google.com>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <63dd4a37.630a0220.e4652.35de@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1pP6z0-0015W0-Bv
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:58048
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfPPJ1fHbB1JldO9brUBBWp0iOPYzTZ5HJ2XzC6CAiwv//AWIKvkeuVwBN78SZrDfNmGJv6LXvEfziRsNzPBi0pSdpgJAEQTiT4nTO6jh2AtUyKDKtNXG
+ jKrkxreb0v0FjV4qwKHsCWaHp6k3W67OFchhtYC4k15PmwoDKgCTnMHVjFMBww1u0cIpf7+E+CcmZMAGgsWMQ2G2adN+qNI76em4i2MP4MngkNfEe3au+51X
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 10:45 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Feb 06, 2023 at 09:52:17AM -0800, Stanislav Fomichev wrote:
-> > On Sat, Feb 4, 2023 at 10:32 AM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > Replace deprecated 0-length array in struct bpf_lpm_trie_key with
-> > > flexible array. Found with GCC 13:
-> > >
-> > > ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
-> > >   207 |                                        *(__be16 *)&key->data[i]);
-> > >       |                                                   ^~~~~~~~~~~~~
-> > > ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
-> > >   102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-> > >       |                                                      ^
-> > > ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
-> > >    97 | #define be16_to_cpu __be16_to_cpu
-> > >       |                     ^~~~~~~~~~~~~
-> > > ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
-> > >   206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
-> > > ^
-> > >       |                            ^~~~~~~~~~~
-> > > In file included from ../include/linux/bpf.h:7:
-> > > ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
-> > >    82 |         __u8    data[0];        /* Arbitrary size */
-> > >       |                 ^~~~
-> > >
-> > > This includes fixing the selftest which was incorrectly using a
-> > > variable length struct as a header, identified earlier[1]. Avoid this
-> > > by just explicitly including the prefixlen member instead of struct
-> > > bpf_lpm_trie_key.
-> > >
-> > > [1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
-> > >
-> > > Cc: Alexei Starovoitov <ast@kernel.org>
-> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > > Cc: Song Liu <song@kernel.org>
-> > > Cc: Yonghong Song <yhs@fb.com>
-> > > Cc: John Fastabend <john.fastabend@gmail.com>
-> > > Cc: KP Singh <kpsingh@kernel.org>
-> > > Cc: Stanislav Fomichev <sdf@google.com>
-> > > Cc: Hao Luo <haoluo@google.com>
-> > > Cc: Jiri Olsa <jolsa@kernel.org>
-> > > Cc: Mykola Lysenko <mykolal@fb.com>
-> > > Cc: Shuah Khan <shuah@kernel.org>
-> > > Cc: Haowen Bai <baihaowen@meizu.com>
-> > > Cc: bpf@vger.kernel.org
-> > > Cc: linux-kselftest@vger.kernel.org
-> > > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > > ---
-> > >  include/uapi/linux/bpf.h                         | 2 +-
-> > >  tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > index ba0f0cfb5e42..5930bc5c7e2c 100644
-> > > --- a/include/uapi/linux/bpf.h
-> > > +++ b/include/uapi/linux/bpf.h
-> > > @@ -79,7 +79,7 @@ struct bpf_insn {
-> > >  /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-> > >  struct bpf_lpm_trie_key {
-> > >         __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
-> > > -       __u8    data[0];        /* Arbitrary size */
-> > > +       __u8    data[];         /* Arbitrary size */
-> > >  };
-> >
-> > That's a UAPI change, can we do it? The safest option is probably just
-> > to remove this field if it's causing any problems (and not do the
-> > map_ptr_kern.c change below).
->
-> The problem was seen because "data" is used by the kernel (see the
-> compiler warning above). But if it can be removed, sure, that works too,
-> and it much nicer since the resulting structs would have fixed sizes.
 
-I guess I still don't understand why we need the change in map_ptr_kern.c?
 
-Re-reading the description:
+On 2/3/23 11:53, Kees Cook wrote:
+> On Thu, Feb 02, 2023 at 07:24:50PM -0600, Gustavo A. R. Silva wrote:
+>> One-element arrays are deprecated, and we are replacing them with flexible
+>> array members instead. So, replace one-element arrays with flexible-array
+>> members in structures xfs_attr_leaf_name_local and
+>> xfs_attr_leaf_name_remote.
+>>
+>> The only binary differences reported after the changes are all like
+>> these:
+>>
+>> fs/xfs/libxfs/xfs_attr_leaf.o
+>> _@@ -435,7 +435,7 @@
+>>        3b8:      movzbl 0x2(%rbx),%eax
+>>        3bc:      rol    $0x8,%bp
+>>        3c0:      movzwl %bp,%ebp
+>> -     3c3:      lea    0x2(%rax,%rbp,1),%ebx
+>> +     3c3:      lea    0x3(%rax,%rbp,1),%ebx
+>>        3c7:      call   3cc <xfs_attr_leaf_entsize+0x8c>
+>>                          3c8: R_X86_64_PLT32     __tsan_func_exit-0x4
+>>        3cc:      or     $0x3,%ebx
+>> _@@ -454,7 +454,7 @@
+>>        3ea:      movzbl 0x8(%rbx),%ebx
+>>        3ee:      call   3f3 <xfs_attr_leaf_entsize+0xb3>
+>>                          3ef: R_X86_64_PLT32     __tsan_func_exit-0x4
+>> -     3f3:      add    $0xa,%ebx
+>> +     3f3:      add    $0xb,%ebx
+>>        3f6:      or     $0x3,%ebx
+>>        3f9:      add    $0x1,%ebx
+>>        3fc:      mov    %ebx,%eax
+>>
+>> similar changes in fs/xfs/scrub/attr.o and fs/xfs/xfs.o object files.
+> 
+> I usually turn off the sanitizers for the A/B build comparisons to make
 
-> > > This includes fixing the selftest which was incorrectly using a
-> > > variable length struct as a header, identified earlier[1].
+Oh yes! that's a good point. I'll see that they are turned off next time. :)
 
-It's my understanding that it's the intended use-case. Users are
-expected to use this struct as a header; at least we've been using it
-that way :-)
+> it easier to read the results. It looks like it _grew_ in size here,
+> though?
 
-For me, both return the same:
-sizeof(struct { __u32 prefix; __u8 data[0]; })
-sizeof(struct { __u32 prefix; __u8 data[]; })
+Yep; I'm sorry I got it wrong. :/ I had it right in the beginning, then after
+reading the code once again just before sending out a version of this patch
+with only the flex-array transformations, I noticed the entsize functions and
+the "sizeof(struct-with-one-element-array) - 1" and I forgot about the padding,
+removed the "- 1" and got a bit confused with my build-tests.
 
-So let's do s/data[0]/data[]/ in the UAPI only? What's wrong with
-using this struct as a header?
+I'll send v2 with my original changes... the flex-array transformations, only.
 
-> > The usual use-case (at least that's what we do) is to define some new
-> > struct over it:
-> >
-> > struct my_key {
-> >   struct bpf_lpm_trie_key prefix;
-> >   int a, b, c;
-> > };
-> >
-> > So I really doubt that the 'data' is ever touched by any programs at all..
->
-> Horrible alternative:
->
-> struct my_key {
->     union {
->         struct bpf_lpm_trie_key trie;
->         struct {
->             u8 header[sizeof(struct bpf_lpm_trie_key)];
->             int a, b, c;
->         };
->     };
-> };
->
-> Perhaps better might be:
->
-> struct bpf_lpm_trie_key {
->     __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
-> };
->
-> struct bpf_lpm_trie_key_raw {
->     struct bpf_lpm_trie_key_prefix prefix;
->     u8 data[];
-> };
->
-> struct my_key {
->     struct bpf_lpm_trie_key_prefix prefix;
->     int a, b, c;
-> };
->
-> Thoughts?
->
-> --
-> Kees Cook
+--
+Gustavo
