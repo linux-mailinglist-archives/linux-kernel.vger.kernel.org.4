@@ -2,118 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C220F68C098
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E558468C0CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjBFO5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S230515AbjBFO6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjBFO5A (ORCPT
+        with ESMTP id S230289AbjBFO6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:57:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ADE166D1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:56:58 -0800 (PST)
-Date:   Mon, 6 Feb 2023 15:56:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675695416;
+        Mon, 6 Feb 2023 09:58:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376011A4A9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:57:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675695434;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qDujTEnegc8pi7+IQ4fzDNueUc4Fzk0Yx9FbbxF0L5c=;
-        b=PoO4FoelGMf6VzNr3vZVX+oYMvdS7wdpkcP4188MKSosfennt1i+ejyDHwAxWWnmFnRmi2
-        HmghgRRnw5/prls2k+DP7U/mfI/Sue0ZN/3IwsXS6u+taLYSEGEeEBhflBtCi/DIRy+dd8
-        49IdomJl3HaBRbQ5oQP8FdQenL7X750A0LMWbvw1D59PTbzSlZ87g+Bf4MKGpIkYgj2ePq
-        TsQXgvzQZOtLD7uuz0pYm8qxt2nkFTdQsoP1yVdF5oazfCeBY7CSVEYPCnHOfxsZAcYIBA
-        8kNM05+BFmETYZmH+8HCP1S84/+FBCCbMmfhBdVTkZHUWGl3UEKbUQq/vMc7Jw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675695416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qDujTEnegc8pi7+IQ4fzDNueUc4Fzk0Yx9FbbxF0L5c=;
-        b=SozKxp4L52cbBpcMsGRizja0MfBC5l+WI0sVR3hJaQK+QXwKjQdFBG+7bLhOQBxSDm/woY
-        8nRHeGQZnAgNqmDA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hu Chunyu <chuhu@redhat.com>, Oleg Nesterov <oleg@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>
-Subject: Re: [PATCH v4] kernel/fork: beware of __put_task_struct calling
- context
-Message-ID: <Y+EVNz4ORkFSvTfP@linutronix.de>
-References: <20230206130449.41360-1-wander@redhat.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rIgTA2Xmbd7t9d8F++MfN6g4uGoF/RD+Mu3OeUMvfvg=;
+        b=hrE9BSF/gePk1gmd3S1fCikixyUgykwGXx9TP1tCD0zpWpL9BlgEu7OScNMUa70QBxuUVV
+        HNe0T/ORJ7oHBHQyZXtSNb4HtXnTndOr0YKcrzZ7cl3Z2u1mGPhGW7U1uAuPgUKgwA/QKN
+        QqagBXwaL68ecA4Jj3t5/S+4m25N0NM=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-542-JmjeXgV9M1mFN0NrVlH90Q-1; Mon, 06 Feb 2023 09:57:05 -0500
+X-MC-Unique: JmjeXgV9M1mFN0NrVlH90Q-1
+Received: by mail-qk1-f197.google.com with SMTP id 130-20020a370588000000b0072fcbe20069so4993923qkf.22
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:57:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rIgTA2Xmbd7t9d8F++MfN6g4uGoF/RD+Mu3OeUMvfvg=;
+        b=16uno0mggU/5wu/3jDaNduOHH+xuT41Nmb2aVUp8c21CWCh0VXe2872vNXw1Ll3RbT
+         YL635ythNm2c/2nIFN3cvfcdERni50SBcMrS+f6btoolCGm4iCWg1GT4hpuLU0SH+wLO
+         nBPuoVXkr2KZl3joi7DIv87nugZabmlwpcOKzfjCpGs6b6JEaUWz9R664k9Ex3Mdrokh
+         ytvoppmbglTzmbpvYbmr4+zSaSSOKNZ6bsoW1g0VSU/ll4QXaiGzQCxGWj39deFt7mDe
+         0bTacGvvWA037SJna4nh2amhrpz7RaG+VMo+Re+meQxKd4w1PmzG+z9dW82aS79amfBs
+         ki7g==
+X-Gm-Message-State: AO0yUKVhKM0OU0F3OmNU3EVbTsc9hZaEPMoCm2AgKH+Fs3Z0IoYfWpfl
+        9IWXUdPAMqwdFpnp6PTDqxEf5Mjm8Hxt1CKb8P/z7fpX5kKiWIHl/NOcD3xelwJSGSBYKuxvtg3
+        bcr2ZA1JmLzN8e1ZBhhsCMJ7g
+X-Received: by 2002:ac8:5ac6:0:b0:3b8:6a92:c8d6 with SMTP id d6-20020ac85ac6000000b003b86a92c8d6mr37832277qtd.60.1675695425195;
+        Mon, 06 Feb 2023 06:57:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set92cIxYT5bIs41crQz1jVBZ7Rd6XKPaRwbA6dH+JROdrZzl5nc/0WhArHdGNyKIkJmZD6GDdA==
+X-Received: by 2002:ac8:5ac6:0:b0:3b8:6a92:c8d6 with SMTP id d6-20020ac85ac6000000b003b86a92c8d6mr37832250qtd.60.1675695424964;
+        Mon, 06 Feb 2023 06:57:04 -0800 (PST)
+Received: from localhost.localdomain.com (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id x5-20020a05620a0b4500b00731a76883basm4117666qkg.101.2023.02.06.06.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 06:57:04 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     hare@suse.de, kbusch@kernel.org, axboe@fb.com, hch@lst.de,
+        sagi@grimberg.me
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] nvme-auth: set nvme_auth_wq storage-class-specifier to static
+Date:   Mon,  6 Feb 2023 06:57:00 -0800
+Message-Id: <20230206145700.1798073-1-trix@redhat.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230206130449.41360-1-wander@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-06 10:04:47 [-0300], Wander Lairson Costa wrote:
-> Under PREEMPT_RT, __put_task_struct() indirectly acquires sleeping
-> locks. Therefore, it can't be called from an non-preemptible context.
->=20
-> One practical example is splat inside inactive_task_timer(), which is
-> called in a interrupt context:
+smatch reports
+drivers/nvme/host/auth.c:48:25: warning: symbol 'nvme_auth_wq' was not declared. Should it be static?
 
-Do you have more?
-The inactive_task_timer() is marked as HRTIMER_MODE_REL_HARD which means
-in runs in hardirq-context. The author of commit
-   850377a875a48 ("sched/deadline: Ensure inactive_timer runs in hardirq co=
-ntext")
+nvme_auth_wq is only used in auth.c, so it should be static.
 
-should have been aware of that.
-We have on workaround of that put_task() in sched-switch. I wasn't aware
-of this shortcoming. So either we have more problems or potential
-problems or this is the only finding so far.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/nvme/host/auth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 9f7fe3541897..532dd2ceb6a3 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -857,6 +857,29 @@ void __put_task_struct(struct task_struct *tsk)
-=E2=80=A6
-> +void __put_task_struct(struct task_struct *tsk)
-> +{
-> +	if (IS_ENABLED(CONFIG_PREEMPT_RT) && (!preemptible() || !in_task()))
+diff --git a/drivers/nvme/host/auth.c b/drivers/nvme/host/auth.c
+index b57630d1d3b8..bdb97496ba2d 100644
+--- a/drivers/nvme/host/auth.c
++++ b/drivers/nvme/host/auth.c
+@@ -45,7 +45,7 @@ struct nvme_dhchap_queue_context {
+ 	int sess_key_len;
+ };
+ 
+-struct workqueue_struct *nvme_auth_wq;
++static struct workqueue_struct *nvme_auth_wq;
+ 
+ #define nvme_auth_flags_from_qid(qid) \
+ 	(qid == 0) ? 0 : BLK_MQ_REQ_NOWAIT | BLK_MQ_REQ_RESERVED
+-- 
+2.26.3
 
-Is it safe to use the rcu member in any case? If so why not use it
-unconditionally?
-
-> +		/*
-> +		 * under PREEMPT_RT, we can't call put_task_struct
-> +		 * in atomic context because it will indirectly
-> +		 * acquire sleeping locks.
-> +		 *
-> +		 * call_rcu() will schedule delayed_put_task_struct_rcu()
-> +		 * to be called in process context.
-> +		 */
-> +		call_rcu(&tsk->rcu, delayed_put_task_struct_rcu);
-> +	else
-> +		___put_task_struct(tsk);
-> +}
->  EXPORT_SYMBOL_GPL(__put_task_struct);
-> =20
->  void __init __weak arch_task_cache_init(void) { }
-
-Sebastian
