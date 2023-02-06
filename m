@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7472A68BBE4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:42:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2496268BBE6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjBFLmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S229987AbjBFLms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBFLml (ORCPT
+        with ESMTP id S229561AbjBFLmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:42:41 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F3565B0;
-        Mon,  6 Feb 2023 03:42:38 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3166KBHh003454;
-        Mon, 6 Feb 2023 11:42:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2AkN329K6J+91VYzBSNBGV3qS2/+ZXQLtTRYt0TZRG0=;
- b=YP6o5PT6XaAgW6lBHHMXOlQCramnKS0OKaQp05U3WakVK8Ze51EK+3YpqqDg0HOZa+V9
- dFddCWdfN1LTbB7tKNBNAYk8DjvxiUXdTODn2FG0wFuJpEVGq7EpikRVVjmXqYFfPgbV
- MH1xZPBmNQnJx0VBjkRKQY5S5nvEyCsK9IjE1w8+sPYpEm44tbm5bEqeJXwWwIN1BlAZ
- IhQy6zc1nG55WIHk886qaIHqkb6mE/pJNhyyKWTIq0acPaN9wscvST4HERYPSg1urSL6
- KFN2y5DSo3qQHrCUll1kU3uKE4xiFndGvA7XF8TP4uq8nuFokSQAhMfIeE4DdTx/E1FZ oA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhff2kjue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 11:42:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 316BgIC1005857
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Feb 2023 11:42:18 GMT
-Received: from [10.50.19.98] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 03:42:11 -0800
-Message-ID: <b5f08d0b-6009-39bb-1819-322a8dc056c4@quicinc.com>
-Date:   Mon, 6 Feb 2023 17:12:08 +0530
+        Mon, 6 Feb 2023 06:42:44 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CA91DBAA
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:42:42 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so10561846wma.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:42:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mcLZp+bwHljE1RPuf6xDhCdiFhlDxm+3HKZwHetgGw=;
+        b=S1/cNS9JWmRCZjJP0bvEApYHgfPv/5Mq/zmU04VMCzjhe03zfE/kTViHbevV8VeLFR
+         VVZOmmsX8Vj+MgINVGGJ5zj1Xo/DQKz2nWCWBoMT0t1iiwlchcu4Aw8A2Y9YTE6o/FH2
+         wL2NXNHmCI9o/ISJc8HzhjPHGlauMuGSNVUZN3ZrQLw/8cLzLL97c1R72iH+jaoxkJLV
+         dzf96GbhIS+qtyumbaTEEvVjuhLwHUgQPwFwtD02wG59fmo7DHGzAJPwTbCCvkAmQniN
+         RmQ3W3VoE3Z37TcraP0c5v4olmO01gXh3ukNu80/tDe/eg1VVi6VKhQjvs+tInOAAK/R
+         5Yig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5mcLZp+bwHljE1RPuf6xDhCdiFhlDxm+3HKZwHetgGw=;
+        b=Vp9QD82w6BzlXVw/yYAwwLetn0OgpYJO+sBO/cRfuqKCqfCqZKJ5MiP045JIFCHMT9
+         irCpr2iLmdHikCTZAna6p2b7K1sMcMjWnlK/iMCPE+svX2smgkiNPHaR3kMPw0NuCUaB
+         jfFsOo0ACHIiL7VL9k/UQtWgMhYhnCpXXHPsNU3Su6HgzEcxOuSpb3EGkKGj3N/T6nOX
+         6VJanlfgWWJ6tGcE56FHHnrD2CwIYspiFhancxp5KVWR6UE6SXHqvAmo3tQtmevQGkih
+         Uesc/Nm7lo0AuAgXfllT6DwPjwPlZcuhY86e4DwMbXscndaFyiKhbQzhGtxrEWTE9Y3K
+         dNTQ==
+X-Gm-Message-State: AO0yUKVOthV/z7est5FFMZ55pbebi0Ug4U+G65N2eC8qrg4zVDwyx4JV
+        bnnlnXNePfUBQfAlCPxkY3qMBg==
+X-Google-Smtp-Source: AK7set/0e8rb0pkCcbZULGmSmISHb9E98R7iG5wsZXc2LS2PbucXN5Ox8X2GEu4jmltN0YSmz+C+0g==
+X-Received: by 2002:a05:600c:1d99:b0:3dc:d5c:76d9 with SMTP id p25-20020a05600c1d9900b003dc0d5c76d9mr20747824wms.0.1675683761383;
+        Mon, 06 Feb 2023 03:42:41 -0800 (PST)
+Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id z17-20020a7bc7d1000000b003dc3f07c876sm16116888wmk.46.2023.02.06.03.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 03:42:40 -0800 (PST)
+Date:   Mon, 6 Feb 2023 11:42:39 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] backlight: hx8357: stop using of-specific APIs
+Message-ID: <Y+Dnr7bzJ7XDdXH1@aspen.lan>
+References: <20230131225707.3599889-1-dmitry.torokhov@gmail.com>
+ <20230131225707.3599889-2-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V3 0/9] Add minimal boot support for IPQ5332
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <dmitry.baryshkov@linaro.org>, <marcel.ziswiler@toradex.com>,
-        <nfraprado@collabora.com>, <robimarko@gmail.com>,
-        <quic_gurus@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <quic_varada@quicinc.com>,
-        <quic_srichara@quicinc.com>
-References: <20230206071217.29313-1-quic_kathirav@quicinc.com>
- <CACRpkdbtEFCSKX8VcD9bAZLy-PYfwVCRKYwXJmh0hnK2Nroq0A@mail.gmail.com>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <CACRpkdbtEFCSKX8VcD9bAZLy-PYfwVCRKYwXJmh0hnK2Nroq0A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: iWipT9JYFiain5QlH-cLgyurHdlkRwe6
-X-Proofpoint-GUID: iWipT9JYFiain5QlH-cLgyurHdlkRwe6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_05,2023-02-06_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- spamscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=900
- suspectscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302060100
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131225707.3599889-2-dmitry.torokhov@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 31, 2023 at 02:57:07PM -0800, Dmitry Torokhov wrote:
+> There is no need for this driver to be OF-specific, so switch it to
+> use device_get_match_data() and stop including various of-related
+> headers.
+>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-On 2/6/2023 4:55 PM, Linus Walleij wrote:
-> Hi Kathiravan,
->
-> thanks for your patches!
->
-> On Mon, Feb 6, 2023 at 8:12 AM Kathiravan T <quic_kathirav@quicinc.com> wrote:
->
->> Kathiravan T (9):
->>    dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
->>    pinctrl: qcom: Introduce IPQ5332 TLMM driver
-> I have applied these two patches to the pin control tree for v6.3.
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
-Thanks a lot Linus!
-
-
->
-> I see no reason to wait for more review since Krzysztof acked the
-> bindings and the driver isn't invasive at all, any problems can certainly
-> be fixed up in-tree.
->
-> Yours,
-> Linus Walleij
+Daniel.
