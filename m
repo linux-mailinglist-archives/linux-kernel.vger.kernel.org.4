@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567BA68C2CB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D14E68C27C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjBFQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S231553AbjBFQHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:07:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbjBFQQN (ORCPT
+        with ESMTP id S231497AbjBFQHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:16:13 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD4513DDE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:15:43 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id b3so18385869lfv.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 08:15:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gaaFjZoa42Ja79jXUWSIIIkDl/uB+0HXTqjNFaP/4Tg=;
-        b=PHXmHsjX/NlR5cDMN2RZXkRFI2ufJcL6W7Vdt00g//qPDvm0Ro9mRustABPxwIlsoI
-         iYj03Nk1C2e7fP70gphUwsvAh6mPa87Z1tLjcubJHCeAJslgTFnHdzgEgo3Oz2O7gJeP
-         4gRLHbLZh2629Wkou7J5BkkeWj+LlCUf8bVD8=
+        Mon, 6 Feb 2023 11:07:18 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759822D146;
+        Mon,  6 Feb 2023 08:07:17 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-16332831ed0so15605574fac.10;
+        Mon, 06 Feb 2023 08:07:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gaaFjZoa42Ja79jXUWSIIIkDl/uB+0HXTqjNFaP/4Tg=;
-        b=hUT3NEe3PizE2cyk95vfl1ewCq70iSB9RYQxcXRrypJXqOTIUNw7IBzLbS3QHbnhmb
-         +n8V4KDMlc/CvEpTnxSUhhrrTauQw/ZgGDV4Ay1OA9TcT785Sl6KWIZr9XYh/Vf1ytsl
-         UpNb3h1T4gB3hXppYRElI++bcI06ljhsf0OiHMFjBlL9mvRJTIjWRIqhC9+o8iAwpWvc
-         qiTNO11exxj0kvsSvxz7U8DOL3PtntNYbnsYfwzdc2nX+e5JvQ9HN1+QxH/wWEkLu/DA
-         n70o3xsXatLZZUfBmeBEoOoTa8xQgFPkViQi5aToCCK53LhEpKzOl6i7YtF3c7zLJngW
-         tlEA==
-X-Gm-Message-State: AO0yUKVxPv8HAlfs8iWKIAWiHDV82rXTCAQj7x1yyGB8HCFzBoCsYpAr
-        Uuu5rfooElYldkd7gBw+wRUrrYijDDC5DvnU+2k=
-X-Google-Smtp-Source: AK7set/TkUM3+6I032cDhh6umurubUbygYRUlCfc+T1yuDfj5l97juW2rwl9pmVBhVhFbh/TyIq7GQ==
-X-Received: by 2002:a19:700a:0:b0:4a4:68b7:deb7 with SMTP id h10-20020a19700a000000b004a468b7deb7mr57486lfc.19.1675700141963;
-        Mon, 06 Feb 2023 08:15:41 -0800 (PST)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id bi32-20020a0565120ea000b004cc82b70809sm805634lfb.150.2023.02.06.08.15.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 08:15:41 -0800 (PST)
-Received: by mail-lf1-f45.google.com with SMTP id v17so18369511lfd.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 08:15:41 -0800 (PST)
-X-Received: by 2002:a17:906:892:b0:87a:7098:ca09 with SMTP id
- n18-20020a170906089200b0087a7098ca09mr5133989eje.78.1675699644119; Mon, 06
- Feb 2023 08:07:24 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XUYFUHd6K0M2VRLqa+pQ0iy4AsAh6s44qKhPHJX0uIM=;
+        b=AFbl5FDQSL4ZxtxDvZOoQLfqhPvSr2nqzTV1MyShV4bOw6pqhND0EHKd8IwrLgeEs6
+         5g4E8wTT7C0SI0PyQpL9PJ+1gy6ORUcUrqgKilO0zpkqvTb60XwnkpXlc5CjG2JczhKd
+         5/+dMnEFFu+iyf+mgE4cn8ix2akuYejpgrC3aCybfOTueDD2m5HGgL5bjXwqgsUVCNIf
+         +7Osm3mfcJY2ndLLER2Cp2//zCgIt9sHxGL5lIAxEY6mWTiRMrJRp4v10ENCxevLnHVj
+         0O+PQsuNgmLHPTqMghs2Eysal0oF6NgXPLPSBeOUcc7Kzf3DZzFDJMmvdET8sXcPCCb8
+         XVlQ==
+X-Gm-Message-State: AO0yUKX97AWCYotqQ2U50OqamMmBaSRlRduYLotDaZpxsh+LEazAMAev
+        76WTaCjVkkdBxGmwyo3PcQ==
+X-Google-Smtp-Source: AK7set8FTeOCEtJ39OQ7PP71M+KY8FxvIZVQjRY913T0OytVnPbTdf3sQqmUTHhKJlvWoDl2eSck+w==
+X-Received: by 2002:a05:6870:9706:b0:163:3283:f366 with SMTP id n6-20020a056870970600b001633283f366mr11056442oaq.24.1675699635269;
+        Mon, 06 Feb 2023 08:07:15 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t22-20020a056871055600b001600797d1b5sm4241889oal.41.2023.02.06.08.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 08:07:14 -0800 (PST)
+Received: (nullmailer pid 156485 invoked by uid 1000);
+        Mon, 06 Feb 2023 16:07:13 -0000
+Date:   Mon, 6 Feb 2023 10:07:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andreas Schwab <schwab@suse.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        linux-riscv@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: pinctrl: Add StarFive JH7110 sys
+ pinctrl
+Message-ID: <167569963291.156426.9284511556590253143.robh@kernel.org>
+References: <20230203141801.59083-1-hal.feng@starfivetech.com>
+ <20230203141801.59083-2-hal.feng@starfivetech.com>
 MIME-Version: 1.0
-References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
- <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com> <Y+EjmnRqpLuBFPX1@bombadil.infradead.org>
-In-Reply-To: <Y+EjmnRqpLuBFPX1@bombadil.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Feb 2023 08:07:07 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wg=6amjgu3UiJX8HcNN9z-jqCRg=P=T4ZytFap2fgAdgw@mail.gmail.com>
-Message-ID: <CAHk-=wg=6amjgu3UiJX8HcNN9z-jqCRg=P=T4ZytFap2fgAdgw@mail.gmail.com>
-Subject: Re: [PATCH v4] pipe: use __pipe_{lock,unlock} instead of spinlock
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Julia Lawall <julia.lawall@inria.fr>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maobibo <maobibo@loongson.cn>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203141801.59083-2-hal.feng@starfivetech.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,20 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 7:58 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> As for Linus' point about us needing to avoid sleep under RCU +
-> spinlock, curious if we can capture *existing* bad users of that with
-> Coccinelle SmPL.
 
-Well, we have it dynamically with the "might_sleep()" debugging. But
-that obviously only triggers if that is enabled and when those
-particular paths are run.
+On Fri, 03 Feb 2023 22:17:58 +0800, Hal Feng wrote:
+> From: Jianlong Huang <jianlong.huang@starfivetech.com>
+> 
+> Add pinctrl bindings for StarFive JH7110 SoC sys pinctrl controller.
+> 
+> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> ---
+>  .../pinctrl/starfive,jh7110-sys-pinctrl.yaml  | 141 ++++++++++++++++++
+>  MAINTAINERS                                   |   6 +-
+>  .../pinctrl/starfive,jh7110-pinctrl.h         | 115 ++++++++++++++
+>  3 files changed, 260 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+>  create mode 100644 include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
+> 
 
-It would be lovely to have a static checker for "sleep under spinlock
-or in RCU" (or any of the other situations: preemption disabled either
-explicitly or due to get_cpu() and similar).
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-But I suspect it would be quite hard to do.
-
-               Linus
