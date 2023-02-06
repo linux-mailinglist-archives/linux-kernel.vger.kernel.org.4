@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0B368B5D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F9C68B5D8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjBFGxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 01:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S229786AbjBFGxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 01:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjBFGxI (ORCPT
+        with ESMTP id S229592AbjBFGxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 01:53:08 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4389C7691;
-        Sun,  5 Feb 2023 22:53:06 -0800 (PST)
-Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P9H3262JJznW2L;
-        Mon,  6 Feb 2023 14:50:54 +0800 (CST)
+        Mon, 6 Feb 2023 01:53:10 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2969A768D;
+        Sun,  5 Feb 2023 22:53:07 -0800 (PST)
+Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P9H0F6GJczkXsZ;
+        Mon,  6 Feb 2023 14:48:29 +0800 (CST)
 Received: from localhost.localdomain (10.67.165.2) by
  dggpeml500019.china.huawei.com (7.185.36.137) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 6 Feb 2023 14:53:03 +0800
+ 15.1.2375.34; Mon, 6 Feb 2023 14:53:04 +0800
 From:   Jie Zhan <zhanjie9@hisilicon.com>
 To:     <will@kernel.org>, <mark.rutland@arm.com>,
         <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
@@ -37,9 +37,9 @@ CC:     <zhangshaokun@hisilicon.com>, <shenyang39@huawei.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-perf-users@vger.kernel.org>
-Subject: [RFC PATCH v1 3/4] perf tool: Add HiSilicon PMCU data recording support
-Date:   Mon, 6 Feb 2023 14:51:45 +0800
-Message-ID: <20230206065146.645505-4-zhanjie9@hisilicon.com>
+Subject: [RFC PATCH v1 4/4] perf tool: Add HiSilicon PMCU data decoding support
+Date:   Mon, 6 Feb 2023 14:51:46 +0800
+Message-ID: <20230206065146.645505-5-zhanjie9@hisilicon.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20230206065146.645505-1-zhanjie9@hisilicon.com>
 References: <20230206065146.645505-1-zhanjie9@hisilicon.com>
@@ -58,182 +58,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support for HiSilicon PMCU data recording using 'perf-record'.
-
-Users can start PMCU profiling through 'perf-record'. Event numbers are
-passed by a sysfs interface. The following optional parameters can be
-passed through 'perf-record':
-- nr_sample: number of samples to take
-- sample_period_ms: time in ms for PMU counters to stay on for an event
-- pmccfiltr: bits[31-24] of system register PMCCFILTR_EL0
+Support for dumping raw trace of HiSilicon PMCU data using 'perf-report'
+or 'perf-script'
 
 Example usage:
 
-1. Enter event numbers in the 'user_events' file:
+ # perf report -D
 
-	echo "0x10 0x11" > /sys/devices/hisi_pmcu_sccl3/user_events
+Output will contain the raw PMCU data with notes, such as:
 
-2. Start the sampling with 'perf-record':
+. ... HISI PMCU data: size 0x9630 bytes
+. ... Header: size 0x30 bytes
+.  00000000:  00 00 40 00 04 00 00 00 08 00 00 00 00 00 00 00
+.  00000010:  80 01 00 00 01 00 00 00 04 00 00 00 10 00 00 00
+.  00000020:  11 00 00 00 12 00 00 00 13 00 00 00 00 00 00 00
+.  Auxtrace buffer max size: 0x400000
+.  Number of PMU counters in parallel: 4
+.  Number of monitored CPUs: 8
+.  Compatible mode: no
+.  Subsample size: 0x180
+.  Number of subsamples per sample: 1
+.  Number of events: 4
+.  Event   0: 0x0010
+.  Event   1: 0x0011
+.  Event   2: 0x0012
+.  Event   3: 0x0013
+. ... Data: size 0x9600 bytes
+.  Sample 0
+.    Subsample 0
+.    00000030:  00000000            PMCID0SR CPU 0
+.    00000034:  00000000            PMCID0SR CPU 1
+.    00000038:  00000000            PMCID0SR CPU 2
+.    0000003c:  00000000            PMCID0SR CPU 3
+.    00000040:  00000000            PMCID0SR CPU 4
+.    00000044:  00000000            PMCID0SR CPU 5
+.    00000048:  00000000            PMCID0SR CPU 6
+.    0000004c:  00000000            PMCID0SR CPU 7
+.    00000050:  000000ba            PMCID1SR CPU 0
+.    00000054:  000056fe            PMCID1SR CPU 1
+.    00000058:  00000000            PMCID1SR CPU 2
+.    0000005c:  00000000            PMCID1SR CPU 3
+.    00000060:  00000195            PMCID1SR CPU 4
+.    00000064:  000056fc            PMCID1SR CPU 5
+.    00000068:  00000000            PMCID1SR CPU 6
+.    0000006c:  00000000            PMCID1SR CPU 7
+.    00000070:  0000000000000000    Event 0010 CPU 0
+.    00000078:  0000000000000000    Event 0010 CPU 1
+.    00000080:  0000000000000000    Event 0010 CPU 2
+.    00000088:  0000000000000000    Event 0010 CPU 3
+.    00000090:  0000000000000000    Event 0010 CPU 4
+.    00000098:  0000000000000001    Event 0010 CPU 5
+.    000000a0:  0000000000000000    Event 0010 CPU 6
+.    000000a8:  0000000000000000    Event 0010 CPU 7
+.    000000b0:  0000000000000000    Event 0011 CPU 0
+.    000000b8:  0000000000000000    Event 0011 CPU 1
+.    000000c0:  0000000000000000    Event 0011 CPU 2
+.    000000c8:  0000000000000000    Event 0011 CPU 3
+.    000000d0:  000000000000d614    Event 0011 CPU 4
+.    000000d8:  000000000000046b    Event 0011 CPU 5
+.    000000e0:  0000000000000000    Event 0011 CPU 6
+.    000000e8:  0000000000000000    Event 0011 CPU 7
+.    000000f0:  0000000000000000    Event 0012 CPU 0
+.    000000f8:  0000000000000000    Event 0012 CPU 1
+.    00000100:  0000000000000000    Event 0012 CPU 2
+.    00000108:  0000000000000000    Event 0012 CPU 3
+.    00000110:  00000000000000f4    Event 0012 CPU 4
+.    00000118:  0000000000000003    Event 0012 CPU 5
+.    00000120:  0000000000000000    Event 0012 CPU 6
+.    00000128:  0000000000000000    Event 0012 CPU 7
+.    00000130:  0000000000000000    Event 0013 CPU 0
+.    00000138:  0000000000000000    Event 0013 CPU 1
+.    00000140:  0000000000000000    Event 0013 CPU 2
+.    00000148:  0000000000000000    Event 0013 CPU 3
+.    00000150:  00000000000000f4    Event 0013 CPU 4
+.    00000158:  0000000000000004    Event 0013 CPU 5
+.    00000160:  0000000000000000    Event 0013 CPU 6
+.    00000168:  0000000000000000    Event 0013 CPU 7
+.    00000170:  000000000000d614    Cycle count CPU 0
+.    00000178:  000000000000d614    Cycle count CPU 1
+.    00000180:  0000000000000000    Cycle count CPU 2
+.    00000188:  0000000000000000    Cycle count CPU 3
+.    00000190:  000000000000d614    Cycle count CPU 4
+.    00000198:  000000000000d614    Cycle count CPU 5
+.    000001a0:  0000000000000000    Cycle count CPU 6
+.    000001a8:  0000000000000000    Cycle count CPU 7
+(...more data follows)
 
-	perf record -e hisi_pmcu_sccl3/nr_sample=1000,sample_period_ms=1/
-
-In this example, the PMCU takes 1000 samples of event 0x0010 and 0x0011
-with a sampling period of 1ms. Data will be written to a 'perf.data' file.
-
-Co-developed-by: Yang Shen <shenyang39@huawei.com>
-Signed-off-by: Yang Shen <shenyang39@huawei.com>
 Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
 ---
- tools/perf/arch/arm/util/auxtrace.c    |  61 +++++++++++
- tools/perf/arch/arm64/util/Build       |   2 +-
- tools/perf/arch/arm64/util/hisi-pmcu.c | 145 +++++++++++++++++++++++++
- tools/perf/util/auxtrace.h             |   1 +
- tools/perf/util/hisi-pmcu.h            |  17 +++
- 5 files changed, 225 insertions(+), 1 deletion(-)
- create mode 100644 tools/perf/arch/arm64/util/hisi-pmcu.c
- create mode 100644 tools/perf/util/hisi-pmcu.h
+ tools/perf/util/Build       |   1 +
+ tools/perf/util/auxtrace.c  |   4 +
+ tools/perf/util/hisi-pmcu.c | 305 ++++++++++++++++++++++++++++++++++++
+ tools/perf/util/hisi-pmcu.h |   2 +
+ 4 files changed, 312 insertions(+)
+ create mode 100644 tools/perf/util/hisi-pmcu.c
 
-diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
-index deeb163999ce..05307c325137 100644
---- a/tools/perf/arch/arm/util/auxtrace.c
-+++ b/tools/perf/arch/arm/util/auxtrace.c
-@@ -17,6 +17,7 @@
- #include "cs-etm.h"
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index e315ecaec323..e062a2c1b962 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -120,6 +120,7 @@ perf-$(CONFIG_AUXTRACE) += arm-spe.o
+ perf-$(CONFIG_AUXTRACE) += arm-spe-decoder/
+ perf-$(CONFIG_AUXTRACE) += hisi-ptt.o
+ perf-$(CONFIG_AUXTRACE) += hisi-ptt-decoder/
++perf-$(CONFIG_AUXTRACE) += hisi-pmcu.o
+ perf-$(CONFIG_AUXTRACE) += s390-cpumsf.o
+ 
+ ifdef CONFIG_LIBOPENCSD
+diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+index 46ada5ec3f9a..ac19220d307e 100644
+--- a/tools/perf/util/auxtrace.c
++++ b/tools/perf/util/auxtrace.c
+@@ -53,6 +53,7 @@
+ #include "intel-bts.h"
  #include "arm-spe.h"
  #include "hisi-ptt.h"
 +#include "hisi-pmcu.h"
+ #include "s390-cpumsf.h"
+ #include "util/mmap.h"
  
- static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
- {
-@@ -99,6 +100,52 @@ static struct perf_pmu **find_all_hisi_ptt_pmus(int *nr_ptts, int *err)
- 	return hisi_ptt_pmus;
- }
- 
-+static struct perf_pmu **find_all_hisi_pmcu_pmus(int *nr_pmcus, int *err)
-+{
-+	const char *sysfs = sysfs__mountpoint();
-+	struct perf_pmu **hisi_pmcu_pmus = NULL;
-+	struct dirent *dent;
-+	char path[PATH_MAX];
-+	DIR *dir = NULL;
-+	int idx = 0;
-+
-+	snprintf(path, PATH_MAX, "%s" EVENT_SOURCE_DEVICE_PATH, sysfs);
-+	dir = opendir(path);
-+	if (!dir) {
-+		pr_err("can't read directory '%s'\n", EVENT_SOURCE_DEVICE_PATH);
-+		*err = -EINVAL;
-+		return NULL;
-+	}
-+
-+	while ((dent = readdir(dir))) {
-+		if (strstr(dent->d_name, HISI_PMCU_PMU_NAME))
-+			(*nr_pmcus)++;
-+	}
-+
-+	if (!(*nr_pmcus))
-+		goto out;
-+
-+	hisi_pmcu_pmus = zalloc(sizeof(struct perf_pmu *) * (*nr_pmcus));
-+	if (!hisi_pmcu_pmus) {
-+		pr_err("hisi_pmcu alloc failed\n");
-+		*err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	rewinddir(dir);
-+	while ((dent = readdir(dir))) {
-+		if (strstr(dent->d_name, HISI_PMCU_PMU_NAME) && idx < *nr_pmcus) {
-+			hisi_pmcu_pmus[idx] = perf_pmu__find(dent->d_name);
-+			if (hisi_pmcu_pmus[idx])
-+				idx++;
-+		}
-+	}
-+
-+out:
-+	closedir(dir);
-+	return hisi_pmcu_pmus;
-+}
-+
- static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
- 					   int pmu_nr, struct evsel *evsel)
- {
-@@ -121,13 +168,16 @@ struct auxtrace_record
- 	struct perf_pmu	*cs_etm_pmu = NULL;
- 	struct perf_pmu **arm_spe_pmus = NULL;
- 	struct perf_pmu **hisi_ptt_pmus = NULL;
-+	struct perf_pmu **hisi_pmcu_pmus = NULL;
- 	struct evsel *evsel;
- 	struct perf_pmu *found_etm = NULL;
- 	struct perf_pmu *found_spe = NULL;
- 	struct perf_pmu *found_ptt = NULL;
-+	struct perf_pmu *found_pmcu = NULL;
- 	int auxtrace_event_cnt = 0;
- 	int nr_spes = 0;
- 	int nr_ptts = 0;
-+	int nr_pmcus = 0;
- 
- 	if (!evlist)
- 		return NULL;
-@@ -135,6 +185,7 @@ struct auxtrace_record
- 	cs_etm_pmu = perf_pmu__find(CORESIGHT_ETM_PMU_NAME);
- 	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
- 	hisi_ptt_pmus = find_all_hisi_ptt_pmus(&nr_ptts, err);
-+	hisi_pmcu_pmus = find_all_hisi_pmcu_pmus(&nr_pmcus, err);
- 
- 	evlist__for_each_entry(evlist, evsel) {
- 		if (cs_etm_pmu && !found_etm)
-@@ -145,10 +196,14 @@ struct auxtrace_record
- 
- 		if (hisi_ptt_pmus && !found_ptt)
- 			found_ptt = find_pmu_for_event(hisi_ptt_pmus, nr_ptts, evsel);
-+
-+		if (hisi_pmcu_pmus && !found_pmcu)
-+			found_pmcu = find_pmu_for_event(hisi_pmcu_pmus, nr_pmcus, evsel);
- 	}
- 
- 	free(arm_spe_pmus);
- 	free(hisi_ptt_pmus);
-+	free(hisi_pmcu_pmus);
- 
- 	if (found_etm)
- 		auxtrace_event_cnt++;
-@@ -159,6 +214,9 @@ struct auxtrace_record
- 	if (found_ptt)
- 		auxtrace_event_cnt++;
- 
-+	if (found_pmcu)
-+		auxtrace_event_cnt++;
-+
- 	if (auxtrace_event_cnt > 1) {
- 		pr_err("Concurrent AUX trace operation not currently supported\n");
- 		*err = -EOPNOTSUPP;
-@@ -174,6 +232,9 @@ struct auxtrace_record
- 
- 	if (found_ptt)
- 		return hisi_ptt_recording_init(err, found_ptt);
-+
-+	if (found_pmcu)
-+		return hisi_pmcu_recording_init(err, found_pmcu);
- #endif
- 
- 	/*
-diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/util/Build
-index 337aa9bdf905..daba9e6ae054 100644
---- a/tools/perf/arch/arm64/util/Build
-+++ b/tools/perf/arch/arm64/util/Build
-@@ -11,4 +11,4 @@ perf-$(CONFIG_LIBDW_DWARF_UNWIND) += unwind-libdw.o
- perf-$(CONFIG_AUXTRACE) += ../../arm/util/pmu.o \
- 			      ../../arm/util/auxtrace.o \
- 			      ../../arm/util/cs-etm.o \
--			      arm-spe.o mem-events.o hisi-ptt.o
-+			      arm-spe.o mem-events.o hisi-ptt.o hisi-pmcu.o
-diff --git a/tools/perf/arch/arm64/util/hisi-pmcu.c b/tools/perf/arch/arm64/util/hisi-pmcu.c
+@@ -1324,6 +1325,9 @@ int perf_event__process_auxtrace_info(struct perf_session *session,
+ 	case PERF_AUXTRACE_HISI_PTT:
+ 		err = hisi_ptt_process_auxtrace_info(event, session);
+ 		break;
++	case PERF_AUXTRACE_HISI_PMCU:
++		err = hisi_pmcu_process_auxtrace_info(event, session);
++		break;
+ 	case PERF_AUXTRACE_UNKNOWN:
+ 	default:
+ 		return -EINVAL;
+diff --git a/tools/perf/util/hisi-pmcu.c b/tools/perf/util/hisi-pmcu.c
 new file mode 100644
-index 000000000000..7c33abf1182d
+index 000000000000..7e0b41cd464d
 --- /dev/null
-+++ b/tools/perf/arch/arm64/util/hisi-pmcu.c
-@@ -0,0 +1,145 @@
++++ b/tools/perf/util/hisi-pmcu.c
+@@ -0,0 +1,305 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * HiSilicon Performance Monitor Control Unit (PMCU) support
@@ -241,179 +200,315 @@ index 000000000000..7c33abf1182d
 + * Copyright (C) 2022 HiSilicon Limited
 + */
 +
-+#include <linux/kernel.h>
-+#include <linux/log2.h>
++#include <errno.h>
++#include <linux/math.h>
 +#include <linux/types.h>
 +#include <linux/zalloc.h>
-+#include <time.h>
-+#include <math.h>
++#include <perf/event.h>
++#include <stdlib.h>
++#include <unistd.h>
++
++#include "auxtrace.h"
++#include "color.h"
++#include "debug.h"
++#include "event.h"
++#include "evsel.h"
++#include "hisi-pmcu.h"
++#include "session.h"
++#include "tool.h"
 +#include <internal/lib.h>
-+#include <internal/threadmap.h>
 +
-+#include "../../../util/auxtrace.h"
-+#include "../../../util/debug.h"
-+#include "../../../util/event.h"
-+#include "../../../util/evlist.h"
-+#include "../../../util/hisi-pmcu.h"
-+#include "../../../util/pmu.h"
-+#include "../../../util/record.h"
-+#include "../../../util/session.h"
-+#include "../../../util/thread_map.h"
++#define HISI_PMCU_AUX_HEADER_ALIGN	0x10
++#define HISI_PMCU_NR_CPU_CLUSTER	8
++#define dump_print(fmt, ...) \
++	color_fprintf(stdout, PERF_COLOR_BLUE, fmt, ##__VA_ARGS__)
 +
-+#define KiB(x) ((x) * 1024)
-+#define MiB(x) ((x) * 1024 * 1024)
-+#define HISI_PMCU_DATA_ALIGNMENT	4
-+
-+struct hisi_pmcu_record {
-+	struct auxtrace_record itr;
-+	struct perf_pmu *hisi_pmcu_pmu;
-+	struct evlist *evlist;
++enum hisi_pmcu_auxtrace_header_index {
++	HISI_PMCU_HEADER_BUFFER_SIZE,
++	HISI_PMCU_HEADER_NR_PMU,
++	HISI_PMCU_HEADER_NR_CPU,
++	HISI_PMCU_HEADER_COMP_MODE,
++	HISI_PMCU_HEADER_SUBSAMPLE_SIZE,
++	HISI_PMCU_HEADER_NR_SUBSAMPLE_PER_SAMPLE,
++	HISI_PMCU_HEADER_NR_EVENT,
++	HISI_PMCU_HEADER_MAX
 +};
 +
-+static int hisi_pmcu_recording_options(struct auxtrace_record *itr,
-+				       struct evlist *evlist,
-+				       struct record_opts *opts)
++struct hisi_pmcu_aux_header_info {
++	u32 buffer_size;
++	u32 nr_pmu;
++	u32 nr_cpu;
++	u32 comp_mode;
++	u32 subsample_size;
++	u32 nr_subsample_per_sample;
++	u32 nr_event;
++	u32 events[];
++};
++
++struct hisi_pmcu_process {
++	u32 pmu_type;
++	struct auxtrace auxtrace;
++	struct hisi_pmcu_aux_header_info *header;
++};
++
++static int hisi_pmcu_process_event(struct perf_session *session __maybe_unused,
++				   union perf_event *event __maybe_unused,
++				   struct perf_sample *sample __maybe_unused,
++				   struct perf_tool *tool __maybe_unused)
 +{
-+	struct hisi_pmcu_record *pmcu_record =
-+			container_of(itr, struct hisi_pmcu_record, itr);
-+	struct perf_pmu *hisi_pmcu_pmu = pmcu_record->hisi_pmcu_pmu;
-+	struct evsel *hisi_pmcu_evsel = NULL;
-+	struct evsel *evsel;
++	return 0;
++}
 +
-+	if (!perf_event_paranoid_check(-1))
-+		return -EPERM;
++static int hisi_pmcu_process_header(struct hisi_pmcu_process *pmcu,
++				    const unsigned char *__data, u64 size)
++{
++	struct hisi_pmcu_aux_header_info *header;
++	const u32 *data = (const u32 *) __data;
++	unsigned int i, j;
++	u32 read_size;
 +
-+	pmcu_record->evlist = evlist;
-+	evlist__for_each_entry(evlist, evsel) {
-+		if (evsel->core.attr.type == hisi_pmcu_pmu->type) {
-+			if (hisi_pmcu_evsel) {
-+				pr_err("Only one event allowed on a PMCU\n");
-+				return -EINVAL;
++	read_size = HISI_PMCU_HEADER_MAX * sizeof(*data);
++	if (size < read_size)
++		return -EINVAL;
++
++	read_size += data[HISI_PMCU_HEADER_NR_EVENT] * sizeof(*data);
++	if (size < read_size)
++		return -EINVAL;
++
++	pmcu->header = malloc(read_size);
++	header = pmcu->header;
++	memcpy(header, data, read_size);
++	read_size = round_up(read_size, HISI_PMCU_AUX_HEADER_ALIGN);
++
++	dump_print(". ... Header: size 0x%lx bytes\n", read_size);
++	for (i = 0; i < read_size; i += HISI_PMCU_AUX_HEADER_ALIGN) {
++		dump_print(".  %08lx:  ", i);
++		for (j = 0; j < HISI_PMCU_AUX_HEADER_ALIGN; j++)
++			dump_print("%02x ", __data[i + j]);
++		dump_print("\n");
++	}
++
++	dump_print(".  Auxtrace buffer max size: 0x%lx\n", header->buffer_size);
++	dump_print(".  Number of PMU counters in parallel: %d\n", header->nr_pmu);
++	dump_print(".  Number of monitored CPUs: %d\n", header->nr_cpu);
++	dump_print(".  Compatible mode: %s\n", header->comp_mode ? "yes" : "no");
++	dump_print(".  Subsample size: 0x%lx\n", header->subsample_size);
++	dump_print(".  Number of subsamples per sample: %d\n", header->nr_subsample_per_sample);
++	dump_print(".  Number of events: %d\n", header->nr_event);
++
++	for (i = 0; i < header->nr_event; i++)
++		dump_print(".  Event %3d: 0x%04x\n", i, header->events[i]);
++
++	return read_size;
++}
++
++static int hisi_pmcu_dump_subsample(struct hisi_pmcu_aux_header_info *header,
++				    const unsigned char *data, u64 offset,
++				    u32 evoffset)
++{
++	int nr_cluster, core, cid, i;
++	u32 pos = 0, event;
++
++	nr_cluster = header->nr_cpu / HISI_PMCU_NR_CPU_CLUSTER;
++
++	for (cid = 0; cid < 2; cid++) {
++		for (core = 0; core < HISI_PMCU_NR_CPU_CLUSTER; core++) {
++			for (i = 0; i < nr_cluster; i++) {
++				dump_print(".    %08lx:  %08lx            PMCID%dSR CPU %d\n",
++					   offset + pos, *(u32 *) (data + pos),
++					   cid,
++					   core + i * HISI_PMCU_NR_CPU_CLUSTER);
++				pos += sizeof(u32);
 +			}
-+			evsel->core.attr.sample_period = 1;
-+			evsel->core.attr.freq = false;
-+			evsel->needs_auxtrace_mmap = true;
-+			opts->full_auxtrace = true;
-+			hisi_pmcu_evsel = evsel;
 +		}
 +	}
 +
-+	opts->auxtrace_mmap_pages = MiB(16) / page_size;
-+
-+	/*
-+	 * To obtain the auxtrace buffer file descriptor, the auxtrace event
-+	 * must come first.
-+	 */
-+	evlist__to_front(evlist, hisi_pmcu_evsel);
-+	evsel__set_sample_bit(hisi_pmcu_evsel, TIME);
-+
-+	return 0;
-+}
-+
-+static size_t hisi_pmcu_info_priv_size(struct auxtrace_record *itr __maybe_unused,
-+				       struct evlist *evlist __maybe_unused)
-+{
-+	return HISI_PMCU_AUXTRACE_PRIV_SIZE;
-+}
-+
-+static int hisi_pmcu_info_fill(struct auxtrace_record *itr,
-+			       struct perf_session *session,
-+			       struct perf_record_auxtrace_info *auxtrace_info,
-+			       size_t priv_size)
-+{
-+	struct hisi_pmcu_record *pmcu_record =
-+			container_of(itr, struct hisi_pmcu_record, itr);
-+	struct perf_pmu *hisi_pmcu_pmu = pmcu_record->hisi_pmcu_pmu;
-+
-+	if (priv_size != HISI_PMCU_AUXTRACE_PRIV_SIZE)
-+		return -EINVAL;
-+
-+	if (!session->evlist->core.nr_mmaps)
-+		return -EINVAL;
-+
-+	auxtrace_info->type = PERF_AUXTRACE_HISI_PMCU;
-+	auxtrace_info->priv[0] = hisi_pmcu_pmu->type;
-+
-+	return 0;
-+}
-+
-+static void hisi_pmcu_record_free(struct auxtrace_record *itr)
-+{
-+	struct hisi_pmcu_record *pmcu_record =
-+			container_of(itr, struct hisi_pmcu_record, itr);
-+
-+	free(pmcu_record);
-+}
-+
-+static u64 hisi_pmcu_reference(struct auxtrace_record *itr __maybe_unused)
-+{
-+	return 0;
-+}
-+
-+struct auxtrace_record *hisi_pmcu_recording_init(int *err,
-+						 struct perf_pmu *hisi_pmcu_pmu)
-+{
-+	struct hisi_pmcu_record *pmcu_record;
-+
-+	if (!hisi_pmcu_pmu) {
-+		*err = -ENODEV;
-+		return NULL;
++	for (event = 0; event < header->nr_pmu; event++) {
++		for (core = 0; core < HISI_PMCU_NR_CPU_CLUSTER; core++) {
++			for (i = 0; i < nr_cluster; i++) {
++				dump_print(".    %08lx:  %016llx    Event %04lx CPU %d\n",
++					   offset + pos, *(u64 *) (data + pos),
++					   header->events[event + evoffset],
++					   core + i * HISI_PMCU_NR_CPU_CLUSTER);
++				pos += sizeof(u64);
++			}
++		}
 +	}
 +
-+	pmcu_record = zalloc(sizeof(*pmcu_record));
-+	if (!pmcu_record) {
-+		*err = -ENOMEM;
-+		return NULL;
++	if (!header->comp_mode) {
++		for (core = 0; core < HISI_PMCU_NR_CPU_CLUSTER; core++) {
++			for (i = 0; i < nr_cluster; i++) {
++				dump_print(".    %08lx:  %016llx    Cycle count CPU %d\n",
++					   offset + pos, *(u64 *) (data + pos),
++					   core + i * HISI_PMCU_NR_CPU_CLUSTER);
++				pos += sizeof(u64);
++			}
++		}
 +	}
 +
-+	pmcu_record->hisi_pmcu_pmu = hisi_pmcu_pmu;
-+	pmcu_record->itr.recording_options = hisi_pmcu_recording_options;
-+	pmcu_record->itr.info_priv_size = hisi_pmcu_info_priv_size;
-+	pmcu_record->itr.info_fill = hisi_pmcu_info_fill;
-+	pmcu_record->itr.free = hisi_pmcu_record_free;
-+	pmcu_record->itr.reference = hisi_pmcu_reference;
-+	pmcu_record->itr.read_finish = auxtrace_record__read_finish;
-+	pmcu_record->itr.alignment = HISI_PMCU_DATA_ALIGNMENT;
-+	pmcu_record->itr.pmu = hisi_pmcu_pmu;
-+
-+	*err = 0;
-+	return &pmcu_record->itr;
++	return pos;
 +}
-diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
-index 6a0f9b98f059..89b2b14407f5 100644
---- a/tools/perf/util/auxtrace.h
-+++ b/tools/perf/util/auxtrace.h
-@@ -49,6 +49,7 @@ enum auxtrace_type {
- 	PERF_AUXTRACE_ARM_SPE,
- 	PERF_AUXTRACE_S390_CPUMSF,
- 	PERF_AUXTRACE_HISI_PTT,
-+	PERF_AUXTRACE_HISI_PMCU,
- };
- 
- enum itrace_period_type {
++
++static int hisi_pmcu_dump_sample(struct hisi_pmcu_aux_header_info *header,
++				 const unsigned char *data, u64 offset)
++{
++	u32 pos = 0, i = 0;
++
++	while (i < header->nr_subsample_per_sample) {
++		dump_print(".    Subsample %d\n", i + 1);
++		pos += hisi_pmcu_dump_subsample(header, data + pos,
++						offset + pos,
++						i * header->nr_pmu);
++		i++;
++	}
++
++	return pos;
++}
++
++static int hisi_pmcu_dump_data(struct hisi_pmcu_process *pmcu,
++			       const unsigned char *data, u64 size)
++{
++	struct hisi_pmcu_aux_header_info *header;
++	u32 sample_size;
++	u32 nr_sample;
++	u64 pos = 0;
++	int ret;
++
++	dump_print(". ... HISI PMCU data: size 0x%lx bytes\n", size);
++
++	ret = hisi_pmcu_process_header(pmcu, data, size);
++	if (ret < 0)
++		return ret;
++
++	pos += ret;
++
++	header = pmcu->header;
++	sample_size = header->subsample_size * header->nr_subsample_per_sample;
++	nr_sample = 1;
++	dump_print(". ... Data: size 0x%lx bytes\n", size - pos);
++	while (pos < size) {
++		u32 buf_remain;
++
++		dump_print(".  Sample %d\n", nr_sample);
++		pos += hisi_pmcu_dump_sample(header, data + pos, pos);
++		nr_sample++;
++
++		// Skip gap at the end of an auxtrace buffer
++		buf_remain = header->buffer_size - pos % header->buffer_size;
++		if (buf_remain < sample_size)
++			pos += buf_remain;
++	}
++
++	return 0;
++}
++
++static int hisi_pmcu_process_auxtrace_event(struct perf_session *session,
++					    union perf_event *event,
++					    struct perf_tool *tool __maybe_unused)
++{
++	struct hisi_pmcu_process *pmcu_process;
++	void *data;
++	u64 size;
++	int fd;
++
++	if (!dump_trace)
++		return 0;
++
++	size = event->auxtrace.size;
++	if (!size)
++		return 0;
++
++	data = malloc(size);
++	if (!data)
++		return -errno;
++
++	fd = perf_data__fd(session->data);
++
++	if (readn(fd, data, size) < 0) {
++		free(data);
++		return -errno;
++	}
++
++	pmcu_process = container_of(session->auxtrace,
++				    struct hisi_pmcu_process, auxtrace);
++
++	return hisi_pmcu_dump_data(pmcu_process, data, size);
++}
++
++static int hisi_pmcu_flush_events(struct perf_session *session __maybe_unused,
++				  struct perf_tool *tool __maybe_unused)
++{
++	return 0;
++}
++
++static void hisi_pmcu_free_events(struct perf_session *session __maybe_unused)
++{
++}
++
++static void hisi_pmcu_free(struct perf_session *session)
++{
++	struct hisi_pmcu_process *pmcu_process;
++
++	pmcu_process = container_of(session->auxtrace,
++				    struct hisi_pmcu_process, auxtrace);
++
++	session->auxtrace = NULL;
++	free(pmcu_process);
++}
++
++static bool hisi_pmcu_evsel_is_auxtrace(struct perf_session *session,
++					struct evsel *evsel)
++{
++	struct hisi_pmcu_process *pmcu_process;
++
++	pmcu_process = container_of(session->auxtrace,
++				    struct hisi_pmcu_process, auxtrace);
++
++	return evsel->core.attr.type == pmcu_process->pmu_type;
++}
++
++int hisi_pmcu_process_auxtrace_info(union perf_event *event,
++				    struct perf_session *session)
++{
++	struct perf_record_auxtrace_info *auxtrace_info;
++	struct hisi_pmcu_process *pmcu_process;
++
++	auxtrace_info = &event->auxtrace_info;
++
++	if (auxtrace_info->header.size < sizeof(*auxtrace_info) +
++					 HISI_PMCU_AUXTRACE_PRIV_SIZE)
++		return -EINVAL;
++
++	pmcu_process = zalloc(sizeof(*pmcu_process));
++	if (!pmcu_process)
++		return -ENOMEM;
++
++	pmcu_process->pmu_type = auxtrace_info->priv[0];
++
++	pmcu_process->auxtrace = (struct auxtrace) {
++		.process_event =  hisi_pmcu_process_event,
++		.process_auxtrace_event = hisi_pmcu_process_auxtrace_event,
++		.flush_events = hisi_pmcu_flush_events,
++		.free_events = hisi_pmcu_free_events,
++		.free = hisi_pmcu_free,
++		.evsel_is_auxtrace = hisi_pmcu_evsel_is_auxtrace,
++	};
++
++	session->auxtrace = &pmcu_process->auxtrace;
++
++	return 0;
++}
 diff --git a/tools/perf/util/hisi-pmcu.h b/tools/perf/util/hisi-pmcu.h
-new file mode 100644
-index 000000000000..d46d523a3aee
---- /dev/null
+index d46d523a3aee..8df74695164b 100644
+--- a/tools/perf/util/hisi-pmcu.h
 +++ b/tools/perf/util/hisi-pmcu.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * HiSilicon Performance Monitor Control Unit (PMCU) support
-+ *
-+ * Copyright (C) 2022 HiSilicon Limited
-+ */
-+
-+#ifndef INCLUDE__PERF_HISI_PMCU_H__
-+#define INCLUDE__PERF_HISI_PMCU_H__
-+
-+#define HISI_PMCU_PMU_NAME		"hisi_pmcu"
-+#define HISI_PMCU_AUXTRACE_PRIV_SIZE	sizeof(u64)
-+
-+struct auxtrace_record *hisi_pmcu_recording_init(int *err,
-+					struct perf_pmu *hisi_pmcu_pmu);
-+
-+#endif
+@@ -14,4 +14,6 @@
+ struct auxtrace_record *hisi_pmcu_recording_init(int *err,
+ 					struct perf_pmu *hisi_pmcu_pmu);
+ 
++int hisi_pmcu_process_auxtrace_info(union perf_event *event,
++				    struct perf_session *session);
+ #endif
 -- 
 2.30.0
 
