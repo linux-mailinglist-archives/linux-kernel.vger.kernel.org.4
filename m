@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DFF68C087
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3EC68C089
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjBFOvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S230478AbjBFOwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:52:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjBFOvv (ORCPT
+        with ESMTP id S229892AbjBFOwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:51:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0CF25BAC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:51:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56378B8117E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26B4C433EF;
-        Mon,  6 Feb 2023 14:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675695108;
-        bh=aKJvfXS+xxZnv3cht3EfQwkvwp4dT7OrFf4PKvTWc48=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uv4TfxJd3NoBs57skRukIbXGaaywY6Clt/BrkA0majQZzbFhMf5RglHspPDjbengZ
-         e1yyfXu/0ysWWsVYe7XfSM39wSbvpXH8DRngL01EI2K7Ga9LCrR7HoijcUvJRt/1ls
-         LzT0AhqRJI410Ihf/Wp/C3MHkIVl7aZwHVp8X9wxt7kHuPaEQesx9L+OUO/wbUG74E
-         F01XmtH4MTH/iIKB8XiJ1ycZAr7Sj8nIOKYucTGzd7WQvHBcrQrkTW8ocF4XTy2ykm
-         EN5aIVuPS1lKnmmTMbDqNv6aezLLVpRhg/+Us/8FhJkVY90DhSGrkwJHdb2SuCQOdq
-         FlmxQKER020kQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EA903405BE; Mon,  6 Feb 2023 11:51:44 -0300 (-03)
-Date:   Mon, 6 Feb 2023 11:51:44 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        eranian@google.com, irogers@google.com
-Subject: Re: [PATCH V2 7/9] perf/x86/msr: Add Meteor Lake support
-Message-ID: <Y+EUAEPhU8hVMLsl@kernel.org>
-References: <20230104201349.1451191-1-kan.liang@linux.intel.com>
- <20230104201349.1451191-7-kan.liang@linux.intel.com>
- <Y9sWImm4v5I/MZId@kernel.org>
- <79807730-73ac-c8c2-fc9d-b7cd00f9336e@linux.intel.com>
- <Y91su757r43jgdle@kernel.org>
- <Y91uWj6PiGQqI48J@kernel.org>
- <47f5639d-a64e-9c85-a62b-40160d02d3ff@linux.intel.com>
+        Mon, 6 Feb 2023 09:52:08 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87B81C7DD;
+        Mon,  6 Feb 2023 06:52:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675695127; x=1707231127;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=L+5LlR1un7mprtyQt90rzYhyMN85ej+w5cAPag3X0F8=;
+  b=VinLM5Q/icnABxLnH5SxR95LPQvUEgbPfRMTI4GFhI/kGRQQbK/D6h6t
+   HfQu3e6Jm6o3yXMejcMKpjeidC3eFOQhs37H/roOdXo4agbpZ2ceS5RrR
+   FYBUZnYhR9GkydBM8EJVq49l4U26ONpTB+9iEze+kq69EVtfZc9ud+1+L
+   r1QiSevR6khtoiRoVyOJvWUfkIwUGwUz0dRjONmTA+io0lSEGXpQ9BbSJ
+   By2OKokJkJe/xK3vDvMiKhMCtbH858+PLqjaCC4B/gZSCjPblBw/fg4Im
+   2pVyy5W8uggfxedqFYrckOKFnavX598nTA4SvaILLKNsG5JJok5MBsDq6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="329235388"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="329235388"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 06:52:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="696884891"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="696884891"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 06 Feb 2023 06:52:05 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 2BAB6241; Mon,  6 Feb 2023 16:52:44 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH v1 1/1] platform/x86: Fix header inclusion in linux/platform_data/x86/soc.h
+Date:   Mon,  6 Feb 2023 16:52:38 +0200
+Message-Id: <20230206145238.19460-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47f5639d-a64e-9c85-a62b-40160d02d3ff@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Feb 06, 2023 at 09:32:00AM -0500, Liang, Kan escreveu:
-> 
-> 
-> On 2023-02-03 3:28 p.m., Arnaldo Carvalho de Melo wrote:
-> > Em Fri, Feb 03, 2023 at 05:21:15PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >> Em Thu, Feb 02, 2023 at 09:34:02AM -0500, Liang, Kan escreveu:
-> >>> Hi Arnaldo,
-> >>>
-> >>> On 2023-02-01 8:47 p.m., Arnaldo Carvalho de Melo wrote:
-> >>>> Em Wed, Jan 04, 2023 at 12:13:47PM -0800, kan.liang@linux.intel.com escreveu:
-> >>>>> From: Kan Liang <kan.liang@linux.intel.com>
-> >>>>>
-> >>>>> Meteor Lake is Intel's successor to Raptor lake. PPERF and SMI_COUNT MSRs
-> >>>>> are also supported.
-> >>>>>
-> >>>>> Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> >>>>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> >>>>> ---
-> >>>>
-> >>>> Did the kernel bits land upstream?
-> >>> Yes, the kernel part has been merged into the tip.git perf/core branch.
-> >>>
-> >>> Thanks for checking the status. There are two perf tool patches in this
-> >>> series, which hasn't been merged. Should I resend them?
-> >>
-> >> Lemme try cherry-picking just the tooling bits from this series.
-> >
-> 
-> Sorry, I forgot to mention it in this thread.
-> I sent V3 with only perf tool patches.
-> 
-> https://lore.kernel.org/lkml/20230202192209.1795329-1-kan.liang@linux.intel.com/
+First of all, we don't use intel-family.h directly. On the other hand
+we actively use boolean type, that is defined in the types.h (we take
+top-level header for that) and x86_cpu_id, that is provided in the
+mod_devicetable.h.
 
-> 
-> > There was a clash with:
-> > 
-> > commit 3fd7a168bf51497909dbfb7347af28b5c57e74a6
-> > Author: Namhyung Kim <namhyung@kernel.org>
-> > Date:   Thu Jan 26 13:36:10 2023 -0800
-> > 
-> >     perf script: Add 'cgroup' field for output
-> > 
-> > And a minor fuzz on the first patch, I applied manually and resolved the
-> > conflict,
-> 
-> The V3 add a perf test case for the new field. Could you please apply it
-> as well?
-> 
-> Sorry for the inconvenience.
+Secondly, we don't need to spread SOC_INTEL_IS_CPU() macro to the users.
+Hence, undefine it when it's appropriate.
 
-np, I'll pick the test and apply it as well,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/platform_data/x86/soc.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Thanks for letting me know,
+diff --git a/include/linux/platform_data/x86/soc.h b/include/linux/platform_data/x86/soc.h
+index da05f425587a..a5705189e2ac 100644
+--- a/include/linux/platform_data/x86/soc.h
++++ b/include/linux/platform_data/x86/soc.h
+@@ -8,10 +8,13 @@
+ #ifndef __PLATFORM_DATA_X86_SOC_H
+ #define __PLATFORM_DATA_X86_SOC_H
+ 
++#include <linux/types.h>
++
+ #if IS_ENABLED(CONFIG_X86)
+ 
++#include <linux/mod_devicetable.h>
++
+ #include <asm/cpu_device_id.h>
+-#include <asm/intel-family.h>
+ 
+ #define SOC_INTEL_IS_CPU(soc, type)				\
+ static inline bool soc_intel_is_##soc(void)			\
+@@ -34,6 +37,8 @@ SOC_INTEL_IS_CPU(apl, ATOM_GOLDMONT);
+ SOC_INTEL_IS_CPU(glk, ATOM_GOLDMONT_PLUS);
+ SOC_INTEL_IS_CPU(cml, KABYLAKE_L);
+ 
++#undef SOC_INTEL_IS_CPU
++
+ #else /* IS_ENABLED(CONFIG_X86) */
+ 
+ static inline bool soc_intel_is_byt(void)
+-- 
+2.39.1
 
-- Arnaldo
