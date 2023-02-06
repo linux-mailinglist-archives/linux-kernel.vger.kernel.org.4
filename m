@@ -2,154 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E3268B890
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:23:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DC768B895
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjBFJXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 04:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S229828AbjBFJ0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 04:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjBFJXn (ORCPT
+        with ESMTP id S229500AbjBFJ0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:23:43 -0500
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B792B12067
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:23:41 -0800 (PST)
-Received: by mail-io1-f71.google.com with SMTP id z23-20020a6b6517000000b00718172881acso6574654iob.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 01:23:41 -0800 (PST)
+        Mon, 6 Feb 2023 04:26:13 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02B72721
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:26:11 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id m2so11495606plg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 01:26:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IFKPLurvqWooNuoOnn6B72qjJ+oeiTEoNHbNUCWvH4Y=;
+        b=SVCALRuYLc+yQPSg0ia2xc/8nN747k8/pNkf48/Dj7hbMPmTTZzDGe3uPQOVG0QCp4
+         HMNC++cBBeqviPXTmrDKlyRFhdBcLXMHRkXVOu4TBvrc381TGTSKG2hf48znHGeOMXbh
+         ffgNN0Nv0rNsAPBFD0CNX3N+286VXOGqjVYGU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dGITBZxgoauLGx4MPTAVJHBqYi+srkjpnuWRVkWIaKk=;
-        b=5TwFGvT5S4XtNBy2vRS3sweqitEhuyn6xy9ORMfJO1tp9Vm9KX9NdGMMAsXOCXKWYC
-         1gNyZWvO7IOZKUEzc8F9V33VLBxvmaPvtYpSu6ow0tNfUKRSCRWoWmx4G9DXKNOIKERK
-         d/YwYq/PcQ0Br4/9X6tRhcvVIu4VA6eGjRuKp1c9TNkljV7o27yWDMra3zUSdUb1ysNd
-         DNHoT2lBww5/tlwDovg263tfV+7yWGBmv5cSWsf5iwLRqWviDQmUrUYsjc/Xj49ukPo9
-         GMJVmBF/iemIavaulvQkhth6KDZOjKPqCMCVhgNs85/R3UOufYeuLDny7nTvDvejs0EZ
-         ysqA==
-X-Gm-Message-State: AO0yUKVhlh9VH4vcqpizO9dZg17k/m/vaoHta6qGxD5oWG+YhnAm/N8y
-        x2M8pcUjIq0l8Ua5qNAQpFoCVDdvLTMFHgtFY06cEnOTdGM+
-X-Google-Smtp-Source: AK7set/BM6NEgMLhcIsrQN4uFlJgd6pF6Xtqu+E+0ocSq+oVHq8ZJRjLTTjBHZfH/i01AI59Z+1MloDysqdnuBZkasw352xBLnum
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IFKPLurvqWooNuoOnn6B72qjJ+oeiTEoNHbNUCWvH4Y=;
+        b=dtcNwqi9E0URmGcwUWNHLmRzmSsVrrVAB1p+CrIrOTh19clqm79Xt6iBZjiniJhVPe
+         3cMtwEOH973hiGUH22HdsmDAak+zfQ6sAQ+lWpfRJ1AxHzMguuT1gMCKdFzEa51R6kYC
+         CQHqpRvACqDpXg2edxJ/ly8lI2PNrvegNd0KUgLTQpvh2kWMhAfubJAN/2EGJbQgL3fn
+         wjr/KYqj4eyJOHGDpW2pU2Zv4JfN2i8Xmr86D07ABOKgYH1+p7ucOOxB9RUI7IVYzZt7
+         Me8LfEPuk53ybxdfHkrlX1tmuvyQpMvR1dwwPoVxahNTfwwb6XodFBN29mRBllP8PjLg
+         ex0Q==
+X-Gm-Message-State: AO0yUKUkI1WeP+270BhmEmZUiHce3hKQFRl2DlS5+kSiKe/nIaDT/iUV
+        QZfhxe1nMdWlU5tapWgozSNxk/qHw9SlieGk
+X-Google-Smtp-Source: AK7set/GiztZW5rp9T9XWQiapa+PfI9oSx5eViTJnm9sy4SVTDmEGmtY1rkW4/qwDyKtXOkuzbJHng==
+X-Received: by 2002:a17:90a:1a5d:b0:230:cc81:ae52 with SMTP id 29-20020a17090a1a5d00b00230cc81ae52mr1257627pjl.9.1675675571418;
+        Mon, 06 Feb 2023 01:26:11 -0800 (PST)
+Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:4a1b:4fdb:174d:8f36])
+        by smtp.gmail.com with ESMTPSA id ga23-20020a17090b039700b00228f45d589fsm5663008pjb.29.2023.02.06.01.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 01:26:10 -0800 (PST)
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: [PATCH 0/2] zsmalloc: fine-grained fullness grouping
+Date:   Mon,  6 Feb 2023 18:25:57 +0900
+Message-Id: <20230206092559.2722946-1-senozhatsky@chromium.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-X-Received: by 2002:a92:c7d3:0:b0:313:d260:41ce with SMTP id
- g19-20020a92c7d3000000b00313d26041cemr126203ilk.123.1675675421011; Mon, 06
- Feb 2023 01:23:41 -0800 (PST)
-Date:   Mon, 06 Feb 2023 01:23:40 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003a78a905f4049614@google.com>
-Subject: [syzbot] kernel BUG in process_one_work
-From:   syzbot <syzbot+c0998868487c1f7e05e5@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        bpf@vger.kernel.org, davem@davemloft.net, dhowells@redhat.com,
-        edumazet@google.com, hch@lst.de, jhubbard@nvidia.com,
-        kuba@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, npiggin@gmail.com, pabeni@redhat.com,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+	Hi,
 
-syzbot found the following issue on:
+	zsmalloc has only two fullness group to choose pages from during
+zs_malloc() and zs_compact():
+- ALMOST_EMPTY for pages with usage ratio equal or less to 3/4 of total
+  page capacity
+- ALMOST_FULL for pages with usage raio greater than 3/4 of total page
+  capacity
 
-HEAD commit:    4fafd96910ad Add linux-next specific files for 20230203
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17e5d623480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d2fba7d42502ca4
-dashboard link: https://syzkaller.appspot.com/bug?extid=c0998868487c1f7e05e5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148901bb480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14911ba5480000
+This leads to suboptimal page selection for both zs_malloc() and
+zs_compact().
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/348cc2da441a/disk-4fafd969.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e2dedc500f12/vmlinux-4fafd969.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fae710d9ebd8/bzImage-4fafd969.xz
+This patchset reworks zsmalloc fullness grouping/classification.
 
-The issue was bisected to:
+Sergey Senozhatsky (2):
+  zsmalloc: remove insert_zspage() ->inuse optimization
+  zsmalloc: fine-grained inuse ratio based fullness grouping
 
-commit 920756a3306a35f1c08f25207d375885bef98975
-Author: David Howells <dhowells@redhat.com>
-Date:   Sat Jan 21 12:51:18 2023 +0000
+ mm/zsmalloc.c | 253 +++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 156 insertions(+), 97 deletions(-)
 
-    block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+-- 
+2.39.1.519.gcb327c4b5f-goog
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13d93dd9480000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10393dd9480000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17d93dd9480000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c0998868487c1f7e05e5@syzkaller.appspotmail.com
-Fixes: 920756a3306a ("block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages")
-
-skbuff: skb_over_panic: text:ffffffff8615b76f len:20 put:20 head:0000000000000000 data:0000000000000000 tail:0x14 end:0x0 dev:<NULL>
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:122!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 26 Comm: kworker/1:1 Not tainted 6.2.0-rc6-next-20230203-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Workqueue: events nsim_dev_trap_report_work
-RIP: 0010:skb_panic+0x152/0x1d0 net/core/skbuff.c:122
-Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48 c7 c7 40 11 5c 8b 41 57 56 48 89 ee 52 4c 89 e2 e8 de 43 5e f9 <0f> 0b 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 a9 66 c9 f9 4c
-RSP: 0018:ffffc90000a1fbc0 EFLAGS: 00010286
-RAX: 0000000000000084 RBX: ffff88802b3e6500 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8168dfbc RDI: 0000000000000005
-RBP: ffffffff8b5c1f80 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000001 R11: 0000000000000000 R12: ffffffff8615b76f
-R13: 0000000000000014 R14: ffffffff8b5c1100 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fdf942b0150 CR3: 000000007a8e3000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- skb_over_panic net/core/skbuff.c:127 [inline]
- skb_put+0x16f/0x1a0 net/core/skbuff.c:2261
- nsim_dev_trap_skb_build drivers/net/netdevsim/dev.c:764 [inline]
- nsim_dev_trap_report drivers/net/netdevsim/dev.c:808 [inline]
- nsim_dev_trap_report_work+0x4df/0xc80 drivers/net/netdevsim/dev.c:853
- process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:skb_panic+0x152/0x1d0 net/core/skbuff.c:122
-Code: 0f b6 04 01 84 c0 74 04 3c 03 7e 20 8b 4b 70 41 56 45 89 e8 48 c7 c7 40 11 5c 8b 41 57 56 48 89 ee 52 4c 89 e2 e8 de 43 5e f9 <0f> 0b 4c 89 4c 24 10 48 89 54 24 08 48 89 34 24 e8 a9 66 c9 f9 4c
-RSP: 0018:ffffc90000a1fbc0 EFLAGS: 00010286
-RAX: 0000000000000084 RBX: ffff88802b3e6500 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8168dfbc RDI: 0000000000000005
-RBP: ffffffff8b5c1f80 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000001 R11: 0000000000000000 R12: ffffffff8615b76f
-R13: 0000000000000014 R14: ffffffff8b5c1100 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fdf942b0150 CR3: 000000007a8e3000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
