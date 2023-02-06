@@ -2,85 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F067C68C79A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B097168C787
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjBFUY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S230180AbjBFUUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjBFUY1 (ORCPT
+        with ESMTP id S230119AbjBFUUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:24:27 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F016E17CFF;
-        Mon,  6 Feb 2023 12:24:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A109360992;
-        Mon,  6 Feb 2023 20:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675715064;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T/BcOBGjoXSzNnn+UWZhaQJzEUM9mrbxaHHpGP8Eq08=;
-        b=oJ9Wz3mSmSgktwkNB/DKp0NuhWc74d2PiDqVh10w9djBN6uYoIJK2QOlx1rYkK3e8WzDP0
-        Pz22tW3jqoeWkcHhuSi1Is1Q9sNqAfD71GY2sPSQgjUjKTGeo7NRkWXrMG/36FYasjkQLJ
-        6b+wg8d9JN6Cos40S99uT0bqy1AynF8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675715064;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T/BcOBGjoXSzNnn+UWZhaQJzEUM9mrbxaHHpGP8Eq08=;
-        b=Pb03ZMjCDSUQLvH0FO94VXPpmLst1FbQNNmO1fShQpwCu4Phjy/JhSNmDtjR8he8v57oC5
-        X+OuXAebm0c2QxDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D1DE138E7;
-        Mon,  6 Feb 2023 20:24:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id O6ijHfhh4WPadAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 06 Feb 2023 20:24:24 +0000
-Date:   Mon, 6 Feb 2023 21:18:36 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] Btrfs fixes for v6.2-rc8
-Message-ID: <20230206201836.GE28288@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <cover.1675710734.git.dsterba@suse.com>
- <CAHk-=wge=yaJ47XewZ0n4EbOLh222M8mCjjmhZji=n--3eyupg@mail.gmail.com>
+        Mon, 6 Feb 2023 15:20:23 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8722BEE7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:19:52 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id dt8so10814796oib.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:19:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YsphjXkBI0H4ZtiynXrY+CUNXqadHKIdr07YXKhwtfE=;
+        b=YXK1qFlepuupaxVP9x9mjLfXiDnmGMOvZsuRb0hoTLfq5WG6ZXqiDa04ySEr2vqpk9
+         ZF65v0IvW9FA7g3tVwvxFIQ//7YLS+08w79hN02qd/UcUDeqgusRse2b+IKqUwjYGobi
+         1Aqq41lrZGlOd8hnLM/ydHHLA668W8RjuI9tMa3D4Mf8gLTAtnCHvQiz7cnMclU3oRqs
+         HFT7q48YHsHn5tyDUfC5M9amABgZLO0nsTF+YPdrhwrgEHA5JlxGYGrETDEyAz8Obl5P
+         wytUHzUpnxshM3KdrkPqE9nkqskrkN2xl6g9mUR2ZaVMidRaaT0zCMVZp2IYz3VmHDOO
+         chRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YsphjXkBI0H4ZtiynXrY+CUNXqadHKIdr07YXKhwtfE=;
+        b=uo+0FoAdk5HCUzeLQhvXuO7/nEfNfps7kel9IgJ57WSBW6Is4TMu0QJWzFuDWAjz6L
+         RhpXZvemPR/hom5pnTrBvn1cIKuEDYvIOtXtbtdum/7qQXsd33xalT4Fe3ABmsj6WzAG
+         kUWHapfatwWDjhSdjXG1j3bYpZLwYCE8Lsugrt57ZTqHTcwbDcofJapVetH7QpSNpXar
+         VjbFXtCbAvfLTNSG1e23tBNKdyxIUwaFIBKtZDPMKE8YSky7IKG9RzQvuo5BeipzKMRc
+         g26uTmqAW54mliR5qDGPfe9jzb1djSzisYCnoARVhS6l+0N2Qv24QxO3ZwVgd1qShwlL
+         S/7g==
+X-Gm-Message-State: AO0yUKXOG2uVriaxpwxOHGTAd/fit0w4qbxBCKwESzOP7iX7nUjYaksT
+        jGqxMgcwuTDH1QVkbqncEENU/W/nFvZvPLgra2Q=
+X-Google-Smtp-Source: AK7set+WPrOO0zrrwk4j2nVGXXhYKvVx98ndm/QUyGFVed5o9F7zj7oMb9r+YqcaGbMDbsjcmb6ZpDLGQB7AfbYBIAU=
+X-Received: by 2002:a05:6808:6242:b0:378:4edd:a89c with SMTP id
+ dt2-20020a056808624200b003784edda89cmr1267118oib.46.1675714788680; Mon, 06
+ Feb 2023 12:19:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wge=yaJ47XewZ0n4EbOLh222M8mCjjmhZji=n--3eyupg@mail.gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230204032735.22509-1-rdunlap@infradead.org>
+In-Reply-To: <20230204032735.22509-1-rdunlap@infradead.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 6 Feb 2023 15:19:37 -0500
+Message-ID: <CADnq5_Ma+0pPtUP5CRpQUyh2NwMyz91D1-L-J5OwRAf9Ty5PXg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/amdgpu: add complete header search path
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Signed-off-by : Sung Joon Kim" <sungkim@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 12:15:41PM -0800, Linus Torvalds wrote:
-> On Mon, Feb 6, 2023 at 11:55 AM David Sterba <dsterba@suse.com> wrote:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.2-rc7-tag
-> 
-> No such ref.
-> 
-> I see the unsigned branch 'for-6.2-rc7' but there's no actual tag there.
-> 
-> Forgot to push it out?
+Applied.  Thanks!
 
-Yes, sorry, now pushed.
+On Fri, Feb 3, 2023 at 10:27 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> The path for the "mod_info_packet.h" header file is
+> incomplete, so add its location to the header search path
+> in the amdgpu Makefile.
+>
+> See on ARCH=3Dalpha (275 times in one build).
+>
+> In file included from ../drivers/gpu/drm/amd/amdgpu/amdgpu.h:90,
+>                  from ../drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:43:
+> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.h:62:10: fat=
+al error: mod_info_packet.h: No such file or directory
+>    62 | #include "mod_info_packet.h"
+>       |          ^~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+>
+> Fixes: 5b49da02ddbe ("drm/amd/display: Enable Freesync over PCon")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Signed-off-by: Sung Joon Kim <sungkim@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: Christian K=C3=B6nig <christian.koenig@amd.com>
+> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> ---
+>  drivers/gpu/drm/amd/amdgpu/Makefile |    1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff -- a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgp=
+u/Makefile
+> --- a/drivers/gpu/drm/amd/amdgpu/Makefile
+> +++ b/drivers/gpu/drm/amd/amdgpu/Makefile
+> @@ -34,6 +34,7 @@ ccflags-y :=3D -I$(FULL_AMD_PATH)/include/
+>         -I$(FULL_AMD_PATH)/acp/include \
+>         -I$(FULL_AMD_DISPLAY_PATH) \
+>         -I$(FULL_AMD_DISPLAY_PATH)/include \
+> +       -I$(FULL_AMD_DISPLAY_PATH)/modules/inc \
+>         -I$(FULL_AMD_DISPLAY_PATH)/dc \
+>         -I$(FULL_AMD_DISPLAY_PATH)/amdgpu_dm \
+>         -I$(FULL_AMD_PATH)/amdkfd
