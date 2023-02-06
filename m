@@ -2,198 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2F668C223
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FEA68C136
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjBFPsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
+        id S229615AbjBFPUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjBFPsG (ORCPT
+        with ESMTP id S229447AbjBFPUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:48:06 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2078.outbound.protection.outlook.com [40.107.102.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E171172F;
-        Mon,  6 Feb 2023 07:47:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OLglG1LHh9/YcRaUI0pwPTATLDH1qbM9RXC55kRGSJpCzBaFYOSkUucWz4QFiGdZk3u71rNG4Gl/s217fDl/OMqr1VCG6tYBkxlN9xm4HM1/a4o/bYdoI/Npls5ESEFG7LfwQb3wZkS0AI7mixeG5HAFv/BT4N2r8bql755A7okaIS8iLI4lAoZFWYY63EioVMHwygFq4xe2li9kmlvr14LKQy4vXHmD5SHDXs8z1amXGZSBLLAeklnkuM/bBoxOk2YB1ITy+o6nOB51utmjKfUMulKF/VOqiZQM8paEdCMOKduD+mon0DN4pQ6XiCEvlYJZlDqbztxHVpIX16Nt+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4MsJGbPin+XBuTeVhPIfXXdziS/8nFVXSz8PED1wGJQ=;
- b=b7PCfkOOAExMoKbge8Qh03oBJ8ZLGYg8zB7/SvB0dYq/nxfGz9pPqZNGhKolInk70zrVLcZFWbRXK7XBTSEip8Qw6YWBmnnWs/H6wFRTuNx4PuW9doalkNz0lFAsaRLToFQ72NCRoZgXkZQw7wa7EolvpckGvt/3rzlBB6e7JIKEB90ddbe6tpnd3gRlEhosf6bLKqondYEbz1vzIN/Umb53L45pStA+nyBhxD6lXImUHobtc26GxQjXCfo2VWkiu7w3yz/Fo2R9IwUKX6nJk1QHEDnEJUqRR/MR+olNKaJzxqqOx/9mkf5or6qc4+CS+/iu9lPY/8bvHhDHFPXlsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=memverge.com; dmarc=pass action=none header.from=memverge.com;
- dkim=pass header.d=memverge.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=memverge.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4MsJGbPin+XBuTeVhPIfXXdziS/8nFVXSz8PED1wGJQ=;
- b=uMR2cYEHwiOx8zLHk53H3Nk+nl0SHAMLSqXFEfxdrh72dZU1Did4xc+buitGPO7oGKbnK3PmGz7Wx3iVjkyY7uE3ppEdNIdeNUSLaIUCnr8bJvCekiY32rbSAhgR67aKrcqhxwrjJ9zILU/mAJP1YLZ+m+f1vFU6quKg4OkIZKA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=memverge.com;
-Received: from BN6PR17MB3121.namprd17.prod.outlook.com (2603:10b6:405:7c::19)
- by CO3PR17MB5757.namprd17.prod.outlook.com (2603:10b6:303:17f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
- 2023 15:47:33 +0000
-Received: from BN6PR17MB3121.namprd17.prod.outlook.com
- ([fe80::d253:1eb3:9347:c660]) by BN6PR17MB3121.namprd17.prod.outlook.com
- ([fe80::d253:1eb3:9347:c660%4]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
- 15:47:33 +0000
-Date:   Mon, 6 Feb 2023 06:23:29 -0500
-From:   Gregory Price <gregory.price@memverge.com>
-To:     Fan Ni <fan.ni@samsung.com>
-Cc:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cxl/region: Fix null pointer dereference for resetting
- decoder
-Message-ID: <Y+DjMTSoG9nZwN+e@memverge.com>
-References: <CGME20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06@uscas1p2.samsung.com>
- <20221215170909.2650271-1-fan.ni@samsung.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221215170909.2650271-1-fan.ni@samsung.com>
-X-ClientProxiedBy: YT4P288CA0005.CANP288.PROD.OUTLOOK.COM
- (2603:10b6:b01:d4::27) To BN6PR17MB3121.namprd17.prod.outlook.com
- (2603:10b6:405:7c::19)
+        Mon, 6 Feb 2023 10:20:06 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0B95250
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:20:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675696805; x=1707232805;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SmEtjgYS88GoKO+Jlag8lErD47phbH2mwUwDEnVaPJ4=;
+  b=gaHJneD0CR7FfpluT6eOiPNUx/4G9D24MDqCKglVbMfzLal8+gZbMhb5
+   POmnvC9jmrFmPfenpkvGBZLlfzfuv6UsGVHlnGAwFKBXkPqBVWIV/Y7Kp
+   LwzGn2wsqsomN4DxSXAg70USktyw8FXRlUId6J2Pv/Zox51mGF2OL+WRg
+   ho+LKldzM3KSzI7HJrKbxD1duuB8C6rrSuRBAXrDnnza6omJP4MeUmXFB
+   pOrWDpXGpFRY1ZD6U/tKi7xDntQiD79CMc2M+yEnuz5Z3m2UDdg+75YdE
+   gzaw10cO6UxqeiwBWuPonKBmvzJwE/ancmjec3HkFgCdxcssuccnX2jbZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="331360734"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="331360734"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 07:20:04 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="696888685"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="696888685"
+Received: from pmagdum-mobl1.amr.corp.intel.com (HELO [10.209.159.190]) ([10.209.159.190])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 07:20:03 -0800
+Message-ID: <8ff49f42-95c5-dbe0-e9a4-f4982185dd63@linux.intel.com>
+Date:   Mon, 6 Feb 2023 08:50:09 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR17MB3121:EE_|CO3PR17MB5757:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9d9fb5d-3d20-45d5-0dca-08db085975ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yNWcl2Vhdb87ixWi2cGOLKFMe8oL91LTkijl9EDYxo08gvdziWdtyBPJs7mtuzI7lMqGW73xK3HuqHfk7IxKb1QjC2DoD4oJ8x+VwyRa/UdRGtcQdSrSTgHdGtvewakfTRzzufpwEEBIdgbL2EHP29xj9k9+dHKpxwNfMfRywaP/YwxPgH3TDjnXBjBSKHeGuwVKm376HTVkullAiEhKNq3PGf8Q0IOnoYKXWvXdmfJgee4vVnIyabOkJn1ZuCxCTZy6+UHd7ObRdJgpq1j6OLzeupBAprAvj68JjiM8+KcRTzJ3CUjlt7K4Ga8flo1pUYwJuJwKUHGbN1fX3EDb2NPQYcyAW/Z40VP6ih5ksWmXI6EvUfNQn2Yg2QHWYWT00F28S3L4tXarOdylKiNduq2R6ZOmHyn3khB0XHMoxKsgrp8DOqMp68N6myDZlXnS9FgBMcelplXQexPNgzucQeOq9SnPLQoWUzC29rHlhuhSRPAwNfWrmAQvzUkuOsNOekFKocLbTW2iu1Jqld+L3hpl+sIcsDKy0cjIw3Jo3L8+i1o1K8B5WRiqaaxph1HP1D+2aDWkxFvBMz3HLVOOP+A+FxuZfFv06Qzc2eDI2RpzJ7XR1Qzk0QHi4ATee+V3ilgwqEVAzMIKm4pAeUNBQQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR17MB3121.namprd17.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(366004)(396003)(39830400003)(346002)(451199018)(8936002)(41300700001)(5660300002)(7416002)(4326008)(6916009)(8676002)(66476007)(66556008)(66946007)(2906002)(44832011)(54906003)(316002)(86362001)(36756003)(6666004)(6506007)(6486002)(478600001)(26005)(38100700002)(2616005)(186003)(6512007)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?37YwuTBDkun4PGQ48tVXBYvNqYT6LXmhWxmX5K5ry0BGI3YlVFsYGCEhPXq8?=
- =?us-ascii?Q?QTTSAAdAC2LytvBPQ2FNnWXbdTuIT0huTue573zJpZT3LTju8GebDG9tkY4t?=
- =?us-ascii?Q?m9cPtH/AW7rT74MLA8fgEUL+YGKDhjfEcjODF3fQ8NU8lyfbEh5RHxo2uEMO?=
- =?us-ascii?Q?nVrVGLZHPuM/gMfWwHcOJhzRLtULqOxCq/B5mky1qH/M1LGTaUjAn9FGy8K7?=
- =?us-ascii?Q?WsPksi8kVsl6ebdD/w5atFIF9Ozsr94R+d1+5QlYGMPok78j/AgLgxvcYMvJ?=
- =?us-ascii?Q?vY0VDxdv/lGOjbXuhxeSJTeMzo0W2iIibG6D8tB7IDX3AkTt8kszNGo5oQYJ?=
- =?us-ascii?Q?VpXYloiyoHh4iBBVppi5fhlBGwR+QZJLI7Q+CMrgwaPpNV+P3vy8NKU+W3zH?=
- =?us-ascii?Q?XuLPqR/z/iIPG4ynzHeA+UR9rYWpkwXMHdOrnqZ4TomC+lBXJl7ntRy/r9in?=
- =?us-ascii?Q?/pnIsdkvNekS57vroP7Umi5TrfHhSr/zmKjHi7yXDL/amb35Pw4c7s7Cp8Kn?=
- =?us-ascii?Q?cn0oYf+b6+3WLiyGOZTh1rlCS4Teyk6aDnaM+8CfCVQzwnKy/PjVEsfQeaFj?=
- =?us-ascii?Q?Pg33LFyncH1uyz/OQQamR9mRkAr31P4GFO6PDTcr5f/5VGN4wYgP83kNRpSe?=
- =?us-ascii?Q?ct3BC+Ry/1zLjJhE+V0/hjF6y0W/BHZf1zh0qcQKIJdKLw2bhXuYxLRWltlO?=
- =?us-ascii?Q?nyTkC276XQAG/BkefzSRlN6WdOPJj3QWe1uYodKzrA20bIQGmgI60C5SVbF2?=
- =?us-ascii?Q?hs/R9OdJRPa4RVrSQLL9rp1LN86nlYZwFTabd7B2h4OSxrTfsfnKiZMuNSkj?=
- =?us-ascii?Q?ugtOrzmB3oREJpYkqyqgDh54LH3B6UFzphxWFAAeaQ7hQPdl26RYuoYcBjlo?=
- =?us-ascii?Q?AjCduc5CC3LINbiky6Fy31MDhkJqE+VsbyrQK3EfRRbcF67tMWv+aS8+EPoa?=
- =?us-ascii?Q?+sjqF/ZfacG0Ufequ++5TMPrT9gniSLfYUU9mYVRXlqzRivmEXBOsOXC1Bth?=
- =?us-ascii?Q?9N236rfzpMc0cP4wmFE4ZnqIegr2y1gAbq6sfnRiYP9Jc/g2/M8Pvi1+7a4u?=
- =?us-ascii?Q?GtnDpyXNHg4W5bYWGXyZ+u5lSEk/leE60LuzllJmHdgLlGDzThhvLSIX2qyk?=
- =?us-ascii?Q?7BiI0P9CUqNPOjDfQd6nFGgveWb7W2tmr67VcpH9aFDZdu38sXpqXkGjHnoH?=
- =?us-ascii?Q?1OnhDRfxG9KHPfDHO3eCDwSGi49jyl6wndLrPKG2OrztsSdhgxAX8KmCztFg?=
- =?us-ascii?Q?zyqSnvzXHJ5I9yRBtIi9WgcK+MGKHehD6gvvvxoswK/xVUCWdlGggOD2gUpW?=
- =?us-ascii?Q?IuUZb6ncHtz/IrFxhGUVf0/lXI/qCRt5b90gaNX6XmDRzmZBszRiyDvzhVFr?=
- =?us-ascii?Q?vrnAoTX5QsDwOYTdou/JTxZCJdzRve/3cYosICnykCeujJSd/BcizvG/lyhN?=
- =?us-ascii?Q?qbHVa+bIa2OproO5iEt7mC8BMBqKrDJTcm9Ck93k8xGPeIx/NwXfQsEd31pc?=
- =?us-ascii?Q?HDmJENKM8eqCjKY3tIFfd3KRm9yurr+hFw/cQPH/5wRU/WsAw8ZUIZkZWkur?=
- =?us-ascii?Q?iOBZKOcgdN5XbRkP0ZBP+mLQDz/zvKx3CQmGv9zy0pdLyI4UfWIJP72jqrLu?=
- =?us-ascii?Q?Qw=3D=3D?=
-X-OriginatorOrg: memverge.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9d9fb5d-3d20-45d5-0dca-08db085975ea
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR17MB3121.namprd17.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 15:47:32.9254
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5c90cb59-37e7-4c81-9c07-00473d5fb682
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ne9H3N/LZ/UEt9q+A4B3YJjgbYsKexazIHIKT8lyDqd41A7N/1Qpy5HI8X4Pgi/W+84FFH/awFa8KHNHMGkXbcLtNa35RDdAdEayaqeA6r8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO3PR17MB5757
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 01/19] ASoC: amd: ps: create platform devices based on acp
+ config
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc:     "Katragadda, Mastan" <Mastan.Katragadda@amd.com>,
+        "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
+        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Saba Kareem, Syed" <Syed.SabaKareem@amd.com>,
+        "kondaveeti, Arungopal" <Arungopal.kondaveeti@amd.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
+ <9f2229fb-499b-f802-993b-56a7ad2ce361@linux.intel.com>
+ <257b6f1e-f403-573f-3978-13ffb14342ad@amd.com>
+ <2b4c12ce-2586-0277-ede0-560f8317e4e4@linux.intel.com>
+ <27eabbf2-eff2-0964-b72b-f9db251c3b57@amd.com>
+ <87ddd91b-fb5f-4f27-942b-dc439b32ce20@amd.com>
+ <fa4cdd91-b430-eb1b-a151-d144f62e827d@linux.intel.com>
+ <MN0PR12MB6101DBF0419C2C565F7F6840E2D09@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <c5161bc3-62cb-d0a1-2ba2-d670285b6958@linux.intel.com>
+ <2ea354bc-4263-1db6-4423-4de1b0d4e535@amd.com>
+ <815ab487-a1a3-1978-94fc-b60e931c2848@linux.intel.com>
+ <ac734e4e-2f61-b9b8-0751-4e3293084696@amd.com>
+ <7b8fe2b6-84cb-e8c8-22aa-2d940a5c68b7@linux.intel.com>
+ <9e6200ee-9b21-66d1-6bb1-832ec7399111@amd.com>
+ <1473e1e9-b368-d8f3-c1f5-1b64e6e2ed90@linux.intel.com>
+ <4c860ef0-d22d-5c2a-9657-7e2436b00101@amd.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <4c860ef0-d22d-5c2a-9657-7e2436b00101@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 05:09:14PM +0000, Fan Ni wrote:
-> Not all decoders have a reset callback.
-> 
-> The CXL specification allows a host bridge with a single root port to
-> have no explicit HDM decoders. Currently the region driver assumes there
-> are none.  As such the CXL core creates a special pass through decoder
-> instance without a commit/reset callback.
-> 
-> Prior to this patch, the ->reset() callback was called unconditionally when
-> calling cxl_region_decode_reset. Thus a configuration with 1 Host Bridge,
-> 1 Root Port, and one directly attached CXL type 3 device or multiple CXL
-> type 3 devices attached to downstream ports of a switch can cause a null
-> pointer dereference.
-> 
-> Before the fix, a kernel crash was observed when we destroy the region, and
-> a pass through decoder is reset.
-> 
-> The issue can be reproduced as below,
->     1) create a region with a CXL setup which includes a HB with a
->     single root port under which a memdev is attached directly.
->     2) destroy the region with cxl destroy-region regionX -f.
-> 
-> Fixes: 176baefb2eb5 ("cxl/hdm: Commit decoder state to hardware")
-> Signed-off-by: Fan Ni <fan.ni@samsung.com>
-> ---
->  drivers/cxl/core/region.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index f9ae5ad284ff..3931793a13ac 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -131,7 +131,7 @@ static int cxl_region_decode_reset(struct cxl_region *cxlr, int count)
->  		struct cxl_memdev *cxlmd = cxled_to_memdev(cxled);
->  		struct cxl_port *iter = cxled_to_port(cxled);
->  		struct cxl_ep *ep;
-> -		int rc;
-> +		int rc = 0;
->  
->  		while (!is_cxl_root(to_cxl_port(iter->dev.parent)))
->  			iter = to_cxl_port(iter->dev.parent);
-> @@ -143,7 +143,8 @@ static int cxl_region_decode_reset(struct cxl_region *cxlr, int count)
->  
->  			cxl_rr = cxl_rr_load(iter, cxlr);
->  			cxld = cxl_rr->decoder;
-> -			rc = cxld->reset(cxld);
-> +			if (cxld->reset)
-> +				rc = cxld->reset(cxld);
->  			if (rc)
->  				return rc;
->  		}
-> @@ -186,7 +187,8 @@ static int cxl_region_decode_commit(struct cxl_region *cxlr)
->  			     iter = ep->next, ep = cxl_ep_load(iter, cxlmd)) {
->  				cxl_rr = cxl_rr_load(iter, cxlr);
->  				cxld = cxl_rr->decoder;
-> -				cxld->reset(cxld);
-> +				if (cxld->reset)
-> +					cxld->reset(cxld);
->  			}
->  
->  			cxled->cxld.reset(&cxled->cxld);
-> -- 
-> 2.25.1
 
+>>>>>>> In above case, two manager instances will be created.
+>>>>>>> When manager under SWC1 scope tries to add peripheral
+>>>>>>> device, In sdw_slave_add() API its failing because peripheral
+>>>>>>> device descriptor uses link id followed by 48bit encoded address.
+>>>>>>> In above scenarios, both the manager's link id is zero only.
 
-Should we try to get this upstreamed in 6.2-final?  Seems like a good
-stable addition. Probably doesn't affect real hardware, but it certainly
-affects QEMU.
+So here you're reporting that the issue is that all devices use link0 ...
 
+>>>>>> what fails exactly? The device_register() ?
+>>>>>>
+>>>>>> If yes, what the issue. the device name?
+>>>>> device_register() is failing because of duplication of
+>>>>> device name.
+>>>>>> I wonder if we need to use something like
+>>>>>>
+>>>>>> "name shall be sdw:bus_id:link:mfg:part:class"
+>>>>>>
+>>>>>> so as to uniquify the device name, if that was the problem.
+>>>>> Yes correct.
+>>>> can you check https://github.com/thesofproject/linux/pull/4165 and see
+>>>> if this works for you? I tested it on Intel platforms.
+>>> It's working fine on our platform. As mentioned earlier in this thread,
+>>> we can't go with two ACPI companion device approach due to
+>>> limitations on windows stack for current platform.
+>> Thanks for testing.
+>>
+>> So if you can't go with 2 ACPI companion devices, what does the
+>> 'Windows' DSDT look like and how would you identify that there are two
+>> controllers on the platform?
+> We are not populating two controller devices. Instead of it, we are populating
+> single controller device with two independent manager instances under the same
+> ACPI device scope.
+> We have configuration register to identify sound wire manager instances on the platform.
+> Below is the sample DSDT for Windows & Linux.
+> 
+> Scope (\_SB.ACP)
+>     {
+>     
+>         Device (SDWC)
+>         {
+>             Name (_ADR, 0x05)  // _ADR: Address
+>         Name(_DSD, Package() {
+>                                         ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+>                                         Package () {
+>                                         Package (2) {"mipi-sdw-sw-interface-revision", 0x00010000},
+>                                         Package (2) {"mipi-sdw-manager-list", 2},
+>                                         },
+>                                         ToUUID("dbb8e3e6-5886-4ba6-8795-1319f52a966b"),
+>                                         Package () {
+>                                         Package (2) {"mipi-sdw-link-0-subproperties", "SWM0"},
+>                                         Package (2) {"mipi-sdw-link-1-subproperties", "SWM1"},
+>                                         }
+>                                         }) // End _DSD
+>         Name(SWM0, Package() {
+>                                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+>                                 Package () {
+>                                 Package (2) {"mipi-sdw-sw-interface-revision", 0x00010000},                                 
+>                                 
+>                                 // ... place holder for SWM0 additional properties
+>                                 }
+>                                 }) // End SWM0.SWM
+>        Name(SWM1,Package(){
+>                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+>                                 Package () {
+>                                 Package (2) {"mipi-sdw-sw-interface-revision", 0x00010000},                                
+>                                 
+>                                 // ... place holder for SWM1 additional properties
+>                                 }
+>                                 }) // End SWM1.SWM
+> 
+>     Device (SLV0) { // SoundWire Slave 0
+>                         Name(_ADR, 0x000032025D131601)
+>         } // END SLV0
+> 
+>     Device (SLV1) { // SoundWire Slave 1
+>                         Name(_ADR, 0x000130025D131601)
+>             } // END SLV1   
 
-Tested-by: Gregory Price <gregory.price@memverge.com>
-Reviewed-by: Gregory Price <gregory.price@memverge.com>
+... but here you have two different link numbers.
+
+I interpret this as SLV0 on link0 and SLV1 on link1.
+
+So what's the issue?
