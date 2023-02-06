@@ -2,122 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1D368B3FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAA468B3F4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBFBps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 20:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43848 "EHLO
+        id S229568AbjBFBpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 20:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFBpp (ORCPT
+        with ESMTP id S229494AbjBFBpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 20:45:45 -0500
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02C531ABDD;
-        Sun,  5 Feb 2023 17:45:41 -0800 (PST)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(20368:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Mon, 06 Feb 2023 09:45:24 +0800 (CST)
-Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Mon, 6 Feb
- 2023 09:45:24 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
- Transport; Mon, 6 Feb 2023 09:45:24 +0800
-From:   <cy_huang@richtek.com>
-To:     <sre@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <cy_huang@richtek.com>, <allen_chiang@richtek.com>,
-        <u0084500@gmail.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v4 3/3] Documentation: power: rt9759: Document exported sysfs entries
-Date:   Mon, 6 Feb 2023 09:45:19 +0800
-Message-ID: <1675647919-11151-4-git-send-email-cy_huang@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1675647919-11151-1-git-send-email-cy_huang@richtek.com>
-References: <1675647919-11151-1-git-send-email-cy_huang@richtek.com>
+        Sun, 5 Feb 2023 20:45:03 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF6F1ADFD
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 17:45:02 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id hv11-20020a17090ae40b00b002307b580d7eso6337877pjb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 17:45:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YnCWo4AAikXuZ3MEq0h3uZ00VDz0wRVmJZ9agLFsWm0=;
+        b=CVOrYXEfZIXaPWopwnsNoos4/2/kLh2SSEF4H4H6UjF3XYdp0vCpHmWZf79tNP7zLc
+         dX1ElMlw0u1XNAHLnWvw7t1e/g6bxeZriqQuf6aQ1+2zacjeY64mhbkyBRJnb4z2Lqty
+         6h82A3nvwYsut4mTB9nqSIC3O4WHgHnigW3UN8HfCMjik9UBikt8TM99pWCysyl0L/x7
+         3HzJY77Chrn3NjkdHFZ9k9FMONAk7GnJMTpYftSY2sU2oPtbYMPhWYFKNdPDB41ZUS6C
+         mj88+Z2wIkzyJ22bId8U4DEx3zggYNs4IqcwrIqGQWkT40wh593OuWr3JcIHnn9CwNoj
+         rm2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YnCWo4AAikXuZ3MEq0h3uZ00VDz0wRVmJZ9agLFsWm0=;
+        b=ttIZ2bB0NNToNtyo+3gaxLLe6hbkT/Fz6pOqAS0n1+nZhV4yh3t4WMeP8FnafDAgvO
+         LAiR9HwzTS5pU/7p0eoALRVQca2HHtaM2GyFNVyrjAuhQPZVqrDHBUbM20pnkEO6Xad7
+         eE1BMNbkElM41U8+R/TVmeejc7pa2BfmY6+dyH3udlqotw6w50X5xNRz+LQ/O4NVSvXX
+         T7d/vJPs6y2GQ+TFjYW+qbwqW/MysC9v9sHvKdwq0Ot3UDvwqziuvEw13HCN23A5pseL
+         7PU/v+SiMTA1MmEaJRxoVdihaKHmI7mHr4v3CLuHaoW0W3dLNsL/CXKyadIdz77VnOPm
+         u3gw==
+X-Gm-Message-State: AO0yUKUC2NOjWM8OkU2wm4B///gm/3GtA5xWZCZGp6YXQQY2L2TKZURt
+        oSERnP9A6ClTCc9d1vFO17o=
+X-Google-Smtp-Source: AK7set+TBDGqJHxU1SXG0i6aacPGpcE/zA/ljipPknHQ3LUY8HyTPxg/DCxScV9FfMD3bWUv2JAARQ==
+X-Received: by 2002:a17:902:c408:b0:196:e8e:cd28 with SMTP id k8-20020a170902c40800b001960e8ecd28mr25335941plk.15.1675647901977;
+        Sun, 05 Feb 2023 17:45:01 -0800 (PST)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id m6-20020a170902bb8600b00177f25f8ab3sm5528616pls.89.2023.02.05.17.45.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 05 Feb 2023 17:45:01 -0800 (PST)
+Date:   Mon, 6 Feb 2023 09:50:41 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        LKML <linux-kernel@vger.kernel.org>, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+Subject: Re: [PATCH 2/6] erofs: avoid tagged pointers to mark sync
+ decompression
+Message-ID: <20230206095041.0000140f.zbestahu@gmail.com>
+In-Reply-To: <20230204093040.97967-2-hsiangkao@linux.alibaba.com>
+References: <20230204093040.97967-1-hsiangkao@linux.alibaba.com>
+        <20230204093040.97967-2-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On Sat,  4 Feb 2023 17:30:36 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-Document the settings exported by rt9759 charger driver through sysfs
-entries:
+> We could just use a boolean in z_erofs_decompressqueue for sync
+> decompression to simplify the code.
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-- watchdog_timer
-- battery_voltage
-- battery_current
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Since v4:
-- Modify date to 'Mar 2023' and kernelversion to next '6.3'.
-
-Since v3:
-No change
-
-Since v2:
-- Change ABI document date from Oct 2022 to Nov 2022 and KernelVersion
-  from 6.1 to 6.2
-
----
- Documentation/ABI/testing/sysfs-class-power-rt9759 | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9759
-
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9759 b/Documentation/ABI/testing/sysfs-class-power-rt9759
-new file mode 100644
-index 00000000..a7a9e06
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9759
-@@ -0,0 +1,37 @@
-+What:		/sys/class/power_supply/rt9759-*/watchdog_timer
-+Date:		Mar 2023
-+KernelVersion:	6.3
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and sets the watchdog timer when rt9759 charger
-+		operates in charging mode. When the timer expires, the device
-+		will disable the charging. To prevent the timer expires, any
-+		host communication can make the timer restarted.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+		- 500, 1000, 5000 or 30000 (milliseconds),
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9759-*/battery_voltage
-+Date:		Mar 2023
-+KernelVersion:	6.3
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		Reports the current BAT voltage.
-+
-+		Access: Read-Only
-+
-+		Valid values: Represented in microvolts
-+
-+What:		/sys/class/power_supply/rt9759-*/battery_current
-+Date:		Mar 2023
-+KernelVersion:	6.3
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		Reports the current BAT current.
-+
-+		Access: Read-Only
-+
-+		Valid values: Represented in microamps
--- 
-2.7.4
-
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
