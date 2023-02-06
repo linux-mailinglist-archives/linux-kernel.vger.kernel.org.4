@@ -2,127 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F6D68BC93
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBA868BC96
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjBFMPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S229890AbjBFMQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjBFMPQ (ORCPT
+        with ESMTP id S229510AbjBFMQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:15:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E0C12051;
-        Mon,  6 Feb 2023 04:15:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RSckQc2Emh9jJfvS33gHYGvM8sjY/00hI0zuLioFFNM=; b=ntuP4M7dSK2zsWVQTbDs9Ox2Ac
-        V4r4EFjkZ99kyYLqdozZ6xzE+QxqYHoG0WCIaMJeVBoR6Y2BbtLPsYb3i01D2x0modrsfxSX57f8v
-        DF30B1tNGD0ZtMzW6GNbWnE/bcmDfjWi9O6PWHEH/Si4SWWexelyntk5L1wIG2NbBH0WlqmGoT5WP
-        AyMxq8eNX+N/jJLzOfoUuQe06/8Jp7hZdjmobg06aJY4TkJlY21aHVxYTE2KfbswHeSGde/+OdjK2
-        Dlior1hUsskbO4lX904cgjfDDm8i9Mg06fGrnhOO3gfkmEmyQ166CbjhPt5EUYYdvgrPaRfUt5YvB
-        rcxZk8pQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pP0OE-00GkH1-Ik; Mon, 06 Feb 2023 12:14:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6EA2030030F;
-        Mon,  6 Feb 2023 13:14:28 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 084DE207A0B88; Mon,  6 Feb 2023 13:14:27 +0100 (CET)
-Date:   Mon, 6 Feb 2023 13:14:27 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        dwmw2@infradead.org, Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
-Message-ID: <Y+DvI7ai/wuovjER@hirez.programming.kicks-ass.net>
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.494373332@infradead.org>
- <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
- <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
+        Mon, 6 Feb 2023 07:16:01 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2131815B;
+        Mon,  6 Feb 2023 04:16:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675685760; x=1707221760;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=/sfAfGJA6/XxqLEnP+hho0W1Nhw3gCWgj1LKpNZa/So=;
+  b=XUJKzco//yWIItKBAOwJE0JHvb8VXqeGJlTk7MbDkKaXY8p2851y1hhq
+   bax7NGIP0VWi3L5UOA2y4cfeUbesP/x8IwF/AitiMFd1CBg+ESSzQTo0/
+   mrbFq75W9xDhevQBowc0zMYKduxez7rUcxR/sYSFAfrbVC42o3IQMQoVN
+   Kq1g5b9GK8K7XS3wUjIJJKKgSxrkanyJxPVd5Vpoqo0/XFI99auAXwz8M
+   9jqNSHapugPwDyRqz5QjCfHuCgN2/w0Kibu2Occyp40h9VKRCQRHK6des
+   zM09r8wA926mbqR5/epRlNrgAh8poBUo0WD/HqmgNdGDRBbuXiuZQ5Rvb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="329206643"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="329206643"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 04:15:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="729990155"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="729990155"
+Received: from hayatibx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.62.213])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 04:15:49 -0800
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?Q?N=C3=ADcolas_F_=2E_R_=2E_A_=2E_Pr?= =?utf-8?Q?ado?= 
+        <nfraprado@collabora.com>, Hsin-Yi Wang <hsinyi@chromium.org>,
+        devicetree@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>,
+        Lyude Paul <lyude@redhat.com>, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Xin Ji <xji@analogixsemi.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        chrome-platform@lists.linux.dev,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH v11 3/9] drm/display: Add Type-C switch helpers
+In-Reply-To: <Y+Dtwm39cGQO58xa@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230204133040.1236799-1-treapking@chromium.org>
+ <20230204133040.1236799-4-treapking@chromium.org>
+ <Y+Dtwm39cGQO58xa@smile.fi.intel.com>
+Date:   Mon, 06 Feb 2023 14:15:46 +0200
+Message-ID: <87k00vyop9.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 12:24:00PM +0100, Peter Zijlstra wrote:
+On Mon, 06 Feb 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> On Sat, Feb 04, 2023 at 09:30:34PM +0800, Pin-yen Lin wrote:
+>> Add helpers to register and unregister Type-C "switches" for bridges
+>> capable of switching their output between two downstream devices.
+>> 
+>> The helper registers USB Type-C mode switches when the "mode-switch"
+>> and the "reg" properties are available in Device Tree.
+>
+> ...
+>
+>> +	fwnode_for_each_child_node(port, sw) {
+>> +		if (fwnode_property_present(sw, "mode-switch"))
+>
+> This idiom is being used at least twice (in this code, haven't checked the rest
+> of the patches, though), perhaps
+>
+> #define fwnode_for_each_typec_mode_switch(port, sw)			\
+> 	fwnode_for_each_child_node(port, sw)				\
+> 		if (!fwnode_property_present(sw, "mode-switch")) {} else
+>
+> ?
 
-> > Unless I have misunderstood what you are doing, my concerns are
-> > still the same:
-> > 
-> > >  #define this_cpu_cmpxchg(pcp, oval, nval) \
-> > > -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-> > > +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-> > >  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
-> > > nval2) \
-> > >  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
-> > > oval1, oval2, nval1, nval2)
-> > 
-> > Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
-> > and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
-> > like a bad design to me.
-> > 
-> > I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
-> > calls that never trap but fall back to the generic version on CPUs that
-> > are lacking the atomics.
-> 
-> You're thinking acidental usage etc..? Lemme see what I can do.
+See for_each_if() in drm_util.h.
 
-So lookng at this I remember why I did it like this, currently 32bit
-archs silently fall back to the generics for most/all 64bit ops.
 
-And personally I would just as soon drop support for the
-!X86_FEATURE_CX* cpus... :/ Those are some serious museum pieces.
+BR,
+Jani.
 
-One problem with silent downgrades like this is that semantics vs NMI
-change, which makes for subtle bugs on said museum pieces.
 
-Basically, using 64bit percpu ops on 32bit is already somewhat dangerous
--- wiring up native cmpxchg64 support in that case seemed an
-improvement.
-
-Anyway... let me get on with doing explicit
-{raw,this}_cpu_cmpxchg{64,128}() thingies.
-
+-- 
+Jani Nikula, Intel Open Source Graphics Center
