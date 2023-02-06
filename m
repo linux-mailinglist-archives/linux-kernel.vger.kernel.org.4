@@ -2,193 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D1A68C97A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4642A68C97B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 23:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBFWeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 17:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S230116AbjBFWeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 17:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBFWeI (ORCPT
+        with ESMTP id S229615AbjBFWeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 17:34:08 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B86D16AC3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:34:04 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id q19so13213218edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 14:34:03 -0800 (PST)
+        Mon, 6 Feb 2023 17:34:13 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B85823C47
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:34:10 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id ml19so38730847ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 14:34:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u8hK6aDnGas5wTwlB9YPUBcu6UkRBLvZchU/qDz76og=;
-        b=EevNMgbk9U4T97qNlnWsGtygl8qMB7c4XLR9I/txerpfKx5PVnGRxFzigNSYs7NYZg
-         WLgmPHL0+MGznlHVdb0ddRLKUJyqUHdugQk0gRwt1UYuhXblEQZ85W3IUHRrTXVuetsL
-         0CN5R/4jlN/IWKHVNjDjCNJmhX0ySRcbSLETCLsIXLBw4KKN865+2kA5Kr6biOc2NBU1
-         Xgbui+TwtpgQgW8WWcdDjhFSvxiCGbVcoXGih8/eceKXPUF0H6qTUSNAXjVpwUsVqyTj
-         OM53iCOSNHIHsveRMv1xKw/3xqkXQqYGYmRBLslGn4BFiFqkQrXIGGLWmwTV/LkRg0Ld
-         hl/w==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oPNP2/Jy05oYx7Ua/KHbVlH+c1xyVbqGnx/noop7sjo=;
+        b=gu0nF7ItiqVouL+YD1YwEyk8qIJ6jlY35wBXYtEqdIT0pE5jC939+c8/4uANgcrYm1
+         iC6NshSMYlrxlR2/ucmgOM8mF8xIyzGoUP12jTYlicbu7JWvlSsnx9RK4slOUfbIYjRr
+         2uRWoJ7EjmBl6CUrMsrhIvVfLvcWPYgV8AfEw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=u8hK6aDnGas5wTwlB9YPUBcu6UkRBLvZchU/qDz76og=;
-        b=N1MUiMTrTsbaZtWkpdFWF1TVVnTkS9ZCvj4kkX+q3KEEbwd8fVK8VyP1/W1sFWtihE
-         9kQXg3MgjNxWfVKD2DFcTLDn4I2/Y0EprrM/MgXSmhIJ/UlHiGWp8pxo+9WCQB9ERcN4
-         zxLwSxVafP6K/b62sj0akOD6r1qSuHyFWM85x06AEvu5KBR079ou3oVbMEcXPCikiRNR
-         Fx7nxYxpsVjPe5DgQZCd7dKQNBimI7DvPjGkAHqizPDr9Udy4Q2GHnNSIv9rEOiKpS9i
-         QrvQcccXEJKmZzzY6jI5GdPGsdo2N9diCp7xrTb4RgSschVpbFSefmzrIZBSuSGqCxUN
-         s2mQ==
-X-Gm-Message-State: AO0yUKXYI4y/AQBp3MpUjmoQ8SMjY72+jKdD94pNxYlEvVQTH5OwL3u4
-        /af3oXuIXC2KqFf7+7taqkF/4KpItpf80SJBtORyb1vi7H7+4bo8
-X-Google-Smtp-Source: AK7set+H3rGwLjh8NVvvnFI7Dml0OaOooCV26xcKw2FJTaXXdzG0Q/pEmu9yvXMetA9du1JlLANUA8H90NenyJlySqo=
-X-Received: by 2002:a50:cd17:0:b0:4a2:7833:e39c with SMTP id
- z23-20020a50cd17000000b004a27833e39cmr24934edi.3.1675722842269; Mon, 06 Feb
- 2023 14:34:02 -0800 (PST)
+        bh=oPNP2/Jy05oYx7Ua/KHbVlH+c1xyVbqGnx/noop7sjo=;
+        b=XExolMI1YJ2Ezu2+n1kD+ebomEsoaIepQ1+FU20vOOc6eafHcVAoRY2laRZRU0FzyO
+         VelMCjpqVoXFq5JjxJ5HQs2Lu5to8rjqgxN9AeB/7z2oG1K3jXJQk6nHDMqVOrf7G9JR
+         0w/Tw7j1bFTwe0LBCjy8fVVkcHn3XZ45FQeuNOFjk9b7OuBEseOuWv7uw5uBllE6V61o
+         0GcwFWehcPsOgq/INZd86hmiTSb82jWc9fpWWWQ032K4nDFkvGuEF3NpGmFjmFE+lLHw
+         3qo0IcCADj5vSHQfOX2Arm0fV5/7QY/cXo4vc2fyOsKzb0T9/OsM2n0C3StRgqxnZYnU
+         yyNg==
+X-Gm-Message-State: AO0yUKUVCIJM12g3RbMIUemiB9cWrd0eViBe9PllNSy4n6FN2s4W3HxP
+        KDaNqZhQe0QVg+s3uY5Agz9SwA==
+X-Google-Smtp-Source: AK7set+yY68oBu2tHm2T564Jwa47RoeBc7Ca68SNH7ZzN8Ddb5UdZvby7KO44vUS6CiGYyVlrIRHxQ==
+X-Received: by 2002:a17:906:228b:b0:888:a06f:104b with SMTP id p11-20020a170906228b00b00888a06f104bmr1042001eja.36.1675722848580;
+        Mon, 06 Feb 2023 14:34:08 -0800 (PST)
+Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
+        by smtp.gmail.com with ESMTPSA id y18-20020a1709063a9200b00878b89075adsm6002799ejd.51.2023.02.06.14.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 14:34:08 -0800 (PST)
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Mon, 06 Feb 2023 22:33:54 +0000
+Subject: [PATCH v3] sched: pick_next_rt_entity(): check list_entry
 MIME-Version: 1.0
-References: <20230203192822.106773-1-vipinsh@google.com> <20230203192822.106773-6-vipinsh@google.com>
-In-Reply-To: <20230203192822.106773-6-vipinsh@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 6 Feb 2023 14:33:50 -0800
-Message-ID: <CANgfPd_MKOPrHJUAJQsKX7G0zQBbGNObjmW6ddfPDfuEJcBvnw@mail.gmail.com>
-Subject: Re: [Patch v2 5/5] KVM: x86/mmu: Merge all handle_changed_pte* functions.
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230128-list-entry-null-check-sched-v3-1-b1a71bd1ac6b@diag.uniroma1.it>
+X-B4-Tracking: v=1; b=H4sIAFGA4WMC/5XOTQ6CMBAF4KuQrh3SHyHgynsYF6UdYCIW0xYiI
+ dzdwtqFriZvJvnerCygJwzskq3M40yBRpeCOmXM9Np1CGRTZpJLxYWsYKAQAV30C7hpGMD0aB4
+ Q0rCgVatsa0t7LiuWhEYHhMZrZ/rdeOoQ0e+Hl8eW3kft7Z5yn9DRL8cXs9i3vxXOAgSYWvGqQ
+ OS8KK6WdJdPjvz41CKnyHZ+ln+QMpG2Qi64MViL5gu5bdsHr5FpCzkBAAA=
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Phil Auld <pauld@redhat.com>, Ben Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dmitry Adamushko <dmitry.adamushko@gmail.com>
+Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675722848; l=1950;
+ i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
+ bh=vTdCdz8mzVgH9HkpgBXyq+LcnD4OnRfIU38f71CBPBI=;
+ b=09d4TBy2OlH9UJqpZpGZsfVSQSid141a0s7KRtEwZzBLi5Yj9TNj5+2UHl+reZjU0iD9gVqRDNV2
+ 6804kGknAdHjTpm7jdUyxFQ6TsGyZ7iKgZhp9cntNv3koW3gwyYV
+X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
+ pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 11:28 AM Vipin Sharma <vipinsh@google.com> wrote:
->
-> __handle_changed_pte() and handle_changed_spte_acc_track() are always
-> used together. Merge these two functions and name the new function
-> handle_changed_pte(). Remove the existing handle_changed_pte() function
-> which just calls __handle_changed_pte and
-> handle_changed_spte_acc_track().
->
-> This converges SPTEs change handling code to a single place.
->
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+Commit 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+removed any path which could make pick_next_rt_entity() return NULL.
+However, BUG_ON(!rt_se) in _pick_next_task_rt() (the only caller of
+pick_next_rt_entity()) still checks the error condition, which can
+never happen, since list_entry() never returns NULL.
+Remove the BUG_ON check, and instead emit a warning in the only
+possible error condition here: the queue being empty which should
+never happen.
 
-Reviewed-by: Ben Gardon <bgardon@google.com>
+Fixes: 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+---
+Changes in v3:
+- return NULL if the list is empty
+- Link to v2: https://lore.kernel.org/r/20230128-list-entry-null-check-sched-v2-1-d8e010cce91b@diag.uniroma1.it
 
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 42 +++++++++++---------------------------
->  1 file changed, 12 insertions(+), 30 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index afe0dcb1859e..9b0c81a28f97 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -334,17 +334,6 @@ static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
->                                 u64 old_spte, u64 new_spte, int level,
->                                 bool shared);
->
-> -static void handle_changed_spte_acc_track(u64 old_spte, u64 new_spte, int level)
-> -{
-> -       if (!is_shadow_present_pte(old_spte) || !is_last_spte(old_spte, level))
-> -               return;
-> -
-> -       if (is_accessed_spte(old_spte) &&
-> -           (!is_shadow_present_pte(new_spte) || !is_accessed_spte(new_spte) ||
-> -            spte_to_pfn(old_spte) != spte_to_pfn(new_spte)))
-> -               kvm_set_pfn_accessed(spte_to_pfn(old_spte));
-> -}
-> -
->  static void tdp_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
->  {
->         kvm_account_pgtable_pages((void *)sp->spt, +1);
-> @@ -487,7 +476,7 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
->  }
->
->  /**
-> - * __handle_changed_spte - handle bookkeeping associated with an SPTE change
-> + * handle_changed_spte - handle bookkeeping associated with an SPTE change
->   * @kvm: kvm instance
->   * @as_id: the address space of the paging structure the SPTE was a part of
->   * @gfn: the base GFN that was mapped by the SPTE
-> @@ -501,9 +490,9 @@ static void handle_removed_pt(struct kvm *kvm, tdp_ptep_t pt, bool shared)
->   * Handle bookkeeping that might result from the modification of a SPTE.
->   * This function must be called for all TDP SPTE modifications.
->   */
-> -static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-> -                                 u64 old_spte, u64 new_spte, int level,
-> -                                 bool shared)
-> +static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-> +                               u64 old_spte, u64 new_spte, int level,
-> +                               bool shared)
->  {
->         bool was_present = is_shadow_present_pte(old_spte);
->         bool is_present = is_shadow_present_pte(new_spte);
-> @@ -587,15 +576,10 @@ static void __handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
->         if (was_present && !was_leaf &&
->             (is_leaf || !is_present || WARN_ON_ONCE(pfn_changed)))
->                 handle_removed_pt(kvm, spte_to_child_pt(old_spte, level), shared);
-> -}
->
-> -static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
-> -                               u64 old_spte, u64 new_spte, int level,
-> -                               bool shared)
-> -{
-> -       __handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level,
-> -                             shared);
-> -       handle_changed_spte_acc_track(old_spte, new_spte, level);
-> +       if (was_leaf && is_accessed_spte(old_spte) &&
-> +           (!is_present || !is_accessed_spte(new_spte) || pfn_changed))
-> +               kvm_set_pfn_accessed(spte_to_pfn(old_spte));
->  }
->
->  /*
-> @@ -638,9 +622,8 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
->         if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
->                 return -EBUSY;
->
-> -       __handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
-> -                             new_spte, iter->level, true);
-> -       handle_changed_spte_acc_track(iter->old_spte, new_spte, iter->level);
-> +       handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
-> +                           new_spte, iter->level, true);
->
->         return 0;
->  }
-> @@ -705,8 +688,7 @@ static u64 _tdp_mmu_set_spte(struct kvm *kvm, int as_id, tdp_ptep_t sptep,
->
->         old_spte = kvm_tdp_mmu_write_spte(sptep, old_spte, new_spte, level);
->
-> -       __handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
-> -       handle_changed_spte_acc_track(old_spte, new_spte, level);
-> +       handle_changed_spte(kvm, as_id, gfn, old_spte, new_spte, level, false);
->         return old_spte;
->  }
->
-> @@ -1273,7 +1255,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
->          * Note, when changing a read-only SPTE, it's not strictly necessary to
->          * zero the SPTE before setting the new PFN, but doing so preserves the
->          * invariant that the PFN of a present * leaf SPTE can never change.
-> -        * See __handle_changed_spte().
-> +        * See handle_changed_spte().
->          */
->         tdp_mmu_set_spte(kvm, iter, 0);
->
-> @@ -1298,7 +1280,7 @@ bool kvm_tdp_mmu_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
->         /*
->          * No need to handle the remote TLB flush under RCU protection, the
->          * target SPTE _must_ be a leaf SPTE, i.e. cannot result in freeing a
-> -        * shadow page.  See the WARN on pfn_changed in __handle_changed_spte().
-> +        * shadow page. See the WARN on pfn_changed in handle_changed_spte().
->          */
->         return kvm_tdp_mmu_handle_gfn(kvm, range, set_spte_gfn);
->  }
-> --
-> 2.39.1.519.gcb327c4b5f-goog
->
+Changes in v2:
+- pick_next_rt_entity(): emit warning instead of crashing
+- Link to v1: https://lore.kernel.org/r/20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it
+---
+ kernel/sched/rt.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index ed2a47e4ddae..0a11f44adee5 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1777,6 +1777,8 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+ 	BUG_ON(idx >= MAX_RT_PRIO);
+ 
+ 	queue = array->queue + idx;
++	if (SCHED_WARN_ON(list_empty(queue)))
++		return NULL;
+ 	next = list_entry(queue->next, struct sched_rt_entity, run_list);
+ 
+ 	return next;
+@@ -1789,7 +1791,8 @@ static struct task_struct *_pick_next_task_rt(struct rq *rq)
+ 
+ 	do {
+ 		rt_se = pick_next_rt_entity(rt_rq);
+-		BUG_ON(!rt_se);
++		if (unlikely(!rt_se))
++			return NULL;
+ 		rt_rq = group_rt_rq(rt_se);
+ 	} while (rt_rq);
+ 
+
+---
+base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+change-id: 20230128-list-entry-null-check-sched-a3f3dfd6d468
+
+Best regards,
+-- 
+Pietro Borrello <borrello@diag.uniroma1.it>
+
