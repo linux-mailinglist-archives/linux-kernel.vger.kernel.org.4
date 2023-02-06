@@ -2,265 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC37068BC28
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DD568BC2D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjBFL4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:56:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S230029AbjBFL6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjBFL4b (ORCPT
+        with ESMTP id S229841AbjBFL6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:56:31 -0500
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C3422DE6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:56:03 -0800 (PST)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230206115601epoutp013fd4db452b5340697d0ed3f0f054ab79~BOjr3S8zs2237722377epoutp01Q
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:56:01 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230206115601epoutp013fd4db452b5340697d0ed3f0f054ab79~BOjr3S8zs2237722377epoutp01Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1675684561;
-        bh=DaNoKx85s1XMgGyOKRqu4B4f9oIW5scdWTiV0LJmAWU=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=V4qVablqNjZ8dzuyZeRnUvvffWkrn9o1XBvYLL4GC1J6E6FEFkrvFUrUnSnJngEwA
-         UCGuU2AUK3GdGuczoPM2C+UWPFxBbRwXxh1xKJmr5W/xeP7YFqTdjjWDzdMyLUbpIe
-         Mdp4PhfXNgmLAaqUHK+g8ZX8pQW3r05oFmbkNEL4=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20230206115600epcas2p375b5479445f9b87732dec33b8131bfbe~BOjrf4BlT1045210452epcas2p3F;
-        Mon,  6 Feb 2023 11:56:00 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.69]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4P9Pq42mSqz4x9Pv; Mon,  6 Feb
-        2023 11:56:00 +0000 (GMT)
-X-AuditID: b6c32a45-671ff7000001f1e7-3c-63e0ead0489b
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E4.23.61927.0DAE0E36; Mon,  6 Feb 2023 20:56:00 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] f2fs: fix typos in comments
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230206115600epcms2p736f05524a361d5926dbb401bdd218f85@epcms2p7>
-Date:   Mon, 06 Feb 2023 20:56:00 +0900
-X-CMS-MailID: 20230206115600epcms2p736f05524a361d5926dbb401bdd218f85
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGKsWRmVeSWpSXmKPExsWy7bCmqe6FVw+SDc58ErI4PfUsk8XLQ5oW
-        vf1b2SyerJ/FbHFpkbvF5V1z2BzYPDat6mTz2L3gM5NH35ZVjB6fN8kFsERl22SkJqakFimk
-        5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYArVZSKEvMKQUKBSQWFyvp
-        29kU5ZeWpCpk5BeX2CqlFqTkFJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGdcWNjIWNBsXvHj
-        7F22BsaFOl2MnBwSAiYSG3/8Yu1i5OIQEtjBKNG/7A1TFyMHB6+AoMTfHcIgNcICOhIN1+4z
-        gthCAkoS59bMYgQpERYwkLjVaw4SZhPQk/i5ZAYbiC0i8IpR4sxqUYjxvBIz2p+yQNjSEtuX
-        b2WEsDUkfizrZYawRSVurn7LDmO/PzYfqkZEovXeWagaQYkHP3dDxSUlDh36ygZygoRAvsSG
-        A4EQ4RqJt8sPQJXoS1zr2Ai2llfAV+LKmQZWEJtFQFWi+/s6qHNcJF4t/wtmMwvIS2x/O4cZ
-        ZCSzgKbE+l36ENOVJY7cYoF5pGHjb3Z0NrMAn0TH4b9w8R3znjBBtKpJLGoyggjLSHw9PB+q
-        xEPi2v29jBMYFWchAnkWkhNmIZywgJF5FaNYakFxbnpqsVGBITxek/NzNzGCE6CW6w7GyW8/
-        6B1iZOJgPMQowcGsJMJreuBBshBvSmJlVWpRfnxRaU5q8SFGU6DnJzJLiSbnA1NwXkm8oYml
-        gYmZmaG5kamBuZI4r7TtyWQhgfTEktTs1NSC1CKYPiYOTqkGJnu16cV8ns82vUpmu9AuE5aX
-        69rd+Is33tJq/+IVuR9rG6cEy4ucEC65PmnL92+Tgy2sXh36cVxUMCZ6omKpiOavyTM/hKQ1
-        h4Q7WEy0UCt45vXuw6sZTwNNJ+Q4lOrsflq57tyaj79rt7KK5L1v+/jsocLzG+1TNu5ibTnY
-        qSe3Zf7Dy9oCnP++JYZOehl7p3hRjdDCYkWLzfJ1Gb4T59lf81SriD7wcYvjocehVbYtj4z4
-        uGJaP53SiLxjGLiaJ9U0W/PsFwlWx5xtDPm8PB/+r7v73X4u5+rLDxtXWX15JOFxm+FS41X1
-        9Eez+U6dmVv/tnZmu+ekF1Yr337PnLplxkHTsxxpP37/1FcMYVNiKc5INNRiLipOBACc99YI
-        CQQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230206115600epcms2p736f05524a361d5926dbb401bdd218f85
-References: <CGME20230206115600epcms2p736f05524a361d5926dbb401bdd218f85@epcms2p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 06:58:48 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB50E12F28;
+        Mon,  6 Feb 2023 03:58:46 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id r3so1654445edq.13;
+        Mon, 06 Feb 2023 03:58:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ppxjTfPrt+fO380TECKEc+9j8f0qNsSPRjIV/2FlqhQ=;
+        b=aDm4q22FFAJMiLL7psWLsdmiCHHEWeaqe9df4Cj2D05wF/rp53Il86syfJA1cqw67v
+         HUOvdu1YcgM4SPClp8Dd2doiCfEznIjnrbzAqn82morUSGeNbGooGE9blGu0FeFs+gEE
+         7C3zyIBGTzIdj2oEZWCS/ncOj6bKDeXn6VU6W4JdYX/vP6w3pMnjyLdXUV0DCklJxq2i
+         mLc3nyKE4ZwMaVsPqIPEcEldIKluga7OBFj21jfHwkzJJFOYhCl41bMQTcJbpPYdRfsY
+         +otpM+3upWgko7msDXMRnG/EHjeNvmzBNYgrT8P5Z/2kPKEpdDUJZBmNn9TP3swBwqI0
+         yovA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ppxjTfPrt+fO380TECKEc+9j8f0qNsSPRjIV/2FlqhQ=;
+        b=ukBcN+91KNb46B82Emjl3KNpUG8g4QRMIM2rGZKAhn1X3KB/BJbIUwaPqTaLqbtznS
+         2Hi9eQyX2o19kAGKN/m2mUDSCvgo+mvz4TwARFR2SCaAREnMKZQbKcaLSi/fYGfwoJsj
+         gMfIwo7dloZUBOnUNmYbV0Y3t3rYZolN8ukrFi+ZtUlYxu7ZfMjyUuGLHl+L2fSPVpfU
+         2xkSoedXqrqP5Z+hhjJgqNUeqoQ3hHiugSZpF4ogvVOK8z5HSKYjzU+xirqGRo2PLrTa
+         vh/v3GIai+FM9ziTD6V2/3LHYU5g4QBX721jXikdi5SEDONgvmM8R0DEugYIWpqfI+Z6
+         ZTLQ==
+X-Gm-Message-State: AO0yUKVPQ0AAPqtmJkzAtPmtorTw2fbOdz5s+1V/mDu7uEBHq2X+ZX4B
+        MhkhCXHuXI95ol7tijfPGoAvSZem/H8hcSWCFOFrZcAyj/o=
+X-Google-Smtp-Source: AK7set8dT1GLWLBBhtdwxzc0ZvOt+xNblBgmSsJtrdZ2/k4U93LHXST34508M3qaGnCip1/HHUWhGEzFRzwQ5P5nDX0=
+X-Received: by 2002:a50:d71b:0:b0:4aa:ab5b:99e7 with SMTP id
+ t27-20020a50d71b000000b004aaab5b99e7mr10418edi.0.1675684725237; Mon, 06 Feb
+ 2023 03:58:45 -0800 (PST)
+MIME-Version: 1.0
+References: <20230203141515.125205-1-n.petrova@fintech.ru>
+In-Reply-To: <20230203141515.125205-1-n.petrova@fintech.ru>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Mon, 6 Feb 2023 12:58:33 +0100
+Message-ID: <CAOi1vP_7Oaw8O-p2X1xymzym1Xf_RZeN0u=SeE4Zbc2y+AfgYA@mail.gmail.com>
+Subject: Re: [PATCH] rbd: avoid double free memory on error path in rbd_dev_create()
+To:     Natalia Petrova <n.petrova@fintech.ru>
+Cc:     Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Jens Axboe <axboe@kernel.dk>, ceph-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is to fix typos in f2fs files.
+On Fri, Feb 3, 2023 at 3:15 PM Natalia Petrova <n.petrova@fintech.ru> wrote:
+>
+> If rbd_dev_create() fails after assignment 'opts' to 'rbd_dev->opts',
+> double free of 'rbd_options' happens:
+> one is in rbd_dev_free() and another one is in do_rbd_add().
+>
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>
+> Fixes: 1643dfa4c2c8 ("rbd: introduce a per-device ordered workqueue")
+> Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
+> Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+> ---
+>  drivers/block/rbd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+> index 04453f4a319c..ab6bfc352cde 100644
+> --- a/drivers/block/rbd.c
+> +++ b/drivers/block/rbd.c
+> @@ -5357,7 +5357,6 @@ static struct rbd_device *rbd_dev_create(struct rbd_client *rbdc,
+>         if (!rbd_dev)
+>                 return NULL;
+>
+> -       rbd_dev->opts = opts;
+>
+>         /* get an id and fill in device name */
+>         rbd_dev->dev_id = ida_simple_get(&rbd_dev_id_ida, 0,
+> @@ -5372,6 +5371,7 @@ static struct rbd_device *rbd_dev_create(struct rbd_client *rbdc,
+>         if (!rbd_dev->task_wq)
+>                 goto fail_dev_id;
+>
+> +       rbd_dev->opts = opts;
+>         /* we have a ref from do_rbd_add() */
+>         __module_get(THIS_MODULE);
+>
+> --
+> 2.34.1
+>
 
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- fs/f2fs/checkpoint.c   | 4 ++--
- fs/f2fs/compress.c     | 2 +-
- fs/f2fs/data.c         | 8 ++++----
- fs/f2fs/extent_cache.c | 4 ++--
- fs/f2fs/file.c         | 6 +++---
- fs/f2fs/namei.c        | 2 +-
- fs/f2fs/segment.c      | 2 +-
- 7 files changed, 14 insertions(+), 14 deletions(-)
+Hi Natalia,
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 89ce08b0ff7c..1369ec892a2c 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -792,7 +792,7 @@ static void write_orphan_inodes(struct f2fs_sb_info *sbi, block_t start_blk)
- 	 */
- 	head = &im->ino_list;
- 
--	/* loop for each orphan inode entry and write them in Jornal block */
-+	/* loop for each orphan inode entry and write them in journal block */
- 	list_for_each_entry(orphan, head, list) {
- 		if (!page) {
- 			page = f2fs_grab_meta_page(sbi, start_blk++);
-@@ -1122,7 +1122,7 @@ int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type,
- 	} else {
- 		/*
- 		 * We should submit bio, since it exists several
--		 * wribacking dentry pages in the freeing inode.
-+		 * writebacking dentry pages in the freeing inode.
- 		 */
- 		f2fs_submit_merged_write(sbi, DATA);
- 		cond_resched();
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index e4851f7a43d8..b40dec3d7f79 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -1225,7 +1225,7 @@ static int f2fs_write_compressed_pages(struct compress_ctx *cc,
- 	loff_t psize;
- 	int i, err;
- 
--	/* we should bypass data pages to proceed the kworkder jobs */
-+	/* we should bypass data pages to proceed the kworker jobs */
- 	if (unlikely(f2fs_cp_error(sbi))) {
- 		mapping_set_error(cc->rpages[0]->mapping, -EIO);
- 		goto out_free;
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 8a636500db0e..c00b9ad98ac4 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -2382,7 +2382,7 @@ static int f2fs_mpage_readpages(struct inode *inode,
- 
- #ifdef CONFIG_F2FS_FS_COMPRESSION
- 		if (f2fs_compressed_file(inode)) {
--			/* there are remained comressed pages, submit them */
-+			/* there are remained compressed pages, submit them */
- 			if (!f2fs_cluster_can_merge_page(&cc, page->index)) {
- 				ret = f2fs_read_multi_pages(&cc, &bio,
- 							max_nr_pages,
-@@ -2788,7 +2788,7 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
- 
- 	trace_f2fs_writepage(page, DATA);
- 
--	/* we should bypass data pages to proceed the kworkder jobs */
-+	/* we should bypass data pages to proceed the kworker jobs */
- 	if (unlikely(f2fs_cp_error(sbi))) {
- 		mapping_set_error(page->mapping, -EIO);
- 		/*
-@@ -2907,7 +2907,7 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
- redirty_out:
- 	redirty_page_for_writepage(wbc, page);
- 	/*
--	 * pageout() in MM traslates EAGAIN, so calls handle_write_error()
-+	 * pageout() in MM translates EAGAIN, so calls handle_write_error()
- 	 * -> mapping_set_error() -> set_bit(AS_EIO, ...).
- 	 * file_write_and_wait_range() will see EIO error, which is critical
- 	 * to return value of fsync() followed by atomic_write failure to user.
-@@ -2941,7 +2941,7 @@ static int f2fs_write_data_page(struct page *page,
- }
- 
- /*
-- * This function was copied from write_cche_pages from mm/page-writeback.c.
-+ * This function was copied from write_cache_pages from mm/page-writeback.c.
-  * The major change is making write step of cold data page separately from
-  * warm/hot data page.
-  */
-diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-index c8efc957c230..636aa8694363 100644
---- a/fs/f2fs/extent_cache.c
-+++ b/fs/f2fs/extent_cache.c
-@@ -233,7 +233,7 @@ struct rb_node **f2fs_lookup_rb_tree_for_insert(struct f2fs_sb_info *sbi,
-  * @prev_ex: extent before ofs
-  * @next_ex: extent after ofs
-  * @insert_p: insert point for new extent at ofs
-- * in order to simpfy the insertion after.
-+ * in order to simplify the insertion after.
-  * tree must stay unchanged between lookup and insertion.
-  */
- struct rb_entry *f2fs_lookup_rb_tree_ret(struct rb_root_cached *root,
-@@ -718,7 +718,7 @@ static void __update_extent_tree_range(struct inode *inode,
- 	if (!en)
- 		en = next_en;
- 
--	/* 2. invlidate all extent nodes in range [fofs, fofs + len - 1] */
-+	/* 2. invalidate all extent nodes in range [fofs, fofs + len - 1] */
- 	while (en && en->ei.fofs < end) {
- 		unsigned int org_end;
- 		int parts = 0;	/* # of parts current extent split into */
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index a17aca50c18c..300eae8b5415 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -303,7 +303,7 @@ static int f2fs_do_sync_file(struct file *file, loff_t start, loff_t end,
- 		 * for OPU case, during fsync(), node can be persisted before
- 		 * data when lower device doesn't support write barrier, result
- 		 * in data corruption after SPO.
--		 * So for strict fsync mode, force to use atomic write sematics
-+		 * So for strict fsync mode, force to use atomic write semantics
- 		 * to keep write order in between data/node and last node to
- 		 * avoid potential data corruption.
- 		 */
-@@ -1806,7 +1806,7 @@ static long f2fs_fallocate(struct file *file, int mode,
- 		return -EOPNOTSUPP;
- 
- 	/*
--	 * Pinned file should not support partial trucation since the block
-+	 * Pinned file should not support partial truncation since the block
- 	 * can be used by applications.
- 	 */
- 	if ((f2fs_compressed_file(inode) || f2fs_is_pinned_file(inode)) &&
-@@ -1856,7 +1856,7 @@ static long f2fs_fallocate(struct file *file, int mode,
- static int f2fs_release_file(struct inode *inode, struct file *filp)
- {
- 	/*
--	 * f2fs_relase_file is called at every close calls. So we should
-+	 * f2fs_release_file is called at every close calls. So we should
- 	 * not drop any inmemory pages by close called by other process.
- 	 */
- 	if (!(filp->f_mode & FMODE_WRITE) ||
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index 82923273f4bb..f9aafb7ac44d 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -963,7 +963,7 @@ static int f2fs_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 
- 	/*
- 	 * If new_inode is null, the below renaming flow will
--	 * add a link in old_dir which can conver inline_dir.
-+	 * add a link in old_dir which can convert inline_dir.
- 	 * After then, if we failed to get the entry due to other
- 	 * reasons like ENOMEM, we had to remove the new entry.
- 	 * Instead of adding such the error handling routine, let's
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 69b01b5c0ce0..ead3f35f501d 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -3616,7 +3616,7 @@ void f2fs_wait_on_page_writeback(struct page *page,
- 
- 		/* submit cached LFS IO */
- 		f2fs_submit_merged_write_cond(sbi, NULL, page, 0, type);
--		/* sbumit cached IPU IO */
-+		/* submit cached IPU IO */
- 		f2fs_submit_merged_ipu_write(sbi, NULL, page);
- 		if (ordered) {
- 			wait_on_page_writeback(page);
--- 
-2.25.1
+It seems like a similar issue is affecting rbd_dev->rbd_client and
+rbd_dev->spec.  Unlike rbd_dev->opts, they are ref-counted and I'm
+guessing that the verification tool doesn't go that deep.
+
+I'd prefer all three to be addressed in the same change, since it's the
+same error path.  Would you be willing to look into that and post a new
+revision or should I treat just this patch as a bug report?
+
+Thanks,
+
+                Ilya
