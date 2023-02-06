@@ -2,225 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFA668B9C8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D937F68B9D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjBFKRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S230364AbjBFKTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:19:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjBFKRd (ORCPT
+        with ESMTP id S230363AbjBFKTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:17:33 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D8A20D26
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:17:13 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so10352482wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:17:13 -0800 (PST)
+        Mon, 6 Feb 2023 05:19:14 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E076E55B2;
+        Mon,  6 Feb 2023 02:18:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bEuZco+C0tgRMLbxFdezlg2QvjwKOW/CKJ9puGrppEDU9U3P/rELIHOrj+T3u8+iBzP/QZtqgf7ZGSuEHNpjmx+bxMEXa0eMZeCVaWeZMTRHt8ob0SMLKSvmm/ZVLZfK5QXKNHv7a1kG/ykM1kq5IQ8NHTgDx1j/5a+gPwH047wLkDZPIikhlqxK+iNwkGGmef/Zzz+W9tlWYEkQrcu5OdMd9i1wcs7VSqMElnOEDkhxtgWcG4BviC4zKR7F77N+PhHEKbZnGZCnNwKbqRXle9RvNyySEY4+hcjC4s0X53cytd644vR1XF6ToGxY0g+WlG44tZ7DgCIfKQS0MKiHdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qcbToXedEk8nMg4tDAsg5PVSCZxyb615DAhOCYVOpAs=;
+ b=N4Cl66HL9b9yXvkvJJb9uwv6lW1PQJy+6PGPLu7VMBWjiv/m8lhOCgYrczZG8MiYhlzVNof59h5tIIp8oYXEs48PV2GSoDKcsIELWwTugur/XfLKkjwzHF2XwHUvJQDc8ge1SoJFaJXZbIfTw0KnkYTIKg66c5kJYybD6UjUDyokHg6ejXYgfMqnSzX/XovfQmZ8G+McXq2VasPvl8u67ruqz9WwZvHikTs6C57us144HRHCISHkLQbYrKmmjJjqaYDK5UkG/62srtYnRnTfvQ0rJNxuhgtyCzMUqJ6w/3X4/IgHjoqswvam0UKA5CyMZHmwlTgFhTDcsp3kZ9VQ+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K8BNt3P6FlT3kcYmEuu8JuiEyEcVrYDY8Kmy12NJEfA=;
-        b=zgSsX1Q7/VpfxquQvwMtgivpLppI6KrnTpFPO5Nmc9n5uOWuMEGxQkQ/Gf4NlxPiFy
-         EJ0jsQ+b/JZ+ys41QsiSgscK6SqRp1RkK0xKCO8bconbCTA+zZkWCcIvkGPGorUCT2lf
-         zrQZT6lsz8Frqk6R6tE+8S1ziWDS/zDum/Ia6sLsiCQJbNNdushk43gUXM4VmJya/w68
-         pjnzJ8GGJ6f1NgTN9PlVF2fuWWNzF7VBgGQGjba5TFXb97YejK4BdTqa9HFsBj/6unMm
-         se57g8Hw+wp97Uz4s9g3+fptcua5sfWyEqAMDT7jiTzNxOMrTU7V2g3Z1FvnZT+9tDOO
-         wyOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K8BNt3P6FlT3kcYmEuu8JuiEyEcVrYDY8Kmy12NJEfA=;
-        b=n8ndTTkYh6UdFTg59qnXA66xiTP45orohP2I2JQL9nN1tC3jhunyKiaz4xsjucbPev
-         CMJP6BakXN8MoQkZpOJM+j/ahUG7D0toLCdFrShNawC2XzNMTnkwhQ0HqNeocGggu5AA
-         JaXHiYZ6HrENNWySOcIBDIZxEyXIdctHKK9P8vNdL54SKopbdDklbmXloyEkVpTNb3JZ
-         iXY6ENFikCUHb6Vz9OtXTi193q5zpPr7q0X0jZXpx+nUct5bdGBS+tN8gOhswQpbbaMb
-         zXbho/BQGaojHWwtBFsF4ntChDb1iOu01RLe2scVxXJl1o79ZbNNa1TyvFai4C9q5FTh
-         13dQ==
-X-Gm-Message-State: AO0yUKUGG4LwISF5omSNoO3P2eRcl0OAEuLQgxPe3PFHP38+tvk2stTF
-        IiDrCw7boVMolnciSkXzngpJWw==
-X-Google-Smtp-Source: AK7set+RBq1X59Rbn5OBJjwdZiUQ7+nz9FtH2iHRF6sKXMb6tfAELQ2EdPiWWyvxhSUGcUJmZxATGg==
-X-Received: by 2002:a05:600c:3544:b0:3dd:1c46:b92 with SMTP id i4-20020a05600c354400b003dd1c460b92mr20586556wmq.16.1675678632105;
-        Mon, 06 Feb 2023 02:17:12 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id w15-20020a05600c474f00b003db0bb81b6asm11314201wmo.1.2023.02.06.02.17.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 02:17:11 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 06 Feb 2023 11:17:08 +0100
-Subject: [PATCH 5/5] arm64: dst: qcom: sm8450: add dp controller
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qcbToXedEk8nMg4tDAsg5PVSCZxyb615DAhOCYVOpAs=;
+ b=YLNNS2l5RUwYKucepJ1TEtIM7L8F/3sLiHCePwsWYeCSgQfK0D8Km6n+KjCVzpXuhVG32fOIZzIU1LZ0Ak+IYK8wI4SBYJw7tHS9RxdvrljxgnfwuIisLFub+S6f/voquZKzy3pELk61R2DxyIuPzGfKpnrk8ynfsEgZ4FvjiLo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB3800.namprd13.prod.outlook.com (2603:10b6:610:9c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 10:18:31 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6064.034; Mon, 6 Feb 2023
+ 10:18:31 +0000
+Date:   Mon, 6 Feb 2023 11:18:23 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Daniel.Machon@microchip.com
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, Lars.Povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        joe@perches.com, richardcochran@gmail.com, casper.casan@gmail.com,
+        Horatiu.Vultur@microchip.com, shangxiaojing@huawei.com,
+        rmk+kernel@armlinux.org.uk, nhuck@google.com, error27@gmail.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next 03/10] net: microchip: sparx5: add support for
+ Service Dual Leacky Buckets
+Message-ID: <Y+DT78lbinHKcxvb@corigine.com>
+References: <20230202104355.1612823-1-daniel.machon@microchip.com>
+ <20230202104355.1612823-4-daniel.machon@microchip.com>
+ <Y95VRJWV4NfSDYUR@corigine.com>
+ <Y+ANVTMT7jgV0i0l@DEN-LT-70577>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+ANVTMT7jgV0i0l@DEN-LT-70577>
+X-ClientProxiedBy: AM0PR02CA0027.eurprd02.prod.outlook.com
+ (2603:10a6:208:3e::40) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230206-topic-sm8450-upstream-dp-controller-v1-5-f1345872ed19@linaro.org>
-References: <20230206-topic-sm8450-upstream-dp-controller-v1-0-f1345872ed19@linaro.org>
-In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v1-0-f1345872ed19@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3800:EE_
+X-MS-Office365-Filtering-Correlation-Id: c19e344f-0aa4-405f-de2a-08db082b7ec7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: io1ZDMMjB0BFbMUrEbfm+bsdMnRRAk8PBwYd7mT+KHySe5lyoEbPWncj2FZyJV/Q7VQeutcc5H3AFoqXoEJ+bpWL86G/YiWlALeJTtsLtLfvlq3miVAadfbpZpQfYSQsQItFit3VGukkD1R7qqhdKxH/B2y61Pc9wj8nvDDJSjhjnHK8zMWXrZsg+3e4ouTRfUg0wOzRYgYAb/cO2t/wh8Li29rWCHVoecIRxdduDeqSCB5lDs+jDEsiCD6C7tZON74lDNhe36H/qlyAnuGff7rTLQAqk3ZSBM748o3noq6mkR9Z0BQJpNDFWjaK5+tyrahN9J0U63u8jtWjMlppEIoH72NbMVvlNzy1Cpp2HN89ShJmU6Bc6h44v98qbyEDc68ocXYffnX+Lqj8F4lmpBC7XYfBobzhi+A9HRtAVS7BcGODKhjzozbftZeYpXdeHAT1W/HpDpWAUFE4T9j9z8o9MpWnjXpIsyhpGVyFYHgGpuXzw3v1ebtb6Gx0RaYqH37P4QwUcE0l9WLNuT0nZ8f5WqJIdZNpdFY9sumoKfbT2NajoBaEix0c2U57OPPLvPp0GUSCp2XB51bWuL5DLzA/fWukZ7sJN23Ll3AsCe0ssn4VwF5IsBF7Sw4b87MeawO9vNVwEyfbiuFlipX5AAtimrlnYfzX+v8jVu+GHq6iRDPWLEG2cUSJoo8jOd6nsu62i/+avjA902U3EdoCC5ZA7jGo1EWVNF15UgdPsYA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(346002)(396003)(376002)(136003)(366004)(451199018)(86362001)(36756003)(38100700002)(41300700001)(316002)(2906002)(6486002)(478600001)(8936002)(44832011)(7416002)(66476007)(6506007)(4744005)(66946007)(5660300002)(66556008)(6916009)(6666004)(8676002)(4326008)(83380400001)(6512007)(186003)(2616005)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CeIggitKQVOdLLvvbZwRSQiiKStt4QmZR8btJZ58kg3iZO+FoohR9Mn0+Gmo?=
+ =?us-ascii?Q?ARJgnjkYQkQJ2Fr1w2VwRmgHUWGewxr7JOeShKOJSWlZ4oehEXwQMWYvCk/5?=
+ =?us-ascii?Q?mI/0ZaV9IUQGq20jfE/HL1kC6NWjjFUEzFGAa5v4gnDjvdn5y6KZxRCtivGR?=
+ =?us-ascii?Q?3RsaFLCaX672TEaspx4hvOMrXG+Q2bN2+LQ3nhoOwYpk1pHBi59M1FlpO8V7?=
+ =?us-ascii?Q?KR+Tw1xQ2W0Yiy8U/fOc81CIfDym5Ogr/TxkBz4rurDXTiHDmrwqajYciqO9?=
+ =?us-ascii?Q?8CvGA3dEgrSFYOOUfp4xE9Vwn4AXipQQBJaoEu23NpgrsgMLHUk8Xy41kjLQ?=
+ =?us-ascii?Q?Q5KUqWeITr5n9GEbRpmfgZezXGdh9cg4X5puIaJ2Dp28LPT+C5dVlyD5cgjG?=
+ =?us-ascii?Q?dmjgLdz97k0dJrWTKVzOnDQpAGhRayxau5xuxbqs3X/Z050VuCYBu60IlZOQ?=
+ =?us-ascii?Q?vMN3c3s03cFcPazrnNFZEBOa9WKbpqjx82MS0/M3pFpf6Dg8nPib6uVKX2IV?=
+ =?us-ascii?Q?pTP49IqIsdD5dNCoZAG0bFtUG1e9yXWFO+BosI3EDFBwtmxkCU8i4F77+aGc?=
+ =?us-ascii?Q?Xg77NuksgWQJ5n1Y3DgBLVEJPUE19RWZEr9EEur8mW04STnpJG9bfTQ6XTxZ?=
+ =?us-ascii?Q?NnrSkM0I7FncgKiiP4pyqTZng9FnriCn0NlQ1lJMG9nOGqL17V1kBUITYslC?=
+ =?us-ascii?Q?oP1eAAOmhaaIY3taWNYUsDmOmCVukR5dsRtbgQ+WgpmPgX60QQhNy5hX9TjQ?=
+ =?us-ascii?Q?+AamlSgn5sJWCrtGvWfScfHbpx5mcXHNU9Rlk00bD3pffgpbs3mUB3JzN8fI?=
+ =?us-ascii?Q?d5pqjgQOWfIlJJHw4bnkWipTsP4IXVmHJlPPJ1cjpJH1QJWdIjirE2o6BJpz?=
+ =?us-ascii?Q?s7R2GvBW1lF4tCOjlBbXDfLUailaByh9H2o9NAODb8i717eg8FF9L0LSkdH8?=
+ =?us-ascii?Q?wttglI0daIqUXvG6Uob16Sr42LpLmhLLFnu9z5iutCFHS+easgAOWcIstp0a?=
+ =?us-ascii?Q?2+/w4oXBDchY5fRe/pvvKjwZiQ7YhAhxaTbhN2tyh8ILbkBjwNwBSHg1zWvM?=
+ =?us-ascii?Q?FogObXJ6t6hOYkK375q+qPSM+E3MIpbagfYXr6xTk58xp44CZu11U0WBoSsI?=
+ =?us-ascii?Q?XZA579xLIM6gUI0uYV0gWU+TCkjFesh2krb6fxK8YQE/iqbEWkBbf4Gecn6s?=
+ =?us-ascii?Q?R31xD+La1jk9jZgyChLXVSNRynflu+tpl44dR0xIJh/pmDlMlMGDEl1W/hNO?=
+ =?us-ascii?Q?IF3V4QGfU9VVCKGALwYBG3sS+gVgBuNe8IW6HdZPECfCph/hHj97ueAkaCQ3?=
+ =?us-ascii?Q?aeW/hthhT+qmeooLx0bR6F/BC4fcbcZ+AevYxj53MI96PbdsC8vPmGahAIzI?=
+ =?us-ascii?Q?nS+YT7Fn9ohb525LFtixmaXqMxAZwrTYGPU3CDcq2soiE5DR2uKR7ZR01Xnq?=
+ =?us-ascii?Q?6tXXNIqw+qxlmguzAPVdqfHd5bNJuNbslWrpV+lFBBxeVs2fGBNYu7r2PHdc?=
+ =?us-ascii?Q?xxHxY2WwasMiKFsbMUrF9ncgXcnC9IgsGyZSKCyGQoBMcj2xamf06mc109Tu?=
+ =?us-ascii?Q?6AJ2v0LZbQxJXrij702wBWLxJslXgTnCgevh+Nyt1disKDm9s5EhEca2/CkQ?=
+ =?us-ascii?Q?mUVhgw40Qpxq+WOSWM3mUXBZJ87bTMZdgVokzoyeu5Qme1Sor+oIgVgSxTCN?=
+ =?us-ascii?Q?I7SB4Q=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c19e344f-0aa4-405f-de2a-08db082b7ec7
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 10:18:30.9669
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Oglx6gtkWQaOJ9dhRjacCxzNls3PRWMs/TiVnWlMBrwffS6haG9UVO+Ey1/hNqYRd/2ijCnCi716mTW0TH16vZKQSoLeu41PcOa2CDQmcdM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3800
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Display Port controller subnode to the MDSS node.
+On Sun, Feb 05, 2023 at 08:11:02PM +0000, Daniel.Machon@microchip.com wrote:
+> Hi Simon,
+> 
+> Thanks for reviewing my patches, appreciate it!
+> 
+> > > +static u32 sparx5_sdlb_group_get_last(struct sparx5 *sparx5, u32 group)
+> > > +{
+> > > +     u32 itr, next;
+> > > +
+> > > +     itr = sparx5_sdlb_group_get_first(sparx5, group);
+> > > +
+> > > +     for (;;) {
+> > 
+> > Unbounded loops like this give me some apprehension.
+> > Will they always terminate?
+> 
+> Yes, it will always terminate - unless the add() del() functions are
+> buggy to begin with.
+> 
+> The end of the leak chain is marked by an index pointing to itself, and
+> this is the exit condition I am looking for in the unbounded loop.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450-hdk.dts |  4 +-
- arch/arm64/boot/dts/qcom/sm8450.dtsi    | 82 +++++++++++++++++++++++++++++++--
- 2 files changed, 82 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-index 5bdc2c1159ae..1b4ef79f74b3 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-@@ -480,7 +480,9 @@ &mdss_dsi0_phy {
- 	status = "okay";
- };
- 
--&mdss_mdp {
-+&mdss_dp0 {
-+	data-lanes = <0 1 2 3>;
-+
- 	status = "okay";
- };
- 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 757b7c56d5f5..8d83545d5e4a 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -2745,13 +2745,20 @@ ports {
- 
- 					port@0 {
- 						reg = <0>;
--						dpu_intf1_out: endpoint {
--							remote-endpoint = <&mdss_dsi0_in>;
-+						dpu_intf0_out: endpoint {
-+							remote-endpoint = <&mdss_dp0_in>;
- 						};
- 					};
- 
- 					port@1 {
- 						reg = <1>;
-+						dpu_intf1_out: endpoint {
-+							remote-endpoint = <&mdss_dsi0_in>;
-+						};
-+					};
-+
-+					port@2 {
-+						reg = <2>;
- 						dpu_intf2_out: endpoint {
- 							remote-endpoint = <&mdss_dsi1_in>;
- 						};
-@@ -2789,6 +2796,75 @@ opp-500000000 {
- 				};
- 			};
- 
-+			mdss_dp0: displayport-controller@ae90000 {
-+				compatible = "qcom,sm8350-dp";
-+				reg = <0 0xae90000 0 0x0fc>,
-+				      <0 0xae90200 0 0x0c0>,
-+				      <0 0xae90400 0 0x770>,
-+				      <0 0xae91000 0 0x098>;
-+				interrupt-parent = <&mdss>;
-+				interrupts = <12>;
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_AUX_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_INTF_CLK>,
-+					 <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK>;
-+				clock-names = "core_iface", "core_aux",
-+					      "ctrl_link",
-+			                      "ctrl_link_iface", "stream_pixel";
-+
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK_SRC>,
-+						  <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC>;
-+				assigned-clock-parents = <&usb_1_qmpphy 1>,
-+							 <&usb_1_qmpphy 2>;
-+
-+				phys = <&usb_1_qmpphy 1>;
-+			        phy-names = "dp";
-+
-+			        #sound-dai-cells = <0>;
-+
-+				operating-points-v2 = <&dp_opp_table>;
-+				power-domains = <&rpmhpd SM8450_MMCX>;
-+
-+				status = "disabled";
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						mdss_dp0_in: endpoint {
-+							remote-endpoint = <&dpu_intf0_out>;
-+						};
-+					};
-+				};
-+
-+				dp_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-160000000 {
-+						opp-hz = /bits/ 64 <160000000>;
-+						required-opps = <&rpmhpd_opp_low_svs>;
-+					};
-+
-+					opp-270000000 {
-+						opp-hz = /bits/ 64 <270000000>;
-+						required-opps = <&rpmhpd_opp_svs>;
-+					};
-+
-+					opp-540000000 {
-+						opp-hz = /bits/ 64 <540000000>;
-+						required-opps = <&rpmhpd_opp_svs_l1>;
-+					};
-+
-+					opp-810000000 {
-+						opp-hz = /bits/ 64 <810000000>;
-+						required-opps = <&rpmhpd_opp_nom>;
-+					};
-+				};
-+			};
-+
- 			mdss_dsi0: dsi@ae94000 {
- 				compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
- 				reg = <0 0x0ae94000 0 0x400>;
-@@ -2966,8 +3042,8 @@ dispcc: clock-controller@af00000 {
- 				 <&mdss_dsi0_phy 1>,
- 				 <&mdss_dsi1_phy 0>,
- 				 <&mdss_dsi1_phy 1>,
--				 <&usb_1_qmpphy 0>,
- 				 <&usb_1_qmpphy 1>,
-+				 <&usb_1_qmpphy 2>,
- 				 <0>, /* dp1 */
- 				 <0>,
- 				 <0>, /* dp2 */
-
--- 
-2.34.1
-
+Thanks for confirming, much appreciated.
