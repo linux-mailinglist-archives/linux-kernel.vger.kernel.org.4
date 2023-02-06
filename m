@@ -2,137 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE93568C038
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C8B68C03C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjBFOfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:35:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
+        id S231358AbjBFOga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjBFOfx (ORCPT
+        with ESMTP id S231245AbjBFOg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:35:53 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CE223DA0;
-        Mon,  6 Feb 2023 06:35:52 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id d2so8138750pjd.5;
-        Mon, 06 Feb 2023 06:35:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V6xEVHTq4BRT21XT3igauxghHQalnR6mzNTQMSRZCcI=;
-        b=PUK6yVSLPoWPtAI6SVLDKNFP6ey/03oHofWOTQaRF2f8HQujwDUcSUf62NWhLKm4Uo
-         YXstcii1NiNg0y/eG5kinLFNV8/+8smrm8PXFNjHOL39IAFe/e5Qof19TQzEdU0TrEOw
-         mdlMMpadPxAlE7b8dGNMwT9HWVEBlwXPR0seRZSCHXiPFMohdT8/u7YqVuWNJwg0RxzX
-         Jv1hUcmReKedzpYn6XFsFMxS35bweAf0/iAnoU3HeOctkI8Snn1LiogH684zEBM1d5R1
-         UKpIZz5VbMcvDXpi+OdMedjl44jR8IbpVh/gl6+z8jyCrTQXrR1rPe23hzpU/Wiuymfd
-         LfeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V6xEVHTq4BRT21XT3igauxghHQalnR6mzNTQMSRZCcI=;
-        b=Ivq1Hhq1+sUuQ/gyv9MEcr5ZqgBYaints97ht5qHGJ+O0v0ZsMu3AJs+6rc1S4wr4x
-         eowOAb3soaF2NCR6PoYg6+/GUbLKSA+68eJQfOsss6O9Tfs1gCZAjuB5A26EnsvmrIaB
-         FWuDSrLSnGbVcTSnsulhL1dhTBAM+6BbCK758DUcHumauNmRTmRznbK7BJBAxBk15nj3
-         S9oPfP7juBACVAo6CkaTOsreGHoXr+fwp5BJl0Y8ZaUC3ngPUgyE0buHAnhLMK+xFOed
-         eE410xHKWVVJI34MwcLNwmIungCgyvh+LIlbfwPouCol76Y6FvyHy+f8aGXvb248xSK1
-         q8yA==
-X-Gm-Message-State: AO0yUKXt1wpv3TzVbdz3FGpJshT7SWofuPo1pcSEug+tbtrDRyUS2n5i
-        DZr25sKWVpQER8ka9IsEjgOCu+PnuT8=
-X-Google-Smtp-Source: AK7set9KvzHJrQ1opQ/69an3pSyuKPBPwGMCbWMp7807AmsrBf9HEFH4jM3ULC8bAMCO2S8nqjIxvw==
-X-Received: by 2002:a17:902:dad2:b0:193:678:df13 with SMTP id q18-20020a170902dad200b001930678df13mr24797027plx.36.1675694151737;
-        Mon, 06 Feb 2023 06:35:51 -0800 (PST)
-Received: from dell-cros.hitronhub.home ([119.77.166.223])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170903248600b00198b0fd363bsm7021181plw.45.2023.02.06.06.35.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 06:35:51 -0800 (PST)
-From:   Ron Lee <ron.lee.intel@gmail.com>
-X-Google-Original-From: Ron Lee <ron.lee@intel.com>
-To:     bhelgaas@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        lmajczak@google.com, rajatja@google.com,
-        Ron Lee <ron.lee@intel.com>
-Subject: [PATCH v3] PCI: Fix up L1SS capability for Intel Apollo Lake PCIe bridge
-Date:   Mon,  6 Feb 2023 22:35:40 +0800
-Message-Id: <20230206143540.15325-1-ron.lee@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 09:36:27 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E8024C92;
+        Mon,  6 Feb 2023 06:36:25 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316Bv47H017711;
+        Mon, 6 Feb 2023 14:36:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=TETDB0LeiUCmf0+tJvAW84Dy4wJip4Q7KldqyimddL8=;
+ b=jmjneK2odiCS9U3rBC89UzPmUiZU8XKOXop+zUu5f4oXNMIB1LlhqoBLnA0NdhXbFF3S
+ vuvBMnn5QCCpPWVSSnauE9de2A7ccgj70Xfvut2b6lIb0Ubx9Eab8CDJm0xXxbLXFgSO
+ dC7jUo4wSZi8qJLq4tV+F6VJ7wzgLV7bx9qxJgoxF+inm2wSsz1V20yLnW4/I01Vjjad
+ faqMJ4Vknfse+bgs2/34AVWUXskzH+mSDXBFE6ZDzGrMR6N4lsoFMhzyw/PhC1fHILmt
+ INh8oh6tb6C5xn7M9V4fRXpcENLUMDqiF0JG8ZA3ijhFs0gBV8gCsNiyAuwtKxaBxCjb gA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhechby1r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Feb 2023 14:36:22 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 316EaLaT016908
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 6 Feb 2023 14:36:21 GMT
+Received: from [10.216.55.169] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 06:36:17 -0800
+Message-ID: <d1dc0c9b-eab2-0287-d0a2-ead44ecee5ce@quicinc.com>
+Date:   Mon, 6 Feb 2023 20:06:13 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8450: Add IMEM and PIL info
+ region
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1675443891-31709-1-git-send-email-quic_mojha@quicinc.com>
+ <1675443891-31709-2-git-send-email-quic_mojha@quicinc.com>
+ <cc30f686-dec7-db85-cf0d-c6c685a623ce@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <cc30f686-dec7-db85-cf0d-c6c685a623ce@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5iQp1wmX4FYfvQOq-vRbeKaEQ-GSUrc_
+X-Proofpoint-ORIG-GUID: 5iQp1wmX4FYfvQOq-vRbeKaEQ-GSUrc_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ adultscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=756 priorityscore=1501 mlxscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302060126
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Google Coral and Reef family Chromebooks with Intel Apollo Lake
-SoC, the PCIe bridge lost its L1 PM Substates capability after resumed
-from D3cold. This patch save the capability header and the pointer
-offset to the L1SS capability after this bridge initialized, and
-recover them every time resuming from D3cold.
 
-Link:https://lore.kernel.org/linux-pci/CAFJ_xbq0cxcH-cgpXLU4Mjk30+muWyWm1aUZGK7iG53yaLBaQg@mail.gmail.com/T/#u
-Signed-off-by: Ron Lee <ron.lee@intel.com>
----
-Change from v2: traverse the capability link list to find the L1SS capability header
-and pointer offset to the L1SS capability, save them after the bridge initialized and 
-restore them after resuming from D3cold.
 
- drivers/pci/quirks.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+On 2/4/2023 3:07 AM, Konrad Dybcio wrote:
+> 
+> 
+> On 3.02.2023 18:04, Mukesh Ojha wrote:
+>> Add a simple-mfd representing IMEM on SM8450 and define the PIL
+>> relocation info region, so that post mortem tools will be able
+>> to locate the loaded remoteprocs.
+>>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+>> ---
+>  From XBL:
+> 
+> 0x14680000, 0x0002A000, "IMEM Base"
+> 
+> Is there anything in that wider address range that would interest
+> us? I recall Alex once dug into that when diving into IPA, but
+> I can not recall the conclusion..
+Spec-wise, yes IPA do own these 0x146A8000 - 0x146AA000 .
+But, not sure what they use it for.
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 285acc4aaccc..4e1c8c4c7e9a 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5992,3 +5992,44 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
- #endif
-+
-+#ifdef CONFIG_PCIEASPM
-+static u16 pos_to_l1ss;
-+static u32 l1ss_header;
-+static void chromeos_save_apl_pci_l1ss_capability(struct pci_dev *pdev)
-+{
-+	u32 header;
-+	int pos = PCI_CFG_SPACE_SIZE;
-+
-+	while (pos) {
-+		pci_read_config_dword(pdev, pos, &header);
-+		if (PCI_EXT_CAP_NEXT(header) == pdev->l1ss)
-+			pos_to_l1ss = pos;
-+		else if (PCI_EXT_CAP_ID(header) == PCI_EXT_CAP_ID_L1SS)
-+			l1ss_header = header;
-+
-+		pos = PCI_EXT_CAP_NEXT(header);
-+	}
-+}
-+
-+static void chromeos_fixup_apl_pci_l1ss_capability(struct pci_dev *pdev)
-+{
-+	u32 header;
-+
-+	if (!pos_to_l1ss || !l1ss_header)
-+		return;
-+
-+	pci_info(pdev, "Fixup L1SS Capability\n");
-+	/* Fixup the header of L1SS Capability if missing */
-+	pci_read_config_dword(pdev, pdev->l1ss, &header);
-+	if (PCI_EXT_CAP_ID(header) != PCI_EXT_CAP_ID_L1SS)
-+		pci_write_config_dword(pdev, pdev->l1ss, l1ss_header);
-+
-+	/* Fixup the link to L1SS Capability if missing*/
-+	pci_read_config_dword(pdev, pos_to_l1ss, &header);
-+	if (PCI_EXT_CAP_NEXT(header) != pdev->l1ss)
-+		pci_write_config_dword(pdev, pos_to_l1ss, pdev->l1ss << 20);
-+}
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_save_apl_pci_l1ss_capability);
-+DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_INTEL, 0x5ad6, chromeos_fixup_apl_pci_l1ss_capability);
-+#endif
--- 
-2.17.1
-
+-Mukesh
+> 
+> Konrad
+>>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 15 +++++++++++++++
+>>   1 file changed, 15 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> index 5704750..474ea1b 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> @@ -3536,6 +3536,21 @@
+>>   			};
+>>   		};
+>>   
+>> +		sram@146aa000 {
+>> +			compatible = "qcom,sm8450-imem", "syscon", "simple-mfd";
+>> +			reg = <0 0x146aa000 0 0x1000>;
+>> +
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +
+>> +			ranges = <0 0 0x146aa000 0x1000>;
+>> +
+>> +			pil-reloc@94c {
+>> +				compatible = "qcom,pil-reloc-info";
+>> +				reg = <0x94c 0xc8>;
+>> +			};
+>> +		};
+>> +
+>>   		apps_rsc: rsc@17a00000 {
+>>   			label = "apps_rsc";
+>>   			compatible = "qcom,rpmh-rsc";
