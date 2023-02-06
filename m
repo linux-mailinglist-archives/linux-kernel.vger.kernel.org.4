@@ -2,143 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CF168C54D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F97468C551
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjBFR65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 12:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S230238AbjBFSAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBFR6z (ORCPT
+        with ESMTP id S230193AbjBFSAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 12:58:55 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF922CC7B;
-        Mon,  6 Feb 2023 09:58:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J/JLWCbVOkmtNAHkE5R/pfYAkfF7suYzp8mHafT7VuMI8hgPDBlq2miQBOLY/w59opCLUOV43J7nsWAxqqtqBxr3aur9vpZEjAxbJvrYEqPJDaTAiGTpSNUJALmIXOGZf8mGUR9UIq5z9HKoNlDYo7XgnH7lClvJHpUsOsXhKx+zmj/dkOKyIjIKJ1qQBF8D30rZ0FAS4ZEMxe94mP/cTry9+WDaTJwknefUXkGyAkqcNn45MEGBbGG4o1O5gFddJBEGU5Uf8sOyRMUA9AT4PNJ6pS+K3/11pFbdB8VIfh4xTRERllph5VygvTLP4hkwJ6FvGB/gi+jPk2/hpeB5ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vhAG3Jatz+EPDmLz8EffQ3IXKaTdg0bdHE1t33/2lko=;
- b=P4ue3xNV33ZmkLhWtb/bVonnMnksN/xL//MdMtE0hOkJOCUFCntoSvMqnBQrhFtS8OsbTFHQbEaQp/Dh9Cm3BO9Dj7EakEn+RR2c4+yeVrGu05Byg2WYCxwLF7PxUtcOqPlka6fVwZ4Ew73GYBU25oI0c7TbFXZbha2FWZS4LlvRAw8ncuNrjgX4cq+srAihW9KvKSg42ycRMntm6MkGdz3fFBJ4zCUJPjPl4vCj8mWk4hFvtmVgk6NPCtApP9K8W5vkZ43+/PLwYOY3cL62qH+f2CCuxobtLt2fsgV2ggeRBDqxVVn2mi61RuYoz7YHNBhI4Z+1M5MiB/8U9Ii77w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=infradead.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vhAG3Jatz+EPDmLz8EffQ3IXKaTdg0bdHE1t33/2lko=;
- b=pGoVOOs1HsOtDfSn7o92LuCwojMeHqhLziBk1D9bsng7PS2022HMNISyZ/StVZnNETrr+gm/7qQYlfTwsVlcPem5ZfovazRwVNiTqqk7N/pRVjHLi5VNbBqWs++Em2NjgegU0r5AC/6dVPrnfS5GmtOK29Oicg7K1CEJjrDYWkk=
-Received: from MW3PR05CA0004.namprd05.prod.outlook.com (2603:10b6:303:2b::9)
- by SJ1PR12MB6098.namprd12.prod.outlook.com (2603:10b6:a03:45f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.35; Mon, 6 Feb
- 2023 17:58:50 +0000
-Received: from CO1NAM11FT112.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2b:cafe::6a) by MW3PR05CA0004.outlook.office365.com
- (2603:10b6:303:2b::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.15 via Frontend
- Transport; Mon, 6 Feb 2023 17:58:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT112.mail.protection.outlook.com (10.13.174.213) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6064.35 via Frontend Transport; Mon, 6 Feb 2023 17:58:49 +0000
-Received: from [10.236.30.70] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 6 Feb
- 2023 11:58:47 -0600
-Message-ID: <7abdd9d4-4ce0-458d-93f4-bff575f04345@amd.com>
-Date:   Mon, 6 Feb 2023 11:58:47 -0600
+        Mon, 6 Feb 2023 13:00:21 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FC12D150
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:00:17 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id h16so11163964wrz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 10:00:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QAzbzHAwMbORwKFGc8I4gB1/HhGTYUVUMIT2p3MVzto=;
+        b=duUAnzGSjSKmhmvXBjIvZ1JQy/33pGphU6VD3fKrWWxkpTSXSv08qtxG2ysiVq8DYh
+         l5yrAn366zu6qlIeEJp/zTFdkIOQzoOzyIF+mIRxSpdaZJakUUjyUUL9FT1OiCUvgQKs
+         6jc4NZidbD6Sg/3X4Awg3R9I29xdb3aA5aN9/0v4bWmn+a1Ncq89QjNGYNAlXPmYov3v
+         NDwKj5jYI4xHZz1kLoLGfLRE25PqdJktTHYTKAO4VhfV9ou9InW8fndaW9JWHbTLo/cl
+         yy0T9gBHWWlWMJJUxLRU+PO4QHE0CA5QGDGPVvww6Dn1RLgJGoewJlSRboajNwHNhIQP
+         VK9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QAzbzHAwMbORwKFGc8I4gB1/HhGTYUVUMIT2p3MVzto=;
+        b=5E6GD2V2TdnrRpguGF0N4Ny8Xk/54C5+FG3g0mXeCLob4XantCYKo4vx7MzfPcGrKr
+         US9kat2Vxqyc7NsaNhUfS5WzKaIVEr/HLmZxQLYnjQA6S1AWRHZF3Udgrp4B1de1F43t
+         AjeDLQBWdrdzFZ5QIWhzVflTWtMDxS8UolHFeBv3EVm3IVcWttFnxc7yqETJ6dyq1xqN
+         TemM4VT38DfExdX74rBCi+8xNHWCKrcI2hBnhcmMS9DnB7ZBfV0y5WZFt7U99xG7+0GP
+         XXYktNY+fwV7l5yIBAMgK8FGnETHMqn9peRzZb1MYwf3Yot+HEzYkSLfu+xjVeKcSGpb
+         kr7Q==
+X-Gm-Message-State: AO0yUKVFX6ynzHKrhloJonDFRpo1cOy9SDGhfBeOeqL/KgA/JsAlYvv6
+        TncdMq3J3YGqQ1njkqE1Yz868g==
+X-Google-Smtp-Source: AK7set+gHrNvDG7dTutQV1RwYNQpdPvpEFYOvQc9NHBZvdR9G+YemKmTRrXYosqJpvEDpCO35gZT6Q==
+X-Received: by 2002:adf:fb82:0:b0:2c2:ad22:40ba with SMTP id a2-20020adffb82000000b002c2ad2240bamr16759553wrr.68.1675706415588;
+        Mon, 06 Feb 2023 10:00:15 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id p4-20020a5d68c4000000b002c3e4f2ffdbsm4401533wrw.58.2023.02.06.10.00.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 10:00:15 -0800 (PST)
+Message-ID: <474338ff-26af-061e-1166-a1bd906ffe00@linaro.org>
+Date:   Mon, 6 Feb 2023 19:00:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Usama Arif <usama.arif@bytedance.com>, <tglx@linutronix.de>,
-        <arjan@linux.intel.com>
-CC:     <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-        <hpa@zytor.com>, <x86@kernel.org>, <pbonzini@redhat.com>,
-        <paulmck@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <rcu@vger.kernel.org>, <mimoja@mimoja.de>,
-        <hewenliang4@huawei.com>, <thomas.lendacky@amd.com>,
-        <seanjc@google.com>, <pmenzel@molgen.mpg.de>,
-        <fam.zheng@bytedance.com>, <punit.agrawal@bytedance.com>,
-        <simon.evans@bytedance.com>, <liangma@liangbit.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230202215625.3248306-8-usama.arif@bytedance.com>
- <b3d9fbbf-e760-5d1d-9182-44c144abd1bf@amd.com>
- <d3ec562fd2e03c3aef9534f64915a14a8cb89ae1.camel@infradead.org>
+Subject: Re: [PATCH] thermal: Hunt zero trip points thermal zones usage
 Content-Language: en-US
-From:   Kim Phillips <kim.phillips@amd.com>
-Subject: Re: [PATCH v6 07/11] x86/smpboot: Disable parallel boot for AMD CPUs
-In-Reply-To: <d3ec562fd2e03c3aef9534f64915a14a8cb89ae1.camel@infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rjw@rjwysocki.net, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        Chuansheng Liu <chuansheng.liu@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230203175832.3406504-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0jzLCQt22MhfaAvL8w+RP7Y-YqxUdcgQ2u2Tz9i0CS+2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT112:EE_|SJ1PR12MB6098:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f83e067-5764-4648-6ff7-08db086bcd0c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tc5844DvxkRAS0SUf34e+zWJm4a4sG6bDKqI+HqC8hmmrpqTeoKrp/iF62BY9UE1mM4e4q1MknXi6jFnv0eKHR/zeQn7RUOAYuCa8JqflIGskMHvHZFOk9vKpZvzGgIYLONSLuzvVER7E85lzaqIP9eMjQZpiKw9O5tNlUNozn4D12CRheailGFPqHWA1s8d4epuObDCWXgec2KXy7AuQeB6/M2+R6SRkqS0B/IP3doGNb9btSvqvqDVpNZp3WIA7D3wNgVlVI7Wt6/hAc+Ge/fpwdJQXLRzKFYQ2AQtxKBiR+Sk8Ew29//1quzX8Pp2q/YH2Ze5OUKTN6bFD6t5qleIuIyfi9t79wGZkIS+EOsvc2gnHP+O0HDNh9je75zrF/D0/i6SvKH+iT3rWDKtM0yy1ugetliATOXfzhbCVFox7HQeqhcSUosV6jUYxXkAsdM+d1RC9psoz+kS01RhyT77MNptyyPEE2e72r3hYkgOqYyXTkIZsz25J22JySqE/HhEoLo4MGafbUPWd2yZVllYe0Z8S2d8EzuS51o876LL2YfIy+qcFcNDJ3Kta1zRcsKdtNpKxWlkSIF472nSGWPeLBYnVI/JTcyjKDdftb0aQXYxz4QjhTREy6IJ0NIRK017V42+t2KUB66Z4VUMFdz2+W4lUfD8LOLZoke+pDJ15ZnBytpsMOYA/MNeQ6lRi6P97wHSnb8SW2JVyEP7d12/dtpzgjJWzjrSy4IcQtfoUAcT62mcB0RLQTLEjkZbAl+4dWP7qVNHP7tDbN4InA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199018)(46966006)(36840700001)(40470700004)(2906002)(31686004)(4744005)(8936002)(5660300002)(7416002)(36756003)(41300700001)(4326008)(86362001)(40460700003)(8676002)(70586007)(31696002)(40480700001)(70206006)(110136005)(54906003)(356005)(316002)(16576012)(44832011)(82740400003)(336012)(478600001)(81166007)(53546011)(36860700001)(16526019)(26005)(186003)(2616005)(426003)(82310400005)(47076005)(83380400001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 17:58:49.6005
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f83e067-5764-4648-6ff7-08db086bcd0c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT112.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6098
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/23 9:40 AM, David Woodhouse wrote:
-> On Fri, 2023-02-03 at 13:48 -0600, Kim Phillips wrote:
->> If I:
+On 06/02/2023 17:08, Rafael J. Wysocki wrote:
+> On Fri, Feb 3, 2023 at 6:59 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 >>
->>    - take dwmw2's parallel-6.2-rc6 branch (commit 459d1c46dbd1)
->>    - remove the set_cpu_bug(c, X86_BUG_NO_PARALLEL_BRINGUP) line from amd.c
+>> Some drivers are declaring a thermal zone without any thermal trip
+>> points.
 >>
->> Then:
+>> On the other side, we are introducing the function
+>> thermal_zone_device_register_with_trips() which provides an array of
+>> generic thermal trip points. When all the drivers will be converted to
+>> the generic trip points, keeping two functions will be useless.
 >>
->>    - a Ryzen 3000 (Picasso A1/Zen+) notebook I have access to fails to boot.
->>    - Zen 2,3,4-based servers boot fine
->>    - a Zen1-based server doesn't boot.
+>> Most of the drivers are now using
+>> thermal_zone_device_register_with_trips() with the generic trip
+>> points. As soon as the remaining drivers are merged, the
+>> thermal_zone_device_register_with_trips() will be renamed to
+>> thermal_zone_device_register().
 > 
-> I've changed it to use CPUID 0xb only if we're actually in x2apic mode,
-> which Boris tells me won't be the case on Zen1 because that doesn't
-> support X2APIC.
+> So why is this the first time I'm learning about this plan?
+
+Well it is not a plan, it looked purely logical to me that the 
+_with_trips variant was added to support the generic trip points in 
+addition to the specific trips. As soon as all the drivers are 
+converted, there is no need to have these two functions anymore and we 
+can fall back to the previous name (or a shorter one).
+
+>> Obviously this renaming can only happen if there are no more user of
+>> the thermal_zone_device_register() function.
+>>
+>> This change uses thermal_zone_device_register_with_trips() with a NULL
+>> parameter for the trip point array instead of
+>> thermal_zone_device_register().
 > 
-> When we're not in x2apic mode, we can use CPUID 0x1 because the 8 bits
-> of APIC ID we find there are perfectly sufficient.
+> And later it will be renamed to thermal_zone_device_register() again?
+
+Yes, that was the idea, unify the name and then use a cocci script to 
+rename them all.
+
+> Can we just stop confusing people this way?
 > 
-> New tree in the same place as before, commit ce7e2d1e046a for the
-> parallel-6.2-rc6-part1 tag and 17bbd12ee03 for parallel-6.2-rc6.
+> What would be wrong with changing both
+> thermal_zone_device_register_with_trips() and
+> thermal_zone_device_register() together when we are ready?  And why
+> can't the both be replaced with something line thermal_zone_register()
+> doing all of the necessary things in one go?  Why do we have to make
+> confusing and redundant changes?
 
-Thanks, Zen 1 through 4 based servers all boot both those two tree
-commits successfully.
+For me the result will be the same, if you prefer to wait for all the 
+drivers to be converted then it is fine for me.
 
-I'll try that Ryzen again later.
 
-Kim
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
