@@ -2,161 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E66768B9A1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B2768B9A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjBFKOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S229899AbjBFKPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:15:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjBFKOL (ORCPT
+        with ESMTP id S229548AbjBFKP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:14:11 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217E5CA17
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:13:40 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso10347784wmp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:13:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mWnzWhG42mXoUZjE/sw1tC0Ie/sX1djVHyC4XNC0yK0=;
-        b=nsEaGbsIKyGbUtHtGy1mNGeocL5YZgeXdim9zyX8/uLfP70KSMUPB0ypo6B8I7lQS2
-         o0iVXcHr3am+JTH0ctMaM+Q4JiAPfOutZ7ehC3n3us3CouKcL3fZzExKjU89IAAb7H+L
-         0aNq+Eiz3h4ja5O7ilQg49alwmqO4bp2kFpQ5zrBWqZ/HZAZxRfReERq2ngyzrUfuqH5
-         4zPCqXjwHyOZ2TnFlOr25z8/LZhotOddkt3CU9+mZ53M1PQf/VGKLyDy8Fmjbqwxtewv
-         cwJk79fIGFT0tgonsFdwjx/IHm5ySrE0L7pwetypLiF5Gn5GAyNYZgzeTryqlHldsLaz
-         LHPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mWnzWhG42mXoUZjE/sw1tC0Ie/sX1djVHyC4XNC0yK0=;
-        b=7oyGJdOoONWojKRhjM7pX608QlhAT8FeJuxnsxiLU7XS6T+zhvT+uKdZRC1qqK7gSb
-         7kBprkV+io4A19sqCsOoz3dMIVK4wq2PmlJpa6Tyg6TFfwC+FocwIqMDGAOJLyaSV77Z
-         KA/YgQDZW/T67wcrU3Ml37ToBgllHrWf/ABb1D0afeEO7WVdMx3nctxxfhYVU7GpDub/
-         Wkb2Ow0KOYei4IlgAUTHlloTqZKBu1amfvUEt+Vs0QOT+jM9cV30Vsal6QkSnmkDV+vC
-         wbfa3mhUbq/nrkjR4ZRJHrhazc2MrnGVWpnBtViWGO/tDynqKqLbD3u5r9f4PrnP19B1
-         gksA==
-X-Gm-Message-State: AO0yUKU9AABCwG1FAzkWgd1AgTl4ZrvtK3tvUkGqEi0aPpODxGi0DUk7
-        XS4mrEIj33ZM2UorqkKgutCo0g==
-X-Google-Smtp-Source: AK7set/PxB+K4iF0WC0uGYoZtVntowM3777PYzd2bhIi94e214DiQHm8b27QEmpC49irJR4kQ51h4w==
-X-Received: by 2002:a1c:f209:0:b0:3df:dc29:d69 with SMTP id s9-20020a1cf209000000b003dfdc290d69mr14228591wmc.36.1675678385525;
-        Mon, 06 Feb 2023 02:13:05 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id h27-20020a05600c2cbb00b003db12112fcfsm11494484wmc.4.2023.02.06.02.13.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 02:13:04 -0800 (PST)
-Message-ID: <3c599fc9-44b9-42dd-0b89-029e45b701c3@linaro.org>
-Date:   Mon, 6 Feb 2023 10:13:03 +0000
-MIME-Version: 1.0
+        Mon, 6 Feb 2023 05:15:27 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0399740E2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:15:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RK+13CUko+LcExvZWVqPUr0Gjd0SB5vvAfweSLrRAc7mwqKQWfsr+1YeB1D+MX9JaVBiwyZVdP/3cwYo+4D5h563+4X5I5w6I4zORv5fcIdjDtKEenFVuXX0YPtInLzH5c+Wo1bIO5HCEQuAqkY9AsX5vfnzc5781JSNHZ7ISVK3D4oOXyM3WGQ2jzwPUynWi2hFVbrpbrRYNA34sry7sBZ5bzVSf8HWw4cgzYWQIzt0jen0Plas/RUtyeaQtLyMMxU5532H5QhcaCW5KE4fyv9XLNoNy1E0LU2A5pWesUMrbfUkKodu7wEUt425wGwUwul+qDpBbsimOs27HbFawA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KlQosZJpb9/aNSVY1/+NOqsHh7n5TmsSm15/6p4LFMk=;
+ b=XyH8r2Q5neuOpqVMUrd9aAmX93yMflUInHlW8UyjbtfenSPEX0n7cUCVzi+288WOe+5/+N8XKBUk6TzvY7WpBKJIAYEKvp9WhBQlKTODRFuLOqCoL+SFupG1oM9cJB340/QQ6QlIsiTo8nU9tB+ejsJ3B31rSJ2/kridz2WFyUaV9V6Q0yDP4DD372FmGetUikegfusJeTkoNbMoE31As49ZdW+zfDsyuAveFKhVEWjy/v6x9QXFxK6eplV/C+eeUdOAfhu0vdxqkY7nWVuDmbZ/R2DlFUD5hfD5aoiWS5hASCX0+6pNulV3UJv3K8bZtsPY11Xq1ydpbVltnG8fyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KlQosZJpb9/aNSVY1/+NOqsHh7n5TmsSm15/6p4LFMk=;
+ b=5RVBcrRsGplPBAxU4dHOzRRRjkT5TYpu3XUMamISxZjY7s2FwapSgfSJyGuJ8HJfVJ1aMbqeRFpVjF7JDt+nz6owMZfiu6V3Tt7W39Qn0jBI9MOtFmkZQX5iM7wypcnriw6V/t3AIVVay02rK1WGtm/N/fKG5oRaWie0VPJgmZk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CH2PR12MB4166.namprd12.prod.outlook.com (2603:10b6:610:78::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 10:15:01 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6064.032; Mon, 6 Feb 2023
+ 10:15:01 +0000
+Message-ID: <2d5fc6f8-2247-8a8b-1174-eccdc2b08064@amd.com>
+Date:   Mon, 6 Feb 2023 11:14:49 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 00/37] nvmem: patches for 6.3
+Subject: Re: [PATCH] drm/amdgpu: Fix potential race processing vm->freed
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20230127111605.25958-1-srinivas.kandagatla@linaro.org>
- <Y9UmhI3hRVjLVWFp@kroah.com>
- <93530be7-b957-4481-629f-dc3bdf56972d@linaro.org>
- <Y9exOmknnNHypwsR@kroah.com>
- <75891466-48f7-f86a-d9e5-e4bb4c0e9912@linaro.org>
- <Y+CwGU0bvwIf2S3H@kroah.com> <Y+CwUax45KgxPBYE@kroah.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <Y+CwUax45KgxPBYE@kroah.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Philip Yang <Philip.Yang@amd.com>, Qiang Yu <qiang.yu@amd.com>,
+        Jammy Zhou <Jammy.Zhou@amd.com>,
+        "open list:RADEON and AMDGPU DRM DRIVERS" 
+        <amd-gfx@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230203181005.4129175-1-robdclark@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230203181005.4129175-1-robdclark@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR3P281CA0041.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:4a::17) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH2PR12MB4166:EE_
+X-MS-Office365-Filtering-Correlation-Id: a1ee179e-4afc-4e03-e7b2-08db082b0217
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kyNrxe+93bAkQS8byEZa12p50OJ7mZ4QJyTzBBjcDAAibtEbH3qlOTudkA8R4C+d7FIacrnCjXwuXVuIL4nUc5N1hyNcVI8brjo4Tiw29oUkloAM79YET2ddtXUqrcJIkj3+BfAJJeNLctmnynzRicESq/Op/lzSBskXjiwOQmiuhFxBNPDC5L6oqX60gzfYjpxtsB7XyRBFrJNBJRRJUxVm2B9VFF+CP2GFQaeWrGEkiep7evD1681owNPn0jQAgGFYg58mF8ns+Hmm2sTTecYyZtZLn79O3/3NQGn8f23FITZNI0YzPPtxP0nZiSYFxi8xpulooaiGZDyMNGIdt5PLBIzdftsyyirtm1GsJuKNLxW6KTi53fb6rBoOrxipUisMIGJEpOB8/SZjlOg0cuo9z3agjCNBJHXgHGg2LOpT677nq+shaiB5Elw9w+JN58xcJRHlMIdrNsQ6yQ+i0mpx/yhWB+e0rxb2rs1ORBogQA6INxp3f2sMl/m4ZCJRZQy7+H7w9lzhymlQSbUlQgam4FFXLbEjB1Fcn0chfdViNY1+D6fVp3PuSkbwtlnp6OmfFQ3OyI9wfxQ3pRhTNpnDOAYJCikQVp05Osr+XQZbgWwSD+/9Lol2DOIBZ9kVSAYZNJ8xUd+q7jib85QfiCwEcMXvs/kJ1dqiIL4gm8uUXDA9DpZk0IZTxj2e0P3Z4J8dRg5WZMck3Xeh52sicaoQmOX5jwsBp/CtQoSgsNc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(376002)(346002)(396003)(451199018)(478600001)(316002)(54906003)(6506007)(6666004)(2616005)(6512007)(26005)(186003)(31686004)(31696002)(36756003)(6486002)(5660300002)(86362001)(38100700002)(83380400001)(66946007)(4326008)(8676002)(2906002)(8936002)(66556008)(41300700001)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SURsWlVYRHFDQ2lKUXJlTkZ4cmhJSy8zQklmWkk1ZDRWSm5EQVRBODE4blkw?=
+ =?utf-8?B?OEtyREx6U0lTOXhzbEllRkthUXh3V0xJS0xiU0Nyc1pWZU80MkhYeURuN0pE?=
+ =?utf-8?B?ZjVPNlQwdXdGQUZFTFp2ak02Z2NwdStjUjFQSW1yZXA1UG1PMG5xNVJ0K05o?=
+ =?utf-8?B?eTZBSVNJOFRWYUNLS2l3anVncWY5RHJtRld3VlJwM0VRcGozSWRqREpLTE9m?=
+ =?utf-8?B?bUFkQnFKMkxEVitmdnFMUno5N1EyQlhJbnh4VjlqZkt5VlV6MkJTQ2NyZnhD?=
+ =?utf-8?B?N29BTXNNWEVaNXI1TGRsMlAzMTNyMHNIVlFoREUrZWV2dEFmM1BMU0sxRGls?=
+ =?utf-8?B?NmhnZzcreGJGZFZCNVR3R2VCQkQrQWhrQU05bHcyOE9rQUVOQUlDMmhsZVRG?=
+ =?utf-8?B?NTNycjhCV0JEaStRYXZlZ3RkL3pneEFKdTYyVFc4WnJ4QlEzdjZFcU4wMzll?=
+ =?utf-8?B?c3FsUHpWT0pjam5KZmVwRWJNazZlOWpaVE5FNm50ZTEyUTFhRFgrTTg3MHlH?=
+ =?utf-8?B?a2w4THFYVVVDOGZ1YldPZitXR1F5QisyMWc5VTEyWGg4b3dVUFQxRU4waDBB?=
+ =?utf-8?B?S251dHJickVueDRZdmdGcnZFOWFEZnJHc0tSNDRQTDRxaTMzenRqcHlnSzd3?=
+ =?utf-8?B?UU1TckM3Rjk2QWs3elRSVDBrWllKb3o4WHZCeEdoYnFackVBMEk3NGNjQlBi?=
+ =?utf-8?B?SDgxbmhqL2tvMDcrOXVBWkVNR2pyZDM2bU9Eb0hxODlRWjNWU3FNQ1JtRnhl?=
+ =?utf-8?B?YStibDlmSjZjdEd2aUJ4RGZMY2R6V3NOcSs4emc2RWI5eXRYc0JZNVRJU24y?=
+ =?utf-8?B?eGtsNFJFT0VINmV6eEE1VEVXeHlud0x6UkZzdHFtV21OUEpEb3lFUUFPTko2?=
+ =?utf-8?B?VWNoT2RTYlIvai9WclRMUDVHVm5iQmsvR05Hc3RqQ3JjMyttVzJMWDNnSnBH?=
+ =?utf-8?B?dWpnVVE3ZU00VlQyWXA2TTN0bzRrQXd1K0tMVWpFVDlIWXpvemgxYmZOem9j?=
+ =?utf-8?B?Zll0NFhXOUlKakVRZlhqWGwvTUhyQlMvKzJldTJDRGJZTE03RENzbFhGMHpq?=
+ =?utf-8?B?dys5dm52eGZPL3M2SFhCUG1QQ0ZQRHZCQ0t4RVRsajVrQXFRY1I0bGNkVnhR?=
+ =?utf-8?B?MGl3bDVKNzJUUVpCeUIwQWplc0dVTEtDTVQyQm84RGFxOTAvTFNHNGpUYndm?=
+ =?utf-8?B?Uy90NDI3SUdOSUcxYk5rUjIwSWVwWS9PWkhSakd3WUhaRUZLczNPelc1cEE3?=
+ =?utf-8?B?d0FTMFlSei9HMkJBK1RxelVuMEJxTjMzTjVqN3I3aDMxNzVHdjZSSjU5Rlkv?=
+ =?utf-8?B?NThLc1UvMTBJYzNKWk51aVhJNnRKYXovT1JKK3dtN2diT3ZiOThtTjNsU0Nh?=
+ =?utf-8?B?azdqZkQyNUZtVnVXSlVrMG5ZN2I4cGQxZEYvTkkyd3pNRHFzZG0yeDkwOHYv?=
+ =?utf-8?B?d2Zxa2dldlZEcFl6Zy9ReVlVM09IcWpXK0NaTjJaZ0lGV293RE8vZEsyZm44?=
+ =?utf-8?B?cUt0UWE2WFk3Rjd4VTJlNmpnSVBhQTZVOExoSFArbXM0WUtVK04rQUg0UlFr?=
+ =?utf-8?B?OE9ndURyQnRoVUxYZkVjcjBIbDRUR0lMeklMc0lWcDZnODVieDc0VEZmY0Mz?=
+ =?utf-8?B?WUJnL3pZcjI4VzNnTktiWUtneVM2VkpOeEV0aFRVL28wbEQvcmVtd2RVSENi?=
+ =?utf-8?B?MDBobnIyVlE2WFRrS0FIRW54QjRxMEZuSlZIck1EU3VEL2cwSWd4dW80K3hh?=
+ =?utf-8?B?alp3dlhnSElJenN6SUw0enJBWlROSVpxamJkUXp2anF1UXQ0Umg1V01aNGt3?=
+ =?utf-8?B?ZzhMRlhQcnRBbVRBN2I5TkFYbnJ0NEp3aUZEeS84eDJZY2lWaDJ2TzNWcTAv?=
+ =?utf-8?B?WW9tcGV4SENzMjU4bmtMYnJtam5sTmZrVW1kZWRXQ2JaNm41ZWptSFRiLzBZ?=
+ =?utf-8?B?TFdoUEppaitkRVRscEpOZmpPWVM5NGRVSUpINDdlcVV1YVduMkhyNkFzeXAr?=
+ =?utf-8?B?S0F6akFXTVg3MmRxL09mb0djMUk1bkhPL0w3SURCVjJvZSs5VTdiTklTQjd4?=
+ =?utf-8?B?L1Vyay9IT29pM2pidUZwa0dmeG41aWJ4TmdjRlNtM0xuMDBNNDhrYVREblYv?=
+ =?utf-8?Q?ZbOvzQEYKoKCAaPTp15u3mDzQ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1ee179e-4afc-4e03-e7b2-08db082b0217
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 10:15:01.6981
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ncMfRGA3MjLy6Gp/fAtGQMt39x1Hfpmx85WdVeSNYgjMcwiMsVRJtnQ2PapJ9GnO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4166
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 03.02.23 um 19:10 schrieb Rob Clark:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> If userspace calls the AMDGPU_CS ioctl from multiple threads, because
+> the vm is global to the drm_file, you can end up with multiple threads
+> racing in amdgpu_vm_clear_freed().  So the freed list should be
+> protected with the status_lock, similar to other vm lists.
 
+Well this is nonsense. To process the freed list the VM root PD lock 
+must be held anyway.
 
-On 06/02/2023 07:46, Greg KH wrote:
-> On Mon, Feb 06, 2023 at 08:45:29AM +0100, Greg KH wrote:
->> On Mon, Jan 30, 2023 at 03:54:58PM +0000, Srinivas Kandagatla wrote:
->>>
->>>
->>> On 30/01/2023 11:59, Greg KH wrote:
->>>> On Mon, Jan 30, 2023 at 11:27:06AM +0000, Srinivas Kandagatla wrote:
->>>>>
->>>>>
->>>>> On 28/01/2023 13:43, Greg KH wrote:
->>>>>> On Fri, Jan 27, 2023 at 11:15:28AM +0000, Srinivas Kandagatla wrote:
->>>>>>> Hi Greg,
->>>>>>>
->>>>>>> Here are some nvmem patches bit more than usual for 6.3 which includes
->>>>>>>
->>>>>>> - Adding support for nvmem layouts, thanks to Michael and Miquel for
->>>>>>>      driving this effort.
->>>>>>> - Add support to stm32 STM32MP15x OPTEE based nvmem provider
->>>>>>> - Updated to qfprom bindings to include various Qualcomm SoCs.
->>>>>>> - adding sl28vpd provider layout
->>>>>>> - move imx provider to use new layout apis
->>>>>>> - add ONIE provider layout.
->>>>>>> - new helper eth_addr_add().
->>>>>>> - few minor enhancements to core and providersdrivers.
->>>>>>>
->>>>>>> Can you please queue them up for 6.3.
->>>>>>
->>>>>> This series does NOT apply to my char-misc-next branch, which is based
->>>>>> on 6.2-rc5.  What did you generate it against?
->>>>>>
->>>>> These were on top of nvmem-fixes based on 6.2-rc1.
->>>>
->>>> Ah, always say that please.
->>> My bad, I assumed that fixes will be applied and then these patches. But I
->>> should have mentioned this clearly.
->>>
->>>>
->>>>>> Can you rebase it and resend?
->>>>>
->>>>> char-misc-next does not have nvmem-fixes yet, which branch should I rebase
->>>>> these on?
->>>>
->>>> char-misc-next please.  If there are going to be merge conflicts when
->>>> the char-misc-linus branch gets merged into that with these changes, > please let me know.
->>>
->>> Yes, for sure this is going to conflict. some of the patches in this set are
->>> on top of fixes.
->>
->> Ok, now that the char-misc-linus branch is merged into my -next branch,
->> I've applied these.
-> 
-> Nope, lots of errors:
-> 
-> Commit: b4fee523c0d7 ("nvmem: stm32: fix OPTEE dependency")
-> 	Fixes tag: Fixes: ae46fd89cc0cc ("nvmem: stm32: add OP-TEE support for STM32MP13x")
-> 	Has these problem(s):
-> 		- Target SHA1 does not exist
-> Commit: b6dc9d9a156a ("of: property: fix #nvmem-cell-cells parsing")
-> 	Fixes tag: Fixes: 6a80b3e6fb41 ("of: property: make #.*-cells optional for simple props")
-> 	Has these problem(s):
-> 		- Target SHA1 does not exist
-> Commit: 57a71161cecb ("nvmem: core: fix nvmem_layout_get_match_data()")
-> 	Fixes tag: Fixes: f61a093b4a0e ("nvmem: core: introduce NVMEM layouts")
-> 	Has these problem(s):
-> 		- Target SHA1 does not exist
-> Commit: 8e1cd6f05f71 ("nvmem: core: return -ENOENT if nvmem cell is not found")
-> 	Fixes tag: Fixes: e894d5ad177c ("nvmem: core: add an index parameter to the cell")
-> 	Has these problem(s):
-> 		- Target SHA1 does not exist
-> 
-> 
-> Can you please fix this up and resend?
-> 
-thanks Greg for trying out.
-Sure, will rebase on top of char-misc-next
+If we have a call path where this isn't true then we have a major bug at 
+a different place here.
 
---srini
-> thanks,
-> 
-> greg k-h
+Regards,
+Christian.
+
+>
+> Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 33 ++++++++++++++++++++++----
+>   1 file changed, 29 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> index b9441ab457ea..aeed7bc1512f 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> @@ -1240,10 +1240,19 @@ int amdgpu_vm_clear_freed(struct amdgpu_device *adev,
+>   	struct amdgpu_bo_va_mapping *mapping;
+>   	uint64_t init_pte_value = 0;
+>   	struct dma_fence *f = NULL;
+> +	struct list_head freed;
+>   	int r;
+>   
+> -	while (!list_empty(&vm->freed)) {
+> -		mapping = list_first_entry(&vm->freed,
+> +	/*
+> +	 * Move the contents of the VM's freed list to a local list
+> +	 * that we can iterate without racing against other threads:
+> +	 */
+> +	spin_lock(&vm->status_lock);
+> +	list_replace_init(&vm->freed, &freed);
+> +	spin_unlock(&vm->status_lock);
+> +
+> +	while (!list_empty(&freed)) {
+> +		mapping = list_first_entry(&freed,
+>   			struct amdgpu_bo_va_mapping, list);
+>   		list_del(&mapping->list);
+>   
+> @@ -1258,6 +1267,15 @@ int amdgpu_vm_clear_freed(struct amdgpu_device *adev,
+>   		amdgpu_vm_free_mapping(adev, vm, mapping, f);
+>   		if (r) {
+>   			dma_fence_put(f);
+> +
+> +			/*
+> +			 * Move any unprocessed mappings back to the freed
+> +			 * list:
+> +			 */
+> +			spin_lock(&vm->status_lock);
+> +			list_splice_tail(&freed, &vm->freed);
+> +			spin_unlock(&vm->status_lock);
+> +
+>   			return r;
+>   		}
+>   	}
+> @@ -1583,11 +1601,14 @@ int amdgpu_vm_bo_unmap(struct amdgpu_device *adev,
+>   	mapping->bo_va = NULL;
+>   	trace_amdgpu_vm_bo_unmap(bo_va, mapping);
+>   
+> -	if (valid)
+> +	if (valid) {
+> +		spin_lock(&vm->status_lock);
+>   		list_add(&mapping->list, &vm->freed);
+> -	else
+> +		spin_unlock(&vm->status_lock);
+> +	} else {
+>   		amdgpu_vm_free_mapping(adev, vm, mapping,
+>   				       bo_va->last_pt_update);
+> +	}
+>   
+>   	return 0;
+>   }
+> @@ -1671,7 +1692,9 @@ int amdgpu_vm_bo_clear_mappings(struct amdgpu_device *adev,
+>   		    tmp->last = eaddr;
+>   
+>   		tmp->bo_va = NULL;
+> +		spin_lock(&vm->status_lock);
+>   		list_add(&tmp->list, &vm->freed);
+> +		spin_unlock(&vm->status_lock);
+>   		trace_amdgpu_vm_bo_unmap(NULL, tmp);
+>   	}
+>   
+> @@ -1788,7 +1811,9 @@ void amdgpu_vm_bo_del(struct amdgpu_device *adev,
+>   		amdgpu_vm_it_remove(mapping, &vm->va);
+>   		mapping->bo_va = NULL;
+>   		trace_amdgpu_vm_bo_unmap(bo_va, mapping);
+> +		spin_lock(&vm->status_lock);
+>   		list_add(&mapping->list, &vm->freed);
+> +		spin_unlock(&vm->status_lock);
+>   	}
+>   	list_for_each_entry_safe(mapping, next, &bo_va->invalids, list) {
+>   		list_del(&mapping->list);
+
