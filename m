@@ -2,409 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4350768C88B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEB368C88E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjBFVXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S229963AbjBFVYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjBFVX3 (ORCPT
+        with ESMTP id S229614AbjBFVYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:23:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2BF1167B;
-        Mon,  6 Feb 2023 13:23:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9C9D61029;
-        Mon,  6 Feb 2023 21:23:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CCAC433D2;
-        Mon,  6 Feb 2023 21:23:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675718603;
-        bh=EOgJFG4xB2Pvp2q4gVhnKQEQgHyj+GPsj7DfmvVT0ZU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=I265x1h425aeQxg04UOFqCMfkOoernmcLBxneGLDXfc3LQvLuaPNc5Kx0zfj1isH+
-         IWNxBg8QvyvJG9SZdsAi9ZVWKJXplEJy01IGga3tIQW1QEn5k4XXa2hpQTR+NTGwP2
-         J58VGGwMJOBeqI3syasTXm3X9PduL6PdSbeXFshyCkkQmNy/4fxeBEMBXjsFFLJQbW
-         ucmTRWau8q1Nlf1eHKLEnd2H7fdX76rGKcG+xh47fx6Ag25P9cp8JF2nZY2mj9lq8c
-         xq1HNedLrXi1BwGKKVBuY0LK/0+LZx7JVT0uxGSspSiKOF9gFqXgvNT+skBb61uA+z
-         KR8MypojugVpw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A73C15C0993; Mon,  6 Feb 2023 13:23:21 -0800 (PST)
-Date:   Mon, 6 Feb 2023 13:23:21 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <20230206212321.GS2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <3684b88b-5236-4a28-6ab9-dd57b1a2780d@huaweicloud.com>
+        Mon, 6 Feb 2023 16:24:01 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF98CDF6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 13:23:59 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id z1so13566912plg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 13:23:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tjRXQ/qonNQW3nkbtuFUrdlBBvSAiIx0cRRrcJJmpv0=;
+        b=pJyqPfUlhjfdu58efNPXYtzfuoMyBtyTVUOlJQCdPDvgLpoGLDksNB233WpM1C7/qO
+         XU819MrT3H3L9PQKOQFDty8cW65kpSTlGA7WrNkSqB+nK0IwchD4iS2WGcwKvDd1+Bfq
+         PKIqFkO7oDp71haOXUN9rsgsg0tI/1lxPd2s9zFMdf5Y7hEB19eynnCdQLPKxftjbgEi
+         Ya+1lJLq/BTm2HhZTij33cBHdq9Qzhe3De4eyBkDtrUk7v/6emF7mWmb3/QICl8tFKPy
+         tp9/uR7ZW0R+epAXHM2jzhgdWd9RP0HufOUuXqrhKtKisSoarOP+b4oalIcyjCikaaN3
+         btfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tjRXQ/qonNQW3nkbtuFUrdlBBvSAiIx0cRRrcJJmpv0=;
+        b=i9DIia+0DOPwiYxcWhGxHz3hT39y7FuHGcspXxHQH6ZTWg5QHrTA24Kp6vOojS0OC7
+         eEoRCbur6ORIADIstBiiH1HQlZLKrIcyygzJgotfkQYIEm24c0zjeZhafo4wM12u9fqw
+         /3bPpVCv0PnQeKhOZ2mMj+bqoWbiG7JJtVdrHhXDXtVXLFWiiiX1ichCiYvgwfremg0P
+         QqjqRwwclDgLywgq3pD0KXDmuWhxcVwJvXUrjNgLgZNefKTjvOqkRtcm8WU+MQmd9b8R
+         QMx5KGZxwxe/OLvAiXxai1TSUfuBoH2RK1um4JfSgdGsJT105cmqHBsUFOvfdA+cTtxL
+         YT9w==
+X-Gm-Message-State: AO0yUKVD5EhFzviwAWHFUyJLLIMBhUmKn9U9NewH4cnBjHr6XMZOPiTQ
+        LHsLD8GJ74slN9jwSXT+9WT5p7IXhdbw0zut8OM=
+X-Google-Smtp-Source: AK7set8AfRRIiKtZXq7K8Kz0iylVHBuimpmNO1kC+dPlQrPVd0DozJysgSwmfofyxKr2tQZHNulhnw==
+X-Received: by 2002:a17:902:cf45:b0:199:bd0:c44c with SMTP id e5-20020a170902cf4500b001990bd0c44cmr246208plg.31.1675718638754;
+        Mon, 06 Feb 2023 13:23:58 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b001991f3d85acsm1921117plq.299.2023.02.06.13.23.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 13:23:58 -0800 (PST)
+Date:   Mon, 6 Feb 2023 13:23:54 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Kevin Cheng <chengkev@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] KVM: selftests: Added eBPF program and selftest to
+ collect vmx exit stat
+Message-ID: <Y+Fv6idxCMkuMf1R@google.com>
+References: <20230126004346.4101944-1-chengkev@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3684b88b-5236-4a28-6ab9-dd57b1a2780d@huaweicloud.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230126004346.4101944-1-chengkev@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 09:18:27PM +0100, Jonas Oberhauser wrote:
-> On 2/4/2023 2:49 AM, Paul E. McKenney wrote:
-> > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
-> > > On Fri, Feb 03, 2023 at 04:48:43PM -0800, Paul E. McKenney wrote:
-> > > > Hello!
-> > > > 
-> > > > Here is what I currently have for LKMM patches:
-> > > > 
-> > > > 289e1c89217d4 ("locking/memory-barriers.txt: Improve documentation for writel() example")
-> > > > ebd50e2947de9 ("tools: memory-model: Add rmw-sequences to the LKMM")
-> > > > aae0c8a50d6d3 ("Documentation: Fixed a typo in atomic_t.txt")
-> > > > 9ba7d3b3b826e ("tools: memory-model: Make plain accesses carry dependencies")
-> > > > 
-> > > > 	Queued for the upcoming (v6.3) merge window.
-> > > > 
-> > > > c7637e2a8a27 ("tools/memory-model: Update some warning labels")
-> > > > 7862199d4df2 ("tools/memory-model: Unify UNLOCK+LOCK pairings to po-unlock-lock-")
-> > > > 
-> > > > 	Are ready for the next (v6.4) merge window.  If there is some
-> > > > 	reason that they should instead go into v6.3, please let us
-> > > > 	all know.
-> > > > 
-> > > > a6cd5214b5ba ("tools/memory-model: Document LKMM test procedure")
-> > > > 
-> > > > 	This goes onto the lkmm-dev pile because it is documenting how
-> > > > 	to use those scripts.
-> > > > 
-> > > > https://lore.kernel.org/lkml/Y9GPVnK6lQbY6vCK@rowland.harvard.edu/
-> > > > https://lore.kernel.org/lkml/20230126134604.2160-3-jonas.oberhauser@huaweicloud.com
-> > > > https://lore.kernel.org/lkml/20230203201913.2555494-1-joel@joelfernandes.org/
-> > > > 5d871b280e7f ("tools/memory-model: Add smp_mb__after_srcu_read_unlock()")
-> > > > 
-> > > > 	These need review and perhaps further adjustment.
-> > > > 
-> > > > So, am I missing any?  Are there any that need to be redirected?
-> > > The "Provide exact semantics for SRCU" patch should have:
-> > > 
-> > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
-> > > 
-> > > added at the end, together with your Reported-by: tag.  With that, I
-> > > think it can be queued for 6.4.
-> > Thank you!  Does the patch shown below work for you?
-> > 
-> > (I have tentatively queued this, but can easily adjust or replace it.)
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > tools/memory-model: Provide exact SRCU semantics
-> > 
-> > LKMM has long provided only approximate handling of SRCU read-side
-> > critical sections.  This has not been a pressing problem because LKMM's
-> > traditional handling is correct for the common cases of non-overlapping
-> > and properly nested critical sections.  However, LKMM's traditional
-> > handling of partially overlapping critical sections incorrectly fuses
-> > them into one large critical section.
-> > 
-> > For example, consider the following litmus test:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > C C-srcu-nest-5
-> > 
-> > (*
-> >   * Result: Sometimes
-> >   *
-> >   * This demonstrates non-nested overlapping of SRCU read-side critical
-> >   * sections.  Unlike RCU, SRCU critical sections do not unconditionally
-> >   * nest.
-> >   *)
-> > 
-> > {}
-> > 
-> > P0(int *x, int *y, struct srcu_struct *s1)
-> > {
-> >          int r1;
-> >          int r2;
-> >          int r3;
-> >          int r4;
-> > 
-> >          r3 = srcu_read_lock(s1);
-> >          r2 = READ_ONCE(*y);
-> >          r4 = srcu_read_lock(s1);
-> >          srcu_read_unlock(s1, r3);
-> >          r1 = READ_ONCE(*x);
-> >          srcu_read_unlock(s1, r4);
-> > }
-> > 
-> > P1(int *x, int *y, struct srcu_struct *s1)
-> > {
-> >          WRITE_ONCE(*y, 1);
-> >          synchronize_srcu(s1);
-> >          WRITE_ONCE(*x, 1);
-> > }
-> > 
-> > locations [0:r1]
-> > exists (0:r1=1 /\ 0:r2=0)
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > Current mainline incorrectly flattens the two critical sections into
-> > one larger critical section, giving "Never" instead of the correct
-> > "Sometimes":
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > $ herd7 -conf linux-kernel.cfg C-srcu-nest-5.litmus
-> > Test C-srcu-nest-5 Allowed
-> > States 3
-> > 0:r1=0; 0:r2=0;
-> > 0:r1=0; 0:r2=1;
-> > 0:r1=1; 0:r2=1;
-> > No
-> > Witnesses
-> > Positive: 0 Negative: 3
-> > Flag srcu-bad-nesting
-> > Condition exists (0:r1=1 /\ 0:r2=0)
-> > Observation C-srcu-nest-5 Never 0 3
-> > Time C-srcu-nest-5 0.01
-> > Hash=e692c106cf3e84e20f12991dc438ff1b
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > To its credit, it does complain about bad nesting.  But with this
-> > commit we get the following result, which has the virtue of being
-> > correct:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > $ herd7 -conf linux-kernel.cfg C-srcu-nest-5.litmus
-> > Test C-srcu-nest-5 Allowed
-> > States 4
-> > 0:r1=0; 0:r2=0;
-> > 0:r1=0; 0:r2=1;
-> > 0:r1=1; 0:r2=0;
-> > 0:r1=1; 0:r2=1;
-> > Ok
-> > Witnesses
-> > Positive: 1 Negative: 3
-> > Condition exists (0:r1=1 /\ 0:r2=0)
-> > Observation C-srcu-nest-5 Sometimes 1 3
-> > Time C-srcu-nest-5 0.05
-> > Hash=e692c106cf3e84e20f12991dc438ff1b
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > In addition, there are new srcu_down_read() and srcu_up_read()
-> > functions on their way to mainline.  Roughly speaking, these are to
-> > srcu_read_lock() and srcu_read_unlock() as down() and up() are to
-> > mutex_lock() and mutex_unlock().  The key point is that
-> > srcu_down_read() can execute in one process and the matching
-> > srcu_up_read() in another, as shown in this litmus test:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > C C-srcu-nest-6
-> > 
-> > (*
-> >   * Result: Never
-> >   *
-> >   * This would be valid for srcu_down_read() and srcu_up_read().
-> >   *)
-> > 
-> > {}
-> > 
-> > P0(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
-> > {
-> >          int r2;
-> >          int r3;
-> > 
-> >          r3 = srcu_down_read(s1);
-> >          WRITE_ONCE(*idx, r3);
-> >          r2 = READ_ONCE(*y);
-> >          smp_store_release(f, 1);
-> > }
-> > 
-> > P1(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
-> > {
-> >          int r1;
-> >          int r3;
-> >          int r4;
-> > 
-> >          r4 = smp_load_acquire(f);
-> >          r1 = READ_ONCE(*x);
-> >          r3 = READ_ONCE(*idx);
-> >          srcu_up_read(s1, r3);
-> > }
-> > 
-> > P2(int *x, int *y, struct srcu_struct *s1)
-> > {
-> >          WRITE_ONCE(*y, 1);
-> >          synchronize_srcu(s1);
-> >          WRITE_ONCE(*x, 1);
-> > }
-> > 
-> > locations [0:r1]
-> > filter (1:r4=1)
-> > exists (1:r1=1 /\ 0:r2=0)
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > When run on current mainline, this litmus test gets a complaint about
-> > an unknown macro srcu_down_read().  With this commit:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > herd7 -conf linux-kernel.cfg C-srcu-nest-6.litmus
-> > Test C-srcu-nest-6 Allowed
-> > States 3
-> > 0:r1=0; 0:r2=0; 1:r1=0;
-> > 0:r1=0; 0:r2=1; 1:r1=0;
-> > 0:r1=0; 0:r2=1; 1:r1=1;
-> > No
-> > Witnesses
-> > Positive: 0 Negative: 3
-> > Condition exists (1:r1=1 /\ 0:r2=0)
-> > Observation C-srcu-nest-6 Never 0 3
-> > Time C-srcu-nest-6 0.02
-> > Hash=c1f20257d052ca5e899be508bedcb2a1
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > Note that the user must supply the flag "f" and the "filter" clause,
-> > similar to what must be done to emulate call_rcu().
-> > 
-> > The commit works by treating srcu_read_lock()/srcu_down_read() as
-> > loads and srcu_read_unlock()/srcu_up_read() as stores.  This allows us
-> > to determine which unlock matches which lock by looking for a data
-> > dependency between them.  In order for this to work properly, the data
-> > dependencies have to be tracked through stores to intermediate
-> > variables such as "idx" in the litmus test above; this is handled by
-> > the new carry-srcu-data relation.  But it's important here (and in the
-> > existing carry-dep relation) to avoid tracking the dependencies
-> > through SRCU unlock stores.  Otherwise, in situations resembling:
-> > 
-> > 	A: r1 = srcu_read_lock(s);
-> > 	B: srcu_read_unlock(s, r1);
-> > 	C: r2 = srcu_read_lock(s);
-> > 	D: srcu_read_unlock(s, r2);
-> > 
-> > it would look as if D was dependent on both A and C, because "s" would
-> > appear to be an intermediate variable written by B and read by C.
-> > This explains the complications in the definitions of carry-srcu-dep
-> > and carry-dep.
-> > 
-> > As a debugging aid, the commit adds a check for errors in which the
-> > value returned by one call to srcu_read_lock()/srcu_down_read() is
-> > passed to more than one instance of srcu_read_unlock()/srcu_up_read().
-> > 
-> > Finally, since these SRCU-related primitives are now treated as
-> > ordinary reads and writes, we have to add them into the lists of
-> > marked accesses (i.e., not subject to data races) and lock-related
-> > accesses (i.e., one shouldn't try to access an srcu_struct with a
-> > non-lock-related primitive such as READ_ONCE() or a plain write).
-> > 
-> > Portions of this approach were suggested by Boqun Feng and Jonas
-> > Oberhauser.
-> > 
-> > [ paulmck: Fix space-before-tab whitespace nit. ]
-> > 
-> > Reported-by: Paul E. McKenney <paulmck@kernel.org>
-> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+On Thu, Jan 26, 2023 at 12:43:46AM +0000, Kevin Cheng wrote:
+> Introduce a new selftest that loads an eBPF program that stores the
+> number of vmx exit counts per vcpu per vm. A process is created per
+> vm_create to load a separate eBPF program to collect its own stats
+> unique to the pid.
 > 
-> Reviewed-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> This test aims to serve as a proof-of-concept and example for using eBPF
+> to collect stats that are not provided by the other stats interfaces
+> such as kvm_binary_stats. Since there will be no further stats being
+> added to kvm_binary_stats, developers can use this selftest as a
+> reference for writing their own eBPF program + selftest to collect
+> whatever stat they may need for debugging/monitoring.
+> 
+> Signed-off-by: Kevin Cheng <chengkev@google.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile          |   4 +-
+>  tools/testing/selftests/kvm/build_ebpf.sh     |   5 +
+>  .../testing/selftests/kvm/kvm_vmx_exit_ebpf.c | 128 ++++++++++++++++++
+>  .../selftests/kvm/kvm_vmx_exit_ebpf_kern.c    |  74 ++++++++++
 
-Applied, thank you!
+x86-specific tests should go in tools/testing/selftests/kvm/x86_64.
 
-							Thanx, Paul
+>  4 files changed, 210 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/kvm/build_ebpf.sh
+>  create mode 100644 tools/testing/selftests/kvm/kvm_vmx_exit_ebpf.c
+>  create mode 100644 tools/testing/selftests/kvm/kvm_vmx_exit_ebpf_kern.c
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 1750f91dd936..d9f56ccbc7bb 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -129,6 +129,7 @@ TEST_GEN_PROGS_x86_64 += set_memory_region_test
+>  TEST_GEN_PROGS_x86_64 += steal_time
+>  TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
+>  TEST_GEN_PROGS_x86_64 += system_counter_offset_test
+> +TEST_GEN_PROGS_x86_64 += kvm_vmx_exit_ebpf
+>  
+>  # Compiled outputs used by test targets
+>  TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
+> @@ -176,6 +177,7 @@ TEST_GEN_PROGS_riscv += set_memory_region_test
+>  TEST_GEN_PROGS_riscv += kvm_binary_stats_test
+>  
+>  TEST_PROGS += $(TEST_PROGS_$(ARCH_DIR))
+> +TEST_PROGS := build_ebpf.sh
 
-> > ---
-> > 
-> >   tools/memory-model/linux-kernel.bell |   17 +++++------------
-> >   tools/memory-model/linux-kernel.def  |    6 ++++--
-> >   tools/memory-model/lock.cat          |    6 +++---
-> >   3 files changed, 12 insertions(+), 17 deletions(-)
-> > 
-> > Index: usb-devel/tools/memory-model/linux-kernel.bell
-> > ===================================================================
-> > --- usb-devel.orig/tools/memory-model/linux-kernel.bell
-> > +++ usb-devel/tools/memory-model/linux-kernel.bell
-> > @@ -57,20 +57,13 @@ flag ~empty Rcu-lock \ domain(rcu-rscs)
-> >   flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
-> >   (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> > -let srcu-rscs = let rec
-> > -	    unmatched-locks = Srcu-lock \ domain(matched)
-> > -	and unmatched-unlocks = Srcu-unlock \ range(matched)
-> > -	and unmatched = unmatched-locks | unmatched-unlocks
-> > -	and unmatched-po = ([unmatched] ; po ; [unmatched]) & loc
-> > -	and unmatched-locks-to-unlocks =
-> > -		([unmatched-locks] ; po ; [unmatched-unlocks]) & loc
-> > -	and matched = matched | (unmatched-locks-to-unlocks \
-> > -		(unmatched-po ; unmatched-po))
-> > -	in matched
-> > +let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
-> > +let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
-> >   (* Validate nesting *)
-> >   flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
-> >   flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
-> > +flag ~empty (srcu-rscs^-1 ; srcu-rscs) \ id as multiple-srcu-matches
-> >   (* Check for use of synchronize_srcu() inside an RCU critical section *)
-> >   flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
-> > @@ -80,11 +73,11 @@ flag ~empty different-values(srcu-rscs)
-> >   (* Compute marked and plain memory accesses *)
-> >   let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
-> > -		LKR | LKW | UL | LF | RL | RU
-> > +		LKR | LKW | UL | LF | RL | RU | Srcu-lock | Srcu-unlock
-> >   let Plain = M \ Marked
-> >   (* Redefine dependencies to include those carried through plain accesses *)
-> > -let carry-dep = (data ; rfi)*
-> > +let carry-dep = (data ; [~ Srcu-unlock] ; rfi)*
-> >   let addr = carry-dep ; addr
-> >   let ctrl = carry-dep ; ctrl
-> >   let data = carry-dep ; data
-> > Index: usb-devel/tools/memory-model/linux-kernel.def
-> > ===================================================================
-> > --- usb-devel.orig/tools/memory-model/linux-kernel.def
-> > +++ usb-devel/tools/memory-model/linux-kernel.def
-> > @@ -49,8 +49,10 @@ synchronize_rcu() { __fence{sync-rcu}; }
-> >   synchronize_rcu_expedited() { __fence{sync-rcu}; }
-> >   // SRCU
-> > -srcu_read_lock(X)  __srcu{srcu-lock}(X)
-> > -srcu_read_unlock(X,Y) { __srcu{srcu-unlock}(X,Y); }
-> > +srcu_read_lock(X) __load{srcu-lock}(*X)
-> > +srcu_read_unlock(X,Y) { __store{srcu-unlock}(*X,Y); }
-> > +srcu_down_read(X) __load{srcu-lock}(*X)
-> > +srcu_up_read(X,Y) { __store{srcu-unlock}(*X,Y); }
-> >   synchronize_srcu(X)  { __srcu{sync-srcu}(X); }
-> >   synchronize_srcu_expedited(X)  { __srcu{sync-srcu}(X); }
-> > Index: usb-devel/tools/memory-model/lock.cat
-> > ===================================================================
-> > --- usb-devel.orig/tools/memory-model/lock.cat
-> > +++ usb-devel/tools/memory-model/lock.cat
-> > @@ -36,9 +36,9 @@ let RU = try RU with emptyset
-> >   (* Treat RL as a kind of LF: a read with no ordering properties *)
-> >   let LF = LF | RL
-> > -(* There should be no ordinary R or W accesses to spinlocks *)
-> > -let ALL-LOCKS = LKR | LKW | UL | LF | RU
-> > -flag ~empty [M \ IW] ; loc ; [ALL-LOCKS] as mixed-lock-accesses
-> > +(* There should be no ordinary R or W accesses to spinlocks or SRCU structs *)
-> > +let ALL-LOCKS = LKR | LKW | UL | LF | RU | Srcu-lock | Srcu-unlock | Sync-srcu
-> > +flag ~empty [M \ IW \ ALL-LOCKS] ; loc ; [ALL-LOCKS] as mixed-lock-accesses
-> >   (* Link Lock-Reads to their RMW-partner Lock-Writes *)
-> >   let lk-rmw = ([LKR] ; po-loc ; [LKW]) \ (po ; po)
+build_ebpf.sh is not be a test program. It should be part of this
+Makefile. i.e. running
+
+  make -C tools/testing/selftests/kvm
+
+should build tools/lib/bpf and kvm_vmx_exit_ebpf_kern.o. Developers
+can't be expected to run
+tools/testing/testing/selftests/kvm/build_ebpf.sh every time they want
+to build the KVM selftests.
+
+>  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
+>  TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
+>  LIBKVM += $(LIBKVM_$(ARCH_DIR))
+> @@ -208,7 +210,7 @@ no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
+>  pgste-option = $(call try-run, echo 'int main(void) { return 0; }' | \
+>  	$(CC) -Werror -Wl$(comma)--s390-pgste -x c - -o "$$TMP",-Wl$(comma)--s390-pgste)
+>  
+> -LDLIBS += -ldl
+> +LDLIBS += -ldl -L$(top_srcdir)/tools/lib/bpf -lbpf -lelf -lz
+
+Please add a comment document why the different libraries are needed for
+future readers.
+
+>  LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
+>  
+>  LIBKVM_C := $(filter %.c,$(LIBKVM))
+> diff --git a/tools/testing/selftests/kvm/build_ebpf.sh b/tools/testing/selftests/kvm/build_ebpf.sh
+> new file mode 100644
+> index 000000000000..b8038b0a0da5
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/build_ebpf.sh
+> @@ -0,0 +1,5 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +clang -g -O2 -target bpf -D__TARGET_ARCH_x86_64 -I . -c kvm_vmx_exit_ebpf_kern.c
+> +        -o kvm_vmx_exit_ebpf_kern.o
+> +make -C ../../../lib/bpf || exit
+
+As mentioned above, this should be part of the Makefile.
+
+> diff --git a/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf.c b/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf.c
+> new file mode 100644
+> index 000000000000..a4bd2c549207
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf.c
+> @@ -0,0 +1,128 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <signal.h>
+> +#include <sys/types.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +#include <bpf/bpf.h>
+> +#include <../bpf/libbpf.h>
+> +#include <linux/btf.h>
+> +
+> +#include "test_util.h"
+> +
+> +#include "kvm_util.h"
+> +#include "linux/kvm.h"
+> +
+> +#define VCPU_ID         0
+> +
+> +struct stats_map_key {
+> +	__u32 pid;
+> +	__u32 vcpu_id;
+> +	__u32 exit_reason;
+> +};
+> +
+> +static void guest_code(void)
+> +{
+> +	__asm__ __volatile__("cpuid");
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	if (argc < 2) {
+> +		fprintf(stderr, "Expected arguments: <number_of_vms>\n");
+> +		return EXIT_FAILURE;
+
+Selftests run by default with no arguments. So please provide a default
+number of VMs to run with the test. Otherwise this test will just fail
+by default.
+
+It's common (at least for me) to run all KVM selftests when submitting
+patches. So having one test that always fails will be annoying to deal
+with.
+
+Also, can you provide some details (e.g. in a comment) about why a user
+might want to pick a different number of VMs? What is the value of
+running this test with 1 VM vs. 2 vs. 3 etc.?
+
+> +	}
+> +	int n = atoi(argv[1]);
+> +
+> +	for (int i = 0; i < n; i++) {
+> +		if (fork() == 0) {
+
+Put the implementation of the child process into a helper function to
+reduce indentation.
+
+> +			struct kvm_vm *vm;
+> +			struct kvm_vcpu *vcpu;
+> +
+> +			vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+> +
+> +			// BPF userspace code
+> +			struct bpf_object *obj;
+> +			struct bpf_program *prog;
+> +			struct bpf_map *map_obj;
+> +			struct bpf_link *link = NULL;
+> +
+> +			obj = bpf_object__open_file("kvm_vmx_exit_ebpf_kern.o", NULL);
+> +			if (libbpf_get_error(obj)) {
+> +				fprintf(stderr, "ERROR: opening BPF object file failed\n");
+> +				return 0;
+
+I notice the children and parent always return 0. The test should exit
+with a non-0 return code if it fails.
+
+> +			}
+> +
+> +			map_obj = bpf_object__find_map_by_name(obj, "vmx_exit_map");
+> +			if (!map_obj) {
+> +				fprintf(stderr, "ERROR: loading of vmx BPF map failed\n");
+> +				goto cleanup;
+> +			}
+> +
+> +			struct bpf_map *pid_map = bpf_object__find_map_by_name(obj, "pid_map");
+> +
+> +			if (!pid_map) {
+> +				fprintf(stderr, "ERROR: loading of pid BPF map failed\n");
+> +				goto cleanup;
+> +			}
+> +
+> +			/* load BPF program */
+
+No need for this comment. bpf_object__load() is quite obvious already :)
+
+> +			if (bpf_object__load(obj)) {
+> +				fprintf(stderr, "ERROR: loading BPF object file failed\n");
+> +				goto cleanup;
+> +			}
+> +
+> +			__u32 userspace_pid = (__u32)getpid();
+> +			__u32 val = (__u32)getpid();
+> +
+> +			bpf_map_update_elem(bpf_map__fd(pid_map), &userspace_pid, &val, 0);
+> +
+> +			prog = bpf_object__find_program_by_name(obj, "bpf_exit_prog");
+> +			if (libbpf_get_error(prog)) {
+> +				fprintf(stderr, "ERROR: finding a prog in obj file failed\n");
+> +				goto cleanup;
+> +			}
+> +
+> +			link = bpf_program__attach(prog);
+> +			if (libbpf_get_error(link)) {
+> +				fprintf(stderr, "ERROR: bpf_program__attach failed\n");
+> +				link = NULL;
+> +				goto cleanup;
+> +			}
+> +
+> +			for (int j = 0; j < 10000; j++)
+> +				vcpu_run(vcpu);
+
+It might be interesting to (1) add some timing around this loop and (2)
+run this loop without any bpf programs attached. i.e. Automatically do
+an A/B performance comparison with and without bpf programs.
+
+> +
+> +			struct stats_map_key key = {
+> +				.pid = 0,
+> +				.vcpu_id = 0,
+> +				.exit_reason = 18,
+> +			};
+> +
+> +
+> +			struct stats_map_key next_key, lookup_key;
+> +
+> +			lookup_key = key;
+> +			while (bpf_map_get_next_key(bpf_map__fd(map_obj), &lookup_key, &next_key)
+> +				 == 0) {
+> +				int count;
+> +
+> +				bpf_map_lookup_elem(bpf_map__fd(map_obj), &next_key, &count);
+> +				fprintf(stdout, "exit reason: '%d'\ncount: %d\npid: %d\n",
+> +						next_key.exit_reason, count, next_key.pid);
+
+Instead of printing ot the count, assert that the count has the right
+value.
+
+> +				lookup_key = next_key;
+> +			}
+> +
+> +cleanup:
+> +			bpf_link__destroy(link);
+> +			bpf_object__close(obj);
+> +			kvm_vm_free(vm);
+
+Shouldn't the child process exit here? Otherwise it's going to keep
+looping and creating *more* children?
+
+> +		}
+> +	}
+> +
+> +	for (int i = 0; i < n; i++)
+> +		wait(NULL);
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf_kern.c b/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf_kern.c
+> new file mode 100644
+> index 000000000000..b9c076f93171
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf_kern.c
+
+I think we should carve out a new directory for bpf programs. If we mix
+this in with the selftest .c files, it will start to get confusing.
+
+e.g. tools/testing/selftests/kvm/bpf/vmx_exit_count.c
+
+Note I dropped the "kvm_" prefix since it's obvious this is a
+KVM-related program since it's under the KVM selftest directory. And I
+also dropped "_ebpf_kern" since that's now obvious from the fact that
+this is in the bpf/ subdirectory (which should only contain bpf
+programs).
+
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/bpf.h>
+> +#include <stdint.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_core_read.h>
+> +
+> +struct kvm_vcpu {
+> +	int vcpu_id;
+> +};
+> +
+> +struct vmx_args {
+> +	__u64 pad;
+> +	unsigned int exit_reason;
+> +	__u32 isa;
+> +	struct kvm_vcpu *vcpu;
+> +};
+> +
+> +struct stats_map_key {
+> +	__u32 pid;
+> +	__u32 vcpu_id;
+> +	__u32 exit_reason;
+> +};
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_HASH);
+> +	__uint(max_entries, 1024);
+> +	__type(key, struct stats_map_key);
+> +	__type(value, int);
+> +} vmx_exit_map SEC(".maps");
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_HASH);
+> +	__uint(max_entries, 1);
+> +	__type(key, __u32);
+> +	__type(value, __u32);
+> +} pid_map SEC(".maps");
+> +
+> +
+> +SEC("tracepoint/kvm/kvm_exit")
+> +int bpf_exit_prog(struct vmx_args *ctx)
+> +{
+> +	__u32 curr_pid = (bpf_get_current_pid_tgid() >> 32);
+> +
+> +	__u32 *userspace_pid = bpf_map_lookup_elem(&pid_map, &curr_pid);
+> +
+> +	if (!userspace_pid || *userspace_pid != curr_pid)
+> +		return 0;
+> +
+> +	struct kvm_vcpu *vcpu = ctx->vcpu;
+> +	int _vcpu_id = BPF_CORE_READ(vcpu, vcpu_id);
+> +
+> +	struct stats_map_key key = {
+> +		.pid = (bpf_get_current_pid_tgid() >> 32),
+> +		.vcpu_id = _vcpu_id,
+> +		.exit_reason = ctx->exit_reason,
+> +	};
+> +
+> +	int *value = bpf_map_lookup_elem(&vmx_exit_map, &key);
+> +
+> +	if (value) {
+> +		*value = *value + 1;
+> +		bpf_map_update_elem(&vmx_exit_map, &key, value, BPF_ANY);
+> +	} else {
+> +		int temp = 1;
+> +
+> +		bpf_map_update_elem(&vmx_exit_map, &key, &temp, BPF_ANY);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> -- 
+> 2.39.1.456.gfc5497dd1b-goog
 > 
