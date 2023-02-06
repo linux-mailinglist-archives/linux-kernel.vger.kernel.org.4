@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B9068BB20
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9188B68BB22
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjBFLSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:18:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S229879AbjBFLS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjBFLSE (ORCPT
+        with ESMTP id S229545AbjBFLSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:18:04 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B719ECB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:18:03 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id s24so12239663vsi.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:18:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rwXX77gDObBsNSKOYPKq8KrSqNKeQDtYRqpUJ33YBs=;
-        b=jCUFeCsz6BfoHukI2ABxuTMF6frheMup3DbNltf74R+lX5vdhqT82KSrIsPkTmAlqH
-         P9WTfXjQBNReHstzUK5VCcyNK8sTRGc5acp/3EmbWQzJlaJUOh88/8ukFH33dUUZDNq2
-         VvrIM7vGnUvJtzPpLYx5Lu6VhhkmPBtsUaij8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/rwXX77gDObBsNSKOYPKq8KrSqNKeQDtYRqpUJ33YBs=;
-        b=pGpUo6FLvOdChR7w0DkfoxjCDH7CpU277ATvRjNOUwndjrraNlic6TvfpVK4L4vaX9
-         pwLDipVG6zbcThrhtSVs/srhILBSmRmvR7UMcoN9DrLVnhquJ3Ss6Q6rqLVS3id9k9mg
-         XgPfAMB6ji5a2Y/bUpEGsgXnvcHCbcQrfkSfPuj/S3TLcox6iERVQmMJRiSeD7hVmi/Z
-         U2NOtW/FW8A/gsviMS+s0U6ASa1iPBUR3aHEM1UQtth1Uy77bdkqo64an+DUNE5BW8YX
-         x/QbIR1x9YJWzyF939eM9XZIRruMUx9cje9BF/8p+q+rsR7Q3wALwDBf2oaE+enSsifB
-         3slA==
-X-Gm-Message-State: AO0yUKVx1WGlOeXl2xj5H14pmyQkATUNomzaBW+3fkNdVUz8n2r/HPt9
-        eDsQbRM2e1A+MxXJiVSQ0PzyjINUAUpq5Xoiqxng/w==
-X-Google-Smtp-Source: AK7set/KGmltEInT6XzqPPO0IQbyeDjR6qLXf6JqdQTYRJiNedxftxWZahdnYF2TPrmK1NolkMQXMg26ZTZ9DH7wHKs=
-X-Received: by 2002:a67:d21a:0:b0:3ed:2cd6:deed with SMTP id
- y26-20020a67d21a000000b003ed2cd6deedmr3458075vsi.65.1675682282519; Mon, 06
- Feb 2023 03:18:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20230206091109.1324-1-moudy.ho@mediatek.com> <20230206091109.1324-6-moudy.ho@mediatek.com>
-In-Reply-To: <20230206091109.1324-6-moudy.ho@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 6 Feb 2023 19:17:51 +0800
-Message-ID: <CAGXv+5GFkNmH=Ltb1o+9eB=4+FfuNk2T3OGk1zWjsrweGbzKkA@mail.gmail.com>
-Subject: Re: [PATCH v7 5/6] soc: mediatek: mutex: Add mtk_mutex_set_mod
- support to set MOD1
-To:     Moudy Ho <moudy.ho@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
+        Mon, 6 Feb 2023 06:18:55 -0500
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE80793EF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1675682332;
+        bh=MMQELgfzmTy2xoXiOtkuiLj6chI+faYOtG4k4503QqY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=FxqEIztYJEsnztsYoMzZasFmEUzUN8QwwE+GVpct7yREFVRzDZtJQJQr7aBsZTnmx
+         Cskc+ZLptA9aIP+LY5WeMczatirrNccPnYmdx+MiYGBOZPHEf3mVDAmVcKgqojYzFc
+         5coUMLOyLkYePMjFb+4I/ZAD6610bXAqWQOVLyXs=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 8E48365BFE;
+        Mon,  6 Feb 2023 06:18:49 -0500 (EST)
+Message-ID: <b1809500e4d55564a1084a3014fb9603ba3d1438.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Jianmin Lv <lvjianmin@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 06 Feb 2023 19:18:47 +0800
+In-Reply-To: <5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn>
+References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+         <5fc85453-1e2c-1f00-7879-1b5fa318c78a@xen0n.name>
+         <5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 5:11 PM Moudy Ho <moudy.ho@mediatek.com> wrote:
->
-> From: "Roy-CW.Yeh" <roy-cw.yeh@mediatek.com>
->
-> Add mtk_mutex_set_mod support to set MOD1
->
-> Signed-off-by: Roy-CW.Yeh <roy-cw.yeh@mediatek.com>
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Mon, 2023-02-06 at 18:24 +0800, Jianmin Lv wrote:
+> Hi, Xuerui
+>=20
+> I think the kernels produced with and without -mstrict-align have mainly=
+=20
+> following differences:
+> - Diffirent size. I build two kernls (vmlinux), size of kernel with=20
+> -mstrict-align is 26533376 bytes and size of kernel without=20
+> -mstrict-align is 26123280 bytes.
+> - Diffirent performance. For example, in kernel function jhash(), the=20
+> assemble code slices with and without -mstrict-align are following:
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+But there are still questions remaining:
+
+(1) Is the difference contributed by a bad code generation of GCC?  If
+true, it's better to improve GCC before someone starts to build a distro
+for LA264 as it would benefit the user space as well.
+
+(2) Is there some "big bad unaligned access loop" on a hot spot in the
+kernel code?  If true, it may be better to just refactor the C code
+because doing so will benefit all ports, not only LoongArch.  Otherwise,
+it may be unworthy to optimize for some cold paths.
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
