@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EF168C695
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59BE68C698
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjBFTQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:16:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
+        id S230215AbjBFTQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjBFTQX (ORCPT
+        with ESMTP id S230217AbjBFTQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:16:23 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7D82BEEE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:15:54 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so9684123wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:15:54 -0800 (PST)
+        Mon, 6 Feb 2023 14:16:55 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FEC2E811
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:16:34 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso9669732wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ASOZTaYA0fPeH4V0w0/DNjsNUMl04wnF0KiVjBDE8js=;
-        b=FkRZnbBXMV+2QXm2YTQ1vwr+2L5cJrDiMLarDO+RZG5x6kNysr4xYb5uZTTEyvxYBN
-         Z/zIs7S0voagwKnVjSmFMJ3tmYdhsdFIJSwneonn7Sstj/FDhQOkmBzic7wMKIMJDDIx
-         /WlMw01YiHvRrrfO9oSM3UAFyGphvfyDBSk8Z4sK94hz2psrYVJzEnHJGFdV+Cc9tPRz
-         RSuZBBbqxCcMVyj10vrrnO43yK/xD+g6rqlyQ5FlQBRvtrfb8bIMcBkVxpM98CrFBNj2
-         Aei7gpB+5s/jr8mUWpNluRjXpoeu4SUVkvLcVIga80lrSviPcHmNAEND+xjlJi4w+/pb
-         TTlQ==
+        bh=gJRDeiWMU5LminQ5X0rSwq5LRRKb8iCPzPGu9WgeBvk=;
+        b=VPj2N3jHazrLOiA7IMwXdxCeFN/lEBhO1oe783NaPoPoRMAJ6L05bPfNIY1WSBVPvg
+         YgR8ZcE1UpgfiKiMwyZjQz3KKkOHc/09+dTTizVt8UI471hYotXy+eaPYtI0LjD2B9X8
+         TM+OupEI9O4EaWaz9EAcCuhBecxbDP0XRUE9zBxqMorKfh8kc7fSlqb8WEfyD4Fzvnb/
+         oqdWiVzVZiER7qK/GwKoHDG+LSwok8oGcu7mxMwe1vb+7QABcdb2nTyS6R3QhsQ+ZRXT
+         Qbw+HQvs0Uij5IaDi5jCdEmXQqTq5Lgy6J67JTREXAUoj/bQYMr60UqRZkPohBhoMUwV
+         cvgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ASOZTaYA0fPeH4V0w0/DNjsNUMl04wnF0KiVjBDE8js=;
-        b=nL9rA6jSsuSQE+raHtrHWZlHQO4NLXbKs281tlIa8phFM0/V0os1LW1Q0pCKp4HhGX
-         X4qkTg3O2mfXpfug6Lmb0bvck20zD6I6ekUjrcAf6CeDPvxgLtPAHFkOUfRiNwvrXUqy
-         Cp+g3vkVK/6RgfIAjBT2UIf9T76AgBkpnOrc1iJtno2nuhoVyZUDLx3gUfc8IGAr8AV8
-         JoEEy5nib3RYdaQWdJJv+dZn0/ybYOW2jUfDulOIXWwp/PYt2Trj1jFL4ufs8MN+kEJ8
-         czitpHJWyWyGt9ysHnKnRzyqoazF2imZXzOeFkpV6WuMaETSwWgIzQdxbWkbxAKMnY8Z
-         D3og==
-X-Gm-Message-State: AO0yUKV3UwWrM/Rq1Xwd0SvQ1zUCOhVLQfzqul9pW7Wt7SrbrrVr4GRc
-        AqBcD+tAx0J4VO1NtrPVatqwhQ==
-X-Google-Smtp-Source: AK7set97CwxTF4+mcJ4gp9ZLuFRVhrwVBA51yp8Mc0iz4oDZXFiH93F59Or07hUeP2uEl5+p8AFg1Q==
-X-Received: by 2002:a05:600c:13c8:b0:3df:50eb:7cd9 with SMTP id e8-20020a05600c13c800b003df50eb7cd9mr731884wmg.14.1675710952530;
-        Mon, 06 Feb 2023 11:15:52 -0800 (PST)
+        bh=gJRDeiWMU5LminQ5X0rSwq5LRRKb8iCPzPGu9WgeBvk=;
+        b=yawnk6saVjnI7Q+cu8HNxzdXBiVqpWFQaRiX5dO7nvyszoNqcZVELLdG79jJO4cWIH
+         W5XoqEVUjXah467a2ugGdSt71yFUqJyXz7MiUxE4tdewOJW1vCCRYMI4N4FCJz9RE/gM
+         vkjO22VbWfdMleQ44uDR5/AUUiJGlpVipfFM2Zx9jDasHhVZs2Lt23tXnu1/RHwtwG8w
+         EIRu8l9+MpXaaAusy4fatImGMBKZa+8d5gmt/CVpKXRECwAgsIDlqqkQwIqst6LF5zUz
+         9AekE4MTTpz+RtQwRAeKAur/7CO4/wApRAiESrYMqagFAsp+KXtPcd5HpWGh/hDvi8LV
+         HqpQ==
+X-Gm-Message-State: AO0yUKXZELDheQvR+tnAzxo45XNTAsrqMvafDFaLmtcLhf320Tr8py1R
+        Lr8p7N1NPLlak6W88UjPskSvUg==
+X-Google-Smtp-Source: AK7set9kdM2QNJOY0kxx1JjhOxRMvHbF5AvX3IsjMUfODox45NsBWNLdRL4wGOc0gLaOFODk/k+JVA==
+X-Received: by 2002:a05:600c:331b:b0:3df:ead3:c6fc with SMTP id q27-20020a05600c331b00b003dfead3c6fcmr746809wmp.17.1675710988803;
+        Mon, 06 Feb 2023 11:16:28 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b12-20020a5d4d8c000000b002c3e63c030bsm4224376wru.93.2023.02.06.11.15.51
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c3b8900b003d9aa76dc6asm18047337wms.0.2023.02.06.11.16.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 11:15:52 -0800 (PST)
-Message-ID: <364e2bd0-c411-7a71-4005-dd24e8d0f0a6@linaro.org>
-Date:   Mon, 6 Feb 2023 20:15:50 +0100
+        Mon, 06 Feb 2023 11:16:28 -0800 (PST)
+Message-ID: <ab80be6e-0dfe-a696-6d81-0969e5a21ddb@linaro.org>
+Date:   Mon, 6 Feb 2023 20:16:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 5/7] ASoC: dt-bindings: meson: convert axg spdif input
+Subject: Re: [PATCH v2 6/7] ASoC: dt-bindings: meson: convert axg spdif output
  to schema
 Content-Language: en-US
 To:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -68,9 +68,9 @@ Cc:     linux-amlogic@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org
 References: <20230206153449.596326-1-jbrunet@baylibre.com>
- <20230206153449.596326-6-jbrunet@baylibre.com>
+ <20230206153449.596326-7-jbrunet@baylibre.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230206153449.596326-6-jbrunet@baylibre.com>
+In-Reply-To: <20230206153449.596326-7-jbrunet@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,10 +83,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 06/02/2023 16:34, Jerome Brunet wrote:
-> Convert the DT binding documentation for the Amlogic axg spdif input to
+> Convert the DT binding documentation for the Amlogic axg spdif output to
 > schema.
 > 
 > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>  .../bindings/sound/amlogic,axg-spdifout.txt   | 25 ------
+>  .../bindings/sound/amlogic,axg-spdifout.yaml  | 79 +++++++++++++++++++
+>  2 files changed, 79 insertions(+), 25 deletions(-)
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
