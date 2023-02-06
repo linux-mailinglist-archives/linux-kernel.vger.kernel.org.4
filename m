@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD18868B399
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B812668B39F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 02:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjBFBF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Feb 2023 20:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        id S229545AbjBFBII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Feb 2023 20:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBFBF5 (ORCPT
+        with ESMTP id S229488AbjBFBIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Feb 2023 20:05:57 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328461A973;
-        Sun,  5 Feb 2023 17:05:53 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 6F6CD24E20D;
-        Mon,  6 Feb 2023 09:05:45 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Feb
- 2023 09:05:45 +0800
-Received: from [192.168.120.49] (171.223.208.138) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Feb
- 2023 09:05:43 +0800
-Message-ID: <5daccff5-6f51-4ee3-29ca-a2ae32c6780e@starfivetech.com>
-Date:   Mon, 6 Feb 2023 09:05:43 +0800
+        Sun, 5 Feb 2023 20:08:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6181CDF4;
+        Sun,  5 Feb 2023 17:08:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7312060C4D;
+        Mon,  6 Feb 2023 01:08:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D781AC433D2;
+        Mon,  6 Feb 2023 01:08:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675645684;
+        bh=XyBLgfQK6ge4EhdCnRlXceT5yEg/NKnPwHNtxHUH0+o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TFp/nNwV67HIdFc5vi8rwNLOpB0TJQOS9Z1aAEQk/ywmRw5oWzuETG7y0eeUCCt9D
+         y2jTHN1SPxkaHlNnE5REHYMqcNuF1TyWkgez/DcNJ4lpBiWWlAJglq5QdbuLLIOHC5
+         MdIuF/8k9HYFVpQLRbQ+8Kxj8DZ9t7ONoeKlvMnwpiBxc/+PU3YR97c0sSshrq8jz1
+         fDeb52qd0fYrUJn4ut941v8DgvSOG5InuaQA+RgVoMiyLyEPyumEskJ9OtKZrRKAoO
+         vDwvwkg+u6gX2ZOMDcGcqcdWubdsKDhvqNyNUiZA3ievQ7PlC2hmgrNf6GcdLMvJz9
+         ymV7fu+ecAmZg==
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-15f97c478a8so13428750fac.13;
+        Sun, 05 Feb 2023 17:08:04 -0800 (PST)
+X-Gm-Message-State: AO0yUKXY0Jm0nxyXWB+i+oU4vCuCvx6uAv3c5KOUY3z9c9vlRZiMaPV3
+        iLVt1EyWCaY5KpZwXyYS3ByAhWd0tOtsmv4dn74=
+X-Google-Smtp-Source: AK7set8xoNkkqvVBNjBk9EbvclUMut0KpNh/NqPcJOx0XYTEkZbTCC+vIzJ2aYHACMV0LfSIms6VOVMi0gK5faJxh+M=
+X-Received: by 2002:a05:6870:110f:b0:160:3296:a9b9 with SMTP id
+ 15-20020a056870110f00b001603296a9b9mr1494289oaf.287.1675645684087; Sun, 05
+ Feb 2023 17:08:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 0/7] Add Ethernet driver for StarFive JH7110 SoC
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20230118061701.30047-1-yanhong.wang@starfivetech.com>
- <Y8h/D7I7/2KhgM00@spud>
- <81217dc9-5673-f7eb-3114-b39de8302687@starfivetech.com>
- <958E7B1C-E0FF-416A-85AD-783682BA8B54@kernel.org>
-From:   yanhong wang <yanhong.wang@starfivetech.com>
-In-Reply-To: <958E7B1C-E0FF-416A-85AD-783682BA8B54@kernel.org>
+References: <20230205163752.2535-1-rdunlap@infradead.org>
+In-Reply-To: <20230205163752.2535-1-rdunlap@infradead.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 6 Feb 2023 10:07:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASGAk3sAaK0bDiTMdWR2ocRcRs8UBLekRddv0mizQKxqg@mail.gmail.com>
+Message-ID: <CAK7LNASGAk3sAaK0bDiTMdWR2ocRcRs8UBLekRddv0mizQKxqg@mail.gmail.com>
+Subject: Re: [PATCH v2] parisc: update kbuild doc. aliases for parisc64
+To:     Randy Dunlap <rdunlap@infradead.org>, Helge Deller <deller@gmx.de>
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 6, 2023 at 1:37 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> ARCH=parisc64 is now supported for 64-bit parisc builds, so add
+> this alias to the kbuild.rst documentation.
+>
+> Fixes: 3dcfb729b5f4 ("parisc: Make CONFIG_64BIT available for ARCH=parisc64 only")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-parisc@vger.kernel.org
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: linux-kbuild@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> ---
+> v2: drop "parisc for 32 bit" part since "parisc" is not an alias
+>
+>  Documentation/kbuild/kbuild.rst |    1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff -- a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+> --- a/Documentation/kbuild/kbuild.rst
+> +++ b/Documentation/kbuild/kbuild.rst
+> @@ -160,6 +160,7 @@ directory name found in the arch/ direct
+>  But some architectures such as x86 and sparc have aliases.
+>
+>  - x86: i386 for 32 bit, x86_64 for 64 bit
+> +- parisc: parisc64 for 64 bit
+>  - sh: sh for 32 bit, sh64 for 64 bit
+>  - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+>
 
 
-On 2023/2/4 22:22, Conor Dooley wrote:
-> 
-> 
-> On 3 February 2023 04:02:54 GMT+01:00, yanhong wang <yanhong.wang@starfivetech.com> wrote:
->>
->>
->>On 2023/1/19 7:21, Conor Dooley wrote:
->>> Hey Yanhong!
->>> 
->>> On Wed, Jan 18, 2023 at 02:16:54PM +0800, Yanhong Wang wrote:
->>>> This series adds ethernet support for the StarFive JH7110 RISC-V SoC. The series
->>>> includes MAC driver. The MAC version is dwmac-5.20 (from Synopsys DesignWare).
->>>> For more information and support, you can visit RVspace wiki[1].
->>>> 	
->>>> This patchset should be applied after the patchset [2], [3], [4].
->>>> [1] https://wiki.rvspace.org/
->>>> [2] https://lore.kernel.org/all/20221118010627.70576-1-hal.feng@starfivetech.com/
->>>> [3] https://lore.kernel.org/all/20221118011108.70715-1-hal.feng@starfivetech.com/
->>>> [4] https://lore.kernel.org/all/20221118011714.70877-1-hal.feng@starfivetech.com/
->>> 
->>> I've got those series applied, albeit locally, since they're not ready,
->>> but I cannot get the Ethernet to work properly on my board.
->>> I boot all of my dev boards w/ tftp, and the visionfive2 is no exception.
->>> The fact that I am getting to the kernel in the first place means the
->>> ethernet is working in the factory supplied U-Boot [1].
->>> 
->>> However, in Linux this ethernet port does not appear to work at all.
->>> The other ethernet port is functional in Linux, but not in the factory
->>> supplied U-Boot.
->>> 
->>> Is this a known issue? If it's not, I'll post the logs somewhere for
->>> you. In case it is relevant, my board is a v1.2a.
->>> 
->>> Thanks,
->>> Conor.
->>> 
->>> 1 - U-Boot 2021.10 (Oct 31 2022 - 12:11:37 +0800), Build: jenkins-VF2_515_Branch_SDK_Release-10
->>
->>
->>No, this is not a issue. 
->>These patches need to rely on the yt8531 phy driver of motorcomm company
->>and the corresponding clock delay configuration to work normally, 
->>and the yt8531 phy driver is being submitted. I have applied the
->>motorcomm patchs during my test on board v1.2b, so the ethernet cannot work without
->>the application of the motorcomm patchs. 
->>
->>For the patchs of yt8531, see [1]
->>
->>1 - https://patchwork.kernel.org/project/netdevbpf/cover/20230202030037.9075-1-Frank.Sae@motor-comm.com/
-> 
-> Please put that info into the cover of the next round of your submission then.
-> 
 
-I will put the info into the cover letter in the next version.
 
-> Thanks,
-> Conor.
-> 
+If Helge will pick this up, please feel free to add
+
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
