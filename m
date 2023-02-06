@@ -2,270 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E6F68B58D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C43368B591
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjBFGRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 01:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S229542AbjBFGXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 01:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjBFGRs (ORCPT
+        with ESMTP id S229518AbjBFGXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 01:17:48 -0500
-Received: from out28-147.mail.aliyun.com (out28-147.mail.aliyun.com [115.124.28.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853171284F;
-        Sun,  5 Feb 2023 22:17:43 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436263|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.0548796-0.0136331-0.931487;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047204;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.RCgGKA9_1675664258;
-Received: from SunxiBot.allwinnertech.com(mailfrom:victor@allwinnertech.com fp:SMTPD_---.RCgGKA9_1675664258)
-          by smtp.aliyun-inc.com;
-          Mon, 06 Feb 2023 14:17:39 +0800
-From:   Victor Hassan <victor@allwinnertech.com>
-To:     keescook@chromium.org
-Cc:     tony.luck@intel.com, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] pstore/blk: Export a method to implemente panic_write()
-Date:   Mon,  6 Feb 2023 14:18:13 +0800
-Message-Id: <20230206061813.44506-1-victor@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Mon, 6 Feb 2023 01:23:04 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B064B750
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 22:22:55 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id j7so11573526vsl.11
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 22:22:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ynrCrA1+knokV0dXoyzZReuKJceQqN5l3Tsi4apnR3Y=;
+        b=uahW6+YnhsfiMMFyR9frf6fGI/xz17H2d0nydFF8gvXJmd0WLchpwKE39XaDirMbnk
+         w5hrvx/7xgjd8p34AvEQyKJyaoZVWIrDQAOgULTc9SgE3bWvi3ocZDdePBsKnQKUcZDE
+         0acxBfrh6WwI0dIJxTi6aL+2hlwuacTIAH+GIegXVx1BoABOvxlg27i/fZognfC+dsHd
+         OyxMpd3/0FX2H+Y/CzGeGr86LgXlxleiQyj7a3voGXKHoJbDDLzo0h9ESQLcLmPlsqyq
+         21tXuel94sxAr08wrf96LMDxOwiJKMoaR5yz2IvSyJlPavteSYie3GGfj+UyBi4u+/ze
+         t4vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ynrCrA1+knokV0dXoyzZReuKJceQqN5l3Tsi4apnR3Y=;
+        b=WuOS37EJyBmAEjXlngM6ZsPeb4SHXObmCGuBw89bIILgsVTfrrmN+1I0loALr5VieE
+         4i1aIkHUB8/8zsdBDgBQuW+uqWRze3aMYF/gDa0lzhRW+RcNzb9qI7ZWQquLYukfmtes
+         IH7DeKLnlbWq2Q7Vo8qK0sDh8zL/+Pye9sx3s7cPaJigJNx3T4fSfpIFYg66lYG4/AER
+         ocRG3rxGurvpfc9JRZo7rJp6GHoOEOwJTsGEAjoGQHXZAn+oN02epf2EQzj7mljuc7sZ
+         14IKgD2WmCFbiBjw2pAW3vQpH2Xqqo3EV+bBLBGNauAW7DBotavR8kH0U1NdN6iNCyP2
+         skww==
+X-Gm-Message-State: AO0yUKV9tLPgaHajyfVGQKOC+AzGzdqgFUIl7JMf/YJ97WmDUi4faVzK
+        eMyp2bRh6OyZk5VEe1GqDcrTCUC5AJER7AVr2EAo7Q==
+X-Google-Smtp-Source: AK7set/Else6edw9TgC+morr2lkXlm+Q1jjv3sTFx00yZIbme3IfsWPhIhz3bmsawg1Ju1IIuZBVQqTgruzBDFfLh5c=
+X-Received: by 2002:a05:6102:2378:b0:3ce:8835:de03 with SMTP id
+ o24-20020a056102237800b003ce8835de03mr2728482vsa.50.1675664574674; Sun, 05
+ Feb 2023 22:22:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com>
+In-Reply-To: <20230203-get_kernel_pages-v2-0-f1dc4af273f1@intel.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 6 Feb 2023 11:52:43 +0530
+Message-ID: <CAFA6WYM5tzs3T1tDgspA=R=VxfWrknm2YPHMCZihx405pF-ftA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Remove get_kernel_pages()
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org, linux-mm@kvack.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The panic_write() is necessary to write the pstore frontend message
-to blk devices when panic. Here is a way to register panic_write when
-we use "best_effort" way to register the pstore blk-backend.
+On Sat, 4 Feb 2023 at 09:36, Ira Weiny <ira.weiny@intel.com> wrote:
+>
+> Sumit,
+>
+> I did not see a follow up on this series per your last email.[1]  I'd like to
+> move forward with getting rid of kmap_to_page().  So Hopefully this can land
+> and you can build on this rather than the other way around?
 
-Usage:
+Apologies Ira for keeping you waiting. Actually I was fully involved
+with other high priority work with my upstream review backlog
+increasing. So I wasn't able to devote time to this work. Sure I will
+rebase my work on top of your changes.
 
-    xx_register_pstore_panic_write(pstore_blk_notifier_type type,
-	    struct pstore_device_info *pdi)
-    {
-	switch (type) {
-	case PSTORE_BLK_BACKEND_REGISTER:
-	case PSTORE_BLK_BACKEND_PANIC_DRV_REGISTER:
-	    ...
+-Sumit
 
-	    pid->zone.panic_write = xxx;
-
-	    ...
-	    break;
-	case PSTORE_BLK_BACKEND_UNREGISTER:
-	case PSTORE_BLK_BACKEND_PANIC_DRV_UNREGISTER:
-	    ...
-
-	    pdi->zone.panic_write = NULL;
-
-	    ...
-	    break;
-	default:
-	    break;
-	}
-
-    }
-
-    static struct pstore_blk_notifier pbn = {
-	.notitifer_call = xx_register_pstore_panic_write;
-    }
-
-    use {un,}register_pstore_blk_panic_notifier() to register/unregister
-    pstore_blk_notifier
-
-Signed-off-by: Victor Hassan <victor@allwinnertech.com>
----
- fs/pstore/blk.c            | 101 +++++++++++++++++++++++++++++++++++--
- include/linux/pstore_blk.h |  19 +++++++
- 2 files changed, 116 insertions(+), 4 deletions(-)
-
-diff --git a/fs/pstore/blk.c b/fs/pstore/blk.c
-index 4ae0cfcd15f2..2c70a3bff1ae 100644
---- a/fs/pstore/blk.c
-+++ b/fs/pstore/blk.c
-@@ -18,6 +18,7 @@
- #include <linux/file.h>
- #include <linux/init_syscalls.h>
- #include <linux/mount.h>
-+#include <linux/notifier.h>
- 
- static long kmsg_size = CONFIG_PSTORE_BLK_KMSG_SIZE;
- module_param(kmsg_size, long, 0400);
-@@ -72,6 +73,14 @@ static DEFINE_MUTEX(pstore_blk_lock);
- static struct file *psblk_file;
- static struct pstore_device_info *pstore_device_info;
- 
-+static struct {
-+	struct raw_notifier_head chain;
-+	struct pstore_blk_notifier *pbn;
-+	bool notifier;
-+} pstore_blk_panic_notifier = {
-+	.chain = RAW_NOTIFIER_INIT(pstore_blk_panic_notifier.chain),
-+};
-+
- #define check_size(name, alignsize) ({				\
- 	long _##name_ = (name);					\
- 	_##name_ = _##name_ <= 0 ? 0 : (_##name_ * 1024);	\
-@@ -94,6 +103,82 @@ static struct pstore_device_info *pstore_device_info;
- 	dev->zone.name = _##name_;				\
- }
- 
-+static int pstore_blk_panic_notifier_call(struct notifier_block *nb,
-+			     unsigned long action, void *data)
-+{
-+	int ret = 0;
-+	struct pstore_blk_notifier *pbn =
-+				container_of(nb, struct pstore_blk_notifier, nb);
-+
-+	if (pbn)
-+		ret = pbn->notifier_call(action, data);
-+
-+	return ret;
-+}
-+
-+int register_pstore_blk_panic_notifier(struct pstore_blk_notifier *pbn)
-+{
-+	int err = 0;
-+	struct notifier_block *nb;
-+
-+	mutex_lock(&pstore_blk_lock);
-+
-+	if (pstore_blk_panic_notifier.notifier) {
-+		pr_info("had register panic\n");
-+		goto unlock;
-+	}
-+
-+	nb = &pbn->nb;
-+	nb->notifier_call = pstore_blk_panic_notifier_call;
-+
-+	err = raw_notifier_chain_register(&pstore_blk_panic_notifier.chain, nb);
-+	if (err)
-+		goto unlock;
-+
-+	if (pstore_device_info)
-+		err = nb->notifier_call(nb, PSTORE_BLK_BACKEND_PANIC_DRV_REGISTER,
-+				pstore_device_info);
-+
-+	if (!err)
-+		pstore_blk_panic_notifier.notifier = true;
-+
-+unlock:
-+	mutex_unlock(&pstore_blk_lock);
-+
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(register_pstore_blk_panic_notifier);
-+
-+void unregister_pstore_blk_panic_notifier(struct pstore_blk_notifier *pbn)
-+{
-+	struct notifier_block *nb = &pbn->nb;
-+
-+	mutex_lock(&pstore_blk_lock);
-+
-+	raw_notifier_chain_unregister(&pstore_blk_panic_notifier.chain, nb);
-+
-+	if (pstore_device_info)
-+		nb->notifier_call(nb, PSTORE_BLK_BACKEND_PANIC_DRV_UNREGISTER,
-+				pstore_device_info);
-+
-+	pstore_blk_panic_notifier.notifier = false;
-+
-+	mutex_unlock(&pstore_blk_lock);
-+}
-+EXPORT_SYMBOL_GPL(unregister_pstore_blk_panic_notifier);
-+
-+static int pstore_blk_panic_notifier_init_call(struct pstore_device_info *pdi)
-+{
-+	return raw_notifier_call_chain(&pstore_blk_panic_notifier.chain,
-+			PSTORE_BLK_BACKEND_REGISTER, pdi);
-+}
-+
-+static int pstore_blk_panic_notifier_exit_call(struct pstore_device_info *pdi)
-+{
-+	return raw_notifier_call_chain(&pstore_blk_panic_notifier.chain,
-+			PSTORE_BLK_BACKEND_UNREGISTER, pdi);
-+}
-+
- static int __register_pstore_device(struct pstore_device_info *dev)
- {
- 	int ret;
-@@ -301,16 +386,22 @@ static int __init __best_effort_init(void)
- 	if (!best_effort_dev)
- 		return -ENOMEM;
- 
-+	strcpy(best_effort_dev->path, blkdev);
- 	best_effort_dev->zone.read = psblk_generic_blk_read;
- 	best_effort_dev->zone.write = psblk_generic_blk_write;
- 
- 	ret = __register_pstore_blk(best_effort_dev,
- 				    early_boot_devpath(blkdev));
--	if (ret)
-+	if (ret) {
- 		kfree(best_effort_dev);
--	else
--		pr_info("attached %s (%lu) (no dedicated panic_write!)\n",
--			blkdev, best_effort_dev->zone.total_size);
-+	} else {
-+		if (pstore_blk_panic_notifier_init_call(best_effort_dev) == NOTIFY_OK)
-+			pr_info("attached %s (%lu) (dedicated panic_write!)\n",
-+				    blkdev, best_effort_dev->zone.total_size);
-+		else
-+			pr_info("attached %s (%lu) (no dedicated panic_write!)\n",
-+				    blkdev, best_effort_dev->zone.total_size);
-+	}
- 
- 	return ret;
- }
-@@ -326,6 +417,8 @@ static void __exit __best_effort_exit(void)
- 	if (psblk_file) {
- 		struct pstore_device_info *dev = pstore_device_info;
- 
-+		pstore_blk_panic_notifier_exit_call(dev);
-+
- 		__unregister_pstore_device(dev);
- 		kfree(dev);
- 		fput(psblk_file);
-diff --git a/include/linux/pstore_blk.h b/include/linux/pstore_blk.h
-index 924ca07aafbd..fd2eb927c2c5 100644
---- a/include/linux/pstore_blk.h
-+++ b/include/linux/pstore_blk.h
-@@ -17,13 +17,32 @@
-  *
-  */
- struct pstore_device_info {
-+	char path[80];
- 	unsigned int flags;
- 	struct pstore_zone_info zone;
- };
- 
-+enum pstore_blk_notifier_type {
-+	PSTORE_BLK_BACKEND_REGISTER = 1,
-+	PSTORE_BLK_BACKEND_PANIC_DRV_REGISTER,
-+	PSTORE_BLK_BACKEND_UNREGISTER,
-+	PSTORE_BLK_BACKEND_PANIC_DRV_UNREGISTER,
-+};
-+
-+typedef	int (*pstore_blk_notifier_fn_t)(enum pstore_blk_notifier_type type,
-+		struct pstore_device_info *dev);
-+
-+struct pstore_blk_notifier {
-+	struct notifier_block nb;
-+	pstore_blk_notifier_fn_t notifier_call;
-+};
-+
- int  register_pstore_device(struct pstore_device_info *dev);
- void unregister_pstore_device(struct pstore_device_info *dev);
- 
-+int register_pstore_blk_panic_notifier(struct pstore_blk_notifier *pbn);
-+void unregister_pstore_blk_panic_notifier(struct pstore_blk_notifier *nb);
-+
- /**
-  * struct pstore_blk_config - the pstore_blk backend configuration
-  *
--- 
-2.29.0
-
+>
+> All,
+>
+> Al Viro found[2] that kmap_to_page() is broken.  But not only is it broken, it
+> presents confusion over how highmem should be used because kmap() and friends
+> should not be used for 'long term' mappings.
+>
+> get_kernel_pages() is a caller of kmap_to_page().  It only has one caller
+> [shm_get_kernel_pages()] which does not need the functionality.
+>
+> Alter shm_get_kernel_pages() to no longer call get_kernel_pages() and remove
+> get_kernel_pages().  Along the way it was noted that shm_get_kernel_pages()
+> does not have any need to support vmalloc'ed addresses either.  Remove that
+> functionality to clean up the logic.
+>
+> This series also fixes is_kmap_addr() and uses it to ensure no kmap addresses
+> slip in later.
+>
+> [1] https://lore.kernel.org/all/CAFA6WYMqEVDVW-ifoh-V9ni1zntYdes8adQKf2XXAUpqdaW53w@mail.gmail.com/
+> [2] https://lore.kernel.org/lkml/YzSSl1ItVlARDvG3@ZenIV
+>
+> To: Sumit Garg <sumit.garg@linaro.org>
+> To: Andrew Morton <akpm@linux-foundation.org>
+> Cc: "Al Viro" <viro@zeniv.linux.org.uk>
+> Cc: "Christoph Hellwig" <hch@lst.de>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: op-tee@lists.trustedfirmware.org
+> Cc: linux-mm@kvack.org
+> Cc: Jens Wiklander <jens.wiklander@linaro.org>
+> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+>
+> ---
+> Changes in v2:
+> - Al Viro: Avoid allocating the kiov.
+> - Sumit: Update cover letter to clarify the motivation behind removing
+>   get_kernel_pages()
+> - Link to v1: https://lore.kernel.org/r/20221002002326.946620-1-ira.weiny@intel.com
+>
+> ---
+> Ira Weiny (4):
+>       highmem: Enhance is_kmap_addr() to check kmap_local_page() mappings
+>       tee: Remove vmalloc page support
+>       tee: Remove call to get_kernel_pages()
+>       mm: Remove get_kernel_pages()
+>
+>  drivers/tee/tee_shm.c            | 37 ++++++++++---------------------------
+>  include/linux/highmem-internal.h |  5 ++++-
+>  include/linux/mm.h               |  2 --
+>  mm/swap.c                        | 30 ------------------------------
+>  4 files changed, 14 insertions(+), 60 deletions(-)
+> ---
+> base-commit: 0136d86b78522bbd5755f8194c97a987f0586ba5
+> change-id: 20230203-get_kernel_pages-199342cfba79
+>
+> Best regards,
+> --
+> Ira Weiny <ira.weiny@intel.com>
