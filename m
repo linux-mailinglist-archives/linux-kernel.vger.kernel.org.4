@@ -2,91 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4805F68C009
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5872668C00F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbjBFO2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:28:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S231172AbjBFO3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjBFO2G (ORCPT
+        with ESMTP id S229884AbjBFO3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:28:06 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722BA16322
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:28:05 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id c15so9697208oic.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:28:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9R7RryzcBt3IOpQ6ZmiIpG+DlyYLOytGf1SpVP5mZzI=;
-        b=iCm5zxRRBDKu3DIWweJEAnXoMlLiwuoUjqGoHjQRVNiJooyapVzcvH0ufex7sKqizi
-         4YP7g+ulOfWQtqU17cOEJ56Ef+UpaRf3/mtqINseNkcdFnhZguVHpUUc14GxMgpsazgY
-         hMVlxDoc0OjrVkauRy1r19G08rWHcdt3geFQXUn4/653NdP8RAGYbdNoAUHTOioRSLVf
-         FFn4jzb4ysUtRblkTFu90+4/XK4K8bB9L6RIM/RL6079LjnSH5r4rk/070qlEIshOcjz
-         fXzvUuwgSu9EaqpXoNk0IrP0yydWwMgCYbyd0aZyB3pBMkAxbjPU2DuE8ogBlUOTWgKR
-         nxRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9R7RryzcBt3IOpQ6ZmiIpG+DlyYLOytGf1SpVP5mZzI=;
-        b=fYL38bWlhkcGeq7IB2oC+045SkIb4NGLjC+deWj+As0bxzKrd9m7ywaB/T9v8jlU3Z
-         ZdzCi4tp5zfnu2L+ICqcnHkc6Tkwky4iw1VIfiCxGcGsFw4QkqVxRnJJ6iHKPhpl0TLd
-         8A9BzJpL4l3fFvZn1PA7XbAxYARTdAcVwngPwGaJPDdmbEamU+5oG75qPudSaYO8tTWz
-         DFhs6Rtyqa4yP/hdLw4jETIexC8Tt6uqRBuABd+CnIk6dim0fBrV872wqKqopOEXecWr
-         CixGzr44/o+CFNyxtoaEwr68t9saiaRwefnmombGOVbyJ8EUE3WB4Ep2x8Z5/xLvX/dV
-         xQJA==
-X-Gm-Message-State: AO0yUKWm6mdp/5unfT0D/zwtmXg1WouYeP8f8N+Lo+apoAtZgt7hJkkk
-        zeRKT8jChsIqbiZVKzA2zdQKScE1zF8=
-X-Google-Smtp-Source: AK7set99Fqd/79QuCyUvp68iUFPqafjYHiMmwNNeakoGY1bKZWy8TMOb74kwmiC72kVZjnEH63v5Xw==
-X-Received: by 2002:a05:6808:1812:b0:364:5ea0:c3f6 with SMTP id bh18-20020a056808181200b003645ea0c3f6mr10826981oib.20.1675693684777;
-        Mon, 06 Feb 2023 06:28:04 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id dp11-20020a056808424b00b003781a8bcb64sm4183548oib.36.2023.02.06.06.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 06:28:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 6 Feb 2023 06:28:02 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.2-rc7
-Message-ID: <20230206142802.GA191238@roeck-us.net>
-References: <CAHk-=whSVeeQN9vO-WSxFkNs0zbUJEBqND-1VO8OJtmu_sn_nw@mail.gmail.com>
+        Mon, 6 Feb 2023 09:29:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3784730C4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:29:16 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B5FDA1EC067D;
+        Mon,  6 Feb 2023 15:29:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675693754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=zwzqalE4/Rjb5RtDU4ACU2k23pCh4TbVsdgfL0LfdXw=;
+        b=qrjccl6jZGnG5XLsqGWrCwH/CwIFJa6qkxMEqY8GZUmh2sF3BW5Fs/yediAfMx4gHz2yvT
+        P6gD4aXXfCGTNQ3xeBK5bmy8YiQWQoj/RcY4X8AJxBazu5MnCs3NdbvNIDayhwDc+/tKLo
+        526Vh+A641mYefDvSeS3+gJAvUmCFpw=
+Date:   Mon, 6 Feb 2023 15:29:08 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] x86/alternative: Support relocations in alternatives
+Message-ID: <Y+EOtNlYLg1VsqiN@zn.tnic>
+References: <Y9py2a5Xw0xbB8ou@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whSVeeQN9vO-WSxFkNs0zbUJEBqND-1VO8OJtmu_sn_nw@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9py2a5Xw0xbB8ou@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 01:32:30PM -0800, Linus Torvalds wrote:
-> So the 6.2 rc releases are continuing to be fairly small and
-> controlled, to the point where normally I'd just say that this is the
-> last rc. But since I've stated multiple times that I'll do an rc8 due
-> to the holiday start of the release, that's what I'll do. And we do
-> have a few regressions outstanding that Thorsten is tracking, so just
-> as well.
-> 
+On Wed, Feb 01, 2023 at 03:10:33PM +0100, Peter Zijlstra wrote:
+> +apply_relocation(u8 *instr, size_t len, u8 *dest, u8 *src, size_t src_len)
+> +{
+> +	struct insn insn;
+> +	int i = 0;
+> +
+> +	for (;;) {
+> +		if (insn_decode_kernel(&insn, &instr[i]))
+> +			return;
+> +
+> +		switch (insn.opcode.bytes[0]) {
+> +		case 0x0f:
+> +			if (insn.opcode.bytes[1] < 0x80 ||
+> +			    insn.opcode.bytes[1] > 0x8f)
+> +				break;
+> +
+> +			fallthrough;	/* Jcc.d32 */
+> +		case 0x70 ... 0x7f:	/* Jcc.d8 */
+> +		case JMP8_INSN_OPCODE:
+> +		case JMP32_INSN_OPCODE:
+> +		case CALL_INSN_OPCODE:
+> +			u8 *target = src + i + insn.length + insn.immediate.value;
+> +			if (target < src || target > src + src_len) {
+> +				apply_reloc(insn.immediate.nbytes,
+> +					    instr + i + insn_offset_immediate(&insn),
+> +					    src - dest);
 
-At least there are no new problems, at least none affecting my tests.
+Ok, here's an addition to convert to 2-byte JMPs. I'll do a proper diff
+after you refresh yours ontop but this is how it looks like. It
+basically does one more pass on the instr[] array bytes after the
+relocation and only for JMP rel32off insns, i.e., opcode 0xe9.
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 504 pass: 504 fail: 0
+Example would be:
 
-Guenter
+[    1.059455] SMP alternatives: feat: 3*32+21, old: (fpu_clone+0x115/0x290 (ffffffff8102e2e5) len: 5), repl: (ffffffff898ac1b6, len: 5)
+[    1.060747] SMP alternatives: apply_reloc: n: 4, ptr: 0xffffffff82203d93, diff: 0x887ded1
+										   ^^^^^^^^^^
+
+That's the diff you pass to apply_reloc_n()
+
+[    1.062692] SMP alternatives: ffffffff8102e2e5:   old_insn: e9 dd b8 6a 08
+[    1.063452] SMP alternatives: ffffffff898ac1b6:   rpl_insn: e9 41 21 78 f7
+
+But the end offset is simply 0x15. (0x12 with the 5-byte JMP).
+
+So we can just as well do JMP rel8off which takes a signed byte as an
+offset. And slap a 3-byte NOP after that:
+
+[    1.064211] SMP alternatives: ffffffff8102e2e5: final_insn: eb 15 0f 1f 00
+
+		...
+		case JMP32_INSN_OPCODE:
+		case CALL_INSN_OPCODE:
+			u8 *target = src + i + insn.length + insn.immediate.value;
+			u8 opcode = instr[i];
+
+			if (target < src || target > src + src_len) {
+				apply_reloc(insn.immediate.nbytes,
+					    instr + i + insn_offset_immediate(&insn),
+					    src - dest);
+
+#define JMP_SIZE_DIFF	JMP32_INSN_SIZE - JMP8_INSN_SIZE
+				if (opcode == JMP32_INSN_OPCODE) {
+					s32 jmp_off;
+
+					jmp_off = *(s32 *)(instr + i + insn_offset_immediate(&insn));
+					jmp_off += JMP_SIZE_DIFF;
+
+					/* Turn it into a 2-byte JMP if new offset allows. */
+					if (jmp_off >= -128 && jmp_off <= 127) {
+						instr[i] = JMP8_INSN_OPCODE;
+						instr[i + 1] = (s8)jmp_off;
+						add_nops(instr + i + 2, JMP_SIZE_DIFF);
+					}
+				}
+			}
+		}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
