@@ -2,215 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BD868B5CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283B368B5CD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjBFGwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 01:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S229740AbjBFGwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 01:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBFGwI (ORCPT
+        with ESMTP id S229499AbjBFGwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 01:52:08 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82695B745;
-        Sun,  5 Feb 2023 22:52:02 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 29E115FD02;
-        Mon,  6 Feb 2023 09:51:59 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1675666319;
-        bh=W0AZoQYdrXV5hWAmgg6fHvPpS8a3OyjtrscQ67WekUk=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=DSFpNTfjfEUSklHX0SzcE/2oRVDJSeacU765KhIUBhLb8zJhW7GEI6ACL8HWcJ1Ab
-         FSYaCi/OBq2k7KLiwaERV2mmB+4IAYcJAWm+NG5EqmVbz40WoJhdHlklCu2RZeLc6x
-         SRr7/7wvTRc4DytPFzUGE1xEIw+qZbN0ZFFfrCODCSdsToQ/fkAP9VeQTZTUDlFVPF
-         hVqvvBHH55I+a4xI7MgAspIZesp1tfCzpH+Z4IbB/izENf0m/hywm7Za3raEG+Ipjv
-         TMAknNpCNRzjZxICAkz4J1uw7W3wI0VwnR/TnxAEfxmmRtmMP76HSA5K04gC6yhZXe
-         2fsReO4Dso1fA==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon,  6 Feb 2023 09:51:55 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        "Krasnov Arseniy" <oxffffaa@gmail.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: [RFC PATCH v1 00/12] vsock: MSG_ZEROCOPY flag support
-Thread-Topic: [RFC PATCH v1 00/12] vsock: MSG_ZEROCOPY flag support
-Thread-Index: AQHZOfeA2nL8nCs+GE2d7KRGHhlyGw==
-Date:   Mon, 6 Feb 2023 06:51:55 +0000
-Message-ID: <0e7c6fc4-b4a6-a27b-36e9-359597bba2b5@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9DBF5BD914616347BBBBC33C6C85928E@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Mon, 6 Feb 2023 01:52:44 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FADFEB48;
+        Sun,  5 Feb 2023 22:52:41 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=tianruidong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VaylKZS_1675666353;
+Received: from 30.221.133.155(mailfrom:tianruidong@linux.alibaba.com fp:SMTPD_---0VaylKZS_1675666353)
+          by smtp.aliyun-inc.com;
+          Mon, 06 Feb 2023 14:52:39 +0800
+Message-ID: <fd49c9f8-3132-c47c-5948-9aee3b1fd625@linux.alibaba.com>
+Date:   Mon, 6 Feb 2023 14:52:32 +0800
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/02/06 01:18:00 #20834045
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] ACPICA: PCI: Undefined ACPI_ADR_SPACE_PCI_CONFIG when
+ CONFIG_PCI is unset
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com,
+        jkchen@linux.alibaba.com, xueshuai@linux.alibaba.com
+References: <20230202034821.25123-1-tianruidong@linux.alibaba.com>
+ <CAJZ5v0i=2f+NFHbyYNgL8vqkcf8ST=14-uqHqOUmL0JPVhmiBw@mail.gmail.com>
+From:   Ruidong Tian <tianruidong@linux.alibaba.com>
+In-Reply-To: <CAJZ5v0i=2f+NFHbyYNgL8vqkcf8ST=14-uqHqOUmL0JPVhmiBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sDQoNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIERFU0NSSVBUSU9ODQoNCnRoaXMg
-aXMgTVNHX1pFUk9DT1BZIGZlYXR1cmUgc3VwcG9ydCBmb3IgdmlydGlvL3Zzb2NrLiBJIHRyaWVk
-IHRvIGZvbGxvdw0KY3VycmVudCBpbXBsZW1lbnRhdGlvbiBmb3IgVENQIGFzIG11Y2ggYXMgcG9z
-c2libGU6DQoNCjEpIFNlbmRlciBtdXN0IGVuYWJsZSBTT19aRVJPQ09QWSBmbGFnIHRvIHVzZSB0
-aGlzIGZlYXR1cmUuIFdpdGhvdXQgdGhpcw0KICAgZmxhZywgZGF0YSB3aWxsIGJlIHNlbnQgaW4g
-ImNsYXNzaWMiIGNvcHkgbWFubmVyIGFuZCBNU0dfWkVST0NPUFkNCiAgIGZsYWcgd2lsbCBiZSBp
-Z25vcmVkIChlLmcuIHdpdGhvdXQgY29tcGxldGlvbikuDQoNCjIpIEtlcm5lbCB1c2VzIGNvbXBs
-ZXRpb25zIGZyb20gc29ja2V0J3MgZXJyb3IgcXVldWUuIFNpbmdsZSBjb21wbGV0aW9uDQogICBm
-b3Igc2luZ2xlIHR4IHN5c2NhbGwgKG9yIGl0IGNhbiBtZXJnZSBzZXZlcmFsIGNvbXBsZXRpb25z
-IHRvIHNpbmdsZQ0KICAgb25lKS4gSSB1c2VkIGFscmVhZHkgaW1wbGVtZW50ZWQgbG9naWMgZm9y
-IE1TR19aRVJPQ09QWSBzdXBwb3J0Og0KICAgJ21zZ196ZXJvY29weV9yZWFsbG9jKCknIGV0Yy4N
-Cg0KRGlmZmVyZW5jZSB3aXRoIGNvcHkgd2F5IGlzIG5vdCBzaWduaWZpY2FudC4gRHVyaW5nIHBh
-Y2tldCBhbGxvY2F0aW9uLA0Kbm9uLWxpbmVhciBza2IgaXMgY3JlYXRlZCwgdGhlbiBJIGNhbGwg
-J2dldF91c2VyX3BhZ2VzKCknIGZvciBlYWNoIHBhZ2UNCmZyb20gdXNlcidzIGlvdiBpdGVyYXRv
-ciAoSSB0aGluayBpIGRvbid0IG5lZWQgJ3Bpbl91c2VyX3BhZ2VzKCknIGFzDQp0aGVyZSBpcyBu
-byBiYWNraW5nIHN0b3JhZ2UgZm9yIHRoZXNlIHBhZ2VzKSBhbmQgYWRkIGVhY2ggcmV0dXJuZWQg
-cGFnZQ0KdG8gdGhlIHNrYiBhcyBmcmFnbWVudC4gVGhlcmUgYXJlIGFsc28gc29tZSB1cGRhdGVz
-IGZvciB2aG9zdCBhbmQgZ3Vlc3QNCnBhcnRzIG9mIHRyYW5zcG9ydCAtIGluIGJvdGggY2FzZXMg
-aSd2ZSBhZGRlZCBoYW5kbGluZyBvZiBub24tbGluZWFyIHNrYg0KZm9yIHZpcnRpbyBwYXJ0LiB2
-aG9zdCBjb3BpZXMgZGF0YSBmcm9tIHN1Y2ggc2tiIHRvIHRoZSBndWVzdCdzIHJ4IHZpcnRpbw0K
-YnVmZmVycy4gSW4gdGhlIGd1ZXN0LCB2aXJ0aW8gdHJhbnNwb3J0IGZpbGxzIHZpcnRpbyBxdWV1
-ZSB3aXRoIHBhZ2VzDQpmcm9tIHNrYi4NCg0KSSB0aGluayBkb2MgaW4gRG9jdW1lbnRhdGlvbi9u
-ZXR3b3JraW5nL21zZ196ZXJvY29weS5yc3QgY291bGQgYmUgYWxzbw0KdXBkYXRlZCBpbiBuZXh0
-IHZlcnNpb25zLg0KDQpUaGlzIHZlcnNpb24gaGFzIHNldmVyYWwgbGltaXRzL3Byb2JsZW1zOg0K
-DQoxKSBBcyB0aGlzIGZlYXR1cmUgdG90YWxseSBkZXBlbmRzIG9uIHRyYW5zcG9ydCwgdGhlcmUg
-aXMgbm8gd2F5IChvciBpdA0KICAgaXMgZGlmZmljdWx0KSB0byBjaGVjayB3aGV0aGVyIHRyYW5z
-cG9ydCBpcyBhYmxlIHRvIGhhbmRsZSBpdCBvciBub3QNCiAgIGR1cmluZyBTT19aRVJPQ09QWSBz
-ZXR0aW5nLiBTZWVtcyBJIG5lZWQgdG8gY2FsbCBBRl9WU09DSyBzcGVjaWZpYw0KICAgc2V0c29j
-a29wdCBjYWxsYmFjayBmcm9tIHNldHNvY2tvcHQgY2FsbGJhY2sgZm9yIFNPTF9TT0NLRVQsIGJ1
-dCB0aGlzDQogICBsZWFkcyB0byBsb2NrIHByb2JsZW0sIGJlY2F1c2UgYm90aCBBRl9WU09DSyBh
-bmQgU09MX1NPQ0tFVCBjYWxsYmFjaw0KICAgYXJlIG5vdCBjb25zaWRlcmVkIHRvIGJlIGNhbGxl
-ZCBmcm9tIGVhY2ggb3RoZXIuIFNvIGluIGN1cnJlbnQgdmVyc2lvbg0KICAgU09fWkVST0NPUFkg
-aXMgc2V0IHN1Y2Nlc3NmdWxseSB0byBhbnkgdHlwZSAoZS5nLiB0cmFuc3BvcnQpIG9mDQogICBB
-Rl9WU09DSyBzb2NrZXQsIGJ1dCBpZiB0cmFuc3BvcnQgZG9lcyBub3Qgc3VwcG9ydCBNU0dfWkVS
-T0NPUFksDQogICB0eCByb3V0aW5lIHdpbGwgZmFpbCB3aXRoIEVPUE5PVFNVUFAuDQoNCjIpIFdo
-ZW4gTVNHX1pFUk9DT1BZIGlzIHVzZWQsIGZvciBlYWNoIHR4IHN5c3RlbSBjYWxsIHdlIG5lZWQg
-dG8gZW5xdWV1ZQ0KICAgb25lIGNvbXBsZXRpb24uIEluIGVhY2ggY29tcGxldGlvbiB0aGVyZSBp
-cyBmbGFnIHdoaWNoIHNob3dzIGhvdyB0eA0KICAgd2FzIHBlcmZvcm1lZDogemVyb2NvcHkgb3Ig
-Y29weS4gVGhpcyBsZWFkcyB0aGF0IHdob2xlIG1lc3NhZ2UgbXVzdA0KICAgYmUgc2VuZCBpbiB6
-ZXJvY29weSBvciBjb3B5IHdheSAtIHdlIGNhbid0IHNlbmQgcGFydCBvZiBtZXNzYWdlIHdpdGgN
-CiAgIGNvcHlpbmcgYW5kIHJlc3Qgb2YgbWVzc2FnZSB3aXRoIHplcm9jb3B5IG1vZGUgKG9yIHZp
-Y2UgdmVyc2EpLiBOb3csDQogICB3ZSBuZWVkIHRvIGFjY291bnQgdnNvY2sgY3JlZGl0IGxvZ2lj
-LCBlLmcuIHdlIGNhbid0IHNlbmQgd2hvbGUgZGF0YQ0KICAgb25jZSAtIG9ubHkgYWxsb3dlZCBu
-dW1iZXIgb2YgYnl0ZXMgY291bGQgc2VudCBhdCBhbnkgbW9tZW50LiBJbiBjYXNlDQogICBvZiBj
-b3B5aW5nIHdheSB0aGVyZSBpcyBubyBwcm9ibGVtIGFzIGluIHdvcnN0IGNhc2Ugd2UgY2FuIHNl
-bmQgc2luZ2xlDQogICBieXRlcywgYnV0IHplcm9jb3B5IGlzIG1vcmUgY29tcGxleCBiZWNhdXNl
-IHNtYWxsZXN0IHRyYW5zbWlzc2lvbg0KICAgdW5pdCBpcyBzaW5nbGUgcGFnZS4gU28gaWYgdGhl
-cmUgaXMgbm90IGVub3VnaCBzcGFjZSBhdCBwZWVyJ3Mgc2lkZQ0KICAgdG8gc2VuZCBpbnRlZ2Vy
-IG51bWJlciBvZiBwYWdlcyAoYXQgbGVhc3Qgb25lKSAtIHdlIHdpbGwgd2FpdCwgdGh1cw0KICAg
-c3RhbGxpbmcgdHggc2lkZS4gVG8gb3ZlcmNvbWUgdGhpcyBwcm9ibGVtIGkndmUgYWRkZWQgc2lt
-cGxlIHJ1bGUgLQ0KICAgemVyb2NvcHkgaXMgcG9zc2libGUgb25seSB3aGVuIHRoZXJlIGlzIGVu
-b3VnaCBzcGFjZSBhdCBhbm90aGVyIHNpZGUNCiAgIGZvciB3aG9sZSBtZXNzYWdlICh0byBjaGVj
-aywgdGhhdCBjdXJyZW50ICdtc2doZHInIHdhcyBhbHJlYWR5IHVzZWQNCiAgIGluIHByZXZpb3Vz
-IHR4IGl0ZXJhdGlvbnMgaSB1c2UgJ2lvdl9vZmZzZXQnIGZpZWxkIG9mIGl0J3MgaW92IGl0ZXIp
-Lg0KDQozKSBsb29wYmFjayB0cmFuc3BvcnQgaXMgbm90IHN1cHBvcnRlZCwgYmVjYXVzZSBpdCBy
-ZXF1aXJlcyB0byBpbXBsZW1lbnQNCiAgIG5vbi1saW5lYXIgc2tiIGhhbmRsaW5nIGluIGRlcXVl
-dWUgbG9naWMgKGFzIHdlICJzZW5kIiBmcmFnZ2VkIHNrYg0KICAgYW5kICJyZWNlaXZlIiBpdCBm
-cm9tIHRoZSBzYW1lIHF1ZXVlKS4gSSdtIGdvaW5nIHRvIGltcGxlbWVudCBpdCBpbg0KICAgbmV4
-dCB2ZXJzaW9ucy4NCg0KNCkgQ3VycmVudCBpbXBsZW1lbnRhdGlvbiBzZXRzIG1heCBsZW5ndGgg
-b2YgcGFja2V0IHRvIDY0S0IuIElJVUMgdGhpcw0KICAgaXMgZHVlIHRvICdrbWFsbG9jKCknIGFs
-bG9jYXRlZCBkYXRhIGJ1ZmZlcnMuIEkgdGhpbmssIGluIGNhc2Ugb2YNCiAgIE1TR19aRVJPQ09Q
-WSB0aGlzIHZhbHVlIGNvdWxkIGJlIGluY3JlYXNlZCwgYmVjYXVzZSAna21hbGxvYygpJyBpcw0K
-ICAgbm90IHRvdWNoZWQgZm9yIGRhdGEgLSB1c2VyIHNwYWNlIHBhZ2VzIGFyZSB1c2VkIGFzIGJ1
-ZmZlcnMuIEFsc28NCiAgIHRoaXMgbGltaXQgdHJpbXMgZXZlcnkgbWVzc2FnZSB3aGljaCBpcyA+
-IDY0S0IsIHRodXMgc3VjaCBtZXNzYWdlcw0KICAgd2lsbCBiZSBzZW5kIGluIGNvcHkgbW9kZSBk
-dWUgdG8gJ2lvdl9vZmZzZXQnIGNoZWNrIGluIDIpLg0KDQogICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgUEVSRk9STUFOQ0UNCg0KUGVyZm9ybWFuY2U6IGl0IGlzIGEgbGl0dGxlIGJpdCB0cmlj
-a3kgdG8gY29tcGFyZSBwZXJmb3JtYW5jZSBiZXR3ZWVuDQpjb3B5IGFuZCB6ZXJvY29weSB0cmFu
-c21pc3Npb25zLiBJbiB6ZXJvY29weSB3YXkgd2UgbmVlZCB0byB3YWl0IHdoZW4NCnVzZXIgYnVm
-ZmVycyB3aWxsIGJlIHJlbGVhc2VkIGJ5IGtlcm5lbCwgc28gaXQgc29tZXRoaW5nIGxpa2Ugc3lu
-Y2hyb25vdXMNCnBhdGggKHdhaXQgdW50aWwgZGV2aWNlIGRyaXZlciB3aWxsIHByb2Nlc3MgaXQp
-LCB3aGlsZSBpbiBjb3B5IHdheSB3ZQ0KY2FuIGZlZWQgZGF0YSB0byBrZXJuZWwgYXMgbWFueSBh
-cyB3ZSB3YW50LCBkb24ndCBjYXJlIGFib3V0IGRldmljZQ0KZHJpdmVyLiBTbyBJIGNvbXBhcmVk
-IG9ubHkgdGltZSB3aGljaCB3ZSBzcGVuZCBpbiAnc2VuZG1zZygpJyBzeXNjYWxsLg0KQWxzbyB0
-aGVyZSBpcyBsaW1pdCBmcm9tIDQpIGFib3ZlIHNvIG1heCBidWZmZXIgc2l6ZSBpcyA2NEtCLiBJ
-J3ZlDQp0ZXN0ZWQgdGhpcyBwYXRjaHNldCBpbiB0aGUgbmVzdGVkIFZNLCBidXQgaSB0aGluayBm
-b3IgVjEgaXQgaXMgbm90IGENCmJpZyBkZWFsLg0KDQpTZW5kZXI6DQouL3Zzb2NrX3BlcmYgLS1z
-ZW5kZXIgPENJRD4gLS1idWYtc2l6ZSA8YnVmIHNpemU+IC0tYnl0ZXMgNjBNIFstLXpjXQ0KDQpS
-ZWNlaXZlcjoNCi4vdnNvY2tfcGVyZiAtLXZzay1zaXplIDI1Nk0NCg0KTnVtYmVyIGluIGNlbGwg
-aXMgc2Vjb25kcyB3aGljaCBzZW5kZXJzIHNwZW5kcyBpbnNpZGUgdHggc3lzY2FsbC4NCg0KR3Vl
-c3QgdG8gaG9zdCB0cmFuc21pc3Npb246DQoNCiotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tKg0KfCAgICAgICAgICB8ICAgICAgICAgfCAgICAgICAgICB8DQp8IGJ1ZiBzaXplIHwgICBj
-b3B5ICB8IHplcm9jb3B5IHwNCnwgICAgICAgICAgfCAgICAgICAgIHwgICAgICAgICAgfA0KKi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0qDQp8ICAgNEtCICAgIHwgIDAuMjYgICB8ICAg
-MC4wNDIgIHwNCiotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgIDE2S0IgICB8
-ICAwLjExICAgfCAgIDAuMDE0ICB8DQoqLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSoN
-CnwgICAzMktCICAgfCAgMC4wNSAgIHwgICAwLjAwOSAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0qDQp8ICAgNjRLQiAgIHwgIDAuMDQgICB8ICAgMC4wMDUgIHwNCiotLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KDQpIb3N0IHRvIGd1ZXN0IHRyYW5zbWlzc2lvbjoN
-Cg0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgICAgICAgICB8ICAgICAg
-ICAgIHwgICAgICAgICAgfA0KfCBidWYgc2l6ZSB8ICAgY29weSAgIHwgemVyb2NvcHkgfA0KfCAg
-ICAgICAgICB8ICAgICAgICAgIHwgICAgICAgICAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tKg0KfCAgIDRLQiAgICB8ICAgMC4wNDkgIHwgICAwLjAzNCAgfA0KKi0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgIDE2S0IgICB8ICAgMC4wMyAgIHwgICAwLjAy
-NCAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0KfCAgIDMyS0IgICB8ICAg
-MC4wMjUgIHwgICAwLjAxICAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKg0K
-fCAgIDY0S0IgICB8ICAgMC4wMjggIHwgICAwLjAxICAgfA0KKi0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tKg0KDQpJZiBob3N0IGZhaWxzIHRvIHNlbmQgZGF0YSB3aXRoICJDYW5ub3Qg
-YWxsb2NhdGUgbWVtb3J5IiwgY2hlY2sgdmFsdWUNCi9wcm9jL3N5cy9uZXQvY29yZS9vcHRtZW1f
-bWF4IC0gaXQgaXMgYWNjb3VudGVkIGR1cmluZyBjb21wbGV0aW9uIHNrYg0KYWxsb2NhdGlvbi4N
-Cg0KWmVyb2NvcHkgaXMgZmFzdGVyIHRoYW4gY2xhc3NpYyBjb3B5IG1vZGUsIGJ1dCBvZiBjb3Vy
-c2UgaXQgcmVxdWlyZXMNCnNwZWNpZmljIGFyY2hpdGVjdHVyZSBvZiBhcHBsaWNhdGlvbiBkdWUg
-dG8gdXNlciBwYWdlcyBwaW5uaW5nLCBidWZmZXINCnNpemUgYW5kIGFsaWdubWVudC4gSW4gbmV4
-dCB2ZXJzaW9ucyBpJ20gZ29pbmcgdG8gZml4IDY0S0IgYmFycmllciB0bw0KcGVyZm9ybSB0ZXN0
-cyB3aXRoIGJpZ2dlciBidWZmZXIgc2l6ZXMuDQoNCiAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBURVNUSU5HDQoNClRoaXMgcGF0Y2hzZXQgaW5jbHVkZXMgc2V0IG9mIHRlc3RzIGZvciBNU0df
-WkVST0NPUFkgZmVhdHVyZS4gSSB0cmllZCB0bw0KY292ZXIgbmV3IGNvZGUgYXMgbXVjaCBhcyBw
-b3NzaWJsZSBzbyB0aGVyZSBhcmUgZGlmZmVyZW50IGNhc2VzIGZvcg0KTVNHX1pFUk9DT1BZIHRy
-YW5zbWlzc2lvbnM6IHdpdGggZGlzYWJsZWQgU09fWkVST0NPUFkgYW5kIHNldmVyYWwgaW8NCnZl
-Y3RvciB0eXBlcyAoZGlmZmVyZW50IHNpemVzLCBhbGlnbm1lbnRzLCB3aXRoIHVubWFwcGVkIHBh
-Z2VzKS4NCg0KVGhhbmtzLCBBcnNlbml5DQoNCkFyc2VuaXkgS3Jhc25vdigxMik6DQogdnNvY2s6
-IGNoZWNrIGVycm9yIHF1ZXVlIHRvIHNldCBFUE9MTEVSUg0KIHZzb2NrOiByZWFkIGZyb20gc29j
-a2V0J3MgZXJyb3IgcXVldWUNCiB2c29jazogY2hlY2sgZm9yIE1TR19aRVJPQ09QWSBzdXBwb3J0
-DQogdmhvc3QvdnNvY2s6IG5vbi1saW5lYXIgc2tiIGhhbmRsaW5nIHN1cHBvcnQNCiB2c29jay92
-aXJ0aW86IG5vbi1saW5lYXIgc2tiIHN1cHBvcnQNCiB2c29jay92aXJ0aW86IG5vbi1saW5lYXIg
-c2tiIGhhbmRsaW5nIGZvciBUQVAgZGV2DQogdnNvY2svdmlydGlvOiBNR1NfWkVST0NPUFkgZmxh
-ZyBzdXBwb3J0DQogdmhvc3QvdnNvY2s6IHN1cHBvcnQgTVNHX1pFUk9DT1BZIGZvciB0cmFuc3Bv
-cnQNCiB2c29jay92aXJ0aW86IHN1cHBvcnQgTVNHX1pFUk9DT1BZIGZvciB0cmFuc3BvcnQNCiBu
-ZXQvc29jazogZW5hYmxlIHNldHRpbmcgU09fWkVST0NPUFkgZm9yIFBGX1ZTT0NLDQogdGVzdC92
-c29jazogTVNHX1pFUk9DT1BZIGZsYWcgdGVzdHMNCiB0ZXN0L3Zzb2NrOiBNU0dfWkVST0NPUFkg
-c3VwcG9ydCBmb3IgdnNvY2tfcGVyZg0KDQogZHJpdmVycy92aG9zdC92c29jay5jICAgICAgICAg
-ICAgICAgICAgICAgfCAgNjIgKysrLQ0KIGluY2x1ZGUvbGludXgvc29ja2V0LmggICAgICAgICAg
-ICAgICAgICAgIHwgICAxICsNCiBpbmNsdWRlL2xpbnV4L3ZpcnRpb192c29jay5oICAgICAgICAg
-ICAgICB8ICAxMiArDQogaW5jbHVkZS9uZXQvYWZfdnNvY2suaCAgICAgICAgICAgICAgICAgICAg
-fCAgIDIgKw0KIG5ldC9jb3JlL3NvY2suYyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA0
-ICstDQogbmV0L3Ztd192c29jay9hZl92c29jay5jICAgICAgICAgICAgICAgICAgfCAgMzUgKyst
-DQogbmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0LmMgICAgICAgICAgfCAgMzggKystDQog
-bmV0L3Ztd192c29jay92aXJ0aW9fdHJhbnNwb3J0X2NvbW1vbi5jICAgfCAyNTUgKysrKysrKysr
-KysrKystLQ0KIHRvb2xzL3Rlc3RpbmcvdnNvY2svTWFrZWZpbGUgICAgICAgICAgICAgIHwgICAy
-ICstDQogdG9vbHMvdGVzdGluZy92c29jay91dGlsLmggICAgICAgICAgICAgICAgfCAgIDEgKw0K
-IHRvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfcGVyZi5jICAgICAgICAgIHwgMTI3ICsrKysrKyst
-DQogdG9vbHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgICAgICAgICAgfCAgMTEgKw0KIHRv
-b2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdF96ZXJvY29weS5jIHwgNDcwICsrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKw0KIHRvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdF96ZXJv
-Y29weS5oIHwgIDEyICsNCiAxNCBmaWxlcyBjaGFuZ2VkLCA5OTEgaW5zZXJ0aW9ucygrKSwgNDEg
-ZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4yNS4xDQo=
+This patch depends on kernel-specific ACPICA configuration, can I submit 
+it to ACPICA
+
+projects?
+
+On 2023/2/2 17:31, Rafael J. Wysocki wrote:
+> On Thu, Feb 2, 2023 at 4:48 AM Ruidong Tian
+> <tianruidong@linux.alibaba.com> wrote:
+>> ACPI core subsystem initialization will fail when Kernel disabled PCI but
+>> ACPI tables still have PCI config address spaces.
+>>
+>> Enable ACPI_ADR_SPACE_PCI_CONFIG in acpi_gbl_default_address_spaces
+>> only when ACPI_PCI_CONFIGURED is defined.
+>>
+>> Signed-off-by: Ruidong Tian <tianruidong@linux.alibaba.com>
+> As an ACPICA change, this should first be submitted (as a pull
+> request) to the upstream ACPICA project on GitHub.
+>
+> Having done that, please resubmit the patch with a Link tag pointing
+> to the corresponding upstream pull request.
+>
+> Thanks!
+>
+>> ---
+>>   drivers/acpi/acpica/evhandler.c | 2 ++
+>>   include/acpi/acconfig.h         | 4 ++++
+>>   2 files changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/acpi/acpica/evhandler.c b/drivers/acpi/acpica/evhandler.c
+>> index be9a05498adc..86057e39df8c 100644
+>> --- a/drivers/acpi/acpica/evhandler.c
+>> +++ b/drivers/acpi/acpica/evhandler.c
+>> @@ -26,7 +26,9 @@ acpi_ev_install_handler(acpi_handle obj_handle,
+>>   u8 acpi_gbl_default_address_spaces[ACPI_NUM_DEFAULT_SPACES] = {
+>>          ACPI_ADR_SPACE_SYSTEM_MEMORY,
+>>          ACPI_ADR_SPACE_SYSTEM_IO,
+>> +#ifdef ACPI_PCI_CONFIGURED
+>>          ACPI_ADR_SPACE_PCI_CONFIG,
+>> +#endif
+>>          ACPI_ADR_SPACE_DATA_TABLE
+>>   };
+>>
+>> diff --git a/include/acpi/acconfig.h b/include/acpi/acconfig.h
+>> index 151e40385673..28456120529f 100644
+>> --- a/include/acpi/acconfig.h
+>> +++ b/include/acpi/acconfig.h
+>> @@ -162,7 +162,11 @@
+>>   /* Maximum space_ids for Operation Regions */
+>>
+>>   #define ACPI_MAX_ADDRESS_SPACE          255
+>> +#ifdef ACPI_PCI_CONFIGURED
+>>   #define ACPI_NUM_DEFAULT_SPACES         4
+>> +#else
+>> +#define ACPI_NUM_DEFAULT_SPACES         3
+>> +#endif
+>>
+>>   /* Array sizes.  Used for range checking also */
+>>
+>> --
+>> 2.33.1
+>>
