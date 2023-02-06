@@ -2,116 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F5468C817
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521D568C816
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjBFUxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S230433AbjBFUwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjBFUxO (ORCPT
+        with ESMTP id S230339AbjBFUwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:53:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7132E0C3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:52:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675716743;
+        Mon, 6 Feb 2023 15:52:45 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468BC2CC75;
+        Mon,  6 Feb 2023 12:52:40 -0800 (PST)
+Received: from booty (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 19C2AC0003;
+        Mon,  6 Feb 2023 20:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675716758;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rqLlmct7lX+JFmd+5pxF8+BD7yXad1T5vU6UwHJMxwY=;
-        b=EbVUPG2YEq0LaEWzyoh9Shyd4/UkhoOjyhIsuzrRzIAS13NqSMjpLNuZyC6a+7/aNPKuWu
-        WW3jYQ0GtKUoRfJKYgd7l/f5Rit900Xs5f7CFPMGKBuOomeYH0JiZx7+WnmONnPTN32FKx
-        93ArRIqlanY7IGIzjdzTijk840xBzpY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-359-oe-RPAn1NgGDGCRRPyJgAw-1; Mon, 06 Feb 2023 15:52:22 -0500
-X-MC-Unique: oe-RPAn1NgGDGCRRPyJgAw-1
-Received: by mail-qk1-f199.google.com with SMTP id v186-20020a37dcc3000000b0072a264a6208so8657574qki.21
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:52:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rqLlmct7lX+JFmd+5pxF8+BD7yXad1T5vU6UwHJMxwY=;
-        b=h5R7NC8zx4BE69sU7uIlk5cKcg5++fzWywxIXlYx/XxM/dSF654i22rJl6z6D+jGNc
-         FgL4awF9PWRTBNydAXFwbC/NLhSbExUq6QQAP41+BhSzpRx/J/ifP2KyYNqIQkimJz0t
-         En5T7OCu2Rfs914KlBbeyjPRHBJxEaY5J/DtkhEG+5OUxZrNODmpGmloSgRHpDMUw55G
-         eGHJQaiqYDTyt5Ts05/pKqAZaesBjwScqZVGSk5e052+E+bhgYICsztFAPJrAekeMvZc
-         7pcuC1vsqdIGtOhLMv5m2t9Leyeedu+BAW/RResXig8xhqCCdaMCOG0NtYc0TVxGO+RL
-         ag2A==
-X-Gm-Message-State: AO0yUKV6fgbFSbh2F5lU8LtCiexdU5V0AEnIs98R2yust4q0yJ0cw1S0
-        q/9wdu8S/c+OMYJ4kVGmjsRpci7iZyIW+RArDZwG26y2DZapN2mlVJG1auf42M3yNy2VdUj4yAy
-        8xwxk/5X9cc2ZKBOm0clkt3TC
-X-Received: by 2002:a05:622a:4b:b0:3b8:6d44:ca7e with SMTP id y11-20020a05622a004b00b003b86d44ca7emr1435594qtw.4.1675716741773;
-        Mon, 06 Feb 2023 12:52:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set+xt3VpKVSjbng5Isjbb9ILCPJQRmOIPFhgB09Fc0XTzyXKXefEhRFVU+CjRKGOYRPbyw2L9Q==
-X-Received: by 2002:a05:622a:4b:b0:3b8:6d44:ca7e with SMTP id y11-20020a05622a004b00b003b86d44ca7emr1435563qtw.4.1675716741494;
-        Mon, 06 Feb 2023 12:52:21 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id x10-20020a05620a12aa00b0071d57a0eb17sm7923473qki.136.2023.02.06.12.52.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 12:52:20 -0800 (PST)
-Date:   Mon, 6 Feb 2023 15:52:19 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Stevens <stevensd@chromium.org>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm/khugepaged: skip shmem with userfaultfd
-Message-ID: <Y+Fog2dO1kpRBMvr@x1n>
-References: <20230206112856.1802547-1-stevensd@google.com>
- <Y+FOk+ty7OKmkwLL@casper.infradead.org>
+        bh=prmY1sdOw0bhFLGxGD8Ft2qaDqoVwbMTn9dC7Z/uNN0=;
+        b=VgVszzRmFCbNGirdnGdgX55toIvftKb+rLOsJAfRgzbD1rQ2dh9INwn9i3pxeo75g9LKjr
+        tVm52onfwHwvTogom4B65Meus8OMWa62J16N6HYRiL/OZprm6+JDMObnbVnod0GSRdUPHk
+        i4shuI7sSGY3z936nKr52uN9zOhJg20y93hzbZOBWAmcLLeBHdDlowgIX3ovU1oMmWVirQ
+        7aFy5ZyVpUuhpu05B8ts/iYFtCDnL+1o6KiRsdtir9KV3caAEhLzvnaUZmdx1bMFTCDEB2
+        v/Fgon/OKnVbO3AXK9dq3hBruFUhQK++0RjrK90xecxwXax7JaFkQpK1vQx0IQ==
+Date:   Mon, 6 Feb 2023 21:52:33 +0100
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Leonard Crestez <leonard.crestez@nxp.com>,
+        Alexandre Bailon <abailon@baylibre.com>
+Subject: Re: [PATCH 04/23] interconnect: imx: fix registration race
+Message-ID: <20230206215233.66433c1a@booty>
+In-Reply-To: <Y+C1zpn3PvRc+6uf@hovoldconsulting.com>
+References: <20230201101559.15529-1-johan+linaro@kernel.org>
+        <20230201101559.15529-5-johan+linaro@kernel.org>
+        <20230203170121.187108bd@booty>
+        <Y+C1zpn3PvRc+6uf@hovoldconsulting.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y+FOk+ty7OKmkwLL@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 07:01:39PM +0000, Matthew Wilcox wrote:
-> On Mon, Feb 06, 2023 at 08:28:56PM +0900, David Stevens wrote:
-> > This change first makes sure that the intermediate page cache state
-> > during collapse is not visible by moving when gaps are filled to after
-> > the page cache lock is acquired for the final time. This is necessary
-> > because the synchronization provided by locking hpage is insufficient
-> > for functions which operate on the page cache without actually locking
-> > individual pages to examine their content (e.g. shmem_mfill_atomic_pte).
+Hello Johan,
+
+On Mon, 6 Feb 2023 09:09:50 +0100
+Johan Hovold <johan@kernel.org> wrote:
+
+> On Fri, Feb 03, 2023 at 05:01:21PM +0100, Luca Ceresoli wrote:
+> > Hello Johan,
+> > 
+> > On Wed,  1 Feb 2023 11:15:40 +0100
+> > Johan Hovold <johan+linaro@kernel.org> wrote:
+> >   
+> > > The current interconnect provider registration interface is inherently
+> > > racy as nodes are not added until the after adding the provider. This
+> > > can specifically cause racing DT lookups to fail.
+> > > 
+> > > Switch to using the new API where the provider is not registered until
+> > > after it has been fully initialised.
+> > > 
+> > > Fixes: f0d8048525d7 ("interconnect: Add imx core driver")
+> > > Cc: stable@vger.kernel.org      # 5.8
+> > > Cc: Leonard Crestez <leonard.crestez@nxp.com>
+> > > Cc: Alexandre Bailon <abailon@baylibre.com>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>  
+> > 
+> > Georgi pointed me to this series after I reported a bug yesterday [0],
+> > that I found on iMX8MP. So I ran some tests with my original, failing
+> > tree, minus one patch with my debugging code to hunt for the bug, plus
+> > patches 1-4 of this series.
+> > 
+> > The original code was failing approx 5~10% of the times. With your 4
+> > patches applied it ran 139 times with zero errors, which looks great! I
+> > won't be able to do more testing until next Monday to be extra sure.  
 > 
-> I've been a little scared of touching khugepaged because, well, look at
-> that function.  But if we are going to touch it, how about this patch
-> first?  It does _part_ of what you need by not filling in the holes,
-> but obviously not the part that looks at uffd.  
+> Thanks for testing.
 > 
-> It leaves the old pages in-place and frozen.  I think this should be
-> safe, but I haven't booted it (not entirely sure what test I'd run
-> to prove that it's not broken)
+> It indeed looks like you're hitting the same race, and as the imx
+> interconnect driver also initialises the provider data num_nodes count
+> before adding the nodes it results in that NULL-deref (where the qcom
+> driver failed a bit more gracefully).
 
-That logic existed since Kirill's original commit to add shmem thp support
-on khugepaged, so Kirill should be the best to tell.. but so far it seems
-reasonalbe to me to have that extra operation.
+My v6.2-rc5 tree with patches 1 to 4 added has booted 590 times with 0
+errors, which add to the 139 times on Friday. This definitely deserves
+my:
 
-The problem is khugepaged will release pgtable lock during collapsing, so
-AFAICT there can be a race where some other thread tries to insert pages
-into page cache in parallel with khugepaged right after khugepaged released
-the page cache lock.
-
-For example, it seems to me new page cache can be inserted when khugepaged
-is copying small page content to the new hpage.
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
 -- 
-Peter Xu
-
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
