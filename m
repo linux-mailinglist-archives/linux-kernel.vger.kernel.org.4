@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A62E68BC52
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E02168BC64
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjBFMHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S229649AbjBFMIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjBFMHY (ORCPT
+        with ESMTP id S230153AbjBFMIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:07:24 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4D922032;
-        Mon,  6 Feb 2023 04:07:22 -0800 (PST)
-X-UUID: ccd61168a61611ed945fc101203acc17-20230206
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PAR9ceNc//mA5cmLDkfFT7PplGN2wFwq9Wd/wjFC8pg=;
-        b=jTR6uO4TijWOnQZzNfft1sn5fiNMJ3pS67gWViZxa/LoNiLUWkhBoCQ08KKMrQu/ArVqoPbtO8jz2PBdDNVoVjT3uMwdvoFSsksPA+RttsyTR/GYtiOtkxg2QQ9crvQ+fL8HsjbrpRVjdVfdLhN8nXzaPe3OAscFhpKYLCXimvo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.19,REQID:dd6cfc3e-8934-42df-a483-f7a908e45722,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:885ddb2,CLOUDID:871c9df7-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: ccd61168a61611ed945fc101203acc17-20230206
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 761754773; Mon, 06 Feb 2023 20:07:17 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 6 Feb 2023 20:07:16 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 6 Feb 2023 20:07:15 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 6/6] media: mediatek: vcodec: Add encode to support dbgfs
-Date:   Mon, 6 Feb 2023 20:07:08 +0800
-Message-ID: <20230206120708.19631-7-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230206120708.19631-1-yunfei.dong@mediatek.com>
-References: <20230206120708.19631-1-yunfei.dong@mediatek.com>
+        Mon, 6 Feb 2023 07:08:15 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA30114E94
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:08:12 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id i5so2972051wrc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 04:08:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZmU4cUw93QoE4h7oX6k5SfP7VHgqLh62OEyhjT4wVP8=;
+        b=Ni8+xUZ3mafWJiQ/wLY6Geib7YEH7K2AC5kCqZ+JTeGMmicPeFJ6hzw832SQdyv3cd
+         GMhX6/lDx28BrWFVAiawpQeogNRfAu+GgExT3KYDZHd7hi5trQlbRDm4pdbO4KsFBNDy
+         8H5MTqBeArJXSn9W2ISmHmpqm5+6oplEecq/eOJuTQZDpdgfR87ZhzJTGjFtmjgqcv1Y
+         gj1zOCl3xtc36SovdkuCUJ+FaATrfMiCC8gIzsU6NW8F/ljWD3AYQJWTyIUc4itr4zhw
+         F7NTg5imlwM+qweIXM+ZME7zSp+5VPTyBkswk5ntXFt8LamTNJLbG32Ai/kxYNiA/sdA
+         e9ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZmU4cUw93QoE4h7oX6k5SfP7VHgqLh62OEyhjT4wVP8=;
+        b=HQXcJdB12MQaid1dkzmqOFRSbJ42cughmZP7n9pBMnsBqv6euYzk5xAxN1yAOQzhnk
+         ncQDZ+jMe+U05e6ep0joepTLBYTxbKD9TtE+HMpKgg/DGNrXKR+veVFhXnCF8J0gVfMW
+         wghGIpIQzg7+PX9EqXXeFHk5BonDMOAZlAbNHm2ZrxAAVAaNegVMGUF3afmmsHS5gsUG
+         zyLD6muJGg0XGlpuzQ6OY2HtQ42xmBK+h9JYW6VUeVm/O1Mc4Frj1CKwTkn/u3qqJfyF
+         WEdZMVRVUaDFpk9AkpHFWMmT19qi5tzTz6pIAvUQ6Hl8U5QqKXvLp75BauX8CBjx6YL6
+         Dang==
+X-Gm-Message-State: AO0yUKWZEPOUfWzlyRx4mcxyujuQ96B/QtfRqXDFTxkS3giw2D9RMAlQ
+        nevi//zOf8opDx76uZ7TerBZy2D1+ON+/ACB
+X-Google-Smtp-Source: AK7set9M7wMcnISexQ3dNo8gIHt8/hl45Ub6FwwT11q2ei8QyMYj6F/FiDSNCR+u6yQlYLWZ8u2oIA==
+X-Received: by 2002:adf:e192:0:b0:2bc:846a:8ead with SMTP id az18-20020adfe192000000b002bc846a8eadmr18206689wrb.37.1675685291427;
+        Mon, 06 Feb 2023 04:08:11 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id j8-20020a5d6048000000b002bfb02153d1sm8698009wrt.45.2023.02.06.04.08.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 04:08:10 -0800 (PST)
+Message-ID: <b16d137b-56ee-5aa2-346d-8ab02d590bf8@linaro.org>
+Date:   Mon, 6 Feb 2023 12:08:09 +0000
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RESEND PATCH 30/37] nvmem: core: fix
+ nvmem_layout_get_match_data()
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Michael Walle <michael@walle.cc>
+References: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
+ <20230206102759.669838-31-srinivas.kandagatla@linaro.org>
+ <Y+Dst2V9mfJbVrzD@kroah.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <Y+Dst2V9mfJbVrzD@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add encode to support dbgfs.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index 9095186d5495..94703c66da74 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -353,6 +353,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_enc_reg;
- 	}
- 
-+	mtk_vcodec_dbgfs_init(dev, false);
- 	mtk_v4l2_debug(0, "encoder %d registered as /dev/video%d",
- 		       dev->venc_pdata->core_id, vfd_enc->num);
- 
-@@ -463,6 +464,7 @@ static int mtk_vcodec_enc_remove(struct platform_device *pdev)
- 	if (dev->vfd_enc)
- 		video_unregister_device(dev->vfd_enc);
- 
-+	mtk_vcodec_dbgfs_deinit(dev);
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	pm_runtime_disable(dev->pm.dev);
- 	mtk_vcodec_fw_release(dev->fw_handler);
--- 
-2.18.0
+On 06/02/2023 12:04, Greg KH wrote:
+> On Mon, Feb 06, 2023 at 10:27:52AM +0000, Srinivas Kandagatla wrote:
+>> From: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> This function was trying to match wrong OF node (parent device's)
+>> against an of_match_table. It was always returning NULL.
+>>
+>> Make it match layout's OF node against layout's of_match_table.
+>>
+>> Note: __maybe_unused is needed to avoid:
+>> warning: variable 'layout_np' set but not used [-Wunused-but-set-variable]
+>> (of_match_node() is no-op without CONFIG_OF).
+>>
+>> Fixes: 61a093b4a0e0 ("nvmem: core: introduce NVMEM layouts")
+> 
+> Nit, how can you have a git commit id if you are sending me patches to
+> be applied to my tree?
+> 
+How should I deal with this situation?
+I apply patches to nvmem-next tree and developers fix issues on top of it.
+On the other hand I send patches as list to you to go via char-misc, so 
+the fixes tag is really not relevant to char-misc.
 
+Should I drop those fixes tag before sending it out?
+
+thanks,
+Srini
+
+
+> That's never going to work, sorry.
+> 
+> greg k-h
