@@ -2,345 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932CE68CAA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 00:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1ED068CAAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 00:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjBFXjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 18:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
+        id S229548AbjBFXlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 18:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjBFXji (ORCPT
+        with ESMTP id S229447AbjBFXlG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 18:39:38 -0500
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E755F2448F;
-        Mon,  6 Feb 2023 15:39:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
-        :References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=04cSRy2a8iC1Cou+aRqOD0F4yyo1g1BzN14brp5dfq8=; b=kkJRhesNolSf5ry5jUrbrHv2f0
-        NToSgHvByPZfV9SNjz+kBs65uyyKlNaCe7O421O+7EFWD4+MoSUj5bclZUntvqvPZkjRfo01vvnTx
-        D/fVHkU9TfH7wzI2q+q6i7mJ4G0bUDjrpYqA2QW/uDRUAu1uvu+BXGpTLfAj21e0j+6sduPo6JqCa
-        2Its7gEUshRf8WEj0mB9UZ6gdKYht3HndJZ/zx7asFNhHVKlR0F6rFtw4WNmg7p70AP/S1goXUAIQ
-        t98U1dwHPJuqKLKh5MSktsv2P8tUMzaevjQXD+729zG9Ek0BJxS23okMSsNAK/Yf/sQV/0PbPXI68
-        maNmlwRw==;
-Received: from authenticated user
-        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <bage@debian.org>)
-        id 1pPB53-00CT8W-U6; Mon, 06 Feb 2023 23:39:26 +0000
-From:   Bastian Germann <bage@debian.org>
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Bastian Germann <bage@debian.org>
-Subject: [PATCH v3 2/2] Bluetooth: btrtl: add support for the RTL8723CS
-Date:   Tue,  7 Feb 2023 00:39:11 +0100
-Message-Id: <20230206233912.9410-3-bage@debian.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230206233912.9410-1-bage@debian.org>
-References: <20230206233912.9410-1-bage@debian.org>
+        Mon, 6 Feb 2023 18:41:06 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2061.outbound.protection.outlook.com [40.107.94.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA6124125;
+        Mon,  6 Feb 2023 15:40:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lZm4gBcCfiUn3dDI+dJ+yCh+QAePziiW9hSqCoi2RvQWY1zJy5uZMAe7XSnyfQgzHwxf7JE+aIk+Rx+8rWdm05LGV736Z5ZAhKj+LuYSHjMyGSicKXMHT7s0rzbmukSYEhZ29F73s2aPhyFR87+zIkVLOYOpsWugZqf4dyn5DpV0qlb38xHobOrXGATroC8VodJ7ESpqHbo8KRt03tEeeWQ+Oc3P9DQnqmaAikgqp8hC2xXiOMoJE2PUdPYkgYLzWiEjUVkFxY8c6u6H2qaibrq38KaWLyKSE0ciWKKI2+jy/LeqnKz0ZCr5LjCjhuJJKKKhqUed9xvI5HfsgI/Jbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=756dhXWezEIp93so5vb4qTkpfkbSmgRWyY2aYv2uiKA=;
+ b=a0WjQF35X/8VQ+DjYD8+dp9ix7sZdYu0UPhxeXRDdz7XOembwaQEbZqlPHJKTrLds17nTBFjWPMdCSaGiZEY435WsjnUaoRKKouFZw6dnCqAnVx8EDc3FV6Pvo3DG6Fu1EcNgh71jSxhbvhDbSBCPZasWKe08vVtcokd6UJa6h2xT65wMHWBAD82H+1PF6oTw6XF284O0++NG35NfPTpA/hCzCstQnoVZr1iCDqijc2aJiyIHS95E5m9rTlnNhSgJKu2ObZ0dKmyjO2gIvBhmd1nxMDJSmYmhsH+7eq3fEXsRtVpVjQx0+CSh+clG7t7k+W1WdLFNBnaiImonGodPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=756dhXWezEIp93so5vb4qTkpfkbSmgRWyY2aYv2uiKA=;
+ b=XlZIX+anh1ducJnI/itZxDFh5fsJx4hV2lN79AiDGPOZL5r/4UgBcCnKYA5/p2HXP9TK0RFxkugLr5lxNqw+Df98XEilMbA0M2uTPMH46QHMHf6GzXQ3JEiYFJRdp56L5qE9OddrlmV6vQVuJIPR0JiUIQ2TeTabveQfzz6w0iD6wz5l+1pfvV/vWZs3ztidNVULNcf3bYNauXGsys9+D/CLM/XLDR5nJUr77vQmT+h5LWaICorztAuD2K841XYsbNtRep7jhDGpQGB4KZIUftYVe/gq4hjcs4/Fy+CFhjZ0SjkDSild0IV6jYtAcyELw9+SJD31TqKRB24BrtY53A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SJ0PR12MB7066.namprd12.prod.outlook.com (2603:10b6:a03:4ae::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Mon, 6 Feb
+ 2023 23:40:56 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6064.031; Mon, 6 Feb 2023
+ 23:40:56 +0000
+Date:   Mon, 6 Feb 2023 19:40:55 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
+        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
+        "Daniel P . Berrange" <berrange@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
+Message-ID: <Y+GQB9I6MFN6BOFw@nvidia.com>
+References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
+ <c7b5e502d1a3b9b8f6e96cbf9ca553b143c327e0.1675669136.git-series.apopple@nvidia.com>
+ <Y+Fttp1ozejoSQzl@slm.duckdns.org>
+ <CAJD7tkb_Cr7rTTpKc1VBpS8h=n3Hu+nGiV8dkLH-NdC1bSG9mg@mail.gmail.com>
+ <Y+GA6Y7SVhAW5Xm9@slm.duckdns.org>
+ <CAJD7tka6SC1ho-dffV0bK_acoZd-5DQzBOy0xg3TkOFG1zAPMg@mail.gmail.com>
+ <Y+GMbWWP/YhtJQqe@slm.duckdns.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+GMbWWP/YhtJQqe@slm.duckdns.org>
+X-ClientProxiedBy: BLAPR03CA0166.namprd03.prod.outlook.com
+ (2603:10b6:208:32f::18) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Debian-User: bage
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB7066:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5548afa8-aaab-4a60-d32a-08db089b9803
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W9u8viY322RiClcJ0uLMnqj9Ra4oRVuAYmIVKJcMKaR+2p9gR1wq3of+7d5vMj5+aeL5Jrtgokn20VKXsm6cMK7y0bnXygRS5F/umNV1KwiEXE0D3G6HHYSWOSlzEy7OySXy/qJeJm/G9xBSh8Y+It5MofR2tRO6e44YOg78xu1qJJEvl+s4igRcIsq9FIKF2qc86kdtu/hQk7OR50l3mL7Xk/mvsSBeK08BLJoSb67Is66/PpBoj6VOhwrryjU33eJ+JJVFdYrn703g6CzDq12eBp+t7r4eTP+XEeNUt41T2yfhK+WS6tDMWY5ohrgxq0Qe6w11QDXnDwcoJWwJvdwg5CDJV0Nqk31XGJXsk7Cm2gXy9ykj8wWLrXgge5LESpSNB0vKkBUJOCySfNXhGknkCEu0dLn5wNKGcMP8OjjXpxV7qDAUlt/fPspk4Gocz7LCzJgG3PhLPHQLJq2goHMa7YXvW6yOgfmgV4CrNAvcmsjSTevbxYwC0r3vmTEfSDIR5SPDC89+RXbuqbuyK/qPnvEiYub6el8ToB+b/iWqK5Z3RSLx4HbWDr2uMDR7uQuhQymwYK0xkfYrZbLHkIrZQItDbmeOw02FFInb0DPSapUuVvJKXrsJwDaAgED9qVM6G/ymMOT4sgv6Ngo4omucVxiuZzQwEr9xy2ANxrGTatKQDLp/ecMwL/1IFL+Y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(346002)(39860400002)(376002)(396003)(451199018)(6916009)(6506007)(2616005)(478600001)(53546011)(6486002)(8676002)(186003)(26005)(6512007)(4326008)(66556008)(316002)(66476007)(66946007)(54906003)(36756003)(86362001)(38100700002)(83380400001)(5660300002)(7416002)(41300700001)(8936002)(2906002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6jsYlNdVbcRE5uZ2DC+dUtFm8PDc+wvWzBS2n4Gj/27ZGTHhpf3Igh9eApX6?=
+ =?us-ascii?Q?8GRhZd85+i2HKt5AzM6qlpiPQpVvZaA7x6jL4E+r9hMBDr5WaPWK1qg01ze4?=
+ =?us-ascii?Q?DalykhLwllA3YPQnGMeYXGcCq58S3tLPLBfVxkCXHjkMQubpdNOHpYZgg9Pn?=
+ =?us-ascii?Q?NqW2P5ps5VFCHpudKG+Xpjj78yN1DhXT6GJbU+QZmbQsL4sXU1tGy97KMU/k?=
+ =?us-ascii?Q?cXUTlrCwVfTasT33MiJIf0+vtdvjOif0j/MYBp+camPHKLhub+5VTc1Ozry1?=
+ =?us-ascii?Q?vlaSkHYlPdYBr4Y/sxdorgTkb+WNnNjnqrvJj4TO6S0kD7wkcTK285FRIzAE?=
+ =?us-ascii?Q?qaP1F7STcCkj1lc29BKJ2MpqC6EhSn0Z1emJywJagnnAdf39BdEPjyCk3u9W?=
+ =?us-ascii?Q?+dYLeKt2iXu7b0ZKqYS88Q5zyaUewnE/l3LhvMYAL3mwZwG4z42NdX+VC1+1?=
+ =?us-ascii?Q?HJbvhP4C6O1HQNFYWUos5ai9g5qmaBr5+cAwYm6poxoi9yetlxImlJpzO/ZX?=
+ =?us-ascii?Q?hXDBFOTJL6C1wfdaPXKGw/VUVZaBv6TJVuEbqKI7Lg56HUMIX6X7N4IRzOjT?=
+ =?us-ascii?Q?1DHOgeqSR9JwidqAjpyXLZn0xZTJQpEaosv15KeYcN9IaXHdsfYWK03y2GsB?=
+ =?us-ascii?Q?7gKMpGM57VlASy+tnjaSRBGTPhQkcSagFvioHx+2vLKEJwbr4fjpfvGIWY9p?=
+ =?us-ascii?Q?AzST2MpoFW8uzyDu1sZS3GwQqCyCy8kJTzp0mCUSamUM3LrXIFo6dFP0wojW?=
+ =?us-ascii?Q?2ABt/wxPWtDdsIpOq/TvNs5nbLkZGxHCYPg1zvt0qkzasGGsZK6lSA5mCg+p?=
+ =?us-ascii?Q?fjErFIQtgY7UgQXjSLqAUMuUXNwoN81e3UXfnSkM6VSaW7TYPJCyW9ROwQsv?=
+ =?us-ascii?Q?Nc81OHJ4YeyGOCWlZXh6i1S2bRUqJKWlD1WpyGodglGTSx66xud4jGp/nfzL?=
+ =?us-ascii?Q?9yGhXmyMmGc1pwjoefnqOs3By6vKOmCxt/Agnr97HBPxNNOUbp+D+Jn8koTM?=
+ =?us-ascii?Q?qLxOyxyt0RfHRvlEgg2oZmzONDJFWsBPyXDZV/hnQxRFA4X8C1r5QUiH2ltd?=
+ =?us-ascii?Q?TprN25C6/CrWDR2NvT//fKfR3vEdYwq+m0jWYPaYp7SkWCcRgvnYfLfXCaaq?=
+ =?us-ascii?Q?vn6vVhIaF754QX86DBDrim2fzmOIkyfbD9/9XbU2+SbeJOIhA/Gb4s2oCO7Z?=
+ =?us-ascii?Q?di5UmIO3QoWExblTg6ZUseRNVtnrSEEDdc6x818f1x0E097rluNMb/s+GxIN?=
+ =?us-ascii?Q?JNb63dW1Q1Ol2DM+bR4ahpIvlbI05vlrVyU9NWtagZSVDD+KXDcGzdqNKRJC?=
+ =?us-ascii?Q?FY0cFBo+/M9SH3nwUQorkoQd6vI3xFPkUmw88q7yQ4laPdjHbrjgiiPN+s25?=
+ =?us-ascii?Q?9Rm1WDOZZbARYPr3/h0SBbL/6m51lecQ4StQ3Y0P1UBG9ht4TecMn/bNlEPk?=
+ =?us-ascii?Q?x5ytmnh5T545vgjk9bmE1sn2xupvRe9iPpiCdPWCU6weKG9Ko7oQ5NMIGo1I?=
+ =?us-ascii?Q?GofcmsNgZfKJreZ1y9iUeaUCyvU4IdpZFPh0ymtcjxVYmULJ00k6yPx81OVn?=
+ =?us-ascii?Q?ZvMiwQyOGZBqK1ZGHgTNip9qZJY04tgsQv3B928C?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5548afa8-aaab-4a60-d32a-08db089b9803
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 23:40:56.7960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 95JhqMh0hf0ReOY/+41eTd4fYV39uARGiOK1tL847gQw7mFtoyhL/Tr37i3IWQSq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7066
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Khoruzhick <anarsoul@gmail.com>
+On Mon, Feb 06, 2023 at 01:25:33PM -1000, Tejun Heo wrote:
+> On Mon, Feb 06, 2023 at 02:39:17PM -0800, Yosry Ahmed wrote:
+> > On Mon, Feb 6, 2023 at 2:36 PM Tejun Heo <tj@kernel.org> wrote:
+> > >
+> > > On Mon, Feb 06, 2023 at 02:32:10PM -0800, Yosry Ahmed wrote:
+> > > > I guess it boils down to which we want:
+> > > > (a) Limit the amount of memory processes in a cgroup can be pinned/locked.
+> > > > (b) Limit the amount of memory charged to a cgroup that can be pinned/locked.
+> > > >
+> > > > The proposal is doing (a), I suppose if this was part of memcg it
+> > > > would be (b), right?
+> > > >
+> > > > I am not saying it should be one or the other, I am just making sure
+> > > > my understanding is clear.
+> > >
+> > > I don't quite understand what the distinction would mean in practice. It's
+> > > just odd to put locked memory in a separate controller from interface POV.
+> > 
+> > Assume we have 2 cgroups, A and B. A process in cgroup A creates a
+> > tmpfs file and writes to it, so the memory is now charged to cgroup A.
+> > Now imagine a process in cgroup B tries to lock this memory.
+> > - With (a) the amount of locked memory will count toward's cgroup A's
+> > limit, because cgroup A is charged for the memory.
+> > - With (b) the amount of locked memory will count toward's cgroup B's
+> > limit, because a process in cgroup B is locking the memory.
+> > 
+> > I agree that it is confusing from an interface POV.
+> 
+> Oh yeah, that's confusing. I'd go with (a) for consistency with the rest of
+> memcg - locked memory should fit inside e.g. memory.max. The problem with
+> shared memory accounting exists for non-locked memory as well and prolly
+> best to handle the same way rather than handling differently.
 
-The Realtek RTL8723CS is SDIO WiFi chip. It also contains a Bluetooth
-module which is connected via UART to the host.
+(a) kind of destroys the point of this as a sandboxing tool
 
-It shares lmp subversion with 8703B, so Realtek's userspace
-initialization tool (rtk_hciattach) differentiates varieties of RTL8723CS
-(CG, VF, XX) with RTL8703B using vendor's command to read chip type.
+It is not so harmful to use memory that someone else has been charged
+with allocating.
 
-Also this chip declares support for some features it doesn't support
-so add a quirk to indicate that these features are broken.
+But it is harmful to pin memory if someone else is charged for the
+pin. It means it is unpredictable how much memory a sandbox can
+actually lock down.
 
-Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
-Signed-off-by: Bastian Germann <bage@debian.org>
----
- drivers/bluetooth/btrtl.c  | 120 +++++++++++++++++++++++++++++++++++--
- drivers/bluetooth/btrtl.h  |   5 ++
- drivers/bluetooth/hci_h5.c |   4 ++
- 3 files changed, 125 insertions(+), 4 deletions(-)
+Plus we have the double accounting problem, if 1000 processes in
+different cgroups open the tmpfs and all pin the memory then cgroup A
+will be charged 1000x for the memory and hit its limit, possibly
+creating a DOS from less priv to more priv
 
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index 69c3fe649ca7..97716cab7617 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -17,7 +17,11 @@
- 
- #define VERSION "0.1"
- 
-+#define RTL_CHIP_8723CS_CG	3
-+#define RTL_CHIP_8723CS_VF	4
-+#define RTL_CHIP_8723CS_XX	5
- #define RTL_EPATCH_SIGNATURE	"Realtech"
-+#define RTL_ROM_LMP_8703B	0x8703
- #define RTL_ROM_LMP_8723A	0x1200
- #define RTL_ROM_LMP_8723B	0x8723
- #define RTL_ROM_LMP_8821A	0x8821
-@@ -30,6 +34,7 @@
- #define IC_MATCH_FL_HCIREV	(1 << 1)
- #define IC_MATCH_FL_HCIVER	(1 << 2)
- #define IC_MATCH_FL_HCIBUS	(1 << 3)
-+#define IC_MATCH_FL_CHIP_TYPE	(1 << 4)
- #define IC_INFO(lmps, hcir, hciv, bus) \
- 	.match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_HCIREV | \
- 		       IC_MATCH_FL_HCIVER | IC_MATCH_FL_HCIBUS, \
-@@ -59,6 +64,7 @@ struct id_table {
- 	__u16 hci_rev;
- 	__u8 hci_ver;
- 	__u8 hci_bus;
-+	__u8 chip_type;
- 	bool config_needed;
- 	bool has_rom_version;
- 	bool has_msft_ext;
-@@ -99,6 +105,39 @@ static const struct id_table ic_id_table[] = {
- 	  .fw_name  = "rtl_bt/rtl8723b_fw.bin",
- 	  .cfg_name = "rtl_bt/rtl8723b_config" },
- 
-+	/* 8723CS-CG */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_CG,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_cg_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_cg_config" },
-+
-+	/* 8723CS-VF */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_VF,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_vf_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_vf_config" },
-+
-+	/* 8723CS-XX */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_XX,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_xx_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_xx_config" },
-+
- 	/* 8723D */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
- 	  .config_needed = true,
-@@ -208,7 +247,8 @@ static const struct id_table ic_id_table[] = {
- 	};
- 
- static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
--					     u8 hci_ver, u8 hci_bus)
-+					     u8 hci_ver, u8 hci_bus,
-+					     u8 chip_type)
- {
- 	int i;
- 
-@@ -225,6 +265,9 @@ static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
- 		if ((ic_id_table[i].match_flags & IC_MATCH_FL_HCIBUS) &&
- 		    (ic_id_table[i].hci_bus != hci_bus))
- 			continue;
-+		if ((ic_id_table[i].match_flags & IC_MATCH_FL_CHIP_TYPE) &&
-+		    (ic_id_table[i].chip_type != chip_type))
-+			continue;
- 
- 		break;
- 	}
-@@ -307,6 +350,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
- 		{ RTL_ROM_LMP_8723B, 1 },
- 		{ RTL_ROM_LMP_8821A, 2 },
- 		{ RTL_ROM_LMP_8761A, 3 },
-+		{ RTL_ROM_LMP_8703B, 7 },
- 		{ RTL_ROM_LMP_8822B, 8 },
- 		{ RTL_ROM_LMP_8723B, 9 },	/* 8723D */
- 		{ RTL_ROM_LMP_8821A, 10 },	/* 8821C */
-@@ -587,6 +631,48 @@ static int btrtl_setup_rtl8723b(struct hci_dev *hdev,
- 	return ret;
- }
- 
-+static bool rtl_has_chip_type(u16 lmp_subver)
-+{
-+	switch (lmp_subver) {
-+	case RTL_ROM_LMP_8703B:
-+		return true;
-+	default:
-+		break;
-+	}
-+
-+	return  false;
-+}
-+
-+static int rtl_read_chip_type(struct hci_dev *hdev, u8 *type)
-+{
-+	struct rtl_chip_type_evt *chip_type;
-+	struct sk_buff *skb;
-+	const unsigned char cmd_buf[] = {0x00, 0x94, 0xa0, 0x00, 0xb0};
-+
-+	/* Read RTL chip type command */
-+	skb = __hci_cmd_sync(hdev, 0xfc61, 5, cmd_buf, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		rtl_dev_err(hdev, "Read chip type failed (%ld)",
-+			    PTR_ERR(skb));
-+		return PTR_ERR(skb);
-+	}
-+
-+	if (skb->len != sizeof(*chip_type)) {
-+		rtl_dev_err(hdev, "RTL chip type event length mismatch");
-+		kfree_skb(skb);
-+		return -EIO;
-+	}
-+
-+	chip_type = (struct rtl_chip_type_evt *)skb->data;
-+	rtl_dev_info(hdev, "chip_type status=%x type=%x",
-+		     chip_type->status, chip_type->type);
-+
-+	*type = chip_type->type & 0x0f;
-+
-+	kfree_skb(skb);
-+	return 0;
-+}
-+
- void btrtl_free(struct btrtl_device_info *btrtl_dev)
- {
- 	kvfree(btrtl_dev->fw_data);
-@@ -603,7 +689,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 	struct hci_rp_read_local_version *resp;
- 	char cfg_name[40];
- 	u16 hci_rev, lmp_subver;
--	u8 hci_ver;
-+	u8 hci_ver, chip_type = 0;
- 	int ret;
- 	u16 opcode;
- 	u8 cmd[2];
-@@ -629,8 +715,14 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 	hci_rev = le16_to_cpu(resp->hci_rev);
- 	lmp_subver = le16_to_cpu(resp->lmp_subver);
- 
-+	if (rtl_has_chip_type(lmp_subver)) {
-+		ret = rtl_read_chip_type(hdev, &chip_type);
-+		if (ret)
-+			goto err_free;
-+	}
-+
- 	btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
--					    hdev->bus);
-+					    hdev->bus, chip_type);
- 
- 	if (!btrtl_dev->ic_info)
- 		btrtl_dev->drop_fw = true;
-@@ -673,7 +765,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 		lmp_subver = le16_to_cpu(resp->lmp_subver);
- 
- 		btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
--						    hdev->bus);
-+						    hdev->bus, chip_type);
- 	}
- out_free:
- 	kfree_skb(skb);
-@@ -755,6 +847,7 @@ int btrtl_download_firmware(struct hci_dev *hdev,
- 	case RTL_ROM_LMP_8761A:
- 	case RTL_ROM_LMP_8822B:
- 	case RTL_ROM_LMP_8852A:
-+	case RTL_ROM_LMP_8703B:
- 		return btrtl_setup_rtl8723b(hdev, btrtl_dev);
- 	default:
- 		rtl_dev_info(hdev, "assuming no firmware upload needed");
-@@ -795,6 +888,19 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
- 		rtl_dev_dbg(hdev, "WBS supported not enabled.");
- 		break;
- 	}
-+
-+	switch (btrtl_dev->ic_info->lmp_subver) {
-+	case RTL_ROM_LMP_8703B:
-+		/* 8723CS reports two pages for local ext features,
-+		 * but it doesn't support any features from page 2 -
-+		 * it either responds with garbage or with error status
-+		 */
-+		set_bit(HCI_QUIRK_BROKEN_LOCAL_EXT_FEATURES_PAGE_2,
-+			&hdev->quirks);
-+		break;
-+	default:
-+		break;
-+	}
- }
- EXPORT_SYMBOL_GPL(btrtl_set_quirks);
- 
-@@ -953,6 +1059,12 @@ MODULE_FIRMWARE("rtl_bt/rtl8723b_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723b_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723bs_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723bs_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8761a_fw.bin");
-diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
-index ebf0101c959b..349d72ee571b 100644
---- a/drivers/bluetooth/btrtl.h
-+++ b/drivers/bluetooth/btrtl.h
-@@ -14,6 +14,11 @@
- 
- struct btrtl_device_info;
- 
-+struct rtl_chip_type_evt {
-+	__u8 status;
-+	__u8 type;
-+} __packed;
-+
- struct rtl_download_cmd {
- 	__u8 index;
- 	__u8 data[RTL_FRAG_LEN];
-diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
-index 6455bc4fb5bb..e90670955df2 100644
---- a/drivers/bluetooth/hci_h5.c
-+++ b/drivers/bluetooth/hci_h5.c
-@@ -936,6 +936,8 @@ static int h5_btrtl_setup(struct h5 *h5)
- 	err = btrtl_download_firmware(h5->hu->hdev, btrtl_dev);
- 	/* Give the device some time before the hci-core sends it a reset */
- 	usleep_range(10000, 20000);
-+	if (err)
-+		goto out_free;
- 
- 	btrtl_set_quirks(h5->hu->hdev, btrtl_dev);
- 
-@@ -1100,6 +1102,8 @@ static const struct of_device_id rtl_bluetooth_of_match[] = {
- 	  .data = (const void *)&h5_data_rtl8822cs },
- 	{ .compatible = "realtek,rtl8723bs-bt",
- 	  .data = (const void *)&h5_data_rtl8723bs },
-+	{ .compatible = "realtek,rtl8723cs-bt",
-+	  .data = (const void *)&h5_data_rtl8723bs },
- 	{ .compatible = "realtek,rtl8723ds-bt",
- 	  .data = (const void *)&h5_data_rtl8723bs },
- #endif
--- 
-2.39.1
-
+Jason
