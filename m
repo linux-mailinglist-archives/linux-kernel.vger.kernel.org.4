@@ -2,95 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7427768C279
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFA468C1F9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjBFQHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S231283AbjBFPnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjBFQHI (ORCPT
+        with ESMTP id S230157AbjBFPmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:07:08 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A01E7A88;
-        Mon,  6 Feb 2023 08:07:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=6yhmU5Aj7NOteiUxigfkd0O6jgTm4huNWcrZ7HcVw4s=; b=2jXFx1bj0ZR6HbUWHUe2JKIOsY
-        cfIeL/ydCyPNIjXkWxaa5a1L2Rjwm8cCwAXz6pmZJhEafa43Tzhsc9tpiU09Z/w6KbHH8qwKT3kC6
-        NpZgYl4kXOUOJdkb4jMteQlCMhPaFwAJnHP57sWlYbLGNGP8iKcigzYUfsVhxYsIiBLs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pP3ay-004DSq-5P; Mon, 06 Feb 2023 16:39:52 +0100
-Date:   Mon, 6 Feb 2023 16:39:52 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 00/23] net: add EEE support for KSZ9477 and
- AR8035 with i.MX6
-Message-ID: <Y+EfSKRwQMRgEurL@lunn.ch>
-References: <20230201145845.2312060-1-o.rempel@pengutronix.de>
- <20230204001332.dd4oq4nxqzmuhmb2@skbuf>
- <20230206054713.GD12366@pengutronix.de>
- <20230206141038.vp5pdkjyco6pyosl@skbuf>
+        Mon, 6 Feb 2023 10:42:44 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BDD2707
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:41:48 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id l7so4854068ilf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 07:41:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ya1iSK0PwE6HxUwFfuaJF4yxZVg4nHtKlcACKsLmRGU=;
+        b=W/YkJki6ZwlXviPJ614uzFdt2BX/wHzE5Skxgb38EnN1zNcf707VfP+vq4SIYuFXiu
+         LiXSzWangkaoiF4lXCarJh274pb36EjTfBBLjteO2eaVrqT3Mm6+UgHx8Wa6DPCrUuge
+         RHhjM55RBX3kjlSfltd6h5n7Q0hOQYnkzXEgdMzMXyn2GoUV/AKfXbqdnXWhZKLdnESp
+         eOHjve0t0fskr5APXwdt8xUGfyhUOx1rWxU6jCKCle6aFXSHTpD4CryrZJcns3EH0Pbh
+         8mCV5jjmwQcYqVjjRfTm3lv79Ijng+S6AoxJdzESt32cONgkf5olvcsWK4xiQCJsIsSe
+         n5ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ya1iSK0PwE6HxUwFfuaJF4yxZVg4nHtKlcACKsLmRGU=;
+        b=d0gkOdUsWM3uNuG7RiE/RwCiuh3VjBSL10Oqhj6T1TuhcrcKZy64wvdgTUzh21h68L
+         yVzUfRIVT9YbTBFTYmAK/BbRXjnyfqCSDJCvmH9KNng9HI5+NcOrrgtKugb2NHw9brhU
+         EKE/ByQ1S4LNrGHuBIZP6SSEIh9jx9dbl6xC5/FpDwROaqYKRWxHq1747R1jxMmoek0i
+         YGb79KVZDz8Y/GAuCYI/F1U07Hcrha5ZzimW5LOueTZxM/7xoU6HMTOY08u2wQltLYDE
+         SZrnohVwnifJgW9ImO24ZLev/7W/PsGaNgHtwtbGKS1m9Ms7fXrY82l5yM5u/HobZ2ZL
+         yd5A==
+X-Gm-Message-State: AO0yUKX7Yl9gAyKY1W+Ya3TyB7g7M2Nv48g9BOnevXC/LaGZZ6JYxSie
+        y2wQLyujeo6h9Ua7YLVarCo+gQ==
+X-Google-Smtp-Source: AK7set9xFUDytMkMm3RWCn615aTLybOLKq1Z55Oif0udR87hG69FUrkkSit5QKSJolKqkiDJt7eRKw==
+X-Received: by 2002:a05:6e02:1a44:b0:313:d748:8f78 with SMTP id u4-20020a056e021a4400b00313d7488f78mr782710ilv.18.1675698072954;
+        Mon, 06 Feb 2023 07:41:12 -0800 (PST)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id o10-20020a02c6aa000000b0038a3b8aaf11sm3547972jan.37.2023.02.06.07.41.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 07:41:12 -0800 (PST)
+Message-ID: <4a584563-1fb7-22fa-5e16-e0cf5e88b76b@linaro.org>
+Date:   Mon, 6 Feb 2023 09:41:11 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206141038.vp5pdkjyco6pyosl@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 10/27] gunyah: rsc_mgr: Add VM lifecycle RPC
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>
+Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-11-quic_eberman@quicinc.com>
+ <4db1c760-10d9-3a22-106a-dda141dd5381@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <4db1c760-10d9-3a22-106a-dda141dd5381@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > What is the code flow through the kernel with EEE? I wasn't able to find
-> > > a good explanation about it.
-> > > 
-> > > Is it advertised by default, if supported? I guess phy_advertise_supported()
-> > > does that.
+On 2/2/23 6:46 AM, Srinivas Kandagatla wrote:
+>> +    ret = gh_rm_call(rm, message_id, &req_payload, 
+>> sizeof(req_payload), &resp, &resp_size);
+>> +    if (!ret && resp_size) {
+> 
+> Am struggling to understand these type of checks in success case, when a 
+> command is not expecting any response why are we checking for response 
+> here, This sounds like a bug in either RM or hypervisor.
+> 
+> Or Is this something that happens due to some firmware behaviour?
+> Could you elobrate on this.
 
-The old flow is poorly defined. If the MAC supports EEE, it should
-call phy_init_eee(). That looks at the results of auto-neg and returns
-if EEE has been negotiated or not.
+What I think you're talking about is error checking even when
+it's very clear something "can't happen."  It's a pattern I've
+seen in Qualcomm downstream code, and I believe sometimes it
+is done as "best practice" to avoid warnings from security scans.
+(I might be wrong about this though.)
 
-However, i'm not aware of any code which disables by default the
-advertisement of EEE, or actually enables the negotiation of EEE. So
-there are probably a number of PHYs which are EEE capable, connected
-to a MAC driver which does not call phy_init_eee() and are advertising
-EEE and negotiating EEE. There might also be a subset of that which
-are actually doing EEE, despite not calling phy_init_eee().
+I think your underlying point though is that we can just assume
+success means "truly successful," so there's no reason to do any
+additional sanity checks.  We *assume* the hardware is doing the
+correct thing (if it's not, we might as well assume it does
+*nothing* right).
 
-So the current code is not good, and there is a danger we introduce
-power regressions as we sort this out.
+So as a very general statement, I think all checks of this type
+should go away (and I think Srini would agree).
 
-The current MAC/PHY API is pretty broken. We probably should be
-handling this similar to pause. A MAC which supports pause should call
-phy_support_asym_pause() or phy_support_sym_pause() which will cause
-the PHY to advertise its supported Pause modes. So we might want to
-add a phy_support_eee()? We then want the result of EEE negotiation
-available in phydev for when the link_adjust() callback is called.
-
-A quick look at a few MAC drivers seems to indicate many are getting
-it wrong and don't actually wait for the result of the auto-neg....
-
-   Andrew
-
+					-Alex
