@@ -2,211 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8083168BF97
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C253068BFAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbjBFOIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:08:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
+        id S231319AbjBFOMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:12:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjBFOHv (ORCPT
+        with ESMTP id S231535AbjBFOLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:07:51 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09EC2BEC9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:05:29 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o36so8763355wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 06:05:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l1sBDHSdASz4ecLzalMdlfELS8RCcYMZ2sk1AegZ7C4=;
-        b=gUDkn0Nk6osoDg6kBIqb4HgThjeRoU3B4yStY9UPgtkSB4y1icRX/nUz/3C0iAIpEm
-         MEDJnt9vnKjADTSJTi/kI8xh0D1PAvXE7gH5tvVQcf8lgVPHzvsc5HnaQOH1XCzK8HqA
-         iLF14vnXPg2R+rqK6qe3qmaCI98vVcpebABOShNnLKS3xsvXq448T7tqXjuyVVxuKx9g
-         yMS5bniysbumzLDbyVXjr/7YPXLCHBoUeOW+P4N/JovSFBu+zje1qoxWataFiEkxgOE+
-         ofZGWBbvJfP+qu1nMsNHPX/6rHYDCqnit3Br9d1aFXvJkdUEMDG8tGXoizjtkjstYorr
-         zWKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l1sBDHSdASz4ecLzalMdlfELS8RCcYMZ2sk1AegZ7C4=;
-        b=5sQ5v2liY/IUzv3KUgOpLMx9mxexd/4Qb/snMyH9inYz+wyD4V2xX5ETrI7VZhsCQO
-         G9YGr+ynOonJ7fJpfWtHUWj4YHd5UyIxwKs5/6RYLogshc9RmHJ7FX7gzdcjjellCatO
-         8HCrXcmHsL8o5Yg4kTBSn6FsK9Q2aLWLgSYbtYu2EPo7hC+Ci1w8g8TqRagZdmTQgBwx
-         ETN25F9n4av/JozSMp8E62nwRNx4ngPB7aHeK40djKOvECKYQFJIH/TyZZV1mn1JRwfJ
-         J1A146d7fAlqA6hv3JWCUXC2OOBO7L9W3Wi59RDAcFZqvQ8tp5yeMQGhz+TVyX9AFGeL
-         gKyg==
-X-Gm-Message-State: AO0yUKWhRQayKdRa1viPEWpYhbSXc2UUA8kxccTg/pnKSibNzlQSoDKO
-        Jdk4L7AuGEp80GZazgIcTxNIAQ==
-X-Google-Smtp-Source: AK7set8CdDqbiahcj1npFpmbebayGsvVRXrv4P1LiTprnhax7cXuxebkMZ+iX0ubTVrxQMT9rjIupw==
-X-Received: by 2002:a05:600c:3849:b0:3d5:365b:773e with SMTP id s9-20020a05600c384900b003d5365b773emr20826426wmr.39.1675692304690;
-        Mon, 06 Feb 2023 06:05:04 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003dc34edacf8sm15917337wmc.31.2023.02.06.06.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 06:05:04 -0800 (PST)
-Date:   Mon, 6 Feb 2023 16:05:02 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v7 08/12] phy: qcom-qmp-pcie: Add support for SM8550 g3x2
- and g4x2 PCIEs
-Message-ID: <Y+EJDofgt6I/abyp@linaro.org>
-References: <20230203081807.2248625-1-abel.vesa@linaro.org>
- <20230203081807.2248625-9-abel.vesa@linaro.org>
- <Y9zU2jBdSD72W28F@hovoldconsulting.com>
+        Mon, 6 Feb 2023 09:11:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC885257
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:09:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675692510;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=meB2OizL/cB9S6SgA7lRQbUSecNILy6AA+MWTSh41HQ=;
+        b=hIxbtiZb1Nuowj+C8uU5It+kM1DMETAtHJ1z6us0LAQSFHp4rOFLWQXJOZ956384jCdYsI
+        uIfGH9U9ESbjt/2lr/Mf3U+a/gV7e63Xy9IaG9IZJ0bHGxGxvfMxYnSmTgQHuh0LVQTKsM
+        qaheQLPQDhZY2Aq+kPzjdixNeoJgxnQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-sB-npgPiNNifwFyoTVeRSA-1; Mon, 06 Feb 2023 09:08:28 -0500
+X-MC-Unique: sB-npgPiNNifwFyoTVeRSA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 658D93815EE0;
+        Mon,  6 Feb 2023 14:08:28 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.33.36.105])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D6E222026D37;
+        Mon,  6 Feb 2023 14:08:26 +0000 (UTC)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Eder Zulian <ezulian@redhat.com>
+Subject: [RFC PATCH v2] sched/deadline: Add more reschedule cases to prio_changed_dl()
+Date:   Mon,  6 Feb 2023 14:06:12 +0000
+Message-Id: <20230206140612.701871-1-vschneid@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9zU2jBdSD72W28F@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-03 10:33:14, Johan Hovold wrote:
-> On Fri, Feb 03, 2023 at 10:18:03AM +0200, Abel Vesa wrote:
-> > Add the SM8550 both g4 and g3 configurations. In addition, there is a
-> > new "lane shared" table that needs to be configured for g4, along with
-> > the No-CSR list of resets.
-> 
-> Could you add a comment about the new nocsr reset and how it is used
-> here?
->  
-> > Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> > 
-> > This patchset relies on the following patchset:
-> > https://lore.kernel.org/all/20230117224148.1914627-1-abel.vesa@linaro.org/
-> > 
-> > The v6 of this patch is:
-> > https://lore.kernel.org/all/20230202123902.3831491-9-abel.vesa@linaro.org/
-> > 
-> > Changes since v6:
-> >  * none
-> > 
-> > Changes since v5:
-> >  * renmaed the no-CSR reset to "phy_nocsr" as discussed off-list with
-> >    Bjorn and Johan
-> > 
-> > Changes since v4:
-> >  * dropped _serdes infix from ln_shrd table name and from every ln_shrd
-> >    variable name
-> >  * added hyphen between "no CSR" in both places
-> >  * dropped has_ln_shrd_serdes_tbl
-> >  * reordered qmp_pcie_offsets_v6_20 by struct members
-> >  * added rollback for no-CSR reset in qmp_pcie_init fail path
-> >  * moved ln_shrd offset calculation after port_b
-> > 
-> > Changes since v3:
-> >  * added Dmitry's R-b tag
-> > 
-> > Changes since v2:
-> >  * none
-> > 
-> > Changes since v1:
-> >  * split all the offsets into separate patches, like Vinod suggested
-> > 
-> > 
-> >  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 367 ++++++++++++++++++++++-
-> >  1 file changed, 365 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > index 907f3f236f05..ff6c0b526fde 100644
-> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
-> > @@ -1506,6 +1506,234 @@ static const struct qmp_phy_init_tbl sm8450_qmp_gen4x2_pcie_ep_pcs_misc_tbl[] =
-> >  	QMP_PHY_INIT_CFG(QPHY_V5_20_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x08),
-> >  };
-> 
-[...]
-> 
-> >  
-> > @@ -2214,6 +2469,68 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
-> >  	.phy_status		= PHYSTATUS_4_20,
-> >  };
-> >  
-> > +static const struct qmp_phy_cfg sm8550_qmp_gen3x2_pciephy_cfg = {
-> > +	.lanes = 2,
-> > +
-> > +	.offsets		= &qmp_pcie_offsets_v5,
-> 
-> Did you really intend to use the v5 offsets here? It seems you use v6.20
-> defines in the tables below. This may work but it looks a little strange
-> and does not match how we name and use these resources for the other
-> SoCs (e.g. reusing structures and defines from older IP revisions is
-> fine, but not necessarily the other way round).
+I've been tracking down an issue on a ~5.17ish kernel where:
 
-So here is what is happening here. The actual IP block version is 6 for
-the g3x2. The offsets of the tables are the same as on v5, but the
-actual offsets of some of the registers within those tables are
-entirely different. Now, if you compare the PCS PCIe offsets (v5 vs v6)
-you'll notice that all v6 registers currently added are the same as v5
-(both names and values). With that in mind, we still need to keep the v6
-offsets for the case when a new register, that might not be in v5, might
-be added later on. As for the table offsets, since they look the same we
-should probably not add a dedicated v6 one.
-> 
-> I assume this means that the gen3 PHY is really is really v5 and using
-> a subset of the v6.20 defines happens to works as they are in fact
-> identical with respect to that subset?
-> 
-> As you have dedicated gen3x2 tables, perhaps those should use the v5
-> defines?
-> 
-> And at least add a comment about this in the commit message.
-> 
-> > +
-> > +	.tbls = {
-> > +		.serdes		= sm8550_qmp_gen3x2_pcie_serdes_tbl,
-> > +		.serdes_num	= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_serdes_tbl),
-> > +		.tx		= sm8550_qmp_gen3x2_pcie_tx_tbl,
-> > +		.tx_num		= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_tx_tbl),
-> > +		.rx		= sm8550_qmp_gen3x2_pcie_rx_tbl,
-> > +		.rx_num		= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_rx_tbl),
-> > +		.pcs		= sm8550_qmp_gen3x2_pcie_pcs_tbl,
-> > +		.pcs_num	= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_pcs_tbl),
-> > +		.pcs_misc	= sm8550_qmp_gen3x2_pcie_pcs_misc_tbl,
-> > +		.pcs_misc_num	= ARRAY_SIZE(sm8550_qmp_gen3x2_pcie_pcs_misc_tbl),
-> > +	},
-> > +	.clk_list		= sc8280xp_pciephy_clk_l,
-> > +	.num_clks		= ARRAY_SIZE(sc8280xp_pciephy_clk_l),
-> > +	.reset_list		= sdm845_pciephy_reset_l,
-> > +	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-> > +	.vreg_list		= qmp_phy_vreg_l,
-> > +	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-> > +	.regs			= pciephy_v5_regs_layout,
-> > +
-> > +	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-> > +	.phy_status		= PHYSTATUS,
-> > +};
-> > +
+  CPUx                           CPUy
 
-[...]
+  <DL task p0 owns an rtmutex M>
+  <p0 depletes its runtime, gets throttled>
+  <rq switches to the idle task>
+				 <DL task p1 blocks on M, boost/replenish p0>
+				 <No call to resched_curr() happens here>
+
+  [idle task keeps running here until *something*
+   accidentally sets TIF_NEED_RESCHED]
+
+On that kernel, it is quite easy to trigger using rt-tests's deadline_test
+[1] with the test running on isolated CPUs (this reduces the chance of
+something unrelated setting TIF_NEED_RESCHED on the idle tasks, making the
+issue even more obvious as the hung task detector chimes in).
+
+I haven't been able to reproduce this using a mainline kernel, even if I
+revert
+
+  2972e3050e35 ("tracing: Make trace_marker{,_raw} stream-like")
+
+which gets rid of the lock involved in the above test, *but* I cannot
+convince myself the issue isn't there from looking at the code.
+
+Make prio_changed_dl() issue a reschedule if the current task isn't a
+deadline one. While at it, ensure a reschedule is emitted when a
+queued-but-not-current task gets boosted with an earlier deadline that
+current's.
+
+[1]: https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+---
+RFCv1 -> RFCv2
+++++++++++++++
+o Fixed UP build issue (Juri)
+---
+ kernel/sched/deadline.c | 42 ++++++++++++++++++++++++++---------------
+ 1 file changed, 27 insertions(+), 15 deletions(-)
+
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 0d97d54276cc8..71b24371a6f77 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -2663,17 +2663,20 @@ static void switched_to_dl(struct rq *rq, struct task_struct *p)
+ static void prio_changed_dl(struct rq *rq, struct task_struct *p,
+ 			    int oldprio)
+ {
+-	if (task_on_rq_queued(p) || task_current(rq, p)) {
++	if (!task_on_rq_queued(p))
++		return;
++
+ #ifdef CONFIG_SMP
+-		/*
+-		 * This might be too much, but unfortunately
+-		 * we don't have the old deadline value, and
+-		 * we can't argue if the task is increasing
+-		 * or lowering its prio, so...
+-		 */
+-		if (!rq->dl.overloaded)
+-			deadline_queue_pull_task(rq);
++	/*
++	 * This might be too much, but unfortunately
++	 * we don't have the old deadline value, and
++	 * we can't argue if the task is increasing
++	 * or lowering its prio, so...
++	 */
++	if (!rq->dl.overloaded)
++		deadline_queue_pull_task(rq);
+ 
++	if (task_current(rq, p)) {
+ 		/*
+ 		 * If we now have a earlier deadline task than p,
+ 		 * then reschedule, provided p is still on this
+@@ -2681,15 +2684,24 @@ static void prio_changed_dl(struct rq *rq, struct task_struct *p,
+ 		 */
+ 		if (dl_time_before(rq->dl.earliest_dl.curr, p->dl.deadline))
+ 			resched_curr(rq);
+-#else
++	} else {
+ 		/*
+-		 * Again, we don't know if p has a earlier
+-		 * or later deadline, so let's blindly set a
+-		 * (maybe not needed) rescheduling point.
++		 * Current may not be deadline in case p was throttled but we
++		 * have just replenished it (e.g. rt_mutex_setprio()).
++		 *
++		 * Otherwise, if p was given an earlier deadline, reschedule.
+ 		 */
+-		resched_curr(rq);
+-#endif /* CONFIG_SMP */
++		if (!dl_task(rq->curr) ||
++		    dl_time_before(p->dl.deadline, rq->curr->dl.deadline))
++			resched_curr(rq);
+ 	}
++#else
++	/*
++	 * We don't know if p has a earlier or later deadline, so let's blindly
++	 * set a (maybe not needed) rescheduling point.
++	 */
++	resched_curr(rq);
++#endif
+ }
+ 
+ DEFINE_SCHED_CLASS(dl) = {
+-- 
+2.31.1
+
