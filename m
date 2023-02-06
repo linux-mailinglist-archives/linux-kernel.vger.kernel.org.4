@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCA668BA3C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A728068BA2F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:30:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjBFKad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:30:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        id S230341AbjBFKa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:30:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjBFK3k (ORCPT
+        with ESMTP id S231209AbjBFK3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Feb 2023 05:29:40 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5942C21A2E
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57D222DCC
         for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:28:50 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so6874900wms.0
+Received: by mail-wm1-x32f.google.com with SMTP id bg26so8311714wmb.0
         for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 02:28:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u+yPE9G7Uhxczh+UksvFIhkwl0eS8Qu86GXZF1wgA0Q=;
-        b=cwWenJ2zwILkHpUzfj5tmZCisYTZ47GOvi5ur3CgjrxuYgl+WnHKJjuxhsvigQ/szp
-         Cfpa+hfeaUU8Bb+ppxtzG3oMg7MlxxwG38v5uoUHqtAukW9nI0T5FQz5iwyL0mM3OMLU
-         JhsP7r9+0xNM8Kibrx780gAeAn8i2aXOwaBMZNK6pMUjEy1XFFA0rc0Ea5cs6OcWwBmR
-         24qUd0mwFnfktOTCfb34oEDUN19F0CEeE0Q83HC5liZ5wmjBJX74VuvEAGiaZZPllUFk
-         IOClUNx4GvULkAEnOmy9VTUq0RAj8vKxt2yc4Zcp9XMIipO38jQfa+cHO1aVmjdvDNRX
-         TUpQ==
+        bh=0+69JoOpEaMXCrh8z1bYxjhPx/3CJW01FzjKrt1Ta/U=;
+        b=lKd8a6zJfcZD6MCQXiRB3KOCNxIZmbAKRcdqIWJIsz74F2W8067bQI+eLevBGS7FKl
+         cFjJjJpOlq70ikrpUx6JiZlC8vpFrWUJqy1iF4zt1vcZfUDqmqPM8zS6kSiorkKvtU9l
+         tVo4hs7TIMygVPUCaK03N7jSsveysoGdxMgKphdOdKcSgi1T6+RTU80aXJHUNTqKIccK
+         qpvG6lXgwzYKNB3s8cC8+fm/GbIq37xPEV583TpbvCnwWcNPCaOdrquekTjZvVeUUx5q
+         iDCCuE0+0q54+bX9p6rhiDc75ZI7SJrDJV8jBALjee/A6EZWXU6oSihRljiECYvuE2HR
+         15IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u+yPE9G7Uhxczh+UksvFIhkwl0eS8Qu86GXZF1wgA0Q=;
-        b=fwv8lwivZmLBQ3Ikfyo7TLZS8L5JZgG4ar9CttpkR7MpnIgLq2KEnLN6pey8TIRq1p
-         nPkvPg4w+7VxwpRHu6cV4XLKSP+EqDB0JVMaPrSPlm2TLekpT8nV4IMjB87hLGsXQ/30
-         FaYSqv9sb/2ncbBpH0frx72FLi8065Rg1OVrXn3M47ph0JNVrNTs7fWYuKVxlQ2iReIG
-         OhwxfteUvbCc567a5o01+G6r0J783g7/QRsBfXVbvaM1LnmT+1Sg8kQVO3V9JTGOTdBd
-         8IMyowOF1F/d6SYXQi0Zjk57Rfaz7ZZEAbIsFi5JYlLA3bnTw5INVlD+q8Z7pdierxz1
-         EMzQ==
-X-Gm-Message-State: AO0yUKWlyUhrUypIwBHiqciW2kzG2lIlNU8kVz/xsyoaXct1SFk+8p+A
-        oNRczSzAzBRlF617W13JHzAQng==
-X-Google-Smtp-Source: AK7set9qQzKLLmB3futGbLABeVtgAFZd+pN3bbJw1z6S8LZFOMGPhTcg7XpZXydUVZ8ZI6MuazKBow==
-X-Received: by 2002:a05:600c:2e06:b0:3dd:1a8b:7374 with SMTP id o6-20020a05600c2e0600b003dd1a8b7374mr18065713wmf.5.1675679327621;
-        Mon, 06 Feb 2023 02:28:47 -0800 (PST)
+        bh=0+69JoOpEaMXCrh8z1bYxjhPx/3CJW01FzjKrt1Ta/U=;
+        b=kOrkygaCyomwGvhInM9fbgKkB7+wGupWC4NtsENluoZTkL1fo964tDAn9nm11HzCEu
+         uk3/CEDh7sTItYq3azJ4gh2fCfkpyA4L6acTh/3IJD8KcbmTyC47HrAcu10+ZIsxp9HX
+         UQde+0Rzf2wLgu0YdK0H5hntd+byaC7qaKYL/31Lmc7EzNHDaJ+ofx5lKWlmqL5/U7HK
+         ieUzYXFYmm0eOD/DDujz5O2ZIHvVcX+T6+EinT1geFg77lUZsh3AqFYMReO0S18bIfop
+         r5cfrM6J44oYJ59AIlpa3RbSaCtbSnOD2Y4ANK88GsPZZ7irKxIlUVEAIol81juhWlUO
+         TyUw==
+X-Gm-Message-State: AO0yUKXdYqh7Nf2sWH4Fc8cXNqvbN0sW6YDKA1RcluV9XnZMm0oLi0+4
+        /nwvj0BQAvAh25v6d24i08YeriJ83IH2aaZW
+X-Google-Smtp-Source: AK7set+Wd6f2qUN14TQ9eTwMYfVDMVGK7kDUI1P56ObVFxDcnsrIC9XqBLtAAegDoaGK5SaUmoX52Q==
+X-Received: by 2002:a05:600c:34d5:b0:3dc:506e:6559 with SMTP id d21-20020a05600c34d500b003dc506e6559mr18539182wmq.37.1675679328825;
+        Mon, 06 Feb 2023 02:28:48 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.46
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003de77597f16sm11002446wmo.21.2023.02.06.02.28.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 02:28:46 -0800 (PST)
+        Mon, 06 Feb 2023 02:28:48 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
+Cc:     linux-kernel@vger.kernel.org,
+        Colin Ian King <colin.i.king@gmail.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [RESEND PATCH 27/37] nvmem: core: return -ENOENT if nvmem cell is not found
-Date:   Mon,  6 Feb 2023 10:27:49 +0000
-Message-Id: <20230206102759.669838-28-srinivas.kandagatla@linaro.org>
+Subject: [RESEND PATCH 28/37] nvmem: layouts: Fix spelling mistake "platforn" -> "platform"
+Date:   Mon,  6 Feb 2023 10:27:50 +0000
+Message-Id: <20230206102759.669838-29-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
 References: <20230206102759.669838-1-srinivas.kandagatla@linaro.org>
@@ -72,43 +72,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-Prior to commit e894d5ad177c ("nvmem: core: add an index parameter to
-the cell") of_nvmem_cell_get() would return -ENOENT if the cell wasn't
-found. Particularly, if of_property_match_string() returned -EINVAL,
-that return code was passed as the index to of_parse_phandle(), which
-then detected it as invalid and returned NULL. That led to an return
-code of -ENOENT.
+There is a spelling mistake in the literal string. Fix it.
 
-With the new code, the negative index will lead to an -EINVAL of
-of_parse_phandle_with_optional_args() which pass straight to the
-caller and break those who expect an -ENOENT.
-
-Fix it by always returning -ENOENT.
-
-Fixes: e894d5ad177c ("nvmem: core: add an index parameter to the cell")
-Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Michael Walle <michael@walle.cc>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/core.c | 2 +-
+ drivers/nvmem/layouts/onie-tlv.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 81ad6a4c4f86..30057b0094a2 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -1346,7 +1346,7 @@ struct nvmem_cell *of_nvmem_cell_get(struct device_node *np, const char *id)
- 						  "#nvmem-cell-cells",
- 						  index, &cell_spec);
- 	if (ret)
--		return ERR_PTR(ret);
-+		return ERR_PTR(-ENOENT);
- 
- 	if (cell_spec.args_count > 1)
- 		return ERR_PTR(-EINVAL);
+diff --git a/drivers/nvmem/layouts/onie-tlv.c b/drivers/nvmem/layouts/onie-tlv.c
+index 074c7c700845..767f39fff717 100644
+--- a/drivers/nvmem/layouts/onie-tlv.c
++++ b/drivers/nvmem/layouts/onie-tlv.c
+@@ -48,7 +48,7 @@ static const char *onie_tlv_cell_name(u8 type)
+ 	case 0x27:
+ 		return "label-revision";
+ 	case 0x28:
+-		return "platforn-name";
++		return "platform-name";
+ 	case 0x29:
+ 		return "onie-version";
+ 	case 0x2A:
 -- 
 2.25.1
 
