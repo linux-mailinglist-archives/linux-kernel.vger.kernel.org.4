@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E140268B757
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B1368B75D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjBFI3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 03:29:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S229547AbjBFIaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 03:30:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjBFI3D (ORCPT
+        with ESMTP id S229737AbjBFIaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:29:03 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CA9193D5
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:29:03 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id k6so11848011vsk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 00:29:02 -0800 (PST)
+        Mon, 6 Feb 2023 03:30:05 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FE01A4A1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:30:03 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id bs10so5726095vkb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 00:30:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k5Jhh41xh/9s5BwvKBlJB3IcR8X3N5w01ZV/SyRF93Y=;
-        b=mUdCCUlpPs82UcEc0LcK949hJZbEhSEsEoO0gQzwORczBdfIMisDTm3iOD+2YFyHOe
-         i8DA234roBj+toW/VaCdnVMDOVZdjzCn/6TyaB0NXymNskkiEp3I7riVVScbV2R9jk26
-         IwuzYOWbvh+D7Ow70WhzXuOH65mjkEmWgh0tJrwjEcCsWq9qfguMXRRLUGPIyOuqH/PC
-         TmnXNDtyjRM9KiOjezNCpakSrpb6maWVRruJ0LrJdY0jVscGHRd+QfxVSVJtnyuyMAkj
-         Jlt3cEi2LCuFwgzTVHXdwvN3CW1IP+RjZr68zU5OHhJem8/Pz58s5yBEoVePPwwTl0d7
-         mndQ==
+        bh=3YQOnjyIZ+V6xLKJZ1YLEXo53MRC6JV/Xmhkcv/e+TM=;
+        b=MQN+c25kEyBeXrZHH+tSGiKhRiSbUCpHHk1eJKegt5dyLkp6KcQLyurDcBrultH4pA
+         0RJSWwmESVLHgtRWJ65hZ5QZD6i6TI/uqOrbdMG0dzxbU82jo9wFGVOogVWpZnpLqfPX
+         edgZLRoQyRj2XE35PtvyK/LjBEGYJktHX+1lb58vTOxFLWXmbtnurrJ+KaUnrS9OF+F/
+         +75cUFACE3Lxf9cDSFXUmh31hvOOKhsr5Iwr22hRpKT+FG7LNUsY05VeGisn2OQIyYw+
+         vTY7Tx4BeCJIupHmCp2R1R1p6UDOknAgFuGivK8ITIpGuddXJIyBydHGLoJoGL/MRf7j
+         g05g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k5Jhh41xh/9s5BwvKBlJB3IcR8X3N5w01ZV/SyRF93Y=;
-        b=qX5kFU1PBsI0wnUHoJsERGiN1gdT07kcIlRuglEKSBEBl3S0Or8fblxPQ5WgXy4cpt
-         kc0/HRwjosHkiHUpdS3FktqPv1coKqqij5ZPlB2mDy+cYbQrzy6bOABKGAVWGn+zr5wq
-         ymzTkaaFtde0ePYp/or0WgZxCzmPDvnC8pxIPYoVzuFb0O3+G9k3ACZyaUaSceQAtiMX
-         Eg/sOtYw1dz9Wmdc8x8si2oxqPJ9Xtx7kcgZas7PC+F1V99CPZh3Ia24A0ENNtKyZNkn
-         DF8FLMnDlCZSUF1DSTNGCfDFA84um4r56vt+OCOzfANemrhc3CZpGyhXO02tOD8/L2mm
-         XInw==
-X-Gm-Message-State: AO0yUKWmJQ+IDpOZ4elq8ayiS7d2mjcygoEfdkJ/aILADyw0tnXcq5NA
-        C3pHyBeymgz0sW9a0S2GEjXeIg+qlESot0uMRAB4+w==
-X-Google-Smtp-Source: AK7set9w9u0DXxvImFRGg0tVcUV0hVq9vnItrG+34sfMND2qX8rbkTt3fj6KChTTnBtx8wRJ9uYoYRir8X9+6ho+sdQ=
-X-Received: by 2002:a05:6102:2e1:b0:3f1:6692:f144 with SMTP id
- j1-20020a05610202e100b003f16692f144mr3162124vsj.67.1675672141917; Mon, 06 Feb
- 2023 00:29:01 -0800 (PST)
+        bh=3YQOnjyIZ+V6xLKJZ1YLEXo53MRC6JV/Xmhkcv/e+TM=;
+        b=pQiu5pb+HsG/WwC/Z/B2J/XEq+AneCjeNDYlUHY0DfTP52Alp8sydGV/VeNT1cLYrd
+         4SOZ2jiiMrpeLfIAPq7PLDZAxm/nsGhT5VmW8O/HBEY0H/mPJfDjVfBadeaslslg+cKR
+         rADk+u8JN9i21PjnFdVpXtITpMO3aTYKOKx4+Nq/67kEPDBs5/CD2KCxskx99MZZa57e
+         yyxNYHfjRGt9f7LRAz9yvm5rlcPbCEgn2xGspuquF8KWipbzSqRUNKU/lftjD2bi/+06
+         cSSxXz4vZxYh0UrAsKrc7J1IkZFQ008sLLw7+CYmDvdmjzfe3n8Db+oFXIQj8u2e/DQU
+         TFSg==
+X-Gm-Message-State: AO0yUKX5M04t3uUDVK8wH+Lx0oN+2NhFz+w9NrA1n37S5wlJHh8hHbTX
+        YSkNqSTCJoUm3VTJZFR+8zHYow5L87OGCIYLUTrRMfZLxbm735fH
+X-Google-Smtp-Source: AK7set9T8AjfIySkEm30Vz2m+oaHw7+ERgX1tbl/naKvtfQPvCTQA3eEbNYLakoC4Tfsi1sMNOM8pIT6zPu7biAnK38=
+X-Received: by 2002:a05:6122:2ba:b0:3dd:f386:1bca with SMTP id
+ 26-20020a05612202ba00b003ddf3861bcamr2887716vkq.33.1675672202754; Mon, 06 Feb
+ 2023 00:30:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20230131-tuntap-sk-uid-v3-0-81188b909685@diag.uniroma1.it> <20230131-tuntap-sk-uid-v3-1-81188b909685@diag.uniroma1.it>
-In-Reply-To: <20230131-tuntap-sk-uid-v3-1-81188b909685@diag.uniroma1.it>
+References: <20230131-tuntap-sk-uid-v3-0-81188b909685@diag.uniroma1.it> <20230131-tuntap-sk-uid-v3-2-81188b909685@diag.uniroma1.it>
+In-Reply-To: <20230131-tuntap-sk-uid-v3-2-81188b909685@diag.uniroma1.it>
 From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 6 Feb 2023 09:28:50 +0100
-Message-ID: <CANn89i+BHx22sc3oxDtn-hSDYEHvqyGuQJm94m_s7VsKaY0XKA@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/3] net: add sock_init_data_uid()
+Date:   Mon, 6 Feb 2023 09:29:51 +0100
+Message-ID: <CANn89iLqDA_O3kFNdcJXcPQK+2jWXcN2CexVJYuexPGiuriq0g@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 2/3] tun: tun_chr_open(): correctly initialize
+ socket uid
 To:     Pietro Borrello <borrello@diag.uniroma1.it>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -77,14 +78,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sat, Feb 4, 2023 at 6:39 PM Pietro Borrello
 <borrello@diag.uniroma1.it> wrote:
 >
-> Add sock_init_data_uid() to explicitly initialize the socket uid.
-> To initialise the socket uid, sock_init_data() assumes a the struct
-> socket* sock is always embedded in a struct socket_alloc, used to
-> access the corresponding inode uid. This may not be true.
-> Examples are sockets created in tun_chr_open() and tap_open().
+> sock_init_data() assumes that the `struct socket` passed in input is
+> contained in a `struct socket_alloc` allocated with sock_alloc().
+> However, tun_chr_open() passes a `struct socket` embedded in a `struct
+> tun_file` allocated with sk_alloc().
+> This causes a type confusion when issuing a container_of() with
+> SOCK_INODE() in sock_init_data() which results in assigning a wrong
+> sk_uid to the `struct sock` in input.
+> On default configuration, the type confused field overlaps with the
+> high 4 bytes of `struct tun_struct __rcu *tun` of `struct tun_file`,
+> NULL at the time of call, which makes the uid of all tun sockets 0,
+> i.e., the root one.
+> Fix the assignment by using sock_init_data_uid().
 >
 > Fixes: 86741ec25462 ("net: core: Add a UID field to struct sock.")
 > Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
 > ---
 
 Reviewed-by: Eric Dumazet <edumazet@google.com>
+Thanks.
