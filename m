@@ -2,174 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C57B68C400
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F1E68C41E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 18:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbjBFQ7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S230042AbjBFRBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 12:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjBFQ67 (ORCPT
+        with ESMTP id S229732AbjBFRB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:58:59 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8E4298E2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:58:58 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so15804012pjd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 08:58:58 -0800 (PST)
+        Mon, 6 Feb 2023 12:01:29 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD302BEE0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 09:00:56 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id u21so12366920edv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 09:00:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+6cxh4rz4zPLRxZdoGK2+GMTraqgMoldabNMRg4aux8=;
-        b=BgfWyS220L2ogzeiap43HdYF8/pueremvhbV96cLNn3FcO8OWLC2JwRAruqDl65Dvk
-         W1LHc+kQM4LzgkWWCn4sqGZDuqKbHcLTN4w2q1N7CuDnRa4XqhxsZ+UEkYH+dxqXDQgh
-         4Q3eRamzjvX8ZjNveWgzrPzjxPkiP6iyTQUFE=
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=a6q/V+E4w1GCT3UIo80p/1jk/eyzfrAH7kZCB3dF6EI=;
+        b=uCfTnrbkPsLAWL6gOh5JY9TMsdhSIK82e1NiuB7IshsdmrWsM5Hjr6FwUqZDOfVwE5
+         pvNIBn/sDzqqN32lvfDoOmAh45PK1wSUkPZLuoc6AEvpCgbhlvhcegjr+D6AEUDXeYYW
+         crvJhRIWcpDQskPdi0OoQGliNpJBpBY6VIzwBot4iZgUgiUf3fIUlETRkLbLODtr4PhJ
+         3TWSPMBYPdaLTxs1wac12U00iQXUDjiSDIkJN5Elr/OcQAIapmSRlT2ChNGZoaEjoLvI
+         /JAvT3ybEZlwj5jOQ0L0qHFxsB/XJq0OisD0eI8mYh3MtxQWHtEUbqVsfi2Ox0lT3Rd+
+         Q6tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+6cxh4rz4zPLRxZdoGK2+GMTraqgMoldabNMRg4aux8=;
-        b=O8bhMdO1A3o63KQoAvB8O8uiZ+HP/PQBB0CF9EJcAG0a1e2EjZhqVuFWdLq992WL8W
-         TGHiGANExHRkeW/Hzd9g+25y1f3Y16kvR5XrYBiT2upqS7YdU4hLwEnYXFCL3C/v5ANW
-         1/3d1zp05MuXm/QzgBeN965KNMCqBZ7CrgtSJMbqtJsAs7EFBkEBSULtjG0BgSTjHGrx
-         09b3h4G1Rl8pOwVQ493jctsiVx0ZXsJS1KqXkGsDihwy9H/hNzeHjtuAyYyVarvBkXkK
-         VlrCysqIquT4tuQXyaswlHwvlo8JRr5jIe5bulQ1y/dxqV6AeR6XOD+UI4NlHPPDEa/I
-         5F0g==
-X-Gm-Message-State: AO0yUKWp55pm9lZo5A+Nu51SwfAytg8hxwevWoS8m3jzT4EKWQFcJkbV
-        9YSNGpvB2+fIuzMnTzpY6qeQW4+NWuUdAn8Vnybl2A==
-X-Google-Smtp-Source: AK7set9WrE2CiVOJv9s1fWRrT4lxtIsu8P0JitFd2HeFbgXGEJx4llzOoVlXE0WI0CG8rC2ep1dYdGauj5ll4g95GfQ=
-X-Received: by 2002:a17:90a:4fa1:b0:230:a3a9:2134 with SMTP id
- q30-20020a17090a4fa100b00230a3a92134mr57239pjh.129.1675702737337; Mon, 06 Feb
- 2023 08:58:57 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6q/V+E4w1GCT3UIo80p/1jk/eyzfrAH7kZCB3dF6EI=;
+        b=OW8GEkQYsm7XqpmuTYmuko8wsh3VEmRn1K8fXFH7nzyH3vhTPvvkoWKSmNJBPelChM
+         IhXh5DY6fRYcSacnR0JOIPOEk6xZHC9bKKX0iomrt1fRibzdDIQkTzfPPmbA5R31mHp0
+         PqTJoYEa0zTyGlMHVQR9YItD+7kN6tqLhBJ8tg5PPlNgJqoJ5RMVufSnnYH+BNEvpw1s
+         rMW6YPrtYwxkS0zHgP+OWvL/REY5E+yp+9I0tiyHFUyRiuhAD8B2WPCqjK/SLks3fGPX
+         po4FyONIk3yZhLMNpBP+peFRI5cW6iG4o/KVVjwpSXxg3DMFffkrXPF+DL8ungQlEknf
+         2P+w==
+X-Gm-Message-State: AO0yUKWT/7EFx/9WKbVZMdXiutAbFP8ObT6Sw6t6d1umpTgUcg3lmSdl
+        zYpzDwNwiQS07w6m3Mqn2i74lA==
+X-Google-Smtp-Source: AK7set9cQX60hct3CmrqQYLoS0zKl3hJEZ9KOOgC/H19Hq6SMdqrMyY4g16B+aPSjyDEPbDCn8cC1A==
+X-Received: by 2002:a50:9ea9:0:b0:4a0:e323:d59c with SMTP id a38-20020a509ea9000000b004a0e323d59cmr246400edf.20.1675702854925;
+        Mon, 06 Feb 2023 09:00:54 -0800 (PST)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id c5-20020a50d645000000b004aaa656887esm2668878edj.96.2023.02.06.09.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 09:00:54 -0800 (PST)
+Date:   Mon, 6 Feb 2023 18:00:53 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
+Message-ID: <Y+EyRb9klmwwHGjn@oden.dyn.berto.se>
+References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-References: <20230202033809.3989-1-ajit.khaparde@broadcom.com> <20230201194925.464b76a3@kernel.org>
-In-Reply-To: <20230201194925.464b76a3@kernel.org>
-From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
-Date:   Mon, 6 Feb 2023 08:58:40 -0800
-Message-ID: <CACZ4nhvqXxDAfo=CQ9jxqHzYHQdr85RCi+LftGqLpmC8_A4bbA@mail.gmail.com>
-Subject: Re: [PATCH net-next v11 0/8] Add Auxiliary driver support
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        michael.chan@broadcom.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, selvin.xavier@broadcom.com,
-        gregkh@linuxfoundation.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000006f83a105f40af234"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000006f83a105f40af234
-Content-Type: text/plain; charset="UTF-8"
+Hi Daniel,
 
-On Wed, Feb 1, 2023 at 7:49 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Wed,  1 Feb 2023 19:38:01 -0800 Ajit Khaparde wrote:
-> > v10->v11:
-> > - Addressed unused variable warning in patch 1 reported by kernel test
-> >   robot.
->
-> :/ Why are you reposting this so early, read the rules please:
->
-> https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
->
-> We should bump that to 48h for those who can't be bothered to compile
-> their code before reposting, if you ask me.
->
-> I'm discarding your series, come back next week.
-Please let me know if I should rebase and send a new version.
-FYI - I rebased the v11 patchset against the latest and it applied fine.
+Thanks for your work.
 
-Thanks
-Ajit
+On 2023-02-06 16:34:29 +0100, Daniel Lezcano wrote:
+> As the name states "thermal_core.h" is the header file for the core
+> components of the thermal framework.
+> 
+> Too many drivers are including it. Hopefully the recent cleanups
+> helped to self encapsulate the code a bit more and prevented the
+> drivers to need this header.
+> 
+> Remove this inclusion in every place where it is possible.
+> 
+> Some other drivers did a confusion with the core header and the one
+> exported in linux/thermal.h. They include the former instead of the
+> latter. The changes also fix this.
+> 
+> The tegra/soctherm driver still remains as it uses an internal
+> function which need to be replaced.
+> 
+> The Intel HFI driver uses the netlink internal framework core and
+> should be changed to prevent to deal with the internals.
+> 
+> No functional changes
+> 
+> [ Applies to thermal/linux-next or linux-pm/linux-next ]
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/amlogic_thermal.c           | 1 -
+>  drivers/thermal/armada_thermal.c            | 2 --
+>  drivers/thermal/broadcom/bcm2835_thermal.c  | 1 -
+>  drivers/thermal/hisi_thermal.c              | 3 +--
+>  drivers/thermal/imx8mm_thermal.c            | 1 -
+>  drivers/thermal/imx_sc_thermal.c            | 1 -
+>  drivers/thermal/intel/intel_hfi.c           | 3 ++-
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 1 -
+>  drivers/thermal/qoriq_thermal.c             | 1 -
+>  drivers/thermal/rcar_gen3_thermal.c         | 1 -
 
---0000000000006f83a105f40af234
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+For R-Car,
 
-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
-pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
-K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
-BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
-xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
-OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
-aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
-KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
-aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
-u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
-MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
-4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOoJRCy05UxqLNTKlFYG
-Ld7hURinyE6PZiiCoDwRgqBFMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
-MQ8XDTIzMDIwNjE2NTg1N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
-BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
-CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQA9sIxUXo5xTs9VhmowzSZ1KLUbH2ZmMKQlA8Zn
-dnGZO8I1jq6bQGrUf8H+7fWT2JW3AqrMx7P152xp4fJD5vygnkNnTW9VNzyDJqgfc+XpeHLy78qB
-A5yIjVo0H0+MEorgMpH8A8hGxvaS7VMUYAhyICt9c68E8tUP8ykcM1Wva8W0u6dJVuaITwTNIw8w
-7fug53G8Y5qY8tY9mLvcs01m4Qtns5cdbYjEAcQ6CZEZXfGwwyYu4/y+UpkLhxixEl0vtpZIMxbZ
-J9Clc9iM1u6oYQGgBW+ekXOyoOgHzspnJHHPoqykvwxcGIS8solGA7yEnWxVqrnXwg+9NHgLFPRt
---0000000000006f83a105f40af234--
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+>  drivers/thermal/samsung/exynos_tmu.c        | 3 +--
+>  drivers/thermal/st/stm_thermal.c            | 1 -
+>  drivers/thermal/tegra/tegra30-tsensor.c     | 1 -
+>  drivers/thermal/uniphier_thermal.c          | 2 --
+>  14 files changed, 4 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
+> index d30cb791e63c..9235fda4ec1e 100644
+> --- a/drivers/thermal/amlogic_thermal.c
+> +++ b/drivers/thermal/amlogic_thermal.c
+> @@ -28,7 +28,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "thermal_core.h"
+>  #include "thermal_hwmon.h"
+>  
+>  #define TSENSOR_CFG_REG1			0x4
+> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+> index 83a4080bffc7..36653f692c80 100644
+> --- a/drivers/thermal/armada_thermal.c
+> +++ b/drivers/thermal/armada_thermal.c
+> @@ -19,8 +19,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/interrupt.h>
+>  
+> -#include "thermal_core.h"
+> -
+>  /* Thermal Manager Control and Status Register */
+>  #define PMU_TDC0_SW_RST_MASK		(0x1 << 1)
+>  #define PMU_TM_DISABLE_OFFS		0
+> diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
+> index 3d0710c6e004..23918bb76ae6 100644
+> --- a/drivers/thermal/broadcom/bcm2835_thermal.c
+> +++ b/drivers/thermal/broadcom/bcm2835_thermal.c
+> @@ -18,7 +18,6 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "../thermal_core.h"
+>  #include "../thermal_hwmon.h"
+>  
+>  #define BCM2835_TS_TSENSCTL			0x00
+> diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
+> index 45226cab466e..62c67942293e 100644
+> --- a/drivers/thermal/hisi_thermal.c
+> +++ b/drivers/thermal/hisi_thermal.c
+> @@ -16,8 +16,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/io.h>
+>  #include <linux/of_device.h>
+> -
+> -#include "thermal_core.h"
+> +#include <linux/thermal.h>
+>  
+>  #define HI6220_TEMP0_LAG			(0x0)
+>  #define HI6220_TEMP0_TH				(0x4)
+> diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+> index d247b48696cb..72b5d6f319c1 100644
+> --- a/drivers/thermal/imx8mm_thermal.c
+> +++ b/drivers/thermal/imx8mm_thermal.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/slab.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "thermal_core.h"
+>  #include "thermal_hwmon.h"
+>  
+>  #define TER			0x0	/* TMU enable */
+> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+> index 378f574607f7..f32e59e74623 100644
+> --- a/drivers/thermal/imx_sc_thermal.c
+> +++ b/drivers/thermal/imx_sc_thermal.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/slab.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "thermal_core.h"
+>  #include "thermal_hwmon.h"
+>  
+>  #define IMX_SC_MISC_FUNC_GET_TEMP	13
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index 6e604bda2b93..c69db6c90869 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -40,10 +40,11 @@
+>  
+>  #include <asm/msr.h>
+>  
+> -#include "../thermal_core.h"
+>  #include "intel_hfi.h"
+>  #include "thermal_interrupt.h"
+>  
+> +#include "../thermal_netlink.h"
+> +
+>  /* Hardware Feedback Interface MSR configuration bits */
+>  #define HW_FEEDBACK_PTR_VALID_BIT		BIT(0)
+>  #define HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT	BIT(0)
+> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> index e2429676d0d2..101c75d0e13f 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> @@ -15,7 +15,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "../thermal_core.h"
+>  #include "../thermal_hwmon.h"
+>  
+>  #define QPNP_TM_REG_DIG_MAJOR		0x01
+> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+> index d111e218f362..431c29c0898a 100644
+> --- a/drivers/thermal/qoriq_thermal.c
+> +++ b/drivers/thermal/qoriq_thermal.c
+> @@ -13,7 +13,6 @@
+>  #include <linux/thermal.h>
+>  #include <linux/units.h>
+>  
+> -#include "thermal_core.h"
+>  #include "thermal_hwmon.h"
+>  
+>  #define SITES_MAX		16
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index 4ef927437842..0fd2fd077638 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/sys_soc.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "thermal_core.h"
+>  #include "thermal_hwmon.h"
+>  
+>  /* Register offsets */
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index 37465af59262..527d1eb0663a 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -20,11 +20,10 @@
+>  #include <linux/of_irq.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regulator/consumer.h>
+> +#include <linux/thermal.h>
+>  
+>  #include <dt-bindings/thermal/thermal_exynos.h>
+>  
+> -#include "../thermal_core.h"
+> -
+>  /* Exynos generic registers */
+>  #define EXYNOS_TMU_REG_TRIMINFO		0x0
+>  #define EXYNOS_TMU_REG_CONTROL		0x20
+> diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
+> index e7834ccc7976..735401958f01 100644
+> --- a/drivers/thermal/st/stm_thermal.c
+> +++ b/drivers/thermal/st/stm_thermal.c
+> @@ -19,7 +19,6 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "../thermal_core.h"
+>  #include "../thermal_hwmon.h"
+>  
+>  /* DTS register offsets */
+> diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
+> index 0ffe37ce7df7..b3218b71b6d9 100644
+> --- a/drivers/thermal/tegra/tegra30-tsensor.c
+> +++ b/drivers/thermal/tegra/tegra30-tsensor.c
+> @@ -28,7 +28,6 @@
+>  
+>  #include <soc/tegra/fuse.h>
+>  
+> -#include "../thermal_core.h"
+>  #include "../thermal_hwmon.h"
+>  
+>  #define TSENSOR_SENSOR0_CONFIG0				0x0
+> diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
+> index f8ab2ca76184..47801841b3f5 100644
+> --- a/drivers/thermal/uniphier_thermal.c
+> +++ b/drivers/thermal/uniphier_thermal.c
+> @@ -17,8 +17,6 @@
+>  #include <linux/regmap.h>
+>  #include <linux/thermal.h>
+>  
+> -#include "thermal_core.h"
+> -
+>  /*
+>   * block registers
+>   * addresses are the offset from .block_base
+> -- 
+> 2.34.1
+> 
+
+-- 
+Kind Regards,
+Niklas Söderlund
