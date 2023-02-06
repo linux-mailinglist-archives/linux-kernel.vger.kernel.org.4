@@ -2,73 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE9668C2F8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEB068C2FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 17:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbjBFQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 11:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S231896AbjBFQTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 11:19:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231432AbjBFQTE (ORCPT
+        with ESMTP id S231837AbjBFQT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 11:19:04 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D7C2A994
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 08:18:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=763ye/8X3APDNxobGOw1oc0nUCmlhrotZmvXI5/VHjA=; b=kBCRaFRZ4cccxqHt5MiYsau2FX
-        /kttVZX2hRJw3vmk3v/nJesYa7mmXNBHzI/7YcK+MNs2CTaby+mUXEqrDqNCGRYGxYDGwWAniLIuD
-        O9WVyM+HGx6F07oznBCbSjf53UGzlPCV6rfgZO8wp1OmJNJWFunOBr1lhrINev5acjE27GfZVX3Ak
-        jK/bVJHd0lzQ+lanMA4d2SZguktjpgsm32YkPuAxS7LHfltSJgzZzI/FLCrhDEmmqpY9XKFlDqZhQ
-        UbrO+Ghfo0siObCfFvX5fonZh8Dp/ktuWClP8ukRIWEN9elU+PmStnBIED3kmb6nV/nYVJTMI8brS
-        kOkzxvtQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pP4CC-00Gtpn-GD; Mon, 06 Feb 2023 16:18:20 +0000
-Date:   Mon, 6 Feb 2023 16:18:20 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com,
-        markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
-        shakeelb@google.com, mhocko@suse.com, vbabka@suse.cz,
-        quic_pkondeti@quicinc.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 2/2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
- for shmem
-Message-ID: <Y+EoTPqkSOrOZlyq@casper.infradead.org>
-References: <cover.1675690847.git.quic_charante@quicinc.com>
- <08e04b5d2fc7a2300a52fb7fff1bc6316a53927c.1675690847.git.quic_charante@quicinc.com>
+        Mon, 6 Feb 2023 11:19:26 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABF52F7BB;
+        Mon,  6 Feb 2023 08:19:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D0F3E1FDC4;
+        Mon,  6 Feb 2023 16:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675700324; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rDZV3mvNGQ6bQlUZNt+pm2+TOpLBe+J478jwvr5iYPs=;
+        b=hQO7lfu/O7FHy0nrH+ZhkVayWc951N8vQUFqsqBQVt4PbLGzLrGPHE0FDkfgw6DtmqrQPF
+        qa2n3gEEry2sT6DZB/Rg+HdMe6NO7pTxDB6Xavt7nlAC7Uxskyt7xQPfC/06rlzBMBlBxC
+        3x3/WqSPCBN2XPQ1ctlHBSeoxXMyGEg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 93FF5138E7;
+        Mon,  6 Feb 2023 16:18:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ubUoI2Qo4WP5BwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 06 Feb 2023 16:18:44 +0000
+Date:   Mon, 6 Feb 2023 17:18:43 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [RFC PATCH] mm: memcontrol: don't account swap failures not due
+ to cgroup limits
+Message-ID: <20230206161843.GD21332@blackbody.suse.cz>
+References: <20230202155626.1829121-1-hannes@cmpxchg.org>
+ <CAJD7tkaCpD0LpzdA+NsZj2WK=iQCLn7RS9qc7K53Qonxhp4TgA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+KJYzRxRHjYqLGl5"
 Content-Disposition: inline
-In-Reply-To: <08e04b5d2fc7a2300a52fb7fff1bc6316a53927c.1675690847.git.quic_charante@quicinc.com>
+In-Reply-To: <CAJD7tkaCpD0LpzdA+NsZj2WK=iQCLn7RS9qc7K53Qonxhp4TgA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 07:51:33PM +0530, Charan Teja Kalla wrote:
-> +static int shmem_fadvise_willneed(struct address_space *mapping,
-> +				 pgoff_t start, pgoff_t long end)
-> +{
-> +	struct page *page;
-> +	pgoff_t index;
-> +
-> +	xa_for_each_range(&mapping->i_pages, index, page, start, end) {
-> +		if (!xa_is_value(page))
-> +			continue;
-> +		page = shmem_read_mapping_page(mapping, index);
-> +		if (!IS_ERR(page))
-> +			put_page(page);
-> +	}
-> +
-> +	return 0;
-> +}
 
-Hm, that's a gap in the shmem folio API.  Patches imminent.
+--+KJYzRxRHjYqLGl5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Feb 02, 2023 at 10:30:40AM -0800, Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> > b) Only count cgroup swap events when they are actually due to a
+> >    cgroup's own limit. Exclude failures that are due to physical swap
+> >    shortage or other system-level conditions (like !THP_SWAP). Also
+> >    count them at the level where the limit is configured, which may be
+> >    above the local cgroup that holds the page-to-be-swapped.
+> >
+> >    This is in line with how memory.swap.high, memory.high and
+> >    memory.max events are counted.
+> >
+> >    However, it's a change in documented behavior.
+>=20
+> This option makes sense to me, but I can't speak to the change of
+> documented behavior. However, looking at the code, it seems like if we do=
+ this
+> the "max" & "fail" counters become effectively the same. "fail" would
+> not provide much value then.
+>=20
+> I wonder if it makes sense to have both, and clarify that "fail" -
+> "max" would be non-limit based failures (e.g. ran out of swap space),
+> or would this cause confusion as to whether those non-limit failures
+> were transient (THP fallback) or eventual?
+
+I somewhat second this.
+
+Perhaps, could the patch (and arguments) be split in two:
+1) count .max events on respective limit's level (other limits consistency),
+2) redefine (remove?) memory.swap.fail events?
+
+Michal
+
+--+KJYzRxRHjYqLGl5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY+EoYQAKCRAkDQmsBEOq
+uXuJAQCRA9+UXkEzfVoUWjltXKLdc9vqvH0D5zne/GZdvubZBwEAoxc1UQlw1YcL
+8fUMQsShXoCJhwMdfV5kVkrsg1du8ww=
+=agtq
+-----END PGP SIGNATURE-----
+
+--+KJYzRxRHjYqLGl5--
