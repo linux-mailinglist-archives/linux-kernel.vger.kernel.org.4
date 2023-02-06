@@ -2,127 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CF368BFD9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF67568BFE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 15:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjBFORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 09:17:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        id S230411AbjBFOSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 09:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjBFORG (ORCPT
+        with ESMTP id S230190AbjBFOSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 09:17:06 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CEF227A6;
-        Mon,  6 Feb 2023 06:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675693011; x=1707229011;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rkMn+pXxQ+KKju55X4C3pa/suoqSDKrEPHgqwNgVWTQ=;
-  b=K45G6x52p2EYve27n4pDIMWBT7ftGSQs11yEjSskVewIqB5mFxMJ08lU
-   FGKLhMtu8WwQbzAxOuS1tEjV3XE8UbQVUympUWxn1rCGuYidIvgBrqX+B
-   pDSESxErYZqLSEELsdw88Z1c3z67RvkEzCCQlsjLOGzJjhgryZRQnZx5z
-   /sqyOhmQA3toGw51INWAL7O0fL3ODLEqjrEoJuQeV5amxTVkrCDm/PmjQ
-   VlJPrYY9afXAJX/E6ZZXhfRTjhVsu9swbZhKzEnkh0y4X3ha4HWVPpjVj
-   xI8gJuGRuL455PlHa66UzRswEJR5yMpHglCftiCHZtPwtfIM3OxbBl5Ao
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="415431790"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="415431790"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 06:16:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="666500603"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="666500603"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 06 Feb 2023 06:16:26 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 427F3241; Mon,  6 Feb 2023 16:17:03 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jim Minter <jimminter@microsoft.com>
-Subject: [PATCH v1 1/1] pinctrl: intel: Restore the pins that used to be in Direct IRQ mode
-Date:   Mon,  6 Feb 2023 16:15:59 +0200
-Message-Id: <20230206141558.20916-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 09:18:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A55271F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 06:18:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC60260F00
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 14:18:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D84C433EF;
+        Mon,  6 Feb 2023 14:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675693109;
+        bh=N0jlMsP1a2pFkwKypT6oJ/20U4sMLM/W0F/2lPeQtH8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KyQCMI370m77ZFJVsLt4vh91v8swcCjpfKYfTyb4Tz8MzTaS5yF/MGnh8W93SoK/r
+         LQ19aVaCKU7AKrAkrgEIi+an++7Z6vSqrEOgEgKgEleC6F/PnL/mkdrfflOBqiDXxh
+         a6k1eNGlCTeJ1Rs20nxB3dh2MksWlPeqLZcNWs1sr5VN/8rQFor9DG7oUj0K4p5ry6
+         HN+S7wrC65E2nSHUiAnjBgOCLfjFhKi057H+NuW+DBgL1kjXGavol0C4pOGpfcXnlt
+         iVoq209YXW1oMGRglGmrpplimHaqfFShhvW5uGk5hd3RNJin56keFDn60krgE5cdWg
+         ATQ71xDejZ8xQ==
+Date:   Mon, 6 Feb 2023 23:18:25 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] x86/kprobes: Fix 1 byte conditional jump target
+Message-Id: <20230206231825.9997d73ded8497df9006585d@kernel.org>
+In-Reply-To: <20230204210807.3930-1-namit@vmware.com>
+References: <20230204210807.3930-1-namit@vmware.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the firmware mangled the register contents too much,
-check the saved value for the Direct IRQ mode. If it
-matches, we will restore the pin state.
+On Sat,  4 Feb 2023 21:08:07 +0000
+Nadav Amit <nadav.amit@gmail.com> wrote:
 
-Reported-by: Jim Minter <jimminter@microsoft.com>
-Fixes: 6989ea4881c8 ("pinctrl: intel: Save and restore pins in "direct IRQ" mode")
-Tested-by: Jim Minter <jimminter@microsoft.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
+> From: Nadav Amit <namit@vmware.com>
+> 
+> Commit 3bc753c06dd0 ("kbuild: treat char as always unsigned") broke
+> kprobes.  Setting a probe-point on 1 byte conditional jump can cause the
+> kernel to crash, as the branch target is not sign extended.
 
-Jim, this is a bit simplified version than what you tested. But it shouldn't
-be a functional changes. Anyway, it would be nice if you have a chance to give
-this a try.
+Oops, indeed!
 
-Linus, I don't expect more to come for this cycle, feel free to apply directly.
+> 
+> Fix by using s8 instead of char and use immediate.value instead of
+> immediate.bytes for consistency.
 
- drivers/pinctrl/intel/pinctrl-intel.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+Looks good to me. Thanks for finding this bug!
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index cc3aaba24188..e49f271de936 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -1709,6 +1709,12 @@ const struct intel_pinctrl_soc_data *intel_pinctrl_get_soc_data(struct platform_
- EXPORT_SYMBOL_GPL(intel_pinctrl_get_soc_data);
- 
- #ifdef CONFIG_PM_SLEEP
-+static bool __intel_gpio_is_direct_irq(u32 value)
-+{
-+	return (value & PADCFG0_GPIROUTIOXAPIC) && (value & PADCFG0_GPIOTXDIS) &&
-+	       (__intel_gpio_get_gpio_mode(value) == PADCFG0_PMODE_GPIO);
-+}
-+
- static bool intel_pinctrl_should_save(struct intel_pinctrl *pctrl, unsigned int pin)
- {
- 	const struct pin_desc *pd = pin_desc_get(pctrl->pctldev, pin);
-@@ -1742,8 +1748,7 @@ static bool intel_pinctrl_should_save(struct intel_pinctrl *pctrl, unsigned int
- 	 * See https://bugzilla.kernel.org/show_bug.cgi?id=214749.
- 	 */
- 	value = readl(intel_get_padcfg(pctrl, pin, PADCFG0));
--	if ((value & PADCFG0_GPIROUTIOXAPIC) && (value & PADCFG0_GPIOTXDIS) &&
--	    (__intel_gpio_get_gpio_mode(value) == PADCFG0_PMODE_GPIO))
-+	if (__intel_gpio_is_direct_irq(value))
- 		return true;
- 
- 	return false;
-@@ -1873,7 +1878,12 @@ int intel_pinctrl_resume_noirq(struct device *dev)
- 	for (i = 0; i < pctrl->soc->npins; i++) {
- 		const struct pinctrl_pin_desc *desc = &pctrl->soc->pins[i];
- 
--		if (!intel_pinctrl_should_save(pctrl, desc->number))
-+		if (!(intel_pinctrl_should_save(pctrl, desc->number) ||
-+		      /*
-+		       * If the firmware mangled the register contents too much,
-+		       * check the saved value for the Direct IRQ mode.
-+		       */
-+		      __intel_gpio_is_direct_irq(pads[i].padcfg0)))
- 			continue;
- 
- 		intel_restore_padcfg(pctrl, desc->number, PADCFG0, pads[i].padcfg0);
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Fixes: 3bc753c06dd0 ("kbuild: treat char as always unsigned")
+
+Thank you!
+> 
+> Cc: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Nadav Amit <namit@vmware.com>
+> ---
+>  arch/x86/kernel/kprobes/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+> index b36f3c367cb2..6a56d56b3817 100644
+> --- a/arch/x86/kernel/kprobes/core.c
+> +++ b/arch/x86/kernel/kprobes/core.c
+> @@ -625,7 +625,7 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
+>  		/* 1 byte conditional jump */
+>  		p->ainsn.emulate_op = kprobe_emulate_jcc;
+>  		p->ainsn.jcc.type = opcode & 0xf;
+> -		p->ainsn.rel32 = *(char *)insn->immediate.bytes;
+> +		p->ainsn.rel32 = *(s8 *)&insn->immediate.value;
+>  		break;
+>  	case 0x0f:
+>  		opcode = insn->opcode.bytes[1];
+> -- 
+> 2.34.1
+> 
+
+
 -- 
-2.39.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
