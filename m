@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3023268BEFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1DF68BF07
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 14:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjBFN5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 08:57:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S230471AbjBFN7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 08:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjBFN5P (ORCPT
+        with ESMTP id S229763AbjBFN67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 08:57:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BDA27D5E;
-        Mon,  6 Feb 2023 05:56:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E72660EF3;
-        Mon,  6 Feb 2023 13:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C950C433AA;
-        Mon,  6 Feb 2023 13:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675691749;
-        bh=lIXsek5n6wDPJwQHFHqeRyxPTSxNcjqPYEciCIuzBWc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M7dHnZY+z0hBSLVAbE/QJYOmu64NrsCeMJ4mbsvbMqZ8Gszujenbyk8I9LJtOCoUP
-         tRXvRAhYmiK3lB9Zld8rt4V9NHOZt1EN7zZUWjyogAaQBOkqqwA9ZchN1hRIvb7FWG
-         2n9F4fPf6h1qxgaFCG3Qm07aXGsvw8RR3QHVQxumXk4Rn8dA0KHs7C4pGmAlF9KzCa
-         4BXAtpYbmuq5g6Fznh9gtPIgSAw+V/IrnXHatCh1Rvut/97cZl+4gWrqTz9PVyf+76
-         nvBb+kPR5qaGlGkF1L4HBEpv9fMlI9CGexlvXKQ8FpeGPUgVf/ENYicQUwuCOWdabH
-         4QBGSvJx0JKHw==
-Date:   Mon, 6 Feb 2023 15:55:46 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc:     Potnuri Bharat Teja <bharat@chelsio.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] RDMA/cxgb4: Fix potential null-ptr-deref in
- pass_establish()
-Message-ID: <Y+EG4uZnMr0lYPwU@unreal>
-References: <Y9vdndjG0e9cCaI/@ziepe.ca>
- <20230202184850.29882-1-n.zhandarovich@fintech.ru>
+        Mon, 6 Feb 2023 08:58:59 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2395C279BA;
+        Mon,  6 Feb 2023 05:58:15 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id D532A60003;
+        Mon,  6 Feb 2023 13:58:09 +0000 (UTC)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>
+Subject: [PATCH 1/3] HID: logitech-hidpp: Add more debug statements
+Date:   Mon,  6 Feb 2023 14:58:06 +0100
+Message-Id: <20230206135808.8840-1-hadess@hadess.net>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202184850.29882-1-n.zhandarovich@fintech.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 10:48:50AM -0800, Nikita Zhandarovich wrote:
-> If get_ep_from_tid() fails to lookup non-NULL value for ep, ep is
-> dereferenced later regardless of whether it is empty.
-> This patch adds a simple sanity check to fix the issue.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 944661dd97f4 ("RDMA/iw_cxgb4: atomically lookup ep and get a reference")
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-> ---
-> v2: do not use pr_warn() when get_ep_from_tid() returns NULL as
-> Jason Gunthorpe <jgg@ziepe.ca> suggested.
-> 
->  drivers/infiniband/hw/cxgb4/cm.c | 2 ++
->  1 file changed, 2 insertions(+)
+This should help us figure out some hairy problems with some devices.
 
-I applied, but please next time.
-1. Don't send patches as reply-to. It messes whole patch flow.
-2. Use target in subject line, e.g. [PATCH rdma-next] or [PATCH rdma-rc]
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/hid/hid-logitech-hidpp.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Thanks
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index f44ba7be3cc5..6386d3f023ca 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -338,8 +338,12 @@ static int hidpp_send_fap_command_sync(struct hidpp_device *hidpp,
+ 	struct hidpp_report *message;
+ 	int ret;
+ 
+-	if (param_count > sizeof(message->fap.params))
++	if (param_count > sizeof(message->fap.params)) {
++		hid_dbg(hidpp->hid_dev,
++			"Invalid number of parameters passed to command (%d != %ld)\n",
++			param_count, sizeof(message->fap.params));
+ 		return -EINVAL;
++	}
+ 
+ 	message = kzalloc(sizeof(struct hidpp_report), GFP_KERNEL);
+ 	if (!message)
+@@ -3440,11 +3444,17 @@ static int hi_res_scroll_enable(struct hidpp_device *hidpp)
+ 		ret = hidpp10_enable_scrolling_acceleration(hidpp);
+ 		multiplier = 8;
+ 	}
+-	if (ret)
++	if (ret) {
++		hid_dbg(hidpp->hid_dev,
++			"Could not enable hi-res scrolling: %d\n", ret);
+ 		return ret;
++	}
+ 
+-	if (multiplier == 0)
++	if (multiplier == 0) {
++		hid_dbg(hidpp->hid_dev,
++			"Invalid multiplier 0 from device, setting it to 1\n");
+ 		multiplier = 1;
++	}
+ 
+ 	hidpp->vertical_wheel_counter.wheel_multiplier = multiplier;
+ 	hid_dbg(hidpp->hid_dev, "wheel multiplier = %d\n", multiplier);
+-- 
+2.39.1
 
-
-> 
-> diff --git a/drivers/infiniband/hw/cxgb4/cm.c b/drivers/infiniband/hw/cxgb4/cm.c
-> index 499a425a3379..f5f4579f037c 100644
-> --- a/drivers/infiniband/hw/cxgb4/cm.c
-> +++ b/drivers/infiniband/hw/cxgb4/cm.c
-> @@ -2676,6 +2676,8 @@ static int pass_establish(struct c4iw_dev *dev, struct sk_buff *skb)
->  	u16 tcp_opt = ntohs(req->tcp_opt);
->  
->  	ep = get_ep_from_tid(dev, tid);
-> +	if (!ep)
-> +		return 0;
->  	pr_debug("ep %p tid %u\n", ep, ep->hwtid);
->  	ep->snd_seq = be32_to_cpu(req->snd_isn);
->  	ep->rcv_seq = be32_to_cpu(req->rcv_isn);
-> -- 
-> 2.25.1
-> 
