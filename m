@@ -2,211 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E07C68B5BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:44:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8137168B5BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 07:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjBFGoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 01:44:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S229708AbjBFGqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 01:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBFGo2 (ORCPT
+        with ESMTP id S229511AbjBFGqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 01:44:28 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40BF12F13
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 22:44:24 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id k4so11633941vsc.4
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 22:44:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KuU/DpvV8tboBaa0OaWBw3UwBG4/bh7i27N9royWm64=;
-        b=l5Xim1zBtv1SrbUsDmWy6/X1uLiBvvH2spNeSVGGUXYUZ4DxVzhTA4p0q+Cpk8vOu3
-         hRUt2flmtPdUSE+804mV5qcIGvWL/dFdcfMM1E3yQ+hLZEiarHGOveYBr622/qZe76KS
-         MM6Z3FXugMKR27UPPjVi9iS4joPJWaA5qHhx9teF33T+3ZRERhekJcMJyco8jRqONfBe
-         an1Zi+m9XY1AShwYpUZyB0m8SWCU/T4KO84RMNpax2ESXuyx1Vx8iyVAX0C4bZv7cN0R
-         GCjR3QvKB5oOv5R4Ry3RZtDD1I5lw3CutraOzg3WPhvDVldJynIPIMjDOLQW33qsLr11
-         R67g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KuU/DpvV8tboBaa0OaWBw3UwBG4/bh7i27N9royWm64=;
-        b=LX4XXdaXJhAM7IkyyowWkRF4xXy0ph2YwbieIwbqpJcuDSOog6p/UBhP5m53MZ3JbO
-         vWMTN+oTEgvcI1rQaYRI+txMIlLEZ1zbxZBjN9s0FSfoiE0ed5EYcWMGwaeYRss2svTQ
-         GvZh/64z+qBUa72tCD8XIE9TEia+iCvgZNQqlTiSXWQbLzyDL7wJ/oDfQKb53IzxhlBm
-         mCqy3CVM2+FPWkYI5xnYzEAZCUobIwtQxS2amBD2pAlgRoAkvYFt1JDvIQ2JbXI7gCyA
-         kpxeRZN5xo7BMk4WhQ9GY1N/EakDakBK8TVeWQKlXIjtjCYP1L1gVnbtNXzCm2YDMRGA
-         xW3A==
-X-Gm-Message-State: AO0yUKVypPau8mlC1XThqTL7zpxFtAsFhAUToIVPXkMSQwYKx6lJoX62
-        V8M9xthfU2dIJ6dc+kAdhlQSEMT52bbAAo6lfxXxoRH7lp8UH2MW
-X-Google-Smtp-Source: AK7set8O4VvDlje1/HLrov8hmyhqxxwvVapB6q7Jwgi1M+TzCibhdIh7FUcfjQgQLsXBWspXlWFe1Q3oEcCyohMPdR4=
-X-Received: by 2002:a67:fd93:0:b0:3f0:ce1c:4d5e with SMTP id
- k19-20020a67fd93000000b003f0ce1c4d5emr2771504vsq.62.1675665863580; Sun, 05
- Feb 2023 22:44:23 -0800 (PST)
+        Mon, 6 Feb 2023 01:46:15 -0500
+Received: from mail3.bemta32.messagelabs.com (mail3.bemta32.messagelabs.com [195.245.230.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B5E12F3E;
+        Sun,  5 Feb 2023 22:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1675665972; i=@fujitsu.com;
+        bh=8tDYHNWMpUBfn2W8rtNUEQrr/Lx/KtmFpqOm7bf5zQI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=x/XU+I3vkY/snNMoCAM/Q/te6FSxTJEf60Xnb/zrFJUUov70ue0p8e8wke8j4UX/s
+         I6AT7V8sLv+JvrsjvpmMjJ895YeTQH1WjKo13SltqC/C4oY2+HqJsDVjZiZiuNUVEi
+         5Tmrk/9cWpNqCZ5Zc8XfeuMeaizZwi4kh54eoQEkU759+tqQ04D+yaItl+JMdgHfSG
+         WqoyWHzlLgCmdn0OIhhRVYZ4NJLTL9pnwWdm9KLG9NHjiJUKA8pEMYBfdDAaD/Z/Ao
+         4iTpnSnDMaMZUCsPfJ+DBXYcrFL/2efiwCAJpqfhIxVItcNut4/dirdG69CiOdVd1v
+         Lji+JGr0wwiUQ==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAKsWRWlGSWpSXmKPExsViZ8ORqKuz6EG
+  ywemHFhbTp15gtNhy7B6jxeUnfBanJyxistj9+iabxZ69J1ksLu+aw2Zxb81/Votdf3awW6z8
+  8YfV4vePOWwO3B6nFkl4bF6h5bF4z0smj02rOtk8Nn2axO7xYvNMRo+PT2+xeHzeJBfAEcWam
+  ZeUX5HAmvHywxrmgg1sFa09v5gaGC+xdDFycQgJbGGUeHnqOzuEs4JJYt6/g1DONkaJi19+sH
+  YxcnLwCthJ/Jr1hA3EZhFQkehq6WWEiAtKnJz5hAXEFhVIljh2vhWsRljATaJh5x0gm4NDREB
+  D4s0WI5CZzAIdTBJ712xkhFiwnFGiY/ZLZpAGNgEdiQsL/oIt4xQwkfi49wU7iM0sYCGx+M1B
+  KFteonnrbGaQoRICShIzu+NBwhIClRKtH36xQNhqElfPbWKewCg0C8l5s5BMmoVk0gJG5lWMZ
+  sWpRWWpRbqGZnpJRZnpGSW5iZk5eolVuol6qaW65anFJbqGeonlxXqpxcV6xZW5yTkpenmpJZ
+  sYgRGZUsz8cgfjib6/eocYJTmYlER5+/3vJgvxJeWnVGYkFmfEF5XmpBYfYpTh4FCS4A2Y8yB
+  ZSLAoNT21Ii0zB5gcYNISHDxKIryXpwOleYsLEnOLM9MhUqcYFaXEeYMXAiUEQBIZpXlwbbCE
+  dIlRVkqYl5GBgUGIpyC1KDezBFX+FaM4B6OSMK/oPKApPJl5JXDTXwEtZgJa3G1wF2RxSSJCS
+  qqBSXCR5j0pid67FqWLbqzXV/yWLZOa47+8+Lvp5YhWqwkHGOf7NZ+f9+HP5Ou75VdP4Vtiln
+  jIQX3alssRHoyyzu92mayYsKLx89Ok5y8FdIXM98yZvsCBXy9RYEKbhlzx7qtKv5enHDSbnCO
+  yeHFAUc7LEE/dV/fKbi86XjXDp+TysUrZC88OFFZ/2Nm2rn+G59W26lt398WrqWwoDTpfVetq
+  127/gV3z0/HEA3+23DSvyjI26rGtc6rcvNw+ZbNF9U+pFpO1J4L3eq94f917SdKEVfWWpa4lf
+  q+SGxke2xp5nX37e11s3KmDz9lbC9/O+bWH8QtzrqmmfdsfeebHUWUn+TjDtji9PuPocUEtUY
+  mlOCPRUIu5qDgRAPjkbkDDAwAA
+X-Env-Sender: ruansy.fnst@fujitsu.com
+X-Msg-Ref: server-23.tower-585.messagelabs.com!1675665964!299649!1
+X-Originating-IP: [62.60.8.97]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.102.2; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 2381 invoked from network); 6 Feb 2023 06:46:04 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-23.tower-585.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 6 Feb 2023 06:46:04 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 77186100188;
+        Mon,  6 Feb 2023 06:46:04 +0000 (GMT)
+Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 6A116100182;
+        Mon,  6 Feb 2023 06:46:04 +0000 (GMT)
+Received: from [192.168.50.5] (10.167.225.141) by
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Mon, 6 Feb 2023 06:46:00 +0000
+Message-ID: <0b8551a2-1d46-8ac8-5073-5b094507975a@fujitsu.com>
+Date:   Mon, 6 Feb 2023 14:45:53 +0800
 MIME-Version: 1.0
-References: <20230126132120.1661-1-masahisa.kojima@linaro.org>
- <CAFA6WYMdTxkcFkSux7F3fwxx2OqHP9UzqbWxdGnxuzjNU75PxA@mail.gmail.com>
- <Y9zFzW2yj7uMI0XR@jade> <CAFA6WYOp-NQxvqOmemiW2D5Au549f-u4LJA7XEK2aJgMiXRUYg@mail.gmail.com>
- <Y9zoMJcbrKIvbDdh@jade>
-In-Reply-To: <Y9zoMJcbrKIvbDdh@jade>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Mon, 6 Feb 2023 12:14:12 +0530
-Message-ID: <CAFA6WYPLeN5tUY8JA=J9T3XVNfq5jAQ62i=qSk-6eesM-9_K=Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] introduce op-tee based EFI Runtime Variable Service
-To:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Masahisa Kojima <masahisa.kojima@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v9 1/3] xfs: fix the calculation of length and end
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <djwong@kernel.org>,
+        <dan.j.williams@intel.com>, <david@fromorbit.com>,
+        <hch@infradead.org>, <jane.chu@oracle.com>
+References: <1675522718-88-1-git-send-email-ruansy.fnst@fujitsu.com>
+ <1675522718-88-2-git-send-email-ruansy.fnst@fujitsu.com>
+ <Y9+WHXyA2GufLWpw@casper.infradead.org>
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+In-Reply-To: <Y9+WHXyA2GufLWpw@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Feb 2023 at 16:25, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->
-> On Fri, Feb 03, 2023 at 03:03:34PM +0530, Sumit Garg wrote:
-> > Hi Jens,
-> >
-> > On Fri, 3 Feb 2023 at 13:59, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> > >
-> > > Hi Sumit,
-> > >
-> > > On Thu, Feb 02, 2023 at 05:35:49PM +0530, Sumit Garg wrote:
-> > > > Hi Masahisa,
-> > > >
-> > > > On Thu, 26 Jan 2023 at 18:52, Masahisa Kojima
-> > > > <masahisa.kojima@linaro.org> wrote:
-> > > > >
-> > > > > This RFC series introduces the op-tee based EFI Runtime Variable
-> > > > > Service.
-> > > > >
-> > > > > The eMMC device is typically owned by the non-secure world(linux in
-> > > > > this case). There is an existing solution utilizing eMMC RPMB partition
-> > > > > for EFI Variables, it is implemented by interacting with
-> > > > > OP-TEE, StandaloneMM(as EFI Variable Service Pseudo TA), eMMC driver
-> > > > > and tee-supplicant. The last piece is the tee-based variable access
-> > > > > driver to interact with OP-TEE and StandaloneMM.
-> > > > >
-> > > >
-> > > > After an overall look at the APIs, following are some initial comments:
-> > > > - Is there any reason to have the edk2 specific StandaloneMM stack in
-> > > > Linux to communicate with OP-TEE pseudo TA?
-> > > > - I think the OP-TEE pseudo TA should be able to expose a rather
-> > > > generic invoke commands such as:
-> > > >      TEE_EFI_GET_VARIABLE
-> > > >      TEE_EFI_GET_NEXT_VARIABLE
-> > > >      TEE_EFI_SET_VARIABLE
-> > > >   So it should no longer be tied to StMM stack and other TEE
-> > > > implementations can re-use the abstracted interface to communicate
-> > > > with its corresponding secure storage TA.
-> > >
-> > > In the current setup we have the following layers in the kernel:
-> > > 1. efivar_operations
-> > > 2. MM
-> > > 3. PTA_STMM
-> > > 4. OP-TEE MSG
-> > >
-> > > and in the secure world:
-> > > S1. internal to StMM
-> > > S2. MM interface to StMM
-> > > S3. PTA_STMM
-> > > S4. OP-TEE MSG
-> > >
-> > > If I understand you correctly you'd like to see this instead:
-> > > Kernel:
-> > > 1. efivar_operations
-> > > 2. PTA_EFIVAR
-> > > 4. OP-TEE MSG
-> > >
-> > > Since we still have the MM interface with StMM we'd have this in the secure
-> > > world:
-> > > S1. internal to StMM
-> > > S2. MM interface to StMM
-> > > S3. PTA_EFIVAR
-> > > S4. OP-TEE MSG
-> > >
-> > > At S3 we'd have to convert between EFIVAR and MM messages. The
-> > > difference is that we're moving the EFIVAR <-> MM conversion from the
-> > > non-secure world into the secure world. We're still using OP-TEE
-> > > specific communication at the fourth layer. So we're only moving problem
-> > > around, I'd rather avoid growing the OP-TEE part in the secure world.
-> > >
-> >
-> > If you look carefully, we are essentially defining an ABI towards the
-> > secure world. The approach in this patch-set adds the MM interface as
-> > a redundant ABI layer which makes it complex to maintain. Now think
-> > about if every TEE implementation would propose such a complex ABI. It
-> > looks like a maintenance nightmare to me.
-> >
-> > The concerns you are highlighting about OP-TEE size, I think those are
-> > implementation details which can be simplified later but once you have
-> > defined an ABI then you are stuck with its maintainability.
->
-> You have a point, but keep in mind that it's StMM that matters here.
-> StMM uses the MM protocol. It was originially using raw SMCs as a
-> conduit, but with the need for OP-TEE accessing RPMB that's not usable.
-> So instead we use OP-TEE MSG as a conduit. Seen from that perspective
-> we're only resuing something established instead of inventing something
-> new.
 
-Aren't we already adding PTA_STMM?
 
-Isn't the StMM specific to Arm as you already mentioned it was
-designed to specifically use raw SMCs? So if in future AMD TEE wants
-to implement EFI services, can we suggest they reuse the MM interface?
+在 2023/2/5 19:42, Matthew Wilcox 写道:
+> On Sat, Feb 04, 2023 at 02:58:36PM +0000, Shiyang Ruan wrote:
+>> @@ -222,8 +222,8 @@ xfs_dax_notify_failure(
+>>   		len -= ddev_start - offset;
+>>   		offset = 0;
+>>   	}
+>> -	if (offset + len > ddev_end)
+>> -		len -= ddev_end - offset;
+>> +	if (offset + len - 1 > ddev_end)
+>> +		len -= offset + len - 1 - ddev_end;
+> 
+> This _looks_ wrong.  Are you sure it shouldn't be:
+> 
+> 		len = ddev_end - offset + 1;
+> 
 
-I am not sure why we need to redirect EFI variables via MM interface
-communication buffers rather than directly using the TEE shared memory
-approach.
+It is to make sure the range won't beyond the end of device.
 
-Ard,
+But actually, both of us are rgiht.
+   Mine: len -= offset + len - 1 - ddev_end;
+      => len = len - (offset + len - 1 - ddev_end);
+      => len = len - offset - len + 1 + ddev_end;
+      => len = ddev_end - offset + 1;          --> Yours
 
-Since you have better insights into how EFI runtime services have to
-be implemented, can you share your opinion here? It may be something I
-am missing here.
+I forgot to simplify it.  Will fix.
 
--Sumit
 
->
-> Cheers,
-> Jens
->
-> >
-> > -Sumit
-> >
-> > > Cheers,
-> > > Jens
-> > >
-> > > >
-> > > > -Sumit
-> > > >
-> > > > > Masahisa Kojima (2):
-> > > > >   efi: expose efivar generic ops register function
-> > > > >   tee: Add op-tee helper functions for variable access
-> > > > >
-> > > > >  drivers/firmware/efi/efi.c           |  12 +
-> > > > >  drivers/tee/optee/Kconfig            |  10 +
-> > > > >  drivers/tee/optee/Makefile           |   1 +
-> > > > >  drivers/tee/optee/mm_communication.h | 249 +++++++++++
-> > > > >  drivers/tee/optee/optee_private.h    |   5 +-
-> > > > >  drivers/tee/optee/optee_stmm_efi.c   | 598 +++++++++++++++++++++++++++
-> > > > >  drivers/tee/tee_core.c               |  23 ++
-> > > > >  include/linux/efi.h                  |   4 +
-> > > > >  include/linux/tee_drv.h              |  23 ++
-> > > > >  9 files changed, 924 insertions(+), 1 deletion(-)
-> > > > >  create mode 100644 drivers/tee/optee/mm_communication.h
-> > > > >  create mode 100644 drivers/tee/optee/optee_stmm_efi.c
-> > > > >
-> > > > > --
-> > > > > 2.30.2
-> > > > >
+--
+Thanks,
+Ruan.
