@@ -2,121 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BE268C830
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0F568C8E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 22:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBFVC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 16:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S229892AbjBFVrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 16:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjBFVCx (ORCPT
+        with ESMTP id S229548AbjBFVrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 16:02:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B198A24CBB;
-        Mon,  6 Feb 2023 13:02:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E87F60FD7;
-        Mon,  6 Feb 2023 21:02:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D186C433EF;
-        Mon,  6 Feb 2023 21:02:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675717360;
-        bh=EFRCzFpjkHfDn0Vt4RI0YMMBe/BYikr6pWN8qSbSd3Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A++NswBZxlfPBvKJSGQcHkAEBFVQFYqQmZ77aEVzm/9tSD4+24bj3UpeiSNUnIZbm
-         Ok3XwzktHKG/nZrKwC7N6k+l/JvsWDX37feMpCG5KzEE5M4g3u/gw750pfAowRaEp9
-         +BRCPoQtHWKJT196WhOKXHMXLbw9bDabyHefysZiikP+lRgA/Q2WdO79DTxQxxX0nu
-         osn48FXPdzjJR0eGrcTOPmjPuX+lmtY6nn8V8Rvk/3qQdva9lSnTIaCg+DrJqswbu/
-         2aa3iKVjOGCQlS2zhnTZh+Exj8/nf2NzkGzlThR6P0uR8yQbJapON49DkZpViiXDE2
-         XAvRLJ9+45vlg==
-Date:   Mon, 6 Feb 2023 13:04:55 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8450: Add IMEM and PIL info
- region
-Message-ID: <20230206210455.xgrvtvknkor4nllx@ripper>
-References: <1675443891-31709-1-git-send-email-quic_mojha@quicinc.com>
- <1675443891-31709-2-git-send-email-quic_mojha@quicinc.com>
- <cc30f686-dec7-db85-cf0d-c6c685a623ce@linaro.org>
- <d1dc0c9b-eab2-0287-d0a2-ead44ecee5ce@quicinc.com>
+        Mon, 6 Feb 2023 16:47:09 -0500
+X-Greylist: delayed 2639 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Feb 2023 13:47:07 PST
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA7A1A487;
+        Mon,  6 Feb 2023 13:47:07 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pP8db-001voz-D9; Mon, 06 Feb 2023 22:02:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=2pugRrrY/jHwIUYNyE6SM2LDsIXpPsZTjyGq9Jd3onI=; b=ReMUsQPqktqw6a46yc2kQ6w+D9
+        BHoOWhRMShO/Zku8a9eTpYpYRTp3SoFPGEBORyT0PqkBJaOuJ48DCNmkjuFuKsFijtdciMG+M04wy
+        iiGO6NuJ1IXx3OJDs+yS4t1SbmC7cz54V6MW9vUY56tKJez9ftC7NKpGnluS7/iEeAygb01l0Vs2w
+        JEadKieyutvSDq+tojjHv0aWVXkZFObz/iq5YwPL83nRuqAhwhOF1Q1fioc4sQh4amg09eklA5Htz
+        x/DWdXEavMST9IQErUCkol4VCduJqJJe3ZBw1isFVTIdPTKRgqfaNEORRLsKmJZwVf91iB6gMQP1r
+        vuuz6hAQ==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=2pugRrrY/jHwIUYNyE6SM2LDsIXpPsZTjyGq9Jd3onI=; b=eB83DX5bk1103SU9DMmPciicbb
+        iMVjNniLEB4aREAiA3VHNQrinomAXwwZQPU5DXy2qxDR3Jdii3Bz7Diz8I7783aBF154l9ouhqe2J
+        SjLbVjmBKkIUA525z836H9E55+asQHZ8oUX0ysmb/WwYBboguAonfojn/RjudyE95eWyDjvWbHFsQ
+        QW3H+H1bu2yKErhyecrbJoopJMWQCaj8M50rJ8Drjyl6Dp/28VsnhqBgdr3nwWkHajgZ/BRHnVFrY
+        cE3g7nrlsH4vn5On4edQ4KlBfqQvAv14xbwrxmnvijP+9ON1g6N3zGtCl1KOen7gN2purnLG6KeVS
+        O/Sh7wIg==;
+Received: from [2a02:908:1b0:8800:1400:2ed0:5344:b031] (helo=debian-qemu)
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pP8dY-0005oP-Ru; Mon, 06 Feb 2023 22:02:54 +0100
+Date:   Mon, 6 Feb 2023 20:51:50 +0100
+From:   Andreas Feldner <pelzi@flying-snail.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per default
+Message-ID: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <d1dc0c9b-eab2-0287-d0a2-ead44ecee5ce@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 08:06:13PM +0530, Mukesh Ojha wrote:
-> 
-> 
-> On 2/4/2023 3:07 AM, Konrad Dybcio wrote:
-> > 
-> > 
-> > On 3.02.2023 18:04, Mukesh Ojha wrote:
-> > > Add a simple-mfd representing IMEM on SM8450 and define the PIL
-> > > relocation info region, so that post mortem tools will be able
-> > > to locate the loaded remoteprocs.
-> > > 
-> > > Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> > > ---
-> >  From XBL:
-> > 
-> > 0x14680000, 0x0002A000, "IMEM Base"
-> > 
-> > Is there anything in that wider address range that would interest
-> > us? I recall Alex once dug into that when diving into IPA, but
-> > I can not recall the conclusion..
-> Spec-wise, yes IPA do own these 0x146A8000 - 0x146AA000 .
-> But, not sure what they use it for.
-> 
+The SoC features debounce logic for external interrupts. Per default,
+this is based on a 32kHz oscillator, in effect filtering away multiple
+interrupts separated by less than roughly 100µs.
 
-The DT should not reflect the organization structure. Let's see if Alex
-have any input on this.
+This patch sets different defaults for this filter for this board:
+PG is connected to non-mechanical components, without any risk for
+showing bounces. PA is mostly exposed to GPIO pins, however the
+existence of a debounce filter is undesirable as well if electronic
+components are connected.
 
-Thanks,
-Bjorn
+Additionally, the clock-frequency attribute is added for each of
+the 4 cores to eliminate the kernel error message on boot, that
+the attribute is missing.
 
-> -Mukesh
-> > 
-> > Konrad
-> > >   arch/arm64/boot/dts/qcom/sm8450.dtsi | 15 +++++++++++++++
-> > >   1 file changed, 15 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > > index 5704750..474ea1b 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> > > @@ -3536,6 +3536,21 @@
-> > >   			};
-> > >   		};
-> > > +		sram@146aa000 {
-> > > +			compatible = "qcom,sm8450-imem", "syscon", "simple-mfd";
-> > > +			reg = <0 0x146aa000 0 0x1000>;
-> > > +
-> > > +			#address-cells = <1>;
-> > > +			#size-cells = <1>;
-> > > +
-> > > +			ranges = <0 0 0x146aa000 0x1000>;
-> > > +
-> > > +			pil-reloc@94c {
-> > > +				compatible = "qcom,pil-reloc-info";
-> > > +				reg = <0x94c 0xc8>;
-> > > +			};
-> > > +		};
-> > > +
-> > >   		apps_rsc: rsc@17a00000 {
-> > >   			label = "apps_rsc";
-> > >   			compatible = "qcom,rpmh-rsc";
+Signed-off-by: Andreas Feldner <pelzi@flying-snail.de>
+---
+ .../dts/sun8i-h2-plus-bananapi-m2-zero.dts     | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+index d729b7c705db..1fc0d5d1e51a 100644
+--- a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
++++ b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+@@ -113,6 +113,22 @@ wifi_pwrseq: wifi_pwrseq {
+ 
+ &cpu0 {
+ 	cpu-supply = <&reg_vdd_cpux>;
++	clock-frequency = <1296000000>;
++};
++
++&cpu1 {
++	cpu-supply = <&reg_vdd_cpux>;
++	clock-frequency = <1296000000>;
++};
++
++&cpu2 {
++	cpu-supply = <&reg_vdd_cpux>;
++	clock-frequency = <1296000000>;
++};
++
++&cpu3 {
++	cpu-supply = <&reg_vdd_cpux>;
++	clock-frequency = <1296000000>;
+ };
+ 
+ &de {
+@@ -193,6 +209,8 @@ bluetooth {
+ };
+ 
+ &pio {
++	/* 1µs debounce filter on both IRQ banks */
++	input-debounce = <1 1>;
+ 	gpio-line-names =
+ 		/* PA */
+ 		"CON2-P13", "CON2-P11", "CON2-P22", "CON2-P15",
+-- 
+2.30.2
+
