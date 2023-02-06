@@ -2,160 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6D668BBEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C5F68BBF1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjBFLpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S229930AbjBFLpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjBFLpj (ORCPT
+        with ESMTP id S229678AbjBFLpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:45:39 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FEB526B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 03:45:38 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so7053147wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 03:45:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=io5TxYTm89uOwis4jMUJKqqOWIjw0glfkZGNfVGgNSU=;
-        b=FC/5NK6QDrqhjg2/7Lbh1v+jYhc9NoQTA2S3rwBO63DuoHzCrgRZPagVpiwP13HI8I
-         /13pK6x9yQZKlJgkbmqGK2LH386NzvRHkSit7V1Gt8mNpNv1fTRU4XQdTfbQSAvIT4ns
-         CIMiDpUPoyN+bsc6XcuwER/UT+0DbNtIufyt0ZcBL81XwxAWfF+kF0Yxa0eOZKmKT0RX
-         uA2J1hiW6bGCas01BvPdb66EpPgBKpjYc4sfrKW6Dj3eMOgMCRkraOA/gBvHd+xSpegh
-         66iZK8XO4d20O2wQ07fZa3lySHEo5xkUBlwW3+v1JeVWdK9HidWic/aQTVphdYWpstL8
-         jHdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=io5TxYTm89uOwis4jMUJKqqOWIjw0glfkZGNfVGgNSU=;
-        b=0UB2UxYMxGsuIXYwz6UwNYGNej+5lZT6mEsVIMnbqlVGEj83H+QQI56vU9YxauKRRZ
-         P7y3QU8YN2L+rNNOPDBXK2MmrAP970AFlsUb70Eccpr4IROh4aaJpqcjmLxY+PXuLYRT
-         fBFAZckevtGab9lOkB4RiQWGwQO/2KfApz7oLX7EHmOP5mRb2Jgveu5B2SeUL9yHZn8s
-         +LDoibosqd3xX1Wk+YYqjcZS1/MV5UDV+gahaLdDLgzqkFwdM2owUXv3USgtxRbw0TwV
-         F+amuhOlMxRDspwWIgBDvJZoC4N6HtmuDct0+skAx36Jmz9bPU6ppNMxdDiywH049yS6
-         YM2g==
-X-Gm-Message-State: AO0yUKVA5agnT4EHASlcFjBebIwXHDIl+LPN519S55eI82tfUfX8GNCB
-        vxGhPXXvpyxOXpHzXu1XB7YQiA==
-X-Google-Smtp-Source: AK7set+woglDIefyaTuMiIQ1NVBVkbBZ/GTk5hK+CMxKO2V7IQS7B/4hgjgn1NR9cp4Bk4s/bz/mTg==
-X-Received: by 2002:a05:600c:538b:b0:3df:a04a:1a7 with SMTP id hg11-20020a05600c538b00b003dfa04a01a7mr15145742wmb.22.1675683937343;
-        Mon, 06 Feb 2023 03:45:37 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id c13-20020a056000104d00b002bfebe2d67esm8816271wrx.9.2023.02.06.03.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 03:45:37 -0800 (PST)
-Date:   Mon, 6 Feb 2023 12:45:36 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 07/14] RISC-V: KVM: Add skeleton support for perf
-Message-ID: <20230206114536.oif5huw4jqhsdtic@orel>
-References: <20230205011515.1284674-1-atishp@rivosinc.com>
- <20230205011515.1284674-8-atishp@rivosinc.com>
+        Mon, 6 Feb 2023 06:45:49 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2178222035;
+        Mon,  6 Feb 2023 03:45:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675683948; x=1707219948;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=uR/HXzJZOonPBiXJlX7ofHHUBlPEq8VyuqMXpzZ/uKY=;
+  b=RTdFolDPaq9B9W4dW+/R0kgeIRbR5ItRmJwMTOM8qc7lrjwXyPEgthem
+   VVU2ssspD5HoyXGPVKjtkhl9W7sjotVIdtd50uShEp2Fvn4K3DYnBi7fr
+   BKWHTpF4Z6P3nJD6ZCbd+6jiRHzT+lw5w9itREaLkxStduIvknN4Q8t/C
+   avkS8fgU5Uxh0o+jKJnvQ+Xd2psecywXuTmrCQTRW6Df3MjwCWNTeNTKv
+   /Nta7g1swcN/UGSs39qTBBu+FR2zamP+viSOTLThIdvZryA4O97YK1yUx
+   qdjJ7wfFk4eKEtn1kOvzmfqeqnaIcqBz3P9mpL3NKqIsVeaC6gKS+9nPs
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="356544493"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="356544493"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 03:45:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="643999780"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="643999780"
+Received: from mjothix-mobl2.ger.corp.intel.com ([10.252.35.36])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 03:45:43 -0800
+Date:   Mon, 6 Feb 2023 13:45:40 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+In-Reply-To: <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
+Message-ID: <a9ab65a6-f750-7fd9-99ba-1cbd15427d2c@linux.intel.com>
+References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205011515.1284674-8-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 05:15:08PM -0800, Atish Patra wrote:
-> This patch only adds barebone structure of perf implementation. Most of
-> the function returns zero at this point and will be implemented
-> fully in the future.
+On Tue, 31 Jan 2023, Shaopeng Tan wrote:
+
+> After creating a child process with fork() in CAT test, if an error
+> occurs or a signal such as SIGINT is received, the parent process will
+> be terminated immediately, and therefor the child process will not
+> be killed and also resctrlfs is not unmounted.
 > 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> There is a signal handler registered in CMT/MBM/MBA tests, which kills
+> child process, unmount resctrlfs, cleanups result files, etc., if a
+> signal such as SIGINT is received.
+>
+> Commonize the signal handler registered for CMT/MBM/MBA tests and reuse
+> it in CAT too.
+> 
+> To reuse the signal handler, make the child process in CAT wait to be
+> killed by parent process in any case (an error occurred or a signal was
+> received), and when killing child process use global bm_pid instead of
+> local bm_pid.
+> 
+> Also, since the MBA/MBA/CMT/CAT are run in order, unregister the signal
+> handler at the end of each test so that the signal handler cannot be
+> inherited by other tests.
+> 
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 > ---
->  arch/riscv/include/asm/kvm_host.h     |   4 +
->  arch/riscv/include/asm/kvm_vcpu_pmu.h |  78 +++++++++++++++
->  arch/riscv/kvm/Makefile               |   1 +
->  arch/riscv/kvm/vcpu.c                 |   7 ++
->  arch/riscv/kvm/vcpu_pmu.c             | 135 ++++++++++++++++++++++++++
->  5 files changed, 225 insertions(+)
->  create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
->  create mode 100644 arch/riscv/kvm/vcpu_pmu.c
+>  tools/testing/selftests/resctrl/cat_test.c    | 28 ++++----
+>  tools/testing/selftests/resctrl/fill_buf.c    | 14 ----
+>  tools/testing/selftests/resctrl/resctrl.h     |  2 +
+>  tools/testing/selftests/resctrl/resctrl_val.c | 70 +++++++++++++------
+>  4 files changed, 68 insertions(+), 46 deletions(-)
 > 
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index 93f43a3..b90be9a 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -18,6 +18,7 @@
->  #include <asm/kvm_vcpu_insn.h>
->  #include <asm/kvm_vcpu_sbi.h>
->  #include <asm/kvm_vcpu_timer.h>
-> +#include <asm/kvm_vcpu_pmu.h>
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> index 6a8306b0a109..3524fa88e3a4 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -103,7 +103,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  	unsigned long l_mask, l_mask_1;
+>  	int ret, pipefd[2], sibling_cpu_no;
+>  	char pipe_message;
+> -	pid_t bm_pid;
 >  
->  #define KVM_MAX_VCPUS			1024
+>  	cache_size = 0;
 >  
-> @@ -228,6 +229,9 @@ struct kvm_vcpu_arch {
+> @@ -181,28 +180,31 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>  		strcpy(param.filename, RESULT_FILE_NAME1);
+>  		param.num_of_runs = 0;
+>  		param.cpu_no = sibling_cpu_no;
+> +	} else {
+> +		ret = signal_handler_register();
+> +		if (ret) {
+> +			kill(bm_pid, SIGKILL);
+> +			goto out;
+> +		}
+>  	}
 >  
->  	/* Don't run the VCPU (blocked) */
->  	bool pause;
-> +
-> +	/* Performance monitoring context */
-> +	struct kvm_pmu pmu_context;
->  };
+>  	remove(param.filename);
 >  
->  static inline void kvm_arch_hardware_unsetup(void) {}
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> new file mode 100644
-> index 0000000..40905db
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> @@ -0,0 +1,78 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2023 Rivos Inc
-> + *
-> + * Authors:
-> + *     Atish Patra <atishp@rivosinc.com>
-> + */
-> +
-> +#ifndef __KVM_VCPU_RISCV_PMU_H
-> +#define __KVM_VCPU_RISCV_PMU_H
-> +
-> +#include <linux/perf/riscv_pmu.h>
-> +#include <asm/kvm_vcpu_sbi.h>
-> +#include <asm/sbi.h>
-> +
-> +#ifdef CONFIG_RISCV_PMU_SBI
-> +#define RISCV_KVM_MAX_FW_CTRS	32
-> +
-> +#if RISCV_KVM_MAX_FW_CTRS > 32
-> +#error "Maximum firmware counter can not exceed 32 without increasing the RISCV_MAX_COUNTERS"
-                                    ^cannot                              ^ no the
 
-> +#endif
-> +
-> +#define RISCV_MAX_COUNTERS 64
+>  	ret = cat_val(&param);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = check_results(&param);
+> -	if (ret)
+> -		return ret;
+> +	if (ret == 0)
+> +		ret = check_results(&param);
 
-I'm still not sure about the above. I wrote more in the v4 thread
-about it.
+It would be take this program flow fix out of the signal handler change
+into a separate change.
 
-Otherwise,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+-- 
+ i.
