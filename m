@@ -2,141 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28F068B90E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 682A168B90A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjBFJxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 04:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
+        id S229947AbjBFJwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 04:52:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjBFJwj (ORCPT
+        with ESMTP id S229787AbjBFJwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:52:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F281CF57
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675677119;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=owEYQNcSgjMplel5oj3hjxZa5dZAvDaBXhOMUtOhUoc=;
-        b=QBAgqzR1BC9eLNdUssnJ2W18sk1oNDHd3+TyAbaOOF4PHlttVlswVJu8vGPolXDB19I13Z
-        JYIsIzKlRb1efml+uSLj56aHTlwxJntOhgn7AgBtJFXeY8KyhOzm2VYjnSDukXSz8gK6yF
-        h3j/EkeYL/hOGLi+sFoJaqtV5z3aDbI=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-599-QlpvH29CO_mwMHCirj2FTw-1; Mon, 06 Feb 2023 04:51:57 -0500
-X-MC-Unique: QlpvH29CO_mwMHCirj2FTw-1
-Received: by mail-ej1-f72.google.com with SMTP id m21-20020a1709060d9500b0088ca6c7af4cso8329523eji.21
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 01:51:57 -0800 (PST)
+        Mon, 6 Feb 2023 04:52:13 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A55D1CF70
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:52:10 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id dr8so32426222ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 01:52:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=baVP657n8icmklgNe0xOuxc0O0JI+5IT7IAu1E1Ky7k=;
+        b=PejvlXRJZwnjHFmZqjeyDC4631Qf/DpedicCiPcMmDPWobE3+8JEzNN1MwoQmE+Cr7
+         +oFSLhPspjpUKKhrMcKxXcV8MsF5/V3T8eJGFT1UrBxuF68gHdFP9TreXoaNb85YRB8K
+         Ur7y33M7x+ITEV9HLoWL95S1YTMuLAvlPHWBTEmWL8rya1rAjFB4ATVitCHz0dft91OZ
+         xsdYv5X9rKND35Pdx4s8Htag48DNIOhY+aXoswR4+hVMcFJK5Q/2YVHE2ZOQXFkw3kow
+         7fMEcRA6UGv6JE0rAgT99W5yCSd+zP7Zozmb+6hnR31RnWd7gMFejjANtV1ZOFrEiMDd
+         rMPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=owEYQNcSgjMplel5oj3hjxZa5dZAvDaBXhOMUtOhUoc=;
-        b=2bWHDuf4JUZNZU7pUDYBm5GsMekmg9oT39F2XLYUAHBtwYZrf1PBtm1uF2E7YlEVKp
-         vOhnkTppoH9ZTefzoeNaoKQu2FpWU+2DGnntHABEuDdPAfJkFtc2W+85LAwyG3707k2N
-         JqjPlUALxMhv5RVFAPLwuzci2N8wmf4UbcJWL5Sv1j610hbY4qntS1lXjWwMxM/PQDds
-         T+mG8ufbD9rbfq1AwSK3d3c3NDE4Q5DJV5ld2d6RX/ULz75QEakNU+1Mlvo3gKByUV2A
-         5oIF1hpAmzQgNsDn7V/beuZOOAygxsUPaK1qfiksb7UoD2+SrjBV799LZh4D/7JZNRO8
-         g6NQ==
-X-Gm-Message-State: AO0yUKU3sCczEkiVxeHvD6KbmhcVMREKrcd4NIHRHLPrjZNfnXhD5Z7Q
-        PULdy/DeKZxTpVEQC6WpiaeYatwXz9GmCHv/hyZ06yxK9w79ATWptDdp3HSIbPXnciOCL+8ResB
-        PL+pVGQHHiA1WTABvR0FtmIHF
-X-Received: by 2002:a50:9341:0:b0:4aa:a76a:c428 with SMTP id n1-20020a509341000000b004aaa76ac428mr5601491eda.6.1675677116591;
-        Mon, 06 Feb 2023 01:51:56 -0800 (PST)
-X-Google-Smtp-Source: AK7set8R7YfE5UxluqXarKoSjZxXBOJ+bTscBS5IqBZTYnjBUWkFkaKqIphqD14gAJ07SG61fBF/pg==
-X-Received: by 2002:a50:9341:0:b0:4aa:a76a:c428 with SMTP id n1-20020a509341000000b004aaa76ac428mr5601481eda.6.1675677116426;
-        Mon, 06 Feb 2023 01:51:56 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id c5-20020a50d645000000b004aaa656887esm2167221edj.96.2023.02.06.01.51.55
+        bh=baVP657n8icmklgNe0xOuxc0O0JI+5IT7IAu1E1Ky7k=;
+        b=7JX/0fqylNXGmXuoN0PsR89HS9RKWklu1ZTNVBqtFh2H56k5MuCA6+wiLQ/8ei8Yug
+         GTib+1oM7XPVdGgZpKHbNZFsFtXkvYw1NMGYwLtOR20c+kTzk4RHMRx7LP/5bKoFtpHj
+         29KwpMRE3NMv64mrEc9aYxubELrMPWZjXOtjNa64Juj86rGB4oadIlBGovJx+gctNav4
+         pwJYmuQ7MK1aIXKpv7Mpe5cWF4urJ++Dwl08iQbFz7HG3NqmWJ/+Dd52+uT4OWQgvd/F
+         UvxJjrYazK+w9wHVf5B3ZM7+mSpwOD1dg9Q9ONdD+2sH0pL1uh2KSygfCKpYtaGhYOVv
+         88lA==
+X-Gm-Message-State: AO0yUKWUQcNEAixvYzcnE8I5Sz0gb779f+xrYAJKMgJaadIS5uNBxRDd
+        AbdSAPdhC8cy0VlmVFAlGGdmX5VrFPIECoW6
+X-Google-Smtp-Source: AK7set819Bt8yINrBhs7qYEWhkifE9mWvvy3wPSDQiyXOb5hzFTlwkg1yIxUDyAiQZ1LDgExVDz4qA==
+X-Received: by 2002:a17:906:3608:b0:878:711d:9310 with SMTP id q8-20020a170906360800b00878711d9310mr20275052ejb.1.1675677129200;
+        Mon, 06 Feb 2023 01:52:09 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id uj19-20020a170907c99300b0088c804c4ae2sm5126434ejc.201.2023.02.06.01.52.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 01:51:56 -0800 (PST)
-Message-ID: <2d5dc77a-4c57-cad5-3fb5-6dc999d3954d@redhat.com>
-Date:   Mon, 6 Feb 2023 10:51:55 +0100
+        Mon, 06 Feb 2023 01:52:08 -0800 (PST)
+Message-ID: <03d6c92a-c9f3-915c-218a-14ff5c5250d2@linaro.org>
+Date:   Mon, 6 Feb 2023 11:52:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH] iio: light: cm32181: Unregister second I2C client if
- present
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230206063616.981225-1-kai.heng.feng@canonical.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230206063616.981225-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH V3 4/9] dt-bindings: clock: Add Qualcomm IPQ5332 GCC
+Content-Language: en-GB
+To:     Kathiravan T <quic_kathirav@quicinc.com>,
+        krzysztof.kozlowski@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        arnd@arndb.de, marcel.ziswiler@toradex.com,
+        nfraprado@collabora.com, robimarko@gmail.com,
+        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     quic_varada@quicinc.com, quic_srichara@quicinc.com
+References: <20230206071217.29313-1-quic_kathirav@quicinc.com>
+ <20230206071217.29313-5-quic_kathirav@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230206071217.29313-5-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2/6/23 07:36, Kai-Heng Feng wrote:
-> If a second client that talks to the actual I2C address was created in
-> probe(), there should be a corresponding cleanup in remove() to avoid
-> leakage.
+On 06/02/2023 09:12, Kathiravan T wrote:
+> Add binding for the Qualcomm IPQ5332 Global Clock Controller.
 > 
-> So if the "client" is not the same one used by I2C core, unregister it
-> accordingly.
-> 
-> Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
-> Fixes: c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices with 2 I2C resources")
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-
-Thank you for fixing this, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
-
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
 > ---
->  drivers/iio/light/cm32181.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> Changes in V3:
+> 	- Actually I missed to remove the clocks in V2 which are supposed to
+> 	  be removed. In V3 I have removed those and they are
+> 	  GCC_APSS_AHB_CLK, GCC_APSS_AHB_CLK_SRC, GCC_APSS_AXI_CLK
+> 	- For the same, didn't add the Reviewed-By tags from Stephen and
+> 	  Krzysztof
 > 
-> diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
-> index b1674a5bfa368..37439e103d273 100644
-> --- a/drivers/iio/light/cm32181.c
-> +++ b/drivers/iio/light/cm32181.c
-> @@ -488,6 +488,15 @@ static int cm32181_probe(struct i2c_client *client)
->  	return 0;
->  }
->  
-> +static void cm32181_remove(struct i2c_client *client)
-> +{
-> +	struct cm32181_chip *cm32181 = iio_priv(i2c_get_clientdata(client));
+> Changes in V2:
+> 	- property 'clocks' is marked required
+> 	- Renamed the include file name to match with compatible
+> 
+>   .../bindings/clock/qcom,ipq5332-gcc.yaml      |  61 +++
+>   include/dt-bindings/clock/qcom,ipq5332-gcc.h  | 356 ++++++++++++++++++
+>   2 files changed, 417 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
+>   create mode 100644 include/dt-bindings/clock/qcom,ipq5332-gcc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
+> new file mode 100644
+> index 000000000000..961311af400c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,ipq5332-gcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	/* Unregister the dummy client */
-> +	if (cm32181->client != client)
-> +		i2c_unregister_device(cm32181->client);
-> +}
+> +title: Qualcomm Global Clock & Reset Controller on IPQ5332
 > +
->  static int cm32181_suspend(struct device *dev)
->  {
->  	struct cm32181_chip *cm32181 = iio_priv(dev_get_drvdata(dev));
-> @@ -531,6 +540,7 @@ static struct i2c_driver cm32181_driver = {
->  		.pm = pm_sleep_ptr(&cm32181_pm_ops),
->  	},
->  	.probe_new	= cm32181_probe,
-> +	.remove		= cm32181_remove,
->  };
->  
->  module_i2c_driver(cm32181_driver);
+> +maintainers:
+> +  - Stephen Boyd <sboyd@kernel.org>
+> +
+> +description: |
+> +  Qualcomm global clock control module provides the clocks, resets and power
+> +  domains on IPQ5332.
+> +
+> +  See also:: include/dt-bindings/clock/qcom,gcc-ipq5332.h
+> +
+> +allOf:
+> +  - $ref: qcom,gcc.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,ipq5332-gcc
+> +
+> +  clocks:
+> +    items:
+> +      - description: Board XO clock source
+> +      - description: Sleep clock source
+> +      - description: PCIE 2lane PHY pipe clock source
+> +      - description: PCIE 2lane x1 PHY pipe clock source (For second lane)
+> +      - description: USB PCIE wrapper pipe clock source
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xo
+> +      - const: sleep_clk
+> +      - const: pcie_2lane_phy_pipe_clk
+> +      - const: pcie_2lane_phy_pipe_clk_x1
+> +      - const: usb_pcie_wrapper_pipe_clk
+
+pcie3x1_0_pipe_clk_src, pcie3x1_1_pipe_clk_src, pcie3x2_pipe_clk_src 
+usb0_pipe_clk_src are missing.
+
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    clock-controller@1800000 {
+> +      compatible = "qcom,ipq5332-gcc";
+> +      reg = <0x01800000 0x80000>;
+> +      clocks = <&xo_board>,
+> +               <&sleep_clk>,
+> +               <&pcie_2lane_phy_pipe_clk>,
+> +               <&pcie_2lane_phy_pipe_clk_x1>,
+> +               <&usb_pcie_wrapper_pipe_clk>;
+> +      #clock-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +      #reset-cells = <1>;
+> +    };
+> +...
+
+-- 
+With best wishes
+Dmitry
 
