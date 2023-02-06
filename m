@@ -2,167 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBAF68C6A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C2768C6A1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 20:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjBFTSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 14:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
+        id S230307AbjBFTRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 14:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbjBFTSV (ORCPT
+        with ESMTP id S230321AbjBFTRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 14:18:21 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF12518A8D;
-        Mon,  6 Feb 2023 11:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675711079; x=1707247079;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=WZL7KYh8ID4GfRs9QrGEDOl+CnXITIyoUyyWxgb7HWI=;
-  b=DyCIUSSQVNA9d5Stgq01HRZWad3+m4NGdPbQM0fM80kDpBmt/xQj+r3V
-   ylV2IsBTOQZOzkP8jZbhikKRynM6OdVx80S/fu1YRgKe6iPiGoP3aVoUe
-   0lqWtKBnA52E7f5plVB2vLiLlP/0ERCvPrbarTnhzis0PwyUWvmH/fHbk
-   rp53coJ3H9/8vasjFu2wLfVNlbpVIvPGHTtydrpB/36QUNDUHrkBdRQeb
-   Eg58aWgfp6e7hkGvQ0gwRsTohHvx0BxgSdtv4GLD7HpAZOuXFrZGJyaym
-   xc6V8nkElyfroKFfBxWSF4QBL1VYbF9i59JzzqCnY7EorHHmLpKE4Syzj
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309625864"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="309625864"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 11:17:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775254266"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="775254266"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2023 11:17:04 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 6 Feb 2023 11:17:04 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 6 Feb 2023 11:17:04 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 6 Feb 2023 11:17:03 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PdprKLBfbDdW09sIErDB9pN+RK9vUz3YNkSrGwsOmZhAXFBrCGxBoOp1S9zvmnLhEHsb1+VjTOwC4Q51/Aet0bYqT0UKObWi5XUv8JG4rybfokHGyUOlbws44qjHVtOCyNagrVVfDIC443/bADH7gu3WE+TiLLA/UW2RAtz7nYYbIkcZyY2oCcsdrFkWtsbj94w58Q843pkk2d17n3mMi+/NQwjH3CJE4yEziJ1qu9sbdFz6PZiDVRq/aV1sVzFrF564gWO8z0FSDOCK3PtwP4lgmiHwDofTaAPe/hA+PVCd2yi98V4M6+KjDkJm3mcRDg324m0MxxvVTDnTJmFR8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0ZyE6hBkneSEGeBwqCTOUgFNC931hJ2AlClWbSotU0c=;
- b=QK5ILvoHFHNyzkXKxNvnG0BIzJ8Lg5XOudMvLrWbkU0wnVR+Or96DbwMueiX+MyXP3qVDUVqJMAx+xSsNt1uxnYyce1SbOnxri1B8QgK0KXMkh0CP1KcMmiV/8+EIMOhk/UJPQ3UJIOqU4AG1CVMQVNerJBYnaiyIEH7fx5caO+R8YZTBwLmU5AL1wkUPOYemD2jtWpZPn1orxvHZC+zQ4tSlRzhX/S6U8PAu6cAkCT1Ats99Gs+P6JJ/PNbVhq93r53DQiqkZRP9wB/R56xm1SU3SyR0ldVzNDXe+StR5Ox7Tl7kSVO/kXQkmdoaYJmb92P75vdUcVbioM4QeWrHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by DM8PR11MB5703.namprd11.prod.outlook.com (2603:10b6:8:22::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.34; Mon, 6 Feb 2023 19:17:01 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::421b:865b:f356:7dfc%6]) with mapi id 15.20.6064.031; Mon, 6 Feb 2023
- 19:17:01 +0000
-Date:   Mon, 6 Feb 2023 11:16:58 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Gregory Price <gregory.price@memverge.com>,
-        Fan Ni <fan.ni@samsung.com>
-CC:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cxl/region: Fix null pointer dereference for resetting
- decoder
-Message-ID: <63e1522ac520b_e3dae29432@dwillia2-xfh.jf.intel.com.notmuch>
-References: <CGME20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06@uscas1p2.samsung.com>
- <20221215170909.2650271-1-fan.ni@samsung.com>
- <Y+DjMTSoG9nZwN+e@memverge.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y+DjMTSoG9nZwN+e@memverge.com>
-X-ClientProxiedBy: SJ0PR03CA0190.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::15) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+        Mon, 6 Feb 2023 14:17:32 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B43E2BF0A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 11:17:19 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o13so12600158pjg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:17:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HFhCCF6KKc8jrwlIib3xYlcK52nQlU5i7JbQZG5xkXg=;
+        b=WIa7oPHbexPVvg4fvwaR9+kndrbroQz++TujaKD28jY2+pxf0hdMAI3dY/LgXNAy3r
+         Qf5FK0+I9qvhFLMOEo43LueGk5poqBnbYVUnXT0t+Ifb6XFaVyG+8AaZiyAEIC625pot
+         j5zoY+NWeNUrD6vp0+dFxCD4OHCRpwcVf1OmeWPxZ0zzz3Dg5GGORrCgUIr8PZ6IZ/o0
+         tYXlfjF+DeDK+Ae/lA0F56vFNv6gYkD75dK51ejHN3N6XhOMEpgwfYjHaSakMJ1mPjlV
+         e6Lun3AqirDzO4xjcq3dO84B13UX2cnUMP0NyznhT+WZgBIpwXLPOjTmfzCr+0vz16kW
+         iroA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HFhCCF6KKc8jrwlIib3xYlcK52nQlU5i7JbQZG5xkXg=;
+        b=akm935QYSrB4xN0u2DvG2bhwVqwj2Dk7QoAk5QMdK0t7Oj7F0L+HcD40xdWRdB3D7X
+         8G79jKIeqw655XKuI5kSdIHOCJpaSuAGpYzzHtYMLUCjuSCtkiAnAKz4I8RMs+oSFV8a
+         L8GPLNIZUzeVUSAlgObsDFOvBoto4EfNMa52MG208TSCA4ZBQtADC2NWREL1DM7BVJI+
+         ru45isKjusC4QnwIrr2y8x2m1GK6aG4Jg6piPIRsXJenWVP/pNRhjRpyERxoPP/S0BtO
+         3emsfHOKyXNcTknruyBFmNyaWJMNtYYsknzlLhfuCxsp91df6aqKxjTpf8KM3YaEv8P4
+         q4tw==
+X-Gm-Message-State: AO0yUKUfKQUMEfmgQkQrcvVWZHyzZ+5LgJdPuQw1h/2w2offSVVL6SLe
+        C07bDMPMIycfg6ilzNK/WUvgoVXJzWP0xrYagqsAuw==
+X-Google-Smtp-Source: AK7set9Bd4y8RazRLw+FgG1fYKluMFeh9bpugxhLYn9uSsK9r462sJPsTzLTYkh/jbCi2pN9gIlAXA1PsRLtyiap9CM=
+X-Received: by 2002:a17:90a:3d01:b0:230:8961:22c1 with SMTP id
+ h1-20020a17090a3d0100b00230896122c1mr167548pjc.95.1675711038558; Mon, 06 Feb
+ 2023 11:17:18 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|DM8PR11MB5703:EE_
-X-MS-Office365-Filtering-Correlation-Id: 308c2ec1-8051-4e8e-d4e9-08db0876b92d
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3YXZWNwtaAusGCA93xXBpVDDtsRsu8lrkhhzJ6puB609Hm/b8J30k+t6i99cj8JYSqj9kN7e1IT0spxd1HPoXJUnkpibjraWW2rvsvWlE8VZYqnzbyx7ygXBmqQRA1mt+UMRsMiexAlmOajXuSHv6dYd7IUaX+Aayty+pRcJN9wF/NZ2DAxqBMBinQECL3TR28PbWK3vPtXN6iIa9QATdWEoImCBZZhvK1QdGtpmJ66BSpCqTNNqqejgz0xcYYd54KBmJt/g3Rwf69oHqTWgn9XK2/ydv12iYTJvnAYvrl37IcPDge1PWhDZeMLFlnrxywIEjDYvSqzeGcnUJAU5PAn1JtIrbpGrOtVYcUICQKpIuWtLBRPlr93aXjjf08ji65JoaQvoPGJdrwvrQ+a1I8tX2KnPC7jKjejLQ5DDGNC1VvjQkzlnOLi3BJrZ8TUIoX6q1+hTEYDdhmExeZ/pAc76Wje6LtnY9VLjNAEbkmMZFMDTJRwtL856+Ky0V61DoHmrY2Vb30JvXk4ipsDOcBnpTrnTWTgVfmgBp+kEpVsAX1XbR/aSDbiemIPe6hqBG+fpGdDvSECC7gurI8qtjLf6ue5G4/jckMrVDfRn49xSno4qsM20XIaJVpuC5WjeEPjc/QPwQQrj7jbOwPu7dhGnpyFyPKST2BvkYA8lmNlH4FEbTlvo176SoJ35nuPM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(136003)(346002)(396003)(376002)(451199018)(41300700001)(5660300002)(8936002)(54906003)(110136005)(66476007)(316002)(8676002)(66946007)(66556008)(4326008)(6506007)(38100700002)(82960400001)(6666004)(6512007)(186003)(26005)(9686003)(6486002)(478600001)(966005)(86362001)(2906002)(558084003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rDDfLDkwZMuiB8vSywSsfbiEdJQ3JqCL9HDSAD8t5qQnjFSJ5uF1WpFitbTK?=
- =?us-ascii?Q?a0+0GF7hcQrohBVpnLdAMsa9sbUbhr++S4Q9EHpJ21wOkwV3KsKG0UnxTbek?=
- =?us-ascii?Q?RAP4By7E73PCLGYdBGEEJn0iZ/X2KsFamlvw9RShBz2F8h+/ikst986sQ8Tc?=
- =?us-ascii?Q?m3UTd7tdYuBLEm3cbkm84QfSNxjcdRrOHiwUQtmxYf/e70beCskErvmpYu0Z?=
- =?us-ascii?Q?dSiJDWStMJrZ8PFgVhAcu2YoLvnzsDcX+CyvDtWu5CTraoe4Cb0ChQAhhe+u?=
- =?us-ascii?Q?qTXZiZCNrMHmXNXxsuqaoyOUrn33hChSTgRE98aSBwNNp8TBYTyPcKwFPZzX?=
- =?us-ascii?Q?nYD0dwMTeyODpvsTA+MGndy0ox0+YLMf3b+9D2V7WypF32mYzIHjCjrD5Yvv?=
- =?us-ascii?Q?hUxCakI/Mz24mlKLGBfQ3EaqYlYnzimr7OR3i0WhMfeCQu/pNYZH/DtMM5Uo?=
- =?us-ascii?Q?gqRz+wrawTaB+PcOuV9rQX4LifZMac+biLEQmCUIb+JSQHGLMzNzchteisWA?=
- =?us-ascii?Q?s4OvZoyZIiw2bXYwr1YPkvI2t47suwWASLn8m/rmJXEuFc/vvaMWPD6wauvB?=
- =?us-ascii?Q?+svwR8b3EuZoX/kRrmPXHmFA7z0cgRBdpYH8eJOmCneWi7aVZAbW48X3RlUa?=
- =?us-ascii?Q?xT967RpuT3qqGjfRWGIykSf9UkTSK/KETaP4303ZYDmXyxoAlV48j0jP7hOg?=
- =?us-ascii?Q?fpcsnzK/FnJ2aEPhh4yZJFZDpRFf4W+Bzp3FcQ4TGf3wjU6FErWf81Q7sLt4?=
- =?us-ascii?Q?LxwrbURxorILUi/To+iryHQ6rWcqdSFqeQ5uI59Eg1x8qt+a0wVWnHfZ/lJ0?=
- =?us-ascii?Q?/GCzZRa4d/TfhXMY50g+2q3Jxg+Jpv5HRPXHdOYvElF2iuhHbRa9gyog+w67?=
- =?us-ascii?Q?AOjR0A0r10oH44iSW2/KIAMu36inVJGwYkSnMNCpeaBitNdrckKcL1026rk/?=
- =?us-ascii?Q?SeEZ3J5JQfjP1wfIxej/srtk0ic4Vhfoah+csvJpgClcVgWCDHsproW4nXkm?=
- =?us-ascii?Q?bYZx7ZLtRXHdA141sGaZbndXeAlHWJNFh2ij9VLhwqjMu/CUK+e/Ej3Hr2BF?=
- =?us-ascii?Q?1tEamSocx+yX6FADikW+FY0xm8JsL7UBsJUee/rG+Mkw3CNwuGzrz4pc/FdM?=
- =?us-ascii?Q?DEF8VB86j5q/7FHccjYGb2OC1zBkggsq9kloyLqxhpDhZFYpxv2i5DN4e5jD?=
- =?us-ascii?Q?B2jpa4xYA09AAmHZBmyazr29n+RlAxkzIMk1/GhEz/T3U8mb+wHXngPtYD2l?=
- =?us-ascii?Q?YXLAFIRzHuHoW+UgnKQFbKHY2BwW5fHn2bTYlQgHenkJb8c9+IdB4c0qolpV?=
- =?us-ascii?Q?vLJfdd1u7yhIixXukEvuufdtzimXWNIih/kekdanioGgEnRdwvu7ykZzThv/?=
- =?us-ascii?Q?fmp2teK+4tt4U5mT4zSJHhFz53GVWnNSOFNoFNQj9+t5JFkFTgBp52ukdkZ0?=
- =?us-ascii?Q?aYcyDYa0OhoMS19veI34ZjK0p/gqgje8vXxuTdjkRYmnkE5UlM/hl6RpQTnN?=
- =?us-ascii?Q?xWFWS/SjzWZKrB2lrNDTUblOmDyElDa8DbNsGqLmuYf9emlhTqgKIs+VyIUM?=
- =?us-ascii?Q?PBw/RsHBsgCWUT2+p8ekFQmuLrULnKE0eNghzwPD3JAIpXxHdDa/xhsZmTKZ?=
- =?us-ascii?Q?BA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 308c2ec1-8051-4e8e-d4e9-08db0876b92d
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2023 19:17:01.0884
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 20+UTc6woN0rWl/n3Xe87X08kVVhUtmZt4QPEI5U3ewNiEN18Ys5u3rq6NA14WCCC1IARgnRP8gH3oV8rj6C9accsE5+l/8tzpYwowH4WYg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5703
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230204183241.never.481-kees@kernel.org> <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
+ <63e14abb.170a0220.ca425.b7bc@mx.google.com>
+In-Reply-To: <63e14abb.170a0220.ca425.b7bc@mx.google.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Mon, 6 Feb 2023 11:17:06 -0800
+Message-ID: <CAKH8qBtX0HU4_YtnZ3hU4NhGHSQ9VU70niXFFoqf3k67a1+6aA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gregory Price wrote:
-[..]
-> Should we try to get this upstreamed in 6.2-final?  Seems like a good
-> stable addition. Probably doesn't affect real hardware, but it certainly
-> affects QEMU.
+On Mon, Feb 6, 2023 at 10:45 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Feb 06, 2023 at 09:52:17AM -0800, Stanislav Fomichev wrote:
+> > On Sat, Feb 4, 2023 at 10:32 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > Replace deprecated 0-length array in struct bpf_lpm_trie_key with
+> > > flexible array. Found with GCC 13:
+> > >
+> > > ../kernel/bpf/lpm_trie.c:207:51: warning: array subscript i is outside array bounds of 'const __u8[0]' {aka 'const unsigned char[]'} [-Warray-bounds=]
+> > >   207 |                                        *(__be16 *)&key->data[i]);
+> > >       |                                                   ^~~~~~~~~~~~~
+> > > ../include/uapi/linux/swab.h:102:54: note: in definition of macro '__swab16'
+> > >   102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+> > >       |                                                      ^
+> > > ../include/linux/byteorder/generic.h:97:21: note: in expansion of macro '__be16_to_cpu'
+> > >    97 | #define be16_to_cpu __be16_to_cpu
+> > >       |                     ^~~~~~~~~~~~~
+> > > ../kernel/bpf/lpm_trie.c:206:28: note: in expansion of macro 'be16_to_cpu'
+> > >   206 |                 u16 diff = be16_to_cpu(*(__be16 *)&node->data[i]
+> > > ^
+> > >       |                            ^~~~~~~~~~~
+> > > In file included from ../include/linux/bpf.h:7:
+> > > ../include/uapi/linux/bpf.h:82:17: note: while referencing 'data'
+> > >    82 |         __u8    data[0];        /* Arbitrary size */
+> > >       |                 ^~~~
+> > >
+> > > This includes fixing the selftest which was incorrectly using a
+> > > variable length struct as a header, identified earlier[1]. Avoid this
+> > > by just explicitly including the prefixlen member instead of struct
+> > > bpf_lpm_trie_key.
+> > >
+> > > [1] https://lore.kernel.org/all/202206281009.4332AA33@keescook/
+> > >
+> > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > > Cc: Song Liu <song@kernel.org>
+> > > Cc: Yonghong Song <yhs@fb.com>
+> > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > Cc: KP Singh <kpsingh@kernel.org>
+> > > Cc: Stanislav Fomichev <sdf@google.com>
+> > > Cc: Hao Luo <haoluo@google.com>
+> > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > Cc: Mykola Lysenko <mykolal@fb.com>
+> > > Cc: Shuah Khan <shuah@kernel.org>
+> > > Cc: Haowen Bai <baihaowen@meizu.com>
+> > > Cc: bpf@vger.kernel.org
+> > > Cc: linux-kselftest@vger.kernel.org
+> > > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > > ---
+> > >  include/uapi/linux/bpf.h                         | 2 +-
+> > >  tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
+> > >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > index ba0f0cfb5e42..5930bc5c7e2c 100644
+> > > --- a/include/uapi/linux/bpf.h
+> > > +++ b/include/uapi/linux/bpf.h
+> > > @@ -79,7 +79,7 @@ struct bpf_insn {
+> > >  /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
+> > >  struct bpf_lpm_trie_key {
+> > >         __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
+> > > -       __u8    data[0];        /* Arbitrary size */
+> > > +       __u8    data[];         /* Arbitrary size */
+> > >  };
+> >
+> > That's a UAPI change, can we do it? The safest option is probably just
+> > to remove this field if it's causing any problems (and not do the
+> > map_ptr_kern.c change below).
+>
+> The problem was seen because "data" is used by the kernel (see the
+> compiler warning above). But if it can be removed, sure, that works too,
+> and it much nicer since the resulting structs would have fixed sizes.
 
-Yes, that's the plan.
+I guess I still don't understand why we need the change in map_ptr_kern.c?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?h=fixes&id=01d2cb2593b1
+Re-reading the description:
+
+> > > This includes fixing the selftest which was incorrectly using a
+> > > variable length struct as a header, identified earlier[1].
+
+It's my understanding that it's the intended use-case. Users are
+expected to use this struct as a header; at least we've been using it
+that way :-)
+
+For me, both return the same:
+sizeof(struct { __u32 prefix; __u8 data[0]; })
+sizeof(struct { __u32 prefix; __u8 data[]; })
+
+So let's do s/data[0]/data[]/ in the UAPI only? What's wrong with
+using this struct as a header?
+
+> > The usual use-case (at least that's what we do) is to define some new
+> > struct over it:
+> >
+> > struct my_key {
+> >   struct bpf_lpm_trie_key prefix;
+> >   int a, b, c;
+> > };
+> >
+> > So I really doubt that the 'data' is ever touched by any programs at all..
+>
+> Horrible alternative:
+>
+> struct my_key {
+>     union {
+>         struct bpf_lpm_trie_key trie;
+>         struct {
+>             u8 header[sizeof(struct bpf_lpm_trie_key)];
+>             int a, b, c;
+>         };
+>     };
+> };
+>
+> Perhaps better might be:
+>
+> struct bpf_lpm_trie_key {
+>     __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
+> };
+>
+> struct bpf_lpm_trie_key_raw {
+>     struct bpf_lpm_trie_key_prefix prefix;
+>     u8 data[];
+> };
+>
+> struct my_key {
+>     struct bpf_lpm_trie_key_prefix prefix;
+>     int a, b, c;
+> };
+>
+> Thoughts?
+>
+> --
+> Kees Cook
