@@ -2,106 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A5168B7B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B8068B7BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjBFIuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 03:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S229794AbjBFIw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 03:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjBFIuU (ORCPT
+        with ESMTP id S229526AbjBFIwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:50:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3512415CB4;
-        Mon,  6 Feb 2023 00:50:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95E3560DBA;
-        Mon,  6 Feb 2023 08:50:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F15ACC4339B;
-        Mon,  6 Feb 2023 08:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675673419;
-        bh=VawD/EaHqKqVOZkMPGhwLh/T7LNSQjsFQoayrKLjIfI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jfSUmiTnJmJ66VPcl8Fzyqzjc0BtOLlHeb7oQdztUr48ov7hv4vE+M9H9CIL3o2PI
-         E2kU+wiskZgz3pcC9qU55p2UZlNNPS+D4lCq1GENzf+iBkuegAUH6QVztJy8DutBRB
-         yYkJ9fVv282f6knb1NNlEh2N4PvWr1kG1p7NOb1e897fqp7qRQ57n8UgiH4ufh6+cx
-         bCwJJXMth1hFOyxHCzvFeW+1uqPsJ8W2Uy8zOJ88X7fviT2cDiicwYj3Rvk21nixdt
-         WaEAHaXWt1ZSVRFTlyP1F0sgOBn8d9l47XUgFHcKdsAbUflBrP8vou9FFiq+sF5YhB
-         jq0AbuXdKqzCQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D58A8E55EFD;
-        Mon,  6 Feb 2023 08:50:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 6 Feb 2023 03:52:24 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEED113EE;
+        Mon,  6 Feb 2023 00:52:23 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so12713654pjq.1;
+        Mon, 06 Feb 2023 00:52:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CTwAC18x9cIOiks/6Nlsw3FpytCj0rBSuF+cGpZx0VM=;
+        b=VSd1My/oB2i372ZLnobUBAmRCyztLovO/+nubk400rlkIFAmqIIirSuZKwKufF6Cmz
+         YyrXXRZ/Fz9JRCik4TvEzTcRjqcl116J42OdlFMfI/Zjb4EYIxxQX+kq8eeHYzIEEzGa
+         +7CN/PWyLZamFpgTdiNMIyTZNuglmXDQUJujb3cERr6MA6noRnVzonrjAkKEtO4Dirzs
+         GBY8HlikPGUwpe9oAsu8WGxtFIrCSdlMh5Wd1sg8iDadbGKv42DKush9+BiouOkjlLmH
+         hzc2RxMolbkDJOI0Wdw0i0s/xQZZ/7huJzn6pmK4gpzTFCGrD9JMRm8mfjj4R4FqN0z2
+         9UsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CTwAC18x9cIOiks/6Nlsw3FpytCj0rBSuF+cGpZx0VM=;
+        b=WbZcV7ItBChnfRCtl0kF0t+i387J0RWZMj1YRJAPHa3pTiE82XBWJ6MAWRDipKBUMm
+         7X0vWQq3AjJ57LFFOcX/cOifDQPFUwsUglI7LtSk4rdZFSBTcTnV25wscSZuHqcM71BV
+         jNBTjUotZstFiMalxN/DZKvfhBbqqRwGRdKOcJScZJWp5sa94Bb4U1hvsV5tzAcGW2Vm
+         6qKkFUzhp7qjLEO7n5VaU6+ZT7Ias878Kf0Xigbom0G09mTXJ90jBKba9ynNhOMC7lfY
+         Ddz6lv6+qRBy8goUqjBGhtFByMsRWFEavlquCWFF83spXMeGtokw8ImNbEHMzX5bGwvx
+         H6sQ==
+X-Gm-Message-State: AO0yUKVAR9PctgtrinNkto13y3y225QfC1VvCwb0dkB2h3Tw4R38EWnX
+        2Sz+wZvx+5VrWRHvZkHpgBE=
+X-Google-Smtp-Source: AK7set9NkvBN6SOTcQQAZVe9yJ4NefHT1nYDE0voeiXA81qVuThAhjyaNJuGoqKsWw0DrLlKScPndg==
+X-Received: by 2002:a17:903:1111:b0:196:6ec4:52db with SMTP id n17-20020a170903111100b001966ec452dbmr22503790plh.51.1675673542782;
+        Mon, 06 Feb 2023 00:52:22 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id f9-20020a170902e98900b00185402cfedesm4607769plb.246.2023.02.06.00.52.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 00:52:22 -0800 (PST)
+Message-ID: <f0f6dbed-0e1d-059c-11a4-07fd4bec5c99@gmail.com>
+Date:   Mon, 6 Feb 2023 16:52:15 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 00/10] Add support for PSFP in Sparx5
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167567341887.6519.10285007740594332273.git-patchwork-notify@kernel.org>
-Date:   Mon, 06 Feb 2023 08:50:18 +0000
-References: <20230202104355.1612823-1-daniel.machon@microchip.com>
-In-Reply-To: <20230202104355.1612823-1-daniel.machon@microchip.com>
-To:     Daniel Machon <daniel.machon@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lars.povlsen@microchip.com,
-        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-        joe@perches.com, richardcochran@gmail.com, casper.casan@gmail.com,
-        horatiu.vultur@microchip.com, shangxiaojing@huawei.com,
-        rmk+kernel@armlinux.org.uk, nhuck@google.com, error27@gmail.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
+ Intel hybrid CPUs
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230131085031.88939-1-likexu@tencent.com>
+ <Y9k7eyfmXjqW9lYF@google.com>
+ <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
+ <Y9v7tEXPlki7YOT4@google.com>
+ <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
+ <Y91DUmMjCLzIXlp+@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <Y91DUmMjCLzIXlp+@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 2 Feb 2023 11:43:45 +0100 you wrote:
-> ================================================================================
-> Add support for Per-Stream Filtering and Policing (802.1Q-2018, 8.6.5.1).
-> ================================================================================
+On 4/2/2023 1:28 am, Sean Christopherson wrote:
+> On Fri, Feb 03, 2023, Like Xu wrote:
+>> On 3/2/2023 2:06 am, Sean Christopherson wrote:
+>>> On Thu, Feb 02, 2023, Like Xu wrote:
+>>>> On 1/2/2023 12:02 am, Sean Christopherson wrote:
+>>>> The perf interface only provides host PMU capabilities and the logic for
+>>>> choosing to disable (or enable) vPMU based on perf input should be left
+>>>> in the KVM part so that subsequent development work can add most code
+>>>> to the just KVM, which is very helpful for downstream users to upgrade
+>>>> loadable KVM module rather than the entire core kernel.
+>>>>
+>>>> My experience interacting with the perf subsystem has taught me that
+>>>> perf change required from KVM should be made as small as possible.
+>>>
+>>> I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
+>>> provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
+>>> somehow able to get away with enumerating a very stripped down vPMU, additional
+>>> modifications to perf_get_x86_pmu_capability() will be required.
+>>>
+>>> What I care more about though is this ugliness in perf_get_x86_pmu_capability():
+>>>
+>>> 	/*
+>>> 	 * KVM doesn't support the hybrid PMU yet.
+>>> 	 * Return the common value in global x86_pmu,
+>>> 	 * which available for all cores.
+>>
+>> I would have expected w/ current code base, vpmu (excluding pebs and lbr, intel_pt)
+>> to continue to work on any type of pCPU until you decide to disable them completely.
 > 
-> The VCAP CLM (VCAP IS0 ingress classifier) classifies streams,
-> identified by ISDX (Ingress Service Index, frame metadata), and maps
-> ISDX to streams.
+> Didn't follow this.
+
+My expectation is that, if a guest doesn't enable "PEBS, LBR and intel_pt",
+and only has the most basic pmu conters (its number is the lesser number
+of big and small cores supported), with some pmu_event_fileter allow list
+mechanism, vPMU works regardless of the vcpu model and does not
+require cpu pined. Any complaints from users on this usages ?
+
 > 
-> [...]
+>> Moreover, the caller of perf_get_x86_pmu_capability() may be more than just KVM,
+>> it may be technically ebpf helpers. The diff on comments from v1 can be applied to
+>> this version (restrict KVM semantics), and it makes the status quo clearer
+>> to KVM users.
+> 
+> In that case, eBPF is just as hosed, no?  And given that the only people that have
+> touched perf_get_x86_pmu_capability() in its 11+ years of existence are all KVM
+> people, I have a hard time believing there is meaningful use outside of KVM.
 
-Here is the summary with links:
-  - [net-next,01/10] net: microchip: add registers needed for PSFP
-    https://git.kernel.org/netdev/net-next/c/edad83e2ba1e
-  - [net-next,02/10] net: microchip: sparx5: add resource pools
-    https://git.kernel.org/netdev/net-next/c/bb535c0dbb6f
-  - [net-next,03/10] net: microchip: sparx5: add support for Service Dual Leacky Buckets
-    https://git.kernel.org/netdev/net-next/c/9bf508898983
-  - [net-next,04/10] net: microchip: sparx5: add support for service policers
-    https://git.kernel.org/netdev/net-next/c/1db82abf1969
-  - [net-next,05/10] net: microchip: sparx5: add support for PSFP flow-meters
-    https://git.kernel.org/netdev/net-next/c/d2185e79ba8f
-  - [net-next,06/10] net: microchip: sparx5: add function for calculating PTP basetime
-    https://git.kernel.org/netdev/net-next/c/9e02131ec272
-  - [net-next,07/10] net: microchip: sparx5: add support for PSFP stream gates
-    https://git.kernel.org/netdev/net-next/c/c70a5e2c3d18
-  - [net-next,08/10] net: microchip: sparx5: add support for PSFP stream filters
-    https://git.kernel.org/netdev/net-next/c/ae3e691f3442
-  - [net-next,09/10] net: microchip: sparx5: initialize PSFP
-    https://git.kernel.org/netdev/net-next/c/e116b19db202
-  - [net-next,10/10] sparx5: add support for configuring PSFP via tc
-    https://git.kernel.org/netdev/net-next/c/6ebf182bfdf1
+Some radical bpf programs will access the pmu directly, although this is
+not  uncommon in upstream. KVM colleagues shouldn't need to care
+about them, but at least don't mislead them.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> 
+>>> 	 */
+>>> 	cap->num_counters_gp	= x86_pmu.num_counters;
+>>>
+>>> I really don't want to leave that comment lying around as it's flat out wrong in
+>>> that it obviously doesn't address the other differences beyond the number of
+>>> counters.  And since there are dependencies on perf, my preference is to disable
+>>> PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
+>>> forced to consider the perf side of things, and get buy in from the perf folks.
+>>
+>> The perf_get_x86_pmu_capability() obviously needs to be revamped,
+>> but until real effective KVM enabling work arrives, any inconsequential intrusion
+>> into perf/core code will only lead to trivial system maintenance.
+> 
+> Trivial doesn't mean useless or unnecessary though.  IMO, there's value in capturing,
+> in code, that perf_get_x86_pmu_capability() doesn't properly support hybrid vPMUs.
+> 
+> That said, poking around perf, checking is_hybrid() is wrong.  This quirk suggests
+> that if E-cores are disabled via BIOS, (a) X86_FEATURE_HYBRID_CPU is _supposed_ to
+> be cleared, and (b) the base PMU will reflect the P-core PMU.  I.e. someone can
+> enable vPMU by disabling E-cores.
+> 
+>                  /*
+>                   * Quirk: For some Alder Lake machine, when all E-cores are disabled in
+>                   * a BIOS, the leaf 0xA will enumerate all counters of P-cores. However,
+>                   * the X86_FEATURE_HYBRID_CPU is still set. The above codes will
 
+Sigh. Then what if E-cores are manually offline via "/.../cpu$/online" and then 
+init kvm module ?
+I suggest leaving these open issues to that enabling guy (or maybe it's still me).
 
+>                   * mistakenly add extra counters for P-cores. Correct the number of
+>                   * counters here.
+>                   */
+>                  if ((pmu->num_counters > 8) || (pmu->num_counters_fixed > 4)) {
+>                          pmu->num_counters = x86_pmu.num_counters;
+>                          pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
+>                  }
+> 
+> Side topic, someone (*cough* Intel) should fix that, e.g. detect the scenario
+> during boot and manually clear X86_FEATURE_HYBRID_CPU.
+
+Maybe they did it on purpose.
+
+> 
+> I'm also ok explicitly disabling support in KVM, but since we need to update
+> perf as well (that KVM comment needs to go), I don't see any reason not to also
+> update perf_get_x86_pmu_capability().
+> 
+> How about this?  Maybe split over two patches to separate the KVM and perf changes?
+
+OK, applying your diff below or mine V2 as a KVM move is both fine to me. Just 
+thanks.
+
+> 
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index 85a63a41c471..d096b04bf80e 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -2974,17 +2974,19 @@ unsigned long perf_misc_flags(struct pt_regs *regs)
+>   
+>   void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
+>   {
+> -       if (!x86_pmu_initialized()) {
+> +       /* This API doesn't currently support enumerating hybrid PMUs. */
+> +       if (WARN_ON_ONCE(cpu_feature_enabled(X86_FEATURE_HYBRID_CPU)) ||
+> +           !x86_pmu_initialized()) {
+>                  memset(cap, 0, sizeof(*cap));
+>                  return;
+>          }
+>   
+> +       /*
+> +        * Note, hybrid CPU models get tracked as having hybrid PMUs even when
+> +        * all E-cores are disabled via BIOS.  When E-cores are disabled, the
+> +        * base PMU holds the correct number of counters for P-cores.
+> +        */
+>          cap->version            = x86_pmu.version;
+> -       /*
+> -        * KVM doesn't support the hybrid PMU yet.
+> -        * Return the common value in global x86_pmu,
+> -        * which available for all cores.
+> -        */
+>          cap->num_counters_gp    = x86_pmu.num_counters;
+>          cap->num_counters_fixed = x86_pmu.num_counters_fixed;
+>          cap->bit_width_gp       = x86_pmu.cntval_bits;
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index cdb91009701d..933165663703 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -165,15 +165,27 @@ static inline void kvm_init_pmu_capability(void)
+>   {
+>          bool is_intel = boot_cpu_data.x86_vendor == X86_VENDOR_INTEL;
+>   
+> -       perf_get_x86_pmu_capability(&kvm_pmu_cap);
+> -
+> -        /*
+> -         * For Intel, only support guest architectural pmu
+> -         * on a host with architectural pmu.
+> -         */
+> -       if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
+> +       /*
+> +        * Hybrid PMUs don't play nice with virtualization unless userspace
+> +        * pins vCPUs _and_ can enumerate accurate informations to the guest.
+> +        * Disable vPMU support for hybrid PMUs until KVM gains a way to let
+> +        * userspace opt into the dangers of hybrid vPMUs.
+> +       */
+> +       if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
+>                  enable_pmu = false;
+>   
+> +       if (enable_pmu) {
+> +               perf_get_x86_pmu_capability(&kvm_pmu_cap);
+> +
+> +               /*
+> +                * For Intel, only support guest architectural pmu
+> +                * on a host with architectural pmu.
+> +                */
+> +               if ((is_intel && !kvm_pmu_cap.version) ||
+> +                   !kvm_pmu_cap.num_counters_gp)
+> +                       enable_pmu = false;
+> +       }
+> +
+>          if (!enable_pmu) {
+>                  memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
+>                  return;
+> 
