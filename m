@@ -2,120 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA3468B8AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3177968B8B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 10:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjBFJ1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 04:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S229717AbjBFJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 04:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjBFJ1C (ORCPT
+        with ESMTP id S229447AbjBFJ2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 04:27:02 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA27DBC2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:26:39 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso10250617wmp.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 01:26:39 -0800 (PST)
+        Mon, 6 Feb 2023 04:28:15 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68EB1706
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 01:28:13 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so10666698pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 01:28:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gv8S5H3Ovr1YQgdvQexv/ddLSC0cqfieNvtl/a724Uc=;
-        b=gA3qKsbNqpXbyWk0xcX3LHDibx+UXkCv3awjvieOBKO+9dHKPjk18MrnJztoFM3EQx
-         ydnUV3vJhR4ggozL2Ywu5Y2EICUYpBYSV9fiZXE6b9JPkOM6R01xHQmjpWjCl5PjmFmT
-         2flTXc8VMk9DFkUoxmHLVS6zAJBZC1aPX/dGqQ95C3Jj95U1Fu6tID2NGwJH9QJoQ/CR
-         YjDmzFEFS1qpthRElBoPGHG0X1Q3uELpWGIX0hC0O9sMJ2GVnYPswkixMJnIlrFymE1k
-         rYsDuRHL8+JtHq1vzV/qsGUG6AgiY9NRNpGZjOJnlMXzuY80XRAQkZeNnW5jc/4C+Sks
-         Nkgw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R04S0qZcEuvqwTFUGr5yTppgbV2UI+APpbonbcIO+xw=;
+        b=bkg+x4uqz4aqdpI1qYPCNGQy3d99LN/Lk3ogwj0e3Su3HOA3+VEIUfsHIJuadsccI0
+         hSHYiLZ8nxyUln/bI3Jj6t9tJltE3L1tzleDPIBBEk3GBvpcoIbJSnpzNtPYp0j5pUsk
+         s081zeo96Fyy+qPOy6VQHR1Sk9lGVrTvqlqZBns0qOJbDdqZGbNy68OPZYTjMu6ZUi4R
+         /5ZcCtNqIT/Zo8zndx9Aq4J9ngieXC++B6FrF6OGCi9geP0b2yvPXmRUICBvg8V9bVqO
+         +oDU0IIPQlNru8wkpvVcQz/Ii9ZGe4Bvp26EzFuVJla5mpbbs9o2su+AytE9nSDiUNxn
+         Y2hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gv8S5H3Ovr1YQgdvQexv/ddLSC0cqfieNvtl/a724Uc=;
-        b=UO5N1bJS5xx4Ko6a+JQweT+ckHB9HhPwo+5feG19C8pjscabPFZHia1uN+TfC5oMer
-         7GDmHZp1u14fWPQzA+o5+p5Tdyi6JBRhWmXpxTGWh4+VXxeq5BwSlKNsr/z110qPr4sh
-         WHPdrLIxR6MjI/jaJiajsMx6eSTXcsPQLF1Vw1jZamlX1Y2YHWOegjxQAEAQmYYVyeNV
-         E6yBZOMc86oSCgEnJrlGujqIN0En8BeEACAoVx7yL7Y94C1yV91RHB3MTLLKXRqzzSvO
-         /CrPDOEWuJmEL22KuqiGV8ZkTpy2kfpst9wdUOQZ1uFzO6Urt5v5pLVsmP7F9B+2juor
-         gtbg==
-X-Gm-Message-State: AO0yUKWS6JZOs5LyrUpp0cMosA9Xg0YpuM2iYuZK6pIj4iAgiS1aTykW
-        NrbRMQXgjFU//TL964xP+wHDKQ==
-X-Google-Smtp-Source: AK7set/g9k2tas0Z2ue87Vyd49Xy03J9aJSThb8Zynjak5G+lcGDdlvSuI1KRVpV7uE3LkhqUowWjQ==
-X-Received: by 2002:a05:600c:4f06:b0:3da:b40f:7a55 with SMTP id l6-20020a05600c4f0600b003dab40f7a55mr10603447wmq.6.1675675597722;
-        Mon, 06 Feb 2023 01:26:37 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m5-20020a7bcb85000000b003de8a1b06c0sm15722568wmi.7.2023.02.06.01.26.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 01:26:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
-        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v3 3/3] dt-bindings: serial: restrict possible child node names
-Date:   Mon,  6 Feb 2023 10:26:24 +0100
-Message-Id: <20230206092624.22922-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230206092624.22922-1-krzysztof.kozlowski@linaro.org>
-References: <20230206092624.22922-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R04S0qZcEuvqwTFUGr5yTppgbV2UI+APpbonbcIO+xw=;
+        b=ZxVjPt6xIgazXk5waI6RF4fr0zznGah/0aa5V/WDtnAlNzsXa1ldhusMLOdO7C+/Bm
+         Q80IZ1zW5qz7hq1Lc09z3gec11Vz3XbVUhjizobyNWiv3rfcejswwycQFLcTQREap27r
+         fOzk+GTlCHx6WBHisZHd3pnshOsqtF0Q+kvUVcoxBUZ4AvAsezSavdpFrTgzIvF8Z1IG
+         AXaOKccXmEHl2xQUBoFFeW0/AuIc9flnyeJsHGw7tG/H/hJ8IVb48ObxIEsFL/bN9oGz
+         9TfCZoN9Op70S7GTBcBs2edjafu0C5lHZC53qzFp6vp3BCZkJ+RoFvdyjBEzRkOzndvf
+         u8AA==
+X-Gm-Message-State: AO0yUKWWLL8enoyRqrUkckUA8MCMd4IBQNAqnqEDZNyo3QxeAY+fn+NV
+        kikzAhbtzLBbeOWaXFItLNMNP+XnsH2c8W5GiFqfaA==
+X-Google-Smtp-Source: AK7set9Pu7DRyILz/wqe5rDPOBdJpuT8N7scdJsueOKvz02K8H24Ka27uRrfZIwTKdI/92KjBEcxsQj3YjzqopISKik=
+X-Received: by 2002:a17:90a:3844:b0:230:7ea2:1a04 with SMTP id
+ l4-20020a17090a384400b002307ea21a04mr1743133pjf.112.1675675693158; Mon, 06
+ Feb 2023 01:28:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230201012032.2874481-1-xii@google.com> <Y9zZDcIua63WOdG7@hirez.programming.kicks-ass.net>
+ <CAOBoifgz0pRCBUqo7+X2BKgSuHmQLB6X0LZ9D2eYvboO5yzybg@mail.gmail.com>
+In-Reply-To: <CAOBoifgz0pRCBUqo7+X2BKgSuHmQLB6X0LZ9D2eYvboO5yzybg@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 6 Feb 2023 10:28:02 +0100
+Message-ID: <CAKfTPtCpfrCbi+ZRtBFV0NfQfv9r1oe30BZM4D3_70PQGkxCdw@mail.gmail.com>
+Subject: Re: [PATCH] sched: Consider capacity for certain load balancing decisions
+To:     Xi Wang <xii@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The re-usable serial.yaml schema matches every property with ".*"
-pattern, thus any other schema referencing it will not report unknown
-(unevaluated) properties.  This hides several wrong properties.  It is
-a limitation of dtschema, thus provide a simple workaround: expect
-children to be only of few names matching upstream usage (Bluetooth,
-GNSS, GPS and MCU).
+On Fri, 3 Feb 2023 at 19:47, Xi Wang <xii@google.com> wrote:
+>
+> On Fri, Feb 3, 2023 at 1:51 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Tue, Jan 31, 2023 at 05:20:32PM -0800, Xi Wang wrote:
+> > > After load balancing was split into different scenarios, CPU capacity
+> > > is ignored for the "migrate_task" case, which means a thread can stay
+> > > on a softirq heavy cpu for an extended amount of time.
+> > >
+> > > By comparing nr_running/capacity instead of just nr_running we can add
+> > > CPU capacity back into "migrate_task" decisions. This benefits
+> > > workloads running on machines with heavy network traffic. The change
+> > > is unlikely to cause serious problems for other workloads but maybe
+> > > some corner cases still need to be considered.
+> > >
+> > > Signed-off-by: Xi Wang <xii@google.com>
+> > > ---
+> > >  kernel/sched/fair.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > index 0f8736991427..aad14bc04544 100644
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -10368,8 +10368,9 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+> > >                       break;
+> > >
+> > >               case migrate_task:
+> > > -                     if (busiest_nr < nr_running) {
+> > > +                     if (busiest_nr * capacity < nr_running * busiest_capacity) {
+> > >                               busiest_nr = nr_running;
+> > > +                             busiest_capacity = capacity;
+> > >                               busiest = rq;
+> > >                       }
+> > >                       break;
+> >
+> > I don't think this is correct. The migrate_task case is work-conserving,
+> > and your change can severely break that I think.
+> >
+>
+> I think you meant this kind of scenario:
+> cpu 0: idle
+> cpu 1: 2 tasks
+> cpu 2: 1 task but only has 30% of capacity
+> Pulling from cpu 2 is good for the task but lowers the overall cpu
+> throughput.
+>
+> The problem we have is:
+> cpu 0: idle
+> cpu 1: 1 task
+> cpu 2: 1 task but only has 60% of capacity due to net softirq
+> The task on cpu 2 stays there and runs slower. (This can also be
+> considered non work-conserving if we account softirq like a task.)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- Documentation/devicetree/bindings/serial/serial.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+When load_balance runs for this 2 cpus, cpu2 should be tagged as
+misfit_task because of reduce_capacity and should be selected in
+priority by cpu0 to pull the task. Do you have more details on your
+topology ?
 
-diff --git a/Documentation/devicetree/bindings/serial/serial.yaml b/Documentation/devicetree/bindings/serial/serial.yaml
-index e05ad3ac2abc..c9231e501f1f 100644
---- a/Documentation/devicetree/bindings/serial/serial.yaml
-+++ b/Documentation/devicetree/bindings/serial/serial.yaml
-@@ -96,7 +96,7 @@ then:
-     rts-gpios: false
- 
- patternProperties:
--  ".*":
-+  "^bluetooth|gnss|gps|mcu$":
-     if:
-       type: object
-     then:
--- 
-2.34.1
 
+>
+> Maybe the logic can be merged like this: Use capacity but pick from
+> nr_running > 1 cpus first, then nr_running == 1 cpus if not found.
