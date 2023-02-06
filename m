@@ -2,215 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7910368BA0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC17B68BA0C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjBFKZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:25:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
+        id S229828AbjBFK0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:26:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjBFKZk (ORCPT
+        with ESMTP id S229533AbjBFKZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:25:40 -0500
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C86D46BC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 02:25:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1675679136; bh=fDhIwgiXb16Zuvz1C8SFJAGtd1AmQo1DiiYBfvoE30c=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=qkKDMe6aZeAlSKCtTxwHTB2WMWDc7d/BfNzf0UbzSdjLCT6NfrZmOkqUKT9+IzE04
-         UzNBv9AZbqa6cplhiM123jTWyd7otG771e2zx7etUBhoFeoK5rNw9Rp346b5GvyEFg
-         QfNGThUMOTyodO/qqdRYND/V/AJ32qm3f+egtbY+C2C8TXuRVuP8qVzTbBSKtyNZTO
-         CByTtQp1T/A9pTeA7mra067kYDryWKY4Ajy1vBIl79GQch2ux5jOU3mNneYKkJsDMF
-         rmAaWj9bdKT0Ck8MSpYQ5Vt5n3ktod1Mw6KPfaqk5NWO1qkHFWd/wGwt3G4eVHFLs0
-         4aDfQuTWMWLLw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from schienar ([128.141.229.79]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MlLE9-1okSGj0CZ3-00ljmR for
- <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 11:25:36 +0100
-Date:   Mon, 6 Feb 2023 11:25:34 +0100
-From:   Julian Wollrath <jwollrath@web.de>
-To:     linux-kernel@vger.kernel.org
-Subject: 6.2-rc7: trace during suspend/wakeup kernel/irq/manage.c
- drivers/iommu/amd/init.c
-Message-ID: <20230206112534.15acf5c8@schienar>
+        Mon, 6 Feb 2023 05:25:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363121165D;
+        Mon,  6 Feb 2023 02:25:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3A9FB80E9E;
+        Mon,  6 Feb 2023 10:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D908CC433EF;
+        Mon,  6 Feb 2023 10:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675679149;
+        bh=YQ0RMAR4jJGj50YRD32k5TMYNkgy5qegOCfRojQMnzA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UtPYo5lsCG4me+PidNkk2hoG0CQrA7k0qRs90/l0ghYvmLQFQ5LgdcGyQcZ7LyZJ+
+         F2NDGWxJBPxkKCoRT1aeFFB2DCCiPRDaCiampM2Z3QbfirJv7dK3PgYKe5eg9UZMis
+         8LAmJtRUy9N6f0OTpu3S6X9H5sV1ButSAhVO4dDE=
+Date:   Mon, 6 Feb 2023 11:25:46 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "D. Starke" <daniel.starke@siemens.com>
+Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] tty: n_gsm: add keep alive support
+Message-ID: <Y+DVqtfBRytURnov@kroah.com>
+References: <20230203145023.6012-1-daniel.starke@siemens.com>
+ <20230203145023.6012-2-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:RqGRneKUxfNs+DqqFNsrB27FXjq8NgIIaTIxzV7+uPoYt1xOgzB
- Dj6I+knU2iRXKxGfykli15WICRZANeVulmyMSefetDNl92QxxD3kZiCWLT6bXERpM3rP0u4
- HvpqZHKdnfT5YDWOLo+f8XaEnCpv6BuFRwhPMvEwDhUbbHguHh8kmZKGCaLt0dISH/GCNyT
- 679RLrRA4F7H4jZrzMGsQ==
-UI-OutboundReport: notjunk:1;M01:P0:TcBs2ImzlTo=;h6ACB0w9HRY6wKhf/2RBEosOQZN
- qoKPS0SC2kMRs0HeUzTcU/Mpu9e9MYmlirOkZixyep9tOXZ5COMdS9qBW33VHoAlexHkT3fzK
- vYkO9xAOdN8YgAr/mn8Fs7ao2ovAkKwsFPAzpLR0YtM4Z7u3jR39ZMEGdeaI6/hbPjKv58Uj1
- yx4zcKc8KhLu4X7nQxEbZQ5YwPY2sQJekVOaZCCl8aTNMllPcUNd7uZayV/UfWAt4gi1QgCmQ
- qTaSpakc6WTQYvxib/4+uNCLCMgQuWM73Idp/KVFHOAmCo3J5Pbgq5DyGVvxZne6YtSSnyFjg
- DcdkjODGG7eoXDwnMNx0mjh/R2e2jRUfvxl7CpUuFG6ajNsCCTus+G7vc5Wb0fvTWoALypJ+7
- EUAwOJzOaeKQ5g1I9HDBwmOOp9BG/PejWbbzIMjPXRXZs+jI1841wKK1Wsfemi+ZryTEVA4ip
- nfZDfR/lr9ZQZXN+9aQIgbd4J60eCs0TS6aaSHT5lYD8TbBG2j2C5v9lUDAYoTsNesljHid2i
- Gc654FyblL7bXOgMKMdMfmuflEpW7G+UwWGbA3zf5PJZii3+Z1x0dfPF+uCU+xyOOWoVslk0w
- nhrEwPh02z13fHOayQLtETacxsvI72qU4Cia8gMjCb/IXrEFYla0q8Fq9o7PlbeRjXUxBFRm8
- dbwFOmljKMbSjEKwmQ225tIHzKHPK9hxu0jKaJN+nHq2GdBA/+xB1WwSk60K9R/+9KACeDRYT
- w+xusJ+ErBMDTzlPdEVXHMV1zufNe/VNmuumZj7FBWAbRjZ7ArYrqpGsfZiBG2Z3ntPIlRaRk
- rzuHo4RvCOUK5KxySaY0wahzjxXniIgc6Xk4rderSjFbt6bd+04fT6egMmSdVkFx2l5BpR5k3
- bMqwvCUye4n18UWlUL2VVk1y9N8CvEIxbOyJOCEl6Q9a9OBuKE0W6y3swhtNrKEPmgLJLsyNa
- E6vG5Q==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203145023.6012-2-daniel.starke@siemens.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Feb 03, 2023 at 03:50:21PM +0100, D. Starke wrote:
+> From: Daniel Starke <daniel.starke@siemens.com>
+> 
+> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+> the newer 27.010 here. Chapters 5.4.6.3.4 and 5.1.8.1.3 describe the test
+> command which can be used to test the mux connection between both sides.
+> 
+> Currently, no algorithm is implemented to make use of this command. This
+> requires that each multiplexed upper layer protocol supervises the
+> underlying muxer connection to handle possible connection losses.
+> 
+> Introduce an ioctl commands and functions to optionally enable keep alive
+> handling via the test command as described in chapter 5.4.6.3.4. A single
+> incrementing octet is being used to distinguish between multiple retries.
+> Retry count and interval are taken from the general parameters N2 and T2.
+> 
+> Note that support for the test command is mandatory and already present in
+> the muxer implementation since the very first version.
+> Also note that the previous ioctl structure gsm_config cannot be extended
+> due to missing checks against zero of the field "unused".
+> 
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>  drivers/tty/n_gsm.c         | 106 +++++++++++++++++++++++++++++++++++-
+>  include/uapi/linux/gsmmux.h |  10 ++++
+>  2 files changed, 114 insertions(+), 2 deletions(-)
+> 
+> v2 -> v3:
+> Split previous patch 1/3 into two commits as recommended in the review.
+> No other changes.
+> 
+> Link: https://lore.kernel.org/all/Y9vYxgGd6kC+ZIgR@kroah.com/
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 5783801d6524..d068df1cf2fd 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -318,6 +318,11 @@ struct gsm_mux {
+>  	struct gsm_control *pending_cmd;/* Our current pending command */
+>  	spinlock_t control_lock;	/* Protects the pending command */
+>  
+> +	/* Keep-alive */
+> +	struct timer_list ka_timer;	/* Keep-alive response timer */
+> +	u8 ka_num;			/* Keep-alive match pattern */
+> +	int ka_retries;			/* Keep-alive retry counter */
+> +
+>  	/* Configuration */
+>  	int adaption;		/* 1 or 2 supported */
+>  	u8 ftype;		/* UI or UIH */
+> @@ -325,6 +330,7 @@ struct gsm_mux {
+>  	unsigned int t3;	/* Power wake-up timer in seconds. */
+>  	int n2;			/* Retry count */
+>  	u8 k;			/* Window size */
+> +	u32 keep_alive;		/* Control channel keep-alive in ms */
+>  
+>  	/* Statistics (not currently exposed) */
+>  	unsigned long bad_fcs;
+> @@ -1897,11 +1903,13 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
+>  						const u8 *data, int clen)
+>  {
+>  	struct gsm_control *ctrl;
+> +	struct gsm_dlci *dlci;
+>  	unsigned long flags;
+>  
+>  	spin_lock_irqsave(&gsm->control_lock, flags);
+>  
+>  	ctrl = gsm->pending_cmd;
+> +	dlci = gsm->dlci[0];
+>  	command |= 1;
+>  	/* Does the reply match our command */
+>  	if (ctrl != NULL && (command == ctrl->cmd || command == CMD_NSC)) {
+> @@ -1916,6 +1924,54 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
+>  	/* Or did we receive the PN response to our PN command */
+>  	} else if (command == CMD_PN) {
+>  		gsm_control_negotiation(gsm, 0, data, clen);
+> +	/* Or did we receive the TEST response to our TEST command */
+> +	} else if (command == CMD_TEST && clen == 1 && *data == gsm->ka_num) {
+> +		gsm->ka_retries = -1; /* trigger new keep-alive message */
+> +		if (dlci && !dlci->dead)
+> +			mod_timer(&gsm->ka_timer,
+> +				  jiffies + gsm->keep_alive * HZ / 100);
+> +	}
+> +	spin_unlock_irqrestore(&gsm->control_lock, flags);
+> +}
+> +
+> +/**
+> + * gsm_control_keep_alive	-	check timeout or start keep-alive
+> + * @t: timer contained in our gsm object
+> + *
+> + * Called off the keep-alive timer expiry signaling that our link
+> + * partner is not responding anymore. Link will be closed.
+> + * This is also called to startup our timer.
+> + */
+> +
+> +static void gsm_control_keep_alive(struct timer_list *t)
+> +{
+> +	struct gsm_mux *gsm = from_timer(gsm, t, ka_timer);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&gsm->control_lock, flags);
+> +	if (gsm->ka_num && gsm->ka_retries == 0) {
+> +		/* Keep-alive expired -> close the link */
+> +		if (debug & DBG_ERRORS)
+> +			pr_info("%s keep-alive timed out\n", __func__);
+> +		spin_unlock_irqrestore(&gsm->control_lock, flags);
+> +		if (gsm->dlci[0])
+> +			gsm_dlci_begin_close(gsm->dlci[0]);
+> +		return;
+> +	} else if (gsm->keep_alive && gsm->dlci[0] && !gsm->dlci[0]->dead) {
+> +		if (gsm->ka_retries > 0) {
+> +			/* T2 expired for keep-alive -> resend */
+> +			gsm->ka_retries--;
+> +		} else {
+> +			/* Start keep-alive timer */
+> +			gsm->ka_num++;
+> +			if (!gsm->ka_num)
+> +				gsm->ka_num++;
+> +			gsm->ka_retries = gsm->n2;
+> +		}
+> +		gsm_control_command(gsm, CMD_TEST, &gsm->ka_num,
+> +				    sizeof(gsm->ka_num));
+> +		mod_timer(&gsm->ka_timer,
+> +			  jiffies + gsm->t2 * HZ / 100);
+>  	}
+>  	spin_unlock_irqrestore(&gsm->control_lock, flags);
+>  }
+> @@ -2061,8 +2117,10 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+>  		/* Ensure that gsmtty_open() can return. */
+>  		tty_port_set_initialized(&dlci->port, false);
+>  		wake_up_interruptible(&dlci->port.open_wait);
+> -	} else
+> +	} else {
+> +		del_timer(&dlci->gsm->ka_timer);
+>  		dlci->gsm->dead = true;
+> +	}
+>  	/* A DLCI 0 close is a MUX termination so we need to kick that
+>  	   back to userspace somehow */
+>  	gsm_dlci_data_kick(dlci);
+> @@ -2078,6 +2136,8 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+>  
+>  static void gsm_dlci_open(struct gsm_dlci *dlci)
+>  {
+> +	struct gsm_mux *gsm = dlci->gsm;
+> +
+>  	/* Note that SABM UA .. SABM UA first UA lost can mean that we go
+>  	   open -> open */
+>  	del_timer(&dlci->t1);
+> @@ -2087,8 +2147,15 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+>  	if (debug & DBG_ERRORS)
+>  		pr_debug("DLCI %d goes open.\n", dlci->addr);
+>  	/* Send current modem state */
+> -	if (dlci->addr)
+> +	if (dlci->addr) {
+>  		gsm_modem_update(dlci, 0);
+> +	} else {
+> +		/* Start keep-alive control */
+> +		gsm->ka_num = 0;
+> +		gsm->ka_retries = -1;
+> +		mod_timer(&gsm->ka_timer,
+> +			  jiffies + gsm->keep_alive * HZ / 100);
+> +	}
+>  	gsm_dlci_data_kick(dlci);
+>  	wake_up(&dlci->gsm->event);
+>  }
+> @@ -2840,6 +2907,7 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+>  	/* Finish outstanding timers, making sure they are done */
+>  	del_timer_sync(&gsm->kick_timer);
+>  	del_timer_sync(&gsm->t2_timer);
+> +	del_timer_sync(&gsm->ka_timer);
+>  
+>  	/* Finish writing to ldisc */
+>  	flush_work(&gsm->tx_work);
+> @@ -2987,6 +3055,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
+>  	INIT_LIST_HEAD(&gsm->tx_data_list);
+>  	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
+>  	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
+> +	timer_setup(&gsm->ka_timer, gsm_control_keep_alive, 0);
+>  	INIT_WORK(&gsm->tx_work, gsmld_write_task);
+>  	init_waitqueue_head(&gsm->event);
+>  	spin_lock_init(&gsm->control_lock);
+> @@ -3003,6 +3072,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
+>  	gsm->mru = 64;	/* Default to encoding 1 so these should be 64 */
+>  	gsm->mtu = 64;
+>  	gsm->dead = true;	/* Avoid early tty opens */
+> +	gsm->keep_alive = 0;	/* Disabled */
+>  
+>  	/* Store the instance to the mux array or abort if no space is
+>  	 * available.
+> @@ -3138,6 +3208,28 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+>  	return 0;
+>  }
+>  
+> +static void gsm_copy_config_ext_values(struct gsm_mux *gsm,
+> +				       struct gsm_config_ext *ce)
+> +{
+> +	memset(ce, 0, sizeof(*ce));
+> +	ce->keep_alive = gsm->keep_alive;
+> +}
+> +
+> +static int gsm_config_ext(struct gsm_mux *gsm, struct gsm_config_ext *ce)
+> +{
+> +	unsigned int i;
+> +
+> +	gsm->keep_alive = ce->keep_alive;
+> +	/*
+> +	 * Check that userspace doesn't put stuff in here to prevent breakages
+> +	 * in the future.
+> +	 */
+> +	for (i = 0; i < ARRAY_SIZE(ce->reserved); i++)
+> +		if (ce->reserved[i])
+> +			return -EINVAL;
 
-during suspend to disk / wake-up I got the following two traces:
+Do the check before you save off the keep_alive variable?
 
-Unbalanced IRQ 1 wake disable
-WARNING: CPU: 10 PID: 5506 at kernel/irq/manage.c:907 irq_set_irq_wake+0x1=
-49/0x1a0
-Modules linked in: snd_seq_dummy snd_hrtimer snd_seq snd_seq_device ccm cm=
-ac algif_hash algif_skcipher af_alg 8021q garp stp mrp llc uvcvideo videob=
-uf2_vmalloc videobuf2_memops videobuf2_v4l2 videodev videobuf2_common mc b=
-nep btusb btintel bluetooth ecdh_generic crc16 snd_ctl_led snd_hda_codec_r=
-ealtek iwlmvm snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi mac80=
-211 snd_hda_intel snd_intel_dspcfg libarc4 nls_ascii nls_cp437 snd_hda_cod=
-ec kvm_amd vfat snd_hwdep iwlwifi fat snd_hda_core kvm xhci_pci snd_pcm ir=
-qbypass crc32_pclmul snd_rn_pci_acp3x sp5100_tco hid_multitouch nft_ct xhc=
-i_hcd snd_timer ghash_clmulni_intel cfg80211 snd_acp_config nf_conntrack c=
-cp watchdog hid_generic usbcore snd_soc_acpi snd sha512_ssse3 nf_defrag_ip=
-v6 ucsi_acpi nf_defrag_ipv4 rapl typec_ucsi tpm_crb rfkill wmi_bmof usb_co=
-mmon pcspkr rng_core snd_pci_acp3x soundcore roles i2c_piix4 i2c_hid_acpi =
-k10temp typec battery i2c_hid tpm_tis hid wireless_hotkey tpm_tis_core cm3=
-2181 industrialio nft_limit
- amd_pmc acpi_cpufreq button ac tcp_bbr sch_fq_codel nf_tables nfnetlink f=
-use efi_pstore configfs efivarfs autofs4 xfs libcrc32c crc32c_generic dm_c=
-rypt dm_mod amdgpu drm_ttm_helper ttm mfd_core gpu_sched i2c_algo_bit crc3=
-2c_intel nvme drm_buddy nvme_core drm_display_helper t10_pi drm_kms_helper=
- syscopyarea crc64_rocksoft sysfillrect crc64 sysimgblt aesni_intel crc_t1=
-0dif crypto_simd evdev crct10dif_generic drm cryptd crct10dif_pclmul serio=
-_raw video crct10dif_common cec wmi
-CPU: 10 PID: 5506 Comm: systemd-sleep Not tainted 6.2.0-rc7 #1
-Hardware name: HP HP EliteBook 845 G7 Notebook PC/8760, BIOS S77 Ver. 01.1=
-1.00 10/17/2022
-RIP: 0010:irq_set_irq_wake+0x149/0x1a0
-Code: f6 e8 8b 5b 80 00 89 c5 85 c0 74 38 c7 83 84 00 00 00 01 00 00 00 e9=
- 38 ff ff ff 44 89 e6 48 c7 c7 88 7a 7d b8 e8 d4 ad 7b 00 <0f> 0b 31 ed e9=
- 20 ff ff ff 48 8b 43 38 31 ed 81 08 00 40 00 00 e9
-RSP: 0018:ffffb3f5c7ee7ce8 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: ffff8b6d40155600 RCX: 0000000000000027
-RDX: ffff8b703fa9b308 RSI: 0000000000000001 RDI: ffff8b703fa9b300
-RBP: 00000000ffffffea R08: 80000000fffff433 R09: 0000000000000000
-R10: 3fffffffffffffff R11: ffffffffb90af2c8 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff8b6e73d16320
-FS:  00007f6382b49440(0000) GS:ffff8b703fa80000(0000) knlGS:00000000000000=
-00
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffd71029d60 CR3: 000000016971a000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- ? acpi_subsys_suspend_noirq+0x50/0x50
- amd_pmc_suspend_handler+0x90/0xc0 [amd_pmc]
- dpm_run_callback+0x4a/0x150
- __device_suspend+0xf1/0x470
- dpm_suspend+0x136/0x270
- hibernation_snapshot+0x7c/0x510
- hibernate.cold+0x99/0x2d0
- state_store+0xbf/0xd0
- kernfs_fop_write_iter+0x11e/0x200
- vfs_write+0x1f5/0x3d0
- ksys_write+0x63/0xe0
- do_syscall_64+0x3a/0x90
- entry_SYSCALL_64_after_hwframe+0x4b/0xb5
-RIP: 0033:0x7f6382717190
-Code: 40 00 48 8b 15 71 9c 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7=
- 0f 1f 00 80 3d 51 24 0e 00 00 74 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff=
- ff 77 58 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
-RSP: 002b:00007ffd7102b2b8 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007f6382717190
-RDX: 0000000000000005 RSI: 00007ffd7102b3a0 RDI: 0000000000000004
-RBP: 00007ffd7102b3a0 R08: 0000000000000007 R09: 0000560b4256e220
-R10: 6dbdda95b41f6e2e R11: 0000000000000202 R12: 0000000000000005
-R13: 0000560b4256a2d0 R14: 0000000000000005 R15: 00007f63827ed9e0
- </TASK>
+Sorry I missed this check before.
 
-WARNING: CPU: 0 PID: 5506 at drivers/iommu/amd/init.c:930 enable_iommus_va=
-pic+0x30e/0x370
-Modules linked in: snd_seq_dummy snd_hrtimer snd_seq snd_seq_device ccm cm=
-ac algif_hash algif_skcipher af_alg 8021q garp stp mrp llc uvcvideo videob=
-uf2_vmalloc videobuf2_memops videobuf2_v4l2 videodev videobuf2_common mc b=
-nep btusb btintel bluetooth ecdh_generic crc16 snd_ctl_led snd_hda_codec_r=
-ealtek iwlmvm snd_hda_codec_generic ledtrig_audio snd_hda_codec_hdmi mac80=
-211 snd_hda_intel snd_intel_dspcfg libarc4 nls_ascii nls_cp437 snd_hda_cod=
-ec kvm_amd vfat snd_hwdep iwlwifi fat snd_hda_core kvm xhci_pci snd_pcm ir=
-qbypass crc32_pclmul snd_rn_pci_acp3x sp5100_tco hid_multitouch nft_ct xhc=
-i_hcd snd_timer ghash_clmulni_intel cfg80211 snd_acp_config nf_conntrack c=
-cp watchdog hid_generic usbcore snd_soc_acpi snd sha512_ssse3 nf_defrag_ip=
-v6 ucsi_acpi nf_defrag_ipv4 rapl typec_ucsi tpm_crb rfkill wmi_bmof usb_co=
-mmon pcspkr rng_core snd_pci_acp3x soundcore roles i2c_piix4 i2c_hid_acpi =
-k10temp typec battery i2c_hid tpm_tis hid wireless_hotkey tpm_tis_core cm3=
-2181 industrialio nft_limit
- amd_pmc acpi_cpufreq button ac tcp_bbr sch_fq_codel nf_tables nfnetlink f=
-use efi_pstore configfs efivarfs autofs4 xfs libcrc32c crc32c_generic dm_c=
-rypt dm_mod amdgpu drm_ttm_helper ttm mfd_core gpu_sched i2c_algo_bit crc3=
-2c_intel nvme drm_buddy nvme_core drm_display_helper t10_pi drm_kms_helper=
- syscopyarea crc64_rocksoft sysfillrect crc64 sysimgblt aesni_intel crc_t1=
-0dif crypto_simd evdev crct10dif_generic drm cryptd crct10dif_pclmul serio=
-_raw video crct10dif_common cec wmi
-CPU: 0 PID: 5506 Comm: systemd-sleep Tainted: G        W          6.2.0-rc=
-7 #1
-Hardware name: HP HP EliteBook 845 G7 Notebook PC/8760, BIOS S77 Ver. 01.1=
-1.00 10/17/2022
-RIP: 0010:enable_iommus_vapic+0x30e/0x370
-Code: 44 24 08 65 48 2b 04 25 28 00 00 00 75 68 49 8b bf a0 00 00 00 48 83=
- c4 10 31 f6 5b 5d 41 5c 41 5d 41 5e 41 5f e9 52 63 c9 ff <0f> 0b e9 a1 fd=
- ff ff 48 8b 15 5c 16 12 01 48 c1 ea 05 83 e2 07 48
-RSP: 0018:ffffb3f5c7ee7d48 EFLAGS: 00010046
-RAX: 0000002459b3abbc RBX: 00000000001e8480 RCX: 0000000000000000
-RDX: 000000000000597f RSI: 00000000000051e2 RDI: 0000002459b3523d
-RBP: 0000000080000000 R08: 0000000000000100 R09: fffff6fa0e69d200
-R10: ffffb3f5c7ee7cd8 R11: ffffb3f5c7ee7cd8 R12: 000ffffffffffff8
-R13: 0800000000000000 R14: 2000000000000000 R15: ffff8b6d40063000
-FS:  00007f6382b49440(0000) GS:ffff8b703f800000(0000) knlGS:00000000000000=
-00
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f402ac7a000 CR3: 000000016971a000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- amd_iommu_reenable+0x34/0x50
- lapic_resume+0x22c/0x2c0
- syscore_resume+0x4a/0x180
- hibernation_snapshot+0x119/0x510
- hibernate.cold+0x99/0x2d0
- state_store+0xbf/0xd0
- kernfs_fop_write_iter+0x11e/0x200
- vfs_write+0x1f5/0x3d0
- ksys_write+0x63/0xe0
- do_syscall_64+0x3a/0x90
- entry_SYSCALL_64_after_hwframe+0x4b/0xb5
-RIP: 0033:0x7f6382717190
-Code: 40 00 48 8b 15 71 9c 0d 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7=
- 0f 1f 00 80 3d 51 24 0e 00 00 74 17 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff=
- ff 77 58 c3 0f 1f 80 00 00 00 00 48 83 ec 28 48 89
-RSP: 002b:00007ffd7102b2b8 EFLAGS: 00000202 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007f6382717190
-RDX: 0000000000000005 RSI: 00007ffd7102b3a0 RDI: 0000000000000004
-RBP: 00007ffd7102b3a0 R08: 0000000000000007 R09: 0000560b4256e220
-R10: 6dbdda95b41f6e2e R11: 0000000000000202 R12: 0000000000000005
-R13: 0000560b4256a2d0 R14: 0000000000000005 R15: 00007f63827ed9e0
- </TASK>
+thanks,
 
-
-Let me know, if you need more information.
-
-
-Best regards,
-Julian Wollrath
-
-=2D-
- ()  ascii ribbon campaign - against html e-mail
- /\                        - against proprietary attachments
+greg k-h
