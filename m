@@ -2,125 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFA468C1F9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA10468C1FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 16:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjBFPnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 10:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
+        id S229592AbjBFPnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 10:43:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjBFPmo (ORCPT
+        with ESMTP id S229873AbjBFPna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 10:42:44 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BDD2707
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:41:48 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id l7so4854068ilf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 07:41:48 -0800 (PST)
+        Mon, 6 Feb 2023 10:43:30 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CB01814D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 07:42:57 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id a2so10510763wrd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 07:42:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ya1iSK0PwE6HxUwFfuaJF4yxZVg4nHtKlcACKsLmRGU=;
-        b=W/YkJki6ZwlXviPJ614uzFdt2BX/wHzE5Skxgb38EnN1zNcf707VfP+vq4SIYuFXiu
-         LiXSzWangkaoiF4lXCarJh274pb36EjTfBBLjteO2eaVrqT3Mm6+UgHx8Wa6DPCrUuge
-         RHhjM55RBX3kjlSfltd6h5n7Q0hOQYnkzXEgdMzMXyn2GoUV/AKfXbqdnXWhZKLdnESp
-         eOHjve0t0fskr5APXwdt8xUGfyhUOx1rWxU6jCKCle6aFXSHTpD4CryrZJcns3EH0Pbh
-         8mCV5jjmwQcYqVjjRfTm3lv79Ijng+S6AoxJdzESt32cONgkf5olvcsWK4xiQCJsIsSe
-         n5ag==
+        bh=W1rmMGWM7aksF5L0VhN0hng96AmwJQmBgJkYeuHcTuM=;
+        b=eUivaHJ0jtk9IWS0bvVWDSWywjwYk5UB4FE53XcrSGCVqpcgbb4/hbj182pPavI6XD
+         1jL/Pzsvcgd5HGmgD/5CW6w/pUxViztOiOcALe6aWgZZXSnBUx10Tn8++pz2fctcB6rr
+         /kFKsBf3t8fRYchlajl75pWf9V+UCNHBqzLStOidhoiro4hiWUK2ii2h4E5fpUP9QSsi
+         dxpaoHbyU35Jx32PofG5+T/bLOQ1afOvoB2OB/cSAU00NHlbsqMbMLC8R0es1WM/QooR
+         R6Tl7uOs4h2ZZsNfBAfkPhwvAX2Nmd4IoDUIuk3//OJzj97ndYi+LIlnmgykktNp4z5B
+         4FkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ya1iSK0PwE6HxUwFfuaJF4yxZVg4nHtKlcACKsLmRGU=;
-        b=d0gkOdUsWM3uNuG7RiE/RwCiuh3VjBSL10Oqhj6T1TuhcrcKZy64wvdgTUzh21h68L
-         yVzUfRIVT9YbTBFTYmAK/BbRXjnyfqCSDJCvmH9KNng9HI5+NcOrrgtKugb2NHw9brhU
-         EKE/ByQ1S4LNrGHuBIZP6SSEIh9jx9dbl6xC5/FpDwROaqYKRWxHq1747R1jxMmoek0i
-         YGb79KVZDz8Y/GAuCYI/F1U07Hcrha5ZzimW5LOueTZxM/7xoU6HMTOY08u2wQltLYDE
-         SZrnohVwnifJgW9ImO24ZLev/7W/PsGaNgHtwtbGKS1m9Ms7fXrY82l5yM5u/HobZ2ZL
-         yd5A==
-X-Gm-Message-State: AO0yUKX7Yl9gAyKY1W+Ya3TyB7g7M2Nv48g9BOnevXC/LaGZZ6JYxSie
-        y2wQLyujeo6h9Ua7YLVarCo+gQ==
-X-Google-Smtp-Source: AK7set9xFUDytMkMm3RWCn615aTLybOLKq1Z55Oif0udR87hG69FUrkkSit5QKSJolKqkiDJt7eRKw==
-X-Received: by 2002:a05:6e02:1a44:b0:313:d748:8f78 with SMTP id u4-20020a056e021a4400b00313d7488f78mr782710ilv.18.1675698072954;
-        Mon, 06 Feb 2023 07:41:12 -0800 (PST)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id o10-20020a02c6aa000000b0038a3b8aaf11sm3547972jan.37.2023.02.06.07.41.11
+        bh=W1rmMGWM7aksF5L0VhN0hng96AmwJQmBgJkYeuHcTuM=;
+        b=bx0ETNK4iObNtboETyKuMM5i0Tx2NnmYzdZa036U9F/Xf+JDbGBQWbrLOIUUVsMo0M
+         S2XCHNzEWL3zDN3FpjPW5ZKx5EVPeuR6hhEaJkJ8NkscfGJ35z3yoPBA6s1nrHjbpxMn
+         tThLAv/KX0UhY+EN203HnRT4ebuEEllSDPn087P9TExugWz1QrDSSreYsI2+4LijmAHI
+         L3nedqpfd+nIcRIl1aezhbdKeBDwHZRB9uTTn/b3UNd9QKPuGcyaigT71XVYnH9LXPtk
+         b+H5IxClRoX6iVWZB/ebYwkR/tgRyMDkY8Q4UOsd96234MNQtE+mHuH7UhIuBJgQhwJ9
+         YoBA==
+X-Gm-Message-State: AO0yUKWy2cprzPUzNXF/YbotesHl/RzdaWd79+Rw2Lt48sPE0UALrhu4
+        SJj53a4Ib7lVzTZ632DUt0Z5cg==
+X-Google-Smtp-Source: AK7set8IA3MEZbh+5u3YvK+B/yEpB076Ei6+jP+uA5+zZcW4IbMJdR2TCrTzSRvBwRayAY0ZaLu6Vw==
+X-Received: by 2002:a5d:6b89:0:b0:2bf:ae2f:c6ff with SMTP id n9-20020a5d6b89000000b002bfae2fc6ffmr17416492wrx.31.1675698171248;
+        Mon, 06 Feb 2023 07:42:51 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e2-20020a5d5002000000b002c3be6ae0b1sm9092299wrt.65.2023.02.06.07.42.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 07:41:12 -0800 (PST)
-Message-ID: <4a584563-1fb7-22fa-5e16-e0cf5e88b76b@linaro.org>
-Date:   Mon, 6 Feb 2023 09:41:11 -0600
+        Mon, 06 Feb 2023 07:42:50 -0800 (PST)
+Message-ID: <f44fd173-07f3-6e08-8d3d-2a5bf538259a@linaro.org>
+Date:   Mon, 6 Feb 2023 16:42:49 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v9 10/27] gunyah: rsc_mgr: Add VM lifecycle RPC
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] dt-bindings : misc : aspeed,cvic interrupt controller :
+ convert the binding document to yaml
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>
-Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Vijaya Anand <sunrockers8@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-11-quic_eberman@quicinc.com>
- <4db1c760-10d9-3a22-106a-dda141dd5381@linaro.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <4db1c760-10d9-3a22-106a-dda141dd5381@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230206153325.43692-1-sunrockers8@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230206153325.43692-1-sunrockers8@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 6:46 AM, Srinivas Kandagatla wrote:
->> +    ret = gh_rm_call(rm, message_id, &req_payload, 
->> sizeof(req_payload), &resp, &resp_size);
->> +    if (!ret && resp_size) {
+Subject: incorrect format. Use style consistent with subsystem (git log).
+
+
+On 06/02/2023 16:33, Vijaya Anand wrote:
+>     Convert the binding document for ASPEED AST2400 and AST2500 coprocessor interrupt controller
+>     from txt to yaml so one could validate dt-entries correctly and any future additions can go
+>     into yaml format. The options for compatability described according to the example given.
+
+Weird commit msg indentation, wrong wrapping.
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+
+typo - compatibility
+
+> ---
+>  .../devicetree/bindings/misc/aspeed,cvic.txt  | 35 ----------
+>  .../devicetree/bindings/misc/aspeed,cvic.yaml | 67 +++++++++++++++++++
+>  2 files changed, 67 insertions(+), 35 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.txt
+>  create mode 100644 Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
+
+It is interrupt controller, so move it to interrupt-controller directory.
+
 > 
-> Am struggling to understand these type of checks in success case, when a 
-> command is not expecting any response why are we checking for response 
-> here, This sounds like a bug in either RM or hypervisor.
-> 
-> Or Is this something that happens due to some firmware behaviour?
-> Could you elobrate on this.
+> diff --git a/Documentation/devicetree/bindings/misc/aspeed,cvic.txt b/Documentation/devicetree/bindings/misc/aspeed,cvic.txt
+> deleted file mode 100644
+> index d62c783d1d5e..000000000000
+> --- a/Documentation/devicetree/bindings/misc/aspeed,cvic.txt
+> +++ /dev/null
+> @@ -1,35 +0,0 @@
+> -* ASPEED AST2400 and AST2500 coprocessor interrupt controller
+> -
+> -This file describes the bindings for the interrupt controller present
+> -in the AST2400 and AST2500 BMC SoCs which provides interrupt to the
+> -ColdFire coprocessor.
+> -
+> -It is not a normal interrupt controller and it would be rather
+> -inconvenient to create an interrupt tree for it as it somewhat shares
+> -some of the same sources as the main ARM interrupt controller but with
+> -different numbers.
+> -
+> -The AST2500 supports a SW generated interrupt
+> -
+> -Required properties:
+> -- reg: address and length of the register for the device.
+> -- compatible: "aspeed,cvic" and one of:
+> -		"aspeed,ast2400-cvic"
+> -	      or
+> -		"aspeed,ast2500-cvic"
+> -
+> -- valid-sources: One cell, bitmap of supported sources for the implementation
+> -
+> -Optional properties;
+> -- copro-sw-interrupts: List of interrupt numbers that can be used as
+> -		       SW interrupts from the ARM to the coprocessor.
+> -		       (AST2500 only)
+> -
+> -Example:
+> -
+> -	cvic: copro-interrupt-controller@1e6c2000 {
+> -		compatible = "aspeed,ast2500-cvic";
+> -		valid-sources = <0xffffffff>;
+> -		copro-sw-interrupts = <1>;
+> -		reg = <0x1e6c2000 0x80>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml b/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
+> new file mode 100644
+> index 000000000000..bbff0418fa2c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/aspeed,cvic.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/misc/aspeed,cvic.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ASPEED AST2400 and AST2500 coprocessor interrupt controller
+> +
+> +maintainers: 
+> +  - Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> +  - Rob Herring <robh@kernel.org>
 
-What I think you're talking about is error checking even when
-it's very clear something "can't happen."  It's a pattern I've
-seen in Qualcomm downstream code, and I believe sometimes it
-is done as "best practice" to avoid warnings from security scans.
-(I might be wrong about this though.)
+These should be people having/knowing/responsible for hardware. I doubt
+Rob has any interest in Aspeed...
 
-I think your underlying point though is that we can just assume
-success means "truly successful," so there's no reason to do any
-additional sanity checks.  We *assume* the hardware is doing the
-correct thing (if it's not, we might as well assume it does
-*nothing* right).
+> +
+> +description: |
+> +  This file describes the bindings for the interrupt controller present
 
-So as a very general statement, I think all checks of this type
-should go away (and I think Srini would agree).
+Drop "This file describes the bindings for the" but instead rephrase it
+and describe the hardware.
 
-					-Alex
+> +  in the AST2400 and AST2500 BMC SoCs which provides interrupt to the
+> +  ColdFire coprocessor.
+> +
+> +  It is not a normal interrupt controller and it would be rather
+> +  inconvenient to create an interrupt tree for it as it somewhat shares
+> +  some of the same sources as the main ARM interrupt controller but with
+> +  different numbers.
+> +
+> +  The AST2500 supports a SW generated interruptThe Soft Decision Forward Error Correction (SDFEC) Engine is a Hard IP block
+
+Fix your wrapping and sentences.
+
+> +  which provides high-throughput LDPC and Turbo Code implementations.
+> +  The LDPC decode & encode functionality is capable of covering a range of
+> +  customer specified Quasi-cyclic (QC) codes. The Turbo decode functionality
+> +  principally covers codes used by LTE. The FEC Engine offers significant
+> +  power and area savings versus implementations done in the FPGA fabric.
+> +
+> +properties:
+> +
+
+Drop blank line.
+
+> +  compatible:
+> +    enum: 
+> +      - aspeed,ast2400-cvic
+> +      - aspeed,ast2500-cvic
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: address and length of the register for the device.
+
+Drop description
+
+> +  
+> +  valid-sources:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: One cell, bitmap of supported sources for the implementation
+> +
+> +  copro-sw-interrupts:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description: |
+
+Drop | and do fix wrapping.
+
+> +                  List of interrupt numbers that can be used as
+> +                  SW interrupts from the ARM to the coprocessor.
+> +                  (AST2500 only)
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - valid-sources
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    cvic: copro-interrupt-controller@1e6c2000 
+
+That's not DT coding style. Open DTS and look how this is coded in ARM.
+
+Node name: interrupt-controller
+Drop label.
+
+> +    {
+> +        compatible = "aspeed,ast2500-cvic";
+> +        valid-sources = <0xffffffff>;
+> +        copro-sw-interrupts = <1>;
+> +        reg = <0x1e6c2000 0x80>;
+
+reg is second property
+
+> +    };
+
+Best regards,
+Krzysztof
+
