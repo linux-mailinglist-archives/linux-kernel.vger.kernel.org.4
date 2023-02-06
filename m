@@ -2,161 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF0868BCC2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3811468BCC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBFMZ1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 07:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
+        id S229936AbjBFM0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:26:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjBFMZZ (ORCPT
+        with ESMTP id S229458AbjBFM0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:25:25 -0500
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100191EBD0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:25:24 -0800 (PST)
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id AFCA8140693;
-        Mon,  6 Feb 2023 12:25:22 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 333372002E;
-        Mon,  6 Feb 2023 12:25:20 +0000 (UTC)
-Message-ID: <12e05a2c2aa1ab5627f4a57135ce4c493abb5a97.camel@perches.com>
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
-From:   Joe Perches <joe@perches.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Mon, 06 Feb 2023 04:25:19 -0800
-In-Reply-To: <CAMuHMdU4HUmTJZiecL9u0G1LuZ18K_1hYo4Q_U9S2a2fuo=xRA@mail.gmail.com>
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
-         <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
-         <3afee0493d3718f2e38b6c54dab23d38360cd5d0.camel@perches.com>
-         <CAMuHMdWcjUXwkk2V29p-hifDnMhLRSwQBXMzVeURRA48znKC5Q@mail.gmail.com>
-         <bbdf99df867786510f709473fa2c3744dbf27bb4.camel@perches.com>
-         <CAMuHMdU4HUmTJZiecL9u0G1LuZ18K_1hYo4Q_U9S2a2fuo=xRA@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 6 Feb 2023 07:26:02 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40CD1EFC5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 04:26:00 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:5f4c:1e23:9c34:1a39])
+        by laurent.telenet-ops.be with bizsmtp
+        id HoRx2900h3XDBUl01oRxX0; Mon, 06 Feb 2023 13:25:57 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pP0Z2-008DEu-LT
+        for linux-kernel@vger.kernel.org;
+        Mon, 06 Feb 2023 13:25:57 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pP0ZJ-00Ejg6-Jr
+        for linux-kernel@vger.kernel.org;
+        Mon, 06 Feb 2023 13:25:57 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.2-rc7
+Date:   Mon,  6 Feb 2023 13:25:57 +0100
+Message-Id: <20230206122557.3512171-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHk-=whSVeeQN9vO-WSxFkNs0zbUJEBqND-1VO8OJtmu_sn_nw@mail.gmail.com>
+References: <CAHk-=whSVeeQN9vO-WSxFkNs0zbUJEBqND-1VO8OJtmu_sn_nw@mail.gmail.com>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 333372002E
-X-Stat-Signature: o11snzhun5bjzaikzw6nenhrefshzyz6
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+XhMEzXbQWd2mnvYJ/q+YBhou0YD8q4HE=
-X-HE-Tag: 1675686320-519272
-X-HE-Meta: U2FsdGVkX1/EDLZyNSBxWkNPBpN0QajvoTACBLdA7CE+6NPBBbtVVCxJ/+K+Goe8ueGtBxeDv2zTm7o7VoOhOQ==
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-06 at 12:54 +0100, Geert Uytterhoeven wrote:
-> Hi Joe,
+Below is the list of build error/warning regressions/improvements in
+v6.2-rc7[1] compared to v6.1[2].
 
-rehi Geert
+Summarized:
+  - build errors: +10/-14
+  - build warnings: +30/-10
 
-maybe:
----
- scripts/checkpatch.pl | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+JFYI, when comparing v6.2-rc7[1] to v6.2-rc6[3], the summaries are:
+  - build errors: +1/-1
+  - build warnings: +0/-1
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index bd44d12965c98..55267ee6b1190 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -36,6 +36,8 @@ my $showfile = 0;
- my $file = 0;
- my $git = 0;
- my %git_commits = ();
-+my $git_sha1_min = 12;
-+my $git_sha1_max = 14;
- my $check = 0;
- my $check_orig = 0;
- my $summary = 1;
-@@ -1230,7 +1232,13 @@ sub git_commit_info {
- 		 $lines[0] =~ /^fatal: bad object $commit/) {
- 		$id = undef;
- 	} else {
--		$id = substr($lines[0], 0, 12);
-+		my $len = length($commit);
-+		if ($len < $git_sha1_min) {
-+			$len = $git_sha1_min;
-+		} elsif ($len > $git_sha1_max) {
-+			$len = $git_sha1_max;
-+		}
-+		$id = substr($lines[0], 0, $len);
- 		$desc = substr($lines[0], 41);
- 	}
- 
-@@ -1297,7 +1305,7 @@ for my $filename (@ARGV) {
- 	if ($filename eq '-') {
- 		$vname = 'Your patch';
- 	} elsif ($git) {
--		$vname = "Commit " . substr($filename, 0, 12) . ' ("' . $git_commits{$filename} . '")';
-+		$vname = "Commit " . substr($filename, 0, $git_sha1_min) . ' ("' . $git_commits{$filename} . '")';
- 	} else {
- 		$vname = $filename;
- 	}
-@@ -3191,7 +3199,7 @@ sub process {
- 				$tag_case = 0 if $tag eq "Fixes:";
- 				$tag_space = 0 if ($line =~ /^fixes:? [0-9a-f]{5,} ($balanced_parens)/i);
- 
--				$id_length = 0 if ($orig_commit =~ /^[0-9a-f]{12}$/i);
-+				$id_length = 0 if ($orig_commit =~ /^[0-9a-f]{$git_sha1_min,$git_sha1_max}$/i);
- 				$id_case = 0 if ($orig_commit !~ /[A-F]/);
- 
- 				# Always strip leading/trailing parens then double quotes if existing
-@@ -3208,7 +3216,7 @@ sub process {
- 			if ($ctitle ne $title || $tag_case || $tag_space ||
- 			    $id_length || $id_case || !$title_has_quotes) {
- 				if (WARN("BAD_FIXES_TAG",
--				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
-+				     "Please use correct Fixes: style 'Fixes: <$git_sha1_min to $git_sha1_max chars of sha1> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
- 				    $fix) {
- 					$fixed[$fixlinenr] = "Fixes: $cid (\"$ctitle\")";
- 				}
-@@ -3300,9 +3308,9 @@ sub process {
- 		    $line !~ /^This reverts commit [0-9a-f]{7,40}/ &&
- 		    (($line =~ /\bcommit\s+[0-9a-f]{5,}\b/i ||
- 		      ($line =~ /\bcommit\s*$/i && defined($rawlines[$linenr]) && $rawlines[$linenr] =~ /^\s*[0-9a-f]{5,}\b/i)) ||
--		     ($line =~ /(?:\s|^)[0-9a-f]{12,40}(?:[\s"'\(\[]|$)/i &&
--		      $line !~ /[\<\[][0-9a-f]{12,40}[\>\]]/i &&
--		      $line !~ /\bfixes:\s*[0-9a-f]{12,40}/i))) {
-+		     ($line =~ /(?:\s|^)[0-9a-f]{$git_sha1_min,40}(?:[\s"'\(\[]|$)/i &&
-+		      $line !~ /[\<\[][0-9a-f]{$git_sha1_min,40}[\>\]]/i &&
-+		      $line !~ /\bfixes:\s*[0-9a-f]{$git_sha1_min,40}/i))) {
- 			my $init_char = "c";
- 			my $orig_commit = "";
- 			my $short = 1;
-@@ -3340,11 +3348,11 @@ sub process {
- 			if ($input =~ /\b(c)ommit\s+([0-9a-f]{5,})\b/i) {
- 				$init_char = $1;
- 				$orig_commit = lc($2);
--				$short = 0 if ($input =~ /\bcommit\s+[0-9a-f]{12,40}/i);
-+				$short = 0 if ($input =~ /\bcommit\s+[0-9a-f]{$git_sha1_min,40}/i);
- 				$long = 1 if ($input =~ /\bcommit\s+[0-9a-f]{41,}/i);
- 				$space = 0 if ($input =~ /\bcommit [0-9a-f]/i);
- 				$case = 0 if ($input =~ /\b[Cc]ommit\s+[0-9a-f]{5,40}[^A-F]/);
--			} elsif ($input =~ /\b([0-9a-f]{12,40})\b/i) {
-+			} elsif ($input =~ /\b([0-9a-f]{$git_sha1_min,40})\b/i) {
- 				$orig_commit = lc($1);
- 			}
- 
-@@ -3355,7 +3363,7 @@ sub process {
- 			    ($short || $long || $space || $case || ($orig_desc ne $description) || !$has_quotes) &&
- 			    $last_git_commit_id_linenr != $linenr - 1) {
- 				ERROR("GIT_COMMIT_ID",
--				      "Please use git commit description style 'commit <12+ chars of sha1> (\"<title line>\")' - ie: '${init_char}ommit $id (\"$description\")'\n" . $herectx);
-+				      "Please use git commit description style 'commit <$git_sha1_min to $git_sha1_max chars of sha1> (\"<title line>\")' - ie: '${init_char}ommit $id (\"$description\")'\n" . $herectx);
- 			}
- 			#don't report the next line if this line ends in commit and the sha1 hash is the next line
- 			$last_git_commit_id_linenr = $linenr if ($line =~ /\bcommit\s*$/i);
+Happy fixing! ;-)
+
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/4ec5183ec48656cec489c49f989c508b68b518e3/ (all 152 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6d796c50f84ca79f1722bb131799e5a5710c4700/ (all 152 configs)
+
+
+*** ERRORS ***
+
+10 error regressions:
+  + /kisskb/src/arch/powerpc/kexec/file_load_64.c: error: implicit declaration of function 'memory_hotplug_max' [-Werror=implicit-function-declaration]:  => 993:33
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'gimple_call_addr_fndecl' was not declared in this scope:  => 2790:10
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'is_gimple_reg' was not declared in this scope:  => 2556:18
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_clobbered' has incomplete type 'pt_solution':  => 284:22
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_used' has incomplete type 'pt_solution':  => 283:22
+  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
+
+14 error improvements:
+  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
+  - /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]: 259:14, 258:14, 263:14, 261:46, 262:14 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
+  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
+  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
+  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
+  - {standard input}: Error: pcrel too far: 2232, 2249, 2216, 2231, 2204, 2209, 2206, 2248, 2221, 2259, 2247, 2217, 2229, 2215, 2262, 2261, 2274, 2293 => 
+  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
+
+
+*** WARNINGS ***
+
+30 warning regressions:
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/bus/mhi/host/mhi_pci_generic.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/extcon/extcon-fsa9480.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/cec/core/cec.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/usb/hdpvr/hdpvr.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/misc/habanalabs/habanalabs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/onenand/onenand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/wil6210/wil6210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/pwm/pwm-sifive.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/scsi/hptiop.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/sd_mod.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-mux-meson-g12a.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
+
+10 warning improvements:
+  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]: 68:25 => 
+  - /kisskb/src/arch/s390/kernel/setup.c: warning: 'memcpy' offset [0, 127] is out of the bounds [0, 0] [-Warray-bounds]: 524:9 => 
+  - /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]: 989:108, 989:122 => 989:108
+  - /kisskb/src/fs/coredump.c: warning: 'dump_emit_page' defined but not used [-Wunused-function]: 834:12 => 
+  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
