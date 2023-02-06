@@ -2,88 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD1D68BCC9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0980A68BCD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 13:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjBFMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 07:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S229630AbjBFMbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 07:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjBFMa6 (ORCPT
+        with ESMTP id S229738AbjBFMbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 07:30:58 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A3C12052;
-        Mon,  6 Feb 2023 04:30:57 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id bg10-20020a17090b0d8a00b00230c7f312d4so1761532pjb.3;
-        Mon, 06 Feb 2023 04:30:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UzR+7bfBn88TNgGWNySKkAyet59cFaJHBbPCeOSCdtA=;
-        b=G8Bxhlzr6grk1WAHKTK0YfCMCdl7oJ0vqQ2mCf+gHZAf3KyHbWpZK7Nv8O+kc4O95g
-         +ZSuylHhZN8DjsOW50hBrJ4czEyQwgyrV/zf/4B+YZwnzE02y9QUAyqN9r+CXgNYFvd6
-         1G7R7KIId+3aAvWAme6k6BzPGUNSULFhPUEDDiHLVeCBHNwKPhBBu5beDq78hSfFMXQf
-         BpvNvr/DHYqV/24+y//1VLTzrCFu+nwfJIbMZn/IwtvikFdKJ6/kB9QgaBhTSn9Fggs/
-         mB+4q3Vnu6OrILSqFgoyc4o60e0JzV39prncsppeeCXQF6ko40OWng/hvs5SycgJh+r7
-         RmBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UzR+7bfBn88TNgGWNySKkAyet59cFaJHBbPCeOSCdtA=;
-        b=QIwkWPohyXqYkvsKXxk7X9SZWmRIY++87diM7k6bDARw4oL0ZfOG63Wz9v0D1Ea/2V
-         Rcb1vugSlsdhuPs9vV4UzLJKg1JHcVE0h2KwSBHQNFsAcocnpgDdUMOJWly/NQT4jo7x
-         ysDu0mfgSWlQXx1HIzdwfTar217Pc+0NMUZaIE+MSGNDysyp1apFHygmRy/4Zy5ZvMtu
-         LpQ+feoIhJ5Om4dNlC5HOHrLs6JwSSRO5ySe0AGEj7sK6E5D9pEcYTpFWJ8IZuXksCL3
-         IGmk4SmnCHW//HgdjPJ16YRxrZAOeo2f3kqM1jO1LSoPawATlqFhEFQybY+Tr8g6WCiW
-         nK6w==
-X-Gm-Message-State: AO0yUKW36P2g2GTox5RnEzl2OK8ruQGFTWbXWfRnCsPwo+BVLUrlABrz
-        CjLsRaYCXyBCvwAhvPROj80ffYohFmg=
-X-Google-Smtp-Source: AK7set/15OSvUgJp+pFr7odeROumCwhDUOWGVDVXQ12Igwe2FOTkRQZqKoQEJekck8mmjd1ZR892RA==
-X-Received: by 2002:a17:90b:38ca:b0:230:d786:4a22 with SMTP id nn10-20020a17090b38ca00b00230d7864a22mr588483pjb.24.1675686657134;
-        Mon, 06 Feb 2023 04:30:57 -0800 (PST)
-Received: from [192.168.43.80] (subs09a-223-255-225-74.three.co.id. [223.255.225.74])
-        by smtp.gmail.com with ESMTPSA id p2-20020a17090a284200b00213c7cf21c0sm5976777pjf.5.2023.02.06.04.30.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 04:30:56 -0800 (PST)
-Message-ID: <02f7d17d-18f6-3f42-6a42-33502f73e34d@gmail.com>
-Date:   Mon, 6 Feb 2023 19:30:49 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: linux-next: build warning after merge of the usb tree
-Content-Language: en-US
-To:     Dan Scally <dan.scally@ideasonboard.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Greg KH <greg@kroah.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230206145004.6e043ed3@canb.auug.org.au>
- <93b56558-b25c-401a-031d-971fc644054b@ideasonboard.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <93b56558-b25c-401a-031d-971fc644054b@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 07:31:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CEA12052;
+        Mon,  6 Feb 2023 04:31:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B8EDB80FA3;
+        Mon,  6 Feb 2023 12:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC9D6C433EF;
+        Mon,  6 Feb 2023 12:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675686703;
+        bh=SSKnltqyFrUrRR/6DQuBz9zXXdOyQfpcUJPdcNtRCFU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g/GTgn5Zr2vIJt5DlEEdvQeuIMMj6GVrHVTg0gW7msGYEZ2ewNkdZaWKqZzbUfZmn
+         qEpeyC+c7b4H3xQijFuKs2cuxOvAOUxg5ygp7Xrr5LmfFbQXfAWfjtg2yHUDFjTlcv
+         QPGM84IoNDnhvhOaSBp2uSNhf5ICbdUzFsNx+kn7DISAaAp+hjPnB7narguJLOFKp3
+         m7ZwGSK/moPApG+Yv66+cdu974/NI95+nMFCtUHDEIpvJhRW6JeYsFnmqtusPKhVsE
+         B0kCmixpbYxqYmZn0ociftTSOT7vLDSNxMxceEQjR/2SKHUpKesLPIjOIbxOsL/cle
+         fdk1VexLpof8w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pP0er-00800O-6V;
+        Mon, 06 Feb 2023 12:31:41 +0000
+Date:   Mon, 06 Feb 2023 12:31:40 +0000
+Message-ID: <86wn4vynyr.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+In-Reply-To: <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+        <20230203135043.409192-30-james.morse@arm.com>
+        <865ycg1kv2.wl-maz@kernel.org>
+        <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: suzuki.poulose@arm.com, james.morse@arm.com, linux-pm@vger.kernel.org, loongarch@lists.linux.dev, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, x86@kernel.org, tglx@linutronix.de, lpieralisi@kernel.org, mark.rutland@arm.com, sudeep.holla@arm.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, mingo@redhat.com, will@kernel.org, catalin.marinas@arm.com, chenhuacai@kernel.org, oliver.upton@linux.dev, lenb@kernel.org, rafael@kernel.org, kernel@xen0n.name, salil.mehta@huawei.com, linux@armlinux.org.uk, jean-philippe@linaro.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/23 14:45, Dan Scally wrote:
-> Thanks Stephen, and sorry Greg - I should have noticed that, I'll figure out why I didn't. Does this just need a patch on top or some other process to be fixed?
+On Mon, 06 Feb 2023 10:10:41 +0000,
+Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
 > 
+> Hi,
+> 
+> A few cents from the Realm support point of view.
+> 
+> On 05/02/2023 10:12, Marc Zyngier wrote:
+> > On Fri, 03 Feb 2023 13:50:40 +0000,
+> > James Morse <james.morse@arm.com> wrote:
+> >> 
+> >> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> >> 
+> >> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+> >> request to handle all hypercalls that aren't handled by KVM. With the
+> >> help of another capability, this will allow userspace to handle PSCI
+> >> calls.
+> >> 
+> >> Suggested-by: James Morse <james.morse@arm.com>
+> >> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> >> Signed-off-by: James Morse <james.morse@arm.com>
+> >> 
+> >> ---
+> >> 
+> > 
+> > On top of Oliver's ask not to make this a blanket "steal everything",
+> > but instead to have an actual request for ranges of forwarded
+> > hypercalls:
+> > 
+> >> Notes on this implementation:
+> >> 
+> >> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+> >>    generalizes the idea to all hypercalls, since that was suggested on
+> >>    the list [2, 3].
+> >> 
+> >> * We're reusing kvm_run.hypercall. I copied x0-x5 into
+> >>    kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+> >>    this, because:
+> >>    - Most user handlers will need to write results back into the
+> >>      registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+> >>      go all the way and read them back on return to kernel.
+> >>    - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+> >>      handling the call.
+> 
+> This may not be always possible, e.g., for Realms. GET_ONE_REG is
+> not supported. So using an explicit passing down of the args is
+> preferrable.
 
-Please send the fixup on top of recent usb tree.
+What is the blocker for CCA to use GET_ONE_REG? The value obviously
+exists and is made available to the host. pKVM is perfectly able to
+use GET_ONE_REG and gets a bunch of zeroes for things that the
+hypervisor has decided to hide from the host.
+
+Of course, it requires that the hypervisor (the RMM in your case)
+knows about the semantics of the hypercall, but that's obviously
+already a requirement (or you wouldn't be able to use PSCI at all).
+
+Thanks,
+
+	M.
 
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Without deviation from the norm, progress is not possible.
