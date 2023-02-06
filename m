@@ -2,94 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EDB68BAEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9720568BAF1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 12:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjBFLFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 06:05:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S229781AbjBFLFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 06:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjBFLFi (ORCPT
+        with ESMTP id S229827AbjBFLFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 06:05:38 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5D6DEC71;
-        Mon,  6 Feb 2023 03:05:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFE9313D5;
-        Mon,  6 Feb 2023 03:06:19 -0800 (PST)
-Received: from [10.57.89.151] (unknown [10.57.89.151])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1EF43F8C6;
-        Mon,  6 Feb 2023 03:05:35 -0800 (PST)
-Message-ID: <e40cb8c2-1124-4002-75f5-671b4c758b5d@arm.com>
-Date:   Mon, 6 Feb 2023 11:05:32 +0000
+        Mon, 6 Feb 2023 06:05:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69A0199E1;
+        Mon,  6 Feb 2023 03:05:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7196160E7F;
+        Mon,  6 Feb 2023 11:05:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 539ABC433D2;
+        Mon,  6 Feb 2023 11:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675681546;
+        bh=3ssH3tyyX9Wb/OOZG7J5+HJgVkFrClE5hsZSLWktyNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VMIa50dZ3HGJEZYNP2DN7M2vNBlXnI3ip7kSC5LkVLi2rS5u1MffbjVgbjrgO6JEj
+         6jD7041iJkFWALRFMCi8CY3dVzG4NpnRIiP29SVxrMDJeESW8qLO1rjyWKoanWnYV8
+         VABXRQwZlOfL27DjJjVy7oqHOEinD0/IxWZlWBxsBct0Ohpob3uF9YgK3iFCMeZJXh
+         bHbQyTbmSMDe8iO/QM5QmAASCEHcw2LFxSNG9hDWHWQ3JK3mSpNnFoI1IYR7AllRE+
+         MWZospnEVhToI9PYoSZK9+1vIRGjqQSTxrpJ5XaAUnSTQYMCyXsQJ+eTSrlrOBO/P3
+         gO1c2xJrjlJZA==
+Date:   Mon, 6 Feb 2023 11:05:41 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH] cgroup/cpuset: Don't filter offline CPUs in
+ cpuset_cpus_allowed() for top cpuset tasks
+Message-ID: <20230206110540.GA11024@willie-the-truck>
+References: <20230203164040.213437-1-longman@redhat.com>
+ <Y94s8mzrE9VyUJLa@hirez.programming.kicks-ass.net>
+ <f356b916-1c10-1565-73fb-34027c6c510a@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] iommu/vt-d: Avoid superfluous IOTLB tracking in lazy mode
-Content-Language: en-GB
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        stable@vger.kernel.org, Sanjay Kumar <sanjay.k.kumar@intel.com>
-References: <20230203230417.1287325-1-jacob.jun.pan@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230203230417.1287325-1-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f356b916-1c10-1565-73fb-34027c6c510a@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-03 23:04, Jacob Pan wrote:
-> Intel IOMMU driver implements IOTLB flush queue with domain selective
-> or PASID selective invalidations. In this case there's no need to track
-> IOVA page range and sync IOTLBs, which may cause significant performance
-> hit.
+On Sun, Feb 05, 2023 at 12:00:25AM -0500, Waiman Long wrote:
+> On 2/4/23 05:01, Peter Zijlstra wrote:
+> > On Fri, Feb 03, 2023 at 11:40:40AM -0500, Waiman Long wrote:
+> > > Since commit 8f9ea86fdf99 ("sched: Always preserve the user
+> > > requested cpumask"), relax_compatible_cpus_allowed_ptr() is calling
+> > > __sched_setaffinity() unconditionally. This helps to expose a bug in
+> > > the current cpuset hotplug code where the cpumasks of the tasks in
+> > > the top cpuset are not updated at all when some CPUs become online or
+> > > offline. It is likely caused by the fact that some of the tasks in the
+> > > top cpuset, like percpu kthreads, cannot have their cpu affinity changed.
+> > > 
+> > > One way to reproduce this as suggested by Peter is:
+> > >   - boot machine
+> > >   - offline all CPUs except one
+> > >   - taskset -p ffffffff $$
+> > >   - online all CPUs
+> > > 
+> > > Fix this by allowing cpuset_cpus_allowed() to return a wider mask that
+> > > includes offline CPUs for those tasks that are in the top cpuset. For
+> > > tasks not in the top cpuset, the old rule applies and only online CPUs
+> > > will be returned in the mask since hotplug events will update their
+> > > cpumasks accordingly.
+> > So you get the task_cpu_possible_mask() interaction vs cpusets horribly
+> > wrong here, but given the very sorry state of task_cpu_possible_mask()
+> > correctness of cpuset as a whole that might just not matter at this
+> > point.
+> > 
+> > I do very much hate how you add exceptions on exceptions instead of
+> > looking to do something right :-(
+> > 
+> > Fixing that parition case in my patch is 1 extra line and then I think
+> > it fundamentally does the right thing and can serve as a basis for
+> > fixing cpuset as a whole.
 > 
-> This patch adds a check to avoid IOVA gather page and IOTLB sync for
-> the lazy path.
+> I am not saying that your patch is incorrect other than handling the
+> partition case. However, it is rather complex and is hard to understand
+> especially for those that are not that familiar with the cpuset code. From
+> the maintainability point of view, a simpler solution that is easier to
+> understand is better.
 > 
-> The performance difference on Sapphire Rapids 100Gb NIC is improved by
-> the following (as measured by iperf send):
-> 
-> w/o this fix~48 Gbits/s. with this fix ~54 Gbits/s
+> If we want to get it into the next merge windows, there isn't much time left
+> for linux-next testing. So a lower risk solution is better from that
+> perspective too.
 
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+This needs to land for 6.2 to fix the regression. The next merge window is
+too late. That's why I cooked the reverts [1] as an alternative.
 
-> Cc: <stable@vger.kernel.org>
-> Tested-by: Sanjay Kumar <sanjay.k.kumar@intel.com>
-> Signed-off-by: Sanjay Kumar <sanjay.k.kumar@intel.com>
-> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> ---
->   drivers/iommu/intel/iommu.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index b4878c7ac008..705a1c66691a 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -4352,7 +4352,13 @@ static size_t intel_iommu_unmap(struct iommu_domain *domain,
->   	if (dmar_domain->max_addr == iova + size)
->   		dmar_domain->max_addr = iova;
->   
-> -	iommu_iotlb_gather_add_page(domain, gather, iova, size);
-> +	/*
-> +	 * We do not use page-selective IOTLB invalidation in flush queue,
-> +	 * There is no need to track page and sync iotlb. Domain-selective or
-> +	 * PASID-selective validation are used in the flush queue.
-> +	 */
-> +	if (!gather->queued)
-> +		iommu_iotlb_gather_add_page(domain, gather, iova, size);
->   
->   	return size;
->   }
+Will
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git/log/?h=ssa-reverts
