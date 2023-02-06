@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6116268C7C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA1268C7B6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjBFUiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S229536AbjBFUgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjBFUiP (ORCPT
+        with ESMTP id S229582AbjBFUgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:38:15 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E849083DF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:38:07 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id d189so7914916ybc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p7ue1zRU/AjU5knacS3GDq7lajmNru08tnSXNxYZ0Gw=;
-        b=BHQbX5u1aQjTGJ1iP02gP7C0QSZh7RNID/98p3Gti/sTWNvXOb+gt3LwB4/Uc7gkZP
-         3GEPsR084v4Y0fRYnVQXN78I4o7okvqXp3PXfcH4GP4+L4PSVu8uy1tyQyaOOE7lbLcs
-         Fo7hfGgcMEvvAFzYESxq//p8nL6SfxRmjoriOJvjljK0cie+wYgUN7SJeOalP+EhWpgW
-         bly8+GUnTgUTD5D0KZ3uNFU4vdPn5gvuaRC/UJ5LjRB+aNSnGzflUs1D14KNmaBpUcnt
-         60IU7w969ZTJ9VVmRpVLldsvXmNZp73T2c2j1l4hw7TCf8aGfK+4L7V5TqndMk8ggUAY
-         Azrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p7ue1zRU/AjU5knacS3GDq7lajmNru08tnSXNxYZ0Gw=;
-        b=dSFlDFO3TOFUkbYs1UBkVM7g5OSBhcuZyZFvWnr/rz6mAyln/jA8GC/ZTK3z67/f1W
-         oD3hpR3UEWuh9TD0C7ekfPGDNCdEn1afIafmzXcwCxdfdzaLXJFdAYZTDIuzShPMu3Hh
-         3MeS/0XjsybT9kabneH+vgaoPUWH7Mkluw2coxLUO4FjsOH1wJCr9ozuFGfKVZi+Vrt5
-         3JZ1is8gqIQWZzYrI1P3JzG8T/PZ17YVIc2KvzcZHUzWdIhCwqyo7k5ImOvHDxEL5/+r
-         3zL2wc3UwpFFTmT1E61hUHYKG4g/NAPxUBpTnr8Xq888BBy/0xIy5QY4bkjNUIzT5Pfq
-         Ihvg==
-X-Gm-Message-State: AO0yUKVuxwQcH08Jm+MFT0/0MVsuSVu+blVilD6J0mVtiQC2ljHEt3OD
-        BTIjJ2uYLxocuboguT1fSfTyH5mojzp75nnFvLBc
-X-Google-Smtp-Source: AK7set+WmFVIug6Skz6bZ/gvAML8mj5Vd83GEt/x5/P8BbbID0lkxXu5H30afIDNA+CbTbvxEcM2GMpQq/xcrypJkOU=
-X-Received: by 2002:a25:22d6:0:b0:861:6af2:d2f3 with SMTP id
- i205-20020a2522d6000000b008616af2d2f3mr122168ybi.330.1675715887097; Mon, 06
- Feb 2023 12:38:07 -0800 (PST)
+        Mon, 6 Feb 2023 15:36:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17204EDB;
+        Mon,  6 Feb 2023 12:36:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DE5260F33;
+        Mon,  6 Feb 2023 20:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 393DFC433D2;
+        Mon,  6 Feb 2023 20:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675715761;
+        bh=sQvioVNroLYZbZP6kYyFNgj62DExtljLCs9UmJr/96c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=puprCIQdrg3fvSw5FcPUmYpEZEUd5s4aVouPHIIfOmxlTpojTvqQK9hwDwadAqTnm
+         vmRfFqZoDJFL3QUArfgm+r0eIRzOSIclsPcacn2oi6YPE2wTpex6rn69adsvg/hSQO
+         wSmE2tFd1XvU/hwh2GZvwvj2jaQU4n06eFs1tJMrOeEapavq5PIe33KqKq5rVsfC2z
+         O42e7drOkko3sqs6Vuz7hiL0l5a4wb9/FzqL4b3TUAZkcS+jD5Bno4dRyIgYhFJVsS
+         APgvJrafZgjHjz3CS1Wu1pd02enFnHKIJ0enHdq3nuEH5qjbvFLnst8FviQpRApSh5
+         Z1B3tSZUCqxfQ==
+Date:   Mon, 6 Feb 2023 12:38:16 -0800
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     ilia.lin@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
+        rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 2/4] cpufreq: qcom-nvmem: reuse socinfo SMEM item struct
+Message-ID: <20230206203816.afexndkiqhpk6e7b@ripper>
+References: <20230121112947.53433-1-robimarko@gmail.com>
+ <20230121112947.53433-2-robimarko@gmail.com>
 MIME-Version: 1.0
-References: <20230203200138.3872873-1-jstultz@google.com> <20230203200138.3872873-4-jstultz@google.com>
- <20230205190548.7auywdoagy6txpla@offworld>
-In-Reply-To: <20230205190548.7auywdoagy6txpla@offworld>
-From:   John Stultz <jstultz@google.com>
-Date:   Mon, 6 Feb 2023 12:37:56 -0800
-Message-ID: <CANDhNCrG5zRZCFdz_k5fnsc8vqNbEu_9++qvR34FW_DXJcpVNA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] locktorture: With nested locks, occasionally skip
- main lock
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230121112947.53433-2-robimarko@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 5, 2023 at 11:33 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
-> On Fri, 03 Feb 2023, John Stultz wrote:
->
-> >@@ -754,21 +755,28 @@ static int lock_torture_writer(void *arg)
-> >                       schedule_timeout_uninterruptible(1);
-> >
-> >               lockset_mask = torture_random(&rand);
-> >+              skip_main_lock = nlocks && !(torture_random(&rand) % 100);
->
-> For the sake of future readers of locktorture.c, this deserves a comment
-> as to why we wanna skip the main lock (copy/paste from the changelog).
+On Sat, Jan 21, 2023 at 12:29:45PM +0100, Robert Marko wrote:
+> Now that socinfo SMEM item struct and defines have been moved to a header
+> so we can utilize that instead.
+> 
+> Now the SMEM value can be accesed directly, there is no need for defining
+> the ID for the SMEM request as well.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
-Good point! I'll send this update out soon.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Thanks again for the review and feedback!
--john
+@Rafael, @Viresh, would you mind providing an Ack for me to take these 3
+patches, together with patch 1, through the Qualcomm tree? I have staged
+changes for 6.3, so we'll otherwise end up with conflicts on the move of
+the struct.
+
+Thanks,
+Bjorn
+
+> ---
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index a577586b23be..c0a7841a56c1 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -28,8 +28,7 @@
+>  #include <linux/pm_opp.h>
+>  #include <linux/slab.h>
+>  #include <linux/soc/qcom/smem.h>
+> -
+> -#define MSM_ID_SMEM	137
+> +#include <linux/soc/qcom/socinfo.h>
+>  
+>  enum _msm_id {
+>  	MSM8996V3 = 0xF6ul,
+> @@ -143,17 +142,14 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+>  static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+>  {
+>  	size_t len;
+> -	u32 *msm_id;
+> +	struct socinfo *info;
+>  	enum _msm8996_version version;
+>  
+> -	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
+> -	if (IS_ERR(msm_id))
+> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
+> +	if (IS_ERR(info))
+>  		return NUM_OF_MSM8996_VERSIONS;
+>  
+> -	/* The first 4 bytes are format, next to them is the actual msm-id */
+> -	msm_id++;
+> -
+> -	switch ((enum _msm_id)*msm_id) {
+> +	switch (info->id) {
+>  	case MSM8996V3:
+>  	case APQ8096V3:
+>  		version = MSM8996_V3;
+> -- 
+> 2.39.1
+> 
