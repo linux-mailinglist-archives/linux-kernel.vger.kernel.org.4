@@ -2,43 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CAF68C5F0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E59F68C5F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 19:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjBFSjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 13:39:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S230190AbjBFSjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 13:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjBFSjJ (ORCPT
+        with ESMTP id S229771AbjBFSjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 13:39:09 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 56F8D273D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:39:08 -0800 (PST)
-Received: (qmail 665605 invoked by uid 1000); 6 Feb 2023 13:39:07 -0500
-Date:   Mon, 6 Feb 2023 13:39:07 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
+        Mon, 6 Feb 2023 13:39:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D0E2BECD
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 10:39:38 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP6Op-0006cv-QR; Mon, 06 Feb 2023 19:39:31 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP6On-0037UJ-VE; Mon, 06 Feb 2023 19:39:31 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pP6Oo-001MHG-8Z; Mon, 06 Feb 2023 19:39:30 +0100
+Date:   Mon, 6 Feb 2023 19:39:30 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v3] i2c: dev: don't allow user-space to deadlock the
+ kernel
+Message-ID: <20230206183930.sipw62it7xmx6nkt@pengutronix.de>
+References: <20230118134940.240102-1-brgl@bgdev.pl>
+ <Y9DpbChLZfDONHPz@ninjato>
+ <Y9GpL9RBNM8H2ZSL@shikoro>
+ <20230206155107.qwf5tbrqsbvv4hln@pengutronix.de>
+ <CAMRc=Mdz_+_MDJAjkXWa2P8FM8i6XPMAVQ-xTUtZDXfD-RBo_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qc7dorfog3znw3nz"
 Content-Disposition: inline
-In-Reply-To: <Y9+41ctA54pjm/KG@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <CAMRc=Mdz_+_MDJAjkXWa2P8FM8i6XPMAVQ-xTUtZDXfD-RBo_w@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,79 +59,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 02:10:29PM +0000, Joel Fernandes wrote:
-> On Sat, Feb 04, 2023 at 02:24:11PM -0800, Paul E. McKenney wrote:
-> > On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
-> > > On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
-> > > > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
-> > > > > The "Provide exact semantics for SRCU" patch should have:
-> > > > > 
-> > > > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
-> > > > > 
-> > > > > added at the end, together with your Reported-by: tag.  With that, I 
-> > > > > think it can be queued for 6.4.
-> > > > 
-> > > > Thank you!  Does the patch shown below work for you?
-> > > > 
-> > > > (I have tentatively queued this, but can easily adjust or replace it.)
-> > > 
-> > > It looks fine.
-> > 
-> > Very good, thank you for looking it over!  I pushed it out on branch
-> > stern.2023.02.04a.
-> > 
-> > Would anyone like to ack/review/whatever this one?
-> 
-> Would it be possible to add comments, something like the following? Apologies
-> if it is missing some ideas. I will try to improve it later.
-> 
-> thanks!
-> 
->  - Joel
-> 
-> ---8<-----------------------
-> 
-> diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-> index ce068700939c..0a16177339bc 100644
-> --- a/tools/memory-model/linux-kernel.bell
-> +++ b/tools/memory-model/linux-kernel.bell
-> @@ -57,7 +57,23 @@ let rcu-rscs = let rec
->  flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
->  flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
->  
-> +(***************************************************************)
->  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
-> +(***************************************************************)
-> +(*
-> + * carry-srcu-data: To handle the case of the SRCU critical section split
-> + * across CPUs, where the idx is used to communicate the SRCU index across CPUs
-> + * (say CPU0 and CPU1), data is between the R[srcu-lock] to W[once][idx] on
-> + * CPU0, which is sequenced with the ->rf is between the W[once][idx] and the
-> + * R[once][idx] on CPU1.  The carry-srcu-data is made to exclude Srcu-unlock
-> + * events to prevent capturing accesses across back-to-back SRCU read-side
-> + * critical sections.
-> + *
-> + * srcu-rscs: Putting everything together, the carry-srcu-data is sequenced with
-> + * a data relation, which is the data dependency between R[once][idx] on CPU1
-> + * and the srcu-unlock store, and loc ensures the relation is unique for a
-> + * specific lock.
-> + *)
->  let carry-srcu-data = (data ; [~ Srcu-unlock] ; rf)*
->  let srcu-rscs = ([Srcu-lock] ; carry-srcu-data ; data ; [Srcu-unlock]) & loc
 
-My tendency has been to keep comments in the herd7 files to a minimum 
-and to put more extended descriptions in the explanation.txt file.  
-Right now that file contains almost nothing (a single paragraph!) about 
-SRCU, so it needs to be updated to talk about the new definition of 
-srcu-rscs.  In my opinion, that's where this sort of comment belongs.
+--qc7dorfog3znw3nz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Joel, would you like to write an extra paragraph of two for that file, 
-explaining in more detail how SRCU lock-to-unlock matching is different 
-from regular RCU and how the definition of the srcu-rscs relation works?  
-I'd be happy to edit anything you come up with.
+Hello Bartosz,
 
-Alan
+On Mon, Feb 06, 2023 at 07:01:11PM +0100, Bartosz Golaszewski wrote:
+> On Mon, Feb 6, 2023 at 4:51 PM Uwe Kleine-K=F6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> >
+> > Hello,
+> >
+> > ah, this is the mail I missed before.
+> >
+> > On Wed, Jan 25, 2023 at 11:11:59PM +0100, Wolfram Sang wrote:
+> > >
+> > > > So, this code handled all my stress-testing well so far. I'll try to
+> > > > think of some more ideas until this evening, but likely I will appl=
+y it
+> > > > later. Nonetheless, more review eyes are still welcome!
+> > >
+> > > Ah yes, I now recalled why I had the gut feeling that this solution is
+> > > not complete. See this mail thread from 2015:
+> > >
+> > > https://lkml.iu.edu/hypermail/linux/kernel/1501.2/01700.html
+> > >
+> > > There are still drivers using i2c_del_adapter()+kfree(), so removing =
+the
+> > > completion could cause use-after-free there, or?
+> >
+> > There is also a strange construct in spi that I understand at one point
+> > in time, but I failed to swap it in quickly. It's about commit
+> > 794aaf01444d4e765e2b067cba01cc69c1c68ed9. I think there should be a
+> > nicer solution than to track if the controller was allocated using devm,
+> > but I don't remember the details. But before addressing the i2c problem
+> > it might be worth to invest some time into that spi issue to not make
+> > the same mistake for i2c.
+>=20
+> Yeah, I've seen these constructs before elsewhere... Sadly, we have
+> workarounds upon workarounds within workarounds chased by other
+> workarounds due to this issue.
 
-PS: We also need to update the PLAIN ACCESSES AND DATA RACES section of 
-explanation.txt, to mention the carry-dep relation and why it is 
-important.
+Another pointer: Some time ago I did to the counter framework what would
+be needed here for i2c. See
+https://lore.kernel.org/all/20211230150300.72196-1-u.kleine-koenig@pengutro=
+nix.de/.
+This was applied in commit f2ee4759fb700b32a1bd830960fe86bf6bdfd0ab and
+its parents.
+
+Maybe it can serve as a template for i2c.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--qc7dorfog3znw3nz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPhSV8ACgkQwfwUeK3K
+7Aka2QgAn+gAHTQ5MLO3HpHfAiBq1stJZADDOy6EEM/kmPrdLuHMcH7LAXOSGgu5
+IUEBWnfWTaTHKRbtjyd7CVJ5cXH/6+XQ2qBY+SKC9Kj2Eao5VP3ouhqGKtQD3ezf
+NWYAXPaeY9vIiNIW6drt5LRYnnbdAiMZDal/5hbnw2DyK69sOq61ovQoJJcAhMvt
+1QIRfN8P6JEGmT91f+/vbw23KpGl7dVpVBPMMvCOoet2iWHt8EKxSiCLQAonC0mg
+jb+Xid9GYeXuBY0JApBFR4yMbpt7NBOs3oAWyw0y6x0DRLMSR1O0VPQMb67UHTME
+XJtcZ8RTqNVL+zNiuXza677zjlfdRg==
+=eUGB
+-----END PGP SIGNATURE-----
+
+--qc7dorfog3znw3nz--
