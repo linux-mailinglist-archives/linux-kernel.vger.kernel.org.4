@@ -2,161 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E830868B690
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825AC68B695
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:43:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjBFHme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 02:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S229823AbjBFHm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 02:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBFHmc (ORCPT
+        with ESMTP id S229735AbjBFHmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 02:42:32 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C716F166FC
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 23:42:30 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id b3so16425175lfv.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 23:42:30 -0800 (PST)
+        Mon, 6 Feb 2023 02:42:53 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04054ECC
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 23:42:50 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id m14so9434076wrg.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Feb 2023 23:42:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=82B4t599f/DpDL7YZ83i615XP1XlvUU4CYMPr+rZYv0=;
-        b=OROMYiqd8ZNZJ3vW3WLZQKrTMAWrr7jPFoRqpFkGh3hHpb03kgW5QjHxiPPFS+aAqG
-         53VL8ZybUKEYwINwDt7vwtyjzPJJGzYxF0i1j+q0h5y7zHlsStaZNeuhbnu4/HK8v7mA
-         TtfA+wNjxCZVWnn5/vfydEkbaw65y+Zz4eXK9OGcA+SrxJK7LjkOplpFel+D8umWU7aX
-         kJJeW952HmlM8CAstBsXCYbZgVYdsFSqb/y3hxANh3MeBp4KqnDLJrNjuNd9170uoeud
-         DtqrMTokw6eATPQHuyMW2JNx7rEFxg4kEA3hTgCMLhpieY8o81BwNxFUMGFEcf9boF0L
-         gC4A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2XA64voz9ivBR8UNL1Z4b6fr6//lgNZOlEzIgWzkqrI=;
+        b=Iad+7Ny2E+UALOfO6NNonPCSf+2HKHeRfPbUezACIXgAcbJUJ3G8UHXjGooNRK3KEk
+         NuwofdM+hk+PKfCB0DcqJ6du5yKbaccuJ3uTdtaVldcs04CW/ohNsPol//L4wMeG1sU/
+         RtEUvOVe93QJ0T/8b1V6fJUQ3tM1F0ty6OAxrBZZtAViiFDqpRwikB9fQdyTSczSSi8i
+         rndOCKOdsNE0xp0OgHe6AW7sqoFiV9fZzc8jQ+q/c3FPNCMf++mzw1zLATPOXSWfSgHM
+         +c/IVuPcNtRqFuow0ZU9GZ18xmDoNxsRAcx8RD3GTucjpbrzw2lrphPE4phT/+QXG7xQ
+         rXkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=82B4t599f/DpDL7YZ83i615XP1XlvUU4CYMPr+rZYv0=;
-        b=6RosZ789D7b+INMmiyFv+9g/8O+jf1zEYjMy8slQaiqZT5mNcndjvyD5F8a73y8e1L
-         hCKMNziIvAUS25aZ8/XNQuk8drgRWLVxlwYWjBrJ2Yr1u9g9iIFVdYWSGIrM6Xgk2wIO
-         EQaMiPwZkKn1wc3yUqBT5C/dhybLDaxy8uv9uUs0sJkPa57/7LDiWsW2+0ZNWs4mdVVw
-         WYV4qEhZ42hAoxhXYWrbZuWFjx9zSVExfW4qixXvTuq69XffSzZXUI5N+ZQ5XSHPRzQM
-         keu236jPAkF5BnqEBEoESSWbYYde/naDZ0yaYn2RRU+pQgEABBmk1lrYprfcatge8Cmk
-         sw5A==
-X-Gm-Message-State: AO0yUKVY2BwU3U1iJZs86y6pXcV7iz9/VtmtJAzeS5o420HXy1Eu2BJX
-        wO5hxmm6Q2LAjjkmVsLSYeRm+UYyf8MgS1BpvRU8iA==
-X-Google-Smtp-Source: AK7set949yF1OIh6bFIfShPVIKefdWTkltsAHpaYlBRRyDo6WH+9FCS4M/DKlTbhxGgJWuiUyELpLyIpplAlbv80GlI=
-X-Received: by 2002:a05:6512:374c:b0:4b6:f2a8:884e with SMTP id
- a12-20020a056512374c00b004b6f2a8884emr3259859lfs.191.1675669349169; Sun, 05
- Feb 2023 23:42:29 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2XA64voz9ivBR8UNL1Z4b6fr6//lgNZOlEzIgWzkqrI=;
+        b=xRbFFwPv8mAlec5ZJ/Kmd29ngveSMwob+cvIg/ieuYqZAN/xD1nKMxgxTy+Ybi+V8y
+         /tf0lWzQv2G3QFPRfUikhDuO6fwLAsz+06EPnI/dYrGtCzZLPSFFcUHaMpIzo00pvqLZ
+         3aHU1APpq5ioVfxIdM9XeT5a5/Dx4yVfg2t7c+xDeUWEPsZgIsdcNObbV6JYVlB2kckT
+         mKTYvqe3DTU/Wt11EUx/qa272YuFmD7y9SBbwCWj+VLTdp6nWKr3Hv9dN8Y2JjPkiGev
+         ufL0EzCCnd+gcW5vDdBdL1yBPk3QC02Mkdn02++i8DDj+JhY8Tb8xStHHEeK2RWQnlih
+         bJ0w==
+X-Gm-Message-State: AO0yUKWfPjji13wIc64rlAiLPxfGqO6bapdxbLOfoN6qy8QULw6yCbAK
+        bDHROyD8+z1NnkFq81xZbQVm9Q==
+X-Google-Smtp-Source: AK7set/zNQJeepBp90+pb7siQybo5fz/0fjOBRUb17obj/tzEFyZevEn0oFiVuXuge8l3CN8hkHVCg==
+X-Received: by 2002:a05:6000:136f:b0:2c3:e80f:6aa3 with SMTP id q15-20020a056000136f00b002c3e80f6aa3mr2835371wrz.51.1675669369259;
+        Sun, 05 Feb 2023 23:42:49 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f9-20020adff989000000b002c3e6b39512sm2682210wrr.53.2023.02.05.23.42.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Feb 2023 23:42:48 -0800 (PST)
+Message-ID: <5454d5c6-1151-af9b-54a3-3bdd66b621e8@linaro.org>
+Date:   Mon, 6 Feb 2023 08:42:46 +0100
 MIME-Version: 1.0
-References: <1675332721-2-1-git-send-email-lizhijian@fujitsu.com>
-In-Reply-To: <1675332721-2-1-git-send-email-lizhijian@fujitsu.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Mon, 6 Feb 2023 08:42:17 +0100
-Message-ID: <CAMGffEnqyq83Z-33Kj6PBL6o95VDCz2Q_D1TFjzZkV7QTnqC2Q@mail.gmail.com>
-Subject: Re: [PATCH v2] RDMA/rtrs: Don't call kobject_del for srv_path->kobj
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     haris.iqbal@ionos.com, linux-rdma@vger.kernel.org, jgg@ziepe.ca,
-        leon@kernel.org, guoqing.jiang@linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RESEND PATCH v3 1/4] dt-bindings: net: Add WCN6855 Bluetooth
+Content-Language: en-US
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+References: <20230206001634.2566-1-steev@kali.org>
+ <20230206001634.2566-2-steev@kali.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230206001634.2566-2-steev@kali.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 11:12 AM Li Zhijian <lizhijian@fujitsu.com> wrote:
->
-> As the mention in commmit f7452a7e96c1 ("RDMA/rtrs-srv: fix memory leak by missing kobject free"),
-> it was intended to remove the kobject_del for srv_path->kobj.
->
-> f7452a7e96c1 said:
-> >This patch moves kobject_del() into free_sess() so that the kobject of
-> >    rtrs_srv_sess can be freed.
->
-> This patch also move rtrs_srv_destroy_once_sysfs_root_folders back to
-> 'if (srv_path->kobj.state_in_sysfs)' block to avoid a 'held lock freed!'
->
-> A kernel panic will be triggered by following script
-> -----------------------
-> $ while true
-> do
->         echo "sessname=foo path=ip:<ip address> device_path=/dev/nvme0n1" > /sys/devices/virtual/rnbd-client/ctl/map_device
->         echo "normal" > /sys/block/rnbd0/rnbd/unmap_device
-> done
-> -----------------------
-> The bisection pointed to commit 6af4609c18b3 ("RDMA/rtrs-srv: Fix several issues in rtrs_srv_destroy_path_files")
-> at last.
->
->  rnbd_server L777: </dev/nvme0n1@foo>: Opened device 'nvme0n1'
->  general protection fault, probably for non-canonical address 0x765f766564753aea: 0000 [#1] PREEMPT SMP PTI
->  CPU: 0 PID: 3558 Comm: systemd-udevd Kdump: loaded Not tainted 6.1.0-rc3-roce-flush+ #51
->  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
->  RIP: 0010:kernfs_dop_revalidate+0x36/0x180
->  Code: 00 00 41 55 41 54 55 53 48 8b 47 68 48 89 fb 48 85 c0 0f 84 db 00 00 00 48 8b a8 60 04 00 00 48 8b 45 30 48 85 c0 48 0f 44 c5 <4c> 8b 60 78 49 81 c4 d8 00 00 00 4c 89 e7 e8 b7 78 7b 00 8b 05 3d
->  RSP: 0018:ffffaf1700b67c78 EFLAGS: 00010206
->  RAX: 765f766564753a72 RBX: ffff89e2830849c0 RCX: 0000000000000000
->  RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff89e2830849c0
->  RBP: ffff89e280361bd0 R08: 0000000000000000 R09: 0000000000000001
->  R10: 0000000000000065 R11: 0000000000000000 R12: ffff89e2830849c0
->  R13: ffff89e283084888 R14: d0d0d0d0d0d0d0d0 R15: 2f2f2f2f2f2f2f2f
->  FS:  00007f13fbce7b40(0000) GS:ffff89e2bbc00000(0000) knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 00007f93e055d340 CR3: 0000000104664002 CR4: 00000000001706f0
->  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->  Call Trace:
->   <TASK>
->   lookup_fast+0x7b/0x100
->   walk_component+0x21/0x160
->   link_path_walk.part.0+0x24d/0x390
->   path_openat+0xad/0x9a0
->   do_filp_open+0xa9/0x150
->   ? lock_release+0x13c/0x2e0
->   ? _raw_spin_unlock+0x29/0x50
->   ? alloc_fd+0x124/0x1f0
->   do_sys_openat2+0x9b/0x160
->   __x64_sys_openat+0x54/0xa0
->   do_syscall_64+0x3b/0x90
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  RIP: 0033:0x7f13fc9d701b
->  Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 00 00 00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 91 00 00 00 48 8b 54 24 28 64 48 2b 14 25
->  RSP: 002b:00007ffddf242640 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
->  RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f13fc9d701b
->  RDX: 0000000000080000 RSI: 00007ffddf2427c0 RDI: 00000000ffffff9c
->  RBP: 00007ffddf2427c0 R08: 00007f13fcc5b440 R09: 21b2131aa64b1ef2
->  R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000080000
->  R13: 00007ffddf2427c0 R14: 000055ed13be8db0 R15: 0000000000000000
->
-> Fixes: 6af4609c18b3 ("RDMA/rtrs-srv: Fix several issues in rtrs_srv_destroy_path_files")
-> Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-Thx!
+On 06/02/2023 01:16, Steev Klimaszewski wrote:
+> Add bindings for the QTI WCN6855 chipset, based on the WCN6750.
+> 
 > ---
-> V2: Call rtrs_srv_destroy_once_sysfs_root_folders in condition to avoid
-> a 'held lock freed!'
-> ---
->  drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c b/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-> index c76ba29da1e2..5adba0f754b6 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-> @@ -312,9 +312,8 @@ void rtrs_srv_destroy_path_files(struct rtrs_srv_path *srv_path)
->
->         if (srv_path->kobj.state_in_sysfs) {
->                 sysfs_remove_group(&srv_path->kobj, &rtrs_srv_path_attr_group);
-> -               kobject_del(&srv_path->kobj);
->                 kobject_put(&srv_path->kobj);
-> +               rtrs_srv_destroy_once_sysfs_root_folders(srv_path);
->         }
->
-> -       rtrs_srv_destroy_once_sysfs_root_folders(srv_path);
->  }
-> --
-> 1.8.3.1
->
+> - v3 No changes from v2
+> - v2 drop second binding in subject line
+> 
+> Signed-off-by: Steev Klimaszewski <steev@kali.org>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Still broken.
+
+Best regards,
+Krzysztof
+
