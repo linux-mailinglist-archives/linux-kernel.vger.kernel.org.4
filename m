@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9BF68BA8B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDC968BA83
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 11:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjBFKkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 05:40:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
+        id S229918AbjBFKjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 05:39:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjBFKk1 (ORCPT
+        with ESMTP id S229764AbjBFKjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:40:27 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF47B457;
-        Mon,  6 Feb 2023 02:40:07 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 316Ad9PP090498;
-        Mon, 6 Feb 2023 04:39:09 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675679949;
-        bh=z4nwf/VDXcG4CYg6semyecFfe3EixsrC45ZlYCcCgyo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=RT62vdH1NqF55aEsgFUHUh704Y0HdoUSB7SBVZzn+tAZOpbFu/qMM/Tj6R/1H0bZ9
-         ZUDqiauBAx4VoGfzIeep6rji88RYZzsNPkburPfdWe9P8EQ2dsbCQNgHHF/2NzuvfR
-         D76SK8422cFLPI6VapvenHFYaxiamt4KHenJm2CU=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 316Ad9J6097075
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Feb 2023 04:39:09 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
- Feb 2023 04:39:08 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 6 Feb 2023 04:39:08 -0600
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 316Ad2pl002451;
-        Mon, 6 Feb 2023 04:39:03 -0600
-Message-ID: <81dc1c83-3e66-4612-9011-cf70fb624529@ti.com>
-Date:   Mon, 6 Feb 2023 16:09:02 +0530
+        Mon, 6 Feb 2023 05:39:40 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF161DBEA;
+        Mon,  6 Feb 2023 02:39:08 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id lu11so32897963ejb.3;
+        Mon, 06 Feb 2023 02:39:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xK/SoV6W+L9dwyyDpNjEuviI697WMNBbUvcumQmSRzo=;
+        b=lHQH0PxHTLqrzoqYttIGLIbe6da/rgJog8MtswapCaoa0tjqEV77lQPQpGZK3ROX5U
+         ZyaGdr6nf/I5ZXo5cVz7fXT3ONHVuMoKP9Noxbu4f1BhtqCunab/0E2hmji4rynw0uwT
+         8mQA5UGEeC6Ag4a5w43+rOGsjePhoDB3FhS7YDcgKYmBf8DC2W/z0Sb9+M+MRMazEIGv
+         jg9japbfF1nDjgCGG5UmvxELn9sjj24UFZodObGYxFE1v4dkXDowbaR2xHKM9GkcAyZn
+         auW51zTelykon91Sex68dJ66zjFIozvr/I4XCJKcc9mypmx60UsXKxqYUu5mAFLCMVv8
+         6qVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xK/SoV6W+L9dwyyDpNjEuviI697WMNBbUvcumQmSRzo=;
+        b=iGlZCjqHR37lJ8SMPWVSmQyvWmxMLCWk9OYp9fygT0d/V7WdIdGs1jB4oBGEXB6MKG
+         4ephwr/0K4bSaTnSagUT/x24Fe4P0TgX4oL0+mVLv3fq46tmirpsyX0hKJ1VJqhtWPmK
+         4x0TFvTvFdPQ0plDMJQfkL+dRE1OUI8sZOomtbhzJMpyGV3S5PO407Gcq5r+Rf6oz9BL
+         s17LHjza+83xYOQrmYh9X6raTo+wp92zhmXEd4kcKpNfeHhCWZ95oHVZMvrCRWJbiyL6
+         gwA2cM28m+OneO3E7PsFRFIhRw4am9+vH2VDEy0GtyRzpTnFU6BXVr1qzvW1r4QlWjhE
+         KgEw==
+X-Gm-Message-State: AO0yUKXXb04VU/1RXGa5wG7MD4r5d27iTUbl4WapnukqgWwX56RcVdU7
+        Lp5UhPe+qx540Pc/KUs6HDY=
+X-Google-Smtp-Source: AK7set8PHFzniR3H0+5MkGkvu4JDYyxbxmaCnvaAaK3dlVpUFb9sEvDfxmIyE9VHYt5TFSVL6CjFOQ==
+X-Received: by 2002:a17:906:5181:b0:878:79e6:4672 with SMTP id y1-20020a170906518100b0087879e64672mr20380001ejk.42.1675679948385;
+        Mon, 06 Feb 2023 02:39:08 -0800 (PST)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id p15-20020a1709060e8f00b0088bd01105eesm5283479ejf.188.2023.02.06.02.39.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 02:39:08 -0800 (PST)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Mon, 06 Feb 2023 11:39:02 +0100
+Subject: [PATCH] x86/sgx: Avoid using iterator after loop in
+ sgx_mmu_notifier_release()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [EXTERNAL] Re: [PATCH v4 1/2] dt-bindings: net: Add ICSSG
- Ethernet Driver bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>
-CC:     <nm@ti.com>, <ssantosh@kernel.org>, <srk@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230206060708.3574472-1-danishanwar@ti.com>
- <20230206060708.3574472-2-danishanwar@ti.com>
- <e0ab9ea1-59b7-506f-1e77-231a0cdc09bf@linaro.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <e0ab9ea1-59b7-506f-1e77-231a0cdc09bf@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Message-Id: <20230206-sgx-use-after-iter-v1-1-c09fb5300b5e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAMXY4GMC/x2NwQrCQAxEf6XkbGC71lr8FfGQbrNtDq6SVCmU/
+ rtZLwOPmcfsYKzCBrdmB+WvmLyKQ3tqIC1UZkaZnCGGeA4x9Gjzhh9jpLyyotTIl6FL7dR3abi
+ CiyN5PyqVtFT1SearWryVs2z/t/vjOH7ef93DfQAAAA==
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     linux-sgx@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675679947; l=1863;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=s5Z25nwMKZrnXgvpZBm/IP90o2y1bj8eWKKa4KOh3MA=;
+ b=0S50NE1ixxa4ushMukAa9C7P25oFt05fKlJK7B1i/gbH5pmxkIS1yph56qxxQD1r4Qtt3lsGkt3c
+ bgDDkaKyDK9vzzIkxC8YnIwtQ5gdWdYP865Cy/hIuzHWhn68H+m0
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,257 +87,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+If &encl_mm->encl->mm_list does not contain the searched 'encl_mm',
+'tmp' will not point to a valid sgx_encl_mm struct.
 
-Thanks for the comments.
+Since the code within the guarded block is just called when the element
+is found, it can simply be moved into the list iterator.
+Within the list iterator 'tmp' is guaranteed to point to a valid
+element.
 
-On 06/02/23 13:20, Krzysztof Kozlowski wrote:
-> On 06/02/2023 07:07, MD Danish Anwar wrote:
->> From: Puranjay Mohan <p-mohan@ti.com>
->>
->> Add a YAML binding document for the ICSSG Programmable real time unit
->> based Ethernet driver. This driver uses the PRU and PRUSS consumer APIs
-> 
-> You add a binding for the hardware, not for driver.
-> 
->> to interface the PRUs and load/run the firmware for supporting ethernet
->> functionality.
-> 
-> Subject: drop second/last, redundant "driver bindings". The
-> "dt-bindings" prefix is already stating that these are bindings.
-> 
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+Linus proposed to avoid any use of the list iterator variable after the
+loop, in the attempt to move the list iterator variable declaration into
+the marcro to avoid any potential misuse after the loop.
+Using it in a pointer comparision after the loop is undefined behavior
+and should be omitted if possible [1].
 
-Sure I will modify the subject and commit description.
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+---
+ arch/x86/kernel/cpu/sgx/encl.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
->>
->> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->> Signed-off-by: Md Danish Anwar <danishanwar@ti.com>
->> ---
->>  .../bindings/net/ti,icssg-prueth.yaml         | 179 ++++++++++++++++++
->>  1 file changed, 179 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->> new file mode 100644
->> index 000000000000..e4dee01a272a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->> @@ -0,0 +1,179 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/net/ti,icssg-prueth.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments ICSSG PRUSS Ethernet
->> +
->> +maintainers:
->> +  - Md Danish Anwar <danishanwar@ti.com>
->> +
->> +description:
->> +  Ethernet based on the Programmable Real-Time
->> +  Unit and Industrial Communication Subsystem.
->> +
->> +allOf:
->> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ti,am654-icssg-prueth  # for AM65x SoC family
->> +
->> +  ti,sram:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      phandle to MSMC SRAM node
->> +
->> +  dmas:
->> +    maxItems: 10
->> +
->> +  dma-names:
->> +    items:
->> +      - const: tx0-0
->> +      - const: tx0-1
->> +      - const: tx0-2
->> +      - const: tx0-3
->> +      - const: tx1-0
->> +      - const: tx1-1
->> +      - const: tx1-2
->> +      - const: tx1-3
->> +      - const: rx0
->> +      - const: rx1
->> +
->> +  ethernet-ports:
-> 
-> Bring some order or logic in the order of the properties. Keep the
-> ethernet-ports as last property.
-> 
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index 2a0e90fe2abc..db585b780141 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -764,15 +764,13 @@ static void sgx_mmu_notifier_release(struct mmu_notifier *mn,
+ 	list_for_each_entry(tmp, &encl_mm->encl->mm_list, list) {
+ 		if (tmp == encl_mm) {
+ 			list_del_rcu(&encl_mm->list);
+-			break;
++			spin_unlock(&encl_mm->encl->mm_lock);
++			synchronize_srcu(&encl_mm->encl->srcu);
++			mmu_notifier_put(mn);
++			return;
+ 		}
+ 	}
+ 	spin_unlock(&encl_mm->encl->mm_lock);
+-
+-	if (tmp == encl_mm) {
+-		synchronize_srcu(&encl_mm->encl->srcu);
+-		mmu_notifier_put(mn);
+-	}
+ }
+ 
+ static void sgx_mmu_notifier_free(struct mmu_notifier *mn)
 
-Sure, I will re-arrange them.
+---
+base-commit: d2d11f342b179f1894a901f143ec7c008caba43e
+change-id: 20230206-sgx-use-after-iter-f584c1d64c87
 
->> +    type: object
->> +    additionalProperties: false
-> 
-> Blank line
-> 
->> +    properties:
->> +      '#address-cells':
->> +        const: 1
->> +      '#size-cells':
->> +        const: 0
->> +
->> +    patternProperties:
->> +      ^port@[0-1]$:
->> +        type: object
->> +        description: ICSSG PRUETH external ports
->> +
-
-At least one ethernet port is required. Should I add the below line here for this?
-
-   minItems: 1
-
->> Drop blank line
-> 
->> +        $ref: ethernet-controller.yaml#
->> +
-> 
-> Drop blank line
-> 
->> +        unevaluatedProperties: false
->> +
->> +        properties:
->> +          reg:
->> +            items:
->> +              - enum: [0, 1]
->> +            description: ICSSG PRUETH port number
->> +
->> +          interrupts-extended:
-> 
-> Just "interrupts"
-
-I will drop / add blank lines and change this to just "interrupts".
-
->> +            maxItems: 1
->> +
->> +          ti,syscon-rgmii-delay:
->> +            items:
->> +              - items:
->> +                  - description: phandle to system controller node
->> +                  - description: The offset to ICSSG control register
->> +            $ref: /schemas/types.yaml#/definitions/phandle-array
->> +            description:
->> +              phandle to system controller node and register offset
->> +              to ICSSG control register for RGMII transmit delay
->> +
->> +        required:
->> +          - reg
-> 
-> required for ethernet-ports - at least one port is required, isn't it?
-
-Yes, at least one ethernet port is required. Should I add "minItems: 1" in
-patternProperties section or should I add a new required section in
-patternProperties and mention something like port@0 as required?
-
->> +
->> +  ti,mii-g-rt:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description: |
->> +      phandle to MII_G_RT module's syscon regmap.
->> +
->> +  ti,mii-rt:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description: |
->> +      phandle to MII_RT module's syscon regmap
->> +
->> +  interrupts:
->> +    maxItems: 2
->> +    description: |
->> +      Interrupt specifiers to TX timestamp IRQ.
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: tx_ts0
->> +      - const: tx_ts1
->> +
->> +required:
->> +  - compatible
->> +  - ti,sram
->> +  - dmas
->> +  - dma-names
->> +  - ethernet-ports
->> +  - ti,mii-g-rt
->> +  - interrupts
->> +  - interrupt-names
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    /* Example k3-am654 base board SR2.0, dual-emac */
->> +    pruss2_eth: ethernet {
->> +        compatible = "ti,am654-icssg-prueth";
->> +        pinctrl-names = "default";
->> +        pinctrl-0 = <&icssg2_rgmii_pins_default>;
->> +        ti,sram = <&msmc_ram>;
->> +
->> +        ti,prus = <&pru2_0>, <&rtu2_0>, <&tx_pru2_0>,
->> +                  <&pru2_1>, <&rtu2_1>, <&tx_pru2_1>;
->> +        firmware-name = "ti-pruss/am65x-pru0-prueth-fw.elf",
->> +                        "ti-pruss/am65x-rtu0-prueth-fw.elf",
->> +                        "ti-pruss/am65x-txpru0-prueth-fw.elf",
->> +                        "ti-pruss/am65x-pru1-prueth-fw.elf",
->> +                        "ti-pruss/am65x-rtu1-prueth-fw.elf",
->> +                        "ti-pruss/am65x-txpru1-prueth-fw.elf";
->> +        ti,pruss-gp-mux-sel = <2>,      /* MII mode */
->> +                              <2>,
->> +                              <2>,
->> +                              <2>,      /* MII mode */
->> +                              <2>,
->> +                              <2>;
->> +        dmas = <&main_udmap 0xc300>, /* egress slice 0 */
->> +               <&main_udmap 0xc301>, /* egress slice 0 */
->> +               <&main_udmap 0xc302>, /* egress slice 0 */
->> +               <&main_udmap 0xc303>, /* egress slice 0 */
->> +               <&main_udmap 0xc304>, /* egress slice 1 */
->> +               <&main_udmap 0xc305>, /* egress slice 1 */
->> +               <&main_udmap 0xc306>, /* egress slice 1 */
->> +               <&main_udmap 0xc307>, /* egress slice 1 */
->> +               <&main_udmap 0x4300>, /* ingress slice 0 */
->> +               <&main_udmap 0x4301>; /* ingress slice 1 */
->> +        dma-names = "tx0-0", "tx0-1", "tx0-2", "tx0-3",
->> +                    "tx1-0", "tx1-1", "tx1-2", "tx1-3",
->> +                    "rx0", "rx1";
->> +        ti,mii-g-rt = <&icssg2_mii_g_rt>;
->> +        interrupts = <24 0 2>, <25 1 3>;
-> 
-> Aren't you open-coding some IRQ flags?
-> 
-
-These values are not open coded here. These values are the expected values for
-interrupt node.
-
-Here,
-
-Cell 1 -> PRU System event number
-Cell 2 -> PRU channel
-Cell 3 -> PRU host_event (target)
-
-This is documented in detail in
-Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
-
-I also missed mentioning "interrupt-parent" in example section. I will add
-interrupt-parent in next revision.
-
-interrupt-parent = <&icssg2_intc>;
-
->> +        interrupt-names = "tx_ts0", "tx_ts1";
->> +        ethernet-ports {
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-
+Best regards,
 -- 
-Thanks and Regards,
-Danish.
+Jakob Koschel <jkl820.git@gmail.com>
+
