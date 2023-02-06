@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B8068B7BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1491F68B7C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjBFIw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 03:52:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
+        id S229922AbjBFIy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 03:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjBFIwY (ORCPT
+        with ESMTP id S229526AbjBFIyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:52:24 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEED113EE;
-        Mon,  6 Feb 2023 00:52:23 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so12713654pjq.1;
-        Mon, 06 Feb 2023 00:52:23 -0800 (PST)
+        Mon, 6 Feb 2023 03:54:25 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA05712857;
+        Mon,  6 Feb 2023 00:54:23 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id ml19so32240408ejb.0;
+        Mon, 06 Feb 2023 00:54:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CTwAC18x9cIOiks/6Nlsw3FpytCj0rBSuF+cGpZx0VM=;
-        b=VSd1My/oB2i372ZLnobUBAmRCyztLovO/+nubk400rlkIFAmqIIirSuZKwKufF6Cmz
-         YyrXXRZ/Fz9JRCik4TvEzTcRjqcl116J42OdlFMfI/Zjb4EYIxxQX+kq8eeHYzIEEzGa
-         +7CN/PWyLZamFpgTdiNMIyTZNuglmXDQUJujb3cERr6MA6noRnVzonrjAkKEtO4Dirzs
-         GBY8HlikPGUwpe9oAsu8WGxtFIrCSdlMh5Wd1sg8iDadbGKv42DKush9+BiouOkjlLmH
-         hzc2RxMolbkDJOI0Wdw0i0s/xQZZ/7huJzn6pmK4gpzTFCGrD9JMRm8mfjj4R4FqN0z2
-         9UsA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5K/+n4xNab3o/nLIaDh95b6yAKziU1tvSQuqOiWt3OA=;
+        b=dP4sWNbjALMahOPsT5Tb6lcwugvRxESmf1F9vvxJGnwe/GzhB5k3TKlb92QjsvsrV9
+         qrKyvnw0hxxKB6biqnP3OIfOoCNKPS+H7YCEnyd+ggtbWFdSxvhwVyuYmz4Ur4UAcw38
+         bHLBcZxdAedA3nnBjQnHpR20jQ9ikXOdur5+NVlvbQeVedMApXVzeQG4eDaedEONOp2m
+         uJ+EBdybvGARjhnURMBe9nm/HDLcPhTHRpSgk8KKoHE7EGFEIIv0ukaklDWn4BEMV4uT
+         Wp4/2lsoYD0Hgv4toHUJpxH+V2DcTmygpfGTMtRJnulvMGFChGcAcsFGpqLEPipYEfUE
+         +0Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CTwAC18x9cIOiks/6Nlsw3FpytCj0rBSuF+cGpZx0VM=;
-        b=WbZcV7ItBChnfRCtl0kF0t+i387J0RWZMj1YRJAPHa3pTiE82XBWJ6MAWRDipKBUMm
-         7X0vWQq3AjJ57LFFOcX/cOifDQPFUwsUglI7LtSk4rdZFSBTcTnV25wscSZuHqcM71BV
-         jNBTjUotZstFiMalxN/DZKvfhBbqqRwGRdKOcJScZJWp5sa94Bb4U1hvsV5tzAcGW2Vm
-         6qKkFUzhp7qjLEO7n5VaU6+ZT7Ias878Kf0Xigbom0G09mTXJ90jBKba9ynNhOMC7lfY
-         Ddz6lv6+qRBy8goUqjBGhtFByMsRWFEavlquCWFF83spXMeGtokw8ImNbEHMzX5bGwvx
-         H6sQ==
-X-Gm-Message-State: AO0yUKVAR9PctgtrinNkto13y3y225QfC1VvCwb0dkB2h3Tw4R38EWnX
-        2Sz+wZvx+5VrWRHvZkHpgBE=
-X-Google-Smtp-Source: AK7set9NkvBN6SOTcQQAZVe9yJ4NefHT1nYDE0voeiXA81qVuThAhjyaNJuGoqKsWw0DrLlKScPndg==
-X-Received: by 2002:a17:903:1111:b0:196:6ec4:52db with SMTP id n17-20020a170903111100b001966ec452dbmr22503790plh.51.1675673542782;
-        Mon, 06 Feb 2023 00:52:22 -0800 (PST)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id f9-20020a170902e98900b00185402cfedesm4607769plb.246.2023.02.06.00.52.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 00:52:22 -0800 (PST)
-Message-ID: <f0f6dbed-0e1d-059c-11a4-07fd4bec5c99@gmail.com>
-Date:   Mon, 6 Feb 2023 16:52:15 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5K/+n4xNab3o/nLIaDh95b6yAKziU1tvSQuqOiWt3OA=;
+        b=Bdf7snvPFK7nJUuN7kntdofC6iZ1uvNsd71NAft6yW2nczLg1ha2oqfl0LobzjLnc3
+         DmQe+wx/SiR4nEd+/McA31XvGWGTKDZJjPMiS6nHgcnxF72EwbT5RsTAyK+J2kYW7qnD
+         bv+VwpJ860ZHZ3dMD1Rhl8z/foWD9KgE8LyLcIgFKTD1vUG2TtGMR3qLAuqEHwJzSZhh
+         xYKboa5Pe9O8ekvhNrfDK1dSEhgFboZPjRdMvyBpcNqeKmVNTHHf9wRvWIvpKB3AZVmj
+         +8eyWCzO6tmksEHqSq+TPFv4/74Iyc8wL7LB8v7bXhB2YEXS0bQUfeQHm8wBmPHeF9cu
+         l/Hg==
+X-Gm-Message-State: AO0yUKVaX53W1pguMQ9qfzd05b6ehao98RBllTgspqn1SggpCAZJda8K
+        nXT1OT9Yxs3GF7cvjAwGe1KbBt7GjpdBDQwtmZ0=
+X-Google-Smtp-Source: AK7set8/28B3/8TsdW+DdIKZXThf8UCw64vcxMlprv1Xh/pwk5jbYFTq6/2hdfjxW8972wHzuE0vBS1Pvf46HpmWdx0=
+X-Received: by 2002:a17:906:6d0d:b0:87e:94bb:8174 with SMTP id
+ m13-20020a1709066d0d00b0087e94bb8174mr5738984ejr.249.1675673662383; Mon, 06
+ Feb 2023 00:54:22 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
- Intel hybrid CPUs
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230131085031.88939-1-likexu@tencent.com>
- <Y9k7eyfmXjqW9lYF@google.com>
- <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
- <Y9v7tEXPlki7YOT4@google.com>
- <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
- <Y91DUmMjCLzIXlp+@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Y91DUmMjCLzIXlp+@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20230205210751.3842103-1-airlied@gmail.com> <CAOkhzLWSJsDK9Gm-AzeUw7fCpkjDg7d9GuDWyF-6hDr5UZ4DZg@mail.gmail.com>
+ <CAPM=9tyaCUmA2bNP1YA1B=cFZP=nKPhQoWR7UwBD2Nfj8ZTODA@mail.gmail.com>
+ <CAOkhzLVLbOEp4QnJynxV3cgiqOV5Rm=+dMgexiRmyDs-bRCTPg@mail.gmail.com>
+ <CAPM=9tx0D54oQ6QmjF_NxnBBxbLzhXxi5uH2p6fLWfg2L3xPFw@mail.gmail.com>
+ <CAOkhzLUspmZjC0x6nJoHyc9nijqZu7BOWc8vsqHSRbQhVzd=Gw@mail.gmail.com> <CAMwc25q9LO0N45DAV6HeONVsWBbOxxYCkSV12Yhr3PVorrr4dg@mail.gmail.com>
+In-Reply-To: <CAMwc25q9LO0N45DAV6HeONVsWBbOxxYCkSV12Yhr3PVorrr4dg@mail.gmail.com>
+From:   Zeno Davatz <zdavatz@gmail.com>
+Date:   Mon, 6 Feb 2023 09:54:11 +0100
+Message-ID: <CAOkhzLXMFwO9hYcwrr9O7xoVs_kprfv4DG8fiNyOsWNLF_VS9g@mail.gmail.com>
+Subject: Re: [PATCH] nvidiafb: detect the hardware support before removing console.
+To:     David Airlie <airlied@redhat.com>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bjorn@helgaas.com>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,179 +73,264 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/2/2023 1:28 am, Sean Christopherson wrote:
-> On Fri, Feb 03, 2023, Like Xu wrote:
->> On 3/2/2023 2:06 am, Sean Christopherson wrote:
->>> On Thu, Feb 02, 2023, Like Xu wrote:
->>>> On 1/2/2023 12:02 am, Sean Christopherson wrote:
->>>> The perf interface only provides host PMU capabilities and the logic for
->>>> choosing to disable (or enable) vPMU based on perf input should be left
->>>> in the KVM part so that subsequent development work can add most code
->>>> to the just KVM, which is very helpful for downstream users to upgrade
->>>> loadable KVM module rather than the entire core kernel.
->>>>
->>>> My experience interacting with the perf subsystem has taught me that
->>>> perf change required from KVM should be made as small as possible.
->>>
->>> I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
->>> provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
->>> somehow able to get away with enumerating a very stripped down vPMU, additional
->>> modifications to perf_get_x86_pmu_capability() will be required.
->>>
->>> What I care more about though is this ugliness in perf_get_x86_pmu_capability():
->>>
->>> 	/*
->>> 	 * KVM doesn't support the hybrid PMU yet.
->>> 	 * Return the common value in global x86_pmu,
->>> 	 * which available for all cores.
->>
->> I would have expected w/ current code base, vpmu (excluding pebs and lbr, intel_pt)
->> to continue to work on any type of pCPU until you decide to disable them completely.
-> 
-> Didn't follow this.
+Dear Dave
 
-My expectation is that, if a guest doesn't enable "PEBS, LBR and intel_pt",
-and only has the most basic pmu conters (its number is the lesser number
-of big and small cores supported), with some pmu_event_fileter allow list
-mechanism, vPMU works regardless of the vcpu model and does not
-require cpu pined. Any complaints from users on this usages ?
+On Mon, Feb 6, 2023 at 9:40 AM David Airlie <airlied@redhat.com> wrote:
+>
+> On Mon, Feb 6, 2023 at 6:38 PM Zeno Davatz <zdavatz@gmail.com> wrote:
+> >
+> > Dear Dave
+> >
+> > On Mon, Feb 6, 2023 at 9:10 AM Dave Airlie <airlied@gmail.com> wrote:
+> > >
+> > > On Mon, 6 Feb 2023 at 18:01, Zeno Davatz <zdavatz@gmail.com> wrote:
+> > > >
+> > > > Dear Dave
+> > > >
+> > > > On Mon, Feb 6, 2023 at 8:54 AM Dave Airlie <airlied@gmail.com> wrote:
+> > > > >
+> > > > > On Mon, 6 Feb 2023 at 17:52, Zeno Davatz <zdavatz@gmail.com> wrote:
+> > > > > >
+> > > > > > Dear Dave
+> > > > > >
+> > > > > > Thank you for your patch.
+> > > > > >
+> > > > > > On Sun, Feb 5, 2023 at 10:07 PM Dave Airlie <airlied@gmail.com> wrote:
+> > > > > > >
+> > > > > > > From: Dave Airlie <airlied@redhat.com>
+> > > > > > >
+> > > > > > > This driver removed the console, but hasn't yet decided if it could
+> > > > > > > take over the console yet. Instead of doing that, probe the hw for
+> > > > > > > support and then remove the console afterwards.
+> > > > > > >
+> > > > > > > Signed-off-by: Dave Airlie <airlied@redhat.com>
+> > > > > > > Fixes: https://bugzilla.kernel.org/show_bug.cgi?id=216859
+> > > > > > > Reported-by: Zeno Davatz <zdavatz@gmail.com>
+> > > > > > > ---
+> > > > > > >  drivers/video/fbdev/nvidia/nvidia.c | 81 +++++++++++++++--------------
+> > > > > > >  1 file changed, 42 insertions(+), 39 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/video/fbdev/nvidia/nvidia.c b/drivers/video/fbdev/nvidia/nvidia.c
+> > > > > > > index 1960916098d4..e60a276b4855 100644
+> > > > > > > --- a/drivers/video/fbdev/nvidia/nvidia.c
+> > > > > > > +++ b/drivers/video/fbdev/nvidia/nvidia.c
+> > > > > > > @@ -1197,17 +1197,17 @@ static int nvidia_set_fbinfo(struct fb_info *info)
+> > > > > > >         return nvidiafb_check_var(&info->var, info);
+> > > > > > >  }
+> > > > > > >
+> > > > > > > -static u32 nvidia_get_chipset(struct fb_info *info)
+> > > > > > > +static u32 nvidia_get_chipset(struct pci_dev *pci_dev,
+> > > > > > > +                             volatile u32 __iomem *REGS)
+> > > > > > >  {
+> > > > > > > -       struct nvidia_par *par = info->par;
+> > > > > > > -       u32 id = (par->pci_dev->vendor << 16) | par->pci_dev->device;
+> > > > > > > +       u32 id = (pci_dev->vendor << 16) | pci_dev->device;
+> > > > > > >
+> > > > > > >         printk(KERN_INFO PFX "Device ID: %x \n", id);
+> > > > > > >
+> > > > > > >         if ((id & 0xfff0) == 0x00f0 ||
+> > > > > > >             (id & 0xfff0) == 0x02e0) {
+> > > > > > >                 /* pci-e */
+> > > > > > > -               id = NV_RD32(par->REGS, 0x1800);
+> > > > > > > +               id = NV_RD32(REGS, 0x1800);
+> > > > > > >
+> > > > > > >                 if ((id & 0x0000ffff) == 0x000010DE)
+> > > > > > >                         id = 0x10DE0000 | (id >> 16);
+> > > > > > > @@ -1220,12 +1220,11 @@ static u32 nvidia_get_chipset(struct fb_info *info)
+> > > > > > >         return id;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > -static u32 nvidia_get_arch(struct fb_info *info)
+> > > > > > > +static u32 nvidia_get_arch(u32 Chipset)
+> > > > > > >  {
+> > > > > > > -       struct nvidia_par *par = info->par;
+> > > > > > >         u32 arch = 0;
+> > > > > > >
+> > > > > > > -       switch (par->Chipset & 0x0ff0) {
+> > > > > > > +       switch (Chipset & 0x0ff0) {
+> > > > > > >         case 0x0100:            /* GeForce 256 */
+> > > > > > >         case 0x0110:            /* GeForce2 MX */
+> > > > > > >         case 0x0150:            /* GeForce2 */
+> > > > > > > @@ -1278,16 +1277,44 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
+> > > > > > >         struct fb_info *info;
+> > > > > > >         unsigned short cmd;
+> > > > > > >         int ret;
+> > > > > > > +       volatile u32 __iomem *REGS;
+> > > > > > > +       int Chipset;
+> > > > > > > +       u32 Architecture;
+> > > > > > >
+> > > > > > >         NVTRACE_ENTER();
+> > > > > > >         assert(pd != NULL);
+> > > > > > >
+> > > > > > > +       if (pci_enable_device(pd)) {
+> > > > > > > +               printk(KERN_ERR PFX "cannot enable PCI device\n");
+> > > > > > > +               return -ENODEV;
+> > > > > > > +       }
+> > > > > > > +
+> > > > > > > +       /* enable IO and mem if not already done */
+> > > > > > > +       pci_read_config_word(pd, PCI_COMMAND, &cmd);
+> > > > > > > +       cmd |= (PCI_COMMAND_IO | PCI_COMMAND_MEMORY);
+> > > > > > > +       pci_write_config_word(pd, PCI_COMMAND, cmd);
+> > > > > > > +
+> > > > > > > +       nvidiafb_fix.mmio_start = pci_resource_start(pd, 0);
+> > > > > > > +       nvidiafb_fix.mmio_len = pci_resource_len(pd, 0);
+> > > > > > > +
+> > > > > > > +       REGS = ioremap(nvidiafb_fix.mmio_start, nvidiafb_fix.mmio_len);
+> > > > > > > +       if (!REGS) {
+> > > > > > > +               printk(KERN_ERR PFX "cannot ioremap MMIO base\n");
+> > > > > > > +               return -ENODEV;
+> > > > > > > +       }
+> > > > > > > +
+> > > > > > > +       Chipset = nvidia_get_chipset(pd, REGS);
+> > > > > > > +       Architecture = nvidia_get_arch(Chipset);
+> > > > > > > +       if (Architecture == 0) {
+> > > > > > > +               printk(KERN_ERR PFX "unknown NV_ARCH\n");
+> > > > > > > +               goto err_out;
+> > > > > > > +       }
+> > > > > > > +
+> > > > > > >         ret = aperture_remove_conflicting_pci_devices(pd, "nvidiafb");
+> > > > > > >         if (ret)
+> > > > > > > -               return ret;
+> > > > > > > +               goto err_out;
+> > > > > > >
+> > > > > > >         info = framebuffer_alloc(sizeof(struct nvidia_par), &pd->dev);
+> > > > > > > -
+> > > > > > >         if (!info)
+> > > > > > >                 goto err_out;
+> > > > > > >
+> > > > > > > @@ -1298,11 +1325,6 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
+> > > > > > >         if (info->pixmap.addr == NULL)
+> > > > > > >                 goto err_out_kfree;
+> > > > > > >
+> > > > > > > -       if (pci_enable_device(pd)) {
+> > > > > > > -               printk(KERN_ERR PFX "cannot enable PCI device\n");
+> > > > > > > -               goto err_out_enable;
+> > > > > > > -       }
+> > > > > > > -
+> > > > > > >         if (pci_request_regions(pd, "nvidiafb")) {
+> > > > > > >                 printk(KERN_ERR PFX "cannot request PCI regions\n");
+> > > > > > >                 goto err_out_enable;
+> > > > > > > @@ -1318,34 +1340,17 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
+> > > > > > >         par->paneltweak = paneltweak;
+> > > > > > >         par->reverse_i2c = reverse_i2c;
+> > > > > > >
+> > > > > > > -       /* enable IO and mem if not already done */
+> > > > > > > -       pci_read_config_word(pd, PCI_COMMAND, &cmd);
+> > > > > > > -       cmd |= (PCI_COMMAND_IO | PCI_COMMAND_MEMORY);
+> > > > > > > -       pci_write_config_word(pd, PCI_COMMAND, cmd);
+> > > > > > > -
+> > > > > > > -       nvidiafb_fix.mmio_start = pci_resource_start(pd, 0);
+> > > > > > >         nvidiafb_fix.smem_start = pci_resource_start(pd, 1);
+> > > > > > > -       nvidiafb_fix.mmio_len = pci_resource_len(pd, 0);
+> > > > > > > -
+> > > > > > > -       par->REGS = ioremap(nvidiafb_fix.mmio_start, nvidiafb_fix.mmio_len);
+> > > > > > >
+> > > > > > > -       if (!par->REGS) {
+> > > > > > > -               printk(KERN_ERR PFX "cannot ioremap MMIO base\n");
+> > > > > > > -               goto err_out_free_base0;
+> > > > > > > -       }
+> > > > > > > +       par->REGS = REGS;
+> > > > > > >
+> > > > > > > -       par->Chipset = nvidia_get_chipset(info);
+> > > > > > > -       par->Architecture = nvidia_get_arch(info);
+> > > > > > > -
+> > > > > > > -       if (par->Architecture == 0) {
+> > > > > > > -               printk(KERN_ERR PFX "unknown NV_ARCH\n");
+> > > > > > > -               goto err_out_arch;
+> > > > > > > -       }
+> > > > > > > +       par->Chipset = Chipset;
+> > > > > > > +       par->Architecture = Architecture;
+> > > > > > >
+> > > > > > >         sprintf(nvidiafb_fix.id, "NV%x", (pd->device & 0x0ff0) >> 4);
+> > > > > > >
+> > > > > > >         if (NVCommonSetup(info))
+> > > > > > > -               goto err_out_arch;
+> > > > > > > +               goto err_out_free_base0;
+> > > > > > >
+> > > > > > >         par->FbAddress = nvidiafb_fix.smem_start;
+> > > > > > >         par->FbMapSize = par->RamAmountKBytes * 1024;
+> > > > > > > @@ -1401,7 +1406,6 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
+> > > > > > >                 goto err_out_iounmap_fb;
+> > > > > > >         }
+> > > > > > >
+> > > > > > > -
+> > > > > > >         printk(KERN_INFO PFX
+> > > > > > >                "PCI nVidia %s framebuffer (%dMB @ 0x%lX)\n",
+> > > > > > >                info->fix.id,
+> > > > > > > @@ -1415,15 +1419,14 @@ static int nvidiafb_probe(struct pci_dev *pd, const struct pci_device_id *ent)
+> > > > > > >  err_out_free_base1:
+> > > > > > >         fb_destroy_modedb(info->monspecs.modedb);
+> > > > > > >         nvidia_delete_i2c_busses(par);
+> > > > > > > -err_out_arch:
+> > > > > > > -       iounmap(par->REGS);
+> > > > > > > - err_out_free_base0:
+> > > > > > > +err_out_free_base0:
+> > > > > > >         pci_release_regions(pd);
+> > > > > > >  err_out_enable:
+> > > > > > >         kfree(info->pixmap.addr);
+> > > > > > >  err_out_kfree:
+> > > > > > >         framebuffer_release(info);
+> > > > > > >  err_out:
+> > > > > > > +       iounmap(REGS);
+> > > > > > >         return -ENODEV;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > --
+> > > > > > > 2.38.1
+> > > > > >
+> > > > > > This patch fails for me.
+> > > > >
+> > > > > I've based the patch on 6.2-rc7, please make sure to not have the
+> > > > > previous revert committed, this is to replace that patch.
+> > > >
+> > > > Can you guide me through the steps please?
+> > > >
+> > > > I done:
+> > > >
+> > > > 1. cd /usr/src/linux
+> > > > 2. sudo git pull
+> > > > 3. then I applied your patch.
+> > > >
+> > > > Am I doing something wrong?
+> > >
+> > > What is your top of tree commit? (git log)
+> > >
+> > > have you got any commits on top?
+> > >
+> > > git reset --hard origin/master should reset your tree to Linus top.
+> >
+> > 1. git log shows "d2d11f342b179f1894a901f143ec7c008caba43e"
+> > 2. No, no patches on top.
+> > 3. I am doing the following steps:
+> > /usr/src/linux> sudo git reset --hard origin/master
+> > Passwort:
+> > HEAD ist jetzt bei d2d11f342b17 Merge branch 'fixes' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs
+> > /usr/src/linux> sudo patch -p1 < /tmp/patch
+> > patching file drivers/video/fbdev/nvidia/nvidia.c
+> > Hunk #1 FAILED at 1197.
+> > Hunk #2 FAILED at 1220.
+> > Hunk #3 FAILED at 1278.
+> > Hunk #4 FAILED at 1298.
+> > Hunk #5 FAILED at 1318.
+> > Hunk #6 FAILED at 1401.
+> > Hunk #7 FAILED at 1415.
+> > 7 out of 7 hunks FAILED -- saving rejects to file
+> > drivers/video/fbdev/nvidia/nvidia.c.rej
+> >
+> Are you pulling the patch from email? I guess your email service or
+> something is mangling it.
+>
+> I've attached it to see if that helps.
 
-> 
->> Moreover, the caller of perf_get_x86_pmu_capability() may be more than just KVM,
->> it may be technically ebpf helpers. The diff on comments from v1 can be applied to
->> this version (restrict KVM semantics), and it makes the status quo clearer
->> to KVM users.
-> 
-> In that case, eBPF is just as hosed, no?  And given that the only people that have
-> touched perf_get_x86_pmu_capability() in its 11+ years of existence are all KVM
-> people, I have a hard time believing there is meaningful use outside of KVM.
+Thank you! This patch works and I am booting perfectly well now!
 
-Some radical bpf programs will access the pmu directly, although this is
-not  uncommon in upstream. KVM colleagues shouldn't need to care
-about them, but at least don't mislead them.
+~/.backup> uname -a
+Linux zenogentoo 6.2.0-rc7-00002-gd2d11f342b17-dirty #144 SMP
+PREEMPT_DYNAMIC Mon Feb  6 09:42:58 CET 2023 x86_64 Intel(R) Core(TM)
+i7 CPU 960 @ 3.20GHz GenuineIntel GNU/Linux
 
-> 
->>> 	 */
->>> 	cap->num_counters_gp	= x86_pmu.num_counters;
->>>
->>> I really don't want to leave that comment lying around as it's flat out wrong in
->>> that it obviously doesn't address the other differences beyond the number of
->>> counters.  And since there are dependencies on perf, my preference is to disable
->>> PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
->>> forced to consider the perf side of things, and get buy in from the perf folks.
->>
->> The perf_get_x86_pmu_capability() obviously needs to be revamped,
->> but until real effective KVM enabling work arrives, any inconsequential intrusion
->> into perf/core code will only lead to trivial system maintenance.
-> 
-> Trivial doesn't mean useless or unnecessary though.  IMO, there's value in capturing,
-> in code, that perf_get_x86_pmu_capability() doesn't properly support hybrid vPMUs.
-> 
-> That said, poking around perf, checking is_hybrid() is wrong.  This quirk suggests
-> that if E-cores are disabled via BIOS, (a) X86_FEATURE_HYBRID_CPU is _supposed_ to
-> be cleared, and (b) the base PMU will reflect the P-core PMU.  I.e. someone can
-> enable vPMU by disabling E-cores.
-> 
->                  /*
->                   * Quirk: For some Alder Lake machine, when all E-cores are disabled in
->                   * a BIOS, the leaf 0xA will enumerate all counters of P-cores. However,
->                   * the X86_FEATURE_HYBRID_CPU is still set. The above codes will
+Please let me know if the patch makes it into mainline for the 6.2 release ;).
 
-Sigh. Then what if E-cores are manually offline via "/.../cpu$/online" and then 
-init kvm module ?
-I suggest leaving these open issues to that enabling guy (or maybe it's still me).
-
->                   * mistakenly add extra counters for P-cores. Correct the number of
->                   * counters here.
->                   */
->                  if ((pmu->num_counters > 8) || (pmu->num_counters_fixed > 4)) {
->                          pmu->num_counters = x86_pmu.num_counters;
->                          pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
->                  }
-> 
-> Side topic, someone (*cough* Intel) should fix that, e.g. detect the scenario
-> during boot and manually clear X86_FEATURE_HYBRID_CPU.
-
-Maybe they did it on purpose.
-
-> 
-> I'm also ok explicitly disabling support in KVM, but since we need to update
-> perf as well (that KVM comment needs to go), I don't see any reason not to also
-> update perf_get_x86_pmu_capability().
-> 
-> How about this?  Maybe split over two patches to separate the KVM and perf changes?
-
-OK, applying your diff below or mine V2 as a KVM move is both fine to me. Just 
-thanks.
-
-> 
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index 85a63a41c471..d096b04bf80e 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -2974,17 +2974,19 @@ unsigned long perf_misc_flags(struct pt_regs *regs)
->   
->   void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
->   {
-> -       if (!x86_pmu_initialized()) {
-> +       /* This API doesn't currently support enumerating hybrid PMUs. */
-> +       if (WARN_ON_ONCE(cpu_feature_enabled(X86_FEATURE_HYBRID_CPU)) ||
-> +           !x86_pmu_initialized()) {
->                  memset(cap, 0, sizeof(*cap));
->                  return;
->          }
->   
-> +       /*
-> +        * Note, hybrid CPU models get tracked as having hybrid PMUs even when
-> +        * all E-cores are disabled via BIOS.  When E-cores are disabled, the
-> +        * base PMU holds the correct number of counters for P-cores.
-> +        */
->          cap->version            = x86_pmu.version;
-> -       /*
-> -        * KVM doesn't support the hybrid PMU yet.
-> -        * Return the common value in global x86_pmu,
-> -        * which available for all cores.
-> -        */
->          cap->num_counters_gp    = x86_pmu.num_counters;
->          cap->num_counters_fixed = x86_pmu.num_counters_fixed;
->          cap->bit_width_gp       = x86_pmu.cntval_bits;
-> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> index cdb91009701d..933165663703 100644
-> --- a/arch/x86/kvm/pmu.h
-> +++ b/arch/x86/kvm/pmu.h
-> @@ -165,15 +165,27 @@ static inline void kvm_init_pmu_capability(void)
->   {
->          bool is_intel = boot_cpu_data.x86_vendor == X86_VENDOR_INTEL;
->   
-> -       perf_get_x86_pmu_capability(&kvm_pmu_cap);
-> -
-> -        /*
-> -         * For Intel, only support guest architectural pmu
-> -         * on a host with architectural pmu.
-> -         */
-> -       if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
-> +       /*
-> +        * Hybrid PMUs don't play nice with virtualization unless userspace
-> +        * pins vCPUs _and_ can enumerate accurate informations to the guest.
-> +        * Disable vPMU support for hybrid PMUs until KVM gains a way to let
-> +        * userspace opt into the dangers of hybrid vPMUs.
-> +       */
-> +       if (cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
->                  enable_pmu = false;
->   
-> +       if (enable_pmu) {
-> +               perf_get_x86_pmu_capability(&kvm_pmu_cap);
-> +
-> +               /*
-> +                * For Intel, only support guest architectural pmu
-> +                * on a host with architectural pmu.
-> +                */
-> +               if ((is_intel && !kvm_pmu_cap.version) ||
-> +                   !kvm_pmu_cap.num_counters_gp)
-> +                       enable_pmu = false;
-> +       }
-> +
->          if (!enable_pmu) {
->                  memset(&kvm_pmu_cap, 0, sizeof(kvm_pmu_cap));
->                  return;
-> 
+Best
+Zeno
