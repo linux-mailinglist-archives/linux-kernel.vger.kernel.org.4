@@ -2,87 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBC368C7E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 582CB68C7EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 21:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbjBFUs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 15:48:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
+        id S230154AbjBFUt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 15:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjBFUs0 (ORCPT
+        with ESMTP id S229970AbjBFUt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 15:48:26 -0500
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29601DBB8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 12:48:25 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so3571237otj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 12:48:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lVCM7ppZvWPv0FWgAoeEHCyX95o4pmFH2WhzfJapagw=;
-        b=du/Rr05MsZoyDDriWw9JxDc4W5e1jJ7W8K9JASgOpe/J1GW6QldOzPZ4lod6bR0q2M
-         r0d6UFNzfV43hj1EaIRY05J1bnrsb5CsDbhhDGfCWO5u3oGpP2FNJfgRu3pcOjQvqPYh
-         AcsbA0r9lMiLNIv9cqWUQ6Rql05CWxNwQZg/kDFIyF7+nOiHvBVula1enPDcxBfSxkLI
-         zggHS5tDdTau/N5EGUIOp1ZUtFLxRC8NQH/Ylv/5tFiLCN2+eTMUjIj/7h1F7um8UfiZ
-         CnVygLqMNnSQbwB00VJelCqBYuU3JL9XCpRuHw4+d+uC+YMSHf8NEqUjlVQXWF35C8tS
-         at4g==
-X-Gm-Message-State: AO0yUKVqTTbRMyTxSN4uaGo+aLqptXbZPvz9fwx7hsNLhHcCnFgRb9TW
-        7SQCbEoeu0J5G7hiMGBJ7w==
-X-Google-Smtp-Source: AK7set9pbh7Wq+E4iW0fy5jRxV6qrIaaJOqCgRrwmo4+qbg0biC+0/V8bxLln4dTmWv9uVIZTvvgzA==
-X-Received: by 2002:a05:6830:349e:b0:68b:d4ac:1ca0 with SMTP id c30-20020a056830349e00b0068bd4ac1ca0mr633920otu.29.1675716505110;
-        Mon, 06 Feb 2023 12:48:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l21-20020a05683016d500b0068663820588sm5585250otr.44.2023.02.06.12.48.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 12:48:24 -0800 (PST)
-Received: (nullmailer pid 1453774 invoked by uid 1000);
-        Mon, 06 Feb 2023 20:48:24 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf: arm_spe: Print the version of SPE detected
-Date:   Mon,  6 Feb 2023 14:47:46 -0600
-Message-Id: <20230206204746.1452942-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Mon, 6 Feb 2023 15:49:26 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E26F71F495;
+        Mon,  6 Feb 2023 12:49:25 -0800 (PST)
+Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4EDD520C7E05;
+        Mon,  6 Feb 2023 12:49:25 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4EDD520C7E05
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675716565;
+        bh=15Rq8lOsvXwsJkBehio+rOsB7GHzPMEXRpn1D+2jO4g=;
+        h=Subject:From:Cc:Date:From;
+        b=oTKrH3wHfHKQBy4nsCl03gpGJuW8QuYIDT8TeRFvfrfQpD3pcWOvg+tsnjAH+k59Q
+         1APVHs2OgMybs3DjS0bb+SPnmW5IMvRUhVwhHkUZ3AzKzH0cjCX2ang22npUN+IF3T
+         ieQV9ShedIX1jH6FEs5G5GOBPgeAAkqH2l3/POcU=
+Subject: [PATCH] x86/hyperv: Pass on the lpj value from host to guest
+From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 06 Feb 2023 20:49:25 +0000
+Message-ID: <167571656510.2157946.174424531449774007.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's up to 4 versions of SPE now. Let's add the version that's been
-detected to the driver's informational print out.
+From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+And have it preset.
+This change allows to significantly reduce time to bring up guest SMP
+configuration as well as make sure the guest won't get inaccurate
+calibration results due to "noisy neighbour" situation.
+
+Below are the numbers for 16 VCPU guest before the patch (~1300 msec)
+
+[    0.562938] x86: Booting SMP configuration:
+...
+[    1.859447] smp: Brought up 1 node, 16 CPUs
+
+and after the patch (~130 msec):
+
+[    0.445079] x86: Booting SMP configuration:
+...
+[    0.575035] smp: Brought up 1 node, 16 CPUs
+
+This change is inspired by commit 0293615f3fb9 ("x86: KVM guest: use
+paravirt function to calculate cpu khz").
+
+Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+CC: "K. Y. Srinivasan" <kys@microsoft.com>
+CC: Haiyang Zhang <haiyangz@microsoft.com>
+CC: Wei Liu <wei.liu@kernel.org>
+CC: Dexuan Cui <decui@microsoft.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: x86@kernel.org
+CC: "H. Peter Anvin" <hpa@zytor.com>
+CC: linux-hyperv@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
 ---
- drivers/perf/arm_spe_pmu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/cpu/mshyperv.c |   21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/drivers/perf/arm_spe_pmu.c b/drivers/perf/arm_spe_pmu.c
-index 573db4211acd..b9ba4c4fe5a2 100644
---- a/drivers/perf/arm_spe_pmu.c
-+++ b/drivers/perf/arm_spe_pmu.c
-@@ -1105,8 +1105,8 @@ static void __arm_spe_pmu_dev_probe(void *info)
- 	}
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index dedec2f23ad1..0282b2e96cc2 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -320,6 +320,21 @@ static void __init hv_smp_prepare_cpus(unsigned int max_cpus)
+ }
+ #endif
  
- 	dev_info(dev,
--		 "probed for CPUs %*pbl [max_record_sz %u, align %u, features 0x%llx]\n",
--		 cpumask_pr_args(&spe_pmu->supported_cpus),
-+		 "probed SPEv1.%d for CPUs %*pbl [max_record_sz %u, align %u, features 0x%llx]\n",
-+		 spe_pmu->pmsver - 1, cpumask_pr_args(&spe_pmu->supported_cpus),
- 		 spe_pmu->max_record_sz, spe_pmu->align, spe_pmu->features);
++static void __init __maybe_unused hv_preset_lpj(void)
++{
++	unsigned long khz;
++	u64 lpj;
++
++	if (!x86_platform.calibrate_tsc)
++		return;
++
++	khz = x86_platform.calibrate_tsc();
++
++	lpj = ((u64)khz * 1000);
++	do_div(lpj, HZ);
++	preset_lpj = lpj;
++}
++
+ static void __init ms_hyperv_init_platform(void)
+ {
+ 	int hv_max_functions_eax;
+@@ -521,6 +536,12 @@ static void __init ms_hyperv_init_platform(void)
  
- 	spe_pmu->features |= SPE_PMU_FEAT_DEV_PROBED;
--- 
-2.39.1
+ 	/* Register Hyper-V specific clocksource */
+ 	hv_init_clocksource();
++
++	/*
++	 * Preset lpj to make calibrate_delay a no-op, which is turn helps to
++	 * speed up secondary cores initialization.
++	 */
++	hv_preset_lpj();
+ #endif
+ 	/*
+ 	 * TSC should be marked as unstable only after Hyper-V
+
 
