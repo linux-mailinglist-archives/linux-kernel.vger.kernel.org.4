@@ -2,65 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1E568D027
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB5268D02D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjBGHJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:09:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
+        id S230377AbjBGHKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 02:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbjBGHJJ (ORCPT
+        with ESMTP id S231324AbjBGHKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:09:09 -0500
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9764F2278C;
-        Mon,  6 Feb 2023 23:09:07 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vb64zG8_1675753744;
-Received: from localhost.localdomain(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0Vb64zG8_1675753744)
-          by smtp.aliyun-inc.com;
-          Tue, 07 Feb 2023 15:09:04 +0800
-From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-To:     axboe@kernel.dk, ming.lei@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com,
-        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Subject: [PATCH RESEND 3/3] ublk: pass NULL to blk_mq_alloc_disk() as queuedata
-Date:   Tue,  7 Feb 2023 15:08:39 +0800
-Message-Id: <20230207070839.370817-4-ZiyangZhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.18.4
-In-Reply-To: <20230207070839.370817-1-ZiyangZhang@linux.alibaba.com>
-References: <20230207070839.370817-1-ZiyangZhang@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Feb 2023 02:10:13 -0500
+Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E225227BD;
+        Mon,  6 Feb 2023 23:10:11 -0800 (PST)
+Received: by soltyk.jannau.net (Postfix, from userid 1000)
+        id 5DDC326F72B; Tue,  7 Feb 2023 08:10:09 +0100 (CET)
+Date:   Tue, 7 Feb 2023 08:10:09 +0100
+From:   Janne Grunau <j@jannau.net>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mailing List <devicetree-spec@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>, van Spriel <arend@broadcom.com>,
+        =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
+Subject: Re: [PATCH RFC 0/3] dt-bindings: net: Add network-class.yaml schema
+Message-ID: <20230207071009.GB9004@jannau.net>
+References: <20230203-dt-bindings-network-class-v1-0-452e0375200d@jannau.net>
+ <CAL_JsqKD7gD86_B93M19rBCWn+rmSw24vOGEhqi9Nvne1Xixwg@mail.gmail.com>
+ <20230206163154.GA9004@jannau.net>
+ <Y+GqsTLXRKyg0BdV@lunn.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+GqsTLXRKyg0BdV@lunn.ch>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-queuedata is not referenced in ublk_drv and we can use driver_data
-instead. Pass NULL to blk_mq_alloc_disk() as queuedata while allocating
-ublk's gendisk.
+On 2023-02-07 02:34:41 +0100, Andrew Lunn wrote:
+> > > > I've ignored "max-frame-size" since the description in
+> > > > ethernet-controller.yaml claims there is a contradiction in the
+> > > > Devicetree specification. I suppose it is describing the property
+> > > > "max-frame-size" with "Specifies maximum packet length ...".
+> > > 
+> > > Please include it and we'll fix the spec. It is clearly wrong. 2 nios
+> > > boards use 1518 and the consumer for them says it is MTU. Everything
+> > > else clearly uses mtu with 1500 or 9000.
+> > 
+> > Ok, the example in the pdf is 'max-frame-size = <1518>;'. I'll include 
+> > it with the description of ethernet-controller.yaml which specifies it 
+> > as MTU.
+> 
+> You need to be careful here. Frame and MTU are different things.
 
-Signed-off-by: Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
----
- drivers/block/ublk_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+yes, we are aware. The description in of the property in
+Documentation/devicetree/bindings/net/ethernet-controller.yaml is:
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 06eddefdf02a..d83fe2c2b3ba 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -1578,7 +1578,7 @@ static int ublk_ctrl_start_dev(struct ublk_device *ub, struct io_uring_cmd *cmd)
- 		goto out_unlock;
- 	}
- 
--	disk = blk_mq_alloc_disk(&ub->tag_set, ub);
-+	disk = blk_mq_alloc_disk(&ub->tag_set, NULL);
- 	if (IS_ERR(disk)) {
- 		ret = PTR_ERR(disk);
- 		goto out_unlock;
--- 
-2.18.4
+| Maximum transfer unit (IEEE defined MTU), rather than the
+| maximum frame size (there\'s contradiction in the Devicetree
+| Specification).
 
+The description for the property in the Devicetree is:
+
+| Specifies maximum packet length in bytes that the physical interface
+| can send and receive.
+
+While the "packet length" in the description is a little confusing this 
+seems to refer to the ethernet frame size.
+
+> The IEEE 802.3 standard says nothing about MTU. I believe MTU is an IP
+> concept. It is the size of the SDU an Ethernet PDU can carry. This is
+> typically 1500.
+> 
+> Historically, the max Ethernet frame size was 1518. But with 802.1Q
+> which added the VLAN header, all modern hardware actual uses 1522 to
+> accommodate the extra 4 bytes VLAN header. So i would not actually put
+> max-frame-size = <1518> anywhere, because it will get copy/pasted and
+> break VLAN setups.
+> 
+> It looks like the ibm,emac.txt makes this error, max-frame-size =
+> <5dc>; 0x5dc is 1500. And there are a few powerpc .dtc using
+> 1500/0x5dc, which are probably broken.
+
+I would not say it is an error. The specification/name and use of 
+"max-frame-size" has clearly diverged. All 4 in-tree users of this 
+property interpret it as MTU. With the exception of the 2 nios2 boards 
+Rob found all device trees use either 1500, 3800 or 9000 as 
+'max-frame-size'.
+
+I think Rob's plan to deal with this conflict between specification and 
+actual use is to accept the use and update the description in the 
+specification. This results in a "max-frame-size" property which 
+describes the maximal payload / MTU. The upside of this is that we can 
+leave all devicetrees and drivers unchanged and avoid breaking 
+out-of-tree users.
+
+I'll fix the 2 nios2 boards since those currently end up with a MTU of 
+1518 in altera_tse_main.c.
+
+Janne
