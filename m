@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04DAC68DA1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7173B68DA19
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjBGOHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:07:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S232009AbjBGOGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbjBGOGu (ORCPT
+        with ESMTP id S231995AbjBGOGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:06:50 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E2E2734
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:06:44 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pPObi-0008HA-7V; Tue, 07 Feb 2023 15:06:02 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:b5cc:20f3:3e4b:3812])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4AC0617277A;
-        Tue,  7 Feb 2023 14:06:00 +0000 (UTC)
-Date:   Tue, 7 Feb 2023 15:05:52 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] can: j1939: do not wait 250 ms if the same addr was
- already claimed
-Message-ID: <20230207140552.bhsq5a2j5rxmwlao@pengutronix.de>
-References: <20221124051611.GA7870@pengutronix.de>
- <20221125170418.34575-1-devid.filoni@egluetechnologies.com>
- <20221126102840.GA21761@pengutronix.de>
- <1ae01ab918876941dc57d01d4c2f1d7376dda87b.camel@egluetechnologies.com>
+        Tue, 7 Feb 2023 09:06:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8442F93DE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:06:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EAB46144D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 14:06:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CBEAC433EF;
+        Tue,  7 Feb 2023 14:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675778784;
+        bh=h6Asegb3UosZ64SLaFl7xxcR07djTQ+PvmszvRBil6w=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=p93Ap3nummMzTCFrhTuIZj/pRJupCaGKWU2886vJi7VYMArbOWawjy7df6+SgP6ar
+         fmjWTVRM+c7pgNSFVvFCOFnmSjnxgWEXrcqX8H2zpEkPl0Lgu7ThM+wLFGO8dW0WYv
+         6CrKIqz1fGb2Or7NvZdHzkI1rLD9ZvD4EUbMNmIqxf5wAQsV5tQqrAs5EbUyZAAjKh
+         pqvu1AmoB37Z+S5Jg6UCdUSBLz3dbXY88k1ub18XXWClIekN8tSOpusycWYxTcGykR
+         8ldPt5g+CdT1PdhbfQD2HiY8xHTQGPsgukFWx6ahPE0MURRHv5p9EOT2M+rUl/86f4
+         QYXoHwKWQT03w==
+From:   Mark Brown <broonie@kernel.org>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <1675760664-25193-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1675760664-25193-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: Re: [PATCH] ASoC: fsl_sai: fix getting version from VERID
+Message-Id: <167577878194.133259.5914289862792868772.b4-ty@kernel.org>
+Date:   Tue, 07 Feb 2023 14:06:21 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tjaisgwns5axhr7i"
-Content-Disposition: inline
-In-Reply-To: <1ae01ab918876941dc57d01d4c2f1d7376dda87b.camel@egluetechnologies.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 07 Feb 2023 17:04:24 +0800, Shengjiu Wang wrote:
+> The version information is at the bit31 ~ bit16 in the VERID
+> register, so need to right shift 16bit to get it, otherwise
+> the result of comparison "sai->verid.version >= 0x0301" is
+> wrong.
+> 
+> 
 
---tjaisgwns5axhr7i
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On 07.02.2023 14:50:15, Devid Antonio Filoni wrote:
-[...]
-> I noticed that this patch has not been integrated in upstream yet. Are
-> there problems with it?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Thanks for the heads up, I've send a PR.
+Thanks!
 
-Marc
+[1/1] ASoC: fsl_sai: fix getting version from VERID
+      commit: 29aab38823b61e482995c24644bd2d8acfe56185
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---tjaisgwns5axhr7i
-Content-Type: application/pgp-signature; name="signature.asc"
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
------BEGIN PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPiWr4ACgkQvlAcSiqK
-BOhGygf/UdoRT6XNx2iC0H5I6wLEb8zsIOtlwzphvfAavWLy78Ri/GZTCLVHkGA1
-9K0HV5AKAqrUjp24bfJ5oiYGBymKqV8R4Dw9NpLebF8NqdZ58WtP1Ejx4oC4c6Rv
-JqvUObqQ5+7zEveK3jDgFl5wQTqyf2vf7IhcOcURCGat/dxrcnuSrDT4wwt1gg5F
-H5Nn80rZjEPeQniFFVXA2ivAdGqQIhLV1Setps1czVPF/yMvGXMgYamGVkIEgnY6
-ecgFdwlmKNdr5rN4Oa+crofLXcN0OSc+SS51EZ6LM8u6jZuwDDXajyc6t2LkC+YG
-OwmZ2asb6dhMBxy21krSdjGvmdnHQQ==
-=Quy/
------END PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
---tjaisgwns5axhr7i--
+Thanks,
+Mark
+
