@@ -2,208 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C17968CF6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A7E68CF6E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjBGGVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S229982AbjBGGYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjBGGVr (ORCPT
+        with ESMTP id S229462AbjBGGX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:21:47 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CAD2C676;
-        Mon,  6 Feb 2023 22:21:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675750903; x=1707286903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j+pyadsYqLfVb4Iz0OO4wXfJls9IQhpM2J9KmFaO9d4=;
-  b=UDOgzZibU4kKBIKOzfA7bNluPNcdbrtP/BNWQAWE8XzAQyRch6JMT2T+
-   nVYbMblPGAdIKVYahBgH/OUkpBY/4LzimyIjNKv+LMV77IxAbUVdjVQ8q
-   2kZ+fG7JtJZ0+iXefWPv4aFtWD82sbPAcJrvjIdBegroriD/JraD5ycXX
-   xT9Jgz0IZJsIDUJW2fiVCIpEH8c+BDUbYt0Mro51WCGowUh4CcQ8Tj/tZ
-   TZ8Z2CDLlncCOFQOKDDpjLOWH6gtHiKv1uTVYV928UlKRbHxnSlUlaPdn
-   SKMWR8I9Bjmdx9130zGWlL9BPrSxON4l4TxgNDSzENIY8Vl5/VZ1qCXs3
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="391813653"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="391813653"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 22:21:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="790679284"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="790679284"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 06 Feb 2023 22:21:40 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPHMJ-0003AW-2L;
-        Tue, 07 Feb 2023 06:21:39 +0000
-Date:   Tue, 7 Feb 2023 14:21:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Willem-Jan de Hoog <arinc9.unal@gmail.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com
-Subject: Re: [PATCH 1/2] firmware: bcm47xx_nvram: allow to read from buffered
- nvram data
-Message-ID: <202302071414.czB7JMnU-lkp@intel.com>
-References: <20230206100502.20243-2-wdehoog@exalondelft.nl>
+        Tue, 7 Feb 2023 01:23:58 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9C35FEB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:23:57 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id i14-20020a056e020d8e00b003034b93bd07so9920821ilj.14
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:23:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cOQi11Ec8g69gVZc/TZnzKhiY2Aonnj64kR8RrBBUAQ=;
+        b=I0Ku+EPg36r3b5I/EWdNTrFmqHxdk150AcX3RNFcntIzbkA6F1fBuz9q5dcmjdcmpB
+         LLrNnWi49VNoR2wip6j5BA4kpI0hO95htLx8Keh8Dnl12CftJ3noos5ac7TDVKYd1mv7
+         8hej51knEmFmnU/6gL5O7uVFZW3wteWyjLesxuBHg2yK8p1iuA6ZmDUxGdWYXk6qG4ku
+         o0DR+S5lgfkTXc1XPtAbk5m4hgnv0wn6K4EGhxk1HwFKoysWXGc4+uLVmPR44o6KSRSX
+         El/jXUaDEuNhgv2m9+wcEGAOUDtK+HFMZ2Xg6IMXBQE5tbHUpMJgNuIJsMa8mHnDEUbp
+         hCmw==
+X-Gm-Message-State: AO0yUKVDY+Rs+Hr/wZs7FpAOKXkQNJVTFXuy9AR5mQkO9Ixe9/omUar6
+        iXVGsYVWuCX5oliHWuqK5maJvKxi19fqtyu/ldDUOgD5mmnq
+X-Google-Smtp-Source: AK7set8uT9ar1/CJ2JJfpGXEF+tDP7F7c/TQY1kYfnqGKVIk/VpqtyF0VUB6Ra6jRctjcxFwXWb/TLHf2vm3kx5xrYOfb+WFiOeT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206100502.20243-2-wdehoog@exalondelft.nl>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cdac:0:b0:313:e345:6340 with SMTP id
+ g12-20020a92cdac000000b00313e3456340mr702593ild.118.1675751037010; Mon, 06
+ Feb 2023 22:23:57 -0800 (PST)
+Date:   Mon, 06 Feb 2023 22:23:56 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004b0d5205f41631be@google.com>
+Subject: [syzbot] WARNING in is_valid_gup_args
+From:   syzbot <syzbot+1f0c9407f4d20f7488b9@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willem-Jan,
+Hello,
 
-Thank you for the patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.2-rc7 next-20230206]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+HEAD commit:    49a8133221c7 Add linux-next specific files for 20230207
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=15016013480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3691b32dd4410e01
+dashboard link: https://syzkaller.appspot.com/bug?extid=1f0c9407f4d20f7488b9
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Willem-Jan-de-Hoog/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-180737
-patch link:    https://lore.kernel.org/r/20230206100502.20243-2-wdehoog%40exalondelft.nl
-patch subject: [PATCH 1/2] firmware: bcm47xx_nvram: allow to read from buffered nvram data
-config: sparc-randconfig-r035-20230205 (https://download.01.org/0day-ci/archive/20230207/202302071414.czB7JMnU-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/763f6661565b50b967e4f22e41cf46d27e14e58f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Willem-Jan-de-Hoog/firmware-bcm47xx_nvram-allow-to-read-from-buffered-nvram-data/20230206-180737
-        git checkout 763f6661565b50b967e4f22e41cf46d27e14e58f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/mtd/parsers/
+Unfortunately, I don't have any reproducer for this issue yet.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6277c699d71e/disk-49a81332.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cbef27c2f238/vmlinux-49a81332.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7c0c68d93ac8/bzImage-49a81332.xz
 
-All errors (new ones prefixed by >>):
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1f0c9407f4d20f7488b9@syzkaller.appspotmail.com
 
-   In file included from drivers/mtd/parsers/ofpart_linksys_ns.c:6:
-   include/linux/bcm47xx_nvram.h:56:2: error: expected identifier or '(' before ':' token
-      56 | }:
-         |  ^
-   In file included from include/linux/uio.h:10,
-                    from include/linux/mtd/mtd.h:10,
-                    from drivers/mtd/parsers/ofpart_linksys_ns.c:7:
->> include/linux/mm_types.h:704:48: error: 'NR_MM_COUNTERS' undeclared here (not in a function)
-     704 |                 struct percpu_counter rss_stat[NR_MM_COUNTERS];
-         |                                                ^~~~~~~~~~~~~~
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 11452 at mm/gup.c:2121 is_valid_gup_args+0x1d8/0x230 mm/gup.c:2121
+Modules linked in:
+CPU: 1 PID: 11452 Comm: syz-executor.0 Not tainted 6.2.0-rc7-next-20230207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:is_valid_gup_args+0x1d8/0x230 mm/gup.c:2121
+Code: c7 ff 48 83 3c 24 00 0f 85 7a ff ff ff e8 10 3a c7 ff 0f 0b 45 31 e4 eb cd e8 04 3a c7 ff 0f 0b 45 31 e4 eb c1 e8 f8 39 c7 ff <0f> 0b 45 31 e4 eb b5 e8 ec 39 c7 ff 0f 0b 45 31 e4 eb a9 e8 e0 39
+RSP: 0018:ffffc900091f72c0 EFLAGS: 00010212
+RAX: 000000000000165e RBX: 0000000000040000 RCX: ffffc90003dc1000
+RDX: 0000000000040000 RSI: ffffffff81bd3248 RDI: 0000000000000005
+RBP: ffffc900091f7320 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000040000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000040000 R15: 0000000000040000
+FS:  00007f31c3ca4700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b31624000 CR3: 0000000027a30000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ pin_user_pages_fast+0x83/0x100 mm/gup.c:3089
+ iov_iter_extract_user_pages lib/iov_iter.c:2160 [inline]
+ iov_iter_extract_pages+0x2b9/0x1e20 lib/iov_iter.c:2229
+ __bio_iov_iter_get_pages block/bio.c:1267 [inline]
+ bio_iov_iter_get_pages block/bio.c:1340 [inline]
+ bio_iov_iter_get_pages+0x354/0x1580 block/bio.c:1327
+ iomap_dio_bio_iter+0x830/0x1440 fs/iomap/direct-io.c:323
+ iomap_dio_iter fs/iomap/direct-io.c:436 [inline]
+ __iomap_dio_rw+0xd81/0x1d80 fs/iomap/direct-io.c:594
+ iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:682
+ ext4_dio_write_iter fs/ext4/file.c:587 [inline]
+ ext4_file_write_iter+0x1053/0x1710 fs/ext4/file.c:698
+ call_write_iter include/linux/fs.h:1851 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
+ do_iter_write+0x182/0x700 fs/read_write.c:861
+ vfs_writev+0x1aa/0x670 fs/read_write.c:934
+ do_pwritev+0x1b6/0x270 fs/read_write.c:1031
+ __do_sys_pwritev2 fs/read_write.c:1090 [inline]
+ __se_sys_pwritev2 fs/read_write.c:1081 [inline]
+ __x64_sys_pwritev2+0xef/0x150 fs/read_write.c:1081
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f31c2e8c0c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f31c3ca4168 EFLAGS: 00000246 ORIG_RAX: 0000000000000148
+RAX: ffffffffffffffda RBX: 00007f31c2fabf80 RCX: 00007f31c2e8c0c9
+RDX: 0000000000000001 RSI: 0000000020000240 RDI: 0000000000000003
+RBP: 00007f31c2ee7ae9 R08: 0000000000000000 R09: 0000000000000003
+R10: 0000000000001400 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff54ef18ef R14: 00007f31c3ca4300 R15: 0000000000022000
+ </TASK>
 
 
-vim +/NR_MM_COUNTERS +704 include/linux/mm_types.h
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-227a4aadc75ba2 Mathieu Desnoyers     2019-09-19  628  
-b279ddc3382426 Vegard Nossum         2017-02-27  629  		/**
-b279ddc3382426 Vegard Nossum         2017-02-27  630  		 * @mm_users: The number of users including userspace.
-b279ddc3382426 Vegard Nossum         2017-02-27  631  		 *
-c1a2f7f0c06454 Rik van Riel          2018-07-16  632  		 * Use mmget()/mmget_not_zero()/mmput() to modify. When this
-c1a2f7f0c06454 Rik van Riel          2018-07-16  633  		 * drops to 0 (i.e. when the task exits and there are no other
-c1a2f7f0c06454 Rik van Riel          2018-07-16  634  		 * temporary reference holders), we also release a reference on
-c1a2f7f0c06454 Rik van Riel          2018-07-16  635  		 * @mm_count (which may then free the &struct mm_struct if
-c1a2f7f0c06454 Rik van Riel          2018-07-16  636  		 * @mm_count also drops to 0).
-b279ddc3382426 Vegard Nossum         2017-02-27  637  		 */
-b279ddc3382426 Vegard Nossum         2017-02-27  638  		atomic_t mm_users;
-b279ddc3382426 Vegard Nossum         2017-02-27  639  
-b279ddc3382426 Vegard Nossum         2017-02-27  640  		/**
-b279ddc3382426 Vegard Nossum         2017-02-27  641  		 * @mm_count: The number of references to &struct mm_struct
-b279ddc3382426 Vegard Nossum         2017-02-27  642  		 * (@mm_users count as 1).
-b279ddc3382426 Vegard Nossum         2017-02-27  643  		 *
-b279ddc3382426 Vegard Nossum         2017-02-27  644  		 * Use mmgrab()/mmdrop() to modify. When this drops to 0, the
-b279ddc3382426 Vegard Nossum         2017-02-27  645  		 * &struct mm_struct is freed.
-b279ddc3382426 Vegard Nossum         2017-02-27  646  		 */
-b279ddc3382426 Vegard Nossum         2017-02-27  647  		atomic_t mm_count;
-b279ddc3382426 Vegard Nossum         2017-02-27  648  
-c4812909f5d5a9 Kirill A. Shutemov    2017-11-15  649  #ifdef CONFIG_MMU
-af5b0f6a09e42c Kirill A. Shutemov    2017-11-15  650  		atomic_long_t pgtables_bytes;	/* PTE page table pages */
-5a3fbef325e872 Kirill A. Shutemov    2015-04-14  651  #endif
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  652  		int map_count;			/* number of VMAs */
-481b4bb5e370aa Richard Kennedy       2011-03-22  653  
-c1a2f7f0c06454 Rik van Riel          2018-07-16  654  		spinlock_t page_table_lock; /* Protects page tables and some
-c1a2f7f0c06454 Rik van Riel          2018-07-16  655  					     * counters
-c1a2f7f0c06454 Rik van Riel          2018-07-16  656  					     */
-2e3025434a6ba0 Feng Tang             2021-06-11  657  		/*
-2e3025434a6ba0 Feng Tang             2021-06-11  658  		 * With some kernel config, the current mmap_lock's offset
-2e3025434a6ba0 Feng Tang             2021-06-11  659  		 * inside 'mm_struct' is at 0x120, which is very optimal, as
-2e3025434a6ba0 Feng Tang             2021-06-11  660  		 * its two hot fields 'count' and 'owner' sit in 2 different
-2e3025434a6ba0 Feng Tang             2021-06-11  661  		 * cachelines,  and when mmap_lock is highly contended, both
-2e3025434a6ba0 Feng Tang             2021-06-11  662  		 * of the 2 fields will be accessed frequently, current layout
-2e3025434a6ba0 Feng Tang             2021-06-11  663  		 * will help to reduce cache bouncing.
-2e3025434a6ba0 Feng Tang             2021-06-11  664  		 *
-2e3025434a6ba0 Feng Tang             2021-06-11  665  		 * So please be careful with adding new fields before
-2e3025434a6ba0 Feng Tang             2021-06-11  666  		 * mmap_lock, which can easily push the 2 fields into one
-2e3025434a6ba0 Feng Tang             2021-06-11  667  		 * cacheline.
-2e3025434a6ba0 Feng Tang             2021-06-11  668  		 */
-da1c55f1b272f4 Michel Lespinasse     2020-06-08  669  		struct rw_semaphore mmap_lock;
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  670  
-c1a2f7f0c06454 Rik van Riel          2018-07-16  671  		struct list_head mmlist; /* List of maybe swapped mm's.	These
-c1a2f7f0c06454 Rik van Riel          2018-07-16  672  					  * are globally strung together off
-c1a2f7f0c06454 Rik van Riel          2018-07-16  673  					  * init_mm.mmlist, and are protected
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  674  					  * by mmlist_lock
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  675  					  */
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  676  
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  677  
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  678  		unsigned long hiwater_rss; /* High-watermark of RSS usage */
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  679  		unsigned long hiwater_vm;  /* High-water virtual memory usage */
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  680  
-e10d59f2c3deca Christoph Lameter     2011-10-31  681  		unsigned long total_vm;	   /* Total pages mapped */
-e10d59f2c3deca Christoph Lameter     2011-10-31  682  		unsigned long locked_vm;   /* Pages that have PG_mlocked set */
-70f8a3ca68d3e1 Davidlohr Bueso       2019-02-06  683  		atomic64_t    pinned_vm;   /* Refcount permanently increased */
-30bdbb78009e67 Konstantin Khlebnikov 2016-02-02  684  		unsigned long data_vm;	   /* VM_WRITE & ~VM_SHARED & ~VM_STACK */
-30bdbb78009e67 Konstantin Khlebnikov 2016-02-02  685  		unsigned long exec_vm;	   /* VM_EXEC & ~VM_WRITE & ~VM_STACK */
-30bdbb78009e67 Konstantin Khlebnikov 2016-02-02  686  		unsigned long stack_vm;	   /* VM_STACK */
-e10d59f2c3deca Christoph Lameter     2011-10-31  687  		unsigned long def_flags;
-88aa7cc688d48d Yang Shi              2018-06-07  688  
-2e3025434a6ba0 Feng Tang             2021-06-11  689  		/**
-2e3025434a6ba0 Feng Tang             2021-06-11  690  		 * @write_protect_seq: Locked when any thread is write
-2e3025434a6ba0 Feng Tang             2021-06-11  691  		 * protecting pages mapped by this mm to enforce a later COW,
-2e3025434a6ba0 Feng Tang             2021-06-11  692  		 * for instance during page table copying for fork().
-2e3025434a6ba0 Feng Tang             2021-06-11  693  		 */
-2e3025434a6ba0 Feng Tang             2021-06-11  694  		seqcount_t write_protect_seq;
-2e3025434a6ba0 Feng Tang             2021-06-11  695  
-88aa7cc688d48d Yang Shi              2018-06-07  696  		spinlock_t arg_lock; /* protect the below fields */
-2e3025434a6ba0 Feng Tang             2021-06-11  697  
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  698  		unsigned long start_code, end_code, start_data, end_data;
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  699  		unsigned long start_brk, brk, start_stack;
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  700  		unsigned long arg_start, arg_end, env_start, env_end;
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  701  
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  702  		unsigned long saved_auxv[AT_VECTOR_SIZE]; /* for /proc/PID/auxv */
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  703  
-f1a7941243c102 Shakeel Butt          2022-10-24 @704  		struct percpu_counter rss_stat[NR_MM_COUNTERS];
-d559db086ff5be KAMEZAWA Hiroyuki     2010-03-05  705  
-801460d0cf5c52 Hiroshi Shimamoto     2009-09-23  706  		struct linux_binfmt *binfmt;
-801460d0cf5c52 Hiroshi Shimamoto     2009-09-23  707  
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  708  		/* Architecture-specific MM context */
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  709  		mm_context_t context;
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  710  
-c1a2f7f0c06454 Rik van Riel          2018-07-16  711  		unsigned long flags; /* Must use atomic bitops to access */
-c92ff1bde06f69 Martin Schwidefsky    2007-10-16  712  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
