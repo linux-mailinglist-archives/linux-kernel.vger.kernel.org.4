@@ -2,55 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5C868DDB4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F56568DDB3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjBGQOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
+        id S232204AbjBGQOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbjBGQOD (ORCPT
+        with ESMTP id S232678AbjBGQNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:14:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C164E055
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:13:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 77F46CE1DFA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:13:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49F3C433D2;
-        Tue,  7 Feb 2023 16:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675786433;
-        bh=DQ1CJxcjsi3b+zqgaRiU3Jl5v/BM3ICCZKlhKghFh0M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DE3g6e+J+twxY5iQXeiCiS+916bB/3gIK508QO16HKNA9TOuv0k/FRrTm7HPd0ktF
-         r70sg7p3xeFPTV15xJDQPZDPq+HHpmLHcCxRq/9gb9IMRf8oGiUWG/G0O4px2hTJqW
-         J6aQjfA6tsc2SlQkawRpi9+vdao8xyLmKUP7+v44ztj7clMM4hw+1f6QsD/LzPE5MH
-         6Eibdp9yNk/kfLNMzfefvhpoO4qoaO2h6HQKwCUVFCB/lB03RH8JUmSKvegtZtUVcl
-         MltwtVrcGh/Rvth5lCojNAf0jARdFgRjn1kuBDV5CfPK5Ds/Y5xMqd06HrPQr4uDfE
-         sxffkOhc8VIuw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] x86: vdso: sanitize asm helpers for vgetcpu.c
-Date:   Tue,  7 Feb 2023 17:13:41 +0100
-Message-Id: <20230207161349.309901-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Tue, 7 Feb 2023 11:13:55 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61396193
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:13:53 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id m14so14039627wrg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:13:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pNxhydrTd34r+uTCjdy7LmWbFpsf5f3sYLA3FNJZQww=;
+        b=OOpf1czEbZTuwyeGOmOGKz7pMXyILFbVPQEgNdrukQw9ebAQtZ3Ph0X+OSqHKXxqiI
+         N/SGx8WbJPHja+jDqLqkhzRlhZVgV3TSBRFNY9avBRQkE4q5JqiTiRq8U1/z8StFEDVZ
+         eqKd8NsJYe4t04WB+x036wWk0qas+WL7GhPpXxtGK9fDJUsBm7KI8hVn8WaReFG3e3w/
+         Zho6lpZ+7bnaGPY1JZTqJTQhAmNJFYItPWl4OXygL23p2f9QfN7IaCrvnfW8TJJtjIMf
+         JWkhcWKGuzVREDAvhRJ2MWMMTCHw/kQw0lj7PLi8vQiTz/qVnDIgk8o3sEO7rTIwlKCd
+         eQ9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pNxhydrTd34r+uTCjdy7LmWbFpsf5f3sYLA3FNJZQww=;
+        b=JieCFA0fGqF0TrsIUhDhtYhLrk283hfGk8tFPgFB4RGM+rzSofYkidra84HJjGXHgU
+         xigkXx0B2pLLlXK8dWaFin3Vmu5B+K98BFTDcVCenFS8cWHgw6jFSdP8MXFCIU8IAh60
+         T1bdLsg9c52V1ZfD0nkW+uBWg/mXsUnD0KlJgMU0sL7vLZY70jZn3opM+YSw55zHr83A
+         F62p4SvIOCoM8i9nIabKC2rxixsUznL7aw6wj9xxv/rBugdDjRIt+7PjwldQGdQM4s7m
+         SB8m5c8kr6mw0QEUIQGmCT1tnACvk09/ECNBicaGIIW5ie8b+ihc4+m826RmgCR3EDdE
+         4AVg==
+X-Gm-Message-State: AO0yUKXMp0//NwWDdNU2o8MXzr5viZisiALsqsV+PcPL1m2N5jSCwe7k
+        N03cbn8B9ReLBTceMZGhzjPBZE17DNOSvlkv
+X-Google-Smtp-Source: AK7set/sTDamrm6lwZ2cQEH8kqJYkVmh9E/4XDzymL4dbTYXYvGyWqJKRMfRHh0fjqGQykDjRGMPmg==
+X-Received: by 2002:adf:fe09:0:b0:2bf:bc0a:361d with SMTP id n9-20020adffe09000000b002bfbc0a361dmr3139814wrr.31.1675786432534;
+        Tue, 07 Feb 2023 08:13:52 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f7-20020a056000128700b002c3df9279f5sm8450225wrx.48.2023.02.07.08.13.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 08:13:52 -0800 (PST)
+Message-ID: <44c7274f-8a5e-0235-413a-6c3260018601@linaro.org>
+Date:   Tue, 7 Feb 2023 17:13:50 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] Documentation: cs35l41: Shared boost properties
+Content-Language: en-US
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230207104021.2842-1-lucas.tanure@collabora.com>
+ <20230207104021.2842-3-lucas.tanure@collabora.com>
+ <44faeca1-94c9-4423-d87a-03d80e286812@linaro.org>
+ <e7257f9a-86c5-74e8-c538-6f6d2ba13274@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e7257f9a-86c5-74e8-c538-6f6d2ba13274@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,91 +85,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 07/02/2023 16:46, Lucas Tanure wrote:
+>>> +      Shared boost allows two amplifiers to share a single boost circuit by
+>>> +      communicating on the MDSYNC bus. The passive amplifier does not control
+>>> +      the boost and receives data from the active amplifier. GPIO1 should be
+>>> +      configured for Sync when shared boost is used. Shared boost is not
+>>> +      compatible with External boost. Active amplifier requires
+>>> +      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
+>>>         0 = Internal Boost
+>>>         1 = External Boost
+>>> +      2 = Reserved
+>>
+>> How binding can be reserved? For what and why? Drop. 2 is shared active,
+>> 3 is shared passive.
+> 2 Is shared boost without VSPK switch, a mode not supported for new 
+> system designs. But there is laptops using it, so we need to keep 
+> supporting in the driver.
 
-The x86 vdso implementation includes a few include/linux/*.h kernel
-headers outside of the include/vdso/*.h space.  This causes a new
-warning when building with clang, after the vgetcpu code is added
-to the vdso32 support on 64-bit kernels:
+That's not the answer. 2 is nothing here, so it cannot be reserved.
+Aren't you mixing now some register value with bindings?
 
-In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-In file included from include/linux/kernel.h:22:
-In file included from include/linux/bitops.h:68:
-In file included from arch/x86/include/asm/bitops.h:420:
-arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size for constraint 'D'
-                         : REG_IN (w));
-                                   ^
-In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-In file included from include/linux/kernel.h:25:
-In file included from include/linux/math.h:6:
-arch/x86/include/asm/div64.h:85:34: error: invalid output size for constraint '=a'
-        asm ("mulq %2; divq %3" : "=a" (q)
-                                        ^
-
-Unlike gcc, clang checks inline asm constraints before dead code
-elimination, which breaks both __arch_hweight64() and mul_u64_u64_div_u64()
-when these are included with CONFIG_64BIT set but compiled with clang -m32,
-even when there are no callers.
-
-Change both affected headers to the check for 32-bit vs 64-bit is done
-correctly for vdso32. It would be nice to also limit the included headers
-further, to avoid subtle differences in the header contents, but that
-requires a larger cleanup.
-
-Fixes: 92d33063c081 ("x86/vdso: Provide getcpu for x86-32.")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/x86/entry/vdso/vdso32/vgetcpu.c | 2 ++
- arch/x86/include/asm/arch_hweight.h  | 4 ++--
- arch/x86/include/asm/div64.h         | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/entry/vdso/vdso32/vgetcpu.c b/arch/x86/entry/vdso/vdso32/vgetcpu.c
-index b777f84ffae9..9f8cf77c7077 100644
---- a/arch/x86/entry/vdso/vdso32/vgetcpu.c
-+++ b/arch/x86/entry/vdso/vdso32/vgetcpu.c
-@@ -1,2 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define BUILD_VDSO32
-+
- #include "../vgetcpu.c"
-diff --git a/arch/x86/include/asm/arch_hweight.h b/arch/x86/include/asm/arch_hweight.h
-index ba88edd0d58b..cca0941673e0 100644
---- a/arch/x86/include/asm/arch_hweight.h
-+++ b/arch/x86/include/asm/arch_hweight.h
-@@ -4,7 +4,7 @@
- 
- #include <asm/cpufeatures.h>
- 
--#ifdef CONFIG_64BIT
-+#if defined(CONFIG_64BIT) && !defined(BUILD_VDSO32)
- #define REG_IN "D"
- #define REG_OUT "a"
- #else
-@@ -33,7 +33,7 @@ static inline unsigned int __arch_hweight8(unsigned int w)
- 	return __arch_hweight32(w & 0xff);
- }
- 
--#ifdef CONFIG_X86_32
-+#if defined(CONFIG_X86_32) || defined(BUILD_VDSO32)
- static inline unsigned long __arch_hweight64(__u64 w)
- {
- 	return  __arch_hweight32((u32)w) +
-diff --git a/arch/x86/include/asm/div64.h b/arch/x86/include/asm/div64.h
-index b8f1dc0761e4..97bd076db0b2 100644
---- a/arch/x86/include/asm/div64.h
-+++ b/arch/x86/include/asm/div64.h
-@@ -2,7 +2,7 @@
- #ifndef _ASM_X86_DIV64_H
- #define _ASM_X86_DIV64_H
- 
--#ifdef CONFIG_X86_32
-+#if defined(CONFIG_X86_32) || defined(BUILD_VDSO32)
- 
- #include <linux/types.h>
- #include <linux/log2.h>
--- 
-2.39.1
+Best regards,
+Krzysztof
 
