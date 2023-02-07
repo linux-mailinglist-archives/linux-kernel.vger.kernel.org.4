@@ -2,243 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C400A68DCCC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D9368DCD1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjBGPVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 10:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S232323AbjBGPVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 10:21:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbjBGPVD (ORCPT
+        with ESMTP id S231909AbjBGPVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 10:21:03 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA6A35B5;
-        Tue,  7 Feb 2023 07:21:01 -0800 (PST)
-Received: from pendragon.ideasonboard.com (unknown [109.136.43.56])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 774C34AF;
-        Tue,  7 Feb 2023 16:20:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675783259;
-        bh=zNeqV5rEJ6QD24SL/I57YlWT7uP7NrrpeInbjDFscnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OWXIcsieV9JnfRe/9elWLtZeo36LO67+GdhMcG7AzNfQAEBeS3BZnMq5wMxXQ0v3Y
-         0OEFa4BWHX5VDUodegggK4/HKP9uaVdQs49a2rcM0AoqT6LEn7i81hFeR9qnzzV9Iq
-         OjTx6p8Ir3JmHED2jpznJq8nP8Ihk8i4ZEntpeZk=
-Date:   Tue, 7 Feb 2023 17:20:57 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: display: bridge: Add GPIO display
- mux binding
-Message-ID: <Y+JsWQZMKCuPSbeO@pendragon.ideasonboard.com>
-References: <20230116110820.2615650-1-treapking@chromium.org>
- <20230116110820.2615650-2-treapking@chromium.org>
- <20230117201703.GA3555326-robh@kernel.org>
- <CAEXTbpdOg_un9rWD+QeS1rJLW8wHzDOnkJ-i6R0WNvAU4THEGQ@mail.gmail.com>
- <Y+InK8qF0Izlv6s6@pendragon.ideasonboard.com>
- <CAEXTbpc=2BOvcXDj-Bff7y3yZjaYr61RBphLiCkkUVzGFnVgKg@mail.gmail.com>
+        Tue, 7 Feb 2023 10:21:20 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED55137F3B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:21:13 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id qw12so44005591ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 07:21:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TY3YqSgtXc7yaW9pPRW8aZSrHCEaGsS7+O63u9ldl3I=;
+        b=BDeEn0a7Jk6LqV0BxUk/3hb/Z6Xqj/yV16kXiuoMOSqrXb0v03vNvq2OkZYT24I96+
+         D3d6sJ4DVgsTUqaJU6izpGl7ntpCilk3ImM0ij9kj9c5KmNrJtR7ZtjCuZbw20z6a814
+         UN4OYx011PWI6uoKNASUOjx8ulf2i2sofMX6LB8jSKn1xLUUeChZSXEecQiR4l3rhS4k
+         Z27dYY+BEfiUwt9IqesyXQLQG7dbN+fXPUleEZp4kE3+Ib2IJq3eZAfdYehzVd8XoR4f
+         blRkO33oFMGA0D55AxhK1Iw9iypVtaANBYwU73rFQgsgd+VknpjgxHybgmr8cPwL0vUk
+         3Q7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TY3YqSgtXc7yaW9pPRW8aZSrHCEaGsS7+O63u9ldl3I=;
+        b=SexTynTr1WCn/9ujzg7zV+iDibwWByd/iDCBESCMn1NuAdXhXCJruhsAP+BS7mft98
+         ObKVGbsGp0EQ5m565Hv9LG1XHs62BhFwXQ8SDvmmg3tJxU40gwGr6LawT3QWHK57EQMK
+         BMDAvwzEr+sZlftAra00UAEQCGh7OT+rlZ80N/tkY70kMgUyLt5HgBokmt7bnjHnfTS3
+         2cF7fsKUBYuxqZjfyBT9K6j9PwOQBssexU0auL0H1aqqhm5x15n9ixlvrv6t1Zj2SglQ
+         vroYwsZEMZYIr0SS5kcXLUu/2n624fLTzxVz/HggFqKaj8VochHzdMfjasTQ1OBDQ1dV
+         2fDg==
+X-Gm-Message-State: AO0yUKW9wtVhsULdFa7RMSFqUYnmxH00zP7d3UhtDNsE7UkTgWFk9PQ/
+        cFIl+deJRws2wMzNOw+m1Fk6Bg==
+X-Google-Smtp-Source: AK7set9QmfJciUrF+W1hV1GefjIjPjj85Ne+J1czfDY4PfZoxbZ0XbFaVW/41jlt6Tah5s19gAACJw==
+X-Received: by 2002:a17:906:560f:b0:887:6c23:193d with SMTP id f15-20020a170906560f00b008876c23193dmr3840701ejq.7.1675783272577;
+        Tue, 07 Feb 2023 07:21:12 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id c18-20020a1709060fd200b0088f8abd3214sm7026217ejk.92.2023.02.07.07.21.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 07:21:12 -0800 (PST)
+Message-ID: <fc32fe18-ee54-7ef9-3cc1-e9ead718961d@linaro.org>
+Date:   Tue, 7 Feb 2023 17:21:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAEXTbpc=2BOvcXDj-Bff7y3yZjaYr61RBphLiCkkUVzGFnVgKg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/4] drm/msm/dpu: add DSPPs into reservation upon a CTM
+ request
+Content-Language: en-GB
+To:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com,
+        marijn.suijten@somainline.org
+References: <1675780196-3076-1-git-send-email-quic_kalyant@quicinc.com>
+ <1675780196-3076-3-git-send-email-quic_kalyant@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1675780196-3076-3-git-send-email-quic_kalyant@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Pin-yen,
-
-On Tue, Feb 07, 2023 at 06:30:36PM +0800, Pin-yen Lin wrote:
-> On Tue, Feb 7, 2023 at 6:25 PM Laurent Pinchart wrote:
-> > On Tue, Feb 07, 2023 at 06:07:44PM +0800, Pin-yen Lin wrote:
-> > > On Wed, Jan 18, 2023 at 4:17 AM Rob Herring wrote:
-> > > > On Mon, Jan 16, 2023 at 07:08:19PM +0800, Pin-yen Lin wrote:
-> > > > > From: Nicolas Boichat <drinkcat@chromium.org>
-> > > > >
-> > > > > Add bindings for Generic GPIO mux driver.
-> > > > >
-> > > > > Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
-> > > > > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> > > > > ---
-> > > > >
-> > > > > Changes in v2:
-> > > > > - Referenced existing dt-binding schemas from graph.yaml
-> > > > > - Added ddc-i2c-bus into the bindings
-> > > > >
-> > > > >  .../bindings/display/bridge/gpio-mux.yaml     | 95 +++++++++++++++++++
-> > > > >  1 file changed, 95 insertions(+)
-> > > > >  create mode 100644 Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml b/Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..da29ba078f05
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/display/bridge/gpio-mux.yaml
-> > > > > @@ -0,0 +1,95 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: http://devicetree.org/schemas/display/bridge/gpio-mux.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > +
-> > > > > +title: Generic display mux (1 input, 2 outputs)
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Nicolas Boichat <drinkcat@chromium.org>
-> > > > > +
-> > > > > +description: |
-> > > > > +  This bindings describes a simple display (e.g. HDMI) mux, that has 1
-> > > > > +  input, and 2 outputs. The mux status is controlled by hardware, and
-> > > > > +  its status is read back using a GPIO.
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: gpio-display-mux
-> > > > > +
-> > > > > +  detect-gpios:
-> > > > > +    maxItems: 1
-> > > > > +    description: GPIO that indicates the active output
-> > > >
-> > > > What are we detecting? That implies an input, but this is selecting the
-> > > > output path, right? Or what does 'mux status is controlled by hardware'
-> > > > mean exactly? Something else? That does not sound very generic.
-> > >
-> > > The GPIO (or any kind of MUX) is an input that indicates where the
-> > > output should go. The actual "output selection" procedure is done in
-> > > the driver. That is, the driver monitors this GPIO and selects the
-> > > output path accordingly. In our use case, the GPIO is reported by the
-> > > embedded controller on the device.
-> > >
-> > > [1] listed other similar bridges that can leverage this driver, so we
-> > > called this driver "generic".
-> > >
-> > > [1]: https://lore.kernel.org/all/CAJMQK-jGw8kJFNjoHjeZUL+3NCiOS2hgGERnAnMwNsL_cm_J=Q@mail.gmail.com/
-> > >
-> > > > In any case, we have a common mux binding so any kind of mux control
-> > > > could be used here, not just GPIO. Then you can make this just a generic
-> > > > display mux.
-> > >
-> > > Thanks for sharing this, I'll update the binding in the next version.
-> > >
-> > > > > +
-> > > > > +  ddc-i2c-bus:
-> > > > > +    description: phandle link to the I2C controller used for DDC EDID probing
-> > > > > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > > >
-> > > > This belongs in the connector node(s).
-> > >
-> > > The HDMI bridge before the MUX doesn't (and doesn't have to) know that
-> > > its next bridge is a MUX. We put it here so that the HDMI bridge can
-> > > parse the phandle and get the bus node.
-> >
-> > How does that work, does the HDMI encoder driver parse the ddc-i2c-bus
-> > property of the next DT node in the OF graph ?
+On 07/02/2023 16:29, Kalyan Thota wrote:
+> Add DSPP blocks into the topology for reservation, if there
+> is a CTM request for that composition.
 > 
-> Yes. In our use case, mtk_hdmi.c[2] checks the remote node of its
-> output port to get the bus phandle. sun4i_hdmi_enc.c[3] seems to use a
-> similar approach as well.
-
-Peeking into nodes of other devices is a bad practice. I don't know how
-the code you mention below got merged, but I'm pretty sure I would have
-flagged it if I had reviewed the patches :-)
-
-The ddc-i2c-bus property should instead be specified in the node where
-it logically belongs (in this case, the connector node), and handled by
-the connector driver. You can then use drm_bridge operations to tie
-things together, like done in the drm_bridge_connector helper. I'd
-recommend using the drm_bridge_connector helper if you can, either
-as-is, or by extending it.
-
-> [2]: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/mediatek/mtk_hdmi.c#L1500
-> [3]: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/sun4i/sun4i_hdmi_enc.c#L240
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> ---
+> Changes in v1:
+> - Minor nits (Dmitry)
 > 
-> > > > > +
-> > > > > +  ports:
-> > > > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > > > +
-> > > > > +    properties:
-> > > > > +      port@0:
-> > > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > > +        description: |
-> > > > > +          Video port for input.
-> > > > > +
-> > > > > +      port@1:
-> > > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > > +        description: |
-> > > > > +          2 video ports for output.
-> > > > > +          The reg value in the endpoints matches the GPIO status: when
-> > > > > +          GPIO is asserted, endpoint with reg value <1> is selected.
-> > > > > +
-> > > > > +    required:
-> > > > > +      - port@0
-> > > > > +      - port@1
-> > > > > +
-> > > > > +required:
-> > > > > +  - compatible
-> > > > > +  - detect-gpios
-> > > > > +  - ports
-> > > > > +
-> > > > > +unevaluatedProperties: false
-> > > > > +
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +    #include <dt-bindings/gpio/gpio.h>
-> > > > > +    hdmi_mux: hdmi_mux {
-> > > > > +      compatible = "gpio-display-mux";
-> > > > > +      detect-gpios = <&pio 36 GPIO_ACTIVE_HIGH>;
-> > > > > +      pinctrl-names = "default";
-> > > > > +      pinctrl-0 = <&hdmi_mux_pins>;
-> > > > > +      ddc-i2c-bus = <&hdmiddc0>;
-> > > > > +
-> > > > > +      ports {
-> > > > > +        #address-cells = <1>;
-> > > > > +        #size-cells = <0>;
-> > > > > +
-> > > > > +        port@0 { /* input */
-> > > > > +          reg = <0>;
-> > > > > +
-> > > > > +          hdmi_mux_in: endpoint {
-> > > > > +            remote-endpoint = <&hdmi0_out>;
-> > > > > +          };
-> > > > > +        };
-> > > > > +
-> > > > > +        port@1 { /* output */
-> > > > > +          reg = <1>;
-> > > > > +
-> > > > > +          #address-cells = <1>;
-> > > > > +          #size-cells = <0>;
-> > > > > +
-> > > > > +          hdmi_mux_out_anx: endpoint@0 {
-> > > > > +            reg = <0>;
-> > > > > +            remote-endpoint = <&dp_bridge_in>;
-> > > > > +          };
-> > > > > +
-> > > > > +          hdmi_mux_out_hdmi: endpoint@1 {
-> > > > > +            reg = <1>;
-> > > > > +            remote-endpoint = <&hdmi_connector_in>;
-> > > > > +          };
-> > > > > +        };
-> > > > > +      };
-> > > > > +    };
+> Changes in v2:
+> - Populate DSPPs into the reservation only if CTM is requested (Dmitry)
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 15 ++++++---------
+>   1 file changed, 6 insertions(+), 9 deletions(-)
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
-Regards,
+With best wishes
+Dmitry
 
-Laurent Pinchart
