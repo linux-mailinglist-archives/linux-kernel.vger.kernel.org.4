@@ -2,218 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B5968E2B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 447A468E2C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjBGVR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 16:17:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        id S229874AbjBGVUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 16:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBGVR4 (ORCPT
+        with ESMTP id S229590AbjBGVUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 16:17:56 -0500
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774FD17175
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:17:49 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id PVLUp8FlEPPaiPVLUpiiRq; Tue, 07 Feb 2023 22:17:46 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 07 Feb 2023 22:17:46 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <fd3ccda3-f964-6904-6056-f93c43b85a0f@wanadoo.fr>
-Date:   Tue, 7 Feb 2023 22:17:39 +0100
+        Tue, 7 Feb 2023 16:20:32 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2042.outbound.protection.outlook.com [40.107.237.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABA217175;
+        Tue,  7 Feb 2023 13:20:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YEOvPPuZijKc8kKAqtyF3H/N59ckNRtV4yzC+tD4uAcDYuv8HOJtYdtiBmvCOYh675Ivn/O8vg0lUx3Wotle7h5PlIdJJ3gjiE+0WglSH8FoF4sLuPY/y7vPPd8AA2ojfn/+HpGuHC2Urj0db5MKLrg4uWrp7wP6kPRL8E0lOmMvKRC1e+t7wzZXWW5rJscUjjhL5HE9e6bHb/j3Ah3sSjSm0yaey/LN/edjHJxJTNg2gaRM+DRqri8UYoK31OUJHN2rE1BFKX+T4SgB2YOJB5qp8EUv5m1ukcTnbIJmwhoPZIn0qPZS7oZXFjC9lwbF76GgoOcTaCZxOhdOLMTfiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UAQQSrKPvcPPwcRqS72ReAZHtW03Jxz+EexB1I0z+O0=;
+ b=Ze8NfsEHUdEtPk9MpQii4J0kw17mzDrqe1lR+fu0d6REdKbdkeLgLozgeZb3lYbdgplWCMQRKr7REwQWoJJsPFj1hYqqTRwdvBcn9Sz+suhA8ZMcgX8XrfdapI+ayG48Sof/ceNsf5lQC9aHHwgYL98XFjpGRsDFilPpEBRsX8N9xULtkXvno0JXlclTjT2TzmREFHik4OArffR+FQY7d/s/kIRoQiYIZ7+Zd0WwxCvXSlqAtoseywg4hUEwQaYsOm8PVAI8AWRxdGvSkrBZcJt6WzuAub5ayBf/xVE+14hREtDgFrl3WSyz5EgpbBYh6ig2377LhHWM6pwwi88Ddg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UAQQSrKPvcPPwcRqS72ReAZHtW03Jxz+EexB1I0z+O0=;
+ b=MvwOf8XbN3Fk9++fPGpzl3n2DSt2Dew0lrRI7bdb7dK1kpSxH3AJ1jhtUD3m69P5KI94KyUxtFrOwLXxLoh73sGafB3ycFSGJvqVBo1n9IH4EelwO6YHaAxFZjbv+Rn4ilRPcCEFdvxsjKU/kjSQvzhAKYTZGtUbQp7kRuNjguBJHWbdx6GSH96WujdqEVBmdz2nzlWyLxcIR6zmPrwMFqAYrO4QY5XEwDGyPa4X7V88Y1A6eOfI3aULc52W5DvLg2gm7hMtw5ZK8+D5mWlGa/AHGb4mAPHDars7oTMa3jc0kg1QHgQkoLctl8CMWhVN09Ju1IRNLu3IIkEwVyBjWg==
+Received: from DM6PR04CA0016.namprd04.prod.outlook.com (2603:10b6:5:334::21)
+ by CH0PR12MB8505.namprd12.prod.outlook.com (2603:10b6:610:193::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Tue, 7 Feb
+ 2023 21:20:27 +0000
+Received: from DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:334:cafe::bd) by DM6PR04CA0016.outlook.office365.com
+ (2603:10b6:5:334::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36 via Frontend
+ Transport; Tue, 7 Feb 2023 21:20:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ DM6NAM11FT101.mail.protection.outlook.com (10.13.172.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.17 via Frontend Transport; Tue, 7 Feb 2023 21:20:27 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 7 Feb 2023
+ 13:20:19 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 7 Feb 2023 13:20:18 -0800
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server id 15.2.986.36 via Frontend
+ Transport; Tue, 7 Feb 2023 13:20:18 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <robin.murphy@arm.com>,
+        <alex.williamson@redhat.com>, <shuah@kernel.org>
+CC:     <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <baolu.lu@linux.intel.com>
+Subject: [PATCH v2 00/10] Add IO page table replacement support
+Date:   Tue, 7 Feb 2023 13:17:52 -0800
+Message-ID: <cover.1675802050.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] ASoC: codecs: Add support for the Infineon PEB2466
- codec
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230206144904.91078-1-herve.codina@bootlin.com>
- <20230206144904.91078-3-herve.codina@bootlin.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230206144904.91078-3-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT101:EE_|CH0PR12MB8505:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8febe473-9fd5-4dcc-7fc9-08db0951226c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: blKk6/qnOhEdY6ww0N9WnCWH6zLQY/cEYt27+MW5bOcUuajJf4IlbjUDQX4szc/C91nL1spswtQIPSpDFkT42DkqssDZgLr3432KbY0YWN5VQHGgo5sCNus1Cl6uADtqYRDCJumBYsyR46pvSB4P47HhzuT2Qs4YNXON690iUMLfFA15Y2GWVRUqCJCnEKKQGpJtHDgErA53SJobhs9toSDHekusjrmKvWRbNcYZnYX6HCu3bMjIQEAD07gGyXIsEHWULhzFsAuVpkikyU8z5B5nRo1hkr+fr5VRvFqUrBKoBU9AVTUWChATtUvKszF8MAtBB+nPdKvQS8wpkgxmGElqCjYK9bzi4T2fdojFRdtSk1qmzMZvMcRngqo1ZBNXqnchA4HKd9B/965mE1Nn1pWcZe6582jR5maiUnaabGYupYu5vvf2cTOEmTd9fuig1SZHHxEPSGHAKLyVVyWn1cHO8t90/Z4RWLyEfDRgGrvjj9r+gayeENpHM5JFXgRZiaEctoiA0/zamYDcMFKCn934XJGbSW5qD+fA2Dfo+ketU9+qpqIgfCYLB7VbjJBV3b0l7Sa4FaWrko7rL56ere0f72ot30SZUQxl6zQEXH/FFwS3kT92OI1VyxujTOVFpBlm2j2OcPJMhkLbihxjVbpKwF0QW4SeJaLN/BpCZBkcP0MgFi0O3mmTWQQ4U1zvWBuwJvfodKL82o1geGcwDrkCXXP+cQPF/f5/zkSDsZaZIQCqEV09qbnltxdHdLwKx5V7vdCLbWa4FskWZhAycegBFWeAJ0IqH6+aJD7Gi1VG1bS2nbO2SMsZXPFGXRnLO7O3+gFOwiDsikj0ASh+Hw==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199018)(36840700001)(40470700004)(46966006)(86362001)(82740400003)(356005)(7636003)(36756003)(36860700001)(82310400005)(5660300002)(70586007)(41300700001)(316002)(8936002)(4326008)(70206006)(54906003)(110136005)(8676002)(40480700001)(2906002)(40460700003)(426003)(7416002)(83380400001)(336012)(2616005)(47076005)(966005)(478600001)(6666004)(26005)(186003)(7696005)(66899018);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 21:20:27.6187
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8febe473-9fd5-4dcc-7fc9-08db0951226c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8505
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 06/02/2023 à 15:49, Herve Codina a écrit :
-> The Infineon PEB2466 codec is a programmable DSP-based four channels
-> codec with filters capabilities.
-> It also provides signals as GPIOs.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->   sound/soc/codecs/Kconfig   |   12 +
->   sound/soc/codecs/Makefile  |    2 +
->   sound/soc/codecs/peb2466.c | 2071 ++++++++++++++++++++++++++++++++++++
->   3 files changed, 2085 insertions(+)
->   create mode 100644 sound/soc/codecs/peb2466.c
-> 
+Changelog
+v1->v2:
+ * Rebased on top of vfio_device cdev v2 series.
+ * Update the kdoc and commit message of iommu_group_replace_domain().
+ * Dropped revert-to-core-domain part in iommu_group_replace_domain().
+ * Dropped !ops->dma_unmap check in vfio_iommufd_emulated_attach_ioas().
+ * Added missing rc value in vfio_iommufd_emulated_attach_ioas() from the
+   iommufd_access_set_ioas() call.
+ * Added a new patch in vfio_main to deny vfio_pin/unpin_pages() calls if
+   vdev->ops->dma_unmap is not implemented.
+ * Added a __iommmufd_device_detach helper and let the replace routine do
+   a partial detach().
+ * Added restriction on auto_domains to use the replace feature.
+ * Added the patch "iommufd/device: Make hwpt_list list_add/del symmetric"
+   from the has_group removal series.
 
-[...]
+Hi all,
 
-> +static int peb2466_spi_probe(struct spi_device *spi)
-> +{
-> +	struct peb2466 *peb2466;
-> +	unsigned long mclk_rate;
-> +	int ret;
-> +	u8 xr5;
-> +
-> +	spi->bits_per_word = 8;
-> +	ret = spi_setup(spi);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	peb2466 = devm_kzalloc(&spi->dev, sizeof(*peb2466), GFP_KERNEL);
-> +	if (!peb2466)
-> +		return -ENOMEM;
-> +
-> +	peb2466->spi = spi;
-> +
-> +	peb2466->regmap = devm_regmap_init(&peb2466->spi->dev, NULL, peb2466,
-> +					   &peb2466_regmap_config);
-> +	if (IS_ERR(peb2466->regmap))
-> +		return PTR_ERR(peb2466->regmap);
-> +
-> +	peb2466->reset_gpio = devm_gpiod_get_optional(&peb2466->spi->dev,
-> +						      "reset", GPIOD_OUT_LOW);
-> +	if (IS_ERR(peb2466->reset_gpio))
-> +		return PTR_ERR(peb2466->reset_gpio);
-> +
-> +	peb2466->mclk = devm_clk_get(&peb2466->spi->dev, "mclk");
+The existing IOMMU APIs provide a pair of functions: iommu_attach_group()
+for callers to attach a device from the default_domain (NULL if not being
+supported) to a given iommu domain, and iommu_detach_group() for callers
+to detach a device from a given domain to the default_domain. Internally,
+the detach_dev op is deprecated for the newer drivers with default_domain.
+This means that those drivers likely can switch an attaching domain to
+another one, without stagging the device at a blocking or default domain,
+for use cases such as:
+1) vPASID mode, when a guest wants to replace a single pasid (PASID=0)
+   table with a larger table (PASID=N)
+2) Nesting mode, when switching the attaching device from an S2 domain
+   to an S1 domain, or when switching between relevant S1 domains.
 
-Hi,
+This series introduces a new iommu_group_replace_domain() for that. And
+add corresponding support throughout the uAPI. So user space can do such
+a REPLACE ioctl reusing the existing VFIO_DEVICE_ATTACH_IOMMUFD_PT. This
+means that user space needs to be aware whether the device is attached or
+not: an unattached device calling VFIO_DEVICE_ATTACH_IOMMUFD_PT means a
+regular ATTACH; an attached device calling VFIO_DEVICE_ATTACH_IOMMUFD_PT
+on the other hand means a REPLACE.
 
-Up to you to decide if it is a good idea or not, but using 
-devm_clk_get_enabled() would save the 'mclk' field in peb2466 ...
+QEMU with this feature should have the vIOMMU maintain a cache of the
+guest io page table addresses and assign a unique IOAS to each unique
+guest page table.
 
-> +	if (IS_ERR(peb2466->mclk))
-> +		return PTR_ERR(peb2466->mclk);
-> +	ret = clk_prepare_enable(peb2466->mclk);
-> +	if (ret)
-> +		return ret;
+As the guest writes the page table address to the HW registers qemu should
+then use the 'replace domain' operation on VFIO to assign the VFIO device
+to the correct de-duplicated page table.
 
-... these 3 lines ...
+The algorithm where QEMU uses one VFIO container per-device and removes
+all the mappings to change the assignment should ideally not be used with
+iommufd.
 
-> +
-> +	if (peb2466->reset_gpio) {
-> +		gpiod_set_value_cansleep(peb2466->reset_gpio, 1);
-> +		udelay(4);
-> +		gpiod_set_value_cansleep(peb2466->reset_gpio, 0);
-> +		udelay(4);
-> +	}
-> +
-> +	spi_set_drvdata(spi, peb2466);
+To apply this series, please rebase on top of the following patches:
+1) [PATCH v2 00/14] Add vfio_device cdev for iommufd support
+   https://lore.kernel.org/kvm/20230206090532.95598-1-yi.l.liu@intel.com/
 
-... this spi_set_drvdata() call ...
+Or you can also find this series on Github:
+https://github.com/nicolinc/iommufd/commits/iommu_group_replace_domain-v2
 
-> +
-> +	mclk_rate = clk_get_rate(peb2466->mclk);
-> +	switch (mclk_rate) {
-> +	case 1536000:
-> +		xr5 = PEB2466_XR5_MCLK_1536;
-> +		break;
-> +	case 2048000:
-> +		xr5 = PEB2466_XR5_MCLK_2048;
-> +		break;
-> +	case 4096000:
-> +		xr5 = PEB2466_XR5_MCLK_4096;
-> +		break;
-> +	case 8192000:
-> +		xr5 = PEB2466_XR5_MCLK_8192;
-> +		break;
-> +	default:
-> +		dev_err(&peb2466->spi->dev, "Unsupported clock rate %lu\n",
-> +			mclk_rate);
-> +		ret = -EINVAL;
-> +		goto failed;
-> +	}
-> +	ret = regmap_write(peb2466->regmap, PEB2466_XR5, xr5);
-> +	if (ret) {
-> +		dev_err(&peb2466->spi->dev, "Setting MCLK failed (%d)\n", ret);
-> +		goto failed;
-> +	}
-> +
-> +	ret = devm_snd_soc_register_component(&spi->dev, &peb2466_component_driver,
-> +					      &peb2466_dai_driver, 1);
-> +	if (ret)
-> +		goto failed;
-> +
-> +	if (IS_ENABLED(CONFIG_GPIOLIB)) {
-> +		ret = peb2466_gpio_init(peb2466);
-> +		if (ret)
-> +			goto failed;
-> +	}
-> +
-> +	return 0;
-> +
-> +failed:
-> +	clk_disable_unprepare(peb2466->mclk);
-> +	return ret;
+Thank you
+Nicolin Chen
 
-... this error handling path ...
+Nicolin Chen (9):
+  iommu: Introduce a new iommu_group_replace_domain() API
+  iommufd: Create access in vfio_iommufd_emulated_bind()
+  iommufd/selftest: Add IOMMU_TEST_OP_ACCESS_SET_IOAS coverage
+  iommufd: Add replace support in iommufd_access_set_ioas()
+  iommufd/selftest: Add coverage for access->ioas replacement
+  iommufd/device: Make hwpt_list list_add/del symmetric
+  iommufd/device: Use iommu_group_replace_domain()
+  vfio: Support IO page table replacement
+  vfio: Do not allow !ops->dma_unmap in vfio_pin/unpin_pages()
 
-> +}
-> +
-> +static void peb2466_spi_remove(struct spi_device *spi)
-> +{
-> +	struct peb2466 *peb2466 = spi_get_drvdata(spi);
-> +
-> +	clk_disable_unprepare(peb2466->mclk);
-> +}
+Yi Liu (1):
+  iommu: Move dev_iommu_ops() to private header
 
-... and the remove function.
+ drivers/iommu/iommu-priv.h                    |  22 ++
+ drivers/iommu/iommu.c                         |  30 +++
+ drivers/iommu/iommufd/device.c                | 221 +++++++++++++-----
+ drivers/iommu/iommufd/iommufd_private.h       |   4 +
+ drivers/iommu/iommufd/iommufd_test.h          |   4 +
+ drivers/iommu/iommufd/selftest.c              |  25 +-
+ drivers/vfio/iommufd.c                        |  30 ++-
+ drivers/vfio/vfio_main.c                      |   4 +
+ include/linux/iommu.h                         |  11 -
+ include/linux/iommufd.h                       |   3 +-
+ include/uapi/linux/vfio.h                     |   6 +
+ tools/testing/selftests/iommu/iommufd.c       |  29 ++-
+ tools/testing/selftests/iommu/iommufd_utils.h |  22 +-
+ 13 files changed, 321 insertions(+), 90 deletions(-)
+ create mode 100644 drivers/iommu/iommu-priv.h
 
-CJ
-
-
-> +
-> +static const struct of_device_id peb2466_of_match[] = {
-> +	{ .compatible = "infineon,peb2466", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, peb2466_of_match);
-> +
-> +static const struct spi_device_id peb2466_id_table[] = {
-> +	{ "peb2466", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(spi, peb2466_id_table);
-> +
-> +static struct spi_driver peb2466_spi_driver = {
-> +	.driver  = {
-> +		.name   = "peb2466",
-> +		.of_match_table = peb2466_of_match,
-> +	},
-> +	.id_table = peb2466_id_table,
-> +	.probe  = peb2466_spi_probe,
-> +	.remove = peb2466_spi_remove,
-> +};
-> +
-> +module_spi_driver(peb2466_spi_driver);
-> +
-> +MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
-> +MODULE_DESCRIPTION("PEB2466 ALSA SoC driver");
-> +MODULE_LICENSE("GPL");
+-- 
+2.39.1
 
