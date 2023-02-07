@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7261868E058
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5DB68E05A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:44:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbjBGSoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:44:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S231951AbjBGSoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjBGSoU (ORCPT
+        with ESMTP id S231804AbjBGSo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:44:20 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDA91E9ED;
-        Tue,  7 Feb 2023 10:44:17 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id bd6so4470527oib.6;
-        Tue, 07 Feb 2023 10:44:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qF05XBm5StkoRZebgzW+5UFs5ZcFAhyv80kCZkRUAKk=;
-        b=RQM43QYANsh6n8TjUTZzlujikH6YlAkjNBPP28+/TfHQSUtc7IdaQ5EbY04ncJqCMh
-         o2lKBDoszWWQ901v8BeLPrIAHY7zARJkWOa1G/Y3ajs4Aai2+fzWZ62wN4IiMhg2ZtU6
-         iNviUIqITn4blXtSqiAYPKZyyG9hJRgKQxz/MEgMqzxzcdTYUkp9bcHcolnsaKVPOo9N
-         7jcLyiTx8zQiSQDfG/9pzkAj+JEkSszLXxDVeDB8zDV87bbiDHfTJCsKHNFrswedI962
-         1gZdtKYUT0mGAhv9/IaC2KOoOVo38qXBKTAwBJo6J6fY2ui7oZ1+Zkn8M+q2qqiZCsKD
-         ghlA==
-X-Gm-Message-State: AO0yUKWzGdzDC11RM3ogzAA9Zb8XKKv2GP73eK7BHj3lSZJet2qqzhu0
-        R0YpABaX1yfqbO7FQNpURg==
-X-Google-Smtp-Source: AK7set+AFJ9CMlKOl1fPlpTwwkum/A3wyh9BV9nr5T0Bia18RR2erkyWqWTpSnNcv8ypn9y4hENlAg==
-X-Received: by 2002:aca:1918:0:b0:367:6fd9:408c with SMTP id l24-20020aca1918000000b003676fd9408cmr1795362oii.44.1675795457117;
-        Tue, 07 Feb 2023 10:44:17 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05683022cc00b0068bcf7995aesm6821095otc.64.2023.02.07.10.44.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 10:44:16 -0800 (PST)
-Received: (nullmailer pid 3956646 invoked by uid 1000);
-        Tue, 07 Feb 2023 18:44:15 -0000
-Date:   Tue, 7 Feb 2023 12:44:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        vkoul@kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v5 1/6] dt-bindings: phy: Add qcom,snps-eusb2-phy schema
- file
-Message-ID: <167579545552.3956607.9337813365247017487.robh@kernel.org>
-References: <20230207114024.944314-1-abel.vesa@linaro.org>
- <20230207114024.944314-2-abel.vesa@linaro.org>
+        Tue, 7 Feb 2023 13:44:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885EA28865;
+        Tue,  7 Feb 2023 10:44:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40C44B81AB2;
+        Tue,  7 Feb 2023 18:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA75C433EF;
+        Tue,  7 Feb 2023 18:44:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675795462;
+        bh=RaD8bOb2fte5qBe2JPxiOX9a3nwNRlSBAu75aieyJBM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EPfly4QymoPJqqYUJBd3OTt/+C5rQ5OT4HODlrCRp4bNyv+h6vrIxXngGEC/d4kZI
+         lU2FD6isJPRCxtJ4YwuxsbADO8KuZTimWt5hJj/D4Msj85nS8lbXmpWN3rBVB7+OoG
+         sWU6XCoZXWLS8GyHUdNfj2MXLeJZtfotVJojAY3rBiIwZU4h08+FfNXDNdWXr2Y023
+         pdnSQ8/JReHKySMun53eADNPsIpxEpUUDDRv5XuWUVbRIBmdijlephs32wKD3khgTo
+         z8jCHMMeB4/gaq8j2X25YBihc2iWO0UQdKvrAppY3cmYGpaO6pwfR47YDxY/v1HPK9
+         O4kNshwCy3ayA==
+Date:   Tue, 7 Feb 2023 18:44:18 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     guoren@kernel.org
+Cc:     palmer@rivosinc.com, arnd@arndb.de, atishp@rivosinc.com,
+        rdunlap@infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] riscv: Cleanup rv32_defconfig
+Message-ID: <Y+KcAiEV5iTG3SyX@spud>
+References: <20230205133307.1058814-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gTE+h999HcA9Enua"
 Content-Disposition: inline
-In-Reply-To: <20230207114024.944314-2-abel.vesa@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230205133307.1058814-1-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,43 +58,228 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 07 Feb 2023 13:40:19 +0200, Abel Vesa wrote:
-> The SM8550 SoC uses Synopsis eUSB2 PHY. Add a dt-binding schema
-> for the new driver.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+--gTE+h999HcA9Enua
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, Feb 05, 2023 at 08:33:07AM -0500, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> Subject: riscv: Cleanup rv32_defconfig
+
+s/cleanup/remove redundant/, cleanup implies that you're doing some
+rework of the file IMO.
+
+> Remove the unused rv32_defconfig file,
+
+What do you mean by "unused"? (don't answer now, read on)
+
+> which has been replaced by
+> 'commit 72f045d19f25 ("riscv: Fixup difference with defconfig")'.
+
+Replaced how? One shouldn't have to go look up that commit to see what
+"replaced" means. Certainly from the subject it is not immediately
+obvious what that commit actually does.
+
+How about:
+"Remove the rv32_defconfig file, which has been made redundant by commit
+112233445566 ("blah") which introduced an rv32_defconfig .PHONY target,
+that is prioritised over the file itself."
+
+I would argue that there is still value in having an off-the-shelf 32-bit
+config for people to base things on though, and being ignored by the
+make target does not make it "unused" IMO.
+
+I did check the before/after of running the make target, so:
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Although, as you are probably aware, there are significant differences
+between the .config generated by the file and by the rv32_defconfig make
+target!
+
+Cheers,
+Conor.
+
+> Also,
+> remove CONFIG_32BIT in 32-bit.config, which CONFIG_ARCH_RV32I has
+> selected.
+>=20
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 > ---
-> 
-> There will be a binding check warning from Rob's bot because of the tcsr
-> clock bindings missing (dt-bindings/clock/qcom,sm8550-tcsr.h), but that
-> is expected as the header is already merged through Bjorn's clocks tree.
-> 
-> The v4 version of this patch was here:
-> https://lore.kernel.org/all/20230202132511.3983095-2-abel.vesa@linaro.org/
-> 
-> Changes since v4:
->  * none
-> 
-> Changes since v3:
->  * removed blank line, like Rob suggested
->  * dropped quotes and reset description, like Rob suggested
->  * dropped the RPMH_CXO_PAD_CLK clock and the ref_src clock name
->    to match the schema
->  * fixed filenames of the includes in the example (sm8550-gcc and
->    sm8550-tcsr)
-> 
-> Changes since v2:
->  * none
-> 
-> Changes since v1:
->  * dropped the "ref src" clock
->  * dropped the usb-repeater property
-> 
-> 
->  .../bindings/phy/qcom,snps-eusb2-phy.yaml     | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml
-> 
+>  arch/riscv/configs/32-bit.config  |   2 -
+>  arch/riscv/configs/rv32_defconfig | 139 ------------------------------
+>  2 files changed, 141 deletions(-)
+>  delete mode 100644 arch/riscv/configs/rv32_defconfig
+>=20
+> diff --git a/arch/riscv/configs/32-bit.config b/arch/riscv/configs/32-bit=
+=2Econfig
+> index f6af0f708df4..eb87885c8640 100644
+> --- a/arch/riscv/configs/32-bit.config
+> +++ b/arch/riscv/configs/32-bit.config
+> @@ -1,4 +1,2 @@
+>  CONFIG_ARCH_RV32I=3Dy
+> -CONFIG_32BIT=3Dy
+> -# CONFIG_PORTABLE is not set
+>  CONFIG_NONPORTABLE=3Dy
+> diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_=
+defconfig
+> deleted file mode 100644
+> index 38760e4296cf..000000000000
+> --- a/arch/riscv/configs/rv32_defconfig
+> +++ /dev/null
+> @@ -1,139 +0,0 @@
+> -CONFIG_SYSVIPC=3Dy
+> -CONFIG_POSIX_MQUEUE=3Dy
+> -CONFIG_NO_HZ_IDLE=3Dy
+> -CONFIG_HIGH_RES_TIMERS=3Dy
+> -CONFIG_BPF_SYSCALL=3Dy
+> -CONFIG_IKCONFIG=3Dy
+> -CONFIG_IKCONFIG_PROC=3Dy
+> -CONFIG_CGROUPS=3Dy
+> -CONFIG_CGROUP_SCHED=3Dy
+> -CONFIG_CFS_BANDWIDTH=3Dy
+> -CONFIG_CGROUP_BPF=3Dy
+> -CONFIG_NAMESPACES=3Dy
+> -CONFIG_USER_NS=3Dy
+> -CONFIG_CHECKPOINT_RESTORE=3Dy
+> -CONFIG_BLK_DEV_INITRD=3Dy
+> -CONFIG_EXPERT=3Dy
+> -# CONFIG_SYSFS_SYSCALL is not set
+> -CONFIG_PROFILING=3Dy
+> -CONFIG_SOC_SIFIVE=3Dy
+> -CONFIG_SOC_VIRT=3Dy
+> -CONFIG_NONPORTABLE=3Dy
+> -CONFIG_ARCH_RV32I=3Dy
+> -CONFIG_SMP=3Dy
+> -CONFIG_HOTPLUG_CPU=3Dy
+> -CONFIG_PM=3Dy
+> -CONFIG_CPU_IDLE=3Dy
+> -CONFIG_VIRTUALIZATION=3Dy
+> -CONFIG_KVM=3Dm
+> -CONFIG_JUMP_LABEL=3Dy
+> -CONFIG_MODULES=3Dy
+> -CONFIG_MODULE_UNLOAD=3Dy
+> -CONFIG_NET=3Dy
+> -CONFIG_PACKET=3Dy
+> -CONFIG_UNIX=3Dy
+> -CONFIG_INET=3Dy
+> -CONFIG_IP_MULTICAST=3Dy
+> -CONFIG_IP_ADVANCED_ROUTER=3Dy
+> -CONFIG_IP_PNP=3Dy
+> -CONFIG_IP_PNP_DHCP=3Dy
+> -CONFIG_IP_PNP_BOOTP=3Dy
+> -CONFIG_IP_PNP_RARP=3Dy
+> -CONFIG_NETLINK_DIAG=3Dy
+> -CONFIG_NET_9P=3Dy
+> -CONFIG_NET_9P_VIRTIO=3Dy
+> -CONFIG_PCI=3Dy
+> -CONFIG_PCIEPORTBUS=3Dy
+> -CONFIG_PCI_HOST_GENERIC=3Dy
+> -CONFIG_PCIE_XILINX=3Dy
+> -CONFIG_DEVTMPFS=3Dy
+> -CONFIG_DEVTMPFS_MOUNT=3Dy
+> -CONFIG_BLK_DEV_LOOP=3Dy
+> -CONFIG_VIRTIO_BLK=3Dy
+> -CONFIG_BLK_DEV_SD=3Dy
+> -CONFIG_BLK_DEV_SR=3Dy
+> -CONFIG_SCSI_VIRTIO=3Dy
+> -CONFIG_ATA=3Dy
+> -CONFIG_SATA_AHCI=3Dy
+> -CONFIG_SATA_AHCI_PLATFORM=3Dy
+> -CONFIG_NETDEVICES=3Dy
+> -CONFIG_VIRTIO_NET=3Dy
+> -CONFIG_MACB=3Dy
+> -CONFIG_E1000E=3Dy
+> -CONFIG_R8169=3Dy
+> -CONFIG_MICROSEMI_PHY=3Dy
+> -CONFIG_INPUT_MOUSEDEV=3Dy
+> -CONFIG_SERIAL_8250=3Dy
+> -CONFIG_SERIAL_8250_CONSOLE=3Dy
+> -CONFIG_SERIAL_OF_PLATFORM=3Dy
+> -CONFIG_VIRTIO_CONSOLE=3Dy
+> -CONFIG_HW_RANDOM=3Dy
+> -CONFIG_HW_RANDOM_VIRTIO=3Dy
+> -CONFIG_SPI=3Dy
+> -CONFIG_SPI_SIFIVE=3Dy
+> -# CONFIG_PTP_1588_CLOCK is not set
+> -CONFIG_DRM=3Dy
+> -CONFIG_DRM_RADEON=3Dy
+> -CONFIG_DRM_VIRTIO_GPU=3Dy
+> -CONFIG_FB=3Dy
+> -CONFIG_FRAMEBUFFER_CONSOLE=3Dy
+> -CONFIG_USB=3Dy
+> -CONFIG_USB_XHCI_HCD=3Dy
+> -CONFIG_USB_XHCI_PLATFORM=3Dy
+> -CONFIG_USB_EHCI_HCD=3Dy
+> -CONFIG_USB_EHCI_HCD_PLATFORM=3Dy
+> -CONFIG_USB_OHCI_HCD=3Dy
+> -CONFIG_USB_OHCI_HCD_PLATFORM=3Dy
+> -CONFIG_USB_STORAGE=3Dy
+> -CONFIG_USB_UAS=3Dy
+> -CONFIG_MMC=3Dy
+> -CONFIG_MMC_SPI=3Dy
+> -CONFIG_RTC_CLASS=3Dy
+> -CONFIG_VIRTIO_PCI=3Dy
+> -CONFIG_VIRTIO_BALLOON=3Dy
+> -CONFIG_VIRTIO_INPUT=3Dy
+> -CONFIG_VIRTIO_MMIO=3Dy
+> -CONFIG_RPMSG_CHAR=3Dy
+> -CONFIG_RPMSG_CTRL=3Dy
+> -CONFIG_RPMSG_VIRTIO=3Dy
+> -CONFIG_EXT4_FS=3Dy
+> -CONFIG_EXT4_FS_POSIX_ACL=3Dy
+> -CONFIG_AUTOFS4_FS=3Dy
+> -CONFIG_MSDOS_FS=3Dy
+> -CONFIG_VFAT_FS=3Dy
+> -CONFIG_TMPFS=3Dy
+> -CONFIG_TMPFS_POSIX_ACL=3Dy
+> -CONFIG_HUGETLBFS=3Dy
+> -CONFIG_NFS_FS=3Dy
+> -CONFIG_NFS_V4=3Dy
+> -CONFIG_NFS_V4_1=3Dy
+> -CONFIG_NFS_V4_2=3Dy
+> -CONFIG_ROOT_NFS=3Dy
+> -CONFIG_9P_FS=3Dy
+> -CONFIG_CRYPTO_USER_API_HASH=3Dy
+> -CONFIG_CRYPTO_DEV_VIRTIO=3Dy
+> -CONFIG_PRINTK_TIME=3Dy
+> -CONFIG_DEBUG_FS=3Dy
+> -CONFIG_DEBUG_PAGEALLOC=3Dy
+> -CONFIG_SCHED_STACK_END_CHECK=3Dy
+> -CONFIG_DEBUG_VM=3Dy
+> -CONFIG_DEBUG_VM_PGFLAGS=3Dy
+> -CONFIG_DEBUG_MEMORY_INIT=3Dy
+> -CONFIG_DEBUG_PER_CPU_MAPS=3Dy
+> -CONFIG_SOFTLOCKUP_DETECTOR=3Dy
+> -CONFIG_WQ_WATCHDOG=3Dy
+> -CONFIG_DEBUG_TIMEKEEPING=3Dy
+> -CONFIG_DEBUG_RT_MUTEXES=3Dy
+> -CONFIG_DEBUG_SPINLOCK=3Dy
+> -CONFIG_DEBUG_MUTEXES=3Dy
+> -CONFIG_DEBUG_RWSEMS=3Dy
+> -CONFIG_DEBUG_ATOMIC_SLEEP=3Dy
+> -CONFIG_STACKTRACE=3Dy
+> -CONFIG_DEBUG_LIST=3Dy
+> -CONFIG_DEBUG_PLIST=3Dy
+> -CONFIG_DEBUG_SG=3Dy
+> -# CONFIG_RCU_TRACE is not set
+> -CONFIG_RCU_EQS_DEBUG=3Dy
+> -# CONFIG_FTRACE is not set
+> -# CONFIG_RUNTIME_TESTING_MENU is not set
+> -CONFIG_MEMTEST=3Dy
+> --=20
+> 2.36.1
+>=20
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+--gTE+h999HcA9Enua
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+KcAgAKCRB4tDGHoIJi
+0nFKAP9F+tE91zDrdwwNriyfwg5wRazXYpqr5Mb3kEuCyu639AD+Pwo99Rc22IXR
+qNTlczwuPZ1R5nRjspo5RxI1y8IM9AU=
+=/929
+-----END PGP SIGNATURE-----
+
+--gTE+h999HcA9Enua--
