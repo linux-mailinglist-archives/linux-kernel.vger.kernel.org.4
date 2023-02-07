@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B5E68D44C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFED68D458
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjBGKcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S231472AbjBGKdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbjBGKcx (ORCPT
+        with ESMTP id S231215AbjBGKdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:32:53 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148823756F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:32:21 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id m2so41969715ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8BZxDuCycAd1fCc9k9fhvujofozc+ta9issSCRUI9Nk=;
-        b=R2VkFDKf+iPdD2a3k8s04obMG9YVHq4XpfTfoVL+MRo5+b+33XFGdLi5IKztv2eqg0
-         I/kLxjmxwdFpt8Nnoum2CKtVvYNkGnkKrbdZW3nZB0c4pS5ECCVhzaZmSeRx9aCgqQ2V
-         P4IVgkPiF3SX9eg4i3w74Tz62CYpOfxFWgzVt7+JmMbo2jWgs1AWW5gWFFafboSL8l3D
-         CL51gQMiwKQZNL8FmjqIPQws09xuHoPWj6u4mS8yWWRinAtDLyPAl6XYMaifeSRQJGZs
-         MzvysHbzoR4vNsD1gBHZF79MkZbIeI9pZndp1VyL53ycU5Sv/bWV5O4I13peCdrJU67R
-         owig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BZxDuCycAd1fCc9k9fhvujofozc+ta9issSCRUI9Nk=;
-        b=0rQ27NiRGxOWk4u2isgK/MBfI4QdyyGUiSJ9bbQ7j9n/uFLbcy1a3+2YMbVNWcI1wK
-         +HL2JKvA9/d4NIKNhlBPVIW6ribxJPHCzgXhZrmzf+dzJcZ3OjrdBmtl9oc1lh4Y71CQ
-         1wHaoen1k9EKShuotcajug6fWwAxxJCSbU4s5YF2nk+M2QTo3GGxgXzn0PuP2ZjsLhKj
-         IUkBHOsvFo1ZMDK18q7Ke06ZtMjmA1EE65jDuz5TABGA/AUc12Igu2sPktD6vJtCbq9G
-         wR1wPJvUpDWdlC/QmSBD8jqf9qeWI/VS3li+mVs8JSKX0cp2Se62npmpaR4HDE/VeHK1
-         y3zw==
-X-Gm-Message-State: AO0yUKVbTn5JqqFYY2n6XZ3xnbpxQ4HL0KR6mPIwYSJjERfv2Fk4ma5N
-        NV9x/RFCtYET6g3gsf512KMBww==
-X-Google-Smtp-Source: AK7set+zqELopfv5DfjJbwt7pGlepRUBW5GRyGFrz1XjTSvVxUt1b5ryX1CAAkT2EMi2kjV6BowxMw==
-X-Received: by 2002:a17:906:228b:b0:888:a06f:104b with SMTP id p11-20020a170906228b00b00888a06f104bmr3127945eja.36.1675765930386;
-        Tue, 07 Feb 2023 02:32:10 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id v9-20020a1709064e8900b0088e7fe75736sm6687491eju.1.2023.02.07.02.32.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 02:32:10 -0800 (PST)
-Message-ID: <a188a52e-6327-f0ea-a54e-a23b88bca82f@linaro.org>
-Date:   Tue, 7 Feb 2023 12:32:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dt-bindings: dma: qcom,bam-dma: add optional memory
- interconnect properties
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230207-topic-sm8550-upstream-bam-dma-bindings-fix-v1-1-57dba71e8727@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230207-topic-sm8550-upstream-bam-dma-bindings-fix-v1-1-57dba71e8727@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 7 Feb 2023 05:33:38 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB5C2E81D;
+        Tue,  7 Feb 2023 02:33:24 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id BC1685C00AC;
+        Tue,  7 Feb 2023 05:33:14 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 07 Feb 2023 05:33:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675765994; x=1675852394; bh=z58s3tlmYT
+        du/UcxWCsndVijZJpk5Ys9RAEY6puhIII=; b=pjRvaaWe7VbSIaKMXOhsl14NTK
+        DTj49AYdV8RW27oy/CBQ60Mvo3reQ+tJXY6R9JMvDAVJFpVBWhADM3w8kqwp8ycj
+        biD19/+OZQEyAMTAdUrjslttS15dHl2bZcD8IZ94eW2dL9DnBRsdCHBoX7xmx03X
+        cyWuGwOP3Mdcr1SwMmBOADeVPriWNZPiJ2AQbPd0HZl8F3a9qj932I8m4ZGjtbWR
+        93WSZS8MHk1u/Hk0U0+TKdCg89o4FNPWC2sJVDDAqx7RAw+IUBL7QXb54CmPNuAN
+        0RlhSyijyX3c9dGqghXS1jYzNgq4Nylb05VQbvbsbbG99PzhQBTFciFdNFJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675765994; x=1675852394; bh=z58s3tlmYTdu/UcxWCsndVijZJpk
+        5Ys9RAEY6puhIII=; b=XNeb286ist6v9OTQZNUUCDI9MaSTgpyOli6yl0MEaYiT
+        J0kUPJyo+yx+Rd8AYFHHZwhdOt/F+GroZqQksMKZf6UwVELxglSKgPgRSdybP+xi
+        6hR/KOlHUFXf+0yyV+geVu/4cWdLIueTGVBlTLMeYuFWr7y0pXUyQbqnzfRLOVm1
+        5WjKdgbLpd3rnTMxs0v/XuiT4uTD8Nbr3PiNzwqkQE3mYRouyzkjG7zDBt/iGVjS
+        bB+1TS4TKEX51i8zRaSZgFBdo+isX/QXwz7BwsW3c234H5CBBSvLArmcoKx62iSS
+        v0/uS3K4CB+grkrpeV1D6duwp4eG33Xp4m7Z0NQAFg==
+X-ME-Sender: <xms:6SjiY7Y4bpk4LdHTBwVkI1hF29_G4Vxv7RlViXlIt15-JoIMl__Ydg>
+    <xme:6SjiY6bFn75IkjLqjU2pTSns4pzZxbycq2YfOsD7KuAXTUG-8FaCq3hHEIgW1hLpP
+    Z7F_9HtxLEs2KMMbaE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegkedgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:6SjiY9-jAtaO-crySt3zntrQPhfzRgGGFXeixPtRSjsoutV1-ARqGg>
+    <xmx:6SjiYxqM0TZ8qUp-iWa4cHu8CSl_z04FkpO9fxmjsbABn7Es4eD8og>
+    <xmx:6SjiY2rHU4tX21q6Tm-jyCjjjC8msdrmjQuUhMITUgSTefEoGyLg2w>
+    <xmx:6ijiYydCrnSvu2H37oaL9b8Gq8EaGIS7qOcq8cahW32_sXWmt-eRQw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CF7D0B60086; Tue,  7 Feb 2023 05:33:13 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <dcd17646-4b8d-447b-bd85-c66c4a7b2cf4@app.fastmail.com>
+In-Reply-To: <379bcb55-f75d-02ce-a51b-467e21ade5a3@xen0n.name>
+References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+ <363cd09a5dcb4deab21f58c19025254f@AcuMS.aculab.com>
+ <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
+ <9936da8f577842b8b5edafcdc69dc2d1@AcuMS.aculab.com>
+ <560d73a8-2f2a-4844-44ff-afffad9c8694@loongson.cn>
+ <379bcb55-f75d-02ce-a51b-467e21ade5a3@xen0n.name>
+Date:   Tue, 07 Feb 2023 11:32:55 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "WANG Xuerui" <kernel@xen0n.name>,
+        "Jianmin Lv" <lvjianmin@loongson.cn>,
+        "David Laight" <David.Laight@ACULAB.COM>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     "Huacai Chen" <chenhuacai@loongson.cn>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 12:03, Neil Armstrong wrote:
-> Recents SoCs like the SM8450 or SM8550 requires memory interconnect
-> in order to have functional DMA.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 6 ++++++
->   1 file changed, 6 insertions(+)
+On Tue, Feb 7, 2023, at 06:24, WANG Xuerui wrote:
 
-I suspect this will not work without a change for a driver.
+> (Yes I've partially changed my mind after seeing Arnd's suggestion that 
+> indeed some optimized codepaths can be enabled if we can know the CPU's 
+> unaligned capability at config time. Now I'm in support of making this 
+> codegen aspect tunable, but I still think keeping the default as-is 
+> would be a better idea. It won't regress or surprise anyone and embedded 
+> people's convenience wouldn't get sacrificed.)
 
--- 
-With best wishes
-Dmitry
+I agree the default should always be to have a kernel that works on
+every machine that has been produced, but this also depends on which
+models specifically lack the unaligned access. If it's just about
+pre-production silicon that is now all but scrapped, things are different
+from a situation where users may actually use them for normal workloads.
 
+Is there an overview of the available loongarch CPU cores that have
+been produced so far, and which ones support unaligned access?
+
+     Arnd
