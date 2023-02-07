@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C53A68D4FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D7C68D502
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjBGLAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S231874AbjBGLBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjBGLAU (ORCPT
+        with ESMTP id S229847AbjBGLB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:00:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB832A9AE;
-        Tue,  7 Feb 2023 03:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 7 Feb 2023 06:01:27 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF8C2A9BE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:01:26 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B37EC6130D;
-        Tue,  7 Feb 2023 11:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1200CC433D2;
-        Tue,  7 Feb 2023 11:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675767618;
-        bh=uXDqiP/EEOsn26MCkEE+Xmwl7tj7nwBTMTAymU2YJQc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HVSaskIhrgM/xao1OQx16Oz9nPcvOqW/61EI01xYAsxMPK8YOAbRTQruGc1ijv/5J
-         meJuEC6hbE5D3vy29QGVtFt/p/O04kW/xiWp78Zmz0Zd8bUpymHD5GDIb/PhChs3RN
-         PUox56o5pdSbscXEEdmXUuykZbn449mSZCh1zO3njrIfiR571faCVNrca99zQzsSzA
-         6RYU8MsEXAZt8dY2xVkMmh+a2gkTnpvP6a5Xnev9Jdx5S+1TadR8LRI3fTD/M0BES3
-         FxUqO9QcBjus//AknvRVXhebvi6iAryO5u46ZYg4v+aKMczdYgbHjXmKtPCFog0eee
-         GZk5BW/Be00vw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBC96E55F07;
-        Tue,  7 Feb 2023 11:00:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 487C31FD81;
+        Tue,  7 Feb 2023 11:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675767685; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzqtHwylccrOKyTIhDhNG1l3BMPIMI3DFTMpbVf3iL4=;
+        b=VPAT3VNKfiJKDuAF3HJNQ6lpfApFPOQzwDvPHVHHB4C8+eELlws3QCYpCjIUi8HXIkfKfQ
+        B1Tgfs/UIE5xxCtO1SyGclMMDpT92z/B26rnuluZyuejlxvIdw+bmK6Z+vZ8FNnkyTcD75
+        OV2e88ZxwZDRR5VMjY/zPaldMEPegMI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675767685;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MzqtHwylccrOKyTIhDhNG1l3BMPIMI3DFTMpbVf3iL4=;
+        b=WSi6PKwJ5mcZ5fVBc2EC0QGceztefltIxpxJxNXUxgYryfFMFbgbJOIm3+q4faeOqkHl0t
+        cKQFqR4OuiIYpiAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3D42C13467;
+        Tue,  7 Feb 2023 11:01:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BDXoDoUv4mMSMgAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 07 Feb 2023 11:01:25 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B42B7A06D5; Tue,  7 Feb 2023 12:01:24 +0100 (CET)
+Date:   Tue, 7 Feb 2023 12:01:24 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Tom Rix <trix@redhat.com>
+Cc:     jack@suse.com, nathan@kernel.org, ndesaulniers@google.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] udf: remove reporting loc in debug output
+Message-ID: <20230207110124.xbme2i2y6yasofci@quack3>
+References: <20230127162906.872395-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU port
- becomes VLAN-aware
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167576761789.20941.3807568418401527275.git-patchwork-notify@kernel.org>
-Date:   Tue, 07 Feb 2023 11:00:17 +0000
-References: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, sean.wang@mediatek.com,
-        Landen.Chao@mediatek.com, dqfext@gmail.com, andrew@lunn.ch,
-        f.fainelli@gmail.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, frank-w@public-files.de
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127162906.872395-1-trix@redhat.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sun,  5 Feb 2023 16:07:13 +0200 you wrote:
-> Frank reports that in a mt7530 setup where some ports are standalone and
-> some are in a VLAN-aware bridge, 8021q uppers of the standalone ports
-> lose their VLAN tag on xmit, as seen by the link partner.
+On Fri 27-01-23 08:29:06, Tom Rix wrote:
+> clang build fails with
+> fs/udf/partition.c:86:28: error: variable 'loc' is uninitialized when used here [-Werror,-Wuninitialized]
+>                           sb, block, partition, loc, index);
+>                                                 ^~~
 > 
-> This seems to occur because once the other ports join the VLAN-aware
-> bridge, mt7530_port_vlan_filtering() also calls
-> mt7530_port_set_vlan_aware(ds, cpu_dp->index), and this affects the way
-> that the switch processes the traffic of the standalone port.
+> loc is now only know when bh is valid.  So remove reporting loc in debug output.
 > 
-> [...]
+> Fixes: 4215db46d538 ("udf: Use udf_bread() in udf_get_pblock_virt15()")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Here is the summary with links:
-  - [net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU port becomes VLAN-aware
-    https://git.kernel.org/netdev/net/c/0b6d6425103a
+Thanks! Patch applied!
 
-You are awesome, thank you!
+								Honza
+
+> ---
+>  fs/udf/partition.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/udf/partition.c b/fs/udf/partition.c
+> index 92765d2f6958..5bcfe78d5cab 100644
+> --- a/fs/udf/partition.c
+> +++ b/fs/udf/partition.c
+> @@ -82,8 +82,8 @@ uint32_t udf_get_pblock_virt15(struct super_block *sb, uint32_t block,
+>  
+>  	bh = udf_bread(sbi->s_vat_inode, newblock, 0, &err);
+>  	if (!bh) {
+> -		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u) VAT: %u[%u]\n",
+> -			  sb, block, partition, loc, index);
+> +		udf_debug("get_pblock(UDF_VIRTUAL_MAP:%p,%u,%u)\n",
+> +			  sb, block, partition);
+>  		return 0xFFFFFFFF;
+>  	}
+>  
+> -- 
+> 2.26.3
+> 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
