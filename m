@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA52E68E1A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726BC68E1A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjBGT63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 14:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S231744AbjBGUAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 15:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbjBGT60 (ORCPT
+        with ESMTP id S229699AbjBGUAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 14:58:26 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4821EBF3;
-        Tue,  7 Feb 2023 11:58:24 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1675799902;
-        bh=gQIB2oBdFzdMrOmsZZakdwbSbKgg9O/YSolMA4XUr1U=;
-        h=From:Date:Subject:To:Cc:From;
-        b=g4Ed3ZyyQ696wqyDleKSdeI0hjWTXYFovyZVz8/CWkk7n4Hd6VYsZdBRqmpcsdtAv
-         bZhGPUbHmHvxbrT0snImNyA43bIMd2stlpR6TVUfL7KELxv+8DL2MrfkYYb10RPY0k
-         vzBSElGdrbG/I7tJMse21hvzqKKbQNIh9dqmBKw0=
-Date:   Tue, 07 Feb 2023 19:58:18 +0000
-Subject: [PATCH] cpufreq: Make kobj_type structure constant
+        Tue, 7 Feb 2023 15:00:08 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377391EBF3;
+        Tue,  7 Feb 2023 12:00:05 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id b9af761efef1130f; Tue, 7 Feb 2023 21:00:01 +0100
+Received: from kreacher.localnet (unknown [213.134.163.116])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id AE11566F913;
+        Tue,  7 Feb 2023 21:00:00 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Subject: [PATCH v1] cpuidle: driver: Update microsecond values of state parameters as needed
+Date:   Tue, 07 Feb 2023 20:59:59 +0100
+Message-ID: <2676828.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230207-kobj_type-cpufreq-v1-1-c7fa2dbd0754@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAFmt4mMC/x2NWwrCMBAAr1L224WYUBSvIiJ5bOxqSePGilJ69
- y79nIFhFmgkTA0u3QJCX248FYXjoYM4+PIg5KQM1lhnrDnhawrP++dfCWOds9Abc/Kpd9mE3p1
- Bu+AbYRBf4qBlmcdRZRXK/NtH19u6bv/PHtt4AAAA
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675799898; l=1020;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=gQIB2oBdFzdMrOmsZZakdwbSbKgg9O/YSolMA4XUr1U=;
- b=oSax7r559kqmhMpcuU6FLIVeWeqnoxNwcj7aKLS5irfkVrnnp/ZceW9/4J7YUIGFNDSFOAYt+
- BdzEBP0Q/HrBNK+h+fgBac9tE8ij+v5QMPLNT9pNVoI7V0axMiu87BY
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.116
+X-CLIENT-HOSTNAME: 213.134.163.116
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudegkedguddvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeifedrudduieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduudeipdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopegrrhhtvghmrdgsihhthihuthhskhhihieslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
+If the cpuidle driver provides the target residency and exit latency in
+nanoseconds, the corresponding values in microseconds need to be set to
+reflect the provided numbers in order for the sysfs interface to show
+them correctly, so make __cpuidle_driver_init() do that.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpufreq/cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cpuidle/driver.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 7e56a42750ea..ceb1574417f9 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -993,7 +993,7 @@ static const struct sysfs_ops sysfs_ops = {
- 	.store	= store,
- };
+Index: linux-pm/drivers/cpuidle/driver.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/driver.c
++++ linux-pm/drivers/cpuidle/driver.c
+@@ -183,11 +183,15 @@ static void __cpuidle_driver_init(struct
+ 			s->target_residency_ns = s->target_residency * NSEC_PER_USEC;
+ 		else if (s->target_residency_ns < 0)
+ 			s->target_residency_ns = 0;
++		else
++			s->target_residency = s->target_residency_ns / NSEC_PER_USEC;
  
--static struct kobj_type ktype_cpufreq = {
-+static const struct kobj_type ktype_cpufreq = {
- 	.sysfs_ops	= &sysfs_ops,
- 	.default_groups	= cpufreq_groups,
- 	.release	= cpufreq_sysfs_release,
+ 		if (s->exit_latency > 0)
+ 			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
+ 		else if (s->exit_latency_ns < 0)
+ 			s->exit_latency_ns =  0;
++		else
++			s->exit_latency = s->exit_latency_ns / NSEC_PER_USEC;
+ 	}
+ }
+ 
 
----
-base-commit: 513c1a3d3f1982fb850c910937099525b0d35e24
-change-id: 20230207-kobj_type-cpufreq-fdad53f0b538
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
 
