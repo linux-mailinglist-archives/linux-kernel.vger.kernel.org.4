@@ -2,152 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EAC68CDE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5956368CDEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjBGEDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 23:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S230224AbjBGEGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 23:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjBGEDn (ORCPT
+        with ESMTP id S229924AbjBGEGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 23:03:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8119D9017
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 20:03:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F2ABB81690
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCF5C4339E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:03:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675742618;
-        bh=H6TlQt041tJWj4E9feO8/AxydSfmcUpI09twaI6RoBg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sRUr0rLLiAp/LiRY2SkyUL8JiqJo2MiOT1XxziIfmjyTy8ApBuS/iJnesrAox6ksl
-         D2ZHjYUHJ+kVXuwuDL/fl7FE3uByTby/xtc8zUZtIhRkCQ2zpGTlGxmnzCiF5AAcTR
-         BzLQPftPXFkYmqYWIUORMtoyF1XXFc4cfWbWVF+uNj+U6HO9csz2pZ59O8WB1z3c2l
-         zoMVdosbfWXvb/EBxOW7DJCtSN2hqC9R8W5NuTXYF4xdZr1QGq4y8e2HeEr12MeoYB
-         ki7C61nA+Pmi6mdUD6hrhGWD7IlmUpU+cF6wdgDF/Fhpzsq4Q9aA6s+E2Xdqp6Yvz6
-         W3i9SYVbCn6CA==
-Received: by mail-ed1-f45.google.com with SMTP id v10so13799185edi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 20:03:38 -0800 (PST)
-X-Gm-Message-State: AO0yUKWCBsj+ETvaIgrHU4IPDwoJdV3yjHD9vHgkfwDIQaIUb7BhA514
-        oNiOSwb9kyjqgKpUfAWcOS0u3eeZapqqPNMrmw4=
-X-Google-Smtp-Source: AK7set9WvTuWKS3heZ69IZMoBYSCJIQGsaD0cRcWYkaOQz1IzLoRpyNoArQCwrUSLYnNIGOljGXMa3+hmkJLolB4QIA=
-X-Received: by 2002:a50:8a84:0:b0:4aa:a4f1:3edc with SMTP id
- j4-20020a508a84000000b004aaa4f13edcmr191069edj.7.1675742617019; Mon, 06 Feb
- 2023 20:03:37 -0800 (PST)
+        Mon, 6 Feb 2023 23:06:38 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A204CC08
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 20:06:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675742797; x=1707278797;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xib0Cpw7yHgdonLY/iWzBJqUZAC6ixAp+WcxP2chy38=;
+  b=FWtHiETlleGE0aSsh8tlntKkZERL+5oHzcKXbvdxPwsYi8SbBcbu1io9
+   6W1eZs9DqjPu5mhV24q6L6/gJCmj747sdDmye0Q5DAd3lnOAE4moFRR/l
+   7gqF+GZuZQx4EIIQvkrDZ7uEFIu546rgOQOMeFI0oUESCz9jOLfXut4cg
+   A7EqwsI0Q0Kuf8zQAGywz6fSnQ07Z2n33fc5j3bfwUU/BNoSFEHbRhK3o
+   XJH77NI0ca27OvKzBPp4i/hxX/dh2IktrjV51ZOmCnXrMTiQ0+6E/jG9p
+   D7zEhXll+5sl0ZzIu4Tn+TW2xrELSwP+cPw07olkWbe7MyQFouY7b1WA0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="313051121"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="313051121"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 20:06:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775380335"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="775380335"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2023 20:06:33 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPFFY-00033D-1v;
+        Tue, 07 Feb 2023 04:06:32 +0000
+Date:   Tue, 07 Feb 2023 12:05:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/vdso] BUILD SUCCESS WITH WARNING
+ 5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
+Message-ID: <63e1ce1f.3OB575/3GBSihMjh%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H4aTd6_cSy45KKjv-KrLTiwT4iG6+fkb84KfCrL3Y+hpg@mail.gmail.com>
- <CAAhV-H5WN5E=0Z9wpbXDc6VO7Nc+j7PGvnyAAGOmCRMJkdwSYw@mail.gmail.com>
- <CAEr6+ECO-=jfhzHrcdKGx0MsjMBMiN6wsBPCfv7CaXo_amAWWg@mail.gmail.com>
- <02806f85-bc09-d316-f058-3947353cb190@loongson.cn> <CAEr6+EBYF2xqZWEuZaz5un5FF3Jb-rSAQp3s3uojsovm9RcUYA@mail.gmail.com>
- <CAAhV-H5dJGrL3kEwzC-XwMqJTCsYHq-YVDTDRntGcYg9RMz02w@mail.gmail.com>
- <CAEr6+EDvaqpfvyJhe9TpDbhzrgu9aPPtePi2Vp=vAB5xgMNhXQ@mail.gmail.com> <8f306f68-7517-7c45-b2ef-668af9cf5f6a@loongson.cn>
-In-Reply-To: <8f306f68-7517-7c45-b2ef-668af9cf5f6a@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 7 Feb 2023 12:03:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7O-R33AQvCXmZQXDb-ACjZ5MYdWULHuKXYdnvt+UPjJA@mail.gmail.com>
-Message-ID: <CAAhV-H7O-R33AQvCXmZQXDb-ACjZ5MYdWULHuKXYdnvt+UPjJA@mail.gmail.com>
-Subject: Re: [PATCH v12 0/5] Add kprobe and kretprobe support for LoongArch
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Jeff Xie <xiehuan09@gmail.com>, WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jeff,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
+branch HEAD: 5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb  selftests: Emit a warning if getcpu() is missing on 32bit
 
-The code has been updated here,
-https://github.com/loongson/linux/commits/loongarch-next, you can test
-again.
+Warning reports:
 
-Huacai
+https://lore.kernel.org/oe-kbuild-all/202302070742.iYcnoJwk-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302070751.uhpE2V7R-lkp@intel.com
 
-On Tue, Feb 7, 2023 at 11:14 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
->
->
-> On 02/06/2023 08:48 PM, Jeff Xie wrote:
-> > On Mon, Feb 6, 2023 at 8:13 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> >>
-> >> Hi, Jeff,
-> >>
-> >> Now I add kprobes on ftrace support in
-> >> https://github.com/loongson/linux/commits/loongarch-next, please test
-> >> again. Thank you.
-> >>
-> >
-> > When using the kprobe example module kprobe_example.ko, I haven't seen
-> > any errors.
-> >
-> > But when using the ftrace to probe the symbol + offset, the kernel will panic:
-> > e.g. probe the scheduler_tick+4 is fine, but when probe the
-> > scheduler_tick+5, the kernel will panic.
-> >
->
-> Thanks for your test.
->
-> We can see that the instruction address is 4-byte alignment,
-> this is because the instruction length is 32-bit on LoongArch.
->
-> $ objdump -d vmlinux > dump.txt
-> $ grep -A 20 scheduler_tick dump.txt | head -21
-> 9000000000279fc8 <scheduler_tick>:
-> 9000000000279fc8:       03400000        andi            $zero, $zero, 0x0
-> 9000000000279fcc:       03400000        andi            $zero, $zero, 0x0
-> 9000000000279fd0:       02ff4063        addi.d          $sp, $sp, -48(0xfd0)
-> 9000000000279fd4:       29c08077        st.d            $s0, $sp, 32(0x20)
-> 9000000000279fd8:       29c06078        st.d            $s1, $sp, 24(0x18)
-> 9000000000279fdc:       29c04079        st.d            $s2, $sp, 16(0x10)
-> 9000000000279fe0:       29c0207a        st.d            $s3, $sp, 8(0x8)
-> 9000000000279fe4:       29c0a061        st.d            $ra, $sp, 40(0x28)
-> 9000000000279fe8:       2700007b        stptr.d         $s4, $sp, 0
-> 9000000000279fec:       24001844        ldptr.w         $a0, $tp, 24(0x18)
-> 9000000000279ff0:       1a02edd9        pcalau12i       $s2, 5998(0x176e)
-> 9000000000279ff4:       1a034bac        pcalau12i       $t0, 6749(0x1a5d)
-> 9000000000279ff8:       02f56339        addi.d          $s2, $s2, -680(0xd58)
-> 9000000000279ffc:       00410c9a        slli.d          $s3, $a0, 0x3
-> 900000000027a000:       28aae18d        ld.w            $t1, $t0, -1352(0xab8)
-> 900000000027a004:       380c6b2e        ldx.d           $t2, $s2, $s3
-> 900000000027a008:       1a022fcc        pcalau12i       $t0, 4478(0x117e)
-> 900000000027a00c:       02f20198        addi.d          $s1, $t0, -896(0xc80)
-> 900000000027a010:       00150317        move            $s0, $s1
-> 900000000027a014:       004081ac        slli.w          $t0, $t1, 0x0
->
-> So we should check the probe address at the beginning of
-> arch_prepare_kprobe(), some other archs do the same thing.
->
-> $ git diff
-> diff --git a/arch/loongarch/kernel/kprobes.c
-> b/arch/loongarch/kernel/kprobes.c
-> index bdab707b6edf..56c8c4b09a42 100644
-> --- a/arch/loongarch/kernel/kprobes.c
-> +++ b/arch/loongarch/kernel/kprobes.c
-> @@ -79,6 +79,9 @@ NOKPROBE_SYMBOL(arch_prepare_simulate);
->
->   int arch_prepare_kprobe(struct kprobe *p)
->   {
-> +       if ((unsigned long)p->addr & 0x3)
-> +               return -EILSEQ;
-> +
->          /* copy instruction */
->          p->opcode = *p->addr;
->
->
-> Thanks,
-> Tiezhu
->
->
+Warning: (recently discovered and may have been fixed)
+
+arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for '__vdso_getcpu' [-Wmissing-prototypes]
+arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for function '__vdso_getcpu' [-Wmissing-prototypes]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- i386-defconfig
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- i386-randconfig-a011-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- i386-randconfig-a012-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- i386-randconfig-a013-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- i386-randconfig-a014-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- i386-randconfig-a015-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- i386-randconfig-a016-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- i386-randconfig-m021
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- x86_64-defconfig
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- x86_64-randconfig-a011-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- x86_64-randconfig-a015-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- x86_64-randconfig-a016-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+|-- x86_64-rhel-8.3-bpf
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+`-- x86_64-rhel-8.3-kselftests
+    `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
+clang_recent_errors
+|-- i386-randconfig-a002-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
+|-- i386-randconfig-a005-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
+|-- x86_64-randconfig-a001-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
+|-- x86_64-randconfig-r031-20230206
+|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
+`-- x86_64-rhel-8.3-rust
+    `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
+
+elapsed time: 780m
+
+configs tested: 42
+configs skipped: 2
+
+gcc tested configs:
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+ia64                             allmodconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+i386                             allyesconfig
+i386                                defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                           rhel-8.3-bpf
+x86_64                         rhel-8.3-kunit
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                          randconfig-c001
+powerpc              randconfig-c003-20230205
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+x86_64                            allnoconfig
+i386                 randconfig-a015-20230206
+i386                 randconfig-a011-20230206
+i386                 randconfig-a014-20230206
+i386                 randconfig-a013-20230206
+i386                 randconfig-a016-20230206
+i386                 randconfig-a012-20230206
+
+clang tested configs:
+x86_64                        randconfig-k001
+arm                         mv78xx0_defconfig
+x86_64                          rhel-8.3-rust
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
