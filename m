@@ -2,345 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5141E68D016
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E14AD68D01D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbjBGHEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
+        id S230230AbjBGHHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 02:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjBGHD7 (ORCPT
+        with ESMTP id S229574AbjBGHHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:03:59 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5117120;
-        Mon,  6 Feb 2023 23:03:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675753396; x=1707289396;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6ptH8NtvzL1DrlH7wz/ndbERaBEk8PIEAMBa7K2WDsg=;
-  b=DpalcjRX2V/+FPtEvLYrBGQdl43NWELI+yldHbA54zAOly8mZtliFC5K
-   qgT++GfaUyolovgqRtUVxpggvSHC8EU33yctxubGAs9hFAPKJ8r5ysU1B
-   gfrAqUWS3Twng70Bv4zUj+2+tNEasoX0Iu0La+WBDO94rAhWmcQ79szNW
-   G43n7Jlz9Z0yixWrsDtGA3nHrtEyzY6NVuHMpgFM3+sndmgVxwYPy47bi
-   snNqvP3okaZMZtiL3ROW2OUm7GUYHgIgv7W5y1XNDwOpF12/OoBTlQg2+
-   73jwqt5FKmvVZgaA8ut5qElJZa1owSLonbbTVRd7p54lpi2H1Tlo9gU7S
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="327111605"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="327111605"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 23:02:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="644331114"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="644331114"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Feb 2023 23:02:44 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPI03-0003EX-31;
-        Tue, 07 Feb 2023 07:02:43 +0000
-Date:   Tue, 7 Feb 2023 15:02:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Green <evan@rivosinc.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Conor Dooley <conor@kernel.org>,
-        vineetg@rivosinc.com, heiko@sntech.de, slewis@rivosinc.com,
-        Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 5/6] RISC-V: hwprobe: Support probing of misaligned
- access performance
-Message-ID: <202302071444.L48pajcK-lkp@intel.com>
-References: <20230206201455.1790329-6-evan@rivosinc.com>
+        Tue, 7 Feb 2023 02:07:46 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029712D50
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 23:07:45 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id j1so2605691uan.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 23:07:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ryLOEKWbee+ndjps07t4kDI2Eg2FatHh2fvzWokSXBU=;
+        b=eoZ6mKxOp2w6xUsUEooFANxsnzN/A6kMbr5e8jO18lPmqMXcrsWo3B88hanIbtdLAE
+         0xFl1kDIp6B2Y6mHtnh+RrLHHU2iHC1HmSAeOtyo6DAd7O4MqxbGhU5dygKI8JAMdVEl
+         yLi/knhfNvEXH9lE9ivUjFclZySG+12+smFQg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ryLOEKWbee+ndjps07t4kDI2Eg2FatHh2fvzWokSXBU=;
+        b=t2BvL1aoH/uFmSZFqFASvFpOCERLas93b5UmdLjff56VmwCHETsg0dasbiQyQmaUU2
+         46+eygQFJ5J0/jwW3BpOJuK6wTq0JQEMhWS2dH9EaWyYn3eUn3Ayj6ahKvJFQ16mTZO+
+         RlHChmFsA4dc2KHxnsV0XOxH3dVFpvb++FB/FeFak6dwwM6gQgxEsHd7HWzSFY3ZIT7b
+         jhnrp4dtHbbeypj92eL0Em7HDM+uKjvHSoO/B4hb4DOq3mbI5FGWLHF67r4lM+EnP/Vy
+         ztKO6UzkXPKM6CYyNaQKrGgbxfQ2R2WuRRG7zqDL/V+U7hJj9xvBe2dTm0+M4rhCedHB
+         Q6rw==
+X-Gm-Message-State: AO0yUKXhk0d8A2YiFDtPqXTGcZOI4vsHFOFDuden2zHMsiW36UevyN9V
+        Dmse5qALDE0pZXTaA0RqBnuFh1M/Q3XlpdPk8w22aQ==
+X-Google-Smtp-Source: AK7set/bGnKz5U9kIPIfo8WqyaYvhc91nHxy9RmnWyFXodO5/eIlBgd4lmr1uUB0s2fHTNklpOlu2qX7HHS/cqrlwlc=
+X-Received: by 2002:ab0:3b90:0:b0:683:c74a:af60 with SMTP id
+ p16-20020ab03b90000000b00683c74aaf60mr362260uaw.74.1675753664132; Mon, 06 Feb
+ 2023 23:07:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206201455.1790329-6-evan@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-9-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206152928.918562-9-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Feb 2023 15:07:33 +0800
+Message-ID: <CAGXv+5GAHngx89bts_SMxh3kD=4kNP9LYLc-J3pixKojVs=GMg@mail.gmail.com>
+Subject: Re: [PATCH v1 08/45] clk: mediatek: mt2712: Move apmixedsys clock
+ driver to its own file
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> The only clock driver that does not support mtk_clk_simple_probe() is
+> apmixedsys: in preparation for enabling module build of non-critical
+> mt2712 clocks, move this to its own file.
+> While at it, also fix some indentation issues in the PLLs table.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/clk/mediatek/Makefile                |   2 +-
+>  drivers/clk/mediatek/clk-mt2712-apmixedsys.c | 152 +++++++++++++++++
+>  drivers/clk/mediatek/clk-mt2712.c            | 164 -------------------
+>  3 files changed, 153 insertions(+), 165 deletions(-)
+>  create mode 100644 drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+>
+> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> index e5d018270ed0..3c7dd19cdddf 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -38,7 +38,7 @@ obj-$(CONFIG_COMMON_CLK_MT2701_HIFSYS) += clk-mt2701-hif.o
+>  obj-$(CONFIG_COMMON_CLK_MT2701_IMGSYS) += clk-mt2701-img.o
+>  obj-$(CONFIG_COMMON_CLK_MT2701_MMSYS) += clk-mt2701-mm.o
+>  obj-$(CONFIG_COMMON_CLK_MT2701_VDECSYS) += clk-mt2701-vdec.o
+> -obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712.o
+> +obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712.o clk-mt2712-apmixedsys.o
+>  obj-$(CONFIG_COMMON_CLK_MT2712_BDPSYS) += clk-mt2712-bdp.o
+>  obj-$(CONFIG_COMMON_CLK_MT2712_IMGSYS) += clk-mt2712-img.o
+>  obj-$(CONFIG_COMMON_CLK_MT2712_JPGDECSYS) += clk-mt2712-jpgdec.o
+> diff --git a/drivers/clk/mediatek/clk-mt2712-apmixedsys.c b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+> new file mode 100644
+> index 000000000000..e841be3a02c9
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+> @@ -0,0 +1,152 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2017 MediaTek Inc.
+> + * Copyright (c) 2023 Collabora Ltd.
+> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> + */
+> +#include <linux/clk.h>
 
-Thank you for the patch! Yet something to improve:
+Missed one. I think you would want <linux/clk-provider.h> instead?
+And you could drop the header from drivers/clk/mediatek/clk-mt2712.c
 
-[auto build test ERROR on shuah-kselftest/next]
-[also build test ERROR on shuah-kselftest/fixes robh/for-next soc/for-next linus/master v6.2-rc7]
-[cannot apply to next-20230207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Evan-Green/RISC-V-Move-struct-riscv_cpuinfo-to-new-header/20230207-041746
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20230206201455.1790329-6-evan%40rivosinc.com
-patch subject: [PATCH v2 5/6] RISC-V: hwprobe: Support probing of misaligned access performance
-config: riscv-randconfig-s052-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071444.L48pajcK-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/9e77be253d64809a98f31c17abd12761dd9fad8e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Evan-Green/RISC-V-Move-struct-riscv_cpuinfo-to-new-header/20230207-041746
-        git checkout 9e77be253d64809a98f31c17abd12761dd9fad8e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/riscv/kernel/cpufeature.c: In function 'riscv_fill_hwcap':
->> arch/riscv/kernel/cpufeature.c:258:23: error: implicit declaration of function 'hartid_to_cpuid_map' [-Werror=implicit-function-declaration]
-     258 |                 cpu = hartid_to_cpuid_map(hartid);
-         |                       ^~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/hartid_to_cpuid_map +258 arch/riscv/kernel/cpufeature.c
-
-    93	
-    94	void __init riscv_fill_hwcap(void)
-    95	{
-    96		struct device_node *node;
-    97		const char *isa, *misaligned;
-    98		char print_str[NUM_ALPHA_EXTS + 1];
-    99		int i, j, rc;
-   100		unsigned long isa2hwcap[26] = {0};
-   101		unsigned long hartid, cpu;
-   102	
-   103		isa2hwcap['i' - 'a'] = COMPAT_HWCAP_ISA_I;
-   104		isa2hwcap['m' - 'a'] = COMPAT_HWCAP_ISA_M;
-   105		isa2hwcap['a' - 'a'] = COMPAT_HWCAP_ISA_A;
-   106		isa2hwcap['f' - 'a'] = COMPAT_HWCAP_ISA_F;
-   107		isa2hwcap['d' - 'a'] = COMPAT_HWCAP_ISA_D;
-   108		isa2hwcap['c' - 'a'] = COMPAT_HWCAP_ISA_C;
-   109	
-   110		elf_hwcap = 0;
-   111	
-   112		bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
-   113	
-   114		for_each_of_cpu_node(node) {
-   115			unsigned long this_hwcap = 0;
-   116			DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
-   117			const char *temp;
-   118	
-   119			rc = riscv_of_processor_hartid(node, &hartid);
-   120			if (rc < 0)
-   121				continue;
-   122	
-   123			if (of_property_read_string(node, "riscv,isa", &isa)) {
-   124				pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-   125				continue;
-   126			}
-   127	
-   128			temp = isa;
-   129	#if IS_ENABLED(CONFIG_32BIT)
-   130			if (!strncmp(isa, "rv32", 4))
-   131				isa += 4;
-   132	#elif IS_ENABLED(CONFIG_64BIT)
-   133			if (!strncmp(isa, "rv64", 4))
-   134				isa += 4;
-   135	#endif
-   136			/* The riscv,isa DT property must start with rv64 or rv32 */
-   137			if (temp == isa)
-   138				continue;
-   139			bitmap_zero(this_isa, RISCV_ISA_EXT_MAX);
-   140			for (; *isa; ++isa) {
-   141				const char *ext = isa++;
-   142				const char *ext_end = isa;
-   143				bool ext_long = false, ext_err = false;
-   144	
-   145				switch (*ext) {
-   146				case 's':
-   147					/**
-   148					 * Workaround for invalid single-letter 's' & 'u'(QEMU).
-   149					 * No need to set the bit in riscv_isa as 's' & 'u' are
-   150					 * not valid ISA extensions. It works until multi-letter
-   151					 * extension starting with "Su" appears.
-   152					 */
-   153					if (ext[-1] != '_' && ext[1] == 'u') {
-   154						++isa;
-   155						ext_err = true;
-   156						break;
-   157					}
-   158					fallthrough;
-   159				case 'x':
-   160				case 'z':
-   161					ext_long = true;
-   162					/* Multi-letter extension must be delimited */
-   163					for (; *isa && *isa != '_'; ++isa)
-   164						if (unlikely(!islower(*isa)
-   165							     && !isdigit(*isa)))
-   166							ext_err = true;
-   167					/* Parse backwards */
-   168					ext_end = isa;
-   169					if (unlikely(ext_err))
-   170						break;
-   171					if (!isdigit(ext_end[-1]))
-   172						break;
-   173					/* Skip the minor version */
-   174					while (isdigit(*--ext_end))
-   175						;
-   176					if (ext_end[0] != 'p'
-   177					    || !isdigit(ext_end[-1])) {
-   178						/* Advance it to offset the pre-decrement */
-   179						++ext_end;
-   180						break;
-   181					}
-   182					/* Skip the major version */
-   183					while (isdigit(*--ext_end))
-   184						;
-   185					++ext_end;
-   186					break;
-   187				default:
-   188					if (unlikely(!islower(*ext))) {
-   189						ext_err = true;
-   190						break;
-   191					}
-   192					/* Find next extension */
-   193					if (!isdigit(*isa))
-   194						break;
-   195					/* Skip the minor version */
-   196					while (isdigit(*++isa))
-   197						;
-   198					if (*isa != 'p')
-   199						break;
-   200					if (!isdigit(*++isa)) {
-   201						--isa;
-   202						break;
-   203					}
-   204					/* Skip the major version */
-   205					while (isdigit(*++isa))
-   206						;
-   207					break;
-   208				}
-   209				if (*isa != '_')
-   210					--isa;
-   211	
-   212	#define SET_ISA_EXT_MAP(name, bit)						\
-   213				do {							\
-   214					if ((ext_end - ext == sizeof(name) - 1) &&	\
-   215					     !memcmp(ext, name, sizeof(name) - 1) &&	\
-   216					     riscv_isa_extension_check(bit))		\
-   217						set_bit(bit, this_isa);			\
-   218				} while (false)						\
-   219	
-   220				if (unlikely(ext_err))
-   221					continue;
-   222				if (!ext_long) {
-   223					int nr = *ext - 'a';
-   224	
-   225					if (riscv_isa_extension_check(nr)) {
-   226						this_hwcap |= isa2hwcap[nr];
-   227						set_bit(nr, this_isa);
-   228					}
-   229				} else {
-   230					SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
-   231					SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
-   232					SET_ISA_EXT_MAP("zicbom", RISCV_ISA_EXT_ZICBOM);
-   233					SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
-   234					SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
-   235					SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
-   236				}
-   237	#undef SET_ISA_EXT_MAP
-   238			}
-   239	
-   240			/*
-   241			 * All "okay" hart should have same isa. Set HWCAP based on
-   242			 * common capabilities of every "okay" hart, in case they don't
-   243			 * have.
-   244			 */
-   245			if (elf_hwcap)
-   246				elf_hwcap &= this_hwcap;
-   247			else
-   248				elf_hwcap = this_hwcap;
-   249	
-   250			if (bitmap_empty(riscv_isa, RISCV_ISA_EXT_MAX))
-   251				bitmap_copy(riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
-   252			else
-   253				bitmap_and(riscv_isa, riscv_isa, this_isa, RISCV_ISA_EXT_MAX);
-   254	
-   255			/*
-   256			 * Check for the performance of misaligned accesses.
-   257			 */
- > 258			cpu = hartid_to_cpuid_map(hartid);
-   259			if (cpu < 0)
-   260				continue;
-   261	
-   262			if (!of_property_read_string(node, "riscv,misaligned-access-performance",
-   263						     &misaligned)) {
-   264				if (strcmp(misaligned, "emulated") == 0)
-   265					per_cpu(misaligned_access_speed, cpu) =
-   266						RISCV_HWPROBE_MISALIGNED_EMULATED;
-   267	
-   268				if (strcmp(misaligned, "slow") == 0)
-   269					per_cpu(misaligned_access_speed, cpu) =
-   270						RISCV_HWPROBE_MISALIGNED_SLOW;
-   271	
-   272				if (strcmp(misaligned, "fast") == 0)
-   273					per_cpu(misaligned_access_speed, cpu) =
-   274						RISCV_HWPROBE_MISALIGNED_FAST;
-   275			}
-   276		}
-   277	
-   278		/* We don't support systems with F but without D, so mask those out
-   279		 * here. */
-   280		if ((elf_hwcap & COMPAT_HWCAP_ISA_F) && !(elf_hwcap & COMPAT_HWCAP_ISA_D)) {
-   281			pr_info("This kernel does not support systems with F but not D\n");
-   282			elf_hwcap &= ~COMPAT_HWCAP_ISA_F;
-   283		}
-   284	
-   285		memset(print_str, 0, sizeof(print_str));
-   286		for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
-   287			if (riscv_isa[0] & BIT_MASK(i))
-   288				print_str[j++] = (char)('a' + i);
-   289		pr_info("riscv: base ISA extensions %s\n", print_str);
-   290	
-   291		memset(print_str, 0, sizeof(print_str));
-   292		for (i = 0, j = 0; i < NUM_ALPHA_EXTS; i++)
-   293			if (elf_hwcap & BIT_MASK(i))
-   294				print_str[j++] = (char)('a' + i);
-   295		pr_info("riscv: ELF capabilities %s\n", print_str);
-   296	
-   297		for_each_set_bit(i, riscv_isa, RISCV_ISA_EXT_MAX) {
-   298			j = riscv_isa_ext2key(i);
-   299			if (j >= 0)
-   300				static_branch_enable(&riscv_isa_ext_keys[j]);
-   301		}
-   302	}
-   303	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+ChenYu
