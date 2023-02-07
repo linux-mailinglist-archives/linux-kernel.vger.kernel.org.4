@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCDE68D37A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F4368D37D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjBGKER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S231346AbjBGKEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBGKEP (ORCPT
+        with ESMTP id S229984AbjBGKEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:04:15 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F42A4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:04:14 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id f15-20020a17090ac28f00b00230a32f0c9eso6821487pjt.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:04:13 -0800 (PST)
+        Tue, 7 Feb 2023 05:04:40 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECCEE0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:04:39 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id u10so7574671wmj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:04:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ATGKPrbMoj2Us2RrFAuQyzUAMxXAoCxSES/6mtMGbY=;
-        b=nBlk71ZDXtc2CpFxmUh1OMZF+QU1yu+GKJm/YL0KyTYBDEyR8+kK1brZLKqN88WkSE
-         KUJENQp1ycAAj+0ptVrkFroD14D9wZFCZHreXfhxMQmC4fFXnxCT4Mfob5VqF9E5XUaQ
-         nQXTXJdwiWavwk+/CaDqBqZMf6PhpRKkwC+2+vDSS/ZtKRG5RTZE01UZECwJs7tvIEvg
-         I1VteZw6w1D/8ZXvFr3mx9q89e/mfmJXGQTTWOMjywlSCW/VXQgrg3YNclZwFkSoVBi8
-         60VKF4etpbx+7sMC0FiVcXMrCNwvkIIdu4IEtu8lnPrI/HO2em8eHios50iDjKBQWa4H
-         ZyAw==
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gpHlh5Hc8HFV1dKj42GmS34FxgEk0w80gWXPPnxKJac=;
+        b=vOLbC+sDtxDzaimA/wUBYKCPICLToLbGet/ShAWYj7TgtzxvGr+pyvCelqUrPWcR8B
+         Z8wH2rIeBw4IzZ36XWtP1ABuZ9XsKxqQQIoDosl/qup490k1MnCRYS/lpIbEZXYzPoGI
+         vLK4EWkDXzVtRs7go3WxFy5/8HLLUVwMKeD+F9lsQNSmPWKkyIHNu7vfUtQociyAlYYk
+         2MD/Pz/67/NND2FV0LPDBVpBdM7jtuaHn0Zk21Apj4ZuYb6MQN8usOLQ+ip6+ECGp635
+         OguGGzu1zVkwCAfaiYL7poMf/1/TR8LAwSIEoSFOkLPfrwthm2yEYws+XXSkCt3ucD/o
+         48vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2ATGKPrbMoj2Us2RrFAuQyzUAMxXAoCxSES/6mtMGbY=;
-        b=XmZjvq1WO31EpnfILRsRCeH9fExcE4Gfso3tGpRf/me9GcDBMzx9iLoS+Ap2lkBTum
-         KkSK5vDm0ixsBeoixjiozDh3+50LEk4bT1LsLEY5S4lTzW5L+7oxtsz48mSrczInbR/+
-         sucy4FfPz1OHljBaB2lErZtIxMc8eam++S72SMgflhH65hx58s0ACBcDn61P9/hojD4A
-         HqJdAFvkxYSHXiCFeUx/JqA9Oqd/WTRVnoaQHeh2mqaNJ7V1F93p6wDKSeu+B8sYgR97
-         TIEHWqCrQ3rR8k1cwGmcNiSHQCSvXd+CuGKjFZMUjiTiJvHiLr2+rQ8Q00ht+2UgBMU6
-         2qJg==
-X-Gm-Message-State: AO0yUKViepvPvQjbUJ8Z1sbZvliYF7CjnfkObjWiexXlGFF88eUdGCSs
-        8HeaWlyF3htyoOBooVQElSp48di12i/kKZFM8HrTOS+LhBo0n2nn
-X-Google-Smtp-Source: AK7set/hcRl+XGA4UDFsADqDw9OCj/sukW5R9o3NVgrY62K5hW/3ogywRCV2cnLB8JSxsD/4NX2lL3zT79iTeZ6KVjI=
-X-Received: by 2002:a17:90a:c7cf:b0:230:a5d7:a479 with SMTP id
- gf15-20020a17090ac7cf00b00230a5d7a479mr1922849pjb.62.1675764253540; Tue, 07
- Feb 2023 02:04:13 -0800 (PST)
+        bh=gpHlh5Hc8HFV1dKj42GmS34FxgEk0w80gWXPPnxKJac=;
+        b=dszY6D54Mwt/sVd3YnVl3j3PbxU3LxCpoubMefUAbg8vCrY6wKZ6IwFKRsHxbiTTjK
+         oSbkHyrhH7VgKgB/Ky/rYJZGqUUafHVbjZk17cFI+EQV0IpebyvoJHFlyv2FVdeu5Wm6
+         RvVnPMiD9JDEJd7Wv5wR7CieSP4tHfFq2WVMTtNF3plECKHOJpGgA5rk1otuTiqMlYu1
+         YOywxK8JVyWLOTxThZOEl1tFb26rc2RWz5TcE0jFVlpuc5DD0dHw9OreAWIfECT3UDXe
+         jlLyrdgG+ydJ+rFAKTK3s1YakkYpV17og9KM9h4+fp145xd8dumRgZP8rC0l/aPxFJN7
+         bVNA==
+X-Gm-Message-State: AO0yUKWln391zb+1y0iaptGy8iQy9Cs/BtEM/8FFB2Z5CFbmo07Wbz5o
+        ump7l4CVFEX5UI05+ayFDg4JYQ==
+X-Google-Smtp-Source: AK7set/L1laTbedtN4/uqHvZ2/IB1phC/BeFIz8BwsrvzeFtjL1osHXIIyd8CrDs3dDEiF+UlW4RvQ==
+X-Received: by 2002:a05:600c:44d4:b0:3df:e69a:2175 with SMTP id f20-20020a05600c44d400b003dfe69a2175mr1495969wmo.35.1675764278045;
+        Tue, 07 Feb 2023 02:04:38 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05600c450600b003dc433bb5e1sm14334052wmo.9.2023.02.07.02.04.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 02:04:37 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 07 Feb 2023 11:04:36 +0100
+Subject: [PATCH] dt-bindings: display: panel: visionox,vtdr6130: add
+ missing reg property
 MIME-Version: 1.0
-References: <20230205224318.2035646-1-qyousef@layalina.io> <20230205224318.2035646-3-qyousef@layalina.io>
-In-Reply-To: <20230205224318.2035646-3-qyousef@layalina.io>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 7 Feb 2023 11:04:02 +0100
-Message-ID: <CAKfTPtCf4+orEhYmFBg+tsMH7e5sV5zJZ1k8apjZkYwSAxAu+w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] sched/uclamp: Ignore (util == 0) optimization in
- feec() when p_util_max = 0
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230207-topic-sm8550-upstream-vtdr6130-bindings-fix-v1-1-0ba2323420c5@linaro.org>
+X-B4-Tracking: v=1; b=H4sIADMi4mMC/x2OywqDMBBFf0Wy7sAkwbT0V0oXeYw6oFEyUQTx3
+ xu6PIfL4V5KqDCJeneXKnSw8Job6Een4uTzSMCpsTJoLBp8Ql03jiDLq+8R9k1qIb/AUVNx2iI
+ EzonzKDDwCV4n4yzSENGpVgxeCELxOU6tmfd5bnIr1Lb/C5/vff8A53XTL5IAAAA=
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,36 +80,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Feb 2023 at 23:43, Qais Yousef <qyousef@layalina.io> wrote:
->
-> find_energy_efficient_cpu() bails out early if effective util of the
-> task is 0. When uclamp is being used, this could lead to wrong decisions
-> when uclamp_max is set to 0. Cater for that.
->
-> Fixes: d81304bc6193 ("sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition")
-> Signed-off-by: Qais Yousef <qyousef@layalina.io>
-> ---
->  kernel/sched/fair.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 7a21ee74139f..a8c3d92ff3f6 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7374,7 +7374,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->         target = prev_cpu;
->
->         sync_entity_load_avg(&p->se);
-> -       if (!uclamp_task_util(p, p_util_min, p_util_max))
-> +       if (!uclamp_task_util(p, p_util_min, p_util_max) && p_util_max != 0)
+Add missing reg property and update example to add dsi top node.
 
-The below should do the same without testing twice p_util_max:
-uclamp_task_util(p, p_util_min, ULONG_MAX)
+Fixes: ef85db911134 ("dt-bindings: display: panel: document the Visionox VTDR6130 AMOLED DSI Panel")
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ .../bindings/display/panel/visionox,vtdr6130.yaml  | 34 ++++++++++++++--------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml b/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+index 49e2fd4b4e99..84562a5b710a 100644
+--- a/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
++++ b/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+@@ -16,6 +16,10 @@ properties:
+   compatible:
+     const: visionox,vtdr6130
+ 
++  reg:
++    maxItems: 1
++    description: DSI virtual channel
++
+   vddio-supply: true
+   vci-supply: true
+   vdd-supply: true
+@@ -26,6 +30,7 @@ additionalProperties: false
+ 
+ required:
+   - compatible
++  - reg
+   - vddio-supply
+   - vci-supply
+   - vdd-supply
+@@ -35,18 +40,23 @@ required:
+ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+-    panel {
+-        compatible = "visionox,vtdr6130";
+-
+-        vddio-supply = <&vreg_l12b_1p8>;
+-        vci-supply = <&vreg_l13b_3p0>;
+-        vdd-supply = <&vreg_l11b_1p2>;
+-
+-        reset-gpios = <&tlmm 133 GPIO_ACTIVE_LOW>;
+-
+-        port {
+-            panel0_in: endpoint {
+-                remote-endpoint = <&dsi0_out>;
++    dsi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        panel@0 {
++            compatible = "visionox,vtdr6130";
++            reg = <0>;
++
++            vddio-supply = <&vreg_l12b_1p8>;
++            vci-supply = <&vreg_l13b_3p0>;
++            vdd-supply = <&vreg_l11b_1p2>;
++
++            reset-gpios = <&tlmm 133 GPIO_ACTIVE_LOW>;
++
++            port {
++                panel0_in: endpoint {
++                    remote-endpoint = <&dsi0_out>;
++                };
+             };
+         };
+     };
 
->                 goto unlock;
->
->         eenv_task_busy_time(&eenv, p, prev_cpu);
-> --
-> 2.25.1
->
+---
+base-commit: 49a8133221c71b935f36a7c340c0271c2a9ee2db
+change-id: 20230207-topic-sm8550-upstream-vtdr6130-bindings-fix-a1d2630efc06
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
