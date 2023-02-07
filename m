@@ -2,102 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFA568E159
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA14268E15B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBGTgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 14:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
+        id S231896AbjBGThp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 14:37:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjBGTgo (ORCPT
+        with ESMTP id S229996AbjBGThn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 14:36:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F213B655
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:36:43 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pPTlh-0002Ed-5t; Tue, 07 Feb 2023 20:36:41 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pPTlf-003Lyz-3z; Tue, 07 Feb 2023 20:36:40 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pPTlf-001f1F-5t; Tue, 07 Feb 2023 20:36:39 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] clocksource: sh_tmu: Mark driver as non-removable
-Date:   Tue,  7 Feb 2023 20:36:14 +0100
-Message-Id: <20230207193614.472060-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.0
+        Tue, 7 Feb 2023 14:37:43 -0500
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F56659B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:37:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1675798662; x=1707334662;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ixcQeaYwPgJfLDDxZ+0/VdfPdbLyDaEaiL6IaxjoUOA=;
+  b=EbYdmVP+Shu7D953sLwMgGyyVVygywsmYWStWBAHhMD2f0rxAErPi+cr
+   iQqWH1qxgAYRO7ujF3kDvYXALxPL2rj4oxsCIgPmrbEme1nLZLOau9dKb
+   LsFSvADctiIJk8qkzSQToKARZv2VMqD5SiOpUaVEsRwe+RThtv+CedtTu
+   k=;
+X-IronPort-AV: E=Sophos;i="5.97,278,1669075200"; 
+   d="scan'208";a="1100207641"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-6e7a78d7.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 19:37:34 +0000
+Received: from EX13D47EUC003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-6e7a78d7.us-east-1.amazon.com (Postfix) with ESMTPS id 5A20A803D0;
+        Tue,  7 Feb 2023 19:37:30 +0000 (UTC)
+Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
+ EX13D47EUC003.ant.amazon.com (10.43.164.208) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 7 Feb 2023 19:37:29 +0000
+Received: from u40bc5e070a0153.ant.amazon.com (10.43.161.198) by
+ EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.24; Tue, 7 Feb 2023 19:37:24 +0000
+Date:   Tue, 7 Feb 2023 20:37:19 +0100
+From:   Roman Kagan <rkagan@amazon.de>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Chen Yu <yu.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
+Message-ID: <Y+Kob8kOUFa0FnJN@u40bc5e070a0153.ant.amazon.com>
+Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
+ <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net>
+ <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
+ <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net>
+ <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
+ <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net>
+ <CAKfTPtBMSg2SDXq=sVt99TyM+tEXRFL74EQ57-t5uKYAXUUyLg@mail.gmail.com>
+ <Y9iJLQxyXp9+x2aF@chenyu5-mobl1>
+ <Y9jmm5c5vT8WXsl6@u40bc5e070a0153.ant.amazon.com>
+ <CAKfTPtDUMph262w5OSiSQi-BVcNRf2gN=PdmxYCKEuk-8aYhgA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1600; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=afhwFKHRjhQ+oOEhse1rmYXhTcETjLrPHQTUdsZj0bc=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj4qgrFqzYI6Osku9IVoAZG+RGoTT/q6ylKX/lqW5T 9aDGHiOJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY+KoKwAKCRDB/BR4rcrsCafcB/ sEVBACqsLCa429wTvBKpOmPWXp8LfXJ4x8aBdrRodxeOahqecDjWAaXqpcgGS7yCty4xmyuBE7/UkL 6qir37XunUl9hf+mRlTS38fQh2aOF0rB0JqTzpCuk2F5VhI4sgLgZjvjYt4caS9mcgLg9xy5xXi0t7 pINVvGNjoaYTKwR9JDT8VvTjpBnvkbzCzWX4cDHEm/vV4QC3TGPaKOE9zNNwBbHNzcc4lVekIuGloO ZjWSQbWdQpDiIKuwa1uFv+zt+U5QMBj1df0rX3EH/AqVgGLLYdfAkIiH8OXIJTxz1Ar13ivqMrE2I+ ABqcAwAEFOBnHzLMxH+3M7ONYbS2lV
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtDUMph262w5OSiSQi-BVcNRf2gN=PdmxYCKEuk-8aYhgA@mail.gmail.com>
+X-Originating-IP: [10.43.161.198]
+X-ClientProxiedBy: EX13D34UWC002.ant.amazon.com (10.43.162.137) To
+ EX19D033EUC004.ant.amazon.com (10.252.61.133)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment in the remove callback suggests that the driver is not
-supposed to be unbound. However returning an error code in the remove
-callback doesn't accomplish that. Instead set the suppress_bind_attrs
-property (which makes it impossible to unbind the driver via sysfs).
-The only remaining way to unbind a sh_tmu device would be module
-unloading, but that doesn't apply here, as the driver cannot be built as
-a module.
+On Tue, Jan 31, 2023 at 12:10:29PM +0100, Vincent Guittot wrote:
+> On Tue, 31 Jan 2023 at 11:00, Roman Kagan <rkagan@amazon.de> wrote:
+> > On Tue, Jan 31, 2023 at 11:21:17AM +0800, Chen Yu wrote:
+> > > On 2023-01-27 at 17:18:56 +0100, Vincent Guittot wrote:
+> > > > On Fri, 27 Jan 2023 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > >
+> > > > > On Thu, Jan 26, 2023 at 07:31:02PM +0100, Roman Kagan wrote:
+> > > > >
+> > > > > > > All that only matters for small sleeps anyway.
+> > > > > > >
+> > > > > > > Something like:
+> > > > > > >
+> > > > > > >         sleep_time = U64_MAX;
+> > > > > > >         if (se->avg.last_update_time)
+> > > > > > >           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
+> > > > > >
+> > > > > > Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
+> > > > > > others were suggesting?  It appears to better match the notion of sleep
+> > > > > > wall-time, no?
+> > > > >
+> > > > > Should also work I suppose. cfs_rq_clock takes throttling into account,
+> > > > > but that should hopefully also not be *that* long, so either should
+> > > > > work.
+> > > >
+> > > > yes rq_clock_task(rq_of(cfs_rq)) should be fine too
+> > > >
+> > > > Another thing to take into account is the sleeper credit that the
+> > > > waking task deserves so the detection should be done once it has been
+> > > > subtracted from vruntime.
+> > > >
+> > > > Last point, when a nice -20 task runs on a rq, it will take a bit more
+> > > > than 2 seconds for the vruntime to be increased by more than 24ms (the
+> > > > maximum credit that a waking task can get) so threshold must be
+> > > > significantly higher than 2 sec. On the opposite side, the lowest
+> > > > possible weight of a cfs rq is 2 which means that the problem appears
+> > > > for a sleep longer or equal to 2^54 = 2^63*2/1024. We should use this
+> > > > value instead of an arbitrary 200 days
+> > > Does it mean any threshold between 2 sec and 2^54 nsec should be fine? Because
+> > > 1. Any task sleeps longer than 2 sec will get at most 24 ms(sysctl_sched_latency)
+> > >    'vruntime bonus' when enqueued.
+> 
+> This means that if a task nice -20 runs on cfs rq while your task is
+> sleeping 2seconds, the min vruntime of the cfs rq will increase by
+> 24ms. If there are 2 nice -20 tasks then the min vruntime will
+> increase by 24ms after 4 seconds and so on ...
+> 
+> On the other side, a task nice 19 that runs 1ms will increase its
+> vruntime by around 68ms.
+> 
+> So if there is 1 task nice 19 with 11 tasks nice -20 on the same cfs
+> rq, the nice -19 one should run 1ms every 65 seconds and this also
+> means that the vruntime of task nice -19 should still be above
+> min_vruntime after sleeping 60 seconds. Of course this is even worse
+> with a child cgroup with the lowest weight (weight of 2 instead of 15)
+> 
+> Just to say that 60 seconds is not so far away and 2^54 should be better IMHO
 
-Also drop the useless remove callback.
+If we go this route, what would be the proper way to infer this value?
+Looks like
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/clocksource/sh_tmu.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+  (1ull << 63) / NICE_0_LOAD * scale_load(MIN_SHARES)
 
-diff --git a/drivers/clocksource/sh_tmu.c b/drivers/clocksource/sh_tmu.c
-index b00dec0655cb..932f31a7c5be 100644
---- a/drivers/clocksource/sh_tmu.c
-+++ b/drivers/clocksource/sh_tmu.c
-@@ -632,11 +632,6 @@ static int sh_tmu_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int sh_tmu_remove(struct platform_device *pdev)
--{
--	return -EBUSY; /* cannot unregister clockevent and clocksource */
--}
--
- static const struct platform_device_id sh_tmu_id_table[] = {
- 	{ "sh-tmu", SH_TMU },
- 	{ "sh-tmu-sh3", SH_TMU_SH3 },
-@@ -652,10 +647,10 @@ MODULE_DEVICE_TABLE(of, sh_tmu_of_table);
- 
- static struct platform_driver sh_tmu_device_driver = {
- 	.probe		= sh_tmu_probe,
--	.remove		= sh_tmu_remove,
- 	.driver		= {
- 		.name	= "sh_tmu",
- 		.of_match_table = of_match_ptr(sh_tmu_of_table),
-+		.suppress_bind_attrs = true,
- 	},
- 	.id_table	= sh_tmu_id_table,
- };
+Is there any other definition that stipulates the lowest weight to be 2?
+Besides, MIN_SHARES is under #ifdef CONFIG_FAIR_GROUP_SCHED, so the
+above expression would require more #ifdef-s.
 
-base-commit: 05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
--- 
-2.39.0
+(That said, I'm still not convinced being math-precise here is
+practical, and slightly violating fairness in such a skewed setup is
+really something to be afraid of.)
+
+Thanks,
+Roman.
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
 
