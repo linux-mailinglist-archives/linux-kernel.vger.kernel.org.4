@@ -2,159 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A94E68CD5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBDB68CD60
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjBGDRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 22:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S229647AbjBGDTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 22:19:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjBGDRW (ORCPT
+        with ESMTP id S229483AbjBGDTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 22:17:22 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44882196AE;
-        Mon,  6 Feb 2023 19:17:05 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3172B2pg018033;
-        Tue, 7 Feb 2023 03:16:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6m1DTHjCgh4CBi/CzMiuI3kgpFXQGgs0euEGDQ2qvz4=;
- b=WtK4IohfpcJut2eHViEEiTKbDyDGEsEN9hFjB8mczOVHslXtaBYDaMC7ie8ZAR4WtF9b
- UtSZoEoQBSODs6S+w/FFiqcJOQ4yDRd8kPqThNHB89MAQaBnJjOotdVgEXmB7vUw0YzN
- 13mgdFY7f1XF7Asyiei6Zp9UQm05Ara8NoG9rAI60Tmr6Z9+N92wvMKJlT0VYLySPXoG
- 2nFjBTkh32iKNqguuissmrWdfePaZKH3MfQLXdsvlW5/aitJoXB9zmNirrONDMoVkQsJ
- nylj5gC+kRNeNfl1uoFxJ2jF5Ogxz4YNhR0hBxBsM4xuenXjaGaGCgkUPk89O9gmo6JF Fg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhghv54y3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 03:16:56 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3173Gt1P008946
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Feb 2023 03:16:56 GMT
-Received: from [10.47.206.1] (10.49.16.6) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 19:16:55 -0800
-Message-ID: <f7e6203d-5773-3c40-db3c-547334efb218@quicinc.com>
-Date:   Mon, 6 Feb 2023 19:16:54 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 17/22] rtc: pm8xxx: add support for nvmem offset
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
- <20230202155448.6715-18-johan+linaro@kernel.org>
-From:   David Collins <quic_collinsd@quicinc.com>
-In-Reply-To: <20230202155448.6715-18-johan+linaro@kernel.org>
+        Mon, 6 Feb 2023 22:19:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FCA9EEB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 19:18:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675739888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GIxTMZmbsJ4n4h+wodJFJ7AH4L9sE2etRukeWGfprOQ=;
+        b=eANDvVka1kzOtB2QmbX+LinmbIlao9B/6l1R7qr5DYuNkPP5NcCHal3ixbiFxYHqQPHUjP
+        lpHjTENepvTF1XjUbCwRYdyWiVnxpzpfgfss/AEiYeS586W+hN/nOymAFS8ude9b8RUq2Y
+        QjaDgif+t9OFCU9p+Vr2KitiBUw/Jhk=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-654-jraRc2wnOjmSxQ2RsvRAsQ-1; Mon, 06 Feb 2023 22:18:07 -0500
+X-MC-Unique: jraRc2wnOjmSxQ2RsvRAsQ-1
+Received: by mail-oo1-f71.google.com with SMTP id i10-20020a4a900a000000b004f1f4aa7f3bso4046402oog.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 19:18:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GIxTMZmbsJ4n4h+wodJFJ7AH4L9sE2etRukeWGfprOQ=;
+        b=NzYvNWeHAW02rqCSF+3lLz9N76EdCe/puq0BBrYeHVWUnbvICs36O6vzgUo7Cmdi6x
+         RwirotGfDAsHSlxWXJo2OuXP8ErSrL5GP4nZB6sxgFTHC71DJR5ml6QV07XBvTn4oe1u
+         lF7jsZ0K+/YolSnUF3LFecCf+shGIkIIYthirISRlNTz8UX7bZt/0sDVxaoM7G8pd8Wq
+         g7CkTxy+4nuv7ynpn9bFKsx9GbCHrJ933tI0ixAgnkxBH/y5Vq+BwYkW2ac1fhSwmtE3
+         xQfAEqfQiH69QZD9brwBmvYAXI27WiQI/gHMB9z63DVd93haG1v0CmJbz0CPDk4Zx4EH
+         weng==
+X-Gm-Message-State: AO0yUKUADOjpI7rk1gjCgY0n+SefJdYpeTAdyiNLAbi94WYx1N2krIZP
+        RRa6XJSUvgtlJ/5MBqMQIvGu3qw8u4hZj88d+lZT/MwS/aMEBVnTbu5cPS8/3bP3qgp5ffCJ1Fl
+        Fm1jWjKOEuwbDH4fyOzxPXj7i
+X-Received: by 2002:aca:2809:0:b0:37a:2bf0:5025 with SMTP id 9-20020aca2809000000b0037a2bf05025mr5460885oix.19.1675739886842;
+        Mon, 06 Feb 2023 19:18:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set+7VS3H2qMxD1XHEeHGgHZ74B+TJyfGc4ZI4Mp5kB81qQes42VlFPDf7PJJ4nRSKOza3aEOWw==
+X-Received: by 2002:aca:2809:0:b0:37a:2bf0:5025 with SMTP id 9-20020aca2809000000b0037a2bf05025mr5460883oix.19.1675739886546;
+        Mon, 06 Feb 2023 19:18:06 -0800 (PST)
+Received: from ?IPv6:2804:1b3:a800:9aa9:fdcb:7dec:9680:8417? ([2804:1b3:a800:9aa9:fdcb:7dec:9680:8417])
+        by smtp.gmail.com with ESMTPSA id z12-20020a54458c000000b003790759c310sm5040893oib.15.2023.02.06.19.18.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 19:18:05 -0800 (PST)
+Message-ID: <4b232f47e038ab6fcaa0114f73c28d4bf8799f84.camel@redhat.com>
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 07 Feb 2023 00:18:01 -0300
+In-Reply-To: <Y+AIOQy0HdVXCw8m@P9FQF9L96D>
+References: <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+         <Y9FzSBw10MGXm2TK@tpad> <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
+         <Y9LDAZmApLeffrT8@tpad> <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
+         <0122005439ffb7895efda7a1a67992cbe41392fe.camel@redhat.com>
+         <Y9j9BnMwfm4TJks7@tpad> <Y9pd7AxAILUSHrpe@dhcp22.suse.cz>
+         <28e08669302ad1e7a41bdf8b9988de6a352b5fe1.camel@redhat.com>
+         <Y+AIOQy0HdVXCw8m@P9FQF9L96D>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XYL9xfT4Nse4u_GKpie6Pc_ug9HJyLAP
-X-Proofpoint-ORIG-GUID: XYL9xfT4Nse4u_GKpie6Pc_ug9HJyLAP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- bulkscore=0 impostorscore=0 spamscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 lowpriorityscore=0 mlxscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070028
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/2/23 07:54, Johan Hovold wrote:
-> On many Qualcomm platforms the PMIC RTC control and time registers are
-> read-only so that the RTC time can not be updated. Instead an offset
+On Sun, 2023-02-05 at 11:49 -0800, Roman Gushchin wrote:
+> Hi Leonardo!
 
-s/can not/cannot/
+Hello Roman,
+Thanks a lot for replying!
 
-> needs be stored in some machine-specific non-volatile memory, which the
-> driver can take into account.
-> 
-> Add support for storing a 32-bit offset from the Epoch in an nvmem cell
-> so that the RTC time can be set on such platforms.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/rtc/rtc-pm8xxx.c | 141 +++++++++++++++++++++++++++++++++++----
->  1 file changed, 129 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-pm8xxx.c b/drivers/rtc/rtc-pm8xxx.c
-> index eff2782beeed..372494e82f40 100644
-> --- a/drivers/rtc/rtc-pm8xxx.c
-> +++ b/drivers/rtc/rtc-pm8xxx.c
-> @@ -1,8 +1,13 @@
->  // SPDX-License-Identifier: GPL-2.0-only
-> -/* Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-> +/*
-> + * pm8xxx RTC driver
-> + *
-> + * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
-> + * Copyright (c) 2023, Linaro Limited
->   */
->  #include <linux/of.h>
->  #include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
->  #include <linux/init.h>
->  #include <linux/rtc.h>
->  #include <linux/platform_device.h>
-> @@ -49,6 +54,8 @@ struct pm8xxx_rtc_regs {
->   * @alarm_irq:		alarm irq number
->   * @regs:		register description
->   * @dev:		device structure
-> + * @nvmem_cell:		nvmem cell for offset
-> + * @offset:		offset from epoch in seconds
->   */
->  struct pm8xxx_rtc {
->  	struct rtc_device *rtc;
-> @@ -57,8 +64,60 @@ struct pm8xxx_rtc {
->  	int alarm_irq;
->  	const struct pm8xxx_rtc_regs *regs;
->  	struct device *dev;
-> +	struct nvmem_cell *nvmem_cell;
-> +	u32 offset;
->  };
->  
-> +static int pm8xxx_rtc_read_nvmem_offset(struct pm8xxx_rtc *rtc_dd)
-> +{
-> +	size_t len;
-> +	void *buf;
-> +	int rc;
-> +
-> +	buf = nvmem_cell_read(rtc_dd->nvmem_cell, &len);
-> +	if (IS_ERR(buf)) {
-> +		rc = PTR_ERR(buf);
-> +		dev_dbg(rtc_dd->dev, "failed to read nvmem offset: %d\n", rc);
+>=20
+> > Yes, but we are exchanging an "always schedule_work_on()", which is a k=
+ind of
+> > contention, for a "sometimes we hit spinlock contention".
+> >=20
+> > For the spinlock proposal, on the local cpu side, the *worst case* cont=
+ention
+> > is:
+> > 1 - wait the spin_unlock() for a complete <percpu cache drain process>,
+> > 2 - wait a cache hit for local per-cpu cacheline=C2=A0
+> >=20
+> > What is current implemented (schedule_work_on() approach), for the loca=
+l
+> > cpu=C2=A0side there is *always* this contention:
+> > 1 - wait for a context switch,
+> > 2 - wait a cache hit from it's local per-cpu cacheline,
+> > 3 - wait a complete <percpu cache drain process>,=C2=A0
+> > 4 - then for a new context switch to the current thread.
+>=20
+> I think both Michal and me are thinking of a more generic case in which t=
+he cpu
+> is not exclusively consumed by 1 special process, so that the draining wo=
+rk can
+> be executed during an idle time. In this case the work is basically free.
 
-Why is dev_dbg() used instead of dev_err() for newly added error
-messages?  Also, why do these conditions warrant error logging when some
-of the previous patches in this series removed older error logging?
+Oh, it makes sense.
+But in such scenarios, wouldn't the same happens to spinlocks?
 
-Thanks,
-David
+I mean, most of the contention with spinlocks only happens if the remote cp=
+u is
+trying to drain the cache while the local cpu happens to be draining/chargi=
+ng,
+which is quite rare due to how fast the local cpu operations are.
+
+Also, if the cpu has some idle time, using a little more on a possible spin=
+lock
+contention should not be a problem. Right?
+
+>=20
+> And the introduction of a spin_lock() on the hot path is what we're are c=
+oncerned
+> about. I agree, that on some hardware platforms it won't be that expensiv=
+e,=C2=A0
+>=20
+
+IIRC most hardware platforms with multicore supported by the kernel should =
+have
+the same behavior, since it's better to rely on cache coherence than lockin=
+g the
+memory bus.
+
+For instance, the other popular architectures supported by Linux use the LR=
+/SC
+strategy for atomic operations (tested on ARM, POWER, RISCV) and IIRC the
+LoadReserve slow part waits for the cacheline exclusivity, which is already
+already exclusive in this perCPU structure.
+
+
+> but in general not having any spinlocks is so much better.
+
+I agree that spinlocks may bring contention, which is not ideal in many cas=
+es.
+In this case, though, it may not be a big issue, due to very rare remote ac=
+cess
+in the structure, for the usual case (non-pre-OOMCG)
+
+>=20
+> >=20
+> > So moving from schedule_work_on() to spinlocks will save 2 context swit=
+ches per
+> > cpu every time drain_all_stock() is called.
+> >=20
+> > On the remote cpu side, my tests point that doing the remote draining i=
+s faster
+> > than scheduling a local draining, so it's also a gain.
+> >=20
+> > Also, IIUC the possible contention in the spinlock approach happens onl=
+y on
+> > page-faulting and syscalls, versus the schedule_work_on() approach that=
+ can
+> > interrupt user workload at any time.=C2=A0
+> >=20
+> > In fact, not interrupting the user workload in isolated cpus is just a =
+bonus of
+> > using spinlocks.
+>=20
+> I believe it significantly depends on the preemption model: you're right =
+regarding
+> fully preemptive kernels, but with voluntary/none preemption it's exactly=
+ opposite:
+> the draining work will be executed at some point later (probably with 0 c=
+ost),
+
+So, in case of voluntary/none preemption with some free cpu time.=20
+
+> while the remote access from another cpu will potentially cause delays on=
+ the
+> spin lock as well as a need to refill the stock.
+
+But if there is some free CPU time, what is the issue of some (potential) d=
+elays
+due to spinlock contention?
+
+I am probably missing the whole picture, but when I think of performance
+improvement, I think on doing more with the same cputime. If we can use fre=
+e
+cputime to do stuff later, it's only fair to also use it in case of content=
+ion,
+right?
+
+I know there are some cases that may need to be more previsible (mostly RT)=
+, but
+when I think of memory allocation, I don't expect it to always take the sam=
+e
+time (as there are caches, pre-OOM, and so)
+
+Also, as previously discussed, in case of a busy cpu, the spinlock approach=
+ will
+probably allow more work to be done.
+
+>=20
+> Overall I'd expect a noticeable performance regression from an introducti=
+on of
+> spin locks and remote draining. Maybe not on all platforms, but at least =
+on some.
+> That's my main concern.
+>=20
+
+I see.=20
+For the platform I have tested (x86) I noticed better overall performance o=
+n
+spinlocks than upstream solution. For other popular platforms, I have brief=
+ly
+read some documentation on locking/atomicity and I think we may keep the
+performance gains.
+
+But to be sure, I could retake the tests on other platforms, such as ARM, P=
+OWER,
+RISCV, and so. Or even perform extra suggested tests.
+
+With that info, would you feel less concerned about a possible change in me=
+mcg
+pcp cache locking scheme?
+
+
+>  And I don't think the problem we're aiming to solve here
+> justifies this potential regression.
+>=20
+
+To be strict, the isolated cpu scheduling problem is already fixed by the
+housekeeping patch (with some limitations).=C2=A0
+
+At this point, I am trying to bring focus to a (possible) performance
+improvement on the memcg pcp cache locking system.
+
+
+> Thanks!
+>=20
+
+Thank you for helping me better understand your arguments and concerns.
+I really appreciate it!
+
+Best regards,
+Leo
 
