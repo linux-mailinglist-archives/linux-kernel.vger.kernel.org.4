@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBBC68D70E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0410B68D714
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbjBGMnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S231562AbjBGMo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:44:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbjBGMnB (ORCPT
+        with ESMTP id S231893AbjBGMov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:43:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29EE35BD;
-        Tue,  7 Feb 2023 04:42:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 7 Feb 2023 07:44:51 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1607FAF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:44:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F70661380;
-        Tue,  7 Feb 2023 12:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0853DC433EF;
-        Tue,  7 Feb 2023 12:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675773778;
-        bh=JVybZG/af25FtT5MIn8vwGANiFyx3YmRZsIluskfyi4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V5/W1xnxs1ZmPu/CLYT6v+6ppZS1ZtONnX/OGJjnqE4/ATQoY0qPJbGFg7Duc7WWa
-         ZriJFVwo95o/jKuBCYdlQt+NMWPyjjUanDvOMTktIZQnf1AMQwQb0Uy7z4DxG3YzmV
-         PdVFpHQFo3yAhpHwE65VfOZ1Eq86VVGFdAQ8dBSjjL3VIbEns1jlxEloRZiyJyLoOY
-         ESZl8hXM3PTViqlwBKSS6uL/iWdFWh1BuSXDLaTp9oqUqs97+1cqqVsrkHXV9Yd80s
-         IKyGKdyWwitqfIes/7M7H9sbwfdN7PUJDI5q4/CsJWhWnExFtsGEN+zvX5NXW0BS+Z
-         Kb8lxOzKop6Iw==
-Date:   Tue, 7 Feb 2023 12:42:51 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Ingo Molnar <mingo@redhat.com>, James Morse <james.morse@arm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     kernel-team@android.com, Mark Brown <broonie@kernel.org>,
-        linux-kernel@vger.kernel.org, James Clark <james.clark@arm.com>,
-        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 0/8] perf: Arm SPEv1.2 support
-Message-ID: <20230207124250.GA12385@willie-the-truck>
-References: <20220825-arm-spe-v8-7-v4-0-327f860daf28@kernel.org>
- <167577072188.364892.17496441030141801452.b4-ty@kernel.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BC6DA5D644;
+        Tue,  7 Feb 2023 12:44:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675773888; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bV88dT2qNkupACeymYc17iJHiiwWQyH4efqPn1zs0d8=;
+        b=dQMeq2LIBcaH/jMfwb4KHF/JsoykIOlr2T8Xt+ggiU84R6mAOgwb1DztKxUkWn6cXeTLtv
+        MLFWCLKYdi4sAe+pohyYO+gE8uh2IalrnzNkDNX5jfLXkyH9C/6L6HYn7jGHtWAy+3z7ER
+        b69d2eQv1nPmRVaCSTRChRCR9B+1JnQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675773888;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bV88dT2qNkupACeymYc17iJHiiwWQyH4efqPn1zs0d8=;
+        b=OVcb4/DjvSCy7umjnR7qcqCRTch+exzIC/3eL1Oq3maoYXf8A3VADqiMVyVGxr6wfRntwf
+        XxEuN+seP9xB9MDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD60313467;
+        Tue,  7 Feb 2023 12:44:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id J49DKsBH4mOLXgAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 07 Feb 2023 12:44:48 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7879DA06D5; Tue,  7 Feb 2023 13:44:47 +0100 (CET)
+Date:   Tue, 7 Feb 2023 13:44:47 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Vladislav Efanov <VEfanov@ispras.ru>
+Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH] udf: KASAN: slab-out-of-bounds in udf_readdir
+Message-ID: <20230207124447.jneehkows3ksulgq@quack3>
+References: <20230206162206.845488-1-VEfanov@ispras.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <167577072188.364892.17496441030141801452.b4-ty@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230206162206.845488-1-VEfanov@ispras.ru>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 12:39:43PM +0000, Will Deacon wrote:
-> On Mon, 09 Jan 2023 13:26:17 -0600, Rob Herring wrote:
-> > Peter, this series is blocked on an ack from you on patch 7. There was
-> > some discussion on validation of the 'config3' attr. The options where
-> > laid out by Mark here[0]. Please chime in on your preference.
-> > 
-> > Will, can you pick up patches 1-6 at least if there's no progress on
-> > 'config3'.
-> > 
-> > [...]
+On Mon 06-02-23 19:22:06, Vladislav Efanov wrote:
+> The KASAN report is:
+> [ 1922.586560] BUG: KASAN: slab-out-of-bounds in udf_readdir+0xe00/0x19e0
+> [ 1922.586922] Write of size 89 at addr ffff888000cd9ea6 by task rm/18493
 > 
-> Applied to will (for-next/perf), thanks!
+> udf_readdir() tries to write file name out of allocated memory
+> buffer bounds. The UDF_NAME_LEN_CS0 (255) is used as max length
+> for file name in udf_put_filename(). But UDF_NAME_LEN (254) is
+> used as the size for buffer allocation in udf_readdir(). As the
+> result out-of-bounds write happened.
 > 
-> [1/8] perf: arm_spe: Use feature numbering for PMSEVFR_EL1 defines
->       (no commit info)
-> [2/8] arm64: Drop SYS_ from SPE register defines
->       (no commit info)
-> [3/8] arm64/sysreg: Convert SPE registers to automatic generation
->       (no commit info)
-> [4/8] perf: arm_spe: Drop BIT() and use FIELD_GET/PREP accessors
->       (no commit info)
-> [5/8] perf: arm_spe: Use new PMSIDR_EL1 register enums
->       (no commit info)
-> [6/8] perf: arm_spe: Support new SPEv1.2/v8.7 'not taken' event
->       (no commit info)
-> [7/8] perf: Add perf_event_attr::config3
->       https://git.kernel.org/will/c/09519ec3b19e
-> [8/8] perf: arm_spe: Add support for SPEv1.2 inverted event filtering
->       https://git.kernel.org/will/c/8d9190f00a97
+> Found by Linux Verification Center (linuxtesting.org) with xfstests
+> 
+> Fixes: 066b9cded00b ("udf: Use separate buffer for copying split names")
+> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
 
-I should've trimmed this, but just in case of confusion: I'd already picked
-up 1-6 prior to Peter's ack on the UAPI change. So now the whole series
-should be in tomorrow's -next with any luck.
+Thanks for the fix Vladislav! But this code is not there anymore in current
+version of UDF code. It got fixed as part of the directory code rewrite -
+you can check current code state in my tree:
 
-Thanks!
+git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git for_next
 
-Will
+								Honza
+
+> ---
+>  fs/udf/dir.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/udf/dir.c b/fs/udf/dir.c
+> index be640f4b2f2c..b95607c42ad4 100644
+> --- a/fs/udf/dir.c
+> +++ b/fs/udf/dir.c
+> @@ -169,7 +169,7 @@ static int udf_readdir(struct file *file, struct dir_context *ctx)
+>  				nameptr = (char *)(fibh.ebh->b_data + poffset - lfi);
+>  			} else {
+>  				if (!copy_name) {
+> -					copy_name = kmalloc(UDF_NAME_LEN,
+> +					copy_name = kmalloc(UDF_NAME_LEN_CS0,
+>  							    GFP_NOFS);
+>  					if (!copy_name) {
+>  						ret = -ENOMEM;
+> -- 
+> 2.34.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
