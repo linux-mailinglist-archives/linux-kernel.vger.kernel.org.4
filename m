@@ -2,105 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969E468E2E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131BE68E2EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjBGVX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 16:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
+        id S229483AbjBGVYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 16:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBGVXY (ORCPT
+        with ESMTP id S229515AbjBGVYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 16:23:24 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB33C26873
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:22:47 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id m15so6591872ilh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 13:22:47 -0800 (PST)
+        Tue, 7 Feb 2023 16:24:12 -0500
+Received: from mailrelay6-1.pub.mailoutpod2-cph3.one.com (mailrelay6-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:405::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AA2E3BE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:23:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4pWtMDHlChNZpBVUhtxKeU61bbziVZ1L3zQXJ9Q/ELQ=;
-        b=iGG49ZGHPzcvfk5FpC/wPCPjp3eRBlDLnfbucFVpWLpsl2Z8RzUxLQhMjaoGLnVgBq
-         xjeqRsYNHx/x1cXl5gl7p7O8mwLBteNJy4e4Jt0xmGTfls523cXFG6Zp+e76SIzupePC
-         DseNoGGv79jE/4Z6vcZzHYWFK5W0bjBjcgF6w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pWtMDHlChNZpBVUhtxKeU61bbziVZ1L3zQXJ9Q/ELQ=;
-        b=ODxjR0thYV9ETR3jMWyWxA8lQFhPIQRp6rp1YhWYuI58PaJZJntvOfVIU28t1Enkyk
-         Oqou5s8u6m0/qwyiWLT9eCQ6RvfVKuYgIaAOTE9XpPctfr77XlSmO0bxdZanb6UzFsIM
-         DMs5qD6e6UF6dYjB9JPBAYW2hLkBjEc+f85CEeyrzSjiZgX92ACgXGkX7NKaC0gz9Apl
-         mDmJitmLPIy6szRO4FoFUQ8R2pt/UozpUQmIN5zSa20elZ5J6LQV0/g5Wq2BZh2RO/JV
-         ryDiUdy0U3dPPRGM07EM2JRxpGMRK05nZsafw4afVBEzrtX/Nyn/giM3kqm5ijzzkhhu
-         uCRg==
-X-Gm-Message-State: AO0yUKWomwyzeyrCYkmP0uSSLFgbsGDpIsYvX6Nc0lbr7q/aADeCqyUB
-        faW1wpuxL9eK+3MvbfKyhOhIVg==
-X-Google-Smtp-Source: AK7set9iKHCEqTPRQ6Y+u1bMD/+Kbw88A5WZcUuyVysTNoY0Ai0/BDNKii8NCmibzYRgz4gqOf3llA==
-X-Received: by 2002:a05:6e02:12a8:b0:313:d901:82e6 with SMTP id f8-20020a056e0212a800b00313d90182e6mr3726764ilr.2.1675804896995;
-        Tue, 07 Feb 2023 13:21:36 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i15-20020a92c94f000000b00304ae88ebebsm4375569ilq.88.2023.02.07.13.21.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 13:21:36 -0800 (PST)
-Message-ID: <8ca9283f-36ff-8e79-c168-c59f8e84f7dc@linuxfoundation.org>
-Date:   Tue, 7 Feb 2023 14:21:34 -0700
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=ybD3WFRL0t0/WmswXzTvoSrr9MBfbijMUcC+L8zj4iY=;
+        b=FS5aWY+Hf/9ypkhLJQY5kPKvbxvBs67v8pNBuO8l0aTvHed0/68+JCIxPHmpJF1nMF6Ulj4GrZZUA
+         Plnz1hbgkco99FEH+QMKzeClczPXlIUObhvxJ1GBMWzHW09/OlaI1tBlnPGgrgPrkcOkPm94RY2LNd
+         epOVAYmO0zE8Mfm/iVWdngVREwLbgpYfxvGAbBnwrxr7LBmpOwNpXy4/E5FLxoxjW32N2MN0XAPEvJ
+         se0g/rjGt6JoxO3fY8qroCKBh2IuDtQjY01kbFIP8WLZ34yNpWps22FRePsqqqiH1wH1jJ4KMzcAIY
+         ut5rp3GbsAWHsVTg0wsKR8xF/n8EUQQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=ybD3WFRL0t0/WmswXzTvoSrr9MBfbijMUcC+L8zj4iY=;
+        b=c/3WRaPt80qqT4bLQkA//sLai9x8OJKnz5MMIPAIe1vqqlounWCmyJpr3Owj2s3p1hFZQ7f3rQqpG
+         zlrRI6TDA==
+X-HalOne-ID: 956b5577-a72d-11ed-b026-cde5ad41a1dd
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay6 (Halon) with ESMTPSA
+        id 956b5577-a72d-11ed-b026-cde5ad41a1dd;
+        Tue, 07 Feb 2023 21:22:56 +0000 (UTC)
+Date:   Tue, 7 Feb 2023 22:22:55 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: display: panel: visionox,vtdr6130: add
+ missing reg property
+Message-ID: <Y+LBL08Xr3vYg4p5@ravnborg.org>
+References: <20230207-topic-sm8550-upstream-vtdr6130-bindings-fix-v1-1-0ba2323420c5@linaro.org>
+ <Y+KaEPO7he39Gmd5@ravnborg.org>
+ <20230207203716.GA4104426-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230207125634.292109991@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230207125634.292109991@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207203716.GA4104426-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/23 05:54, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.11 release.
-> There are 208 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Feb 07, 2023 at 02:37:16PM -0600, Rob Herring wrote:
+> On Tue, Feb 07, 2023 at 07:36:00PM +0100, Sam Ravnborg wrote:
+> > Hi Neil.
+> > 
+> > 
+> > On Tue, Feb 07, 2023 at 11:04:36AM +0100, Neil Armstrong wrote:
+> > > Add missing reg property and update example to add dsi top node.
+> > > 
+> > > Fixes: ef85db911134 ("dt-bindings: display: panel: document the Visionox VTDR6130 AMOLED DSI Panel")
+> > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > ---
+> > >  .../bindings/display/panel/visionox,vtdr6130.yaml  | 34 ++++++++++++++--------
+> > >  1 file changed, 22 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml b/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+> > > index 49e2fd4b4e99..84562a5b710a 100644
+> > > --- a/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+> > > +++ b/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+> > > @@ -16,6 +16,10 @@ properties:
+> > >    compatible:
+> > >      const: visionox,vtdr6130
+> > >  
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +    description: DSI virtual channel
+> > > +
+> > Other panels using dsi uses a simple
+> > "	reg: true"
+> > 
+> > I think that would suffice here too.
 > 
-> Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
-> Anything received after that time might be too late.
+> Yes, because dsi-controller.yaml restricts it to a single entry. 
+> However, it's description says there can be more than 1 virtual channel 
+> for a device. In that case, it shouldn't be restricted in 
+> dsi-controller.yaml and the above with 'maxItems: 1' would be correct. 
+> So I'd keep this as-is.
+Thanks for the explanation.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+> Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
