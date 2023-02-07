@@ -2,113 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C054268E11C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9E568E126
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBGTZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 14:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S230011AbjBGT3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 14:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjBGTZc (ORCPT
+        with ESMTP id S229662AbjBGT3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 14:25:32 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4434239295;
-        Tue,  7 Feb 2023 11:25:22 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317JGasM006605;
-        Tue, 7 Feb 2023 19:25:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=tqfqfPZ+3SXtUvlt271AVvVdM7OC1tOz3fAp9g1Zs7g=;
- b=b5SOspP7fg7gJIqGmsLh7NJ0iZ2A1STE5ZoEDrMcu1vg+LiVWHd5yd49teydoJG0meF9
- 2J+hT+W0YUoE8RwMc1rrkkjsQ7HPx10ajELXwj/t1OC8HCv0eGwI0Q+a1aycpDYAhIKn
- C5XeBPIFwu6xe2mhLboQzb/25ailWHSMt3NfS/g3OFe5JW4oJfzawRYD0XEIjDr+8d3P
- w8vN6qwuv6p4XlSP5R3xEV3KzSSFAQbLxuNEc45OzukaLCRlhpwh0To+5GRyBbzp+5F3
- t1ko+KC453XSu5DAww8q7p0f4JnqSzQsd3N0oOKX7piLRsnenKFS3VPHzWdBruv8LAOQ Zg== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkvnmr6p6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 19:25:16 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 317Ff9Qi003947;
-        Tue, 7 Feb 2023 19:25:15 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3nhf079h7r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 19:25:15 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317JPE5558524064
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Feb 2023 19:25:14 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1927858062;
-        Tue,  7 Feb 2023 19:25:14 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 011AE58057;
-        Tue,  7 Feb 2023 19:25:12 +0000 (GMT)
-Received: from [172.20.7.120] (unknown [9.211.110.248])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Feb 2023 19:25:11 +0000 (GMT)
-Message-ID: <05eed3d8321d0f355bf3dc59ffea3d6ab08135fa.camel@linux.ibm.com>
-Subject: Re: [PATCH] scsi: FlashPoint: Replace arithmetic addition by
- bitwise OR
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Khalid Aziz <khalid@gonehiking.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Date:   Tue, 07 Feb 2023 22:25:09 +0300
-In-Reply-To: <Y+KOeP0OOiem3lR5@ubun2204.myguest.virtualbox.org>
-References: <Y+I0HXsHezZRtFOM@ubun2204.myguest.virtualbox.org>
-         <9a78cdd254d5d962450242d2e01c3a0f702a63a0.camel@linux.ibm.com>
-         <Y+KOeP0OOiem3lR5@ubun2204.myguest.virtualbox.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Tue, 7 Feb 2023 14:29:00 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BAA3A855
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:28:59 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so12318376wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 11:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U8Ap/R9bBCRwfbHGCfaOdQ/oi2hB1pqW05c0juFinY0=;
+        b=vIkCoxnEwrDeI35wrzj+TX7KKyYN4lId+J+knK7tvaXmNVu51KlchE3CIKk8jqJ87j
+         m6WF9XxXVGbT4qtTtlA0AMoH9z6CTaDulTx+iyEOznZMsylwv5gx8aNhG7a5ry3mJGc0
+         eAms2XPNv/3AzP9UzZlTHdDtJqAHSD0t8tsdqyH1RED455qvRWOd3LWWgGh8nHa10WfT
+         ma5E1TnNN9+7C3vB9dg7B/eVLM4HQ2TFV3tl7JHF37T9GYcqs84Hh8rFoT+3EkrMT/Gk
+         jGxF4LEc//YbaYLAGCGiB3ZM/8003BAGj/gVBPwOxPhHlW4sksXP44L89Aj6aonntgJ5
+         5e5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U8Ap/R9bBCRwfbHGCfaOdQ/oi2hB1pqW05c0juFinY0=;
+        b=EN5oY7a9DS6y2tNuReCun/91FO5oj1fyHU6rt4OpFW9vDooV68P8Y4fhE4Br4nLGMP
+         qY4IMLIxAAijAky/+93KdB0AQKs8J3IytO4KdQ43HFRHbMugPQit3Vb5Hj60AOHR6HbO
+         Q+yiw8/5ZSvFWJgfOPZykFsi5RR51RW2uuj56Rp4pjrVyz0ErFmuoo/+UFuZ2vytltGT
+         vAk/58/4LtC9kkB00wM1lDm/ugOOpAIeE/Lq04CpegI4vBj7psCQZPCcgNOEBswSNrEI
+         csW5eYKKEUTJKLRu/vBY6HPxZAgjTDnAGYx70o9tT4oGMyt8MEW57hwZWKmiiJabc0cs
+         DDTA==
+X-Gm-Message-State: AO0yUKXh026QbAyQB1qjqZ5RNHk+NvZwHIweLc79elbQ43lVFM8lD/B0
+        QyYy2+g3c7tbQ7mErX7M1ZeXFw==
+X-Google-Smtp-Source: AK7set9k6ax9+8EqWLt6+WaYYhjredgB03dqiFMzkGrpCA7+tKGHv3HYgWBH0mSw6TVrdK7kotJ+DQ==
+X-Received: by 2002:a05:600c:a292:b0:3df:eb5d:fbf with SMTP id hu18-20020a05600ca29200b003dfeb5d0fbfmr4158930wmb.38.1675798138113;
+        Tue, 07 Feb 2023 11:28:58 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j33-20020a05600c1c2100b003db0ad636d1sm22770818wms.28.2023.02.07.11.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 11:28:57 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/3] dt-bindings: soc: samsung: exynos-pmu: allow phys as child on Exynos3 and Exynos4
+Date:   Tue,  7 Feb 2023 20:28:49 +0100
+Message-Id: <20230207192851.549242-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Zop1i2iHus6d-QhWg2DPFN52aWKUgS1W
-X-Proofpoint-ORIG-GUID: Zop1i2iHus6d-QhWg2DPFN52aWKUgS1W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_11,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1015 bulkscore=0
- impostorscore=0 mlxlogscore=817 lowpriorityscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302070170
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-07 at 23:16 +0530, Deepak R Varma wrote:
-[...]
-> James, there are a few other patch submissions for the scsi subsystem
-> that I submitted in last few weeks. I sent couple of reminder request
-> for comments on those submission, but still waiting. Could you please
-> also review those and share your feedback?
+Just like on Exynos5250, Exynos5420 and Exynos5433 the MIPI phy is
+actually part of the Power Management Unit system controller thus allow
+it as PMU's child.
 
-The problem is basically that they don't fix a bug or introduce an
-enhancement.  Review bandwidth in SCSI is the main limiting factor for
-any new patch, so we tend to concentrate on these two types.  The main
-problem with code replacement patches is that they do tend to introduce
-inadvertent bugs in old drivers, which is why people are afraid to
-review them.  You can reduce the overhead of review by demonstrating
-that the binary produced is unchanged (obviously this works for some
-but not all of your patches), so a maintainer need only decide if they
-like the change rather than worrying about it introducing a regression.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/soc/samsung/exynos-pmu.yaml      | 23 +++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-Regards,
-
-James
+diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+index f7c141dd11ec..5d8d9497f18e 100644
+--- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
++++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+@@ -48,6 +48,9 @@ properties:
+           - const: syscon
+       - items:
+           - enum:
++              - samsung,exynos3250-pmu
++              - samsung,exynos4210-pmu
++              - samsung,exynos4412-pmu
+               - samsung,exynos5250-pmu
+               - samsung,exynos5420-pmu
+               - samsung,exynos5433-pmu
+@@ -138,18 +141,34 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - samsung,exynos3250-pmu
++              - samsung,exynos4210-pmu
++              - samsung,exynos4412-pmu
+               - samsung,exynos5250-pmu
+               - samsung,exynos5420-pmu
+               - samsung,exynos5433-pmu
+     then:
+       properties:
+-        dp-phy: true
+         mipi-phy: true
+     else:
+       properties:
+-        dp-phy: false
+         mipi-phy: false
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - samsung,exynos5250-pmu
++              - samsung,exynos5420-pmu
++              - samsung,exynos5433-pmu
++    then:
++      properties:
++        dp-phy: true
++    else:
++      properties:
++        dp-phy: false
++
+ examples:
+   - |
+     #include <dt-bindings/clock/exynos5250.h>
+-- 
+2.34.1
 
