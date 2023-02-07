@@ -2,190 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B274868D935
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFBD68D939
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjBGNWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
+        id S232048AbjBGNYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjBGNWx (ORCPT
+        with ESMTP id S231128AbjBGNYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:22:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C0DB767;
-        Tue,  7 Feb 2023 05:22:52 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317DMMSS024107;
-        Tue, 7 Feb 2023 13:22:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lTzwb3wPD/ahzgNvLMmcdWpvrliagOkCOoHNCzUnFRs=;
- b=B5fXnb8A4/5najHwGW0QH2YdrL83LmWrisYQuVqZnmct5QE5D2zh35FURWvDiarGaA1M
- 7/YtW2AX0Ny4gOVPu8UampIFlIx6QEw3mahJQroDtGzkmZKVv/9l3fzE73RqLqMos6rP
- NCvcgeb5GIPl3dSYfJZApiruVHsXa7c/ApdoZMK4r369WeEx785jklUUXg0kVtQobm1N
- Wzo7QvSA1IbaAwiw1oE6LDOnV/ODsGJkiUYwbBak4ziJG7MNB1AaZrFAH6DkzIbmhQ3R
- J8NXDHsxJ5zALaVPAf5DkK56FL8wdfo+mVNz6+PT/ZNRuJ35Mrm7ljHgBZQVgCfxrkk1 Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkqfj807b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:22:49 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317DMhmc024516;
-        Tue, 7 Feb 2023 13:22:49 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkqfj806k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:22:49 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 317BjfKR001926;
-        Tue, 7 Feb 2023 13:22:47 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06kmqq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 13:22:46 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317DMhVt53084434
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Feb 2023 13:22:43 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 38BF52004B;
-        Tue,  7 Feb 2023 13:22:43 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 636A120043;
-        Tue,  7 Feb 2023 13:22:42 +0000 (GMT)
-Received: from [9.171.52.227] (unknown [9.171.52.227])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Feb 2023 13:22:42 +0000 (GMT)
-Message-ID: <30435adc-e86f-c96c-3795-bea6bca65c16@linux.ibm.com>
-Date:   Tue, 7 Feb 2023 14:22:42 +0100
+        Tue, 7 Feb 2023 08:24:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AE9C643;
+        Tue,  7 Feb 2023 05:24:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9105AB818E8;
+        Tue,  7 Feb 2023 13:24:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 938BEC433EF;
+        Tue,  7 Feb 2023 13:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675776244;
+        bh=uCbshn+qe74HjI3bUDjFeLeAizMW+J2giZWltFU2N8Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V5Q0mkmSKbd1/aV8yViRxHmUCEasgQ4reB4ylLa6jCdCyYqE+SopkONicaxvqg/Cz
+         VojA7oLHuXB/rsjpFvoAGa1auvV9DlhdLij7mG8Eaol4SzQlQYkOA/YJ1TKzw2yE5A
+         7o4u9PTYa0JZO7jk4E53DkNhMomtFNcHXzdspJojui2OxEr0pft3RDTe88DE7qunxV
+         tY6k3RCuDaLGBuMnwZ/o0KDYuKCyDImvQuC2lF7HeLsiKYOQLbCNLfsJitTyZRMfN0
+         +F8yU2AaFjpRL0bFHSMj5G4HcCwIoxKYhKcORjyuWz5XBSAhiXBnD0Bt76vIAzRCsv
+         SurMb0/QoKbhQ==
+Date:   Tue, 7 Feb 2023 14:24:00 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Qiang Zhang <Qiang1.zhang@intel.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH] rcu/tree: Improve comments in rcu_report_qs_rdp()
+Message-ID: <Y+JQ8GX82Gn+7ZWe@lothringen>
+References: <20230204022051.2737724-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 10/14] KVM: s390: Refactor absolute vm mem_op function
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Huth <thuth@redhat.com>
-References: <20230206164602.138068-1-scgl@linux.ibm.com>
- <20230206164602.138068-11-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230206164602.138068-11-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: bQ1obWv9uEwb0uJecL-8SBd-L_0GWt0T
-X-Proofpoint-GUID: Zf3yjCv-G_ao0ginpF6j-jRf5NrU_ewg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 lowpriorityscore=0 mlxlogscore=884 priorityscore=1501
- impostorscore=0 clxscore=1015 phishscore=0 spamscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070116
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230204022051.2737724-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/23 17:45, Janis Schoetterl-Glausch wrote:
-> Remove code duplication with regards to the CHECK_ONLY flag.
-> Decrease the number of indents.
-> No functional change indented.
+On Sat, Feb 04, 2023 at 02:20:50AM +0000, Joel Fernandes (Google) wrote:
+> Recent discussion triggered due to a patch linked below, from Qiang,
+> shed light on the need to accelerate from QS reporting paths.
 > 
-> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Reviewed-by: Thomas Huth <thuth@redhat.com>
+> Update the comments to capture this piece of knowledge.
+> 
+> Link: https://lore.kernel.org/all/20230118073014.2020743-1-qiang1.zhang@intel.com/
+> Cc: Qiang Zhang <Qiang1.zhang@intel.com>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> 
 > ---
+>  kernel/rcu/tree.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 > 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 93eb03f8ed99..713eb6ca6902 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -1983,7 +1983,12 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+>  	} else {
+>  		/*
+>  		 * This GP can't end until cpu checks in, so all of our
+> -		 * callbacks can be processed during the next GP.
+> +		 * callbacks can be processed during the next GP. Do
+> +		 * the acceleration from here otherwise there may be extra
+> +		 * grace period delays, as any accelerations from rcu_core()
+> +		 * or note_gp_changes() may happen only after the GP after the
+> +		 * current one has already started. Further, rcu_core()
+> +		 * only accelerates if RCU is idle (no GP in progress).
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Actually note_gp_changes() should take care of that. My gut feeling is that the
+acceleration in rcu_report_qs_rdp() only stands for:
 
-> 
-> Cosmetic only, can be dropped
-> 
-> 
->   arch/s390/kvm/kvm-s390.c | 43 +++++++++++++++++-----------------------
->   1 file changed, 18 insertions(+), 25 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 707967a296f1..1f94b18f1cb5 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2782,6 +2782,7 @@ static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_fla
->   static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   {
->   	void __user *uaddr = (void __user *)mop->buf;
-> +	enum gacc_mode acc_mode;
->   	void *tmpbuf = NULL;
->   	int r, srcu_idx;
->   
-> @@ -2803,33 +2804,25 @@ static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->   		goto out_unlock;
->   	}
->   
-> -	switch (mop->op) {
-> -	case KVM_S390_MEMOP_ABSOLUTE_READ: {
-> -		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> -			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_FETCH, mop->key);
-> -		} else {
-> -			r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> -						      mop->size, GACC_FETCH, mop->key);
-> -			if (r == 0) {
-> -				if (copy_to_user(uaddr, tmpbuf, mop->size))
-> -					r = -EFAULT;
-> -			}
-> -		}
-> -		break;
-> +	acc_mode = mop->op == KVM_S390_MEMOP_ABSOLUTE_READ ? GACC_FETCH : GACC_STORE;
-> +	if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> +		r = check_gpa_range(kvm, mop->gaddr, mop->size, acc_mode, mop->key);
-> +		goto out_unlock;
->   	}
-> -	case KVM_S390_MEMOP_ABSOLUTE_WRITE: {
-> -		if (mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY) {
-> -			r = check_gpa_range(kvm, mop->gaddr, mop->size, GACC_STORE, mop->key);
-> -		} else {
-> -			if (copy_from_user(tmpbuf, uaddr, mop->size)) {
-> -				r = -EFAULT;
-> -				break;
-> -			}
-> -			r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> -						      mop->size, GACC_STORE, mop->key);
-> +	if (acc_mode == GACC_FETCH) {
-> +		r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> +					      mop->size, GACC_FETCH, mop->key);
-> +		if (r)
-> +			goto out_unlock;
-> +		if (copy_to_user(uaddr, tmpbuf, mop->size))
-> +			r = -EFAULT;
-> +	} else {
-> +		if (copy_from_user(tmpbuf, uaddr, mop->size)) {
-> +			r = -EFAULT;
-> +			goto out_unlock;
->   		}
-> -		break;
-> -	}
-> +		r = access_guest_abs_with_key(kvm, mop->gaddr, tmpbuf,
-> +					      mop->size, GACC_STORE, mop->key);
->   	}
->   
->   out_unlock:
+* callbacks that may be enqueued from an IRQ firing during the small window
+  between the RNP unlock in note_gp_changes() and the RNP lock in
+  rcu_report_qs_rdp()
 
+* __note_gp_changes() got called even before from the GP kthread, and callbacks
+  got enqueued between that and rcu_core().
+  
+Thanks.
