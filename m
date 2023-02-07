@@ -2,103 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B542C68DFCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC71668DFD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjBGSTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S232346AbjBGSWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbjBGSTR (ORCPT
+        with ESMTP id S232319AbjBGSVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:19:17 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C75B40BFB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:18:13 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id l7so6401702ilf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:18:13 -0800 (PST)
+        Tue, 7 Feb 2023 13:21:38 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3994B2128
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:21:07 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id x8so11212102ybt.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fQMCLtY/o/lcP2wVxbKEZHVTujPOs6CF4TCboKmWfnM=;
-        b=DYiZQ/QlyBeTa/mCDWni3T7T/0TILBtLstqv2EawL1Ewt5HTPQKQIbVG8t0RJoY5sZ
-         7CWDsy4IjKqxxiPS4ke4s9Tgez07u870yZBp4cCdYjwhvqUr6HrM7ZYCgQqyGa1ZFnVF
-         xsUWTLvKoPpTXYX29+5exDtYHvXgWQzD2Dw9E=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgtQzTnRbIYg38jJchN06SmvlnyEwUuCcDS5MUriAcg=;
+        b=qQejTzWm3ZVkyedm+qpn7sKhWB05HsE5Bz9mysMH6HhhYsjzo2052XmSD2dIYGBXAy
+         L5qIZyP6Edzx543kT8tWteEF2mrY4Rp1OrIvNq+1tyKH+L0K8U5Kj2iqTXE2XEzfI1lD
+         gly0qJ0z99TJsKks7YQ/0gFE/5O+Rn5qz0hbyhiUOkOj7xa3gXFHzK20VBPrk0zrjWvW
+         yv/DC1HGGzFmWfz2eBpAIrsg3KctA/vmSQaQdWpfD4JRNE9WsaNMqj176R9IRppIASrX
+         c2Ps7vXHTBYADlw65xo7BtVleIvH908+/WH5d5bH8AJ2FzRIDtaw074bb+Qi5DmdtuQ+
+         StAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fQMCLtY/o/lcP2wVxbKEZHVTujPOs6CF4TCboKmWfnM=;
-        b=Jzj/12d6auyCN2fck66dXMc6Ly3W/iHAPHnMQVugWOHzPMaO+MTRF6wxEC3Z71e2HR
-         RYrdxVv0H6T4NffK7aXCAK1ESkx/g3zOffREQct8EKAMDyTsbygfBT6xUukghtwSuw0f
-         6ZaH8JVsHTm5R5j4x10kU1utI8aXpQegLMFMdxMIPPIgxk7WVUpuOyJNt/5mhYrW3E7D
-         ztmucBBdWBwWa8BoblJ8A2pzpH1vhP1JJHkCuF7MZQffzKbt4sugwQgE7NwmuaaH4kk1
-         0K0P6xR/BA4uJUyQqLOUyd9z4DUZRyHuavyhhq/QelHwgu7JhXXY2of395POqH1BQSr2
-         GGVQ==
-X-Gm-Message-State: AO0yUKWcQ/Xd37odxr0H6reXLifQn2jZw04iE91kIIL+YgqLZil9O/CQ
-        tFBJkRijc8ybCZaBBvwkIyBPsg==
-X-Google-Smtp-Source: AK7set987uZbgR5yZkVJT+jrgFpaiDdCBjJhqCqZZGfbB4Gk0XbPD2P05L05pZgj2GUSaLAHeDcYig==
-X-Received: by 2002:a05:6e02:178b:b0:310:a06a:d0b0 with SMTP id y11-20020a056e02178b00b00310a06ad0b0mr5382939ilu.10.1675793889892;
-        Tue, 07 Feb 2023 10:18:09 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id e1-20020a056e020b2100b0030c27c9eea4sm4352263ilu.33.2023.02.07.10.18.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 10:18:09 -0800 (PST)
-Date:   Tue, 7 Feb 2023 18:18:08 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/7] arm64: dts: qcom: sc7280: Hook up the touchscreen IO
- rail on villager
-Message-ID: <Y+KV4D0iAp1GxY2p@google.com>
-References: <20230207024816.525938-1-dianders@chromium.org>
- <20230206184744.3.I740d409bc5bb69bf4a7b3c4568ea6e7a92f16ccd@changeid>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YgtQzTnRbIYg38jJchN06SmvlnyEwUuCcDS5MUriAcg=;
+        b=BOnJKB/YwvghP7bjhFyveJNoCVlyPrK8pbJKd3lbANmFM5W1dk2wRhJTQ4OgPeuEFi
+         Tfo/0cpTTM0eAe3QfYcOW1egOcz8uJ92q7CDM07WSpalbltXME8kEbkLh8ZoqAGNZOoh
+         Cl+layP/dqhCTd4gR68p1Xx88kgl/tG5gCr9YY9++6LUMCRSuF3hWaxPOX/EV8D3WVTJ
+         e4H9I5yxggzYssZemaWkcGdZ1+Hx3Cxm/1zYv0Xqp5cD412QD9NjtauxM+Ay3YZYBgs8
+         6VzmX8XnAEeUoKLWCvjJAilrlNme/w4A0LPuDRrmpw06f147wGJ7Twzo1kOz+cWHZOcI
+         Htuw==
+X-Gm-Message-State: AO0yUKW2Lpncr3C9IkrXrOndTYmjMKVHDuDrBnr8gVdruwUP0eWK2uLr
+        cimveB3uZfkt470/EMxMI52xusrk+eBAJRWMp/n+mw==
+X-Google-Smtp-Source: AK7set+jm1zYINS+NliZlMfuV08OLGvpAfypwpp1JL58OQi8bfPIKpRIbpDKObv3qmyUwnguDZw2Ke9C3lVmKu54ZG0=
+X-Received: by 2002:a25:d3c3:0:b0:8a1:2e92:c089 with SMTP id
+ e186-20020a25d3c3000000b008a12e92c089mr685041ybf.186.1675794066368; Tue, 07
+ Feb 2023 10:21:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230206184744.3.I740d409bc5bb69bf4a7b3c4568ea6e7a92f16ccd@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230202-rds-zerocopy-v2-1-c999755075db@diag.uniroma1.it>
+In-Reply-To: <20230202-rds-zerocopy-v2-1-c999755075db@diag.uniroma1.it>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Tue, 7 Feb 2023 13:20:29 -0500
+Message-ID: <CA+FuTSftbF=xwWd_kJHuJ9hQ3PYFOT48r_TazEDVaH8GkrQ2+g@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] rds: rds_rm_zerocopy_callback() use list_first_entry()
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
+        sowmini.varadhan@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 06:48:12PM -0800, Douglas Anderson wrote:
-> On never revs of sc7280-herobrine-villager (rev2+) the L3C rail is
+On Tue, Feb 7, 2023 at 9:57 AM Pietro Borrello
+<borrello@diag.uniroma1.it> wrote:
+>
+> rds_rm_zerocopy_callback() uses list_entry() on the head of a list
+> causing a type confusion.
+> Use list_first_entry() to actually access the first element of the
+> rs_zcookie_queue list.
+>
+> Fixes: 9426bbc6de99 ("rds: use list structure to track information for zerocopy completion notification")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
 
-nit: s/never/newer/
+This should go to net.
 
-no need to re-spin just for this.
-
-> provided to the touchscreen as the IO voltage rail. Let's add it in
-> the device tree.
-> 
-> NOTE: Even though this is only really needed on rev2+ villagers (-rev0
-> had non-functioning touchscreen and -rev1 had some hacky hardware
-> magic), it doesn't actually hurt to do this for old villager revs. As
-> talked about in the patch ("arm64: dts: qcom: sc7280: On QCard,
-> regulator L3C should be 1.8V") the L3C regulator didn't go anywhere at
-> all on older revs. That means that turning it on for older revs
-> doesn't hurt other than drawing a tiny bit of extra power. Since -rev0
-> and -rev1 villagers will never make it to real customers and it's nice
-> not to have too many old device trees, the better tradeoff seems to be
-> to enable it everywhere.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
