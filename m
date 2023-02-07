@@ -2,135 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A0068E290
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BC668E389
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjBGVBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 16:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S229865AbjBGWo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 17:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjBGVAj (ORCPT
+        with ESMTP id S229505AbjBGWo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 16:00:39 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 133B123675
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:00:35 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so38359wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 13:00:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EL0UxKkbBJyJQsPoDByYBOTCFVMLiiPVdLRpwYhsZyU=;
-        b=QYvkwDEtI17eFx3Aky5tWD098dmnaGI3c54T+cIdcAwUqyzH1RwHuKU5MEuuZ3xajx
-         WaZVGXsze1tpE3vp8YrGuB4flr0lNTu/u1UjUGlMK6ZxiYqzRsZU/GVPVfH9b7b2IxDM
-         I1zLkcQrDtvDWPfH6kzDPeKZ8aeimwOQ3ML2jSC/YaOqXy6rgobFjwcT2Aov3gkDQm6C
-         IWIkSE6K0o1KLTt8Sr8Z3SUPA9oB9cM+PTf8KjPmW9CWgUwgJ7KgavUwaKG1XDpfwizt
-         QjPaJAjiz1xuv61x36wVlC/1Qs8ptleONoKPJddwnmPFJzyorKByIyawP8SeYtWel9ss
-         oaTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EL0UxKkbBJyJQsPoDByYBOTCFVMLiiPVdLRpwYhsZyU=;
-        b=t8dRuQE/JyFQsvLkPi15n9PBjD5//dHNElD7S9tKH4MQrzIcF3itNPTaSa+wIBIosx
-         YSMZP0w8fUPwqJICUoPNZGevqQ9Fx48fPYYvJaCERVR2Wj0GIPtpBwp1Peu3G0fr1rR3
-         HRVE5HWpX0FPhEimSxeI986Jv6qVdVGIrlSxBowR0p2k2RYXghRGwP+hg+3NtSZHmc0Y
-         Karp7E5DBklENtRNkhB1NntMyZKDw1UAo5ycGa5jzBbI0gEgiOQ3yY0m+L0/HPbGW2Wt
-         62sryvG0fVw+B9KvnUKZWLxIPon/P00CYACjtR53eMCA95lYc1heyNHkxEnwv+kB0mtE
-         F1wQ==
-X-Gm-Message-State: AO0yUKXGuhfOweZaWZdg996FuSn+KOFOhDkj0z5elG3S+x1Z3TDMva75
-        3ejYKMILmWSxLRM8rEMZJq10Iw==
-X-Google-Smtp-Source: AK7set+iWPMML3Nm2brY9DDC78PaPSUmaB2xj9+8+sVGsinSPH+VjBv0oq3VZeEnT0ElEM52IECvQg==
-X-Received: by 2002:a05:600c:a295:b0:3da:1e35:dfec with SMTP id hu21-20020a05600ca29500b003da1e35dfecmr4247864wmb.4.1675803633511;
-        Tue, 07 Feb 2023 13:00:33 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f9-20020a05600c44c900b003dc4fd6e624sm8041631wmo.19.2023.02.07.13.00.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 13:00:33 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 7/7] ARM: dts: exynos: move I2C10 out of soc node on Arndale
-Date:   Tue,  7 Feb 2023 22:00:20 +0100
-Message-Id: <20230207210020.677007-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230207210020.677007-1-krzysztof.kozlowski@linaro.org>
-References: <20230207210020.677007-1-krzysztof.kozlowski@linaro.org>
+        Tue, 7 Feb 2023 17:44:27 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE95B9EC0;
+        Tue,  7 Feb 2023 14:44:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675809866; x=1707345866;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=w4yUWgdrMkSu5h1zXbr5sfr/CirMhN4jXxr0vnH7soA=;
+  b=HfO1bJch7urb36Y8969+dlDJjzJG33h4btEq+2Q74gm5aF1+wEJxGWhq
+   0xy1m4whevJPOkWbzdj3CZeMzZQqag+0Fu3AjZdS1q88zE9t6dbMtgXCF
+   l/d3EY2EI4CDZVQMfKenurSVnlBbnQZ2313G6c3ER7BWqTI26qqGeFPa5
+   3iThx4tVsArsSqARBR6Pdi6RAg9btw0r4XUQUd+o9q8Xwx7YsoMxIkwNy
+   N/rGoUCtODkCee/Hdy7lDNN2rMH2PQmvbDXLlNvZ7Hf6GlxmaO9bNffSf
+   XcytN1lDVwzGomT8AL0AdhINWJH91r/Rmq3fUsKSDyR9ddbZO0igPBMab
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="357027931"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="357027931"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 14:44:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="616981528"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="616981528"
+Received: from jinggu-mobl.amr.corp.intel.com (HELO [10.212.120.142]) ([10.212.120.142])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 14:44:23 -0800
+Message-ID: <b532bf7b-e1fb-3a9d-1b88-02f3159be47d@linux.intel.com>
+Date:   Tue, 7 Feb 2023 07:29:19 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v2 20/22] sound: usb: Prevent starting of audio stream
+ if in use
+To:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
+        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
+        agross@kernel.org
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-21-quic_wcheng@quicinc.com>
+ <557f8f76-38f5-5e07-905e-774e03120bd2@linux.intel.com>
+ <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I2C10 is represented as i2c-gpio device, thus it is not really a part of
-soc MMIO bus:
 
-  exynos5250-arndale.dtb: soc: i2c-10: {'pinctrl-names': ['default'], ... } should not be valid under {'type': 'object'}
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/exynos5250-arndale.dts | 28 +++++++++++-------------
- 1 file changed, 13 insertions(+), 15 deletions(-)
+On 2/6/23 19:15, Wesley Cheng wrote:
+> Hi Pierre,
+> 
+> On 1/26/2023 8:12 AM, Pierre-Louis Bossart wrote:
+>>
+>>
+>> On 1/25/23 21:14, Wesley Cheng wrote:
+>>> With USB audio offloading, an audio session is started from the ASoC
+>>> platform sound card and PCM devices.  Likewise, the USB SND path is
+>>> still
+>>> readily available for use, in case the non-offload path is desired.  In
+>>> order to prevent the two entities from attempting to use the USB bus,
+>>> introduce a flag that determines when either paths are in use.
+>>>
+>>> If a PCM device is already in use, the check will return an error to
+>>> userspace notifying that the stream is currently busy.  This ensures
+>>> that
+>>> only one path is using the USB substream.
+>>
+>> It's good to maintain mutual exclusion, but it's still very hard for an
+>> application to figure out which card can be used when.
+>>
+>> Returning -EBUSY is not super helpful. There should be something like a
+>> notification or connection status so that routing decisions can be made
+>> without trial-and-error.
+>>
+> 
+> The USB offload driver does have access to the USB substream that is
+> being utilized/offloaded.  Maybe in addition to this check, we can also
+> set the PCM runtime state as well (for that particular substream)?  That
+> way userspace can fetch information about if the stream is busy or not.
 
-diff --git a/arch/arm/boot/dts/exynos5250-arndale.dts b/arch/arm/boot/dts/exynos5250-arndale.dts
-index 305289ed06d8..56f08ca4762c 100644
---- a/arch/arm/boot/dts/exynos5250-arndale.dts
-+++ b/arch/arm/boot/dts/exynos5250-arndale.dts
-@@ -73,6 +73,19 @@ key-wakeup {
- 		};
- 	};
- 
-+	/*
-+	 * For unknown reasons HDMI-DDC does not work with Exynos I2C
-+	 * controllers. Lets use software I2C over GPIO pins as a workaround.
-+	 */
-+	i2c_ddc: i2c-10 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&i2c2_gpio_bus>;
-+		compatible = "i2c-gpio";
-+		sda-gpios = <&gpa0 6 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+		scl-gpios = <&gpa0 7 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+		i2c-gpio,delay-us = <2>;
-+	};
-+
- 	panel: panel {
- 		compatible = "boe,hv070wsa-100";
- 		power-supply = <&vcc_3v3_reg>;
-@@ -615,21 +628,6 @@ &sata_phy_i2c {
- 	status = "okay";
- };
- 
--&soc {
--	/*
--	 * For unknown reasons HDMI-DDC does not work with Exynos I2C
--	 * controllers. Lets use software I2C over GPIO pins as a workaround.
--	 */
--	i2c_ddc: i2c-10 {
--		pinctrl-names = "default";
--		pinctrl-0 = <&i2c2_gpio_bus>;
--		compatible = "i2c-gpio";
--		sda-gpios = <&gpa0 6 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
--		scl-gpios = <&gpa0 7 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
--		i2c-gpio,delay-us = <2>;
--	};
--};
--
- &usbdrd {
- 	vdd10-supply = <&ldo15_reg>;
- 	vdd33-supply = <&ldo12_reg>;
--- 
-2.34.1
+You're missing the point. When a card is exposed but the PCM devices may
+or may not be usable (consuming data with no sound rendered or returning
+an error), it's much better to provide a clear connection status to
+userspace.
 
+Let me give you an example. Intel drivers can expose 3 HDMI/DP PCM
+devices. Userspace has no idea which one to use, so there's a jack
+control that tells userspace whether there is a receiver connected so
+that the audio server can use the relevant PCM device.
+
+Audio routing based on trial and error is really problematic, errors can
+happen but they should be exceptional (e.g. xruns), not a means of
+driver-userspace communication on the device status.
