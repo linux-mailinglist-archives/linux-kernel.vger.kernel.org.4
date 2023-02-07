@@ -2,343 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8135E68DF03
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC61068DF04
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjBGRdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S231777AbjBGRd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjBGRdV (ORCPT
+        with ESMTP id S229685AbjBGRdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:33:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9733CE32;
-        Tue,  7 Feb 2023 09:33:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E891F60F95;
-        Tue,  7 Feb 2023 17:33:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45330C433EF;
-        Tue,  7 Feb 2023 17:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675791189;
-        bh=OOFodDg/RJjo5qTVphmNP/E/fr/ShyEQVDZAWMtFoM0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tXxwcE/gOF0eNx0XF92RAoYkNum7JZnXOZnnavM7kzrO0MQevxJJtXQxPJNmPEoZR
-         tAMLz9nlYUiMrkjH/XKT2k/4CJZ7++RadCYpn6C4IHt8JHwnxoVyjFlB66hlg6cJRQ
-         RtVlmuj69eecz4+uNG9d2OCUVRkR6tgweGdQ7Ag3A9B3i0x3l1Z/3o2JXHp4uErqyf
-         t3GKQ32zFVa94qvR26M0CjRf2YghqCdXlloIl2kbFkmDdMkoXcoi91RlDvfyQm8h4p
-         fB3bxwZHldFOuKK/WwIFRqJvJxjNiXAvBoMPfmM9C2dJCIEbPzS8z2Zbf2jvHi7ZV3
-         3Wl3kMwIvcAmA==
-Date:   Tue, 7 Feb 2023 09:33:04 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     jgross@suse.com, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
-        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
-        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org
-Subject: [PATCH v1.1 22/22] sched/idle: Mark arch_cpu_idle_dead() __noreturn
-Message-ID: <20230207173304.le5rvsz2emasye7s@treble>
-References: <cover.1675461757.git.jpoimboe@kernel.org>
- <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
+        Tue, 7 Feb 2023 12:33:53 -0500
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662D7392B9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:33:46 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vb8OoW2_1675791220;
+Received: from 30.25.213.166(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0Vb8OoW2_1675791220)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Feb 2023 01:33:42 +0800
+Message-ID: <89120a6f-079c-3687-1c97-c339c06d4cff@linux.alibaba.com>
+Date:   Wed, 8 Feb 2023 01:33:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH -v4 5/9] migrate_pages: batch _unmap and _move
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20230206063313.635011-1-ying.huang@intel.com>
+ <20230206063313.635011-6-ying.huang@intel.com>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20230206063313.635011-6-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before commit 076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead()
-return"), in Xen, when a previously offlined CPU was brought back
-online, it unexpectedly resumed execution where it left off in the
-middle of the idle loop.
+I will do some tests on my arm64 server, but there is a problem with my 
+machine environment, I will provide the test results later.
 
-There were some hacks to make that work, but the behavior was surprising
-as do_idle() doesn't expect an offlined CPU to return from the dead (in
-arch_cpu_idle_dead()).
+Of course, i should combine with this patch 
+https://lore.kernel.org/lkml/20221117082648.47526-1-yangyicong@huawei.com/
 
-Now that Xen has been fixed, and the arch-specific implementations of
-arch_cpu_idle_dead() also don't return, give it a __noreturn attribute.
-
-This will cause the compiler to complain if an arch-specific
-implementation might return.  It also improves code generation for both
-caller and callee.
-
-Also fixes the following warning:
-
-  vmlinux.o: warning: objtool: do_idle+0x25f: unreachable instruction
-
-Reported-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
-v1.1:
-- add __noreturn to the implementations (in addition to just the
-  prototype)
-
- arch/alpha/kernel/process.c     | 2 +-
- arch/arm/kernel/smp.c           | 2 +-
- arch/arm64/kernel/process.c     | 2 +-
- arch/csky/kernel/smp.c          | 2 +-
- arch/ia64/kernel/process.c      | 2 +-
- arch/loongarch/kernel/process.c | 2 +-
- arch/mips/kernel/process.c      | 2 +-
- arch/parisc/kernel/process.c    | 2 +-
- arch/powerpc/kernel/smp.c       | 2 +-
- arch/riscv/kernel/cpu-hotplug.c | 2 +-
- arch/s390/kernel/idle.c         | 2 +-
- arch/sh/kernel/idle.c           | 2 +-
- arch/sparc/kernel/process_64.c  | 2 +-
- arch/x86/kernel/process.c       | 2 +-
- arch/xtensa/kernel/smp.c        | 2 +-
- include/linux/cpu.h             | 2 +-
- tools/objtool/check.c           | 1 +
- 17 files changed, 17 insertions(+), 16 deletions(-)
-
-diff --git a/arch/alpha/kernel/process.c b/arch/alpha/kernel/process.c
-index 94938f856545..c9a5ed23c5a6 100644
---- a/arch/alpha/kernel/process.c
-+++ b/arch/alpha/kernel/process.c
-@@ -60,7 +60,7 @@ void arch_cpu_idle(void)
- 	wtint(0);
- }
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	wtint(INT_MAX);
- 	BUG();
-diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
-index adcd417c526b..c2daa0f2f784 100644
---- a/arch/arm/kernel/smp.c
-+++ b/arch/arm/kernel/smp.c
-@@ -320,7 +320,7 @@ void __cpu_die(unsigned int cpu)
-  * of the other hotplug-cpu capable cores, so presumably coming
-  * out of idle fixes this.
-  */
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	unsigned int cpu = smp_processor_id();
- 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 71d59b5abede..089ced6d6bd6 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -69,7 +69,7 @@ void (*pm_power_off)(void);
- EXPORT_SYMBOL_GPL(pm_power_off);
- 
- #ifdef CONFIG_HOTPLUG_CPU
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
-        cpu_die();
- }
-diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
-index 0ec20efaf5fd..9c7a20b73ac6 100644
---- a/arch/csky/kernel/smp.c
-+++ b/arch/csky/kernel/smp.c
-@@ -300,7 +300,7 @@ void __cpu_die(unsigned int cpu)
- 	pr_notice("CPU%u: shutdown\n", cpu);
- }
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	idle_task_exit();
- 
-diff --git a/arch/ia64/kernel/process.c b/arch/ia64/kernel/process.c
-index 78f5794b2dde..9a5cd9fad3a9 100644
---- a/arch/ia64/kernel/process.c
-+++ b/arch/ia64/kernel/process.c
-@@ -225,7 +225,7 @@ static inline void __noreturn play_dead(void)
- }
- #endif /* CONFIG_HOTPLUG_CPU */
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	play_dead();
- }
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index edfd220a3737..ba70e94eb996 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -61,7 +61,7 @@ unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
- EXPORT_SYMBOL(boot_option_idle_override);
- 
- #ifdef CONFIG_HOTPLUG_CPU
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	play_dead();
- }
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index 093dbbd6b843..a3225912c862 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -40,7 +40,7 @@
- #include <asm/stacktrace.h>
- 
- #ifdef CONFIG_HOTPLUG_CPU
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	play_dead();
- }
-diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
-index c064719b49b0..97c6f875bd0e 100644
---- a/arch/parisc/kernel/process.c
-+++ b/arch/parisc/kernel/process.c
-@@ -159,7 +159,7 @@ EXPORT_SYMBOL(running_on_qemu);
- /*
-  * Called from the idle thread for the CPU which has been shutdown.
-  */
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- #ifdef CONFIG_HOTPLUG_CPU
- 	idle_task_exit();
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index 6b90f10a6c81..f62e5e651bcd 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1752,7 +1752,7 @@ void __cpu_die(unsigned int cpu)
- 		smp_ops->cpu_die(cpu);
- }
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	/*
- 	 * Disable on the down path. This will be re-enabled by
-diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
-index f7a832e3a1d1..59b80211c25f 100644
---- a/arch/riscv/kernel/cpu-hotplug.c
-+++ b/arch/riscv/kernel/cpu-hotplug.c
-@@ -71,7 +71,7 @@ void __cpu_die(unsigned int cpu)
- /*
-  * Called from the idle thread for the CPU which has been shutdown.
-  */
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	idle_task_exit();
- 
-diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
-index cb653c87018f..481ca32e628e 100644
---- a/arch/s390/kernel/idle.c
-+++ b/arch/s390/kernel/idle.c
-@@ -143,7 +143,7 @@ void arch_cpu_idle_exit(void)
- {
- }
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	cpu_die();
- }
-diff --git a/arch/sh/kernel/idle.c b/arch/sh/kernel/idle.c
-index 114f0c4abeac..d662503b0665 100644
---- a/arch/sh/kernel/idle.c
-+++ b/arch/sh/kernel/idle.c
-@@ -30,7 +30,7 @@ void default_idle(void)
- 	clear_bl_bit();
- }
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	play_dead();
- }
-diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
-index 91c2b8124527..b51d8fb0ecdc 100644
---- a/arch/sparc/kernel/process_64.c
-+++ b/arch/sparc/kernel/process_64.c
-@@ -95,7 +95,7 @@ void arch_cpu_idle(void)
- }
- 
- #ifdef CONFIG_HOTPLUG_CPU
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	sched_preempt_enable_no_resched();
- 	cpu_play_dead();
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index f1ec36caf1d8..3e30147a537e 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -727,7 +727,7 @@ void arch_cpu_idle_enter(void)
- 	local_touch_nmi();
- }
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	play_dead();
- }
-diff --git a/arch/xtensa/kernel/smp.c b/arch/xtensa/kernel/smp.c
-index 7bad78495536..054bd64eab19 100644
---- a/arch/xtensa/kernel/smp.c
-+++ b/arch/xtensa/kernel/smp.c
-@@ -322,7 +322,7 @@ void __cpu_die(unsigned int cpu)
- 	pr_err("CPU%u: unable to kill\n", cpu);
- }
- 
--void arch_cpu_idle_dead(void)
-+void __noreturn arch_cpu_idle_dead(void)
- {
- 	cpu_die();
- }
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index f83e4519c5f0..8582a7142623 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -182,7 +182,7 @@ void arch_cpu_idle(void);
- void arch_cpu_idle_prepare(void);
- void arch_cpu_idle_enter(void);
- void arch_cpu_idle_exit(void);
--void arch_cpu_idle_dead(void);
-+void __noreturn arch_cpu_idle_dead(void);
- 
- int cpu_report_state(int cpu);
- int cpu_check_up_prepare(int cpu);
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 0f67c6a8bc98..e3fa2279d612 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -167,6 +167,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
- 		"__reiserfs_panic",
- 		"__stack_chk_fail",
- 		"__ubsan_handle_builtin_unreachable",
-+		"arch_cpu_idle_dead",
- 		"cpu_bringup_and_idle",
- 		"cpu_startup_entry",
- 		"do_exit",
--- 
-2.39.0
-
+在 2023/2/6 下午2:33, Huang Ying 写道:
+> In this patch the _unmap and _move stage of the folio migration is
+> batched.  That for, previously, it is,
+>
+>    for each folio
+>      _unmap()
+>      _move()
+>
+> Now, it is,
+>
+>    for each folio
+>      _unmap()
+>    for each folio
+>      _move()
+>
+> Based on this, we can batch the TLB flushing and use some hardware
+> accelerator to copy folios between batched _unmap and batched _move
+> stages.
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: haoxin <xhao@linux.alibaba.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>   mm/migrate.c | 208 +++++++++++++++++++++++++++++++++++++++++++++------
+>   1 file changed, 184 insertions(+), 24 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 0428449149f4..fa7212330cb6 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1033,6 +1033,33 @@ static void __migrate_folio_extract(struct folio *dst,
+>   	dst->private = NULL;
+>   }
+>   
+> +/* Restore the source folio to the original state upon failure */
+> +static void migrate_folio_undo_src(struct folio *src,
+> +				   int page_was_mapped,
+> +				   struct anon_vma *anon_vma,
+> +				   struct list_head *ret)
+> +{
+> +	if (page_was_mapped)
+> +		remove_migration_ptes(src, src, false);
+> +	/* Drop an anon_vma reference if we took one */
+> +	if (anon_vma)
+> +		put_anon_vma(anon_vma);
+> +	folio_unlock(src);
+> +	list_move_tail(&src->lru, ret);
+> +}
+> +
+> +/* Restore the destination folio to the original state upon failure */
+> +static void migrate_folio_undo_dst(struct folio *dst,
+> +				   free_page_t put_new_page,
+> +				   unsigned long private)
+> +{
+> +	folio_unlock(dst);
+> +	if (put_new_page)
+> +		put_new_page(&dst->page, private);
+> +	else
+> +		folio_put(dst);
+> +}
+> +
+>   /* Cleanup src folio upon migration success */
+>   static void migrate_folio_done(struct folio *src,
+>   			       enum migrate_reason reason)
+> @@ -1052,7 +1079,7 @@ static void migrate_folio_done(struct folio *src,
+>   }
+>   
+>   static int __migrate_folio_unmap(struct folio *src, struct folio *dst,
+> -				int force, enum migrate_mode mode)
+> +				 int force, bool force_lock, enum migrate_mode mode)
+>   {
+>   	int rc = -EAGAIN;
+>   	int page_was_mapped = 0;
+> @@ -1079,6 +1106,17 @@ static int __migrate_folio_unmap(struct folio *src, struct folio *dst,
+>   		if (current->flags & PF_MEMALLOC)
+>   			goto out;
+>   
+> +		/*
+> +		 * We have locked some folios, to avoid deadlock, we cannot
+> +		 * lock the folio synchronously.  Go out to process (and
+> +		 * unlock) all the locked folios.  Then we can lock the folio
+> +		 * synchronously.
+> +		 */
+> +		if (!force_lock) {
+> +			rc = -EDEADLOCK;
+> +			goto out;
+> +		}
+> +
+>   		folio_lock(src);
+>   	}
+>   
+> @@ -1187,10 +1225,20 @@ static int __migrate_folio_move(struct folio *src, struct folio *dst,
+>   	int page_was_mapped = 0;
+>   	struct anon_vma *anon_vma = NULL;
+>   	bool is_lru = !__PageMovable(&src->page);
+> +	struct list_head *prev;
+>   
+>   	__migrate_folio_extract(dst, &page_was_mapped, &anon_vma);
+> +	prev = dst->lru.prev;
+> +	list_del(&dst->lru);
+>   
+>   	rc = move_to_new_folio(dst, src, mode);
+> +
+> +	if (rc == -EAGAIN) {
+> +		list_add(&dst->lru, prev);
+> +		__migrate_folio_record(dst, page_was_mapped, anon_vma);
+> +		return rc;
+> +	}
+> +
+>   	if (unlikely(!is_lru))
+>   		goto out_unlock_both;
+>   
+> @@ -1233,7 +1281,7 @@ static int __migrate_folio_move(struct folio *src, struct folio *dst,
+>   /* Obtain the lock on page, remove all ptes. */
+>   static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page,
+>   			       unsigned long private, struct folio *src,
+> -			       struct folio **dstp, int force,
+> +			       struct folio **dstp, int force, bool force_lock,
+>   			       enum migrate_mode mode, enum migrate_reason reason,
+>   			       struct list_head *ret)
+>   {
+> @@ -1261,7 +1309,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+>   	*dstp = dst;
+>   
+>   	dst->private = NULL;
+> -	rc = __migrate_folio_unmap(src, dst, force, mode);
+> +	rc = __migrate_folio_unmap(src, dst, force, force_lock, mode);
+>   	if (rc == MIGRATEPAGE_UNMAP)
+>   		return rc;
+>   
+> @@ -1270,7 +1318,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+>   	 * references and be restored.
+>   	 */
+>   	/* restore the folio to right list. */
+> -	if (rc != -EAGAIN)
+> +	if (rc != -EAGAIN && rc != -EDEADLOCK)
+>   		list_move_tail(&src->lru, ret);
+>   
+>   	if (put_new_page)
+> @@ -1309,9 +1357,8 @@ static int migrate_folio_move(free_page_t put_new_page, unsigned long private,
+>   	 */
+>   	if (rc == MIGRATEPAGE_SUCCESS) {
+>   		migrate_folio_done(src, reason);
+> -	} else {
+> -		if (rc != -EAGAIN)
+> -			list_add_tail(&src->lru, ret);
+> +	} else if (rc != -EAGAIN) {
+> +		list_add_tail(&src->lru, ret);
+>   
+>   		if (put_new_page)
+>   			put_new_page(&dst->page, private);
+> @@ -1591,7 +1638,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   		enum migrate_mode mode, int reason, struct list_head *ret_folios,
+>   		struct migrate_pages_stats *stats)
+>   {
+> -	int retry = 1;
+> +	int retry;
+>   	int large_retry = 1;
+>   	int thp_retry = 1;
+>   	int nr_failed = 0;
+> @@ -1600,13 +1647,19 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   	int pass = 0;
+>   	bool is_large = false;
+>   	bool is_thp = false;
+> -	struct folio *folio, *folio2, *dst = NULL;
+> -	int rc, nr_pages;
+> +	struct folio *folio, *folio2, *dst = NULL, *dst2;
+> +	int rc, rc_saved, nr_pages;
+>   	LIST_HEAD(split_folios);
+> +	LIST_HEAD(unmap_folios);
+> +	LIST_HEAD(dst_folios);
+>   	bool nosplit = (reason == MR_NUMA_MISPLACED);
+>   	bool no_split_folio_counting = false;
+> +	bool force_lock;
+>   
+> -split_folio_migration:
+> +retry:
+> +	rc_saved = 0;
+> +	force_lock = true;
+> +	retry = 1;
+>   	for (pass = 0;
+>   	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+>   	     pass++) {
+> @@ -1628,16 +1681,15 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   			cond_resched();
+>   
+>   			rc = migrate_folio_unmap(get_new_page, put_new_page, private,
+> -						 folio, &dst, pass > 2, mode,
+> -						 reason, ret_folios);
+> -			if (rc == MIGRATEPAGE_UNMAP)
+> -				rc = migrate_folio_move(put_new_page, private,
+> -							folio, dst, mode,
+> -							reason, ret_folios);
+> +						 folio, &dst, pass > 2, force_lock,
+> +						 mode, reason, ret_folios);
+>   			/*
+>   			 * The rules are:
+>   			 *	Success: folio will be freed
+> +			 *	Unmap: folio will be put on unmap_folios list,
+> +			 *	       dst folio put on dst_folios list
+>   			 *	-EAGAIN: stay on the from list
+> +			 *	-EDEADLOCK: stay on the from list
+>   			 *	-ENOMEM: stay on the from list
+>   			 *	-ENOSYS: stay on the from list
+>   			 *	Other errno: put on ret_folios list
+> @@ -1672,7 +1724,7 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   			case -ENOMEM:
+>   				/*
+>   				 * When memory is low, don't bother to try to migrate
+> -				 * other folios, just exit.
+> +				 * other folios, move unmapped folios, then exit.
+>   				 */
+>   				if (is_large) {
+>   					nr_large_failed++;
+> @@ -1711,7 +1763,19 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   				/* nr_failed isn't updated for not used */
+>   				nr_large_failed += large_retry;
+>   				stats->nr_thp_failed += thp_retry;
+> -				goto out;
+> +				rc_saved = rc;
+> +				if (list_empty(&unmap_folios))
+> +					goto out;
+> +				else
+> +					goto move;
+> +			case -EDEADLOCK:
+> +				/*
+> +				 * The folio cannot be locked for potential deadlock.
+> +				 * Go move (and unlock) all locked folios.  Then we can
+> +				 * try again.
+> +				 */
+> +				rc_saved = rc;
+> +				goto move;
+>   			case -EAGAIN:
+>   				if (is_large) {
+>   					large_retry++;
+> @@ -1725,6 +1789,15 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   				stats->nr_succeeded += nr_pages;
+>   				stats->nr_thp_succeeded += is_thp;
+>   				break;
+> +			case MIGRATEPAGE_UNMAP:
+> +				/*
+> +				 * We have locked some folios, don't force lock
+> +				 * to avoid deadlock.
+> +				 */
+> +				force_lock = false;
+> +				list_move_tail(&folio->lru, &unmap_folios);
+> +				list_add_tail(&dst->lru, &dst_folios);
+> +				break;
+>   			default:
+>   				/*
+>   				 * Permanent failure (-EBUSY, etc.):
+> @@ -1748,12 +1821,95 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   	nr_large_failed += large_retry;
+>   	stats->nr_thp_failed += thp_retry;
+>   	stats->nr_failed_pages += nr_retry_pages;
+> +move:
+> +	retry = 1;
+> +	for (pass = 0;
+> +	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+> +	     pass++) {
+> +		retry = 0;
+> +		large_retry = 0;
+> +		thp_retry = 0;
+> +		nr_retry_pages = 0;
+> +
+> +		dst = list_first_entry(&dst_folios, struct folio, lru);
+> +		dst2 = list_next_entry(dst, lru);
+> +		list_for_each_entry_safe(folio, folio2, &unmap_folios, lru) {
+> +			is_large = folio_test_large(folio);
+> +			is_thp = is_large && folio_test_pmd_mappable(folio);
+> +			nr_pages = folio_nr_pages(folio);
+> +
+> +			cond_resched();
+> +
+> +			rc = migrate_folio_move(put_new_page, private,
+> +						folio, dst, mode,
+> +						reason, ret_folios);
+> +			/*
+> +			 * The rules are:
+> +			 *	Success: folio will be freed
+> +			 *	-EAGAIN: stay on the unmap_folios list
+> +			 *	Other errno: put on ret_folios list
+> +			 */
+> +			switch(rc) {
+> +			case -EAGAIN:
+> +				if (is_large) {
+> +					large_retry++;
+> +					thp_retry += is_thp;
+> +				} else if (!no_split_folio_counting) {
+> +					retry++;
+> +				}
+> +				nr_retry_pages += nr_pages;
+> +				break;
+> +			case MIGRATEPAGE_SUCCESS:
+> +				stats->nr_succeeded += nr_pages;
+> +				stats->nr_thp_succeeded += is_thp;
+> +				break;
+> +			default:
+> +				if (is_large) {
+> +					nr_large_failed++;
+> +					stats->nr_thp_failed += is_thp;
+> +				} else if (!no_split_folio_counting) {
+> +					nr_failed++;
+> +				}
+> +
+> +				stats->nr_failed_pages += nr_pages;
+> +				break;
+> +			}
+> +			dst = dst2;
+> +			dst2 = list_next_entry(dst, lru);
+> +		}
+> +	}
+> +	nr_failed += retry;
+> +	nr_large_failed += large_retry;
+> +	stats->nr_thp_failed += thp_retry;
+> +	stats->nr_failed_pages += nr_retry_pages;
+> +
+> +	if (rc_saved)
+> +		rc = rc_saved;
+> +	else
+> +		rc = nr_failed + nr_large_failed;
+> +out:
+> +	/* Cleanup remaining folios */
+> +	dst = list_first_entry(&dst_folios, struct folio, lru);
+> +	dst2 = list_next_entry(dst, lru);
+> +	list_for_each_entry_safe(folio, folio2, &unmap_folios, lru) {
+> +		int page_was_mapped = 0;
+> +		struct anon_vma *anon_vma = NULL;
+> +
+> +		__migrate_folio_extract(dst, &page_was_mapped, &anon_vma);
+> +		migrate_folio_undo_src(folio, page_was_mapped, anon_vma,
+> +				       ret_folios);
+> +		list_del(&dst->lru);
+> +		migrate_folio_undo_dst(dst, put_new_page, private);
+> +		dst = dst2;
+> +		dst2 = list_next_entry(dst, lru);
+> +	}
+> +
+>   	/*
+>   	 * Try to migrate split folios of fail-to-migrate large folios, no
+>   	 * nr_failed counting in this round, since all split folios of a
+>   	 * large folio is counted as 1 failure in the first round.
+>   	 */
+> -	if (!list_empty(&split_folios)) {
+> +	if (rc >= 0 && !list_empty(&split_folios)) {
+>   		/*
+>   		 * Move non-migrated folios (after NR_MAX_MIGRATE_PAGES_RETRY
+>   		 * retries) to ret_folios to avoid migrating them again.
+> @@ -1761,12 +1917,16 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   		list_splice_init(from, ret_folios);
+>   		list_splice_init(&split_folios, from);
+>   		no_split_folio_counting = true;
+> -		retry = 1;
+> -		goto split_folio_migration;
+> +		goto retry;
+>   	}
+>   
+> -	rc = nr_failed + nr_large_failed;
+> -out:
+> +	/*
+> +	 * We have unlocked all locked folios, so we can force lock now, let's
+> +	 * try again.
+> +	 */
+> +	if (rc == -EDEADLOCK)
+> +		goto retry;
+> +
+>   	return rc;
+>   }
+>   
