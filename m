@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BF568CE95
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA0268CE90
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjBGFC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:02:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
+        id S230367AbjBGFCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjBGFB5 (ORCPT
+        with ESMTP id S229874AbjBGFB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Feb 2023 00:01:57 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901C7C678;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90246C67C;
         Mon,  6 Feb 2023 21:01:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1675746115; x=1707282115;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=d7YOpMlf1P1ORwPsFp8Wf2z9+WUpcXCD+VCa+NWGzJ0=;
-  b=KgwOpYS9wwI5sG+q542pWz5u/vqrl00gdbipfL2/6e4zuRlSjEa2a1FL
-   EByuNyYUqIIm1c1vhNPO/wgqf+J91afi2g6JOobXDlY4H+cSFYwbpilRE
-   k2W035GmwVnSMmxflsN0H6BOW+8rw4OyOtxAf4PArdcu1YtuXJQjLuDxU
-   UdfT1ID5O/f8u7Lo1tBAdnH3XwyjQoLIOC1CwkU7FvRHl+99J5lfaDCKx
-   KinJoe/DUXiPwN55nUT5Qw8qoJhb7j5HVmHuNplFkU+0dkhqn8Rc+jMg8
-   msjsuc6nY5h3tVppu8rYD5ZtiImDWUCq9i95V9D/HTtapQu0W+SMGgVrg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625861"
+  bh=+1DtJmYoUbMLlAjJEQ1d3h7xcYK1w4mnpef+1fxd8fs=;
+  b=FT6uX/2Z2cJDqxB5UQdPg6yPU4mrWILNCMAbkcAW/F+e/3uy6Qs/0kEF
+   0XfIcNOwyLA75YRzVxpsWrrf+3UZ3uXHqSvt5KobjKrmL/EsQRSPjSI1h
+   M6BrDUgLkm2WB1VHRiPl2q6HDPof2pE362N5D8yj6dTRGbKjFfAmUHoDk
+   2vpL+iUZ0xIbh56yd9qHd6WZMi509xW0C8O00Fz6W8XETeQhaDwlzaLKE
+   tIDSGHVgWdEEBwXmBVdeIZdv7uYy+a4H64M9rtpmM2v9NtMPl/4OlZOkW
+   JuNtzcQi/sNh/azzkLMTbA8AP69uc2Flsg1o/GHUXjJ6xRrZEY0YMbB4b
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625878"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415625861"
+   d="scan'208";a="415625878"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:01:43 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:01:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657733"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657740"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668657733"
+   d="scan'208";a="668657740"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:43 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -60,9 +60,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v3 11/24] thermal: intel: hfi: Introduce Intel Thread Director classes
-Date:   Mon,  6 Feb 2023 21:10:52 -0800
-Message-Id: <20230207051105.11575-12-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 12/24] x86/cpufeatures: Add the Intel Thread Director feature definitions
+Date:   Mon,  6 Feb 2023 21:10:53 -0800
+Message-Id: <20230207051105.11575-13-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
@@ -75,12 +75,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Intel hybrid parts, each type of CPU has specific performance and
-energy efficiency capabilities. The Intel Thread Director technology
-extends the Hardware Feedback Interface (HFI) to provide performance and
-energy efficiency data for advanced classes of instructions.
+Intel Thread Director (ITD) provides hardware resources to classify
+the current task. The classification reflects the type of instructions that
+a task currently executes.
 
-Add support to parse per-class capabilities.
+ITD extends the Hardware Feedback Interface table to provide performance
+and energy efficiency capabilities for each of the supported classes of
+tasks.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -104,100 +105,65 @@ Changes since v2:
  * None
 
 Changes since v1:
- * Removed a now obsolete comment.
+ * Removed dependency on CONFIG_INTEL_THREAD_DIRECTOR. Instead, depend on
+   CONFIG_IPC_CLASSES.
+ * Added DISABLE_ITD to the correct DISABLE_MASK: 14 instead of 13.
 ---
- drivers/thermal/intel/intel_hfi.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ arch/x86/include/asm/cpufeatures.h       | 1 +
+ arch/x86/include/asm/disabled-features.h | 8 +++++++-
+ arch/x86/kernel/cpu/cpuid-deps.c         | 1 +
+ 3 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 6e604bda2b93..2527ae3836c7 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -77,7 +77,7 @@ union cpuid6_edx {
-  * @ee_cap:		Energy efficiency capability
-  *
-  * Capabilities of a logical processor in the HFI table. These capabilities are
-- * unitless.
-+ * unitless and specific to each HFI class.
-  */
- struct hfi_cpu_data {
- 	u8	perf_cap;
-@@ -89,7 +89,8 @@ struct hfi_cpu_data {
-  * @perf_updated:	Hardware updated performance capabilities
-  * @ee_updated:		Hardware updated energy efficiency capabilities
-  *
-- * Properties of the data in an HFI table.
-+ * Properties of the data in an HFI table. There exists one header per each
-+ * HFI class.
-  */
- struct hfi_hdr {
- 	u8	perf_updated;
-@@ -127,16 +128,21 @@ struct hfi_instance {
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index fdb8e09234ba..8a6261a5dbbf 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -349,6 +349,7 @@
+ #define X86_FEATURE_HWP_EPP		(14*32+10) /* HWP Energy Perf. Preference */
+ #define X86_FEATURE_HWP_PKG_REQ		(14*32+11) /* HWP Package Level Request */
+ #define X86_FEATURE_HFI			(14*32+19) /* Hardware Feedback Interface */
++#define X86_FEATURE_ITD			(14*32+23) /* Intel Thread Director */
  
- /**
-  * struct hfi_features - Supported HFI features
-+ * @nr_classes:		Number of classes supported
-  * @nr_table_pages:	Size of the HFI table in 4KB pages
-  * @cpu_stride:		Stride size to locate the capability data of a logical
-  *			processor within the table (i.e., row stride)
-+ * @class_stride:	Stride size to locate a class within the capability
-+ *			data of a logical processor or the HFI table header
-  * @hdr_size:		Size of the table header
-  *
-  * Parameters and supported features that are common to all HFI instances
+ /* AMD SVM Feature Identification, CPUID level 0x8000000a (EDX), word 15 */
+ #define X86_FEATURE_NPT			(15*32+ 0) /* Nested Page Table support */
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 5dfa4fb76f4b..f8e145a8c5dd 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -99,6 +99,12 @@
+ # define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
+ #endif
+ 
++#ifdef CONFIG_IPC_CLASSES
++# define DISABLE_ITD	0
++#else
++# define DISABLE_ITD	(1 << (X86_FEATURE_ITD & 31))
++#endif
++
+ /*
+  * Make sure to add features to the correct mask
   */
- struct hfi_features {
-+	unsigned int	nr_classes;
- 	size_t		nr_table_pages;
- 	unsigned int	cpu_stride;
-+	unsigned int	class_stride;
- 	unsigned int	hdr_size;
+@@ -117,7 +123,7 @@
+ 			 DISABLE_CALL_DEPTH_TRACKING)
+ #define DISABLED_MASK12	0
+ #define DISABLED_MASK13	0
+-#define DISABLED_MASK14	0
++#define DISABLED_MASK14	(DISABLE_ITD)
+ #define DISABLED_MASK15	0
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
+ 			 DISABLE_ENQCMD)
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index f6748c8bd647..7a87b823eef3 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -81,6 +81,7 @@ static const struct cpuid_dep cpuid_deps[] = {
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
+ 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
++	{ X86_FEATURE_ITD,			X86_FEATURE_HFI       },
+ 	{}
  };
  
-@@ -333,8 +339,8 @@ static void init_hfi_cpu_index(struct hfi_cpu_info *info)
- }
- 
- /*
-- * The format of the HFI table depends on the number of capabilities that the
-- * hardware supports. Keep a data structure to navigate the table.
-+ * The format of the HFI table depends on the number of capabilities and classes
-+ * that the hardware supports. Keep a data structure to navigate the table.
-  */
- static void init_hfi_instance(struct hfi_instance *hfi_instance)
- {
-@@ -515,18 +521,30 @@ static __init int hfi_parse_features(void)
- 	/* The number of 4KB pages required by the table */
- 	hfi_features.nr_table_pages = edx.split.table_pages + 1;
- 
-+	/*
-+	 * Capability fields of an HFI class are grouped together. Classes are
-+	 * contiguous in memory.  Hence, use the number of supported features to
-+	 * locate a specific class.
-+	 */
-+	hfi_features.class_stride = nr_capabilities;
-+
-+	/* For now, use only one class of the HFI table */
-+	hfi_features.nr_classes = 1;
-+
- 	/*
- 	 * The header contains change indications for each supported feature.
- 	 * The size of the table header is rounded up to be a multiple of 8
- 	 * bytes.
- 	 */
--	hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities, 8) * 8;
-+	hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities *
-+					     hfi_features.nr_classes, 8) * 8;
- 
- 	/*
- 	 * Data of each logical processor is also rounded up to be a multiple
- 	 * of 8 bytes.
- 	 */
--	hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities, 8) * 8;
-+	hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities *
-+					       hfi_features.nr_classes, 8) * 8;
- 
- 	return 0;
- }
 -- 
 2.25.1
 
