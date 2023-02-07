@@ -2,135 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3AAA68D5A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F8968D5A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjBGLhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S231243AbjBGLhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjBGLhA (ORCPT
+        with ESMTP id S230176AbjBGLhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:37:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5555310DD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:36:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675769780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f10t9dK7ifwgpP0YM2Y3xjBmnDWSujGozfYVnVK63GU=;
-        b=eYlNPxpjH9/HGIKMO0PdX673TBN4rZw4ZjM5/lZs+fHwH1FBPRlIZa2xZwqEguMFYwc5XA
-        PiGhjRcrEuzFF84cVaEMvpxrsg/scawlmuby+Vp/rQ/a4j3lJ8H7LIfJo6nZW3k0Qnvkmn
-        Qw8vSloDfce18Fi8XCsNEhnfvEi4jAE=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-494-pRpWgby0OSe16Bx-_JCSXg-1; Tue, 07 Feb 2023 06:36:17 -0500
-X-MC-Unique: pRpWgby0OSe16Bx-_JCSXg-1
-Received: by mail-qk1-f199.google.com with SMTP id x12-20020a05620a258c00b007051ae500a2so9572175qko.15
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 03:36:16 -0800 (PST)
+        Tue, 7 Feb 2023 06:37:01 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6261FFF3E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:36:57 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o36so10820440wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 03:36:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mdps6QBYo2EpuvJeAjXIcH3c9RsvgZrrYv9TzRjo4cg=;
+        b=PwiGU5LiVPMC55a4jM5WbxdWafNPqkDEJ6q+rPKmDoWesqzTsxe5weTgyhsUiUtJLl
+         +6TQVnSw3OPz4j92KQNzOYF3LzD+WtWoktbQFWk7+vkdCJSG6WMVx1Eu8fCGKtkD0ypZ
+         LFe6ZfTUt4lPsrszA3zzWv7k0yoYPdq3PjldNi/jPbF4Gg73S5aFSJsNXBywyDpH+ndu
+         0KVZbabl7Pxa5Zlw5E70x9iZQDmAQnRewS2XBOGurDpP0F52GKCbdJ4GqyPTm73lO7u9
+         zB51SJcBRdfgkDxZ/xf6esONMzqwIzZfYQk1qkTq6uUPsmj/43zf68ImwLF5wy+oCB1J
+         pOuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f10t9dK7ifwgpP0YM2Y3xjBmnDWSujGozfYVnVK63GU=;
-        b=xMb6/MHk4AsihuxT0lLrFut9W8okZy2zj209zuOs9JSDxke3owxtrMTdEtzWHKTovb
-         Yl3ns8OgSUVEW1d7rPicXTFBq5vaEOMf0YtqIM8k7zq5iNOf8OLTy1Lc1gf913CNblhV
-         IYrpulxTrXWkLZQ7VZhA7HlmNx0fn4Ws+p0wKoijzMolGioiz1Kl+5JpyI0adhVKQhqM
-         NSp26CbaVGyFyQwXo+07Jd/6vdU3kRK/Uo4CEELDaYdCo+vhl1QJnYLG0WxoSXhoquZu
-         5TYbBPyyI9lnet4HKzSAQcyOS+qkLZrRMiTBq7gmL4+mGR0nJ0UWEDb9zeR5R9BNXbfk
-         h6Iw==
-X-Gm-Message-State: AO0yUKXHfZzCC8HD5IgFOQ1YrieNVZEqw+Td6P2k86I33BBqmBij6edp
-        66DxR7RHlmMP+MdDr1Oxe/yr2IFSGbPoGuoG/C47nC+Tm2tsxG7TKBdV+d7kfYRiuOjpPeNR3EJ
-        ZQlroPQARRSCK6rPAm8A+BgQy
-X-Received: by 2002:a05:622a:ce:b0:39c:da22:47b8 with SMTP id p14-20020a05622a00ce00b0039cda2247b8mr5905563qtw.1.1675769776454;
-        Tue, 07 Feb 2023 03:36:16 -0800 (PST)
-X-Google-Smtp-Source: AK7set/JWAeulvB7eXRw0UD+lz66hmrJqSLEyBKwkHda5nG4yDCSyYcjGhaW8JWftV6yQo9TBlp3EA==
-X-Received: by 2002:a05:622a:ce:b0:39c:da22:47b8 with SMTP id p14-20020a05622a00ce00b0039cda2247b8mr5905538qtw.1.1675769776219;
-        Tue, 07 Feb 2023 03:36:16 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id l12-20020a05622a050c00b003b960aad697sm9515985qtx.9.2023.02.07.03.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 03:36:15 -0800 (PST)
-Message-ID: <135b671b1b76978fb147d5fee1e1b922e2c61f26.camel@redhat.com>
-Subject: Re: [PATCH net v2 1/2] net: ll_temac: Fix DMA resources leak
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jonas Suhr Christensen <jsc@umbraculum.org>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Haoyue Xu <xuhaoyue1@hisilicon.com>,
-        huangjunxian <huangjunxian6@hisilicon.com>,
-        Wang Qing <wangqing@vivo.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Esben Haabendal <esben@geanix.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Feb 2023 12:36:11 +0100
-In-Reply-To: <5314e0ba3a728787299ca46a60b0a2da5e8ab23a.camel@redhat.com>
-References: <20230205201130.11303-1-jsc@umbraculum.org>
-         <20230205201130.11303-2-jsc@umbraculum.org>
-         <5314e0ba3a728787299ca46a60b0a2da5e8ab23a.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mdps6QBYo2EpuvJeAjXIcH3c9RsvgZrrYv9TzRjo4cg=;
+        b=sKoxWNQxQnBL3puRIJV0uyx+4t7/fhTo/cYabO1Md/zsb5xc0y8eAiBa8vfsDIAK61
+         rbXtSJJDaIz+6HYTXUfkRN7MhHxCV0gOQWL81DXHd0LESBRjKD/YpC69BUIPRPCtLCra
+         DFn9WrUwMhF9cEq9nyaO31UbtW57sTp3VvtYmFE65BvFvLlughBowVpDx/GOLbBzb2CL
+         InOyc7ZWp7s2bGfFSLgRFOCJEyxRjLQICEso8SX3q689n072w86x0jEgEEe+QhpC0KaH
+         SNxqaU/C2oTv34XVYJY3xwEq9e1afIU81+gsviJYNA+6hhBdLCwP2MMDKC5T5cXg+ltP
+         RN1w==
+X-Gm-Message-State: AO0yUKVTBx6n+XyihDlCsCrJoBX4rcTJ5NNSce7m2X+n0b5GETwAGu3L
+        cvAY88z4ktcGGsBiiKjVkpm1pA==
+X-Google-Smtp-Source: AK7set9n+m4pjXErkmugtRMuy4NBW/6r4G9q7oXcQhxqaTVJO4e/w06E1QNJPt8PPg3CIPLvKxJACg==
+X-Received: by 2002:a05:600c:3093:b0:3df:fbd5:690 with SMTP id g19-20020a05600c309300b003dffbd50690mr2788705wmn.17.1675769815959;
+        Tue, 07 Feb 2023 03:36:55 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id k32-20020a05600c1ca000b003ddf2865aeasm20243816wms.41.2023.02.07.03.36.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 03:36:55 -0800 (PST)
+Message-ID: <14d57333-02bc-6294-ed20-4c882dcd0dae@linaro.org>
+Date:   Tue, 7 Feb 2023 11:36:54 +0000
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH v9 14/27] gunyah: vm_mgr: Add ioctls to support basic
+ non-proxy VM boot
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>
+Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-15-quic_eberman@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20230120224627.4053418-15-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-07 at 12:27 +0100, Paolo Abeni wrote:
-> Hi,
->=20
-> On Sun, 2023-02-05 at 21:11 +0100, Jonas Suhr Christensen wrote:
-> > Add missing conversion of address when unmapping dma region causing
-> > unmapping to silently fail. At some point resulting in buffer
-> > overrun eg. when releasing device.
-> >=20
-> > Fixes: fdd7454ecb29 ("net: ll_temac: Fix support for little-endian plat=
-forms")
-> >=20
-> > Signed-off-by: Jonas Suhr Christensen <jsc@umbraculum.org>
->=20
-> I'm sorry for nit-picking, but you must avoid empty lines in the tag
-> area. Please post a v2 avoiding the empty line between the Fixes and
-> sob tags (both here and in the next patch).
->=20
-> You can retain (include in the tag area) the already collected
-> reviewed-by/acked-by tags.
 
-I'm sorry,  I'm low on coffee. I forgot to mention a more relevant
-thing:
 
-> @@ -307,9 +308,14 @@  static void temac_dma_bd_release(struct net_device =
-*ndev)
-> 	for (i =3D 0; i < lp->rx_bd_num; i++) {
-> 		if (!lp->rx_skb[i])
-> 			break;
-> -		dma_unmap_single(ndev->dev.parent, lp->rx_bd_v[i].phys,
+On 20/01/2023 22:46, Elliot Berman wrote:
+> Add remaining ioctls to support non-proxy VM boot:
+> 
+>   - Gunyah Resource Manager uses the VM's devicetree to configure the
+>     virtual machine. The location of the devicetree in the guest's
+>     virtual memory can be declared via the SET_DTB_CONFIG ioctl.
+>   - Trigger start of the virtual machine with VM_START ioctl.
+> 
+> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   drivers/virt/gunyah/vm_mgr.c    | 110 ++++++++++++++++++++++++++++++++
+>   drivers/virt/gunyah/vm_mgr.h    |   9 +++
+>   drivers/virt/gunyah/vm_mgr_mm.c |  24 +++++++
+>   include/uapi/linux/gunyah.h     |   8 +++
+>   4 files changed, 151 insertions(+)
+> 
+> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
+> index b847fde63333..48bd3f06fb6c 100644
+> --- a/drivers/virt/gunyah/vm_mgr.c
+> +++ b/drivers/virt/gunyah/vm_mgr.c
+> @@ -9,6 +9,7 @@
+>   #include <linux/file.h>
+>   #include <linux/gunyah_rsc_mgr.h>
+>   #include <linux/miscdevice.h>
+> +#include <linux/mm.h>
+>   #include <linux/module.h>
+>   
+>   #include <uapi/linux/gunyah.h>
+> @@ -37,10 +38,98 @@ static __must_check struct gunyah_vm *gunyah_vm_alloc(struct gh_rm_rpc *rm)
+>   
+>   	mutex_init(&ghvm->mm_lock);
+>   	INIT_LIST_HEAD(&ghvm->memory_mappings);
+> +	init_rwsem(&ghvm->status_lock);
+>   
+
+using read write semaphore is really not going to make any difference in 
+this particular case.
+we have just one reader (gh_vm_ensure_started) and it mostly makes 
+synchronous call to writer (vm_start).
+
+>   	return ghvm;
+>   }
+>   
+> +static int gh_vm_start(struct gunyah_vm *ghvm)
+> +{
+> +	struct gunyah_vm_memory_mapping *mapping;
+> +	u64 dtb_offset;
+> +	u32 mem_handle;
+> +	int ret;
 > +
-> +		bd =3D &lp->rx_bd_v[i];
-> +		dma_unmap_single(ndev->dev.parent, be32_to_cpu(bd->phys),
+> +	down_write(&ghvm->status_lock);
+> +	if (ghvm->vm_status != GH_RM_VM_STATUS_NO_STATE) {
+> +		up_write(&ghvm->status_lock);
+> +		return 0;
+> +	}
+> +
+> +	list_for_each_entry(mapping, &ghvm->memory_mappings, list) {
+> +		switch (mapping->share_type) {
+> +		case VM_MEM_LEND:
+> +			ret = gh_rm_mem_lend(ghvm->rm, &mapping->parcel);
+> +			break;
+> +		case VM_MEM_SHARE:
+> +			ret = gh_rm_mem_share(ghvm->rm, &mapping->parcel);
+> +			break;
+> +		}
 
-The above be32_to_cpu() introduces a new build warning. as phys type is
-u32. It looks like the existing code generates a lot of similar warns.
+> +		if (ret > 0)
+> +			ret = -EINVAL;
 
-You can either try change to phys type to __be32 (likely not suitable
-for -net and possibly can introduce even more warnings elsewhere) or
-explicitly cast the argument.
+why are we converting the error messages, afaiu both gh_rm_mem_lend and 
+gh_rm_mem_share return a valid error codes.
 
-Thanks,
+> +		if (ret) {
+> +			pr_warn("Failed to %s parcel %d: %d\n",
+> +				mapping->share_type == VM_MEM_LEND ? "lend" : "share",
+> +				mapping->parcel.label,
+> +				ret);
+> +			goto err;
+> +		}
+> +	}
+> +
+> +	mapping = gh_vm_mem_mapping_find_mapping(ghvm, ghvm->dtb_config.gpa, ghvm->dtb_config.size);
+> +	if (!mapping) {
+> +		pr_warn("Failed to find the memory_handle for DTB\n");
+> +		ret = -EINVAL;
+> +		goto err;
+> +	}
+> +
+> +	mem_handle = mapping->parcel.mem_handle;
+> +	dtb_offset = ghvm->dtb_config.gpa - mapping->guest_phys_addr;
+> +
+> +	ret = gh_rm_vm_configure(ghvm->rm, ghvm->vmid, ghvm->auth, mem_handle,
+> +				0, 0, dtb_offset, ghvm->dtb_config.size);
+> +	if (ret) {
+> +		pr_warn("Failed to configure VM: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	ret = gh_rm_vm_init(ghvm->rm, ghvm->vmid);
+> +	if (ret) {
+> +		pr_warn("Failed to initialize VM: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	ret = gh_rm_vm_start(ghvm->rm, ghvm->vmid);
+> +	if (ret) {
+> +		pr_warn("Failed to start VM: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	ghvm->vm_status = GH_RM_VM_STATUS_READY;
+> +
+> +	up_write(&ghvm->stvm_status = atus_lock);
+> +	return ret;
+> +err:
+> +	ghvm->vm_status = GH_RM_VM_STATUS_INIT_FAILED;
+> +	up_write(&ghvm->status_lock);
+> +	return ret;
+> +}
+> +
+> +static void gh_vm_stop(struct gunyah_vm *ghvm)
+> +{
+> +	int ret;
+> +
+> +	down_write(&ghvm->status_lock);
+> +	if (ghvm->vm_status == GH_RM_VM_STATUS_READY) {
+> +		ret = gh_rm_vm_stop(ghvm->rm, ghvm->vmid);
+> +		if (ret)
+> +			pr_warn("Failed to stop VM: %d\n", ret);
+> +	}
+> +
+> +	ghvm->vm_status = GH_RM_VM_STATUS_EXITED;
+> +	up_write(&ghvm->status_lock);
+> +}
+> +
+>   static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>   {
+>   	struct gunyah_vm *ghvm = filp->private_data;
+> @@ -84,6 +173,25 @@ static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>   		}
+>   		break;
+>   	}
+> +	case GH_VM_SET_DTB_CONFIG: {
+> +		struct gh_vm_dtb_config dtb_config;
+> +
+> +		r = -EFAULT;
+> +		if (copy_from_user(&dtb_config, argp, sizeof(dtb_config)))
+> +			break;
+> +
+same feedback as other patches on setting error codes.
+> +		dtb_config.size = PAGE_ALIGN(dtb_config.size);
+> +		ghvm->dtb_config = dtb_config;
+> +
+> +		r = 0;
+> +		break;
+> +	}
+> +	case GH_VM_START: {
+> +		r = gh_vm_start(ghvm);
+> +		if (r)
+> +			r = -EINVAL;
+> +		break;
+> +	}
+>   	default:
+>   		r = -ENOTTY;
+>   		break;
+> @@ -97,6 +205,8 @@ static int gh_vm_release(struct inode *inode, struct file *filp)
+>   	struct gunyah_vm *ghvm = filp->private_data;
+>   	struct gunyah_vm_memory_mapping *mapping, *tmp;
+>   
+> +	gh_vm_stop(ghvm);
+> +
+>   	list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
+>   		gh_vm_mem_mapping_reclaim(ghvm, mapping);
+>   		kfree(mapping);
+> diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
+> index 6b38bf780f76..5c02fb305893 100644
+> --- a/drivers/virt/gunyah/vm_mgr.h
+> +++ b/drivers/virt/gunyah/vm_mgr.h
+> @@ -10,6 +10,7 @@
+>   #include <linux/list.h>
+>   #include <linux/miscdevice.h>
+>   #include <linux/mutex.h>
+> +#include <linux/rwsem.h>
+>   
+>   #include <uapi/linux/gunyah.h>
+>   
+> @@ -34,6 +35,12 @@ struct gunyah_vm {
+>   	u16 vmid;
+>   	struct gh_rm *rm;
+>   
+> +	enum gh_rm_vm_auth_mechanism auth;
+> +	struct gh_vm_dtb_config dtb_config;
+> +
+> +	enum gh_rm_vm_status vm_status;
+> +	struct rw_semaphore status_lock;
+> +
+>   	struct mutex mm_lock;
+>   	struct list_head memory_mappings;
+>   };
+> @@ -42,5 +49,7 @@ struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_alloc(struct gunyah_vm *ghvm,
+>   							struct gh_userspace_memory_region *region);
+>   void gh_vm_mem_mapping_reclaim(struct gunyah_vm *ghvm, struct gunyah_vm_memory_mapping *mapping);
+>   struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_find(struct gunyah_vm *ghvm, u32 label);
+> +struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_find_mapping(struct gunyah_vm *ghvm,
+> +								u64 gpa, u32 size);
+>   
+>   #endif
+> diff --git a/drivers/virt/gunyah/vm_mgr_mm.c b/drivers/virt/gunyah/vm_mgr_mm.c
+> index f2dbdb4ee8ab..7fcb9f8a29bf 100644
+> --- a/drivers/virt/gunyah/vm_mgr_mm.c
+> +++ b/drivers/virt/gunyah/vm_mgr_mm.c
+> @@ -53,6 +53,30 @@ void gh_vm_mem_mapping_reclaim(struct gunyah_vm *ghvm, struct gunyah_vm_memory_m
+>   	mutex_unlock(&ghvm->mm_lock);
+>   }
+>   
+> +struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_find_mapping(struct gunyah_vm *ghvm,
+> +								u64 gpa, u32 size)
+> +{
+> +	struct gunyah_vm_memory_mapping *mapping = NULL;
+> +	int ret;
+> +
+> +	ret = mutex_lock_interruptible(&ghvm->mm_lock);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	list_for_each_entry(mapping, &ghvm->memory_mappings, list) {
+> +		if (gpa >= mapping->guest_phys_addr &&
+> +			(gpa + size <= mapping->guest_phys_addr +
+> +			(mapping->npages << PAGE_SHIFT))) {
+> +			goto unlock;
+> +		}
+> +	}
+> +
+> +	mapping = NULL;
+> +unlock:
+> +	mutex_unlock(&ghvm->mm_lock);
+> +	return mapping;
+> +}
+> +
+>   struct gunyah_vm_memory_mapping *gh_vm_mem_mapping_find(struct gunyah_vm *ghvm, u32 label)
+>   {
+>   	struct gunyah_vm_memory_mapping *mapping;
+> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+> index 574f33b198d0..36359ad2175e 100644
+> --- a/include/uapi/linux/gunyah.h
+> +++ b/include/uapi/linux/gunyah.h
+> @@ -42,4 +42,12 @@ struct gh_userspace_memory_region {
+>   #define GH_VM_SET_USER_MEM_REGION	_IOW(GH_IOCTL_TYPE, 0x1, \
+>   						struct gh_userspace_memory_region)
+>   
+> +struct gh_vm_dtb_config {
+> +	__u64 gpa;
 
-Paolo
+need kernedoc, what is gpa?
 
+> +	__u64 size;
+> +};
+> +#define GH_VM_SET_DTB_CONFIG	_IOW(GH_IOCTL_TYPE, 0x2, struct gh_vm_dtb_config)
+> +
+> +#define GH_VM_START		_IO(GH_IOCTL_TYPE, 0x3)
+> +
+>   #endif
