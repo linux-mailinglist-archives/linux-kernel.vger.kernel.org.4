@@ -2,85 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4778968CD11
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D73A68CEB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjBGDEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 22:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        id S230414AbjBGFJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjBGDDq (ORCPT
+        with ESMTP id S230093AbjBGFJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 22:03:46 -0500
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4BA2D58;
-        Mon,  6 Feb 2023 19:03:25 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 1235E1A00A1C;
-        Tue,  7 Feb 2023 11:03:54 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZXB-Qq9GzveJ; Tue,  7 Feb 2023 11:03:53 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 3B6951A0087E;
-        Tue,  7 Feb 2023 11:03:53 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] ext4: extents: Modify the return value variable type and initialize the assignment
-Date:   Thu,  9 Feb 2023 03:34:43 +0800
-Message-Id: <20230208193443.3055-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 7 Feb 2023 00:09:29 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244F137F23;
+        Mon,  6 Feb 2023 21:07:44 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 31757Bxc077545;
+        Mon, 6 Feb 2023 23:07:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675746431;
+        bh=9z53VZ1BVzzZFAbLkQNtC3Tnesb/rnN18j8iaYp1STc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=J0vgMlW6nFln5PJcri+u6+x/22yFumiWSLUmsM8rpwld35VSPjv4YwX+FsacHgkUT
+         aURUKO8ewbV8CXySKuxZ9+GxvvAIFFXXvPO+YUT2NS8vwUlAJl+Uc5veTyMsqiINhl
+         LlmL6RNm84/2dO6OlWmDLfUHQhnj6qsh7AhpeIxE=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 31757BS2005294
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Feb 2023 23:07:11 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
+ Feb 2023 23:07:11 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 6 Feb 2023 23:07:11 -0600
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 317575iq023952;
+        Mon, 6 Feb 2023 23:07:05 -0600
+Message-ID: <e31ade52-648f-d743-e3db-ba8d4d0baf94@ti.com>
+Date:   Tue, 7 Feb 2023 10:37:04 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [EXTERNAL] Re: [PATCH v4 1/2] dt-bindings: net: Add ICSSG
+ Ethernet Driver bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>
+CC:     <nm@ti.com>, <ssantosh@kernel.org>, <srk@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230206060708.3574472-1-danishanwar@ti.com>
+ <20230206060708.3574472-2-danishanwar@ti.com>
+ <e0ab9ea1-59b7-506f-1e77-231a0cdc09bf@linaro.org>
+ <81dc1c83-3e66-4612-9011-cf70fb624529@ti.com>
+ <bd840b3b-995e-2133-df93-a5e78128acfc@linaro.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <bd840b3b-995e-2133-df93-a5e78128acfc@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify the return value variable to be consistent with the return value
-type of the function, and modify the initialization assignment. Under
-certain circumstances, the constant return value is not required.
+Hi Krzysztof,
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
----
- fs/ext4/extents.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 06/02/23 16:11, Krzysztof Kozlowski wrote:
+> On 06/02/2023 11:39, Md Danish Anwar wrote:
+>>>> +    properties:
+>>>> +      '#address-cells':
+>>>> +        const: 1
+>>>> +      '#size-cells':
+>>>> +        const: 0
+>>>> +
+>>>> +    patternProperties:
+>>>> +      ^port@[0-1]$:
+>>>> +        type: object
+>>>> +        description: ICSSG PRUETH external ports
+>>>> +
+>>
+>> At least one ethernet port is required. Should I add the below line here for this?
+>>
+>>    minItems: 1
+> 
+> You need after the patternProperties:
+>     anyOf:
+>       - required:
+>           - port@0
+>       - required:
+>           - port@1
+> 
 
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index 9de1c9d1a13d..debeb2e7a162 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -4676,7 +4676,7 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
- 	struct inode *inode = file_inode(file);
- 	loff_t new_size = 0;
- 	unsigned int max_blocks;
--	int ret = 0;
-+	long ret = -EOPNOTSUPP;
- 	int flags;
- 	ext4_lblk_t lblk;
- 	unsigned int blkbits = inode->i_blkbits;
-@@ -4689,13 +4689,13 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
- 	 */
- 	if (IS_ENCRYPTED(inode) &&
- 	    (mode & (FALLOC_FL_COLLAPSE_RANGE | FALLOC_FL_INSERT_RANGE)))
--		return -EOPNOTSUPP;
-+		return ret;
- 
- 	/* Return error if mode is not supported */
- 	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |
- 		     FALLOC_FL_COLLAPSE_RANGE | FALLOC_FL_ZERO_RANGE |
- 		     FALLOC_FL_INSERT_RANGE))
--		return -EOPNOTSUPP;
-+		return ret;
- 
- 	inode_lock(inode);
- 	ret = ext4_convert_inline_data(inode);
+
+Is this correct?
+
+  ethernet-ports:
+    type: object
+    additionalProperties: false
+
+    properties:
+      '#address-cells':
+        const: 1
+      '#size-cells':
+        const: 0
+
+    patternProperties:
+      ^port@[0-1]$:
+        type: object
+        description: ICSSG PRUETH external ports
+        $ref: ethernet-controller.yaml#
+        unevaluatedProperties: false
+
+        properties:
+          reg:
+            items:
+              - enum: [0, 1]
+            description: ICSSG PRUETH port number
+
+          interrupts:
+            maxItems: 1
+
+          ti,syscon-rgmii-delay:
+            items:
+              - items:
+                  - description: phandle to system controller node
+                  - description: The offset to ICSSG control register
+            $ref: /schemas/types.yaml#/definitions/phandle-array
+            description:
+              phandle to system controller node and register offset
+              to ICSSG control register for RGMII transmit delay
+
+        required:
+          - reg
+    anyOf:
+      - required:
+          - port@0
+      - required:
+          - port@1
+
+Adding anyOf just below patternProperties was throwing error, so I added anyOf
+after the end of patternProperties. Please let me know if this looks OK.
+
+>>
+>>
+> 
+> Best regards,
+> Krzysztof
+> 
+
 -- 
-2.18.2
-
+Thanks and Regards,
+Danish.
