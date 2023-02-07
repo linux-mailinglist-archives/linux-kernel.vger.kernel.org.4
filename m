@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E9268E000
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 647DB68E004
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjBGS1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S232350AbjBGSal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbjBGS1h (ORCPT
+        with ESMTP id S232065AbjBGSai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:27:37 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2888C83DD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:27:26 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id lu11so44961115ejb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:27:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G3C5mOidhZDrCqJ4TYEcLxCaPp0/cnlYAYlnw8sD9bM=;
-        b=MqwIFpgzZ4IuhdKcIoI4RWMlnojYLVxPhx1w9n0b0bMhcRyOF1ZsDrlj/SyZ+xCvEJ
-         d2Vb7A6wC6xCHddTYK4/jZrID4K7sAyzOTyKQZ8Cxz94DxsSfEvTY3Jto67sfGRvCuOE
-         OAlhG/6RrflvFGfTDUpD4PWLjcuG96phtOy5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G3C5mOidhZDrCqJ4TYEcLxCaPp0/cnlYAYlnw8sD9bM=;
-        b=WvY+QDmuTG3Pnntm7TfShr18CzghoS3VTEsJAa9fzErWd3O+TuYTLLwejYClAvm8WZ
-         C21fnXdClxCBohyI3sF8+C51xoMWBQYwEE9gn2jD2v3a5k/pQELSE+9lp3hnWpOwD5wu
-         Ritc9OS+DR4P1q3VwRkRtFmtS/9vw80T3aahnOSJ9rtT0qXmmI4kGLJ42rRXxxqgzbEF
-         +Uoem0Etl3CbEd8lbmSxGAtp0vWaU4mWkvezZ6cY2N5dG2lXkI2CFw/zwAoVjq+giJ4t
-         z+pfJXFFxxaRk667OSbGj0eBPLhwit9s3BYhGd+85PEbtMF3xNg/4xuLpORy5JtU5r+H
-         d4EQ==
-X-Gm-Message-State: AO0yUKWN0XH9IXuSzVpK40CXrfh6Jpv9UW9UOIrM5w4S1IqbtOw3Yi3B
-        ullO5kM4DVpdJcywMGRbVtcPYqoNzCIfFbUZ4BCXjw==
-X-Google-Smtp-Source: AK7set8S8b3O/e4b4YJvSR/iy27GoOfLbU1kyTqsS0lIGxBOIHzb9qmJyo4USffDoWiXrB/8GqUfxADEss5NDfdZZc8=
-X-Received: by 2002:a17:906:37c2:b0:878:7bc7:958a with SMTP id
- o2-20020a17090637c200b008787bc7958amr1091575ejc.220.1675794444795; Tue, 07
- Feb 2023 10:27:24 -0800 (PST)
+        Tue, 7 Feb 2023 13:30:38 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC8A1AE;
+        Tue,  7 Feb 2023 10:30:37 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7506F1EC06BD;
+        Tue,  7 Feb 2023 19:30:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675794635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=unM+sDz7KgSXzbCVAYLEm70N3Pk5L+izixqtsNk9evU=;
+        b=jqOfvXZWlZZ51s5K/7R3yT8hL3AqyHKQZ3bIkq0eaVq15t//WOPnNVaGPmIII/m8WGa1E6
+        MxjFJsICorR7ddXyzmsv8qP6e+DKVUHSH4IslgjmaR+6FrvlF38vbgTg5CM86QYiP8HPg8
+        m0gd1b6vez7jLIDA/L8mE0q0D7oEhiE=
+Date:   Tue, 7 Feb 2023 19:30:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     silviazhaooc <silviazhao-oc@zhaoxin.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cobechen@zhaoxin.com, louisqi@zhaoxin.com, silviazhao@zhaoxin.com,
+        tonywwang@zhaoxin.com, kevinbrace@gmx.com,
+        8vvbbqzo567a@nospam.xutrox.com
+Subject: Re: [PATCH] x86/perf/zhaoxin: Add stepping check for ZX-C
+Message-ID: <Y+KYx5XcE1IAPPoQ@zn.tnic>
+References: <20230202091738.5947-1-silviazhao-oc@zhaoxin.com>
+ <Y95hWVFyw7TM1WSB@zn.tnic>
+ <51ab21ee-403b-f4ce-9a7e-2580ab7e8118@zhaoxin.com>
+ <Y+DM8BZUi6a10hXY@zn.tnic>
+ <1d808c21-f54d-1506-d95a-0276430aea8d@zhaoxin.com>
+ <Y+Dgx7EeRufHdx17@zn.tnic>
+ <950c6d27-bc91-01e0-ba26-d09ad4bf7934@zhaoxin.com>
 MIME-Version: 1.0
-References: <20230202-rds-zerocopy-v2-1-c999755075db@diag.uniroma1.it> <CA+FuTSftbF=xwWd_kJHuJ9hQ3PYFOT48r_TazEDVaH8GkrQ2+g@mail.gmail.com>
-In-Reply-To: <CA+FuTSftbF=xwWd_kJHuJ9hQ3PYFOT48r_TazEDVaH8GkrQ2+g@mail.gmail.com>
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Tue, 7 Feb 2023 19:27:14 +0100
-Message-ID: <CAEih1qV5wNE3Q6AEJ2ERa3geoW8LBe4puuCXwfOD95uw7FU=bQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] rds: rds_rm_zerocopy_callback() use list_first_entry()
-To:     Willem de Bruijn <willemb@google.com>
-Cc:     Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
-        sowmini.varadhan@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <950c6d27-bc91-01e0-ba26-d09ad4bf7934@zhaoxin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023 at 19:21, Willem de Bruijn <willemb@google.com> wrote:
->
-> On Tue, Feb 7, 2023 at 9:57 AM Pietro Borrello
-> <borrello@diag.uniroma1.it> wrote:
-> >
-> > rds_rm_zerocopy_callback() uses list_entry() on the head of a list
-> > causing a type confusion.
-> > Use list_first_entry() to actually access the first element of the
-> > rs_zcookie_queue list.
-> >
-> > Fixes: 9426bbc6de99 ("rds: use list structure to track information for zerocopy completion notification")
-> > Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
->
-> This should go to net.
+On Tue, Feb 07, 2023 at 04:42:26PM +0800, silviazhaooc wrote:
+> Sorry, I'm a newbie in Linux. Thanks for your reminding.
 
-Ops, fixed in v3
+No worries. :)
 
->
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> I have carefully checked our product manual for Nano and ZXC FMS.
+> 
+> For ZXC, there are 2 kinds of FMS：
+> 
+> 1. Family=6, Model=0x19, Stepping=0-3
+> 
+> 2. Family=6, Model=F, Stepping=E-F
+> 
+> For Nano, there is only one kind of FMS:
+> 
+> Family=6, Model=F, Stepping=[0-A]/[C-D]
+> 
+> So model = 0xf, steppings >= 0xe or model = 0x19 belong solely to ZXC.
+> Nano is an old CPU series which has been stopped production several years
+> ago.
+
+Good, which sounds like there won't be any more Nano steppings.
+
+> It will not use the steppings which belong to ZXC.This is an
+> unambiguous way to differentiate between ZXC and Nano CPUs.
+> 
+> Do I need to add the statements in the source code and re-commit the patch?
+
+Yes please. That would explain in a clear way why it is ok to test those
+models/steppings. If it turns out that we need this Nano - ZXC
+distinction more often, we can do something more involved later.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
