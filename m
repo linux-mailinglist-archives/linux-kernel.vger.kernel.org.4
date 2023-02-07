@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4962868CF83
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458C568CF86
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjBGGca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S230237AbjBGGdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:33:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjBGGc1 (ORCPT
+        with ESMTP id S229865AbjBGGdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:32:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C56F193EA;
-        Mon,  6 Feb 2023 22:32:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1B3AACE1C78;
-        Tue,  7 Feb 2023 06:32:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A06F5C433D2;
-        Tue,  7 Feb 2023 06:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675751542;
-        bh=BM31iNLFopS5FV6b55CPDvqToJbz28aRbpAuedR3Wg0=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=PaGOfHg8GAh6cLctTj+gwXlACn71B6RQGviIMwip2g/oq7XsohntDT9cHKQLfn0OU
-         ZsWEARVAVvOxE3lZ7MeDaExdM1B9gfE0+mdMugyt9zDF+daBT5sNsBQER1o2ljJ0t1
-         iycJPdO62eaWALdOvzCeayx4TICusi6vEbbIRprTM8JV5X0QlnwyC/tbI/4EQ9wHdl
-         +e9gldY2f4bmCX3vpWmMF4hqkeIFqQQvHGt8I4nwtSP8WJ0Qqo0MI9g751FujEkjiH
-         v/XUIdIVUNa58m+9jG5U6nWlLf3x5TduQodDtfYkLvfYgY3kpe8aQmWlGRiUBxf7t7
-         4tqErvkByrhAQ==
-Date:   Tue, 07 Feb 2023 06:32:18 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Evan Green <evan@rivosinc.com>
-CC:     Palmer Dabbelt <palmer@rivosinc.com>, vineetg@rivosinc.com,
-        heiko@sntech.de, slewis@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ruizhe Pan <c141028@gmail.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 2/6] RISC-V: Add a syscall for HW probing
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Y+HsE397cY4HF+5K@kroah.com>
-References: <20230206201455.1790329-1-evan@rivosinc.com> <20230206201455.1790329-3-evan@rivosinc.com> <Y+HsE397cY4HF+5K@kroah.com>
-Message-ID: <C3C21677-5250-4120-9A4F-24945C1EE51B@kernel.org>
+        Tue, 7 Feb 2023 01:33:23 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BFD1EBC5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:33:22 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id u3so2600141uae.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:33:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GhEJW88dUamcVlxz1ctqv2Q07xJfwW2/bNyU0rz8iQk=;
+        b=JVvlH3kx8Is97sQFT4RvzJlTQ+zbkU+oBsvJYwzSnaP3fS0ixxmBSYWsPS20j3rhDl
+         8+A047CYm0DGQ8NNgLgKYVcAglDhkECnCio+M69CZ/u6/4Fe+5N5VqBvuJachOs7H4VK
+         WMq76TJmzWmDR89TxB7dhLP8cLGkKad2MXJf0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GhEJW88dUamcVlxz1ctqv2Q07xJfwW2/bNyU0rz8iQk=;
+        b=KhgSUyVqIUCE9rTzsOU8qBs10Og6TsP2NS8Pf/JxycIRuAIbvIFAfc7FpeU7kk/cMZ
+         4n2+QjqHxDcex54g613RyGRg7CDJsZir0HxV2kb5OhLryVlS/6dNUVl4tyI4ivU+Z9+k
+         2s9lIb7WLokm+522SZfIqKAzRmp4lv7Dnii6QysZJsz8xF3LUaMMyVNT2XeGm8hFrhNC
+         +VSB1y2x/WtEmGcizLEjGAFVUAB0BBVEyCCYSGLQxpCka1HzGmLBJ5LqAQdYIkURRdo8
+         uOyUM/Kb5tKl/sqhxhEnsaF2PXDTRbxKEfJobaBishT18ylK1Gk4XcymLVcOZZSVKIyE
+         Ly3A==
+X-Gm-Message-State: AO0yUKWGSGqMFuvsCbC+9cPMK1geJgDZMbcLeGlCCgK7IzuqNh3EBSBV
+        tdDbLNUz0r2/oVOa4PXxDfcA4bgYEH6KQXKZU3VJXg==
+X-Google-Smtp-Source: AK7set+YKznaFHPKW5d8ydDKeXnKeXaGm6lSyKFulo85U5cVsQELhT7ZwYey65wdDhWkdey4zY8XvSZcd/FntPH7fcA=
+X-Received: by 2002:ab0:2bd5:0:b0:5e6:3536:22e4 with SMTP id
+ s21-20020ab02bd5000000b005e6353622e4mr368876uar.55.1675751601965; Mon, 06 Feb
+ 2023 22:33:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-10-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206152928.918562-10-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Feb 2023 14:33:10 +0800
+Message-ID: <CAGXv+5GfwY2+55UupTUNYVudg3-YDQtkkfhT=M53CJwdqG=ERg@mail.gmail.com>
+Subject: Re: [PATCH v1 09/45] clk: mediatek: mt2712: Change to use
+ module_platform_driver macro
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Evan, Greg,
-
-
-On 7 February 2023 06:13:39 GMT, Greg KH <gregkh@linuxfoundation=2Eorg> wr=
-ote:
->On Mon, Feb 06, 2023 at 12:14:51PM -0800, Evan Green wrote:
->> We don't have enough space for these all in ELF_HWCAP{,2} and there's n=
-o
->> system call that quite does this, so let's just provide an arch-specifi=
-c
->> one to probe for hardware capabilities=2E  This currently just provides
->> m{arch,imp,vendor}id, but with the key-value pairs we can pass more in
->> the future=2E
+On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
->Ick, this is exactly what sysfs is designed to export in a sane way=2E
->Why not just use that instead?  The "key" would be the filename, and the
->value the value read from the filename=2E  If the key is not present, the
->file is not present and it's obvious what is happening, no fancy parsing
->and ABI issues at all=2E
+> Now that all of the clocks in clk-mt2712.c are using the common
+> mtk_clk_simple_{probe,remove}() callbacks we can safely migrate
+> to module_platform_driver.
 
-https://lore=2Ekernel=2Eorg/linux-riscv/20221201160614=2Expomlqq2fzpzfmcm@=
-kamzik/
+Instead of splitting the conversion into a module among many patches,
+I'd do it in one go. With one patch we get a working module instead
+of a half-baked one half way through the series.
 
-This is the sysfs interface that I mentioned drew
-suggested on the v1=2E
-I think it fits ~perfectly with what Greg is suggesting too=2E
+The subject could say "Convert X driver from builtin to module". And
+instead of "migrate to module_platform_driver", the body could say
+"convert to module by switching to module_platform_driver, and adding
+missing MODULE_* statements". I believe this constitutes one logical
+change. Maybe the accompanying Kconfig change should be included as
+well?
 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/clk/mediatek/clk-mt2712.c | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
 >
->Bonus is that you will also properly document all valid key/value pairs
->in Documentation/ABI/ when you do this, so it reinforces what the code
->should be doing correctly=2E
+> diff --git a/drivers/clk/mediatek/clk-mt2712.c b/drivers/clk/mediatek/clk-mt2712.c
+> index c5fd76d1b9df..65c1cbcbd54e 100644
+> --- a/drivers/clk/mediatek/clk-mt2712.c
+> +++ b/drivers/clk/mediatek/clk-mt2712.c
+> @@ -1028,7 +1028,7 @@ static const struct of_device_id of_match_clk_mt2712_simple[] = {
+>         { /* sentinel */ }
+>  };
 >
->thanks,
+> -static struct platform_driver clk_mt2712_simple_drv = {
+> +static struct platform_driver clk_mt2712_drv = {
+
+Why the name change? If you do change the name, could you also change
+the of match table's name as well to be consistent, and also mention
+the change in the commit log?
+
+I'd just leave it alone though.
+
+
+ChenYu
+
+>         .probe = mtk_clk_simple_probe,
+>         .remove = mtk_clk_simple_remove,
+>         .driver = {
+> @@ -1036,10 +1036,4 @@ static struct platform_driver clk_mt2712_simple_drv = {
+>                 .of_match_table = of_match_clk_mt2712_simple,
+>         },
+>  };
+> -
+> -static int __init clk_mt2712_init(void)
+> -{
+> -       return platform_driver_register(&clk_mt2712_simple_drv);
+> -}
+> -
+> -arch_initcall(clk_mt2712_init);
+> +module_platform_driver(clk_mt2712_drv);
+> --
+> 2.39.1
 >
->greg k-h
