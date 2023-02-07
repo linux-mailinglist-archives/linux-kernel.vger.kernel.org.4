@@ -2,246 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF6868CE31
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A7D68CE33
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbjBGEal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 23:30:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
+        id S229951AbjBGEcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 23:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBGEaf (ORCPT
+        with ESMTP id S229478AbjBGEcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 23:30:35 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BCC35265;
-        Mon,  6 Feb 2023 20:30:32 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3174IIa5009596;
-        Tue, 7 Feb 2023 04:30:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=bRhQuIglRpdjSUiz8zZ2CW02S5eDhSJ5Zk6RnH8XY5M=;
- b=VZbWM4H38Ar7Z62cjZ04m8XK7J6JXnvr8KaycsfnoWdzBNwlCfBNuUSzedc/WmeembKh
- vdS3lh6YAGACQ4IZmk6DQ429qAUuMY8YAdn0gc+u3f9MeBgOAfNwKiYgxtmDlm22rQ64
- U3ouOQYqZ8K26H1feoRBXXSa3gC95QCLqzyGbJELBEl46z7o7DLiOh9qXz4LB7BEqN7j
- B1f906FK3s2Gv7+xtWscMr6Vrwp6SnI2RI+cy1QlkuzLYZD2HBRQ3UoYTeQTG+fwUz/x
- WE3p1FfEkrBxmpcUMAv3oBPKZAFKHchZXolA70g2NfxcQBv1aXBBwgQl7D+me9Q0TG79 Ew== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhd2qdgmh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 04:30:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3174U8OL007190
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Feb 2023 04:30:08 GMT
-Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 20:30:00 -0800
-Message-ID: <4bcf4bd9-e638-22a2-044d-47fd5fd5d104@quicinc.com>
-Date:   Tue, 7 Feb 2023 09:59:57 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V3 5/9] clk: qcom: add Global Clock controller (GCC)
- driver for IPQ5332 SoC
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <nfraprado@collabora.com>,
-        <robimarko@gmail.com>, <quic_gurus@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>
-References: <20230206071217.29313-1-quic_kathirav@quicinc.com>
- <20230206071217.29313-6-quic_kathirav@quicinc.com>
- <019bf6ae-cdc4-8fa7-4d76-c39403d93b34@linaro.org>
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <019bf6ae-cdc4-8fa7-4d76-c39403d93b34@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Mon, 6 Feb 2023 23:32:10 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2077.outbound.protection.outlook.com [40.92.52.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A73B465;
+        Mon,  6 Feb 2023 20:32:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TTRiiHjk+K+WdLzrMxwB0y11h12jfq0BckIR7/vXZmu8Vv96B10YcvjSo1SqCkwtT9EVeGiBAToBFuhqvt20qZT1IREcpoc6sG1uMXXICPbNiRa/Pw0JnNdLalc6JIkRsFnM7OMKP2CWfyL26sPIUqDRGqKWaAQgN3y2KCWG7aJbv2j5iDw5XpzXYq3oY2BZ4l219ShIM9/ciNGSWuD3jUkapox1OYW4uloYM/jmokLiaekfjaUgekRHwHHuipn5aBLdNz1IyYzNv6C/kwT7LzGMMK4ViRPWYmpEYmEmlsUfd9N1gFC2fH/i7Id3bvZjEv9176Xg0EdDczhxCbehzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C9rs15PDpFPmOMMPPs3y92Pypuix4CHbghkoxhxJecY=;
+ b=nTrVkn+SZJN/LgGNBHWm0uk8QUo+CDvZXLFAFkHbwxb+svhZPje0CxPLtd2uL2hCZwUseHopG5kbKwYQboaQ+9axz+qonT0A6zPPsLmka5lzoJL518X41PFWp7BRfXoAyarUaxvQ5rgEIOGw5HXwznffsfPu2bA6fov8ON+bmvZZgCJ8mzKj70XbhGGLH6LRM0hPcRCJ35XQ8z/6iDaQIMRXqz6D4fcUbAK/dEUbmICSGVT6LpApwuht6fWEz/eWUtsQcdfA1CuiLwopjyok40vyBog5r/Gbw/kY4iEEPksZ9E1b47jz/TThacha+vaUxEmZBgUBbZ+k7xbqetRTFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C9rs15PDpFPmOMMPPs3y92Pypuix4CHbghkoxhxJecY=;
+ b=oIXLqekJ071yCXQ01gLBdtsAMVm1lL0tytRd4Mq0ayY6tFZ9/qzRBYqp5x0UAuIh9+rKDWkfNt0BLM+6JE64QNcBwpIQC6SmeLb0MLKTrGufiKtvdCEjWGn8XqmcYP/27VPjSTD6GfYNRmcs6vyHyD/6YNibPdT30Ogzd4hC4z0Ym41ZeCTr1MbUWmLDqY/qnIKJVfTmaywGNuP/3yS0klMchFE77z2flNrzfIQPBo5A0DN2K11+RxyftGLVEGXMXJHppTioFTxOIU6xemV58gYQ6WEWZGanICFbld8i/hwTbYR7tK1rz83uy2Prr5vVZzWp4xNhA6qDOIiOywszHQ==
+Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
+ by OS3P286MB2043.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:192::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.35; Tue, 7 Feb
+ 2023 04:32:04 +0000
+Received: from OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9a1d:12f5:126c:9068]) by OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::9a1d:12f5:126c:9068%3]) with mapi id 15.20.6064.035; Tue, 7 Feb 2023
+ 04:32:04 +0000
+From:   Eddy Tao <taoyuan_eddy@hotmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Eddy Tao <taoyuan_eddy@hotmail.com>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v1 1/1] net: openvswitch: remove unnecessary vlan init in key_extract
+Date:   Tue,  7 Feb 2023 12:31:33 +0800
+Message-ID: <OS3P286MB229551D6705894E6578778DCF5DB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.27.0
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qDcc2Ow3Z6Rjke8K4w2lpPhiUKTIHOuX
-X-Proofpoint-GUID: qDcc2Ow3Z6Rjke8K4w2lpPhiUKTIHOuX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070039
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TMN:  [GpvWe1xCXoRdhdfZZX5NnNjoC/rH3H7R]
+X-ClientProxiedBy: SGBP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::27)
+ To OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::11)
+X-Microsoft-Original-Message-ID: <20230207043133.1405976-1-taoyuan_eddy@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3P286MB2295:EE_|OS3P286MB2043:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb3e6fab-9242-4136-902f-08db08c4437d
+X-MS-Exchange-SLBlob-MailProps: C/ir7cSdGlv/EVvTBxMgR0dPX0q274mQCwSNZn7AKXSEGVhUH68lR0iMN8xEJgGyhIDldCR0XDiagCmsqshoahGg0m+dxnAoXbQ41DokWycUYIoBe999ohuqwQKmQ1bWknQFhDSmPl6mpL1Z3gRTdAclw0j32vYnWU5zHUlI6s14IB2poqROw4OJzJi8vIKx+gIf+QBxCEoFygzF+HBBkxslG6UqYjVCSIWvIT1z/UHtPgYT2QaxCM/D7JjYCil2+f5g8ixpyjDIDKu95tPqKTtU44/FtRUz/hoidx9Ip+MHwYxvqVz2eZnqeW74aUrL6XaJ/tbp1T1BrKRTALdvt7U1Y9Yph0L3hKMavnCOQGmna7lCAYLU5jlZ8qgQhO28IVXKx7cGiLcc/mpLu05PD0+uJfkd4xUeTxaGw1ycx4yoEyLFNv1X3B1qHYDOKKYXTQFc+tnMlC9y0wvakJKIgGVZ1+HiN9QgCbs4new4Y4ceY0c+nF2Mx4bKXdVTz6JDpRRVYSsfIC3+G7auS0ybp/Zb+510C4p7H38K/LutopnO0UayfA2PKl1nR7ZaZNRIWUZUPdceb1rfEqP7UqlgoidoAjRUYDSRGvCy8xHtSSFxbtlPVnIySImWWM5GvxBdfylp85V8johGXeWm4zRJCsgVzzWsmphDAPdb4wY/KRauT8ZqExhY43UYEojumU1F0KWUNXq922tBJ/uuQkeVUDAkMmlo2mtF/6bGzsKOBzX2L2eu4KJWE1a6pYQzYOvk
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cfyQLfaGytFlBEB4qX+lTz4s5YHGmL1ycYYCKu4WBJ9eCsmlZoJ0hOTnBkXgZHOu4WxtblAFZ9ofE0RFYlhHa+0G89xA5HvTsJz3vi/a+QZpPsyv1FwiPrG9b+Bq3AQ7PQZEzYM4XcSG56QiwcPgZjjTHV19S3aIk3ZTyDyJU5gSS7gwMLzBR88FOYfImScc+94gB96D5jXg8JlMz/D5n9HuqvGirMQEaSdUTMRaSLn6vHihMi3k2kWKQWWi6yV/FejHyqnQ4MO/7/6EUQPtbGLa1GFOoBnTE9tVgGgcZ76OdEMzU/ps/WwkWkAKnjBuKuUTv2SP+qCgOSrgFqEDzqs/3uhZYDGzj0awriRsY51OLelGjL8eda0WNvXdIX8AiFWV13HYTRo0FftD7ubVr4+cXcI2oBlZIxCfqLRp/ztlef0LnUfbt5OghgA/7kuS2PhYP9rOK9EM7AuIau6W6EnMQwrspg5Ncs41eqa3elvzxglXPkl4fJ9ZaeYMg9vhapFmZqqra7G7bfl7e1NSZVLxKSmDtAVmPqxeIMVjqzNZ5KEBvIYfQim74RtkOmqxiUTO0LDN8GCEDRCPnEAar1WIYwZsWn2mvNvESTSaS39ipHMaAyzDfD+U5EEVeIcOA5/lVcjD//FSGTliS0PBOA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k6M5kDkTR1zzf0fZFx/uKqzog2igV4JiKbHYolOft8YyQM8QSpftfJEIs/QB?=
+ =?us-ascii?Q?ZzSbYWslZs+nHStN0mQJxPQIDGDdJ0p0U9+aJjRYVHUMN+RHeLhJ2y6Es3D7?=
+ =?us-ascii?Q?AD67GgruN9faVnWVp3RW9XAfEsui3AX31EwqalZ8w3rbm9ROGwmZpFJ3hDTc?=
+ =?us-ascii?Q?oMxnFLD3R/CFgUZvbpqT0bi0Uu0hWD9UY4mdElwkAVls0kHxGplKPy4vh/90?=
+ =?us-ascii?Q?KO9RAUReIXEfHcxS3zf8xc0UZthXCOaCxzdEAAFsxwHhe/W8+NMTUQuGXFaA?=
+ =?us-ascii?Q?0mM/3W6508Kc3IkkuG4C/1/To5LWkikFIZfh+SFHz4R2rhV9lvC23/mCU9T8?=
+ =?us-ascii?Q?qN6773o5Uhv5HCd7Yz5nuTDMNFfEQxPcb7/ME/OCPGxie2XkrQdatKAS7pbV?=
+ =?us-ascii?Q?qlfZ4bXBDwhmEmpw2/Lznuja2AmbG4lQjK0o8AXRKGgCdrHbYWBtV25ZVK6Z?=
+ =?us-ascii?Q?ii43K2xfp8WNgQEhgyIY9iS6wxReK4XhStQwz5w7aqpBMb28UeiCObyYiZBL?=
+ =?us-ascii?Q?kwmkj4ppsxEp7lZzzlDCPU10HAsiekJHOaKT4goBvzOWFFSx/ZZkninTQGG4?=
+ =?us-ascii?Q?EdF/YbkWM8iLh4gwqrTX/qsQBnZFtEnUJOC+eQNgt2fbo1p+ABzuTjcwCo26?=
+ =?us-ascii?Q?MoBVN21xyJL1+ZkEjZAGBPKeA2Vk5BWTWqVABVhjHzUs6eeBl0Se2maLBMfa?=
+ =?us-ascii?Q?Ut6QqA/0/lGhmAD2ShCOKd9NqGlXnDsL7kOxMfrwcigyaR2WHvsd5FeZSXpu?=
+ =?us-ascii?Q?Gt9vNCE5bbKzPOlaLTI0702xVSNcgB6U1HVTVZw8uUwNkHQvHaQwiOZP5jus?=
+ =?us-ascii?Q?N0E4bSy5LZk0aFnoWvNHu/qNeO0zDrCwXQCtKohmSV2FsHrIBIRjQFk3Y48n?=
+ =?us-ascii?Q?xQGayOS7I4eaPUbUIMyqPp/2Bqi1GscmImwjG/mztmPtWpD7Ztq7B6Kfm3SO?=
+ =?us-ascii?Q?659+y6I8kJbimgSzi071AnWfC+t4mRX6mMx1dVFCLCAtXf8I6QuzeF7c4asV?=
+ =?us-ascii?Q?kaloL+BarD+bP+5zyV+cUIY2MrVW8p2V3z6s2490tfZK+uy3ILMRN8Veyc4I?=
+ =?us-ascii?Q?sHzHlTK9dovsnf1prBVqbtGVdMGc/K7JQVpmOR644g5eIYtxy/MSJ23QyDvm?=
+ =?us-ascii?Q?uZ//M7xW/z1637KwteiBTU00XyPuFuCU2mluRkRwrNXlFcgOc9JQ7iiXqXwT?=
+ =?us-ascii?Q?dB3MeQfIS5F8g96cmw/zVhAH4QhFxfog49YUaZodSCCPDDQ81HtPqs09slzq?=
+ =?us-ascii?Q?eCGTsvHdkhZNrok1pl1cyYUJGIXC7Zl61XNx2/aAOg=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb3e6fab-9242-4136-902f-08db08c4437d
+X-MS-Exchange-CrossTenant-AuthSource: OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 04:32:04.6502
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB2043
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Dmirty for the review!
+Redefine clear_vlan to initialize one struct vlan_head
+Define   clear_vlans to initialize key.eth.vlan and key.eth.cvlan
+Calls the revised functions accurately
 
+Reasoning:
 
-On 2/6/2023 3:26 PM, Dmitry Baryshkov wrote:
-> On 06/02/2023 09:12, Kathiravan T wrote:
-> > Add support for the global clock controller found on IPQ5332 SoC.
-> >
-> > Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> > ---
-> > Changes in V3:
-> >     - As I mentined the bindings, changes need to be done in V2 got
-> >       missed out and same has been done in V3, to call out
-> >       specifically dropped the CLK_IS_CRITICAL and dropped the
-> >       gcc_apss_ahb_clk, its source clock and gcc_apss_axi_clk
-> >     - Used gcc_parent_data_xo wherever applicable and dropped the
-> >       duplicate entries
-> >     - dropped the unused parent_map_10 and parent_data_10
-> >     - Used qcom_cc_probe instead of qcom_cc_really_probe
-> > Changes in V2:
-> >     - Added the 'dependes on' for Kconfig symbol
-> >     - Dropped the CLK_IS_CRITICAL flag throughout the file
-> >     - Dropped the gcc_apss_ahb_clk and gcc_apss_axi_clk as these are
-> >       managed by bootloaders
->
->
-> [skipped]
->
-> > +static const struct freq_tbl ftbl_gcc_pcie_aux_clk_src[] = {
-> > +    F(2000000, P_XO, 12, 0, 0),
-> > +    { }
-> > +};
-> > +
-> > +static struct clk_rcg2 gcc_pcie_aux_clk_src = {
-> > +    .cmd_rcgr = 0x28004,
-> > +    .mnd_width = 16,
-> > +    .hid_width = 5,
-> > +    .parent_map = gcc_parent_map_6,
-> > +    .freq_tbl = ftbl_gcc_pcie_aux_clk_src,
-> > +    .clkr.hw.init = &(const struct clk_init_data){
-> > +        .name = "gcc_pcie_aux_clk_src",
-> > +        .parent_data = gcc_parent_data_6,
-> > +        .num_parents = ARRAY_SIZE(gcc_parent_data_6),
-> > +        .ops = &clk_rcg2_ops,
-> > +    },
-> > +};
-> > +
-> > +static struct clk_regmap_mux pcie3x2_pipe_clk_src = {
-> > +    .reg = 0x28064,
-> > +    .shift = 8,
-> > +    .width = 2,
-> > +    .parent_map = gcc_parent_map_14,
-> > +    .clkr = {
-> > +        .hw.init = &(struct clk_init_data){
-> > +            .name = "pcie3x2_phy_pipe_clk_src",
-> > +            .parent_data = gcc_parent_data_14,
-> > +            .num_parents = ARRAY_SIZE(gcc_parent_data_14),
-> > +            .ops = &clk_regmap_mux_closest_ops,
->
-> Should we use clk_regmap_phy_mux_ops here instead?
+For vlan packet, current code calls clear_vlan unnecessarily,
+since parse_vlan sets key->eth.vlan and key->eth.cvlan correctly.
+Only special case where return value <=0 needs inialization
+certail key.eth.vlan or key.eth.cvlan specifically.
 
+For none-vlan case, parse_vlan returns on the first parse_vlan_tag
+which returns 0, in this case, calls clear_vlan
 
-Sure, I will check this one. Also looking at the commit, 74e4190cdebe 
-("clk: qcom: regmap: add PHY clock source implementation"), looks like I 
-can use the clk_regmap_phy_mux struct instead of clk_regmap_mux. I will 
-check into this and update accordingly.
+For MAC_PROTO_NONE, logic is intact after this revision
 
+Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
+---
+ net/openvswitch/flow.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
->
-> > +            .flags = CLK_SET_RATE_PARENT,
-> > +        },
-> > +    },
-> > +};
-> > +
-> > +static struct clk_regmap_mux pcie3x1_0_pipe_clk_src = {
-> > +    .reg = 0x29064,
-> > +    .shift = 8,
-> > +    .width = 2,
-> > +    .parent_map = gcc_parent_map_15,
-> > +    .clkr = {
-> > +        .hw.init = &(struct clk_init_data){
-> > +            .name = "pcie3x1_0_phy_pipe_clk_src",
-> > +            .parent_data = gcc_parent_data_15,
-> > +            .num_parents = ARRAY_SIZE(gcc_parent_data_15),
-> > +            .ops = &clk_regmap_mux_closest_ops,
->
-> And clk_regmap_phy_mux_ops here too?
+diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
+index e20d1a973417..30a90597cab6 100644
+--- a/net/openvswitch/flow.c
++++ b/net/openvswitch/flow.c
+@@ -480,12 +480,16 @@ static int parse_vlan_tag(struct sk_buff *skb, struct vlan_head *key_vh,
+ 	return 1;
+ }
+ 
+-static void clear_vlan(struct sw_flow_key *key)
++static inline void clear_vlan(struct vlan_head *vlan)
+ {
+-	key->eth.vlan.tci = 0;
+-	key->eth.vlan.tpid = 0;
+-	key->eth.cvlan.tci = 0;
+-	key->eth.cvlan.tpid = 0;
++	vlan->tci = 0;
++	vlan->tpid = 0;
++}
++
++static inline void clear_vlans(struct sw_flow_key *key)
++{
++	clear_vlan(&key->eth.vlan);
++	clear_vlan(&key->eth.cvlan);
+ }
+ 
+ static int parse_vlan(struct sk_buff *skb, struct sw_flow_key *key)
+@@ -498,14 +502,18 @@ static int parse_vlan(struct sk_buff *skb, struct sw_flow_key *key)
+ 	} else {
+ 		/* Parse outer vlan tag in the non-accelerated case. */
+ 		res = parse_vlan_tag(skb, &key->eth.vlan, true);
+-		if (res <= 0)
++		if (res <= 0) {
++			clear_vlans(key);
+ 			return res;
++		}
+ 	}
+ 
+ 	/* Parse inner vlan tag. */
+ 	res = parse_vlan_tag(skb, &key->eth.cvlan, false);
+-	if (res <= 0)
++	if (res <= 0) {
++		clear_vlan(&key->eth.cvlan);
+ 		return res;
++	}
+ 
+ 	return 0;
+ }
+@@ -918,8 +926,8 @@ static int key_extract(struct sk_buff *skb, struct sw_flow_key *key)
+ 	skb_reset_mac_header(skb);
+ 
+ 	/* Link layer. */
+-	clear_vlan(key);
+ 	if (ovs_key_mac_proto(key) == MAC_PROTO_NONE) {
++		clear_vlans(key);
+ 		if (unlikely(eth_type_vlan(skb->protocol)))
+ 			return -EINVAL;
+ 
+-- 
+2.27.0
 
-
-Ack.
-
-
->
-> > +            .flags = CLK_SET_RATE_PARENT,
-> > +        },
-> > +    },
-> > +};
-> > +
-> > +static struct clk_regmap_mux pcie3x1_1_pipe_clk_src = {
-> > +    .reg = 0x2A064,
-> > +    .shift = 8,
-> > +    .width = 2,
-> > +    .parent_map = gcc_parent_map_16,
-> > +    .clkr = {
-> > +        .hw.init = &(struct clk_init_data){
-> > +            .name = "pcie3x1_1_phy_pipe_clk_src",
-> > +            .parent_data = gcc_parent_data_16,
-> > +            .num_parents = ARRAY_SIZE(gcc_parent_data_16),
-> > +            .ops = &clk_regmap_mux_closest_ops,
->
-> And here?
-
-
-Ack.
-
-
->
-> > +            .flags = CLK_SET_RATE_PARENT,
-> > +        },
-> > +    },
-> > +};
-> > +
->
-> [skipped]
->
->
-> > +
-> > +static struct clk_branch gcc_pcie3x1_0_pipe_clk = {
-> > +    .halt_reg = 0x29068,
-> > +    .halt_check = BRANCH_HALT_DELAY,
-> > +    .clkr = {
-> > +        .enable_reg = 0x29068,
-> > +        .enable_mask = BIT(0),
-> > +        .hw.init = &(const struct clk_init_data){
-> > +            .name = "gcc_pcie3x1_0_pipe_clk",
-> > +            .parent_names = (const char *[]){
-> > +                "pcie3x1_0_pipe_clk_src"
-> > +            },
->
-> Nooo. No parent_names please. You have several of them in the driver
-
-
-I missed this. I will fix in next spin.
-
-
->
-> > +            .num_parents = 1,
-> > +            .flags = CLK_SET_RATE_PARENT,
-> > +            .ops = &clk_branch2_ops,
-> > +        },
-> > +    },
-> > +};
-> > +
->
