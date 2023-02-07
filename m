@@ -2,194 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DD768DBA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB2168DB9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjBGOeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S232006AbjBGOdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232873AbjBGOdB (ORCPT
+        with ESMTP id S232834AbjBGOc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:33:01 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A7BAD07;
-        Tue,  7 Feb 2023 06:30:15 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317Dtr40015974;
-        Tue, 7 Feb 2023 14:30:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=GwcZMBJ+t9sh8tBQ7PFQ+Eh5/Zaszc1egC6gMYlmjmk=;
- b=NOzW+4otNduEsl83UtEZchssWkVuqafyXV/x+032luxEkheA+qehj56FU9sPTL7Dfg6V
- IyNym39XdRn5Ho4H8Hfdr/CCc7+r5X9pAk65k5lQw8MY2liCattuvjG2gsvMWyJT7vGl
- QWzrZ3yQNyFvzjOEJazoJ8lpMWCP+WRvHJo8GoCSdDTak3r+FTAUZx+VdPs3br3tK4fG
- sYQN6IZusS5ZSNzHcY387qG3Ro5pA+aV8NaJatMS0a69QjXHIPWgBSfm36XBxwPnNFIL
- Aclyu+36jAyfqQdkuJ2b8w1cvo6hFiFumqzpnjp+B9FY/LRKwmmSHlQk5qHz7QvJUUty fA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkk0dgqar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 14:30:09 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 317EU40p003191;
-        Tue, 7 Feb 2023 14:30:04 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgeke6f8-1;
-        Tue, 07 Feb 2023 14:30:04 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317EU4bO003174;
-        Tue, 7 Feb 2023 14:30:04 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 317EU44Z003162;
-        Tue, 07 Feb 2023 14:30:04 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id 8B29B4BDD; Tue,  7 Feb 2023 06:30:03 -0800 (PST)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com, marijn.suijten@somainline.org
-Subject: [PATCH v2 4/4] drm/msm/dpu: reserve the resources on topology change
-Date:   Tue,  7 Feb 2023 06:29:56 -0800
-Message-Id: <1675780196-3076-5-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1675780196-3076-1-git-send-email-quic_kalyant@quicinc.com>
-References: <1675780196-3076-1-git-send-email-quic_kalyant@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 80fGcj61k9ziaqQf2A0Y29FZpsBY9Nno
-X-Proofpoint-ORIG-GUID: 80fGcj61k9ziaqQf2A0Y29FZpsBY9Nno
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_06,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- adultscore=0 impostorscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070129
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 7 Feb 2023 09:32:58 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A5E3E639
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:30:09 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id n2so7963815pgb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 06:30:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TCoGFFPpMbOza9FdCyyz4Zw1S0IHVLItXuTN6BD2F0E=;
+        b=NAFAFkZzNFYY6iP/bIFblEQaqKIpHmf1oMNAOirUnWbLeHBw4ZbvCX0Ob9vkQJ2QNU
+         cPOua6c5tx0QrTPSHJX9ZrhRhu4HuB/8yyJLly5cplgSprl6x5sadjHFQJaODAZ2xT3D
+         +1R/LCFwziNu/mUP+FNT/jdyhGqKcnYh6NPtXYb/kw9Wawxm1wfK9orvb29YpZpfL9Gd
+         PJFHwpoDvx+t4DkxijicPQ0MQRVDaaUz7Ytku0ECDo8ZkHYub0UMUTkZbJ2Bp2ruiwx0
+         PlIPdl2kWBh6YHsjm2PCNvLvBf7UHFSkl+r9lI86/uWTKx4IgxUkXXl7EdFzNs6Emejq
+         pafw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TCoGFFPpMbOza9FdCyyz4Zw1S0IHVLItXuTN6BD2F0E=;
+        b=OKeE18H7gUA/uL5UUKbn5vQJs099ZFB+Fqdfzjukq5Hn4mCqNfaB96eeWVCevlkrjB
+         5NwKKkn67780StRnQzMpX1G4b8vMClZx5ulK0EkFHpZAmUhXoTY7hGv3gfYFvehToX9n
+         6BNLfn9nAMCwikqNytkoWOTdCO1xTv0qmz8f2YIYmtsHGThA6cY20bSsT5IK/A/ABq2D
+         mCKy+DapPu3OyjwaTdzXzqP7EYInSNTgaj2UwSWms1PcvErDs3XIXqzZlVxW19nWUC0E
+         DTkP7c1quWBJt8dfWB1ZmsbRFkUpHkR5xC4MtvjLZVBGlOlRsMxzaDy9PHTX46lzhtKq
+         1RSw==
+X-Gm-Message-State: AO0yUKUQZO81Q7w1zZgOQV8m1/2owZE6OcB7gKutUcykGd9z4+dWVdrM
+        TVn4sN6P9TLtSOTYXCO00uQCsA==
+X-Google-Smtp-Source: AK7set8Ar8Nl3tSE07P4Yp6yz07hhOu687ZD4iO2wfG9LIbz068ml6BrS7sKxkHLG4MyszWAW+79Qw==
+X-Received: by 2002:a62:cd84:0:b0:593:dc7c:98b1 with SMTP id o126-20020a62cd84000000b00593dc7c98b1mr3180405pfg.3.1675780209081;
+        Tue, 07 Feb 2023 06:30:09 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id m20-20020aa78a14000000b005a77b030b5csm1700377pfa.88.2023.02.07.06.30.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 06:30:08 -0800 (PST)
+Message-ID: <d9247209-bca2-4650-b1c7-72e77990411d@kernel.dk>
+Date:   Tue, 7 Feb 2023 07:30:07 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/2] iomap, splice: Fix DIO/splice_read race memory
+ corruptor and kill off ITER_PIPE
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230207133916.3109147-1-dhowells@redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230207133916.3109147-1-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some features like CTM can be enabled dynamically. Release
-and reserve the DPU resources whenever a topology change
-occurs such that required hw blocks are allocated appropriately.
+On 2/7/23 6:39?AM, David Howells wrote:
+> [!] Jens: Note that there's a window in the linux-block/for-next branch
+>     with a memory corruptor bug that someone bisecting might hit.  These
+>     two patches would be better pushed to the front of my iov-extract
+>     branch to eliminate the window.  Would it be possible for you to
+>     replace my branch in your for-next branch at this point?
 
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
----
-Changes in v1:
-- Avoid mode_set call directly (Dmitry)
+I'll check in on these two patches later today, but just wanted to say
+that we can definitely just toss the existing branch, and setup a new
+one based on -rc7 that adds these two first, then pulls in the other
+branch on top to avoid this. Not a big deal, and warranted in this case.
 
-Changes in v2:
-- Minor nits (Dmitry)
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  2 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 27 ++++++++++++++++++++++-----
- 2 files changed, 24 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-index 539b68b..85bd5645 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-@@ -204,6 +204,7 @@ struct dpu_crtc {
-  * @hw_ctls       : List of active ctl paths
-  * @crc_source    : CRC source
-  * @crc_frame_skip_count: Number of frames skipped before getting CRC
-+ * @ctm_enabled   : Cached color management enablement state
-  */
- struct dpu_crtc_state {
- 	struct drm_crtc_state base;
-@@ -225,6 +226,7 @@ struct dpu_crtc_state {
- 
- 	enum dpu_crtc_crc_source crc_source;
- 	int crc_frame_skip_count;
-+	bool ctm_enabled;
- };
- 
- #define to_dpu_crtc_state(x) \
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 3920efd..7bb4840 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -217,6 +217,22 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
- 	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
- };
- 
-+static bool _dpu_enc_is_dspp_changed(struct drm_crtc_state *crtc_state,
-+	struct msm_display_topology topology)
-+{
-+	struct dpu_crtc_state *cstate = to_dpu_crtc_state(crtc_state);
-+
-+	if (drm_atomic_crtc_needs_modeset(crtc_state))
-+		return true;
-+
-+	if ((cstate->ctm_enabled && !topology.num_dspp) ||
-+	    (!cstate->ctm_enabled && topology.num_dspp)) {
-+		crtc_state->mode_changed = true;
-+		return true;
-+	}
-+
-+	return false;
-+}
- 
- bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
- {
-@@ -642,14 +658,15 @@ static int dpu_encoder_virt_atomic_check(
- 
- 	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, crtc_state);
- 
-+	_dpu_enc_is_dspp_changed(crtc_state, topology);
-+
- 	/*
- 	 * Release and Allocate resources on every modeset
--	 * Dont allocate when active is false.
- 	 */
- 	if (drm_atomic_crtc_needs_modeset(crtc_state)) {
- 		dpu_rm_release(global_state, drm_enc);
- 
--		if (!crtc_state->active_changed || crtc_state->active)
-+		if (crtc_state->enable)
- 			ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
- 					drm_enc, crtc_state, topology);
- 	}
-@@ -1022,7 +1039,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 	struct dpu_hw_blk *hw_lm[MAX_CHANNELS_PER_ENC];
- 	struct dpu_hw_blk *hw_dspp[MAX_CHANNELS_PER_ENC] = { NULL };
- 	struct dpu_hw_blk *hw_dsc[MAX_CHANNELS_PER_ENC];
--	int num_lm, num_ctl, num_pp, num_dsc;
-+	int num_lm, num_ctl, num_pp, num_dsc, num_dspp;
- 	unsigned int dsc_mask = 0;
- 	int i;
- 
-@@ -1053,7 +1070,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 		drm_enc->base.id, DPU_HW_BLK_CTL, hw_ctl, ARRAY_SIZE(hw_ctl));
- 	num_lm = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
- 		drm_enc->base.id, DPU_HW_BLK_LM, hw_lm, ARRAY_SIZE(hw_lm));
--	dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
-+	num_dspp = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
- 		drm_enc->base.id, DPU_HW_BLK_DSPP, hw_dspp,
- 		ARRAY_SIZE(hw_dspp));
- 
-@@ -1084,7 +1101,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 	}
- 
- 	cstate->num_mixers = num_lm;
--
-+	cstate->ctm_enabled = !!num_dspp;
- 	dpu_enc->connector = conn_state->connector;
- 
- 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
 -- 
-2.7.4
+Jens Axboe
 
