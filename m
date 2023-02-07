@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B8B68CF10
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591D268CF1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjBGFjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:39:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S229737AbjBGFvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:51:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBGFjl (ORCPT
+        with ESMTP id S229447AbjBGFvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 00:39:41 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF172A992
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 21:39:40 -0800 (PST)
+        Tue, 7 Feb 2023 00:51:07 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345C01E2BC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 21:51:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675748380; x=1707284380;
+  t=1675749063; x=1707285063;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vA9Mmni/6NPac6Y0H9GUnP6jaS0rdTr3cyE3IuB+Rso=;
-  b=hPqD7mLewV+cmvDlmJRCz+g7KAgdtZh43+WiZ31+F/Dt1dwvQ1jXM+rf
-   dFrMTlL1biu1J2UEpiILJSXr3jgf1M9XMt9c7LDNA3hxTbPR2pXbLTmzu
-   kJtyGEpGzji6zORizYs6VjKG2JZ7lQlUCjKD+OBsf3zk7kZjQjdNnvf9N
-   Rmq+0LU3VVv92TxAxf8ZmKiYJADKwlMPaEh5ZcJnQYg2tYasxYTwa/kR/
-   pJrzmQEDF5AhvpWsv29h2qvqAOvJDyVKdAq1f/a1CZyzkdbscix1+zL9T
-   pKXxlp8dt2wUK+tIc9EQqtIXbAbsN8lMuGnP/QrI98EHUUNW9Yf74q9Ow
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309745850"
+  bh=3b3aWcL1l7U/L1LS+KV371zL/qzf8gpKCQsHXNrtd54=;
+  b=EbIBFyZeObq/8MvTjFpmFNur4AV4v2gbwkLHoLc9dhE/g0O5SBxx3y7n
+   RAW/u1FS6QmAQ8Or0OgjC3c9FEbfCQwIoqg6ae7XKvQ/9C/FOkjMkO0oV
+   OLAdFwEsUS60yOysCCDrYSCsECxGdolMnNV2MhuRCEOTZDbw1+efvPWqB
+   VdoSAFZsneOT/h939uCh/S+LfbBmMr6xDKqh03P3PBjr0B2rQn5DTqjth
+   4MMlbf4UEuERRjoiG4eER0V2mEWlLrD+w0XMx3eArsnJ0xbSyk+q0531l
+   JhB5aQYeml+DqYqHoYbTkozskOsT5L7mmMYkR6yj2T9QBjKgxOooHh1yA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415633701"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="309745850"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:39:40 -0800
+   d="scan'208";a="415633701"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:50:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="699114117"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775409282"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="699114117"
+   d="scan'208";a="775409282"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2023 21:39:38 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2023 21:50:39 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pPGhd-00038A-19;
-        Tue, 07 Feb 2023 05:39:37 +0000
-Date:   Tue, 7 Feb 2023 13:39:30 +0800
+        id 1pPGsI-00038v-1M;
+        Tue, 07 Feb 2023 05:50:38 +0000
+Date:   Tue, 7 Feb 2023 13:50:00 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
@@ -50,13 +50,13 @@ Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Thomas Gleixner <tglx@linutronix.de>
 Subject: [tip:x86/vdso 3/4] arch/x86/include/asm/arch_hweight.h:49:15: error:
  invalid input size for constraint 'D'
-Message-ID: <202302071338.m7nBGR5i-lkp@intel.com>
+Message-ID: <202302071322.KTuOfRSa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,7 +66,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
 head:   5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
 commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 [3/4] x86/vdso: Provide getcpu for x86-32.
-config: x86_64-randconfig-r031-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071338.m7nBGR5i-lkp@intel.com/config)
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230207/202302071322.KTuOfRSa-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
