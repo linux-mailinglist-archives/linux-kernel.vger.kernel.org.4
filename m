@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5D368D096
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 213EE68D097
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjBGH3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:29:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S230217AbjBGH3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 02:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjBGH3N (ORCPT
+        with ESMTP id S229890AbjBGH3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:29:13 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FA732E7F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 23:29:11 -0800 (PST)
+        Tue, 7 Feb 2023 02:29:19 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA67836089
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 23:29:17 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9E32F21EBA;
-        Tue,  7 Feb 2023 07:29:10 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 68AE860F1F;
+        Tue,  7 Feb 2023 07:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1675754950; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1675754956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rbY40ezGliGVnHSth5hMXNDNMzMU7QLwqm1NaZ+5dkM=;
-        b=jO5CLX0xWZHkj2UeNFp7sHfonkrtsyyATSHmwc/Kj7LOQ6K7zCAPf53+TN60RGd5qHyeEr
-        QDMFsUrfE5zkMS5871Z37xsigU2CNsjkAmu1NlqLmB3WZ/h+Ab/lSeX1EUiYkCIzl+W5wt
-        V2LD3eJTvJVvptr8534mzNyQfilK9OU=
+        bh=MDR6p3EEVdt6aI87yhW7ogY5yoUM9JM3hkrFmMLxzCQ=;
+        b=tDbv7vnL7LeZnXzm7xPgZ0dgekKLu5Kq2IaGD8+x2/lhyO2fRjp33UC/eYHyw/oto49Z3l
+        ui0fwheHnag2U7JLyNI+QwYEdOnhKIZRbuOMWZCJXEj5R9HbI/ooM4AhK751VnRmDKBsfr
+        HRJ+nvkd9mP2RgasyzPodZaYgpy8G4g=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5163613A8C;
-        Tue,  7 Feb 2023 07:29:10 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1160313A8C;
+        Tue,  7 Feb 2023 07:29:16 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1Wd/Esb94WOfUQAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 07 Feb 2023 07:29:10 +0000
+        id n5fiAsz94WO4UQAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 07 Feb 2023 07:29:16 +0000
 From:   Juergen Gross <jgross@suse.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     lists@nerdbynature.de, mikelley@microsoft.com,
         torvalds@linux-foundation.org, Juergen Gross <jgross@suse.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH 1/6] x86/mtrr: make mtrr_enabled() non-static
-Date:   Tue,  7 Feb 2023 08:28:57 +0100
-Message-Id: <20230207072902.5528-2-jgross@suse.com>
+Subject: [PATCH 2/6] x86/pat: check for MTRRs enabled in memtype_reserve()
+Date:   Tue,  7 Feb 2023 08:28:58 +0100
+Message-Id: <20230207072902.5528-3-jgross@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230207072902.5528-1-jgross@suse.com>
 References: <20230207072902.5528-1-jgross@suse.com>
@@ -65,52 +67,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to be able to use mtrr_enabled() outside of MTRR code, make
-it non-static and add a sub for the !CONFIG_MTRR case.
+Today memtype_reserve() bails out early if pat_enabled() returns false.
+The same can be done in case MTRRs aren't enabled.
 
+This will reinstate the behavior of memtype_reserve() before commit
+72cbc8f04fe2 ("x86/PAT: Have pat_enabled() properly reflect state when
+running on Xen"). There have been reports about that commit breaking
+SEV-SNP guests under Hyper-V, which was tried to be resolved by commit
+90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case"),
+but that again resulted in problems with Xen PV guests.
+
+Fixes: 72cbc8f04fe2 ("x86/PAT: Have pat_enabled() properly reflect state when running on Xen")
+Fixes: 90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case")
 Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- arch/x86/include/asm/mtrr.h     | 6 ++++++
- arch/x86/kernel/cpu/mtrr/mtrr.c | 2 +-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/mm/pat/memtype.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-index f0eeaf6e5f5f..29ec2d6f0537 100644
---- a/arch/x86/include/asm/mtrr.h
-+++ b/arch/x86/include/asm/mtrr.h
-@@ -31,6 +31,7 @@
-  */
- # ifdef CONFIG_MTRR
- void mtrr_bp_init(void);
-+bool mtrr_enabled(void);
- extern u8 mtrr_type_lookup(u64 addr, u64 end, u8 *uniform);
- extern void mtrr_save_fixed_ranges(void *);
- extern void mtrr_save_state(void);
-@@ -48,6 +49,11 @@ void mtrr_disable(void);
- void mtrr_enable(void);
- void mtrr_generic_set_state(void);
- #  else
-+static inline bool mtrr_enabled(void)
-+{
-+	return false;
-+}
-+
- static inline u8 mtrr_type_lookup(u64 addr, u64 end, u8 *uniform)
- {
- 	/*
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 783f3210d582..814cc13fd6eb 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -59,7 +59,7 @@
- #define MTRR_TO_PHYS_WC_OFFSET 1000
+diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+index fb4b1b5e0dea..18f612b43763 100644
+--- a/arch/x86/mm/pat/memtype.c
++++ b/arch/x86/mm/pat/memtype.c
+@@ -557,8 +557,12 @@ int memtype_reserve(u64 start, u64 end, enum page_cache_mode req_type,
+ 		return -EINVAL;
+ 	}
  
- u32 num_var_ranges;
--static bool mtrr_enabled(void)
-+bool mtrr_enabled(void)
- {
- 	return !!mtrr_if;
- }
+-	if (!pat_enabled()) {
+-		/* This is identical to page table setting without PAT */
++	/*
++	 * PAT disabled or MTRRs disabled don't require any memory type
++	 * tracking or type adjustments, as there can't be any conflicts
++	 * between PAT and MTRRs with at least one of both being disabled.
++	 */
++	if (!pat_enabled() || !mtrr_enabled()) {
+ 		if (new_type)
+ 			*new_type = req_type;
+ 		return 0;
+@@ -627,7 +631,7 @@ int memtype_free(u64 start, u64 end)
+ 	int is_range_ram;
+ 	struct memtype *entry_old;
+ 
+-	if (!pat_enabled())
++	if (!pat_enabled() || !mtrr_enabled())
+ 		return 0;
+ 
+ 	start = sanitize_phys(start);
 -- 
 2.35.3
 
