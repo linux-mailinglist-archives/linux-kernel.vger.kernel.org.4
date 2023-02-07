@@ -2,116 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8353D68DF1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7137E68DF20
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:39:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjBGRig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S231941AbjBGRjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjBGRie (ORCPT
+        with ESMTP id S231972AbjBGRjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:38:34 -0500
+        Tue, 7 Feb 2023 12:39:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665307EDD;
-        Tue,  7 Feb 2023 09:38:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012C7421A;
+        Tue,  7 Feb 2023 09:39:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0205560F91;
-        Tue,  7 Feb 2023 17:38:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0ADFC433A1;
-        Tue,  7 Feb 2023 17:38:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82A7160F92;
+        Tue,  7 Feb 2023 17:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7488C4339E;
+        Tue,  7 Feb 2023 17:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675791512;
-        bh=bhXZevl7/ueOvYs4UE/FXGrLbw9bx+H5XCbSilyeFXk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=h7h587fTawkt2a5j+ZF8/7L5MjzroZngsgrtUL80z2fzTYNoZU3zWaycy4/LMsouK
-         CXlG4MP/nER23MqJ8xmuQ/OXbleMyeeQEm9LVMGp482IgPy5ckhkoJzcyH15f/MmLW
-         M3biIqT+5bk/Xd8RQ8Or3A5P7HE1ahi8d7z0MVB9NRF7l76Gf0WjYmLL9xKD45S+jm
-         Ubk3npaKZmNrzHxqUnSlLxL4SJF1CPKSYlucltf3vtSrV25uiYFBsZUizp3Lme1JgN
-         1Bhi98f9GQOkEURWSY2NZdfFq2lvUYdYr6BvZq7KFlzXi5M6T/vNv+q5v3W5eN9fXu
-         QNlBfhx5yGDCw==
-Message-ID: <ad09a065-c10d-3061-adbe-c58724cdfde0@kernel.org>
-Date:   Tue, 7 Feb 2023 18:38:23 +0100
+        s=k20201202; t=1675791547;
+        bh=KZlrxH/j0b90gVF45TsrOX41MvrLcj8pAItg6Xzoxdo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GBOSdL5WJf/wN4rUEjZiQTaQ87SKc9knmDdocyN27DLgtcevcjewUvlju5pPYTDDF
+         gCq8LBxzDYG063ZTo2GufKunfjMbvUZMsQ8GEEvTA5aYOo1Wf+Cp1hAGOp0gSjnVRA
+         WjBDtIfBbWnW6ehmUX7ZjHqVWfaGQgvebPk/XdfFHM1wqqWl2gpkCUaG5Z5bufAYk5
+         ix6av/JK0kWbmRBrF2Au+1HmRQRILDLzlNgEMMUazQ9UvqwRlNuQm13T3uqk868Y3u
+         +0FRgWRoArOJP4UmEZKs6B0uPGSJOLn6MZ7G+llBisOq+AIzaVhprre2nlOppjD/Aw
+         EHW4b6ffFruMA==
+Received: by mail-vs1-f53.google.com with SMTP id k6so17092413vsk.1;
+        Tue, 07 Feb 2023 09:39:07 -0800 (PST)
+X-Gm-Message-State: AO0yUKUGE2Imit4S4fZFvK/FEZ2Rlc9A6xWsBEJj2NrpIifq40gd0qLv
+        yYQADPLQlcowEswm2nSSHM+esKxc2rLp7Mte/w==
+X-Google-Smtp-Source: AK7set8he/v5HFsA1kt1CzDG53fUn4W/mqRZFX4p6+6jCqlvPfny4Lqp0rVvcs5fJmGGKMoqWTO9zOzlppsHceLljxs=
+X-Received: by 2002:a67:7206:0:b0:3ea:c8c:48a5 with SMTP id
+ n6-20020a677206000000b003ea0c8c48a5mr815523vsc.53.1675791546831; Tue, 07 Feb
+ 2023 09:39:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 03/11] dt-bindings: arm: mediatek: add
- 'mediatek,pn_swap' property
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
-References: <cover.1675779094.git.daniel@makrotopia.org>
- <a8c567cf8c3ec6fef426b64fb1ab7f6e63a0cc07.1675779094.git.daniel@makrotopia.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <a8c567cf8c3ec6fef426b64fb1ab7f6e63a0cc07.1675779094.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675188609-20913-7-git-send-email-ssengar@linux.microsoft.com>
+ <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
+ <20230201165133.GA24116@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <20230201174638.GA3872117-robh@kernel.org> <20230203173616.GA8582@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230203173616.GA8582@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 7 Feb 2023 11:38:55 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKWWg=nL5C1Hz7GQ6YCbc0ssUP71Be6kcn57v5240GQew@mail.gmail.com>
+Message-ID: <CAL_JsqKWWg=nL5C1Hz7GQ6YCbc0ssUP71Be6kcn57v5240GQew@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] Driver: VMBus: Add device tree support
+To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 15:19, Daniel Golle wrote:
-> Add documentation for the newly introduced 'mediatek,pn_swap' property
-> to mediatek,sgmiisys.txt.
-> 
+On Fri, Feb 3, 2023 at 11:36 AM Saurabh Singh Sengar
+<ssengar@linux.microsoft.com> wrote:
+>
+> On Wed, Feb 01, 2023 at 11:46:38AM -0600, Rob Herring wrote:
+> > On Wed, Feb 01, 2023 at 08:51:33AM -0800, Saurabh Singh Sengar wrote:
+> > > On Tue, Jan 31, 2023 at 02:12:53PM -0600, Rob Herring wrote:
+> > > > On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
+> > > > <ssengar@linux.microsoft.com> wrote:
+> > > > >
+> > > > > Update the driver to support device tree boot as well along with =
+ACPI.
+> > > > > At present the device tree parsing only provides the mmio region =
+info
+> > > > > and is not the exact copy of ACPI parsing. This is sufficient to =
+cater
+> > > > > all the current device tree usecases for VMBus.
+> > > > >
+> > > > > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > > > > ---
+> > > > >  drivers/hv/vmbus_drv.c | 75 ++++++++++++++++++++++++++++++++++++=
+++++--
+> > > > >  1 file changed, 73 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> > > > > index 49030e756b9f..1741f1348f9f 100644
+> > > > > --- a/drivers/hv/vmbus_drv.c
+> > > > > +++ b/drivers/hv/vmbus_drv.c
+> > > > > @@ -2152,7 +2152,7 @@ void vmbus_device_unregister(struct hv_devi=
+ce *device_obj)
+> > > > >         device_unregister(&device_obj->device);
+> > > > >  }
+> (...)
+> > > > >         struct pci_dev *pdev;
+> > > > > @@ -2442,6 +2443,7 @@ void vmbus_free_mmio(resource_size_t start,=
+ resource_size_t size)
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
+> > > > >
+> > > > > +#ifdef CONFIG_ACPI
+> > > >
+> > > > It's better to put C 'if (!IS_ENABLED(CONFIG_ACPI)' code in the
+> > >
+> > > I wanted to have separate function for ACPI and device tree flow, whi=
+ch
+> > > can be easily maintained with #ifdef. Please let me know if its fine.
+> >
+> > Yes, you can have separate functions:
+> >
+> > static int vmbus_acpi_add(struct platform_device *pdev)
+> > {
+> >       if (!IS_ENABLED(CONFIG_ACPI))
+> >               return -ENODEV;
+> >
+> >       ...
+> > }
+> >
+> > The compiler will throw away the function in the end if CONFIG_ACPI is
+> > not enabled.
+> >
+> > That is easier for us to maintain because it reduces the combinations t=
+o
+> > build.
+> >
+>
+> I tried removing #ifdef CONFIG_ACPI and use C's if(!IS_ENABLED(CONFIG_ACP=
+I)) but looks
+> compiler is not optimizing out the rest of function, it still throwing er=
+rors
+> for acpi functions. This doesn't look 1:1 replacement to me.
+> Please let me know if I have missunderstood any of your suggestion.
+>
+> drivers/hv/vmbus_drv.c:2175:8: error: implicit declaration of function =
+=E2=80=98acpi_dev_resource_interrupt=E2=80=99 [-Werror=3Dimplicit-function-
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+That's a failure of the ACPI headers not having empty function
+declarations. The DT functions do...
 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  .../devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt    | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-> index d2c24c277514..b38dd0fde21d 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
-> @@ -14,6 +14,10 @@ Required Properties:
->  	- "mediatek,mt7986-sgmiisys_1", "syscon"
->  - #clock-cells: Must be 1
->  
-> +Optional Properties:
-> +
-> +- mediatek,pn_swap: Invert polarity of the SGMII data lanes.
+Also, this is just a broken assumption:
 
-No:
-1. No new properties for TXT bindings,
-2. Underscore is not allowed.
-3. Does not look like property of this node. This is a clock controller
-or system controller, not SGMII/phy etc.
+#ifdef CONFIG_ACPI
 
-Best regards,
-Krzysztof
+#else
+// Assume DT
+#endif
 
+Both ACPI and DT can be enabled at the same time. They may be mutually
+exclusive for a platform, but not the kernel. For distro kernels, both
+will be enabled typically if the arch supports both. On arm64, DT is
+never disabled because the boot interface is always DT.
+
+Furthermore, this makes compile testing your code difficult. The arm64
+defconfig, allmodconfig and allyesconfig all will not build the DT
+code. The same for x86. This means all the CI builds that happen can't
+build test this.
+
+Rob
