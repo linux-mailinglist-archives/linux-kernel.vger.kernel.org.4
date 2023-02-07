@@ -2,227 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BA268D283
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EBA68D28B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjBGJSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 04:18:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S231487AbjBGJUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbjBGJSc (ORCPT
+        with ESMTP id S230467AbjBGJUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:18:32 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD7438672;
-        Tue,  7 Feb 2023 01:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675761498; x=1707297498;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=20NY+RcJCVYM1jV2aZkfU/WSt0jQ7R3gBvD0TYMBH0M=;
-  b=UDn7rr5BSnds6wkufen8LO6wYfd1E51bY9w6Ov5oRDXTIgfsthWDtkBA
-   S3VSN0kel/F+N1wbR/3x0IzSL5crystwnBeGmtCCAFjyWX9sPw5tAqRzA
-   txHFXg09l+jIE1OxPJ1lZyEvN+xmqkVKolewA1jHWGCzfhhpMfWEi/n8e
-   TbRwUNDJn1rzhwZSgXWvfo3xME3wOFvVisQAuXPWCKsJPlpHH65MmCiPW
-   IUbaWzZcFF4/pxVNOYUFnKN7TaZxY8lanR3K6FwVXyZPSD02rz2BNdpcV
-   JrnfN4You+P2ntcDck82K8EZ/4j5MlhQQ4GDiS0fCkr1CNxOBYh/8QWNf
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="327145987"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="327145987"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 01:18:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="912263901"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="912263901"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Feb 2023 01:18:17 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 01:18:17 -0800
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 01:18:17 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 01:18:17 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 7 Feb 2023 01:18:16 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LzgBnfcqmH311dARdKDtn4sxTGYQxtsyNR5N0FNuQGu1E9v7ZigWcNgL5sBDOoS0KxGR02oViXKR5ZbW1T3gS7gp4Qczw4elr/Dd5HO1RovDovHVhWMfWg5XsB2653kwZ90dv8GRjPJ2rQ6s59o74RDz6YYS7c7JdN8c/ZXpA1LPZmQ2g/JyX/IuVpSZjI4mOCZZSfeJEUHUkLsnhYS2LkfpFE4DboAmk+nZa7ZPhrJDvTSh+6dBc+6iOkeEJlCQ/SkgCpv5to0E5YuVHTp5PEjKTkqMcqtxtw/G4ShNcqzpEpPKEFUvsr+zWjHlazfGh0R+T4cmpRaHBHEx1h31iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=20NY+RcJCVYM1jV2aZkfU/WSt0jQ7R3gBvD0TYMBH0M=;
- b=Y0RIPQkNX7sG5uoEZOZDwGoWtFAlkRFjknQivq8gS9QQ5sgCJPQjD0pd6jG7hpKIc/DVJbxgrtG910XN46NUbDTwrt4Bb/mAi1Ju44GuX81OYBMwrrv3kaDve5LqTideNf08QRIlliXVskohdHcVjKxhLZSClzGFLJXi3JRgjCCivJpPvEmPeQAYk1a00bBOWpjTWFtL/cnt8mgikr0hTIfdlIyrdOgK9IRW4rSt4pWG1K5TCKC9XdtS3HMbEUxtJ1zmUwig4M1nuQZtLZbIQT+GCunqSTdJiD8Xgq4K/vUKPfagGls5YFVS6vhVcrmnJl6wleoWYIM3J58+ba41Fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SN7PR11MB6874.namprd11.prod.outlook.com (2603:10b6:806:2a5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Tue, 7 Feb
- 2023 09:18:15 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
- 09:18:14 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>
-CC:     David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        "Robin Murphy" <robin.murphy@arm.com>
-Subject: RE: [PATCH] iommu/vt-d: Avoid superfluous IOTLB tracking in lazy mode
-Thread-Topic: [PATCH] iommu/vt-d: Avoid superfluous IOTLB tracking in lazy
- mode
-Thread-Index: AQHZOCNd6z7weBkJP0K7ycd3Ms6uFq6+VIgAgAL1GUCAAcWqgIAAKncA
-Date:   Tue, 7 Feb 2023 09:18:14 +0000
-Message-ID: <BN9PR11MB527646D3824A1E219435F3EF8CDB9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230203230417.1287325-1-jacob.jun.pan@linux.intel.com>
- <ef65f1cf-d04c-8c35-7144-d30504bf7a1c@linux.intel.com>
- <BN9PR11MB52764498929E4978B3A8740D8CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <b190ddb3-eb1d-cd72-ce03-1127af228bf0@linux.intel.com>
-In-Reply-To: <b190ddb3-eb1d-cd72-ce03-1127af228bf0@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SN7PR11MB6874:EE_
-x-ms-office365-filtering-correlation-id: 44821935-ecdc-425c-9fe0-08db08ec3e00
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EN2/siAnyiVJK94jRIFY9VOWRO4xN1nfj+oOPK6x3vDV6EN2xfUEyg/+dG9woREMgJWQbwaNOFzON0w7zI0PIWr33EkC/ejA3cvCiFJ6Ptl16l/qMcAFvVhwXqo09af5RNO2BA69CshK244yfIqsFOnr0o9/10zJ878XkS9D9wuHW8no9wg0L/W5c+nSjMKuLtzSPrmhfdCn1FIrGCPnK8PK4oViPhr05GITn37YaIJWkKVhsIH96ZywGyuGASj7wCksdT2omgeevMho9ZxJV/JucY34CYMFd76jjws4MEh23qmv3u9UMawTumTMQJXS4rq3enZjWyA138PmOA0Vnxdi5zu8aTzoARslZtjyEqHsk1Wc8GYjcoLQK1swm7pISFenKxEMIlgFu5PJNWtXefKvColLA1/5D6TVy9QUGes4gUZD3+TQGLNItRDgPmzt9Zkevv482XQU7lVc5KQA4EYTqaa8HmOYIuB+PPlOGIun4jMFrBU2LIUZxPobT+aN1RhHb6oliGr441mHFmRz8ghW2TwUcqMuA3TKbnx57uHTqxe43QNOI/3AWgg014Qpr1GNczJZySHEXKr/sReqpKO7A34KSzuB6D7Ydg0318xb7ov3Y4ejtxIxv0yVmk66szcSNNSUQI5wYwrbX7KAPiJskoZQNA6b8gbNWN1VS6JbqXTem2Iy5tE9+mFkMPX13Q+ueNGxHSybH3E2YiPpNg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(366004)(39860400002)(376002)(136003)(346002)(451199018)(38100700002)(82960400001)(122000001)(38070700005)(6506007)(33656002)(186003)(26005)(53546011)(9686003)(86362001)(76116006)(66946007)(64756008)(4326008)(83380400001)(66556008)(8676002)(316002)(66476007)(52536014)(110136005)(478600001)(54906003)(7696005)(66446008)(5660300002)(2906002)(41300700001)(8936002)(55016003)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q0t4cDJCTU1lR1k0Z1pvNDhRUUV3c1ZUaXVzbDVUK0tNOTBTMkdvWXRxVjhB?=
- =?utf-8?B?K0QzazlzNXdDWnBHeHF2LzJRSHZaZVJpRUZ1Nk1FZzFNRko5OWI3MXJpZWQw?=
- =?utf-8?B?cmQ0RjZ3ck92Syt0YzB4R053RFoxT2pUUmNLV05oSTNlUjZlWHBBdTl6TnBa?=
- =?utf-8?B?VXIyTGxzN1lzWStYY3ZRQjEzd2EwQmVVSGJrRXdmUlI4S0syTndkcElFOWVK?=
- =?utf-8?B?a3RGUHNMNC9Ob1A3TmdRUlBuVmxMUTJuaVpoZWpZMWd4Lzh3WUJRN3JXb2VJ?=
- =?utf-8?B?QkJiU1g1NWhVS3gybnlkL0poa0UvclZtZmhkdWpKS2tNb0R0UmtpK214WC94?=
- =?utf-8?B?TlNSc0tXUDJxN1RUKzVvUmJpVnJFUjNCL1QwRDRVbDZBMzFVeGdFNFlkYkxZ?=
- =?utf-8?B?OXRRSmVIMFBWMzdrV2tFaHhpaFcyS0d4STRzL1VEdTFDTTgrWjZUQlBwbS8x?=
- =?utf-8?B?R2h1RUdCY3N6RUpxaHplekM3bnIvT3k3RkpqSytLUWtaU2tFL2g2bVEvRGFG?=
- =?utf-8?B?MHVJcG1hU2ljYkNQSEt4Q0JuQnBGMkRVK0RtZE1XRnhINlBIbUFLUW4wNXVP?=
- =?utf-8?B?WDF2NUNDVldlREEzMFdOUmhXU2s5VlBHMXVPRVlnVEU5ajJJRkg1eVI4Vm4z?=
- =?utf-8?B?ZXpja0kvR2E0d2Q3cjJEeFpUUmFhaVh0YTY5Z0huWmJqNE5teUE1RVZ2b1J3?=
- =?utf-8?B?dVIwNjBVY2xzRkRTcmpSb2FZeWREUW4yYmd5Ryt6OTZvaDVJR09YR2svRVZK?=
- =?utf-8?B?cUtiV1FMNis0NXVRTTNWVGVtdUdaejJiQ1RWb1RjTnh6aXhld09zQlp6STI1?=
- =?utf-8?B?ZlAxbjhCQ0Z4MjF6QmdUMTlGK3VycmNVQ1dERC9EdGErVTgrdWFDK1RCemdG?=
- =?utf-8?B?cTZLdmZ4K2Y3VWZxR1FBRE5KUWVJVWVkbkkzS3RhN2hhQVRQNEdmTTM5RlAy?=
- =?utf-8?B?blBHMEdXMzRVU0ZNbjUrNS9DcGJoWHlnNTJuTEVCWTFzTTJaVmRrWnNqZis3?=
- =?utf-8?B?TVkrL3RpYU5DaitDY1NLUTNDNTlzNXJnVjlrSUk2Skp2YWZ5V1dxeFdBZFlr?=
- =?utf-8?B?dTUvemtoSFdtUlVjRTVJdG5WckhNK2d0bXJDaUhjY2NqenVGUUx0ZHd4V1B1?=
- =?utf-8?B?OVpONDZzUW1oWVJRbm5aSUhxckp2NmZQZjU4b0pLdytCWURUSEtPV0VTL053?=
- =?utf-8?B?bHRjUFYrNDMzZUpaNlBvQjJOZElMYlN6WmFET1R2dFlKUFV0R3BHME9OMnJ4?=
- =?utf-8?B?U0lCaWFZMVZPcnZZVGlxbkJDYitvcC9KeHE2a1ZLaUZDRkFTSUZWcnlEWE1h?=
- =?utf-8?B?SGgyWlI1QWFDYVpGYXFDYVMxcTJtTzdvd293aHYraTFDUWJobnlqMFNtbGJu?=
- =?utf-8?B?bnh2QVI1bEVmUXUxcFZpZDRtNml4RE8zSUIyRG9zalF2WEcvSVlrMUJQY1Jw?=
- =?utf-8?B?NzdKSkZwaStFdnprNUlOZjRVTGs0b1JINGhlVmVXZTBiUWJPK3hJTDlpOGNo?=
- =?utf-8?B?ckdUTWhWK2M5YlgyMGMxc1pHb3NLaGNSMWxBVTczTzdXOEs4ZXdDeUYxK3U1?=
- =?utf-8?B?UjBwcUYzYUZEa0JGeUk3TzBML2hqbmltWlZWMFFkNTd0UUR6SFlxc3BvcG5v?=
- =?utf-8?B?a0x6R0FUWE9hajlqcCtzRkFPbzFTYkpRb1R2THo0NnpZMllDeHUrVG8zTXBI?=
- =?utf-8?B?WU9FMUMwaWpZN0tjMU1WUDVmRW9lWUxjQ2M5cjFQblJESjJyNjN0T2lGc25j?=
- =?utf-8?B?WW14bEZBTUZlOGdYUmw5M2wzRXE5Zlk1U3k3Z3Y3QWVRVXRhOVFUbnc3Q3ZB?=
- =?utf-8?B?cXJZQmZtK0pPQXBDYmxpT29JYkdPSUQvQXkwNGZzL0RZVEJnVjdZZzBxQUM4?=
- =?utf-8?B?eVE4MkFxb3NCSjlQcExraDVVUVhJbktnRUlLb1VLWkhwbjZtQno1Q0FFbWFn?=
- =?utf-8?B?b3BPcEo0WW93ZGI1TWl4d0wxOERDdHVSeitFL20zeDZWd3VObEtlS0lBazJL?=
- =?utf-8?B?MG9JRnRHR0orTFMzU0JHcW9KUmJ5MmtJcW5VR2UreVowcms1MnVqZXBNVks0?=
- =?utf-8?B?RzNwVDNtckpnUno1Tm1CRy8xZ0RTTG1YMCt3V1BPNXhua1hWcmxxblBqcHNo?=
- =?utf-8?Q?BWUnBKHEzRka+YsnqDr+N4UIq?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 7 Feb 2023 04:20:09 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7371F491;
+        Tue,  7 Feb 2023 01:20:07 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id d6-20020a17090ae28600b00230aa72904fso5999203pjz.5;
+        Tue, 07 Feb 2023 01:20:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sACnErhtrCsWw74xwaNwuygQbaOdtgbjKjTOtxPcekQ=;
+        b=kaf2yqSVeOvUWMU9XXznG8AUmjNCOvebNTky2BXBFRrsvTsZsq1Zqm2r2UvHnOZeEJ
+         nFnZJ69CSctP7Flb+JG5RIXJyJRLP1A56vHhLAn/yVLILmmBQOfGrOAQhlKaGElOXpid
+         pfu1YOAEPSVXqwJDcm8YxX30/LAaHV00CbQlA/LUXohN9jEyJg2cRM4DrIzJtzm3G9p3
+         aVd//9k00dtzdkQW50px2t/Eu5C0asR/ZTFk46iDcTNM56yjmAHe84uYHywDEQEq0932
+         eKRPK8DGbNAeRnL+cO3JmSaLGbSwGicglwyaGvO+kE4QOT/xjqXrovMadA2ABg6QYmTs
+         uOHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sACnErhtrCsWw74xwaNwuygQbaOdtgbjKjTOtxPcekQ=;
+        b=oxclEHMCx5F8qKH0WV3MjpTyUoZFgUZEaohfk5+QedM5FqTjhMMGbAF7IWlWhEQliv
+         +q8l8axuI+Q5BfMxAM3iG30Be6uYiGmGBJ41JjooIO8hu5PPkAvgw80s8o1gWjIizoMy
+         bqXuRH2X4r08v35IENuG/rgqu77qJrxi0l84JPdV+hJqBfxBR3PxDuykMaNmV7S8M84A
+         4jzyW/auJ5CzHJckrkSpaXLgSFGyVtAbdqeUq4MGf40Q5BMM6sT0Q9nUkGOR4D+qgIQC
+         FeEQHvbYmX6WQxG4mv4bjFez8MDU4BtzkgdsOios666qhT94iCVmJMrPaGyK4ULYqnR3
+         Fqdw==
+X-Gm-Message-State: AO0yUKXIa3UvBzh9ethmh1LF95nwkfJD3Tlp3Alc4ldakIQMalIJ5V6G
+        aJRmK0Tl+ZCgcfJ2QVULl1o=
+X-Google-Smtp-Source: AK7set8i+FKwnEdgGx/shM69oqU+XicAXabWykjK/gQeIDVIoyEvrOeVykCZg5lkl6WzJyM1Pm1UlA==
+X-Received: by 2002:a17:903:1107:b0:196:8d48:8744 with SMTP id n7-20020a170903110700b001968d488744mr2645647plh.40.1675761606909;
+        Tue, 07 Feb 2023 01:20:06 -0800 (PST)
+Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id io20-20020a17090312d400b0019934030f46sm545327plb.132.2023.02.07.01.20.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 01:20:06 -0800 (PST)
+From:   Marvin Lin <milkfafa@gmail.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrzej.p@collabora.com
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        kwliu@nuvoton.com, kflin@nuvoton.com,
+        Marvin Lin <milkfafa@gmail.com>
+Subject: [PATCH v11 0/7] Support Nuvoton NPCM Video Capture/Encode Engine
+Date:   Tue,  7 Feb 2023 17:18:55 +0800
+Message-Id: <20230207091902.2512905-1-milkfafa@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 44821935-ecdc-425c-9fe0-08db08ec3e00
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 09:18:14.8432
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: boY+oz9YQrLJiyK/TuRcAWWBsscEGTEw5CoMWhgkm1uiTZST+wnn+MvkyE3spjP35B2WtpodPmImPulcfxYptw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6874
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBCYW9sdSBMdSA8YmFvbHUubHVAbGludXguaW50ZWwuY29tPg0KPiBTZW50OiBUdWVz
-ZGF5LCBGZWJydWFyeSA3LCAyMDIzIDI6NDYgUE0NCj4gDQo+IE9uIDIwMjMvMi82IDExOjQ4LCBU
-aWFuLCBLZXZpbiB3cm90ZToNCj4gPj4gRnJvbTogQmFvbHUgTHUgPGJhb2x1Lmx1QGxpbnV4Lmlu
-dGVsLmNvbT4NCj4gPj4gU2VudDogU2F0dXJkYXksIEZlYnJ1YXJ5IDQsIDIwMjMgMjozMiBQTQ0K
-PiA+Pg0KPiA+PiBPbiAyMDIzLzIvNCA3OjA0LCBKYWNvYiBQYW4gd3JvdGU6DQo+ID4+PiBJbnRl
-bCBJT01NVSBkcml2ZXIgaW1wbGVtZW50cyBJT1RMQiBmbHVzaCBxdWV1ZSB3aXRoIGRvbWFpbiBz
-ZWxlY3RpdmUNCj4gPj4+IG9yIFBBU0lEIHNlbGVjdGl2ZSBpbnZhbGlkYXRpb25zLiBJbiB0aGlz
-IGNhc2UgdGhlcmUncyBubyBuZWVkIHRvIHRyYWNrDQo+ID4+PiBJT1ZBIHBhZ2UgcmFuZ2UgYW5k
-IHN5bmMgSU9UTEJzLCB3aGljaCBtYXkgY2F1c2Ugc2lnbmlmaWNhbnQNCj4gPj4gcGVyZm9ybWFu
-Y2UNCj4gPj4+IGhpdC4NCj4gPj4NCj4gPj4gW0FkZCBjYyBSb2Jpbl0NCj4gPj4NCj4gPj4gSWYg
-SSB1bmRlcnN0YW5kIHRoaXMgcGF0Y2ggY29ycmVjdGx5LCB0aGlzIG1pZ2h0IGJlIGNhdXNlZCBi
-eSBiZWxvdw0KPiA+PiBoZWxwZXI6DQo+ID4+DQo+ID4+IC8qKg0KPiA+PiAgICAqIGlvbW11X2lv
-dGxiX2dhdGhlcl9hZGRfcGFnZSAtIEdhdGhlciBmb3IgcGFnZS1iYXNlZCBUTEINCj4gaW52YWxp
-ZGF0aW9uDQo+ID4+ICAgICogQGRvbWFpbjogSU9NTVUgZG9tYWluIHRvIGJlIGludmFsaWRhdGVk
-DQo+ID4+ICAgICogQGdhdGhlcjogVExCIGdhdGhlciBkYXRhDQo+ID4+ICAgICogQGlvdmE6IHN0
-YXJ0IG9mIHBhZ2UgdG8gaW52YWxpZGF0ZQ0KPiA+PiAgICAqIEBzaXplOiBzaXplIG9mIHBhZ2Ug
-dG8gaW52YWxpZGF0ZQ0KPiA+PiAgICAqDQo+ID4+ICAgICogSGVscGVyIGZvciBJT01NVSBkcml2
-ZXJzIHRvIGJ1aWxkIGludmFsaWRhdGlvbiBjb21tYW5kcyBiYXNlZCBvbg0KPiA+PiBpbmRpdmlk
-dWFsDQo+ID4+ICAgICogcGFnZXMsIG9yIHdpdGggcGFnZSBzaXplL3RhYmxlIGxldmVsIGhpbnRz
-IHdoaWNoIGNhbm5vdCBiZSBnYXRoZXJlZA0KPiA+PiBpZiB0aGV5DQo+ID4+ICAgICogZGlmZmVy
-Lg0KPiA+PiAgICAqLw0KPiA+PiBzdGF0aWMgaW5saW5lIHZvaWQgaW9tbXVfaW90bGJfZ2F0aGVy
-X2FkZF9wYWdlKHN0cnVjdCBpb21tdV9kb21haW4NCj4gPj4gKmRvbWFpbiwNCj4gPj4gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdA0KPiA+PiBp
-b21tdV9pb3RsYl9nYXRoZXIgKmdhdGhlciwNCj4gPj4gICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHVuc2lnbmVkIGxvbmcgaW92YSwNCj4gPj4gc2l6ZV90
-IHNpemUpDQo+ID4+IHsNCj4gPj4gICAgICAgICAgIC8qDQo+ID4+ICAgICAgICAgICAgKiBJZiB0
-aGUgbmV3IHBhZ2UgaXMgZGlzam9pbnQgZnJvbSB0aGUgY3VycmVudCByYW5nZSBvciBpcw0KPiA+
-PiBtYXBwZWQgYXQNCj4gPj4gICAgICAgICAgICAqIGEgZGlmZmVyZW50IGdyYW51bGFyaXR5LCB0
-aGVuIHN5bmMgdGhlIFRMQiBzbyB0aGF0IHRoZSBnYXRoZXINCj4gPj4gICAgICAgICAgICAqIHN0
-cnVjdHVyZSBjYW4gYmUgcmV3cml0dGVuLg0KPiA+PiAgICAgICAgICAgICovDQo+ID4+ICAgICAg
-ICAgICBpZiAoKGdhdGhlci0+cGdzaXplICYmIGdhdGhlci0+cGdzaXplICE9IHNpemUpIHx8DQo+
-ID4+ICAgICAgICAgICAgICAgaW9tbXVfaW90bGJfZ2F0aGVyX2lzX2Rpc2pvaW50KGdhdGhlciwg
-aW92YSwgc2l6ZSkpDQo+ID4+ICAgICAgICAgICAgICAgICAgIGlvbW11X2lvdGxiX3N5bmMoZG9t
-YWluLCBnYXRoZXIpOw0KPiA+Pg0KPiA+PiAgICAgICAgICAgZ2F0aGVyLT5wZ3NpemUgPSBzaXpl
-Ow0KPiA+PiAgICAgICAgICAgaW9tbXVfaW90bGJfZ2F0aGVyX2FkZF9yYW5nZShnYXRoZXIsIGlv
-dmEsIHNpemUpOw0KPiA+PiB9DQo+ID4+DQo+ID4+IEFzIHRoZSBjb21tZW50cyBmb3IgaW9tbXVf
-aW90bGJfZ2F0aGVyX2lzX2Rpc2pvaW50KCkgc2F5cywNCj4gPj4NCj4gPj4gIi4uLkZvciBtYW55
-IElPTU1VcywgZmx1c2hpbmcgdGhlIElPTU1VIGluIHRoaXMgY2FzZSBpcyBiZXR0ZXINCj4gPj4g
-ICAgdGhhbiBtZXJnaW5nIHRoZSB0d28sIHdoaWNoIG1pZ2h0IGxlYWQgdG8gdW5uZWNlc3Nhcnkg
-aW52YWxpZGF0aW9ucy4NCj4gPj4gICAgLi4uIg0KPiA+Pg0KPiA+PiBTbywgcGVyaGFwcyB0aGUg
-cmlnaHQgZml4IGZvciB0aGlzIHBlcmZvcm1hbmNlIGlzc3VlIGlzIHRvIGFkZA0KPiA+Pg0KPiA+
-PiAJaWYgKCFnYXRoZXItPnF1ZXVlZCkNCj4gPj4NCj4gPj4gaW4gaW9tbXVfaW90bGJfZ2F0aGVy
-X2FkZF9wYWdlKCkgb3IgaW9tbXVfaW90bGJfZ2F0aGVyX2lzX2Rpc2pvaW50KCk/DQo+ID4+IEl0
-IHNob3VsZCBiZW5lZml0IG90aGVyIGFyY2gncyBhcyB3ZWxsLg0KPiA+Pg0KPiA+DQo+ID4gVGhl
-cmUgYXJlIG9ubHkgdHdvIGNhbGxlcnMgb2YgdGhpcyBoZWxwZXI6IGludGVsIGFuZCBhcm0tc21t
-dS12My4NCj4gPg0KPiA+IExvb2tzIG90aGVyIGRyaXZlcnMganVzdCBpbXBsZW1lbnRzIGRpcmVj
-dCBmbHVzaCB2aWENCj4gaW9fcGd0YWJsZV90bGJfYWRkX3BhZ2UoKS4NCj4gPg0KPiA+IGFuZCB0
-aGVpciB1bm1hcCBjYWxsYmFjayB0eXBpY2FsbHkgZG9lczoNCj4gPg0KPiA+IGlmICghaW9tbXVf
-aW90bGJfZ2F0aGVyX3F1ZXVlZChnYXRoZXIpKQ0KPiA+IAlpb19wZ3RhYmxlX3RsYl9hZGRfcGFn
-ZSgpOw0KPiA+DQo+ID4gZnJvbSB0aGlzIGFuZ2xlIGl0J3Mgc2FtZSBwb2xpY3kgYXMgSmFjb2In
-cyBkb2VzLCBpLmUuIGlmIGl0J3MgYWxyZWFkeQ0KPiA+IHF1ZXVlZCB0aGVuIG5vIG5lZWQgdG8g
-ZnVydGhlciBjYWxsIG9wdGltaXphdGlvbiBmb3IgZGlyZWN0IGZsdXNoLg0KPiANCj4gUGVyaGFw
-cyB3ZSBjYW4gdXNlIGlvbW11X2lvdGxiX2dhdGhlcl9xdWV1ZWQoKSB0byByZXBsYWNlIGRpcmVj
-dA0KPiBnYXRoZXItPnF1ZXVlZCBjaGVjayBpbiB0aGlzIHBhdGNoIGFzIHdlbGw/DQo+IA0KDQp5
-ZXMNCg==
+This patch series add DTS node, dt-bindings document and drivers for Video
+Capture/Differentiation Engine (VCD) and Encoding Compression Engine (ECE)
+present on Nuvoton NPCM SoCs.
+
+As described in the datasheet NPCM750D_DS_Rev_1.0, the VCD can capture a
+frame from digital video input and compare two frames in memory, then the
+ECE will compress the frame data into HEXTITLE format which is defined in
+Remote Framebuffer Protocol (RFC 6143, chapter 7.7.4. Hextile Encoding).
+
+The output of v4l2-compliance:
+v4l2-compliance 1.23.0-4965, 64 bits, 64-bit time_t
+v4l2-compliance SHA: d0964d133053 2022-11-06 14:46:45
+
+Compliance test for npcm-video device /dev/video0:
+
+Driver Info:
+        Driver name      : npcm-video
+        Card type        : NPCM Video Engine
+        Bus info         : platform:npcm-video
+        Driver version   : 5.15.50
+        Capabilities     : 0x85200001
+                Video Capture
+                Read/Write
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x05200001
+                Video Capture
+                Read/Write
+                Streaming
+                Extended Pix Format
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+        test invalid ioctls: OK
+
+Allow for multiple opens:
+        test second /dev/video0 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 1 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK
+        test VIDIOC_DV_TIMINGS_CAP: OK
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls (Input 0):
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+        test VIDIOC_QUERYCTRL: OK
+        test VIDIOC_G/S_CTRL: OK
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+                warn: /usr/src/debug/v4l-utils/1.22.1-r0/utils/v4l2-compliance/v4l2-test-controls.cpp(1070): V4L2_CID_DV_RX_POWER_PRESENT not found for input 0
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 1 Private Controls: 2
+
+Format ioctls (Input 0):
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+                warn: /usr/src/debug/v4l-utils/1.22.1-r0/utils/v4l2-compliance/v4l2-test-formats.cpp(1411): S_PARM is supported for buftype 1, but not for ENUM_FRAMEINTERVALS
+        test VIDIOC_G/S_PARM: OK
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK (Not Supported)
+        test Composing: OK (Not Supported)
+        test Scaling: OK (Not Supported)
+
+Codec ioctls (Input 0):
+        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls (Input 0):
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+
+Total for npcm-video device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 2
+
+Changes in v11:
+  - Replace "u8/u16/u32" with "unsigned int" for generic local variables.
+  - Correct subsystem prefixes, drop redundant words in commit subject, and
+    add more information in commit message.
+
+Changes in v10:
+  - drivers/media/platform/nuvoton/npcm-video.c
+    * Let short functions to be inline function.
+    * Correct return type of some functions, and properly handle return
+      value by callers.
+    * Correct the timing of removing rect_list and the flow of FIFO overrun
+      case in irq.
+    * Adjust line breaks, indentations, and style of variable declarations.
+
+Changes in v9:
+  - Change ECE node name to "video-codec".
+  - Drop redundant "bindings for" in commit subject of patch 2/7.
+  - Refine the format of VCD/ECE dt-binding document.
+
+Changes in v8:
+  - Let VCD/ECE to be 2 separate nodes and update dt-binding documents.
+  - Move register definitions out to a local header file.
+  - Driver refinements (add error handling for memory allocation, remove
+    unnecessary condition check and introduce "goto"s to handle similar
+    error recovery paths).
+  - Correct properties and typo in GFXI dt-binding document.
+
+Changes in v7:
+  - Add uapi documents for driver-specific controls.
+  - Implement driver-specific controls for switching capture mode and
+    getting the count of compressed HEXTILE rectangles.
+  - Drop unnecessary "enum_framesizes" and "enum_frameintervals" functions.
+  - Include the output of v4l2-compliance in cover letter.
+
+Changes in v6:
+  - Support NPCM845 and add compatible "nuvoton,npcm845-video".
+  - Correct pixel format to V4L2_PIX_FMT_HEXTILE which is newly added in
+    this patch series.
+
+Changes in v5:
+  - Simplify function prefix "nuvoton_" to "npcm_".
+  - Increase VCD_BUSY_TIMEOUT_US and ECE_POLL_TIMEOUT_US to 300ms to
+    prevent polling timeout when ECC is enabled or system is busy.
+
+Changes in v4:
+  - Fix compile warning reported by kernel test robot.
+
+Changes in v3:
+  - Add video driver entry in MAINTAINERS.
+  - Change config name to CONFIG_VIDEO_NPCM_VCD_ECE.
+  - Reduce the waiting time after resetting the VCD/ECE module.
+  - Correct data types of some variables.
+
+Changes in v2:
+  - Add Hextile document and locate with vendor formats.
+
+Marvin Lin (7):
+  ARM: dts: nuvoton: Add node for NPCM VCD and ECE engine
+  media: dt-bindings: nuvoton: Add NPCM VCD and ECE engine
+  dt-bindings: arm: nuvoton: Add NPCM GFXI
+  media: v4l: Add HEXTILE compressed format
+  media: v4l2-ctrls: Add user control base for Nuvoton NPCM controls
+  media: uapi: Add controls for NPCM video driver
+  media: nuvoton: Add driver for NPCM video capture and encode engine
+
+ .../bindings/arm/npcm/nuvoton,gfxi.yaml       |   39 +
+ .../bindings/media/nuvoton,npcm-ece.yaml      |   43 +
+ .../bindings/media/nuvoton,npcm-vcd.yaml      |   72 +
+ .../userspace-api/media/drivers/index.rst     |    1 +
+ .../media/drivers/npcm-video.rst              |   67 +
+ .../media/v4l/pixfmt-reserved.rst             |    7 +
+ MAINTAINERS                                   |   12 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   23 +
+ drivers/media/platform/Kconfig                |    1 +
+ drivers/media/platform/Makefile               |    1 +
+ drivers/media/platform/nuvoton/Kconfig        |   15 +
+ drivers/media/platform/nuvoton/Makefile       |    2 +
+ drivers/media/platform/nuvoton/npcm-regs.h    |  171 ++
+ drivers/media/platform/nuvoton/npcm-video.c   | 1816 +++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |    1 +
+ include/uapi/linux/npcm-video.h               |   41 +
+ include/uapi/linux/v4l2-controls.h            |    6 +
+ include/uapi/linux/videodev2.h                |    1 +
+ 18 files changed, 2319 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/npcm/nuvoton,gfxi.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
+ create mode 100644 Documentation/userspace-api/media/drivers/npcm-video.rst
+ create mode 100644 drivers/media/platform/nuvoton/Kconfig
+ create mode 100644 drivers/media/platform/nuvoton/Makefile
+ create mode 100644 drivers/media/platform/nuvoton/npcm-regs.h
+ create mode 100644 drivers/media/platform/nuvoton/npcm-video.c
+ create mode 100644 include/uapi/linux/npcm-video.h
+
+-- 
+2.34.1
+
