@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335C968D50D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2633268D51A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbjBGLFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S231478AbjBGLHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjBGLFW (ORCPT
+        with ESMTP id S231430AbjBGLHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:05:22 -0500
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5832B621
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:05:20 -0800 (PST)
-Received: by mail-vk1-xa2c.google.com with SMTP id g28so7651236vkd.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 03:05:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GoPHPcTm8H8ze7FW2FRADE/W8w+P/SQ3Sd3300xGuo4=;
-        b=0dPAoABezthwk9gv6NoB2KkyYvtpOVASTxfXFscCZF/vXmIhvKj4DrD/GzOAOrARik
-         ivToWBkJVLLcSS9KZvgnWlwilnv+D1173Ed+WALVXqS6t6pEjvKFgnloZq1j4ADaXh1Q
-         AT+gpssI28cNPKFIjxz4Ak+UlsfBubhD1cAX6ZggZ0sYTFXnj7guo1zmvth6y3mjjL00
-         xdUw1z2IX3DT2P7ik5FJ7hnGtFjD30fS0W8aIZrbIn91cSjrC5DtomBwqywVLTUeU+Mf
-         AvaVQT908ZvHMnrSsXewNQXjD7SVvAVL870MOHUot35VxWiq6zvzZ+4EYvp05Yx0EEgy
-         C0+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GoPHPcTm8H8ze7FW2FRADE/W8w+P/SQ3Sd3300xGuo4=;
-        b=BWNllatfS3XwDLsWkwatgQMgb5pNtipZrLTvjPRVZXMuQUxA+Hq2as6K4ZzevDV1ct
-         tqGgho8JzSe2d6UjwWzTRhlM1cQJ6zOMkr49m+Q5NnuspyFbOFDqmr7DD+edNnX00b+5
-         78it6hA5e9dvGLi7gAip8+TWIOjcwRI/Bul9jeBkHb2ZvuVSdCB+jZ72jZv16OTlQxDL
-         BBfhKx/Hcsg3b3CW96USjssiRUwFVqkVUZTazY+dxL74pnn0S7XpApwnoFxlRPb9m2Gm
-         kST9oY3GOxcrniqYzb+zwmLFbfog+ybhbmkia89Y9QNFnMqU7QH+FW22MDOS2xPjeTrQ
-         mL2w==
-X-Gm-Message-State: AO0yUKUYVACbgMOfyXOXvT1yFuW34KclzCrIJDA368q5TJe71c9Myqq8
-        nOrCT9gQorVd8h6kDeKMS351n3VsU5XXbGOpxFO5IA==
-X-Google-Smtp-Source: AK7set9nK8EJsglFuTDfip/AK3uw96RbrvDbyGTM4gE2EsRI6AGAzZVwnmVNnIBHUjxBZeYPdJ4Hxa6z7WxUVxSCdz0=
-X-Received: by 2002:a1f:9d02:0:b0:3dd:f6a9:4b73 with SMTP id
- g2-20020a1f9d02000000b003ddf6a94b73mr348309vke.12.1675767919671; Tue, 07 Feb
- 2023 03:05:19 -0800 (PST)
+        Tue, 7 Feb 2023 06:07:12 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98706EB7E;
+        Tue,  7 Feb 2023 03:07:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675768027; x=1707304027;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dDI4A6HJTioLCKUY7vYEGx25MsUN8KwQ7xKiuXhgBIM=;
+  b=oevL/DppNKzFPBEiFA42Lv0eeey9MDIvBTnLPymn43CykMJevTDyqOPN
+   t0LzWIbJdWlleRtOuDbAMoM5sZLRc8JDYDE+SvcFQ00C3vC8jBnz86gVJ
+   n1wJ2JcRrw1Yo2ROiXUsaqcaFSK2K3NXrdkH33jFNy1o4rCV6OPuE6FOW
+   m/qKR8Dm8snoBRTVx8SG9RhyYFuz3gGRokGJbDXw6v+tPbNyPcG1nTp8/
+   tAI50LhnrxMlIj72wEHWOC0v+0/VLBJrpiYPfgvtqAJlpLW1ggDzzEVP8
+   acC3JY5Zpk14CMW4uxRRtBOvitPxgjL6CGAHbAIhBS3gluWN5MgiRVlHF
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,278,1669100400"; 
+   d="scan'208";a="135929091"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 04:07:06 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 7 Feb 2023 04:07:05 -0700
+Received: from che-lt-i66125lx.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 04:06:56 -0700
+From:   Durai Manickam KR <durai.manickamkr@microchip.com>
+To:     <Hari.PrasathGE@microchip.com>,
+        <balamanikandan.gunasundar@microchip.com>,
+        <manikandan.m@microchip.com>, <varshini.rajendran@microchip.com>,
+        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
+        <balakrishnan.s@microchip.com>, <claudiu.beznea@microchip.com>,
+        <cristian.birsan@microchip.com>, <nicolas.ferre@microchip.com>,
+        <krzysztof.kozlowski@linaro.org>, <alexandre.belloni@bootlin.com>,
+        <davem@davemloft.net>, <arnd@arndb.de>, <olof@lixom.net>,
+        <soc@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <Kavyasree.Kotagiri@microchip.com>,
+        <Horatiu.Vultur@microchip.com>, <robh+dt@kernel.org>,
+        <andrew@lunn.ch>, <michael@walle.cc>, <jerry.ray@microchip.com>
+CC:     Durai Manickam KR <durai.manickamkr@microchip.com>
+Subject: [PATCH v6 0/8] Add support for sam9x60 curiosity board
+Date:   Tue, 7 Feb 2023 16:36:43 +0530
+Message-ID: <20230207110651.197268-1-durai.manickamkr@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230203100418.2981144-1-mie@igel.co.jp> <20230203100418.2981144-4-mie@igel.co.jp>
- <20230203051844-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230203051844-mutt-send-email-mst@kernel.org>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 7 Feb 2023 20:05:08 +0900
-Message-ID: <CANXvt5r10bec+X=j35ertph9i+d08bkxDG7ffwUjc5z_1NgKtw@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] PCI: endpoint: Introduce virtio library for EP functions
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Wang <jasowang@redhat.com>, Frank Li <Frank.Li@nxp.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,230 +71,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023=E5=B9=B42=E6=9C=883=E6=97=A5(=E9=87=91) 19:20 Michael S. Tsirkin <mst@=
-redhat.com>:
->
-> On Fri, Feb 03, 2023 at 07:04:17PM +0900, Shunsuke Mie wrote:
-> > Add a new library to access a virtio ring located on PCIe host memory. =
-The
-> > library generates struct pci_epf_vringh that is introduced in this patc=
-h.
-> > The struct has a vringh member, so vringh APIs can be used to access th=
-e
-> > virtio ring.
-> >
-> > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > Signed-off-by: Takanari Hayama <taki@igel.co.jp>
-> > ---
-> >  drivers/pci/endpoint/Kconfig          |   7 ++
-> >  drivers/pci/endpoint/Makefile         |   1 +
-> >  drivers/pci/endpoint/pci-epf-virtio.c | 113 ++++++++++++++++++++++++++
-> >  include/linux/pci-epf-virtio.h        |  25 ++++++
-> >  4 files changed, 146 insertions(+)
-> >  create mode 100644 drivers/pci/endpoint/pci-epf-virtio.c
-> >  create mode 100644 include/linux/pci-epf-virtio.h
-> >
-> > diff --git a/drivers/pci/endpoint/Kconfig b/drivers/pci/endpoint/Kconfi=
-g
-> > index 17bbdc9bbde0..07276dcc43c8 100644
-> > --- a/drivers/pci/endpoint/Kconfig
-> > +++ b/drivers/pci/endpoint/Kconfig
-> > @@ -28,6 +28,13 @@ config PCI_ENDPOINT_CONFIGFS
-> >          configure the endpoint function and used to bind the
-> >          function with a endpoint controller.
-> >
-> > +config PCI_ENDPOINT_VIRTIO
-> > +     tristate
-> > +     depends on PCI_ENDPOINT
-> > +     select VHOST_IOMEM
-> > +     help
-> > +       TODO update this comment
-> > +
-> >  source "drivers/pci/endpoint/functions/Kconfig"
-> >
-> >  endmenu
-> > diff --git a/drivers/pci/endpoint/Makefile b/drivers/pci/endpoint/Makef=
-ile
-> > index 95b2fe47e3b0..95712f0a13d1 100644
-> > --- a/drivers/pci/endpoint/Makefile
-> > +++ b/drivers/pci/endpoint/Makefile
-> > @@ -4,5 +4,6 @@
-> >  #
-> >
-> >  obj-$(CONFIG_PCI_ENDPOINT_CONFIGFS)  +=3D pci-ep-cfs.o
-> > +obj-$(CONFIG_PCI_ENDPOINT_VIRTIO)    +=3D pci-epf-virtio.o
-> >  obj-$(CONFIG_PCI_ENDPOINT)           +=3D pci-epc-core.o pci-epf-core.=
-o\
-> >                                          pci-epc-mem.o functions/
-> > diff --git a/drivers/pci/endpoint/pci-epf-virtio.c b/drivers/pci/endpoi=
-nt/pci-epf-virtio.c
-> > new file mode 100644
-> > index 000000000000..7134ca407a03
-> > --- /dev/null
-> > +++ b/drivers/pci/endpoint/pci-epf-virtio.c
-> > @@ -0,0 +1,113 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Virtio library for PCI Endpoint function
-> > + */
-> > +#include <linux/kernel.h>
-> > +#include <linux/pci-epf-virtio.h>
-> > +#include <linux/pci-epc.h>
-> > +#include <linux/virtio_pci.h>
-> > +
-> > +static void __iomem *epf_virtio_map_vq(struct pci_epf *epf, u32 pfn,
-> > +                                    size_t size, phys_addr_t *vq_phys)
-> > +{
-> > +     int err;
-> > +     phys_addr_t vq_addr;
-> > +     size_t vq_size;
-> > +     void __iomem *vq_virt;
-> > +
-> > +     vq_addr =3D (phys_addr_t)pfn << VIRTIO_PCI_QUEUE_ADDR_SHIFT;
-> > +
-> > +     vq_size =3D vring_size(size, VIRTIO_PCI_VRING_ALIGN) + 100;
->
-> 100?
-It is a mistake and will be removed.
-> Also ugh, this uses the legacy vring_size.
-> Did not look closely but is all this limited to legacy virtio then?
-> Pls make sure you code builds with #define VIRTIO_RING_NO_LEGACY.
-Thanks for your suggestion, but this device works as a legacy device.
-In this case, the NO_LEGACY macro can not applicable I think. Is that right=
-?
-> > +
-> > +     vq_virt =3D pci_epc_mem_alloc_addr(epf->epc, vq_phys, vq_size);
-> > +     if (!vq_virt) {
-> > +             pr_err("Failed to allocate epc memory\n");
-> > +             return ERR_PTR(-ENOMEM);
-> > +     }
-> > +
-> > +     err =3D pci_epc_map_addr(epf->epc, epf->func_no, epf->vfunc_no, *=
-vq_phys,
-> > +                            vq_addr, vq_size);
-> > +     if (err) {
-> > +             pr_err("Failed to map virtuqueue to local");
-> > +             goto err_free;
-> > +     }
-> > +
-> > +     return vq_virt;
-> > +
-> > +err_free:
-> > +     pci_epc_mem_free_addr(epf->epc, *vq_phys, vq_virt, vq_size);
-> > +
-> > +     return ERR_PTR(err);
-> > +}
-> > +
-> > +static void epf_virtio_unmap_vq(struct pci_epf *epf, void __iomem *vq_=
-virt,
-> > +                             phys_addr_t vq_phys, size_t size)
-> > +{
-> > +     pci_epc_unmap_addr(epf->epc, epf->func_no, epf->vfunc_no, vq_phys=
-);
-> > +     pci_epc_mem_free_addr(epf->epc, vq_phys, vq_virt,
-> > +                           vring_size(size, VIRTIO_PCI_VRING_ALIGN));
-> > +}
-> > +
-> > +/**
-> > + * pci_epf_virtio_alloc_vringh() - allocate epf vringh from @pfn
-> > + * @epf: the EPF device that communicates to host virtio dirver
-> > + * @features: the virtio features of device
-> > + * @pfn: page frame number of virtqueue located on host memory. It is
-> > + *           passed during virtqueue negotiation.
-> > + * @size: a length of virtqueue
-> > + */
-> > +struct pci_epf_vringh *pci_epf_virtio_alloc_vringh(struct pci_epf *epf=
-,
-> > +                                                u64 features, u32 pfn,
-> > +                                                size_t size)
-> > +{
-> > +     int err;
-> > +     struct vring vring;
-> > +     struct pci_epf_vringh *evrh;
-> > +
-> > +     evrh =3D kmalloc(sizeof(*evrh), GFP_KERNEL);
-> > +     if (!evrh) {
-> > +             err =3D -ENOMEM;
-> > +             goto err_unmap_vq;
-> > +     }
-> > +
-> > +     evrh->size =3D size;
-> > +
-> > +     evrh->virt =3D epf_virtio_map_vq(epf, pfn, size, &evrh->phys);
-> > +     if (IS_ERR(evrh->virt))
-> > +             return evrh->virt;
-> > +
-> > +     vring_init(&vring, size, evrh->virt, VIRTIO_PCI_VRING_ALIGN);
-> > +
-> > +     err =3D vringh_init_iomem(&evrh->vrh, features, size, false, GFP_=
-KERNEL,
-> > +                             vring.desc, vring.avail, vring.used);
-> > +     if (err)
-> > +             goto err_free_epf_vq;
-> > +
-> > +     return evrh;
-> > +
-> > +err_free_epf_vq:
-> > +     kfree(evrh);
-> > +
-> > +err_unmap_vq:
-> > +     epf_virtio_unmap_vq(epf, evrh->virt, evrh->phys, evrh->size);
-> > +
-> > +     return ERR_PTR(err);
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_epf_virtio_alloc_vringh);
-> > +
-> > +/**
-> > + * pci_epf_virtio_free_vringh() - release allocated epf vring
-> > + * @epf: the EPF device that communicates to host virtio dirver
-> > + * @evrh: epf vringh to free
-> > + */
-> > +void pci_epf_virtio_free_vringh(struct pci_epf *epf,
-> > +                             struct pci_epf_vringh *evrh)
-> > +{
-> > +     epf_virtio_unmap_vq(epf, evrh->virt, evrh->phys, evrh->size);
-> > +     kfree(evrh);
-> > +}
-> > +EXPORT_SYMBOL_GPL(pci_epf_virtio_free_vringh);
-> > +
-> > +MODULE_DESCRIPTION("PCI EP Virtio Library");
-> > +MODULE_AUTHOR("Shunsuke Mie <mie@igel.co.jp>");
-> > +MODULE_LICENSE("GPL");
-> > diff --git a/include/linux/pci-epf-virtio.h b/include/linux/pci-epf-vir=
-tio.h
-> > new file mode 100644
-> > index 000000000000..ae09087919a9
-> > --- /dev/null
-> > +++ b/include/linux/pci-epf-virtio.h
-> > @@ -0,0 +1,25 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * PCI Endpoint Function (EPF) for virtio definitions
-> > + */
-> > +#ifndef __LINUX_PCI_EPF_VIRTIO_H
-> > +#define __LINUX_PCI_EPF_VIRTIO_H
-> > +
-> > +#include <linux/types.h>
-> > +#include <linux/vringh.h>
-> > +#include <linux/pci-epf.h>
-> > +
-> > +struct pci_epf_vringh {
-> > +     struct vringh vrh;
-> > +     void __iomem *virt;
-> > +     phys_addr_t phys;
-> > +     size_t size;
-> > +};
-> > +
-> > +struct pci_epf_vringh *pci_epf_virtio_alloc_vringh(struct pci_epf *epf=
-,
-> > +                                                u64 features, u32 pfn,
-> > +                                                size_t size);
-> > +void pci_epf_virtio_free_vringh(struct pci_epf *epf,
-> > +                             struct pci_epf_vringh *evrh);
-> > +
-> > +#endif // __LINUX_PCI_EPF_VIRTIO_H
-> > --
-> > 2.25.1
->
-Best,
-Shunsuke
+This series of patches is meant to address the following:
+- Moving of flexcom definitions from board file to SoC file and
+   some minor changes to its properties.
+- Add support for the new sam9x60 curiosity board based on the
+   existing sam9x60 SoC.
+
+Changes in v6:
+--------------
+- Added Reviewed-by and Acked-by tags.
+All the patches are accepted except the below patches which are
+updated based on the comments receied on PATCH v5,
+- [PATCH v5 8/8] Enabled the sdmmc1 node in dts.
+- [PATCH v5 8/8] Syntax update in dts for sdmmc1 node and i2c0 
+  node.
+
+Changes in v5:
+--------------
+All the patches are accepted except the below patches which are 
+updated based on the comments receied on PATCH v4,
+- [PATCH v4 2/8] Updated from field and first SOB as same author.
+- [PATCH v4 2/8] Added the missing compatibles for the UART.
+- [PATCH v4 8/8] Fixed the dtb warnings.
+
+Changes in v4:
+--------------
+- Added the missed property atmel,usart-mode in uart5
+- Renamed the led label.
+
+Changes in v3:
+--------------
+- Updated commit logs mentioning each author's contribution.
+- Author name is updated based on the linux mainline guidelines.
+- updated the description file such that sam9x60 curiosity is
+  added together with sam9x60ek as an enum.
+- Updated the entries in the regulator container alphabetically
+  sorted.
+- Added label name and node name following the guidelines.
+
+Changes in v2:
+--------------
+- Added generic names for regulator node.
+- Removed the #addredd-cells and #size-cells property which shows
+  compilation warning.
+- Removed the property "status=okay" as this is default.
+- No underscores used for the pinctrl definitions and node names.
+- Organised the patches in the logical way.
+- Bindings are made separate patch.
+
+Durai Manickam KR (3):
+  ARM: dts: at91: sam9x60: fix spi4 node
+  dt-bindings: arm: at91: Add info on sam9x60 curiosity
+  ARM: dts: at91: sam9x60_curiosity: Add device tree for sam9x60
+    curiosity board
+
+Manikandan Muralidharan (5):
+  ARM: dts: at91: sam9x60: Fix the label numbering for the flexcom
+    functions
+  ARM: dts: at91: sam9x60: move flexcom definitions
+  ARM: dts: at91: sam9x60: Specify the FIFO size for the Flexcom UART
+  ARM: dts: at91: sam9x60: Add DMA bindings for the flexcom nodes
+  ARM: dts: at91: sam9x60: Add missing flexcom definitions
+
+ .../devicetree/bindings/arm/atmel-at91.yaml   |   6 +-
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/at91-sam9x60_curiosity.dts  | 503 ++++++++++++++
+ arch/arm/boot/dts/at91-sam9x60ek.dts          |  50 +-
+ arch/arm/boot/dts/sam9x60.dtsi                | 622 ++++++++++++++++++
+ 5 files changed, 1140 insertions(+), 42 deletions(-)
+ create mode 100644 arch/arm/boot/dts/at91-sam9x60_curiosity.dts
+
+-- 
+2.25.1
+
