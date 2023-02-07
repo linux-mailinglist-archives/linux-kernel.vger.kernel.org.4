@@ -2,232 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D6C68DCD7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB54D68DCD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbjBGPVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 10:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S232360AbjBGPVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 10:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbjBGPVq (ORCPT
+        with ESMTP id S232351AbjBGPVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 10:21:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33E638019
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:21:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84F42B819CB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 15:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5238CC433EF;
-        Tue,  7 Feb 2023 15:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675783296;
-        bh=LqOdVFe4VhEEm7ofCG1fGYiMh90WgS98iGG8MCxOqcQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cPaiVphV2xc0g6yuqyA8EhrONxJRqag9UhsiGUgP17scoZCZYQgpZhEc/dXEzcEYI
-         AGV+/96Zw81xGVWXRZV/mUV6rR9oSNTvSsWwnWmZm+VB+WcRBxij6QZZhnkX/AggBD
-         IRYHqoW5g4N9Jrl6UxfgDN/3SCaSw9ZWzwJExXeN/r29mRV9ZhylCWkuCaArRvwSGf
-         W7udHvcgu7I873JoYwTKBWunxCkpAMVYVRLfuRzazSoG9Mv3U3uYmPeE6n96bV8bDN
-         E3DrXksAKdITJQ+JV70jB+govDAPRzyaNY/6l2bKLB6OewV8VC/ejd2vZy6i35cuVa
-         py8zSN0bDJukQ==
-Date:   Wed, 8 Feb 2023 00:21:32 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>, Nadav Amit <namit@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] x86/kprobes: Fix 1 byte conditional jump target
-Message-Id: <20230208002132.63b70cb9d6e5badad45fb828@kernel.org>
-In-Reply-To: <20230207095424.42f4c0147f693a8cef25757c@kernel.org>
-References: <20230204210807.3930-1-namit@vmware.com>
-        <a75c134d-8278-b17c-e05e-409b70ad15b0@intel.com>
-        <C4863EDA-106B-4AF9-8D39-D603EEE4BEDC@vmware.com>
-        <dc964552-dca7-dd83-52a2-283be7f51555@intel.com>
-        <20230207095424.42f4c0147f693a8cef25757c@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 7 Feb 2023 10:21:45 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E7329420
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:21:37 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id m2so43984178ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 07:21:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YTPYfaNfHTlgzHYyV9+fBlSvLMoaCZHX7hD5pX806Bw=;
+        b=yM2LjNDtT8Di21u7MkpL8aEYysXvyagUm5aFbBZ47I6Hp8/h+0a6HUX7mqE/WMGGQM
+         WnHyppQiTUdXfcPULg81UxftTgArLfn0DrEOlvPmqv0GuN4frYzktmX7+3FTAtBE5TZB
+         3I1Gol6P/42HRIH+oV61kzOydHpL1TAaxE+RUOLmFhuc9Aq/M64FlW9VdvsSKLjzZDmj
+         XCNiFpFySOrnA/GcbDMlWlzg1Q8NDk557SxUE4x4dZK6FAUPZfvfjd8J9EFLbhMEbkDm
+         v6+t8B2cMGUkBTM/WBn5ksA8GWz1UBv6/tKz8nkVe6mUM3e1Qb+L2TVtzPB6LPeRR4j6
+         Pt3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YTPYfaNfHTlgzHYyV9+fBlSvLMoaCZHX7hD5pX806Bw=;
+        b=X+AbI2v/EUDswO7fvfYGbSo8nHfVW3pXr80ZV5euiG/k4P7aLov3Lwbb3WVMAR4MNZ
+         KVKJLZls9RdFqW/ZjpukFPFiEfzVBShW5ETdFE3zR7dN41yQFR25o8hnV+ldC2TbJKtw
+         SsIUR3Q35ARg4ywBABkQCcaVstBIVXQuOqnNW8a9x/ISv2HuLqXyppEq6ygaYAWKODmB
+         XNpjB0xh+xiVDPwC81BQDy/WckjyPLh+GVVa7bDdMUQoRPH7uWgPhZ89jzIJ7IB8viXj
+         ymECNAQFtRHAIdrsZ0+7NaSoUyrxae/gl/IR5b651QbHNxFU4LExnxMnZyxxvwWbAhGM
+         LFyA==
+X-Gm-Message-State: AO0yUKUU7JUfQo1sLZURpoDpxGzARYBViw9lR0M6xC4cewAzYH4aJhuA
+        r1Di4HWRS9grZ62y5j0I7MDs8g==
+X-Google-Smtp-Source: AK7set8584YuXOspFQeCKZnkVa3k+0F5o6MK5ItC2rBbYRItlVp13BBNRpy1PcI/NjxZgLO++QQCdg==
+X-Received: by 2002:a17:906:604d:b0:878:7b5c:3811 with SMTP id p13-20020a170906604d00b008787b5c3811mr4171364ejj.42.1675783295577;
+        Tue, 07 Feb 2023 07:21:35 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id bl11-20020a170906c24b00b0088d0b51f056sm6921120ejb.40.2023.02.07.07.21.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 07:21:35 -0800 (PST)
+Message-ID: <f57c7137-0470-ca04-68fa-f0a2f5fabb4f@linaro.org>
+Date:   Tue, 7 Feb 2023 17:21:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 3/4] drm/msm/dpu: avoid unnecessary check in DPU
+ reservations
+Content-Language: en-GB
+To:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com,
+        marijn.suijten@somainline.org
+References: <1675780196-3076-1-git-send-email-quic_kalyant@quicinc.com>
+ <1675780196-3076-4-git-send-email-quic_kalyant@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1675780196-3076-4-git-send-email-quic_kalyant@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023 09:54:24 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-
-> On Mon, 6 Feb 2023 14:38:16 -0800
-> Dave Hansen <dave.hansen@intel.com> wrote:
+On 07/02/2023 16:29, Kalyan Thota wrote:
+> Return immediately on failure, this will make dpu reservations
+> part look cleaner.
 > 
-> > On 2/6/23 11:05, Nadav Amit wrote:
-> > >> On 2/4/23 13:08, Nadav Amit wrote:
-> > >>> --- a/arch/x86/kernel/kprobes/core.c
-> > >>> +++ b/arch/x86/kernel/kprobes/core.c
-> > >>> @@ -625,7 +625,7 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
-> > >>>              /* 1 byte conditional jump */
-> > >>>              p->ainsn.emulate_op = kprobe_emulate_jcc;
-> > >>>              p->ainsn.jcc.type = opcode & 0xf;
-> > >>> -             p->ainsn.rel32 = *(char *)insn->immediate.bytes;
-> > >>> +             p->ainsn.rel32 = *(s8 *)&insn->immediate.value;
-> > >>>              break;
-> > >>
-> > >> This new code is at least consistent with what the other code in that
-> > >> function does with 1-byte immediates.  But, I'm curious what the point
-> > >> is about going through the 's8' type.
-> > >>
-> > >> What's wrong with:
-> > >>
-> > >>        p->ainsn.rel32 = insn->immediate.value;
-> > >>
-> > >> ?  Am I missing something subtle?
-> > > 
-> > > I am not sure why this is considered safe, insn->immediate.value has a
-> > > type of insn_value_t, which is signed int, so such casting seems wrong
-> > > to me. Do you imply that during decoding the sign-extension should have
-> > > been done correctly? Or am I missing something else?
-> > 
-> > OK, so we've got an assignment which on the left hand side is
-> > p->ainsn.rel32 which is a 32-bit signed integer:
-> > 
-> > struct arch_specific_insn {
-> > 	...
-> >         s32 rel32;      /* relative offset must be s32, s16, or s8 */
-> > 
-> > The right hand side is insn->immediate.value.  Its real type is a couple
-> > of layers deep, but it boils down to a 'signed int', also 32-bit:
-> > 
-> > Struct #1:
-> > struct insn {
-> > 	...
-> >         union {
-> >                 struct insn_field immediate;
-> > 		...
-> >         };
-> > 
-> > Struct #2
-> > struct insn_field {
-> >         union {
-> >                 insn_value_t value;
-> >                 insn_byte_t bytes[4];
-> >         };
-> > 	...
-> > 
-> > And a typedef:
-> > typedef signed int insn_value_t;
-> > 
-> > So, the proposed code above is effectively this:
-> > 
-> > 	s32 foo;
-> > 	signed int bar;
-> > 
-> > 	foo = *(s8 *)&bar;
-> > 
-> > That works just fine as long as the value being represented fits in a
-> > single byte.  But, it *certainly* wouldn't work for:
-> > 
-> > 	s32 foo;
-> > 	signed int bar = 128;
-> > 
-> > 	foo = *(s8 *)&bar;
-> > 
-> > In this specific case, I think the conditional jump offsets are all from
-> > the (entire) second byte of the instruction, so this is _somewhat_ academic.
-> 
-> NOTE: Since we have checked the opcode is Jcc (0x70 to 0x7f) we ensured that
-> the immediate value is 1 byte (rel8 = -128 to +127).
-> 
->         case 0x70 ... 0x7f:
->                 /* 1 byte conditional jump */
->                 p->ainsn.emulate_op = kprobe_emulate_jcc;
->                 p->ainsn.jcc.type = opcode & 0xf;
->                 p->ainsn.rel32 = *(s8 *)&insn->immediate.value;
->                 break;
-> 
-> But I think your have a point. I missed that Nadav is using immediate.value
-> instead of immediate.bytes[0]. And from the instruction decoder code, it is
-> better to use immediate.value without casting.
-> 
-> In arch/x86/lib/insn.c:
-> 
-> int insn_get_immediate(struct insn *insn)
-> {
-> ...
->         switch (inat_immediate_size(insn->attr)) {
->         case INAT_IMM_BYTE:
->                 insn_field_set(&insn->immediate, get_next(signed char, insn), 1);
->                 break;
-> 
-> And 
-> 
-> In arch/x86/include/asm/insn.h:
-> 
-> static inline void insn_field_set(struct insn_field *p, insn_value_t v,
->                                   unsigned char n)
-> {
->         p->value = v;
->         p->nbytes = n;
-> }
-> 
-> Thus the immediate.value should be set correctly. (means we don't have to
-> pick up the 1st byte from the value)
-> 
-> Nadav, can you update your patch to assign immediate.value directly?
-
-BTW, there are many similar casts around there. I'll fix those too.
-If we need to be more conservative, 
-
- p->ainsn.rel32 = (s8)insn->immediate.value;
-
-should work, right?
-Or, maybe we can add WARN_ON_ONCE() as
-
- WARN_ON_ONCE(insn.immediate.nbytes != 1)
-
-Thank you, 
-
-> 
-> Thank you,
-> 
-> > 
-> > > Anyhow, after spending too much time on debugging kprobes failures,
-> > > I prefer to be more defensive, and not require the code to be “aware”
-> > > or rely on member types or the order of implicit casting in C.
-> > 
-> > Well, the code in the fix requires some awareness of the range of the
-> > data type.  The simpler direct assignment:
-> > 
-> > 	p->ainsn.rel32 = insn->immediate.value;
-> > 
-> > doesn't require much and works for a wider range of values -- *ALL*
-> > 32-bit signed integer values on x86.
-> > 
-> > I figured I must be missing something.  It would not be the first time
-> > that C's type system rules tripped me up.  Why this:
-> > 
-> > 	foo = *(s8 *)&bar;
-> > 
-> > Instead of this:
-> > 
-> > 	foo = bar;
-> > 
-> > ?  I'm having a hard time of seeing what the advantage is of the 's8'
-> > version.
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 23 ++++++++++-------------
+>   1 file changed, 10 insertions(+), 13 deletions(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+With best wishes
+Dmitry
+
