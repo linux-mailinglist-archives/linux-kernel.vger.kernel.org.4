@@ -2,189 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAC968CFA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9B268CFA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjBGGnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
+        id S229893AbjBGGmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:42:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjBGGm4 (ORCPT
+        with ESMTP id S229743AbjBGGma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:42:56 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA9D2D6D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:42:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675752164; x=1707288164;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jIpT9ebS7n4mNSRR5/KZDqEO+r88BCQJ+kzssd4ydgA=;
-  b=a9pwywPx3Q+C7aqO/Iy+LWOF9CqIvZO39ZYswYQp0lcp0cp6r2rU8pbB
-   QFA56buCBVjXToNU93knd8tA0UiHbFu8Gc0q+5S+jyOpoiVxnEiGMwedi
-   jrwJCK2REjdZ+shlGZS3FpZY/uh8KFgO6E6rw10o0DopAbyn8nobmlbpE
-   UeCXsrHS83uUbQJUfy+jxnyI252uFd2g7T4BCHSuzpWpN16NpY/qzl1e7
-   hpxpR0NCatmY5P0yz6mmky5V649hwVz7ToteKPfsywETZ86qgy7dr+wdb
-   Ym5CzZlMFVnm1qkeG6kJPw94KgeshksYMPj9uaD291oUOHBPNa8jU9aFG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="391817593"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="391817593"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 22:42:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="995627008"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="995627008"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Feb 2023 22:42:41 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPHgf-0003CM-0V;
-        Tue, 07 Feb 2023 06:42:41 +0000
-Date:   Tue, 7 Feb 2023 14:41:44 +0800
-From:   kernel test robot <lkp@intel.com>
+        Tue, 7 Feb 2023 01:42:30 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2059.outbound.protection.outlook.com [40.107.243.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF666EC73
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:42:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iSOp/b8UnEE7t3KwCfTrc4YviuiImY+8bMy29rMbYm0sW8h++t4vCz++etYtZZa/8Cuu2/K+PSqyEJp05NoMrtjVqsvoQCkAyhkstAxfqy2VVN/5kq0Ah9Ou8MOP/unaq5W6Ly4iUr1MVskROzaY0yYok3NXTkkyTxsCATbwn0JTV426P92zEjJhlwVC4QhcRX6ISzSN8nrJ3hl34MUzfN6pQbE0O11MXqYzj5GGaB34/W39s+7x4jGybm/BNajMWSPpyPx3zevddm++C/V8yyEiIOhKkUvokRtyojXT1NHx1Y14nS60iEUO479W9KgOiHnqdDyodFqKmTggt28V7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/LGvZyfF0ACSeEjteCU6cNDyAuRlyi7Gj1zr+m4JgfY=;
+ b=H0beTEu9E5HxnQHABegrrCX44FJ+et8MASHsBt0IpcbWajJ2866udft60HK5Ee/T9cTHyVMNqxjwLxN37xldogn6caPjVNj4hjJKv4dvHwoCW8httFCcIjccbiTzMooqA9MkdAMNOshB1G0ou444HEBsfOqGNb9jq2Fot4iaYMRanPt292mhcgbSl2xyR+2m0mhmV2Z5zJwBJ/0bZUPuU4NJo2apee5LfrxlZunNgTEcClk9O0waYEHxRZb6tbb5E2rAlJNhgePSnTtgA8EYVvk0vxnDf/DyWKDqXWL7mQdmjLTqRCphVG3gx8oX6ZFz9KLqWNGjpqNCRop7lNr0vw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/LGvZyfF0ACSeEjteCU6cNDyAuRlyi7Gj1zr+m4JgfY=;
+ b=mRJDWv7kAWvJBu0zOYE2Vg9QL8xEydX/x0dxiPz0eyuHHoP2iR39+h122GfblhC//eTKSEjtxTU5/+wMoCCCKNx1x62hbtjWzGS7KyG4XYP/I1X99FgPP1cKsPibg7Np7vX1TSyuI70XeaHmtcdYemXkGX7zq6VBnljgeQcp39I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com (2603:10b6:208:c8::17)
+ by PH8PR12MB8430.namprd12.prod.outlook.com (2603:10b6:510:259::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Tue, 7 Feb
+ 2023 06:41:59 +0000
+Received: from MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::f9e8:ee48:6cf9:afdc]) by MN2PR12MB3008.namprd12.prod.outlook.com
+ ([fe80::f9e8:ee48:6cf9:afdc%7]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
+ 06:41:58 +0000
+Message-ID: <ccba1a65-fe4f-89d5-a32b-2efba30a1350@amd.com>
+Date:   Tue, 7 Feb 2023 12:11:47 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH V2 2/3] sched/numa: Enhance vma scanning logic
+Content-Language: en-US
+From:   Raghavendra K T <raghavendra.kt@amd.com>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Ingo Molnar <mingo@kernel.org>
-Subject: [tip:sched/core 10/10] vmlinux.o: warning: objtool: poll_idle+0x4a:
- call to ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <202302071403.la39hU5C-lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>, rppt@kernel.org,
+        Bharata B Rao <bharata@amd.com>,
+        Disha Talreja <dishaa.talreja@amd.com>
+References: <cover.1675159422.git.raghavendra.kt@amd.com>
+ <5f0872657ddb164aa047a2231f8dc1086fe6adf6.1675159422.git.raghavendra.kt@amd.com>
+ <Y9zs5A/T1WQpJTuM@hirez.programming.kicks-ass.net>
+ <048964e8-179f-de7b-1190-831779d9911f@amd.com>
+In-Reply-To: <048964e8-179f-de7b-1190-831779d9911f@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN2PR01CA0194.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e8::19) To MN2PR12MB3008.namprd12.prod.outlook.com
+ (2603:10b6:208:c8::17)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3008:EE_|PH8PR12MB8430:EE_
+X-MS-Office365-Filtering-Correlation-Id: c9d4188c-2e63-40fa-b8a0-08db08d668bf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 56HjtZlXR+nUsB2JV0JShhKCJRKVBuTo8TLVOS7r2VsjRmZX3uQDXhXaSSbtJcR3WLJkhfWbhmD7TEKu/L3UfTF+Xr9l/qsgvImLJNo+WXBn17F4Ewy59NZRLqo3zsY6IZiriNOJE0DVK8ZYFY+YY8YPKR8KWhW8FTZ0iK/jYoaRDV3cQLAJ9TuNcy5aQOEItIL2hfd0FT07EcO+ng+j6viBJIdGFBxlK85EG8mJfvd3YjwzlDjkDrXzdVbE2l7mManLFSimz5ZaGCF1tLmhuYL+hjv9Qt7Ci/NaRQAAJIuMadkwikY8/wu1r7QvZFbwNX/jm3eo/OSA4jiHuzjZmJwUFH4SqpohCsl76BEfTC1ZmZM4j342g4G5N4mJ9tiAIxiWank6P9cxz9bC63k3SqQpbl/pGSn20bvEGYeN08GQR3sxNwMAxJKJ3sH62XKnqpba6b9GByjqpcmrfnQVb128fSgd6ZaRj+5tSv9nUPeQDvLq6wVr5Q4ZjUDGIaFec20/gyOCqipHs8CeUN6FbxigDrMq6J+4b1Ivlvt2Ks/1Etbl5q5ClMIUI7CUWjjuQjbMGOZKSFpB1/ZUpC9xGwDP5dt8toYHa7GV4cSv3uBgl2OfK8SKNaLxE54BHR4+P47uPyokMNReAKMPsM8HiOeFxtRRve2ssRWJZU6hw04fiICrOEu65TjzxEJLu7a1W5mj+k0ARlmXL8Bjhc7qQ++4hKxSj89okSBE7smQrqw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3008.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(366004)(346002)(39860400002)(451199018)(54906003)(316002)(6486002)(6666004)(31696002)(6512007)(38100700002)(186003)(53546011)(2616005)(6506007)(478600001)(26005)(2906002)(5660300002)(83380400001)(36756003)(66946007)(8936002)(8676002)(4326008)(41300700001)(66476007)(6916009)(66556008)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bHd6RHd0VUZWN1FLeEhRZERpVURGVndWc001bnBUQ1kzNGxzMUxyZUpWaXRE?=
+ =?utf-8?B?VFgwVDh0dGpMeTV0eEE0UnZ0Q3BBQkZqRG5xR09FMFVtL3UwaGFoZkNnZ2Q4?=
+ =?utf-8?B?bUhUOEsrdyt2WW5oa1J2S0s1Y09qU0w4QWhRR2FDZXBuNnl5cHRSYmM4VWxz?=
+ =?utf-8?B?dWd4alg0VGpXL0V5KzFoV3M0WDJEWFNxd1RrR2dsbEFJN09zVVduS3VtVnRI?=
+ =?utf-8?B?UStmY0tsQkd0Q3k3aDUzcWlIWlRtZVNDM2NxU3RwREMzdmVuQTVkZnNQd1JN?=
+ =?utf-8?B?WWxodk9zVU52QjZrYjN2aFh2L1NZaW5EOXVxR2kxdHdhWXRxYUE5aDNLKzE2?=
+ =?utf-8?B?eXpBWnJMOURocTUxNlRuY3ZRVlNuR2JneTg4SHQ0WnlKUzhsaGpYZ2N4RGFM?=
+ =?utf-8?B?UzBTOHF2TE5NdzR5a0lmYm9xQ0xIajBDVHVtd25Bdzk4SlVMcW85Y2hmRVhF?=
+ =?utf-8?B?QWxXMjBveHlIYWVJN3lJbFV3cmVubGsvS3NKVHBHaGxoTG1neWJMQk16MVpZ?=
+ =?utf-8?B?S1E3SCtGZmxVQkp1MGlELzd2VzdoeGhqZUFndnZDZ2kxN2thSEp6LzVnZFA0?=
+ =?utf-8?B?T1Vxb1RKbklNZG84OEpLM20rTDRPb0sxSXQ4V1JTYUROZllGMHROUE1JUmNp?=
+ =?utf-8?B?TGN3QW8yZjFneEUxVVJ5YUFxLzVCM1hBQ3RFMTFlNnFwcElwK3g5dFljYnZu?=
+ =?utf-8?B?cHVyL3RtendwRExXSnhyaDVXU3dDclhsdGNCOUx6V1VrR1pJUGJQcklqQUkx?=
+ =?utf-8?B?UXRKM05ZVnJSbFA2MEtUYWNvWGpxcDJHY29iK0VpQzJuekhkVUZiRGo2dVdR?=
+ =?utf-8?B?VVc0d2NZR0F3aVdDaHRTSWMzOXNmWWZDOXBqN0VrdU9jQTBUSmdFUDROYk03?=
+ =?utf-8?B?d05FRllFVHZhYTRkMXZZcG40ZUd1elhVUGY3Z3p2dzVYUEZRc2xIVk5IMmhx?=
+ =?utf-8?B?Y3NiVUwxWmFqcXFJRGdqbk1Takdrc2hDY0RwVzAxQ040ek4xOS8xazJRV2xl?=
+ =?utf-8?B?ZEl2NXhQUFlxSUR3UURqczhnTFJMMkREVmt1S2R5YkdSazk3NUswYklLVnBO?=
+ =?utf-8?B?MGIrWm95WGJ4NjV0WmV0bWlza1JHWThsL0o3ZjRQTnE2MVF0VWpTRlJpUnkr?=
+ =?utf-8?B?cWd3L05XaCtHczNZM2I4d0psZVNiK2xXRUdHM1Nwd1cyMWJ3bm11NERLTDQy?=
+ =?utf-8?B?bEpSeFo1Vk0wODM2Wk0vbE9makY5TUVqU1ZicDBjSzVPUnRCTFJRMG1aVWs2?=
+ =?utf-8?B?cVJibzV4UE1ldmduS1dQYTJYLzMzZjh3YkdROVA1SjY3d0VKeDFFWnpWMEVp?=
+ =?utf-8?B?SDF0MkNqVlVjNWxna1c3YlBPYjdsZXhUM1F1V1g1WnI1eHQvRXBaV09mcXNS?=
+ =?utf-8?B?MUh4KzZKbUo3ZHVudWQ5QlNSeWNzaEprbVdjTlgwZzdxMkowczRXeThNV1pX?=
+ =?utf-8?B?VG1jb2tQZmV3SXU3NW5mQlJVK2JtbXFqZmZ4U1BxeWtmdFI3ZjBBUXBwTVhT?=
+ =?utf-8?B?VmFJWkZzbHd4VVVGYlFNc29xNDE1ZzZqVFZhY0hRZzdsM3g2b2dNVDluQTNa?=
+ =?utf-8?B?WjY1U3Y2MDdUcVZjMUIxbWpxTXI2cDhmbW9BQTVZNm9JYnY0TUtJZ3c3VURP?=
+ =?utf-8?B?SWgzeXN1VzNhOXR0Z1p2TUpEbUUxVXRRemNrWEdPUlM4Uis4TTBCMUluT29J?=
+ =?utf-8?B?QUk0WUhqK2ZxS25QaE4wY1JIb05mQURvVVhQTjNNejQ5YkxjTTRhSnQyZE45?=
+ =?utf-8?B?RS9hY3lIcjlZQkkveEZEOGJycmxiQko0aDVoRzU3R25sSlR0STdZNXpmSHlG?=
+ =?utf-8?B?WTEzMEtyOFR5czhtYjVMNDZxQlhQSVY3b2IzTXNQSXl1YnpIa3lBeE1rOTBH?=
+ =?utf-8?B?cis3SU5VbkhSUndjZWxxWlBsV2Y3bk1tcENBMENOdlVza0tmVkUxclBrZWRl?=
+ =?utf-8?B?WkgwRm1aMjNqb1kxdU1uOSt5MnF2bm5pTlZMMm9QTEU1N1d3Q0ZkRUhvVk4r?=
+ =?utf-8?B?Nm9SdmhFVUMrZXVYYTNYbVVudkdUcTR3dmc5MnFINkZwVHU4TjRsWGgzTHdJ?=
+ =?utf-8?B?MlUvcHBBTFVOQW50WE5UNjlnOHZwWmpkSlBFWStNVVUwTFRhcWk2KzJSL0VB?=
+ =?utf-8?Q?37a3TtA8u8pg9us+FlJiyQnag?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9d4188c-2e63-40fa-b8a0-08db08d668bf
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3008.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 06:41:58.0381
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: W7BpkYiKcdrgG2X4ESBWxw9vxAV7EpI5U8k2xhSTlgURgbB6IAaFNGV66SynNdB9T6QccKypF6N2klXiC+Xjaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB8430
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-head:   4d627628d7584f3d3add1d53342d0f01aa878e04
-commit: 4d627628d7584f3d3add1d53342d0f01aa878e04 [10/10] cpuidle: Fix poll_idle() noinstr annotation
-config: x86_64-randconfig-c022 (https://download.01.org/0day-ci/archive/20230207/202302071403.la39hU5C-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=4d627628d7584f3d3add1d53342d0f01aa878e04
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip sched/core
-        git checkout 4d627628d7584f3d3add1d53342d0f01aa878e04
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 2/4/2023 11:44 PM, Raghavendra K T wrote:
+> On 2/3/2023 4:45 PM, Peter Zijlstra wrote:
+>> On Wed, Feb 01, 2023 at 01:32:21PM +0530, Raghavendra K T wrote:
+[...]
+> 
+>>> +        if (!vma_is_accessed(vma))
+>>> +            continue;
+>>> +
+>>>           do {
+>>>               start = max(start, vma->vm_start);
+>>>               end = ALIGN(start + (pages << PAGE_SHIFT), HPAGE_SIZE);
+>>
+>>
+>> This feels wrong, specifically we track numa_scan_offset per mm, now, if
+>> we divide the threads into two dis-joint groups each only using their
+>> own set of vmas (in fact quite common for workloads with proper data
+>> partitioning) it is possible to consistently sample one set of threads
+>> and thus not scan the other set of vmas.
+>>
+>> It seems somewhat unlikely, but not impossible to create significant
+>> unfairness.
+>>
+> 
+> Agree, But that is the reason why we want to allow first few
+> unconditional scans Or am I missing something?
+> 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Thinking further, may be we can summarize the different aspects of 
+thread/ two disjoint set case itself into:
 
-All warnings (new ones prefixed by >>):
+1) Unfairness because of way in which threads gets opportunity
+to scan.
 
-   vmlinux.o: warning: objtool: __asan_memset+0x53: call to __memset() with UACCESS enabled
-   vmlinux.o: warning: objtool: __asan_memmove+0x7f: call to __memmove() with UACCESS enabled
-   vmlinux.o: warning: objtool: __asan_memcpy+0x7f: call to __memcpy() with UACCESS enabled
-   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x36: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x32: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: fixup_bad_iret+0x75: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: noist_exc_debug+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_nmi+0xbc: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: poke_int3_handler+0x34: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: native_sched_clock+0x7d: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0xd: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_machine_check+0x4d: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: exc_machine_check+0x52: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: pvclock_clocksource_read_nowd+0xb2: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: local_clock+0x44: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x49: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x8e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x3f: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_exit+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: mwait_idle+0x2a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: acpi_processor_ffh_cstate_enter+0x45: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: intel_idle_s2idle+0x63: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: intel_idle_xstate+0x5e: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: intel_idle_irq+0x5a: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: intel_idle+0x59: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: intel_idle_ibrs+0x12: call to sched_smt_active() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x53: call to ftrace_likely_update() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: acpi_idle_enter+0x4c: call to ftrace_likely_update() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: poll_idle+0x4a: call to ftrace_likely_update() leaves .noinstr.text section
+2) Disjoint set of vmas in the partition set could be of different sizes
 
+3) Disjoint set of vmas could be associated with different number of
+threads
 
-objdump-func vmlinux.o poll_idle:
-0000 0000000000000b3b <poll_idle>:
-0000  b3b:	f3 0f 1e fa          	endbr64
-0004  b3f:	41 57                	push   %r15
-0006  b41:	49 89 f7             	mov    %rsi,%r15
-0009  b44:	41 56                	push   %r14
-000b  b46:	41 55                	push   %r13
-000d  b48:	41 89 d5             	mov    %edx,%r13d
-0010  b4b:	41 54                	push   %r12
-0012  b4d:	55                   	push   %rbp
-0013  b4e:	53                   	push   %rbx
-0014  b4f:	48 89 fb             	mov    %rdi,%rbx
-0017  b52:	51                   	push   %rcx
-0018  b53:	e8 00 00 00 00       	call   b58 <poll_idle+0x1d>	b54: R_X86_64_PLT32	local_clock-0x4
-001d  b58:	80 23 fb             	andb   $0xfb,(%rbx)
-0020  b5b:	49 89 c6             	mov    %rax,%r14
-0023  b5e:	fb                   	sti
-0024  b5f:	4c 8b 24 25 00 00 00 00 	mov    0x0,%r12	b63: R_X86_64_32S	pcpu_hot
-002c  b67:	41 80 4c 24 02 20    	orb    $0x20,0x2(%r12)
-0032  b6d:	49 8b 2c 24          	mov    (%r12),%rbp
-0036  b71:	31 c9                	xor    %ecx,%ecx
-0038  b73:	31 d2                	xor    %edx,%edx
-003a  b75:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	b78: R_X86_64_32S	_ftrace_annotated_branch+0xf5010
-0041  b7c:	48 c1 ed 03          	shr    $0x3,%rbp
-0045  b80:	83 e5 01             	and    $0x1,%ebp
-0048  b83:	89 ee                	mov    %ebp,%esi
-004a  b85:	e8 00 00 00 00       	call   b8a <poll_idle+0x4f>	b86: R_X86_64_PLT32	ftrace_likely_update-0x4
-004f  b8a:	48 85 ed             	test   %rbp,%rbp
-0052  b8d:	75 4f                	jne    bde <poll_idle+0xa3>
-0054  b8f:	48 89 de             	mov    %rbx,%rsi
-0057  b92:	4c 89 ff             	mov    %r15,%rdi
-005a  b95:	e8 00 00 00 00       	call   b9a <poll_idle+0x5f>	b96: R_X86_64_PLT32	cpuidle_poll_time-0x4
-005f  b9a:	48 89 04 24          	mov    %rax,(%rsp)
-0063  b9e:	41 bf c9 00 00 00    	mov    $0xc9,%r15d
-0069  ba4:	49 8b 2c 24          	mov    (%r12),%rbp
-006d  ba8:	31 c9                	xor    %ecx,%ecx
-006f  baa:	31 d2                	xor    %edx,%edx
-0071  bac:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	baf: R_X86_64_32S	_ftrace_annotated_branch+0xf5040
-0078  bb3:	48 c1 ed 03          	shr    $0x3,%rbp
-007c  bb7:	83 e5 01             	and    $0x1,%ebp
-007f  bba:	89 ee                	mov    %ebp,%esi
-0081  bbc:	e8 00 00 00 00       	call   bc1 <poll_idle+0x86>	bbd: R_X86_64_PLT32	ftrace_likely_update-0x4
-0086  bc1:	48 85 ed             	test   %rbp,%rbp
-0089  bc4:	75 18                	jne    bde <poll_idle+0xa3>
-008b  bc6:	f3 90                	pause
-008d  bc8:	41 ff cf             	dec    %r15d
-0090  bcb:	75 d7                	jne    ba4 <poll_idle+0x69>
-0092  bcd:	e8 00 00 00 00       	call   bd2 <poll_idle+0x97>	bce: R_X86_64_PLT32	local_clock-0x4
-0097  bd2:	4c 29 f0             	sub    %r14,%rax
-009a  bd5:	48 3b 04 24          	cmp    (%rsp),%rax
-009e  bd9:	76 c3                	jbe    b9e <poll_idle+0x63>
-00a0  bdb:	80 0b 04             	orb    $0x4,(%rbx)
-00a3  bde:	fa                   	cli
-00a4  bdf:	48 8b 04 25 00 00 00 00 	mov    0x0,%rax	be3: R_X86_64_32S	pcpu_hot
-00ac  be7:	80 60 02 df          	andb   $0xdf,0x2(%rax)
-00b0  beb:	48 8b 00             	mov    (%rax),%rax
-00b3  bee:	a8 08                	test   $0x8,%al
-00b5  bf0:	74 0a                	je     bfc <poll_idle+0xc1>
-00b7  bf2:	81 25 00 00 00 00 ff ff ff 7f 	andl   $0x7fffffff,0x0(%rip)        # bfc <poll_idle+0xc1>	bf4: R_X86_64_PC32	pcpu_hot
-00c1  bfc:	5a                   	pop    %rdx
-00c2  bfd:	44 89 e8             	mov    %r13d,%eax
-00c5  c00:	5b                   	pop    %rbx
-00c6  c01:	5d                   	pop    %rbp
-00c7  c02:	41 5c                	pop    %r12
-00c9  c04:	41 5d                	pop    %r13
-00cb  c06:	41 5e                	pop    %r14
-00cd  c08:	41 5f                	pop    %r15
-00cf  c0a:	c3                   	ret
+Each of above can potentially help or make some thread do heavy lifting
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+but (2), and (3). is what I think we are trying to be Okay with by
+making sure tasks mostly do not scan others' vmas
+
+(1) could be a real issue (though I know that there are many places we
+  have corrected the issue by introducing offset in p->numa_next_scan)
+but how the distribution looks now practically, I take it as a TODO and
+post.
