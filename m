@@ -2,72 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B09F68D1BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6298268D1C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjBGIu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
+        id S231284AbjBGIu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 03:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjBGIuY (ORCPT
+        with ESMTP id S231271AbjBGIur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:50:24 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B731617176
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:50:17 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id s12-20020a92cb0c000000b00313ceced13aso3009245ilo.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 00:50:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZudusWGG5cp60tJ2sRNhtj/VAm33RPMEtWAQ7vrCuvk=;
-        b=nHuLZ6r0iyXY8Ui8rxdihraSr8h7L3fDqSS/sxoMeIw2MhhI+eTFtWcohsEZ6L3lzg
-         QpjM6FqO+OEFJf6pHeLZZmgo2qVqF4uV4G+KsM/OFGAWQz+NzSAAo80LriKuDUfdgFI5
-         ySbXHxQPcJbr4xfmxUaTkBcqYq5Bg+jZn9/ehxjf1KgR6lI24RfauHUrxlHw7HAa8vyC
-         S/BxjRvRy44LSGWzUch+LKY83rhJ/xR+pru6MJBYYJMv/RMLn/j9ItgxzeqZ9/Ps76j7
-         2TCBjJcH2GZZFUMVGRG0vlUCQVmnQ0YrXoivKYIoe+M0agrnPWNxHdPZwb2OMlQk2Wi+
-         d+QQ==
-X-Gm-Message-State: AO0yUKXXehNVq6m9ovowh7H03NkkRYgQnow9ZIFWaSOOV1ks2BwZyF+w
-        P4tReG6+0V7bK1M6bKB5CaWK5LAVdWTJSxiwc1iV+wS29CQy
-X-Google-Smtp-Source: AK7set/5TsfYP6+cu0BxJcHxeiNU70jMTJq5ZHHtWKrXVticb9kDA7l3ipuTSPpxgLzkLp/VnBN4nAnmjlmGhs5Wr1L6LXmhVSR0
+        Tue, 7 Feb 2023 03:50:47 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B192118;
+        Tue,  7 Feb 2023 00:50:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675759846; x=1707295846;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=1Cg0BkZLcjjnL2oGDwOtUOGPwzfbs6tORc0ZeGAodwI=;
+  b=erHulSN00x2m4X00S/8RRwyeo5ARoiPw5GfGdI7Z77WsNhJRlv2VCODi
+   RLak9iBpmMkNdVZ8Fiu65PSH3rSCXFhrmYkVC+4MXZAvRiWsyfmt1N2Iz
+   Olntl/RG91oz+25Nrx3wZa+HmUf9Mdhydg/Wgrbc3AK/3kMa0DiBUZXwx
+   ccsDD5BA5b3ATflbDn5TebC8J4TcvgeE0Zc8TkHVV31QdAV6h5q+3TmDW
+   OIzqL2HHY5xzI1s/+EHyWFSbSs6rt7rmZkOkhtg7E5XircUmFKqL4a5Kb
+   YGUjtpvJDcBf9J5r23suEB7IfGBhWFnpxx9cKzOA/kEr2sGIJQsdR3Bwf
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="317472521"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="317472521"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 00:50:37 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775482535"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="775482535"
+Received: from aamakine-mobl.ger.corp.intel.com ([10.249.36.72])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 00:50:29 -0800
+Date:   Tue, 7 Feb 2023 10:50:23 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
+cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+In-Reply-To: <TYAPR01MB6330A24D0B7B52567453FF388BDB9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Message-ID: <406496b7-877b-d9e7-10e-d7b31da51add@linux.intel.com>
+References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com> <a9ab65a6-f750-7fd9-99ba-1cbd15427d2c@linux.intel.com> <TYAPR01MB6330A24D0B7B52567453FF388BDB9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:2e04:0:b0:30e:d994:199b with SMTP id
- v4-20020a922e04000000b0030ed994199bmr1845598ile.41.1675759817069; Tue, 07 Feb
- 2023 00:50:17 -0800 (PST)
-Date:   Tue, 07 Feb 2023 00:50:17 -0800
-In-Reply-To: <20230207082506.1322-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a01e8305f4183c3b@google.com>
-Subject: Re: [syzbot] kernel BUG in process_one_work
-From:   syzbot <syzbot+c0998868487c1f7e05e5@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 7 Feb 2023, Shaopeng Tan (Fujitsu) wrote:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> > On Tue, 31 Jan 2023, Shaopeng Tan wrote:
+> > 
+> > > After creating a child process with fork() in CAT test, if an error
+> > > occurs or a signal such as SIGINT is received, the parent process will
+> > > be terminated immediately, and therefor the child process will not be
+> > > killed and also resctrlfs is not unmounted.
+> > >
+> > > There is a signal handler registered in CMT/MBM/MBA tests, which kills
+> > > child process, unmount resctrlfs, cleanups result files, etc., if a
+> > > signal such as SIGINT is received.
+> > >
+> > > Commonize the signal handler registered for CMT/MBM/MBA tests and
+> > > reuse it in CAT too.
+> > >
+> > > To reuse the signal handler, make the child process in CAT wait to be
+> > > killed by parent process in any case (an error occurred or a signal
+> > > was received), and when killing child process use global bm_pid
+> > > instead of local bm_pid.
+> > >
+> > > Also, since the MBA/MBA/CMT/CAT are run in order, unregister the
+> > > signal handler at the end of each test so that the signal handler
+> > > cannot be inherited by other tests.
+> > >
+> > > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> > > ---
 
-Reported-and-tested-by: syzbot+c0998868487c1f7e05e5@syzkaller.appspotmail.com
+> > >  	ret = cat_val(&param);
+> > > -	if (ret)
+> > > -		return ret;
+> > > -
+> > > -	ret = check_results(&param);
+> > > -	if (ret)
+> > > -		return ret;
+> > > +	if (ret == 0)
+> > > +		ret = check_results(&param);
+> > 
+> > It would be take this program flow fix out of the signal handler change into a
+> > separate change.
+> 
+> Do you mean this fix should be separated into two patches?
 
-Tested on:
+Yes.
 
-commit:         4fafd969 Add linux-next specific files for 20230203
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1753218d480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d2fba7d42502ca4
-dashboard link: https://syzkaller.appspot.com/bug?extid=c0998868487c1f7e05e5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15a33033480000
+Currently, I see your patch doing (mainly) two things:
+1) cleaning up the messy signal handler logic
+2) fixing the early return in case of error from cat_val() or 
+   check_results()
 
-Note: testing is done by a robot and is best-effort only.
+Both are good changes and both are needed to fully fix things. But (IMHO) 
+those are indepedent enough that it would warrant to split this change 
+into two.
+
+-- 
+ i.
+
+> To make the child process wait to be killed by parent process
+> in any case(an error occurred or a signal was received),
+> I fixed it like this.
+> 
+> This fix was discussed here.
+> https://lore.kernel.org/lkml/2ab9ca20-c757-7dd8-b770-2b84d171cbfb@intel.com/
+
+
