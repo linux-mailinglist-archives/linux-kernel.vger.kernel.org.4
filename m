@@ -2,86 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EAE68D6DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B8C68D6E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjBGMfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57276 "EHLO
+        id S231807AbjBGMhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbjBGMfm (ORCPT
+        with ESMTP id S231790AbjBGMhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:35:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C25EF8A;
-        Tue,  7 Feb 2023 04:35:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C61661374;
-        Tue,  7 Feb 2023 12:35:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AC2C433EF;
-        Tue,  7 Feb 2023 12:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675773340;
-        bh=B1yqYk/6A/aeLnbi8ZCAvrU/n2HsoZIBq+L0c92QQzA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bv0QIeWKfpn3ZDkjnvuntP2gV7vEJE1EysC1w4rnGp2rmhe26XRim/hzHFFvx42Td
-         6amqQ4CjhE+afT1aRClBO3ndLxrMi2Aeh3XMTBS0LvLIEMvwG9fNp8AIqGNTL9tZMV
-         mYrwocbvB18T9TOq2F0TKr59Rh3YUGPxyES+z/qPy7O7MJNPKpIgTLwU0KghexeofH
-         JovGmKtq9Aa6btDAav1oYCMCMkvYFaRh25ZgNJ3EQUnuBS12fJT80OYCsJzJLeiZVw
-         Iq0LgFWReVStAEDUpId322L3JTDjnj+FMlg1sl2QmLcg42r0lt79VIbyrAffaebpCA
-         ldZrHQ/BpcNwA==
-Message-ID: <97b16883-64ec-ba32-ddf2-656ff7a5fc80@kernel.org>
-Date:   Tue, 7 Feb 2023 20:35:38 +0800
+        Tue, 7 Feb 2023 07:37:22 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C681E2B9;
+        Tue,  7 Feb 2023 04:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675773438; x=1707309438;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+/E5PcQ0zh/6DggX2arWnQ62RptWMI2UE/7JScGHEGk=;
+  b=R46Gz9+RNX+dFwxcDU7GIsbf8MDzgdye1OhZkk2qNBhfobCrBRBSzgUr
+   brJyXuLO6QORjCZ5kt52sKmSRB8zuNV6VAeskvS146D/7sxEvSkcn2xmw
+   FdPNLH911emnE7PdX+bJFNQYazfhaDeekBRRHUqG81gafN/7CxuJZWtC6
+   w+ojYSHAYdLH39P4gBEi5+usgPqyCdzN8FWAmEDj6XfA6UerubUEC727A
+   /mZgjKqQljdJWGP+0zA5FOJPOqkK2sQTdTXTe8crMnvjrp7nSt1Ayfu8M
+   xLemrDoUCOWdreIa+Zw+d3feAntxU5AJPy2a7fwtEFhXW+H06Azttcrj6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309140905"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="309140905"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 04:37:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="697267987"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="697267987"
+Received: from tdx-lm.sh.intel.com ([10.239.53.27])
+  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2023 04:37:16 -0800
+From:   Wei Wang <wei.w.wang@intel.com>
+To:     pbonzini@redhat.com, seanjc@google.com, mhal@rbox.co
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wei Wang <wei.w.wang@intel.com>
+Subject: [PATCH v2 0/2] kvm_io_bus_unregister_dev cleanup
+Date:   Tue,  7 Feb 2023 20:37:11 +0800
+Message-Id: <20230207123713.3905-1-wei.w.wang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [f2fs-dev] [PATCH] f2fs: fix kernel crash due to null io->bio
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     stable@vger.kernel.org
-References: <20230206034344.724593-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230206034344.724593-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/6 11:43, Jaegeuk Kim wrote:
-> We should return when io->bio is null before doing anything. Otherwise, panic.
-> 
-> BUG: kernel NULL pointer dereference, address: 0000000000000010
-> RIP: 0010:__submit_merged_write_cond+0x164/0x240 [f2fs]
-> Call Trace:
->   <TASK>
->   f2fs_submit_merged_write+0x1d/0x30 [f2fs]
->   commit_checkpoint+0x110/0x1e0 [f2fs]
->   f2fs_write_checkpoint+0x9f7/0xf00 [f2fs]
->   ? __pfx_issue_checkpoint_thread+0x10/0x10 [f2fs]
->   __checkpoint_and_complete_reqs+0x84/0x190 [f2fs]
->   ? preempt_count_add+0x82/0xc0
->   ? __pfx_issue_checkpoint_thread+0x10/0x10 [f2fs]
->   issue_checkpoint_thread+0x4c/0xf0 [f2fs]
->   ? __pfx_autoremove_wake_function+0x10/0x10
->   kthread+0xff/0x130
->   ? __pfx_kthread+0x10/0x10
->   ret_from_fork+0x2c/0x50
->   </TASK>
-> 
-> Cc: stable@vger.kernel.org # v5.18+
-> Fixes: 64bf0eef0171 ("f2fs: pass the bio operation to bio_alloc_bioset")
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+This patchset moves kvm io_device destruction into
+kvm_io_bus_unregister_dev. This reduces LOCs a bit for users and can 
+avoid the leakage of destructing the device explicitly.
+Accordingly, below cleanups are included:
+- remove the exposure of kvm_iodevice_destructor and the invocation in
+  the users as kvm_iodevice_destructor is now invoked in
+  kvm_io_bus_unregister_dev;
+- Change kvm_deassign_ioeventfd_idx to use list_for_each_entry as the 
+  loop ends at the entry that's founded and deleted.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+The patches are rebased to
+https://github.com/kvm-x86/linux/commit/b1cb1fac22ab
 
-Thanks,
+Changelog:
+v1->v2:
+ - keep kfree(bus) when the new bus is successfully allocated
+ - add patch 2
+
+Previous version:
+https://lore.kernel.org/lkml/20221229123302.4083-1-wei.w.wang@intel.com/
+
+Wei Wang (2):
+  KVM: destruct kvm_io_device while unregistering it from kvm_io_bus
+  kvm/eventfd: use list_for_each_entry when deassign ioeventfd
+
+ include/kvm/iodev.h       |  6 ------
+ virt/kvm/coalesced_mmio.c |  9 ++-------
+ virt/kvm/eventfd.c        |  6 ++----
+ virt/kvm/kvm_main.c       | 23 +++++++++++++++--------
+ 4 files changed, 19 insertions(+), 25 deletions(-)
+
+-- 
+2.27.0
+
