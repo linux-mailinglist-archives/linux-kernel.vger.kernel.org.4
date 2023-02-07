@@ -2,203 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9AB68DDBE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC8D68DDC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbjBGQRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S232049AbjBGQRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbjBGQRN (ORCPT
+        with ESMTP id S232008AbjBGQRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:17:13 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC2961B5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:17:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=D/595zd2bwLI9Ts3OQDjIrZJ9SVnpkY9w35ikK9E30g=; b=ljOSH63kWzbB/osxS2fz4+b73F
-        Ay4Mp7L9gWdQ4SK7ep3+LQPb0h4uRg027gS8245X2wQbs5N0W4kNETyGZSWpp8mmoXEak3jxKqCxB
-        bur5w4yL6p2Aq0Cj2rOdNYI4P9T2tZLPW0i+0OOmA8KcKy1pR1Ew4/kSqaNIv5RxF2VYRyK2dGC2w
-        TNp3zWcgbsNr5//tM2q3hDdHb8xyf9nmKOwEuWa8DGVyf9RbOpn0YfENQ7tu5vD3RqLPbD/ss9Hv/
-        sGsl59eXv9ZK6zwcIFfL5BCkCrVvrpeHMvRFULuN4ei4ypJw1Kg65rWCLL7l3FlUpIwh1tUUVsg8b
-        0gm/B3Fw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPQeS-000N8Y-R1; Tue, 07 Feb 2023 16:17:01 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 41B5930013F;
-        Tue,  7 Feb 2023 17:16:59 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 073C620AF917C; Tue,  7 Feb 2023 17:16:59 +0100 (CET)
-Date:   Tue, 7 Feb 2023 17:16:58 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: current objtool warnings from randconfig builds
-Message-ID: <Y+J5ev/R/Sz6nwBF@hirez.programming.kicks-ass.net>
-References: <9698eff1-9680-4f0a-94de-590eaa923e94@app.fastmail.com>
+        Tue, 7 Feb 2023 11:17:40 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275FB1E296
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:17:39 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8BFA11EC068B;
+        Tue,  7 Feb 2023 17:17:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675786657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UETytlTOPd+ZYdvXlPzbxbLjnmIE0WEmRzl07+QluuU=;
+        b=PBOPO8ZDxl4avWhgkB3SpFMtd7O9ai+og3b7H2lixGiMCDn5j7cq91npmiYyiRUQlPFmo4
+        6hQyaYOmuhVxMCrPLwMuhodRDZK1svGRBT/IZDO9E6LHV8nC4ys00DDX7RwLzkUtPdfAZR
+        KqWF0jAA88BGh/xq3fRmi4GUh/x+XXw=
+Date:   Tue, 7 Feb 2023 17:17:33 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Terry Bowman <terry.bowman@amd.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 3/3] tools/x86/kcpuid: Dump the CPUID function in
+ detailed view
+Message-ID: <Y+J5jDfO4PMujuXD@zn.tnic>
+References: <20230206141832.4162264-1-terry.bowman@amd.com>
+ <20230206141832.4162264-4-terry.bowman@amd.com>
+ <Y+HIkTzNh4SXgVEc@feng-clx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9698eff1-9680-4f0a-94de-590eaa923e94@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y+HIkTzNh4SXgVEc@feng-clx>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 11:25:27AM +0100, Arnd Bergmann wrote:
-> Hi Josh and Peter,
-> 
-> I've updated my randconfig test setup to use gcc-13 and clang-16, and
-> have sent fixes for all normal WERROR=y build warnings, but there are a
-> lot of objtool warnings that remain. I've reported some of them in
-> the past, some others are new. It would be nice to at least reduce
-> the number of warnings either through code changes or workarounds
-> in objtool for any false positives.
-> 
-> Out of 1500 builds, about a third had any warnings, this is the full
-> list sorted by frequency. Let me know if there are any that you haven't
-> seen before, I can provide the corresponding object and config files
-> for reproducing.
-> 
->     Arnd
-> 
-> 8<---
-> 205 mm/kasan/shadow.o: warning: objtool: __asan_memset+0x2e: call to __memset() with UACCESS enabled
-> 205 mm/kasan/shadow.o: warning: objtool: __asan_memmove+0x48: call to __memmove() with UACCESS enabled
-> 205 mm/kasan/shadow.o: warning: objtool: __asan_memcpy+0x48: call to __memcpy() with UACCESS enabled
+On Tue, Feb 07, 2023 at 11:42:09AM +0800, Feng Tang wrote:
+> Maybe we can check the sum of subleaf->info.nr[EAX/EBX/ECX/EDX],
+> and only print it out when it is not zero.
 
-Patch pending here:
+Considering how this is only a --detail output and I kinda find the
+default output a bit too terse, yeah, I think we should dump all the
+values with -d. Something like the below diff ontop.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=sched/core-robot&id=79cdfdacd5b8d1ac77e24ccbc178bba0294d0d78
-￼
+I've added the output at the end and I think it makes perfect sense to
+dump those raw values with -d. In time, we will start decoding them too
+so that we can have a full, human readable dump of the CPUID leafs and
+all the data needed.
 
-> 80 vmlinux.o: warning: objtool: ibt_selftest+0x11: sibling call from callable instruction with modified stack frame
+---
 
-Can you provide details on how to reproduce this?
+diff --git a/tools/arch/x86/kcpuid/cpuid.csv b/tools/arch/x86/kcpuid/cpuid.csv
+index 59ee3b53309a..baadf2cdd1c6 100644
+--- a/tools/arch/x86/kcpuid/cpuid.csv
++++ b/tools/arch/x86/kcpuid/cpuid.csv
+@@ -375,7 +375,7 @@
+ 0x80000001,    0,  ECX,     27, perftsc, Performance time-stamp counter supported
+ 0x80000001,    0,  ECX,     28, perfctrextllc, Indicates support for L3 performance counter extensions
+ 0x80000001,    0,  ECX,     29, mwaitextended, MWAITX and MONITORX capability is supported
+-0x80000001,    0,  ECX,     30. admskextn, Indicates support for address mask extension (to 32 bits and to all 4 DRs) for instruction breakpoints
++0x80000001,    0,  ECX,     30, admskextn, Indicates support for address mask extension (to 32 bits and to all 4 DRs) for instruction breakpoints
+ 
+ 0x80000001,    0,  EDX,      0, fpu, x87 floating point unit on-chip
+ 0x80000001,    0,  EDX,      1, vme, Virtual-mode enhancements
+diff --git a/tools/arch/x86/kcpuid/kcpuid.c b/tools/arch/x86/kcpuid/kcpuid.c
+index 26fa5255c42b..1b1fa13a9921 100644
+--- a/tools/arch/x86/kcpuid/kcpuid.c
++++ b/tools/arch/x86/kcpuid/kcpuid.c
+@@ -33,7 +33,7 @@ struct reg_desc {
+ 	struct bits_desc descs[32];
+ };
+ 
+-enum {
++enum cpuid_reg {
+ 	R_EAX = 0,
+ 	R_EBX,
+ 	R_ECX,
+@@ -41,6 +41,10 @@ enum {
+ 	NR_REGS
+ };
+ 
++static const char * const reg_names[] = {
++	"EAX", "EBX", "ECX", "EDX",
++};
++
+ struct subleaf {
+ 	u32 index;
+ 	u32 sub;
+@@ -445,12 +449,18 @@ static void parse_text(void)
+ 
+ 
+ /* Decode every eax/ebx/ecx/edx */
+-static void decode_bits(u32 value, struct reg_desc *rdesc)
++static void decode_bits(u32 value, struct reg_desc *rdesc, enum cpuid_reg reg)
+ {
+ 	struct bits_desc *bdesc;
+ 	int start, end, i;
+ 	u32 mask;
+ 
++	if (!rdesc->nr) {
++		if (show_details)
++			printf("\t %s: 0x%08x\n", reg_names[reg], value);
++		return;
++	}
++
+ 	for (i = 0; i < rdesc->nr; i++) {
+ 		bdesc = &rdesc->descs[i];
+ 
+@@ -493,10 +503,10 @@ static void show_leaf(struct subleaf *leaf)
+ 				leaf->index, leaf->sub);
+ 	}
+ 
+-	decode_bits(leaf->eax, &leaf->info[R_EAX]);
+-	decode_bits(leaf->ebx, &leaf->info[R_EBX]);
+-	decode_bits(leaf->ecx, &leaf->info[R_ECX]);
+-	decode_bits(leaf->edx, &leaf->info[R_EDX]);
++	decode_bits(leaf->eax, &leaf->info[R_EAX], R_EAX);
++	decode_bits(leaf->ebx, &leaf->info[R_EBX], R_EBX);
++	decode_bits(leaf->ecx, &leaf->info[R_ECX], R_ECX);
++	decode_bits(leaf->edx, &leaf->info[R_EDX], R_EDX);
+ 
+ 	if (!show_raw && show_details)
+ 		printf("\n");
 
-> 49 vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0x100: relocation to !ENDBR: native_write_cr4+0x4
+---
 
-That one was on purpose I think.
+Output:
 
-> 29 mm/kasan/generic.o: warning: objtool: kasan_check_range+0x1e: call to addr_has_metadata() with UACCESS enabled
-> 29 mm/kasan/generic.o: warning: objtool: __asan_load2+0x11: call to addr_has_metadata() with UACCESS enabled
+---
 
-I'm thinking addr_has_metadata() needs the __always_inline treatment, it
-seems to be present a lot.
+CPU features:
+=============
 
-> 28 mm/kasan/generic.o: warning: objtool: __asan_store16+0x11: call to addr_has_metadata() with UACCESS enabled
-> 28 mm/kasan/generic.o: warning: objtool: __asan_load16+0x11: call to addr_has_metadata() with UACCESS enabled
-> 22 mm/kasan/generic.o: warning: objtool: __asan_load4+0x11: call to addr_has_metadata() with UACCESS enabled
-> 21 mm/kasan/generic.o: warning: objtool: __asan_store4+0x11: call to addr_has_metadata() with UACCESS enabled
-> 21 mm/kasan/generic.o: warning: objtool: __asan_store1+0x11: call to addr_has_metadata() with UACCESS enabled
-> 21 mm/kasan/generic.o: warning: objtool: __asan_load8+0x11: call to addr_has_metadata() with UACCESS enabled
-> 21 mm/kasan/generic.o: warning: objtool: __asan_load1+0x11: call to addr_has_metadata() with UACCESS enabled
+CPUID_0x0_ECX[0x0]:
+	 max_basic_leafs    	: 0xd       	- Max input value for supported subleafs
+	 EBX: 0x68747541
+	 ECX: 0x444d4163
+	 EDX: 0x69746e65
 
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_out+0x15e: return with modified stack frame
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_out+0x11d: stack state mismatch: cfa1=5+16 cfa2=4+8
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_in+0x150: return with modified stack frame
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx_msg.o: warning: objtool: vmw_port_hb_in+0x13d: stack state mismatch: cfa1=5+16 cfa2=4+8
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_out+0xe2: return with modified stack frame
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_out+0xd1: stack state mismatch: cfa1=5+16 cfa2=4+8
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_in+0xea: return with modified stack frame
-> 29 drivers/gpu/drm/vmwgfx/vmwgfx.o: warning: objtool: vmw_port_hb_in+0xcc: stack state mismatch: cfa1=5+16 cfa2=4+8
+CPUID_0x1_ECX[0x0]:
+	 stepping           	: 0x2       	- Stepping ID
+	 model              	: 0x8       	- Model
+	 family             	: 0xf       	- Family ID
+	 processor          	: 0x0       	- Processor Type
+	 model_ext          	: 0x0       	- Extended Model ID
+	 family_ext         	: 0x8       	- Extended Family ID
+	 brand              	: 0x0       	- Brand Index
+	 clflush_size       	: 0x8       	- CLFLUSH line size (value * 8) in bytes
+	 max_cpu_id         	: 0x10      	- Maxim number of addressable logic cpu in this package
+	 apic_id            	: 0xe       	- Initial APIC ID
+	 sse3                - Streaming SIMD Extensions 3(SSE3)
+	 pclmulqdq           - PCLMULQDQ instruction supported
+	 mwait               - MONITOR/MWAIT supported
+	 ssse3               - Supplemental Streaming SIMD Extensions 3 (SSSE3)
+	 fma                 - FMA extensions using YMM state supported
+	 cmpxchg16b          - 'CMPXCHG16B - Compare and Exchange Bytes' supported
+	 sse4_1              - SSE4.1 feature present
+	 sse4_2              - SSE4.2 feature present
+	 movbe               - MOVBE instruction supported
+	 popcnt              - POPCNT instruction supported
+	 aesni               - AESNI instruction supported
+	 xsave               - XSAVE/XRSTOR processor extended states (XSETBV/XGETBV/XCR0)
+	 osxsave             - OS has set CR4.OSXSAVE bit to enable XSETBV/XGETBV/XCR0
+	 avx                 - AVX instruction supported
+	 f16c                - 16-bit floating-point conversion instruction supported
+	 rdrand              - RDRAND instruction supported
+	 fpu                 - x87 FPU on chip
+	 vme                 - Virtual-8086 Mode Enhancement
+	 de                  - Debugging Extensions
+	 pse                 - Page Size Extensions
+	 tsc                 - Time Stamp Counter
+	 msr                 - RDMSR and WRMSR Support
+	 pae                 - Physical Address Extensions
+	 mce                 - Machine Check Exception
+	 cx8                 - CMPXCHG8B instr
+	 apic                - APIC on Chip
+	 sep                 - SYSENTER and SYSEXIT instrs
+	 mtrr                - Memory Type Range Registers
+	 pge                 - Page Global Bit
+	 mca                 - Machine Check Architecture
+	 cmov                - Conditional Move Instrs
+	 pat                 - Page Attribute Table
+	 pse36               - 36-Bit Page Size Extension
+	 clflush             - CLFLUSH instr
+	 mmx                 - Intel MMX Technology
+	 fxsr                - XSAVE and FXRSTOR Instrs
+	 sse                 - SSE
+	 sse2                - SSE2
+	 hit                 - Max APIC IDs
 
-Repro details?
+CPUID_0x5_ECX[0x0]:
+	 min_mon_size       	: 0x40      	- Smallest monitor line size in bytes
+	 max_mon_size       	: 0x40      	- Largest monitor line size in bytes
+	 mwait_ext           - Enum of Monitor-Mwait extensions supported
+	 mwait_irq_break     - Largest monitor line size in bytes
+	 c0_sub_stats       	: 0x1       	- Number of C0* sub C-states supported using MWAIT
+	 c1_sub_stats       	: 0x1       	- Number of C1* sub C-states supported using MWAIT
+	 c2_sub_stats       	: 0x0       	- Number of C2* sub C-states supported using MWAIT
+	 c3_sub_stats       	: 0x0       	- Number of C3* sub C-states supported using MWAIT
+	 c4_sub_stats       	: 0x0       	- Number of C4* sub C-states supported using MWAIT
+	 c5_sub_stats       	: 0x0       	- Number of C5* sub C-states supported using MWAIT
+	 c6_sub_stats       	: 0x0       	- Number of C6* sub C-states supported using MWAIT
+	 c7_sub_stats       	: 0x0       	- Number of C7* sub C-states supported using MWAIT
 
-> 18 fs/reiserfs/reiserfs.o: warning: objtool: balance_internal+0x1238: stack state mismatch: cfa1=4+248 cfa2=4+256
-> 18 fs/reiserfs/ibalance.o: warning: objtool: balance_internal+0x10a2: stack state mismatch: cfa1=4+232 cfa2=4+256
-> 17 arch/x86/coco/tdx/tdcall.o: warning: objtool: __tdx_hypercall+0xb0: return with modified stack frame
+CPUID_0x6_ECX[0x0]:
+	 arat                - Always running APIC timer
+	 therm_irq_thresh   	: 0x0       	- Number of Interrupt Thresholds in Digital Thermal Sensor
+	 aperfmperf          - Presence of IA32_MPERF and IA32_APERF
+	 EDX: 0x00000000
 
-Fix on list somewhere..
+CPUID_0x7_ECX[0x0]:
+	 EAX: 0x00000000
+	 fsgsbase            - RDFSBASE/RDGSBASE/WRFSBASE/WRGSBASE supported
+	 bmi1                - BMI1
+	 avx2                - AVX2
+	 smep                - Supervisor-Mode Execution Prevention
+	 bmi2                - BMI2
+	 rdseed              - RDSEED instr
+	 adx                 - ADX instr
+	 smap                - Supervisor Mode Access Prevention
+	 clflushopt          - CLFLUSHOPT instr
+	 sha                 - Intel Secure Hash Algorithm Extensions instr
+	 mawau              	: 0x0       	- The value of MAWAU used by the BNDLDX and BNDSTX instructions in 64-bit mode
+	 EDX: 0x00000000
 
-> 15 vmlinux.o: warning: objtool: ftrace_likely_update+0xd2: call to __stack_chk_fail() with UACCESS enabled
-> 15 kernel/trace/trace_branch.o: warning: objtool: ftrace_likely_update+0x201: call to __stack_chk_fail() with UACCESS enabled
+CPUID_0xd_ECX[0x0]:
+	 x87                 - X87 state
+	 sse                 - SSE state
+	 avx                 - AVX state
+	 mpx                	: 0x0       	- MPX state
+	 avx512             	: 0x0       	- AVX-512 state
+	 max_sz_xcr0        	: 0x340     	- Maximum size (bytes) required by enabled features in XCR0
+	 max_sz_xsave       	: 0x340     	- Maximum size (bytes) of the XSAVE/XRSTOR save area
+	 EDX: 0x00000000
 
--EWONTFIX, TRACE_BRANCH_PROFILING is fundamentally incompatible with
-lots of things.
+CPUID_0xd_ECX[0x1]:
+	 xsaveopt            - XSAVEOPT available
+	 xsavec              - XSAVEC and compacted form supported
+	 xgetbv              - XGETBV supported
+	 xsaves              - XSAVES/XRSTORS and IA32_XSS supported
+	 max_sz_xcr0        	: 0x340     	- Maximum size (bytes) required by enabled features in XCR0
+	 EDX: 0x00000000
 
-> 14 mm/kasan/generic.o: warning: objtool: __asan_store2+0x11: call to addr_has_metadata() with UACCESS enabled
-> 13 mm/kasan/generic.o: warning: objtool: __asan_store8+0x11: call to addr_has_metadata() with UACCESS enabled
+CPUID_0xd_ECX[0x2]:
+	 EAX: 0x00000100
+	 EBX: 0x00000240
+	 ECX: 0x00000000
+	 EDX: 0x00000000
 
-> 14 arch/x86/kvm/kvm.o: warning: objtool: .text+0x0: unreachable instruction
+CPUID_0x80000000_ECX[0x0]:
+	 EAX: 0x8000001f
+	 EBX: 0x68747541
+	 ECX: 0x444d4163
+	 EDX: 0x69746e65
 
-details?
+CPUID_0x80000001_ECX[0x0]:
+	 extfamily          	: 0x8       	- Extended family
+	 extmodel           	: 0x0       	- Extended model
+	 basefamily         	: 0xf       	- Description of Family
+	 basemodel          	: 0xf       	- Model numbers vary with product
+	 stepping           	: 0x2       	- Processor stepping (revision) for a specific model
+	 pkgtype            	: 0x2       	- Specifies the package type
+	 lahf_lm             - LAHF/SAHF available in 64-bit mode
+	 cmplegacy           - Core multi-processing legacy mode
+	 svm                 - Indicates support for: VMRUN, VMLOAD, VMSAVE, CLGI, VMMCALL, and INVLPGA
+	 extapicspace        - Extended APIC register space
+	 altmovecr8          - Indicates support for LOCK MOV CR0 means MOV CR8
+	 lzcnt               - LZCNT
+	 sse4a               - EXTRQ, INSERTQ, MOVNTSS, and MOVNTSD instruction support
+	 misalignsse         - Misaligned SSE Mode
+	 prefetchw           - PREFETCHW
+	 osvw                - OS Visible Work-around support
+	 skinit              - SKINIT and STGI support
+	 wdt                 - Watchdog timer support
+	 tce                 - Translation cache extension
+	 TopologyExtensions  - Indicates support for Core::X86::Cpuid::CachePropEax0 and Core::X86::Cpuid::ExtApicId
+	 perfctrextcore      - Indicates support for Core::X86::Msr::PERF_CTL0 - 5 and Core::X86::Msr::PERF_CTR
+	 perfctrextdf        - Indicates support for Core::X86::Msr::DF_PERF_CTL and Core::X86::Msr::DF_PERF_CTR
+	 databreakpointextension - Indicates data breakpoint support for Core::X86::Msr::DR0_ADDR_MASK, Core::X86::Msr::DR1_ADDR_MASK, Core::X86::Msr::DR2_ADDR_MASK and Core::X86::Msr::DR3_ADDR_MASK
+	 perfctrextllc       - Indicates support for L3 performance counter extensions
+	 mwaitextended       - MWAITX and MONITORX capability is supported
+	 fpu                 - x87 floating point unit on-chip
+	 vme                 - Virtual-mode enhancements
+	 de                  - Debugging extensions, IO breakpoints, CR4.DE
+	 pse                 - Page-size extensions (4 MB pages)
+	 tsc                 - Time stamp counter, RDTSC/RDTSCP instructions, CR4.TSD
+	 msr                 - Model-specific registers (MSRs), with RDMSR and WRMSR instructions
+	 pae                 - Physical-address extensions (PAE)
+	 mce                 - Machine Check Exception, CR4.MCE
+	 cmpxchg8b           - CMPXCHG8B instruction
+	 apic                - advanced programmable interrupt controller (APIC) exists and is enabled
+	 sysret              - SYSCALL/SYSRET supported
+	 mtrr                - Memory-type range registers
+	 pge                 - Page global extension, CR4.PGE
+	 mca                 - Machine check architecture, MCG_CAP
+	 cmov                - Conditional move instructions, CMOV, FCOMI, FCMOV
+	 pat                 - Page attribute table
+	 pse36               - Page-size extensions
+	 exec_dis            - Execute Disable Bit available
+	 mmxext              - AMD extensions to MMX instructions
+	 mmx                 - MMX instructions
+	 fxsr                - FXSAVE and FXRSTOR instructions
+	 ffxsr               - FXSAVE and FXRSTOR instruction optimizations
+	 1gb_page            - 1GB page supported
+	 rdtscp              - RDTSCP and IA32_TSC_AUX are available
+	 lm                  - 64b Architecture supported
 
-> 11 vmlinux.o: warning: objtool: replace_key+0x1b2: stack state mismatch: cfa1=4+72 cfa2=4+88
-> 8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x49: relocation to !ENDBR: kgdb_ll_trap+0x6a
-> 8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x28: relocation to !ENDBR: kgdb_arch_late+0x193
-> 8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: kexec_mark_range+0x13
-> 8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: kexec_mark_crashkres+0x53
-> 8 vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !ENDBR: .text+0x4b314
-> 8 drivers/media/platform/qcom/camss/qcom-camss.o: warning: objtool: csiphy_lanes_enable() falls through to next function __cfi_csiphy_hw_version_read()
-> 8 drivers/media/platform/qcom/camss/camss-csiphy-3ph-1-0.o: warning: objtool: csiphy_lanes_enable() falls through to next function __cfi_csiphy_get_lane_mask()
-> 7 vmlinux.o: warning: objtool: internal_move_pointers_items+0x3fa: stack state mismatch: cfa1=4+144 cfa2=4+136
-> 7 fs/jffs2/jffs2.o: warning: objtool: jffs2_erase_pending_blocks() falls through to next function jffs2_free_jeb_node_refs()
-> 7 fs/jffs2/erase.o: warning: objtool: jffs2_erase_pending_blocks() falls through to next function __cfi_jffs2_free_jeb_node_refs()
-> 7 drivers/hwmon/pmbus/adm1275.o: warning: objtool: adm1275_probe+0x574: unreachable instruction
-> 5 vmlinux.o: warning: objtool: exynos3250_cmu_isp_probe+0x17: unreachable instruction
-> 5 arch/x86/mm/fault.o: warning: objtool: do_user_addr_fault+0x2c0: unreachable instruction
-> 5 arch/x86/kvm/kvm-amd.o: warning: objtool: __svm_vcpu_run+0x141: BP used as a scratch register
-> 5 arch/x86/kvm/kvm-amd.o: warning: objtool: __svm_sev_es_vcpu_run+0x36: BP used as a scratch register
-> 4 vmlinux.o: warning: objtool: resume_play_dead+0xe: unreachable instruction
-> 4 vmlinux.o: warning: objtool: hyperv_init+0x55c: unreachable instruction
-> 4 vmlinux.o: warning: objtool: do_idle+0x15e: unreachable instruction
-> 4 drivers/media/i2c/m5mols/m5mols_core.o: warning: objtool: m5mols_set_fmt() falls through to next function __cfi_m5mols_get_frame_desc()
-> 3 vmlinux.o: warning: objtool: nmi_panic+0x2d: unreachable instruction
-> 3 vmlinux.o: warning: objtool: mptscsih_abort+0x319: unreachable instruction
-> 3 vmlinux.o: warning: objtool: internal_delete_pointers_items+0x392: stack state mismatch: cfa1=4+136 cfa2=4+144
-> 3 vmlinux.o: warning: objtool: emulate_vsyscall+0x1ff: unreachable instruction
-> 3 vmlinux.o: warning: objtool: do_arch_prctl_64+0x1ac: unreachable instruction
-> 3 fs/xfs/libxfs/xfs_da_btree.o: warning: objtool: xfs_da_grow_inode_int+0x397: stack state mismatch: reg1[12]=-2-48 reg2[12]=-1+0
-> 3 drivers/spi/spi-amd.o: warning: objtool: amd_spi_master_transfer() falls through to next function __cfi_amd_spi_max_transfer_size()
-> 3 drivers/pwm/pwm-mediatek.o: warning: objtool: .text: unexpected end of section
-> 3 drivers/gpu/drm/i915/gt/intel_timeline.o: warning: objtool: live_hwsp_read+0x318: stack state mismatch: cfa1=4+240 cfa2=5+48
-> 3 arch/x86/entry/entry_64.o: warning: objtool: .entry.text+0xba7: unreachable instruction
-> 2 vmlinux.o: warning: objtool: xenpv_exc_double_fault+0x9: unreachable instruction
-> 2 vmlinux.o: warning: objtool: pwm_mediatek_apply() falls through to next function mtk_disp_pwm_probe()
-> 2 vmlinux.o: warning: objtool: force_ibs_eilvt_setup+0xad: unreachable instruction
-> 2 vmlinux.o: warning: objtool: exynos7885_cmu_probe+0x1b: unreachable instruction
-> 2 vmlinux.o: warning: objtool: do_one_initcall+0x1f6: unreachable instruction
+CPUID_0x80000002_ECX[0x0]:
+	 EAX: 0x20444d41
+	 EBX: 0x657a7952
+	 ECX: 0x2037206e
+	 EDX: 0x30303732
 
-> 2 mm/kmsan/report.o: warning: objtool: kmsan_report+0x0: call to __fentry__() with UACCESS enabled
+CPUID_0x80000003_ECX[0x0]:
+	 EAX: 0x69452058
+	 EBX: 0x2d746867
+	 ECX: 0x65726f43
+	 EDX: 0x6f725020
 
-mm/kasan/Makefil:CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
+CPUID_0x80000004_ECX[0x0]:
+	 EAX: 0x73736563
+	 EBX: 0x2020726f
+	 ECX: 0x20202020
+	 EDX: 0x00202020
 
-How?!?!
-￼
+CPUID_0x80000005_ECX[0x0]:
+	 EAX: 0xff40ff40
+	 EBX: 0xff40ff40
+	 ECX: 0x20080140
+	 EDX: 0x40040140
 
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_warning+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_poison_alloca+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_n+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_8+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_4+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_2+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_store_1+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_n+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_8+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_4+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_2+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_metadata_ptr_for_load_1+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_instrument_asm_store+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_get_context_state+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/instrumentation.o: warning: objtool: __msan_chain_origin+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/hooks.o: warning: objtool: kmsan_unpoison_memory+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/hooks.o: warning: objtool: kmsan_unpoison_entry_regs+0x0: call to __fentry__() with UACCESS enabled
-> 2 mm/kmsan/hooks.o: warning: objtool: kmsan_copy_to_user+0x0: call to __fentry__() with UACCESS enabled
+CPUID_0x80000006_ECX[0x0]:
+	 EAX: 0x26006400
+	 EBX: 0x66006400
+	 clsize             	: 0x40      	- Cache Line size in bytes
+	 l2c_assoc          	: 0x6       	- L2 Associativity
+	 csize              	: 0x200     	- Cache size in 1K units
+	 EDX: 0x00808140
 
-Something seems to be going badly wrong there... notrace is being lost.
+CPUID_0x80000007_ECX[0x0]:
+	 EAX: 0x00000000
+	 ECX: 0x00000000
+	 nonstop_tsc         - Invariant TSC available
+
+CPUID_0x80000008_ECX[0x0]:
+	 phy_adr_bits       	: 0x30      	- Physical Address Bits
+	 lnr_adr_bits       	: 0x30      	- Linear Address Bits
+	 EBX: 0x00001007
+	 ECX: 0x0000400f
+	 EDX: 0x00000000
+
+CPUID_0x8000000a_ECX[0x0]:
+	 EAX: 0x00000001
+	 EBX: 0x00008000
+	 ECX: 0x00000000
+	 EDX: 0x0001bcff
+
+CPUID_0x80000019_ECX[0x0]:
+	 EAX: 0xf040f040
+	 EBX: 0x00000000
+	 ECX: 0x00000000
+	 EDX: 0x00000000
+
+CPUID_0x8000001a_ECX[0x0]:
+	 EAX: 0x00000003
+	 EBX: 0x00000000
+	 ECX: 0x00000000
+	 EDX: 0x00000000
+
+CPUID_0x8000001b_ECX[0x0]:
+	 EAX: 0x000003ff
+	 EBX: 0x00000000
+	 ECX: 0x00000000
+	 EDX: 0x00000000
+
+CPUID_0x8000001d_ECX[0x0]:
+	 EAX: 0x00004121
+	 EBX: 0x01c0003f
+	 ECX: 0x0000003f
+	 EDX: 0x00000000
+
+CPUID_0x8000001d_ECX[0x1]:
+	 EAX: 0x00004122
+	 EBX: 0x00c0003f
+	 ECX: 0x000000ff
+	 EDX: 0x00000000
+
+CPUID_0x8000001d_ECX[0x2]:
+	 EAX: 0x00004143
+	 EBX: 0x01c0003f
+	 ECX: 0x000003ff
+	 EDX: 0x00000002
+
+CPUID_0x8000001d_ECX[0x3]:
+	 EAX: 0x0001c163
+	 EBX: 0x03c0003f
+	 ECX: 0x00001fff
+	 EDX: 0x00000001
+
+CPUID_0x8000001e_ECX[0x0]:
+	 extended_apic_id   	: 0xe       	- Extended APIC ID
+	 core_id            	: 0x7       	- Identifies the logical core ID
+	 threads_per_core   	: 0x1       	- The number of threads per core is threads_per_core + 1
+	 node_id            	: 0x0       	- Node ID
+	 nodes_per_processor	: 0x0       	- Nodes per processor { 0: 1 node, else reserved }
+	 EDX: 0x00000000
+
+CPUID_0x8000001f_ECX[0x0]:
+	 sme                 -	Secure Memory Encryption
+	 sev                 -	Secure Encrypted Virtualization
+	 vmpgflush           - VM Page Flush MSR
+	 seves               - SEV Encrypted State
+	 c-bit              	: 0x2f      	- Page table bit number used to enable memory encryption
+	 mem_encrypt_physaddr_width	: 0x5       	- Reduction of physical address space in bits with SME enabled
+	 num_encrypted_guests	: 0xf       	- Maximum ASID value that may be used for an SEV-enabled guest
+	 minimum_sev_asid   	: 0x0       	- Minimum ASID value that must be used for an SEV-enabled, SEV-ES-disabled guest
 
 
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
