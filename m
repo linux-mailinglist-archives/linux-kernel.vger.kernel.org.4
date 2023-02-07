@@ -2,163 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89E268CC8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61FB68CC8C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjBGC1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:27:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S229706AbjBGCaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 21:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBGC1g (ORCPT
+        with ESMTP id S229447AbjBGC36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:27:36 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9403430F;
-        Mon,  6 Feb 2023 18:27:34 -0800 (PST)
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P9n3P0GZpzkXqp;
-        Tue,  7 Feb 2023 10:22:57 +0800 (CST)
-Received: from [10.67.103.231] (10.67.103.231) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 7 Feb 2023 10:27:31 +0800
-Message-ID: <926bf147-5e93-0104-1bf4-171efcd15c5c@huawei.com>
-Date:   Tue, 7 Feb 2023 10:27:31 +0800
+        Mon, 6 Feb 2023 21:29:58 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C2E3430F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 18:29:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SASaUnYdxhNK3uDt7Eh9RINEEFziNC6Cq2V1+B/g2OY=; b=WLZaBcaJ5P/wG6jQQ4o2uEYgrB
+        jnmuzERagNZXMiDSga9F0Yr9YyhdHtNPVTjqA2xLJbgTYL39VEzQ1NPMcORpHp9l1oM9tz3yBbPuQ
+        A3C0E6bbIml9q6+UoP5cW09zwUFPN5YyakV1FavAZU9txjE7POxC8T40FCBXrS0GP2T1FYxzR0vYV
+        3SxGpY4EaCtQQFbczKLDCBeb1A8+oyXE+gFJgwBuo0fTpMFca0Wc2oWnKlCCxPckAgHCTcLQhp6hh
+        zzIZl1pPaq+nBEV0SNuMhWs+9wgZ7gimLJjdfGjxnBeoBh8aH3uRvPi0Q7q4C9HkdRNhsdEg633gz
+        sOv8UGXQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPDjo-00HMol-5u; Tue, 07 Feb 2023 02:29:40 +0000
+Date:   Tue, 7 Feb 2023 02:29:40 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mm/khugepaged: skip shmem with userfaultfd
+Message-ID: <Y+G3lDu3UPFZcFE0@casper.infradead.org>
+References: <20230206112856.1802547-1-stevensd@google.com>
+ <Y+FOk+ty7OKmkwLL@casper.infradead.org>
+ <Y+Fog2dO1kpRBMvr@x1n>
+ <Y+F2IdXhqc5187s+@casper.infradead.org>
+ <CAD=HUj4yhMLnBNpumxC4urSY2Js5XuekzGP+UOXJmUV=k5nx=A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [RFC-V3 1/2] mailbox: pcc: Add processing platform notification
- for slave subspaces
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Robbie King <robbiek@xsightlabs.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
-        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
-        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
-        <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
-        <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>
-References: <20221016034043.52227-1-lihuisong@huawei.com>
- <20221203095150.45422-1-lihuisong@huawei.com>
- <20221203095150.45422-2-lihuisong@huawei.com>
- <20230206153940.gcddy3b3znk72yqd@bogus>
-From:   "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20230206153940.gcddy3b3znk72yqd@bogus>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.231]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=HUj4yhMLnBNpumxC4urSY2Js5XuekzGP+UOXJmUV=k5nx=A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 07, 2023 at 10:37:06AM +0900, David Stevens wrote:
+> On Tue, Feb 7, 2023 at 6:50 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > On Mon, Feb 06, 2023 at 03:52:19PM -0500, Peter Xu wrote:
+> > > The problem is khugepaged will release pgtable lock during collapsing, so
+> > > AFAICT there can be a race where some other thread tries to insert pages
+> > > into page cache in parallel with khugepaged right after khugepaged released
+> > > the page cache lock.
+> > >
+> > > For example, it seems to me new page cache can be inserted when khugepaged
+> > > is copying small page content to the new hpage.
+> 
+> This particular race can't happen with either patch, since the missing
+> page cache entries are filled when we create the multi-index entry for
+> hpage.
 
-在 2023/2/6 23:39, Sudeep Holla 写道:
-> Hi Huisong,
->
-> Apologies for such a long delay.
->
-> Also I would like to hear from Robbie King who I know is playing around
-> with this these days 😄. At minimum if this logic works for him as well.
+Can too.
 
-@Robbie King,
-Do you use this patchset to test your requirements?
-Any other problems? Can you tell us your result?
+        for (index = start; index < end; index++) {
+...
+                        if (xa_is_value(page) || !PageUptodate(page)) {
+                                xas_unlock_irq(&xas);
+                                /* swap in or instantiate fallocated page */
+                                if (shmem_get_folio(mapping->host, index,
+                                                &folio, SGP_NOALLOC)) {
+                                        result = SCAN_FAIL;
+                                        goto xa_unlocked;
+                                }
+...
 
->
-> On Sat, Dec 03, 2022 at 05:51:49PM +0800, Huisong Li wrote:
->> Currently, PCC driver doesn't support the processing of platform
->> notification for slave PCC subspaces because of the incomplete
->> communication flow.
->>
->> According to ACPI specification, if platform sends a notification
->> to OSPM, it must clear the command complete bit and trigger platform
->> interrupt. OSPM needs to check whether the command complete bit is
->> cleared, clear platform interrupt, process command, and then set the
->> command complete and ring doorbell to Platform. But the current judgment
->> on the command complete is not applicable to type4 in pcc_mbox_irq().
->>
->> This patch introduces a communication flow direction field to detect
->> whether the interrupt belongs to the master or slave subspace channel.
->> And PCC driver needs to add the phase of setting the command complete
->> and ring doorbell in pcc_mbox_irq() to complete type4 communication
->> flow after processing command from Platform.
->>
->> Signed-off-by: Huisong Li <lihuisong@huawei.com>
->> ---
->>   drivers/mailbox/pcc.c | 77 +++++++++++++++++++++++++++++++++++++++----
->>   1 file changed, 71 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
->> index 105d46c9801b..ad6d0b7d50fc 100644
->> --- a/drivers/mailbox/pcc.c
->> +++ b/drivers/mailbox/pcc.c
->> @@ -80,6 +80,13 @@ struct pcc_chan_reg {
->>   	u64 status_mask;
->>   };
->>   
->> +enum pcc_chan_comm_flow_dir_type {
->> +	PCC_ONLY_OSPM_TO_PLATFORM,
->> +	PCC_ONLY_PLATFORM_TO_OSPM,
->> +	PCC_BIDIRECTIONAL,
->> +	PCC_DIR_UNKNOWN,
->> +};
->> +
->>   /**
->>    * struct pcc_chan_info - PCC channel specific information
->>    *
->> @@ -91,6 +98,7 @@ struct pcc_chan_reg {
->>    * @cmd_update: PCC register bundle for the command complete update register
->>    * @error: PCC register bundle for the error status register
->>    * @plat_irq: platform interrupt
->> + * @comm_flow_dir: direction of communication flow supported by the channel
->>    */
->>   struct pcc_chan_info {
->>   	struct pcc_mbox_chan chan;
->> @@ -100,12 +108,15 @@ struct pcc_chan_info {
->>   	struct pcc_chan_reg cmd_update;
->>   	struct pcc_chan_reg error;
->>   	int plat_irq;
->> +	u8 comm_flow_dir;
-> I would rather just save the 'type' as read from the PCCT. We don't know
-> what future types might be and just identifying them by the direction of
-> flow of the data, it restricts the usage of this.
-Ack.
->
->>   };
->>   
->>   #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
->>   static struct pcc_chan_info *chan_info;
->>   static int pcc_chan_count;
->>   
->> +static int pcc_send_data(struct mbox_chan *chan, void *data);
->> +
->>   /*
->>    * PCC can be used with perf critical drivers such as CPPC
->>    * So it makes sense to locally cache the virtual address and
->> @@ -221,6 +232,43 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
->>   	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
->>   }
->>   
->> +static bool pcc_chan_need_rsp_irq(struct pcc_chan_info *pchan,
->> +				  u64 cmd_complete_reg_val)
-> Probably rename this as pcc_chan_command_complete or something similar.
-Ack
->
->> +{
->> +	bool need_rsp;
->> +
->> +	if (!pchan->cmd_complete.gas)
->> +		return true;
->> +
->> +	cmd_complete_reg_val &= pchan->cmd_complete.status_mask;
->> +
->> +	switch (pchan->comm_flow_dir) {
-> Use the channel type instead here.
-Ack
+So we start the iteration, and then a page fault happens in one of
+the indices we've already examined, but we don't have the page on
+the list.  It's a nice wide race too because we're bringing the
+page in from swap.
+
