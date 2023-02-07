@@ -2,178 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF9768D04E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAE668D089
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjBGHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:13:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S230305AbjBGHXi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Feb 2023 02:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjBGHNq (ORCPT
+        with ESMTP id S229755AbjBGHX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:13:46 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8476524C88
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 23:13:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jkKNCLKYAzCJHHxf1jPRmx6i11rpydmGnlM+USVTkmwW7pzRdncaDSx8OyPUYAu9pd0CsXCTmLcV3CmU3ys9TuIkHKJmWL6zeArXDWJ3Pt7ABWAmWLQtwyAk715UGJwXkWJYRdujrMhZogjTExdivCClScLmM2u19LxIFZ7x8ga3yiAo1brGX5XygqoKdHfQdIAHHjol/O5ltApsnkNxCS+FaIVFRjq+8PVFxdMmZHJXlt3eRlxfZ69aFv1P35fpGakaFljgLFF8hoEvysN8Cj1xGMeXFGRZaBco8E17lEuPMRRG6pttYDacTy0Tg576BQ/c2L7x7kulOcCEyRLAmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ThjrIk1AmcpUcepBcD8FfoNqcnyKYININc+4TCz0DVM=;
- b=IJS/3rN1hDZBw8OwTWBfQt5TiA7jxZEKuA0rauP/+ex5LnnFCnOjmFcDAtI/8hgTkph9IVY21tWPFl3oQUJBXew2ri+hRyop1OEFgUatnp+FvSwG3PT+1fYHQ2UXJ5rX4BrjuEwGMuQ7CQmTiDHNK+OTkIqhbOd9lPrR9kCFNfcjvCAYdDfbaBjKVMHtddJbHBWIM1MEmZLSHZljiqnWzlWzD2toMPso+1Go/iRF/Cx0AAo8Z/eD7xkqPeYfkHCzAAlaigdf+1JTF8PD5mRngWAhYQlsGE5IYqScYuZlvkSulcGNI0CnjpCo5xdFVdbr9YOUbz2gHNSqBQtjWHMFGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ThjrIk1AmcpUcepBcD8FfoNqcnyKYININc+4TCz0DVM=;
- b=bPXp1/tt0nwsfn9z36DgGxwT5L5WpWyD59p9Ki7QkslkWGSAVi8RVO0cix+62veYAvE4+Xfxa30UgxVedoLaT3qCScWWHm5pb+13X9S1N9LMjJN2ON+r/h+XKhlt1tvf3MxN5ZVbgHfMoU9GnTlNT9m3rJAFWSkKH8mjJ7b9+Ts=
-Received: from BN6PR17CA0049.namprd17.prod.outlook.com (2603:10b6:405:75::38)
- by MW6PR12MB7071.namprd12.prod.outlook.com (2603:10b6:303:238::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Tue, 7 Feb
- 2023 07:13:41 +0000
-Received: from BN8NAM11FT012.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:75:cafe::a4) by BN6PR17CA0049.outlook.office365.com
- (2603:10b6:405:75::38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36 via Frontend
- Transport; Tue, 7 Feb 2023 07:13:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT012.mail.protection.outlook.com (10.13.177.55) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6064.32 via Frontend Transport; Tue, 7 Feb 2023 07:13:40 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 7 Feb
- 2023 01:13:40 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 7 Feb
- 2023 01:13:39 -0600
-Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
- via Frontend Transport; Tue, 7 Feb 2023 01:13:38 -0600
-From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-To:     <vkoul@kernel.org>
-CC:     <pierre-louis.bossart@linux.intel.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        "moderated list:SOUNDWIRE SUBSYSTEM" <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] soundwire: export sdw_compute_slave_ports() function
-Date:   Tue, 7 Feb 2023 12:46:44 +0530
-Message-ID: <20230207071644.3757-1-Vijendar.Mukunda@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 7 Feb 2023 02:23:26 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D192ED62;
+        Mon,  6 Feb 2023 23:23:24 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 9D2D024E0D8;
+        Tue,  7 Feb 2023 15:23:17 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Feb
+ 2023 15:23:18 +0800
+Received: from ubuntu.localdomain (183.27.96.33) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Feb
+ 2023 15:23:16 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/2] hwmon: Add StarFive JH71X0 temperature sensor
+Date:   Tue, 7 Feb 2023 15:23:12 +0800
+Message-ID: <20230207072314.62040-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT012:EE_|MW6PR12MB7071:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2ee4bfe-f557-4c3c-e5fd-08db08dad6fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D9ERvBpFCf8T1imtDs8zUZvLULJrJAH4Qxor/9DgT4UP028RSLgvRxAl2QIPiYuyldP56e813ISy/a9jKW17XkT4H/Ty1F2IRf2BHwGkiHJY4cXOMGV+jYwGRSBAp1GSzqvsUkZZy9umRj0V2FFniNp6lE0y+mf0bi01wS4MsA0xSmOAbua8hd0ClZhy1E/4grRajquAQD0ob2QnvJx8eMRMBZSyP10K7GkYgY/kzeGCHQxwvw6gB/PJRnSJ62254BHEu48GIAqH+TOMDe4A+s2IGjhODO1zj1syoRu+LVlYrlgTqRbuwPx25xFfvTIlQdv7xuxMZDpMBKoH8Qqr+g7EeEOnzv9ktZxv53Q5rPDN/xJDYxZppLRn6ypZdmnkt5Vw01Ylo1mDmJs9qYZ1Iqx4Z4Wg7MtjA3lH1F2hHs9L0npjfZBjJY+1DAaI57RHFTFhRAvQ/rb1ONI95NADF4xEW9rCHPXtzhzocp2kHeWmbn7Gfbpi739ly65ZL/6PgHRmlFi3kLuphjxP89XQkTxVYg27/J/G7nhVPkmbn0pPICfWwEyHcyQGGdPs8tikoruzmDA0UBItoTq6e2JA+lRsxE2fwaxamwOQr6vMLnlFNTCi1JLNKmduLM3T1VrE4OZgxbyxHKZoLX+PTGEM6yDT3SXocZp/pWJdD7OaVJXseEaKeMyxRnrN0l1NMhpBE+uCXHKGhEbpio50XOyOQTuF/bTMFWDzThVPFJ+uxcs/temkIkU0epSrBLMVgbxTiw+HOokGlJlFLRiXotbebg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199018)(40470700004)(36840700001)(46966006)(40460700003)(36756003)(7696005)(478600001)(6666004)(316002)(54906003)(4326008)(1076003)(966005)(8676002)(8936002)(70206006)(2906002)(5660300002)(70586007)(6916009)(26005)(36860700001)(82740400003)(356005)(86362001)(40480700001)(81166007)(426003)(83380400001)(336012)(186003)(2616005)(41300700001)(82310400005)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 07:13:40.5666
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2ee4bfe-f557-4c3c-e5fd-08db08dad6fe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT012.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7071
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [183.27.96.33]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export sdw_compute_slave_ports() function to use it in another
-soundwire manager module.
-Move sdw_transport_data structure to bus header file to export
-sdw_compute_slave_ports() function.
+This adds a driver for the temperature sensor on the JH7100 and JH7110,
+RISC-V SoCs by StarFive Technology Co. Ltd.. The JH7100 is used on the
+BeagleV Starlight board and StarFive VisionFive board. The JH7110 is
+used on the StarFive VisionFive 2 board.
 
-Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Link: https://lore.kernel.org/lkml/20230201165944.3169125-1-Vijendar.Mukunda@amd.com
----
- drivers/soundwire/bus.h                          |  9 +++++++++
- drivers/soundwire/generic_bandwidth_allocation.c | 12 +++---------
- 2 files changed, 12 insertions(+), 9 deletions(-)
+v4:
+* Change the node name from "tmon" to "temperature-sensor" in dt-binding
+  example, which is more generic.
+* Add support for StarFive JH7110 SoC besides JH7100.
+* Add clock and reset support in the dt-bindings and driver.
+* Add the missing headers in patch 2.
+* Use devm_platform_ioremap_resource() to remap instead of
+  platform_get_resource() and devm_ioremap_resource().
+* Use dev_err_probe() instead of dev_err().
+* Add Signed-off-by tag for Hal Feng. Add Co-developed-by tag for
+  Samin Guo in patch 2.
 
-diff --git a/drivers/soundwire/bus.h b/drivers/soundwire/bus.h
-index 7631ef5e71fb..141b99ac58de 100644
---- a/drivers/soundwire/bus.h
-+++ b/drivers/soundwire/bus.h
-@@ -144,6 +144,13 @@ struct sdw_master_runtime {
- 	struct list_head bus_node;
- };
- 
-+struct sdw_transport_data {
-+	int hstart;
-+	int hstop;
-+	int block_offset;
-+	int sub_block_offset;
-+};
-+
- struct sdw_dpn_prop *sdw_get_slave_dpn_prop(struct sdw_slave *slave,
- 					    enum sdw_data_direction direction,
- 					    unsigned int port_num);
-@@ -213,5 +220,7 @@ int sdw_bwrite_no_pm_unlocked(struct sdw_bus *bus, u16 dev_num, u32 addr, u8 val
- 
- void sdw_clear_slave_status(struct sdw_bus *bus, u32 request);
- int sdw_slave_modalias(const struct sdw_slave *slave, char *buf, size_t size);
-+void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
-+			     struct sdw_transport_data *t_data);
- 
- #endif /* __SDW_BUS_H */
-diff --git a/drivers/soundwire/generic_bandwidth_allocation.c b/drivers/soundwire/generic_bandwidth_allocation.c
-index f7c66083a4dd..39543048baa7 100644
---- a/drivers/soundwire/generic_bandwidth_allocation.c
-+++ b/drivers/soundwire/generic_bandwidth_allocation.c
-@@ -28,15 +28,8 @@ struct sdw_group {
- 	unsigned int *rates;
- };
- 
--struct sdw_transport_data {
--	int hstart;
--	int hstop;
--	int block_offset;
--	int sub_block_offset;
--};
--
--static void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
--				    struct sdw_transport_data *t_data)
-+void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
-+			     struct sdw_transport_data *t_data)
- {
- 	struct sdw_slave_runtime *s_rt = NULL;
- 	struct sdw_port_runtime *p_rt;
-@@ -85,6 +78,7 @@ static void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
- 		}
- 	}
- }
-+EXPORT_SYMBOL(sdw_compute_slave_ports);
- 
- static void sdw_compute_master_ports(struct sdw_master_runtime *m_rt,
- 				     struct sdw_group_params *params,
+v3:
+* Handle timeouts from wait_for_completion_interruptible_timeout
+  properly.
+
+v2:
+* Fix checkpatch.pl --strict warnings
+  - Add myself to MAINTAINERS
+  - Fix multiline comments
+  - Use proper case and whitespace for #defines
+  - Add comment to sfctemp::lock mutex.
+* Remaining comments by Guenter Roeck
+  - Add Documentation/hwmon/sfctemp.rst
+  - Use devm_add_action() and devm_hwmon_device_register_with_info()
+    instead of a driver .remove function.
+  - Don't do test conversion at probe time.
+  - #include <linux/io.h>
+  - Remove unused #defines
+  - Use int return variable in sfctemp_convert().
+* Add Samin's Signed-off-by to patch 2/2
+
+History:
+v3: https://lore.kernel.org/all/20210726171802.1052716-1-kernel@esmil.dk/
+v2: https://lore.kernel.org/all/20210624162108.832518-1-esmil@mailme.dk/
+v1: https://lore.kernel.org/all/20210616181545.496149-1-kernel@esmil.dk/
+
+Emil Renner Berthing (2):
+  dt-bindings: hwmon: Add starfive,jh71x0-temp
+  hwmon: (sfctemp) Add StarFive JH71x0 temperature sensor
+
+ .../bindings/hwmon/starfive,jh71x0-temp.yaml  |  75 ++++
+ Documentation/hwmon/index.rst                 |   1 +
+ Documentation/hwmon/sfctemp.rst               |  33 ++
+ MAINTAINERS                                   |   8 +
+ drivers/hwmon/Kconfig                         |  10 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/sfctemp.c                       | 352 ++++++++++++++++++
+ 7 files changed, 480 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml
+ create mode 100644 Documentation/hwmon/sfctemp.rst
+ create mode 100644 drivers/hwmon/sfctemp.c
+
+
+base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
 -- 
-2.34.1
+2.38.1
 
