@@ -2,70 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A5B68CC89
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89E268CC8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjBGCXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
+        id S229930AbjBGC1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 21:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBGCXi (ORCPT
+        with ESMTP id S229447AbjBGC1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:23:38 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102BCF778;
-        Mon,  6 Feb 2023 18:23:37 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id x8so8472152ybt.13;
-        Mon, 06 Feb 2023 18:23:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oasGFPSWMrpTNhbAhdcnL/rowDmuIn5jSJ0VHoLfVPE=;
-        b=BOfHuCu+FMHtB1pZRGt7jnAnTgT+YMJdj1hi8i42yzZ0nW58lHSdYnjqnLB8eph7tv
-         uJGGHiPfP44HmI0W3BgQSiNyfAoWgavF93aZszhue30DREAPXMgOwFbCYeAs1cm4sVuL
-         7MHtrGGL0Qsp8j+3QS7sWOmlj4h2UwgkPMPFSGEO8mwPiVLf6kSjWxHoTpcyjS4XwFkL
-         WAXlKVfkTF8B3RsIwY7tMG3ePtzK7xvMA+twG9W6/M+E1rYfy4N8+MH2X/L2aqnM6q+w
-         scRCvMErt8notwkwpfgOF9DmV12Nx7Lkp9ONIePo+YhSE6j8zfK//10YI6UQlgACc0rM
-         mshQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oasGFPSWMrpTNhbAhdcnL/rowDmuIn5jSJ0VHoLfVPE=;
-        b=NGHSssnXkvSVbfJfXdUyBySWUWYlxWa4EO34F+319KFoi1Fopp/smkrdltkE+hWZ/d
-         +AWbMz8CwIC+s3UdSNM0iop4HV7T9VP+ww0h2LiT5UE2d/pNouuVVqDz8gnRq9I6hxIe
-         F26rsxezg+ZIDWDitwfmLwlHmOn67cVdDZlzGbs68fYcGHYt5S1HyKXMOhc8o13OcB6U
-         5viPeQp2Jn8G0b78yYaMX/P21DZjM8CC0XxAguP6GSRDrdxPjYIaYabcDbTfAgp+ARvo
-         e/Z17RVju5ixi+B3xTPtuoS7mH5BaY0ndWjzn7CXrbwmcJ4uzsrmdoZdxlW//7DGtnpV
-         l0+Q==
-X-Gm-Message-State: AO0yUKUgyw5yHfy6OuUnnsk1HQeCLEJtF9MrsVN5wtXpVBKXCYOyNA04
-        dn/4QI+uLKeDVcQq2vIeKirFTKS7DEyluc/A+BE=
-X-Google-Smtp-Source: AK7set8yf+oFf8zI8UK+suWtpbA2MSdFcT2IICuuSySGoTHuHYkTty1uBOCGbWUfrqBcUSdcKmbsBCad6F9k7+OEvMk=
-X-Received: by 2002:a5b:ad2:0:b0:80b:c194:7d61 with SMTP id
- a18-20020a5b0ad2000000b0080bc1947d61mr258130ybr.26.1675736616215; Mon, 06 Feb
- 2023 18:23:36 -0800 (PST)
+        Mon, 6 Feb 2023 21:27:36 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9403430F;
+        Mon,  6 Feb 2023 18:27:34 -0800 (PST)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P9n3P0GZpzkXqp;
+        Tue,  7 Feb 2023 10:22:57 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 7 Feb 2023 10:27:31 +0800
+Message-ID: <926bf147-5e93-0104-1bf4-171efcd15c5c@huawei.com>
+Date:   Tue, 7 Feb 2023 10:27:31 +0800
 MIME-Version: 1.0
-References: <20230203031742.1730761-1-imagedong@tencent.com>
- <20230203031742.1730761-2-imagedong@tencent.com> <CAEf4Bzbig9DmCEJd0i64gA=jzczK7n=joqiD0MAa6sFSgd=WAw@mail.gmail.com>
-In-Reply-To: <CAEf4Bzbig9DmCEJd0i64gA=jzczK7n=joqiD0MAa6sFSgd=WAw@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 7 Feb 2023 10:23:24 +0800
-Message-ID: <CADxym3ZwYNkmoECRQZZuprZuXoMJSiT2umCsC4gtsiPAb2dm6A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: add support to set kprobe/uprobe
- attach mode
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC-V3 1/2] mailbox: pcc: Add processing platform notification
+ for slave subspaces
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Robbie King <robbiek@xsightlabs.com>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rafael@kernel.org>, <rafael.j.wysocki@intel.com>,
+        <wanghuiqiang@huawei.com>, <zhangzekun11@huawei.com>,
+        <wangxiongfeng2@huawei.com>, <tanxiaofei@huawei.com>,
+        <guohanjun@huawei.com>, <xiexiuqi@huawei.com>,
+        <wangkefeng.wang@huawei.com>, <huangdaode@huawei.com>
+References: <20221016034043.52227-1-lihuisong@huawei.com>
+ <20221203095150.45422-1-lihuisong@huawei.com>
+ <20221203095150.45422-2-lihuisong@huawei.com>
+ <20230206153940.gcddy3b3znk72yqd@bogus>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230206153940.gcddy3b3znk72yqd@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,212 +58,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 3:59 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Feb 2, 2023 at 7:18 PM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > By default, libbpf will attach the kprobe/uprobe eBPF program in the
-> > latest mode that supported by kernel. In this patch, we add the support
-> > to let users manually attach kprobe/uprobe in legacy or perf mode.
-> >
-> > There are 3 mode that supported by the kernel to attach kprobe/uprobe:
-> >
-> >   LEGACY: create perf event in legacy way and don't use bpf_link
-> >   PERF: create perf event with perf_event_open() and don't use bpf_link
-> >   LINK: create perf event with perf_event_open() and use bpf_link
-> >
-> > Users now can manually choose the mode with
-> > bpf_program__attach_uprobe_opts()/bpf_program__attach_kprobe_opts().
-> >
-> > Link: https://lore.kernel.org/bpf/20230113093427.1666466-1-imagedong@tencent.com/
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 26 +++++++++++++++++++++++++-
-> >  tools/lib/bpf/libbpf.h | 19 ++++++++++++++++---
-> >  2 files changed, 41 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index eed5cec6f510..0d20bf1ee301 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -9784,7 +9784,7 @@ struct bpf_link *bpf_program__attach_perf_event_opts(const struct bpf_program *p
-> >         link->link.dealloc = &bpf_link_perf_dealloc;
-> >         link->perf_event_fd = pfd;
-> >
-> > -       if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
-> > +       if (kernel_supports(prog->obj, FEAT_PERF_LINK) && !opts->no_link) {
-> >                 DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
-> >                         .perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0));
-> >
-> > @@ -10148,16 +10148,28 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
-> >         struct bpf_link *link;
-> >         size_t offset;
-> >         bool retprobe, legacy;
-> > +       enum probe_mode mode;
-> >         int pfd, err;
-> >
-> >         if (!OPTS_VALID(opts, bpf_kprobe_opts))
-> >                 return libbpf_err_ptr(-EINVAL);
-> >
-> > +       mode = OPTS_GET(opts, mode, PROBE_MODE_DEFAULT);
-> >         retprobe = OPTS_GET(opts, retprobe, false);
-> >         offset = OPTS_GET(opts, offset, 0);
-> >         pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-> >
-> >         legacy = determine_kprobe_perf_type() < 0;
-> > +       switch (mode) {
-> > +       case PROBE_MODE_LEGACY:
-> > +               legacy = true;
-> > +       case PROBE_MODE_PERF:
-> > +               pe_opts.no_link = true;
-> > +               break;
-> > +       default:
-> > +               break;
-> > +       }
-> > +
-> >         if (!legacy) {
-> >                 pfd = perf_event_open_probe(false /* uprobe */, retprobe,
-> >                                             func_name, offset,
-> > @@ -10817,10 +10829,12 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
-> >         int pfd, err;
-> >         bool retprobe, legacy;
-> >         const char *func_name;
-> > +       enum probe_mode mode;
-> >
-> >         if (!OPTS_VALID(opts, bpf_uprobe_opts))
-> >                 return libbpf_err_ptr(-EINVAL);
-> >
-> > +       mode = OPTS_GET(opts, mode, PROBE_MODE_DEFAULT);
-> >         retprobe = OPTS_GET(opts, retprobe, false);
-> >         ref_ctr_off = OPTS_GET(opts, ref_ctr_offset, 0);
-> >         pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-> > @@ -10849,6 +10863,16 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
-> >         }
-> >
-> >         legacy = determine_uprobe_perf_type() < 0;
-> > +       switch (mode) {
-> > +       case PROBE_MODE_LEGACY:
-> > +               legacy = true;
-> > +       case PROBE_MODE_PERF:
-> > +               pe_opts.no_link = true;
-> > +               break;
-> > +       default:
-> > +               break;
-> > +       }
-> > +
->
-> I think this is a good place to also return errors early if, say, user
-> requested LINK mode, but that mode is not supported by kernel. Instead
-> of returning some -ENOTSUP generic error, we can error out early?
-> Similar for PERF mode, if only legacy is supported, and so on. Similar
-> for attach_uprobe, of course.
->
 
-Yes, sounds great.
-
-> >         if (!legacy) {
-> >                 pfd = perf_event_open_probe(true /* uprobe */, retprobe, binary_path,
-> >                                             func_offset, pid, ref_ctr_off);
-> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> > index 8777ff21ea1d..7fb474e036a3 100644
-> > --- a/tools/lib/bpf/libbpf.h
-> > +++ b/tools/lib/bpf/libbpf.h
-> > @@ -451,8 +451,10 @@ struct bpf_perf_event_opts {
-> >         size_t sz;
-> >         /* custom user-provided value fetchable through bpf_get_attach_cookie() */
-> >         __u64 bpf_cookie;
-> > +       /* don't use bpf_link when attach eBPF pprogram */
+在 2023/2/6 23:39, Sudeep Holla 写道:
+> Hi Huisong,
 >
-> typo: pprogram
+> Apologies for such a long delay.
+>
+> Also I would like to hear from Robbie King who I know is playing around
+> with this these days 😄. At minimum if this logic works for him as well.
 
-Ops, get it!
+@Robbie King,
+Do you use this patchset to test your requirements?
+Any other problems? Can you tell us your result?
 
 >
-> > +       bool no_link;
+> On Sat, Dec 03, 2022 at 05:51:49PM +0800, Huisong Li wrote:
+>> Currently, PCC driver doesn't support the processing of platform
+>> notification for slave PCC subspaces because of the incomplete
+>> communication flow.
+>>
+>> According to ACPI specification, if platform sends a notification
+>> to OSPM, it must clear the command complete bit and trigger platform
+>> interrupt. OSPM needs to check whether the command complete bit is
+>> cleared, clear platform interrupt, process command, and then set the
+>> command complete and ring doorbell to Platform. But the current judgment
+>> on the command complete is not applicable to type4 in pcc_mbox_irq().
+>>
+>> This patch introduces a communication flow direction field to detect
+>> whether the interrupt belongs to the master or slave subspace channel.
+>> And PCC driver needs to add the phase of setting the command complete
+>> and ring doorbell in pcc_mbox_irq() to complete type4 communication
+>> flow after processing command from Platform.
+>>
+>> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+>> ---
+>>   drivers/mailbox/pcc.c | 77 +++++++++++++++++++++++++++++++++++++++----
+>>   1 file changed, 71 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/mailbox/pcc.c b/drivers/mailbox/pcc.c
+>> index 105d46c9801b..ad6d0b7d50fc 100644
+>> --- a/drivers/mailbox/pcc.c
+>> +++ b/drivers/mailbox/pcc.c
+>> @@ -80,6 +80,13 @@ struct pcc_chan_reg {
+>>   	u64 status_mask;
+>>   };
+>>   
+>> +enum pcc_chan_comm_flow_dir_type {
+>> +	PCC_ONLY_OSPM_TO_PLATFORM,
+>> +	PCC_ONLY_PLATFORM_TO_OSPM,
+>> +	PCC_BIDIRECTIONAL,
+>> +	PCC_DIR_UNKNOWN,
+>> +};
+>> +
+>>   /**
+>>    * struct pcc_chan_info - PCC channel specific information
+>>    *
+>> @@ -91,6 +98,7 @@ struct pcc_chan_reg {
+>>    * @cmd_update: PCC register bundle for the command complete update register
+>>    * @error: PCC register bundle for the error status register
+>>    * @plat_irq: platform interrupt
+>> + * @comm_flow_dir: direction of communication flow supported by the channel
+>>    */
+>>   struct pcc_chan_info {
+>>   	struct pcc_mbox_chan chan;
+>> @@ -100,12 +108,15 @@ struct pcc_chan_info {
+>>   	struct pcc_chan_reg cmd_update;
+>>   	struct pcc_chan_reg error;
+>>   	int plat_irq;
+>> +	u8 comm_flow_dir;
+> I would rather just save the 'type' as read from the PCCT. We don't know
+> what future types might be and just identifying them by the direction of
+> flow of the data, it restricts the usage of this.
+Ack.
 >
-> I've been struggling with this "no_link" name a bit. It is quite
-> confusing considering that from libbpf's API side we do return `struct
-> bpf_link`. So I'm thinking that maybe "force_ioctl_attach" would be a
-> better way to describe it (and will be scary enough for people not
-> knowing what this is about to not set it to true?)
+>>   };
+>>   
+>>   #define to_pcc_chan_info(c) container_of(c, struct pcc_chan_info, chan)
+>>   static struct pcc_chan_info *chan_info;
+>>   static int pcc_chan_count;
+>>   
+>> +static int pcc_send_data(struct mbox_chan *chan, void *data);
+>> +
+>>   /*
+>>    * PCC can be used with perf critical drivers such as CPPC
+>>    * So it makes sense to locally cache the virtual address and
+>> @@ -221,6 +232,43 @@ static int pcc_map_interrupt(u32 interrupt, u32 flags)
+>>   	return acpi_register_gsi(NULL, interrupt, trigger, polarity);
+>>   }
+>>   
+>> +static bool pcc_chan_need_rsp_irq(struct pcc_chan_info *pchan,
+>> +				  u64 cmd_complete_reg_val)
+> Probably rename this as pcc_chan_command_complete or something similar.
+Ack
 >
-
-Yeah, "force_ioctl_attach" sounds more appropriate.
-
-> Also, we'll need size_t: 0 at the end to avoid uninitialized padding
-> issues (like we have in kprobe_opts and uprobe_opts)
->
-> >  };
-> > -#define bpf_perf_event_opts__last_field bpf_cookie
-> > +#define bpf_perf_event_opts__last_field no_link
-> >
-> >  LIBBPF_API struct bpf_link *
-> >  bpf_program__attach_perf_event(const struct bpf_program *prog, int pfd);
-> > @@ -461,6 +463,13 @@ LIBBPF_API struct bpf_link *
-> >  bpf_program__attach_perf_event_opts(const struct bpf_program *prog, int pfd,
-> >                                     const struct bpf_perf_event_opts *opts);
-> >
-> > +enum probe_mode {
->
-> shall we call it probe_attach_mode?
->
-> also let's elaborate a bit more in doc comment that specifying mode
-> will force libbpf to use that, but if kernel doesn't support it --
-> then we'll error out.
->
-
-OK.
-
-> > +       PROBE_MODE_DEFAULT = 0, /* latest supported by kernel */
-> > +       PROBE_MODE_LEGACY,
-> > +       PROBE_MODE_PERF,
-> > +       PROBE_MODE_LINK,
-> > +};
-> > +
-> >  struct bpf_kprobe_opts {
-> >         /* size of this struct, for forward/backward compatiblity */
-> >         size_t sz;
-> > @@ -470,9 +479,11 @@ struct bpf_kprobe_opts {
-> >         size_t offset;
-> >         /* kprobe is return probe */
-> >         bool retprobe;
-> > +       /* kprobe attach mode */
-> > +       enum probe_mode mode;
->
-> nit: mode -> attach_mode?
->
-> >         size_t :0;
-> >  };
-> > -#define bpf_kprobe_opts__last_field retprobe
-> > +#define bpf_kprobe_opts__last_field mode
-> >
-> >  LIBBPF_API struct bpf_link *
-> >  bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
-> > @@ -570,9 +581,11 @@ struct bpf_uprobe_opts {
-> >          * binary_path.
-> >          */
-> >         const char *func_name;
-> > +       /* uprobe attach mode */
-> > +       enum probe_mode mode;
-> >         size_t :0;
-> >  };
-> > -#define bpf_uprobe_opts__last_field func_name
-> > +#define bpf_uprobe_opts__last_field mode
->
-> ditto
->
-
-I'll fix these problems in the V2.
-
-Thanks!
-Menglong Dong
-
-> >
-> >  /**
-> >   * @brief **bpf_program__attach_uprobe()** attaches a BPF program
-> > --
-> > 2.39.0
-> >
+>> +{
+>> +	bool need_rsp;
+>> +
+>> +	if (!pchan->cmd_complete.gas)
+>> +		return true;
+>> +
+>> +	cmd_complete_reg_val &= pchan->cmd_complete.status_mask;
+>> +
+>> +	switch (pchan->comm_flow_dir) {
+> Use the channel type instead here.
+Ack
