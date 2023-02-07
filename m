@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09D368DFF3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B418E68DFF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjBGSZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S231445AbjBGS1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:27:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbjBGSZk (ORCPT
+        with ESMTP id S231248AbjBGS1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:25:40 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24A81AE
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:25:07 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id sa10so14489725ejc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:25:07 -0800 (PST)
+        Tue, 7 Feb 2023 13:27:08 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AFA171A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:26:46 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l12so8342745edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:26:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pizbVdzIu8iuBwFy6mvT//fygI8uGhRT/vJXKJ1LaVY=;
-        b=Cbdf46oletXuJOCJFIQa/rXoWMh2VweqM3WV0BdriyXCVvt01UIAIUTfYvqvj42FI2
-         dGIfD10JkRckky68XPz+miwRmw315N2EVOwurVjhjAEG1ALANVLXtxKLg2HenyvlPIf3
-         BQ+5TFXwBlTTO9jEL5tKFIsun1OjHvxjw507I=
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fEO7JT8019FhjWA5ozs5gXujOBuHxjwPw/lAImXKXkU=;
+        b=Fjd4nNnVBzF8pslJBnpYO5rEpmABVH/CrSTCmK1WOBRzEZ9SsgX6LowdJoZUVsfB6a
+         38vQxFTbWk1o3a6VbFBpgSmMtZeNPvfSECEjOkn+dX9HVztfqE6iO2D/fKl6x2HcQQyT
+         6MlvOX8ECzGiZJNv+9Pcd74ex+IjjhIjXp6po=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pizbVdzIu8iuBwFy6mvT//fygI8uGhRT/vJXKJ1LaVY=;
-        b=Pvq7DpL0PQLTQuCWyCzeh3edrCHycbH85nMQmpWoz4wj9BgVd5A30gRksyWHqsi0id
-         +rf1lLhm0y0FfrPwAOvIA6Rtrtwbu0FfoOf3qgsmJjx0GEF4Izx1xjbDKXnup4qHxR1j
-         xnQlGZ5z4tDWZtcz+j7OWoFIonU7KnyztqnkZW07LQJHRjkbXqm4bDvWauEdszkHLIp1
-         2EvBIL8lXWjEWcsaIAKRda5Za03nebTHqP7immmH56evu133mEVLG6BdS0LbJQ99GupB
-         zI2JLXXvBqMPznxaosy5alam3OApKDy53G6VlSc/gVCewm3p2b1sgWSI7x68jC4NffaX
-         mzEA==
-X-Gm-Message-State: AO0yUKVXyIojxEBTgmL8bHhDyFY5ERtxe02R3wCG1PlHwIhUAifRyAx0
-        /jf3tglVpxdT//82pyeLJ5ir6qWDZ5HAe7JOkXutCA==
-X-Google-Smtp-Source: AK7set/zCijcP03eTMU+2PhxffdAXyPf3oFS3VHfWoeL1IaY8vYSg0WqeOjtMaD3pqHkwRuwpUhl2g==
-X-Received: by 2002:a17:907:2c54:b0:882:82b3:58bc with SMTP id hf20-20020a1709072c5400b0088282b358bcmr4492008ejc.65.1675794303620;
-        Tue, 07 Feb 2023 10:25:03 -0800 (PST)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id sa21-20020a170906edb500b0088957f66018sm7245480ejb.142.2023.02.07.10.25.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 10:25:02 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id sa10so14489376ejc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:25:02 -0800 (PST)
-X-Received: by 2002:a17:906:4e46:b0:87a:7098:ca09 with SMTP id
- g6-20020a1709064e4600b0087a7098ca09mr970336ejw.78.1675794302170; Tue, 07 Feb
- 2023 10:25:02 -0800 (PST)
+        bh=fEO7JT8019FhjWA5ozs5gXujOBuHxjwPw/lAImXKXkU=;
+        b=HMzE//nK4kdd/jPUmBlBXYYfG5K2HI7qzVRUtHGU/C3t6ferR+O3nhlZr/tyGF26q5
+         NcBWHe3HAifQeL1sshi7YWXYgM9h6PbZP74WPI0ARGhtIMOTGrCW4YP0Y9k2k/naKL9c
+         AUVVTNmnUp1nm75huzHIPgGXQCHlvFcTvyi51jfN1JSbim+QGxO/667HW4LZYzAQ5abs
+         mle4B+PmMM8OIeFkW4IDuJqAWvu4CoDFM1PkFKInaIrVpl9W1sJXrtT+CIZODFZojoEW
+         hKpDufACaBILHC0GJKj9t9LT7JYhouk5lhb8BctAQETQdAUKYRq+7tbsyN6TUnrU6edv
+         wgtA==
+X-Gm-Message-State: AO0yUKWIBj4AD8CBn0eCZ2KSCALNbajNMPPb+o2R8wZvdyjmyqYdJMnV
+        tq/w1gUoawPi2lA0LsqY6JTUUA==
+X-Google-Smtp-Source: AK7set+PXrHx0uLdMpAosgecovGqzJL8DzLU8MH7S8DnG/Vz54LjVo9mtSHk7hbVr28cICLkzlV4oA==
+X-Received: by 2002:a50:d747:0:b0:4a2:1b97:228c with SMTP id i7-20020a50d747000000b004a21b97228cmr4826317edj.28.1675794405089;
+        Tue, 07 Feb 2023 10:26:45 -0800 (PST)
+Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
+        by smtp.gmail.com with ESMTPSA id b18-20020aa7dc12000000b004a9b5c957bfsm6274121edu.77.2023.02.07.10.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 10:26:44 -0800 (PST)
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Tue, 07 Feb 2023 18:26:34 +0000
+Subject: [PATCH net v3] rds: rds_rm_zerocopy_callback() use
+ list_first_entry()
 MIME-Version: 1.0
-References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
- <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
- <Y+EjmnRqpLuBFPX1@bombadil.infradead.org> <4ffbb0c8-c5d0-73b3-7a4e-2da9a7b03669@inria.fr>
- <Y+Ja5SRs886CEz7a@kadam> <CAHk-=wg6ohuyrmLJYTfEpDbp2Jwnef54gkcpZ3-BYgy4C6UxRQ@mail.gmail.com>
- <Y+KP/fAQjawSofL1@gmail.com>
-In-Reply-To: <Y+KP/fAQjawSofL1@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 7 Feb 2023 10:24:45 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgmZDqCOynfiH4NFoL50f4+yUjxjp0sCaWS=xUmy731CQ@mail.gmail.com>
-Message-ID: <CAHk-=wgmZDqCOynfiH4NFoL50f4+yUjxjp0sCaWS=xUmy731CQ@mail.gmail.com>
-Subject: Re: block: sleeping in atomic warnings
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Dan Carpenter <error27@gmail.com>, linux-block@vger.kernel.org,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230202-rds-zerocopy-v3-1-83b0df974f9a@diag.uniroma1.it>
+X-B4-Tracking: v=1; b=H4sIANmX4mMC/32NQQ6CMBBFr0K6toQWEOvKexgXbRlhFrRkio1Iu
+ LsFt8TNJH9+/nsLC0AIgV2zhRFEDOhdCuUpY7bXrgOObcpMFrIs0uHUBv4B8taPMzeglLlUohT
+ 2wtLE6ADckHa230aDDhPQVowET3zvnjtzMLFHevYYJk/z7o5ir441UXDBlQRTV81ZVY26tai7/
+ OWQ/KBFjj9elP8YMjGsUqqp66KpW3PAWNf1C6JJGJkRAQAA
+To:     Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maobibo <maobibo@loongson.cn>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemb@google.com>
+Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675794404; l=1516;
+ i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
+ bh=0nDPNqBG+YTRTLjDtzI+UrYDaq7bsigQYB2rylSsaYE=;
+ b=/tCvGrSqKoGTZNGYci4wbRhXJ9NKe1TOM7hwyPh99q7AKMHOdeSOagLFKA0z6Gp3BBEaP7KQj75U
+ 0bydtkoYCArlmntYw4V4XbHrjW388Mg7lbEPZT2uZg71+5CwbH7F
+X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
+ pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 9:53 AM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> It's a false positive.  See the comment above fscrypt_destroy_keyring()
+rds_rm_zerocopy_callback() uses list_entry() on the head of a list
+causing a type confusion.
+Use list_first_entry() to actually access the first element of the
+rs_zcookie_queue list.
 
-Hmm. Ok. Unfortunate.
+Fixes: 9426bbc6de99 ("rds: use list structure to track information for zerocopy completion notification")
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+---
+Changes in v3:
+- target net
+- Link to v2: https://lore.kernel.org/r/20230202-rds-zerocopy-v2-1-c999755075db@diag.uniroma1.it
+---
+ net/rds/message.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
->  If the filesystem has not been mounted, then the call from __put_super()
-> is needed, but blk_crypto_evict_key() can never be executed in that case.
+diff --git a/net/rds/message.c b/net/rds/message.c
+index b47e4f0a1639..c19c93561227 100644
+--- a/net/rds/message.c
++++ b/net/rds/message.c
+@@ -104,9 +104,9 @@ static void rds_rm_zerocopy_callback(struct rds_sock *rs,
+ 	spin_lock_irqsave(&q->lock, flags);
+ 	head = &q->zcookie_head;
+ 	if (!list_empty(head)) {
+-		info = list_entry(head, struct rds_msg_zcopy_info,
+-				  rs_zcookie_next);
+-		if (info && rds_zcookie_add(info, cookie)) {
++		info = list_first_entry(head, struct rds_msg_zcopy_info,
++					rs_zcookie_next);
++		if (rds_zcookie_add(info, cookie)) {
+ 			spin_unlock_irqrestore(&q->lock, flags);
+ 			kfree(rds_info_from_znotifier(znotif));
+ 			/* caller invokes rds_wake_sk_sleep() */
 
-It's not all that clear that some *other* error might not have
-happened to keep the mount from actually succeeding, but after the
-keys have been instantiated?
+---
+base-commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
+change-id: 20230202-rds-zerocopy-be99b84131c8
 
-IOW, what's the thing that makes "blk_crypto_evict_key() can never be
-executed in that case" be obvious?
+Best regards,
+-- 
+Pietro Borrello <borrello@diag.uniroma1.it>
 
-I think _that_ is what might want a comment, about how we always call
-generic_shutdown_super() before the last put_super() happens.
-
-It does seem like Dan's automated checks could be useful, but if
-there's no sane way to avoid the false positives, it's always going to
-be a lot of noise ;(
-
-           Linus
