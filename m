@@ -2,85 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C73D68E4AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4EA68E4B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBGXz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 18:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        id S229675AbjBGX6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 18:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBGXzy (ORCPT
+        with ESMTP id S229512AbjBGX6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 18:55:54 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8F820696;
-        Tue,  7 Feb 2023 15:55:53 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675814151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7bMsFqexife+ywZrYCgkFEhhv4UjPGRPsQk7cMNeYE=;
-        b=lCpFHGmEc0aKNMD7/Og+w0z0X2azQAypfr+EbGXzzuCUVLDTyHjMVcyTWqerx+Qb2EzJOs
-        4BffxTjMB2izlCqGPqfhndft3//rV+kRXH04k6YIMaVw4u6obVnAjDZ21G90KGXwgtPzdL
-        AuSgpU3O7wXbi6tjr/w1GOigrhKVrlGtg27SgAzkhcTLck1zD2Ttl3JzpxQipeRYAWM2tf
-        e2sGjvo28NLt97ZgHBy/wBpJIMVpmviUlSQTbQCZSDns+Atlo0HI/Y3e1+wGnoFe3GY1Iu
-        +MvV56vL+dd+Wm8h2RC2/IE5kO//0BNs7Q8E+jXkgHzKzGoSpb8d0li8nk33+w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675814151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V7bMsFqexife+ywZrYCgkFEhhv4UjPGRPsQk7cMNeYE=;
-        b=Cyzxy2vY85R/VCKQL76eoAYsmkrxvsLC0ROhgDhEsRRqc/egyz/4MHuEEBH/09oiIzCtIP
-        7KMktk9vg/YxgdCA==
-To:     Arjan van de Ven <arjan@linux.intel.com>,
-        Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-Subject: Re: [PATCH v6 11/11] x86/smpboot: reuse timer calibration
-In-Reply-To: <ca89ed9f-3869-9556-0eb3-c5dc84511d95@linux.intel.com>
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230202215625.3248306-12-usama.arif@bytedance.com>
- <ca89ed9f-3869-9556-0eb3-c5dc84511d95@linux.intel.com>
-Date:   Wed, 08 Feb 2023 00:55:50 +0100
-Message-ID: <875ycduj21.ffs@tglx>
+        Tue, 7 Feb 2023 18:58:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FD1252B1;
+        Tue,  7 Feb 2023 15:58:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 805B2B816D4;
+        Tue,  7 Feb 2023 23:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88304C433D2;
+        Tue,  7 Feb 2023 23:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675814283;
+        bh=sGXVaRq6vYQJqxYDtBacKqsMgua8qseAvNZKfXM4PXY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bqKCVz+Mave8Fx0zq4+M9qYMTm6ZlSWC2rAFunG41hjqgDqk5UJtVuwWBn03cGKRV
+         aWvZUKFTvEPyFi2qOTONmDbuqbEXbZsXZQ97yHpL1TZ4I3lFk1h86CqtFFd72RvzRW
+         pcOoPLGqq3pBRqMacLJWsYdNiWDBCKnfsagPYaksIY/CbUcZBC4Q0Wuv4EWyxePl39
+         A9NlmcyS81s97RzyP3dE1U67sXxVIIgKcvG2twTQspMTepg2aOyQtpBfFH09X9vLxs
+         QaxB0Etglbnv/xlu7YsIymkLms6gaxwJJbXl9erWtJzyLt1VU67qCped3nXH1ZcXOC
+         +7Cpr2+cTmhPg==
+Date:   Tue, 7 Feb 2023 15:58:01 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     arinc9.unal@gmail.com, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: enable special tag when
+ any MAC uses DSA
+Message-ID: <20230207155801.3e6295b0@kernel.org>
+In-Reply-To: <52f8fc7f-9578-6873-61ae-b4bf85151c0f@arinc9.com>
+References: <20230205175331.511332-1-arinc.unal@arinc9.com>
+        <20230207105613.4f56b445@kernel.org>
+        <5d025125-77e4-cbfb-8caa-b71dd4adfc40@arinc9.com>
+        <52f8fc7f-9578-6873-61ae-b4bf85151c0f@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arjan!
+On Tue, 7 Feb 2023 23:25:32 +0300 Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
+> >> As Paolo pointed out to me off-list this is pretty much a revert of
+> >> commit under Fixes. Is this an actual regression fix, or second MAC
+> >> as DSA port never worked but now you found a way to make it work? =20
+> >=20
+> > Second MAC as DSA master after hardware DSA untagging was enabled never=
+=20
+> > worked. I first disabled it to make the communication work again, then,=
+=20
+> > with this patch, I found a way to make it work which is what should've=
+=20
+> > been done with the commit for adding hardware DSA untagging support. =20
+>=20
+> Should both commits be mentioned with Fixes tag?
 
-On Tue, Feb 07 2023 at 15:16, Arjan van de Ven wrote:
-> On 2/2/2023 1:56 PM, Usama Arif wrote:
->> From: Arjan van de Ven <arjan@linux.intel.com>
->> 
->> No point recalibrating for known-constant tsc.
->> When tested on a 128 core, 2 socket server, this reduces
->> the parallel smpboot time from 100ms to 30ms.
->> 
->> Not-signed-off-by: Arjan van de Ven <arjan@linux.intel.com>
->
-> you can turn this in a Signed-off-By:
+No strong preference, TBH.
 
-Please post your patch separately as it is a completely orthogonal issue
-and can be reviewed and discussed independently of the parallel bringup
-effort.
-
-Thanks,
-
-        tglx
+The motivation for my question was to try to figure out how long we
+should wait with applying this patch. I applied the commit under Fixes
+without waiting for a test from Frank, which made me feel a bit guilty
+:)
