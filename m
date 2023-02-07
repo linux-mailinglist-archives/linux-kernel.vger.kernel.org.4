@@ -2,250 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CECD068CF55
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8386968CF58
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBGGL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S229994AbjBGGLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjBGGLW (ORCPT
+        with ESMTP id S229460AbjBGGLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:11:22 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D052F787
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:11:09 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id t19so2605876pfe.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:11:09 -0800 (PST)
+        Tue, 7 Feb 2023 01:11:40 -0500
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E60C303E5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:11:38 -0800 (PST)
+Received: by mail-vs1-xe2e.google.com with SMTP id y8so15232079vsq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:11:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rAcX9aaFjXRXaxTFHD9BwOlLSG25X1nzXDAU6wa6LN4=;
-        b=QFA55Z3owdD7Qqm7qantYesixVLz/YV5mQY8OB36UyTkX1O+jv7dtgW8mlmXov68he
-         Sp47ymJ8lA4yojfiudNfX269H7aHw4B0KZ3A7xIyByAjRPaseqgUw12rTrUnkT3L//vG
-         O/KXCHwfhMdSYjIg5QWAG94t4Zg1hgL5HEDBQ=
+        bh=zP2ygbVdDON6yUIfexoROgjUPhLPhR3gUrJen46Rt4k=;
+        b=njFbTgS2Fnz3eXZQG2IIJq44fTew4djBUK9I5vGRHno7jZJxYxJ1F+n/A6/9kRBU5+
+         V5jzuzeDn1fRqBRoQ9ckiOYh3BaOU8U9oH1FdOkOana/r1CA4Db6gTTxjrwrr7JFCVWz
+         CGBPbLeqbDDy2BWvEu3oUXn4Liaqav4bL4kdY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rAcX9aaFjXRXaxTFHD9BwOlLSG25X1nzXDAU6wa6LN4=;
-        b=3Z2s0axRE4JxjnLEyTxi+AVU4/MUinRKiDZT0TP0yKYj6ss4eDaLjgSCCFdUVNAeWl
-         b0LBN7+UpEIY4n+GEc3QUTt1YSDfxub3iD3e3Q4thdnww0GvzfpdpCY6QT4ctGBslFSg
-         uKYFBOr2K9gtk0imu2v840uMGbVd4B8PU6IY1G+ggXVLfbJL9Isvg9DPAya/akFrG/hX
-         h85FbiqkazVFbDH78iG7wyPRIXfBjtDu+s01j9dfAmVPYx1OrwU7DUCHxvUpCT43diQH
-         wBn75pyyGTv456Xko5iXlggFWjQBsSLXeU0JyqxKbFXDz3zY0wwJQkAsDOguC0Bsx1c3
-         CAXQ==
-X-Gm-Message-State: AO0yUKXsrlOpynJsi94scpWbzu4/lLGj6JBGp7nPWXiH0HoHvp1fFsjw
-        2F7fgSUajAsA9Ov+EeWPz/pSGyzo1fuVfpstFtfj
-X-Google-Smtp-Source: AK7set8GCI2+N5yKUnT63zTuZxVFJbNXLiYrGyefyOdpN5Wd2cg8/+0sabR/eAwg9CBuYMJPxhIOLP3kyInF2DSi2j4=
-X-Received: by 2002:a63:7a56:0:b0:4c7:ef33:bbe1 with SMTP id
- j22-20020a637a56000000b004c7ef33bbe1mr306028pgn.73.1675750269029; Mon, 06 Feb
- 2023 22:11:09 -0800 (PST)
+        bh=zP2ygbVdDON6yUIfexoROgjUPhLPhR3gUrJen46Rt4k=;
+        b=U0Qv2Jz5ePUQXt7qZNrvJOaBgQXk8YVwkf+tOEqVBmULv5IB6pSblHzicCa1uhaZ/r
+         6X8m1/8x9gTWoULg3zni6RRhV9qlLuNbZhRgUFJUTxQ9frpbWEtpEE+KaeHUSEk7nEOA
+         UhPnkcn8VW5X+yHLctQP3bWESIiUrsXmepVNgA+khOyhUwYFw3P6O4ORdaCASHX3WXwl
+         zr/3kNl7MZSCNaNrWeKMOHvYJ1C+CXJQ1536FoMpmEQ/H9OMfP77PeuJ7jI5IKsNf8Zf
+         5eCaFr4FEejJCpBYnFQwkgFQMnHZ+q+TMGmenDqz1CT+xMnK4+JacnVzTl8fyzp43wW+
+         9S6w==
+X-Gm-Message-State: AO0yUKVfLq4kgxaA74jNfvrEXqBXKxtUjZRWaVRBdPECMiiJ7kOgfyBo
+        ymstWGVoBHTv5bZdC1E+GbI/eDHbNnREKiYEGDR0HQ==
+X-Google-Smtp-Source: AK7set/rPPS4UD3H+wPsyBdYQgSN6AGYtE3iy5mIdz5UsLRmTWNhHy9DVvsGzrlJ8515poglceCc81LaO1hE0/O0uFg=
+X-Received: by 2002:a05:6102:3d18:b0:3f7:93c4:9e56 with SMTP id
+ i24-20020a0561023d1800b003f793c49e56mr545453vsv.85.1675750297266; Mon, 06 Feb
+ 2023 22:11:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20230205011515.1284674-1-atishp@rivosinc.com> <20230205011515.1284674-9-atishp@rivosinc.com>
- <F8326D42-00ED-4639-91E7-5CF8E84469E7@kernel.org>
-In-Reply-To: <F8326D42-00ED-4639-91E7-5CF8E84469E7@kernel.org>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 6 Feb 2023 22:10:57 -0800
-Message-ID: <CAOnJCULfPR22sHLYAOmqbTZUg9XY3trOnMVoEcWjVXKU-TCw8A@mail.gmail.com>
-Subject: Re: [PATCH v5 08/14] RISC-V: KVM: Add SBI PMU extension support
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Anup Patel <anup@brainfault.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-5-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206152928.918562-5-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Feb 2023 14:11:26 +0800
+Message-ID: <CAGXv+5FxX4tue8owuxbrA2NNxmQdCnYj7orbam8AUFismTA1jw@mail.gmail.com>
+Subject: Re: [PATCH v1 04/45] clk: mediatek: Add divider clocks to mtk_clk_simple_{probe,remove}()
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 5, 2023 at 2:31 AM Conor Dooley <conor@kernel.org> wrote:
+On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
+> Add support for divider clocks register/unregister in the common
+> mtk_clk_simple_probe() and mtk_clk_simple_remove() functions.
 >
->
-> On 5 February 2023 02:15:09 GMT+01:00, Atish Patra <atishp@rivosinc.com> wrote:
-> >SBI PMU extension allows KVM guests to configure/start/stop/query about
-> >the PMU counters in virtualized enviornment as well.
-> >
-> >In order to allow that, KVM implements the entire SBI PMU extension.
-> >
-> >Reviewed-by: Anup Patel <anup@brainfault.org>
-> >Signed-off-by: Atish Patra <atishp@rivosinc.com>
->
-> Hey Atish,
-> CI is still complaining about something in this patch:
-> https://gist.github.com/conor-pwbot/8f8d6a60a65b0b44d96c9c3b220e3efd
->
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-This is an invalid warning as vcpu_sbi_ext_pmu is used as an extern variable in
-arch/riscv/kvm/vcpu_sbi.c. That's how every sbi extension code defines the
-kvm_vcpu_sbi_extension in its own respective file.
-
-
-> I'm without a laptop this weekend, so apologies for
-> the lack of investigation as to whether there's a
-> reason for it.
->
-> Cheers,
-> Conor.
->
->
-> >---
-> > arch/riscv/kvm/Makefile       |  2 +-
-> > arch/riscv/kvm/vcpu_sbi.c     | 11 +++++
-> > arch/riscv/kvm/vcpu_sbi_pmu.c | 87 +++++++++++++++++++++++++++++++++++
-> > 3 files changed, 99 insertions(+), 1 deletion(-)
-> > create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
-> >was > >diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
-> >index 5de1053..278e97c 100644
-> >--- a/arch/riscv/kvm/Makefile
-> >+++ b/arch/riscv/kvm/Makefile
-> >@@ -25,4 +25,4 @@ kvm-y += vcpu_sbi_base.o
-> > kvm-y += vcpu_sbi_replace.o
-> > kvm-y += vcpu_sbi_hsm.o
-> > kvm-y += vcpu_timer.o
-> >-kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
-> >+kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o vcpu_sbi_pmu.o
-> >diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-> >index fe2897e..15fde15 100644
-> >--- a/arch/riscv/kvm/vcpu_sbi.c
-> >+++ b/arch/riscv/kvm/vcpu_sbi.c
-> >@@ -20,6 +20,16 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
-> > };
-> > #endif
-> >
-> >+#ifdef CONFIG_RISCV_PMU_SBI
-> >+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
-> >+#else
-> >+static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> >+      .extid_start = -1UL,
-> >+      .extid_end = -1UL,
-> >+      .handler = NULL,
-> >+};
-> >+#endif
-> >+
-> > static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
-> >       &vcpu_sbi_ext_v01
-> >       &vcpu_sbi_ext_base,
-> >@@ -28,6 +38,7 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
-> >       &vcpu_sbi_ext_rfence,
-> >       &vcpu_sbi_ext_srst,
-> >       &vcpu_sbi_ext_hsm,
-> >+      &vcpu_sbi_ext_pmu,
-> >       &vcpu_sbi_ext_experimental,
-> >       &vcpu_sbi_ext_vendor,
-> > };
-> >diff --git a/arch/riscv/kvm/vcpu_sbi_pmu.c b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> >new file mode 100644
-> >index 0000000..9fdc1e1
-> >--- /dev/null
-> >+++ b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> >@@ -0,0 +1,87 @@
-> >+// SPDX-License-Identifier: GPL-2.0
-> >+/*
-> >+ * Copyright (c) 2023 Rivos Inc
-> >+ *
-> >+ * Authors:
-> >+ *     Atish Patra <atishp@rivosinc.com>
-> >+ */
-> >+
-> >+#include <linux/errno.h>
-> >+#include <linux/err.h>
-> >+#include <linux/kvm_host.h>
-> >+#include <asm/csr.h>
-> >+#include <asm/sbi.h>
-> >+#include <asm/kvm_vcpu_sbi.h>
-> >+
-> >+static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> >+                                 struct kvm_vcpu_sbi_return *retdata)
-> >+{
-> >+      int ret = 0;
-> >+      struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> >+      struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> >+      unsigned long funcid = cp->a6;
-> >+      u64 temp;
-> >+
-> >+      /* Return not supported if PMU is not initialized */
-> >+      if (!kvpmu->init_done) {
-> >+              retdata->err_val = SBI_ERR_NOT_SUPPORTED;
-> >+              return 0;
-> >+      }
-> >+
-> >+      switch (funcid) {
-> >+      case SBI_EXT_PMU_NUM_COUNTERS:
-> >+              ret = kvm_riscv_vcpu_pmu_num_ctrs(vcpu, retdata);
-> >+              break;
-> >+      case SBI_EXT_PMU_COUNTER_GET_INFO:
-> >+              ret = kvm_riscv_vcpu_pmu_ctr_info(vcpu, cp->a0, retdata);
-> >+              break;
-> >+      case SBI_EXT_PMU_COUNTER_CFG_MATCH:
-> >+#if defined(CONFIG_32BIT)
-> >+              temp = ((uint64_t)cp->a5 << 32) | cp->a4;
-> >+#else
-> >+              temp = cp->a4;
-> >+#endif
-> >+              /*
-> >+               * This can fail if perf core framework fails to create an event.
-> >+               * Forward the error to userspace because it's an error happened
-> >+               * within the host kernel. The other option would be to convert
-> >+               * this an SBI error and forward to the guest.
-> >+               */
-> >+              ret = kvm_riscv_vcpu_pmu_ctr_cfg_match(vcpu, cp->a0, cp->a1,
-> >+                                                     cp->a2, cp->a3, temp, retdata);
-> >+              break;
-> >+      case SBI_EXT_PMU_COUNTER_START:
-> >+#if defined(CONFIG_32BIT)
-> >+              temp = ((uint64_t)cp->a4 << 32) | cp->a3;
-> >+#else
-> >+              temp = cp->a3;
-> >+#endif
-> >+              ret = kvm_riscv_vcpu_pmu_ctr_start(vcpu, cp->a0, cp->a1, cp->a2,
-> >+                                                 temp, retdata);
-> >+              break;
-> >+      case SBI_EXT_PMU_COUNTER_STOP:
-> >+              ret = kvm_riscv_vcpu_pmu_ctr_stop(vcpu, cp->a0, cp->a1, cp->a2, retdata);
-> >+              break;
-> >+      case SBI_EXT_PMU_COUNTER_FW_READ:
-> >+              ret = kvm_riscv_vcpu_pmu_ctr_read(vcpu, cp->a0, retdata);
-> >+              break;
-> >+      default:
-> >+              retdata->err_val = SBI_ERR_NOT_SUPPORTED;
-> >+      }
-> >+
-> >+      return ret;
-> >+}
-> >+
-> >+static unsigned long kvm_sbi_ext_pmu_probe(struct kvm_vcpu *vcpu)
-> >+{
-> >+      struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> >+
-> >+      return kvpmu->init_done;
-> >+}
-> >+
-> >+const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> >+      .extid_start = SBI_EXT_PMU,
-> >+      .extid_end = SBI_EXT_PMU,
-> >+      .handler = kvm_sbi_ext_pmu_handler,
-> >+      .probe = kvm_sbi_ext_pmu_probe,
-> >+};
-
-
-
--- 
-Regards,
-Atish
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
