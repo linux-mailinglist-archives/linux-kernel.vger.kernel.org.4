@@ -2,159 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D7E68DF30
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F98768DF35
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjBGRoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S232087AbjBGRrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:47:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjBGRoN (ORCPT
+        with ESMTP id S232082AbjBGRq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:44:13 -0500
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD333BD8A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:44:10 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vb8Lda5_1675791845;
-Received: from 30.25.213.166(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0Vb8Lda5_1675791845)
-          by smtp.aliyun-inc.com;
-          Wed, 08 Feb 2023 01:44:06 +0800
-Message-ID: <8464725c-40ce-3e3f-baaf-5c2c136cc870@linux.alibaba.com>
-Date:   Wed, 8 Feb 2023 01:44:04 +0800
+        Tue, 7 Feb 2023 12:46:58 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114B035A3;
+        Tue,  7 Feb 2023 09:46:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1675791996; bh=ii4yoI1YfOqgXUDUFrZF3AkgOsKIFlm4QdS+yQ2YnnI=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=d6nj7V9XUBHGTHXwAeCyU5EutnYlDdFfSj/SQkfdygrNTqNkCK5vJDADtyvk5TywI
+         0wJ+jWQxUXmLGnO2gXmENhyD168zaqphTGwI8Ow9ItMgPmQacwCsF3gEKJBS2+yhbf
+         NrgSfOO/YxXi+9y/mbHjamEoOeh5DSEVQVkksA9w=
+Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Tue,  7 Feb 2023 18:46:36 +0100 (CET)
+X-EA-Auth: 2Gy1ppoYqDnuraQ5LgQ/oD15lFOEcXlTXiILHsKqJbC9Jk5cYGFzLi8N/jfAJ62+Hc91BBhZIlWhxj344v6R9V/oFpDKJDTI
+Date:   Tue, 7 Feb 2023 23:16:32 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Khalid Aziz <khalid@gonehiking.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH] scsi: FlashPoint: Replace arithmetic addition by bitwise
+ OR
+Message-ID: <Y+KOeP0OOiem3lR5@ubun2204.myguest.virtualbox.org>
+References: <Y+I0HXsHezZRtFOM@ubun2204.myguest.virtualbox.org>
+ <9a78cdd254d5d962450242d2e01c3a0f702a63a0.camel@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH -v4 8/9] migrate_pages: batch flushing TLB
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <20230206063313.635011-1-ying.huang@intel.com>
- <20230206063313.635011-9-ying.huang@intel.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20230206063313.635011-9-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a78cdd254d5d962450242d2e01c3a0f702a63a0.camel@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 07, 2023 at 03:26:48PM +0300, James Bottomley wrote:
+> On Tue, 2023-02-07 at 16:51 +0530, Deepak R Varma wrote:
+> > When adding two bit-field mask values, an OR operation offers higher
+> > performance over an arithmetic operation. So, convert such additions
+> > to an OR based expressions. Issue identified using orplus.cocci
+> > semantic patch script.
+> 
+> No it doesn't, at least not for constants, which is the entirety of
+> this patch: the compiler can find the value at compile time, so the
+> whole lot becomes a load immediate of a single value.  Whether the
+> compiler sees OR or + is immaterial to the compile time computation. 
 
-在 2023/2/6 下午2:33, Huang Ying 写道:
-> The TLB flushing will cost quite some CPU cycles during the folio
-> migration in some situations.  For example, when migrate a folio of a
-> process with multiple active threads that run on multiple CPUs.  After
-> batching the _unmap and _move in migrate_pages(), the TLB flushing can
-> be batched easily with the existing TLB flush batching mechanism.
-> This patch implements that.
->
-> We use the following test case to test the patch.
->
-> On a 2-socket Intel server,
->
-> - Run pmbench memory accessing benchmark
->
-> - Run `migratepages` to migrate pages of pmbench between node 0 and
->    node 1 back and forth.
->
-> With the patch, the TLB flushing IPI reduces 99.1% during the test and
-> the number of pages migrated successfully per second increases 291.7%.
->
-> NOTE: TLB flushing is batched only for normal folios, not for THP
-> folios.  Because the overhead of TLB flushing for THP folios is much
-> lower than that for normal folios (about 1/512 on x86 platform).
->
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Bharata B Rao <bharata@amd.com>
-> Cc: Alistair Popple <apopple@nvidia.com>
-> Cc: haoxin <xhao@linux.alibaba.com>
-> Cc: Minchan Kim <minchan@kernel.org>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> ---
->   mm/migrate.c |  4 +++-
->   mm/rmap.c    | 20 +++++++++++++++++---
->   2 files changed, 20 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 9378fa2ad4a5..ca6e2ff02a09 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1230,7 +1230,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
->   		/* Establish migration ptes */
->   		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
->   			       !folio_test_ksm(src) && !anon_vma, src);
-> -		try_to_migrate(src, 0);
-> +		try_to_migrate(src, TTU_BATCH_FLUSH);
->   		page_was_mapped = 1;
->   	}
->   
-> @@ -1781,6 +1781,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
->   	stats->nr_thp_failed += thp_retry;
->   	stats->nr_failed_pages += nr_retry_pages;
->   move:
-> +	try_to_unmap_flush();
-> +
->   	retry = 1;
->   	for (pass = 0;
->   	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index b616870a09be..2e125f3e462e 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1976,7 +1976,21 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
->   		} else {
->   			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
->   			/* Nuke the page table entry. */
-> -			pteval = ptep_clear_flush(vma, address, pvmw.pte);
-> +			if (should_defer_flush(mm, flags)) {
-> +				/*
-> +				 * We clear the PTE but do not flush so potentially
-> +				 * a remote CPU could still be writing to the folio.
-> +				 * If the entry was previously clean then the
-> +				 * architecture must guarantee that a clear->dirty
-> +				 * transition on a cached TLB entry is written through
-> +				 * and traps if the PTE is unmapped.
-> +				 */
-> +				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
-Nice work， Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
-> +
-> +				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
-> +			} else {
-> +				pteval = ptep_clear_flush(vma, address, pvmw.pte);
-> +			}
->   		}
->   
->   		/* Set the dirty flag on the folio now the pte is gone. */
-> @@ -2148,10 +2162,10 @@ void try_to_migrate(struct folio *folio, enum ttu_flags flags)
->   
->   	/*
->   	 * Migration always ignores mlock and only supports TTU_RMAP_LOCKED and
-> -	 * TTU_SPLIT_HUGE_PMD and TTU_SYNC flags.
-> +	 * TTU_SPLIT_HUGE_PMD, TTU_SYNC, and TTU_BATCH_FLUSH flags.
->   	 */
->   	if (WARN_ON_ONCE(flags & ~(TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
-> -					TTU_SYNC)))
-> +					TTU_SYNC | TTU_BATCH_FLUSH)))
->   		return;
->   
->   	if (folio_is_zone_device(folio) &&
+Hello James,
+Thank you for the feedback. Your comments are useful. I was not aware of the
+compile time computation of constant expressions before. Thanks.
+
+> Perhaps Coccinelle should be fixed not to complain about this case?
+Yes, sure. I will review the semantic patch and deterrmine if and how to fine
+tune the same to avoid false positives.
+
+> 
+> James
+
+James, there are a few other patch submissions for the scsi subsystem that I
+submitted in last few weeks. I sent couple of reminder request for comments on
+those submission, but still waiting. Could you please also review those and
+share your feedback?
+
+Best Regards,
+deepak.
+
+> 
+
+
