@@ -2,189 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB4C68E41B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907BE68E424
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjBGXDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 18:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+        id S229994AbjBGXFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 18:05:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjBGXDi (ORCPT
+        with ESMTP id S229868AbjBGXFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 18:03:38 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAFE1D90E;
-        Tue,  7 Feb 2023 15:03:36 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id 203so11877105pfx.6;
-        Tue, 07 Feb 2023 15:03:36 -0800 (PST)
+        Tue, 7 Feb 2023 18:05:02 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01203A5B9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 15:04:41 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso196728wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 15:04:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mKRyLs14cQMLkdQlb1k9GTQd3JA97HIjZ/46MwZ+z08=;
-        b=Js/HNexDSwOKgRBcmYiuHgQCRxp8/HlVnCuGxHWIUi9YAXcklBawiUgPzAJ1XHFhf1
-         XeOA6jrBLKXLHd5xUiqpz2G6d3YYYvc0m0Kl0QRF3s+wDWkcd4xdVenO7EFf1V7jHWJa
-         7mO6FpXCD2hmzhqp0kt5jTGzOLEcdioFtof51Qdmj/icKjukD3ThgYJM0Z8yNR1EMbRL
-         xJ/gdRQ3YLtCa8oz3N3V+67WZfd6c2rHc7LWPQfOc1YL49yOMbLz3gSF7xhV73JcM2Gl
-         ha9n+6nUZnNrhwmYfw6vWWWMSfocijWxgV0giTs1YC8Qa8GgNZTuhxfk/3QcXyDfxnDd
-         qHoA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7K90Cconf9IU/JjGhL3usnB4fcgEN7IGa/N6vi83tEU=;
+        b=z706X9RPRqgrkCmt0yKUhE1L13f0JWFGtZsjk6h4QI2Mv+QHJqo22MYv34CjWHftK4
+         oAJGajJuv3Q00OnN6Fn/ZCWTmO8GtjcrerCMBnkvi1zFZXC/wwNColrF9kW6jcNe7EeX
+         V56u1UwIuBxsnjgXrtV+XxAyLT4UUvBrNH98CfU/TG9q7aYZ/bqljHMhWs8knSyIRQuv
+         lxEWGDGdcUFJJemoOyheFPlxzsXqecbyounSaS3Rm8GT5zFuViuYClwhnUkzoCArNv3/
+         P3kLTknuABGBHhZVt0rAx09gEqaNLbWe9aSzeg5rY49tu9ooNv6MbBSF6Pbi67vqP+RJ
+         EoJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mKRyLs14cQMLkdQlb1k9GTQd3JA97HIjZ/46MwZ+z08=;
-        b=5UmqVNLsOcxbEnXQymAdJ71H5tV4YLRihdFm9/Phbty9IzZiq0cMuL+zXeRkGjCUus
-         EdXKAyU1cXqZxDb5WXxPo7bF7caV5p27U4KfPz6bvh+dZ2sf+8LGIQTTQhbSFtXRPu75
-         BH2UzsMPhOXiCKQ2bfMXdyOPWuqQ1LjgPzXd0ONK/3pAaNa4tB8EPezaxCq/4PHiqgYr
-         kPRDT1kpdTeF4sexi6e5JRbKRNELtNTSA+rov/ruY7NDqrJvQqogspcDzLXicEyKipGT
-         H2eI8Csn4TDKuvBp7IQqS/cWZQ781GF7nUe+8oG2ND49lbTG6r/oWCcFZGLL2Rn85np+
-         wfDQ==
-X-Gm-Message-State: AO0yUKWLs8KEXRcnogFZh7JvZzS5IYXSqIf5O/NEYRtIN8X9BMLq5ptQ
-        ynQgdcKujVxdnOHrozs4X3M=
-X-Google-Smtp-Source: AK7set8HPr4JHDvwWO6Wuy0bMS2wszHrJPMyBH1MxEmU9ElP0BS5OCyXQOYHimhySgzzXYjBt5KiGw==
-X-Received: by 2002:aa7:9603:0:b0:57f:c170:dc6 with SMTP id q3-20020aa79603000000b0057fc1700dc6mr4815885pfg.14.1675811016365;
-        Tue, 07 Feb 2023 15:03:36 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:c930:81ab:3aec:b9cb])
-        by smtp.gmail.com with ESMTPSA id a22-20020a62bd16000000b00580a0bb411fsm1913537pff.174.2023.02.07.15.03.34
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7K90Cconf9IU/JjGhL3usnB4fcgEN7IGa/N6vi83tEU=;
+        b=zDSFiH4OUmJhDk6b3CwX+oSWC/n5vorm1RB91Mjp7/CBhkV9pk1zV5YM5sqGoOY+hX
+         Q2wIsXIB3kO+BIHbRAsUaM9/joCmq/k1f3Nchloyy9VPFIbh/+B36BGiRZN7KhZAEZbY
+         NeIdtQfFnKvZWNlqku0ku+qV8aPv0GN3PGI6NeqSjv7l7M4nXER0DIKlctDsB9d7HsLd
+         4WfXJ48G3YdI78k/r7MmTcZBmhLRq/Pi1LHc+4osKYpsQw2D4xECrvr7XjS6eWnCRzlh
+         BPVt2Ri+DHZoH5rtZyHsFJoiw8wAZii1mxRDnvBE0OI5FYyVkTCmxtWsAlSLYHvx4UhB
+         lyVw==
+X-Gm-Message-State: AO0yUKXqBiMwgsoI54hICCN522OalYmRtvtlSLPku6jQCJdujmMq+Rwe
+        8zViuLnFjDGst00GH56EnpGU4Q==
+X-Google-Smtp-Source: AK7set8zWLCiZ74mwTGNMT2x2h+OX5COLl6cjWMEbiHAzeo6UxDuzQyfGltINaNHn718jXW1Eb49GQ==
+X-Received: by 2002:a05:600c:3423:b0:3e0:185:e916 with SMTP id y35-20020a05600c342300b003e00185e916mr4591454wmp.13.1675811080307;
+        Tue, 07 Feb 2023 15:04:40 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:c04f:2463:c151:8b87])
+        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b003dcc82ce53fsm146485wmq.38.2023.02.07.15.04.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 15:03:35 -0800 (PST)
-Date:   Tue, 7 Feb 2023 15:03:30 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Guenter Roeck <groeck@chromium.org>,
-        Allen Ballway <ballway@chromium.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] HID: retain initial quirks set up when creating HID
- devices
-Message-ID: <Y+LYwu3Zs13hdVDy@google.com>
+        Tue, 07 Feb 2023 15:04:39 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com
+Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v7 0/9] Parallel CPU bringup for x86_64
+Date:   Tue,  7 Feb 2023 23:04:27 +0000
+Message-Id: <20230207230436.2690891-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In certain circumstances, such as when creating I2C-connected HID
-devices, we want to pass and retain some quirks (axis inversion, etc).
-The source of such quirks may be device tree, or DMI data, or something
-else not readily available to the HID core itself and therefore cannot
-be reconstructed easily. To allow this, introduce "initial_quirks" field
-in hid_device structure and use it when determining the final set of
-quirks.
+Tested on v7, doing INIT/SIPI/SIPI in parallel brings down the time for
+smpboot from ~700ms to 100ms (85% improvement) on a server with 128 CPUs
+split across 2 NUMA nodes.
 
-This fixes the problem with i2c-hid setting up device-tree sourced
-quirks too late and losing them on device rebind, and also allows to
-sever the tie between hid-code and i2c-hid when applying DMI-based
-quirks.
+The major change over v6 is keeping parallel smp support enabled in AMD.
+APIC ID for parallel CPU bringup is now obtained from CPUID leaf 0x0B
+(for x2APIC mode) otherwise CPUID leaf 0x1 (8 bits).
 
-Fixes: b60d3c803d76 ("HID: i2c-hid-of: Expose the touchscreen-inverted properties")
-Fixes: a2f416bf062a ("HID: multitouch: Add quirks for flipped axes")
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Tested-by: Allen Ballway <ballway@chromium.org>
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
+The patch for reusing timer calibration for secondary CPUs is also removed
+from the series as its not part of parallel smp bringup and needs to be
+further thought about.
 
-v2:
-- corrected spelling/grammar in the commit message per Guenter
-- added reviewed-by/tested-by tags
+Thanks,
+Usama
 
+Changes across versions:
+v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
+v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
+    in preparation for more parallelisation.
+v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
+    avoid scribbling on initial_gs in common_cpu_up(), and to allow all
+    24 bits of the physical X2APIC ID to be used. That patch still needs
+    a Signed-off-by from its original author, who once claimed not to
+    remember writing it at all. But now we've fixed it, hopefully he'll
+    admit it now :)
+v5: rebase to v6.1 and remeasure performance, disable parallel bringup
+    for AMD CPUs.
+v6: rebase to v6.2-rc6, disabled parallel boot on amd as a cpu bug and
+    reused timer calibration for secondary CPUs.
+v7: [David Woodhouse] iterate over all possible CPUs to find any existing
+    cluster mask in alloc_clustermask. (patch 1/9)
+    Keep parallel AMD support enabled in AMD, using APIC ID in CPUID leaf
+    0x0B (for x2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+    Included sanity checks for APIC id from 0x0B. (patch 6/9)
+    Removed patch for reusing timer calibration for secondary CPUs.
+    commit message and code improvements.
 
- drivers/hid/hid-quirks.c                 | 8 +-------
- drivers/hid/i2c-hid/i2c-hid-core.c       | 6 ++++--
- drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 1 -
- include/linux/hid.h                      | 1 +
- 4 files changed, 6 insertions(+), 10 deletions(-)
+David Woodhouse (8):
+  x86/apic/x2apic: Allow CPU cluster_mask to be populated in parallel
+  cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
+  cpu/hotplug: Add dynamic parallel bringup states before
+    CPUHP_BRINGUP_CPU
+  x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
+  x86/smpboot: Split up native_cpu_up into separate phases and document
+    them
+  x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
+  x86/mtrr: Avoid repeated save of MTRRs on boot-time CPU bringup
+  x86/smpboot: Serialize topology updates for secondary bringup
 
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 30e35f79def4..66e64350f138 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -19,7 +19,6 @@
- #include <linux/input/elan-i2c-ids.h>
- 
- #include "hid-ids.h"
--#include "i2c-hid/i2c-hid.h"
- 
- /*
-  * Alphabetically sorted by vendor then product.
-@@ -1238,7 +1237,7 @@ EXPORT_SYMBOL_GPL(hid_quirks_exit);
- static unsigned long hid_gets_squirk(const struct hid_device *hdev)
- {
- 	const struct hid_device_id *bl_entry;
--	unsigned long quirks = 0;
-+	unsigned long quirks = hdev->initial_quirks;
- 
- 	if (hid_match_id(hdev, hid_ignore_list))
- 		quirks |= HID_QUIRK_IGNORE;
-@@ -1299,11 +1298,6 @@ unsigned long hid_lookup_quirk(const struct hid_device *hdev)
- 		quirks = hid_gets_squirk(hdev);
- 	mutex_unlock(&dquirks_lock);
- 
--	/* Get quirks specific to I2C devices */
--	if (IS_ENABLED(CONFIG_I2C_DMI_CORE) && IS_ENABLED(CONFIG_DMI) &&
--	    hdev->bus == BUS_I2C)
--		quirks |= i2c_hid_get_dmi_quirks(hdev->vendor, hdev->product);
--
- 	return quirks;
- }
- EXPORT_SYMBOL_GPL(hid_lookup_quirk);
-diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
-index 0ab8f47a84e9..efbba0465eef 100644
---- a/drivers/hid/i2c-hid/i2c-hid-core.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-@@ -1025,6 +1025,10 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
- 	hid->vendor = le16_to_cpu(ihid->hdesc.wVendorID);
- 	hid->product = le16_to_cpu(ihid->hdesc.wProductID);
- 
-+	hid->initial_quirks = quirks;
-+	hid->initial_quirks |= i2c_hid_get_dmi_quirks(hid->vendor,
-+						      hid->product);
-+
- 	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X",
- 		 client->name, (u16)hid->vendor, (u16)hid->product);
- 	strscpy(hid->phys, dev_name(&client->dev), sizeof(hid->phys));
-@@ -1038,8 +1042,6 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
- 		goto err_mem_free;
- 	}
- 
--	hid->quirks |= quirks;
--
- 	return 0;
- 
- err_mem_free:
-diff --git a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
-index 554a7dc28536..210f17c3a0be 100644
---- a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
-@@ -492,4 +492,3 @@ u32 i2c_hid_get_dmi_quirks(const u16 vendor, const u16 product)
- 
- 	return quirks;
- }
--EXPORT_SYMBOL_GPL(i2c_hid_get_dmi_quirks);
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index daaac4d7f370..56dac09c99d9 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -622,6 +622,7 @@ struct hid_device {							/* device report descriptor */
- 	unsigned long status;						/* see STAT flags above */
- 	unsigned claimed;						/* Claimed by hidinput, hiddev? */
- 	unsigned quirks;						/* Various quirks the device can pull on us */
-+	unsigned initial_quirks;					/* Initial set of quirks supplied when creating device */
- 	bool io_started;						/* If IO has started */
- 
- 	struct list_head inputs;					/* The list of inputs */
--- 
-2.39.1.519.gcb327c4b5f-goog
+Thomas Gleixner (1):
+  x86/smpboot: Support parallel startup of secondary CPUs
 
+ arch/x86/include/asm/realmode.h       |   3 +
+ arch/x86/include/asm/smp.h            |  14 +-
+ arch/x86/include/asm/topology.h       |   2 -
+ arch/x86/kernel/acpi/sleep.c          |   1 +
+ arch/x86/kernel/apic/apic.c           |   2 +-
+ arch/x86/kernel/apic/x2apic_cluster.c | 130 ++++++----
+ arch/x86/kernel/cpu/common.c          |   6 +-
+ arch/x86/kernel/cpu/mtrr/mtrr.c       |   9 +
+ arch/x86/kernel/head_64.S             |  84 +++++++
+ arch/x86/kernel/smpboot.c             | 349 +++++++++++++++++++-------
+ arch/x86/realmode/init.c              |   3 +
+ arch/x86/realmode/rm/trampoline_64.S  |  14 ++
+ arch/x86/xen/smp_pv.c                 |   4 +-
+ include/linux/cpuhotplug.h            |   2 +
+ include/linux/smpboot.h               |   7 +
+ kernel/cpu.c                          |  31 ++-
+ kernel/smpboot.c                      |   2 +-
+ kernel/smpboot.h                      |   2 -
+ 18 files changed, 506 insertions(+), 159 deletions(-)
 
 -- 
-Dmitry
+2.25.1
+
