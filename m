@@ -2,134 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0060868D4A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12EB68D4A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjBGKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S231724AbjBGKnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjBGKmz (ORCPT
+        with ESMTP id S230397AbjBGKmy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:42:55 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0453410E7;
-        Tue,  7 Feb 2023 02:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ZPYG/zvRTVen44RSGuz7Fz8RexNUnqk9Tz3jaq6V3LQ=; b=kMTMZX3j7GPqGpI8ybON0E5M4y
-        FNDv0nmaEMUpCHKXGZ6BCidO2MxqelVkXd50X8yAceTl7B8fyYh1B8neNO7W1UMjv8sFMMyx6/ngC
-        NNcKw06np0c6UWqHkvhC2i5G9PIpjI/zsEFXPKEEyGS2gdFgytK3cypQp9fh7hi66kEQ=;
-Received: from p200300daa717ad04d0827e150ac3376f.dip0.t-ipconnect.de ([2003:da:a717:ad04:d082:7e15:ac3:376f] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pPLQM-005hBy-Kr; Tue, 07 Feb 2023 11:42:06 +0100
-Message-ID: <b1d812ea-57a0-fd68-d398-69e0b17c2f34@nbd.name>
-Date:   Tue, 7 Feb 2023 11:42:05 +0100
+        Tue, 7 Feb 2023 05:42:54 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE01BC170
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:42:22 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id j25so9553038wrc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:42:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AjQX5toyVmZyFFEDPSoSrTaqoGSIHeRpLwxYhtU6050=;
+        b=UHX61DtMSMsDlTukE3lUUsvg7WmUUbdO41vBdM7YAVGyZyrIhDBvj3ZRGpgDwnN7CR
+         ZAQc19T3RgcgNoKKVQDtKdtQ2wc4VM0SWJzjgTfFMq9T10FhyOcG09vbME5Xd/rgHDHD
+         3HvNY+WFXm1YcmXykLH8Ztod4TkZYUcSuMW7sNoP9Sh591xJpRmFYJsPQr/1ciYdW8NI
+         YDebVX59G7VmmV6PK9n/Wq1WBTxLY2VGqZbvMFjPIP+zpWto4bGIWgtytwyxwryHjT1R
+         Pqwi6c1G7+HALb70TkQ2EaLZfd+VFoXehvx0ObbA0+iLcET6WR78ylGkf9m/8gg6PNFU
+         ynJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AjQX5toyVmZyFFEDPSoSrTaqoGSIHeRpLwxYhtU6050=;
+        b=JqK7un/xbKamEANY6XidHNHlVvM5x6bcPORRRLT0cWNeNFt5DjsxuLtpNus1YsxCLj
+         /EZ15uBNqUNTyit/XCB0SgdidEfiLEH3Xr9IGBQ3bvPNqhqiUIGWBa7UeqS4VVlf47Ie
+         zTMd/Xv9q8smXcFGjozfK/vMBo9mShCP2SjBsy7bvHspz4OAekCK8p7fF8E9iHTUaccP
+         jSOfFQdNVWv/glQFzvJlQUcPcsVPgdTAtcW9cG5X4Gg8ni4naZ7C0W41nJd2tUeeoJkQ
+         Me7usdWIWaeBXtMUZnBOEg7QDY/qwdzF16qulEdtsGIqB6SSrJXYOf2Um8i4HP3TytRi
+         yi/A==
+X-Gm-Message-State: AO0yUKWIpFMMAxZ3QZ7EKdJYr+MCdhcZbp3XcmnYkcvtNNCMiLZUiLAO
+        Te6aNSEO7w6LpCdol+mUZurEsA==
+X-Google-Smtp-Source: AK7set8cj+1hsFTMCBGD6WhztYFclKHDVzs8N4JlHw+lhZTiXnlFlFe+TW8Mnp0zjORJwHU2fazPkQ==
+X-Received: by 2002:a05:6000:985:b0:2c3:be89:7c38 with SMTP id by5-20020a056000098500b002c3be897c38mr11888335wrb.27.1675766541488;
+        Tue, 07 Feb 2023 02:42:21 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o13-20020a5d408d000000b002c3f42f3687sm1307866wrp.72.2023.02.07.02.42.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 02:42:21 -0800 (PST)
+Message-ID: <44faeca1-94c9-4423-d87a-03d80e286812@linaro.org>
+Date:   Tue, 7 Feb 2023 11:42:19 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel
- for switch port 0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] Documentation: cs35l41: Shared boost properties
 Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-References: <20230207103027.1203344-1-vladimir.oltean@nxp.com>
-From:   Felix Fietkau <nbd@nbd.name>
-In-Reply-To: <20230207103027.1203344-1-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230207104021.2842-1-lucas.tanure@collabora.com>
+ <20230207104021.2842-3-lucas.tanure@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230207104021.2842-3-lucas.tanure@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.02.23 11:30, Vladimir Oltean wrote:
-> Arınç reports that on his MT7621AT Unielec U7621-06 board and MT7623NI
-> Bananapi BPI-R2, packets received by the CPU over mt7530 switch port 0
-> (of which this driver acts as the DSA master) are not processed
-> correctly by software. More precisely, they arrive without a DSA tag
-> (in packet or in the hwaccel area - skb_metadata_dst()), so DSA cannot
-> demux them towards the switch's interface for port 0. Traffic from other
-> ports receives a skb_metadata_dst() with the correct port and is demuxed
-> properly.
+On 07/02/2023 11:40, Lucas Tanure wrote:
+> Describe the properties used for shared boost
+> configuration.
+
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
+
 > 
-> Looking at mtk_poll_rx(), it becomes apparent that this driver uses the
-> skb vlan hwaccel area:
+> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+> ---
+>  .../devicetree/bindings/sound/cirrus,cs35l41.yaml     | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> 	union {
-> 		u32		vlan_all;
-> 		struct {
-> 			__be16	vlan_proto;
-> 			__u16	vlan_tci;
-> 		};
-> 	};
-> 
-> as a temporary storage for the VLAN hwaccel tag, or the DSA hwaccel tag.
-> If this is a DSA master it's a DSA hwaccel tag, and finally clears up
-> the skb VLAN hwaccel header.
-> 
-> I'm guessing that the problem is the (mis)use of API.
-> skb_vlan_tag_present() looks like this:
-> 
->   #define skb_vlan_tag_present(__skb)	(!!(__skb)->vlan_all)
-> 
-> So if both vlan_proto and vlan_tci are zeroes, skb_vlan_tag_present()
-> returns precisely false. I don't know for sure what is the format of the
-> DSA hwaccel tag, but I surely know that lowermost 3 bits of vlan_proto
-> are 0 when receiving from port 0:
-> 
-> 	unsigned int port = vlan_proto & GENMASK(2, 0);
-> 
-> If the RX descriptor has no other bits set to non-zero values in
-> RX_DMA_VTAG, then the call to __vlan_hwaccel_put_tag() will not, in
-> fact, make the subsequent skb_vlan_tag_present() return true, because
-> it's implemented like this:
-> 
-> static inline void __vlan_hwaccel_put_tag(struct sk_buff *skb,
-> 					  __be16 vlan_proto, u16 vlan_tci)
-> {
-> 	skb->vlan_proto = vlan_proto;
-> 	skb->vlan_tci = vlan_tci;
-> }
-> 
-> What we need to do to fix this problem (assuming this is the problem) is
-> to stop using skb->vlan_all as temporary storage for driver affairs, and
-> just create some local variables that serve the same purpose, but
-> hopefully better. Instead of calling skb_vlan_tag_present(), let's look
-> at a boolean has_hwaccel_tag which we set to true when the RX DMA
-> descriptors have something. Disambiguate based on netdev_uses_dsa()
-> whether this is a VLAN or DSA hwaccel tag, and only call
-> __vlan_hwaccel_put_tag() if we're certain it's a VLAN tag.
-> 
-> Arınç confirms that the treatment works, so this validates the
-> assumption.
-> 
-> Link: https://lore.kernel.org/netdev/704f3a72-fc9e-714a-db54-272e17612637@arinc9.com/
-> Fixes: 2d7605a72906 ("net: ethernet: mtk_eth_soc: enable hardware DSA untagging")
-> Reported-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Felix Fietkau <nbd@nbd.name>
+> diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
+> index 18fb471aa891..6f5f01bec6f1 100644
+> --- a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
+> +++ b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
+> @@ -85,11 +85,20 @@ properties:
+>        boost-cap-microfarad.
+>        External Boost must have GPIO1 as GPIO output. GPIO1 will be set high to
+>        enable boost voltage.
+> +      Shared boost allows two amplifiers to share a single boost circuit by
+> +      communicating on the MDSYNC bus. The passive amplifier does not control
+> +      the boost and receives data from the active amplifier. GPIO1 should be
+> +      configured for Sync when shared boost is used. Shared boost is not
+> +      compatible with External boost. Active amplifier requires
+> +      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
+>        0 = Internal Boost
+>        1 = External Boost
+> +      2 = Reserved
+
+How binding can be reserved? For what and why? Drop. 2 is shared active,
+3 is shared passive.
+
+Best regards,
+Krzysztof
+
