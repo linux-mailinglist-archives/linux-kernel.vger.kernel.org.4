@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429EF68E2BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969E468E2E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjBGVUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 16:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S229551AbjBGVX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 16:23:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjBGVT6 (ORCPT
+        with ESMTP id S229457AbjBGVXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 16:19:58 -0500
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD0817175;
-        Tue,  7 Feb 2023 13:19:57 -0800 (PST)
-Received: by mail-ot1-f42.google.com with SMTP id 70-20020a9d084c000000b0068bccf754f1so4650008oty.7;
-        Tue, 07 Feb 2023 13:19:57 -0800 (PST)
+        Tue, 7 Feb 2023 16:23:24 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB33C26873
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:22:47 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id m15so6591872ilh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 13:22:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4pWtMDHlChNZpBVUhtxKeU61bbziVZ1L3zQXJ9Q/ELQ=;
+        b=iGG49ZGHPzcvfk5FpC/wPCPjp3eRBlDLnfbucFVpWLpsl2Z8RzUxLQhMjaoGLnVgBq
+         xjeqRsYNHx/x1cXl5gl7p7O8mwLBteNJy4e4Jt0xmGTfls523cXFG6Zp+e76SIzupePC
+         DseNoGGv79jE/4Z6vcZzHYWFK5W0bjBjcgF6w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z47pTYQ+/5OctvC8ddoYwu8QG4IsEwXm/DVEAF/PVtM=;
-        b=SoyK9tJb5xYN3u/LN3HwBLhozTCRChlbn5319JwIwTUi55OTl0NIyBESxnHHWUfzDy
-         QPd1fKY6PqK1wVSSo8pWsrEB/OoZqgEF2fc8iCZJfxDLNaY4BNVJqNvclXO2A2WE9QAI
-         i0ECL8gX11a++cqDEWcegiz0LOESfj6ueWnK/SaUZFSwKWm03KfLmkhQCLrUvmXplKTT
-         VFE3zBb/vTzxzrcHMZEUdlzSGYX1NXRZOksINSN40sjSvdNSO97gxIKLGimEnqcSv/Bt
-         +dJyaLqL8wXg3qvXc+jNCxkmc7arTNR0WPml8/zQbZBuQkmOk/InS4o46dmOYAQgRaDw
-         hFuw==
-X-Gm-Message-State: AO0yUKWr84srnArgXSiDpQb7Z2aZaEEouuElxY8DY8glx5C6v/aNL3He
-        zDpGm+ooMq/PCa4FM4au9in+qENHNw==
-X-Google-Smtp-Source: AK7set/diBRHF4lI5GQLqN0GdFX+iy7l2cjOo76iYc6ZAnC18tkVaZyWtWStK7hjiJcpjbgQkX/zug==
-X-Received: by 2002:a9d:177:0:b0:68d:a785:5f5f with SMTP id 110-20020a9d0177000000b0068da7855f5fmr2872911otu.2.1675804796999;
-        Tue, 07 Feb 2023 13:19:56 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a24-20020a9d4718000000b0068d3f341dd9sm7019996otf.62.2023.02.07.13.19.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 13:19:56 -0800 (PST)
-Received: (nullmailer pid 4171931 invoked by uid 1000);
-        Tue, 07 Feb 2023 21:19:55 -0000
-Date:   Tue, 7 Feb 2023 15:19:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>
-Subject: Re: [PATCH 5/7] dt-bindings: HID: i2c-hid: goodix: Add
- mainboard-vddio-supply
-Message-ID: <167580479546.4171868.14123127361187653098.robh@kernel.org>
-References: <20230207024816.525938-1-dianders@chromium.org>
- <20230206184744.5.Ia77a96c6c5564f9cc25e6220b5a9171d5c2639e8@changeid>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4pWtMDHlChNZpBVUhtxKeU61bbziVZ1L3zQXJ9Q/ELQ=;
+        b=ODxjR0thYV9ETR3jMWyWxA8lQFhPIQRp6rp1YhWYuI58PaJZJntvOfVIU28t1Enkyk
+         Oqou5s8u6m0/qwyiWLT9eCQ6RvfVKuYgIaAOTE9XpPctfr77XlSmO0bxdZanb6UzFsIM
+         DMs5qD6e6UF6dYjB9JPBAYW2hLkBjEc+f85CEeyrzSjiZgX92ACgXGkX7NKaC0gz9Apl
+         mDmJitmLPIy6szRO4FoFUQ8R2pt/UozpUQmIN5zSa20elZ5J6LQV0/g5Wq2BZh2RO/JV
+         ryDiUdy0U3dPPRGM07EM2JRxpGMRK05nZsafw4afVBEzrtX/Nyn/giM3kqm5ijzzkhhu
+         uCRg==
+X-Gm-Message-State: AO0yUKWomwyzeyrCYkmP0uSSLFgbsGDpIsYvX6Nc0lbr7q/aADeCqyUB
+        faW1wpuxL9eK+3MvbfKyhOhIVg==
+X-Google-Smtp-Source: AK7set9iKHCEqTPRQ6Y+u1bMD/+Kbw88A5WZcUuyVysTNoY0Ai0/BDNKii8NCmibzYRgz4gqOf3llA==
+X-Received: by 2002:a05:6e02:12a8:b0:313:d901:82e6 with SMTP id f8-20020a056e0212a800b00313d90182e6mr3726764ilr.2.1675804896995;
+        Tue, 07 Feb 2023 13:21:36 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id i15-20020a92c94f000000b00304ae88ebebsm4375569ilq.88.2023.02.07.13.21.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 13:21:36 -0800 (PST)
+Message-ID: <8ca9283f-36ff-8e79-c168-c59f8e84f7dc@linuxfoundation.org>
+Date:   Tue, 7 Feb 2023 14:21:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206184744.5.Ia77a96c6c5564f9cc25e6220b5a9171d5c2639e8@changeid>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230207125634.292109991@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230207125634.292109991@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,54 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 06 Feb 2023 18:48:14 -0800, Douglas Anderson wrote:
-> The goodix i2c-hid bindings currently support two models of
-> touchscreen: GT7375P and GT7986U. The datasheets of both touchscreens
-> show the following things:
-> * The mainboard that the touchscreen is connected to is only expected
->   to supply one voltage to the touchscreen: 3.3V.
-> * The touchscreen, depending on stuffing options, can accept IO to the
->   touchscreen as either 3.3V or 1.8V. Presumably this means that the
->   touchscreen has its own way internally to make or deal with 1.8V
->   signals when it's configured for 1.8V IO.
+On 2/7/23 05:54, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.11 release.
+> There are 208 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> NOTE: you've got to look very carefully at the datasheet for the
-> touchscreen to see that the above bullets are true. Specifically, the
-> datasheet shows a signal called VDDIO and one might think that this is
-> where a mainboard would provide VDDIO to the touchscreen. Upon closer
-> inspection, however, a footnote can be found that says "When VDDIO is
-> left floating, the logic level is 1.8V [...]; when VDDIO is connected
-> to AVDD, the logic level is AVDD.". Thus the VDDIO pin on the
-> touchscreen IC is actually a selector and not a pin whre the mainboard
-> would pass a reference voltage.
+> Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
+> Anything received after that time might be too late.
 > 
-> The fact that the touchscreen isn't supplied 1.8V by the mainboard
-> means that when I originally submitted bindings for these touchscreens
-> I only listed the 3.3V rail in the bindings. It can be noted that the
-> original bindings and driver were added for sc7180-trogdor boards and
-> these boards all use 3.3V IO via a level shifter on the mainboard.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
 > 
-> It turns out that with sc7280-herobrine-evoker, we've got a bit of a
-> strange monkey on our hands. Due to some very interesting but
-> (unfortunately) set-in-stone hardware design, we are doing 1.8V IO to
-> the touchscreen but we _also_ have some extra buffers on the mainboard
-> that need to be powered up to make the IO lines work. After much
-> pondering about this, it seems like the best way to handle this is to
-> add an optional "mainboard-vddio" rail to the bindings that is used to
-> power up the buffers. Specifically, the fact that the touchscreen
-> datasheet documents that its IOs can be at a different voltage level
-> than its main power rail means that there truly are two voltage rails
-> associated with the touchscreen, even if we don't actually provide the
-> IO rail to it. Thus it doesn't feel absurd for the DT node on the host
-> to have a 1.8V rail to power up anything related to its 1.8V logic.
+> thanks,
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
->  .../devicetree/bindings/input/goodix,gt7375p.yaml          | 7 +++++++
->  1 file changed, 7 insertions(+)
+> greg k-h
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Compiled and booted on my test system. No dmesg regressions.
 
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
