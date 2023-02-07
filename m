@@ -2,142 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1DD68DF8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA0768DF8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjBGSBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S231366AbjBGSC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:02:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjBGSBo (ORCPT
+        with ESMTP id S229618AbjBGSC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:01:44 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00E137577
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:01:33 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id i2so3085232ple.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:01:33 -0800 (PST)
+        Tue, 7 Feb 2023 13:02:58 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B49199DE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:02:56 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id v1so2305629ilg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:02:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PZduzSQedcfK0VkSdKK8LkGwE1Lav/aAuVJtPsAz85U=;
-        b=OBxGFk75lDiGUlUvrFhIHJPcRAslCw/EEvSQNDBB5YCIzMHVA4EnksKV25d5GBa8T9
-         dFS19YdvdlPngB22IpK6355pvCbZS88YSXZJn0ypE20zzdLdc3hFS7GLG9O2Oi6SBDZr
-         iX8gB/ssqdae0nsogt7pu+1nXVASgEzoB3iba34bqufCITrZzBbSUG72BPS1U/xt4PMm
-         ZvdfoPHZ8gwvGgVZ8ryLTePkyRraoiOf8yX2ucJpoHts2vqjlVXcdjCZI1HRRTIdUqEJ
-         I07rC4JoFiNgx1KV8OsL+j5niabSt3T/7hR+ulfJikexep4XdQnX2OIPRZ7KcZnGiE4h
-         yBbA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bUQ+Q0O4InpaxQsTYmk72fYT5UIvjG/Pm2uUP+Phbwk=;
+        b=JGHoYL40Z6fjjUrLtEJSGnhqJ5HXvZqZ45pUm+86mk1oyvSMIQ6hL2kSeRAqxRs686
+         rMOxQaQhOIUbvArfmOgeHG/va2KZMhBxe88CJ/UDb5mK5zau+L4jSNjKHn/N4rrHR7sL
+         xaT6BSBIOSA5nNoJ9b6EHgzgrFronLQpS8Pdo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PZduzSQedcfK0VkSdKK8LkGwE1Lav/aAuVJtPsAz85U=;
-        b=BRf4FhaQtfnaTqu3FgPgcm9NLO7piycX99F2mYiraICT/NPGQJp/5Vw3ySrag7qP8x
-         rP73RtonB1arPq2rdRTtV2FY9gViUX9paQgYST+JT6a64vWEHtkdYxLI99Wa2l1hFquN
-         CiYgL6PX57WEeHQVGWTZK/3rdcVBaXSigR55GJAy+kzhNEfqI0uB686w1yaw47OGq96z
-         QlBZcbkTsydI0filf+oGLDqzEfk6f6I3WANTbLwSAzSj6veKHY8vizXZ0q4MMRbNsdeq
-         s7iagOWgkMmsXIdCo0Ytrp8fK7+P0y2cvY0L2vjSzR1FZVnyP2SfyVb/bIzYAS1U1h1L
-         q63Q==
-X-Gm-Message-State: AO0yUKVn+NexgDbPC+PFRsI9X/Q3dt2Lulf905nuxQKdW7vsK/ksdFZm
-        Uf07oiAoL6tIV2SM3wmtL2hRe4+9+yCKmjG4J2bLhA==
-X-Google-Smtp-Source: AK7set/5/7deqTUQyO/sBNCbUgkmz7QmmOIK18S7lNp32mxnhOYV8HOSgp8+KUAArWSXjr58XkSfzZwy3swzWUzfUDI=
-X-Received: by 2002:a17:903:555:b0:196:14ea:d3c6 with SMTP id
- jo21-20020a170903055500b0019614ead3c6mr923273plb.20.1675792892586; Tue, 07
- Feb 2023 10:01:32 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bUQ+Q0O4InpaxQsTYmk72fYT5UIvjG/Pm2uUP+Phbwk=;
+        b=mgs4zYh2u2I+yQaNxnT5Xz9ag26MuOsrLIWKwy/tioBNYMkmWIy3dYome9PmfDTHXr
+         NpENlOjvDtYM/NKm4Uxs+Glw/KTbxUSLLd3RxtWqgTarPQrpInfHPrQTjsY9NVYsfWbO
+         QWSlVXaPBv84ZbZXYvxIFzO9N4wEU1okRfJHAQvt9HXHzZlqKOGUCj9kb4us8DNSS4vz
+         fS2yGAXvif8rzpp6YdPI8vRwto2oxc1tQJRUFMLeZmmDNENA4OmdcT4Z035NavvBiTK6
+         n3ji4awDvcU0beyCGANK1y8b4RXN7xKQ4Py2vhH6bXjp0F8un7CwjWBokQvgGfVFz+I3
+         EdDQ==
+X-Gm-Message-State: AO0yUKVbajCXcu9MkL9d51MXkDUltpic4Xf4OBp3Ah3L7szMX56Ju5zw
+        yvyd8gfli9Mipc+Yxul6SaVjBg==
+X-Google-Smtp-Source: AK7set+Gs5sMZkpCEn+J2Ws04h4s1CYRJPvjEKEvzqVHSPh/cEtUPPOERE1fGdpKjwzCw+QLP5RncQ==
+X-Received: by 2002:a05:6e02:1be8:b0:313:cd79:adcb with SMTP id y8-20020a056e021be800b00313cd79adcbmr4889037ilv.18.1675792975934;
+        Tue, 07 Feb 2023 10:02:55 -0800 (PST)
+Received: from chromium.org ([2a00:79e1:abc:1702:24:af62:de72:11ae])
+        by smtp.gmail.com with ESMTPSA id q15-20020a02cf0f000000b0038a6ae38ceasm4647885jar.26.2023.02.07.10.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 10:02:55 -0800 (PST)
+Date:   Tue, 7 Feb 2023 11:02:52 -0700
+From:   Jack Rosenthal <jrosenth@chromium.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Julius Werner <jwerner@chromium.org>,
+        David Gow <davidgow@google.com>,
+        chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: coreboot: Remove GOOGLE_COREBOOT_TABLE_ACPI/OF
+ Kconfig entries
+Message-ID: <Y+KSTG92TtFK4PQm@chromium.org>
+References: <20230207081130.1.I657776750156793721efa247ce6293445137bc8a@changeid>
 MIME-Version: 1.0
-References: <20230203194201.92015-1-ebiggers@kernel.org> <63deacb1.170a0220.f078.6779@mx.google.com>
- <CAFP8O3Kwa2V7GvJPEbr87o6hMi8i2JquWniFOaiFR3nv9pGc_g@mail.gmail.com>
-In-Reply-To: <CAFP8O3Kwa2V7GvJPEbr87o6hMi8i2JquWniFOaiFR3nv9pGc_g@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Feb 2023 10:01:21 -0800
-Message-ID: <CAKwvOdm8F_VcdegPGw3vPu+-H1Gyh0rqQWpf=+Yh9YAowVuWSA@mail.gmail.com>
-Subject: Re: [PATCH] randstruct: temporarily disable clang support
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Bill Wendling <morbo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207081130.1.I657776750156793721efa247ce6293445137bc8a@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 3:41 PM Fangrui Song <maskray@google.com> wrote:
->
-> On Sat, Feb 4, 2023 at 11:06 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Fri, Feb 03, 2023 at 11:42:01AM -0800, Eric Biggers wrote:
-> > > From: Eric Biggers <ebiggers@google.com>
-> > >
-> > > Randstruct with clang is currently unsafe to use in any clang release
-> > > that supports it, due to a clang bug that is causing miscompilations:
-> > > "-frandomize-layout-seed inconsistently randomizes all-function-point=
-ers
-> > > structs" (https://github.com/llvm/llvm-project/issues/60349).  Disabl=
-e
-> > > it temporarily until the bug is fixed and the fix is released in a cl=
-ang
-> > > version that can be checked for.
-> > >
-> > > Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Eric Biggers <ebiggers@google.com>
-> > > ---
-> > >  security/Kconfig.hardening | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> > > index 53baa95cb644..aad16187148c 100644
-> > > --- a/security/Kconfig.hardening
-> > > +++ b/security/Kconfig.hardening
-> > > @@ -280,7 +280,8 @@ config ZERO_CALL_USED_REGS
-> > >  endmenu
-> > >
-> > >  config CC_HAS_RANDSTRUCT
-> > > -     def_bool $(cc-option,-frandomize-layout-seed-file=3D/dev/null)
-> > > +     # Temporarily disabled due to https://github.com/llvm/llvm-proj=
-ect/issues/60349
-> > > +     def_bool n
-> > >
-> > >  choice
-> > >       prompt "Randomize layout of sensitive kernel structures"
-> > >
-> > > base-commit: 7b753a909f426f2789d9db6f357c3d59180a9354
-> > > --
-> > > 2.39.1
-> >
-> > This should be fixed with greater precision -- i.e. this is nearly fixe=
-d
-> > in Clang now, and is likely to be backported. So I think we'll need
-> > versioned checks here.
-> >
-> > --
-> > Kees Cook
-> >
->
-> Bill has requested cherry-pick the llvm-project fix into the
-> release/16.x branch [1].
-> https://github.com/llvm/llvm-project-release-prs/pull/276
-> It may take one day to land.
->
-> [1]: https://github.com/llvm/llvm-project/tree/release/16.x
->
-> --
-> =E5=AE=8B=E6=96=B9=E7=9D=BF
->
+On 2023-02-07 at 08:12 -0800, Douglas Anderson wrote:
+> Ever since commit a28aad66da8b ("firmware: coreboot: Collapse platform
+> drivers into bus core") the Kconfig entries GOOGLE_COREBOOT_TABLE_OF
+> and GOOGLE_COREBOOT_TABLE_ACPI have been dead. They have no "help"
+> text and thus aren't user choosable. They also aren't "select"ed by
+> anything. They also control the compilation of no code.
+> 
+> Let's remove them.
+> 
+> Fixes: a28aad66da8b ("firmware: coreboot: Collapse platform drivers into bus core")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-All landed; the version check should be for 16+. (And the link to the
-issue report would be nice to retain).
---=20
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Jack Rosenthal <jrosenth@chromium.org>
+
+> ---
+> 
+>  drivers/firmware/google/Kconfig | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
+> diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
+> index 9f190eab43ed..1bc7cbf2f65d 100644
+> --- a/drivers/firmware/google/Kconfig
+> +++ b/drivers/firmware/google/Kconfig
+> @@ -44,14 +44,6 @@ config GOOGLE_COREBOOT_TABLE
+>  	  device tree node /firmware/coreboot.
+>  	  If unsure say N.
+>  
+> -config GOOGLE_COREBOOT_TABLE_ACPI
+> -	tristate
+> -	select GOOGLE_COREBOOT_TABLE
+> -
+> -config GOOGLE_COREBOOT_TABLE_OF
+> -	tristate
+> -	select GOOGLE_COREBOOT_TABLE
+> -
+>  config GOOGLE_MEMCONSOLE
+>  	tristate
+>  	depends on GOOGLE_MEMCONSOLE_X86_LEGACY || GOOGLE_MEMCONSOLE_COREBOOT
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
+> 
