@@ -2,230 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EBF68CF01
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B8B68CF10
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjBGF3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S229745AbjBGFjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjBGF2x (ORCPT
+        with ESMTP id S229509AbjBGFjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 00:28:53 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D4728214
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 21:28:39 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id c29-20020a4ad21d000000b00517a55a78d4so1323391oos.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 21:28:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gd4sYDNe6UVOrg+q9jpwoTsY9NpzBuVI5nXxucyMsZw=;
-        b=EDW35YE/XRTMMUEDQNybDT4BzNWrzrsr6SEz8tih38Ww92U1TfwKe9dIJCgF5AsHNI
-         yYOeV9usgnONpu2u8IDgVQaTstSn2T8OFHFGWT7O4PzdWe7xtbLaKznmXfywTOZJL7P8
-         N6ezM9J47wm/eLLMb2+V5BzFArqzpN5nHU6t+Vw/JvyZ8D15v7Bl/65Q2ZBG+PC2mEfS
-         8I6Okf+ly3oPRxnIQxYiasmtk1BTthtmWAyomqLON1LCh3YPCVa+3zZRdUO/sqnTz0eE
-         taMpP3Yd/WRtUcW14zTV69y15MLbvSK+zfnsr+NWfoiBtQTnxyrBlG1lFvpI+r7/8SrN
-         Z5CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gd4sYDNe6UVOrg+q9jpwoTsY9NpzBuVI5nXxucyMsZw=;
-        b=kVI9N8nxN9vEAtxIzGsYZYDyR/mcvI4+o27jEANb4PujBpAdQZXQFLBEOu0ZtAPx6B
-         wPB4wlorHabhCX/piSCeH+gxAyxH9+YZDDM7hNA74Oe9s+EZbCTHmLjk1Ut5yld/THz4
-         tQxl5Ys/6L/4nPeagSHYks/oB6pfTgduNef0C7MudmvnX3hg8xSPxTXB6Gdpq2XxAQ09
-         Wg/Zgi2Qk/kovkEgnN0E0MycLtsLH0RbvDeKBpFIizex195DVbQ/mK9r7ehtgEGuDNTY
-         egnCzXptPtyZmA6569cO/Na+daeDlLEZkxP6C0paEGKZPeKZSVOK8eS07o8MDI5ep0z8
-         5RZw==
-X-Gm-Message-State: AO0yUKUaB5dLP9itcCXTBzbaKnJcTX+BsCBuxDp8fLaUkRE8vqwDmAEy
-        Nnuf8WQ5yz+FizLlxc9LQkVw0A==
-X-Google-Smtp-Source: AK7set9Uy3D004ifBj8bxCumSdcCXKbgivSVVGaqxQArAm5s+JDPXWj34hs2WLgu1SHb2En8zit28g==
-X-Received: by 2002:a4a:88c5:0:b0:51a:be3:bcff with SMTP id q5-20020a4a88c5000000b0051a0be3bcffmr955384ooh.7.1675747719599;
-        Mon, 06 Feb 2023 21:28:39 -0800 (PST)
-Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id l14-20020a4ae38e000000b004a0ad937ccdsm581478oov.1.2023.02.06.21.28.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 21:28:39 -0800 (PST)
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: [PATCH v4 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
-Date:   Mon,  6 Feb 2023 23:28:29 -0600
-Message-Id: <20230207052829.3996-5-steev@kali.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230207052829.3996-1-steev@kali.org>
-References: <20230207052829.3996-1-steev@kali.org>
+        Tue, 7 Feb 2023 00:39:41 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF172A992
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 21:39:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675748380; x=1707284380;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vA9Mmni/6NPac6Y0H9GUnP6jaS0rdTr3cyE3IuB+Rso=;
+  b=hPqD7mLewV+cmvDlmJRCz+g7KAgdtZh43+WiZ31+F/Dt1dwvQ1jXM+rf
+   dFrMTlL1biu1J2UEpiILJSXr3jgf1M9XMt9c7LDNA3hxTbPR2pXbLTmzu
+   kJtyGEpGzji6zORizYs6VjKG2JZ7lQlUCjKD+OBsf3zk7kZjQjdNnvf9N
+   Rmq+0LU3VVv92TxAxf8ZmKiYJADKwlMPaEh5ZcJnQYg2tYasxYTwa/kR/
+   pJrzmQEDF5AhvpWsv29h2qvqAOvJDyVKdAq1f/a1CZyzkdbscix1+zL9T
+   pKXxlp8dt2wUK+tIc9EQqtIXbAbsN8lMuGnP/QrI98EHUUNW9Yf74q9Ow
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309745850"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="309745850"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:39:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="699114117"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="699114117"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 06 Feb 2023 21:39:38 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPGhd-00038A-19;
+        Tue, 07 Feb 2023 05:39:37 +0000
+Date:   Tue, 7 Feb 2023 13:39:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:x86/vdso 3/4] arch/x86/include/asm/arch_hweight.h:49:15: error:
+ invalid input size for constraint 'D'
+Message-ID: <202302071338.m7nBGR5i-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
-add this.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
+head:   5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
+commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 [3/4] x86/vdso: Provide getcpu for x86-32.
+config: x86_64-randconfig-r031-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071338.m7nBGR5i-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=92d33063c081a82d25dd08a9cce03947c8ed9164
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/vdso
+        git checkout 92d33063c081a82d25dd08a9cce03947c8ed9164
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
----
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Changes since v3:
- * Add vreg_s1c
- * Add regulators and not dead code
- * Fix commit message changelog
+All errors (new ones prefixed by >>):
 
-Changes since v2:
- * Remove dead code and add TODO comment
- * Make dtbs_check happy with the pin definitions
----
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+   In file included from include/linux/kernel.h:22:
+   In file included from include/linux/bitops.h:68:
+   In file included from arch/x86/include/asm/bitops.h:420:
+>> arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size for constraint 'D'
+                            : REG_IN (w));
+                                      ^
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+   In file included from include/linux/kernel.h:25:
+   In file included from include/linux/math.h:6:
+>> arch/x86/include/asm/div64.h:85:34: error: invalid output size for constraint '=a'
+           asm ("mulq %2; divq %3" : "=a" (q)
+                                           ^
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+   arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for function '__vdso_getcpu' [-Wmissing-prototypes]
+   __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+   ^
+   arch/x86/entry/vdso/vdso32/../vgetcpu.c:12:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   notrace long
+           ^
+           static 
+   1 warning and 2 errors generated.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index f936b020a71d..8e3c6524e7c6 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -24,6 +24,8 @@ / {
- 	aliases {
- 		i2c4 = &i2c4;
- 		i2c21 = &i2c21;
-+		serial0 = &uart17;
-+		serial1 = &uart2;
- 	};
- 
- 	wcd938x: audio-codec {
-@@ -297,6 +299,14 @@ pmc8280c-rpmh-regulators {
- 		qcom,pmic-id = "c";
- 		vdd-bob-supply = <&vreg_vph_pwr>;
- 
-+		vreg_s1c: smps1 {
-+			regulator-name = "vreg_s1c";
-+			regulator-min-microvolt = <1880000>;
-+			regulator-max-microvolt = <1900000>;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_AUTO>;
-+			regulator-allow-set-load;
-+		};
-+
- 		vreg_l1c: ldo1 {
- 			regulator-name = "vreg_l1c";
- 			regulator-min-microvolt = <1800000>;
-@@ -712,6 +722,32 @@ &qup0 {
- 	status = "okay";
- };
- 
-+&uart2 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart2_state>;
-+
-+	bluetooth {
-+		compatible = "qcom,wcn6855-bt";
-+
-+		vddio-supply = <&vreg_s10b>;
-+		vddbtcxmx-supply = <&vreg_s12b>;
-+		vddrfacmn-supply = <&vreg_s12b>;
-+		vddrfa0p8-supply = <&vreg_s12b>;
-+		vddrfa1p2-supply = <&vreg_s11b>;
-+		vddrfa1p7-supply = <&vreg_s1c>;
-+
-+		max-speed = <3200000>;
-+
-+		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
-+		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&bt_en>;
-+	};
-+};
-+
- &qup1 {
- 	status = "okay";
- };
-@@ -720,6 +756,12 @@ &qup2 {
- 	status = "okay";
- };
- 
-+&uart17 {
-+	compatible = "qcom,geni-debug-uart";
-+
-+	status = "okay";
-+};
-+
- &remoteproc_adsp {
- 	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
- 
-@@ -980,6 +1022,19 @@ hastings_reg_en: hastings-reg-en-state {
- &tlmm {
- 	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
- 
-+	bt_en: bt-en-state {
-+		hstp-sw-ctrl-pins {
-+			pins = "gpio132";
-+			function = "gpio";
-+		};
-+
-+		hstp-bt-en-pins {
-+			pins = "gpio133";
-+			function = "gpio";
-+			drive-strength = <16>;
-+		};
-+	};
-+
- 	edp_reg_en: edp-reg-en-state {
- 		pins = "gpio25";
- 		function = "gpio";
-@@ -1001,6 +1056,27 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
- 
-+	uart2_state: uart2-state {
-+		cts-pins {
-+			pins = "gpio122";
-+			function = "qup2";
-+			bias-disable;
-+		};
-+
-+		rts-tx-pins {
-+			pins = "gpio122", "gpio123";
-+			function = "qup2";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		rx-pins {
-+			pins = "gpio124";
-+			function = "qup2";
-+			bias-pull-up;
-+		};
-+	};
-+
- 	i2c21_default: i2c21-default-state {
- 		pins = "gpio81", "gpio82";
- 		function = "qup21";
+
+vim +/D +49 arch/x86/include/asm/arch_hweight.h
+
+d61931d89be506 Borislav Petkov 2010-03-05  35  
+d14edb1648221e Denys Vlasenko  2015-08-04  36  #ifdef CONFIG_X86_32
+d61931d89be506 Borislav Petkov 2010-03-05  37  static inline unsigned long __arch_hweight64(__u64 w)
+d61931d89be506 Borislav Petkov 2010-03-05  38  {
+d61931d89be506 Borislav Petkov 2010-03-05  39  	return  __arch_hweight32((u32)w) +
+d61931d89be506 Borislav Petkov 2010-03-05  40  		__arch_hweight32((u32)(w >> 32));
+d14edb1648221e Denys Vlasenko  2015-08-04  41  }
+d61931d89be506 Borislav Petkov 2010-03-05  42  #else
+d14edb1648221e Denys Vlasenko  2015-08-04  43  static __always_inline unsigned long __arch_hweight64(__u64 w)
+d14edb1648221e Denys Vlasenko  2015-08-04  44  {
+f5967101e9de12 Borislav Petkov 2016-05-30  45  	unsigned long res;
+d14edb1648221e Denys Vlasenko  2015-08-04  46  
+566b62a3676cae Uros Bizjak     2018-10-14  47  	asm (ALTERNATIVE("call __sw_hweight64", "popcntq %1, %0", X86_FEATURE_POPCNT)
+d61931d89be506 Borislav Petkov 2010-03-05  48  			 : "="REG_OUT (res)
+d61931d89be506 Borislav Petkov 2010-03-05 @49  			 : REG_IN (w));
+d61931d89be506 Borislav Petkov 2010-03-05  50  
+d61931d89be506 Borislav Petkov 2010-03-05  51  	return res;
+d61931d89be506 Borislav Petkov 2010-03-05  52  }
+d14edb1648221e Denys Vlasenko  2015-08-04  53  #endif /* CONFIG_X86_32 */
+d61931d89be506 Borislav Petkov 2010-03-05  54  
+
+:::::: The code at line 49 was first introduced by commit
+:::::: d61931d89be506372d01a90d1755f6d0a9fafe2d x86: Add optimized popcnt variants
+
+:::::: TO: Borislav Petkov <borislav.petkov@amd.com>
+:::::: CC: H. Peter Anvin <hpa@zytor.com>
+
 -- 
-2.39.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
