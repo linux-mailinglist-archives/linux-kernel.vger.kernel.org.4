@@ -2,216 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DE968DECF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AA868DED0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjBGRWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
+        id S229984AbjBGRYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjBGRWI (ORCPT
+        with ESMTP id S229447AbjBGRYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:22:08 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2101.outbound.protection.outlook.com [40.107.220.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1607C5BB5;
-        Tue,  7 Feb 2023 09:22:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y9MNazeflmOLYeKEItPVyxjblhF9Ioa+uh2/bBCCvdktTIrcCvmu3hKHsg0ncEBnYt8kD8Tvtr99jWo3cZm4/wMVnDrmYDTkApG7EmT1pmYBLvGnRscuiqpPYlTVR9SnroJRvhvIqctFGk/Lusf/I27AXWHqJ1ImG/sTkAKKwIHHo6OzEpO7czEI/VIzmimk8cxiajXs/p3l61SgRn0h7fwzBfBTogmLNC3mP++u+4hreb2jnLtHXnn+76dxalnnF8mG6pkNLAWtUArxMbWHIuWYLgDzXatVnnkzzcZiZIabK+UgJPd2pCpiJ7UihbINl5YaMFqzduqKptLrZBz2ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MNh/JZL/k9oQko1wB7UXdYbutLpYbP0rEiKMSWtMPAo=;
- b=lXQ6JQ1mA8ZdzC90gtjxPlDdYY1Iw71ilCWSMQi5wQeg1ysQ3iT3K3q2QlYU5FtAqeUZZ38jINrorudZKgLIGq1YBWQ80PLArg2+qhpl0/ZaCmMpeVG6SnU31i2FdGSSr5RhAykUH1EQ20Sk86EHyciXUY0meHWc7jaF9kWxWMNhmQrObjJk8XuOCtxsIvaaszFOMdlJNowObxDzS+Ge9C2gjz9WbRkFWkbiYv8zfwRcQy4xI0u5mQeOJ4CyuIFsq4UPwItNVLWR6hKm53YadwFXxD9i+nI4+K8dDI/Dfh26T95eMZMsEFIVGTtbszUmfayOTCpFMEb+3bqtGPMg4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 7 Feb 2023 12:24:05 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FD610424
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:24:04 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-51ba4b1b9feso203971357b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:24:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MNh/JZL/k9oQko1wB7UXdYbutLpYbP0rEiKMSWtMPAo=;
- b=p7QM7ms8m79maMzTvIHCK07ILiMMU17CN6/sulKRyPwWkCw2CC7i8BS9MSapo2OUjcN4aq0FmI4wozhSOF9Yx8RpZyfSeHi5VETO0ozroFdo41LDPMSibAU8EREK8oPusAEqwZd1Aba1x26jUbX17afhg8kFbYhmQxblnamWnj0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH2PR13MB3893.namprd13.prod.outlook.com (2603:10b6:610:98::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Tue, 7 Feb
- 2023 17:22:03 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
- 17:22:03 +0000
-Date:   Tue, 7 Feb 2023 18:21:51 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Eddy Tao <taoyuan_eddy@hotmail.com>
-Cc:     netdev@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: openvswitch: remove unnecessary
- vlan init in key_extract
-Message-ID: <Y+KIr5Pwlpoy/sn3@corigine.com>
-References: <OS3P286MB229551D6705894E6578778DCF5DB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS3P286MB229551D6705894E6578778DCF5DB9@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-X-ClientProxiedBy: AS4P251CA0024.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d3::16) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wY8hb5nZUT6CPxT6UQHAOP5yFiXCDsuAFz5p/YAvGLQ=;
+        b=Pb3qC/edCu+Hdhuxvh6TBPGYHOaJFiLiiDb92+b3hsAKrktXMLCjByGYCVYHnQpMrj
+         weicCOrRJIJoIT6fer6g9jNEjcE8p19ac7zlLhBMuS5AhytpqFS8HzhZ/Quvq35yemQu
+         nuGjWp9herknCbGRi2jNeP/G8KwHMt0KF4T7nfE9ebWsqlxoytJdJVJd+YK2wTxfst3s
+         YiDRQyHlXxz+RrDlsjNEE0kGtlMAPp2GdWOwLpSfkltZjREr7SfLW3bSDuh37mNkpJiJ
+         rK3K2dACeciOJshRN89HTZcg8bk7zWUxYnolBW6KWfy2DbTd7tlzhtqHN6vc6V+htiaY
+         lbZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wY8hb5nZUT6CPxT6UQHAOP5yFiXCDsuAFz5p/YAvGLQ=;
+        b=UNyNTLaURoCgoFh3F3+kNP1bk9f12WimXYAAn/Cq0Iv8aBIPPpcfmE6qVrGWlM1gmU
+         eFA/KibXLDzHdwmHGf1bDQldvJkvOUKGr3NzyobghymaGqq73cvg2tViwQB9oPDtL3se
+         EY8fvFdhCew5mVVWVHPe2joXlE8Nb3sNFBJ0WLHPAHd1e90Uj3MOVDrlPP53qsrDw4p9
+         okNkhIrk795hlKnOHVZWFLzcNcIptPz15Qh5BdyL/NbdcpH6N3bep3zgP+i+gjIwYV0p
+         CL2d6WEm5ekCPJyC/YM34caXEI/YNy3/mPjuGOi+dmt0D2gDKvN2MlzeOUxt0KDMq5F1
+         yqAw==
+X-Gm-Message-State: AO0yUKVKkos0yoZzTLng3nlix9gJizChZW+SYktCLF5Kj6+51nQ1qr3y
+        wNOMDE8PqPfQ8vg4u6O5qJnBmsqfpEbZhosUlMwg7g==
+X-Google-Smtp-Source: AK7set9W8Y0rg7QI82Y3A8eB+oY+UN01O2yggY3Hc3Pg8a19h2sKqu2GnTC09gqwgFsaHf2qGIPVjJ6VaMAwBgtLg2U=
+X-Received: by 2002:a0d:e808:0:b0:527:b484:aa14 with SMTP id
+ r8-20020a0de808000000b00527b484aa14mr456067ywe.263.1675790643441; Tue, 07 Feb
+ 2023 09:24:03 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3893:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4388faf6-806f-4235-502b-08db092fd43a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kRqaZN5dpMTSddnNCIi1ueW14hzB7OF9a8NhIydqtPx2HJjzzOqWA27AtRFJQcUF6tUYFuGiwqADk2IVmqscUvwGxqFSmdk5avcXhST27Tz8ZbLQnxf5YMvRtxifYXv5vDsjdaj1pslMvMnxt/HZ+I6hkITuWXslLpgIWfeqCPl5a9RJfRpxIjjGowjlNN1+sSZXydK1NENDKiFaKUD9KpOB0pRtngcFlEzkx6kBD0ELFDoqAahMIDCyDygz0P5p4zpocVWV7F1MDAjQDogC/TJH/Fi+eAUyi6QUvwOwO35IVJj7mafFwp9ykIF1Fre2+1dw/22c31+1QPXOHTBqu7fM3tXVhtCmiVoQnYs1NN5uKsJjFDlTMDm4L5FYnitzVUikAY0WGFyRxipyAkknG6tv7QitXYvXhjKEcXjpjK0l9gnbs/qMBsnBx+96E0dSTktPmhQPQX1HPdQYZKgIRiWa4ecp4l74lDHoHSm6tQHGeYmMLZJR9tkEIQfQZMP+6pMx4FxW1PSSoV7Mg5EIMqqdPZUEP3TYu8L2G1tyFP1a9zwq3omo4p+4ssZSm7OdLpW/DrLCvQbTEER0mFHumvzQLstTjWOHv1whCcvWCv9/x6nQrHUT+pSVWSHqpK54gm8qXqpBN1BrgrJ6hmjisL2F97fuqWMPtl2Zfyrg9qWYiAiIz5qfWo1GhHxnMfeO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(39840400004)(136003)(396003)(366004)(376002)(451199018)(5660300002)(8936002)(41300700001)(83380400001)(86362001)(38100700002)(36756003)(44832011)(2906002)(54906003)(186003)(6512007)(26005)(45080400002)(6506007)(478600001)(6486002)(66556008)(66946007)(2616005)(66476007)(8676002)(4326008)(6916009)(316002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v3kHy/H9Al90RNt1sXFjkCITgE+PMkaXdrEdFRRiq2QfKf+g54IaO4Whb7bt?=
- =?us-ascii?Q?R5n2WWtcR1vj+Jlm/vAHm8v3R77GYvnLXOQhBK+fTQbmSF6zgsoQcDhfHCo0?=
- =?us-ascii?Q?p5QAXnoPhztLfF71qaPDVBb99pSn2P14S+hS7mqZ/dhTonNq7+SURv1b4p11?=
- =?us-ascii?Q?VZpNUIbDiZPmPQEh2WytTBX1afLgMUftqimsbQSmermQjRIaKI8Xe7zIr6uj?=
- =?us-ascii?Q?72MaRVT+QQKBLBalm9HBerpmoNDFDTpEc1KifAAJLl/aRTzLAFFg3tHr9Jd9?=
- =?us-ascii?Q?PvQ2O/x6T+8+ZMMkPOzb4BNuJ7xJvC+9xSl6/rk58tSCgU6kvtIamBKuBnSE?=
- =?us-ascii?Q?IuVnL7HmV8wRuH9Ri58QALth1KQfe3tMC8FhBPRmUbouoQIQb3uUPJHjwiSr?=
- =?us-ascii?Q?wobhYbkoyymMNRYo0KUAufMN8YQe9fr7Ybx7niZqyL3nY5y8djaGJvD3bzw/?=
- =?us-ascii?Q?kZluI+DHUv2jSFhk/Jp0drGt1Ok3TwNxXnOLwCL75/Re4wDGLtGMapzTY/Dh?=
- =?us-ascii?Q?ra0Jk3GpXtRRXpQHWrkMl20bCGdmkb7XAuEV6yDzguoWJUyuAp4Kx5WSqTcs?=
- =?us-ascii?Q?aPczAt3jEmDFkCldT4waJFF9OnLFd48EV8QLRnb2oAbtO99MfbGL+ZMr6Jkn?=
- =?us-ascii?Q?E3WmKID7c9/iBBAPoyTRgk4ueNLry0Autq2i3DsEKsWTA5cvxRdqP+RgKLnY?=
- =?us-ascii?Q?UXgRtoimhTQf9kmtb/Yky5ODcvOf5fXrfsi2hSukzV8SYxRJfnoXtZwWElzs?=
- =?us-ascii?Q?ps82fAvJcvKQZyp7eFTy5gcDK/qi2XjduY6xPwalaslPl7OL7giJD/vKwq7d?=
- =?us-ascii?Q?Fw2A5gADBX9BT+ogKpjJPC7FRCGlPIFuZ6ARTtZyynhLzJur5Qx9MpQMqsXh?=
- =?us-ascii?Q?bKQ42MmcE50WwAw4MuDfkAp6eosyjcqg5kZA470CMkmm/2Be81WHOfHZ0ZSO?=
- =?us-ascii?Q?HZunKz7fEhSSIz/mosV4PXEtESfLVboCEgBkIIZEBaAPTSAGLVLTfTXKKkWl?=
- =?us-ascii?Q?nnR8/xaGot+H1XgJuwMKvUc1YtcQDqTHGAeHQX0dxb9gWRuJ6MgJRpy/fPGk?=
- =?us-ascii?Q?Qp0cFhLfmU+eppGPAGQsgPU0gWT/arNfhUVM77BcDNRSDS8GVAyak+VTFjsv?=
- =?us-ascii?Q?UjuAu9dSu8avaB3cmkHuIpedpzm7ftOLDPHX9dif2MnYCT12R/VxXCiS5Vw0?=
- =?us-ascii?Q?xBoxYJF9/PCNhRr9lFx+jSJtGYYUmCy1V3Z7Tl1KULKWHs3aHF+rfLQoxyUJ?=
- =?us-ascii?Q?s4CUa+HyrxLlucO87WGqfiPPYMA3WTM3CNYm50tjeL+DzclqrDJAADcTntHF?=
- =?us-ascii?Q?QOcsSmgalJFykl4Bu6l6yvLhqRk/56sPvDgC2Bc0nefmqqRaqTzmqdJmrVw3?=
- =?us-ascii?Q?m+xrUO+WqLrcKGwgUHbHYyam7a9gVdeZwDzG8RP5N5jroaxBwwCgjG3TCi7p?=
- =?us-ascii?Q?mHDOTK4vpEludIoAcGMvAZ9NGjNzbe6vnvSw/uj3GMor3mgALz+3HyE0CZT+?=
- =?us-ascii?Q?gVT/oIfPpgISRV1lFhG0JGytU+v2f0VCFQuRb3rt3kcQAM1sO+IYkyFo1NwW?=
- =?us-ascii?Q?xF3AFGumZ/Ep4AP/0FqkmQve3afJTKL0pGzFuxnVD1Yp0NC0QK4jtsBqmJk6?=
- =?us-ascii?Q?zQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4388faf6-806f-4235-502b-08db092fd43a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 17:22:03.5490
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ikK6LNSbYZQen/P6VYcEWsm9F2cjILNwfhO/73FnvJ2Ou6ko/cdztX+gUro+4/hV5dV2mERE+azlQgE/2DjfYHq6Hmes/8k6GW3wlVjIjWA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3893
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125233554.153109-1-surenb@google.com> <20230125233554.153109-2-surenb@google.com>
+ <20230125162159.a66e5ef05fecb405e85ffec9@linux-foundation.org>
+ <CAJuCfpG5HyMP3RM1jTJxCnN4WUz4APAcxbkOT48ZtJDXcb3z3w@mail.gmail.com>
+ <20230125173449.5472cffc989dfab4b83c491d@linux-foundation.org>
+ <20230126172726.GA682281@paulmck-ThinkPad-P17-Gen-1> <Y+KHWcpxd09prihv@elver.google.com>
+In-Reply-To: <Y+KHWcpxd09prihv@elver.google.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 7 Feb 2023 09:23:52 -0800
+Message-ID: <CAJuCfpHY07stD9T12oqcz2ELJf42ExP-Du3ZdT84CcOk5VVi-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] kernel/fork: convert vma assignment to a memcpy
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        peterz@infradead.org, ldufour@linux.ibm.com, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 12:31:33PM +0800, Eddy Tao wrote:
-> Redefine clear_vlan to initialize one struct vlan_head
-> Define   clear_vlans to initialize key.eth.vlan and key.eth.cvlan
-> Calls the revised functions accurately
-> 
-> Reasoning:
-> 
-> For vlan packet, current code calls clear_vlan unnecessarily,
-> since parse_vlan sets key->eth.vlan and key->eth.cvlan correctly.
-> Only special case where return value <=0 needs inialization
-> certail key.eth.vlan or key.eth.cvlan specifically.
-> 
-> For none-vlan case, parse_vlan returns on the first parse_vlan_tag
-> which returns 0, in this case, calls clear_vlan
-> 
-> For MAC_PROTO_NONE, logic is intact after this revision
-> 
-> Signed-off-by: Eddy Tao <taoyuan_eddy@hotmail.com>
+On Tue, Feb 7, 2023 at 9:16 AM Marco Elver <elver@google.com> wrote:
+>
+> On Thu, Jan 26, 2023 at 09:27AM -0800, Paul E. McKenney wrote:
+> > On Wed, Jan 25, 2023 at 05:34:49PM -0800, Andrew Morton wrote:
+> > > On Wed, 25 Jan 2023 16:50:01 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> > >
+> > > > On Wed, Jan 25, 2023 at 4:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > >
+> > > > > On Wed, 25 Jan 2023 15:35:48 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > >
+> > > > > > Convert vma assignment in vm_area_dup() to a memcpy() to prevent compiler
+> > > > > > errors when we add a const modifier to vma->vm_flags.
+> > > > > >
+> > > > > > ...
+> > > > > >
+> > > > > > --- a/kernel/fork.c
+> > > > > > +++ b/kernel/fork.c
+> > > > > > @@ -482,7 +482,7 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
+> > > > > >                * orig->shared.rb may be modified concurrently, but the clone
+> > > > > >                * will be reinitialized.
+> > > > > >                */
+> > > > > > -             *new = data_race(*orig);
+> > > > > > +             memcpy(new, orig, sizeof(*new));
+> > > > >
+> > > > > The data_race() removal is unchangelogged?
+> > > >
+> > > > True. I'll add a note in the changelog about that. Ideally I would
+> > > > like to preserve it but I could not find a way to do that.
+> > >
+> > > Perhaps Paul can comment?
+> > >
+> > > I wonder if KCSAN knows how to detect this race, given that it's now in
+> > > a memcpy.  I assume so.
+> >
+> > I ran an experiment memcpy()ing between a static array and an onstack
+> > array, and KCSAN did not complain.  But maybe I was setting it up wrong.
+> >
+> > This is what I did:
+> >
+> >       long myid = (long)arg; /* different value for each task */
+> >       static unsigned long z1[10] = { 0 };
+> >       unsigned long z2[10];
+> >
+> >       ...
+> >
+> >       memcpy(z1, z2, ARRAY_SIZE(z1) * sizeof(z1[0]));
+> >       for (zi = 0; zi < ARRAY_SIZE(z1); zi++)
+> >               z2[zi] += myid;
+> >       memcpy(z2, z1, ARRAY_SIZE(z1) * sizeof(z1[0]));
+> >
+> > Adding Marco on CC for his thoughts.
+>
+> ( Sorry for not seeing it earlier - just saw this by chance. )
+>
+> memcpy() data races will be detected as of (given a relatively recent
+> Clang compiler):
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7c201739beef
+>
+> Also beware that the compiler is free to "optimize" things by either
+> inlining memcpy() (turning an explicit memcpy() into just a bunch of
+> loads/stores), or outline plain assignments into memcpy() calls. So the
+> only way to be sure what ends up there is to look at the disassembled
+> code.
+>
+> The data_race() was introduced by:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cda099b37d716
+>
+> It says:
+>  "vm_area_dup() blindly copies all fields of original VMA to the new one.
+>   This includes coping vm_area_struct::shared.rb which is normally
+>   protected by i_mmap_lock. But this is fine because the read value will
+>   be overwritten on the following __vma_link_file() under proper
+>   protection. Thus, mark it as an intentional data race and insert a few
+>   assertions for the fields that should not be modified concurrently."
+>
+> And as far as I can tell this hasn't changed.
 
-This seems like a complex, and perhaps error-prone, way to avoid
-writing a few bytes. I do tend to think the extra code complexity
-is not worth it without some performance justification.
+Thanks for the feedback, Marco!
+So, IIUC Mel's proposal to use data_race(memcpy(new, orig,
+sizeof(*new))); is fine in this case, right?
+Thanks,
+Suren.
 
-OTOH, I think that perhaps a better question might be: do the bytes need to
-be cleared under any circumstances? I suspect key is discarded when an
-error occurs.
-
-> ---
->  net/openvswitch/flow.c | 24 ++++++++++++++++--------
->  1 file changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
-> index e20d1a973417..30a90597cab6 100644
-> --- a/net/openvswitch/flow.c
-> +++ b/net/openvswitch/flow.c
-> @@ -480,12 +480,16 @@ static int parse_vlan_tag(struct sk_buff *skb, struct vlan_head *key_vh,
->  	return 1;
->  }
->  
-> -static void clear_vlan(struct sw_flow_key *key)
-> +static inline void clear_vlan(struct vlan_head *vlan)
->  {
-> -	key->eth.vlan.tci = 0;
-> -	key->eth.vlan.tpid = 0;
-> -	key->eth.cvlan.tci = 0;
-> -	key->eth.cvlan.tpid = 0;
-> +	vlan->tci = 0;
-> +	vlan->tpid = 0;
-> +}
-> +
-> +static inline void clear_vlans(struct sw_flow_key *key)
-> +{
-> +	clear_vlan(&key->eth.vlan);
-> +	clear_vlan(&key->eth.cvlan);
->  }
-
-This is a nice cleanup, IMHO :)
->  
->  static int parse_vlan(struct sk_buff *skb, struct sw_flow_key *key)
-> @@ -498,14 +502,18 @@ static int parse_vlan(struct sk_buff *skb, struct sw_flow_key *key)
->  	} else {
->  		/* Parse outer vlan tag in the non-accelerated case. */
->  		res = parse_vlan_tag(skb, &key->eth.vlan, true);
-> -		if (res <= 0)
-> +		if (res <= 0) {
-> +			clear_vlans(key);
-
-I think this makes more sense in the caller.
-
->  			return res;
-> +		}
->  	}
->  
->  	/* Parse inner vlan tag. */
->  	res = parse_vlan_tag(skb, &key->eth.cvlan, false);
-> -	if (res <= 0)
-> +	if (res <= 0) {
-> +		clear_vlan(&key->eth.cvlan);
->  		return res;
-> +	}
->  
->  	return 0;
->  }
-> @@ -918,8 +926,8 @@ static int key_extract(struct sk_buff *skb, struct sw_flow_key *key)
->  	skb_reset_mac_header(skb);
->  
->  	/* Link layer. */
-> -	clear_vlan(key);
->  	if (ovs_key_mac_proto(key) == MAC_PROTO_NONE) {
-> +		clear_vlans(key);
->  		if (unlikely(eth_type_vlan(skb->protocol)))
->  			return -EINVAL;
-
-I think you missed the following case further down:
-
-		if (unlikely(key->eth.type == htons(0)))
-			return -ENOMEM;
+>
+> Thanks,
+> -- Marco
