@@ -2,334 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B1F68E433
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF8168E435
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjBGXGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 18:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49534 "EHLO
+        id S229740AbjBGXJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 18:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjBGXF2 (ORCPT
+        with ESMTP id S229478AbjBGXJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 18:05:28 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7948D40BC5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 15:04:49 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso196937wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 15:04:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KVqUJYOx2vTuosUua8hJoGt0geRYeRPq5H8k23kPkBg=;
-        b=K/XKPjBxiVvpGnCBsaHZtP2MmfmWYWpHG1S9ROqPdhk3ZU25g/JOlC+1MkQQErcuGq
-         aONBfjQdDeEo8jMzDH3KrgKg2XEZOAhYuB17+A2g8pVL3/ADw6KQNGnoisVnwPqJ5SFi
-         UXa0Xf/0IgntZAtCY3uyoJA/fMaeKNtZEhGCWxIUnlczw8Gp7HPlvDIeMFGDNVO7buQ8
-         lhMtml6oj25JiR4LpJ2OdEqpI8kxrAi0e6fDTRKQpWZi6OdDen2rlSYuhPvBunudbzXZ
-         Vg0c59FaCOlEtUptoe12uB9Os165CWXPoSJhwUQ+94sebZ/KKvWoeAGea+d7zhHC1TTl
-         Pdbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KVqUJYOx2vTuosUua8hJoGt0geRYeRPq5H8k23kPkBg=;
-        b=azjYey3qfTNP7vPltG2TqkOUxOOK4FIx1esDizggc0/P4fnh/jpj8EfuHsaBwF/Me9
-         MKeZ/Ep/hAukdFC6g2BvYzwTdBsfsY7e9YX0XW9p1wR6QSJe1QI/UpZg/pnsR5IwPoDM
-         l9gJCmWaJgV2+YGGthVO+w4KhAIeZ/FFFu5xo64N5eVDO4TJL1ORCAPeziw7ERXRPm3B
-         uQvakn41O2Dvm/EsoRnkMfx4KL9jx2meDqnQNmBwgF2sYi19RgDnln41e6zrVQoDKfJt
-         J+y/M/JEvgN0ETsAuFA3mwu5035uYXD2nGufMKUUF9S/DHmM9VyxWFYif6SA/CVg62BK
-         0qjQ==
-X-Gm-Message-State: AO0yUKWX+y+GNdr5Eo1q1PNcOMakAip6TSxMh8lgVtKuKD+g3zNgIiwV
-        mvhesGpfV6GrQo6VHVlP7Eb51w==
-X-Google-Smtp-Source: AK7set+hluSt+fJvGKCSphDcTtrvanviw8PudRthiYm7O+MAazDZkZ+OhT5/KXkLNZSNnimembDx+g==
-X-Received: by 2002:a05:600c:807:b0:3dc:eaef:c1bb with SMTP id k7-20020a05600c080700b003dceaefc1bbmr4449372wmp.35.1675811088984;
-        Tue, 07 Feb 2023 15:04:48 -0800 (PST)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:c04f:2463:c151:8b87])
-        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b003dcc82ce53fsm146485wmq.38.2023.02.07.15.04.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 15:04:48 -0800 (PST)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com
-Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v7 9/9] x86/smpboot: Serialize topology updates for secondary bringup
-Date:   Tue,  7 Feb 2023 23:04:36 +0000
-Message-Id: <20230207230436.2690891-10-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230207230436.2690891-1-usama.arif@bytedance.com>
-References: <20230207230436.2690891-1-usama.arif@bytedance.com>
+        Tue, 7 Feb 2023 18:09:19 -0500
+Received: from omta37.uswest2.a.cloudfilter.net (omta37.uswest2.a.cloudfilter.net [35.89.44.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8B7367C8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 15:08:53 -0800 (PST)
+Received: from eig-obgw-6018a.ext.cloudfilter.net ([10.0.30.233])
+        by cmsmtp with ESMTP
+        id PS3epA2RiYHR1PX50pXQJ1; Tue, 07 Feb 2023 23:08:50 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTP
+        id PX4zpK970y1hcPX50pldnm; Tue, 07 Feb 2023 23:08:50 +0000
+X-Authority-Analysis: v=2.4 cv=cqSILn0i c=1 sm=1 tr=0 ts=63e2da02
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=wTog8WU66it3cfrESHnF4A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=m04uMKEZRckA:10
+ a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8 a=XYAwZIGsAAAA:8 a=VwQbUJbxAAAA:8
+ a=cm27Pg_UAAAA:8 a=_Wotqz80AAAA:8 a=lepexe-JEeTRwUq4UYcA:9 a=QEXdDO2ut3YA:10
+ a=E8ToXWR_bxluHZ7gmE-Z:22 a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
+ a=buJP51TR1BpY-zbLSsyS:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ED4y54RMLPXzNI1joWSXaV4TBbQzFSz900g2AHgM1Ro=; b=P0mahWdIRcjVu7mRciLzvxhWo2
+        zH53lbynCFt2QyDV/S0rRfXsJ0c592YM6fT91me/yHXehAttNjFSsOVRFNPjHIWbbUTy6i/SPMyvF
+        AYMSZoPJS1bXb5ATyIfwHF1oJE3gX9p4O0gpPEMwRvfGxKlByKnzdrnB37TppNxG2lBymgMhsAPE9
+        Dak3tZmi22bo1TCrSkUNcyfQWy/RImJ9qrEj85ATjjWCY3iquvF2lk/xdzwVhvyOWGUx9U3V5VZR7
+        1pfzSm09lRKSMec3QJrZB73mm/ByrPlszkxH7cuE+iofjzonKwhr89DFGcRR7XRqd0G1hcuzXVyBG
+        ziYj2jGA==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:56074 helo=[192.168.15.7])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1pPX4y-000Jun-Tl;
+        Tue, 07 Feb 2023 17:08:49 -0600
+Message-ID: <22599902-57bb-a137-047e-867f35b45b69@embeddedor.com>
+Date:   Tue, 7 Feb 2023 17:09:06 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3][next] scsi: smartpqi: Replace one-element array with
+ flexible-array member
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Don Brace <don.brace@microchip.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <Y+LJz/r6+UeLqnV3@work>
+ <63e2d840.170a0220.2b199.00a7@mx.google.com>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <63e2d840.170a0220.2b199.00a7@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1pPX4y-000Jun-Tl
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.7]) [187.162.31.110]:56074
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKjTyjr5lkneV+jPCPlVcF1qoHJUD949zU8zMyowvzXEFAZhABfKQbuEL+JfKi4C8cn78J9UTb3x+AvYHSBrp7cVQWvHvh0TXzHKN+RqdTeyCWDYhoD6
+ ZW28i8hV9RZAyoAP4+QXB16kgltMzkg/aSRZh01p2cr5Wt/SY+JsdMr0QIgNLCWqUxQ3poa7V35aDHdbqdklo/cn1UQ0ahokZYIbuXfGEympLEQOJtPV43sC
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
 
-The toplogy update is performed by the AP via smp_callin() after the BSP
-has called do_wait_cpu_initialized(), setting the AP's bit in
-cpu_callout_mask to allow it to proceed.
 
-In preparation to enable further parallelism of AP bringup, add locking to
-serialize the update even if multiple APs are (in future) permitted to
-proceed through the next stages of bringup in parallel.
+On 2/7/23 17:01, Kees Cook wrote:
+> On Tue, Feb 07, 2023 at 03:59:43PM -0600, Gustavo A. R. Silva wrote:
+>> One-element arrays are deprecated, and we are replacing them with flexible
+>> array members instead. So, replace one-element array with flexible-array
+>> member in struct report_log_lun_list.
+>>
+>> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
+>> on memcpy().
+>>
+>> Link: https://github.com/KSPP/linux/issues/79
+>> Link: https://github.com/KSPP/linux/issues/204
+>> Acked-by: Don Brace <don.brace@microchip.com>
+>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> 
+> Looks good to me -- both before and after, there is 1 extra all-zero
+> entry at the end. But now the struct is using a flex array correctly.
 
-Without such ordering (and with that future extra parallelism), confusion
-ensues:
+Yep. :)
 
-[    1.360149] x86: Booting SMP configuration:
-[    1.360221] .... node  #0, CPUs:        #1  #2  #3  #4  #5  #6  #7  #8  #9 #10 #11 #12 #13 #14 #15 #16 #17 #18 #19 #20 #21 #22 #23
-[    1.366225] .... node  #1, CPUs:   #24 #25 #26 #27 #28 #29 #30 #31 #32 #33 #34 #35 #36 #37 #38 #39 #40 #41 #42 #43 #44 #45 #46 #47
-[    1.370219] .... node  #0, CPUs:   #48 #49 #50 #51 #52 #53 #54 #55 #56 #57 #58 #59 #60 #61 #62 #63 #64 #65 #66 #67 #68 #69 #70 #71
-[    1.378226] .... node  #1, CPUs:   #72 #73 #74 #75 #76 #77 #78 #79 #80 #81 #82 #83 #84 #85 #86 #87 #88 #89 #90 #91 #92 #93 #94 #95
-[    1.382037] Brought 96 CPUs to x86/cpu:kick in 72232606 cycles
-[    0.104104] smpboot: CPU 26 Converting physical 0 to logical die 1
-[    0.104104] smpboot: CPU 27 Converting physical 1 to logical package 2
-[    0.104104] smpboot: CPU 24 Converting physical 1 to logical package 3
-[    0.104104] smpboot: CPU 27 Converting physical 0 to logical die 2
-[    0.104104] smpboot: CPU 25 Converting physical 1 to logical package 4
-[    1.385609] Brought 96 CPUs to x86/cpu:wait-init in 9269218 cycles
-[    1.395285] Brought CPUs online in 28930764 cycles
-[    1.395469] smp: Brought up 2 nodes, 96 CPUs
-[    1.395689] smpboot: Max logical packages: 2
-[    1.396222] smpboot: Total of 96 processors activated (576000.00 BogoMIPS)
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-[Usama Arif: fixed rebase conflict]
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- arch/x86/include/asm/smp.h      |  4 +-
- arch/x86/include/asm/topology.h |  2 -
- arch/x86/kernel/cpu/common.c    |  6 +--
- arch/x86/kernel/smpboot.c       | 73 ++++++++++++++++++++-------------
- arch/x86/xen/smp_pv.c           |  4 +-
- 5 files changed, 48 insertions(+), 41 deletions(-)
+Thanks!
+--
+Gustavo
 
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index 33c0d5fd8af6..b4b29e052b6e 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -48,8 +48,6 @@ struct smp_ops {
- };
- 
- /* Globals due to paravirt */
--extern void set_cpu_sibling_map(int cpu);
--
- #ifdef CONFIG_SMP
- extern struct smp_ops smp_ops;
- 
-@@ -137,7 +135,7 @@ void native_send_call_func_single_ipi(int cpu);
- void x86_idle_thread_init(unsigned int cpu, struct task_struct *idle);
- 
- void smp_store_boot_cpu_info(void);
--void smp_store_cpu_info(int id);
-+void smp_store_cpu_info(int id, bool force_single_core);
- 
- asmlinkage __visible void smp_reboot_interrupt(void);
- __visible void smp_reschedule_interrupt(struct pt_regs *regs);
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 458c891a8273..4bccbd949a99 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -136,8 +136,6 @@ static inline int topology_max_smt_threads(void)
- 	return __max_smt_threads;
- }
- 
--int topology_update_package_map(unsigned int apicid, unsigned int cpu);
--int topology_update_die_map(unsigned int dieid, unsigned int cpu);
- int topology_phys_to_logical_pkg(unsigned int pkg);
- int topology_phys_to_logical_die(unsigned int die, unsigned int cpu);
- bool topology_is_primary_thread(unsigned int cpu);
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 9cfca3d7d0e2..cf1a4eff7a76 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1766,7 +1766,7 @@ static void generic_identify(struct cpuinfo_x86 *c)
-  * Validate that ACPI/mptables have the same information about the
-  * effective APIC id and update the package map.
-  */
--static void validate_apic_and_package_id(struct cpuinfo_x86 *c)
-+static void validate_apic_id(struct cpuinfo_x86 *c)
- {
- #ifdef CONFIG_SMP
- 	unsigned int apicid, cpu = smp_processor_id();
-@@ -1777,8 +1777,6 @@ static void validate_apic_and_package_id(struct cpuinfo_x86 *c)
- 		pr_err(FW_BUG "CPU%u: APIC id mismatch. Firmware: %x APIC: %x\n",
- 		       cpu, apicid, c->initial_apicid);
- 	}
--	BUG_ON(topology_update_package_map(c->phys_proc_id, cpu));
--	BUG_ON(topology_update_die_map(c->cpu_die_id, cpu));
- #else
- 	c->logical_proc_id = 0;
- #endif
-@@ -1969,7 +1967,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
- #ifdef CONFIG_X86_32
- 	enable_sep_cpu();
- #endif
--	validate_apic_and_package_id(c);
-+	validate_apic_id(c);
- 	x86_spec_ctrl_setup_ap();
- 	update_srbds_msr();
- 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 7e7bcab6676e..8ffec5de2e2e 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -180,16 +180,12 @@ static void smp_callin(void)
- 	apic_ap_setup();
- 
- 	/*
--	 * Save our processor parameters. Note: this information
--	 * is needed for clock calibration.
--	 */
--	smp_store_cpu_info(cpuid);
--
--	/*
-+	 * Save our processor parameters and update topology.
-+	 * Note: this information is needed for clock calibration.
- 	 * The topology information must be up to date before
- 	 * calibrate_delay() and notify_cpu_starting().
- 	 */
--	set_cpu_sibling_map(raw_smp_processor_id());
-+	smp_store_cpu_info(cpuid, false);
- 
- 	ap_init_aperfmperf();
- 
-@@ -244,6 +240,12 @@ static void notrace start_secondary(void *unused)
- 	 * smp_callout_mask to release them.
- 	 */
- 	cpu_init_secondary();
-+
-+	/*
-+	 * Even though notify_cpu_starting() will do this, it does so too late
-+	 * as the AP may already have triggered lockdep splats by then. See
-+	 * commit 29368e093 ("x86/smpboot:  Move rcu_cpu_starting() earlier").
-+	 */
- 	rcu_cpu_starting(raw_smp_processor_id());
- 	x86_cpuinit.early_percpu_clock_init();
- 
-@@ -352,7 +354,7 @@ EXPORT_SYMBOL(topology_phys_to_logical_die);
-  * @pkg:	The physical package id as retrieved via CPUID
-  * @cpu:	The cpu for which this is updated
-  */
--int topology_update_package_map(unsigned int pkg, unsigned int cpu)
-+static int topology_update_package_map(unsigned int pkg, unsigned int cpu)
- {
- 	int new;
- 
-@@ -375,7 +377,7 @@ int topology_update_package_map(unsigned int pkg, unsigned int cpu)
-  * @die:	The die id as retrieved via CPUID
-  * @cpu:	The cpu for which this is updated
-  */
--int topology_update_die_map(unsigned int die, unsigned int cpu)
-+static int topology_update_die_map(unsigned int die, unsigned int cpu)
- {
- 	int new;
- 
-@@ -406,25 +408,7 @@ void __init smp_store_boot_cpu_info(void)
- 	c->initialized = true;
- }
- 
--/*
-- * The bootstrap kernel entry code has set these up. Save them for
-- * a given CPU
-- */
--void smp_store_cpu_info(int id)
--{
--	struct cpuinfo_x86 *c = &cpu_data(id);
--
--	/* Copy boot_cpu_data only on the first bringup */
--	if (!c->initialized)
--		*c = boot_cpu_data;
--	c->cpu_index = id;
--	/*
--	 * During boot time, CPU0 has this setup already. Save the info when
--	 * bringing up AP or offlined CPU0.
--	 */
--	identify_secondary_cpu(c);
--	c->initialized = true;
--}
-+static arch_spinlock_t topology_lock = __ARCH_SPIN_LOCK_UNLOCKED;
- 
- static bool
- topology_same_node(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
-@@ -630,7 +614,7 @@ static struct sched_domain_topology_level x86_topology[] = {
-  */
- static bool x86_has_numa_in_package;
- 
--void set_cpu_sibling_map(int cpu)
-+static void set_cpu_sibling_map(int cpu)
- {
- 	bool has_smt = smp_num_siblings > 1;
- 	bool has_mp = has_smt || boot_cpu_data.x86_max_cores > 1;
-@@ -709,6 +693,37 @@ void set_cpu_sibling_map(int cpu)
- 	}
- }
- 
-+/*
-+ * The bootstrap kernel entry code has set these up. Save them for
-+ * a given CPU
-+ */
-+void smp_store_cpu_info(int id, bool force_single_core)
-+{
-+	struct cpuinfo_x86 *c = &cpu_data(id);
-+
-+	/* Copy boot_cpu_data only on the first bringup */
-+	if (!c->initialized)
-+		*c = boot_cpu_data;
-+	c->cpu_index = id;
-+	/*
-+	 * During boot time, CPU0 has this setup already. Save the info when
-+	 * bringing up AP or offlined CPU0.
-+	 */
-+	identify_secondary_cpu(c);
-+
-+	arch_spin_lock(&topology_lock);
-+	BUG_ON(topology_update_package_map(c->phys_proc_id, id));
-+	BUG_ON(topology_update_die_map(c->cpu_die_id, id));
-+	c->initialized = true;
-+
-+	/* For Xen PV */
-+	if (force_single_core)
-+		c->x86_max_cores = 1;
-+
-+	set_cpu_sibling_map(id);
-+	arch_spin_unlock(&topology_lock);
-+}
-+
- /* maps the cpu to the sched domain representing multi-core */
- const struct cpumask *cpu_coregroup_mask(int cpu)
- {
-diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
-index 6175f2c5c822..09f94f940689 100644
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -71,9 +71,7 @@ static void cpu_bringup(void)
- 		xen_enable_syscall();
- 	}
- 	cpu = smp_processor_id();
--	smp_store_cpu_info(cpu);
--	cpu_data(cpu).x86_max_cores = 1;
--	set_cpu_sibling_map(cpu);
-+	smp_store_cpu_info(cpu, true);
- 
- 	speculative_store_bypass_ht_init();
- 
--- 
-2.25.1
-
+> 
+> -Kees
+> 
+>> ---
+>> Changes in v3:
+>>   - Amplify the existing comment instead of adding a new one. By Don
+>>     Brace[1].
+>>   - Add Don's Acked-by tag to the changelog.
+>>     Link: https://lore.kernel.org/linux-hardening/d881ad98-a291-1c9b-53dc-199f23f1625e@embeddedor.com/ [1]
+>>
+>> Changes in v2:
+>>   - In v1 we thought that the original code was allocating one too-many
+>>     entries for the list. However, Don Brace commented that the allocation
+>>     was actually intentional[2]. So, I added a code comment with his feedback.
+>>     Link: https://lore.kernel.org/linux-hardening/16e6c434-44af-2efb-d4bc-a253e93e5590@embeddedor.com/  [2]
+>>
+>> v1:
+>>   - Link: https://lore.kernel.org/linux-hardening/c80c0979933e0c05e80d95792ef167a28640a14b.1663816572.git.gustavoars@kernel.org/
+>>
+>>   drivers/scsi/smartpqi/smartpqi.h      | 2 +-
+>>   drivers/scsi/smartpqi/smartpqi_init.c | 3 ++-
+>>   2 files changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
+>> index af27bb0f3133..228838eb3686 100644
+>> --- a/drivers/scsi/smartpqi/smartpqi.h
+>> +++ b/drivers/scsi/smartpqi/smartpqi.h
+>> @@ -954,7 +954,7 @@ struct report_log_lun {
+>>   
+>>   struct report_log_lun_list {
+>>   	struct report_lun_header header;
+>> -	struct report_log_lun lun_entries[1];
+>> +	struct report_log_lun lun_entries[];
+>>   };
+>>   
+>>   struct report_phys_lun_8byte_wwid {
+>> diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+>> index d0446d4d4465..49a8f91810b6 100644
+>> --- a/drivers/scsi/smartpqi/smartpqi_init.c
+>> +++ b/drivers/scsi/smartpqi/smartpqi_init.c
+>> @@ -1259,7 +1259,8 @@ static int pqi_get_device_lists(struct pqi_ctrl_info *ctrl_info,
+>>   			"report logical LUNs failed\n");
+>>   
+>>   	/*
+>> -	 * Tack the controller itself onto the end of the logical device list.
+>> +	 * Tack the controller itself onto the end of the logical device list
+>> +	 * by adding a list entry that is all zeros.
+>>   	 */
+>>   
+>>   	logdev_data = *logdev_list;
+>> -- 
+>> 2.34.1
+>>
+> 
