@@ -2,123 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F37668CC45
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 02:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC1568CC4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 02:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjBGBrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 20:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S229895AbjBGBsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 20:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBGBrs (ORCPT
+        with ESMTP id S229617AbjBGBsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 20:47:48 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8B735260
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 17:47:33 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id g9so9730281pfo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 17:47:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VT2N/cNgYHeJTg3AnvqtHUtYbhomEZrsIqmnGNcfHCg=;
-        b=lThdBjAnpO16dKQakceoxTO9O3emdVZ3d9CmFVBTY6PidwuzieqO6swkx6lsRYXOGu
-         OGdKkvxqUr8FE7AF+Cly0Gh3MSV1+c7Rhp2ff1TwzE10qw8NCUrE2nkj+ebt9wR4x3Zn
-         GPXA8Nt5o6K/v5TxIHduoEjvYpYZj7nMvzxXI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VT2N/cNgYHeJTg3AnvqtHUtYbhomEZrsIqmnGNcfHCg=;
-        b=wytx/Euuo9qktOEGF+s49zscOAMIAYrZsSdeT3KVfFSH8f6tvMQDIWAxf1+uAsCKaM
-         fCXbHl/ICuRukKarH7eYqztu67H2KKL8GR1gl2HsmQEyszffK54hF/1eLevtHeYw0i7s
-         pXYX4f6VniJU/URmlC/0uXlyS2PxoQ9Hp8cEAgAUw5dXCEp05+RirGqdoZb5DNAsOJFF
-         /q23shB2CGESeWIoghzcJ8aw07BFMkMHHvW1SHKzdiS3njfA4xapWDGBbK8qeEMJBAcR
-         KmW1sw1dOEZfgOBF8xi42JXisUMqJGc1/SS62RJET8cMpt5de1B4kyQIIKzrx8z2Qhj/
-         WSMw==
-X-Gm-Message-State: AO0yUKWME0P5nTG2r+OH+lxtUQH7khZFhBW1vNzqWbTg2oiuthEzYdyg
-        6qLb//ZCqfjBQSegABr/8YPGRg==
-X-Google-Smtp-Source: AK7set9lQ9uyNxpo009dAjF+P5fdv8ArpSJXT+18At0hzWO5JcIIJxtkeejej2IxAt0IIoRVYrDXmw==
-X-Received: by 2002:a62:384f:0:b0:590:6d2f:d23a with SMTP id f76-20020a62384f000000b005906d2fd23amr1624385pfa.10.1675734453061;
-        Mon, 06 Feb 2023 17:47:33 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id m20-20020aa78a14000000b005a77b030b5csm233041pfa.88.2023.02.06.17.47.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 17:47:32 -0800 (PST)
-Date:   Tue, 7 Feb 2023 10:47:28 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 2/2] zsmalloc: fine-grained inuse ratio based fullness
- grouping
-Message-ID: <Y+GtsM6vJge90LHe@google.com>
-References: <20230206092559.2722946-1-senozhatsky@chromium.org>
- <20230206092559.2722946-3-senozhatsky@chromium.org>
- <CAJD7tka_DFfFu2Ji-HAdw066J2MkmxzrYVQp6pHUAAQhz6Y7EA@mail.gmail.com>
+        Mon, 6 Feb 2023 20:48:18 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBE786B1;
+        Mon,  6 Feb 2023 17:48:09 -0800 (PST)
+X-UUID: 759efe32a68911ed945fc101203acc17-20230207
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=xfJdDHYM1kIjZH2oKMPB4Dv9VCfW1IAMgum+diCywO0=;
+        b=JlsUz3jqlcpktPVP7ZsYLFi9uhriH2E7uV+sCeJNtEWWDPBLWwY0tr5M1L0hvh61+Oyzowjtk5uvFKXYbE/nQEBgwBMn/3qA+Y3muEpRx/D2gDh/rOq5S3lknV4oLqsMEhFeyK9bbTir8Fhi8PQ9Uqrlk99Q8Y3yTK5GDgD0vRk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:fdc50af1-e261-475c-9bc0-12e6779c7c13,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:885ddb2,CLOUDID:f7437f56-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 759efe32a68911ed945fc101203acc17-20230207
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1120567926; Tue, 07 Feb 2023 09:48:03 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 7 Feb 2023 09:48:01 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 7 Feb 2023 09:48:01 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v7 0/1] Migrate MT8195 VPPSYS 0/1 to mtk-mmsys drive
+Date:   Tue, 7 Feb 2023 09:47:59 +0800
+Message-ID: <20230207014800.7619-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJD7tka_DFfFu2Ji-HAdw066J2MkmxzrYVQp6pHUAAQhz6Y7EA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/02/06 17:02), Yosry Ahmed wrote:
-[..]
-> > A 1/10 difference in ratio between fullness groups is intentional
-> > and critical for classes that have a high number of objs_per_zspage.
-> > For instance, class-624 stores 59 objects per zspage. With a 1/10
-> > ratio grouping, the difference in inuse values between the page
-> > with the lowest and highest inuse in a single fullness group is
-> > only 4 objects (2469 bytes), whereas a 1/5 ratio grouping would
-> > result in a difference of 10 objects (6240 bytes).
-> 
-> 
-> The memory extra overhead would be sizeof(list_head) * nr of classes *
-> extra fullness groups = 16 * 255 * 6 = 24480 bytes ~= 24KB on a
-> machine with 4096 page size. Sounds reasonable (although I wonder how
-> it scales with PAGE_SIZE).
+Change since v6:
+- Rebase on linux-next.
+- Drop applied patches [1/4], [2/4] and [4/4].
+- In response to the API changes of "mtk_clk_register_gates" and
+  "mtk_alloc_clk_data", the patch [3/4] has been modified accordingly.
 
-It should be slightly lower than that. We never have 255 classes,
-because clases get merged. On a system with chain size of 10 we
-have 141 classes, with chain size of 8 it's 119 and chain size of
-16 gives us 192 size classes.
+Change since v5:
+- Rebase on linux-next.
+- Correct the compatible enumeration order in "mediatek,mmsys.yaml".
 
-> >  enum fullness_group {
-> > -       ZS_EMPTY,
-> > -       ZS_ALMOST_EMPTY,
-> > -       ZS_ALMOST_FULL,
-> > -       ZS_FULL,
-> > +       ZS_USAGE_0,
-> > +       ZS_USAGE_10,
-> > +       ZS_USAGE_20,
-> > +       ZS_USAGE_30,
-> > +       ZS_USAGE_40,
-> > +       ZS_USAGE_50,
-> > +       ZS_USAGE_60,
-> > +       ZS_USAGE_70,
-> > +       ZS_USAGE_80,
-> > +       ZS_USAGE_90,
-> > +       ZS_USAGE_99,
-> > +       ZS_USAGE_100,
-> >         NR_ZS_FULLNESS,
-> >  };
-> >
-> 
-> Is there a reason why this can't be done with something like #define
-> FULLNESS_GROUPS 10? We can make sure during build that (100 %
-> FULLNESS_GROUPS == 0) to make our lives easier. I feel like the code
-> will be much more concise and easier to navigate, instead of multiple
-> enums and static arrays.
+Hi,
 
-I wanted to keep things the way they are to make reviews simpler.
-We probably can do something more "disruptive" in a separate patch.
+This series splits patches from the original mailing list below:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=711592
+
+Refer to the comments of 0/8 and 1/8 in the following series:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=702518
+All about the MT8195 VPPSYS 0/1 should be probed from the "mtk-mmsys"
+driver, which then starts its own clock driver as the platform driver.
+
+Moudy Ho (1):
+  clk: mediatek: remove MT8195 vppsys/0/1 simple_probe
+
+ drivers/clk/mediatek/clk-mt8195-vpp0.c | 58 +++++++++++++++++++-------
+ drivers/clk/mediatek/clk-mt8195-vpp1.c | 58 +++++++++++++++++++-------
+ 2 files changed, 86 insertions(+), 30 deletions(-)
+
+-- 
+2.18.0
+
