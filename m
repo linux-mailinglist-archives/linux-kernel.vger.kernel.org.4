@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E5068E497
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3622868E4A3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjBGXr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 18:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S229806AbjBGXw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 18:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjBGXr5 (ORCPT
+        with ESMTP id S229500AbjBGXwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 18:47:57 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D106A37F15;
-        Tue,  7 Feb 2023 15:47:55 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id v15so6905219oie.9;
-        Tue, 07 Feb 2023 15:47:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RL2rT8laHFrNHHzc0odSdyPcsgeRUMEPIV17VsWonL8=;
-        b=emrDFWTNba9MqG1BFPIoi2okPSxFzhbtKBlhYLfKkXqS5h5tDZdWX7YlfPXVBY8OGD
-         fff+ZTgipH+f17M2x6MnH8tkWGq8JsNQhzO7wMZ4zQ3tIYvow4/95A5UaapwYyh2tpQN
-         CRns8p3ldYSebSyO6V9bp+/JXb+Ezp3fcBzzgQXgZBfanghlgds/b4qJlErYF54qQzSB
-         WV6lW4RKjgeAp/Yle2cdVif+ZR56Tfk7CYz9MDJ8k3kveVv3WX2/Y2KXIy8LV4SGO+CP
-         UogmgVfLj9NMzP/5kCy8R5gR0Hshwg6yb3w1TEvK5GfiMBG4wuMZ5aMncWj781KUwGg/
-         ObDg==
-X-Gm-Message-State: AO0yUKXUmRe5v+iw1M1X746kjs+PtHpVMfKy2EW02ft/Xq+nGkQrrtt9
-        MJI3WhKwVr80a29OYxS1pg==
-X-Google-Smtp-Source: AK7set9mEgjabLC+0YQc+pN4njFP8njRI1lxOsmHIovGnu2s7Rd5IBpIQyY9cx/D1mgwiIugZh4B3A==
-X-Received: by 2002:a05:6808:408c:b0:364:c9b7:bc with SMTP id db12-20020a056808408c00b00364c9b700bcmr2077193oib.56.1675813674986;
-        Tue, 07 Feb 2023 15:47:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v4-20020a056830140400b0068bcadcad5bsm7199442otp.57.2023.02.07.15.47.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 15:47:54 -0800 (PST)
-Received: (nullmailer pid 202269 invoked by uid 1000);
-        Tue, 07 Feb 2023 23:47:54 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: rk3399: Fix GICv3 ITS node name
-Date:   Tue,  7 Feb 2023 17:47:49 -0600
-Message-Id: <20230207234750.202154-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.1
+        Tue, 7 Feb 2023 18:52:46 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD5022DE56;
+        Tue,  7 Feb 2023 15:52:43 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 176D020C7E3B; Tue,  7 Feb 2023 15:52:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 176D020C7E3B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675813963;
+        bh=bN+LfT2jCsmdfpuG53FeQKLA8B080GGv4HrkY+14DXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hSfonHypMPNXA/gQOAT23RUpooup3G7+qibjblfPVtx6A1CKJWe3gizG59dykFgCp
+         YZqOCVC1arTMI5pL3NStHy3tE1QO8YQMlWNJGnDgL355x/w6sgpO0tkgu8YIRLPlzi
+         yoxiJL98QkkTB+6GGAMiog/8Qevkz8CRvtEUpSI0=
+Date:   Tue, 7 Feb 2023 15:52:43 -0800
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 10/16] dm-verity: consume root hash digest and
+ signature data via LSM hook
+Message-ID: <20230207235243.GA5107@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-11-git-send-email-wufan@linux.microsoft.com>
+ <4f029a41d80d883d9b4729cbc85211955c9efe8e.camel@huaweicloud.com>
+ <20230201232639.GB9075@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <903062f7b2e2709ae0e4416545ffadd91c132676.camel@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <903062f7b2e2709ae0e4416545ffadd91c132676.camel@huaweicloud.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GICv3 ITS is an MSI controller, therefore its node name should be
-'msi-controller'.
+On Thu, Feb 02, 2023 at 09:21:24AM +0100, Roberto Sassu wrote:
+> On Wed, 2023-02-01 at 15:26 -0800, Fan Wu wrote:
+> > On Tue, Jan 31, 2023 at 02:22:01PM +0100, Roberto Sassu wrote:
+> > > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > > > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > > > 
+> > > > dm-verity provides a strong guarantee of a block device's integrity. As
+> > > > a generic way to check the integrity of a block device, it provides
+> > > > those integrity guarantees to its higher layers, including the filesystem
+> > > > level.
+> > > 
+> > > I think you could reuse most of is_trusted_verity_target(), in
+> > > particular dm_verity_get_root_digest().
+> > > 
+> > > And probably, the previous patch is not necessary.
+> > > 
+> > > Roberto
+> > > 
+> > Thanks for the info. This function seems could be used to get the roothash
+> > but for saving the signature we still need the hook function in the previous
+> > patch.
+> 
+> Uhm, look at the LoadPin case. It does not need to temporarily store
+> the root digest in a security blob. It evaluates it directly.
+> 
+> Well, ok, dm_verity_loadpin_is_bdev_trusted() looks for trusted digests
+> in the dm_verity_loadpin_trusted_root_digests list. So, something
+> equivalent needs to be made for IPE (or you just get the digest).
+> However, I find not introducing new hooks and evaluating the
+> information directly more efficient.
+> 
+> Roberto
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- arch/arm64/boot/dts/rockchip/rk3399.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the input. I did a deeper dive into the source code and did some
+experiements, my conclusion is the hook is still the preferred way for us.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 4391aea25984..588e1509e423 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -552,7 +552,7 @@ gic: interrupt-controller@fee00000 {
- 		      <0x0 0xfff10000 0 0x10000>, /* GICH */
- 		      <0x0 0xfff20000 0 0x10000>; /* GICV */
- 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
--		its: interrupt-controller@fee20000 {
-+		its: msi-controller@fee20000 {
- 			compatible = "arm,gic-v3-its";
- 			msi-controller;
- 			#msi-cells = <1>;
--- 
-2.39.1
+For the root digest part, dm_verity_loadpin_is_bdev_trusted is able to query
+the root digest is because the root digest is saved in struct dm_verity.
+Specifically it will call dm_verity_get_root_digest to kmemdup the digest.
+If every binary execution will trigger a kmemdup to copy a digest,
+the overhead will be noticeable. 
+Using a hook can let us copy the root digest exactly once when
+the block device is created and free the copied digest when 
+the block device is unmounted. 
 
+For the signature, it is currently an optional parameter and it is not
+saved in struct dm_verity. But even if we let struct dm_verity saves
+the signature it will still have the kmemdup problem above. 
+So using the hook will be the cleanest way.
+
+-Fan
