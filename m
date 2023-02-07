@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6684E68CE8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BF568CE95
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjBGFCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S230392AbjBGFC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjBGFB4 (ORCPT
+        with ESMTP id S229878AbjBGFB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 00:01:56 -0500
+        Tue, 7 Feb 2023 00:01:57 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E45BC643;
-        Mon,  6 Feb 2023 21:01:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901C7C678;
+        Mon,  6 Feb 2023 21:01:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675746114; x=1707282114;
+  t=1675746115; x=1707282115;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=BrjwTRAQcpfuOeAV7Rg7Zm/X0IgwzgEOiAKjPiNKh1M=;
-  b=ZGnjxVpa8iBCrxYykm4azWnUE82ILNVXXrmb3XL1r1GVuqN/eJz9Fv6+
-   BG5KtJsW2kvHDhW8u15yamKhtbsHFWIPtI5bZy6b62TNAOHUIfg8BTl6q
-   U+sxFHy32zkOO96x2ls6L01fxLkJfrLFYAAqUmWnvEcC3BtRfXWzNNNnD
-   wP+BBoG13YwvVkI85fwTRqaZp3LSWQKqYSjGYX+zBXadW27ShXC/Q0wv5
-   6eEhN8XbB0PTIvYMag6ip7fv7IhxmdWx61s09inzXdO9nfMYk/YOUB8lI
-   R8WIEstc3TnFW/izgAh1XJg4cMWsQLMitCr/4HASdp/tYqyQKsmegaFA6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625849"
+  bh=d7YOpMlf1P1ORwPsFp8Wf2z9+WUpcXCD+VCa+NWGzJ0=;
+  b=KgwOpYS9wwI5sG+q542pWz5u/vqrl00gdbipfL2/6e4zuRlSjEa2a1FL
+   EByuNyYUqIIm1c1vhNPO/wgqf+J91afi2g6JOobXDlY4H+cSFYwbpilRE
+   k2W035GmwVnSMmxflsN0H6BOW+8rw4OyOtxAf4PArdcu1YtuXJQjLuDxU
+   UdfT1ID5O/f8u7Lo1tBAdnH3XwyjQoLIOC1CwkU7FvRHl+99J5lfaDCKx
+   KinJoe/DUXiPwN55nUT5Qw8qoJhb7j5HVmHuNplFkU+0dkhqn8Rc+jMg8
+   msjsuc6nY5h3tVppu8rYD5ZtiImDWUCq9i95V9D/HTtapQu0W+SMGgVrg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625861"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415625849"
+   d="scan'208";a="415625861"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:01:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657730"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657733"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668657730"
+   d="scan'208";a="668657733"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:42 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:43 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -60,9 +60,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v3 10/24] sched/fair: Use IPCC scores to select a busiest runqueue
-Date:   Mon,  6 Feb 2023 21:10:51 -0800
-Message-Id: <20230207051105.11575-11-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 11/24] thermal: intel: hfi: Introduce Intel Thread Director classes
+Date:   Mon,  6 Feb 2023 21:10:52 -0800
+Message-Id: <20230207051105.11575-12-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
@@ -75,12 +75,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For two runqueues of equal priority and equal number of running of tasks,
-select the one whose current task would have the highest IPC class score
-if placed on the destination CPU.
+On Intel hybrid parts, each type of CPU has specific performance and
+energy efficiency capabilities. The Intel Thread Director technology
+extends the Hardware Feedback Interface (HFI) to provide performance and
+energy efficiency data for advanced classes of instructions.
 
-For now, use IPCC scores only for scheduling domains with the
-SD_ASYM_PACKING flag.
+Add support to parse per-class capabilities.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -101,119 +101,103 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v2:
- * Only use IPCC scores to break ties if the sched domain uses
-   asym_packing. (Ionela)
- * Handle errors of arch_get_ipcc_score(). (Ionela)
+ * None
 
 Changes since v1:
- * Fixed a bug when selecting a busiest runqueue: when comparing two
-   runqueues with equal nr_running, we must compute the IPCC score delta
-   of both.
- * Renamed local variables to improve the layout of the code block.
-   (PeterZ)
- * Used the new interface names.
+ * Removed a now obsolete comment.
 ---
- kernel/sched/fair.c | 64 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ drivers/thermal/intel/intel_hfi.c | 30 ++++++++++++++++++++++++------
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 72d88270b320..d3c22dc145f7 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9399,6 +9399,37 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
- 	return sched_asym_ipcc_prefer(a_stats, b_stats);
- }
- 
-+/**
-+ * ipcc_score_delta - Get the IPCC score delta wrt the load balance's dst_cpu
-+ * @p:		A task
-+ * @env:	Load balancing environment
-+ *
-+ * Returns: The IPCC score delta that @p would get if placed in the destination
-+ * CPU of @env. LONG_MIN to indicate that the delta should not be used.
-+ */
-+static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-+{
-+	unsigned long score_src, score_dst;
-+	unsigned short ipcc = p->ipcc;
-+
-+	if (!sched_ipcc_enabled())
-+		return LONG_MIN;
-+
-+	/* Only asym_packing uses IPCC scores at the moment. */
-+	if (!(env->sd->flags & SD_ASYM_PACKING))
-+		return LONG_MIN;
-+
-+	score_dst = arch_get_ipcc_score(ipcc, env->dst_cpu);
-+	if (IS_ERR_VALUE(score_dst))
-+		return LONG_MIN;
-+
-+	score_src = arch_get_ipcc_score(ipcc, task_cpu(p));
-+	if (IS_ERR_VALUE(score_src))
-+		return LONG_MIN;
-+
-+	return score_dst - score_src;
-+}
-+
- #else /* CONFIG_IPC_CLASSES */
- static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
- 				    struct rq *rq)
-@@ -9429,6 +9460,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
- 	return false;
- }
- 
-+static long ipcc_score_delta(struct task_struct *p, struct lb_env *env)
-+{
-+	return LONG_MIN;
-+}
-+
- #endif /* CONFIG_IPC_CLASSES */
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index 6e604bda2b93..2527ae3836c7 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -77,7 +77,7 @@ union cpuid6_edx {
+  * @ee_cap:		Energy efficiency capability
+  *
+  * Capabilities of a logical processor in the HFI table. These capabilities are
+- * unitless.
++ * unitless and specific to each HFI class.
+  */
+ struct hfi_cpu_data {
+ 	u8	perf_cap;
+@@ -89,7 +89,8 @@ struct hfi_cpu_data {
+  * @perf_updated:	Hardware updated performance capabilities
+  * @ee_updated:		Hardware updated energy efficiency capabilities
+  *
+- * Properties of the data in an HFI table.
++ * Properties of the data in an HFI table. There exists one header per each
++ * HFI class.
+  */
+ struct hfi_hdr {
+ 	u8	perf_updated;
+@@ -127,16 +128,21 @@ struct hfi_instance {
  
  /**
-@@ -10589,6 +10625,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+  * struct hfi_features - Supported HFI features
++ * @nr_classes:		Number of classes supported
+  * @nr_table_pages:	Size of the HFI table in 4KB pages
+  * @cpu_stride:		Stride size to locate the capability data of a logical
+  *			processor within the table (i.e., row stride)
++ * @class_stride:	Stride size to locate a class within the capability
++ *			data of a logical processor or the HFI table header
+  * @hdr_size:		Size of the table header
+  *
+  * Parameters and supported features that are common to all HFI instances
+  */
+ struct hfi_features {
++	unsigned int	nr_classes;
+ 	size_t		nr_table_pages;
+ 	unsigned int	cpu_stride;
++	unsigned int	class_stride;
+ 	unsigned int	hdr_size;
+ };
+ 
+@@ -333,8 +339,8 @@ static void init_hfi_cpu_index(struct hfi_cpu_info *info)
+ }
+ 
+ /*
+- * The format of the HFI table depends on the number of capabilities that the
+- * hardware supports. Keep a data structure to navigate the table.
++ * The format of the HFI table depends on the number of capabilities and classes
++ * that the hardware supports. Keep a data structure to navigate the table.
+  */
+ static void init_hfi_instance(struct hfi_instance *hfi_instance)
  {
- 	struct rq *busiest = NULL, *rq;
- 	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-+	long busiest_ipcc_delta = LONG_MIN;
- 	unsigned int busiest_nr = 0;
- 	int i;
+@@ -515,18 +521,30 @@ static __init int hfi_parse_features(void)
+ 	/* The number of 4KB pages required by the table */
+ 	hfi_features.nr_table_pages = edx.split.table_pages + 1;
  
-@@ -10705,8 +10742,35 @@ static struct rq *find_busiest_queue(struct lb_env *env,
++	/*
++	 * Capability fields of an HFI class are grouped together. Classes are
++	 * contiguous in memory.  Hence, use the number of supported features to
++	 * locate a specific class.
++	 */
++	hfi_features.class_stride = nr_capabilities;
++
++	/* For now, use only one class of the HFI table */
++	hfi_features.nr_classes = 1;
++
+ 	/*
+ 	 * The header contains change indications for each supported feature.
+ 	 * The size of the table header is rounded up to be a multiple of 8
+ 	 * bytes.
+ 	 */
+-	hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities, 8) * 8;
++	hfi_features.hdr_size = DIV_ROUND_UP(nr_capabilities *
++					     hfi_features.nr_classes, 8) * 8;
  
- 		case migrate_task:
- 			if (busiest_nr < nr_running) {
-+				struct task_struct *curr;
-+
- 				busiest_nr = nr_running;
- 				busiest = rq;
-+
-+				/*
-+				 * Remember the IPCC score delta of busiest::curr.
-+				 * We may need it to break a tie with other queues
-+				 * with equal nr_running.
-+				 */
-+				curr = rcu_dereference(busiest->curr);
-+				busiest_ipcc_delta = ipcc_score_delta(curr, env);
-+			/*
-+			 * If rq and busiest have the same number of running
-+			 * tasks and IPC classes are supported, pick rq if doing
-+			 * so would give rq::curr a bigger IPC boost on dst_cpu.
-+			 */
-+			} else if (busiest_nr == nr_running) {
-+				struct task_struct *curr;
-+				long delta;
-+
-+				curr = rcu_dereference(rq->curr);
-+				delta = ipcc_score_delta(curr, env);
-+
-+				if (busiest_ipcc_delta < delta) {
-+					busiest_ipcc_delta = delta;
-+					busiest_nr = nr_running;
-+					busiest = rq;
-+				}
- 			}
- 			break;
+ 	/*
+ 	 * Data of each logical processor is also rounded up to be a multiple
+ 	 * of 8 bytes.
+ 	 */
+-	hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities, 8) * 8;
++	hfi_features.cpu_stride = DIV_ROUND_UP(nr_capabilities *
++					       hfi_features.nr_classes, 8) * 8;
  
+ 	return 0;
+ }
 -- 
 2.25.1
 
