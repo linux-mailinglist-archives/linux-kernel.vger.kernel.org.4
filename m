@@ -2,133 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6712968DE31
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DFC68DE39
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjBGQtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S231800AbjBGQvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjBGQtE (ORCPT
+        with ESMTP id S229685AbjBGQvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:49:04 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A7039BB6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:49:03 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so13639013wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:49:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gQ6efCB61TIYLPpmHdBk+1/LSUB0gQyc/JjMU48i42c=;
-        b=bgfak1jDvCOVHQQGElWmnD2lEOMEwTBINLogn9Eq0pKQvrNoRAXz8j0EjilZ4k4JYP
-         Vmw1eHnC760O26q7ev3uIE0BV6+vlXEgBj9WZuAF5e66h3wBo485l/vcuMKvan2wuHS9
-         uIuDOePMn2u7AxdEg1LCq6cSzyJdVmnweP3F/9KzJzC72dHF+4vH+mX10ivzZVBVOho6
-         JkVdG1kEid5uJS9lG3OqmKHUgTw4VWggv5Y3fp+saqbVXt7SMQPYQ1sclQWTrrzEHYht
-         9Q0FUICTHFi4DO3gHhDSKvWkENjBFuJPlokc1Z8D9JP89mJyHhZl60+6O7RwwyyQhirs
-         ml5A==
+        Tue, 7 Feb 2023 11:51:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B03439BA9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:50:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675788630;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ux0mmfKkphxoPa36aiTHBWDRHrPHYlMhgTpD+S7fBoM=;
+        b=QlT9vKFe34eBEFn3PctQl+jMojGBmZJzv9GKds2gX6qjhixKbYaXBTfSVpFcjmUOK7iTrh
+        9jNAoKIrQlg5/TpA0qvtIbutaOIhjQv2Zi4kvsT1u8znwk7mNnu3eB6bZwUGM/t2xDw8cg
+        7ikFVFnFJJ0EAL9pXXjO4m/OQzwGnRU=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-602-ocjzkSeJOo2yAZCwPoPWSg-1; Tue, 07 Feb 2023 11:50:29 -0500
+X-MC-Unique: ocjzkSeJOo2yAZCwPoPWSg-1
+Received: by mail-pj1-f71.google.com with SMTP id l18-20020a17090add9200b00230f60889d6so890492pjv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:50:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gQ6efCB61TIYLPpmHdBk+1/LSUB0gQyc/JjMU48i42c=;
-        b=vsxFzg5/b5RqWOondH19scphm8K+iknr7JlM11mFfxMflN3pAxsExlc5Nhrpgeljt1
-         gLsK95bHRyEI83C5kmo1B8ynRtxyMXQIxsTc8gGtKgzEKoBMNM8kGpOQQXluIrijZsGU
-         2vm7y5pWNcgNhp08Zs7LdOVnlH73j/S+17Ci0mbXs5PjiipMc02cDXU/oqLkbbMM/JXQ
-         s7sVzGni5RveAhnkaqKzPAqPAkthvhCpz0v0kWR8WSGPQ0NTpT30FDgAk6u3plsKxYaA
-         dMCvd7xzvnXvOJCSDjXprd1xq78b6EXivXw0E3AdBYpyCEJcHkJK+YuMwQkm/UVX4iFd
-         e5Qw==
-X-Gm-Message-State: AO0yUKXXVQycq53k3rnvSGLHuDuvZPZ0ggOSPdu6ZgTMSOAoIaBNh9//
-        fCP5hVmoMpP5r9LLIFJUDmtn/A==
-X-Google-Smtp-Source: AK7set/wpe72cljXd1fwohTpF1E1pBpcSt320AhZrTM3txhgwmGemUE2cxJ3yvXcCkWxTecsGoIF1w==
-X-Received: by 2002:a05:600c:1d8b:b0:3dc:198c:dde with SMTP id p11-20020a05600c1d8b00b003dc198c0ddemr3515818wms.41.1675788541619;
-        Tue, 07 Feb 2023 08:49:01 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p10-20020a05600c468a00b003e0015c8618sm7074580wmo.6.2023.02.07.08.49.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 08:49:01 -0800 (PST)
-Message-ID: <56ce2617-4fd1-d597-a4dc-918654cdd3f6@linaro.org>
-Date:   Tue, 7 Feb 2023 17:48:59 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ux0mmfKkphxoPa36aiTHBWDRHrPHYlMhgTpD+S7fBoM=;
+        b=VYPrU4Ebv5h4Kk/2a1bdC8g+bOq9EDNRukb4zgPocQB5cw9v+f7Kg8AmsunmF4tqCv
+         9S8jy3h5nF7bwUCgxM9Nbxpl0wqrlnmUAN4kGeJxIIFdyZsV+hX3rDR24GmWttJoQeUa
+         ifkIgynKB/QPB9fuoF3MLKej8uezCN7WggMeDNpDS2fgAcLjY3CDIOtd9CTcjljEM0GJ
+         S5eMr8YP12H8lbCLA5NeRRGe0o/kruFKdbNu3YKlXFlExW3Ms8tKhNSJcIoiuE3EWQhX
+         t4aP72hD17nv0RdoAFHSZbyVZ2SSqhv/6G99+57uigw7aycN5OcAEHNuHQDE17AEZkon
+         QTBg==
+X-Gm-Message-State: AO0yUKX4ZNkdP3DdcAPuRAQtkyeX1+vg14n/pzSTgowxoredrTvOVtEY
+        6HWgdNf+CurOAd/La/Z8JGLp72cJVGj8oH3qxuLB0SoDnHn+WWFI/WbubAJtPqDKE5h2ZGDqOwc
+        0JvvGyvoG3UHxMVXbEH9dBu5a
+X-Received: by 2002:a17:902:c755:b0:199:1c65:2c42 with SMTP id q21-20020a170902c75500b001991c652c42mr2807581plq.12.1675788628193;
+        Tue, 07 Feb 2023 08:50:28 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Ecof491y5T7KAvJJUvUguy2ifRnXyA0sF5o/encxu7p8vkz0C0zDmDQbUpwpa2sUuQuIStQ==
+X-Received: by 2002:a17:902:c755:b0:199:1c65:2c42 with SMTP id q21-20020a170902c75500b001991c652c42mr2807560plq.12.1675788627852;
+        Tue, 07 Feb 2023 08:50:27 -0800 (PST)
+Received: from kernel-devel ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
+        by smtp.gmail.com with ESMTPSA id f1-20020a170902ff0100b0019602dd914csm6689293plj.180.2023.02.07.08.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 08:50:27 -0800 (PST)
+Date:   Wed, 8 Feb 2023 01:50:22 +0900
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] l2tp: Avoid possible recursive deadlock in
+ l2tp_tunnel_register()
+Message-ID: <Y+KBTktdS8WLV/3/@kernel-devel>
+References: <20230130154438.1373750-1-syoshida@redhat.com>
+ <Y9f4eAhcJXhh0+c2@debian>
+ <Y9qItT82LcJdJVlF@kernel-devel>
+ <Y9voRRiiWK/V7WQD@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] Documentation: cs35l41: Shared boost properties
-Content-Language: en-US
-To:     Lucas Tanure <lucas.tanure@collabora.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230207104021.2842-1-lucas.tanure@collabora.com>
- <20230207104021.2842-3-lucas.tanure@collabora.com>
- <44faeca1-94c9-4423-d87a-03d80e286812@linaro.org>
- <e7257f9a-86c5-74e8-c538-6f6d2ba13274@collabora.com>
- <44c7274f-8a5e-0235-413a-6c3260018601@linaro.org>
- <4efe9796-6d3e-09d1-d5f7-cfb25a439061@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4efe9796-6d3e-09d1-d5f7-cfb25a439061@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9voRRiiWK/V7WQD@debian>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 17:34, Lucas Tanure wrote:
-> On 07-02-2023 16:13, Krzysztof Kozlowski wrote:
->> On 07/02/2023 16:46, Lucas Tanure wrote:
->>>>> +      Shared boost allows two amplifiers to share a single boost circuit by
->>>>> +      communicating on the MDSYNC bus. The passive amplifier does not control
->>>>> +      the boost and receives data from the active amplifier. GPIO1 should be
->>>>> +      configured for Sync when shared boost is used. Shared boost is not
->>>>> +      compatible with External boost. Active amplifier requires
->>>>> +      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
->>>>>          0 = Internal Boost
->>>>>          1 = External Boost
->>>>> +      2 = Reserved
->>>>
->>>> How binding can be reserved? For what and why? Drop. 2 is shared active,
->>>> 3 is shared passive.
->>> 2 Is shared boost without VSPK switch, a mode not supported for new
->>> system designs. But there is laptops using it, so we need to keep
->>> supporting in the driver.
->>
->> That's not the answer. 2 is nothing here, so it cannot be reserved.
->> Aren't you mixing now some register value with bindings?
->>
->> Best regards,
->> Krzysztof
->>
->>
-> I have added a new patch with propper documentation.
-> And I would like to use 3 and 4 for shared boost as 
-> CS35L41_EXT_BOOST_NO_VSPK_SWITCH already exist as 2 and is used in the 
-> current driver.
+Hi Guillaume,
 
-I don't see CS35L41_EXT_BOOST_NO_VSPK_SWITCH in the bindings.
+On Thu, Feb 02, 2023 at 05:43:49PM +0100, Guillaume Nault wrote:
+> On Thu, Feb 02, 2023 at 12:43:49AM +0900, Shigeru Yoshida wrote:
+> > Hi Guillaume,
+> > 
+> > On Mon, Jan 30, 2023 at 06:03:52PM +0100, Guillaume Nault wrote:
+> > > On Tue, Jan 31, 2023 at 12:44:38AM +0900, Shigeru Yoshida wrote:
+> > > > This patch fixes the issue by returning error when a pppol2tp socket
+> > > > itself is passed.
+> > > 
+> > > Fixes: 0b2c59720e65 ("l2tp: close all race conditions in l2tp_tunnel_register()")
+> > > 
+> > > > Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+> > > > ---
+> > > >  net/l2tp/l2tp_ppp.c | 7 +++++--
+> > > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
+> > > > index db2e584c625e..88d1a339500b 100644
+> > > > --- a/net/l2tp/l2tp_ppp.c
+> > > > +++ b/net/l2tp/l2tp_ppp.c
+> > > > @@ -702,11 +702,14 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+> > > >  			struct l2tp_tunnel_cfg tcfg = {
+> > > >  				.encap = L2TP_ENCAPTYPE_UDP,
+> > > >  			};
+> > > > +			int dummy = 0;
+> > > 
+> > > There's no need to initialise dummy here. This is just confusing.
+> > > We could even do without any extra variable and reuse error in
+> > > sockfd_lookup().
+> > > 
+> > > >  			/* Prevent l2tp_tunnel_register() from trying to set up
+> > > > -			 * a kernel socket.
+> > > > +			 * a kernel socket.  Also, prevent l2tp_tunnel_register()
+> > > > +			 * from trying to use pppol2tp socket itself.
+> > > >  			 */
+> > > > -			if (info.fd < 0) {
+> > > > +			if (info.fd < 0 ||
+> > > > +			    sock == sockfd_lookup(info.fd, &dummy)) {
+> > > >  				error = -EBADF;
+> > > >  				goto end;
+> > > >  			}
+> > > 
+> > > That should work, but the real problem is calling l2tp_tunnel_register()
+> > > under lock_sock(). We should instead get/create the tunnel before
+> > > locking the pppol2tp socket.
+> > 
+> > Thank you so much for your comment, and sorry for the late response.
+> > 
+> > Do you mean we can call l2tp_tunnel_register() without pppol2tp socket
+> > lock?
+> 
+> Yes. At this point, we're creating a new tunnel which is independant
+> from the pppol2tp socket.
+> 
+> > I've read the source code of pppol2tp_connect(), but I'm not
+> > sure why pppol2tp socket is locked at the beginning of this function.
+> > If we can call l2tp_tunnel_register() without pppol2tp socket lock, I
+> > think we can move lock_sock() after l2tp_tunnel_register().
+> 
+> Here are a few more details to be sure we're on the same page.
+> 
+> Locking the pppol2tp socket remains necessary since we access and
+> modify some of its protected attributes. But we can fetch or create
+> the tunnel before working on the socket. For this, the only information
+> we need to get from the socket is its netns. And calling sock_net(sk)
+> without holding the socket lock is fine because user space sockets
+> can't have their netns modified after initialisation.
+> 
+> So the code for retrieving or creating the tunnel can be moved before
+> the lock_sock(sk) call in pppol2tp_register(). Just make sure to adjust
+> the error path accordingly. Also, a helper function might help to make
+> the code more readable.
 
-> The laptop that uses CS35L41_EXT_BOOST_NO_VSPK_SWITCH doesn't have the 
-> property "cirrus,boost-type", but to make everything consistent I would 
-> prefer to use 3 and 4 for the new boost types.
-> Is that ok with you?
+Thank you so much for the detailed explanation.  I really appreciate.
+I'll think about it further, and try to prepare v2 patch.
 
-I don't see how it is related. The value does not exist, so whether
-laptop has that property or not, is not really related, right?
+Thanks,
+Shigeru
 
-Best regards,
-Krzysztof
+> 
+> > Thanks,
+> > Shigeru
+> > 
+> > > 
+> > 
+> 
 
