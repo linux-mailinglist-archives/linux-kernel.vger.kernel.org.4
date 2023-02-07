@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02B668D72C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 524AE68D727
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:48:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjBGMtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        id S231539AbjBGMs0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Feb 2023 07:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjBGMs5 (ORCPT
+        with ESMTP id S230178AbjBGMsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:48:57 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E201CF4A;
-        Tue,  7 Feb 2023 04:48:53 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317BwvTm011461;
-        Tue, 7 Feb 2023 12:48:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2022-7-12;
- bh=TGkF2tOO4frLvPts9ZwsXb2QPUj+1HoDuf+5oC5qBMs=;
- b=zogrOpzSNhuymsZ2J7Hj7yr0POlZj7LuKS6sJWnOzssC/32PJYxNlFa9rR9z2Pz4qE23
- AxMYoviUZwTIz+Xy4+NC2o2yKrfbM3AXpBldGvHVv4/LDwtUHpD4TV0e4n9+PIIgvf85
- FgPXrSFCmjura9s/mOKrKl/joqxmiEMvEPo/Tj6YShKDtsLaKYslw4HgcU5sLfUTk2GG
- 2TkbOhPSoednafKu62/Wz7yqnsJUd7Aa4kUIn0PQn/74vItSsNq4EjieWgopXGcUt93p
- x5yHEgTCaIRlPHHh/W09Usg2xY8tgKUcq4xhNx7/sjeTmgVTrU5o5UgjJAikciqyICFi QQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhdsdne4w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Feb 2023 12:48:42 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 317CipCR040797;
-        Tue, 7 Feb 2023 12:48:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtbu8uh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Feb 2023 12:48:41 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317Cd0lN029118;
-        Tue, 7 Feb 2023 12:48:41 GMT
-Received: from dhcp-10-152-13-169.usdhcp.oraclecorp.com.com (dhcp-10-152-13-169.usdhcp.oraclecorp.com [10.152.13.169])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3nhdtbu8uc-1;
-        Tue, 07 Feb 2023 12:48:41 +0000
-From:   George Kennedy <george.kennedy@oracle.com>
-To:     gregkh@linuxfoundation.org, jslaby@suse.cz,
-        torvalds@linux-foundation.org
-Cc:     george.kennedy@oracle.com, sfr@canb.auug.org.au,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v2] vc_screen: break from vcs_read() while loop if vcs_vc() returns NULL
-Date:   Tue,  7 Feb 2023 07:48:18 -0500
-Message-Id: <1675774098-17722-1-git-send-email-george.kennedy@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 adultscore=0
- malwarescore=0 mlxscore=0 phishscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302070114
-X-Proofpoint-ORIG-GUID: 4r_C2QQumyNCCkEnwvirGRvLf103Pp_g
-X-Proofpoint-GUID: 4r_C2QQumyNCCkEnwvirGRvLf103Pp_g
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Tue, 7 Feb 2023 07:48:24 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91765AD04;
+        Tue,  7 Feb 2023 04:48:22 -0800 (PST)
+Received: from frapeml500006.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PB2rN2XLRz6J6fN;
+        Tue,  7 Feb 2023 20:44:20 +0800 (CST)
+Received: from frapeml500005.china.huawei.com (7.182.85.13) by
+ frapeml500006.china.huawei.com (7.182.85.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 7 Feb 2023 13:48:20 +0100
+Received: from frapeml500005.china.huawei.com ([7.182.85.13]) by
+ frapeml500005.china.huawei.com ([7.182.85.13]) with mapi id 15.01.2507.017;
+ Tue, 7 Feb 2023 13:48:20 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+Subject: RE: linux-next: build failure after merge of the integrity tree
+Thread-Topic: linux-next: build failure after merge of the integrity tree
+Thread-Index: AQHZOo5Tct5gClMYeE2iR8mZbs+mTq7DbyMw
+Date:   Tue, 7 Feb 2023 12:48:19 +0000
+Message-ID: <b02ea122f029407099950c5a0a8b935d@huawei.com>
+References: <20230207115113.21efd917@canb.auug.org.au>
+In-Reply-To: <20230207115113.21efd917@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.221.98.153]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,49 +58,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If vcs_vc() returns NULL in vcs_read(), break from while loop if partial
-read, else if no reads have been done, go to unlock_out and return -ENXIO.
-In addition, change the goto unlock_out after vcs_size() to a break
-to conform to the break handling after vcs_vc().
+> From: Stephen Rothwell [mailto:sfr@canb.auug.org.au]
+> Sent: Tuesday, February 7, 2023 1:51 AM
+> Hi all,
+> 
+> After merging the integrity tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> security/integrity/ima/ima_main.c: In function 'ima_file_mprotect':
+> security/integrity/ima/ima_main.c:473:34: error: implicit declaration of
+> function 'file_mnt_user_ns'; did you mean 'get_user_ns'? [-Werror=implicit-
+> function-declaration]
+>   473 |         action |= ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
+>       |                                  ^~~~~~~~~~~~~~~~
+>       |                                  get_user_ns
+> security/integrity/ima/ima_main.c:473:34: error: passing argument 1 of
+> 'ima_get_action' makes pointer from integer without a cast [-Werror=int-
+> conversion]
+>   473 |         action |= ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
+>       |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |                                  |
+>       |                                  int
+> In file included from security/integrity/ima/ima_main.c:30:
+> security/integrity/ima/ima.h:258:38: note: expected 'struct mnt_idmap *' but
+> argument is of type 'int'
+>   258 | int ima_get_action(struct mnt_idmap *idmap, struct inode *inode,
+>       |                    ~~~~~~~~~~~~~~~~~~^~~~~
+> cc1: all warnings being treated as errors
+> 
+> Caused by commit
+> 
+>   4958db3245fa ("ima: Introduce MMAP_CHECK_REQPROT hook")
+> 
+> interacting with commit
+> 
+>   39f60c1ccee7 ("fs: port xattr to mnt_idmap")
+> 
+> from the vfs-idmapping tree.
+> 
+> I have applied the following merge fix patch for today.
 
-Fixes: ac751efa6a0d ("console: rename acquire/release_console_sem() to console_lock/unlock()")
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: George Kennedy <george.kennedy@oracle.com>
----
- drivers/tty/vt/vc_screen.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+Hi Stephen
 
-diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-index f566eb1839dc..c599b452969f 100644
---- a/drivers/tty/vt/vc_screen.c
-+++ b/drivers/tty/vt/vc_screen.c
-@@ -406,19 +406,17 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 		ret = -ENXIO;
- 		vc = vcs_vc(inode, &viewed);
- 		if (!vc)
--			goto unlock_out;
-+			break;
- 
- 		/* Check whether we are above size each round,
- 		 * as copy_to_user at the end of this loop
- 		 * could sleep.
- 		 */
--		size = vcs_size(vc, attr, uni_mode);
--		if (size < 0) {
--			if (read)
--				break;
--			ret = size;
--			goto unlock_out;
--		}
-+		ret = vcs_size(vc, attr, uni_mode);
-+		if (ret < 0)
-+			break;
-+		size = ret;
-+		ret = 0;
- 		if (pos >= size)
- 			break;
- 		if (count > size - pos)
--- 
-2.31.1
+the fix looks ok for me.
 
+Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Thanks
+
+Roberto
+
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 7 Feb 2023 11:31:16 +1100
+> Subject: [PATCH] fixup for "ima: Introduce MMAP_CHECK_REQPROT hook"
+> 
+> interacting with "fs: port xattr to mnt_idmap"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  security/integrity/ima/ima_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/integrity/ima/ima_main.c
+> b/security/integrity/ima/ima_main.c
+> index 7a05af9f481f..d66a0a36415e 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -470,7 +470,7 @@ int ima_file_mprotect(struct vm_area_struct *vma,
+> unsigned long prot)
+>  	action = ima_get_action(file_mnt_idmap(vma->vm_file), inode,
+>  				current_cred(), secid, MAY_EXEC,
+> MMAP_CHECK,
+>  				&pcr, &template, NULL, NULL);
+> -	action |= ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
+> +	action |= ima_get_action(file_mnt_idmap(vma->vm_file), inode,
+>  				 current_cred(), secid, MAY_EXEC,
+>  				 MMAP_CHECK_REQPROT, &pcr, &template,
+> NULL,
+>  				 NULL);
+> --
+> 2.35.1
+> x
+> --
+> Cheers,
+> Stephen Rothwell
