@@ -2,89 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBDB68CD60
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A35468CD5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjBGDTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 22:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S229735AbjBGDRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 22:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBGDTY (ORCPT
+        with ESMTP id S229656AbjBGDRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 22:19:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FCA9EEB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 19:18:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675739888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GIxTMZmbsJ4n4h+wodJFJ7AH4L9sE2etRukeWGfprOQ=;
-        b=eANDvVka1kzOtB2QmbX+LinmbIlao9B/6l1R7qr5DYuNkPP5NcCHal3ixbiFxYHqQPHUjP
-        lpHjTENepvTF1XjUbCwRYdyWiVnxpzpfgfss/AEiYeS586W+hN/nOymAFS8ude9b8RUq2Y
-        QjaDgif+t9OFCU9p+Vr2KitiBUw/Jhk=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-654-jraRc2wnOjmSxQ2RsvRAsQ-1; Mon, 06 Feb 2023 22:18:07 -0500
-X-MC-Unique: jraRc2wnOjmSxQ2RsvRAsQ-1
-Received: by mail-oo1-f71.google.com with SMTP id i10-20020a4a900a000000b004f1f4aa7f3bso4046402oog.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 19:18:07 -0800 (PST)
+        Mon, 6 Feb 2023 22:17:41 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC94A6EB4;
+        Mon,  6 Feb 2023 19:17:18 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id s8so7476849pgg.11;
+        Mon, 06 Feb 2023 19:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gEdx9HDblWu1Giy1hcfGtLMQdifTw+HkdbmqOyodOVw=;
+        b=ZQguRZWuUDg7ejfZ/13IUqBONLkGw/N7iaWg0B8vANmtG84iFjPnY6fM1T5sxuvWr4
+         BVXFn6dpf0dSLPAoIYvSchUqB8uw7ldaR5AZm6NwPimviECDkBFkBm6pQa2095BxMH92
+         OwNggtDAhapuz3RfH2ox88YncBCOeggM6qJQBO0EK58MjVlFx+gHpgXQvOM5/e3qiOvx
+         5hzyq46Q4AcvttjGTckqq9ZvzwOrSUI8nxEDPt4S7GdqHyPvcMjJj8v8dR98M6bCFQjh
+         rVRusBUsoQJCJLQPhRneG4bZoWWGE50xquMq99QwVcRPcbqhAFpgf79Yz3cGuuxHb1bk
+         G6uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GIxTMZmbsJ4n4h+wodJFJ7AH4L9sE2etRukeWGfprOQ=;
-        b=NzYvNWeHAW02rqCSF+3lLz9N76EdCe/puq0BBrYeHVWUnbvICs36O6vzgUo7Cmdi6x
-         RwirotGfDAsHSlxWXJo2OuXP8ErSrL5GP4nZB6sxgFTHC71DJR5ml6QV07XBvTn4oe1u
-         lF7jsZ0K+/YolSnUF3LFecCf+shGIkIIYthirISRlNTz8UX7bZt/0sDVxaoM7G8pd8Wq
-         g7CkTxy+4nuv7ynpn9bFKsx9GbCHrJ933tI0ixAgnkxBH/y5Vq+BwYkW2ac1fhSwmtE3
-         xQfAEqfQiH69QZD9brwBmvYAXI27WiQI/gHMB9z63DVd93haG1v0CmJbz0CPDk4Zx4EH
-         weng==
-X-Gm-Message-State: AO0yUKUADOjpI7rk1gjCgY0n+SefJdYpeTAdyiNLAbi94WYx1N2krIZP
-        RRa6XJSUvgtlJ/5MBqMQIvGu3qw8u4hZj88d+lZT/MwS/aMEBVnTbu5cPS8/3bP3qgp5ffCJ1Fl
-        Fm1jWjKOEuwbDH4fyOzxPXj7i
-X-Received: by 2002:aca:2809:0:b0:37a:2bf0:5025 with SMTP id 9-20020aca2809000000b0037a2bf05025mr5460885oix.19.1675739886842;
-        Mon, 06 Feb 2023 19:18:06 -0800 (PST)
-X-Google-Smtp-Source: AK7set+7VS3H2qMxD1XHEeHGgHZ74B+TJyfGc4ZI4Mp5kB81qQes42VlFPDf7PJJ4nRSKOza3aEOWw==
-X-Received: by 2002:aca:2809:0:b0:37a:2bf0:5025 with SMTP id 9-20020aca2809000000b0037a2bf05025mr5460883oix.19.1675739886546;
-        Mon, 06 Feb 2023 19:18:06 -0800 (PST)
-Received: from ?IPv6:2804:1b3:a800:9aa9:fdcb:7dec:9680:8417? ([2804:1b3:a800:9aa9:fdcb:7dec:9680:8417])
-        by smtp.gmail.com with ESMTPSA id z12-20020a54458c000000b003790759c310sm5040893oib.15.2023.02.06.19.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 19:18:05 -0800 (PST)
-Message-ID: <4b232f47e038ab6fcaa0114f73c28d4bf8799f84.camel@redhat.com>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 07 Feb 2023 00:18:01 -0300
-In-Reply-To: <Y+AIOQy0HdVXCw8m@P9FQF9L96D>
-References: <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
-         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
-         <Y9FzSBw10MGXm2TK@tpad> <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
-         <Y9LDAZmApLeffrT8@tpad> <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
-         <0122005439ffb7895efda7a1a67992cbe41392fe.camel@redhat.com>
-         <Y9j9BnMwfm4TJks7@tpad> <Y9pd7AxAILUSHrpe@dhcp22.suse.cz>
-         <28e08669302ad1e7a41bdf8b9988de6a352b5fe1.camel@redhat.com>
-         <Y+AIOQy0HdVXCw8m@P9FQF9L96D>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gEdx9HDblWu1Giy1hcfGtLMQdifTw+HkdbmqOyodOVw=;
+        b=YDzSoI6NccQxB2MGZxnXemr16HjSbmPoHbJak2Wgz8zpobJKN5jLyOxxa0H9/+as3a
+         xnxQombb+2QNN05Mmw2y29k9OpE4L8fFtMeGvnXUlAtVbkmioJTjyooZfAGX21USoUTU
+         pwhlBloEi27XLtkWonNPSFAc07QnQcnxyHP2ZsUA5CgSjDdp3v6avE0Bs7oRlhCfBDtY
+         8OVl7yxns9PV5Zq24rPsCIdjaJHimCV+XXlQoeVAKP/ClzMl14LE0hZJciGTH4mXjLYQ
+         NVqH+oP/dntf3yM2h7Da+Gp4EPZ+a+4KNpjeS1IFdtUTkn0x8pt2edBB09rMn3fKUYTA
+         6+/w==
+X-Gm-Message-State: AO0yUKWYAvRbndCNQKPaYKIPpZObzjICuVRgcaFDQayjUcZ7nTYuRLuJ
+        gI001Po5ac5JWN+by0B3h7G87DRZidnF6DufcH0=
+X-Google-Smtp-Source: AK7set/IgnWvC+1T7ik0Cn8q8NqR2wk3vROsEsFNmbgUQDJ+HPmjizDorws0xZCeIry6U0mHESWMMzbsaq+75SD8HP4=
+X-Received: by 2002:a62:2506:0:b0:5a7:2295:cb03 with SMTP id
+ l6-20020a622506000000b005a72295cb03mr330917pfl.18.1675739838359; Mon, 06 Feb
+ 2023 19:17:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20221222072603.1175248-1-korantwork@gmail.com>
+ <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev> <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
+ <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
+ <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev> <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
+ <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev> <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
+ <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
+ <9e6cfda1-4309-d1bb-a0cf-404a7fe7d3aa@linux.intel.com> <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
+In-Reply-To: <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
+From:   Xinghui Li <korantwork@gmail.com>
+Date:   Tue, 7 Feb 2023 11:18:14 +0800
+Message-ID: <CAEm4hYWjaVCDFtCCyHrq5vOie4wV5LFn-UVZ5qQbpASxVGy1TA@mail.gmail.com>
+Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     "Patel, Nirmal" <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,174 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-02-05 at 11:49 -0800, Roman Gushchin wrote:
-> Hi Leonardo!
-
-Hello Roman,
-Thanks a lot for replying!
-
->=20
-> > Yes, but we are exchanging an "always schedule_work_on()", which is a k=
-ind of
-> > contention, for a "sometimes we hit spinlock contention".
-> >=20
-> > For the spinlock proposal, on the local cpu side, the *worst case* cont=
-ention
-> > is:
-> > 1 - wait the spin_unlock() for a complete <percpu cache drain process>,
-> > 2 - wait a cache hit for local per-cpu cacheline=C2=A0
-> >=20
-> > What is current implemented (schedule_work_on() approach), for the loca=
-l
-> > cpu=C2=A0side there is *always* this contention:
-> > 1 - wait for a context switch,
-> > 2 - wait a cache hit from it's local per-cpu cacheline,
-> > 3 - wait a complete <percpu cache drain process>,=C2=A0
-> > 4 - then for a new context switch to the current thread.
->=20
-> I think both Michal and me are thinking of a more generic case in which t=
-he cpu
-> is not exclusively consumed by 1 special process, so that the draining wo=
-rk can
-> be executed during an idle time. In this case the work is basically free.
-
-Oh, it makes sense.
-But in such scenarios, wouldn't the same happens to spinlocks?
-
-I mean, most of the contention with spinlocks only happens if the remote cp=
-u is
-trying to drain the cache while the local cpu happens to be draining/chargi=
-ng,
-which is quite rare due to how fast the local cpu operations are.
-
-Also, if the cpu has some idle time, using a little more on a possible spin=
-lock
-contention should not be a problem. Right?
-
->=20
-> And the introduction of a spin_lock() on the hot path is what we're are c=
-oncerned
-> about. I agree, that on some hardware platforms it won't be that expensiv=
-e,=C2=A0
->=20
-
-IIRC most hardware platforms with multicore supported by the kernel should =
-have
-the same behavior, since it's better to rely on cache coherence than lockin=
-g the
-memory bus.
-
-For instance, the other popular architectures supported by Linux use the LR=
-/SC
-strategy for atomic operations (tested on ARM, POWER, RISCV) and IIRC the
-LoadReserve slow part waits for the cacheline exclusivity, which is already
-already exclusive in this perCPU structure.
-
-
-> but in general not having any spinlocks is so much better.
-
-I agree that spinlocks may bring contention, which is not ideal in many cas=
-es.
-In this case, though, it may not be a big issue, due to very rare remote ac=
-cess
-in the structure, for the usual case (non-pre-OOMCG)
-
->=20
-> >=20
-> > So moving from schedule_work_on() to spinlocks will save 2 context swit=
-ches per
-> > cpu every time drain_all_stock() is called.
-> >=20
-> > On the remote cpu side, my tests point that doing the remote draining i=
-s faster
-> > than scheduling a local draining, so it's also a gain.
-> >=20
-> > Also, IIUC the possible contention in the spinlock approach happens onl=
-y on
-> > page-faulting and syscalls, versus the schedule_work_on() approach that=
- can
-> > interrupt user workload at any time.=C2=A0
-> >=20
-> > In fact, not interrupting the user workload in isolated cpus is just a =
-bonus of
-> > using spinlocks.
->=20
-> I believe it significantly depends on the preemption model: you're right =
-regarding
-> fully preemptive kernels, but with voluntary/none preemption it's exactly=
- opposite:
-> the draining work will be executed at some point later (probably with 0 c=
-ost),
-
-So, in case of voluntary/none preemption with some free cpu time.=20
-
-> while the remote access from another cpu will potentially cause delays on=
- the
-> spin lock as well as a need to refill the stock.
-
-But if there is some free CPU time, what is the issue of some (potential) d=
-elays
-due to spinlock contention?
-
-I am probably missing the whole picture, but when I think of performance
-improvement, I think on doing more with the same cputime. If we can use fre=
-e
-cputime to do stuff later, it's only fair to also use it in case of content=
-ion,
-right?
-
-I know there are some cases that may need to be more previsible (mostly RT)=
-, but
-when I think of memory allocation, I don't expect it to always take the sam=
-e
-time (as there are caches, pre-OOM, and so)
-
-Also, as previously discussed, in case of a busy cpu, the spinlock approach=
- will
-probably allow more work to be done.
-
->=20
-> Overall I'd expect a noticeable performance regression from an introducti=
-on of
-> spin locks and remote draining. Maybe not on all platforms, but at least =
-on some.
-> That's my main concern.
->=20
-
-I see.=20
-For the platform I have tested (x86) I noticed better overall performance o=
-n
-spinlocks than upstream solution. For other popular platforms, I have brief=
-ly
-read some documentation on locking/atomicity and I think we may keep the
-performance gains.
-
-But to be sure, I could retake the tests on other platforms, such as ARM, P=
-OWER,
-RISCV, and so. Or even perform extra suggested tests.
-
-With that info, would you feel less concerned about a possible change in me=
-mcg
-pcp cache locking scheme?
-
-
->  And I don't think the problem we're aiming to solve here
-> justifies this potential regression.
->=20
-
-To be strict, the isolated cpu scheduling problem is already fixed by the
-housekeeping patch (with some limitations).=C2=A0
-
-At this point, I am trying to bring focus to a (possible) performance
-improvement on the memcg pcp cache locking system.
-
-
-> Thanks!
->=20
-
-Thank you for helping me better understand your arguments and concerns.
-I really appreciate it!
-
-Best regards,
-Leo
-
+Keith Busch <kbusch@kernel.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=887=E6=97=A5=
+=E5=91=A8=E4=BA=8C 02:28=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, Feb 06, 2023 at 11:11:36AM -0700, Patel, Nirmal wrote:
+> > I like the idea of module parameter to allow switching between the mode=
+s
+> > but keep MSI remapping enabled (non-bypass) by default.
+>
+> Isn't there a more programatic way to go about selecting the best option =
+at
+> runtime?
+Do you mean that the operating mode is automatically selected by
+detecting the number of devices and CPUs instead of being set
+manually?
+>I suspect bypass is the better choice if "num_active_cpus() > pci_msix_vec=
+_count(vmd->dev)".
+For this situation, My speculation is that the PCIE nodes are
+over-mounted and not just because of the CPU to Drive ratio.
+We considered designing online nodes, because we were concerned that
+the IO of different chunk sizes would adapt to different MSI-X modes.
+I privately think that it may be logically complicated if programmatic
+judgments are made.
