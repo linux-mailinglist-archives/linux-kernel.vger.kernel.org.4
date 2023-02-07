@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCA368DED7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD1E68DE72
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjBGRZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S231543AbjBGRDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:03:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbjBGRYx (ORCPT
+        with ESMTP id S230509AbjBGRDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:24:53 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC56810424;
-        Tue,  7 Feb 2023 09:24:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675790692; x=1707326692;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9xrRpquyUcNbyxXOKJwhHLAwKl6JNnIm4Wb4TxBKwhg=;
-  b=NNa90n7GNnNOPC8Q7aEJsN/92O20DA9BJ08GBvEb4qvabYsdF2ihDmoI
-   ABCnz5MTLVPoM1senFI/xVJHYfxfmsUg483urA/5QPH5gY+mQY6Y9nuhE
-   cf8wo5ui6O+s77x7pmtLovPKM63mG4FN4SWRcnDFu9EQ93kTokLiR+s7X
-   lOLm/2+NdS1vl5M8hReGgHuYI8QhMN1ng0Ej39hHlp0ejuzrMlkeoMRpL
-   AzPAd1sPqQ6AfMzlyNaCPaV4aDgDfsQhlk6ORpLY3bqdH2/DvpcoL0f9Y
-   PVyV66MHXuZxDLhucKgQt6cnJFgRvaknuy/5cCR1feG3GP8L24serP3Vn
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="317536490"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="317536490"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 06:44:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="755642583"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="755642583"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2023 06:44:44 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id B38A61C5; Tue,  7 Feb 2023 16:45:22 +0200 (EET)
-Date:   Tue, 7 Feb 2023 16:45:22 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     mauro.lima@eclypsium.com, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/1] spi: intel: Remove DANGEROUS tag from pci driver
-Message-ID: <Y+JkArdW747OtMO9@black.fi.intel.com>
-References: <20230206183143.75274-2-mauro.lima@eclypsium.com>
- <20230207135254.2465816-1-michael@walle.cc>
- <Y+JaKF4FZQKqeGs7@black.fi.intel.com>
- <8797addc6c063b867b94cce352191aab@walle.cc>
+        Tue, 7 Feb 2023 12:03:36 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AD92720;
+        Tue,  7 Feb 2023 09:03:35 -0800 (PST)
+Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: tanureal)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C934660208F;
+        Tue,  7 Feb 2023 17:03:33 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675789413;
+        bh=wXQQ9hKZcEEkrcDxicfFkwdm2d8cPyM0mRqhWTqAu6Y=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=N0cro9P2kAQnSsWLmuFFbK3gcDv0FZGpHvAI+aLTLUDMBB68kJrNayxCDhdlMmZz+
+         yWCnkvqvSJKpky5rK2mwNKhHpEZzpFnpErscf4Yf0hC0deRzrz6x0d7K+aqvvmM9JX
+         I5UunF0z12QtQUXu6KZoKF13rI9PUF/2uqN8LzwrzNh6TlRMzQ8LZEtEWv4eR8cXxT
+         YrqLDoeFglAsx8Knhlgx5NCLPQclycuSG0rbHv+MA0oegwT52QEz4d0kfNMD/3nWKx
+         hsY9NTzq8cN8Zz03fGGkU7Iz4OQ38hiCJw72phfM5rgmDXUNRwfS258FHjLSwTVN86
+         kt+EUCcTrwRTw==
+Message-ID: <e8aa571a-2d96-47da-34f0-47cc048dc655@collabora.com>
+Date:   Tue, 7 Feb 2023 17:03:31 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8797addc6c063b867b94cce352191aab@walle.cc>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   lucas.tanure@collabora.com
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 2/2] Documentation: cs35l41: Shared boost properties
+References: <20230207104021.2842-1-lucas.tanure@collabora.com>
+ <20230207104021.2842-3-lucas.tanure@collabora.com>
+ <44faeca1-94c9-4423-d87a-03d80e286812@linaro.org>
+ <e7257f9a-86c5-74e8-c538-6f6d2ba13274@collabora.com>
+ <44c7274f-8a5e-0235-413a-6c3260018601@linaro.org>
+ <4efe9796-6d3e-09d1-d5f7-cfb25a439061@collabora.com>
+ <56ce2617-4fd1-d597-a4dc-918654cdd3f6@linaro.org>
+In-Reply-To: <56ce2617-4fd1-d597-a4dc-918654cdd3f6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Feb 07, 2023 at 03:11:26PM +0100, Michael Walle wrote:
-> Hi Mika,
+On 2/7/23 4:48 PM, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> On 07/02/2023 17:34, Lucas Tanure wrote:
+> > On 07-02-2023 16:13, Krzysztof Kozlowski wrote:
+> >> On 07/02/2023 16:46, Lucas Tanure wrote:
+> >>>>> +      Shared boost allows two amplifiers to share a single boost circuit by
+> >>>>> +      communicating on the MDSYNC bus. The passive amplifier does not control
+> >>>>> +      the boost and receives data from the active amplifier. GPIO1 should be
+> >>>>> +      configured for Sync when shared boost is used. Shared boost is not
+> >>>>> +      compatible with External boost. Active amplifier requires
+> >>>>> +      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
+> >>>>>           0 = Internal Boost
+> >>>>>           1 = External Boost
+> >>>>> +      2 = Reserved
+> >>>>
+> >>>> How binding can be reserved? For what and why? Drop. 2 is shared active,
+> >>>> 3 is shared passive.
+> >>> 2 Is shared boost without VSPK switch, a mode not supported for new
+> >>> system designs. But there is laptops using it, so we need to keep
+> >>> supporting in the driver.
+> >>
+> >> That's not the answer. 2 is nothing here, so it cannot be reserved.
+> >> Aren't you mixing now some register value with bindings?
+> >>
+> >> Best regards,
+> >> Krzysztof
+> >>
+> >>
+> > I have added a new patch with propper documentation.
+> > And I would like to use 3 and 4 for shared boost as
+> > CS35L41_EXT_BOOST_NO_VSPK_SWITCH already exist as 2 and is used in the
+> > current driver.
 > 
-> Am 2023-02-07 15:03, schrieb Mika Westerberg:
-> > On Tue, Feb 07, 2023 at 02:52:54PM +0100, Michael Walle wrote:
-> > > > Modern CPUs exposes this controller as PCI device that only uses
-> > > > hardware sequencing capabilities which is safer than software
-> > > > sequencing.
-> > > > Leave the platform driver as *DANGEROUS* and update help text since
-> > > > most of these controllers are using software sequencing.
-> > > 
-> > > Out of curiosity, what is hardware sequencing? Maybe this should
-> > > be explained a bit more in the Kconfig help text. Looks like the
-> > > dangerous was there because you can update the bios and that
-> > > could eventually lead to a bricked mainboard. So hardware
-> > > sequencing helps there? how?
-> > 
-> > Hardware sequencing means the controller exposes just a bunch of "high
-> > level" operations to the software.
+> I don't see CS35L41_EXT_BOOST_NO_VSPK_SWITCH in the bindings.
 > 
-> Ok, I figured it would have been something to do with the SPI driver
-> just supporting these high level ops. But even with that background
-> it was hard to connect that to the "hardware sequencing". The help
-> text should be somewhat understandable to the user/distro people/whoever,
-> right? So I'd suggest to explain that a bit more in detail, or don't
-> use the term hardware sequencing at all. I'm not sure.
-
-I agree it should be made more understandable for the distro folks. At
-least add some explanation why it is OK to select this.
-
-Mauro, can you do that in the next version?
-
-> > Such as read, write, erase and so on
-> > but does not allow running the actual "low level" SPI-NOR opcodes.
-> > Software sequencing on the other hand allows running pretty much any
-> > opcode and this is what caused problems for certain Lenovo laptops few
-> > years back that then resulted adding DANGEROUS to the Kconfig.
+> > The laptop that uses CS35L41_EXT_BOOST_NO_VSPK_SWITCH doesn't have the
+> > property "cirrus,boost-type", but to make everything consistent I would
+> > prefer to use 3 and 4 for the new boost types.
+> > Is that ok with you?
 > 
-> That information should go into the commit message.
+> I don't see how it is related. The value does not exist, so whether
+> laptop has that property or not, is not really related, right?
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+The value does exist in the code, but no device should have that in ACPI/DTB, so yes the value doesn't exist for ACPI/DTB purposes.
+I can change CS35L41_EXT_BOOST_NO_VSPK_SWITCH to another value, like 99, and use 2 and 3 for shared boost.
+I will re-submit that with v3.
+Is that ok with you?
 
-+1
+Thanks
+Lucas
+
