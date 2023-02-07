@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D466068E274
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE10268E271
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBGU65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 15:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S229936AbjBGU67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 15:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjBGU6t (ORCPT
+        with ESMTP id S229779AbjBGU6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Feb 2023 15:58:49 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C26513DE7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 12:58:48 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id z13so4466948wmp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 12:58:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZVDEkwpSNBnNA5bvC0eSecX/xh6oUxrJTLdGIKP8nY4=;
-        b=uH2KAUVklw9v43h9yxNBufniyLS6TjEIIWPQXE6iftGk2v0fGkbNJAd8CeWQXDyGTO
-         3+jQagCE3g33wzfpDvz1FKzLwayfNTWXZNUcGSwHDCQsY+10LxPptS0u9tN4OmmlfFp4
-         htkSYBlpb35kapv9Bddhu7pUZi6razflGKlvnFtGXW45pT/knPZScLm0kaj7vZDkGSMR
-         ZfG4xCoTvpdrG+4szCkJASSht4esYG0MqkaPVSJzHa0os1OC2MJRRiftDXTcvRO00kTg
-         AY4PXW31vld/2p1G2SfdyAP7/xPUMTFv2mefqhx+SpSVz9eHHvVpvL2nyB0DjMCGYV6L
-         +PKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZVDEkwpSNBnNA5bvC0eSecX/xh6oUxrJTLdGIKP8nY4=;
-        b=Nc1qUggE333l7IVZ0GexbHd73x7mWmfJFBdQC28DbvnwWc+aTFUGUHCGQl832UhBoZ
-         QiZvfEsP0jyIbXqbLFEaWe8BBIGdbY4iGOs2itmqltCHbwk+V+nyyuFF5ybi8zcY4Eln
-         k1PXDSds7M2s0+FrH+VQ/rx/3yBxnhaADxqgsgIYON2y5gR5MZderl9XxIzO1Rt6c5l6
-         7T8SBBRcky28Kejw9NpXJTsMHvtAhwqF05z9K4wzCfKdIDHHNeqzuuZmg5O+VLYDwQFd
-         t3Xd/OTFzV4/OWTgMHXin2NW0fahl5eAGmDIV8kXqoGPGrHZdcFg5EUBuVALOPKxgKau
-         x0Kw==
-X-Gm-Message-State: AO0yUKWWKs9wnyjYZAAwnQG8l89C1j7u3PogcMr5uz8c1piypPyDd+TC
-        RvtWGxkd/g1U9YbdWkLJ+1nZgw==
-X-Google-Smtp-Source: AK7set9g0Q4PXzjyBw/7a9A5YeoIjf44d801s6Qofr8X7o0oi+hxj5dbCa8KvDcVQ6d9cBKnOlSLiQ==
-X-Received: by 2002:a05:600c:1688:b0:3dc:4042:5c21 with SMTP id k8-20020a05600c168800b003dc40425c21mr4443353wmn.6.1675803527622;
-        Tue, 07 Feb 2023 12:58:47 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h27-20020a05600c2cbb00b003db12112fcfsm16555649wmc.4.2023.02.07.12.58.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 12:58:47 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/4] media: samsung: exynos4-is: drop simple-bus from compatibles
-Date:   Tue,  7 Feb 2023 21:58:34 +0100
-Message-Id: <20230207205834.673163-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230207205834.673163-1-krzysztof.kozlowski@linaro.org>
-References: <20230207205834.673163-1-krzysztof.kozlowski@linaro.org>
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5999511647;
+        Tue,  7 Feb 2023 12:58:47 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675803524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kNQJNy/R9/K5UBVEa2XTHQBRDjsgUlovum6u1lLQmzM=;
+        b=Cycy9LYUbcBKf+iD/qLT6uJTjyeF6t1gUhw8PZNP0qPiMxpA//CSMHrNXeW2Evp0WL29VR
+        rIfIXARScT9Xl33sZSpe5TMjzcerq7XY07EcfmIQ1DelptcduoAYVpvONTIHZnlrJXTbBp
+        RTfvU/XxJkIi+rGJXBn7D3iw9PH1RbxrFgqf0W0Ha6OtiyllXwVeTUvK14n/uSRyNt3/Hy
+        B4gbpuy+BIAVZt0PIvOHZsBXv028GWh+Dao7yJkHYCigBL2ZXwlOJXM9ojRwAOkeuPkQ9n
+        iS2hN6skox1qo63F01iqxcNAgVWEJNxLMIwMPtsVQ5kZETKN1a9rw1V4PDqN1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675803524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kNQJNy/R9/K5UBVEa2XTHQBRDjsgUlovum6u1lLQmzM=;
+        b=+lMS0cNSyRWvGBEVLrvGuakIwd5kaM0Kue5WBHCJtypUVHRl0vgyBRwLEHO3EieaA4g51s
+        sYKRjvHdp/dkWuBg==
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+Subject: Re: [PATCH v6 01/11] x86/apic/x2apic: Fix parallel handling of
+ cluster_mask
+In-Reply-To: <0460d9cd8cdb7be2fcea00579e80ee683920d66d.camel@infradead.org>
+References: <20230202215625.3248306-1-usama.arif@bytedance.com>
+ <20230202215625.3248306-2-usama.arif@bytedance.com> <87a61qxtx0.ffs@tglx>
+ <d37f3af69df09ff542024ed93a37865b28dfa86e.camel@infradead.org>
+ <921cfe295fcd398168e5454e01193045de312688.camel@infradead.org>
+ <87v8kdv9i1.ffs@tglx>
+ <0460d9cd8cdb7be2fcea00579e80ee683920d66d.camel@infradead.org>
+Date:   Tue, 07 Feb 2023 21:58:44 +0100
+Message-ID: <87bkm5ur97.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The FIMC camera node wrapper is not a bus, so using simple-bus fallback
-compatible just to instantiate its children nodes was never correct.
-Driver should explicitly populate all its children devices.
+On Tue, Feb 07 2023 at 19:53, David Woodhouse wrote:
+> On Tue, 2023-02-07 at 15:24 +0100, Thomas Gleixner wrote:
+> Thanks. I've reworked and I think I've caught everything. Didn't want
+> to elide the credit where Usama had done some of the forward-porting
+> work, so I've left those notes and the SoB intact on those patches, on
+> the assumption that they will be reposting the series after proper
+> testing on hardware again anyway (I'm only spawning it in qemu right
+> now).
+>
+> https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/parallel-6.2-rc7
+>
+> The only real code change other than what we've discussed here is to
+> implement what we talked about for CPUID 0xb vs. 0x1 etc:
+>
+> 	/*
+> 	 * We can do 64-bit AP bringup in parallel if the CPU reports
+> 	 * its APIC ID in CPUID (either leaf 0x0B if we need the full
+> 	 * APIC ID in X2APIC mode, or leaf 0x01 if 8 bits are
+> 	 * sufficient). Otherwise it's too hard. And not for SEV-ES
+> 	 * guests because they can't use CPUID that early.
+> 	 */
+> 	if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 1 ||
+> 	    (x2apic_mode && boot_cpu_data.cpuid_level < 0xb) ||
+> 	    cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+> 		do_parallel_bringup = false;
+>
+> 	if (do_parallel_bringup && x2apic_mode) {
+> 		unsigned int eax, ebx, ecx, edx;
+>
+> 		/*
+> 		 * To support parallel bringup in x2apic mode, the AP will need
+> 		 * to obtain its APIC ID from CPUID 0x0B, since CPUID 0x01 has
+> 		 * only 8 bits. Check that it is present and seems correct.
+> 		 */
+> 		cpuid_count(0xb, 0, &eax, &ebx, &ecx, &edx);
+>
+> 		/*
+> 		 * AMD says that if executed with an umimplemented level in
+> 		 * ECX, then it will return all zeroes in EAX. Intel says it
+> 		 * will return zeroes in both EAX and EBX. Checking only EAX
+> 		 * should be sufficient.
+> 		 */
+> 		if (eax) {
+> 			smpboot_control = STARTUP_SECONDARY | STARTUP_APICID_CPUID_0B;
+> 		} else {
+> 			pr_info("Disabling parallel bringup because CPUID 0xb looks untrustworthy\n");
+> 			do_parallel_bringup = false;
+> 		}
+> 	} else if (do_parallel_bringup) {
+> 		/* Without X2APIC, what's in CPUID 0x01 should suffice. */
+> 		smpboot_control = STARTUP_SECONDARY | STARTUP_APICID_CPUID_01;
+> 	}
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Looks good to me!
 
----
+Thanks,
 
-Changes since v1:
-1. Do not depopulate on errors because it causes several errors.
----
- drivers/media/platform/samsung/exynos4-is/media-dev.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/media/platform/samsung/exynos4-is/media-dev.c b/drivers/media/platform/samsung/exynos4-is/media-dev.c
-index 22baa429ed5d..6839007edf1d 100644
---- a/drivers/media/platform/samsung/exynos4-is/media-dev.c
-+++ b/drivers/media/platform/samsung/exynos4-is/media-dev.c
-@@ -1440,6 +1440,10 @@ static int fimc_md_probe(struct platform_device *pdev)
- 	if (!fmd)
- 		return -ENOMEM;
- 
-+	ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
-+	if (ret < 0)
-+		return -ENOMEM;
-+
- 	spin_lock_init(&fmd->slock);
- 	INIT_LIST_HEAD(&fmd->pipelines);
- 	fmd->pdev = pdev;
--- 
-2.34.1
-
+        tglx
