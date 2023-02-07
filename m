@@ -2,97 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD78E68D253
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4815D68D255
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjBGJOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 04:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S231345AbjBGJPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjBGJOt (ORCPT
+        with ESMTP id S231395AbjBGJPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:14:49 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FED82B084;
-        Tue,  7 Feb 2023 01:14:47 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r2so12836248wrv.7;
-        Tue, 07 Feb 2023 01:14:47 -0800 (PST)
+        Tue, 7 Feb 2023 04:15:06 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF94B36476
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:15:05 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id a1so17707846ybj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 01:15:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EnOMeG0z+YCevJjETbIYGt07S+IbdApmVaDUDwVjN8U=;
-        b=iqlAf7IGMyIOrcKjo+GQMhHPJG6L6QvHww9wyGLEFS56jdFszjRj15dzxrUf6AMNBC
-         RDsxjqagk1CLTr8CwmHto2Fz6sq+pgCqj640Km2/vSTeqO4frnXLFWq6wgtHyteVFM0d
-         95HOJ1JP26R16VXiWvMb2xQFoHzePRnjO85XemX8yWzYTweqk0xr/0xkmT/aUsdaoic5
-         VF8x0bmepJSwpe6y9rwpC3m61PYM04SunqcFQvUbAc4stRekVH6AQynVJki6LRemKp6L
-         uDrHlxrGnHEQ74VibFi2GYvH8ycHsMHnITQNKPxapKQPLLSlUUIFpEzsoYeSpBx0GC5N
-         yHRg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q8jBVuw64zr+++4naEUhmf8QMT+GB68ff/CcL3gGnDk=;
+        b=NWlZW+1yt6Dn6Z2iU3Hm59DGjYhkWJYoHVsD+bAUodoF+FaamRhb/AUYydjendGFUO
+         ZHKaeU/1EyJcdLHBaadRpFCxZ2Mggbg80NX1tmi6vzsFaO5zwCM7mCrnZHD1JjG/B1r6
+         bqgOqg5D+H353oCu3RcqkPZoZEW6YxwfCJ2ziCAgsa0Nj8BoVkX3BkjuDW5U3EsvGJGc
+         YEXIIqREmxLzUU5hPd15s1Be2EFNFSRdEbfsY9L22U7rW6vMeWywFpRVFwE1lOGXzqVm
+         521qqGp8mnebLHZkaK+OaMgMCGH+r1nOx78Vg1Z1qLaLpwShT7tjF+k01pdc0Lk5DwOk
+         vncQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EnOMeG0z+YCevJjETbIYGt07S+IbdApmVaDUDwVjN8U=;
-        b=3RwIWsb75wtvTpz8SVAfE2Zp29VHAYk1bsYrWSpPmqg5gG/PBwoF694kOjA88gQtKt
-         0WScMVdUxwH0+HfieHtNP84WFlDOWpErWYRHJEGBkYLWTKCxH6Rj85mR1y0n44PYhMxY
-         UrMSiO1TTfbnDIHkeZFw6kO3/0agVe4fC79UU7FLTHiewYjhyE0E8EC6NQgbLRmrxf5b
-         OEsjJxG5YLiRX2lZPv4gts4GhLNzTi0XCqW5ni74+d+qWqkn1e17+v/9FXGZjZnkboxD
-         tU+xtDpQJdv+8HDSxwXE8c/faBz7yfE7c9L4HZBBQXZwbCl7Vy3+B9OweQ+NpbT9gBqq
-         JhNQ==
-X-Gm-Message-State: AO0yUKW3cKT9w8PLGdKA0BxgjJCPtz1ZEaSF+SjdVa/EazKfigaNbH+4
-        EMB3cg3XMxcoTa5HgBQvNfqpU0NGVB7WPYfk
-X-Google-Smtp-Source: AK7set95oC0Zx1vGd8VPUnITmIN++zR08TCoUYDCujeSmKMmRwYBoI5qC0HZN3YdOhaYkVNR6b9BcA==
-X-Received: by 2002:a5d:6447:0:b0:2be:57a6:8161 with SMTP id d7-20020a5d6447000000b002be57a68161mr1879784wrw.46.1675761285516;
-        Tue, 07 Feb 2023 01:14:45 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a17-20020a5d53d1000000b002c3ebbc9248sm3704990wrw.66.2023.02.07.01.14.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 01:14:44 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] platform/chrome: Fix spelling mistake "Attenetion" -> "attention"
-Date:   Tue,  7 Feb 2023 09:14:43 +0000
-Message-Id: <20230207091443.143995-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        bh=q8jBVuw64zr+++4naEUhmf8QMT+GB68ff/CcL3gGnDk=;
+        b=eiKghWEoVGYlADdxilYUMc0hcRRLI5yTm3/R2H0zRtBPswVHm6JC4/v2ZtCaDAgiQW
+         7FVEE3loCx69kQnjlPf9P3IeG2OPkaaINaUKZmChrMPgsTT/ILXY1ASMvXISoo4Exc13
+         FYaCgUAYJpy4/Etrqajz9nQ0XAXv+bvTNY8r5mtlGyHpcGOSBo1rQ9I4fu6vozKxXb5q
+         C+fHwsCsS37peGt2aQe1y/TgQ8eTBXC1oKscrc+1rrgNXcvW4w2SSBgvF+JL22FAXjmt
+         1U7mJc1/s1lsGlWsW252rXIv35FIS4HnWanvDCSrjemULygvefdh2NQOgZc0+tLQQ100
+         zixg==
+X-Gm-Message-State: AO0yUKUNTF2YKScs4LskZ/xeU4pLQxyzBUf5MTQuUsTZ8ZzO5gu/rCT1
+        dTHICcJyxOiW42D8CWX+ceZnV1X2dHD3qw1pq8omxQgm/SpVJA==
+X-Google-Smtp-Source: AK7set+yZ7oot/nLJBhp936PRtnytfQjFAtinpDu6O4RQZtagOF92fdcaz69150IfHZum63k6nVKWxw2gVVw1WaXgSQ=
+X-Received: by 2002:a5b:6c5:0:b0:88f:946:bd98 with SMTP id r5-20020a5b06c5000000b0088f0946bd98mr323446ybq.24.1675761305145;
+ Tue, 07 Feb 2023 01:15:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20230206141558.20916-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230206141558.20916-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 7 Feb 2023 10:14:53 +0100
+Message-ID: <CACRpkda+5s3X-g5C=42m3Xh-A=mpR-2hLasht6bMT89L9XBJQg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: intel: Restore the pins that used to be
+ in Direct IRQ mode
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Jim Minter <jimminter@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_warn message, make it lower case
-and fix the spelling.
+On Mon, Feb 6, 2023 at 3:16 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/platform/chrome/cros_ec_typec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> If the firmware mangled the register contents too much,
+> check the saved value for the Direct IRQ mode. If it
+> matches, we will restore the pin state.
+>
+> Reported-by: Jim Minter <jimminter@microsoft.com>
+> Fixes: 6989ea4881c8 ("pinctrl: intel: Save and restore pins in "direct IRQ" mode")
+> Tested-by: Jim Minter <jimminter@microsoft.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 71f5d7d8e055..a673c3342470 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -1020,7 +1020,7 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
- 		cros_typec_handle_vdm_attention(typec, port_num);
- 		ret = cros_typec_send_clear_event(typec, port_num, PD_STATUS_EVENT_VDM_ATTENTION);
- 		if (ret < 0)
--			dev_warn(typec->dev, "Failed VDM Attenetion event clear, port: %d\n",
-+			dev_warn(typec->dev, "Failed VDM attention event clear, port: %d\n",
- 				 port_num);
- 	}
- }
--- 
-2.30.2
+Patch applied for fixes.
 
+Yours,
+Linus Walleij
