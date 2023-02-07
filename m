@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BC668E389
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FC068E29E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:05:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjBGWo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 17:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S229663AbjBGVFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 16:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBGWo1 (ORCPT
+        with ESMTP id S229582AbjBGVFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 17:44:27 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE95B9EC0;
-        Tue,  7 Feb 2023 14:44:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675809866; x=1707345866;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=w4yUWgdrMkSu5h1zXbr5sfr/CirMhN4jXxr0vnH7soA=;
-  b=HfO1bJch7urb36Y8969+dlDJjzJG33h4btEq+2Q74gm5aF1+wEJxGWhq
-   0xy1m4whevJPOkWbzdj3CZeMzZQqag+0Fu3AjZdS1q88zE9t6dbMtgXCF
-   l/d3EY2EI4CDZVQMfKenurSVnlBbnQZ2313G6c3ER7BWqTI26qqGeFPa5
-   3iThx4tVsArsSqARBR6Pdi6RAg9btw0r4XUQUd+o9q8Xwx7YsoMxIkwNy
-   N/rGoUCtODkCee/Hdy7lDNN2rMH2PQmvbDXLlNvZ7Hf6GlxmaO9bNffSf
-   XcytN1lDVwzGomT8AL0AdhINWJH91r/Rmq3fUsKSDyR9ddbZO0igPBMab
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="357027931"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="357027931"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 14:44:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="616981528"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="616981528"
-Received: from jinggu-mobl.amr.corp.intel.com (HELO [10.212.120.142]) ([10.212.120.142])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 14:44:23 -0800
-Message-ID: <b532bf7b-e1fb-3a9d-1b88-02f3159be47d@linux.intel.com>
-Date:   Tue, 7 Feb 2023 07:29:19 -0600
+        Tue, 7 Feb 2023 16:05:01 -0500
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E03AE;
+        Tue,  7 Feb 2023 13:05:00 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-169ba826189so20688317fac.2;
+        Tue, 07 Feb 2023 13:05:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mFGDXaBqsF9jEoiShHTN1yV+Mtn0R4KDmloG0NYM1Zs=;
+        b=b5WH48CARw3ZlTZhUaasMaNoMIZIn1JnyKKNig5/T3V0ozxlJHoyQFq4tDFLeUzvnh
+         CANdgWcHceNFEXT+AqCTu+LRV/fEeY80zTuekWIMqKO8jZ+qC3bC+4r0L/LOWV/CZCjb
+         WgotwQe+P5v3QM5W67tHVcY/LHsIn3H5WTDtDttdn/ndPOBPrQ7BgPJ74l8ww6OtVWMg
+         ETByyzFvge9LaAz3s22FEAPVriFfTTGoCZEKBgudrHW+Te56kPJds5yqW90DavwEI1CR
+         SNSghvzDpeIhJZgpWD/4WuFBmDFDTA4BdHkWYvbdRB7MFeD7muPa5EUVNYtY5xE7Xe2Y
+         zskg==
+X-Gm-Message-State: AO0yUKUFGDFJk5KUbDm0r6/aZO8oK7/O1C4mhkYyStuMY534JEk7dvwt
+        FymfAspZO+mrqnDqFu4WGs7eON0nuQ==
+X-Google-Smtp-Source: AK7set9BvmkzqucwHSklKk1CG0HFoET9kw5v1V7H41Esr59xBJlnU34LyUXqvKNhwC7Em+eoObbQpg==
+X-Received: by 2002:a05:6870:708a:b0:163:4c84:5f1a with SMTP id v10-20020a056870708a00b001634c845f1amr2100457oae.49.1675803899449;
+        Tue, 07 Feb 2023 13:04:59 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s24-20020a05682003d800b004a8eb1d8f1bsm6514302ooj.39.2023.02.07.13.04.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 13:04:58 -0800 (PST)
+Received: (nullmailer pid 4152043 invoked by uid 1000);
+        Tue, 07 Feb 2023 21:04:58 -0000
+Date:   Tue, 7 Feb 2023 15:04:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Martin Liu <liumartin@google.com>
+Cc:     frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, surenb@google.com,
+        minchan@kernel.org, tkjos@google.com
+Subject: Re: [PATCH] of: reserved-mem: expose reserved-mem details via debugfs
+Message-ID: <20230207210458.GA4142905-robh@kernel.org>
+References: <20230206142714.4151047-1-liumartin@google.com>
+ <CAL_JsqKA8pBess-zLA_2n0p8q=NBuY0EGA7qALKabwJA8ZRwrA@mail.gmail.com>
+ <CAASV4h5ANYTJUN3gQxuLxeKMknyoyt7-YTxRRMcjrQXRrVRi5Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [RFC PATCH v2 20/22] sound: usb: Prevent starting of audio stream
- if in use
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, broonie@kernel.org,
-        bgoswami@quicinc.com, tiwai@suse.com, robh+dt@kernel.org,
-        agross@kernel.org
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-21-quic_wcheng@quicinc.com>
- <557f8f76-38f5-5e07-905e-774e03120bd2@linux.intel.com>
- <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
-Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAASV4h5ANYTJUN3gQxuLxeKMknyoyt7-YTxRRMcjrQXRrVRi5Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/6/23 19:15, Wesley Cheng wrote:
-> Hi Pierre,
+On Wed, Feb 08, 2023 at 01:05:25AM +0800, Martin Liu wrote:
+> On Mon, Feb 6, 2023 at 11:12 PM Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Mon, Feb 6, 2023 at 8:27 AM Martin Liu <liumartin@google.com> wrote:
+> > >
+> > > It's important to know reserved-mem information in mobile world
+> > > since reserved memory via device tree keeps increased in platform
+> > > (e.g., 45% in our platform). Therefore, it's crucial to know the
+> > > reserved memory sizes breakdown for the memory accounting.
+> > >
+> > > This patch shows the reserved memory breakdown under debugfs to
+> > > make them visible.
+> > >
+> > > Below is an example output:
+> > > cat $debugfs/reserved_mem/show
+> > > 0x00000009fc400000..0x00000009ffffffff (   61440 KB )   map     reusable test1
+> > > 0x00000009f9000000..0x00000009fc3fffff (   53248 KB )   map     reusable test2
+> > > 0x00000000ffdf0000..0x00000000ffffffff (    2112 KB )   map non-reusable test3
+> > > 0x00000009f6000000..0x00000009f8ffffff (   49152 KB )   map     reusable test4
+> > > ...
+> > > 0x00000000fd902000..0x00000000fd909fff (      32 KB ) nomap non-reusable test38
+> > > 0x00000000fd90a000..0x00000000fd90bfff (       8 KB ) nomap non-reusable test39
+> > > Total 39 regions, 1446140 KB
+> >
+> > This information is pretty much static, why not just print it during
+> > boot? It's also just spitting out information that's straight from the
+> > DT which is also available to userspace (flattened and unflattened).
 > 
-> On 1/26/2023 8:12 AM, Pierre-Louis Bossart wrote:
->>
->>
->> On 1/25/23 21:14, Wesley Cheng wrote:
->>> With USB audio offloading, an audio session is started from the ASoC
->>> platform sound card and PCM devices.  Likewise, the USB SND path is
->>> still
->>> readily available for use, in case the non-offload path is desired.  In
->>> order to prevent the two entities from attempting to use the USB bus,
->>> introduce a flag that determines when either paths are in use.
->>>
->>> If a PCM device is already in use, the check will return an error to
->>> userspace notifying that the stream is currently busy.  This ensures
->>> that
->>> only one path is using the USB substream.
->>
->> It's good to maintain mutual exclusion, but it's still very hard for an
->> application to figure out which card can be used when.
->>
->> Returning -EBUSY is not super helpful. There should be something like a
->> notification or connection status so that routing decisions can be made
->> without trial-and-error.
->>
-> 
-> The USB offload driver does have access to the USB substream that is
-> being utilized/offloaded.  Maybe in addition to this check, we can also
-> set the PCM runtime state as well (for that particular substream)?  That
-> way userspace can fetch information about if the stream is busy or not.
+> IIUC, for dynamic allocation cases, we can't get actual allocation layout
+> from DT.
 
-You're missing the point. When a card is exposed but the PCM devices may
-or may not be usable (consuming data with no sound rendered or returning
-an error), it's much better to provide a clear connection status to
-userspace.
+Right, so whomever does the allocation should print that out.
 
-Let me give you an example. Intel drivers can expose 3 HDMI/DP PCM
-devices. Userspace has no idea which one to use, so there's a jack
-control that tells userspace whether there is a receiver connected so
-that the audio server can use the relevant PCM device.
+>  Also, there could be some adjustment from memblock
+> (ex. alignment). Therefore, printing it out from the reserved_mem would
+> be more clear.
 
-Audio routing based on trial and error is really problematic, errors can
-happen but they should be exceptional (e.g. xruns), not a means of
-driver-userspace communication on the device status.
+If memblock is adjusting, then shouldn't memblock print out the 
+addresses?
+
+> However, as you mentioned, once the allocation is done, it should be pretty
+> static. Thus, printing it during boot should be reasonable. If so, we
+> could print
+> them out in fdt_init_reserved_mem() like below. Is my understanding correct?
+
+That looks mostly fine to me. If we can do it with the unflattened tree, 
+that would be better. I'm not sure off hand if that works here and you 
+are just incorrectly using of_get_flat_dt_prop() still, or if it is 
+indeed too early.
+
+Rob
