@@ -2,141 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B7B68D19B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA99D68D19D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:44:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjBGImh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
+        id S230407AbjBGIoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 03:44:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjBGImg (ORCPT
+        with ESMTP id S231167AbjBGIoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:42:36 -0500
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EE41165C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:42:33 -0800 (PST)
-X-ASG-Debug-ID: 1675759350-1eb14e7e420af50001-xx1T2L
-Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id lk2joHE7hInOTlC7 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Tue, 07 Feb 2023 16:42:30 +0800 (CST)
-X-Barracuda-Envelope-From: SilviaZhao-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Received: from ZXBJMBX02.zhaoxin.com (10.29.252.6) by ZXSHMBX2.zhaoxin.com
- (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 7 Feb
- 2023 16:42:30 +0800
-Received: from [10.29.8.47] (10.29.8.47) by ZXBJMBX02.zhaoxin.com
- (10.29.252.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Tue, 7 Feb
- 2023 16:42:28 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
-Message-ID: <950c6d27-bc91-01e0-ba26-d09ad4bf7934@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.8.47
-Date:   Tue, 7 Feb 2023 16:42:26 +0800
+        Tue, 7 Feb 2023 03:44:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C46975F;
+        Tue,  7 Feb 2023 00:44:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5262EB816BF;
+        Tue,  7 Feb 2023 08:44:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3210C4339B;
+        Tue,  7 Feb 2023 08:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675759458;
+        bh=uIFZ6C+dgvqZ2HFhkvL6C0xfNCDjt7/o6qgCfeq7fWc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ma4Rnx03MnBDSv7NBePrO9s8eXbuDDmnuqcyF/ChHcKOLYVMr6TxWzczh8YkwQ2yx
+         ZqMLnnoxyIJaiMlFvnip4QhcK/H8C+CqsCYEiSpzlqkWhZcutnPRbdo/rTxfBXV1S7
+         Lt7HrSnq9C2l3Gfhq3px/HUIEng1ryoWSZUi5mjLMuPze8UHuRTJfzQ2icKIeB1/rh
+         f1D6zGA5nBv6hty0x8+tKmfHRCHPd5kJmVDhBn9+lLVs4mymGQSdMNQCD6zeXtXOe9
+         +4Y930DqnMTYjqgWN2ucDFVS61R8+bnxHFLcgD4qpDY+wzwbqy8NcaEs5+BF7OmRE0
+         zeIYmAUm5hOqg==
+Received: by mail-lj1-f177.google.com with SMTP id h4so14758469lja.2;
+        Tue, 07 Feb 2023 00:44:16 -0800 (PST)
+X-Gm-Message-State: AO0yUKUWqO6pgVodqzUiSgqp/wdZuXmHAV2//rw0XLJpKdwO7C1BR7P9
+        InJKHVz6PJQhTRP+fAQeNYPwqinHQJLV7ovVPaI=
+X-Google-Smtp-Source: AK7set/bHazqwePHFFINFuJAswX+GNy5VqD+MiexpeWuQYU0k1J46ViK6/39NayfRuNVhQhPh7BlthQTdqE3en2m56w=
+X-Received: by 2002:a05:651c:3c6:b0:290:5011:2332 with SMTP id
+ f6-20020a05651c03c600b0029050112332mr300579ljp.120.1675759455022; Tue, 07 Feb
+ 2023 00:44:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] x86/perf/zhaoxin: Add stepping check for ZX-C
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH] x86/perf/zhaoxin: Add stepping check for ZX-C
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <tglx@linutronix.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <cobechen@zhaoxin.com>, <louisqi@zhaoxin.com>,
-        <silviazhao@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <kevinbrace@gmx.com>, <8vvbbqzo567a@nospam.xutrox.com>
-References: <20230202091738.5947-1-silviazhao-oc@zhaoxin.com>
- <Y95hWVFyw7TM1WSB@zn.tnic> <51ab21ee-403b-f4ce-9a7e-2580ab7e8118@zhaoxin.com>
- <Y+DM8BZUi6a10hXY@zn.tnic> <1d808c21-f54d-1506-d95a-0276430aea8d@zhaoxin.com>
- <Y+Dgx7EeRufHdx17@zn.tnic>
-From:   silviazhaooc <silviazhao-oc@zhaoxin.com>
-In-Reply-To: <Y+Dgx7EeRufHdx17@zn.tnic>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.29.8.47]
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- ZXBJMBX02.zhaoxin.com (10.29.252.6)
-X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
-X-Barracuda-Start-Time: 1675759350
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1785
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.4071 1.0000 0.0000
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.104443
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230131040355.3116-1-justin.he@arm.com> <CAMj1kXFTUXgaENBSYh+cGCS3wFCFunf+auk3nKwHVJWiZ7crig@mail.gmail.com>
+ <DBBPR08MB45383B479656BA18FEFFB7D5F7D09@DBBPR08MB4538.eurprd08.prod.outlook.com>
+ <Y9lchEgyNGLKu/4R@zx2c4.com> <DBBPR08MB4538E2CE68BCBF15B9F0093AF7D69@DBBPR08MB4538.eurprd08.prod.outlook.com>
+ <DBBPR08MB4538A07A62DC4A10257B3277F7DB9@DBBPR08MB4538.eurprd08.prod.outlook.com>
+In-Reply-To: <DBBPR08MB4538A07A62DC4A10257B3277F7DB9@DBBPR08MB4538.eurprd08.prod.outlook.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 7 Feb 2023 09:44:03 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFE7A0=+MA2tCtuwjeGMcc1hgzvDnEJy1xGE=fh9Kgc2Q@mail.gmail.com>
+Message-ID: <CAMj1kXFE7A0=+MA2tCtuwjeGMcc1hgzvDnEJy1xGE=fh9Kgc2Q@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
+To:     Justin He <Justin.He@arm.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexandru Elisei <Alexandru.Elisei@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, nd <nd@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 7 Feb 2023 at 04:21, Justin He <Justin.He@arm.com> wrote:
+>
+> Hi Ard
+>
+> > -----Original Message-----
+> [...]
+> > As your suggested (comment above execute_with_initialized_rng in latest
+> > kernel):
+> > The efibootmgr -t X will be hung. Looks like one certain commit before =
+your
+> > patch broke the set_variable efi call. I will dig into the further debu=
+g and tell
+> > you the result.
+>
+> The root cause of the hung IMO might be similar to
+> commit 550b33cfd445296868a478e8413ffb2e963eed32
+> Author: Ard Biesheuvel <ardb@kernel.org>
+> Date:   Thu Nov 10 10:36:20 2022 +0100
+>
+>     arm64: efi: Force the use of SetVirtualAddressMap() on Altra machines
+>
+> Do you agree with the idea if I add Ampere =E2=80=9DeMAG=E2=80=9D machine=
+ into the list of
+> Using SetVirtualAddressMap() forcibly?
+>
+> Please note that even in previous kernel patch, the efibootmgr -t 10 will=
+ make
+> kernel hung if I passed "efi=3Dnovamap" to the boot parameter.
+>
 
-On 2023/2/6 19:13, Borislav Petkov wrote:
-> Hi Silvia,
-> 
-> On Mon, Feb 06, 2023 at 06:55:21PM +0800, silviazhaooc wrote:
->> Thanks for your reply.
-> 
-> You're welcome.
-> 
-> First of all, please do not top-post when replying on a public mailing
-> list but put your reply under the text you're replying to. Like the rest
-> of us do.
-> 
-Sorry, I'm a newbie in Linux. Thanks for your reminding.
-
->> As I mentioned before, Nano has several series. We cannot test if all of
->> them have the bug.
-> 
-> If you cannot test if all of them have the bug, then testing the
-> stepping as you do is wrong too.
-> 
-> You need an unambiguous way to differentiate between ZXC and Nano CPUs.
-> 
-> If steppings >= 0xe belong solely to ZXC, then state that in a comment
-> above it so that you can exclude Nano.
-> 
-> If Nano starts using those steppings later, though, then that check will
-> become wrong too.
-> 
-> So I need a statement: "this is how you detect a ZXC CPU unambiguously"
-> and then use that method when enabling PMU support on it and *only* on
-> it.
-> 
-> Makes more sense?
-> 
-Yes, that makes sense.
-
-I have carefully checked our product manual for Nano and ZXC FMS.
-
-For ZXC, there are 2 kinds of FMS：
-
-1. Family=6, Model=0x19, Stepping=0-3
-
-2. Family=6, Model=F, Stepping=E-F
-
-For Nano, there is only one kind of FMS:
-
-Family=6, Model=F, Stepping=[0-A]/[C-D]
-
-So model = 0xf, steppings >= 0xe or model = 0x19 belong solely to ZXC.
-Nano is an old CPU series which has been stopped production several 
-years ago. It will not use the steppings which belong to ZXC.This is an 
-unambiguous way to differentiate between ZXC and Nano CPUs.
-
-Do I need to add the statements in the source code and re-commit the patch?
-
-Thx.
-
-> Thx.
-> 
+Interesting. What does dmidecode return for the family in the type 1 record=
+?
