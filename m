@@ -2,180 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A41068E353
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6371568E35C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjBGWRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 17:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S229548AbjBGWTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 17:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjBGWR2 (ORCPT
+        with ESMTP id S229589AbjBGWTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 17:17:28 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A84223336
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 14:17:25 -0800 (PST)
-Received: from fsav411.sakura.ne.jp (fsav411.sakura.ne.jp [133.242.250.110])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 317MHNiv001394;
-        Wed, 8 Feb 2023 07:17:23 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav411.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp);
- Wed, 08 Feb 2023 07:17:23 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav411.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 317MHNQl001391
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 8 Feb 2023 07:17:23 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
-Date:   Wed, 8 Feb 2023 07:17:20 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Converting dev->mutex into dev->spinlock ?
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Tue, 7 Feb 2023 17:19:35 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1913A98;
+        Tue,  7 Feb 2023 14:19:34 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 317LL4Fi015234;
+        Tue, 7 Feb 2023 14:19:34 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : mime-version; s=s2048-2021-q4;
+ bh=yhRMK4pGZw635YhjsQyh7GEdHByDgDeXWTvrhuNUbKE=;
+ b=RrPaCQRkkRhGugR2t7taIrXe+8ZQ9iytFFBJFUbzypb5pMMtyxcpzlcuUM4Kw/hqQx8f
+ LYvqR49h19btyfUsh48E0844jMhmkc2Ex2CfQuVV8eNshkRzP3cD4jzFkiaq4dFaF3Qf
+ /5131rSCgYmY63B7KqHuZ5yhGrsaZ6DGiwoFW1uFI3n13bW0fCJ/5PTBMB3E3YJPU6t8
+ vg3nr8HIjICR9//MJRKkZQ82qpNvK31Me1LjHU7fRPkol37B1C5fPHRaJ9NHgsdBjGdr
+ aF9EXHIfO4XqJdwm6XCD/YIHAVDnjiVAuVmsTluqkBiv4t0Zw7m3l+jFKYVTpE04DH+O wg== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3nk2whcm76-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 14:19:33 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mQ4mtOGbTyGgAgpjvi0oqxFUQcc5viB8ssyWncosinRIGo1tOH/uR6srd7C7nFKb3xjq83ZlNxkxZ3wnLX/NK3kC7l9+xgbS5EDedNQ4Z3iK1RrZy9CwXDWTWtplkx9gkyw8FgQmreEx7PCd2RHh8A1ouQYFY+7FWLJE3dKvpGfQxl75fmzEEgRrIkdBPg/pdoWWON/qBVG8xo52+b6p93a0ld93eDBwRHnRqnLNec/g3T+4jvL1BHKdZBcKWGZP9XbpXvNu/dxcqk3zQKFyyPjFgCJsWyKeFkH0fBFum5OPU8jsUIrkgU6QrAAJOrCG2R+b4YG499eOhUUdoedggQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yhRMK4pGZw635YhjsQyh7GEdHByDgDeXWTvrhuNUbKE=;
+ b=K/i3ON8QgiZQX8C4VqlC8J8US08E/CYUdE9O+LYwBGQHrJkQMdlNq2RY9uxVm3KgzelJBavrT9TrckHqr3QCpPUSgjkCgwpzbw5xcynNHmBrJXigPGzjTSx6p031ZNE3fyDOTJdipKmYsm0K14wz9g4Hc/CdVyW027Quj6gWetk9tfl+NqbNA9oXEcBCmsIaPVmmCjWkGlqbsHHEGDTGbLMOaWnip4DG/4lY8rF6/iDrD7V6lxg1D1XK5KMBTaQbJmn8YxdlThib8HBiWnCYUAnw0vdXRQPksCBbUE9YQfMwLTFMZPIo/2VRBCcieFU/jPidfEHFwN1nvI+WiyJjbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by MW4PR15MB4521.namprd15.prod.outlook.com (2603:10b6:303:106::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Tue, 7 Feb
+ 2023 22:19:31 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::7b61:8691:5b41:ecf8]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::7b61:8691:5b41:ecf8%5]) with mapi id 15.20.6064.036; Tue, 7 Feb 2023
+ 22:19:30 +0000
+From:   Song Liu <songliubraving@meta.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
- <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
- <Y96HiYcreb8jZIHi@rowland.harvard.edu>
- <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
- <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
- <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
- <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
- <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
- <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
- <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
- <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Christoph Hellwig <hch@lst.de>,
+        Kernel Team <kernel-team@meta.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Song Liu <song@kernel.org>
+Subject: Re: [PATCH v10] module: replace module_layout with module_memory
+Thread-Topic: [PATCH v10] module: replace module_layout with module_memory
+Thread-Index: AQHZOosWgrFk94mbpUiAn23Fr3awBK7ED1wA
+Date:   Tue, 7 Feb 2023 22:19:30 +0000
+Message-ID: <8972F26D-34FE-4463-83AD-BBCC6F92C952@fb.com>
+References: <20230207002802.2514802-1-song@kernel.org>
+In-Reply-To: <20230207002802.2514802-1-song@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.300.101.1.3)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|MW4PR15MB4521:EE_
+x-ms-office365-filtering-correlation-id: 7287fa8d-0855-41a6-07a1-08db09596244
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0GzheqEE3HdCHkQ5DAktJCEBQDUJynQXcRtkIo6lSPkeXchqLZpoy5Ky6ozPl9ZMU0lOY40yKJNYoVHQxdt3yBLATyRuv+YzjBXYa1n8R3rNG8uAUEpEQVcbR3OsDXES37Qnn/QT1rBMn4lqmAbH0DjV0uzJfPKWb2kVE8QzfGZMrlMPbHfOka0A3OY01/8Ir48Npf5cMEe8xWFV4VMb3KZL1lPKK4y7guOlLD2ngaUhQdRE74r1O3G8/kM+/2ormkU5/maGYpn7ip0RhguqfSCsomk7r+0VF9Mxw15acQP/dxF4XQ5PLf6FzlmxyzANUsm+O8AqX1fY5mkDQ+qDRckg11XgFAi7lNKLa6Oq2VGQJWtxcqqWXozhWDTzS1B/qo5/J7Xz4tYm3zUdktspd0XCxW/adUnqg8SQkXxigR2BNIImYftt/Ipl/LJy5jN3Oxi11qboohrJv01G9F+B/BnEcAOs5aHrG30IzvYsBWbObWDvmBbCWkeF+CX0EWxOTROs6xkM2maa4MEfSlQaGwgab6mWAARPMwPoQ1JOl+YCfIe21D9qsSXggl/FySJ9wcKhQpSkS7HFf/E9D/tklKCrXjLtc6mMok/OL4em/V/AJsfsA5JftUpakTjly1vDYhZOsbm31TBLZNdwqthLjHmmB3FMeZVE1LI5P9EshavkoZE6z37XVa9H3QIlcK12xSWqA8oklhV/ZBKSLuDRjA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(376002)(136003)(346002)(396003)(451199018)(71200400001)(83380400001)(33656002)(2906002)(36756003)(38100700002)(38070700005)(122000001)(54906003)(76116006)(66446008)(478600001)(66556008)(64756008)(66946007)(91956017)(6512007)(66476007)(6916009)(9686003)(53546011)(186003)(6486002)(6506007)(316002)(41300700001)(8936002)(8676002)(4326008)(5660300002)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?cnAsled0Z2/mGoijH+v8q7HuLGdnjPRl2gWyO9AHLu8wbljb7iG/Dxm+hM8c?=
+ =?us-ascii?Q?kDU7IsI4OoxieAPIq7ahil4V6Nr3CuqEb65VJi+GNV/Q3KUjyBp6JWiH/kO3?=
+ =?us-ascii?Q?B33b5UcHebDDEDqqYQ2CejJyt3EIxiq7sq6rhIOYI5/IoWZFxkrrUF5ssDAT?=
+ =?us-ascii?Q?ExifjsynJvjbP/LpgesErbXWmrHeeJtIC36MBKmeeCsQRZGqyQ4Zyu1sgvk2?=
+ =?us-ascii?Q?hZ269YsgucZj0euGhiNKi3b91pl7mkQ9MHinwCS145fgdYDZPylS7LzvXfzK?=
+ =?us-ascii?Q?Xp0UPssKYGC1nwAIbetVtHsW3CIb47fLO972MlVCUn1aRJ1Zvxf6OZ/puzk2?=
+ =?us-ascii?Q?KXUInMTbD+EvfcyHo4TrEPSBW9H2yrpLRRa8aX1uVDoucQo6+ycDaq30tuj4?=
+ =?us-ascii?Q?0T5LdDMbUNJAs4snq5F/SgzZ9IWAQdo87VakQreJehfZCQ0pWilZBAx7Aqhr?=
+ =?us-ascii?Q?FWGVjKb/f6JOUqwbWSlsyw2V2XO17YW+3n1dD/CfNLPktm/XUOp0RXC1dC47?=
+ =?us-ascii?Q?Bd8N9mD+PnCHTmSR+TR7yJxglYBolcTeCOroZZoTwhRrLShP60rtAEt4CKkX?=
+ =?us-ascii?Q?3KVVvO+U5Gqjmm9DK//sxVblayL1kAqhBCH5gZCCt6w933otWNAzZXiszkkm?=
+ =?us-ascii?Q?14kFl0/wymonT+XAAZNWwkZFEHwNS5zMGM6wTAaBg5ST1y67n9yRphMmaMfc?=
+ =?us-ascii?Q?R6mrTt8V9M1OGW6QcdWAiQMf1GmNm9k98lSI1MeCe3IoFyChwmbnrJd3nwtt?=
+ =?us-ascii?Q?+ZxMRcxHM9PEbCh6lGvTDacM3cNRRQnjePy6i/h/50DsFbctT45AQQMc6tn7?=
+ =?us-ascii?Q?keyFj+Z6XM1V/W7NQhX4y0RtFULpwD89LeYuNhv2NBnBEoxgJdEtDA0IcbJ8?=
+ =?us-ascii?Q?fBpAK4mttoZlrhkZc+0rMqIJZC3DWaAp9KClYJ6lQRv3x4blTf6Utx/kOKT3?=
+ =?us-ascii?Q?LfbVyvaQcmOLZT0L4ZmeznVhZmIxeHmTitgEk/uyabKjOg4PBUuTCIZXOG2T?=
+ =?us-ascii?Q?eCtq1+cIZOlXD4U8Z6XAnvS1sceNnui5Dxn2ieI+SZYSiRpnn6B5Mr8X0YXn?=
+ =?us-ascii?Q?xHd45r/jDe3z9+92GvFF19x9XUKG2XZ2+ifequXIg2Xo+1yo0V5uRU/xPolp?=
+ =?us-ascii?Q?vpoh6jQQ+oIGW7HGmTrByhkjzQTVsBiHFq68chGbRIFgkipFFI2xYMykaKCH?=
+ =?us-ascii?Q?Q61oUQSou3SY9XP34sngv0+oFbqTkYBGbKxy0snQ/ozS4ZvSwIZLdWmC8mXy?=
+ =?us-ascii?Q?O7eCUaffrGWZ67AUEaoUvHSgA56TriGtwTgdm0+QccEOGIDbHeca/7ABWf9r?=
+ =?us-ascii?Q?k+RH6AsEHC6eXqqXmXUsWaWehtTQSFqsgLzXkD8Qrt6TVkssxIBUA9dMP5MW?=
+ =?us-ascii?Q?BfB6tN3NpR3Zw4xQZblwPRGgXRHP0CNwrHav5CD1WKh2P6p3k8+HQ0s5irlZ?=
+ =?us-ascii?Q?wxMaAjFusNi7DHyIutIXtw1T+6zlhuNUeY5ySCytdphIiFg7Va8l8QfQoyaG?=
+ =?us-ascii?Q?mK5cH9nSAx4Q4a8pl86A1FvWBhcuFGnYaoALwWNYWeNIWASDyQ7rNWp+BEzZ?=
+ =?us-ascii?Q?03lPKsEiyORAAOk5raYWbGnzy/XLixWSgvwAwwFlz5gtl601y3hmE2iGGkJ4?=
+ =?us-ascii?Q?YVlxbkc13u+U5QicWqIGj/IgIntS72UcWHo01o4Q2hox?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F1A97DF26DBCDB4CA27143DC92C2A9C3@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7287fa8d-0855-41a6-07a1-08db09596244
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 22:19:30.7953
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: f493Mktkb+IXI0ciqf2cl6e9bfEasfk6awFYfBE6MXQKhEeYYidgKH/jGFsUjd6ezHCz/Dymsvfgbjj4BnHPXA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4521
+X-Proofpoint-GUID: W2fmatTDA3rk1dYnD1ZgSUDsawH4upUZ
+X-Proofpoint-ORIG-GUID: W2fmatTDA3rk1dYnD1ZgSUDsawH4upUZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_13,2023-02-06_03,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/02/08 2:46, Alan Stern wrote:
-> The real question is what will happen in your syzbot test scenarios.  
-> Lockdep certainly ought to be able to detect a real deadlock when one 
-> occurs.  It will be more interesting to find out if it can warn about 
-> potential deadlocks _without_ them occurring.
+Hi Luis
 
-For example, https://syzkaller.appspot.com/x/repro.c?x=15556074480000 generates
-below warning, but I don't have syzbot environment. Please propose an updated
-patch (which won't hit WARN_ON_ONCE()) for allowing people to try it in syzbot
-environment.
+> On Feb 6, 2023, at 4:28 PM, Song Liu <song@kernel.org> wrote:
+> 
+> +static void free_mod_mem(struct module *mod)
+> +{
+> + /* free the memory in the right order to avoid use-after-free */
+> + static enum mod_mem_type mod_mem_free_order[MOD_MEM_NUM_TYPES] = {
+> + /* first free init sections */
+> + MOD_INIT_TEXT,
+> + MOD_INIT_DATA,
+> + MOD_INIT_RODATA,
+> +
+> + /* then core sections, except rw data */
+> + MOD_TEXT,
+> + MOD_RODATA,
+> + MOD_RO_AFTER_INIT,
+> +
+> + /* last, rw data */
+> + MOD_DATA,
+> + };
+> + int i;
+> +
+> + BUILD_BUG_ON(ARRAY_SIZE(mod_mem_free_order) != MOD_MEM_NUM_TYPES);
+> +
+> + for (i = 0; i < MOD_MEM_NUM_TYPES; i++) {
+> + enum mod_mem_type type = mod_mem_free_order[i];
+> + struct module_memory *mod_mem = &mod->mem[type];
+> +
+> + /* Free lock-classes; relies on the preceding sync_rcu(). */
+> + lockdep_free_key_range(mod_mem->base, mod_mem->size);
+> + if (mod_mem->size)
+> + module_memory_free(mod_mem->base, type);
+> + }
+> +}
 
-----------
-[  122.946483][ T3692] 
-[  122.979855][ T3692] ======================================================
-[  122.984206][ T3692] WARNING: possible circular locking dependency detected
-[  122.986920][ T3692] 6.2.0-rc7-00011-g05ecb680708a-dirty #943 Tainted: G        W         
-[  122.989918][ T3692] ------------------------------------------------------
-[  122.993357][ T3692] a.out/3692 is trying to acquire lock:
-[  122.995732][ T3692] ffff888128168900 (&dev->mutex_key#165){+.+.}-{3:3}, at: nfc_dev_down+0x26/0x120
-[  123.008266][ T3692] 
-[  123.008266][ T3692] but task is already holding lock:
-[  123.010995][ T3692] ffffffff85a09040 (rfkill_global_mutex){+.+.}-{3:3}, at: rfkill_fop_write+0x10e/0x360
-[  123.020389][ T3692] 
-[  123.020389][ T3692] which lock already depends on the new lock.
-[  123.020389][ T3692] 
-[  123.029714][ T3692] 
-[  123.029714][ T3692] the existing dependency chain (in reverse order) is:
-[  123.033255][ T3692] 
-[  123.033255][ T3692] -> #1 (rfkill_global_mutex){+.+.}-{3:3}:
-[  123.037794][ T3692]        __mutex_lock_common+0xe6/0xea0
-[  123.040845][ T3692]        mutex_lock_nested+0x1b/0x20
-[  123.043990][ T3692]        rfkill_register+0x25/0x3d0
-[  123.046100][ T3692]        nfc_register_device+0xd9/0x200
-[  123.048369][ T3692]        nfcsim_device_new+0x146/0x2c0
-[  123.077246][ T3692]        nfcsim_init+0x71/0x130
-[  123.079456][ T3692]        do_one_initcall+0xab/0x200
-[  123.081584][ T3692]        do_initcall_level+0xd7/0x1c0
-[  123.084613][ T3692]        do_initcalls+0x3f/0x80
-[  123.087020][ T3692]        kernel_init_freeable+0x230/0x2e0
-[  123.089388][ T3692]        kernel_init+0x1b/0x290
-[  123.091567][ T3692]        ret_from_fork+0x1f/0x30
-[  123.094393][ T3692] 
-[  123.094393][ T3692] -> #0 (&dev->mutex_key#165){+.+.}-{3:3}:
-[  123.097522][ T3692]        __lock_acquire+0x170d/0x33c0
-[  123.100739][ T3692]        lock_acquire+0xd3/0x200
-[  123.103840][ T3692]        __mutex_lock_common+0xe6/0xea0
-[  123.106366][ T3692]        mutex_lock_nested+0x1b/0x20
-[  123.108942][ T3692]        nfc_dev_down+0x26/0x120
-[  123.111542][ T3692]        nfc_rfkill_set_block+0x26/0x80
-[  123.114113][ T3692]        rfkill_set_block+0xa1/0x1e0
-[  123.116739][ T3692]        rfkill_fop_write+0x2e9/0x360
-[  123.148674][ T3692]        vfs_write+0x187/0x4d0
-[  123.151862][ T3692]        ksys_write+0xc6/0x170
-[  123.156763][ T3692]        do_syscall_64+0x41/0x90
-[  123.161519][ T3692]        entry_SYSCALL_64_after_hwframe+0x46/0xb0
-[  123.171373][ T3692] 
-[  123.171373][ T3692] other info that might help us debug this:
-[  123.171373][ T3692] 
-[  123.179398][ T3692]  Possible unsafe locking scenario:
-[  123.179398][ T3692] 
-[  123.183031][ T3692]        CPU0                    CPU1
-[  123.188115][ T3692]        ----                    ----
-[  123.190123][ T3692]   lock(rfkill_global_mutex);
-[  123.192104][ T3692]                                lock(&dev->mutex_key#165);
-[  123.200840][ T3692]                                lock(rfkill_global_mutex);
-[  123.207386][ T3692]   lock(&dev->mutex_key#165);
-[  123.241397][ T3692] 
-[  123.241397][ T3692]  *** DEADLOCK ***
-[  123.241397][ T3692] 
-[  123.245893][ T3692] 1 lock held by a.out/3692:
-[  123.250422][ T3692]  #0: ffffffff85a09040 (rfkill_global_mutex){+.+.}-{3:3}, at: rfkill_fop_write+0x10e/0x360
-[  123.256266][ T3692] 
-[  123.256266][ T3692] stack backtrace:
-[  123.258802][ T3692] CPU: 0 PID: 3692 Comm: a.out Tainted: G        W          6.2.0-rc7-00011-g05ecb680708a-dirty #943
-[  123.276931][ T3692] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
-[  123.280352][ T3692] Call Trace:
-[  123.310882][ T3692]  <TASK>
-[  123.312232][ T3692]  dump_stack_lvl+0xfe/0x190
-[  123.314278][ T3692]  check_noncircular+0x12e/0x140
-[  123.317038][ T3692]  __lock_acquire+0x170d/0x33c0
-[  123.320079][ T3692]  ? __lock_acquire+0x65f/0x33c0
-[  123.321887][ T3692]  ? __lock_acquire+0x65f/0x33c0
-[  123.325643][ T3692]  lock_acquire+0xd3/0x200
-[  123.327611][ T3692]  ? nfc_dev_down+0x26/0x120
-[  123.331732][ T3692]  ? nfc_dev_down+0x26/0x120
-[  123.335510][ T3692]  ? nfc_dev_down+0x26/0x120
-[  123.337961][ T3692]  __mutex_lock_common+0xe6/0xea0
-[  123.340214][ T3692]  ? nfc_dev_down+0x26/0x120
-[  123.347330][ T3692]  ? nfc_dev_down+0x26/0x120
-[  123.352194][ T3692]  mutex_lock_nested+0x1b/0x20
-[  123.356877][ T3692]  nfc_dev_down+0x26/0x120
-[  123.361856][ T3692]  nfc_rfkill_set_block+0x26/0x80
-[  123.378236][ T3692]  rfkill_set_block+0xa1/0x1e0
-[  123.379954][ T3692]  rfkill_fop_write+0x2e9/0x360
-[  123.381693][ T3692]  ? rfkill_fop_read+0x2a0/0x2a0
-[  123.406421][ T3692]  vfs_write+0x187/0x4d0
-[  123.408119][ T3692]  ? do_user_addr_fault+0x6e1/0x9c0
-[  123.410174][ T3692]  ksys_write+0xc6/0x170
-[  123.411856][ T3692]  do_syscall_64+0x41/0x90
-[  123.426593][ T3692]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-[  123.429725][ T3692] RIP: 0033:0x7fbea991ea3d
-[  123.431577][ T3692] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c3 a3 0f 00 f7 d8 64 89 01 48
-[  123.461942][ T3692] RSP: 002b:00007ffc8e2f63a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-[  123.468363][ T3692] RAX: ffffffffffffffda RBX: 00000000000f4240 RCX: 00007fbea991ea3d
-[  123.480268][ T3692] RDX: 0000000000000008 RSI: 0000000020000080 RDI: 0000000000000004
-[  123.487754][ T3692] RBP: 0000000000000000 R08: 0000000000000060 R09: 0000000000000060
-[  123.491003][ T3692] R10: 0000000000000060 R11: 0000000000000246 R12: 00007ffc8e2f6538
-[  123.550555][ T3692] R13: 000055cea974c2e0 R14: 00007ffc8e2f63d0 R15: 00007ffc8e2f63c0
-[  123.555519][ T3692]  </TASK>
-----------
+If there are no other comments, would you mind make the following 
+change when applying the patch?
+
+Thanks,
+Song
+
+
+diff --git i/kernel/module/main.c w/kernel/module/main.c
+index b9617d7e8db2..c598f11e7016 100644
+--- i/kernel/module/main.c
++++ w/kernel/module/main.c
+@@ -1211,7 +1211,7 @@ static void free_mod_mem(struct module *mod)
+		MOD_RODATA,
+		MOD_RO_AFTER_INIT,
+
+-		/* last, rw data */
++		/* rw data need to be freed last, as it hosts mod */
+		MOD_DATA,
+	};
+	int i;
+
+
 
