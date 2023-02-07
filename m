@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FA468DDF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E60968DDF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjBGQ2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:28:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
+        id S231383AbjBGQ24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:28:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBGQ2o (ORCPT
+        with ESMTP id S230444AbjBGQ2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:28:44 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE4C1A5;
-        Tue,  7 Feb 2023 08:28:43 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-16a7f5b6882so2363944fac.10;
-        Tue, 07 Feb 2023 08:28:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XI6Rbsn9O4Ky4P8KlbFZdfXngJlkXBuGuGn6ubsxjEU=;
-        b=gpAHr4Q/cfIU5nGSdQbdDMupU+9XMMPcdR4tUCgFEj/Kvn+iAmC2SQcnsTR7oHzOy0
-         tNpZsscob6a2jWE3kwBUX2Q34+lKRIb+DdDKfhgQqykgT6w6AS3qLUZRZUQiZxGcPA9o
-         v/BVGUg2ufvQL4hA51MoYTIBRcgVWYArwE/wr5YGdDFJn06iyFZSaaN4oAT2X/DUGX6M
-         hoACxHl6XL2jYxDPgHgk/tXRIAtktS2SQcm/CNtILql5enNoY0z7LWXNTdOs3MWWtVh/
-         pC2090xrHB0EA4ZrBz0gnBrRUW3uxn3uTWQ952jSQd95ht4vbDgE64VaY5tt0r5kKiQ+
-         VyiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XI6Rbsn9O4Ky4P8KlbFZdfXngJlkXBuGuGn6ubsxjEU=;
-        b=pnO2qXJCsFDNrKmv5bvM1XfpIvo+cE56WqTJqygK/bTxGAiFg2adBxnsZmVPN/Ze1J
-         n5acqHdetlPnDzmuzXSsiMBJRkeLBhlQ+kddmYDw40/+wohoukyqgmyo4SfIZkzXpPsw
-         l/lGN29iJD6P6jG7+SGr1+mveguR+Lu3HJRWWUsUToQxENABBBueCKQhzhYnSbb1ih40
-         xI4PbYhMgLgEBMkd2JSQaCMHRjFcl5t3LE1XBi+M9aL2zMTm4vut8M9lIzVe0sVX+AnE
-         cn7pJjF7e6L3q37REgXYrxJgA3xPGKn1/fjaNRBztFq73gXyGnisnN77+1sezysBqtiF
-         XmIA==
-X-Gm-Message-State: AO0yUKWDun1aIqYWgaBRZARG3/5L/P+1rmVyJ87n8VWn/74MSTZjE4Ri
-        XF8Ln7EAcDreZ4TBkGdanYkB7xpphoCb3HwsW5Fmth/W
-X-Google-Smtp-Source: AK7set8ewQ6nSRT+x986Io37kBZPo079R4GPuq050dU9NtKJP5cy8TYzDgIEHCiJrnIsU2u1fR28ySXBhbUR4qadgC0=
-X-Received: by 2002:a05:6870:2186:b0:163:babd:12e with SMTP id
- l6-20020a056870218600b00163babd012emr792588oae.146.1675787322533; Tue, 07 Feb
- 2023 08:28:42 -0800 (PST)
+        Tue, 7 Feb 2023 11:28:55 -0500
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4699012
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:28:51 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vb8Hzuq_1675787323;
+Received: from 30.25.212.190(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0Vb8Hzuq_1675787323)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Feb 2023 00:28:45 +0800
+Message-ID: <bdfe2b45-a67c-7a7a-3803-210c59a18a42@linux.alibaba.com>
+Date:   Wed, 8 Feb 2023 00:28:43 +0800
 MIME-Version: 1.0
-References: <20221227001001.51626-1-zh.nvgt@gmail.com> <9b0f6779-e2a5-54f1-2b9c-6bc42c6d3d90@redhat.com>
- <CAO2zrtbaz2XF+vHW6mC_+gUNwwkWffupbp2jg8_sWgcguy5AKA@mail.gmail.com> <859bdf0d-8679-e4aa-5c0e-49ead7e62059@redhat.com>
-In-Reply-To: <859bdf0d-8679-e4aa-5c0e-49ead7e62059@redhat.com>
-From:   Hang Zhang <zh.nvgt@gmail.com>
-Date:   Tue, 7 Feb 2023 11:28:32 -0500
-Message-ID: <CAO2zrtYgcYJRM-P0JHbCofjxmpxWCO=3Wqo7AiW1pZ-7nZ_=4g@mail.gmail.com>
-Subject: Re: [PATCH] scsi: dpt_i2o: fix a potential use-after-free in __adpt_reset()
-To:     Tomas Henzl <thenzl@redhat.com>
-Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH -v4 1/9] migrate_pages: organize stats with struct
+ migrate_pages_stats
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Alistair Popple <apopple@nvidia.com>, Zi Yan <ziy@nvidia.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <20230206063313.635011-1-ying.huang@intel.com>
+ <20230206063313.635011-2-ying.huang@intel.com>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20230206063313.635011-2-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,87 +54,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 10:34 AM Tomas Henzl <thenzl@redhat.com> wrote:
->
-> On 2/3/23 21:05, Hang Zhang wrote:
->
-> On Fri, Feb 3, 2023 at 11:07 AM Tomas Henzl <thenzl@redhat.com> wrote:
->
-> Hi Hang,
->
-> with b04e75a4a8a8 scsi: dpt_i2o: Remove obsolete driver
-> was the driver removed from kernel.
->
-> Regards,
-> Tomas
->
-> Hi Tomas, thank you very much for pointing this out! I'm wondering
-> that is this removal for all the kernel versions, or there might still be
-> some maintained versions using this driver (e.g., from a quick check
-> it seems the longterm 5.15.91 still has the driver)? If so, do you think
-> this is a valid issue that we need to fix in some prior affected
-> longterm kernel versions? Thank you for your help and comments!
->
-> It is now removed from the mainline, it can stay elsewhere
-> for an uncertain time.
-> If there is a mechanism how to fix patches only in those longterm kernels I don't know.
-> Ask in related mailing lists.
-> I think that when the driver is now eol and this issue hasn't been noticed
-> before, it's likely not worth the effort to fix it now.
->
-Hi Tomas, thank you for the reply. We will try to gather more information
-about this. Thanks!
 
-Best,
-Hang
+在 2023/2/6 下午2:33, Huang Ying 写道:
+> Define struct migrate_pages_stats to organize the various statistics
+> in migrate_pages().  This makes it easier to collect and consume the
+> statistics in multiple functions.  This will be needed in the
+> following patches in the series.
 >
-> Best,
-> Hang
->
-> On 12/27/22 01:10, Hang Zhang wrote:
->
-> __adpt_reset() invokes adpt_hba_reset(), which can free "pHba"
-> on error paths and return an negative error code in those
-> situations. The problem is that "pHba" is from the global pointer
-> "cmd->device->host->hostdata[0]", regardless of the possible free
-> of "pHba", that original global pointer is never nullified and
-> thus may become a dangling pointer and be dereferenced later,
-> potentially causing a use-after-free.
->
-> Fix the issue by nullifying "cmd->device->host->hostdata[0]" if
-> adpt_hba_reset() returns a negative error code to __adpt_reset(),
-> which indicates the free of "pHba". Also add a NULL check before
-> any dereference of "pHba", or the aliased global pointer. Note
-> that the similar NULL check already exists at other places, like
-> in adpt_queue_lck().
->
-> Signed-off-by: Hang Zhang <zh.nvgt@gmail.com>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Reviewed-by: Alistair Popple <apopple@nvidia.com>
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: haoxin <xhao@linux.alibaba.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 > ---
->  drivers/scsi/dpt_i2o.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>   mm/migrate.c | 60 +++++++++++++++++++++++++++++-----------------------
+>   1 file changed, 34 insertions(+), 26 deletions(-)
 >
-> diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
-> index 2e9155ba7408..9827517a1898 100644
-> --- a/drivers/scsi/dpt_i2o.c
-> +++ b/drivers/scsi/dpt_i2o.c
-> @@ -753,6 +753,9 @@ static int __adpt_reset(struct scsi_cmnd* cmd)
->   char name[32];
->
->   pHba = (adpt_hba*)cmd->device->host->hostdata[0];
-> + if (!pHba) {
-> + return FAILED;
-> + }
->   strncpy(name, pHba->name, sizeof(name));
->   printk(KERN_WARNING"%s: Hba Reset: scsi id %d: tid: %d\n", name, cmd->device->channel, pHba->channel[cmd->device->channel].tid);
->   rcode =  adpt_hba_reset(pHba);
-> @@ -760,6 +763,7 @@ static int __adpt_reset(struct scsi_cmnd* cmd)
->   printk(KERN_WARNING"%s: HBA reset complete\n", name);
->   return SUCCESS;
->   } else {
-> + cmd->device->host->hostdata[0] = NULL;
->   printk(KERN_WARNING"%s: HBA reset failed (%x)\n", name, rcode);
->   return FAILED;
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index a4d3fc65085f..ef388a9e4747 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1396,6 +1396,16 @@ static inline int try_split_folio(struct folio *folio, struct list_head *split_f
+>   	return rc;
 >   }
->
->
->
+>   
+> +struct migrate_pages_stats {
+> +	int nr_succeeded;	/* Normal and large folios migrated successfully, in
+> +				   units of base pages */
+> +	int nr_failed_pages;	/* Normal and large folios failed to be migrated, in
+> +				   units of base pages.  Untried folios aren't counted */
+> +	int nr_thp_succeeded;	/* THP migrated successfully */
+> +	int nr_thp_failed;	/* THP failed to be migrated */
+> +	int nr_thp_split;	/* THP split before migrating */
+> +};
+> +
+>   /*
+>    * migrate_pages - migrate the folios specified in a list, to the free folios
+>    *		   supplied as the target for the page migration
+> @@ -1430,13 +1440,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	int large_retry = 1;
+>   	int thp_retry = 1;
+>   	int nr_failed = 0;
+> -	int nr_failed_pages = 0;
+>   	int nr_retry_pages = 0;
+> -	int nr_succeeded = 0;
+> -	int nr_thp_succeeded = 0;
+>   	int nr_large_failed = 0;
+> -	int nr_thp_failed = 0;
+> -	int nr_thp_split = 0;
+>   	int pass = 0;
+>   	bool is_large = false;
+>   	bool is_thp = false;
+> @@ -1446,9 +1451,11 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	LIST_HEAD(split_folios);
+>   	bool nosplit = (reason == MR_NUMA_MISPLACED);
+>   	bool no_split_folio_counting = false;
+> +	struct migrate_pages_stats stats;
+>   
+>   	trace_mm_migrate_pages_start(mode, reason);
+>   
+> +	memset(&stats, 0, sizeof(stats));
+>   split_folio_migration:
+>   	for (pass = 0; pass < 10 && (retry || large_retry); pass++) {
+>   		retry = 0;
+> @@ -1502,9 +1509,9 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				/* Large folio migration is unsupported */
+>   				if (is_large) {
+>   					nr_large_failed++;
+> -					nr_thp_failed += is_thp;
+> +					stats.nr_thp_failed += is_thp;
+>   					if (!try_split_folio(folio, &split_folios)) {
+> -						nr_thp_split += is_thp;
+> +						stats.nr_thp_split += is_thp;
+>   						break;
+>   					}
+>   				/* Hugetlb migration is unsupported */
+> @@ -1512,7 +1519,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   					nr_failed++;
+>   				}
+>   
+> -				nr_failed_pages += nr_pages;
+> +				stats.nr_failed_pages += nr_pages;
+>   				list_move_tail(&folio->lru, &ret_folios);
+>   				break;
+>   			case -ENOMEM:
+> @@ -1522,13 +1529,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				 */
+>   				if (is_large) {
+>   					nr_large_failed++;
+> -					nr_thp_failed += is_thp;
+> +					stats.nr_thp_failed += is_thp;
+>   					/* Large folio NUMA faulting doesn't split to retry. */
+>   					if (!nosplit) {
+>   						int ret = try_split_folio(folio, &split_folios);
+>   
+>   						if (!ret) {
+> -							nr_thp_split += is_thp;
+> +							stats.nr_thp_split += is_thp;
+>   							break;
+>   						} else if (reason == MR_LONGTERM_PIN &&
+>   							   ret == -EAGAIN) {
+> @@ -1546,7 +1553,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   					nr_failed++;
+>   				}
+>   
+> -				nr_failed_pages += nr_pages + nr_retry_pages;
+> +				stats.nr_failed_pages += nr_pages + nr_retry_pages;
+>   				/*
+>   				 * There might be some split folios of fail-to-migrate large
+>   				 * folios left in split_folios list. Move them back to migration
+> @@ -1556,7 +1563,7 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				list_splice_init(&split_folios, from);
+>   				/* nr_failed isn't updated for not used */
+>   				nr_large_failed += large_retry;
+> -				nr_thp_failed += thp_retry;
+> +				stats.nr_thp_failed += thp_retry;
+>   				goto out;
+>   			case -EAGAIN:
+>   				if (is_large) {
+> @@ -1568,8 +1575,8 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				nr_retry_pages += nr_pages;
+>   				break;
+>   			case MIGRATEPAGE_SUCCESS:
+> -				nr_succeeded += nr_pages;
+> -				nr_thp_succeeded += is_thp;
+> +				stats.nr_succeeded += nr_pages;
+> +				stats.nr_thp_succeeded += is_thp;
+>   				break;
+>   			default:
+>   				/*
+> @@ -1580,20 +1587,20 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   				 */
+>   				if (is_large) {
+>   					nr_large_failed++;
+> -					nr_thp_failed += is_thp;
+> +					stats.nr_thp_failed += is_thp;
+>   				} else if (!no_split_folio_counting) {
+>   					nr_failed++;
+>   				}
+>   
+> -				nr_failed_pages += nr_pages;
+> +				stats.nr_failed_pages += nr_pages;
+>   				break;
+>   			}
+>   		}
+>   	}
+>   	nr_failed += retry;
+>   	nr_large_failed += large_retry;
+> -	nr_thp_failed += thp_retry;
+> -	nr_failed_pages += nr_retry_pages;
+> +	stats.nr_thp_failed += thp_retry;
+> +	stats.nr_failed_pages += nr_retry_pages;
+>   	/*
+>   	 * Try to migrate split folios of fail-to-migrate large folios, no
+>   	 * nr_failed counting in this round, since all split folios of a
+> @@ -1626,16 +1633,17 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>   	if (list_empty(from))
+>   		rc = 0;
+>   
+> -	count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
+> -	count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
+> -	count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
+> -	count_vm_events(THP_MIGRATION_FAIL, nr_thp_failed);
+> -	count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
+> -	trace_mm_migrate_pages(nr_succeeded, nr_failed_pages, nr_thp_succeeded,
+> -			       nr_thp_failed, nr_thp_split, mode, reason);
+> +	count_vm_events(PGMIGRATE_SUCCESS, stats.nr_succeeded);
+> +	count_vm_events(PGMIGRATE_FAIL, stats.nr_failed_pages);
+> +	count_vm_events(THP_MIGRATION_SUCCESS, stats.nr_thp_succeeded);
+> +	count_vm_events(THP_MIGRATION_FAIL, stats.nr_thp_failed);
+> +	count_vm_events(THP_MIGRATION_SPLIT, stats.nr_thp_split);
+> +	trace_mm_migrate_pages(stats.nr_succeeded, stats.nr_failed_pages,
+> +			       stats.nr_thp_succeeded, stats.nr_thp_failed,
+> +			       stats.nr_thp_split, mode, reason);
+>   
+>   	if (ret_succeeded)
+> -		*ret_succeeded = nr_succeeded;
+> +		*ret_succeeded = stats.nr_succeeded;
+>   
+>   	return rc;
+>   }
+Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
+
