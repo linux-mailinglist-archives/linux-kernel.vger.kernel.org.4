@@ -2,144 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60D068CFCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7318768CFD2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjBGGuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
+        id S229706AbjBGGwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjBGGur (ORCPT
+        with ESMTP id S229743AbjBGGwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:50:47 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE89298F2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:50:46 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id g3so3899854vsr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:50:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovD4NTkRVtFpsf9ep+ByBKc78lLKrAGdTdRbhoRExPc=;
-        b=aSz1OItET9lgxK/S1Ryjin49/fpFyBf/eXdaBxZu3kafmKocBA7g/+H7Dc6o8PE9ml
-         TpgXs1r44ebC1xHMW2isjHKBewi5M6NwitN4otd+IlASmD+fEKgdmtNl34/v69XDAGPE
-         Y2L13X715ApbH8k5GDcCZLUdwbW0SgrXbEXKw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ovD4NTkRVtFpsf9ep+ByBKc78lLKrAGdTdRbhoRExPc=;
-        b=t55zWCTAe/2gSDvQ9kOMtaXYjr+LnhdFhHctdwguhyYAbiPMo3FZOIP2O+NCjxBRrz
-         lP9zUebQXHwPR6xH/VM7ZE2AFueEwm6u5OO+6gXcDZkUvT5f/1C1/T0+XH/HZM8GgiM6
-         FcS7rY+QAhrzrkpWmVS1jdvSGmCgnvskaDyp3xzeWKiBTtx0pK4MwjtrwX9KzO8Kr8nW
-         oc3RU2ebsp/oj4IFr2GGQ62b0GrTN4aWUGehEDuExuccZFLkCp/6aRZnvtRHpieEQsw6
-         2KZOQIRwaE3XT7umZr31ZE1NGdiSHbYw6dblJ/9Yyjle2zvvIlPZ2iDD7/RJO2tE/3i1
-         uM3Q==
-X-Gm-Message-State: AO0yUKXUollZWmnL6oUm4GTCpr/x3vBmf8IBFBZ7CLqa+vjRtAUmPGsG
-        Ai0g3gkGIVxj+FhzpRtpZTsuYneAmPvLvr/veD02hw==
-X-Google-Smtp-Source: AK7set99t3gC07Hg4yA0UO3w3cEuRbQykjCNUiz+MsYe6moWdFHqfF8gGT+ZkK7EQ8lATbxIIWMvgDhlF5i8p+oiQ3k=
-X-Received: by 2002:a05:6102:4b8:b0:3fe:ae88:d22 with SMTP id
- r24-20020a05610204b800b003feae880d22mr463700vsa.65.1675752645237; Mon, 06 Feb
- 2023 22:50:45 -0800 (PST)
+        Tue, 7 Feb 2023 01:52:08 -0500
+Received: from mail-108-mta33.mxroute.com (mail-108-mta33.mxroute.com [136.175.108.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8E01117D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:52:05 -0800 (PST)
+Received: from mail-111-mta2.mxroute.com ([136.175.111.2] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta33.mxroute.com (ZoneMTA) with ESMTPSA id 1862aa54d32000011e.003
+ for <linux-kernel@vger.kernel.org>
+ (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256);
+ Tue, 07 Feb 2023 06:52:01 +0000
+X-Zone-Loop: 72935d3152837a1841ca316b9fe301d62ec852953ea2
+X-Originating-IP: [136.175.111.2]
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ahepp.dev;
+        s=x; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:
+        To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GVj+LEYlI2Qq4xFI1gEBZUt2ynSCfUVqIy8+Bofom5w=; b=lKS+5EjokjHm83/k0rfgTsDYGP
+        +WkVBzQb7NHK7vlbbA7knkq7Bi39f2Ci8BoeSwfbaIE8pIOBWEwhuy88zJ9sJynppTT9ElT/RyRTS
+        AVeHfaaQCd6o6k2kGQ55kpNhH/ZhAZcbFqsqlYKS+JOpUV4p0P+TZXlvEEpNmABFWlfZ64I923Nmk
+        o7ZOO6N+HFjXDOpF6nCqGZDyYXiY5Vw0B2DTkNkqBoR5zxoTVBPLTJifxs77QQRomMfPBKTX8IS98
+        MedirkJmnnBEKLs6EjnhHs7jfuMir3sTQqp9XzDISeJlYTxJUyRC8rSyk5lkbqPlHtFbM98CX0Y0Q
+        sOS3G2DQ==;
+Message-ID: <2a995efa-9eeb-710e-79e6-149fbb356ce1@ahepp.dev>
+Date:   Mon, 6 Feb 2023 22:51:24 -0800
 MIME-Version: 1.0
-References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-9-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230206152928.918562-9-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 7 Feb 2023 14:50:34 +0800
-Message-ID: <CAGXv+5EFKxx8-8aD1VeMpPmNsztPJMsirpDc4Nd17ZMi7ED_9Q@mail.gmail.com>
-Subject: Re: [PATCH v1 08/45] clk: mediatek: mt2712: Move apmixedsys clock
- driver to its own file
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2] iio: temperature: Add MCP9600 thermocouple EMF
+ converter driver
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <Jonathan Cameron <jic23@kernel.org>
+ <20230108234503.2803-1-andrew.hepp@ahepp.dev>
+ <20230112190551.4d9ac5f6@jic23-huawei> <20230205152508.778b010a@jic23-huawei>
+From:   Andrew Hepp <andrew.hepp@ahepp.dev>
+In-Reply-To: <20230205152508.778b010a@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Id: andrew.hepp@ahepp.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> The only clock driver that does not support mtk_clk_simple_probe() is
-> apmixedsys: in preparation for enabling module build of non-critical
-> mt2712 clocks, move this to its own file.
-> While at it, also fix some indentation issues in the PLLs table.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/clk/mediatek/Makefile                |   2 +-
->  drivers/clk/mediatek/clk-mt2712-apmixedsys.c | 152 +++++++++++++++++
->  drivers/clk/mediatek/clk-mt2712.c            | 164 -------------------
->  3 files changed, 153 insertions(+), 165 deletions(-)
->  create mode 100644 drivers/clk/mediatek/clk-mt2712-apmixedsys.c
-
-`git diff --color-moved=dimmed-zebra --color-moved-ws=ignore-all-space`
-agrees this is mostly code movement.
-
-> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-> index e5d018270ed0..3c7dd19cdddf 100644
-> --- a/drivers/clk/mediatek/Makefile
-> +++ b/drivers/clk/mediatek/Makefile
-> @@ -38,7 +38,7 @@ obj-$(CONFIG_COMMON_CLK_MT2701_HIFSYS) += clk-mt2701-hif.o
->  obj-$(CONFIG_COMMON_CLK_MT2701_IMGSYS) += clk-mt2701-img.o
->  obj-$(CONFIG_COMMON_CLK_MT2701_MMSYS) += clk-mt2701-mm.o
->  obj-$(CONFIG_COMMON_CLK_MT2701_VDECSYS) += clk-mt2701-vdec.o
-> -obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712.o
-> +obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712.o clk-mt2712-apmixedsys.o
->  obj-$(CONFIG_COMMON_CLK_MT2712_BDPSYS) += clk-mt2712-bdp.o
->  obj-$(CONFIG_COMMON_CLK_MT2712_IMGSYS) += clk-mt2712-img.o
->  obj-$(CONFIG_COMMON_CLK_MT2712_JPGDECSYS) += clk-mt2712-jpgdec.o
-> diff --git a/drivers/clk/mediatek/clk-mt2712-apmixedsys.c b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
-> new file mode 100644
-> index 000000000000..e841be3a02c9
-> --- /dev/null
-> +++ b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
-> @@ -0,0 +1,152 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2017 MediaTek Inc.
-> + * Copyright (c) 2023 Collabora Ltd.
-> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-I think the original author still applies, given you are mostly just
-moving the code?
-
-[...]
-
-> +static const struct of_device_id of_match_clk_mt2712_apmixed[] = {
-> +       { .compatible = "mediatek,mt2712-apmixedsys" },
-> +       { /* sentinel */ }
-> +};
-> +
-> +static struct platform_driver clk_mt2712_apmixed_drv = {
-> +       .probe = clk_mt2712_apmixed_probe,
-> +       .driver = {
-> +               .name = "clk-mt2712",
-
-I'd change the name as well, but I'm not sure if that constitutes a
-uAPI change.
-
-> +               .of_match_table = of_match_clk_mt2712_apmixed,
-> +       },
-> +};
-> +builtin_platform_driver(clk_mt2712_apmixed_drv)
 
 
-ChenYu
+On 2/5/23 7:25 AM, Jonathan Cameron wrote:
+> Hi Andrew,
+> 
+> If you aren't going to get to this sometime soon, feel free to say so and
+> I might write binding docs for it if I get time.  I'd rather do that than
+> lose a driver over some docs!
+
+Hi Jonathan,
+
+I appreciate the offer! I have been putting this off since I'm not yet 
+familiar with binding docs, but I figure it's important to learn. 
+Apologies for leaving the patch sitting around half-baked, I'll try to 
+have something ready for submission this weekend.
+
+By the way, thanks for the useful feedback on previous versions of the 
+patch! I've really enjoyed using the IIO subsystem and am excited to 
+contribute upstream.
+
+Thanks,
+Andrew
+
+> 
+> Jonathan
