@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EB568D008
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0E968CFE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjBGHCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S229949AbjBGG6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjBGHB4 (ORCPT
+        with ESMTP id S229500AbjBGG6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:01:56 -0500
-Received: from relay.smtp-ext.broadcom.com (lpdvacalvio01.broadcom.com [192.19.166.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88137557;
-        Mon,  6 Feb 2023 23:01:28 -0800 (PST)
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.75.146.107])
-        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 3AD6FC0000F4;
-        Mon,  6 Feb 2023 23:01:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 3AD6FC0000F4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1675753264;
-        bh=X5cdBYXRB2mwWELEQQJyye+moI+W1M3OCjm+m2greeI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OTwAl6PUPWzs1eXx6hPfNWfj1D/ynYN7cwdIE81row63dgG8w9mFcTZytWiafS2cZ
-         361H3Biejhr9btfgsvZtStRnQCYfH3ABmFjGM0ZG0ay8RJ1i5PMzdq6Zzhv8+JaIzO
-         PGe3ypwZSCDp1jDh5R+qEh0y6yUoDnguZMotdL8c=
-Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id 392E818041CAC6;
-        Mon,  6 Feb 2023 23:01:04 -0800 (PST)
-Received: by bcacpedev-irv-3.lvn.broadcom.net (Postfix, from userid 28376)
-        id 34C45101B41; Mon,  6 Feb 2023 23:01:04 -0800 (PST)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     kursad.oney@broadcom.com, anand.gore@broadcom.com,
-        dan.beygelman@broadcom.com, dregan@mail.com, f.fainelli@gmail.com,
-        joel.peshkin@broadcom.com, jonas.gorski@gmail.com,
-        tomer.yacoby@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 15/15] MAINTAINERS: Add entry for Broadcom Broadband SoC HS SPI drivers
-Date:   Mon,  6 Feb 2023 22:58:26 -0800
-Message-Id: <20230207065826.285013-16-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230207065826.285013-1-william.zhang@broadcom.com>
-References: <20230207065826.285013-1-william.zhang@broadcom.com>
+        Tue, 7 Feb 2023 01:58:50 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B4F23C47
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:58:49 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id ch22so344782uab.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:58:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R5I8DVYK4b9McA/r3M/11XMbXDM1r/KOU7F9x3+nTK8=;
+        b=i4IRGldyz7bsyO1yl+IwS+9uwH6TMyV3ZceFsE+hkKuyuOx0ipHR+mGOTj/7GGhHqg
+         JEWMJKhl/Y0LbmgZVsPIr1PB5uzwtSDsxCwqa9Ay+JfcnsJnD4o7x8oQ/0RZZVdj7NGe
+         /l4QjrMriXwrW86obfM26x68oowkuCTXt5VYs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R5I8DVYK4b9McA/r3M/11XMbXDM1r/KOU7F9x3+nTK8=;
+        b=1O2nuwRQ6YUNm6BImIcbk9rCtC3Bbypd94uK1DEXbuwDY/3hv9FqgBIlZ2xMZclipG
+         kTZx8eDWayIPo/+PrUEcdaIH7MZ2odvHcgYsPiAlgM+O75ICcUObstYuTGri0miSHFYv
+         egK+Fpf7uw2FYRT8gVZbt7MFujo0P1mFl0dLBQ9jWby3A8QwSJPcM9ky4O+DUCvrdc2b
+         5HLW3ObAfXyqspTKMYH7cIuPEtsPFhgXbKwqZJXLGSb8mu9v2DCon1gApwhO/fpc8H3E
+         06jvThBBhXgdIHsX1yUKG33sTbnBil5GcY4a5TBSS71HVUsRSI3f6tX0iBp78FnrFj1J
+         ud5w==
+X-Gm-Message-State: AO0yUKU3d21wUBanpxqJVffi3ESoHZcm4QYZiuBedJr3qX9hFXsf7nyt
+        g2o5CYoB95lcYMR+GbBXmuhaN/+KM1epSVtqdQxf+g==
+X-Google-Smtp-Source: AK7set+78b7Dxso6dKCLZowVq0wZELWdMYO62DUcepaqgTDKO3R5fnsrULG8pV1lDnlXoMYJn3L42i8V4EcTZgbjRSw=
+X-Received: by 2002:ab0:2bd5:0:b0:5e6:3536:22e4 with SMTP id
+ s21-20020ab02bd5000000b005e6353622e4mr378300uar.55.1675753129141; Mon, 06 Feb
+ 2023 22:58:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-7-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206152928.918562-7-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Feb 2023 14:58:38 +0800
+Message-ID: <CAGXv+5HiWU6MxSCqW8a_7xKA=-HKQSnC9EvT5eCtbpAqguq7tQ@mail.gmail.com>
+Subject: Re: [PATCH v1 06/45] clk: mediatek: mt2712: Compress clock arrays
+ entries to 90 columns
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver and device tree doc were originally authored by Jonas Gorski
-and it has been updated from Broadcom recently including the dts yaml
-file and a new driver for the updated controller. Add Jonas Gorski and
-Broadcom engineers William Zhang and Kursad Oney as the maintainers.
+On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Compress the clock arrays entries to allow a maximum of 90 columns:
+> this greatly increases readability and also generously reduces the
+> amount of lines.
+> While at it, also fix some indentation here and there.
+>
+> This is a cosmetic change. No functional changes.
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+wdiff agrees.
 
----
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Changes in v3:
-- Add Acked-by tag
-
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7f0b7181e60a..c7b1d4046940 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4299,6 +4299,18 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	drivers/phy/broadcom/phy-brcm-usb*
- 
-+BROADCOM Broadband SoC High Speed SPI Controller DRIVER
-+M:	William Zhang <william.zhang@broadcom.com>
-+M:	Kursad Oney <kursad.oney@broadcom.com>
-+M:	Jonas Gorski <jonas.gorski@gmail.com>
-+R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-+L:	linux-spi@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi-peripheral-props.yaml
-+F:	Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
-+F:	drivers/spi/spi-bcm63xx-hsspi.c
-+F:	drivers/spi/spi-bcmbca-hsspi.c
-+
- BROADCOM ETHERNET PHY DRIVERS
- M:	Florian Fainelli <f.fainelli@gmail.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
--- 
-2.37.3
-
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
