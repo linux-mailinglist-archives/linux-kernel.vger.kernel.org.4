@@ -2,301 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B0468E10A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:21:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A9D68E10C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjBGTVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 14:21:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S230009AbjBGTV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 14:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjBGTVW (ORCPT
+        with ESMTP id S231172AbjBGTVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 14:21:22 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD21274BC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:21:20 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1675797678;
-        bh=LoBTCG/oycpVG+asEbk/KiwysCZzWdl4sVo8qNIQGpI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=opegAJ0UJYUwCKUyVcFDqXJfE4JpGRgXy5jKYCjlFylnnCiwYt6IXJwT87eWAlcD8
-         FeCeyo0lg0AekUcsH/VwkAlElEjAVgapvPkLYDTxSrnqb8+91OhFRpdf2OJYmkXwW3
-         WdQL3DtsZEzP7MWZXwIBFNlhk1Rd+7N1Wt+E4SVM=
-Date:   Tue, 07 Feb 2023 19:21:15 +0000
-Subject: [PATCH] mm/damon/sysfs: make kobj_type structures constant
+        Tue, 7 Feb 2023 14:21:54 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64B9EFA8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:21:53 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id r3so7739064edq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 11:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VDILy+PNgcqxcF4yOSkG05rYNGvInPFxYKoFxYbI9dw=;
+        b=c24d5UBmzra/K5gTnmg2fAOQqtZAHh41pSuHu3OFxwKNWhulmtBuVr/MIxjG37RNDZ
+         WfqAeBdCKw+ws8nmsqOZEblvRLbWueG/t2wQ8B1X+5vTr9dXjXThkzpyhIY9FeNl9ozd
+         /KfbBwCajTzHBmfMuxiadNxb31PpZ4vee8+utToEDfH3whzIvj9MLBtFdwdQkep2fRcC
+         t2FIJAGN5BttGo/22D1jJADqUmIKdrbkuT2EoWGH6RBthO89cHX+fGjYY2jLiU9hJaiZ
+         +G4WHpwm4z0uXRS+7KgUrSPfUCaiyB0PQeZVKcXC4+D4IqIYqRw+VuL8EI+Im5ew2cik
+         Uedg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VDILy+PNgcqxcF4yOSkG05rYNGvInPFxYKoFxYbI9dw=;
+        b=vPpDV1z0TiVWUGx1SSpPDVofMdhWe5QjEMDHhvDEOYOMlrA3W9jRK6e/vBPMfN1fcl
+         kEF9aeRNIRlahnfCH9Q0Dg4vnsgGlTBo+A0z7rR9bV5C1LgOPDIHYk4IoWTvK5RxvArD
+         ZuUS3EKR7TpbYleZ2NFoOTPxCpp/LQLHsJAdcFYmugbmy4zz4JvxPPwho7D6+3JVywrq
+         wqifsthjc+130nsokl8WwLQjqmxtFNYgbwGgw6JEGMwFdDUO897QC+mAh9UzzxiwZff8
+         XWe5bpbpRgp2tuZB8RWfZzp/eF7aUJKXuHXn6d/9stcgYLFpf8JlN0adJJMeZGUns3oN
+         o8BA==
+X-Gm-Message-State: AO0yUKXTqoCclmlDdwqPfBKesskSO4slEFPDhX34JVPLAiHXNbrN1wuI
+        yEP3q/yXZt8fGGrswiDSa+85Rv0c1KqkEy6kdiygaw==
+X-Google-Smtp-Source: AK7set8XFOOUqqLWdCLhum9e/4ptokb0Bh2nheX44PWhOhBR8bKAVyyg9Z0TSHeFDFe2fjyvkpl1wm03TGlRN6U45JE=
+X-Received: by 2002:a50:875d:0:b0:49e:1638:1071 with SMTP id
+ 29-20020a50875d000000b0049e16381071mr939175edv.5.1675797711931; Tue, 07 Feb
+ 2023 11:21:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230207-kobj_type-damon-v1-1-9d4fea6a465b@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAKqk4mMC/x2N0QrCMAwAf2Xk2UCXwUR/RUTSLrroTEer4hj7d
- 4OPd3DcClWKSoVjs0KRj1bN5tDuGkgj201QB2egQF2gsMdHjvfLa5kFB35mQ44HCT1R2yUBryJ
- XwVjY0uidvafJ5Vzkqt//5nTeth/JZSx2dgAAAA==
-To:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675797676; l=9920;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=LoBTCG/oycpVG+asEbk/KiwysCZzWdl4sVo8qNIQGpI=;
- b=pa67lkv7S9lAbb30xmyy2f9u48dt2crHJuSFopYL+fO9n5hb4UBBAMxgB1r5uJ/dyJOMrLHj7
- Ukze/fbStVaCgc71vXsh2pATLE+oLTWOR0t5osRyStiG9jCoIA5xd1d
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230202155626.1829121-1-hannes@cmpxchg.org> <CAJD7tkaCpD0LpzdA+NsZj2WK=iQCLn7RS9qc7K53Qonxhp4TgA@mail.gmail.com>
+ <Y+Kh5atM0TQmkR+R@cmpxchg.org>
+In-Reply-To: <Y+Kh5atM0TQmkR+R@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 7 Feb 2023 11:21:15 -0800
+Message-ID: <CAJD7tkZ_vBTh6Nj_8AViJbQ1dFf3zxS3cEjHu0CsuGq+pKH+Jw@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm: memcontrol: don't account swap failures not due
+ to cgroup limits
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+On Tue, Feb 7, 2023 at 11:09 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Thu, Feb 02, 2023 at 10:30:40AM -0800, Yosry Ahmed wrote:
+> > On Thu, Feb 2, 2023 at 7:56 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > >
+> > > Christian reports the following situation in a cgroup that doesn't
+> > > have memory.swap.max configured:
+> > >
+> > >   $ cat memory.swap.events
+> > >   high 0
+> > >   max 0
+> > >   fail 6218
+> > >
+> > > Upon closer examination, this is an ARM64 machine that doesn't support
+> > > swapping out THPs. In that case, the first get_swap_page() fails, and
+> > > the kernel falls back to splitting the THP and swapping the 4k
+> > > constituents one by one. /proc/vmstat confirms this with a high rate
+> > > of thp_swpout_fallback events.
+> > >
+> > > While the behavior can ultimately be explained, it's unexpected and
+> > > confusing. I see three choices how to address this:
+> > >
+> > > a) Specifically exlude THP fallbacks from being counted, as the
+> > >    failure is transient and the memory is ultimately swapped.
+> > >
+> > >    Arguably, though, the user would like to know if their cgroup's
+> > >    swap limit is causing high rates of THP splitting during swapout.
+> >
+> > We have the option to add THP_SWPOUT_FALLBACK (and THP_SWPOUT for
+> > completeness) to memcg events for this if/when a use case arises,
+> > right?
+>
+> Yes, we can add that to memory.stat.
+>
+> > > b) Only count cgroup swap events when they are actually due to a
+> > >    cgroup's own limit. Exclude failures that are due to physical swap
+> > >    shortage or other system-level conditions (like !THP_SWAP). Also
+> > >    count them at the level where the limit is configured, which may be
+> > >    above the local cgroup that holds the page-to-be-swapped.
+> > >
+> > >    This is in line with how memory.swap.high, memory.high and
+> > >    memory.max events are counted.
+> > >
+> > >    However, it's a change in documented behavior.
+> >
+> > This option makes sense to me, but I can't speak to the change of
+> > documented behavior. However, looking at the code, it seems like if we do this
+> > the "max" & "fail" counters become effectively the same. "fail" would
+> > not provide much value then.
+>
+> Right.
+>
+> > I wonder if it makes sense to have both, and clarify that "fail" -
+> > "max" would be non-limit based failures (e.g. ran out of swap space),
+> > or would this cause confusion as to whether those non-limit failures
+> > were transient (THP fallback) or eventual?
+>
+> If we add the fallback events, the user can calculate it. I wouldn't
+> split the fail counter itself. There are too many reasons why swap can
+> fail, half of them implementation-defined (as in the ARM example).
+>
+> So I think I'll send patches either way to:
+>
+> 1. Fix the hierarchical accounting of the events to make it consistent
+>    with other counters.
+>
+> 2. Add THP swap/fallback counts to memory.stat
 
-Take advantage of this to constify the structure definitions to prevent
-modification at runtime.
+Sounds good, thanks!
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- mm/damon/sysfs-common.c  |  2 +-
- mm/damon/sysfs-common.h  |  4 ++--
- mm/damon/sysfs-schemes.c | 18 +++++++++---------
- mm/damon/sysfs.c         | 22 +++++++++++-----------
- 4 files changed, 23 insertions(+), 23 deletions(-)
+>
+> We could consider excluding THP fallbacks from the fail count. But it
+> seems really wrong for the cgroup controller to start classifying
+> individual types of failures in the swap layer and make decisions on
+> how to report them to the user. Cgroups really shouldn't be in the
+> business of making up its own MM events. I should provide per-cgroup
+> accounting of native MM events. And nobody has felt the need to add
+> native swap failure counts yet.
+>
+> So I'd argue we should either remove the swap fail count altogether
+> for all the reasons mentioned, or just leave it as is and as a
+> documented interface that is unfortunately out the door.
+>
+> Thoughts?
 
-diff --git a/mm/damon/sysfs-common.c b/mm/damon/sysfs-common.c
-index 52bebf242f74..70edf45c2174 100644
---- a/mm/damon/sysfs-common.c
-+++ b/mm/damon/sysfs-common.c
-@@ -99,7 +99,7 @@ static struct attribute *damon_sysfs_ul_range_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_ul_range);
- 
--struct kobj_type damon_sysfs_ul_range_ktype = {
-+const struct kobj_type damon_sysfs_ul_range_ktype = {
- 	.release = damon_sysfs_ul_range_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_ul_range_groups,
-diff --git a/mm/damon/sysfs-common.h b/mm/damon/sysfs-common.h
-index 604a6cbc3ede..db677eba78fd 100644
---- a/mm/damon/sysfs-common.h
-+++ b/mm/damon/sysfs-common.h
-@@ -21,7 +21,7 @@ struct damon_sysfs_ul_range *damon_sysfs_ul_range_alloc(
- 		unsigned long max);
- void damon_sysfs_ul_range_release(struct kobject *kobj);
- 
--extern struct kobj_type damon_sysfs_ul_range_ktype;
-+extern const struct kobj_type damon_sysfs_ul_range_ktype;
- 
- /*
-  * schemes directory
-@@ -36,7 +36,7 @@ struct damon_sysfs_schemes {
- struct damon_sysfs_schemes *damon_sysfs_schemes_alloc(void);
- void damon_sysfs_schemes_rm_dirs(struct damon_sysfs_schemes *schemes);
- 
--extern struct kobj_type damon_sysfs_schemes_ktype;
-+extern const struct kobj_type damon_sysfs_schemes_ktype;
- 
- int damon_sysfs_set_schemes(struct damon_ctx *ctx,
- 		struct damon_sysfs_schemes *sysfs_schemes);
-diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
-index 81fc4d27f4e4..6e7c3accdd94 100644
---- a/mm/damon/sysfs-schemes.c
-+++ b/mm/damon/sysfs-schemes.c
-@@ -103,7 +103,7 @@ static struct attribute *damon_sysfs_scheme_region_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_scheme_region);
- 
--static struct kobj_type damon_sysfs_scheme_region_ktype = {
-+static const struct kobj_type damon_sysfs_scheme_region_ktype = {
- 	.release = damon_sysfs_scheme_region_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_scheme_region_groups,
-@@ -153,7 +153,7 @@ static struct attribute *damon_sysfs_scheme_regions_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_scheme_regions);
- 
--static struct kobj_type damon_sysfs_scheme_regions_ktype = {
-+static const struct kobj_type damon_sysfs_scheme_regions_ktype = {
- 	.release = damon_sysfs_scheme_regions_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_scheme_regions_groups,
-@@ -252,7 +252,7 @@ static struct attribute *damon_sysfs_stats_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_stats);
- 
--static struct kobj_type damon_sysfs_stats_ktype = {
-+static const struct kobj_type damon_sysfs_stats_ktype = {
- 	.release = damon_sysfs_stats_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_stats_groups,
-@@ -427,7 +427,7 @@ static struct attribute *damon_sysfs_watermarks_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_watermarks);
- 
--static struct kobj_type damon_sysfs_watermarks_ktype = {
-+static const struct kobj_type damon_sysfs_watermarks_ktype = {
- 	.release = damon_sysfs_watermarks_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_watermarks_groups,
-@@ -538,7 +538,7 @@ static struct attribute *damon_sysfs_weights_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_weights);
- 
--static struct kobj_type damon_sysfs_weights_ktype = {
-+static const struct kobj_type damon_sysfs_weights_ktype = {
- 	.release = damon_sysfs_weights_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_weights_groups,
-@@ -669,7 +669,7 @@ static struct attribute *damon_sysfs_quotas_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_quotas);
- 
--static struct kobj_type damon_sysfs_quotas_ktype = {
-+static const struct kobj_type damon_sysfs_quotas_ktype = {
- 	.release = damon_sysfs_quotas_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_quotas_groups,
-@@ -768,7 +768,7 @@ static struct attribute *damon_sysfs_access_pattern_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_access_pattern);
- 
--static struct kobj_type damon_sysfs_access_pattern_ktype = {
-+static const struct kobj_type damon_sysfs_access_pattern_ktype = {
- 	.release = damon_sysfs_access_pattern_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_access_pattern_groups,
-@@ -1001,7 +1001,7 @@ static struct attribute *damon_sysfs_scheme_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_scheme);
- 
--static struct kobj_type damon_sysfs_scheme_ktype = {
-+static const struct kobj_type damon_sysfs_scheme_ktype = {
- 	.release = damon_sysfs_scheme_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_scheme_groups,
-@@ -1118,7 +1118,7 @@ static struct attribute *damon_sysfs_schemes_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_schemes);
- 
--struct kobj_type damon_sysfs_schemes_ktype = {
-+const struct kobj_type damon_sysfs_schemes_ktype = {
- 	.release = damon_sysfs_schemes_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_schemes_groups,
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index aeb0beb1da91..33e1d5c9cb54 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -81,7 +81,7 @@ static struct attribute *damon_sysfs_region_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_region);
- 
--static struct kobj_type damon_sysfs_region_ktype = {
-+static const struct kobj_type damon_sysfs_region_ktype = {
- 	.release = damon_sysfs_region_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_region_groups,
-@@ -198,7 +198,7 @@ static struct attribute *damon_sysfs_regions_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_regions);
- 
--static struct kobj_type damon_sysfs_regions_ktype = {
-+static const struct kobj_type damon_sysfs_regions_ktype = {
- 	.release = damon_sysfs_regions_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_regions_groups,
-@@ -277,7 +277,7 @@ static struct attribute *damon_sysfs_target_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_target);
- 
--static struct kobj_type damon_sysfs_target_ktype = {
-+static const struct kobj_type damon_sysfs_target_ktype = {
- 	.release = damon_sysfs_target_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_target_groups,
-@@ -402,7 +402,7 @@ static struct attribute *damon_sysfs_targets_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_targets);
- 
--static struct kobj_type damon_sysfs_targets_ktype = {
-+static const struct kobj_type damon_sysfs_targets_ktype = {
- 	.release = damon_sysfs_targets_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_targets_groups,
-@@ -530,7 +530,7 @@ static struct attribute *damon_sysfs_intervals_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_intervals);
- 
--static struct kobj_type damon_sysfs_intervals_ktype = {
-+static const struct kobj_type damon_sysfs_intervals_ktype = {
- 	.release = damon_sysfs_intervals_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_intervals_groups,
-@@ -612,7 +612,7 @@ static struct attribute *damon_sysfs_attrs_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_attrs);
- 
--static struct kobj_type damon_sysfs_attrs_ktype = {
-+static const struct kobj_type damon_sysfs_attrs_ktype = {
- 	.release = damon_sysfs_attrs_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_attrs_groups,
-@@ -800,7 +800,7 @@ static struct attribute *damon_sysfs_context_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_context);
- 
--static struct kobj_type damon_sysfs_context_ktype = {
-+static const struct kobj_type damon_sysfs_context_ktype = {
- 	.release = damon_sysfs_context_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_context_groups,
-@@ -926,7 +926,7 @@ static struct attribute *damon_sysfs_contexts_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_contexts);
- 
--static struct kobj_type damon_sysfs_contexts_ktype = {
-+static const struct kobj_type damon_sysfs_contexts_ktype = {
- 	.release = damon_sysfs_contexts_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_contexts_groups,
-@@ -1564,7 +1564,7 @@ static struct attribute *damon_sysfs_kdamond_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_kdamond);
- 
--static struct kobj_type damon_sysfs_kdamond_ktype = {
-+static const struct kobj_type damon_sysfs_kdamond_ktype = {
- 	.release = damon_sysfs_kdamond_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_kdamond_groups,
-@@ -1707,7 +1707,7 @@ static struct attribute *damon_sysfs_kdamonds_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_kdamonds);
- 
--static struct kobj_type damon_sysfs_kdamonds_ktype = {
-+static const struct kobj_type damon_sysfs_kdamonds_ktype = {
- 	.release = damon_sysfs_kdamonds_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_kdamonds_groups,
-@@ -1757,7 +1757,7 @@ static struct attribute *damon_sysfs_ui_dir_attrs[] = {
- };
- ATTRIBUTE_GROUPS(damon_sysfs_ui_dir);
- 
--static struct kobj_type damon_sysfs_ui_dir_ktype = {
-+static const struct kobj_type damon_sysfs_ui_dir_ktype = {
- 	.release = damon_sysfs_ui_dir_release,
- 	.sysfs_ops = &kobj_sysfs_ops,
- 	.default_groups = damon_sysfs_ui_dir_groups,
+Agreed. We should either report all failures or failures specific to
+cgroup limits (which the max count already tracks).
 
----
-base-commit: 513c1a3d3f1982fb850c910937099525b0d35e24
-change-id: 20230207-kobj_type-damon-ab9e062213ce
+About removing the fail count completely as-is or completely removing
+it, I don't feel strongly either way. If we add THP swap fallbacks to
+memory.stat, then the fail counter becomes more understandable as you
+can break it down into (max, THP swap fallback, others), with others
+being *probably* swap is full. Arguably, it seems like the interesting
+components (or the cgroup-relevant) components are already there
+regardless. The counter might be useful from a monitoring perspective,
+if a memcg OOMs for example a high fail count can show us that it
+tried to swap multiple times but failed, we can then look at the max
+count and THP fallbacks to understand where the failure is coming
+from.
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+I would say we can leave it as-is, but whatever you prefer.
