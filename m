@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E3C68D58A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A6268D58C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbjBGLbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S231350AbjBGLcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbjBGLbN (ORCPT
+        with ESMTP id S230236AbjBGLca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:31:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1085539291;
-        Tue,  7 Feb 2023 03:30:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 7 Feb 2023 06:32:30 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164993A5AE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:31:15 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7CC06CE1D78;
-        Tue,  7 Feb 2023 11:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 328C4C4339B;
-        Tue,  7 Feb 2023 11:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675769418;
-        bh=8y3WhzO7sDBgy3Fsq/THsijwl9HUGqvh/0JBaNiMwgY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pCEgFp2Uyf2sNaALJcWNh21vAj7u/+3KBmMPBMvLCIJN7w5eae+iLMEhxPzk2zLd+
-         F9134uLDV3tIoivS4thLWZIU7MLK7IX3rDZTve7wdIzTvZFsL2tECOX7fGA4yA5S8Q
-         3MsdQZMvNpuTfLEWghw1AN52kFeX6HlaoGDKg6qRWfrIZueqhmPFVC9QrGmfYz57Ug
-         dZUoBNlZtO6rxanNWL+QasyWqyBEM4/zpfzaEPJY0HvoKtnCYupX1NfUfonPdib2sm
-         WFB1P8//NOzA/BXO5ji+uakCBbMOr+6So1G5thKEncTTIAcpuinZc2YLs5YCip5SqJ
-         Qd5Wu3EAS5FAg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 15C26E55F07;
-        Tue,  7 Feb 2023 11:30:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CB31A1EC047F;
+        Tue,  7 Feb 2023 12:31:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675769472;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=h7lnd9yay5DNxFl5I2HIyME+G/Sn/uJGuf8xwszLWZA=;
+        b=qIzWX5xRIwrHS6V1xx4gjLHcKH6OgAT+yJ0I5QVL9OACA3z+AUp1Pb+QYqgLRb0VoyW309
+        R8g43eTfNzQnMtRLWxRpjeWyLoqSVXdQ5BeFZrT8vUyVfVD2WJ8gsofEVxrahvIf07If/j
+        HdYSsTOf9yB5BGgKynta7wQ1ZYbrmtM=
+Date:   Tue, 7 Feb 2023 12:31:08 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH 2/6] x86/pat: check for MTRRs enabled in memtype_reserve()
+Message-ID: <Y+I2fD6zrU51OZOk@zn.tnic>
+References: <20230207072902.5528-1-jgross@suse.com>
+ <20230207072902.5528-3-jgross@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/2] net: mscc: ocelot: fix VCAP filters not matching on
- MAC with "protocol 802.1Q"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167576941808.4371.16125260499189510076.git-patchwork-notify@kernel.org>
-Date:   Tue, 07 Feb 2023 11:30:18 +0000
-References: <20230205192409.1796428-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230205192409.1796428-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        linux-kernel@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
-        richard.pearn@nxp.com, xiaoliang.yang_1@nxp.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230207072902.5528-3-jgross@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sun,  5 Feb 2023 21:24:08 +0200 you wrote:
-> Alternative short title: don't instruct the hardware to match on
-> EtherType with "protocol 802.1Q" flower filters. It doesn't work for the
-> reasons detailed below.
+On Tue, Feb 07, 2023 at 08:28:58AM +0100, Juergen Gross wrote:
+> Today memtype_reserve() bails out early if pat_enabled() returns false.
+> The same can be done in case MTRRs aren't enabled.
 > 
-> With a command such as the following:
-> 
-> tc filter add dev $swp1 ingress chain $(IS1 2) pref 3 \
-> 	protocol 802.1Q flower skip_sw vlan_id 200 src_mac $h1_mac \
-> 	action vlan modify id 300 \
-> 	action goto chain $(IS2 0 0)
-> 
-> [...]
+> This will reinstate the behavior of memtype_reserve() before commit
+> 72cbc8f04fe2 ("x86/PAT: Have pat_enabled() properly reflect state when
+> running on Xen"). There have been reports about that commit breaking
+> SEV-SNP guests under Hyper-V, which was tried to be resolved by commit
+> 90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case"),
+> but that again resulted in problems with Xen PV guests.
 
-Here is the summary with links:
-  - [net,1/2] net: mscc: ocelot: fix VCAP filters not matching on MAC with "protocol 802.1Q"
-    https://git.kernel.org/netdev/net/c/f964f8399df2
-  - [net,2/2] selftests: ocelot: tc_flower_chains: make test_vlan_ingress_modify() more comprehensive
-    https://git.kernel.org/netdev/net/c/bbb253b206b9
+No, no commit message text with references to other commits.
 
-You are awesome, thank you!
+Considering how this is one of those "let's upset the universe" thing of
+decoupling MTRRs from PAT and how it breaks in weird ways, if we ever
+end up doing that, then we need to explain *exactly* why we're doing it.
+
+And in detail.
+
+Because otherwise, in the future, we'll end up scratching heads just
+like we're doing now as to why the large page thing allowed those
+certain types, and so on and so on.
+
+> Fixes: 72cbc8f04fe2 ("x86/PAT: Have pat_enabled() properly reflect state when running on Xen")
+> Fixes: 90b926e68f50 ("x86/pat: Fix pat_x_mtrr_type() for MTRR disabled case")
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+>  arch/x86/mm/pat/memtype.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
+> index fb4b1b5e0dea..18f612b43763 100644
+> --- a/arch/x86/mm/pat/memtype.c
+> +++ b/arch/x86/mm/pat/memtype.c
+> @@ -557,8 +557,12 @@ int memtype_reserve(u64 start, u64 end, enum page_cache_mode req_type,
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (!pat_enabled()) {
+> -		/* This is identical to page table setting without PAT */
+> +	/*
+> +	 * PAT disabled or MTRRs disabled don't require any memory type
+> +	 * tracking or type adjustments, as there can't be any conflicts
+> +	 * between PAT and MTRRs with at least one of both being disabled.
+> +	 */
+> +	if (!pat_enabled() || !mtrr_enabled()) {
+
+Yah, looks straight-forward to me but I have said this before. And we
+have broken shit so if anything, this needs to be tested on everything
+before we go with it.
+
+IMNSVHO.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette
