@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A9568CC93
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43A668CC9C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjBGCdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S229735AbjBGCf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 21:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBGCdH (ORCPT
+        with ESMTP id S229574AbjBGCfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:33:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E4411E89;
-        Mon,  6 Feb 2023 18:33:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D00A360C8E;
-        Tue,  7 Feb 2023 02:33:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 912F9C433EF;
-        Tue,  7 Feb 2023 02:33:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675737185;
-        bh=lfcZBFn2TbIl3b1FVnqxOh4EPYPlCWTfGmws1y2kKP8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Z01qupXcA30HyhEE/r5efrMsuD1Q/6+cS5YdMIbWllM1MxI3Sal8nugJI/2zFUFDq
-         2Jl55UsJG/CyG+jdT2kdekI3LaXOLOeAIFomrKOofLz0pKL0oeCUbD4x/htGskqO6n
-         NoFKzlukEeFat9gVzj1qlwvHmf1BAMi43CiOn48yQ3URmWOKdR+/VdXSPJRkDxcGhu
-         +eHv1CYyEW7YMiHP3QDXi/DdJqIifCaLb75fCykvU8OOUOMZtrol87O/f2WRZ3DZFF
-         ciqQVKdsfrBHYTrYXC/ozFc0Fqlv+r9ZO/dxHboc4yK3lGKGzxpfpb6mM3Qk5ggsEk
-         VO8dlDv+EAlqA==
-Date:   Mon, 6 Feb 2023 18:33:03 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
-        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
-        wei.liu@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        leon@kernel.org, longli@microsoft.com, ssengar@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH net,v3] net: mana: Fix accessing freed irq affinity_hint
-Message-ID: <20230206183303.35fd1cf7@kernel.org>
-In-Reply-To: <1675718929-19565-1-git-send-email-haiyangz@microsoft.com>
-References: <1675718929-19565-1-git-send-email-haiyangz@microsoft.com>
+        Mon, 6 Feb 2023 21:35:19 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65D4311E89;
+        Mon,  6 Feb 2023 18:35:18 -0800 (PST)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 07 Feb 2023 11:35:17 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id CA0ED2020780;
+        Tue,  7 Feb 2023 11:35:17 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 7 Feb 2023 11:35:11 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 864D2A8556;
+        Tue,  7 Feb 2023 11:35:17 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH 0/8] Update UniPhier devicetree for 6.3
+Date:   Tue,  7 Feb 2023 11:35:06 +0900
+Message-Id: <20230207023514.29783-1-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Feb 2023 13:28:49 -0800 Haiyang Zhang wrote:
-> After calling irq_set_affinity_and_hint(), the cpumask pointer is
-> saved in desc->affinity_hint, and will be used later when reading
-> /proc/irq/<num>/affinity_hint. So the cpumask variable needs to be
-> persistent. Otherwise, we are accessing freed memory when reading
-> the affinity_hint file.
-> 
-> Also, need to clear affinity_hint before free_irq(), otherwise there
-> is a one-time warning and stack trace during module unloading:
+Update devicetree sources for UniPhier SoCs to align node names
+to generic, add missing properties and compatible strings,
+and add SD UHS property.
 
-What's the difference from the previous posting? Did you just resend it?
+The SD UHS mode patches are related to the series:
+https://lore.kernel.org/lkml/20230125010201.28246-4-hayashi.kunihiko@socionext.com/
+
+Kunihiko Hayashi (8):
+  ARM: dts: uniphier: Align node names for SoC-dependent controller and
+    PHYs with bindings
+  ARM: dts: uniphier: Add missing reg properties for glue layer
+  ARM: dts: uniphier: Add syscon compatible string to soc-glue-debug
+  ARM: dts: uniphier: Add syscon-uhs-mode to SD node
+  arm64: dts: uniphier: Align node names for SoC-dependent controller
+    and PHYs with bindings
+  arm64: dts: uniphier: Add missing reg properties for glue layer nodes
+  arm64: dts: uniphier: Add syscon compatible string to soc-glue-debug
+  arm64: dts: uniphier: Add syscon-uhs-mode to SD node
+
+ arch/arm/boot/dts/uniphier-ld4.dtsi           | 25 +++++-----
+ arch/arm/boot/dts/uniphier-pro4.dtsi          | 44 ++++++++++-------
+ arch/arm/boot/dts/uniphier-pro5.dtsi          | 42 +++++++++-------
+ arch/arm/boot/dts/uniphier-pxs2.dtsi          | 49 ++++++++++---------
+ arch/arm/boot/dts/uniphier-sld8.dtsi          | 26 +++++-----
+ .../boot/dts/socionext/uniphier-ld11.dtsi     | 35 ++++++-------
+ .../boot/dts/socionext/uniphier-ld20.dtsi     | 45 +++++++++--------
+ .../boot/dts/socionext/uniphier-pxs3.dtsi     | 48 ++++++++++--------
+ 8 files changed, 171 insertions(+), 143 deletions(-)
+
+-- 
+2.25.1
+
