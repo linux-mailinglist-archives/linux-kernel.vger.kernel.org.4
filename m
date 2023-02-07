@@ -2,121 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634B268CBD0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 02:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AB468CBD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 02:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjBGBQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 20:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
+        id S230168AbjBGBSG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Feb 2023 20:18:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjBGBQW (ORCPT
+        with ESMTP id S230034AbjBGBSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 20:16:22 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5629752;
-        Mon,  6 Feb 2023 17:16:21 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3170u5kg027900;
-        Tue, 7 Feb 2023 01:15:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pWHPnYskouJSq6CSoAtrMJ75+OdE0EBnxXlivgcyd5I=;
- b=XhoEX7o9jcfBXy0ElrrJBc06ZCyxh2NOlmG+swz7xyLQeNl4QclsYLoT5oSLqoNNHvIC
- NgqZkzWJt65ZGbEKH7AshoOdLiy0CVR75SFtuW5a+TkELBDxjImaX3e71dKseNC2uDSv
- nY0XVs8Ecq/yYu/zdWMZkxTIgtNffmNhBfr7Ru1BkztylYd3/coFUhl8vnYGQ+UZnirh
- PgiAZPkOt5TPfnsmxs7u5Cf8z10fKtAOraqQHBFbm0n02laBwabfFoCMIvbIN7VU6Hi9
- DrQ3EltZGRjwCZIwt4FHdhut1yKBdPXMqRI3iRu5JrRdDt+MCOU3Qwrrpn2bpJ361yVZ Fg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhechd6wk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 01:15:51 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3171FooG017472
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Feb 2023 01:15:50 GMT
-Received: from [10.110.82.184] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 17:15:49 -0800
-Message-ID: <b26c9e4c-5a9c-a2ff-19a7-78419c6b81df@quicinc.com>
-Date:   Mon, 6 Feb 2023 17:15:49 -0800
+        Mon, 6 Feb 2023 20:18:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22BB31D925;
+        Mon,  6 Feb 2023 17:18:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F74C13D5;
+        Mon,  6 Feb 2023 17:18:43 -0800 (PST)
+Received: from slackpad.lan (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A6243F71E;
+        Mon,  6 Feb 2023 17:17:58 -0800 (PST)
+Date:   Tue, 7 Feb 2023 01:16:08 +0000
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Andreas Feldner <pelzi@flying-snail.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
+ default
+Message-ID: <20230207011608.2ce24d17@slackpad.lan>
+In-Reply-To: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
+References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 20/22] sound: usb: Prevent starting of audio stream
- if in use
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-21-quic_wcheng@quicinc.com>
- <557f8f76-38f5-5e07-905e-774e03120bd2@linux.intel.com>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <557f8f76-38f5-5e07-905e-774e03120bd2@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xQxQtllAUmy7Yzc4Em6kIZDvjXU0oiky
-X-Proofpoint-ORIG-GUID: xQxQtllAUmy7Yzc4Em6kIZDvjXU0oiky
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- adultscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0
- mlxlogscore=789 priorityscore=1501 mlxscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302070010
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pierre,
+On Mon, 6 Feb 2023 20:51:50 +0100
+Andreas Feldner <pelzi@flying-snail.de> wrote:
 
-On 1/26/2023 8:12 AM, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 1/25/23 21:14, Wesley Cheng wrote:
->> With USB audio offloading, an audio session is started from the ASoC
->> platform sound card and PCM devices.  Likewise, the USB SND path is still
->> readily available for use, in case the non-offload path is desired.  In
->> order to prevent the two entities from attempting to use the USB bus,
->> introduce a flag that determines when either paths are in use.
->>
->> If a PCM device is already in use, the check will return an error to
->> userspace notifying that the stream is currently busy.  This ensures that
->> only one path is using the USB substream.
-> 
-> It's good to maintain mutual exclusion, but it's still very hard for an
-> application to figure out which card can be used when.
-> 
-> Returning -EBUSY is not super helpful. There should be something like a
-> notification or connection status so that routing decisions can be made
-> without trial-and-error.
-> 
+Hi Andreas,
 
-The USB offload driver does have access to the USB substream that is 
-being utilized/offloaded.  Maybe in addition to this check, we can also 
-set the PCM runtime state as well (for that particular substream)?  That 
-way userspace can fetch information about if the stream is busy or not.
+thanks for taking care about this board and sending patches!
 
-Thanks
-Wesley Cheng
+> The SoC features debounce logic for external interrupts. Per default,
+> this is based on a 32kHz oscillator, in effect filtering away multiple
+> interrupts separated by less than roughly 100ï¿½s.
+> 
+> This patch sets different defaults for this filter for this board:
+> PG is connected to non-mechanical components, without any risk for
+> showing bounces. PA is mostly exposed to GPIO pins, however the
+> existence of a debounce filter is undesirable as well if electronic
+> components are connected.
+
+So how do you know if that's the case? It seems to be quite normal to
+just connect mechanical switches to GPIO pins.
+
+If you are trying to fix a particular issue you encountered, please
+describe that here, and say how (or at least that) the patch fixes it.
+
+And I would suggest to treat port G and port A differently. If you
+need a lower debounce threshold for port A, you can apply a DT overlay
+in U-Boot, just for your board.
+
+> Additionally, the clock-frequency attribute is added for each of
+> the 4 cores to eliminate the kernel error message on boot, that
+> the attribute is missing.
+> 
+> Signed-off-by: Andreas Feldner <pelzi@flying-snail.de>
+> ---
+>  .../dts/sun8i-h2-plus-bananapi-m2-zero.dts     | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+> index d729b7c705db..1fc0d5d1e51a 100644
+> --- a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+> +++ b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+> @@ -113,6 +113,22 @@ wifi_pwrseq: wifi_pwrseq {
+>  
+>  &cpu0 {
+>  	cpu-supply = <&reg_vdd_cpux>;
+> +	clock-frequency = <1296000000>;
+
+I see where you are coming from, this is really an unnecessary warning
+message. However this message should be really removed from the kernel
+instead of adding some rather meaningless value here.
+The current DT spec marks this property as required, though, so I added
+a PR there to get this fixed:
+https://github.com/devicetree-org/devicetree-specification/pull/61
+Once this is through, we can try to remove the kernel message.
+
+> +};
+> +
+> +&cpu1 {
+> +	cpu-supply = <&reg_vdd_cpux>;
+
+I don't think we need this for every core?
+
+> +	clock-frequency = <1296000000>;
+> +};
+> +
+> +&cpu2 {
+> +	cpu-supply = <&reg_vdd_cpux>;
+> +	clock-frequency = <1296000000>;
+> +};
+> +
+> +&cpu3 {
+> +	cpu-supply = <&reg_vdd_cpux>;
+> +	clock-frequency = <1296000000>;
+>  };
+>  
+>  &de {
+> @@ -193,6 +209,8 @@ bluetooth {
+>  };
+>  
+>  &pio {
+> +	/* 1ï¿½s debounce filter on both IRQ banks */
+
+Is that supposed to be <micro> in UTF-8? It seems to have got lost in
+translation, or is that just me?
+
+> +	input-debounce = <1 1>;
+
+As mentioned above, I am not so sure this is generic enough to put it
+here for PA. And what is the significance of "1 us", in particular? Is
+that just the smallest value?
+
+Cheers,
+Andre
+
+>  	gpio-line-names =
+>  		/* PA */
+>  		"CON2-P13", "CON2-P11", "CON2-P22", "CON2-P15",
+
