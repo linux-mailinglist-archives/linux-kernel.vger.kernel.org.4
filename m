@@ -2,126 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE10268E271
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E0D68E282
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjBGU67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 15:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S229895AbjBGVAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 16:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjBGU6t (ORCPT
+        with ESMTP id S229535AbjBGVAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 15:58:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5999511647;
-        Tue,  7 Feb 2023 12:58:47 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675803524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kNQJNy/R9/K5UBVEa2XTHQBRDjsgUlovum6u1lLQmzM=;
-        b=Cycy9LYUbcBKf+iD/qLT6uJTjyeF6t1gUhw8PZNP0qPiMxpA//CSMHrNXeW2Evp0WL29VR
-        rIfIXARScT9Xl33sZSpe5TMjzcerq7XY07EcfmIQ1DelptcduoAYVpvONTIHZnlrJXTbBp
-        RTfvU/XxJkIi+rGJXBn7D3iw9PH1RbxrFgqf0W0Ha6OtiyllXwVeTUvK14n/uSRyNt3/Hy
-        B4gbpuy+BIAVZt0PIvOHZsBXv028GWh+Dao7yJkHYCigBL2ZXwlOJXM9ojRwAOkeuPkQ9n
-        iS2hN6skox1qo63F01iqxcNAgVWEJNxLMIwMPtsVQ5kZETKN1a9rw1V4PDqN1A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675803524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kNQJNy/R9/K5UBVEa2XTHQBRDjsgUlovum6u1lLQmzM=;
-        b=+lMS0cNSyRWvGBEVLrvGuakIwd5kaM0Kue5WBHCJtypUVHRl0vgyBRwLEHO3EieaA4g51s
-        sYKRjvHdp/dkWuBg==
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-Subject: Re: [PATCH v6 01/11] x86/apic/x2apic: Fix parallel handling of
- cluster_mask
-In-Reply-To: <0460d9cd8cdb7be2fcea00579e80ee683920d66d.camel@infradead.org>
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230202215625.3248306-2-usama.arif@bytedance.com> <87a61qxtx0.ffs@tglx>
- <d37f3af69df09ff542024ed93a37865b28dfa86e.camel@infradead.org>
- <921cfe295fcd398168e5454e01193045de312688.camel@infradead.org>
- <87v8kdv9i1.ffs@tglx>
- <0460d9cd8cdb7be2fcea00579e80ee683920d66d.camel@infradead.org>
-Date:   Tue, 07 Feb 2023 21:58:44 +0100
-Message-ID: <87bkm5ur97.ffs@tglx>
+        Tue, 7 Feb 2023 16:00:36 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E353EC4E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:00:26 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso15470wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 13:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RUVaoheynYuPBZIl2P8uumz3FtGDoBwSbFJg7uXrdag=;
+        b=zBTflR7+KqJgouh69ORKmJpVf519ralGzIclUlw+jTtpQBOoyQ/9eGPyaUAisKWy7v
+         O+YodHBS7tazSc19se3qlW/lF7x5fllSJ6zsLJizyxLxsgKcA6ReBKL7H7G/Iv2lbXWK
+         KVAn6Bw8euZJX53zGnjbWhkHhVZrobGdklEgZmoIi2zztMVwi9vvTIVxewnfzQQqBoC1
+         FAXPjlGOB8rQoaD0K4mPXOdQzY4OBthLmN/QZge/AQ7/LoAfMl6npJ1lVsA28Rg0dNRn
+         K1aCTsDZ03rKYh5D92ofPlfhzdoaRoTMxj+DX4L48pwum4xEIBSEo2q/oHE1QfXWX/8J
+         BjDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RUVaoheynYuPBZIl2P8uumz3FtGDoBwSbFJg7uXrdag=;
+        b=szfNBv0FBQYirEe7TaXi3U0EricSRWl6KXZwZuL+OJU3FCp8aUlF0BL/i9GwYka3FA
+         +ZXTTw10gjyBVv2vENoqn7vVjwUS1B4KwjCIW+njUCB79FhVpl+Kt5ITA6RZaxOqnV6m
+         CPr9Q1UjkZ2SfvJilorI1NPBcidaffLlsDrB882a5WupegpesQkV6yECcTdKbz5e+rxI
+         iOGsyjJoSXbGvL88rQK6A/aixoSUZBiW8Lz9EV/EUaeZ+V8Iy7Tx6m9wPbSSu3mVPtup
+         Yc5JdMmjg6CBwseI1kmlfo268Hm3MUJLSfVm/Ogbz4aV/DvQOveCculx6D/U3MrMxr8n
+         +sOA==
+X-Gm-Message-State: AO0yUKXTgEdFAerh89xxHsYi/G9ifljMbBmkbp6ppKXm3cylTBSWbVwG
+        ymUW8cGZVabvh5oCxHbcKlFQhg==
+X-Google-Smtp-Source: AK7set9jhJY/IWTXUEu5ibMOFtpXEGJQcwmxoVDLHyxllonp0xaHZrVElLOan6ooaFS5oyk44Dh07g==
+X-Received: by 2002:a05:600c:18a6:b0:3d3:4f56:62e1 with SMTP id x38-20020a05600c18a600b003d34f5662e1mr4240915wmp.27.1675803624580;
+        Tue, 07 Feb 2023 13:00:24 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f9-20020a05600c44c900b003dc4fd6e624sm8041631wmo.19.2023.02.07.13.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 13:00:24 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/7] ARM: dts: exynos: Remove empty camera pinctrl configuration in Trats
+Date:   Tue,  7 Feb 2023 22:00:14 +0100
+Message-Id: <20230207210020.677007-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07 2023 at 19:53, David Woodhouse wrote:
-> On Tue, 2023-02-07 at 15:24 +0100, Thomas Gleixner wrote:
-> Thanks. I've reworked and I think I've caught everything. Didn't want
-> to elide the credit where Usama had done some of the forward-porting
-> work, so I've left those notes and the SoB intact on those patches, on
-> the assumption that they will be reposting the series after proper
-> testing on hardware again anyway (I'm only spawning it in qemu right
-> now).
->
-> https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/parallel-6.2-rc7
->
-> The only real code change other than what we've discussed here is to
-> implement what we talked about for CPUID 0xb vs. 0x1 etc:
->
-> 	/*
-> 	 * We can do 64-bit AP bringup in parallel if the CPU reports
-> 	 * its APIC ID in CPUID (either leaf 0x0B if we need the full
-> 	 * APIC ID in X2APIC mode, or leaf 0x01 if 8 bits are
-> 	 * sufficient). Otherwise it's too hard. And not for SEV-ES
-> 	 * guests because they can't use CPUID that early.
-> 	 */
-> 	if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 1 ||
-> 	    (x2apic_mode && boot_cpu_data.cpuid_level < 0xb) ||
-> 	    cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-> 		do_parallel_bringup = false;
->
-> 	if (do_parallel_bringup && x2apic_mode) {
-> 		unsigned int eax, ebx, ecx, edx;
->
-> 		/*
-> 		 * To support parallel bringup in x2apic mode, the AP will need
-> 		 * to obtain its APIC ID from CPUID 0x0B, since CPUID 0x01 has
-> 		 * only 8 bits. Check that it is present and seems correct.
-> 		 */
-> 		cpuid_count(0xb, 0, &eax, &ebx, &ecx, &edx);
->
-> 		/*
-> 		 * AMD says that if executed with an umimplemented level in
-> 		 * ECX, then it will return all zeroes in EAX. Intel says it
-> 		 * will return zeroes in both EAX and EBX. Checking only EAX
-> 		 * should be sufficient.
-> 		 */
-> 		if (eax) {
-> 			smpboot_control = STARTUP_SECONDARY | STARTUP_APICID_CPUID_0B;
-> 		} else {
-> 			pr_info("Disabling parallel bringup because CPUID 0xb looks untrustworthy\n");
-> 			do_parallel_bringup = false;
-> 		}
-> 	} else if (do_parallel_bringup) {
-> 		/* Without X2APIC, what's in CPUID 0x01 should suffice. */
-> 		smpboot_control = STARTUP_SECONDARY | STARTUP_APICID_CPUID_01;
-> 	}
+The camera's pinctrl configuration is simply empty and not effective.
+Remove it to fix dtbs_check warning:
 
-Looks good to me!
+  arch/arm/boot/dts/exynos4210-trats.dt.yaml: camera: pinctrl-0: True is not of type 'array'
 
-Thanks,
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-        tglx
+---
+
+Resend old patch after fixing FIMC driver. Depends on:
+---
+ arch/arm/boot/dts/exynos4210-trats.dts | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/exynos4210-trats.dts b/arch/arm/boot/dts/exynos4210-trats.dts
+index b8e9dd23fc51..9a9a744a88da 100644
+--- a/arch/arm/boot/dts/exynos4210-trats.dts
++++ b/arch/arm/boot/dts/exynos4210-trats.dts
+@@ -144,8 +144,6 @@ pmic_ap_clk: pmic-ap-clk {
+ };
+ 
+ &camera {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <>;
+ 	status = "okay";
+ };
+ 
+-- 
+2.34.1
+
