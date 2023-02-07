@@ -2,155 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B3E68DE2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D89E68DE2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbjBGQrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S231718AbjBGQsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBGQrR (ORCPT
+        with ESMTP id S231676AbjBGQsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:47:17 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989A239B96
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:47:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675788436; x=1707324436;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DsOK4vKSMQgQY8rpRAJjjVTikkqV9NOuG7jF/Xfiv9w=;
-  b=m+07OCqMteb+LGlIsM7P742awArdrszW+co5tCol37GnUUY6ocRwf8KC
-   PRPlB9Vq8+F4HbfbVCnmXTW6BYJ8bnV9ko2uebql3TZLRIPrUAF1LkfR4
-   PzSJVzl6rzrIvI7REuGlkch9kbctItloFfncD8eiSNGnfHGweYhYdCz4e
-   Aw7Z/nxh1zkFr60w6SsiqspVm60287t4C3D5AGk7oIGsIRu9XcHpWet+o
-   R2NvaSVpunNNr9RpSA+W1eDP39Vdo/YWHNe16IX2iOrBVK+cIfTuQ0jkc
-   D7QslxH7FPWlvCn/tYOx5V1PCSEHimKn4CAFiVWBzFoFdxikZHzJT8qY9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="327248499"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="327248499"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 08:47:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="840833570"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="840833570"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 07 Feb 2023 08:47:14 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPR7h-0003iC-1y;
-        Tue, 07 Feb 2023 16:47:13 +0000
-Date:   Wed, 08 Feb 2023 00:46:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- cdd4b92e382b4245faca3713c2efb9ecd46cd5a2
-Message-ID: <63e28058.gfkRX9SgQ5FfjczH%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 7 Feb 2023 11:48:18 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B02039B9D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:48:17 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id m14so14146790wrg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:48:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ky7HAXJkS1X4hEgrcJjQQo7al6D+HHtf9urEyCKlGps=;
+        b=ZVmVyDjSx6EgkFT8iA42dx4e6NkiFFvRjgyVg3vEwOo0sTodqpf/6xC7Kg8zvu5zOi
+         +i12SLbbl4EZG+LN97qWe6I+1nf7msNnuZujHBy1cutT62jCNnRsC29vzSbwShTGLJk1
+         qZYaDyl5UTtWP6oEC2vJLZfbjaQlWRcfn9s1g62TU2LJurA6KpeBdnISuwk0MQw6cNY5
+         892USyFUbQ90GHznIUqrP6DW2lUZ+wf44TCj8WwXad3JpTV4x64SRgkhtbuXHVcqTGJK
+         MFbAe8tiuizvuNYAJkNKmLvFSSDg+Gxjp6mXLkKvCTbo5ygU/iFBvdk1NlblLIO98PDs
+         M9iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ky7HAXJkS1X4hEgrcJjQQo7al6D+HHtf9urEyCKlGps=;
+        b=UkQomC5uuUdnghr/4CKmACt05fORRePfYKUhjUmP6jhzSjEmOlJUg5oFYA7mSTcMzz
+         msbdVX+zB7jnxL+fwREO5Vcq0qVmlHofJX7qqFXgDygsxo6RwfrypiHNXlIp7cMgZApg
+         E39UuDOpe/YtMoU0EkG4e27Q531jyK07gCN9cfe2WKHjwhSUZFtk1MIs7F6ZkRvvzp1E
+         bmTpVvTSXw9QFZXJ1W13gIddxs801GJR4au6TION+V0PR4Mt1y7I1r//NwBpLHUkSC2C
+         RwEvE+bbR4WlCOQV0wrRM6d2mPlafne6kwETD867NWSEXCt0HZWx6mjmVHhJfU5/ftKj
+         s4FQ==
+X-Gm-Message-State: AO0yUKU8k6JyMJmPpThGmadEB2njeJc34dwAKSQA9SusdJO8kvubWsjK
+        aeYKkc6wvFsO13LAUrH5NGD5PA==
+X-Google-Smtp-Source: AK7set8TXIFkWABojtv5YPhyN5r9CAIvfLXqNjua96/e+MfEknoAwWnL/akisqL1H78whXRbC2TL6A==
+X-Received: by 2002:a5d:4bc2:0:b0:2c1:28e7:5081 with SMTP id l2-20020a5d4bc2000000b002c128e75081mr3490785wrt.68.1675788495656;
+        Tue, 07 Feb 2023 08:48:15 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i6-20020adffc06000000b002c3e28d0343sm7732034wrr.85.2023.02.07.08.48.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 08:48:15 -0800 (PST)
+Message-ID: <1dad040e-fb18-8291-5e11-31ab35a8e4a2@linaro.org>
+Date:   Tue, 7 Feb 2023 17:48:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 4/5] ASoC: cs35l41: Document CS35l41 external boost
+ without VSPK
+Content-Language: en-US
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230207162526.1024286-1-lucas.tanure@collabora.com>
+ <20230207162526.1024286-5-lucas.tanure@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230207162526.1024286-5-lucas.tanure@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: cdd4b92e382b4245faca3713c2efb9ecd46cd5a2  tools/memory-model: Provide exact SRCU semantics
+On 07/02/2023 17:25, Lucas Tanure wrote:
+> External Boost without GPIO1 as VSPK switch
+> is no longer supported, but there is laptop
+> models using this feature.
 
-elapsed time: 728m
 
-configs tested: 73
-configs skipped: 2
+No, because:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+1. We did not finish discussion
+2. Subject prefix is still not correct.
+3. Please wrap commit message according to Linux coding style /
+submission process (neither too early nor over the limit):
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
 
-gcc tested configs:
-x86_64                            allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-powerpc                           allnoconfig
-arm                                 defconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-arc                                 defconfig
-x86_64                           rhel-8.3-bpf
-s390                             allmodconfig
-x86_64                           rhel-8.3-syz
-alpha                               defconfig
-s390                                defconfig
-x86_64                         rhel-8.3-kunit
-sh                               allmodconfig
-i386                 randconfig-a011-20230206
-x86_64               randconfig-a014-20230206
-ia64                             allmodconfig
-arm64                            allyesconfig
-mips                             allyesconfig
-s390                             allyesconfig
-m68k                             allyesconfig
-i386                                defconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-x86_64               randconfig-a013-20230206
-x86_64                           allyesconfig
-arm                              allyesconfig
-alpha                            allyesconfig
-i386                 randconfig-a014-20230206
-powerpc                          allmodconfig
-x86_64               randconfig-a011-20230206
-i386                 randconfig-a012-20230206
-x86_64               randconfig-a015-20230206
-i386                 randconfig-a016-20230206
-x86_64               randconfig-a012-20230206
-i386                 randconfig-a013-20230206
-x86_64               randconfig-a016-20230206
-i386                 randconfig-a015-20230206
-i386                             allyesconfig
-s390                 randconfig-r044-20230206
-arc                  randconfig-r043-20230205
-arm                  randconfig-r046-20230205
-arc                  randconfig-r043-20230206
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-riscv                randconfig-r042-20230206
-arm                         assabet_defconfig
-powerpc                 mpc834x_itx_defconfig
-sh                            titan_defconfig
-sh                          sdk7780_defconfig
-alpha                             allnoconfig
 
-clang tested configs:
-i386                 randconfig-a002-20230206
-i386                 randconfig-a005-20230206
-i386                 randconfig-a004-20230206
-i386                 randconfig-a003-20230206
-i386                 randconfig-a001-20230206
-i386                 randconfig-a006-20230206
-x86_64               randconfig-a001-20230206
-x86_64               randconfig-a005-20230206
-x86_64               randconfig-a006-20230206
-x86_64               randconfig-a002-20230206
-x86_64               randconfig-a004-20230206
-x86_64               randconfig-a003-20230206
-hexagon              randconfig-r041-20230205
-riscv                randconfig-r042-20230205
-hexagon              randconfig-r045-20230206
-hexagon              randconfig-r041-20230206
-arm                  randconfig-r046-20230206
-x86_64                          rhel-8.3-rust
-s390                 randconfig-r044-20230205
-hexagon              randconfig-r045-20230205
+Best regards,
+Krzysztof
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
