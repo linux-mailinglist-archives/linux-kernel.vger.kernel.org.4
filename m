@@ -2,81 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FAB68D9AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D134968D9AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232071AbjBGNu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
+        id S231669AbjBGNv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:51:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjBGNuY (ORCPT
+        with ESMTP id S229565AbjBGNvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:50:24 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1FB6193;
-        Tue,  7 Feb 2023 05:50:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1675777816; bh=jlBHC3QyqIXwkEA9wCkUNUW2S5vOVyEt3NXTW9XKYms=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=YYDjoAh1uTogiP68LejSPUPD3G4suAUD6cj247wXqsNBD9dWGKrXTYCA1XrAdRIZp
-         mPv4bBa7PjAIygdpaeCIG7Cw6B1iSDVq6+gk6r3wM9l1n5Jw/jT5ji2RXcqJyBOYpo
-         UqR0beEPMEfJ8laABih9dGvh7h4S1aJVa4+n1fNvXpyfBe0d/besWLnURc1inHdSL4
-         z79G8ghXUOAd6mNud3MnjS+oi3QkxO4XDfy4coWWLMfsV8uI8YCNlnCQAHOU1257Ty
-         MyxsH6D39eDCsOyf1Spyz0pdpmSoDWxwJzVKjb7Gr1RqZVvS09NAaKB1vlN/y1q/x8
-         JSsXxq+rraRgA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.35.231]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWzfl-1p5pB31WGX-00XNWI; Tue, 07
- Feb 2023 14:50:16 +0100
-Message-ID: <9802c963-1533-690a-220b-261d31f8e7f8@gmx.de>
-Date:   Tue, 7 Feb 2023 14:50:15 +0100
+        Tue, 7 Feb 2023 08:51:24 -0500
+X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Feb 2023 05:51:20 PST
+Received: from smtpcmd03116.aruba.it (smtpcmd03116.aruba.it [62.149.158.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733D8EF8B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:51:20 -0800 (PST)
+Received: from [192.168.1.189] ([213.215.163.55])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id POMRpOrLjQC6APOMSpnlcj; Tue, 07 Feb 2023 14:50:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1675777817; bh=NcFSD1+hQkDyhML9faTlgcz6QoKVti5xKqEWWp0kIPQ=;
+        h=Subject:From:To:Date:Content-Type:MIME-Version;
+        b=GQ4ZVZoTUQiZ0bHywdXm2iNKSQwKGsDqoXPfhrLNIpC+Pvlv2g3MAbGgF5kd0zkJv
+         9YT/wWJtNSgp1iNoihuXViqU/eolc+MZ0BpcbUuBDljIPLfglQ6sEz+i5FU2OO7z3A
+         wlk+JcPHxoVl+aZP4hkikqQvasQ6g7wkKdELTgQSvA+zYdoCNCsu0Z/JOWhdjwZIRS
+         on/kUbqElLF3h4g17M5O4nreU2JMcOxNtWASrt4Rg5b0KwueOpNok8j3Z05Wu0wBiP
+         +K8f6Q+ZH71jxTzg+Xc2t/N4nF9ZxwOQFwqqbTR9MZNYBPv9OlC+2pCNx3pWWLHZv5
+         ZHN/3Rvca0WqA==
+Message-ID: <1ae01ab918876941dc57d01d4c2f1d7376dda87b.camel@egluetechnologies.com>
+Subject: Re: [PATCH v2] can: j1939: do not wait 250 ms if the same addr was
+ already claimed
+From:   Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 07 Feb 2023 14:50:15 +0100
+In-Reply-To: <20221126102840.GA21761@pengutronix.de>
+References: <20221124051611.GA7870@pengutronix.de>
+         <20221125170418.34575-1-devid.filoni@egluetechnologies.com>
+         <20221126102840.GA21761@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-GB
-Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:C2rlY5Ph86J3sEp5l/Yzj5UKMivzCrrIUSchviJajyzkb0Mv46z
- djwzNSnu/ZQgXfxdP0RHV69WasZhmYkWn9YQZoKoQtymEC/+DW1FstdhzsXLzq/19/QXyRR
- 72MBQ3jzN7CPIp50Xk60tkgynI2iDnzPZ2+9oAi3/oyhZTeisOWnCyvAdfP3i37Hs1UZRqp
- 94A/7Nkeu3rNgoM/948Pw==
-UI-OutboundReport: notjunk:1;M01:P0:9ofhJka+Z0w=;BFrlA9cXVtzKSgaPlUXaCgl4dEh
- wmNHPA0z5iBBL1q+hB6ih2fsrR3qGM3d+DyvQZ7SZqI695wKZG1XWlpjO8k2wwfbswOIaLIsM
- 6SLFv1R/tu+i7Eo4Si2w8drAE9F+pakXsAreTfXUsngGUD0regzWATdbQTwSn8LKpHCSt/aSF
- Qx98lpS4rHomE/QuqzaATFP+oEszgfp9pTDeeu+P3X3/zS0IZhuRJlcmjjlYmlSo8bxdFUDGL
- ic+IQCZSZD8jrbsffRHM+qWXH0DgEhiSkcaYmxb9NViep3e6UZ7kqw7/b97XKFvskynwIj+LK
- zrjI5R8WdqjDyW4ptP2X0w6KR7BO5qyBSx7mRx/urkhWkIc7tIIRr2bSUQFX7bvt8LGY9SlfL
- 87SGNcis93HlwlZ2p4Nqh5nZtbSIrjBQJ2JMjn4ckKetn5tZxjHj0gRelDtz/VP8Aypebh7Tv
- 8I+Z5WYGD6csW0pDIw91zX9WbdbIKU3pRtI+5nfNNkc2i8TKkF2eNkSWjbBLuZQ+DXT3ZYjIA
- 4dqBfQpqVFTeeTJ10nLNS7wzcrRoe51q+YhgcR1EwEjfw1lonkZqmT6DEb7z6jyGu9No6FBEM
- Yyh7/uSyFfD80/erZaWJ9dKy+hY7Eb0Hw2OtFB23fUDZTL3kGG3k9LodFCasfEEYdRGmQy1/j
- nwIdX1GWPLQS74uq5gSk9JRuiVmZWo7jJ59nbBCM/wU8GhCAdyBYRV8TaC9MUdgtHIzkDF13x
- fkr3CD97IWKYGcPO8d0FqcyLdUhtBqu0BcD92IvvjdKFAU3AgxEGh8kokYQLxKl4lzCg9Dirx
- iTC6uerVP3Bz0SKHc9lJuncvUTqb8Bol6WpNVDp3vCEuHCQYNONeUw5qb5wuXzYHkLtYoVqeT
- Q0cgKDxBEwiZ6gAfT5XluRLfRYzqCDbIfWE7nxNhWe1IobnoCws4unjXeoXG/YTARJP8p73j+
- woCUpXHt519eWSwDQym72r5wasg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4xfHjTsmG/3kzQnWEX/yQougaeflBWS+XaKBGWU4V8UDcseLaVHyFCE9JSBHXVmUsVWEPWtvKkARZggLEfHIuv4nJf7v4bOEMxFgXQcKoN//sqtcKHNzrA
+ Zv7AkeePhZKn9JrhUmqKhQbmTzg9uXS9N6SEwrz6gyNAdC4Vlug/cbL3LkcVfdcOmbZLJI7te/K3uU4FTAbiJQFEE/kX5ocDXTUejTmodZZeUi5wRXiPqhsb
+ OeZkBLZAAijGiCZoTXdH/I4J+d/12pqU2O0KmUZSIB3NQQkXlAPIeQIvLo/w0IFe5Z8Qo/wkNNcZgVDJh+enPklAqbZxmBWrdgl2D6YiOmtY+tc59JeJqKXO
+ Hb+hcluVAaPVxLOoBpkp+sGnysQq1OAaKIS0Aazw3ucCu2vmTMFoUuAqw5u/hg7VDTT6MKoIjE2rbmA0s9Gwid6z21QE3IcWh2IIa5DxcJeqChroebYssoWS
+ BGyIEXAM7l374FVzt8bz5+8QTSbijvD4fn3rqvzVeCJfeM6smlTsMxW4PM9FCzFhdLIrDS44ebdwKRLfnxvYHKFg1+S+y/TSMmsFXDxxauwb3CweVMxRf+qM
+ M2dd8JdgyXytwouHxjqH2FB5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Sat, 2022-11-26 at 11:28 +0100, Oleksij Rempel wrote:
+> On Fri, Nov 25, 2022 at 06:04:18PM +0100, Devid Antonio Filoni wrote:
+> > The ISO 11783-5 standard, in "4.5.2 - Address claim requirements", stat=
+es:
+> >   d) No CF shall begin, or resume, transmission on the network until 25=
+0
+> >      ms after it has successfully claimed an address except when
+> >      responding to a request for address-claimed.
+> >=20
+> > But "Figure 6" and "Figure 7" in "4.5.4.2 - Address-claim
+> > prioritization" show that the CF begins the transmission after 250 ms
+> > from the first AC (address-claimed) message even if it sends another AC
+> > message during that time window to resolve the address contention with
+> > another CF.
+> >=20
+> > As stated in "4.4.2.3 - Address-claimed message":
+> >   In order to successfully claim an address, the CF sending an address
+> >   claimed message shall not receive a contending claim from another CF
+> >   for at least 250 ms.
+> >=20
+> > As stated in "4.4.3.2 - NAME management (NM) message":
+> >   1) A commanding CF can
+> >      d) request that a CF with a specified NAME transmit the address-
+> >         claimed message with its current NAME.
+> >   2) A target CF shall
+> >      d) send an address-claimed message in response to a request for a
+> >         matching NAME
+> >=20
+> > Taking the above arguments into account, the 250 ms wait is requested
+> > only during network initialization.
+> >=20
+> > Do not restart the timer on AC message if both the NAME and the address
+> > match and so if the address has already been claimed (timer has expired=
+)
+> > or the AC message has been sent to resolve the contention with another
+> > CF (timer is still running).
+> >=20
+> > Signed-off-by: Devid Antonio Filoni <devid.filoni@egluetechnologies.com=
+>
+>=20
+> Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+>=20
+> > ---
+> >  v1 -> v2: Added ISO 11783-5 standard references
+> >=20
+> >  net/can/j1939/address-claim.c | 40 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 40 insertions(+)
+> >=20
+> > diff --git a/net/can/j1939/address-claim.c b/net/can/j1939/address-clai=
+m.c
+> > index f33c47327927..ca4ad6cdd5cb 100644
+> > --- a/net/can/j1939/address-claim.c
+> > +++ b/net/can/j1939/address-claim.c
+> > @@ -165,6 +165,46 @@ static void j1939_ac_process(struct j1939_priv *pr=
+iv, struct sk_buff *skb)
+> >  	 * leaving this function.
+> >  	 */
+> >  	ecu =3D j1939_ecu_get_by_name_locked(priv, name);
+> > +
+> > +	if (ecu && ecu->addr =3D=3D skcb->addr.sa) {
+> > +		/* The ISO 11783-5 standard, in "4.5.2 - Address claim
+> > +		 * requirements", states:
+> > +		 *   d) No CF shall begin, or resume, transmission on the
+> > +		 *      network until 250 ms after it has successfully claimed
+> > +		 *      an address except when responding to a request for
+> > +		 *      address-claimed.
+> > +		 *
+> > +		 * But "Figure 6" and "Figure 7" in "4.5.4.2 - Address-claim
+> > +		 * prioritization" show that the CF begins the transmission
+> > +		 * after 250 ms from the first AC (address-claimed) message
+> > +		 * even if it sends another AC message during that time window
+> > +		 * to resolve the address contention with another CF.
+> > +		 *
+> > +		 * As stated in "4.4.2.3 - Address-claimed message":
+> > +		 *   In order to successfully claim an address, the CF sending
+> > +		 *   an address claimed message shall not receive a contending
+> > +		 *   claim from another CF for at least 250 ms.
+> > +		 *
+> > +		 * As stated in "4.4.3.2 - NAME management (NM) message":
+> > +		 *   1) A commanding CF can
+> > +		 *      d) request that a CF with a specified NAME transmit
+> > +		 *         the address-claimed message with its current NAME.
+> > +		 *   2) A target CF shall
+> > +		 *      d) send an address-claimed message in response to a
+> > +		 *         request for a matching NAME
+> > +		 *
+> > +		 * Taking the above arguments into account, the 250 ms wait is
+> > +		 * requested only during network initialization.
+> > +		 *
+> > +		 * Do not restart the timer on AC message if both the NAME and
+> > +		 * the address match and so if the address has already been
+> > +		 * claimed (timer has expired) or the AC message has been sent
+> > +		 * to resolve the contention with another CF (timer is still
+> > +		 * running).
+> > +		 */
+> > +		goto out_ecu_put;
+> > +	}
+> > +
+> >  	if (!ecu && j1939_address_is_unicast(skcb->addr.sa))
+> >  		ecu =3D j1939_ecu_create_locked(priv, name);
+> > =20
+> > --=20
+> > 2.34.1
+> >=20
+> >=20
+>=20
 
-6.1.11-rc1
+Hello,
+I noticed that this patch has not been integrated in upstream yet. Are
+there problems with it?
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37)
-
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+Thank you,
+Devid
