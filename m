@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D268CF1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8313868CF1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBGFvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S229894AbjBGFvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBGFvH (ORCPT
+        with ESMTP id S229563AbjBGFvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 00:51:07 -0500
+        Tue, 7 Feb 2023 00:51:08 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345C01E2BC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 21:51:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E950326875;
+        Mon,  6 Feb 2023 21:51:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675749063; x=1707285063;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3b3aWcL1l7U/L1LS+KV371zL/qzf8gpKCQsHXNrtd54=;
-  b=EbIBFyZeObq/8MvTjFpmFNur4AV4v2gbwkLHoLc9dhE/g0O5SBxx3y7n
-   RAW/u1FS6QmAQ8Or0OgjC3c9FEbfCQwIoqg6ae7XKvQ/9C/FOkjMkO0oV
-   OLAdFwEsUS60yOysCCDrYSCsECxGdolMnNV2MhuRCEOTZDbw1+efvPWqB
-   VdoSAFZsneOT/h939uCh/S+LfbBmMr6xDKqh03P3PBjr0B2rQn5DTqjth
-   4MMlbf4UEuERRjoiG4eER0V2mEWlLrD+w0XMx3eArsnJ0xbSyk+q0531l
-   JhB5aQYeml+DqYqHoYbTkozskOsT5L7mmMYkR6yj2T9QBjKgxOooHh1yA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415633701"
+  t=1675749064; x=1707285064;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yF4PX+2z9gDccoVYuykfNbSYoITJYxsw4/QbUOFEFXg=;
+  b=KosfakCED15gDl0FAtBboQzT0zt/fGtybzAJ2793ObpJ2Rg1r7QyZZ8h
+   Uo5LvCM8NfiQeTkG7gs+zBctSQhomWYEPsHGo5Zzaxx+mMRAXt/RNoCgK
+   vDSlijNQLKOwrb2GZSg5AE1fc3jOiag57CVpOOlCHV/envbTVjDUtFrnT
+   sySu0MQAkfaqh/cjsI+1jhiXHE0e86dQ5khigM6N3JFTXH9y/JMTloH1G
+   DdsooVugVU77FRdT4EXfnPim5VU302VAjchyrIIQblZyca+/OxJjpLhlJ
+   zlqwDRWhBZ6476TCkXKfPBgNKDlFYIGK3UKsZkkRzebZfcl/7+7180lC0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415633721"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415633701"
+   d="scan'208";a="415633721"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:50:40 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:50:42 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775409282"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775409281"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="775409282"
+   d="scan'208";a="775409281"
 Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
   by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2023 21:50:39 -0800
 Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pPGsI-00038v-1M;
+        id 1pPGsI-00038r-19;
         Tue, 07 Feb 2023 05:50:38 +0000
-Date:   Tue, 7 Feb 2023 13:50:00 +0800
+Date:   Tue, 7 Feb 2023 13:50:01 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [tip:x86/vdso 3/4] arch/x86/include/asm/arch_hweight.h:49:15: error:
- invalid input size for constraint 'D'
-Message-ID: <202302071322.KTuOfRSa-lkp@intel.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com, dphadke@linux.microsoft.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 3/6] Drivers: hv: vmbus: Convert acpi_device to more
+ generic platform_device
+Message-ID: <202302071303.dB30Hu98-lkp@intel.com>
+References: <1675706060-22361-4-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1675706060-22361-4-git-send-email-ssengar@linux.microsoft.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -63,82 +71,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
-head:   5646bbd6684acf5c9b9dedb863b7d2f6f5a330fb
-commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 [3/4] x86/vdso: Provide getcpu for x86-32.
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230207/202302071322.KTuOfRSa-lkp@intel.com/config)
+Hi Saurabh,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on next-20230206]
+[also build test ERROR on v6.2-rc7]
+[cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Saurabh-Sengar/drivers-clocksource-hyper-v-non-ACPI-support-in-hyperv-clock/20230207-015625
+patch link:    https://lore.kernel.org/r/1675706060-22361-4-git-send-email-ssengar%40linux.microsoft.com
+patch subject: [PATCH v3 3/6] Drivers: hv: vmbus: Convert acpi_device to more generic platform_device
+config: i386-randconfig-a006-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071303.dB30Hu98-lkp@intel.com/config)
 compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=92d33063c081a82d25dd08a9cce03947c8ed9164
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip x86/vdso
-        git checkout 92d33063c081a82d25dd08a9cce03947c8ed9164
+        # https://github.com/intel-lab-lkp/linux/commit/e6c8ebd27cac165137702f5ff85b14d6d0b8e820
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Saurabh-Sengar/drivers-clocksource-hyper-v-non-ACPI-support-in-hyperv-clock/20230207-015625
+        git checkout e6c8ebd27cac165137702f5ff85b14d6d0b8e820
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-   In file included from include/linux/kernel.h:22:
-   In file included from include/linux/bitops.h:68:
-   In file included from arch/x86/include/asm/bitops.h:420:
->> arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size for constraint 'D'
-                            : REG_IN (w));
-                                      ^
-   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-   In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-   In file included from include/linux/kernel.h:25:
-   In file included from include/linux/math.h:6:
->> arch/x86/include/asm/div64.h:85:34: error: invalid output size for constraint '=a'
-           asm ("mulq %2; divq %3" : "=a" (q)
-                                           ^
-   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-   arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for function '__vdso_getcpu' [-Wmissing-prototypes]
-   __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+>> drivers/hv/vmbus_drv.c:2283:1: error: non-void function does not return a value [-Werror,-Wreturn-type]
+   }
    ^
-   arch/x86/entry/vdso/vdso32/../vgetcpu.c:12:9: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   notrace long
-           ^
-           static 
-   1 warning and 2 errors generated.
+   1 error generated.
 
 
-vim +/D +49 arch/x86/include/asm/arch_hweight.h
+vim +2283 drivers/hv/vmbus_drv.c
 
-d61931d89be506 Borislav Petkov 2010-03-05  35  
-d14edb1648221e Denys Vlasenko  2015-08-04  36  #ifdef CONFIG_X86_32
-d61931d89be506 Borislav Petkov 2010-03-05  37  static inline unsigned long __arch_hweight64(__u64 w)
-d61931d89be506 Borislav Petkov 2010-03-05  38  {
-d61931d89be506 Borislav Petkov 2010-03-05  39  	return  __arch_hweight32((u32)w) +
-d61931d89be506 Borislav Petkov 2010-03-05  40  		__arch_hweight32((u32)(w >> 32));
-d14edb1648221e Denys Vlasenko  2015-08-04  41  }
-d61931d89be506 Borislav Petkov 2010-03-05  42  #else
-d14edb1648221e Denys Vlasenko  2015-08-04  43  static __always_inline unsigned long __arch_hweight64(__u64 w)
-d14edb1648221e Denys Vlasenko  2015-08-04  44  {
-f5967101e9de12 Borislav Petkov 2016-05-30  45  	unsigned long res;
-d14edb1648221e Denys Vlasenko  2015-08-04  46  
-566b62a3676cae Uros Bizjak     2018-10-14  47  	asm (ALTERNATIVE("call __sw_hweight64", "popcntq %1, %0", X86_FEATURE_POPCNT)
-d61931d89be506 Borislav Petkov 2010-03-05  48  			 : "="REG_OUT (res)
-d61931d89be506 Borislav Petkov 2010-03-05 @49  			 : REG_IN (w));
-d61931d89be506 Borislav Petkov 2010-03-05  50  
-d61931d89be506 Borislav Petkov 2010-03-05  51  	return res;
-d61931d89be506 Borislav Petkov 2010-03-05  52  }
-d14edb1648221e Denys Vlasenko  2015-08-04  53  #endif /* CONFIG_X86_32 */
-d61931d89be506 Borislav Petkov 2010-03-05  54  
-
-:::::: The code at line 49 was first introduced by commit
-:::::: d61931d89be506372d01a90d1755f6d0a9fafe2d x86: Add optimized popcnt variants
-
-:::::: TO: Borislav Petkov <borislav.petkov@amd.com>
-:::::: CC: H. Peter Anvin <hpa@zytor.com>
+b0069f43fc6bc9 drivers/staging/hv/vmbus_drv.c K. Y. Srinivasan 2011-04-29  2265  
+e6c8ebd27cac16 drivers/hv/vmbus_drv.c         Saurabh Sengar   2023-02-06  2266  static int vmbus_mmio_remove(void)
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2267  {
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2268  	struct resource *cur_res;
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2269  	struct resource *next_res;
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2270  
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2271  	if (hyperv_mmio) {
+6d146aefbaa5c5 drivers/hv/vmbus_drv.c         Jake Oshins      2016-04-05  2272  		if (fb_mmio) {
+6d146aefbaa5c5 drivers/hv/vmbus_drv.c         Jake Oshins      2016-04-05  2273  			__release_region(hyperv_mmio, fb_mmio->start,
+6d146aefbaa5c5 drivers/hv/vmbus_drv.c         Jake Oshins      2016-04-05  2274  					 resource_size(fb_mmio));
+6d146aefbaa5c5 drivers/hv/vmbus_drv.c         Jake Oshins      2016-04-05  2275  			fb_mmio = NULL;
+6d146aefbaa5c5 drivers/hv/vmbus_drv.c         Jake Oshins      2016-04-05  2276  		}
+6d146aefbaa5c5 drivers/hv/vmbus_drv.c         Jake Oshins      2016-04-05  2277  
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2278  		for (cur_res = hyperv_mmio; cur_res; cur_res = next_res) {
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2279  			next_res = cur_res->sibling;
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2280  			kfree(cur_res);
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2281  		}
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2282  	}
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05 @2283  }
+7f163a6fd957a8 drivers/hv/vmbus_drv.c         Jake Oshins      2015-08-05  2284  
 
 -- 
 0-DAY CI Kernel Test Service
