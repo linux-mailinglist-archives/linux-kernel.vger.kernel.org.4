@@ -2,83 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCCD68D72F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02B668D72C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbjBGMtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
+        id S231857AbjBGMtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbjBGMtM (ORCPT
+        with ESMTP id S231902AbjBGMs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:49:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0945314E91
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:48:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675774103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3pNnVVvvF8/Ot6Ip5i4hvaULShyHI18MUkSy36eZSxE=;
-        b=YS6HOubElUaqNqip3S5OwnrNYs15OQHaPqLZvj15+XkAblHRIRaYprtRrIL8u32z6u/M+v
-        QStWO8oU0qKJS161LrTawH2uRxZ0oYycBH+KvXra3e9jTl8RHTEtlKDtKEGpQzb0DB+kqr
-        BVNv2k3+Nc+pBz1nN+s6RzTkj7VJqPI=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-447-IbiFXLCSNxui-meArU6Yyg-1; Tue, 07 Feb 2023 07:48:22 -0500
-X-MC-Unique: IbiFXLCSNxui-meArU6Yyg-1
-Received: by mail-qv1-f71.google.com with SMTP id e5-20020a056214110500b0053547681552so7521850qvs.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 04:48:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3pNnVVvvF8/Ot6Ip5i4hvaULShyHI18MUkSy36eZSxE=;
-        b=P25erijUlYu1HwqNot2mEAsqmGxxI/FS2RqkKwl2b/cNfOGLVwShEyqD46w6vsa2wu
-         lgu+IlJMNdUKE5HXzQCZ5N0JQqCZufdfenGPN2LgQMlrxA+6ZZzKKMwvc7mzOGrCGBJ8
-         HOl5LloAlMzpYsYI5iJ4HNEJSzRqUlduX/ttdjW0epXnSRLNl6Rqfgq7HmK5BOM4TDNz
-         Vc+7NGfDC43NkD6IqL+wemY2QVZpypCotK9+qfLFMLjmVL+pORv0/pB8ufKBxkdVofvZ
-         /0JWPR61ZDleJazoCfE5LdRmoctTXIPT/Ju0WvJLP0NhgYIY0fQzLBUaX+JCcRiwzysj
-         a3Zw==
-X-Gm-Message-State: AO0yUKWsu8iiN+OFeOLEYdD0y1bvSdoBUOO3i4QOcls5s4+yDWwrSJOR
-        MW7g9GtDzr3YQBX3p2H+uYJdev/xZlaq9P3cnm6QX9RivOe2nDANOygVfEolX0oydlmpchpXC7I
-        8sPiz1NLgVXvsHe56o1HVFsgV
-X-Received: by 2002:a05:622a:4d2:b0:3b6:35cb:b944 with SMTP id q18-20020a05622a04d200b003b635cbb944mr6044708qtx.2.1675774101594;
-        Tue, 07 Feb 2023 04:48:21 -0800 (PST)
-X-Google-Smtp-Source: AK7set+mQoNSGATnBKIkXvsLl6p0m/4Ku460QBMKXR+jCVcof7QL6e4N6h/kUynB2ZQZ4hY6I+ltGg==
-X-Received: by 2002:a05:622a:4d2:b0:3b6:35cb:b944 with SMTP id q18-20020a05622a04d200b003b635cbb944mr6044667qtx.2.1675774101255;
-        Tue, 07 Feb 2023 04:48:21 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05620a20d200b007090f7a4f2asm9344737qka.82.2023.02.07.04.48.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 04:48:20 -0800 (PST)
-Message-ID: <b25f37e4e11d9da5b6d61cbfaa0cafe9889c3926.camel@redhat.com>
-Subject: Re: [net-next PATCH V3 4/4] octeontx2-pf: Add support for HTB
- offload
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Hariprasad Kelam <hkelam@marvell.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
-        jerinj@marvell.com, sbhatta@marvell.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, saeedm@nvidia.com,
-        richardcochran@gmail.com, tariqt@nvidia.com,
-        linux-rdma@vger.kernel.org, maxtram95@gmail.com,
-        naveenm@marvell.com, hariprasad.netdev@gmail.com
-Date:   Tue, 07 Feb 2023 13:48:11 +0100
-In-Reply-To: <20230206054640.5854-5-hkelam@marvell.com>
-References: <20230206054640.5854-1-hkelam@marvell.com>
-         <20230206054640.5854-5-hkelam@marvell.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Tue, 7 Feb 2023 07:48:57 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E201CF4A;
+        Tue,  7 Feb 2023 04:48:53 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317BwvTm011461;
+        Tue, 7 Feb 2023 12:48:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=TGkF2tOO4frLvPts9ZwsXb2QPUj+1HoDuf+5oC5qBMs=;
+ b=zogrOpzSNhuymsZ2J7Hj7yr0POlZj7LuKS6sJWnOzssC/32PJYxNlFa9rR9z2Pz4qE23
+ AxMYoviUZwTIz+Xy4+NC2o2yKrfbM3AXpBldGvHVv4/LDwtUHpD4TV0e4n9+PIIgvf85
+ FgPXrSFCmjura9s/mOKrKl/joqxmiEMvEPo/Tj6YShKDtsLaKYslw4HgcU5sLfUTk2GG
+ 2TkbOhPSoednafKu62/Wz7yqnsJUd7Aa4kUIn0PQn/74vItSsNq4EjieWgopXGcUt93p
+ x5yHEgTCaIRlPHHh/W09Usg2xY8tgKUcq4xhNx7/sjeTmgVTrU5o5UgjJAikciqyICFi QQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhdsdne4w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Feb 2023 12:48:42 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 317CipCR040797;
+        Tue, 7 Feb 2023 12:48:41 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtbu8uh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Feb 2023 12:48:41 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317Cd0lN029118;
+        Tue, 7 Feb 2023 12:48:41 GMT
+Received: from dhcp-10-152-13-169.usdhcp.oraclecorp.com.com (dhcp-10-152-13-169.usdhcp.oraclecorp.com [10.152.13.169])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3nhdtbu8uc-1;
+        Tue, 07 Feb 2023 12:48:41 +0000
+From:   George Kennedy <george.kennedy@oracle.com>
+To:     gregkh@linuxfoundation.org, jslaby@suse.cz,
+        torvalds@linux-foundation.org
+Cc:     george.kennedy@oracle.com, sfr@canb.auug.org.au,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v2] vc_screen: break from vcs_read() while loop if vcs_vc() returns NULL
+Date:   Tue,  7 Feb 2023 07:48:18 -0500
+Message-Id: <1675774098-17722-1-git-send-email-george.kennedy@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 phishscore=0 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302070114
+X-Proofpoint-ORIG-GUID: 4r_C2QQumyNCCkEnwvirGRvLf103Pp_g
+X-Proofpoint-GUID: 4r_C2QQumyNCCkEnwvirGRvLf103Pp_g
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,62 +72,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-06 at 11:16 +0530, Hariprasad Kelam wrote:
-> +static int otx2_qos_txschq_alloc(struct otx2_nic *pfvf,
-> +				 struct otx2_qos_cfg *cfg)
-> +{
-> +	struct nix_txsch_alloc_req *req;
-> +	struct nix_txsch_alloc_rsp *rsp;
-> +	struct mbox *mbox =3D &pfvf->mbox;
-> +	int lvl, rc, schq;
-> +
-> +	mutex_lock(&mbox->lock);
-> +	req =3D otx2_mbox_alloc_msg_nix_txsch_alloc(&pfvf->mbox);
-> +	if (!req)
-> +		return -ENOMEM;
+If vcs_vc() returns NULL in vcs_read(), break from while loop if partial
+read, else if no reads have been done, go to unlock_out and return -ENXIO.
+In addition, change the goto unlock_out after vcs_size() to a break
+to conform to the break handling after vcs_vc().
 
-This does not releases the mbox->lock mutex on error (another
-occurrence below).
+Fixes: ac751efa6a0d ("console: rename acquire/release_console_sem() to console_lock/unlock()")
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+---
+ drivers/tty/vt/vc_screen.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-[...]
-
-
-> +static int otx2_qos_txschq_update_config(struct otx2_nic *pfvf,
-> +					 struct otx2_qos_node *node,
-> +					 struct otx2_qos_cfg *cfg)
-> +{
-> +	int ret =3D 0;
-> +
-> +	otx2_qos_txschq_fill_cfg(pfvf, node, cfg);
-> +	ret =3D otx2_qos_txschq_push_cfg(pfvf, node, cfg);
-> +
-> +	return ret;
-
-I personally find the plain:
-
-	return <function>
-
-more easy to read - more instances below.
-
-[...]
-
-> +static void otx2_reset_qdisc(struct net_device *dev, u16 qid)
-> +{
-> +	struct netdev_queue *dev_queue =3D netdev_get_tx_queue(dev, qid);
-> +	struct Qdisc *qdisc =3D dev_queue->qdisc_sleeping;
-> +
-> +	if (!qdisc)
-> +		return;
-> +
-> +	spin_lock_bh(qdisc_lock(qdisc));
-> +	qdisc_reset(qdisc);
-> +	spin_unlock_bh(qdisc_lock(qdisc));
-> +}
-
-The above looks like a possible shared helper, as mlx code implements a
-quite identical function.
-
-Cheers,
-
-Paolo
+diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
+index f566eb1839dc..c599b452969f 100644
+--- a/drivers/tty/vt/vc_screen.c
++++ b/drivers/tty/vt/vc_screen.c
+@@ -406,19 +406,17 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 		ret = -ENXIO;
+ 		vc = vcs_vc(inode, &viewed);
+ 		if (!vc)
+-			goto unlock_out;
++			break;
+ 
+ 		/* Check whether we are above size each round,
+ 		 * as copy_to_user at the end of this loop
+ 		 * could sleep.
+ 		 */
+-		size = vcs_size(vc, attr, uni_mode);
+-		if (size < 0) {
+-			if (read)
+-				break;
+-			ret = size;
+-			goto unlock_out;
+-		}
++		ret = vcs_size(vc, attr, uni_mode);
++		if (ret < 0)
++			break;
++		size = ret;
++		ret = 0;
+ 		if (pos >= size)
+ 			break;
+ 		if (count > size - pos)
+-- 
+2.31.1
 
