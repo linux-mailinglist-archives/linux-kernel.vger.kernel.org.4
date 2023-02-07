@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CF768DDD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:21:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7A668DDD6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjBGQVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        id S232543AbjBGQWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:22:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbjBGQVR (ORCPT
+        with ESMTP id S229727AbjBGQWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:21:17 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995633E097
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:20:51 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id ee13so9790137edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:20:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y88Utef6qJHAS4wQ2e647m3TQ6BM/POf4UQBE8RAnlo=;
-        b=KqTmBsTMJrmVDliiJIIlIflPhloLMYAGI9DGS5JGeWj2g9GOBGVJgutaNy8RJEmTwr
-         +dkqv0nADBQ6ZGCLnFpR9YLTb4lokI0E+mrnkzgXusasUJZqpQKoihEkJHqa48rbQfSS
-         48+fyxjS6qESomYnIRY8LDUhpDj31asJ+zUIk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y88Utef6qJHAS4wQ2e647m3TQ6BM/POf4UQBE8RAnlo=;
-        b=gNIyx+2VkyDuJCvOiTnQnkBsR/L0cVB2wg7f3WhNaXUsb6yTZ7RpwVEeG1um6nLeQh
-         BSIf1GlP9FAzzSRgomhrSsuRdGaX8qDze3J4nXkbnlrH0gfO3G3vhsGUrtGvfuGQ+YbZ
-         qjU7DP28ETpXH6T0ijeefPIXFpYFd39kfeaBpQlmMqFsBcHJIA/1jpAw0Jih+N7lJE9y
-         IXLPhhAjsruqQbo3yf5U9S6AQXVLnCIsaALVDDkrRNTjMkv8mYhA9sgadCIN1DnKoZpl
-         +pnB95FDQVnw7uxoRagFWCFZ2kNhhRat+AL6BTT1hYei61slGa7jBe0tow6h/y87uwxS
-         Rl6g==
-X-Gm-Message-State: AO0yUKUbh0d+5dSntb2pewwbJYvgQsfBZ0Ds/rwkdlxbo424TQ2I9RMf
-        348GALJ79X9On6oToOfMpBF7vPozTycfoCFR+MRRsA==
-X-Google-Smtp-Source: AK7set/4ZHgmHuzPhT5EgRWeTKdILexRTbXINaYfV9E6MRrMGQooyLjv44Cc/ZhBDcZxRhO37EBZRg==
-X-Received: by 2002:a17:906:4995:b0:89b:6048:85d2 with SMTP id p21-20020a170906499500b0089b604885d2mr3648293eju.15.1675786849573;
-        Tue, 07 Feb 2023 08:20:49 -0800 (PST)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id kf15-20020a17090776cf00b0087bdae33badsm7057237ejc.56.2023.02.07.08.20.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 08:20:48 -0800 (PST)
-Received: by mail-ed1-f53.google.com with SMTP id v13so16342119eda.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:20:48 -0800 (PST)
-X-Received: by 2002:a17:906:4e46:b0:87a:7098:ca09 with SMTP id
- g6-20020a1709064e4600b0087a7098ca09mr878988ejw.78.1675786848396; Tue, 07 Feb
- 2023 08:20:48 -0800 (PST)
+        Tue, 7 Feb 2023 11:22:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7CE1A5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:22:43 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F32FC3E726;
+        Tue,  7 Feb 2023 16:22:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675786962; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IgIaY+60H9Y4KDbp25QpOtfJ5cBNJYAa5+eQFcyi++M=;
+        b=l+aBA5K0ZCAKDMsX5l2FhnIqf0HMshopWWSKhvrTluaMaK7c3uAKeAzUQwkuHkHrtytGjY
+        exssZZ/T2qRqwK+FvUrSm6SgMi3xvHUVuP9wrzgEEx3BgS59KiataikswozBF5pSG6c4U6
+        EUbtjg4x19MY5UuSLk0OSy2vjbTsVt4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675786962;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IgIaY+60H9Y4KDbp25QpOtfJ5cBNJYAa5+eQFcyi++M=;
+        b=Vz6Fa+fw1cBTMn0w/OQJczz8doUugENLz4kFazkktieQrpYaPyq4nVHqwhZ3Vz6WXsqgz5
+        5EIgveqQBwtjFYDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC2B2139ED;
+        Tue,  7 Feb 2023 16:22:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fxQcMdF64mPJQQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 07 Feb 2023 16:22:41 +0000
+Message-ID: <9cbde82c-b8e0-cb79-4a22-2b4cf2c7bd34@suse.cz>
+Date:   Tue, 7 Feb 2023 17:22:41 +0100
 MIME-Version: 1.0
-References: <20230207072902.5528-1-jgross@suse.com> <20230207072902.5528-5-jgross@suse.com>
-In-Reply-To: <20230207072902.5528-5-jgross@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 7 Feb 2023 08:20:31 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi53OX86-yLBp4rCHOH67XhVbzV78qa63mh4-rOhxQSLw@mail.gmail.com>
-Message-ID: <CAHk-=wi53OX86-yLBp4rCHOH67XhVbzV78qa63mh4-rOhxQSLw@mail.gmail.com>
-Subject: Re: [PATCH 4/6] x86/mtrr: don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/4] mm, compaction: Rename compact_control->rescan to
+ finish_pageblock
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230125134434.18017-1-mgorman@techsingularity.net>
+ <20230125134434.18017-2-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230125134434.18017-2-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 11:29 PM Juergen Gross <jgross@suse.com> wrote:
->
-> mtrr_type_lookup() should always return a valid memory type. In case
-> there is no information available, it should return the default UC.
+On 1/25/23 14:44, Mel Gorman wrote:
+> The rescan field was not well named albeit accurate at the time. Rename the
+> field to finish_pageblock to indicate that the remainder of the pageblock
+> should be scanned regardless of COMPACT_CLUSTER_MAX. The intent is that
+> pageblocks with transient failures get marked for skipping to avoid
+> revisiting the same pageblock.
+> 
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-Why isn't the second case (ie MTRR_STATE_MTRR_ENABLED not being set)
-returning 'mtrr_state.def_type'. That's what the hw does, no?
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-> At the same time the mtrr_type_lookup() stub for the !CONFIG_MTRR
-> case should set uniform to 1, as if the memory range would be
-> covered by no MTRR at all.
-
-.. but you didn't do that for the CONFIG_MTRR, so now they return
-MTRR_TYPE_UNCACHABLE, but don't set uniform=1.
-
-              Linus
