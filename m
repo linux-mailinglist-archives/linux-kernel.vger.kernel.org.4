@@ -2,108 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E7868D0D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FB268D0DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjBGHtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S230457AbjBGHuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 02:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBGHtN (ORCPT
+        with ESMTP id S229625AbjBGHuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:49:13 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A66812847;
-        Mon,  6 Feb 2023 23:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675756152; x=1707292152;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vluZuFSkGXbu6xfPDdmoiFX4n+Szt9NgbKjeRxh+kfk=;
-  b=XwMcx2mddJaVaITik9PyeUnKaP1foPfjIVN6urInPlkLNgulGgCVgI8j
-   VKUdozVy7GWWuuBBN082yEGw6Dxyo7M7MKZm7kkyO74dnb/ItidTvUmGP
-   vsjLNKxJYOaV2XXHcd557f3Ulq5MMVRqWP8qxdNYCQ9UyerjY9F0U8k9D
-   23sU/59mheqL2qvhO2jgrtwDuo5+YcjxgCDoEpACD7Dh/a3yRVH8mOvui
-   hqSTbcW4hUIlxwic5hFeqVrNKDlsT1OszK/lTXmV70JiJ8BAg0Dd0rb08
-   y+nxDeiqIURpWHJeGm5eM/BgdtsEzkI4uxuKckFG1LywfkF92O0Y1g4eh
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,278,1669100400"; 
-   d="scan'208";a="195693381"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 00:49:11 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 00:48:57 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Tue, 7 Feb 2023 00:48:56 -0700
-Date:   Tue, 7 Feb 2023 08:48:56 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linus.walleij@linaro.org>, <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH] pinctrl: ocelot: Fix alt mode for ocelot
-Message-ID: <20230207074856.2akoi4v65cbolinb@soft-dev3-1>
-References: <20230206203720.1177718-1-horatiu.vultur@microchip.com>
- <CAHp75VcVn2=Xy7P4xgiDKkpOkw+YD1zGwMYARpWV6Eiv0fUakw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VcVn2=Xy7P4xgiDKkpOkw+YD1zGwMYARpWV6Eiv0fUakw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 7 Feb 2023 02:50:04 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54E3B12847;
+        Mon,  6 Feb 2023 23:50:03 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B822420C7E28;
+        Mon,  6 Feb 2023 23:50:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B822420C7E28
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675756202;
+        bh=mf6bBpSzSp5FvIZlbgZNiPFVdnfQ6pILfRC3PQopagc=;
+        h=From:To:Subject:Date:From;
+        b=MQWnrOafvpvN/YE8jA0A4/NMv0Ma8eqAj/Gv6A5D4Il2aBi9HAX2/wtRVlJ3inGes
+         QWwt2icKXn8zhkmdfZjs+dSTr/zL+K8QTeWyXImorKt3jnqt0nRbw+Bf4VCd5dqTzk
+         K8cCKOpP+k9kFX0fSKEgxICK1CNHuWJFiAXZsbfs=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com, dphadke@linux.microsoft.com
+Subject: [PATCH v4 0/6] Device tree support for Hyper-V VMBus driver
+Date:   Mon,  6 Feb 2023 23:49:53 -0800
+Message-Id: <1675756199-5917-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 02/06/2023 22:59, Andy Shevchenko wrote:
+This set of patches expands the VMBus driver to include device tree
+support. This feature allows for a kernel boot without the use of ACPI
+tables, resulting in a smaller memory footprint and potentially faster
+boot times. This is tested by enabling CONFIG_FLAT and OF_EARLY_FLATTREE
+for x86.
 
-Hi Andy,
+The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+build.
 
-> 
-> On Mon, Feb 6, 2023 at 10:37 PM Horatiu Vultur
-> <horatiu.vultur@microchip.com> wrote:
-> >
-> > In case the driver was trying to set an alternate mode for gpio
-> > 0 or 32 then the mode was not set correctly. The reason is that
-> > there is computation error inside the function ocelot_pinmux_set_mux
-> > because in this case it was trying to shift to left by -1.
-> > Fix this by actually shifting the function bits and not the position.
-> >
-> > Fixes: 4b36082e2e09 ("pinctrl: ocelot: fix pinmuxing for pins after 31")
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> 
-> ...
-> 
-> >         regmap_update_bits(info->map, REG_ALT(0, info, pin->pin),
-> >                            BIT(p), f << p);
-> >         regmap_update_bits(info->map, REG_ALT(1, info, pin->pin),
-> > -                          BIT(p), f << (p - 1));
-> > +                          BIT(p), (f >> 1) << p);
-> 
-> I'm not sure I understand how this doesn't break anything that has a
-> bit 0 set in f. Is it not a problem?
+The third patch converts the VMBus driver from acpi to more generic
+platform driver.
 
-I don't think it is a problem. This is similar to the implementation of
-'lan966x_pinmux_set_mux', the only difference is that
-lan966x_pinmux_set_mux has more GPIOs than ocelot.
+Further to add device tree documentation for VMBus, it needs to club with
+other virtualization driver's documentation. For this rename the virtio
+folder to more generic hypervisor, so that all the hypervisor based
+devices can co-exist in a single place in device tree documentation. The
+fourth patch does this renaming.
 
-If we take an example where f equals 0x1 and p equals 0.
-REG_ALT(0): BIT(0) & (0x1 << 0) equals 0x1
-REG_ALT(1): BIT(0) & ((0x1 >> 1) << 0)) equals 0x0.
+The fifth patch introduces the device tree documentation for VMBus.
 
-Or am I misunderstood something?
+The sixth patch adds device tree support to the VMBus driver. Currently
+this is tested only for x86 and it may not work for other archs.
 
-> 
-> --
-> With Best Regards,
-> Andy Shevchenko
+[V4]
+- rebased which fixed return type of 'vmbus_mmio_remove' from int to void
+- used __maybe_unused for 'vmbus_of_match' and safeguard vmbus_acpi_device_ids
+  under #ifdef
+
+[V3]
+- Changed the logic to use generic api (for_each_of_range) for parsing "ranges".
+- Remove dependency of ACPI for HYPERV in case of x86.
+- Removed "device tree bindings" from title and patch subject.
+- Removed duplicate vendor prefix, used microsoft instead of msft.
+- Use 'soc' in example of device tree documantation for parent node.
+- Fixed compatible schemas error generated in other modules referring to
+  virtio.
+- Drop hex notation and leading zeros from device tree cell properties.
+- Added missing full stop at the end of commit message.
+- Typos fix: s/Initaly/Initially/ and s/hibernate/hibernation/.
+- Replace to_acpi_device with ACPI_COMPANION which simplify the logic.
+- Added more info in cover letter aboutsystem under test.
+
+[v2]
+- Convert VMBus acpi device to platform device, and added device tree support
+  in separate patch. This enables using same driver structure for both the flows.
+- In Device tree documentation, changed virtio folder to hypervisor and moved
+  VMBus documentation there.
+- Moved bindings before Device tree patch.
+- Removed stale ".data" and ".name" field from of_device match table.
+- Removed debug print.
+
+Saurabh Sengar (6):
+  drivers/clocksource/hyper-v: non ACPI support in hyperv clock
+  Drivers: hv: allow non ACPI compilation for
+    hv_is_hibernation_supported
+  Drivers: hv: vmbus: Convert acpi_device to more generic
+    platform_device
+  dt-bindings: hypervisor: Rename virtio to hypervisor
+  dt-bindings: hypervisor: VMBus
+  Driver: VMBus: Add device tree support
+
+ .../devicetree/bindings/gpio/gpio-virtio.yaml      |   4 +-
+ .../bindings/hypervisor/microsoft,vmbus.yaml       |  48 +++++++++
+ .../bindings/{virtio => hypervisor}/mmio.yaml      |   2 +-
+ .../bindings/{virtio => hypervisor}/pci-iommu.yaml |   2 +-
+ .../{virtio => hypervisor}/virtio-device.yaml      |   2 +-
+ .../devicetree/bindings/i2c/i2c-virtio.yaml        |   4 +-
+ MAINTAINERS                                        |   3 +-
+ drivers/clocksource/hyperv_timer.c                 |  15 ++-
+ drivers/hv/Kconfig                                 |   4 +-
+ drivers/hv/hv_common.c                             |   4 +
+ drivers/hv/vmbus_drv.c                             | 120 ++++++++++++++++-----
+ 11 files changed, 171 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/hypervisor/microsoft,vmbus.yaml
+ rename Documentation/devicetree/bindings/{virtio => hypervisor}/mmio.yaml (95%)
+ rename Documentation/devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml (98%)
+ rename Documentation/devicetree/bindings/{virtio => hypervisor}/virtio-device.yaml (93%)
 
 -- 
-/Horatiu
+1.8.3.1
+
