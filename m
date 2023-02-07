@@ -2,147 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DDC68D7E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F5268D7F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbjBGNDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S232134AbjBGNE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjBGNDw (ORCPT
+        with ESMTP id S232148AbjBGNEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:03:52 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594EC35240
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:03:51 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-520dad0a7d2so195112147b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:03:51 -0800 (PST)
+        Tue, 7 Feb 2023 08:04:51 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4022339CD4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:04:43 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk16so13465920wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Xd+/5Y9VTyL6XxO9VJQ62sf2ccIN1/K2xW1odJL8Mo=;
-        b=uWLALjwdLTy33c8dzkuoCBH5sSws4MdJkcHWMKUJ68n89+1DYYNLO/nHpKqfwWIKR2
-         GckGI3CGQmfFKbnzwTbE2Qlg/MNBvKKT+R2nnvKMGsbVtyf2Cktm5eUoB4AuIOMLyiLB
-         jJKLbjIo02MIev/iBsEEKLaGLk5bwNQ4UGh34TjhXCwtdU1EZ+Rq41w6SV4dTniHkUtF
-         dMRDd6bxXLGBCT7MNb7tmxxYEZ2tq0EMBkFIu7p6suMbgxIC3QVwk2+1s6Gqjy76gz4g
-         rkGhjeWxJC+XXO0qSHQIlqmVNmEaT7tMc25EVhqMhyrufIP95/Gporvw/sIuGz/Tk+Am
-         +cFA==
+        d=tessares.net; s=google;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2LNCnTYQnKI2Qi+rIbkgnUL8Nmbo6Qz5VaHG00c9zYg=;
+        b=R6b16Anl58GF4Ndnmggam0JqBAZSqo0/T+bhnT/iYTRtuObc/dXZ6xloUhtLwWp9y+
+         UTJr92rFlrbCq+tzaHrs69ArfVTgoUR6PBj84O9mvc1/I1Exc0hMdlZGgTDvtwykl0Mt
+         IAX8Zic1dqgE42gMDp9jS6SSO/IL9ixdJoXYfBr4v5PBbsLwSy9yhHqt/9vY4ATmV22F
+         TPodadJqvEWI3SpF+/IqycXhFvTGxkOmBE5FiauyXH/rK6M+Lvo8f3W8t6OYeoKG60fV
+         dqB3sn4haHf/1mH9+XiRfXRDFqrw4o4xjICP9IXP2Yv0ka01Q52bcPpDKi+XDlW3l6rI
+         n2sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3Xd+/5Y9VTyL6XxO9VJQ62sf2ccIN1/K2xW1odJL8Mo=;
-        b=c0DDhxXCfagnAyeaUsnE6fLOv0UsOIYc2yDDlVQbrEvGmRpobdLS2vXM7vgSH31yPE
-         AKT7an5J7DvDiFvlO6u9B8Hi8LVPqT0smSImeCb5LgDbs4j3x/kqipQHzXy9aJI2tv52
-         SJvlOyAg0eXe1OFPrLNJvsx5JGV/iOl2zShh7+fGZKCvOsHR9pav+Jgqtt3u9WecZrDp
-         //ABQIKNPkOk3jFdLRLLduB79FJeAz5he9hzVbB8qUFwGW5YF+v7SRkzyGamMPjWN6+H
-         nnAgH1ODU1RDrc88jMW+acNAv7TKjcpXq4S7IDoswdVyqJ3XBHf2W71jFz1X4bji/Jxs
-         0XAQ==
-X-Gm-Message-State: AO0yUKXMoGVLx7bGDWamhYbSS9xYED/J74YemFISczp+RHvx4GIQZ9kO
-        ivQmwCbSTf4Lt+o4ZwGqXr1nllj7y5pJ7U5fjc7AFA==
-X-Google-Smtp-Source: AK7set80cxJ9Kb2iR+lHvpLM2k5mPTgvJUc4GK/bdANgCT+MK42k1rMj1ZkHPioNfa6E4lhwrcgs9S6voONnZ8inhxw=
-X-Received: by 2002:a81:6c81:0:b0:527:af02:df16 with SMTP id
- h123-20020a816c81000000b00527af02df16mr317532ywc.138.1675775030572; Tue, 07
- Feb 2023 05:03:50 -0800 (PST)
+        bh=2LNCnTYQnKI2Qi+rIbkgnUL8Nmbo6Qz5VaHG00c9zYg=;
+        b=l2sKJHRZxoNnVCsK5Vh9FLaaX8vdUmklo2PWP0yYmpeG1dKi+rekV9nUsXmN7QJz21
+         Hes5dm2OYAmVsdCuakIGTS+52ZCPutuqY5VY5+nLxkN2iLEEyi4MJ8IOvEiPYe/ueBs2
+         aUZqYm9CqG1VZwK3xUeu8RC7kCenZHfHk+yvY8pDwu6CdY8RAJ6vnwnylxBPvbtsNrxl
+         KOCe+37X9oofB/lDhUrOj3PNkAOXGLUFydEoyDYgC5hLLp4sw6yw0Cb7e69525AhxLWO
+         aIM6EV6W0s+X8HlG/EvamxmV4QHBmjqszQZUcRzNPPLE2kU7wtsijzH5VRMu8jW+HDVH
+         hu8w==
+X-Gm-Message-State: AO0yUKWZVZ6f0KiGxTDWTn26zOi91WzYKnriDwxuPnmOgPEpZQP46LF8
+        tB+SsvfzdPs3jLPht2/vtBknUg==
+X-Google-Smtp-Source: AK7set9YTo6jBw+wu7vaeuAeClfkKfkEd/2ijcXBN2UJsc6YhpTX+cpVF2pNclhOp4qg7ZOFKK1Euw==
+X-Received: by 2002:a5d:4806:0:b0:2c3:ea6b:ef83 with SMTP id l6-20020a5d4806000000b002c3ea6bef83mr2957523wrq.12.1675775081619;
+        Tue, 07 Feb 2023 05:04:41 -0800 (PST)
+Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
+        by smtp.gmail.com with ESMTPSA id n9-20020a5d5989000000b002bc7fcf08ddsm11645394wri.103.2023.02.07.05.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 05:04:41 -0800 (PST)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Subject: [PATCH net 0/6] mptcp: fixes for v6.2
+Date:   Tue, 07 Feb 2023 14:04:12 +0100
+Message-Id: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
 MIME-Version: 1.0
-References: <20230202133816.4026990-1-abel.vesa@linaro.org>
- <20230202133816.4026990-5-abel.vesa@linaro.org> <6f326ed7-6799-b965-fe3a-1f046546ed44@linaro.org>
- <Y+JDQt/T7pXh2/P7@linaro.org>
-In-Reply-To: <Y+JDQt/T7pXh2/P7@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 7 Feb 2023 15:03:39 +0200
-Message-ID: <CAA8EJpq8ihMDGiJodA=AtoZOs31R6ceVrVB-9-d-vni4m8+adQ@mail.gmail.com>
-Subject: Re: [RFC v3 4/7] phy: qcom: Add QCOM SNPS eUSB2 repeater driver
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-phy@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAExM4mMC/z2OTQ6CQAyFr0K6tnEYFYhXMS46UKULBtLCxIRwd
+ 2dcuHx/X94OxipscK92UE5iMscs6lMF/UjxzShD1uCdvzjvWtwWW5Vpwsgr/t1EKvNm+JIPNui
+ x7q4dtbcQAjeQWYGMMSjFfiy0vB04FcR5IomlsSjn8e/Jo+TwPI4vG2YZcZ4AAAA=
+To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Benjamin Hesmans <benjamin.hesmans@tessares.net>,
+        Geliang Tang <geliangtang@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1639;
+ i=matthieu.baerts@tessares.net; h=from:subject:message-id;
+ bh=2gwf1t1oLdLLnLS96VoPdbQ5z+6BonFJUbLHcasVbGo=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj4kxofU3dUJPYLTFtKKn31mjpfvMSn+lCifKCJ
+ xo/SKVohx6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY+JMaAAKCRD2t4JPQmmg
+ c/UCD/9DpgQJ8kzrJ2KEQv1Xi/VGx2/EyabkZme7Vtis7wJFenjHLJAHALXsvAtTY/6mqc6YZ2+
+ 9KnFFKfL46SvYBIcrieYB1ryxDWGQlmOn+OculZ6VWyUgJZRLOzaFrLTi/LJ3iVgsfDXDMoyPWz
+ rtvyqO/nfdoeOQvPCjOuVAqHVkL7xK9lcZa27IyF1rPyLs3e80WmQ69DvcQuRkVXDTO9ZuxshV3
+ zm0LCL43YCYh8/Gjmup5/nOG0FjbuJNzzNNZyeer1y6JbrvkXv1fleuSMrYC2fJdpPpWXN8eEk3
+ 9PYliiKo2h7WT2p7jVe1L5dSZ5a46rNmuwXYiA3UKkkNJEGd5EGy09fhUBU3TuB9vHfZCiFaghk
+ kC4o+sS80nxzoJqab2g3YbcaL1Pudgzye5XvjiScEcP0CNO2dIjTWeL9zlA3968vYhE11imsGK4
+ yS8e8hDOb3meiFGAxQ4YcInNen9jFPsTIPU/1WjxZ6ciBBZL2rYZ7lwkIJlYVMYdeKjw7stSZar
+ TS07d6zvKETpCIc31rtuesf4OcCATbRBWueZx3aE6VDeavG04zAVWu7IeYEq3g3YTWZi8oDi5Yt
+ EilmNWGLySNbLcFgJhlcuTrsgZm1Y4Q1/wHOsdr4b0Qj8BT0g03A5QZDgODmLoZl1n6+knuogow
+ pe75W2YZdKn34vg==
+X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023 at 14:25, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> On 23-02-03 18:51:13, Dmitry Baryshkov wrote:
-> > On 02/02/2023 15:38, Abel Vesa wrote:
-> > > PM8550B contains a eUSB2 repeater used for making the eUSB2 from
-> > > SM8550 USB 2.0 compliant. This can be modelled SW-wise as a Phy.
-> > > So add a new phy driver for it.
-> > >
-> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > > ---
-> > >   drivers/phy/qualcomm/Kconfig                  |   9 +
-> > >   drivers/phy/qualcomm/Makefile                 |   1 +
-> > >   .../phy/qualcomm/phy-qcom-eusb2-repeater.c    | 278 ++++++++++++++++++
-> > >   3 files changed, 288 insertions(+)
-> > >   create mode 100644 drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c
-> > >
->
-> [ ... ]
->
-> > > +
-> > > +static int eusb2_repeater_init(struct phy *phy)
-> > > +{
-> > > +   struct eusb2_repeater *rptr = phy_get_drvdata(phy);
-> > > +   const struct eusb2_repeater_init_tbl *init_tbl = rptr->cfg->init_tbl;
-> > > +   int num = rptr->cfg->init_tbl_num;
-> > > +   int ret = 0;
-> > > +   u32 val;
-> > > +   int i;
-> > > +
-> > > +   ret = regulator_bulk_enable(rptr->cfg->num_vregs, rptr->vregs);
-> > > +   if (ret)
-> > > +           return ret;
-> > > +
-> > > +   regmap_update_bits(rptr->regmap, rptr->base + EUSB2_EN_CTL1,
-> > > +                           EUSB2_RPTR_EN, EUSB2_RPTR_EN);
-> > > +
-> > > +   for (i = 0; i < num; i++)
-> > > +           regmap_update_bits(rptr->regmap,
-> > > +                                   rptr->base + init_tbl[i].offset,
-> > > +                                   init_tbl[i].val, init_tbl[i].val);
-> >
-> > I'd move this to a separate function. Then you can use it in the set_mode()
-> > too.
-> >
->
-> I don't think this is necessary in set_mode.
+Patch 1 clears resources earlier if there is no more reasons to keep
+MPTCP sockets alive.
 
-It's not necessary. However as set_mode() is also a sequence of simple
-register updates, it might be easy to have everything as an
-offset-mask-value table.
+Patches 2 and 3 fix some locking issues visible in some rare corner
+cases: the linked issues should be quite hard to reproduce.
 
->
-> > > +
-> > > +   ret = regmap_read_poll_timeout(rptr->regmap,
-> > > +                                   rptr->base + EUSB2_RPTR_STATUS, val,
-> > > +                                   val & RPTR_OK, 10, 5);
-> > > +   if (ret)
-> > > +           dev_err(rptr->dev, "initialization timed-out\n");
-> > > +
-> > > +   return ret;
-> > > +}
-> > > +
->
-> [ ... ]
+Patch 4 makes sure subflows are correctly cleaned after the end of a
+connection.
 
+Patch 5 and 6 improve the selftests stability when running in a slow
+environment by transfering data for a longer period on one hand and by
+stopping the tests when all expected events have been observed on the
+other hand.
 
+All these patches fix issues introduced before v6.2.
 
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+Matthieu Baerts (1):
+      selftests: mptcp: stop tests earlier
+
+Paolo Abeni (5):
+      mptcp: do not wait for bare sockets' timeout
+      mptcp: fix locking for setsockopt corner-case
+      mptcp: fix locking for in-kernel listener creation
+      mptcp: be careful on subflow status propagation on errors
+      selftests: mptcp: allow more slack for slow test-case
+
+ net/mptcp/pm_netlink.c                          | 10 ++++++----
+ net/mptcp/protocol.c                            |  9 +++++++++
+ net/mptcp/sockopt.c                             | 11 +++++++++--
+ net/mptcp/subflow.c                             | 12 ++++++++++--
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 22 +++++++++++++++++-----
+ 5 files changed, 51 insertions(+), 13 deletions(-)
+---
+base-commit: 811d581194f7412eda97acc03d17fc77824b561f
+change-id: 20230207-upstream-net-20230207-various-fix-6-2-1848a75bbbe6
+
+Best regards,
 -- 
-With best wishes
-Dmitry
+Matthieu Baerts <matthieu.baerts@tessares.net>
+
