@@ -2,65 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF4E68CEDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5988568CEE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjBGFZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S229944AbjBGF0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:26:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjBGFZV (ORCPT
+        with ESMTP id S229832AbjBGFZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 00:25:21 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4864A23132
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 21:25:19 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id DB13E604ED;
-        Tue,  7 Feb 2023 06:25:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1675747515; bh=3E8TFqbFq3Z1MWaXlNmNm2GlyZvKdBVRCAH2zqj61I4=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=r83j8VnQUTxjdPFhCFciax37l41KqnpBz0jhc78TlWeb1rqTveOFV6eky/mcPRrR0
-         RUAQI2TkP5zc0krXDTRB5RtP6LRXP9TMbJEjKPMFwJxeEoL55uE779Xr40HW5efqLk
-         el2DGDKROf8dXAxUTHo5pyXUbRVaracVDB/VQwQjSaPJlta1wfpjBnjTQsxRQx+2UQ
-         VNiJrCMAJBBpwmTUZzhr2EpSgmPX1GM3mdQ2ZQbK0bXzm8A5gfA3WQIvFZaXmf82cn
-         thklAGx4kXgGExeBeVUC/nt6yb+vEQLnsA6dUZPIVOzVYpQoLyMfdWb2+kBLrVOMnv
-         pDmXDr2VfDbWw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id t0uhjkFo6AJS; Tue,  7 Feb 2023 06:25:13 +0100 (CET)
-Received: from [192.168.1.4] (unknown [77.237.109.125])
-        by domac.alu.hr (Postfix) with ESMTPSA id DA72E604EA;
-        Tue,  7 Feb 2023 06:25:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1675747513; bh=3E8TFqbFq3Z1MWaXlNmNm2GlyZvKdBVRCAH2zqj61I4=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=KgUq7+BORimr8TAb6OYDkudoUNQCSiQ5paDpErlnxouTAaLTi/MGT8aDNtjNbV9In
-         mk6v3XraSG2BBudTKQ074GqRVxeorjEC1FnZW+Dq5j7T+HGeeLOVgMblZYEW9wh4O9
-         pNDWI8q2I+r8XMyrmfj1a8ClDdv4YzTTIiw5sepeZ3MozlnITMck8MOJ3KJcGp2GH6
-         XRqcyj20nC1hs8XjjNBSwx10I7CxJrOPHMaZieg6/8/b7tZIDPLPDGNbA4ndt9mgp+
-         LZGJHyZB8xPrJtDXEJXR8TxjrRGMQRLclkQRRHcBF/lKkbjnGpfvmzlCeHaSW/qgd0
-         3/S12mswyf+AA==
-Message-ID: <370700e7-6e93-d1ad-1215-81caccd50b5d@alu.unizg.hr>
-Date:   Tue, 7 Feb 2023 06:25:12 +0100
+        Tue, 7 Feb 2023 00:25:59 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174D323337;
+        Mon,  6 Feb 2023 21:25:55 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3173RcDC031589;
+        Tue, 7 Feb 2023 05:25:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=MDDY2xtAagBPSEC6o2U7J4JQZ3D1QDD9r7/0FqNQWgE=;
+ b=bnVp5EiJvF8XQTF7p6NDpZ8zdthL6lGbH3IZVQTjJqQG8kXhRDOr34/7yYbOPc3X8g3/
+ SVMjyiFG6TNWbCApCuzAfzZEdBW8XK0c4L/dAoCqVB8jekx+j+D9Q41AKfT9zT8WYcda
+ N6xeXOCz+TQTMJeFzWHycC+D74LJrfvnh98KwO/Ec33XqqzlcHDkEjJUUOwHS7yy6fcE
+ RL2Q6n17/tJ8vBXkxAHsAy/7vdPy8YVGkZvfGgLxOV2ayrJDJbQWur3kedLyZm1JGRPx
+ vDpVe97+8D9ON/VTZGxqNcRf6C/5pggzOSbj0NPaFarbF5VCLlpMy2a2aSFk5O8bSUwB wA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkda0v1s4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 05:25:44 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 31751726028763;
+        Tue, 7 Feb 2023 05:25:44 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkda0v1rf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 05:25:44 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316HgKLO023711;
+        Tue, 7 Feb 2023 05:25:42 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06u5ja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 05:25:42 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3175Pd5R25100566
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Feb 2023 05:25:39 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CDB0020049;
+        Tue,  7 Feb 2023 05:25:39 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 48BC620040;
+        Tue,  7 Feb 2023 05:25:39 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Feb 2023 05:25:39 +0000 (GMT)
+Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 6925A6010B;
+        Tue,  7 Feb 2023 16:25:35 +1100 (AEDT)
+Message-ID: <1be52a01d4d467300b9197f384498174a6942c10.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 19/25] powerpc/pseries: Make caller pass buffer to
+ plpks_read_var()
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com,
+        Michael Ellerman <mpe@ellerman.id.au>
+Date:   Tue, 07 Feb 2023 16:25:35 +1100
+In-Reply-To: <5c335c29-ecb6-70eb-ab8e-caadde774434@linux.ibm.com>
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+         <20230131063928.388035-20-ajd@linux.ibm.com>
+         <5c335c29-ecb6-70eb-ab8e-caadde774434@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: [PATCH RFC] tick/nohz: fix data races in get_cpu_idle_time_us()
-To:     Yu Liao <liaoyu15@huawei.com>, fweisbec@gmail.com,
-        tglx@linutronix.de, mingo@kernel.org
-Cc:     liwei391@huawei.com, adobriyan@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <20230128020051.2328465-1-liaoyu15@huawei.com>
-Content-Language: en-US, hr
-In-Reply-To: <20230128020051.2328465-1-liaoyu15@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: keLy3LWDQ3lADihVWqrZMz-wTfKF0X8V
+X-Proofpoint-ORIG-GUID: 7rgOvipZPeOTAfmpqpzrtsmAs6LUkjzc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=743 phishscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 impostorscore=0 spamscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302070044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,291 +104,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,Yu Liao,
+On Tue, 2023-01-31 at 11:38 -0500, Stefan Berger wrote:
+>=20
+>=20
+> On 1/31/23 01:39, Andrew Donnellan wrote:
+> > Currently, plpks_read_var() allocates a buffer to pass to the
+> > H_PKS_READ_OBJECT hcall, then allocates another buffer, of the
+> > caller's
+>=20
+>=20
+> -> buffer of the (no comma)
 
-On 28. 01. 2023. 03:00, Yu Liao wrote:
-> selftest/proc/proc-uptime-001 complains:
->   Euler:/mnt # while true; do ./proc-uptime-001; done
->   proc-uptime-001: proc-uptime-001.c:41: main: Assertion `i1 >= i0' failed.
->   proc-uptime-001: proc-uptime-001.c:41: main: Assertion `i1 >= i0' failed.
-> 
-> /proc/uptime should be monotonically increasing. This occurs because
-> the data races between get_cpu_idle_time_us and
-> tick_nohz_stop_idle/tick_nohz_start_idle, for example:
-> 
-> CPU0                        CPU1
-> get_cpu_idle_time_us
-> 
->                             tick_nohz_idle_exit
->                               now = ktime_get();
->                               tick_nohz_stop_idle
->                                 update_ts_time_stats
->                                   delta = ktime_sub(now, ts->idle_entrytime);
->                                   ts->idle_sleeptime = ktime_add(ts->idle_sleeptime, delta)
->                                   ts->idle_entrytime = now
-> 
-> now = ktime_get();
-> if (ts->idle_active && !nr_iowait_cpu(cpu)) {
->     ktime_t delta = ktime_sub(now, ts->idle_entrytime);
->     idle = ktime_add(ts->idle_sleeptime, delta);
->     //idle is slightly greater than the actual value
-> } else {
->     idle = ts->idle_sleeptime;
-> }
->                             ts->idle_active = 0
-> 
-> After this, idle = idle_sleeptime(actual idle value) + now(CPU0) - now(CPU1).
-> If get_cpu_idle_time_us() is called immediately after ts->idle_active = 0,
-> only ts->idle_sleeptime is returned, which is smaller than the previously
-> read one, resulting in a non-monotonically increasing idle time. In
-> addition, there are other data race scenarios not listed here.
-> 
-> This patch introduce a lock to prevent data races.
-> 
-> Fixes: a130e8fbc7de ("fs/proc/uptime.c: Fix idle time reporting in /proc/uptime")
-> Signed-off-by: Yu Liao <liaoyu15@huawei.com>
-> ---
->  kernel/time/tick-sched.c | 15 ++++++++++++++-
->  kernel/time/tick-sched.h |  1 +
->  2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index b0e3c9205946..ad7d47098a58 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -36,7 +36,9 @@
->  /*
->   * Per-CPU nohz control structure
->   */
-> -static DEFINE_PER_CPU(struct tick_sched, tick_cpu_sched);
-> +static DEFINE_PER_CPU(struct tick_sched, tick_cpu_sched) = {
-> +	.idle_time_lock = __SPIN_LOCK_UNLOCKED(tick_cpu_sched.idle_time_lock),
-> +};
->  
->  struct tick_sched *tick_get_tick_sched(int cpu)
->  {
-> @@ -661,16 +663,24 @@ update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now, u64 *last_upda
->  
->  static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
->  {
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&ts->idle_time_lock, flags);
->  	update_ts_time_stats(smp_processor_id(), ts, now, NULL);
->  	ts->idle_active = 0;
-> +	spin_unlock_irqrestore(&ts->idle_time_lock, flags);
->  
->  	sched_clock_idle_wakeup_event();
->  }
->  
->  static void tick_nohz_start_idle(struct tick_sched *ts)
->  {
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&ts->idle_time_lock, flags);
->  	ts->idle_entrytime = ktime_get();
->  	ts->idle_active = 1;
-> +	spin_unlock_irqrestore(&ts->idle_time_lock, flags);
->  	sched_clock_idle_sleep_event();
->  }
->  
-> @@ -691,12 +701,14 @@ static void tick_nohz_start_idle(struct tick_sched *ts)
->  u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time)
->  {
->  	struct tick_sched *ts = &per_cpu(tick_cpu_sched, cpu);
-> +	unsigned long flags;
->  	ktime_t now, idle;
->  
->  	if (!tick_nohz_active)
->  		return -1;
->  
->  	now = ktime_get();
-> +	spin_lock_irqsave(&ts->idle_time_lock, flags);
->  	if (last_update_time) {
->  		update_ts_time_stats(cpu, ts, now, last_update_time);
->  		idle = ts->idle_sleeptime;
-> @@ -709,6 +721,7 @@ u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time)
->  			idle = ts->idle_sleeptime;
->  		}
->  	}
-> +	spin_unlock_irqrestore(&ts->idle_time_lock, flags);
->  
->  	return ktime_to_us(idle);
->  
-> diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-> index 504649513399..a64d4781e7af 100644
-> --- a/kernel/time/tick-sched.h
-> +++ b/kernel/time/tick-sched.h
-> @@ -81,6 +81,7 @@ struct tick_sched {
->  	atomic_t			tick_dep_mask;
->  	unsigned long			last_tick_jiffies;
->  	unsigned int			stalled_jiffies;
-> +	spinlock_t			idle_time_lock;
->  };
->  
->  extern struct tick_sched *tick_get_tick_sched(int cpu);
-
-Thank you for the patch RFC.
-
-I can confirm that v6.2-rc7 still exhibits the issue:
-marvin@marvin-IdeaPad-3-15ITL6:~/linux/kernel/linux_torvalds/tools/testing/selftests/proc$ while true; do ./proc-uptime-001; done
-proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
-Aborted (core dumped)
-proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
-Aborted (core dumped)
-proc-uptime-001: proc-uptime-001.c:39: main: Assertion `i1 >= i0' failed.
-Aborted (core dumped)
-^C
-marvin@marvin-IdeaPad-3-15ITL6:~/linux/kernel/linux_torvalds/tools/testing/selftests/proc$ uname -rms
-Linux 6.2.0-rc7-mglru-kmemlk x86_64
-marvin@marvin-IdeaPad-3-15ITL6:~/linux/kernel/linux_torvalds/tools/testing/selftests/proc$ 
-
-Your patch, however, apparently fixes the problem.
-
-Rebooting with the patched kernel eliminates the Assertion above, on the same hardware platform.
-
-All the programs in the tools/testing/seltest/proc now appear to pass the test:
-
-make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc'
-TAP version 13
-1..21
-# selftests: proc: fd-001-lookup
-ok 1 selftests: proc: fd-001-lookup
-# selftests: proc: fd-002-posix-eq
-ok 2 selftests: proc: fd-002-posix-eq
-# selftests: proc: fd-003-kthread
-ok 3 selftests: proc: fd-003-kthread
-# selftests: proc: proc-loadavg-001
-ok 4 selftests: proc: proc-loadavg-001
-# selftests: proc: proc-empty-vm
-ok 5 selftests: proc: proc-empty-vm
-# selftests: proc: proc-pid-vm
-ok 6 selftests: proc: proc-pid-vm
-# selftests: proc: proc-self-map-files-001
-ok 7 selftests: proc: proc-self-map-files-001
-# selftests: proc: proc-self-map-files-002
-ok 8 selftests: proc: proc-self-map-files-002
-# selftests: proc: proc-self-syscall
-ok 9 selftests: proc: proc-self-syscall
-# selftests: proc: proc-self-wchan
-ok 10 selftests: proc: proc-self-wchan
-# selftests: proc: proc-subset-pid
-ok 11 selftests: proc: proc-subset-pid
-# selftests: proc: proc-tid0
-ok 12 selftests: proc: proc-tid0
-# selftests: proc: proc-uptime-001
-ok 13 selftests: proc: proc-uptime-001
-# selftests: proc: proc-uptime-002
-ok 14 selftests: proc: proc-uptime-002
-# selftests: proc: read
-ok 15 selftests: proc: read
-# selftests: proc: self
-ok 16 selftests: proc: self
-# selftests: proc: setns-dcache
-ok 17 selftests: proc: setns-dcache
-# selftests: proc: setns-sysvipc
-ok 18 selftests: proc: setns-sysvipc
-# selftests: proc: thread-self
-ok 19 selftests: proc: thread-self
-# selftests: proc: proc-multiple-procfs
-ok 20 selftests: proc: proc-multiple-procfs
-# selftests: proc: proc-fsconfig-hidepid
-ok 21 selftests: proc: proc-fsconfig-hidepid
-make[2]: Leaving directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/proc'
-
-What was applied was:
-
-# git diff
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index b0e3c9205946..ad7d47098a58 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -36,7 +36,9 @@
- /*
-  * Per-CPU nohz control structure
-  */
--static DEFINE_PER_CPU(struct tick_sched, tick_cpu_sched);
-+static DEFINE_PER_CPU(struct tick_sched, tick_cpu_sched) = {
-+       .idle_time_lock = __SPIN_LOCK_UNLOCKED(tick_cpu_sched.idle_time_lock),
-+};
- 
- struct tick_sched *tick_get_tick_sched(int cpu)
- {
-@@ -661,16 +663,24 @@ update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now, u64 *last_upda
- 
- static void tick_nohz_stop_idle(struct tick_sched *ts, ktime_t now)
- {
-+       unsigned long flags;
-+
-+       spin_lock_irqsave(&ts->idle_time_lock, flags);
-        update_ts_time_stats(smp_processor_id(), ts, now, NULL);
-        ts->idle_active = 0;
-+       spin_unlock_irqrestore(&ts->idle_time_lock, flags);
- 
-        sched_clock_idle_wakeup_event();
- }
- 
- static void tick_nohz_start_idle(struct tick_sched *ts)
- {
-+       unsigned long flags;
-+
-+       spin_lock_irqsave(&ts->idle_time_lock, flags);
-        ts->idle_entrytime = ktime_get();
-        ts->idle_active = 1;
-+       spin_unlock_irqrestore(&ts->idle_time_lock, flags);
-        sched_clock_idle_sleep_event();
- }
- 
-@@ -691,12 +701,14 @@ static void tick_nohz_start_idle(struct tick_sched *ts)
- u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time)
- {
-        struct tick_sched *ts = &per_cpu(tick_cpu_sched, cpu);
-+       unsigned long flags;
-        ktime_t now, idle;
- 
-        if (!tick_nohz_active)
-                return -1;
- 
-        now = ktime_get();
-+       spin_lock_irqsave(&ts->idle_time_lock, flags);
-        if (last_update_time) {
-                update_ts_time_stats(cpu, ts, now, last_update_time);
-                idle = ts->idle_sleeptime;
-@@ -709,6 +721,7 @@ u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time)
-                        idle = ts->idle_sleeptime;
-                }
-        }
-+       spin_unlock_irqrestore(&ts->idle_time_lock, flags);
- 
-        return ktime_to_us(idle);
- 
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index 504649513399..a64d4781e7af 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -81,6 +81,7 @@ struct tick_sched {
-        atomic_t                        tick_dep_mask;
-        unsigned long                   last_tick_jiffies;
-        unsigned int                    stalled_jiffies;
-+       spinlock_t                      idle_time_lock;
- };
- 
- extern struct tick_sched *tick_get_tick_sched(int cpu);
+I'll just remove that clause entirely, it's not really necessary
 
 
-Feel free to add: Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-
-Regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
-
+--=20
+Andrew Donnellan    OzLabs, ADL Canberra
+ajd@linux.ibm.com   IBM Australia Limited
