@@ -2,134 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EADF68D117
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22A468D11C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjBGH4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S229865AbjBGH5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 02:57:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBGH4h (ORCPT
+        with ESMTP id S229500AbjBGH5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:56:37 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE533ABF;
-        Mon,  6 Feb 2023 23:56:36 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id z5so15778770qtn.8;
-        Mon, 06 Feb 2023 23:56:36 -0800 (PST)
+        Tue, 7 Feb 2023 02:57:20 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD51228D30
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 23:57:18 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id dr8so40918987ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 23:57:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hjsB+AGSljRnQpA+58k97XCvwuzQDyJ3UN6KNCrj/C4=;
+        b=pN1+ghys/kOt1G6oDLNcsqOKPC0GBRpCTvNgXY4pyab/kLCRMENic/vyj0vzi6c4/8
+         EoK+/lRrHx8BJz0JTLDrb9Dz+QA3DoX++R1OGxa8vGW7ACwFZa32OhCovDBYjfzoazTe
+         NXsZHaS5Ax+Q1VrttS0Zth3l3wfCRshuKzh8I6SOVmJvPR7qCWXfuN7DwSJQ6zdJL76W
+         kINDEA6JlaqlX8mYnrWqgkwZGlv+GY8XnvALqebRPKdzzDWeQaFm4WLOO5W0DoW01fop
+         PSaXOfVrbeXomDPbvO52xD6979y7rAagSmhzJQWmFpk8/Drjov4kOqJ+YAAtCpizkXUr
+         voIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X2wYlj6gN2naNv6gpoblV6OOQNS/n19UAH0L94v4JNA=;
-        b=wUPhG2bN1r5NsnmQHW5uV+uFZJu0ulIEuhmFktxC08fwn1do48LRBLUTfw/Mn16tAh
-         op8NJT1ECr2pxKEEIL8fBSth5R1K5OJUdRyRBAL9q/yL1TYa5L1ohz5m5+qUw266MpxC
-         19k11pIIoiELRG44AnGRmCbEU4ADTFSu5c5qJoRPBF0uup6wqbyO7eopTCtLYCelvPTF
-         aa+Wc+q7O5foi1L2KdzbT4HRk531X/mHRAc+AzdbpS3xi7bYKGZZi+T3BLO3SxZC0HnS
-         Q0H3nQymUbi4qR2/fQoErzUNYOobkPiGNDoc8rex+msCMl3kjY4GzWYnfqXA2IjxHymB
-         /C+w==
-X-Gm-Message-State: AO0yUKXHpCKZnfDcwkdtg3334D2hdnKxaoXI/6fYMXhLwmHr3EQuIzmv
-        BYmaIVvAZT3tNfPvUQTn0hw/t1SkRImtQQ==
-X-Google-Smtp-Source: AK7set/GsXzUtdquy75y0skRTgxKoi8REMlB3sUQ/kxGRwkiKEXp2fARGeiFzvznbAB8sWCyRdNxPQ==
-X-Received: by 2002:ac8:5949:0:b0:3b8:41f4:94e7 with SMTP id 9-20020ac85949000000b003b841f494e7mr3710067qtz.17.1675756595464;
-        Mon, 06 Feb 2023 23:56:35 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id e18-20020ac86712000000b003b9a505627bsm8872489qtp.79.2023.02.06.23.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 23:56:35 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5254e8994e8so140830827b3.6;
-        Mon, 06 Feb 2023 23:56:34 -0800 (PST)
-X-Received: by 2002:a5b:508:0:b0:8a3:59a4:340e with SMTP id
- o8-20020a5b0508000000b008a359a4340emr269046ybp.604.1675756583781; Mon, 06 Feb
- 2023 23:56:23 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hjsB+AGSljRnQpA+58k97XCvwuzQDyJ3UN6KNCrj/C4=;
+        b=kJdIX9hFNBQWNTLGc+b39Ftnb+l0mnNK0x9UoyzUST+sKs/gfjcCPyEPAtIMSJsBpt
+         hjUYAVxx7ffYo7okx/pKMaorwiIyBo5zpUPB1/knN7WB+DouV0gCyAx4xn7czZKxfjqV
+         FyRZMS4+duGHNAbjnjJgUfkrrXqytcp+a4q9LF9LnHKx9yql7kW5JGUgVFhzSdqroXyV
+         4vH5yyy/dr0XL48gkC0tNjIyuVpRBfpC/1/saD8tRa+jz3qay0RsGDxO68nu1L2XXlFc
+         G2NGCanL7wU/nlmxr/mUixMuhw33dvptyUwTQELLEE0N8VOn0UTjYIz7Rv049t3ClbGT
+         F59Q==
+X-Gm-Message-State: AO0yUKWvv4HLDIkhqeLMmlHKt6lKYlZ1XvXMeQOCJGJr6kp7qxtGNG4n
+        j2933ZeC71OywhZHdfCKcqaygCjaZ8cj7UHfewB0H8Ax9yJQ6Qyl
+X-Google-Smtp-Source: AK7set9V3pgczMpgtevwU7e3NotwVmoDa6/EjWoWewDNkfPAzcq1B9PF5l3vDjS6m4TKEpRPyMZk5erMRliHmTK98EQ=
+X-Received: by 2002:a17:906:38c2:b0:88c:f92e:a13e with SMTP id
+ r2-20020a17090638c200b0088cf92ea13emr593049ejd.172.1675756637037; Mon, 06 Feb
+ 2023 23:57:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20230207014207.1678715-1-saravanak@google.com> <20230207014207.1678715-4-saravanak@google.com>
-In-Reply-To: <20230207014207.1678715-4-saravanak@google.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Feb 2023 08:56:11 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVRq-+zMuMPMuqLt45t5X78P4nRWZ-cJe8fk=1TsugTYA@mail.gmail.com>
-Message-ID: <CAMuHMdVRq-+zMuMPMuqLt45t5X78P4nRWZ-cJe8fk=1TsugTYA@mail.gmail.com>
-Subject: Re: [PATCH v3 03/12] soc: renesas: Move away from using OF_POPULATED
- for fw_devlink
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 7 Feb 2023 13:27:05 +0530
+Message-ID: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
+Subject: x86/include/asm/arch_hweight.h:49:15: error: invalid input size for
+ constraint 'D'
+To:     llvm@lists.linux.dev, open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     borislav.petkov@amd.com, "H. Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Tony Lindgren <tony@atomide.com>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-acpi@vger.kernel.org
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 2:42 AM Saravana Kannan <saravanak@google.com> wrote:
-> The OF_POPULATED flag was set to let fw_devlink know that the device
-> tree node will not have a struct device created for it. This information
-> is used by fw_devlink to avoid deferring the probe of consumers of this
-> device tree node.
->
-> Let's use fwnode_dev_initialized() instead because it achieves the same
-> effect without using OF specific flags. This allows more generic code to
-> be written in driver core.
->
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Following Build regressions warnings / errors noticed on Linux next-20230207.
 
-You've missed my earlier:
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Regressions found on x86_64:
 
-Gr{oetje,eeting}s,
+    - build/clang-15-lkftconfig-compat
+    - build/clang-nightly-lkftconfig
+    - build/clang-15-lkftconfig
+    - build/clang-15-lkftconfig-kcsan
+    - build/clang-lkftconfig
 
-                        Geert
+In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+In file included from include/linux/kernel.h:22:
+In file included from include/linux/bitops.h:68:
+In file included from arch/x86/include/asm/bitops.h:420:
+arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size
+for constraint 'D'
+                         : REG_IN (w));
+                                   ^
+In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+In file included from include/linux/kernel.h:25:
+In file included from include/linux/math.h:6:
+arch/x86/include/asm/div64.h:85:34: error: invalid output size for
+constraint '=a'
+        asm ("mulq %2; divq %3" : "=a" (q)
+                                        ^
+2 errors generated.
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Following config diff found.
+ + CONFIG_COMPAT_WARN_32BIT_FILESYSTEM_ACCESS=y
+
+Build details link,
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230207/testrun/14611359/suite/build/test/clang-lkftconfig/details/
+
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+tuxmake \
+ --runtime podman \
+ --target-arch x86_64 \
+ --toolchain clang-15 \
+ --kconfig defconfig \
+ --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
+\
+ --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
+\
+ --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
+\
+ --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
+\
+ --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
+\
+ --kconfig-add CONFIG_IGB=y \
+ --kconfig-add CONFIG_UNWINDER_FRAME_POINTER=y LLVM=1 LLVM_IAS=1
+
 
 --
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Linaro LKFT
+https://lkft.linaro.org
