@@ -2,368 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2668568D286
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:19:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9675168D29D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjBGJTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 04:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
+        id S231664AbjBGJU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:20:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjBGJTd (ORCPT
+        with ESMTP id S231567AbjBGJUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:19:33 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8981F491;
-        Tue,  7 Feb 2023 01:19:31 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19887660206D;
-        Tue,  7 Feb 2023 09:19:28 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675761569;
-        bh=e8Qbiy3FLGBXCTtjU1xYNBFtYCGotU30DjCg6KnlbPc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=i3muvc0fi156lot201IdTBZqn4ICyWuIycz8wwpeaIvtskpN4RBMNrvMbGNLBZMXv
-         mXYNFRR2S1zPnVKZTMxokjRZTeBiuLxQTE/QFfWlCw4YtT97AaYbGb/rJvpw9WVdIH
-         6JlRnyZllS9E/EtHAZ6iJCZzqmOzkBldGUfq5ph2oMAHwQWDDdlPV/RsuZuguAjqTR
-         HKMATBor5Drl+cO3uNkUY7g2R/RjB5AP7L6l3bbOEb53eXQ9vu+Nr0fgrUk/P79oC/
-         NFDTB+ieEr087PhbFkyAlssTbBgJNAz88RdkX+hoefrtPKNkXBHXlcrU4E4x/VMeRz
-         Mo33XTXZW1ZEA==
-Message-ID: <ea5b8fd0-579e-12e1-d9ca-775b6db30f69@collabora.com>
-Date:   Tue, 7 Feb 2023 10:19:25 +0100
+        Tue, 7 Feb 2023 04:20:30 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A51624C96
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:20:24 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id w20so10305468pfn.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 01:20:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=616h4CPqRb9+yGgK1+zMae6bPtCXWD1O+JIiZJuuAN4=;
+        b=POuFDmmZM+HsSNu3Ig6MrYzwr3GM4CyOQdDe7V11yiwyZPXSCPNLzrlt076FyPn9N3
+         Ra3OCljjkArBP9GamaRLVX37vdcbOskg+wqXX/KuFLOrm5AYkm4n/TmA6Zn3pxImfTlT
+         OL0CV63kV1gNyVRmGC8U56R9ST6dZfBwW6N/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=616h4CPqRb9+yGgK1+zMae6bPtCXWD1O+JIiZJuuAN4=;
+        b=MLh8rdkkiUOp0mX8gRMfp6B9jZ1dXElHVZdcTU799Nn/Df/PZOl1XRcz+/3oGFSE6J
+         bUfH1G7J6UvIg4WbDM/5on4hlb6FD/+c0UR4iltBkK+1QUtC3YxZsYniBTNeZISlteUX
+         OvB9gfgyzhTb4bc+V4OldaGeVenYmS4U5yNhZMdHqL1H8Dwii7tQDDv1jwMAimox1beR
+         KrGLSQ2nwQjGb7t5Wry3AZByCH7hAqCVyX3767aAJaa6nIG6L5D2ZBJ8n6lUKVe5H98N
+         D29wU4wKaslFrt3vj46Tkw3dlceY538qo+w9n8EoWbrORQdJSDOEVeCSueLHns3yGjnx
+         +rNw==
+X-Gm-Message-State: AO0yUKWAbdG3z55mmALq+f9eJsfpooCvmiiELbYJ2neDMhRJ2i5xmaOd
+        yP3kLNZZEYgKCyN590Wf75fULU6ywcYL+xZtJjGI
+X-Google-Smtp-Source: AK7set8u2ObsZbLlP0iS0NBdphAYXHsP07SB/g80AsW6PNgCWskBsHThfsh9+Xa6vPihwEdNRDQUptXNmQK/81bFsSg=
+X-Received: by 2002:a63:7a56:0:b0:4c7:ef33:bbe1 with SMTP id
+ j22-20020a637a56000000b004c7ef33bbe1mr415970pgn.73.1675761624040; Tue, 07 Feb
+ 2023 01:20:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 00/45] MediaTek clocks: full module build and cleanups
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
- <847332fb-5f10-a8dd-4203-a1906973d0ff@collabora.com>
- <CAGXv+5GUaWzoPZuO3ZUX60exZeg2S=91u-i1bGOraV1AcWP9Og@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5GUaWzoPZuO3ZUX60exZeg2S=91u-i1bGOraV1AcWP9Og@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230201231250.3806412-1-atishp@rivosinc.com> <20230201231250.3806412-8-atishp@rivosinc.com>
+ <20230202170345.uwi72dauzunlzxex@orel> <CAOnJCUJfc8y729GiUdtqhv+PZu8v9rH+kfpwPwdW=GQPEs9FNw@mail.gmail.com>
+ <CAOnJCUKn_pLKqYO71S6MrZd=rnTdSShZk+XksX2uxTiVtthmTA@mail.gmail.com>
+ <20230206092204.aiyo43uxlm4xdmgn@orel> <20230206113945.vcnrokltvzgifsqu@orel>
+In-Reply-To: <20230206113945.vcnrokltvzgifsqu@orel>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 7 Feb 2023 01:20:12 -0800
+Message-ID: <CAOnJCUK8FUFYGgTh0Zx=_nN8BwZ1rnCXccg212y=dVKkOXuwww@mail.gmail.com>
+Subject: Re: [PATCH v4 07/14] RISC-V: KVM: Add skeleton support for perf
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/02/23 10:04, Chen-Yu Tsai ha scritto:
-> On Mon, Feb 6, 2023 at 11:38 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 06/02/23 16:28, AngeloGioacchino Del Regno ha scritto:
->>> This is part 2 of the "MediaTek clocks cleanups and improvements" series,
->>> which was already picked.
->>>
->>> If reading this full cover letter is too boring for you, here's a short
->>> summary of the changes of this series:
->>>    - Added mtk_clk_pdev_probe() for mtk-mmsys probed clocks;
->>>    - Added divider clock support to common probe mechanism;
->>>    - Various cleanups here and there;
->>>    - Converted most clock drivers to platform_driver;
->>>    - MediaTek clocks can now be built as modules.
->>>
->>> NOTE: Applies on top of [1].
->>>
->>>
-> 
-> Something broke on MT8183 Juniper, though I'm not sure what. It ended up
-> crashing in mtk-cpufreq in a badly written error path. Once that was fixed
-> it was endlessly looping through deferred probe. Seems like mtk-cpufreq
-> was not able to get all its resources.
-> 
+On Mon, Feb 6, 2023 at 3:39 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Mon, Feb 06, 2023 at 10:22:04AM +0100, Andrew Jones wrote:
+> > On Sat, Feb 04, 2023 at 11:37:47PM -0800, Atish Patra wrote:
+> > > On Fri, Feb 3, 2023 at 12:47 AM Atish Patra <atishp@atishpatra.org> wrote:
+> > > >
+> > > > On Thu, Feb 2, 2023 at 9:03 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> > > > >
+> > > > > On Wed, Feb 01, 2023 at 03:12:43PM -0800, Atish Patra wrote:
+> > > > > > This patch only adds barebone structure of perf implementation. Most of
+> > > > > > the function returns zero at this point and will be implemented
+> > > > > > fully in the future.
+> > > > > >
+> > > > > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> > > > > > ---
+> > > > > >  arch/riscv/include/asm/kvm_host.h     |   4 +
+> > > > > >  arch/riscv/include/asm/kvm_vcpu_pmu.h |  78 +++++++++++++++
+> > > > > >  arch/riscv/kvm/Makefile               |   1 +
+> > > > > >  arch/riscv/kvm/vcpu.c                 |   7 ++
+> > > > > >  arch/riscv/kvm/vcpu_pmu.c             | 136 ++++++++++++++++++++++++++
+> > > > > >  5 files changed, 226 insertions(+)
+> > > > > >  create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > > > > >  create mode 100644 arch/riscv/kvm/vcpu_pmu.c
+> > > > > >
+> > > > > > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+> > > > > > index 93f43a3..b90be9a 100644
+> > > > > > --- a/arch/riscv/include/asm/kvm_host.h
+> > > > > > +++ b/arch/riscv/include/asm/kvm_host.h
+> > > > > > @@ -18,6 +18,7 @@
+> > > > > >  #include <asm/kvm_vcpu_insn.h>
+> > > > > >  #include <asm/kvm_vcpu_sbi.h>
+> > > > > >  #include <asm/kvm_vcpu_timer.h>
+> > > > > > +#include <asm/kvm_vcpu_pmu.h>
+> > > > > >
+> > > > > >  #define KVM_MAX_VCPUS                        1024
+> > > > > >
+> > > > > > @@ -228,6 +229,9 @@ struct kvm_vcpu_arch {
+> > > > > >
+> > > > > >       /* Don't run the VCPU (blocked) */
+> > > > > >       bool pause;
+> > > > > > +
+> > > > > > +     /* Performance monitoring context */
+> > > > > > +     struct kvm_pmu pmu_context;
+> > > > > >  };
+> > > > > >
+> > > > > >  static inline void kvm_arch_hardware_unsetup(void) {}
+> > > > > > diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > > > > > new file mode 100644
+> > > > > > index 0000000..e2b4038
+> > > > > > --- /dev/null
+> > > > > > +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> > > > > > @@ -0,0 +1,78 @@
+> > > > > > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > > > > > +/*
+> > > > > > + * Copyright (c) 2023 Rivos Inc
+> > > > > > + *
+> > > > > > + * Authors:
+> > > > > > + *     Atish Patra <atishp@rivosinc.com>
+> > > > > > + */
+> > > > > > +
+> > > > > > +#ifndef __KVM_VCPU_RISCV_PMU_H
+> > > > > > +#define __KVM_VCPU_RISCV_PMU_H
+> > > > > > +
+> > > > > > +#include <linux/perf/riscv_pmu.h>
+> > > > > > +#include <asm/kvm_vcpu_sbi.h>
+> > > > > > +#include <asm/sbi.h>
+> > > > > > +
+> > > > > > +#ifdef CONFIG_RISCV_PMU_SBI
+> > > > > > +#define RISCV_KVM_MAX_FW_CTRS        32
+> > > > > > +
+> > > > > > +#if RISCV_KVM_MAX_FW_CTRS > 32
+> > > > > > +#error "Maximum firmware counter can't exceed 32 without increasing the RISCV_MAX_COUNTERS"
+> > > > >
+> > > > > "The number of firmware counters cannot exceed 32 without increasing RISCV_MAX_COUNTERS"
+> > > > >
+> > > > > > +#endif
+> > > > > > +
+> > > > > > +#define RISCV_MAX_COUNTERS      64
+> > > > >
+> > > > > But instead of that message, what I think we need is something like
+> > > > >
+> > > > >  #define RISCV_KVM_MAX_HW_CTRS  32
+> > > > >  #define RISCV_KVM_MAX_FW_CTRS  32
+> > > > >  #define RISCV_MAX_COUNTERS     (RISCV_KVM_MAX_HW_CTRS + RISCV_KVM_MAX_FW_CTRS)
+> > > > >
+> > > > >  static_assert(RISCV_MAX_COUNTERS <= 64)
+> > > > >
+> > > > > And then in pmu_sbi_device_probe() should ensure
+> > > > >
+> > > > >   num_counters <= RISCV_MAX_COUNTERS
+> > > > >
+> > > > > and pmu_sbi_get_ctrinfo() should ensure
+> > > > >
+> > > > >   num_hw_ctr <= RISCV_KVM_MAX_HW_CTRS
+> > > > >   num_fw_ctr <= RISCV_KVM_MAX_FW_CTRS
+> > > > >
+> > > > > which has to be done at runtime.
+> > > > >
+> > > >
+> > > > Sure. I will add the additional sanity checks.
+> > > >
+> > >
+> > > As explained above, I feel we shouldn't mix the firmware number of
+> > > counters that the host gets and it exposes to a guest.
+> > > So I have not included this suggestion in the v5.
+> > > I have changed the num_fw_ctrs to PMU_FW_MAX though to accurately
+> > > reflect the firmware counters KVM is actually using.
+> >
+> > Sounds good
+>
+> I just looked at v5. IMO, much of what I proposed above still makes
+> sense, since what I'm proposing is that the relationship between
+> RISCV_KVM_MAX_HW_CTRS, RISCV_KVM_MAX_FW_CTRS, RISCV_MAX_COUNTERS, and 64
+> (our current max bitmap size) be explicitly checked. So, even if we want
+> RISCV_KVM_MAX_FW_CTRS to be SBI_PMU_FW_MAX, it'd be good to have
+>
+> #define RISCV_KVM_MAX_HW_CTRS  32
+>
+> (And a runtime check confirming num_hw_ctrs + 1 <= RISCV_KVM_MAX_HW_CTRS,
+>  and then either silently capping or issuing a warning and capping)
+>
+> And, to be sure the sum of RISCV_KVM_MAX_FW_CTRS and RISCV_KVM_MAX_HW_CTRS
+> doesn't exceed the size of the bitmap
+>
+> #define RISCV_KVM_MAX_FW_CTRS   SBI_PMU_FW_MAX
+> #define RISCV_MAX_COUNTERS      (RISCV_KVM_MAX_HW_CTRS + RISCV_KVM_MAX_FW_CTRS)
+> static_assert(RISCV_MAX_COUNTERS <= 64)
+>
 
-I would be silly to expect everything to go alright in v1, wouldn't I? :-)
-I'll recheck and try to understand what went wrong here.
+ok. I have added those changes but I have modified RISCV_MAX_COUNTERS
+to RISCV_KVM_MAX_COUNTERS,
+to avoid overlapping with the RISCV_MAX_COUNTERS defined in the host.
+Logically, the host and the guest can have separate counters anyways.
 
-Thanks!
+> Thanks,
+> drew
+>
+> >
+> > > I don't know if there is any benefit of static_assert over #error.
+> > > Please let me know if you feel strongly about that.
+> >
+> > One "normal" line vs. three #-lines?
+> >
 
-> ChenYu
-> 
->> ...and of course I forgot to paste the link.
->>
->> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=719067
->>
->> Cheers,
->> Angelo
->>
->>
->>> Full blurb:
->>>
->>> This huge series adds more cleanups on top, reducing size and adding more
->>> commonization for clock drivers probe/remove, which also includes a new
->>> common probe mechanism for multimedia clock drivers that are usually
->>> probed by mtk-mmsys instead of a dt clock node: thanks to this, it was
->>> finally possible to convert almost all clock drivers to the common probe
->>> mechanism, which *finally again* makes us able to build all these drivers
->>> as modules!
->>>
->>> Since this looked like being *the* way forward, I went on converting some
->>> more drivers away from OF_CLK_DECLARE_DRIVER to full platform_driver(s),
->>> allowing for more (actually, almost all!) drivers to be built as modules.
->>>
->>> While at it, I also added some more consistency in macros usage by
->>> removing all of the duplicated full macro declaration for MediaTek gate
->>> clocks and replacing all of those with using the GATE_MTK macro instead,
->>> producing a nice reduction in amount of lines per file but, more
->>> importantly, improving readability and eventual future batch changes.
->>>
->>> This amount of commonization will also, in my opinion, greatly improve
->>> the review process for new clock drivers, as they will be mostly just a
->>> list of clocks and won't contain much new code, as it's all going to be
->>> handled in the common places, which also reduces chances to see new clock
->>> driver related bugs emerging on one SoC or the other.
->>>
->>> Since I don't own devices with all of the supported MediaTek SoCs, I
->>> could not test some of the conversions on real hardware... but I am
->>> confident that this will work as the drivers are *very* similar on a
->>> per-generation basis.
->>>
->>> This series was build-tested for all (both module and built-in build)
->>> and was manually tested on MT6795, MT8173, MT8192, MT8195.
->>>
->>> AngeloGioacchino Del Regno (45):
->>>     clk: mediatek: clk-mtk: Switch to device_get_match_data()
->>>     clk: mediatek: clk-mtk: Introduce clk_mtk_pdev_{probe,remove}()
->>>     clk: mediatek: Migrate to mtk_clk_pdev_probe() for multimedia clocks
->>>     clk: mediatek: Add divider clocks to mtk_clk_simple_{probe,remove}()
->>>     clk: mediatek: mt2712: Migrate topckgen/mcucfg to
->>>       mtk_clk_simple_probe()
->>>     clk: mediatek: mt2712: Compress clock arrays entries to 90 columns
->>>     clk: mediatek: mt2712: Add error handling to
->>>       clk_mt2712_apmixed_probe()
->>>     clk: mediatek: mt2712: Move apmixedsys clock driver to its own file
->>>     clk: mediatek: mt2712: Change to use module_platform_driver macro
->>>     clk: mediatek: mt2712: Change Kconfig options to allow module build
->>>     clk: mediatek: mt8365: Move apmixedsys clock driver to its own file
->>>     clk: mediatek: mt8365: Convert to mtk_clk_simple_{probe,remove}()
->>>     clk: mediatek: mt8167: Compress GATE_TOPx macros
->>>     clk: mediatek: mt8167: Move apmixedsys as platform_driver in new file
->>>     clk: mediatek: mt8167: Remove __initconst annotation from arrays
->>>     clk: mediatek: mt8167: Convert to mtk_clk_simple_{probe,remove}()
->>>     clk: mediatek: mt8183: Move apmixedsys clock driver to its own file
->>>     clk: mediatek: mt8183: Compress clocks arrays entries where possible
->>>     clk: mediatek: mt8183: Convert all remaining clocks to common probe
->>>     clk: mediatek: Consistently use GATE_MTK() macro
->>>     clk: mediatek: mt7622: Properly use CLK_IS_CRITICAL flag
->>>     clk: mediatek: mt7622: Move apmixedsys clock driver to its own file
->>>     clk: mediatek: mt7622: Move infracfg to clk-mt7622-infracfg.c
->>>     clk: mediatek: mt7622: Convert to platform driver and simple probe
->>>     clk: mediatek: mt8516: Move apmixedsys clock driver to its own file
->>>     clk: mediatek: mt8516: Convert to platform driver and simple probe
->>>     clk: mediatek: mt8516: Allow building clock drivers as modules
->>>     clk: mediatek: Propagate struct device with
->>>       mtk_clk_register_dividers()
->>>     clk: mediatek: mt7986-apmixed: Use PLL_AO flag to set critical clock
->>>     clk: mediatek: mt7986-infracfg: Migrate to common probe mechanism
->>>     clk: mediatek: mt7986-eth: Migrate to common probe mechanism
->>>     clk: mediatek: mt8186-mcu: Migrate to common probe mechanism
->>>     clk: mediatek: Switch to module_platform_driver() where possible
->>>     clk: mediatek: Add MODULE_LICENSE() where missing
->>>     clk: mediatek: Split MT8195 clock drivers and allow module build
->>>     clk: mediatek: Allow building MT8192 non-critical clocks as modules
->>>     clk: mediatek: Allow MT7622 clocks to be built as modules
->>>     clk: mediatek: Allow all MT8167 clocks to be built as modules
->>>     clk: mediatek: Allow all MT8183 clocks to be built as modules
->>>     clk: mediatek: Allow building most MT6765 clock drivers as modules
->>>     clk: mediatek: Allow building most MT6797 clock drivers as modules
->>>     clk: mediatek: Split configuration options for MT8186 clock drivers
->>>     clk: mediatek: mt8192: Move apmixedsys clock driver to its own file
->>>     clk: mediatek: Kconfig: Allow module build for core mt8192 clocks
->>>     clk: mediatek: Add MODULE_DEVICE_TABLE() where appropriate
->>>
->>>    drivers/clk/mediatek/Kconfig                  |  282 +++--
->>>    drivers/clk/mediatek/Makefile                 |   53 +-
->>>    drivers/clk/mediatek/clk-mt2701-aud.c         |   49 +-
->>>    drivers/clk/mediatek/clk-mt2701-bdp.c         |   27 +-
->>>    drivers/clk/mediatek/clk-mt2701-eth.c         |   16 +-
->>>    drivers/clk/mediatek/clk-mt2701-g3d.c         |   16 +-
->>>    drivers/clk/mediatek/clk-mt2701-hif.c         |   16 +-
->>>    drivers/clk/mediatek/clk-mt2701-img.c         |   15 +-
->>>    drivers/clk/mediatek/clk-mt2701-mm.c          |   56 +-
->>>    drivers/clk/mediatek/clk-mt2701-vdec.c        |   27 +-
->>>    drivers/clk/mediatek/clk-mt2701.c             |   48 +-
->>>    drivers/clk/mediatek/clk-mt2712-apmixedsys.c  |  154 +++
->>>    drivers/clk/mediatek/clk-mt2712-bdp.c         |   16 +-
->>>    drivers/clk/mediatek/clk-mt2712-img.c         |   15 +-
->>>    drivers/clk/mediatek/clk-mt2712-jpgdec.c      |   16 +-
->>>    drivers/clk/mediatek/clk-mt2712-mfg.c         |   15 +-
->>>    drivers/clk/mediatek/clk-mt2712-mm.c          |   66 +-
->>>    drivers/clk/mediatek/clk-mt2712-vdec.c        |   27 +-
->>>    drivers/clk/mediatek/clk-mt2712-venc.c        |   16 +-
->>>    drivers/clk/mediatek/clk-mt2712.c             | 1016 +++++------------
->>>    drivers/clk/mediatek/clk-mt6765-audio.c       |   27 +-
->>>    drivers/clk/mediatek/clk-mt6765-cam.c         |   16 +-
->>>    drivers/clk/mediatek/clk-mt6765-img.c         |   15 +-
->>>    drivers/clk/mediatek/clk-mt6765-mipi0a.c      |   16 +-
->>>    drivers/clk/mediatek/clk-mt6765-mm.c          |   15 +-
->>>    drivers/clk/mediatek/clk-mt6765-vcodec.c      |   16 +-
->>>    drivers/clk/mediatek/clk-mt6765.c             |   90 +-
->>>    drivers/clk/mediatek/clk-mt6779-aud.c         |    1 +
->>>    drivers/clk/mediatek/clk-mt6779-cam.c         |    1 +
->>>    drivers/clk/mediatek/clk-mt6779-img.c         |    1 +
->>>    drivers/clk/mediatek/clk-mt6779-ipe.c         |    1 +
->>>    drivers/clk/mediatek/clk-mt6779-mfg.c         |    1 +
->>>    drivers/clk/mediatek/clk-mt6779-mm.c          |   25 +-
->>>    drivers/clk/mediatek/clk-mt6779-vdec.c        |    1 +
->>>    drivers/clk/mediatek/clk-mt6779-venc.c        |    1 +
->>>    drivers/clk/mediatek/clk-mt6779.c             |    1 +
->>>    drivers/clk/mediatek/clk-mt6795-apmixedsys.c  |    1 +
->>>    drivers/clk/mediatek/clk-mt6795-infracfg.c    |    1 +
->>>    drivers/clk/mediatek/clk-mt6795-mfg.c         |    1 +
->>>    drivers/clk/mediatek/clk-mt6795-mm.c          |   56 +-
->>>    drivers/clk/mediatek/clk-mt6795-pericfg.c     |    1 +
->>>    drivers/clk/mediatek/clk-mt6795-topckgen.c    |    1 +
->>>    drivers/clk/mediatek/clk-mt6795-vdecsys.c     |    1 +
->>>    drivers/clk/mediatek/clk-mt6795-vencsys.c     |    1 +
->>>    drivers/clk/mediatek/clk-mt6797-img.c         |   15 +-
->>>    drivers/clk/mediatek/clk-mt6797-mm.c          |   56 +-
->>>    drivers/clk/mediatek/clk-mt6797-vdec.c        |   27 +-
->>>    drivers/clk/mediatek/clk-mt6797-venc.c        |   16 +-
->>>    drivers/clk/mediatek/clk-mt6797.c             |   47 +-
->>>    drivers/clk/mediatek/clk-mt7622-apmixedsys.c  |  138 +++
->>>    drivers/clk/mediatek/clk-mt7622-aud.c         |   49 +-
->>>    drivers/clk/mediatek/clk-mt7622-eth.c         |   27 +-
->>>    drivers/clk/mediatek/clk-mt7622-hif.c         |   27 +-
->>>    drivers/clk/mediatek/clk-mt7622-infracfg.c    |  129 +++
->>>    drivers/clk/mediatek/clk-mt7622.c             |  375 +-----
->>>    drivers/clk/mediatek/clk-mt7629-eth.c         |   25 +-
->>>    drivers/clk/mediatek/clk-mt7629-hif.c         |   27 +-
->>>    drivers/clk/mediatek/clk-mt7629.c             |   46 +-
->>>    drivers/clk/mediatek/clk-mt7981-apmixed.c     |    2 +
->>>    drivers/clk/mediatek/clk-mt7981-eth.c         |    3 +-
->>>    drivers/clk/mediatek/clk-mt7981-infracfg.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt7981-topckgen.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt7986-apmixed.c     |    8 +-
->>>    drivers/clk/mediatek/clk-mt7986-eth.c         |  115 +-
->>>    drivers/clk/mediatek/clk-mt7986-infracfg.c    |   93 +-
->>>    drivers/clk/mediatek/clk-mt7986-topckgen.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8135.c             |   31 +-
->>>    drivers/clk/mediatek/clk-mt8167-apmixedsys.c  |  145 +++
->>>    drivers/clk/mediatek/clk-mt8167-aud.c         |   47 +-
->>>    drivers/clk/mediatek/clk-mt8167-img.c         |   50 +-
->>>    drivers/clk/mediatek/clk-mt8167-mfgcfg.c      |   50 +-
->>>    drivers/clk/mediatek/clk-mt8167-mm.c          |   69 +-
->>>    drivers/clk/mediatek/clk-mt8167-vdec.c        |   59 +-
->>>    drivers/clk/mediatek/clk-mt8167.c             |  390 ++-----
->>>    drivers/clk/mediatek/clk-mt8173-apmixedsys.c  |    1 +
->>>    drivers/clk/mediatek/clk-mt8173-img.c         |    1 +
->>>    drivers/clk/mediatek/clk-mt8173-infracfg.c    |    1 +
->>>    drivers/clk/mediatek/clk-mt8173-mm.c          |   82 +-
->>>    drivers/clk/mediatek/clk-mt8173-pericfg.c     |    1 +
->>>    drivers/clk/mediatek/clk-mt8173-topckgen.c    |    1 +
->>>    drivers/clk/mediatek/clk-mt8173-vdecsys.c     |    1 +
->>>    drivers/clk/mediatek/clk-mt8173-vencsys.c     |    1 +
->>>    drivers/clk/mediatek/clk-mt8183-apmixedsys.c  |  194 ++++
->>>    drivers/clk/mediatek/clk-mt8183-audio.c       |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-cam.c         |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-img.c         |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-ipu0.c        |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-ipu1.c        |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-ipu_adl.c     |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-ipu_conn.c    |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-mfgcfg.c      |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-mm.c          |   29 +-
->>>    drivers/clk/mediatek/clk-mt8183-vdec.c        |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183-venc.c        |    5 +-
->>>    drivers/clk/mediatek/clk-mt8183.c             |  747 +++---------
->>>    drivers/clk/mediatek/clk-mt8186-apmixedsys.c  |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-cam.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-img.c         |    4 +-
->>>    .../clk/mediatek/clk-mt8186-imp_iic_wrap.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-infra_ao.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-ipe.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-mcu.c         |   69 +-
->>>    drivers/clk/mediatek/clk-mt8186-mdp.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-mfg.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-mm.c          |   59 +-
->>>    drivers/clk/mediatek/clk-mt8186-topckgen.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-vdec.c        |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-venc.c        |    4 +-
->>>    drivers/clk/mediatek/clk-mt8186-wpe.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8192-apmixedsys.c  |  215 ++++
->>>    drivers/clk/mediatek/clk-mt8192-aud.c         |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-cam.c         |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-img.c         |    5 +-
->>>    .../clk/mediatek/clk-mt8192-imp_iic_wrap.c    |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-ipe.c         |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-mdp.c         |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-mfg.c         |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-mm.c          |   34 +-
->>>    drivers/clk/mediatek/clk-mt8192-msdc.c        |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-scp_adsp.c    |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-vdec.c        |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192-venc.c        |    5 +-
->>>    drivers/clk/mediatek/clk-mt8192.c             |  223 +---
->>>    drivers/clk/mediatek/clk-mt8195-apmixedsys.c  |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-apusys_pll.c  |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-cam.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-ccu.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-img.c         |    4 +-
->>>    .../clk/mediatek/clk-mt8195-imp_iic_wrap.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-infra_ao.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-ipe.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-mfg.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-peri_ao.c     |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-scp_adsp.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-topckgen.c    |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-vdec.c        |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-vdo0.c        |   59 +-
->>>    drivers/clk/mediatek/clk-mt8195-vdo1.c        |   61 +-
->>>    drivers/clk/mediatek/clk-mt8195-venc.c        |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-vpp0.c        |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-vpp1.c        |    4 +-
->>>    drivers/clk/mediatek/clk-mt8195-wpe.c         |    4 +-
->>>    drivers/clk/mediatek/clk-mt8365-apmixedsys.c  |  166 +++
->>>    drivers/clk/mediatek/clk-mt8365-apu.c         |    3 +-
->>>    drivers/clk/mediatek/clk-mt8365-cam.c         |    3 +-
->>>    drivers/clk/mediatek/clk-mt8365-mfg.c         |    3 +-
->>>    drivers/clk/mediatek/clk-mt8365-mm.c          |   42 +-
->>>    drivers/clk/mediatek/clk-mt8365-vdec.c        |    3 +-
->>>    drivers/clk/mediatek/clk-mt8365-venc.c        |    3 +-
->>>    drivers/clk/mediatek/clk-mt8365.c             |  605 ++--------
->>>    drivers/clk/mediatek/clk-mt8516-apmixedsys.c  |  122 ++
->>>    drivers/clk/mediatek/clk-mt8516-aud.c         |   47 +-
->>>    drivers/clk/mediatek/clk-mt8516.c             |  246 +---
->>>    drivers/clk/mediatek/clk-mtk.c                |   82 +-
->>>    drivers/clk/mediatek/clk-mtk.h                |    7 +-
->>>    155 files changed, 3292 insertions(+), 4355 deletions(-)
->>>    create mode 100644 drivers/clk/mediatek/clk-mt2712-apmixedsys.c
->>>    create mode 100644 drivers/clk/mediatek/clk-mt7622-apmixedsys.c
->>>    create mode 100644 drivers/clk/mediatek/clk-mt7622-infracfg.c
->>>    create mode 100644 drivers/clk/mediatek/clk-mt8167-apmixedsys.c
->>>    create mode 100644 drivers/clk/mediatek/clk-mt8183-apmixedsys.c
->>>    create mode 100644 drivers/clk/mediatek/clk-mt8192-apmixedsys.c
->>>    create mode 100644 drivers/clk/mediatek/clk-mt8365-apmixedsys.c
->>>    create mode 100644 drivers/clk/mediatek/clk-mt8516-apmixedsys.c
->>>
+Fair enough. Fixed.
+
+> > Thanks,
+> > drew
+
+
 
 -- 
-AngeloGioacchino Del Regno
-Software Engineer
-
-Collabora Ltd.
-Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
-Registered in England & Wales, no. 5513718
-
+Regards,
+Atish
