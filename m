@@ -2,118 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0410B68D714
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:45:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3827368D71F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjBGMo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:44:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S231702AbjBGMrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjBGMov (ORCPT
+        with ESMTP id S231528AbjBGMrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:44:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1607FAF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:44:50 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BC6DA5D644;
-        Tue,  7 Feb 2023 12:44:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675773888; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bV88dT2qNkupACeymYc17iJHiiwWQyH4efqPn1zs0d8=;
-        b=dQMeq2LIBcaH/jMfwb4KHF/JsoykIOlr2T8Xt+ggiU84R6mAOgwb1DztKxUkWn6cXeTLtv
-        MLFWCLKYdi4sAe+pohyYO+gE8uh2IalrnzNkDNX5jfLXkyH9C/6L6HYn7jGHtWAy+3z7ER
-        b69d2eQv1nPmRVaCSTRChRCR9B+1JnQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675773888;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bV88dT2qNkupACeymYc17iJHiiwWQyH4efqPn1zs0d8=;
-        b=OVcb4/DjvSCy7umjnR7qcqCRTch+exzIC/3eL1Oq3maoYXf8A3VADqiMVyVGxr6wfRntwf
-        XxEuN+seP9xB9MDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD60313467;
-        Tue,  7 Feb 2023 12:44:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id J49DKsBH4mOLXgAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 07 Feb 2023 12:44:48 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 7879DA06D5; Tue,  7 Feb 2023 13:44:47 +0100 (CET)
-Date:   Tue, 7 Feb 2023 13:44:47 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Vladislav Efanov <VEfanov@ispras.ru>
-Cc:     Jan Kara <jack@suse.com>, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] udf: KASAN: slab-out-of-bounds in udf_readdir
-Message-ID: <20230207124447.jneehkows3ksulgq@quack3>
-References: <20230206162206.845488-1-VEfanov@ispras.ru>
+        Tue, 7 Feb 2023 07:47:02 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5207611E9B;
+        Tue,  7 Feb 2023 04:47:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F4C6106F;
+        Tue,  7 Feb 2023 04:47:43 -0800 (PST)
+Received: from [10.57.75.57] (unknown [10.57.75.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4589B3F71E;
+        Tue,  7 Feb 2023 04:46:56 -0800 (PST)
+Message-ID: <7a88cefe-c817-3bca-f3e1-88254a144e3e@arm.com>
+Date:   Tue, 7 Feb 2023 12:46:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206162206.845488-1-VEfanov@ispras.ru>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-30-james.morse@arm.com> <865ycg1kv2.wl-maz@kernel.org>
+ <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com> <86wn4vynyr.wl-maz@kernel.org>
+ <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com> <86sffhzpkz.wl-maz@kernel.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <86sffhzpkz.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 06-02-23 19:22:06, Vladislav Efanov wrote:
-> The KASAN report is:
-> [ 1922.586560] BUG: KASAN: slab-out-of-bounds in udf_readdir+0xe00/0x19e0
-> [ 1922.586922] Write of size 89 at addr ffff888000cd9ea6 by task rm/18493
+On 07/02/2023 11:23, Marc Zyngier wrote:
+> On Tue, 07 Feb 2023 09:41:54 +0000,
+> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>
+>> Hi Marc,
+>>
+>> On 06/02/2023 12:31, Marc Zyngier wrote:
+>>> On Mon, 06 Feb 2023 10:10:41 +0000,
+>>> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>>>
+>>>> This may not be always possible, e.g., for Realms. GET_ONE_REG is
+>>>> not supported. So using an explicit passing down of the args is
+>>>> preferrable.
+>>>
+>>> What is the blocker for CCA to use GET_ONE_REG? The value obviously
+>>> exists and is made available to the host. pKVM is perfectly able to
+>>> use GET_ONE_REG and gets a bunch of zeroes for things that the
+>>> hypervisor has decided to hide from the host.
+>>>
+>>
+>> It is not impossible. On a "HOST CALL" (explicit calls to the Host
+>> from Realm), the GPRs are made available to the host and can be
+>> stashed into the vcpu reg state and the request can be
+>> serviced. However, it is a bit odd, to make this exception - "the
+>> GET_ONE_REG is valid now", while in almost all other cases it is
+>> invalid (exception of MMIO).
 > 
-> udf_readdir() tries to write file name out of allocated memory
-> buffer bounds. The UDF_NAME_LEN_CS0 (255) is used as max length
-> for file name in udf_put_filename(). But UDF_NAME_LEN (254) is
-> used as the size for buffer allocation in udf_readdir(). As the
-> result out-of-bounds write happened.
+> But that's an RMM decision. If the RMM decides to forward the
+> hypercall to the host (irrespective of the potential forwarding to
+> userspace), it makes the GPRs available.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with xfstests
-> 
-> Fixes: 066b9cded00b ("udf: Use separate buffer for copying split names")
-> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+> If the hypercall is forwarded to userspace, then the host is
+> responsible to check with the RMM that it will be willing to provide
+> the required information (passed as GPRs or not).
 
-Thanks for the fix Vladislav! But this code is not there anymore in current
-version of UDF code. It got fixed as part of the directory code rewrite -
-you can check current code state in my tree:
+Just to be clear, on a hypercall, all the arguments are provided to
+the host. And it is always possible for the host to sync the vcpu
+GPR state with those arguments and make them available via the 
+GET_ONE_REG call.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git for_next
-
-								Honza
-
-> ---
->  fs/udf/dir.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/fs/udf/dir.c b/fs/udf/dir.c
-> index be640f4b2f2c..b95607c42ad4 100644
-> --- a/fs/udf/dir.c
-> +++ b/fs/udf/dir.c
-> @@ -169,7 +169,7 @@ static int udf_readdir(struct file *file, struct dir_context *ctx)
->  				nameptr = (char *)(fibh.ebh->b_data + poffset - lfi);
->  			} else {
->  				if (!copy_name) {
-> -					copy_name = kmalloc(UDF_NAME_LEN,
-> +					copy_name = kmalloc(UDF_NAME_LEN_CS0,
->  							    GFP_NOFS);
->  					if (!copy_name) {
->  						ret = -ENOMEM;
-> -- 
-> 2.34.1
+>> Of course we could always return what is stashed in the vcpu state,
+>> which is may be invalid/ 0. But given the construct of "host doesn't
+>> have access to the register state", it may be a good idea to say,
+>> request always fails, to indicate that the Host is probably doing
+>> something wrong, than silently passing on incorrect information.
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> I disagree. Either you fail at the delegation point, or you don't. On
+> getting a hypercall exit to userspace, you are guaranteed that the
+> GPRs are valid.
+
+This is possible, as I mentioned below, the question is bug vs feature.
+
+> 
+>>> Of course, it requires that the hypervisor (the RMM in your case)
+>>> knows about the semantics of the hypercall, but that's obviously
+>>
+>> RMM doesn't care about the semantics of hypercall, other than
+>> considering it just like an SMCCC compliant call. The hypercall
+>> arguments/results are passed down/up by the Realm in a separate
+>> structure.
+> 
+> That's because the RMM doesn't use registers to pass the data. But at
+> the end of the day, this is the same thing. The host gets the data
+> from the RMM, stashes it in the GPRs, and exit to userspace.
+
+True.
+
+> 
+> The important thing here is that GET_ONE_REG is valid in the context
+> where it matters. If the VMM tries to use it outside of the context of
+> a hypercall, it gets junk. It's not a bug, it's a feature.
+
+This is what I was concerned about.  As long as this "For any exit
+other than hypercall (at least for now), you get junk values when using
+GET_ONE_REG for confidential guests" is an acceptable feature, that 
+should be alright.
+
+Thanks
+Suzuki
+
+> 
+> Thanks,
+> 
+> 	M.
+> 
+
