@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B45A68E1E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A248468E1F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjBGUcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 15:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S231215AbjBGUhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 15:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjBGUcX (ORCPT
+        with ESMTP id S229537AbjBGUhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 15:32:23 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A8D36FE8;
-        Tue,  7 Feb 2023 12:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675801942; x=1707337942;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6noEI464CUMFcBf7pZxqivQw9LwN/ttWIrgnoBxYvRY=;
-  b=K4VXv0/fKFE96GclVhLuBDGkDnSgeGylapTb4dtxdYYuMdSY3TskKqdv
-   lC5yOnsL45/tgD+ixkyWvH0uZ071VESWYA1lfOwUEOtdp+f1VUarj9RVZ
-   bac5M5y84t4MjLaDY9EVScTusS1j7DqiqZj7KDF+/Xui47Ebvcvkx//gS
-   ojt00VUezx928DcVk4/kG017AGZwUJe/+PYYUnLK83ZwrNlgtmPIcw6on
-   21bgSX4pSbijRLVsrUP6ODW6aEgodjfYyhGAgGR+9yW4T71Q7C+Pvk0Pn
-   dx5CKMIV9Lt4F+TdNCVoRdRl+RONXmtoqxlG9t/BPrsPor507+TS1Z47b
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="317614410"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="317614410"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 12:32:21 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="755755078"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="755755078"
-Received: from patelni-mobl1.amr.corp.intel.com (HELO [10.212.55.98]) ([10.212.55.98])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 12:32:21 -0800
-Message-ID: <c830a68e-014b-ddec-4bab-5db337fc378f@linux.intel.com>
-Date:   Tue, 7 Feb 2023 13:32:20 -0700
+        Tue, 7 Feb 2023 15:37:19 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2166F3B0CD;
+        Tue,  7 Feb 2023 12:37:18 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id r28so13725747oiw.3;
+        Tue, 07 Feb 2023 12:37:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2sF5RkIuECxkMvmcFPNdqGchQ0B4cLoOA3/te7YcOjE=;
+        b=F098Wr3kdi6GIMINRs/zleH96a009WV6JG6NqeBGR2hqQCaleydT8SPTjYoUkrUkr8
+         z8uGpAXGgZWkqUXmGsLQ4JOPno/dkEsyUH/N+zYcPHzUagSj561rUF2xJ3e5wcHwzRTt
+         DE+gK/xqTF7ZHHhG9x7So0wLzKfCFXRWzzRTONQDxJDIbjD/1rhT0slDFOU3qhTQYx51
+         wV2hwU/qKReSwVrBcIU6p74t5b6v4MmSSjIf4u+F2Pv4rEtATJPiPFBTO/mTulOeC4kw
+         AeDBb5t14ssZCFiwB0IJzVbIP4cTsEvHkTBgf3w4MRLdAZddDuunQ3dAuWsidTjSHnP4
+         eZ6w==
+X-Gm-Message-State: AO0yUKVBNX5XllwhI6R15/CfFw/GxxKXU3RH0JbyvAhXc/pFFfzYsHiq
+        L5FW4yghZ8PdJFoa48DFMQ==
+X-Google-Smtp-Source: AK7set/B4ylgU1A5htRkefbyGbhW6WJBI6o253nOAnJexKv2HHGfEtibv9DgFl2VyHQPuILgCzC9VQ==
+X-Received: by 2002:a05:6808:30c:b0:35e:d787:ec7f with SMTP id i12-20020a056808030c00b0035ed787ec7fmr2022331oie.50.1675802237344;
+        Tue, 07 Feb 2023 12:37:17 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id o66-20020acaf045000000b0037af1a17692sm3717631oih.27.2023.02.07.12.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 12:37:16 -0800 (PST)
+Received: (nullmailer pid 4113072 invoked by uid 1000);
+        Tue, 07 Feb 2023 20:37:16 -0000
+Date:   Tue, 7 Feb 2023 14:37:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: display: panel: visionox,vtdr6130: add
+ missing reg property
+Message-ID: <20230207203716.GA4104426-robh@kernel.org>
+References: <20230207-topic-sm8550-upstream-vtdr6130-bindings-fix-v1-1-0ba2323420c5@linaro.org>
+ <Y+KaEPO7he39Gmd5@ravnborg.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0
- controller
-Content-Language: en-US
-To:     Xinghui Li <korantwork@gmail.com>, Keith Busch <kbusch@kernel.org>
-Cc:     Jonathan Derrick <jonathan.derrick@linux.dev>,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-References: <20221222072603.1175248-1-korantwork@gmail.com>
- <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev>
- <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
- <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev>
- <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
- <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev>
- <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
- <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
- <9e6cfda1-4309-d1bb-a0cf-404a7fe7d3aa@linux.intel.com>
- <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYWjaVCDFtCCyHrq5vOie4wV5LFn-UVZ5qQbpASxVGy1TA@mail.gmail.com>
-From:   "Patel, Nirmal" <nirmal.patel@linux.intel.com>
-In-Reply-To: <CAEm4hYWjaVCDFtCCyHrq5vOie4wV5LFn-UVZ5qQbpASxVGy1TA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+KaEPO7he39Gmd5@ravnborg.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/6/2023 8:18 PM, Xinghui Li wrote:
-> Keith Busch <kbusch@kernel.org> 于2023年2月7日周二 02:28写道：
->> On Mon, Feb 06, 2023 at 11:11:36AM -0700, Patel, Nirmal wrote:
->>> I like the idea of module parameter to allow switching between the modes
->>> but keep MSI remapping enabled (non-bypass) by default.
->> Isn't there a more programatic way to go about selecting the best option at
->> runtime?
-> Do you mean that the operating mode is automatically selected by
-> detecting the number of devices and CPUs instead of being set
-> manually?
->> I suspect bypass is the better choice if "num_active_cpus() > pci_msix_vec_count(vmd->dev)".
-> For this situation, My speculation is that the PCIE nodes are
-> over-mounted and not just because of the CPU to Drive ratio.
-> We considered designing online nodes, because we were concerned that
-> the IO of different chunk sizes would adapt to different MSI-X modes.
-> I privately think that it may be logically complicated if programmatic
-> judgments are made.
+On Tue, Feb 07, 2023 at 07:36:00PM +0100, Sam Ravnborg wrote:
+> Hi Neil.
+> 
+> 
+> On Tue, Feb 07, 2023 at 11:04:36AM +0100, Neil Armstrong wrote:
+> > Add missing reg property and update example to add dsi top node.
+> > 
+> > Fixes: ef85db911134 ("dt-bindings: display: panel: document the Visionox VTDR6130 AMOLED DSI Panel")
+> > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > ---
+> >  .../bindings/display/panel/visionox,vtdr6130.yaml  | 34 ++++++++++++++--------
+> >  1 file changed, 22 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml b/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+> > index 49e2fd4b4e99..84562a5b710a 100644
+> > --- a/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+> > +++ b/Documentation/devicetree/bindings/display/panel/visionox,vtdr6130.yaml
+> > @@ -16,6 +16,10 @@ properties:
+> >    compatible:
+> >      const: visionox,vtdr6130
+> >  
+> > +  reg:
+> > +    maxItems: 1
+> > +    description: DSI virtual channel
+> > +
+> Other panels using dsi uses a simple
+> "	reg: true"
+> 
+> I think that would suffice here too.
 
-Also newer CPUs have more MSIx (128) which means we can still have
-better performance without bypass. It would be better if user have
-can chose module parameter based on their requirements. Thanks.
+Yes, because dsi-controller.yaml restricts it to a single entry. 
+However, it's description says there can be more than 1 virtual channel 
+for a device. In that case, it shouldn't be restricted in 
+dsi-controller.yaml and the above with 'maxItems: 1' would be correct. 
+So I'd keep this as-is.
 
+Acked-by: Rob Herring <robh@kernel.org>
+
+Rob
