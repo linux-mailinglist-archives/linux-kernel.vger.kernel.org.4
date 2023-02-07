@@ -2,189 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED4468CDD6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A432868CDDB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:02:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjBGD7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 22:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S229574AbjBGECB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 23:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBGD7r (ORCPT
+        with ESMTP id S229896AbjBGEB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 22:59:47 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C744D9;
-        Mon,  6 Feb 2023 19:59:46 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3171jXGm032028;
-        Tue, 7 Feb 2023 03:59:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dKn000mqdgebyRGCvfqjvl5A8oSOiVLU+kcFkvL/tUY=;
- b=Cd3uXutbcWGTk80js5BaciQ9aVnWR4/4d9Trx/GredhvIw3cAx+83MVuLUVLqVLVCRUr
- XE2h3pLA+iuxNhkVXQP7ZFHc6iClHHjn65J/Pj7IsdiT+Nkkc/9D+d6jQXSYW4BawF7T
- Ym9e33Q8EZg8noVyGkBCd4PUVZed/w3vEM4YWGKuUzsmGPbqxJm08kEJmDMLUq1fUS+M
- OheQ7zGbkOMKTn0c7FQ+S3iMH2JP5PlPulh7jMYylcZ34BR2iOc+rZ2AhsB2qzusobNP
- T2oSkQMcsf+2ecO6ytZpmN6eBAQ6zMmPoLmekX3+Wm6Vl7fTYpYkRhvdNm99GWKJupw4 jQ== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkd8m07kj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 03:59:32 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3173xV8X018175
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Feb 2023 03:59:31 GMT
-Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
- 19:59:30 -0800
-Message-ID: <5b4b0c3b-0d1f-5f6c-d541-744c9a7173f8@quicinc.com>
-Date:   Mon, 6 Feb 2023 19:59:30 -0800
+        Mon, 6 Feb 2023 23:01:56 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D8B75FD6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 20:01:50 -0800 (PST)
+Received: from loongson.cn (unknown [10.2.9.158])
+        by gateway (Coremail) with SMTP id _____8CxzvAtzeFj_GcPAA--.30627S3;
+        Tue, 07 Feb 2023 12:01:49 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.9.158])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC74szeFj5jkrAA--.17338S2;
+        Tue, 07 Feb 2023 12:01:48 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] LoongArch: add checksum optimization for 64-bit system
+Date:   Tue,  7 Feb 2023 12:01:48 +0800
+Message-Id: <20230207040148.1801169-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v9 23/27] virt: gunyah: Add IO handlers
-Content-Language: en-US
-To:     Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-24-quic_eberman@quicinc.com>
- <20230206104637.GG332@quicinc.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <20230206104637.GG332@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: T8Z4B15NOY4HQUe04TE_v83na-vCu4_y
-X-Proofpoint-ORIG-GUID: T8Z4B15NOY4HQUe04TE_v83na-vCu4_y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 malwarescore=0 spamscore=0 mlxlogscore=912
- adultscore=0 priorityscore=1501 phishscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070035
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxC74szeFj5jkrAA--.17338S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3JrW5ZF4UtryxurW3ZFyUAwb_yoWxWF4kpF
+        nxAr9Ygr4UGF1I9r92yrWIqr43Ja1kGr12grZIgFy8ArW7X347Jrs3KrZYvFy7Gw4fGFyx
+        Zay5KF1agFs3JaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
+        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+loongArch platform is 64-bit system, which supports 8 bytes memory
+accessing, generic checksum function uses 4 byte memory access.
+This patch adds 8-bytes memory access optimization for checksum
+function on loongArch. And the code comes from arm64 system.
 
+When network hw checksum is disabled, iperf performance improves
+about 10% with this patch.
 
-On 2/6/2023 2:46 AM, Srivatsa Vaddagiri wrote:
-> * Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:22]:
-> 
->> +static inline bool gh_vm_io_handler_matches(struct gunyah_vm_io_handler *io_hdlr, u64 addr,
->> +						u64 len, u64 data)
->> +{
->> +	u64 mask = BIT_ULL(io_hdlr->len * BITS_PER_BYTE) - 1;
->> +
->> +	if (io_hdlr->addr != addr)
-> 
-> Isn't this test redundant (given that caller would have performed same test)?
-> 
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ arch/loongarch/include/asm/checksum.h |  50 +++++++++
+ arch/loongarch/lib/Makefile           |   2 +-
+ arch/loongarch/lib/csum.c             | 142 ++++++++++++++++++++++++++
+ 3 files changed, 193 insertions(+), 1 deletion(-)
+ create mode 100644 arch/loongarch/include/asm/checksum.h
+ create mode 100644 arch/loongarch/lib/csum.c
 
-Done.
+diff --git a/arch/loongarch/include/asm/checksum.h b/arch/loongarch/include/asm/checksum.h
+new file mode 100644
+index 000000000000..c9d5af206604
+--- /dev/null
++++ b/arch/loongarch/include/asm/checksum.h
+@@ -0,0 +1,50 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2016 ARM Ltd.
++ */
++#ifndef __ASM_CHECKSUM_H
++#define __ASM_CHECKSUM_H
++
++#include <linux/in6.h>
++
++#define _HAVE_ARCH_IPV6_CSUM
++__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
++			const struct in6_addr *daddr,
++			__u32 len, __u8 proto, __wsum sum);
++
++static inline __sum16 csum_fold(__wsum csum)
++{
++	u32 sum = (__force u32)csum;
++
++	sum += (sum >> 16) | (sum << 16);
++	return ~(__force __sum16)(sum >> 16);
++}
++#define csum_fold csum_fold
++
++static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
++{
++	__uint128_t tmp;
++	u64 sum;
++	int n = ihl; /* we want it signed */
++
++	tmp = *(const __uint128_t *)iph;
++	iph += 16;
++	n -= 4;
++	tmp += ((tmp >> 64) | (tmp << 64));
++	sum = tmp >> 64;
++	do {
++		sum += *(const u32 *)iph;
++		iph += 4;
++	} while (--n > 0);
++
++	sum += ((sum >> 32) | (sum << 32));
++	return csum_fold((__force __wsum)(sum >> 32));
++}
++#define ip_fast_csum ip_fast_csum
++
++extern unsigned int do_csum(const unsigned char *buff, int len);
++#define do_csum do_csum
++
++#include <asm-generic/checksum.h>
++
++#endif	/* __ASM_CHECKSUM_H */
+diff --git a/arch/loongarch/lib/Makefile b/arch/loongarch/lib/Makefile
+index 40bde632900f..6ba6df411f90 100644
+--- a/arch/loongarch/lib/Makefile
++++ b/arch/loongarch/lib/Makefile
+@@ -4,4 +4,4 @@
+ #
+ 
+ lib-y	+= delay.o memset.o memcpy.o memmove.o \
+-	   clear_user.o copy_user.o dump_tlb.o unaligned.o
++	   clear_user.o copy_user.o dump_tlb.o unaligned.o csum.o
+diff --git a/arch/loongarch/lib/csum.c b/arch/loongarch/lib/csum.c
+new file mode 100644
+index 000000000000..0f7e3a5ce96a
+--- /dev/null
++++ b/arch/loongarch/lib/csum.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0-only
++// Copyright (C) 2019-2020 Arm Ltd.
++
++#include <linux/compiler.h>
++#include <linux/kasan-checks.h>
++#include <linux/kernel.h>
++
++#include <net/checksum.h>
++
++/* Looks dumb, but generates nice-ish code */
++static u64 accumulate(u64 sum, u64 data)
++{
++	__uint128_t tmp;
++
++	tmp = (__uint128_t)sum + data;
++	return tmp + (tmp >> 64);
++}
++
++/*
++ * We over-read the buffer and this makes KASAN unhappy. Instead, disable
++ * instrumentation and call kasan explicitly.
++ */
++unsigned int __no_sanitize_address do_csum(const unsigned char *buff, int len)
++{
++	unsigned int offset, shift, sum;
++	const u64 *ptr;
++	u64 data, sum64 = 0;
++
++	if (unlikely(len == 0))
++		return 0;
++
++	offset = (unsigned long)buff & 7;
++	/*
++	 * This is to all intents and purposes safe, since rounding down cannot
++	 * result in a different page or cache line being accessed, and @buff
++	 * should absolutely not be pointing to anything read-sensitive. We do,
++	 * however, have to be careful not to piss off KASAN, which means using
++	 * unchecked reads to accommodate the head and tail, for which we'll
++	 * compensate with an explicit check up-front.
++	 */
++	kasan_check_read(buff, len);
++	ptr = (u64 *)(buff - offset);
++	len = len + offset - 8;
++
++	/*
++	 * Head: zero out any excess leading bytes. Shifting back by the same
++	 * amount should be at least as fast as any other way of handling the
++	 * odd/even alignment, and means we can ignore it until the very end.
++	 */
++	shift = offset * 8;
++	data = *ptr++;
++	data = (data >> shift) << shift;
++
++	/*
++	 * Body: straightforward aligned loads from here on (the paired loads
++	 * underlying the quadword type still only need dword alignment). The
++	 * main loop strictly excludes the tail, so the second loop will always
++	 * run at least once.
++	 */
++	while (unlikely(len > 64)) {
++		__uint128_t tmp1, tmp2, tmp3, tmp4;
++
++		tmp1 = *(__uint128_t *)ptr;
++		tmp2 = *(__uint128_t *)(ptr + 2);
++		tmp3 = *(__uint128_t *)(ptr + 4);
++		tmp4 = *(__uint128_t *)(ptr + 6);
++
++		len -= 64;
++		ptr += 8;
++
++		/* This is the "don't dump the carry flag into a GPR" idiom */
++		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
++		tmp2 += (tmp2 >> 64) | (tmp2 << 64);
++		tmp3 += (tmp3 >> 64) | (tmp3 << 64);
++		tmp4 += (tmp4 >> 64) | (tmp4 << 64);
++		tmp1 = ((tmp1 >> 64) << 64) | (tmp2 >> 64);
++		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
++		tmp3 = ((tmp3 >> 64) << 64) | (tmp4 >> 64);
++		tmp3 += (tmp3 >> 64) | (tmp3 << 64);
++		tmp1 = ((tmp1 >> 64) << 64) | (tmp3 >> 64);
++		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
++		tmp1 = ((tmp1 >> 64) << 64) | sum64;
++		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
++		sum64 = tmp1 >> 64;
++	}
++	while (len > 8) {
++		__uint128_t tmp;
++
++		sum64 = accumulate(sum64, data);
++		tmp = *(__uint128_t *)ptr;
++
++		len -= 16;
++		ptr += 2;
++
++		data = tmp >> 64;
++		sum64 = accumulate(sum64, tmp);
++	}
++	if (len > 0) {
++		sum64 = accumulate(sum64, data);
++		data = *ptr;
++		len -= 8;
++	}
++	/*
++	 * Tail: zero any over-read bytes similarly to the head, again
++	 * preserving odd/even alignment.
++	 */
++	shift = len * -8;
++	data = (data << shift) >> shift;
++	sum64 = accumulate(sum64, data);
++
++	/* Finally, folding */
++	sum64 += (sum64 >> 32) | (sum64 << 32);
++	sum = sum64 >> 32;
++	sum += (sum >> 16) | (sum << 16);
++	if (offset & 1)
++		return (u16)swab32(sum);
++
++	return sum >> 16;
++}
++
++__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
++			const struct in6_addr *daddr,
++			__u32 len, __u8 proto, __wsum csum)
++{
++	__uint128_t src, dst;
++	u64 sum = (__force u64)csum;
++
++	src = *(const __uint128_t *)saddr->s6_addr;
++	dst = *(const __uint128_t *)daddr->s6_addr;
++
++	sum += (__force u32)htonl(len);
++	sum += (u32)proto << 24;
++	src += (src >> 64) | (src << 64);
++	dst += (dst >> 64) | (dst << 64);
++
++	sum = accumulate(sum, src >> 64);
++	sum = accumulate(sum, dst >> 64);
++
++	sum += ((sum >> 32) | (sum << 32));
++	return csum_fold((__force __wsum)(sum >> 32));
++}
++EXPORT_SYMBOL(csum_ipv6_magic);
+-- 
+2.27.0
 
->> +		return false;
->> +
->> +	if (!io_hdlr->datamatch)
->> +		return true;
->> +
->> +	if (io_hdlr->len != len)
->> +		return false;
->> +
->> +	return (data & mask) == (io_hdlr->data & mask);
->> +}
->> +
->> +static struct gunyah_vm_io_handler *gh_vm_mgr_find_io_hdlr(struct gunyah_vm *ghvm, u64 addr,
->> +								u64 len, u64 data)
->> +{
->> +	struct gunyah_vm_io_handler *io_hdlr = NULL;
->> +	struct rb_node *root = NULL;
->> +
->> +	root = ghvm->mmio_handler_root.rb_node;
->> +	while (root) {
->> +		io_hdlr = rb_entry(root, struct gunyah_vm_io_handler, node);
->> +		if (addr < io_hdlr->addr)
->> +			root = root->rb_left;
->> +		else if (addr > io_hdlr->addr)
->> +			root = root->rb_right;
->> +		else if (gh_vm_io_handler_matches(io_hdlr, addr, len, data))
-> 
-> In case of handler not matching, don't we need to modify root?
-> Otherwise we can be stuck in infinite loop here AFAICS.
-> 
-
-Done.
-
->> +			return io_hdlr;
->> +	}
->> +	return NULL;
->> +}
-> 
-> // snip
-> 
->> +int gh_vm_mgr_add_io_handler(struct gunyah_vm *ghvm, struct gunyah_vm_io_handler *io_hdlr)
->> +{
->> +	struct rb_node **root, *parent = NULL;
->> +
->> +	if (io_hdlr->datamatch &&
->> +		(!io_hdlr->len || io_hdlr->len > (sizeof(io_hdlr->data) * BITS_PER_BYTE)))
->> +		return -EINVAL;
->> +
->> +	root = &ghvm->mmio_handler_root.rb_node;
->> +	while (*root) {
->> +		struct gunyah_vm_io_handler *curr = rb_entry(*root, struct gunyah_vm_io_handler,
->> +								node);
->> +
->> +		parent = *root;
->> +		if (io_hdlr->addr < curr->addr)
->> +			root = &((*root)->rb_left);
->> +		else if (io_hdlr->addr > curr->addr)
->> +			root = &((*root)->rb_right);
->> +		else
-> 
-> We should allow two io_handlers on the same addr, but with different data
-> matches I think.
-> 
-
-Done.
-
->> +			return -EEXIST;
->> +	}
->> +
->> +	rb_link_node(&io_hdlr->node, parent, root);
->> +	rb_insert_color(&io_hdlr->node, &ghvm->mmio_handler_root);
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(gh_vm_mgr_add_io_handler);
