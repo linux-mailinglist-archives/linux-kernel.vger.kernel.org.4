@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC6A68E39C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817C068E3A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjBGWup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 17:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
+        id S229965AbjBGWyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 17:54:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjBGWun (ORCPT
+        with ESMTP id S229519AbjBGWyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 17:50:43 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C741EFEE;
-        Tue,  7 Feb 2023 14:50:40 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id q19so18220930edd.2;
-        Tue, 07 Feb 2023 14:50:40 -0800 (PST)
+        Tue, 7 Feb 2023 17:54:00 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F9322A03;
+        Tue,  7 Feb 2023 14:53:59 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id dr8so46697591ejc.12;
+        Tue, 07 Feb 2023 14:53:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a19ongoHR0lKc5Z2rB3GGnOVjxdQWZVAxVKvBk5S0+M=;
-        b=ZJ0Q7OTnYM+Oy94s/9Skmk77bZf9qQ+yCYfNpWTwxJMZwbckg1EQpq8/KqCVguIx4V
-         XVbsB3BVu29Mhh+yYgwhVyf42J/g2IlcgI7fgBduElkaJPXna0Q2YmkxDy9M/8sdzvKT
-         1XlCuD5KwsB4h8mGrIeVc1jdqW5zf3fhSzZT77qyrtQvFeUGufuPDtLbd8oS/kuzR71z
-         wpBCG9vPh2x5i5P/A6Qlvw3oqFwnHrBl6BiJDQmRGdvpILrKBW8ThJfjt553A6jjJDUX
-         pz6fPlly3XB6sjv8tAOW6CFmkYUkYQKThkwb6eGU+ngSOvZDDWNlT707G8ts+LBFpyWx
-         yO4w==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fCqExVtxIQ8fx2PtH4CD+ssBUWyleyM+Y/yJC5Su3to=;
+        b=ARzyMCa57hmvHj2qiZ4Y0X13C2pc3k0DK/F2SzSo1J3Kh73G8GiPLEp9M/eWhfoboU
+         oJLFipPSnGer6Pi3m4oPdjzsgWPxlEDqn3pSJCphmLxWCZj6+egr4cvyWcoIc2FKctnN
+         t2BWYV+kCIKA1yPkqdr2XUs39eIYx86OrZe+edReKl84nvQlqLabsVqKACLsvnP+uCrq
+         rRstHEk37Y+ea138gvu0Gow3zAoNSjN1G2TwKHAbHWuhMoXgtUH1y3IVX6G6UbLFEb/R
+         6V+VrhoB8W3sAGoMReTaH8+ufnYLkq4U2UNa53CPU/qlcUAu3tSk5Akz6B6GkxSmgLED
+         cvsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a19ongoHR0lKc5Z2rB3GGnOVjxdQWZVAxVKvBk5S0+M=;
-        b=cwpEebVn4oUxPrQv6RdT+vvr7x8aaM/LvCHsf/AE6e/VtzuNh3nFD902LlKHs0Ya+W
-         NVmAPejlnPRRigBi7dFsDrX775vB0ha2iQ6Yq0Srb+bx9+8J0fb7/hdMTd4yRQekl+6o
-         1vIci3uSf5KFN+DipXB4oE5c9GcoUehhezyafVWgIh8ZKyrMJEcfozkorpV1SBmzkWxo
-         +2UgYHFe0lZjBijfza/VMStBOz4Kor4Ph3dxdsWHFqCPU/ySJ1ONzkD0xSz7R6kFlufj
-         zFPHx6r2HAJrJmbCeLdV1FiTPmHX1je6Z2TpCVFz9dV4BFYPDLB0MecP11r63skN9cPI
-         5xVg==
-X-Gm-Message-State: AO0yUKXaCC5Vu0w82i9SoMClPvxcJBuuexhaFwbNopnoOfXi/an+4I9q
-        OeFfon7XzB8nKW5Idrj3gtTFZDA/Xpy4heXMJYSu3Z2u
-X-Google-Smtp-Source: AK7set/ERxgo4HCE3Z8jQMdo+dm2UKuyJs3boT0Bixkl9QsGKweZutA1CjUuz/R5pOyj//cfBwEozyjffOpakIl1OtY=
-X-Received: by 2002:a05:6402:4308:b0:4aa:a516:8ea0 with SMTP id
- m8-20020a056402430800b004aaa5168ea0mr268331edc.0.1675810238927; Tue, 07 Feb
- 2023 14:50:38 -0800 (PST)
+        bh=fCqExVtxIQ8fx2PtH4CD+ssBUWyleyM+Y/yJC5Su3to=;
+        b=g+XICN+wIH6ALaIr8Zke59RzAHcEa3Xwib6X70+NObYnvxUt0VRJ/kGNykoxcMGPHv
+         FY5rl7KK/5E3PhFxD/s+B+s+74XIMBot596bKztqmA8emX79i2Jl/oA/EsWVUdElQakr
+         0R1rpWmPlnnMfGsF+gj0+mzacZ+PvLOV05CErPHo1Wi1rX0wE8tjmYMGmeVxi4VJ5apN
+         KdBwHWPWH1DgEHRegfuUETU1Tl0SPSHqjp/13XIw4ZrNUjx5vJsbBpeDrbYrCpriMdRu
+         yyGsVTQvJk2uSmXpB1r6DW5uw3DMTqAq2nsrCpudaao55/M/vUmj72S/WmAsJRFshibG
+         MuHg==
+X-Gm-Message-State: AO0yUKXjqVD+dNAFCIgmNRGsNeann+PaZATgipoq7KNeGAfDiLhhEZOM
+        gZi0vLnLGQBLHOENgn+5CF0=
+X-Google-Smtp-Source: AK7set858wdCN1RRt53CZdx+41ECs55QkbWbM6xU5QVfjUe3stU2UAoU/eH6rUPXzk3fuQ6uujlvNw==
+X-Received: by 2002:a17:907:20cb:b0:87f:89f2:c012 with SMTP id qq11-20020a17090720cb00b0087f89f2c012mr5670236ejb.24.1675810437547;
+        Tue, 07 Feb 2023 14:53:57 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id b21-20020a170906195500b008779b5c7db6sm7437785eje.107.2023.02.07.14.53.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 14:53:56 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH RFC] bgmac: fix *initial* chip reset to support BCM5358
+Date:   Tue,  7 Feb 2023 23:53:27 +0100
+Message-Id: <20230207225327.27534-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230203031742.1730761-1-imagedong@tencent.com>
- <20230203031742.1730761-3-imagedong@tencent.com> <CAEf4BzYh90NyyYvfTT=M=-KLspydMX4PZK8jCwNDydAP=kFgYw@mail.gmail.com>
- <CADxym3a6_wBHW_c_ZYtZ5QXbbunhKxau6k-fn4TNrn+6qzW6fw@mail.gmail.com>
-In-Reply-To: <CADxym3a6_wBHW_c_ZYtZ5QXbbunhKxau6k-fn4TNrn+6qzW6fw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 7 Feb 2023 14:50:26 -0800
-Message-ID: <CAEf4BzZAo6Bfio3pbY3j5yUDArCbdiWPC-r=XhFM9Bwq+4VVMg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add test for legacy/perf
- kprobe/uprobe attach mode
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,67 +76,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 6:39 PM Menglong Dong <menglong8.dong@gmail.com> wrote:
->
-> On Tue, Feb 7, 2023 at 4:05 AM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Feb 2, 2023 at 7:18 PM <menglong8.dong@gmail.com> wrote:
-> > >
-> > > From: Menglong Dong <imagedong@tencent.com>
-> > >
-> > > Add the testing for kprobe/uprobe attaching in legacy and perf mode.
-> > > And the testing passed:
-> > >
-> > > ./test_progs -t attach_probe
-> > > $5       attach_probe:OK
-> > > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> > >
-> > > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > > ---
-> >
-> > Do you mind refactoring attach_probe test into multiple subtests,
-> > where each subtest will only test one of the attach mode and type. The
-> > reason is that libbpf CI runs tests with latest selftests and libbpf
-> > against old kernels (4.9 and 5.5, currently). Due to attach_probe
-> > testing all these uprobe/kprobe attach modes with extra features (like
-> > cookie, ref count, etc), we had to disable attach_probe test in libbpf
-> > CI on old kernels.
-> >
-> > If we can split each individual uprobe/kprobe mode, that will give us
-> > flexibility to selectively allowlist those tests that don't force
-> > libbpf to use newer features (like cookies, LINK or PERF mode, etc).
-> >
-> > It would be a great improvement and highly appreciated! If you don't
-> > mind doing this, let's do the split of existing use cases into subtest
-> > in a separate patch, and then add PERF/LEGACY/LINK mode tests on top
-> > of that patch.
-> >
->
-> Of course, with pleasure. For the existing use cases, we split it into
-> subtests, such as:
->
->   kprobe/kretprobe auto attach
->   kprobe/kretprobe manual attach
->   uprobe/uretprobe ref_ctr test
->   uprobe/uretprobe auto attach
->   sleepable kprobe/uprobe
->   ......
->
-> Am I right?
+While bringing hardware up we should perform a full reset including the
+switch bit (BGMAC_BCMA_IOCTL_SW_RESET aka SICF_SWRST). It's what
+specification says and what reference driver does.
 
-I haven't analysed all the different cases, but roughly it makes
-sense. With more granular subtests we can also drop `legacy` flag and
-rely on subtest allowlisting in CI.
+This seems to be critical for the BCM5358. Without this hardware doesn't
+get initialized properly and doesn't seem to transmit or receive any
+packets.
 
->
-> Thanks!
-> Dongmeng Long
->
-> >
-> > >  .../selftests/bpf/prog_tests/attach_probe.c   | 61 ++++++++++++++++++-
-> > >  .../selftests/bpf/progs/test_attach_probe.c   | 32 ++++++++++
-> > >  2 files changed, 92 insertions(+), 1 deletion(-)
-> > >
-> >
-> > [...]
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+RFC: What do you think about adding that "bool initial" parameter? Is
+     that OK? As an alternative I could use something like
+     u16 flags;
+     BGMAC_FLAGS_INITIAL_RESET
+---
+ drivers/net/ethernet/broadcom/bgmac.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bgmac.c b/drivers/net/ethernet/broadcom/bgmac.c
+index 3038386a5afd..4963fdbad31b 100644
+--- a/drivers/net/ethernet/broadcom/bgmac.c
++++ b/drivers/net/ethernet/broadcom/bgmac.c
+@@ -876,7 +876,7 @@ static void bgmac_miiconfig(struct bgmac *bgmac)
+ 	}
+ }
+ 
+-static void bgmac_chip_reset_idm_config(struct bgmac *bgmac)
++static void bgmac_chip_reset_idm_config(struct bgmac *bgmac, bool initial)
+ {
+ 	u32 iost;
+ 
+@@ -890,20 +890,20 @@ static void bgmac_chip_reset_idm_config(struct bgmac *bgmac)
+ 
+ 		if (iost & BGMAC_BCMA_IOST_ATTACHED) {
+ 			flags = BGMAC_BCMA_IOCTL_SW_CLKEN;
+-			if (!bgmac->has_robosw)
++			if (initial || !bgmac->has_robosw)
+ 				flags |= BGMAC_BCMA_IOCTL_SW_RESET;
+ 		}
+ 		bgmac_clk_enable(bgmac, flags);
+ 	}
+ 
+-	if (iost & BGMAC_BCMA_IOST_ATTACHED && !bgmac->has_robosw)
++	if (iost & BGMAC_BCMA_IOST_ATTACHED && (initial || !bgmac->has_robosw))
+ 		bgmac_idm_write(bgmac, BCMA_IOCTL,
+ 				bgmac_idm_read(bgmac, BCMA_IOCTL) &
+ 				~BGMAC_BCMA_IOCTL_SW_RESET);
+ }
+ 
+ /* http://bcm-v4.sipsolutions.net/mac-gbit/gmac/chipreset */
+-static void bgmac_chip_reset(struct bgmac *bgmac)
++static void bgmac_chip_reset(struct bgmac *bgmac, bool initial)
+ {
+ 	u32 cmdcfg_sr;
+ 	int i;
+@@ -927,7 +927,7 @@ static void bgmac_chip_reset(struct bgmac *bgmac)
+ 	}
+ 
+ 	if (!(bgmac->feature_flags & BGMAC_FEAT_IDM_MASK))
+-		bgmac_chip_reset_idm_config(bgmac);
++		bgmac_chip_reset_idm_config(bgmac, initial);
+ 
+ 	/* Request Misc PLL for corerev > 2 */
+ 	if (bgmac->feature_flags & BGMAC_FEAT_MISC_PLL_REQ) {
+@@ -1177,7 +1177,7 @@ static int bgmac_open(struct net_device *net_dev)
+ 	struct bgmac *bgmac = netdev_priv(net_dev);
+ 	int err = 0;
+ 
+-	bgmac_chip_reset(bgmac);
++	bgmac_chip_reset(bgmac, false);
+ 
+ 	err = bgmac_dma_init(bgmac);
+ 	if (err)
+@@ -1214,7 +1214,7 @@ static int bgmac_stop(struct net_device *net_dev)
+ 	bgmac_chip_intrs_off(bgmac);
+ 	free_irq(bgmac->irq, net_dev);
+ 
+-	bgmac_chip_reset(bgmac);
++	bgmac_chip_reset(bgmac, false);
+ 	bgmac_dma_cleanup(bgmac);
+ 
+ 	return 0;
+@@ -1515,7 +1515,7 @@ int bgmac_enet_probe(struct bgmac *bgmac)
+ 			bgmac_idm_write(bgmac, BCMA_OOB_SEL_OUT_A30, 0x86);
+ 	}
+ 
+-	bgmac_chip_reset(bgmac);
++	bgmac_chip_reset(bgmac, true);
+ 
+ 	err = bgmac_dma_alloc(bgmac);
+ 	if (err) {
+@@ -1587,7 +1587,7 @@ int bgmac_enet_suspend(struct bgmac *bgmac)
+ 	netif_tx_unlock(bgmac->net_dev);
+ 
+ 	bgmac_chip_intrs_off(bgmac);
+-	bgmac_chip_reset(bgmac);
++	bgmac_chip_reset(bgmac, false);
+ 	bgmac_dma_cleanup(bgmac);
+ 
+ 	return 0;
+-- 
+2.34.1
+
