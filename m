@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29D768DE0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4496568DE10
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjBGQiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S231245AbjBGQkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBGQiS (ORCPT
+        with ESMTP id S229500AbjBGQkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:38:18 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F4F44AE
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:38:18 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id z1so16193513plg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2So4hv1hi8BG5UUukFb3+REHHKPjn28YFwULPpBOJLk=;
-        b=WD7a0RXfAR2IFHAOllVUw8jakwuoLsXLLs6ixFHKdmY+6Wus3qK8CD/1XDZtC1dIUg
-         RooS0coMvNT1WjlROoiAdP0pX0azC1wONTrncHHJ3s9oDsVzX5WXfUl/lYQkxZheCUEA
-         Jml0u0duRfANlAvmzewqFgpOfW+rkz1gSU4tsz+swQJG9Fo3+BlQXRlbIYkDD+rMNUEw
-         mHlGLJ3F9McQ0HaPNCq0GYqhXdpVom79f1QGeNqqStbsu/5XIrOM7xRen4LQngq5iJSx
-         RLP2fUvsyYdFP0Cep+OZiRVLnmprzZPt/iciVhmbmrAMMNhHek0DJI16UFfCxDFkR///
-         790A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2So4hv1hi8BG5UUukFb3+REHHKPjn28YFwULPpBOJLk=;
-        b=pc/aLTjw2mRZS5sm8VrvNpMxfE8ko9qJeVabwHenIHcb126KaNE66li7VdlSGPLD5h
-         LQXWFjnfAZSOVKykHwLmXfuK7FAQwiCukJ0agSh/qNir7GZkbXY+MtTDTd2KkLgfBh9j
-         jau3EKFysbdO7QywIuvNqkPuBZ0e7M00QRLHISbNGjMKTEdbX9MXd4ocHifRvlz7jymr
-         tGQ8nkUiJURag5J2AOxoIfLDcY1uWWkQmy/+OORwNuMHzK2aUAMzuzwsqdH9QIFJJ8pY
-         l36yxBvNHw1PC/cW+uBP27YgYgR1ssxzyLx9F1zxv3YjA6EKpPIGXEpBmAJHjPdASBHJ
-         9WnQ==
-X-Gm-Message-State: AO0yUKVMlr7X8yxrIT38E/LccyiBaJEJ3WNiRTXA/RnqiA+O2fjIVqk9
-        8/2H9+Rls59oY5YzLagEkUOa1A==
-X-Google-Smtp-Source: AK7set8T2dPADRrjmHIwQIhOi9y6Kjuq37Aqt8tThmQ4Y9zHFhM0wAaRxTzdegYDmj8jOjGAFntBsg==
-X-Received: by 2002:a17:902:8697:b0:198:af4f:de0b with SMTP id g23-20020a170902869700b00198af4fde0bmr213146plo.11.1675787897388;
-        Tue, 07 Feb 2023 08:38:17 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id z11-20020a17090a170b00b0023087e8adf8sm6542524pjd.21.2023.02.07.08.38.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 08:38:16 -0800 (PST)
-Date:   Tue, 7 Feb 2023 16:38:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Joao Martins <joao.m.martins@oracle.com>
-Cc:     Igor Mammedov <imammedo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: Re: [PATCH v2 2/3] KVM: SVM: Modify AVIC GATag to support max number
- of 512 vCPUs
-Message-ID: <Y+J+dS8ZRX07kgt7@google.com>
-References: <20230207002156.521736-1-seanjc@google.com>
- <20230207002156.521736-3-seanjc@google.com>
- <20230207093350.5db155ca@imammedo.users.ipa.redhat.com>
- <0e12d654-d388-a0f9-e7f9-7e96921786b7@oracle.com>
+        Tue, 7 Feb 2023 11:40:20 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE60F166FD;
+        Tue,  7 Feb 2023 08:40:18 -0800 (PST)
+Received: from pendragon.ideasonboard.com (unknown [109.136.43.56])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B94E6589;
+        Tue,  7 Feb 2023 17:40:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675788016;
+        bh=wq7TOYV2DuTuczCso9xs9cP6d5UpUm8m76Tk/x6Pvoc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hh7q+YvOOnhWnBaKu9RhL0V7m9Zt4iUOW5eQCMmPgpPZw0C8+LO4k38TMRhDn4ynb
+         2DWI4I3dY0PCcirelnQaNB/K1+Ldja4eY+yXF6pwb1Dxf07BiDH2GfVXsuVkDL88bf
+         maH5tW2sKtJ8Aet94ilkTuhtN3lTM4vVW3dWlwFI=
+Date:   Tue, 7 Feb 2023 18:40:14 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: imx290: fix conditional function defintions
+Message-ID: <Y+J+7lsf083k4x80@pendragon.ideasonboard.com>
+References: <20230207161316.293923-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0e12d654-d388-a0f9-e7f9-7e96921786b7@oracle.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230207161316.293923-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023, Joao Martins wrote:
-> On 07/02/2023 08:33, Igor Mammedov wrote:
-> > On Tue,  7 Feb 2023 00:21:55 +0000
-> > Sean Christopherson <seanjc@google.com> wrote:
-> > 
-> >> From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> >>
-> >> Define AVIC_VCPU_ID_MASK based on AVIC_PHYSICAL_MAX_INDEX, i.e. the mask
-> >> that effectively controls the largest guest physical APIC ID supported by
-> >> x2AVIC, instead of hardcoding the number of bits to 8 (and the number of
-> >> VM bits to 24).
-> > 
-> > Is there any particular reason not to tie it to max supported by KVM
-> > KVM_MAX_VCPU_IDS?
-> > 
-> > Another question:
-> >  will guest fail to start when configured with more than 512 vCPUs
-> >  or it will start broken?
-> > 
+Hi Arnd,
+
+Thank you for the patch.
+
+On Tue, Feb 07, 2023 at 05:13:12PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> I think the problem is not so much the GATag (which can really be anything at
-> the resolution you want). It's more of an SVM limit AIUI. Provided you can't
-> have GATAgs if you don't have guest-mode/AVIC active, then makes sense have the
-> same limit on both.
-
-Yep.  The physical ID table, which is needed to achieve full AVIC benefits for a
-vCPU, is a single 4KiB page that holds 512 64-bit entries.  AIUI, the GATag is
-used if and only if the interrupt target is in the physical ID table, so using
-more GATag bits for vCPU ID is pointless.
-
-> SVM seems to be limited to 256 vcpus in xAPIC mode or 512 vcpus in x2APIC
-> mode[0]. IIUC You actually won't be able to create guests with more than
-> 512vcpus as KVM bound checks those max limits very early in the vCPU init (see
-> avic_init_vcpu()). I guess the alternative would an AVIC inhibit if vCPU count
-> goes beyond those limits -- probably a must have once avic flips to 1 by default
-> like Intel.
-
-I don't _think_ KVM would have to explicitly inhibit AVIC.  I believe the fallout
-would be that vCPUs >= 512 would simply not be eligible for virtual interrupt
-delivery, e.g. KVM would get a "Invalid Target in IPI" exit.  I haven't dug into
-the IOMMU side of things though, so it's possible something in that world would
-necessitate disabling (x2)AVIC.
-
-> [0] in APM Volume 2 15.29.4.3 Physical Address Pointer Restrictions,
+> The runtime suspend/resume functions are only referenced from the
+> dev_pm_ops, but they use the old SET_RUNTIME_PM_OPS() helper
+> that requires a __maybe_unused annotation to avoid a warning:
 > 
-> * All the addresses point to 4-Kbyte aligned data structures. Bits 11:0 are
-> reserved (except for offset 0F8h) and should be set to zero. The lower 8 bits of
-> offset 0F8h are used for the field AVIC_PHYSICAL_MAX_INDEX. VMRUN fails with
-> #VMEXIT(VMEXIT_INVALID) if AVIC_PHYSICAL_MAX_INDEX is greater than 255 in xAVIC
-> mode or greater than 511 in x2AVIC mode.
+> drivers/media/i2c/imx290.c:1082:12: error: unused function 'imx290_runtime_resume' [-Werror,-Wunused-function]
+> static int imx290_runtime_resume(struct device *dev)
+>            ^
+> drivers/media/i2c/imx290.c:1090:12: error: unused function 'imx290_runtime_suspend' [-Werror,-Wunused-function]
+> static int imx290_runtime_suspend(struct device *dev)
+>            ^
+> 
+> Convert this to the new RUNTIME_PM_OPS() helper that so this
+> is not required. To improve this further, also use the pm_ptr()
+> helper that lets the dev_pm_ops get dropped entirely when
+> CONFIG_PM is disabled.
+> 
+> A related mistake happened in the of_match_ptr() macro here, which
+> like SET_RUNTIME_PM_OPS() requires the match table to be marked
+> as __maybe_unused, though I could not reproduce building this without
+> CONFIG_OF. Remove the of_match_ptr() here as there is no point in
+> dropping the match table in configurations without CONFIG_OF.
+> 
+> Fixes: 02852c01f654 ("media: i2c: imx290: Initialize runtime PM before subdev")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/i2c/imx290.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> index 49d6c8bdec41..48ae2e0adf9e 100644
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -1098,7 +1098,7 @@ static int imx290_runtime_suspend(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops imx290_pm_ops = {
+> -	SET_RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
+> +	RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
+>  };
+>  
+>  /* ----------------------------------------------------------------------------
+> @@ -1362,8 +1362,8 @@ static struct i2c_driver imx290_i2c_driver = {
+>  	.remove = imx290_remove,
+>  	.driver = {
+>  		.name  = "imx290",
+> -		.pm = &imx290_pm_ops,
+> -		.of_match_table = of_match_ptr(imx290_of_match),
+> +		.pm = pm_ptr(&imx290_pm_ops),
+> +		.of_match_table = imx290_of_match,
+>  	},
+>  };
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
