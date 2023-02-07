@@ -2,133 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDA868E252
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCECA68E25C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjBGUzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 15:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S229582AbjBGU5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 15:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjBGUzR (ORCPT
+        with ESMTP id S229460AbjBGU5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 15:55:17 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F253FF2F;
-        Tue,  7 Feb 2023 12:54:54 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id x10so11335722qtr.2;
-        Tue, 07 Feb 2023 12:54:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oJYwQvo65YV42CcV67j6ThqJrL2j7vs+//jJJBY1lJU=;
-        b=llA8jH1JKpr+bAusRJRIFeZ/Iqv4GXI5iUR1BlNEKrmRbiDGHQ3cLLgV9tp7uILLIa
-         QdJLlqqYCPybhOpSlLdM0z7SlLvNgbC92+KL73sz+S9zNlQXbpwwyUeIx0GjdtzWUbif
-         6vN+eVYyS6bHiyqYyKB85dWaZN7wTgOPS/a/31naUxzDQtxrlDLj3Ske7AQmlJP/H42Y
-         xCRPkBBy9G+GKOZo7+8p0C+r2VkaLI8OQINhp1P+4V7RPfenBVMskigk1NO8zrlNX8sD
-         xZ7XKWHRuSsW+480scXYEUrry54oxOHjGc2bGflXgYB0civZslT8ehKQKkzMXU0WhFUq
-         SkBg==
+        Tue, 7 Feb 2023 15:57:40 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A611647;
+        Tue,  7 Feb 2023 12:57:39 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id g8so18308502qtq.13;
+        Tue, 07 Feb 2023 12:57:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oJYwQvo65YV42CcV67j6ThqJrL2j7vs+//jJJBY1lJU=;
-        b=U9VBxJMwTZfd/tMQCu787fhYmFMTazHM5M4nz444hXTsCW9PuXNDptyNIGDFxblCXr
-         eOng8FbQshq07IlkFSVlo6K2loOzBV5R7kkSZ21iqS+REejVYICmgJawLISl3wjY6w5X
-         xwrryYPI0sW4TCbHGdnF5NoEGWS7NpaNN23ZlJ24GqG2/M6CG5LOqsTOCdR/WwnF8qKG
-         lRDXClI7KxZ/g2sQbQn92TByYoQUQUilDlr7NDcrWFTqJvLNGKsHQffRn491Ifhw9uAP
-         Hn7WbF8wvNcdd9vW+OiSe0BCI4dwA6OodfJkrmwe6UCK/FwPJB7z+QFPa6Z8ScYJXVoa
-         bjlQ==
-X-Gm-Message-State: AO0yUKX49YJ6FTml82hFiXRFMCliseFjq1b0w+xpDb682c9TcD0a7J50
-        z5bKZF6gx+wT/EbieO4kNRE=
-X-Google-Smtp-Source: AK7set8mDwYpo/iKZ6AafvA0mQowqngfNnOUwxaaIcqcw7DFfC/t2H08eg7u6sWHCgAipUZOpGfzeg==
-X-Received: by 2002:a05:622a:1393:b0:3b6:30b6:b894 with SMTP id o19-20020a05622a139300b003b630b6b894mr6817929qtk.20.1675803293183;
-        Tue, 07 Feb 2023 12:54:53 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id q18-20020ae9e412000000b0071f636c108bsm10097714qkc.73.2023.02.07.12.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 12:54:52 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 2678027C0054;
-        Tue,  7 Feb 2023 15:54:51 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 07 Feb 2023 15:54:52 -0500
-X-ME-Sender: <xms:m7riY-mxHaW4HQA5Uz3C2ggGAftD8JgtA3Pw_aKmVQi7C-p343d1RA>
-    <xme:m7riY10yPlR8dNxSco9rKxZh_cax1enBHppL0DnldrHl_sIZ67I1NvyBFewbobd07
-    TO8STkFHkafManvVg>
-X-ME-Received: <xmr:m7riY8pX18rbbV0OcA5DxcfLwraFSFaWbh8LktzN0DGea1_FbNjvEaRePtI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegkedgudegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:m7riYylJqzWYGfTEtzFcwCy1J4etyIiPpjl9wMqs06IwgKcq7TaSMA>
-    <xmx:m7riY83AuPl60Ug5K69YxE0nSBpXgI190i7ExW1043uxh3qyRfdkyg>
-    <xmx:m7riY5vhxFS7RIhMjLb8mzpAEsOSavC7sRh3_tyCkGFHDWC8kZux5w>
-    <xmx:m7riY31y-VF8J1_T_Zw8oRFFozhZTjZboECSQwudTo1BlRnq3L5kvQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 Feb 2023 15:54:51 -0500 (EST)
-Date:   Tue, 7 Feb 2023 12:54:33 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergio =?iso-8859-1?Q?Gonz=E1lez?= Collado 
-        <sergio.collado@gmail.com>, Finn Behrens <fin@nyantec.com>
-Subject: Re: [PATCH v2 1/2] rust: sync: impl {Debug,Display} for {Unique,}Arc
-Message-ID: <Y+K6iextaWKdqtHP@boqun-archlinux>
-References: <20230207185216.1314638-1-boqun.feng@gmail.com>
- <20230207185216.1314638-2-boqun.feng@gmail.com>
- <CQCMHZWN9GKV.20T08UNZV7FTJ@vincent-arch>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=stAVsaUhrI2VyH6NyKcHcY+/3Po2YLTE8rKYRoMV1wU=;
+        b=MePtt6+340djBSmSXVbEwH8kcQj2EMJ7pSDDPQEkpqlK3vU+Q0FWFrH3X3f5NXjBlx
+         jtt9Y72cVYlqYszdp/249KyuYBr0c+piB1JsfvtFYGzqIHfZQvnqiPv5KXtRH3M6un25
+         K1/yAXwcAsjTjLRtQJhiEqEMZXE3xmVFJi0YT9rPqimepZpnGh1nv8anCis2mD6s15Ro
+         Ixg+DzOJEBrOR4/mpUZkPPc0DgjIdJRnVJhfcArWThd5fuYWvZnHy3Rh+DV2uOm0lcxL
+         X8euQBQrqEP6LjJu82zGlXhe9+3+RnIHLapwjpDVcBhK0pZOsR3muQh0I64DropLmiyH
+         fjcg==
+X-Gm-Message-State: AO0yUKUrCchewnewM5Ui/Pd/Zii5MBdwkrWeF62x23S2AZTDzM9f29f5
+        NMhJoFx2OtKyDnyD92BuBYVXtBJqUN+7Lg==
+X-Google-Smtp-Source: AK7set/yK96fHKzvj7tLcWyuEI7gC7UCj2Zz/Z5Ct5CxUemLKhS5GWRug8fn4PlDtilF+GkfFPycXA==
+X-Received: by 2002:a05:622a:1489:b0:3ba:110a:bc6e with SMTP id t9-20020a05622a148900b003ba110abc6emr7754473qtx.33.1675803458307;
+        Tue, 07 Feb 2023 12:57:38 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id t189-20020a372dc6000000b0072771acaf09sm10220897qkh.126.2023.02.07.12.57.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 12:57:37 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-52a849206adso65540517b3.4;
+        Tue, 07 Feb 2023 12:57:37 -0800 (PST)
+X-Received: by 2002:a25:928e:0:b0:8a0:2a4:a96c with SMTP id
+ y14-20020a25928e000000b008a002a4a96cmr477401ybl.380.1675803446414; Tue, 07
+ Feb 2023 12:57:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CQCMHZWN9GKV.20T08UNZV7FTJ@vincent-arch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230207014207.1678715-1-saravanak@google.com> <20230207014207.1678715-10-saravanak@google.com>
+In-Reply-To: <20230207014207.1678715-10-saravanak@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Feb 2023 21:57:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com>
+Message-ID: <CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com>
+Subject: Re: [PATCH v3 09/12] of: property: Simplify of_link_to_phandle()
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Tony Lindgren <tony@atomide.com>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 08:45:59PM +0000, Vincenzo Palazzo wrote:
-> > This allows printing the inner data of `Arc` and its friends if the
-> > inner data implements `Display` or `Debug`. It's useful for logging and
-> > debugging purpose.
-> >
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > Reviwed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-> > ---
-> With this review I will override my previous one, because it 
-> contains a typo inside the Reviewed-by.
-> 
-> Sorry about that!
-> 
+Hi Saravana,
 
-No worries.
+On Tue, Feb 7, 2023 at 2:42 AM Saravana Kannan <saravanak@google.com> wrote:
+> The driver core now:
+> - Has the parent device of a supplier pick up the consumers if the
+>   supplier never has a device created for it.
+> - Ignores a supplier if the supplier has no parent device and will never
+>   be probed by a driver
+>
+> And already prevents creating a device link with the consumer as a
+> supplier of a parent.
+>
+> So, we no longer need to find the "compatible" node of the supplier or
+> do any other checks in of_link_to_phandle(). We simply need to make sure
+> that the supplier is available in DT.
+>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 
-> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Thanks for your patch!
 
-Thanks!
+This patch introduces a regression when dynamically loading DT overlays.
+Unfortunately this happens when using the out-of-tree OF configfs,
+which is not supported upstream.  Still, there may be (obscure)
+in-tree users.
 
-Regards,
-Boqun
+When loading a DT overlay[1] to enable an SPI controller, and
+instantiate a connected SPI EEPROM:
+
+    $ overlay add 25lc040
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /keys/status
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/pinctrl-0
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/pinctrl-names
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/cs-gpios
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/status
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /__symbols__/msiof0_pins
+
+The SPI controller and the SPI EEPROM are no longer instantiated.
+
+    # cat /sys/kernel/debug/devices_deferred
+    e6e90000.spi    platform: wait for supplier msiof0
+
+Let's remove the overlay again:
+
+    $ overlay rm 25lc040
+    input: keys as /devices/platform/keys/input/input1
+
+And retry:
+
+    $ overlay add 25lc040
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /keys/status
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/pinctrl-0
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/pinctrl-names
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/cs-gpios
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/status
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /__symbols__/msiof0_pins
+    spi_sh_msiof e6e90000.spi: DMA available
+    spi_sh_msiof e6e90000.spi: registered master spi0
+    spi spi0.0: setup mode 0, 8 bits/w, 100000 Hz max --> 0
+    at25 spi0.0: 512 Byte at25 eeprom, pagesize 16
+    spi_sh_msiof e6e90000.spi: registered child spi0.0
+
+Now it succeeds, and the SPI EEPROM is available, and works.
+
+Without this patch, or with this patch reverted after applying the
+full series:
+
+    $ overlay add 25lc040
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /keys/status
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/pinctrl-0
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/pinctrl-names
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/cs-gpios
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /soc/spi@e6e90000/status
+    OF: overlay: WARNING: memory leak will occur if overlay removed,
+property: /__symbols__/msiof0_pins
+    OF: Not linking spi@e6e90000 to interrupt-controller@f1010000 - No
+struct device
+    spi_sh_msiof e6e90000.spi: DMA available
+    spi_sh_msiof e6e90000.spi: registered master spi0
+    spi spi0.0: setup mode 0, 8 bits/w, 100000 Hz max --> 0
+    at25 spi0.0: 444 bps (2 bytes in 9 ticks)
+    at25 spi0.0: 512 Byte at25 eeprom, pagesize 16
+    spi_sh_msiof e6e90000.spi: registered child spi0.0
+
+The SPI EEPROM is available on the first try after boot.
+
+All output is with #define DEBUG in drivers/of/property.c, and with
+CONFIG_SPI_DEBUG=y.
+
+Note that your patch has no impact on drivers/of/unittest.c, as that
+checks only internal DT structures, not actual device instantiation.
+
+Thanks! ;-)
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/diff/arch/arm64/boot/dts/renesas/r8a77990-ebisu-cn41-msiof0-25lc040.dtso?h=topic/renesas-overlays&id=86d0cf6fa7f191145380485c22f684873c5cce26
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
