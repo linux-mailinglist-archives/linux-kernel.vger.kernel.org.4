@@ -2,129 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAC968D5BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2F768D5BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjBGLkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
+        id S231431AbjBGLkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjBGLkN (ORCPT
+        with ESMTP id S229942AbjBGLkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:40:13 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F91F10248;
-        Tue,  7 Feb 2023 03:40:11 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso11209572wms.4;
-        Tue, 07 Feb 2023 03:40:10 -0800 (PST)
+        Tue, 7 Feb 2023 06:40:49 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DD414E8C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:40:45 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id bk16so13239100wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 03:40:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CVUPLdLOw/UB93NtGlM7IQoioXa06+RQkko/zl9JthU=;
-        b=VJCAqSwV8SEb9dTPQAkuvQc6ycFufPKuoCv64JlqglyOojgkokfgfcYkqfLlwXNQpn
-         esBze4kx7maIBe9Gj7fO5/maQRe4j0VGoK6sRo56hQz4BwofN0iety2nxvczkCiWUuDF
-         vx2BzS54uej4q+inVIiGJcyLBFp6riToS9IfGgzskm1w6eTnB3u9UY/cSW0+quzLoe1Q
-         o8CEduKXROvELtrLaEm2ONJeFkOt9y6LvOnCjOPIpRWq1vO5bmuZRWy82uQsqcrByTJk
-         3iiiSBzX1YSkZ14m5X24o6zgleo2ItqDxpLCTUR8WWLSz9ti7ekw5P/7UPcQxHf4+gH/
-         86EA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0d71pvNow4MZxTy2PhdR4/s9QayMD3hQ8JhxulOfaGY=;
+        b=xkY62qqQmXp9GdszMKhWW8VUG22gdoM1zO5Y6Ierr23/D8xkYQbbEhNe2c0Xu+U6lv
+         pWf9KCzH6/lydUi3wquhFOQwCoQAJr7lQKGDFOJmalVbBYO6B8XK9cHziXDvPRD+Mv+M
+         tJurVodzvcUi6jOt/x46Kpcr2ruyBDzUnSkeyXL0HCq3FzoaNPewMwRdwMMddHj6ltE8
+         RSpTSJ8Hj/2bVNfvTQEPl+4dk4Mp4l3B3NlB74IIkma/+TZyaF834OeC1s9wt/CzmpXl
+         KEGQVTmWEg3GYRMbaKKRou/CFCCIEKYUfAuOIjaGSP41Yq/bndM6hn1QOpFT8QsBZGSf
+         UfgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CVUPLdLOw/UB93NtGlM7IQoioXa06+RQkko/zl9JthU=;
-        b=5DC42oq9NQYYaMbupIJQYgP/71A6doSJcyw8Jj8pIjD85kEWquqEmgsqjBU8gXHnRE
-         h6e6yuYMYtRzUXFQfrVGTk0uFFUCch6vaUaFq6UKY4+EI6WZK/jfmO7NHgwLpwxGeVGK
-         3US7cpwNYGNTs7zQlgelgcBVNfPc7rng8kIkqEy3hhJ412Ew2gcld4GY4kXWW6krYT/q
-         avQUmXOR4hBXA3F2xj0exIKCzpHr0/xoF81DetoDCUweI2v3LNqPrVHx8LCg3LN10L/x
-         9VGDR1pyTANNY3Apzxb92uSha/0R39vxNrMyltveV+bGdhM0/0z2MRXKDjL1PW4HxxGa
-         4wZg==
-X-Gm-Message-State: AO0yUKXYdhB6IOifnGPatb6k8iesR7nznFvKXwSOBXEWa78EQRu6I8sr
-        4zjT4Tsh5isOwH0eOMZgj5I=
-X-Google-Smtp-Source: AK7set+O8Z1wCa2vCtlaMwiUEB+EQ/2JqzGwSRInIaDGWnSxMWM7KwBYn1o29gzma5ZL7XOjOqPUow==
-X-Received: by 2002:a05:600c:3d8b:b0:3df:fd8c:8f2f with SMTP id bi11-20020a05600c3d8b00b003dffd8c8f2fmr2797728wmb.40.1675770009336;
-        Tue, 07 Feb 2023 03:40:09 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o35-20020a05600c512300b003cffd3c3d6csm14762782wms.12.2023.02.07.03.40.08
+        bh=0d71pvNow4MZxTy2PhdR4/s9QayMD3hQ8JhxulOfaGY=;
+        b=7SBqeEsjeipMIyCCe1oxS419/3Jb+V65mhsZS8dbbLmnrVk1CwLREAWcYjntp7KMio
+         fHix4Us5t5BZLGI6vED/uokQfTejReBsA8Xp06r0GnLs1qL/hc1Yxzs+sohbEKpyCZPY
+         NDvYc945CgTbgaNCHAAvQaqd/Wpi36M6S+DMPm6GMgvwJTO7V8NEIakiMDmeShBQh0JG
+         3onBGu6LbzTRsn0PMXRvWiAShJtsqDjunpgDu1KZyJpCQaL5qjIgx/CUb+AtfZvt5Mqq
+         CEbbCz8bBIAflnwxVT35K57rjNNACIftVsE5dFxYW0JEV0q5Epz573u1iSAuuaLgCkfS
+         baVQ==
+X-Gm-Message-State: AO0yUKXxNwva/asCl/PJFPfdYr8/nJPldfMG2ebAvPD2NON5/HqUGGCb
+        mZMmF3SSY44bvap5Oou7Pkhqfg==
+X-Google-Smtp-Source: AK7set9Aeb/GAN7TJEWb/HYMU2morU4S82KZxLRl5kieGErlGBEypSmnf86+JFfUEQfR3mlL5vWGWg==
+X-Received: by 2002:a5d:510e:0:b0:2c3:e4f5:18c with SMTP id s14-20020a5d510e000000b002c3e4f5018cmr2188054wrt.30.1675770044402;
+        Tue, 07 Feb 2023 03:40:44 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0ac700b003d1d5a83b2esm18326005wmr.35.2023.02.07.03.40.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 03:40:08 -0800 (PST)
-Date:   Tue, 7 Feb 2023 14:40:04 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev, Dmitry Safonov <dima@arista.com>,
-        linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        netdev@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] crypto/net/ipv6: sr: Switch to using crypto_pool
-Message-ID: <202302071833.k6CihGFl-lkp@intel.com>
+        Tue, 07 Feb 2023 03:40:43 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/6] sm8550: Add USB HC and PHYs support
+Date:   Tue,  7 Feb 2023 13:40:18 +0200
+Message-Id: <20230207114024.944314-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230118214111.394416-4-dima@arista.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+This patchset adds support for USB for Qualcomm SM8550 platform.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/crypto-Introduce-crypto_pool/20230119-054258
-base:   c1649ec55708ae42091a2f1bca1ab49ecd722d55
-patch link:    https://lore.kernel.org/r/20230118214111.394416-4-dima%40arista.com
-patch subject: [PATCH v4 3/4] crypto/net/ipv6: sr: Switch to using crypto_pool
-config: s390-randconfig-m041-20230206 (https://download.01.org/0day-ci/archive/20230207/202302071833.k6CihGFl-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
+This patchset is based on top of the following patchset:
+https://lore.kernel.org/all/20230206212619.3218741-1-abel.vesa@linaro.org/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+Changes since v4:
+ * dropped the dts/dtsi patches as there is no change needed to what is
+   already merged
+ * rebased on top of next-20230206 which has Luca's patches for SM6350,
+   like Johan suggested
 
-smatch warnings:
-net/ipv6/seg6.c:539 seg6_init() warn: ignoring unreachable code.
+Abel Vesa (6):
+  dt-bindings: phy: Add qcom,snps-eusb2-phy schema file
+  phy: qcom: Add QCOM SNPS eUSB2 driver
+  dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Document SM8550
+    compatible
+  phy: qcom-qmp: pcs-usb: Add v6 register offsets
+  phy: qcom-qmp: Add v6 DP register offsets
+  phy: qcom-qmp-combo: Add support for SM8550
 
-vim +539 net/ipv6/seg6.c
-
-4f4853dc1c9c19 David Lebrun   2016-11-08  532  
-915d7e5e5930b4 David Lebrun   2016-11-08  533  	pr_info("Segment Routing with IPv6\n");
-915d7e5e5930b4 David Lebrun   2016-11-08  534  
-915d7e5e5930b4 David Lebrun   2016-11-08  535  out:
-915d7e5e5930b4 David Lebrun   2016-11-08  536  	return err;
-754f6619437c57 Dmitry Safonov 2023-01-18  537  
-46738b1317e169 David Lebrun   2016-11-15  538  #ifdef CONFIG_IPV6_SEG6_LWTUNNEL
-d1df6fd8a1d22d David Lebrun   2017-08-05 @539  	seg6_local_exit();
-
-Not a bug.  Just dead code.  Some people like to store dead code here
-for later, but it's not a common thing...
-
-754f6619437c57 Dmitry Safonov 2023-01-18  540  out_unregister_iptun:
-4f4853dc1c9c19 David Lebrun   2016-11-08  541  	seg6_iptunnel_exit();
-4f4853dc1c9c19 David Lebrun   2016-11-08  542  #endif
-46738b1317e169 David Lebrun   2016-11-15  543  #ifdef CONFIG_IPV6_SEG6_LWTUNNEL
-6c8702c60b8865 David Lebrun   2016-11-08  544  out_unregister_pernet:
-6c8702c60b8865 David Lebrun   2016-11-08  545  	unregister_pernet_subsys(&ip6_segments_ops);
-46738b1317e169 David Lebrun   2016-11-15  546  #endif
-915d7e5e5930b4 David Lebrun   2016-11-08  547  out_unregister_genl:
-915d7e5e5930b4 David Lebrun   2016-11-08  548  	genl_unregister_family(&seg6_genl_family);
-915d7e5e5930b4 David Lebrun   2016-11-08  549  	goto out;
-915d7e5e5930b4 David Lebrun   2016-11-08  550  }
+ .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    |   1 +
+ .../bindings/phy/qcom,snps-eusb2-phy.yaml     |  74 +++
+ drivers/phy/qualcomm/Kconfig                  |   9 +
+ drivers/phy/qualcomm/Makefile                 |   1 +
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 409 ++++++++++++++++-
+ .../phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h    |  31 ++
+ drivers/phy/qualcomm/phy-qcom-qmp.h           |   4 +
+ drivers/phy/qualcomm/phy-qcom-snps-eusb2.c    | 423 ++++++++++++++++++
+ 8 files changed, 945 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-snps-eusb2.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
 
