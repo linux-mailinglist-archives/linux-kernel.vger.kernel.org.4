@@ -2,211 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603CF68D42A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B803268D436
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjBGK3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S231330AbjBGKab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjBGK3i (ORCPT
+        with ESMTP id S230369AbjBGKaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:29:38 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B891728214
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:29:18 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id k26so7884ual.5
+        Tue, 7 Feb 2023 05:30:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C330279AD
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:29:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675765759;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XeNNXdPHcFQFjrDCbOR/TvrpskWkdGBwv23ZwvAwhAQ=;
+        b=UO1XhJhXp+IJnTNYshZK7vZUjvRg8lX5ss+Vj6mhVrFdSndq7ai4ZcnnsiI8HuZ4pCpSHy
+        +tXdM3RwIqatATEs7sx2Knd78dY/Q58q6UGr+xrs1L0LHAaOC6rbXGHZmpUGwvNwXavP3a
+        OdVE18GWpHVPbI/k5L9une1bM4jIUMM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-416-K3YDBfrfMOmUy2qgzfdV7A-1; Tue, 07 Feb 2023 05:29:18 -0500
+X-MC-Unique: K3YDBfrfMOmUy2qgzfdV7A-1
+Received: by mail-qt1-f200.google.com with SMTP id g2-20020ac870c2000000b003b9c8ab53e9so8164599qtp.6
         for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:29:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UommVTJaXxWIOJAZoy5o/EUG5Ks0hfVT9tU2NEiYwdg=;
-        b=cRO+42/de4Uh+pv3kGZRiBlNDQQKw1ggRGvdLr4DzdWX8ivcamZ816SOkZdGPE7K+k
-         qAa5EsnzSgpxuxOU67xVCuJaKaOPlOF6ugte1Ho2+BEgHMOh+VQ3mdtAtHXWVK5UWVdy
-         F0jNhXPJokBM000pywFXhmPQoxWNIloTyvnaVpAQQjkpxYSJCIVs/dE+Qvuq8FwYpqO7
-         OByedRC3nPh5LZwhIAWELfTxyPc03qEu1Kd2oBinjuplsn4FtI3Et4kzu64Uqlzam+gK
-         SsfiPlsJSLCpO+it5mCwJlh1vzQHzQQmOrz1fyZFrh9H6x/Y26kjZ1BFpNpbVUT/5xJm
-         5FEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UommVTJaXxWIOJAZoy5o/EUG5Ks0hfVT9tU2NEiYwdg=;
-        b=0bm2h3eeu4qMiyLMwLHtMpqFx+TI2SQmYokTggH7HUkBxuBKkPpi47LnqkunOn7vuT
-         zG9N325OeX81SxLlnI3bKP91U577hMwfhKs4wurkFrmTenIApUzQlDB9gfZy5I5idDE3
-         GPW84ex+wz0ZBR3JFQQ6GaiJXeUOKFF9VaVBMPqNgOClBY9D7EgTI6jkpE96vhI35+YU
-         lu5jSUPSGEfWC8v9YQXtzTgZD+3/blG03+jKZFCyf1LbwJhk96AmfxL293SdJvMqVvA3
-         DNQj+HtB/r0jn/WDRIYFnOdrDzlS0cq2RQ7mF+fp3ixDVZrF5eHUawFOWB/hYahl5Dx9
-         IEJw==
-X-Gm-Message-State: AO0yUKXIr4EEeuqyVpA3burUU07O101JvEH7kmIjngnxSaqv0Y4LnOfF
-        EPaotAWGDJpiFJvykt9p05Sr8/6R2UQogv5bi6GwGQ==
-X-Google-Smtp-Source: AK7set+vtrzOIUPt3cNy80cmjiPZQoeNH2N8CM9SSDLoBn+2JNI5eWx2e2HNyMEkuQbDC+qeDS5zvamAOgoG3U7qoDs=
-X-Received: by 2002:ab0:3749:0:b0:669:f7f:882f with SMTP id
- i9-20020ab03749000000b006690f7f882fmr446807uat.54.1675765757774; Tue, 07 Feb
- 2023 02:29:17 -0800 (PST)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XeNNXdPHcFQFjrDCbOR/TvrpskWkdGBwv23ZwvAwhAQ=;
+        b=KMvfiDnOyzURJ9iqKjlg1kLoeT5D6wB50lXUsCEqSW6F0TN8V93o9ZKC/19rfpgD30
+         gj7tUEXqkdrQp4t5aWsZKjC4CsQ6D/uIY81n6X37z2r/v61MVACR2viZpbb29iKID5X+
+         0J9IfhKQqMPLUDstC6jnZlm5ZhYgQVFbkej86dFL9FtIyM5P2OcYIXkMuEhwUxpRZB/U
+         oN7pQ6+D2TEx4mlIisU12gXcm6AVGxEFXx+pBUKQfSDmYuTfOfos4mAKFCcRoAbN0lvi
+         cvAsLN+fJWhQ0qmPFDkuJKUiPt23ns5RZEKhRnrdA9dV/rEZudJfJXQAYK0YKWPNbAL5
+         ZOJw==
+X-Gm-Message-State: AO0yUKWw6uJiBvec47CtPho1eLgIEoSdjNENTvpUYN1J1KWVREg7Zu9U
+        au0zp4MVOqbHJa5T1qkx4T6ujFL7PMrXHUp8LNJWQEvfdscugidU2SVxJtsXMHbq/sdNcTPb1Hg
+        kOB7QiMNLhLxf/BS0g5/LOKnp
+X-Received: by 2002:a05:6214:628:b0:568:d153:823a with SMTP id a8-20020a056214062800b00568d153823amr3751774qvx.15.1675765757637;
+        Tue, 07 Feb 2023 02:29:17 -0800 (PST)
+X-Google-Smtp-Source: AK7set9BUnmZ40Hqit30IPBlDyN9DB7QZjcW+HxvsM96EkuqWD4++1pq7itmtw1eDdcYnxruJSbEJA==
+X-Received: by 2002:a05:6214:628:b0:568:d153:823a with SMTP id a8-20020a056214062800b00568d153823amr3751745qvx.15.1675765757393;
+        Tue, 07 Feb 2023 02:29:17 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id r6-20020a05620a03c600b00702d1c6e7bbsm8958153qkm.130.2023.02.07.02.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 02:29:16 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haniel Bristot de Oliveira <bristot@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Lafreniere <peter@n8pjl.ca>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 3/9] sched: add sched_numa_find_nth_cpu()
+In-Reply-To: <20230206210943.79e01af9@kernel.org>
+References: <20230121042436.2661843-1-yury.norov@gmail.com>
+ <20230121042436.2661843-4-yury.norov@gmail.com>
+ <20230206210943.79e01af9@kernel.org>
+Date:   Tue, 07 Feb 2023 10:29:12 +0000
+Message-ID: <xhsmh4jrxsr9j.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20230203100418.2981144-1-mie@igel.co.jp> <HE1PR0401MB2331EAFF5684D60EC565433688D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-In-Reply-To: <HE1PR0401MB2331EAFF5684D60EC565433688D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 7 Feb 2023 19:29:06 +0900
-Message-ID: <CANXvt5qjDDEK0NB=BWh00-HGU-p+sC=8TyP-oPdccnZxKxZt9w@mail.gmail.com>
-Subject: Re: [EXT] [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP function
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023=E5=B9=B42=E6=9C=884=E6=97=A5(=E5=9C=9F) 1:45 Frank Li <frank.li@nxp.co=
-m>:
+On 06/02/23 21:09, Jakub Kicinski wrote:
+> On Fri, 20 Jan 2023 20:24:30 -0800 Yury Norov wrote:
+>> The function finds Nth set CPU in a given cpumask starting from a given
+>> node.
+>>
+>> Leveraging the fact that each hop in sched_domains_numa_masks includes the
+>> same or greater number of CPUs than the previous one, we can use binary
+>> search on hops instead of linear walk, which makes the overall complexity
+>> of O(log n) in terms of number of cpumask_weight() calls.
 >
->
->
-> > -----Original Message-----
-> > From: Shunsuke Mie <mie@igel.co.jp>
-> > Sent: Friday, February 3, 2023 4:04 AM
-> > To: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > Cc: Krzysztof Wilczy=C5=84ski <kw@linux.com>; Manivannan Sadhasivam
-> > <mani@kernel.org>; Kishon Vijay Abraham I <kishon@kernel.org>; Bjorn
-> > Helgaas <bhelgaas@google.com>; Michael S. Tsirkin <mst@redhat.com>;
-> > Jason Wang <jasowang@redhat.com>; Shunsuke Mie <mie@igel.co.jp>;
-> > Frank Li <frank.li@nxp.com>; Jon Mason <jdmason@kudzu.us>; Ren Zhijie
-> > <renzhijie2@huawei.com>; Takanari Hayama <taki@igel.co.jp>; linux-
-> > kernel@vger.kernel.org; linux-pci@vger.kernel.org; virtualization@lists=
-.linux-
-> > foundation.org
-> > Subject: [EXT] [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP
-> > function
-> >
-> > Caution: EXT Email
-> >
-> > This patchset introduce a virtio-net EP device function. It provides a
-> > new option to communiate between PCIe host and endpoint over IP.
-> > Advantage of this option is that the driver fully uses a PCIe embedded =
-DMA.
-> > It is used to transport data between virtio ring directly each other. I=
-t
-> > can be expected to better throughput.
->
-> Thanks, basic that's what I want.  I am trying use RDMA.
-> But I think virtio-net still be good solution.
-We project extending this module to support RDMA. The plan is based on
-virtio-rdma[1].
-It extends the virtio-net and we are plan to implement the proposed
-spec based on this patch.
-[1] virtio-rdma
-- proposal:
-https://lore.kernel.org/all/20220511095900.343-1-xieyongji@bytedance.com/T/
-- presentation on kvm forum:
-https://youtu.be/Qrhv6hC_YK4
+> Valentin, would you be willing to give us a SoB or Review tag for
+> this one?  We'd like to take the whole series via networking, if
+> that's okay.
 
-Please feel free to comment and suggest.
-> Frank Li
->
-> >
-> > To realize the function, this patchset has few changes and introduces a
-> > new APIs to PCI EP framework related to virtio. Furthermore, it device
-> > depends on the some patchtes that is discussing. Those depended patchse=
-t
-> > are following:
-> > - [PATCH 1/2] dmaengine: dw-edma: Fix to change for continuous transfer
-> > link:
-> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flor=
-e.k
-> > ernel.org%2Fdmaengine%2F20221223022608.550697-1-
-> > mie%40igel.co.jp%2F&data=3D05%7C01%7CFrank.Li%40nxp.com%7Cac57a62d4
-> > 10b458a5ba408db05ce0a4e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
-> > 7C0%7C638110154722945380%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
-> > wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7
-> > C%7C%7C&sdata=3DtIn0MHzEvrdxaC4KKTvTRvYXBzQ6MyrFa2GXpa3ePv0%3D&
-> > reserved=3D0
-> > - [RFC PATCH 0/3] Deal with alignment restriction on EP side
-> > link:
-> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flor=
-e.k
-> > ernel.org%2Flinux-pci%2F20230113090350.1103494-1-
-> > mie%40igel.co.jp%2F&data=3D05%7C01%7CFrank.Li%40nxp.com%7Cac57a62d4
-> > 10b458a5ba408db05ce0a4e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
-> > 7C0%7C638110154722945380%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
-> > wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7
-> > C%7C%7C&sdata=3DRLpnDiLwfqQd5QMXdiQyPVCkfOj8q2AyVeZOwWHvlsM%3
-> > D&reserved=3D0
-> > - [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
-> > link:
-> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flor=
-e.k
-> > ernel.org%2Fvirtualization%2F20230202090934.549556-1-
-> > mie%40igel.co.jp%2F&data=3D05%7C01%7CFrank.Li%40nxp.com%7Cac57a62d4
-> > 10b458a5ba408db05ce0a4e%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
-> > 7C0%7C638110154722945380%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4
-> > wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7
-> > C%7C%7C&sdata=3D6jgY76BMSbvamb%2Fl3Urjt4Gcizeqon%2BZE5nPssc2kDA%
-> > 3D&reserved=3D0
-> >
-> > About this patchset has 4 patches. The first of two patch is little cha=
-nges
-> > to virtio. The third patch add APIs to easily access virtio data struct=
-ure
-> > on PCIe Host side memory. The last one introduce a virtio-net EP device
-> > function. Details are in commit respectively.
-> >
-> > Currently those network devices are testd using ping only. I'll add a
-> > result of performance evaluation using iperf and etc to the future vers=
-ion
-> > of this patchset.
-> >
-> > Shunsuke Mie (4):
-> >   virtio_pci: add a definition of queue flag in ISR
-> >   virtio_ring: remove const from vring getter
-> >   PCI: endpoint: Introduce virtio library for EP functions
-> >   PCI: endpoint: function: Add EP function driver to provide virtio net
-> >     device
-> >
-> >  drivers/pci/endpoint/Kconfig                  |   7 +
-> >  drivers/pci/endpoint/Makefile                 |   1 +
-> >  drivers/pci/endpoint/functions/Kconfig        |  12 +
-> >  drivers/pci/endpoint/functions/Makefile       |   1 +
-> >  .../pci/endpoint/functions/pci-epf-vnet-ep.c  | 343 ++++++++++
-> >  .../pci/endpoint/functions/pci-epf-vnet-rc.c  | 635 ++++++++++++++++++
-> >  drivers/pci/endpoint/functions/pci-epf-vnet.c | 387 +++++++++++
-> >  drivers/pci/endpoint/functions/pci-epf-vnet.h |  62 ++
-> >  drivers/pci/endpoint/pci-epf-virtio.c         | 113 ++++
-> >  drivers/virtio/virtio_ring.c                  |   2 +-
-> >  include/linux/pci-epf-virtio.h                |  25 +
-> >  include/linux/virtio.h                        |   2 +-
-> >  include/uapi/linux/virtio_pci.h               |   2 +
-> >  13 files changed, 1590 insertions(+), 2 deletions(-)
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-ep.c
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-rc.c
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.c
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.h
-> >  create mode 100644 drivers/pci/endpoint/pci-epf-virtio.c
-> >  create mode 100644 include/linux/pci-epf-virtio.h
-> >
-> > --
-> > 2.25.1
->
-Best,
-Shunsuke
+Sure, feel free to add
+
+  Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+
+to patches that don't already have it.
+
