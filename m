@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63DE68DDB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5C868DDB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjBGQNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:13:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        id S232281AbjBGQOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbjBGQN2 (ORCPT
+        with ESMTP id S231779AbjBGQOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:13:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C274E055;
-        Tue,  7 Feb 2023 08:13:20 -0800 (PST)
+        Tue, 7 Feb 2023 11:14:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C164E055
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:13:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB8360EA6;
-        Tue,  7 Feb 2023 16:13:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C26C433EF;
-        Tue,  7 Feb 2023 16:13:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 77F46CE1DFA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49F3C433D2;
+        Tue,  7 Feb 2023 16:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675786399;
-        bh=FLLBP0tTZMTEFNWTFRCOfoqXmh7TMFj9z2SwwwQ+5qo=;
+        s=k20201202; t=1675786433;
+        bh=DQ1CJxcjsi3b+zqgaRiU3Jl5v/BM3ICCZKlhKghFh0M=;
         h=From:To:Cc:Subject:Date:From;
-        b=nhhBAWfFDWtPwtP5V87mG2i7Se7blpUDpt0dX0s1B2Nz8J9dHcar/LTEE4M2F5/yM
-         E28Y0A+5GYWCzYXlSv7zJv5A44VpQS74C7z3Lb6oWWf/VVnmPzVPw9z7b1kD8Cf6Ih
-         1mePSowwg3p65lzzLBB8pWQrSdIwquj5+0ELfVZ4g5rIp4DhdopEpfMedZTDwGQUcY
-         kMHKKjMiatRL3vqMusbbsqcpxO55rY30nr07BbirYbZqnBSkPrmLyBhIjVQRzdsr5v
-         bz6QlUCL+ZuccEB7nOAZVRzWmcbVl9vQATNgIXJ4w+M+f1KO6XKeb7Vtrm+TzjoUhq
-         B0qttGVTChpdg==
+        b=DE3g6e+J+twxY5iQXeiCiS+916bB/3gIK508QO16HKNA9TOuv0k/FRrTm7HPd0ktF
+         r70sg7p3xeFPTV15xJDQPZDPq+HHpmLHcCxRq/9gb9IMRf8oGiUWG/G0O4px2hTJqW
+         J6aQjfA6tsc2SlQkawRpi9+vdao8xyLmKUP7+v44ztj7clMM4hw+1f6QsD/LzPE5MH
+         6Eibdp9yNk/kfLNMzfefvhpoO4qoaO2h6HQKwCUVFCB/lB03RH8JUmSKvegtZtUVcl
+         MltwtVrcGh/Rvth5lCojNAf0jARdFgRjn1kuBDV5CfPK5Ds/Y5xMqd06HrPQr4uDfE
+         sxffkOhc8VIuw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: i2c: imx290: fix conditional function defintions
-Date:   Tue,  7 Feb 2023 17:13:12 +0100
-Message-Id: <20230207161316.293923-1-arnd@kernel.org>
+To:     Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] x86: vdso: sanitize asm helpers for vgetcpu.c
+Date:   Tue,  7 Feb 2023 17:13:41 +0100
+Message-Id: <20230207161349.309901-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,58 +60,89 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The runtime suspend/resume functions are only referenced from the
-dev_pm_ops, but they use the old SET_RUNTIME_PM_OPS() helper
-that requires a __maybe_unused annotation to avoid a warning:
+The x86 vdso implementation includes a few include/linux/*.h kernel
+headers outside of the include/vdso/*.h space.  This causes a new
+warning when building with clang, after the vgetcpu code is added
+to the vdso32 support on 64-bit kernels:
 
-drivers/media/i2c/imx290.c:1082:12: error: unused function 'imx290_runtime_resume' [-Werror,-Wunused-function]
-static int imx290_runtime_resume(struct device *dev)
-           ^
-drivers/media/i2c/imx290.c:1090:12: error: unused function 'imx290_runtime_suspend' [-Werror,-Wunused-function]
-static int imx290_runtime_suspend(struct device *dev)
-           ^
+In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+In file included from include/linux/kernel.h:22:
+In file included from include/linux/bitops.h:68:
+In file included from arch/x86/include/asm/bitops.h:420:
+arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size for constraint 'D'
+                         : REG_IN (w));
+                                   ^
+In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
+In file included from include/linux/kernel.h:25:
+In file included from include/linux/math.h:6:
+arch/x86/include/asm/div64.h:85:34: error: invalid output size for constraint '=a'
+        asm ("mulq %2; divq %3" : "=a" (q)
+                                        ^
 
-Convert this to the new RUNTIME_PM_OPS() helper that so this
-is not required. To improve this further, also use the pm_ptr()
-helper that lets the dev_pm_ops get dropped entirely when
-CONFIG_PM is disabled.
+Unlike gcc, clang checks inline asm constraints before dead code
+elimination, which breaks both __arch_hweight64() and mul_u64_u64_div_u64()
+when these are included with CONFIG_64BIT set but compiled with clang -m32,
+even when there are no callers.
 
-A related mistake happened in the of_match_ptr() macro here, which
-like SET_RUNTIME_PM_OPS() requires the match table to be marked
-as __maybe_unused, though I could not reproduce building this without
-CONFIG_OF. Remove the of_match_ptr() here as there is no point in
-dropping the match table in configurations without CONFIG_OF.
+Change both affected headers to the check for 32-bit vs 64-bit is done
+correctly for vdso32. It would be nice to also limit the included headers
+further, to avoid subtle differences in the header contents, but that
+requires a larger cleanup.
 
-Fixes: 02852c01f654 ("media: i2c: imx290: Initialize runtime PM before subdev")
+Fixes: 92d33063c081 ("x86/vdso: Provide getcpu for x86-32.")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/media/i2c/imx290.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/entry/vdso/vdso32/vgetcpu.c | 2 ++
+ arch/x86/include/asm/arch_hweight.h  | 4 ++--
+ arch/x86/include/asm/div64.h         | 2 +-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 49d6c8bdec41..48ae2e0adf9e 100644
---- a/drivers/media/i2c/imx290.c
-+++ b/drivers/media/i2c/imx290.c
-@@ -1098,7 +1098,7 @@ static int imx290_runtime_suspend(struct device *dev)
+diff --git a/arch/x86/entry/vdso/vdso32/vgetcpu.c b/arch/x86/entry/vdso/vdso32/vgetcpu.c
+index b777f84ffae9..9f8cf77c7077 100644
+--- a/arch/x86/entry/vdso/vdso32/vgetcpu.c
++++ b/arch/x86/entry/vdso/vdso32/vgetcpu.c
+@@ -1,2 +1,4 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define BUILD_VDSO32
++
+ #include "../vgetcpu.c"
+diff --git a/arch/x86/include/asm/arch_hweight.h b/arch/x86/include/asm/arch_hweight.h
+index ba88edd0d58b..cca0941673e0 100644
+--- a/arch/x86/include/asm/arch_hweight.h
++++ b/arch/x86/include/asm/arch_hweight.h
+@@ -4,7 +4,7 @@
+ 
+ #include <asm/cpufeatures.h>
+ 
+-#ifdef CONFIG_64BIT
++#if defined(CONFIG_64BIT) && !defined(BUILD_VDSO32)
+ #define REG_IN "D"
+ #define REG_OUT "a"
+ #else
+@@ -33,7 +33,7 @@ static inline unsigned int __arch_hweight8(unsigned int w)
+ 	return __arch_hweight32(w & 0xff);
  }
  
- static const struct dev_pm_ops imx290_pm_ops = {
--	SET_RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
-+	RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
- };
+-#ifdef CONFIG_X86_32
++#if defined(CONFIG_X86_32) || defined(BUILD_VDSO32)
+ static inline unsigned long __arch_hweight64(__u64 w)
+ {
+ 	return  __arch_hweight32((u32)w) +
+diff --git a/arch/x86/include/asm/div64.h b/arch/x86/include/asm/div64.h
+index b8f1dc0761e4..97bd076db0b2 100644
+--- a/arch/x86/include/asm/div64.h
++++ b/arch/x86/include/asm/div64.h
+@@ -2,7 +2,7 @@
+ #ifndef _ASM_X86_DIV64_H
+ #define _ASM_X86_DIV64_H
  
- /* ----------------------------------------------------------------------------
-@@ -1362,8 +1362,8 @@ static struct i2c_driver imx290_i2c_driver = {
- 	.remove = imx290_remove,
- 	.driver = {
- 		.name  = "imx290",
--		.pm = &imx290_pm_ops,
--		.of_match_table = of_match_ptr(imx290_of_match),
-+		.pm = pm_ptr(&imx290_pm_ops),
-+		.of_match_table = imx290_of_match,
- 	},
- };
+-#ifdef CONFIG_X86_32
++#if defined(CONFIG_X86_32) || defined(BUILD_VDSO32)
  
+ #include <linux/types.h>
+ #include <linux/log2.h>
 -- 
 2.39.1
 
