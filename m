@@ -2,149 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD3368D855
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1014068D884
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbjBGNIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S232381AbjBGNKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbjBGNIk (ORCPT
+        with ESMTP id S232331AbjBGNKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:08:40 -0500
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1A239CD5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:08:10 -0800 (PST)
-Received: from fsav117.sakura.ne.jp (fsav117.sakura.ne.jp [27.133.134.244])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 317D7KXf001231;
-        Tue, 7 Feb 2023 22:07:20 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav117.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp);
- Tue, 07 Feb 2023 22:07:20 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav117.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 317D7Kmo001228
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 7 Feb 2023 22:07:20 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
-Date:   Tue, 7 Feb 2023 22:07:18 +0900
+        Tue, 7 Feb 2023 08:10:14 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583193B0E8;
+        Tue,  7 Feb 2023 05:09:58 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317BOhL4030809;
+        Tue, 7 Feb 2023 13:09:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=eSqfTMcYmap6Rq2CFj8elWEtcqRfbRQlrMyq11yd7PE=;
+ b=cHWqwEXEmiSZuysi0XYCUSPHltUT6gITefzFDmfrADIIKPEzF7w4Z6SvtG0Z9y8yTS35
+ gQCPCEsm4BzREgIukFTZVF+3E+4A2df8dl1wXpwIqfAvd/lkId9hbTnIRAOHjslJbm4x
+ QcFrhP42gptAG3o990uZlNUjQiS9zePIcHUqUUpR5VDfwTCpIuS4a3O5jBK80fiXSiyN
+ AAAP9cZhf93LRKFgUPV1msQ44Kl32d5wMp6iWYvYQ0DLriD3nzkiVScV4dZ+aBGZT+BM
+ /aCbZxjPgE8CyCSgi9ftbdkYQWmvwNH+DPGwOJnhkSLBh1hXI421tkR3/PZVq/F3WaWd dQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nknr32kvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 13:09:02 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317CrUxH023084;
+        Tue, 7 Feb 2023 13:09:01 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nknr32kvb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 13:09:01 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 316Dvnms015413;
+        Tue, 7 Feb 2023 13:08:59 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3nhf06tja7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 13:08:59 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317D8ufq23855512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Feb 2023 13:08:56 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EFDE920043;
+        Tue,  7 Feb 2023 13:08:55 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11F7F20040;
+        Tue,  7 Feb 2023 13:08:55 +0000 (GMT)
+Received: from [9.171.52.227] (unknown [9.171.52.227])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Feb 2023 13:08:54 +0000 (GMT)
+Message-ID: <f37f0057-c872-4cb0-fd15-12d2ef280f49@linux.ibm.com>
+Date:   Tue, 7 Feb 2023 14:08:54 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: Converting dev->mutex into dev->spinlock ?
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v7 09/14] KVM: s390: Dispatch to implementing function at
+ top level of vm mem_op
 Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <Y95h7Vop9t5Li0HD@kroah.com>
- <a236ab6b-d38c-3974-d4cb-5e92d0877abc@I-love.SAKURA.ne.jp>
- <Y957GSFVAQz8v3Xo@rowland.harvard.edu>
- <cf56ebc3-187a-6ee4-26bc-2d180272b5cf@I-love.SAKURA.ne.jp>
- <Y96HiYcreb8jZIHi@rowland.harvard.edu>
- <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
- <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
- <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
- <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
- <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
- <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Huth <thuth@redhat.com>
+References: <20230206164602.138068-1-scgl@linux.ibm.com>
+ <20230206164602.138068-10-scgl@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230206164602.138068-10-scgl@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: wv-J_tqsIw07YP7dJAYC3o8baXJGZUWU
+X-Proofpoint-ORIG-GUID: YlNFpg-Fkt1HeNAWRFKav-OQgJcr1cJW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 bulkscore=0 clxscore=1015 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302070116
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/02/07 0:45, Alan Stern wrote:
-> On Mon, Feb 06, 2023 at 11:13:38PM +0900, Tetsuo Handa wrote:
->> On 2023/02/05 10:23, Alan Stern wrote:
->>> I suppose we could create separate lockdep classes for every bus_type 
->>> and device_type combination, as well as for the different sorts of 
->>> devices -- treat things like class devices separately from normal 
->>> devices, and so on.  But even then there would be trouble.
->>
->> Sorry, since I'm not familiar with devices, I can't interpret what you
->> are talking about in this response. But why don't you try test5() approach
->> in an example module shown below (i.e. treat all dev->mutex instances
->> independent to each other) ?
->>
->> Sharing mutex_init() (like test2() approach) causes false positives,
->> but allocating a key on each dev->mutex (like test5() approach) should
->> avoid false positives.
+On 2/6/23 17:45, Janis Schoetterl-Glausch wrote:
+> Instead of having one function covering all mem_op operations,
+> have a function implementing absolute access and dispatch to that
+> function in its caller, based on the operation code.
+> This way additional future operations can be implemented by adding an
+> implementing function without changing existing operations.
 > 
-> Interesting idea.  I'm doubtful that it will accomplish all that you 
-> want.  After all, one of lockdep's biggest advantages is that it can 
-> detect the potential for deadlocks without a deadlock actually 
-> occurring.  By putting each mutex into its own class, you lose much of 
-> this ability.
+> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
+> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> Reviewed-by: Thomas Huth <thuth@redhat.com>
+
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
+> ---
+>   arch/s390/kvm/kvm-s390.c | 38 ++++++++++++++++++++++++--------------
+>   1 file changed, 24 insertions(+), 14 deletions(-)
 > 
-> But who knows?  Maybe it will be a big help.
-> 
-> Anyway, below is a patch you can try, based on the code for your test5.  
-> Let me know what happens.
-> 
-
-It boots, except lockdep_register_key() hit WARN_ON_ONCE() at
-device_register(&platform_bus) from platform_bus_init(), for
-platform_bus is a static object.
-
-  struct device platform_bus = {
-  	.init_name	= "platform",
-  };
-
-We need to skip lockdep_register_key()/lockdep_unregister_key() on
-static "struct device" instances...
-
-----------
-[    0.550046][    T1] smpboot: Total of 12 processors activated (74513.31 BogoMIPS)
-[    0.559082][    T1] devtmpfs: initialized
-[    0.560054][    T1] ------------[ cut here ]------------
-[    0.562046][    T1] WARNING: CPU: 0 PID: 1 at kernel/locking/lockdep.c:1223 lockdep_register_key+0x1a2/0x230
-[    0.564046][    T1] Modules linked in:
-[    0.565050][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc7+ #16
-[    0.567046][    T1] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-[    0.569077][    T1] RIP: 0010:lockdep_register_key+0x1a2/0x230
-[    0.571046][    T1] Code: 89 03 4a 89 1c e5 60 b1 e8 84 48 85 c0 0f 84 27 ff ff ff 8b 3d c7 68 f8 01 48 89 58 08 85 ff 0f 85 54 ff ff ff e9 1a ff ff ff <0f> 0b 5b 41 5c 41 5d 41 5e 5d c3 89 c6 48 c7 c7 70 41 05 85 e8 35
-[    0.573046][    T1] RSP: 0000:ffffadbb00017e80 EFLAGS: 00010202
-[    0.575046][    T1] RAX: 0000000000000001 RBX: ffffffff8443f5d0 RCX: 0000000000000000
-[    0.577054][    T1] RDX: 0000000000000001 RSI: 0000000000000001 RDI: ffffffff8443f5d0
-[    0.579069][    T1] RBP: ffffadbb00017ea0 R08: 0000000000000003 R09: 0000000000000000
-[    0.581069][    T1] R10: d6bf87c490213bdc R11: 0000000000000001 R12: ffffffff8443f5d0
-[    0.583069][    T1] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-[    0.585058][    T1] FS:  0000000000000000(0000) GS:ffff9b7ef6e00000(0000) knlGS:0000000000000000
-[    0.587046][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    0.589046][    T1] CR2: ffff9b7df0202000 CR3: 000000012f011001 CR4: 0000000000370ef0
-[    0.591046][    T1] Call Trace:
-[    0.592310][    T1]  <TASK>
-[    0.594046][    T1]  device_initialize+0x5f/0x170
-[    0.595046][    T1]  device_register+0xd/0x20
-[    0.597046][    T1]  platform_bus_init+0x16/0x4d
-[    0.598061][    T1]  driver_init+0x2e/0x3a
-[    0.600054][    T1]  kernel_init_freeable+0xc3/0x1d2
-[    0.601051][    T1]  ? rest_init+0x190/0x190
-[    0.603051][    T1]  kernel_init+0x15/0x120
-[    0.604273][    T1]  ret_from_fork+0x1f/0x30
-[    0.606058][    T1]  </TASK>
-[    0.607069][    T1] irq event stamp: 38345
-[    0.608284][    T1] hardirqs last  enabled at (38357): [<ffffffff830d9953>] __up_console_sem+0x53/0x60
-[    0.610046][    T1] hardirqs last disabled at (38370): [<ffffffff830d9938>] __up_console_sem+0x38/0x60
-[    0.613054][    T1] softirqs last  enabled at (38314): [<ffffffff838d54db>] __do_softirq+0x30b/0x46f
-[    0.615061][    T1] softirqs last disabled at (38309): [<ffffffff8306e859>] irq_exit_rcu+0xb9/0xf0
-[    0.617059][    T1] ---[ end trace 0000000000000000 ]---
-[    0.622102][    T1] ACPI: PM: Registering ACPI NVS region [mem 0xbfeff000-0xbfefffff] (4096 bytes)
-[    0.625130][    T1] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
-----------
-
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 0367c1a7e69a..707967a296f1 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -2779,7 +2779,7 @@ static int mem_op_validate_common(struct kvm_s390_mem_op *mop, u64 supported_fla
+>   	return 0;
+>   }
+>   
+> -static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+> +static int kvm_s390_vm_mem_op_abs(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   {
+>   	void __user *uaddr = (void __user *)mop->buf;
+>   	void *tmpbuf = NULL;
+> @@ -2790,17 +2790,6 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   	if (r)
+>   		return r;
+>   
+> -	/*
+> -	 * This is technically a heuristic only, if the kvm->lock is not
+> -	 * taken, it is not guaranteed that the vm is/remains non-protected.
+> -	 * This is ok from a kernel perspective, wrongdoing is detected
+> -	 * on the access, -EFAULT is returned and the vm may crash the
+> -	 * next time it accesses the memory in question.
+> -	 * There is no sane usecase to do switching and a memop on two
+> -	 * different CPUs at the same time.
+> -	 */
+> -	if (kvm_s390_pv_get_handle(kvm))
+> -		return -EINVAL;
+>   	if (!(mop->flags & KVM_S390_MEMOP_F_CHECK_ONLY)) {
+>   		tmpbuf = vmalloc(mop->size);
+>   		if (!tmpbuf)
+> @@ -2841,8 +2830,6 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   		}
+>   		break;
+>   	}
+> -	default:
+> -		r = -EINVAL;
+>   	}
+>   
+>   out_unlock:
+> @@ -2852,6 +2839,29 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+>   	return r;
+>   }
+>   
+> +static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+> +{
+> +	/*
+> +	 * This is technically a heuristic only, if the kvm->lock is not
+> +	 * taken, it is not guaranteed that the vm is/remains non-protected.
+> +	 * This is ok from a kernel perspective, wrongdoing is detected
+> +	 * on the access, -EFAULT is returned and the vm may crash the
+> +	 * next time it accesses the memory in question.
+> +	 * There is no sane usecase to do switching and a memop on two
+> +	 * different CPUs at the same time.
+> +	 */
+> +	if (kvm_s390_pv_get_handle(kvm))
+> +		return -EINVAL;
+> +
+> +	switch (mop->op) {
+> +	case KVM_S390_MEMOP_ABSOLUTE_READ:
+> +	case KVM_S390_MEMOP_ABSOLUTE_WRITE:
+> +		return kvm_s390_vm_mem_op_abs(kvm, mop);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+>   long kvm_arch_vm_ioctl(struct file *filp,
+>   		       unsigned int ioctl, unsigned long arg)
+>   {
 
