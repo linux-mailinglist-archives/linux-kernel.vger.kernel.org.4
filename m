@@ -2,201 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB1C68DC52
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5460368DC56
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbjBGO6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S232470AbjBGO7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232333AbjBGO6k (ORCPT
+        with ESMTP id S232358AbjBGO6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:58:40 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C031BAE2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:58:20 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id ee13so9272305edb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 06:58:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m9dXzspMSenNlI5oCamUoCDWEueYdcmA62RT2TViylY=;
-        b=2moa32bRD5/aRbpTqfOpVvFxqg7F3DCkT6Wwjk1WD8tGYkbbmJD2dCA0NnLITyBwDW
-         S9mZwGy8VJynNqb8rK2CZ9NNE502+WK61EqEs3OOMHe1+j3HZh80Pw30dIUGw/ccRwh+
-         e7c5vhKdu0c0W4yGNb/Cb7ZT8V1sV5QZ7ksxme7irlkrEonCcyf4FlaoxQCZFvchNTm6
-         h52Q7C4WR2MEzDjmVQoZGr3O5N+Z2gbBatLnTR9eYdSV8NUC6YMYNTrQHQYyjnu8BSTL
-         xGL/HtFfuEKDGQ36ggD4tXyXntLsGSjQayEROksSwwAKdYzAnGouK+NjMykJdCAftYoi
-         UAIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m9dXzspMSenNlI5oCamUoCDWEueYdcmA62RT2TViylY=;
-        b=K+b4gugBchmlSSJ+O9c/yu7MCI1Vj7l1oQjdxCXJqae+R305e32p1Kp9J+Vt9ilxKI
-         07CtuVdeGGKhvELOxPQiL7cYemQu3qJ9pcogCQIrOXrrnJ6piR9INFiGl/WL5mVnJSiZ
-         /iTnHUVfaeRDB+fCSLIErNmwPIFYUOozuL7TEnjQOq/4Fy+oLl2+Zvea+BOTQj64OZxR
-         nVy5YD4IRvddyhA+WNuA9C+o4R8UQLax0pnck2YtsEPLj5fGHVegR+Yn6esLWXjvchhV
-         EPwRdAru8mq3zt5jT9ou6aRTFWl0it8PqOIfJya24fjt56TheHNn46eei9FtvLsbgdFv
-         cJzw==
-X-Gm-Message-State: AO0yUKUz3BJbblhPKBa04twAGwUKXjQEH3/TrhEhdfI6QBbTBqKBNrdW
-        UnYA4YzSjzNXJJ4ybkjgFYPKutjYF2MZbCn3fadfvw==
-X-Google-Smtp-Source: AK7set9ktBVamZDOe0rLwj4ElOxpqxvlknofQcBsPZjUtzWEjZj6aoCr5xhjGxwbLh0FKu5sHXjKgb9NqDrBX+NfYSs=
-X-Received: by 2002:a50:cd17:0:b0:4aa:bb33:1368 with SMTP id
- z23-20020a50cd17000000b004aabb331368mr713976edi.3.1675781896444; Tue, 07 Feb
- 2023 06:58:16 -0800 (PST)
+        Tue, 7 Feb 2023 09:58:51 -0500
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9BC13506
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:58:41 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4PB5qK6thNz9sjF;
+        Tue,  7 Feb 2023 15:58:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1675781917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y8pSud8m501Wt9iBbbyoSb9xtWR95MXuPDZJjmHVUQE=;
+        b=W6sWaEhcvrkKUM9l+HGFmvwxOw1aIRqkJUcPcWp0od8bkjxalWfoNTtAMhE/ZtTuP41a5R
+        QCL3E0o6j6tN+fjfqEC1BCkAZkvLcAxkoh18pLrNqkU1dQoqHWxDd5/BMXdgdQ3lzQi9fs
+        gwlPg2nhnuTreTvGZWbwK0iVfvoOlUseYIUCtStSgtxS5zBiJtMDJr6KmoSm0Njn3qodw/
+        bQULX50s49rdtjiSazfPcu4bBD0M7fruxr3AP38tP06B3pNfU9ar/zqWVCmrmCJozxoDSU
+        jh2DvZzS1Wl/qfOBou6OnwG42tLU+ZiLJrEmVFmkmhwE5oX9bcC8avk0oqKwzA==
+Message-ID: <2d8d962e-9fa3-7671-de05-8401a81b1356@mailbox.org>
+Date:   Tue, 7 Feb 2023 15:58:33 +0100
 MIME-Version: 1.0
-References: <20230207095529.1787260-1-atishp@rivosinc.com>
-In-Reply-To: <20230207095529.1787260-1-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 7 Feb 2023 20:28:05 +0530
-Message-ID: <CAAhSdy2jfD6ieiwkO7Mcdsb7DeCE4A86H6usTSmuWKpnHter_A@mail.gmail.com>
-Subject: Re: [PATCH v6 0/8] KVM perf support
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH] drm: Create documentation about device resets
+Content-Language: en-CA
+To:     Pekka Paalanen <ppaalanen@gmail.com>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+Cc:     pierre-eric.pelloux-prayer@amd.com,
+        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
+        amaranath.somalapuram@amd.com, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        kernel-dev@igalia.com, alexander.deucher@amd.com,
+        contactshashanksharma@gmail.com,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pierre-Loup A . Griffais" <pgriffais@valvesoftware.com>
+References: <20230123202646.356592-1-andrealmeid@igalia.com>
+ <20230123202646.356592-2-andrealmeid@igalia.com>
+ <37e78013-5ed6-e80f-4a1c-1e61bed59735@amd.com>
+ <20230207153048.78697e7b@eldfell>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
+In-Reply-To: <20230207153048.78697e7b@eldfell>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-ID: 305e7d2157b32886a42
+X-MBO-RS-META: c74pzhf4mpjfpobjhsbsjrezdyyk7jzk
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 3:26 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> This series extends perf support for KVM. The KVM implementation relies
-> on the SBI PMU extension and trap n emulation of hpmcounter CSRs.
-> The KVM implementation exposes the virtual counters to the guest and internally
-> manage the counters using kernel perf counters.
->
-> This series doesn't support the counter overflow as the Sscofpmf extension
-> doesn't allow trap & emulation mechanism of scountovf CSR yet. The required
-> changes to allow that are being under discussions. Supporting overflow interrupt
-> also requires AIA interrupt filtering support.
->
-> perf stat works in kvm guests with this series.
->
-> Here is example of running perf stat in a guest running in KVM.
->
-> ===========================================================================
-> / # /host/apps/perf stat -e instructions -e cycles -e r8000000000000005 \
-> > -e r8000000000000006 -e r8000000000000007 -e r8000000000000008 \
-> > -e r800000000000000a perf bench sched messaging -g 10 -l 10
->
-> # Running 'sched/messaging' benchmark:
-> # 20 sender and receiver processes per group
-> # 10 groups == 400 processes run
->
->      Total time: 7.769 [sec]
->
->  Performance counter stats for 'perf bench sched messaging -g 10 -l 10':
->
->        73556259604      cycles
->        73387266056      instructions              #    1.00  insn per cycle
->                  0      dTLB-store-misses
->                  0      iTLB-load-misses
->                  0      r8000000000000005
->               2595      r8000000000000006
->               2272      r8000000000000007
->                 10      r8000000000000008
->                  0      r800000000000000a
->
->       12.173720400 seconds time elapsed
->
->        1.002716000 seconds user
->       21.931047000 seconds sys
->
->
-> Note: The SBI_PMU_FW_SET_TIMER (eventid : r8000000000000005) is zero
-> as kvm guest supports sstc now.
->
-> This series can be found here as well.
-> https://github.com/atishp04/linux/tree/kvm_perf_v6
->
-> TODO:
-> 1. Add sscofpmf support.
-> 2. Add One reg interface for the following operations:
->         1. Enable/Disable PMU (should it at VM level rather than vcpu ?)
->         2. Number of hpmcounter and width of the counters
->         3. Init PMU
->         4. Allow guest user to access cycle & instret without trapping
-> 3. Move counter mask to a bitmask instead of unsigned long so that it can work
->    for RV32 systems where number of total counters are more than 32.
->    This will also accomodate future systems which may define maximum counters
->    to be more than 64.
->
-> Changes from v5->v6:
-> 1. Addressed remainig RB tags.
-> 2. Rebased on kvm-queue which already has merged first 6 patches from v5.
-> 3. Added static time compilation checks for max counters.
-> 4. Addressed other nit comments.
->
-> Changes from v4->v5:
-> 1. Few checkpatch --strict error fixes.
-> 2. Some other minor nit comment addressed.
-> 3. Fixed an issue around counter indexing.
->
-> Changes from v3->v4:
-> 1. Addressed all the comments on v3.
-> 2. Modified the vcpu_pmu_init to void return type.
-> 3. Redirect illegal instruction trap to guest for invalid hpmcounter access
->    instead of exiting to the userpsace.
-> 4. Got rid of unecessary error messages.
->
-> Changes v2->v3:
-> 1. Changed the exported functions to GPL only export.
-> 2. Addressed all the nit comments on v2.
-> 3. Split non-kvm related changes into separate patches.
-> 4. Reorgainze the PATCH 11 and 10 based on Drew's suggestions.
->
-> Changes from v1->v2:
-> 1. Addressed comments from Andrew.
-> 2. Removed kvpmu sanity check.
-> 3. Added a kvm pmu init flag and the sanity check to probe function.
-> 4. Improved the linux vs sbi error code handling.
->
->
-> Atish Patra (8):
-> RISC-V: KVM: Add skeleton support for perf
-> RISC-V: KVM: Add SBI PMU extension support
-> RISC-V: KVM: Make PMU functionality depend on Sscofpmf
-> RISC-V: KVM: Disable all hpmcounter access for VS/VU mode
-> RISC-V: KVM: Implement trap & emulate for hpmcounters
-> RISC-V: KVM: Implement perf support without sampling
-> RISC-V: KVM: Support firmware events
-> RISC-V: KVM: Increment firmware pmu events
+On 2/7/23 14:30, Pekka Paalanen wrote:
+> On Mon, 23 Jan 2023 21:38:11 +0100
+> Christian König <christian.koenig@amd.com> wrote:
+>> Am 23.01.23 um 21:26 schrieb André Almeida:
+>>>
+>>> diff --git a/Documentation/gpu/drm-reset.rst b/Documentation/gpu/drm-reset.rst
+>>> new file mode 100644
+>>> index 000000000000..0dd11a469cf9
+>>> --- /dev/null
+>>> +++ b/Documentation/gpu/drm-reset.rst
+>>> @@ -0,0 +1,51 @@
+>>> +================
+>>> +DRM Device Reset
+>>> +================
+>>> +
+>>> +The GPU stack is really complex and is prone to errors, from hardware bugs,
+>>> +faulty applications and everything in the many layers in between. To recover
+>>> +from this kind of state, sometimes is needed to reset the GPU. Unproper handling
+>>> +of GPU resets can lead to an unstable userspace. This page describes what's the
+>>> +expected behaviour from DRM drivers to do in those situations, from usermode
+>>> +drivers and compositors as well.
+>>> +
+>>> +Robustness
+>>> +----------
+>>> +
+>>> +First of all, application robust APIs, when available, should be used. This
+>>> +allows the application to correctly recover and continue to run after a reset.
+>>> +Apps that doesn't use this should be promptly killed when the kernel driver
+>>> +detects that it's in broken state. Specifically guidelines for some APIs:
+>>> +  
+>>
+>>> +- OpenGL: During a reset, KMD kill processes that haven't ARB Robustness
+>>> +  enabled, assuming they can't recover.  
+>>
+>> This is a pretty clear NAK from my side to this approach. The KMD should 
+>> never mess with an userspace process directly in such a way.
+>>
+>> Instead use something like this "OpenGL: KMD signals the abortion of 
+>> submitted commands and the UMD should then react accordingly and abort 
+>> the application.".
+> 
+> what Christian said, plus I would not assume that robust programs will
+> always respond by creating a new context. They could also switch
+> to a software renderer, [...]
 
-I have queued this series for Linux-6.3
+That is indeed what Firefox does.
 
-Thanks,
-Anup
 
->
-> arch/riscv/include/asm/kvm_host.h     |   4 +
-> arch/riscv/include/asm/kvm_vcpu_pmu.h | 108 +++++
-> arch/riscv/kvm/Makefile               |   1 +
-> arch/riscv/kvm/main.c                 |   3 +-
-> arch/riscv/kvm/tlb.c                  |   4 +
-> arch/riscv/kvm/vcpu.c                 |   7 +
-> arch/riscv/kvm/vcpu_insn.c            |   4 +-
-> arch/riscv/kvm/vcpu_pmu.c             | 630 ++++++++++++++++++++++++++
-> arch/riscv/kvm/vcpu_sbi.c             |  11 +
-> arch/riscv/kvm/vcpu_sbi_pmu.c         |  86 ++++
-> arch/riscv/kvm/vcpu_sbi_replace.c     |   7 +
-> 11 files changed, 863 insertions(+), 2 deletions(-)
-> create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
-> create mode 100644 arch/riscv/kvm/vcpu_pmu.c
-> create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
->
-> --
-> 2.25.1
->
+-- 
+Earthling Michel Dänzer            |                  https://redhat.com
+Libre software enthusiast          |         Mesa and Xwayland developer
+
