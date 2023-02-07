@@ -2,169 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE5668DE46
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0CC68DE4B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbjBGQx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S231984AbjBGQzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:55:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjBGQxz (ORCPT
+        with ESMTP id S230503AbjBGQy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:53:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE8E65BD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:53:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C8C5B81A1F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B818C4339B;
-        Tue,  7 Feb 2023 16:53:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675788831;
-        bh=XuTCGHDp71Maj5LPFP6Q/D0zLoJ9M2HqT+7H2wIqnvM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pGclJ/DqVAGjovIJ9hLph5/0eo+QXyrPNtMVOmmyhU/iTM76j4MTHDjAGJIiJRCr6
-         2LbXUulAGSEj4UZhd1wq9FliysnhQxkImn+y6Xi9CjXIf7U9gvkKTn/5MMwxsONTD7
-         I2jdy/HEwpKybpSEWLVBkt2zzgv7LHUA2QTum0n3YgEuxD4KwyzrrFPPcyqLH0A3nA
-         nTT+CDj8l61w+cpEjedO/m475M40gmWccgXpJlKakNMprEfbes8voZ5EF+lxRCvH+S
-         BqtuatyfKafip2JI+S9Zpk9JKIbYUIBrWR/XcajcT6XUTDhInIn70quYCmmZEoXTq7
-         a1DmDU1hK+G0g==
-Date:   Tue, 7 Feb 2023 09:53:48 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     kernel test robot <lkp@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH] x86/vdso: Fake 32bit VDSO build on 64bit compile for
- vgetcpu.
-Message-ID: <Y+KCHOkrumS1I/Th@dev-arch.thelio-3990X>
-References: <202302071338.m7nBGR5i-lkp@intel.com>
- <Y+IsCWQdXEr8d9Vy@linutronix.de>
+        Tue, 7 Feb 2023 11:54:58 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB2746B0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:54:56 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id c2so17426116qtw.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:54:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gzBHkLfEnVFDEK+KjgVtsPAXlm9EVCQtMhAcZQTuuh0=;
+        b=3R5dDZ6GGGovkkLkQKUaYxu0foL+1lSJ8IYIIwmffq4aZeogM3A10O2HibgSIDGKm6
+         P7pHWBdcrdY/tHJxBL8olfaSswF+l0AOUBQwRFILopVOkqOWeq+fkuGRn/KV2miGfB3R
+         u2vfrnTiS6VZZdXL1OihlaQjXHY5+EQIfDuv8ApYEIwNiQ+tgj6bt1TEcvup3q5bEnCV
+         6X8WgXeM41DC7cVzX/pLIbQCt5v/NoP7/Xe8rOEgPF+0w6pktkLf4mXIh6XVxykeW53+
+         OoHO/9ALa/Yjs0ssGNlGiW1Gqwin4AsAZ9YzG1koYj2hrBCPfTY81/kOEme7WiTmWusk
+         n0gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gzBHkLfEnVFDEK+KjgVtsPAXlm9EVCQtMhAcZQTuuh0=;
+        b=tk6geCzoKp3F4yR2mtIa/QTPNDT5reGnreANtQzEc7DGvXNBncCgHRpyYOwEl7bgdn
+         iS/G/D2vxcAQRHhIruliPo4YmPVizzZS2I92LspRWn3paDZ/NyLLMd1jvcZZB6z8k4b5
+         v116+sgsr2d0ylpB3T29woUAHp0bh1GmLL+u8Qp06DlbjXSOO9rhubr9QhyFmxT3B8+p
+         mdgi8wnf2fj6WH8C7NjdyaLR/iTj7tFkJlbFI9fp8CHZ5kgZaBX0iG+5CO6OPPJQLUgl
+         rWwO1OtIoC/okFkqhTjtXb8+onOOBHWlYTRmJPx8uVqeDl4k3OsgbxngaWxHEbpvxl6J
+         otLg==
+X-Gm-Message-State: AO0yUKXNa4iDJ77BGj8kDpRterXK2Pdz5P5cBmaxcFlSeyZ1AC//NNPD
+        3mgMBN0ET3gJmUpcAPpp37mIbg==
+X-Google-Smtp-Source: AK7set+qMzUiEaYmqgBIuMjwJYZXmESXV2XKb3as1asM/N2cPgZ2RgC9pfsk9faWyzv7DV7GhtKZIA==
+X-Received: by 2002:a05:622a:196:b0:3b9:b422:4d5b with SMTP id s22-20020a05622a019600b003b9b4224d5bmr6436646qtw.26.1675788896058;
+        Tue, 07 Feb 2023 08:54:56 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id j6-20020ac84c86000000b003b642c7c772sm9611834qtv.71.2023.02.07.08.54.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 08:54:55 -0800 (PST)
+Date:   Tue, 7 Feb 2023 11:54:55 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [RFC PATCH] mm: memcontrol: don't account swap failures not due
+ to cgroup limits
+Message-ID: <Y+KCX6XHj/lv9ul3@cmpxchg.org>
+References: <20230202155626.1829121-1-hannes@cmpxchg.org>
+ <CAJD7tkaCpD0LpzdA+NsZj2WK=iQCLn7RS9qc7K53Qonxhp4TgA@mail.gmail.com>
+ <20230206161843.GD21332@blackbody.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y+IsCWQdXEr8d9Vy@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230206161843.GD21332@blackbody.suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 11:46:33AM +0100, Sebastian Andrzej Siewior wrote:
-> The 64bit register constrains in __arch_hweight64() can not be
-> fulfilled in a 32bit build. The function is only declared, not used
-> within vclock_gettime.c and gcc does not care. LLVM complains and
-> aborts.
+On Mon, Feb 06, 2023 at 05:18:43PM +0100, Michal Koutný wrote:
+> On Thu, Feb 02, 2023 at 10:30:40AM -0800, Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > b) Only count cgroup swap events when they are actually due to a
+> > >    cgroup's own limit. Exclude failures that are due to physical swap
+> > >    shortage or other system-level conditions (like !THP_SWAP). Also
+> > >    count them at the level where the limit is configured, which may be
+> > >    above the local cgroup that holds the page-to-be-swapped.
+> > >
+> > >    This is in line with how memory.swap.high, memory.high and
+> > >    memory.max events are counted.
+> > >
+> > >    However, it's a change in documented behavior.
+> > 
+> > This option makes sense to me, but I can't speak to the change of
+> > documented behavior. However, looking at the code, it seems like if we do this
+> > the "max" & "fail" counters become effectively the same. "fail" would
+> > not provide much value then.
+> > 
+> > I wonder if it makes sense to have both, and clarify that "fail" -
+> > "max" would be non-limit based failures (e.g. ran out of swap space),
+> > or would this cause confusion as to whether those non-limit failures
+> > were transient (THP fallback) or eventual?
 > 
-> Move the "fake a 32 bit kernel configuration" bits from vclock_gettime.c
-> into a common header file. Use this from vclock_gettime.c and vgetcpu.c.
+> I somewhat second this.
 > 
-> Fixes: 92d33063c081a ("x86/vdso: Provide getcpu for x86-32.")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Perhaps, could the patch (and arguments) be split in two:
+> 1) count .max events on respective limit's level (other limits consistency),
 
-Thank you so much for the fix! Boris inquired why this happens with
-clang and I wrote a little blurb here if that is helpful at all:
+Okay, I'll split this one out. It's good to have regardless of what we
+do with the fail counter.
 
-https://lore.kernel.org/Y+J+UQ1vAKr6RHuH@dev-arch.thelio-3990X/
-
-Regardless, this works for me.
-
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
->  arch/x86/entry/vdso/vdso32/fake_32bit_build.h | 25 +++++++++++++++++
->  arch/x86/entry/vdso/vdso32/vclock_gettime.c   | 27 +------------------
->  arch/x86/entry/vdso/vdso32/vgetcpu.c          |  1 +
->  3 files changed, 27 insertions(+), 26 deletions(-)
->  create mode 100644 arch/x86/entry/vdso/vdso32/fake_32bit_build.h
-> 
-> diff --git a/arch/x86/entry/vdso/vdso32/fake_32bit_build.h b/arch/x86/entry/vdso/vdso32/fake_32bit_build.h
-> new file mode 100644
-> index 0000000000000..db1b15f686e32
-> --- /dev/null
-> +++ b/arch/x86/entry/vdso/vdso32/fake_32bit_build.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifdef CONFIG_X86_64
-> +
-> +/*
-> + * in case of a 32 bit VDSO for a 64 bit kernel fake a 32 bit kernel
-> + * configuration
-> + */
-> +#undef CONFIG_64BIT
-> +#undef CONFIG_X86_64
-> +#undef CONFIG_COMPAT
-> +#undef CONFIG_PGTABLE_LEVELS
-> +#undef CONFIG_ILLEGAL_POINTER_VALUE
-> +#undef CONFIG_SPARSEMEM_VMEMMAP
-> +#undef CONFIG_NR_CPUS
-> +#undef CONFIG_PARAVIRT_XXL
-> +
-> +#define CONFIG_X86_32 1
-> +#define CONFIG_PGTABLE_LEVELS 2
-> +#define CONFIG_PAGE_OFFSET 0
-> +#define CONFIG_ILLEGAL_POINTER_VALUE 0
-> +#define CONFIG_NR_CPUS 1
-> +
-> +#define BUILD_VDSO32_64
-> +
-> +#endif
-> diff --git a/arch/x86/entry/vdso/vdso32/vclock_gettime.c b/arch/x86/entry/vdso/vdso32/vclock_gettime.c
-> index 283ed9d004267..86981decfea83 100644
-> --- a/arch/x86/entry/vdso/vdso32/vclock_gettime.c
-> +++ b/arch/x86/entry/vdso/vdso32/vclock_gettime.c
-> @@ -1,29 +1,4 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #define BUILD_VDSO32
-> -
-> -#ifdef CONFIG_X86_64
-> -
-> -/*
-> - * in case of a 32 bit VDSO for a 64 bit kernel fake a 32 bit kernel
-> - * configuration
-> - */
-> -#undef CONFIG_64BIT
-> -#undef CONFIG_X86_64
-> -#undef CONFIG_COMPAT
-> -#undef CONFIG_PGTABLE_LEVELS
-> -#undef CONFIG_ILLEGAL_POINTER_VALUE
-> -#undef CONFIG_SPARSEMEM_VMEMMAP
-> -#undef CONFIG_NR_CPUS
-> -#undef CONFIG_PARAVIRT_XXL
-> -
-> -#define CONFIG_X86_32 1
-> -#define CONFIG_PGTABLE_LEVELS 2
-> -#define CONFIG_PAGE_OFFSET 0
-> -#define CONFIG_ILLEGAL_POINTER_VALUE 0
-> -#define CONFIG_NR_CPUS 1
-> -
-> -#define BUILD_VDSO32_64
-> -
-> -#endif
-> -
-> +#include "fake_32bit_build.h"
->  #include "../vclock_gettime.c"
-> diff --git a/arch/x86/entry/vdso/vdso32/vgetcpu.c b/arch/x86/entry/vdso/vdso32/vgetcpu.c
-> index b777f84ffae9b..3a9791f5e9989 100644
-> --- a/arch/x86/entry/vdso/vdso32/vgetcpu.c
-> +++ b/arch/x86/entry/vdso/vdso32/vgetcpu.c
-> @@ -1,2 +1,3 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#include "fake_32bit_build.h"
->  #include "../vgetcpu.c"
-> -- 
-> 2.39.1
-> 
+Thanks
