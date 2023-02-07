@@ -2,178 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5E168E341
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5495568E347
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjBGWIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 17:08:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S229836AbjBGWLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 17:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjBGWIx (ORCPT
+        with ESMTP id S229559AbjBGWLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 17:08:53 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32301718;
-        Tue,  7 Feb 2023 14:08:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VP1pSt2rwMIIpA1HeXdi+lwWY8F5SQ8fM4INaHwZ0RPM0BTZ6EH+Mr7A8Q5no84CJUbIFE31JzbHBViR5nYdoCy9lIXHnfSt9lxEls1BvX4547MsvyRuHPQzJ3nZssnojDxcGxK9CAIFSXwHxNZw4/AbnXwtBg7s8LEOlNmz2BRmyYOLdBKuvf+4Cq6rfq4ZBZ/+FAgW0srJsKVnbDltG3YRAwTTXEnaSYhrjdaob7SBCXehh8OftFZ1Q8/StUZ9e135chr1BLEhofWiINwUy3msiAbgIudm+ApO9lWMDWnQvhoKDPOek45Gi3gFCQXY+AtRIFhprby2wsYSx6j1VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dhJrz0UPPAttYYlsH1uONgI493axlUkzqiO90vjoCpw=;
- b=EF1sXuq+uwLAq9+vO6axkv1bJajOmzi1p5UVjqlW+Ur78mbutRAaVt2vvIWRpHAC4F7b0xx36q0icj5XKUuC2n7oqBx/P+HhVZNW3TiA8JBDsnFsIkj2dtCJ4pgBL32HTSFKCKnwAsO0ubVccLmpFatII/iqIyyosEJA/+Ut4ahvq+8D5Nnwq38OsbiTeFNjwWKvc5kq5azSAW/O2zRJWsIg77RcSZ6QJzFoVUqPpjks1ri+P/GeAjTO24nZbS0aON2arMjvyQzUy9TVkmSr5Sw5Pov1GnGBCvhxeBcAgZ3Jy2zcmezNhoWqtOtKrHFz0KCzCoF92mCGU6ZqWmIuiA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lwn.net smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dhJrz0UPPAttYYlsH1uONgI493axlUkzqiO90vjoCpw=;
- b=lwrhqVlEQDqQcPPhM544xS3JcTxLS5/zNWiRqb98cw5iPrpYOvAYES+hB6M3PYMSdRUm8RnQhlP3unQBh0Lmihdeg9ZuwrgrL4rkQ3LyAJZIRXj6bQwq1IMZGqjKb2LpdYcsK/3SKUKW3wAxV1foJz92AO4dEiuzd+eaOwVL81k=
-Received: from BN9PR03CA0704.namprd03.prod.outlook.com (2603:10b6:408:ef::19)
- by PH0PR12MB7472.namprd12.prod.outlook.com (2603:10b6:510:1e9::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Tue, 7 Feb
- 2023 22:08:46 +0000
-Received: from BN8NAM11FT098.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ef:cafe::9d) by BN9PR03CA0704.outlook.office365.com
- (2603:10b6:408:ef::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36 via Frontend
- Transport; Tue, 7 Feb 2023 22:08:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN8NAM11FT098.mail.protection.outlook.com (10.13.177.196) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6086.16 via Frontend Transport; Tue, 7 Feb 2023 22:08:45 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 7 Feb
- 2023 16:08:45 -0600
-Received: from iron-maiden.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 7 Feb 2023 16:08:44 -0600
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <corbet@lwn.net>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH] docs/sp_SP: Add process programming-language translation
-Date:   Tue, 7 Feb 2023 16:08:44 -0600
-Message-ID: <20230207220844.2661295-1-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 7 Feb 2023 17:11:36 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9197A8C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 14:11:35 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id j1so10585491pjd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 14:11:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=i593f184Hmr8abWf/XruS/2XPihlJHd7nufXR7hHK0U=;
+        b=jEtiVqC6llTtARjXT3H0GDBGkn1em1He6HefcR5Z+ZApS8fx8hTP8A3emqMTvRx1e8
+         llI3vPq4cKRhmoWl02+JysYv3C4mtKCI/tVgyPUVviVMkBRj0SDZ3Y4DvqclQdLdSB9C
+         vTLgKcVx1gXgmesDpEeaPTYQvBvdWnn+cyIuQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i593f184Hmr8abWf/XruS/2XPihlJHd7nufXR7hHK0U=;
+        b=pnTRp1o5W1anR0kFJZxwToTxJZk5Irn77Cq45WW+ZLSYCBx8ZtP8+jOJR/zbA5OLVy
+         y3JaEB00IzYwWE5GO4NGtrZX6pB2voMI3ybq2JN6YlBZsa3UOmVx4kfVeTom/RA0Thb8
+         Z6MbfsMIyahU+//DC3kvm8sIRSHuozPOS6hOrtPlXoe5czg5pJI14Em7TbXOA/hPJXic
+         WsUYp/XDTe227WABkacyh69CXu9uhvnleDIGEpAfDFvVl92sbuEP2RHE/7f+Gg2x+KEx
+         BSKc7qmptTrIObhxU7zsaDBa4rSNo2yDARTkXVnei2Lqz4/UUc9O5DqwL5BV3Zfripfk
+         d5lQ==
+X-Gm-Message-State: AO0yUKUjSMNcZ438m5xu/VLP8X4Y9fgA1yYkMYeYu2OkJh4jc3UZVYNG
+        +3giFkhzTFZ5n0o3NeaoGnOv6mWqrWxLA0DcRiyGpA==
+X-Google-Smtp-Source: AK7set/lhHQNMXIISr9N9la2CTvYuDcvZ+/dXpfrOcx/S4HboLBegd9C2OFyGu1PSyIT0qtMJOGDTqIKiYshuksVQIo=
+X-Received: by 2002:a17:902:ce86:b0:198:f9e4:5d1a with SMTP id
+ f6-20020a170902ce8600b00198f9e45d1amr1258924plg.13.1675807894714; Tue, 07 Feb
+ 2023 14:11:34 -0800 (PST)
 MIME-Version: 1.0
+References: <Y+K/i4kj0WER1Hl0@google.com>
+In-Reply-To: <Y+K/i4kj0WER1Hl0@google.com>
+From:   Allen Ballway <ballway@chromium.org>
+Date:   Tue, 7 Feb 2023 14:11:24 -0800
+Message-ID: <CAEs41JAFTGs8LErq1e7esANbHGnfyyP=xZzeax7KfPwoazVK8Q@mail.gmail.com>
+Subject: Re: [PATCH] HID: retain initial quirks set up when creating HID devices
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT098:EE_|PH0PR12MB7472:EE_
-X-MS-Office365-Filtering-Correlation-Id: f7dd3084-e04e-496a-3418-08db0957e194
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MFD2iX5IuorUg9zrpM6+Shcud1MmQZmJRh5LJ/tPHaZv9gpo7RwSJEOgIpZ1zUboG9G5prG3igzSxRQrz7S6pnoKohGB5DrB0qbjxu7QUQJpXwP9uWt66TaLgalrZmb/IA7aWN0prfACdmeVIeMjPa4Sshe8O/Q3gS9KSVN17t7HpKvMk4/q5BJyanOuDpruJ14wQCMzCOIgv/jsinA2k23iN0IqAcDX5BrftQ/0mxNYBXBJX2lc27VoEw5nKg8LSpR8grtZyDXk696HnZaXWRTVHS8FN++oAmIfLtfDbXA5H1PWRC36+i75W9kPqihsbZynSpi2rR6BwC+85DIh4CHM+osqBB6N5RI74V4aDRgYmsf+06jhvGmZLv/Pd0c2hlrt62sB8QUcMKWCOKd3oPTuL+ZWJhHd/QZPkQ6xjoQiaa8OV3LQWx2VVeVniPgAufjONsGUNSwTFgr/WVzrvoEv4TOZAMh0F7KGZkOHDSPDm15dzA1up5IakA1hVbRH1hfGbq8drkD/ZYoYVzcCZiIqbzzClmkGX3Vdg5Omh0gnmEtRUPj6ssbcHT23ptsM+HZHoLwkHS5zcgffkQjz6aguzTMwghCtL9B92UOsgBkHOfCVXYBIzhUf74PDxR4Tw/KElYijynBr7//NQcoNmfj7xyPb1rGjD/6MVGJHe6b49Y3D6LuPKJaxJnnxkXALkg3fDjrPNP5TpPWX1gPf/MSdu7OGECSlypeksdfzeoQO1W1jKQhg3RE+zSAzCFBsoYtueGi2qzle+n7LjTaSTad5/nzgLqbl/5rvWvkMLmHK26GIpN/aP3Z0o46qMPKG
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:es;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199018)(36840700001)(46966006)(40470700004)(336012)(1076003)(186003)(26005)(82740400003)(2616005)(47076005)(426003)(83380400001)(7696005)(966005)(478600001)(36860700001)(356005)(81166007)(4326008)(70586007)(8676002)(316002)(54906003)(6916009)(86362001)(8936002)(5660300002)(44832011)(41300700001)(36756003)(40460700003)(2906002)(70206006)(82310400005)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 22:08:45.3979
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7dd3084-e04e-496a-3418-08db0957e194
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT098.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7472
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Translate Documentation/process/programming-language.rst into Spanish.
+On Tue, Feb 7, 2023 at 1:16 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> In certain circumstances, such as when creating I2C-connected HID
+> devices, we want to pass and retain some querks (axis inversion, etc).
+> The source of such quirks may be device tree, or DMI data, or something
+> else not readily available to the HID core itself and therefore cannot
+> be reconstructed easily. To allow this introduce "initial_quirks" field
+> in hid_device structure and use it when determining the final set of
+> quirks.
+>
+> This fixes problem with i2c-hid setting up device-tree sourced quirks
+> too late and losing them on device rebind, and also allows to sever the
+> tie between hid-code and i2c-hid when applying DMI-based quirks.
+>
+> Fixes: b60d3c803d76 ("HID: i2c-hid-of: Expose the touchscreen-inverted properties")
+> Fixes: a2f416bf062a ("HID: multitouch: Add quirks for flipped axes")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>
+> Compiled only, not tested on hardware.
+>
 
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
----
- .../translations/sp_SP/process/index.rst      |  1 +
- .../sp_SP/process/programming-language.rst    | 53 +++++++++++++++++++
- 2 files changed, 54 insertions(+)
- create mode 100644 Documentation/translations/sp_SP/process/programming-language.rst
+Tested on Dynabook K50 with Elan9034 touchscreen and confirmed quirks are
+applied as expected.
 
-diff --git a/Documentation/translations/sp_SP/process/index.rst b/Documentation/translations/sp_SP/process/index.rst
-index c978a8132ce1..0f1e131b3bb1 100644
---- a/Documentation/translations/sp_SP/process/index.rst
-+++ b/Documentation/translations/sp_SP/process/index.rst
-@@ -17,3 +17,4 @@
-    kernel-enforcement-statement
-    email-clients
-    magic-number
-+   programming-language
-diff --git a/Documentation/translations/sp_SP/process/programming-language.rst b/Documentation/translations/sp_SP/process/programming-language.rst
-new file mode 100644
-index 000000000000..301f525372d8
---- /dev/null
-+++ b/Documentation/translations/sp_SP/process/programming-language.rst
-@@ -0,0 +1,53 @@
-+.. include:: ../disclaimer-sp.rst
-+
-+:Original: :ref:`Documentation/process/programming-language.rst <programming_language>`
-+:Translator: Carlos Bilbao <carlos.bilbao@amd.com>
-+
-+.. _sp_programming_language:
-+
-+Lenguaje de programación
-+========================
-+
-+El kernel está escrito en el lenguaje de programación C [sp-c-language]_.
-+Más concretamente, el kernel normalmente se compila con ``gcc`` [sp-gcc]_
-+bajo ``-std=gnu11`` [sp-gcc-c-dialect-options]_: el dialecto GNU de ISO C11.
-+``clang`` [sp-clang]_ también es compatible, consulte los documentos en
-+:ref:`Building Linux with Clang/LLVM <kbuild_llvm>`.
-+
-+Este dialecto contiene muchas extensiones del lenguaje [sp-gnu-extensions]_,
-+y muchos de ellos se usan dentro del kernel de forma habitual.
-+
-+Hay algo de soporte para compilar el núcleo con ``icc`` [sp-icc]_ para varias
-+de las arquitecturas, aunque en el momento de escribir este texto, eso no
-+está terminado y requiere parches de terceros.
-+
-+Atributos
-+---------
-+
-+Una de las comunes extensiones utilizadas en todo el kernel son los atributos
-+[sp-gcc-attribute-syntax]_. Los atributos permiten introducir semántica
-+definida por la implementación a las entidades del lenguaje (como variables,
-+funciones o tipos) sin tener que hacer cambios sintácticos significativos
-+al idioma (por ejemplo, agregar una nueva palabra clave) [sp-n2049]_.
-+
-+En algunos casos, los atributos son opcionales (es decir, hay compiladores
-+que no los admiten pero de todos modos deben producir el código adecuado,
-+incluso si es más lento o no realiza tantas comprobaciones/diagnósticos en
-+tiempo de compilación).
-+
-+El kernel define pseudo-palabras clave (por ejemplo, ``__pure``) en lugar
-+de usar directamente la sintaxis del atributo GNU (por ejemplo,
-+``__attribute__((__pure__))``) con el fin de detectar cuáles se pueden
-+utilizar y/o acortar el código.
-+
-+Por favor consulte ``include/linux/compiler_attributes.h`` para obtener
-+más información.
-+
-+.. [sp-c-language] http://www.open-std.org/jtc1/sc22/wg14/www/standards
-+.. [sp-gcc] https://gcc.gnu.org
-+.. [sp-clang] https://clang.llvm.org
-+.. [sp-icc] https://software.intel.com/en-us/c-compilers
-+.. [sp-gcc-c-dialect-options] https://gcc.gnu.org/onlinedocs/gcc/C-Dialect-Options.html
-+.. [sp-gnu-extensions] https://gcc.gnu.org/onlinedocs/gcc/C-Extensions.html
-+.. [sp-gcc-attribute-syntax] https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
-+.. [sp-n2049] http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2049.pdf
--- 
-2.34.1
-
+>  drivers/hid/hid-quirks.c                 | 8 +-------
+>  drivers/hid/i2c-hid/i2c-hid-core.c       | 6 ++++--
+>  drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 1 -
+>  include/linux/hid.h                      | 1 +
+>  4 files changed, 6 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+> index 30e35f79def4..66e64350f138 100644
+> --- a/drivers/hid/hid-quirks.c
+> +++ b/drivers/hid/hid-quirks.c
+> @@ -19,7 +19,6 @@
+>  #include <linux/input/elan-i2c-ids.h>
+>
+>  #include "hid-ids.h"
+> -#include "i2c-hid/i2c-hid.h"
+>
+>  /*
+>   * Alphabetically sorted by vendor then product.
+> @@ -1238,7 +1237,7 @@ EXPORT_SYMBOL_GPL(hid_quirks_exit);
+>  static unsigned long hid_gets_squirk(const struct hid_device *hdev)
+>  {
+>         const struct hid_device_id *bl_entry;
+> -       unsigned long quirks = 0;
+> +       unsigned long quirks = hdev->initial_quirks;
+>
+>         if (hid_match_id(hdev, hid_ignore_list))
+>                 quirks |= HID_QUIRK_IGNORE;
+> @@ -1299,11 +1298,6 @@ unsigned long hid_lookup_quirk(const struct hid_device *hdev)
+>                 quirks = hid_gets_squirk(hdev);
+>         mutex_unlock(&dquirks_lock);
+>
+> -       /* Get quirks specific to I2C devices */
+> -       if (IS_ENABLED(CONFIG_I2C_DMI_CORE) && IS_ENABLED(CONFIG_DMI) &&
+> -           hdev->bus == BUS_I2C)
+> -               quirks |= i2c_hid_get_dmi_quirks(hdev->vendor, hdev->product);
+> -
+>         return quirks;
+>  }
+>  EXPORT_SYMBOL_GPL(hid_lookup_quirk);
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+> index 0ab8f47a84e9..efbba0465eef 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-core.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+> @@ -1025,6 +1025,10 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
+>         hid->vendor = le16_to_cpu(ihid->hdesc.wVendorID);
+>         hid->product = le16_to_cpu(ihid->hdesc.wProductID);
+>
+> +       hid->initial_quirks = quirks;
+> +       hid->initial_quirks |= i2c_hid_get_dmi_quirks(hid->vendor,
+> +                                                     hid->product);
+> +
+>         snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X",
+>                  client->name, (u16)hid->vendor, (u16)hid->product);
+>         strscpy(hid->phys, dev_name(&client->dev), sizeof(hid->phys));
+> @@ -1038,8 +1042,6 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
+>                 goto err_mem_free;
+>         }
+>
+> -       hid->quirks |= quirks;
+> -
+>         return 0;
+>
+>  err_mem_free:
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
+> index 554a7dc28536..210f17c3a0be 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
+> @@ -492,4 +492,3 @@ u32 i2c_hid_get_dmi_quirks(const u16 vendor, const u16 product)
+>
+>         return quirks;
+>  }
+> -EXPORT_SYMBOL_GPL(i2c_hid_get_dmi_quirks);
+> diff --git a/include/linux/hid.h b/include/linux/hid.h
+> index daaac4d7f370..56dac09c99d9 100644
+> --- a/include/linux/hid.h
+> +++ b/include/linux/hid.h
+> @@ -622,6 +622,7 @@ struct hid_device {                                                 /* device report descriptor */
+>         unsigned long status;                                           /* see STAT flags above */
+>         unsigned claimed;                                               /* Claimed by hidinput, hiddev? */
+>         unsigned quirks;                                                /* Various quirks the device can pull on us */
+> +       unsigned initial_quirks;                                        /* Initial set of quirks supplied when creating device */
+>         bool io_started;                                                /* If IO has started */
+>
+>         struct list_head inputs;                                        /* The list of inputs */
+> --
+> 2.39.1.519.gcb327c4b5f-goog
+>
+>
+> --
+> Dmitry
