@@ -2,124 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8FF68DC4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB1C68DC52
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:58:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbjBGO6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:58:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S232394AbjBGO6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:58:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbjBGO55 (ORCPT
+        with ESMTP id S232333AbjBGO6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:57:57 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656C21350E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:57:54 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id mc11so43741847ejb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 06:57:54 -0800 (PST)
+        Tue, 7 Feb 2023 09:58:40 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C031BAE2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:58:20 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ee13so9272305edb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 06:58:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSN+gCXhLmK6XFmTGEQoC/f2vmDaSDoOGNlOWvo6ELM=;
-        b=pfYzR9mD7dYztX0PF4DSe69cyNHcWL6JRJwjp6ns70iRKoeGoOqB+fxGKz67ZjwB9j
-         2epyEwQmX6VfthGmO6ttM++aLn675tv0A3+m7KgKBCkzpGRkwbuZqPyC6GcxDS/7pLNm
-         EDlUOeCZQIQnHvr2ZRVm1E3dnElAlxM2HtNPs=
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m9dXzspMSenNlI5oCamUoCDWEueYdcmA62RT2TViylY=;
+        b=2moa32bRD5/aRbpTqfOpVvFxqg7F3DCkT6Wwjk1WD8tGYkbbmJD2dCA0NnLITyBwDW
+         S9mZwGy8VJynNqb8rK2CZ9NNE502+WK61EqEs3OOMHe1+j3HZh80Pw30dIUGw/ccRwh+
+         e7c5vhKdu0c0W4yGNb/Cb7ZT8V1sV5QZ7ksxme7irlkrEonCcyf4FlaoxQCZFvchNTm6
+         h52Q7C4WR2MEzDjmVQoZGr3O5N+Z2gbBatLnTR9eYdSV8NUC6YMYNTrQHQYyjnu8BSTL
+         xGL/HtFfuEKDGQ36ggD4tXyXntLsGSjQayEROksSwwAKdYzAnGouK+NjMykJdCAftYoi
+         UAIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rSN+gCXhLmK6XFmTGEQoC/f2vmDaSDoOGNlOWvo6ELM=;
-        b=eoY5mPRLwQUgiSmDB8qXJTu///f+hVNMdjE8o2kW/9lMf2wN87RI5RB49WjvTPoQbh
-         sP3IaE7HQ7fJ9ywrHRyMtfAcJSp1qLfKi8kmFiSEBWyTPyrCoO1qiBkfsvJ46vG7U970
-         lqYs1jrDOgVGw9XgN+wJ4vWwaE+JPENoJOeorMh7Vyes/osthp1ULS31X99kH2+shFSd
-         Z+/3GMGKJZdiXnE/rQWkXghNfKoQ85oyYoDMllIWb8I/kpdAzJONXl5veAwKVsjW7mYC
-         9YD7d+6FK9ybg+0XoEIMdcJLhYwtkOy7ksLfcFP3b7K8g7BVL2lNsm7MyU03eJK62L2+
-         /Btg==
-X-Gm-Message-State: AO0yUKWYSCd7RNWSfvBvt835zCG8AO0t+n0SENknmXQx2Pa4EBgTSzTZ
-        pdEk7h8r2e3Usaos+BiYYD70eg==
-X-Google-Smtp-Source: AK7set/uZ4rLCFuor89/DZU+t+30ehfkikR4/mkrOoLFeEJWUaObhM31ZP+pyRjRaao5NZO9ftHgOA==
-X-Received: by 2002:a17:907:8e88:b0:8aa:f74:3263 with SMTP id tx8-20020a1709078e8800b008aa0f743263mr2401984ejc.51.1675781873007;
-        Tue, 07 Feb 2023 06:57:53 -0800 (PST)
-Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id v4-20020a170906564400b0088ee56fb24dsm6963073ejr.103.2023.02.07.06.57.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 06:57:52 -0800 (PST)
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Tue, 07 Feb 2023 14:57:48 +0000
-Subject: [PATCH net-next v2] rds: rds_rm_zerocopy_callback() use
- list_first_entry()
+        bh=m9dXzspMSenNlI5oCamUoCDWEueYdcmA62RT2TViylY=;
+        b=K+b4gugBchmlSSJ+O9c/yu7MCI1Vj7l1oQjdxCXJqae+R305e32p1Kp9J+Vt9ilxKI
+         07CtuVdeGGKhvELOxPQiL7cYemQu3qJ9pcogCQIrOXrrnJ6piR9INFiGl/WL5mVnJSiZ
+         /iTnHUVfaeRDB+fCSLIErNmwPIFYUOozuL7TEnjQOq/4Fy+oLl2+Zvea+BOTQj64OZxR
+         nVy5YD4IRvddyhA+WNuA9C+o4R8UQLax0pnck2YtsEPLj5fGHVegR+Yn6esLWXjvchhV
+         EPwRdAru8mq3zt5jT9ou6aRTFWl0it8PqOIfJya24fjt56TheHNn46eei9FtvLsbgdFv
+         cJzw==
+X-Gm-Message-State: AO0yUKUz3BJbblhPKBa04twAGwUKXjQEH3/TrhEhdfI6QBbTBqKBNrdW
+        UnYA4YzSjzNXJJ4ybkjgFYPKutjYF2MZbCn3fadfvw==
+X-Google-Smtp-Source: AK7set9ktBVamZDOe0rLwj4ElOxpqxvlknofQcBsPZjUtzWEjZj6aoCr5xhjGxwbLh0FKu5sHXjKgb9NqDrBX+NfYSs=
+X-Received: by 2002:a50:cd17:0:b0:4aa:bb33:1368 with SMTP id
+ z23-20020a50cd17000000b004aabb331368mr713976edi.3.1675781896444; Tue, 07 Feb
+ 2023 06:58:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230202-rds-zerocopy-v2-1-c999755075db@diag.uniroma1.it>
-X-B4-Tracking: v=1; b=H4sIAOtm4mMC/22OTQ6CMBCFr0K6dggtKNSV9zAu2jLCLGjJFAlIu
- LuFtZuXvHx5P5uIyIRR3LNNMM4UKfhk1CUTrje+Q6A2eaEKVRZJgNsIX+TgwriCRa1tU8lSuka
- kiDURwbLxrj9Cg4kT8gFGxjct585TeJzA4zKJVyI9xSnweh6Y5cn/b80SJGiF9lrVN13V+tGS6
- fKPJw6DkTmlvn3ff0de2ybSAAAA
-To:     Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemb@google.com>
-Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675781872; l=1331;
- i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
- bh=C5CIo8jerNHCxckEuqqrroe2dMawqbDhJuIQdmf27dA=;
- b=Tvff2+5O2E1YCJSWDaIcctk0TLnj/z5ts1dQryYNGB0frC/Agk0HAfUUsDhBBdSoxjNpb1Is2BZZ
- KG/mOoMCCy5QyfHazEzMSrgQ1+KDvNCk6Zd0xAKENHcaZjQIbwea
-X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
- pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230207095529.1787260-1-atishp@rivosinc.com>
+In-Reply-To: <20230207095529.1787260-1-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Tue, 7 Feb 2023 20:28:05 +0530
+Message-ID: <CAAhSdy2jfD6ieiwkO7Mcdsb7DeCE4A86H6usTSmuWKpnHter_A@mail.gmail.com>
+Subject: Re: [PATCH v6 0/8] KVM perf support
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rds_rm_zerocopy_callback() uses list_entry() on the head of a list
-causing a type confusion.
-Use list_first_entry() to actually access the first element of the
-rs_zcookie_queue list.
+On Tue, Feb 7, 2023 at 3:26 PM Atish Patra <atishp@rivosinc.com> wrote:
+>
+> This series extends perf support for KVM. The KVM implementation relies
+> on the SBI PMU extension and trap n emulation of hpmcounter CSRs.
+> The KVM implementation exposes the virtual counters to the guest and internally
+> manage the counters using kernel perf counters.
+>
+> This series doesn't support the counter overflow as the Sscofpmf extension
+> doesn't allow trap & emulation mechanism of scountovf CSR yet. The required
+> changes to allow that are being under discussions. Supporting overflow interrupt
+> also requires AIA interrupt filtering support.
+>
+> perf stat works in kvm guests with this series.
+>
+> Here is example of running perf stat in a guest running in KVM.
+>
+> ===========================================================================
+> / # /host/apps/perf stat -e instructions -e cycles -e r8000000000000005 \
+> > -e r8000000000000006 -e r8000000000000007 -e r8000000000000008 \
+> > -e r800000000000000a perf bench sched messaging -g 10 -l 10
+>
+> # Running 'sched/messaging' benchmark:
+> # 20 sender and receiver processes per group
+> # 10 groups == 400 processes run
+>
+>      Total time: 7.769 [sec]
+>
+>  Performance counter stats for 'perf bench sched messaging -g 10 -l 10':
+>
+>        73556259604      cycles
+>        73387266056      instructions              #    1.00  insn per cycle
+>                  0      dTLB-store-misses
+>                  0      iTLB-load-misses
+>                  0      r8000000000000005
+>               2595      r8000000000000006
+>               2272      r8000000000000007
+>                 10      r8000000000000008
+>                  0      r800000000000000a
+>
+>       12.173720400 seconds time elapsed
+>
+>        1.002716000 seconds user
+>       21.931047000 seconds sys
+>
+>
+> Note: The SBI_PMU_FW_SET_TIMER (eventid : r8000000000000005) is zero
+> as kvm guest supports sstc now.
+>
+> This series can be found here as well.
+> https://github.com/atishp04/linux/tree/kvm_perf_v6
+>
+> TODO:
+> 1. Add sscofpmf support.
+> 2. Add One reg interface for the following operations:
+>         1. Enable/Disable PMU (should it at VM level rather than vcpu ?)
+>         2. Number of hpmcounter and width of the counters
+>         3. Init PMU
+>         4. Allow guest user to access cycle & instret without trapping
+> 3. Move counter mask to a bitmask instead of unsigned long so that it can work
+>    for RV32 systems where number of total counters are more than 32.
+>    This will also accomodate future systems which may define maximum counters
+>    to be more than 64.
+>
+> Changes from v5->v6:
+> 1. Addressed remainig RB tags.
+> 2. Rebased on kvm-queue which already has merged first 6 patches from v5.
+> 3. Added static time compilation checks for max counters.
+> 4. Addressed other nit comments.
+>
+> Changes from v4->v5:
+> 1. Few checkpatch --strict error fixes.
+> 2. Some other minor nit comment addressed.
+> 3. Fixed an issue around counter indexing.
+>
+> Changes from v3->v4:
+> 1. Addressed all the comments on v3.
+> 2. Modified the vcpu_pmu_init to void return type.
+> 3. Redirect illegal instruction trap to guest for invalid hpmcounter access
+>    instead of exiting to the userpsace.
+> 4. Got rid of unecessary error messages.
+>
+> Changes v2->v3:
+> 1. Changed the exported functions to GPL only export.
+> 2. Addressed all the nit comments on v2.
+> 3. Split non-kvm related changes into separate patches.
+> 4. Reorgainze the PATCH 11 and 10 based on Drew's suggestions.
+>
+> Changes from v1->v2:
+> 1. Addressed comments from Andrew.
+> 2. Removed kvpmu sanity check.
+> 3. Added a kvm pmu init flag and the sanity check to probe function.
+> 4. Improved the linux vs sbi error code handling.
+>
+>
+> Atish Patra (8):
+> RISC-V: KVM: Add skeleton support for perf
+> RISC-V: KVM: Add SBI PMU extension support
+> RISC-V: KVM: Make PMU functionality depend on Sscofpmf
+> RISC-V: KVM: Disable all hpmcounter access for VS/VU mode
+> RISC-V: KVM: Implement trap & emulate for hpmcounters
+> RISC-V: KVM: Implement perf support without sampling
+> RISC-V: KVM: Support firmware events
+> RISC-V: KVM: Increment firmware pmu events
 
-Fixes: 9426bbc6de99 ("rds: use list structure to track information for zerocopy completion notification")
-Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
----
- net/rds/message.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I have queued this series for Linux-6.3
 
-diff --git a/net/rds/message.c b/net/rds/message.c
-index b47e4f0a1639..c19c93561227 100644
---- a/net/rds/message.c
-+++ b/net/rds/message.c
-@@ -104,9 +104,9 @@ static void rds_rm_zerocopy_callback(struct rds_sock *rs,
- 	spin_lock_irqsave(&q->lock, flags);
- 	head = &q->zcookie_head;
- 	if (!list_empty(head)) {
--		info = list_entry(head, struct rds_msg_zcopy_info,
--				  rs_zcookie_next);
--		if (info && rds_zcookie_add(info, cookie)) {
-+		info = list_first_entry(head, struct rds_msg_zcopy_info,
-+					rs_zcookie_next);
-+		if (rds_zcookie_add(info, cookie)) {
- 			spin_unlock_irqrestore(&q->lock, flags);
- 			kfree(rds_info_from_znotifier(znotif));
- 			/* caller invokes rds_wake_sk_sleep() */
+Thanks,
+Anup
 
----
-base-commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
-change-id: 20230202-rds-zerocopy-be99b84131c8
-
-Best regards,
--- 
-Pietro Borrello <borrello@diag.uniroma1.it>
-
+>
+> arch/riscv/include/asm/kvm_host.h     |   4 +
+> arch/riscv/include/asm/kvm_vcpu_pmu.h | 108 +++++
+> arch/riscv/kvm/Makefile               |   1 +
+> arch/riscv/kvm/main.c                 |   3 +-
+> arch/riscv/kvm/tlb.c                  |   4 +
+> arch/riscv/kvm/vcpu.c                 |   7 +
+> arch/riscv/kvm/vcpu_insn.c            |   4 +-
+> arch/riscv/kvm/vcpu_pmu.c             | 630 ++++++++++++++++++++++++++
+> arch/riscv/kvm/vcpu_sbi.c             |  11 +
+> arch/riscv/kvm/vcpu_sbi_pmu.c         |  86 ++++
+> arch/riscv/kvm/vcpu_sbi_replace.c     |   7 +
+> 11 files changed, 863 insertions(+), 2 deletions(-)
+> create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
+> create mode 100644 arch/riscv/kvm/vcpu_pmu.c
+> create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
+>
+> --
+> 2.25.1
+>
