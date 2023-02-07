@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7419968DC9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 859C768DC9E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjBGPLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 10:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S232699AbjBGPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 10:11:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjBGPLb (ORCPT
+        with ESMTP id S232569AbjBGPLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 10:11:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746703C298
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:10:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675782585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GxBfoqI0PHHne7Q8icH0M4s0J6nFlvJqJYlQUhkLb0g=;
-        b=CvvppWss4yksN6Bp7eq52zAhy7KTXODwTiM4pxKczxKeDFObjKUrKoaNMsfz+hm1E+CAdA
-        muttJHk+9Fq/7HKUMunZKyxMzGqyiAiHuC6ML42xkPoh4tlJfaM37gnpVNGB6RVZoI+nzU
-        j/OFzyxqnA2P/SxzgPjxV3Tc/PKhCFc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-25NjHeWuOEiRldTs_uNVyA-1; Tue, 07 Feb 2023 10:09:42 -0500
-X-MC-Unique: 25NjHeWuOEiRldTs_uNVyA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 7 Feb 2023 10:11:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246453BD83
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:11:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A09D180D0F2;
-        Tue,  7 Feb 2023 15:09:41 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 72BBE1121314;
-        Tue,  7 Feb 2023 15:09:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <0000000000003a78a905f4049614@google.com>
-References: <0000000000003a78a905f4049614@google.com>
-To:     syzbot <syzbot+c0998868487c1f7e05e5@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, akpm@linux-foundation.org,
-        aneesh.kumar@linux.ibm.com, bpf@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, hch@lst.de,
-        jhubbard@nvidia.com, kuba@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, npiggin@gmail.com, pabeni@redhat.com,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Subject: Re: [syzbot] kernel BUG in process_one_work
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B317D60DBA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 15:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580B7C433D2;
+        Tue,  7 Feb 2023 15:11:19 +0000 (UTC)
+Date:   Tue, 7 Feb 2023 10:11:17 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Phil Auld <pauld@redhat.com>, Ben Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dmitry Adamushko <dmitry.adamushko@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] sched: pick_next_rt_entity(): check list_entry
+Message-ID: <20230207101117.6a87de53@gandalf.local.home>
+In-Reply-To: <20230128-list-entry-null-check-sched-v3-1-b1a71bd1ac6b@diag.uniroma1.it>
+References: <20230128-list-entry-null-check-sched-v3-1-b1a71bd1ac6b@diag.uniroma1.it>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3416442.1675782578.1@warthog.procyon.org.uk>
-Date:   Tue, 07 Feb 2023 15:09:38 +0000
-Message-ID: <3416443.1675782578@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz dup: [syzbot] general protection fault in skb_dequeue (3)
+On Mon, 06 Feb 2023 22:33:54 +0000
+Pietro Borrello <borrello@diag.uniroma1.it> wrote:
 
+> Commit 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+> removed any path which could make pick_next_rt_entity() return NULL.
+> However, BUG_ON(!rt_se) in _pick_next_task_rt() (the only caller of
+> pick_next_rt_entity()) still checks the error condition, which can
+> never happen, since list_entry() never returns NULL.
+> Remove the BUG_ON check, and instead emit a warning in the only
+> possible error condition here: the queue being empty which should
+> never happen.
+> 
+> Fixes: 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> ---
+> Changes in v3:
+> - return NULL if the list is empty
+> - Link to v2: https://lore.kernel.org/r/20230128-list-entry-null-check-sched-v2-1-d8e010cce91b@diag.uniroma1.it
+> 
+> Changes in v2:
+> - pick_next_rt_entity(): emit warning instead of crashing
+> - Link to v1: https://lore.kernel.org/r/20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it
+> ---
+>  kernel/sched/rt.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index ed2a47e4ddae..0a11f44adee5 100644
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+
+-- Steve
