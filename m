@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5305268D51C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:07:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3903D68D51E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjBGLHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S231915AbjBGLHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjBGLHY (ORCPT
+        with ESMTP id S231266AbjBGLHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:07:24 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAA13866E;
-        Tue,  7 Feb 2023 03:07:21 -0800 (PST)
+        Tue, 7 Feb 2023 06:07:39 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB4737F2A;
+        Tue,  7 Feb 2023 03:07:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675768040; x=1707304040;
+  t=1675768057; x=1707304057;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rueJZQaYj5/OCL0rhwE4IQRQNJdQeur4XqdJx6V7odE=;
-  b=P1h8kazBf2WJwCQqoXalOfVX0QWwn9RkfPqTIIWheQbILOE+Uujtjrja
-   o45g0uWZxM/qm+bPY8ZGzi/0zfDTGQkI2UCtBcwhBGQ2/hWb/dWvQDUw2
-   B8bBEVTJKTw2Ius7sAFOX0T6rCIBDNUWW8jk9xuXLU/7QdN0iKTz0B1D8
-   0VQWM4Hnstmt+cRAakHLTWzm8N7J2yYpct4SqzJfFCH5iaJcHm78mKYN4
-   X8JrvuLujSSiZbrB4LuByJKfatd3HTGyuNI3UmKTv+GtYSSpVIro4TXIz
-   gQz5qTqmfajtyYn8NMAKAHnxIt/13L+ZcyTZsfvktgrvQPE1BvwTo/18P
-   w==;
+  bh=mjHwzmjVx5AsDKi0vsPeqIFr4VuECLn5thzx9mG1050=;
+  b=jG7OAO+99gFZsNpY4WOSvsQPAy5JJHWHsLEWN77u2Q/EiFfKSI5d1N7X
+   NBB0BwoMeMnXRlfA/bNHLNHv/ws5/GbUELjzxZHy8XNe6uO0x+WwkXzCi
+   bnd5Kb3TSkPWtXU0+SH30BGB3cf7uttiMMpCiMcgdOLvVy0qjrUYhckRk
+   Ylhb/zEWRyTvIAbUWsWwS/AF0QQI3G9WidCcT6XyQPKP78jmb9Nyjpprn
+   uSEcYOuvsMZ5oYFFdLDMosWIuD93vvwZvz5BTjLlY3lLbkZcLSkEbN87n
+   K3Q5rZXnYZO0r8nEv8RYqzpUKgLZjgt5OySG3XAPe602fsB8mStR+nWVx
+   g==;
 X-IronPort-AV: E=Sophos;i="5.97,278,1669100400"; 
-   d="scan'208";a="135929117"
+   d="scan'208";a="210907328"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 04:07:19 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 04:07:37 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 04:07:16 -0700
+ 15.1.2507.16; Tue, 7 Feb 2023 04:07:36 -0700
 Received: from che-lt-i66125lx.microchip.com (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 04:07:07 -0700
+ 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 04:07:27 -0700
 From:   Durai Manickam KR <durai.manickamkr@microchip.com>
 To:     <Hari.PrasathGE@microchip.com>,
         <balamanikandan.gunasundar@microchip.com>,
@@ -54,9 +54,9 @@ To:     <Hari.PrasathGE@microchip.com>,
         <Horatiu.Vultur@microchip.com>, <robh+dt@kernel.org>,
         <andrew@lunn.ch>, <michael@walle.cc>, <jerry.ray@microchip.com>
 CC:     Durai Manickam KR <durai.manickamkr@microchip.com>
-Subject: [PATCH v6 1/8] ARM: dts: at91: sam9x60: Fix the label numbering for the flexcom functions
-Date:   Tue, 7 Feb 2023 16:36:44 +0530
-Message-ID: <20230207110651.197268-2-durai.manickamkr@microchip.com>
+Subject: [PATCH v6 2/8] ARM: dts: at91: sam9x60: move flexcom definitions
+Date:   Tue, 7 Feb 2023 16:36:45 +0530
+Message-ID: <20230207110651.197268-3-durai.manickamkr@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230207110651.197268-1-durai.manickamkr@microchip.com>
 References: <20230207110651.197268-1-durai.manickamkr@microchip.com>
@@ -75,82 +75,177 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Manikandan Muralidharan <manikandan.m@microchip.com>
 
-Fixed the label numbering of the flexcom functions so that all
-13 flexcom functions of sam9x60 are in the following order when the missing
-flexcom functions are added:
-
-flx0: uart0, spi0, i2c0
-flx1: uart1, spi1, i2c1
-flx2: uart2, spi2, i2c2
-flx3: uart3, spi3, i2c3
-flx4: uart4, spi4, i2c4
-flx5: uart5, spi5, i2c5
-flx6: uart6, i2c6
-flx7: uart7, i2c7
-flx8: uart8, i2c8
-flx9: uart9, i2c9
-flx10: uart10, i2c10
-flx11: uart11, i2c11
-flx12: uart12, i2c12
+Move the flexcom definitions from board specific DTS file
+to the SoC specific DTSI file for sam9x60ek.
 
 Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
+Signed-off-by: Hari Prasath Gujulan Elango <Hari.PrasathGE@microchip.com>
+[durai.manickamkr@microchip.com: Logical split-up of this patch and added
+ missing UART5 compatibles]
 Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
 Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- arch/arm/boot/dts/at91-sam9x60ek.dts | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/at91-sam9x60ek.dts | 33 +------------------
+ arch/arm/boot/dts/sam9x60.dtsi       | 49 ++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+), 32 deletions(-)
 
 diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index d929c1ba5789..cf5d786531f2 100644
+index cf5d786531f2..4ff84633dd43 100644
 --- a/arch/arm/boot/dts/at91-sam9x60ek.dts
 +++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -16,8 +16,8 @@ / {
+@@ -207,15 +207,10 @@ &flx0 {
+ 	status = "okay";
  
- 	aliases {
- 		i2c0 = &i2c0;
--		i2c1 = &i2c1;
--		serial1 = &uart1;
-+		i2c1 = &i2c6;
-+		serial1 = &uart5;
- 	};
- 
- 	chosen {
-@@ -234,7 +234,7 @@ &flx4 {
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_SPI>;
+ 	i2c0: i2c@600 {
+-		compatible = "microchip,sam9x60-i2c";
+-		reg = <0x600 0x200>;
+-		interrupts = <5 IRQ_TYPE_LEVEL_HIGH 7>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 5>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_flx0_default>;
+-		atmel,fifo-size = <16>;
+ 		i2c-analog-filter;
+ 		i2c-digital-filter;
+ 		i2c-digital-filter-width-ns = <35>;
+@@ -235,14 +230,8 @@ &flx4 {
  	status = "disabled";
  
--	spi0: spi@400 {
-+	spi4: spi@400 {
- 		compatible = "microchip,sam9x60-spi", "atmel,at91rm9200-spi";
- 		reg = <0x400 0x200>;
- 		interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
-@@ -253,7 +253,7 @@ &flx5 {
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
+ 	spi4: spi@400 {
+-		compatible = "microchip,sam9x60-spi", "atmel,at91rm9200-spi";
+-		reg = <0x400 0x200>;
+-		interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 13>;
+-		clock-names = "spi_clk";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_flx4_default>;
+-		atmel,fifo-size = <16>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 		status = "disabled";
+@@ -254,23 +243,8 @@ &flx5 {
  	status = "okay";
  
--	uart1: serial@200 {
-+	uart5: serial@200 {
- 		compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
- 		reg = <0x200 0x200>;
- 		atmel,usart-mode = <AT91_USART_MODE_SERIAL>;
-@@ -279,7 +279,7 @@ &flx6 {
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
+ 	uart5: serial@200 {
+-		compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
+-		reg = <0x200 0x200>;
+-		atmel,usart-mode = <AT91_USART_MODE_SERIAL>;
+-		interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
+-		dmas = <&dma0
+-			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
+-			 AT91_XDMAC_DT_PERID(10))>,
+-		       <&dma0
+-			(AT91_XDMAC_DT_MEM_IF(0) | AT91_XDMAC_DT_PER_IF(1) |
+-			 AT91_XDMAC_DT_PERID(11))>;
+-		dma-names = "tx", "rx";
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 14>;
+-		clock-names = "usart";
+-		pinctrl-0 = <&pinctrl_flx5_default>;
+ 		pinctrl-names = "default";
+-		atmel,use-dma-rx;
+-		atmel,use-dma-tx;
++		pinctrl-0 = <&pinctrl_flx5_default>;
+ 		status = "okay";
+ 	};
+ };
+@@ -280,15 +254,10 @@ &flx6 {
  	status = "okay";
  
--	i2c1: i2c@600 {
-+	i2c6: i2c@600 {
- 		compatible = "microchip,sam9x60-i2c";
- 		reg = <0x600 0x200>;
- 		interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
-@@ -439,7 +439,7 @@ AT91_PIOA 13 AT91_PERIPH_A AT91_PINCTRL_NONE
- 				 AT91_PIOA 14 AT91_PERIPH_A AT91_PINCTRL_NONE>;
- 		};
+ 	i2c6: i2c@600 {
+-		compatible = "microchip,sam9x60-i2c";
+-		reg = <0x600 0x200>;
+-		interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		clocks = <&pmc PMC_TYPE_PERIPHERAL 9>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_flx6_default>;
+-		atmel,fifo-size = <16>;
+ 		i2c-analog-filter;
+ 		i2c-digital-filter;
+ 		i2c-digital-filter-width-ns = <35>;
+diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
+index 8f5477e307dd..ee6cc4329ae4 100644
+--- a/arch/arm/boot/dts/sam9x60.dtsi
++++ b/arch/arm/boot/dts/sam9x60.dtsi
+@@ -170,6 +170,16 @@ flx4: flexcom@f0000000 {
+ 				#size-cells = <1>;
+ 				ranges = <0x0 0xf0000000 0x800>;
+ 				status = "disabled";
++
++				spi4: spi@400 {
++					compatible = "microchip,sam9x60-spi", "atmel,at91rm9200-spi";
++					reg = <0x400 0x200>;
++					interrupts = <13 IRQ_TYPE_LEVEL_HIGH 7>;
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 13>;
++					clock-names = "spi_clk";
++					atmel,fifo-size = <16>;
++					status = "disabled";
++				};
+ 			};
  
--		pinctrl_flx5_default: flx_uart {
-+		pinctrl_flx5_default: flx5_uart {
- 			atmel,pins =
- 				<AT91_PIOA 7 AT91_PERIPH_C AT91_PINCTRL_NONE
- 				 AT91_PIOA 8 AT91_PERIPH_B AT91_PINCTRL_NONE
+ 			flx5: flexcom@f0004000 {
+@@ -180,6 +190,27 @@ flx5: flexcom@f0004000 {
+ 				#size-cells = <1>;
+ 				ranges = <0x0 0xf0004000 0x800>;
+ 				status = "disabled";
++
++				uart5: serial@200 {
++					compatible = "microchip,sam9x60-dbgu", "microchip,sam9x60-usart", "atmel,at91sam9260-dbgu", "atmel,at91sam9260-usart";
++					reg = <0x200 0x200>;
++					atmel,usart-mode = <AT91_USART_MODE_SERIAL>;
++					interrupts = <14 IRQ_TYPE_LEVEL_HIGH 7>;
++					dmas = <&dma0
++						(AT91_XDMAC_DT_MEM_IF(0) |
++						 AT91_XDMAC_DT_PER_IF(1) |
++						 AT91_XDMAC_DT_PERID(10))>,
++						<&dma0
++						(AT91_XDMAC_DT_MEM_IF(0) |
++						 AT91_XDMAC_DT_PER_IF(1) |
++						 AT91_XDMAC_DT_PERID(11))>;
++					dma-names = "tx", "rx";
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 14>;
++					clock-names = "usart";
++					atmel,use-dma-rx;
++					atmel,use-dma-tx;
++					status = "disabled";
++				};
+ 			};
+ 
+ 			dma0: dma-controller@f0008000 {
+@@ -379,6 +410,15 @@ flx6: flexcom@f8010000 {
+ 				#size-cells = <1>;
+ 				ranges = <0x0 0xf8010000 0x800>;
+ 				status = "disabled";
++
++				i2c6: i2c@600 {
++					compatible = "microchip,sam9x60-i2c";
++					reg = <0x600 0x200>;
++					interrupts = <9 IRQ_TYPE_LEVEL_HIGH 7>;
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 9>;
++					atmel,fifo-size = <16>;
++					status = "disabled";
++				};
+ 			};
+ 
+ 			flx7: flexcom@f8014000 {
+@@ -409,6 +449,15 @@ flx0: flexcom@f801c000 {
+ 				#size-cells = <1>;
+ 				ranges = <0x0 0xf801c000 0x800>;
+ 				status = "disabled";
++
++				i2c0: i2c@600 {
++					compatible = "microchip,sam9x60-i2c";
++					reg = <0x600 0x200>;
++					interrupts = <5 IRQ_TYPE_LEVEL_HIGH 7>;
++					clocks = <&pmc PMC_TYPE_PERIPHERAL 5>;
++					atmel,fifo-size = <16>;
++					status = "disabled";
++				};
+ 			};
+ 
+ 			flx1: flexcom@f8020000 {
 -- 
 2.25.1
 
