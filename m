@@ -2,154 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3D968CFB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 925F468CFC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjBGGpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S230327AbjBGGsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjBGGpn (ORCPT
+        with ESMTP id S230321AbjBGGsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:45:43 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533D11BE7;
-        Mon,  6 Feb 2023 22:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675752342; x=1707288342;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AaUf0zG3WU35FnYxi/A+oYi6a97oKHZ4rYfEtRF+/Vc=;
-  b=EjbtUhxgPCXJ6j/vBKEij8VCF26PoEBNGWRXK5ZgvUa1ZsUvERHqjrI5
-   aNCK+X58W4eMXIt19CG+uLXEGomACoQasiBf7v8amesPpKBg/V38TWJkx
-   ZnaoOdhVJ9uB3DeDI1roPb0CTb+So2vXgjgZi8wgxTYmmyJUEcEpHeFW0
-   LPdJjN5GmgnrlRKq+XQ5jMWCoUP49Hhrfsjqgi7ZWusyglSg84xwGPwR2
-   hNslj7cVO2jWSUfu0ZXHGOzv9oH48xZAcDtw0CrEq/rjhYNZlcCD8VKBY
-   mVXKNb+BWZpEzbYThcN8mdrToComhuAh5fcGf8gEJqkGJ70EW5FhA2YE4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="329441402"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="329441402"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 22:45:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668680659"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668680659"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.209.26]) ([10.254.209.26])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 22:45:39 -0800
-Message-ID: <b190ddb3-eb1d-cd72-ce03-1127af228bf0@linux.intel.com>
-Date:   Tue, 7 Feb 2023 14:45:37 +0800
+        Tue, 7 Feb 2023 01:48:09 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2752298F2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:48:07 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so10631413wms.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0+/U+QeK9hEvR6ABz+IUCKA1l4N6KPAD5pigWZc0fCI=;
+        b=PuElOJ85V+kFpfl3zu7zCKumBa64kSyH1+BScbb0uNTmSHsLoKEBVtlCQcoxSAASOr
+         kzdOwtho7xSPQJ638hf/8BkmHQM3ghsoJOfZSnagx0kVzGk0PtjKB4++QsGlfES+s1oF
+         L/xpGmzlhjFMLQZq5J46Fiirv2V63YA8P3gVSU56CeuIvaHQ3b4jPZ/IpwLXzaWuidNY
+         YfcqmJPSo7AtuiMn5dGrneo1gPHQZ+OELT2dzmloA7f5x+pwvdWCxlFcj2/YV+7/h8+4
+         of3pa1wV436yuX59pcLro+vfLxW3Cy4OxlhoCnzQFDeIeBrd+irSUt1XDUzqFPWPZNKV
+         5kFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0+/U+QeK9hEvR6ABz+IUCKA1l4N6KPAD5pigWZc0fCI=;
+        b=zwBbZUx6/1rbjZgJDc2luBIq/AWb4pYbNnnxXkQjxuNH+07P9lkVq/ok4uzw+qk8ul
+         c3z92jKnEpQ6I6JpzZuM79k19ifmVKFDmdMKY+dmHWEgdTUmWYBMeSI4/WJ0CuPhuw3H
+         IB85H/+ncFGKl9nCRUysDs8onBPUMwbc5RFgUFLnEdgDU+jbTOoPeqsybcDbis3rvu6N
+         IE00joz/IMjm2kacMMAyZhT9UrmfQx011UB++GZyVnV2B4ddScK13vgBivdFw5y9cF8o
+         WEZcbw+rlFGQ7h4hs36wg+mEY9yuovGQEUGvqKLWLz8nvoYcriYy+2N3FH2MCkJflP9k
+         TxVw==
+X-Gm-Message-State: AO0yUKXu+AG85oe3W08IMtmfcCZRX/g0ynz2MTevJHFYBJAHXL1AXYsn
+        RtHZso+cMcPs/TVIgAfXRoCUTg==
+X-Google-Smtp-Source: AK7set8/0UZWOQVVrAPWQTpokDH093Y0jNluxoRsQ7HVW1Y5DviGGWIwbHisbRqsQTbbkAN+r4DDkQ==
+X-Received: by 2002:a05:600c:44c9:b0:3df:f9e9:7600 with SMTP id f9-20020a05600c44c900b003dff9e97600mr2042146wmo.25.1675752486463;
+        Mon, 06 Feb 2023 22:48:06 -0800 (PST)
+Received: from [192.168.0.104] ([82.77.80.113])
+        by smtp.gmail.com with ESMTPSA id s22-20020a1cf216000000b003dffe312925sm6097811wmc.15.2023.02.06.22.48.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 22:48:06 -0800 (PST)
+Message-ID: <67e1d3af-d106-bd5c-f8d8-3f43a58975a0@linaro.org>
+Date:   Tue, 7 Feb 2023 06:48:04 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Kumar, Sanjay K" <sanjay.k.kumar@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH] iommu/vt-d: Avoid superfluous IOTLB tracking in lazy mode
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/3] spi: spi-cadence-quadspi: Add Rx tuning support for
+ DTR mode
 Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20230203230417.1287325-1-jacob.jun.pan@linux.intel.com>
- <ef65f1cf-d04c-8c35-7144-d30504bf7a1c@linux.intel.com>
- <BN9PR11MB52764498929E4978B3A8740D8CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB52764498929E4978B3A8740D8CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, saikrishna12468@gmail.com,
+        git@amd.com
+References: <20230207060924.265789-1-sai.krishna.potthuri@amd.com>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20230207060924.265789-1-sai.krishna.potthuri@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/6 11:48, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Saturday, February 4, 2023 2:32 PM
->>
->> On 2023/2/4 7:04, Jacob Pan wrote:
->>> Intel IOMMU driver implements IOTLB flush queue with domain selective
->>> or PASID selective invalidations. In this case there's no need to track
->>> IOVA page range and sync IOTLBs, which may cause significant
->> performance
->>> hit.
->>
->> [Add cc Robin]
->>
->> If I understand this patch correctly, this might be caused by below
->> helper:
->>
->> /**
->>    * iommu_iotlb_gather_add_page - Gather for page-based TLB invalidation
->>    * @domain: IOMMU domain to be invalidated
->>    * @gather: TLB gather data
->>    * @iova: start of page to invalidate
->>    * @size: size of page to invalidate
->>    *
->>    * Helper for IOMMU drivers to build invalidation commands based on
->> individual
->>    * pages, or with page size/table level hints which cannot be gathered
->> if they
->>    * differ.
->>    */
->> static inline void iommu_iotlb_gather_add_page(struct iommu_domain
->> *domain,
->>                                                  struct
->> iommu_iotlb_gather *gather,
->>                                                  unsigned long iova,
->> size_t size)
->> {
->>           /*
->>            * If the new page is disjoint from the current range or is
->> mapped at
->>            * a different granularity, then sync the TLB so that the gather
->>            * structure can be rewritten.
->>            */
->>           if ((gather->pgsize && gather->pgsize != size) ||
->>               iommu_iotlb_gather_is_disjoint(gather, iova, size))
->>                   iommu_iotlb_sync(domain, gather);
->>
->>           gather->pgsize = size;
->>           iommu_iotlb_gather_add_range(gather, iova, size);
->> }
->>
->> As the comments for iommu_iotlb_gather_is_disjoint() says,
->>
->> "...For many IOMMUs, flushing the IOMMU in this case is better
->>    than merging the two, which might lead to unnecessary invalidations.
->>    ..."
->>
->> So, perhaps the right fix for this performance issue is to add
->>
->> 	if (!gather->queued)
->>
->> in iommu_iotlb_gather_add_page() or iommu_iotlb_gather_is_disjoint()?
->> It should benefit other arch's as well.
->>
-> 
-> There are only two callers of this helper: intel and arm-smmu-v3.
-> 
-> Looks other drivers just implements direct flush via io_pgtable_tlb_add_page().
-> 
-> and their unmap callback typically does:
-> 
-> if (!iommu_iotlb_gather_queued(gather))
-> 	io_pgtable_tlb_add_page();
-> 
-> from this angle it's same policy as Jacob's does, i.e. if it's already
-> queued then no need to further call optimization for direct flush.
 
-Perhaps we can use iommu_iotlb_gather_queued() to replace direct
-gather->queued check in this patch as well?
 
-Best regards,
-baolu
+On 2/7/23 06:09, Sai Krishna Potthuri wrote:
+> Enable PHY and DQS required for Xilinx Versal Octal SPI to operate in DTR
+> protocol.
+> Add and update device_id field in spi_mem structure with flash id
+> information. Xilinx Versal Octal SPI driver requires the device id
+> information to perform the Rx tuning operation. Since there is no common
+> Tuning Data Pattern defined across all vendors, controllers like Xilinx
+> Versal Octal SPI which requires Rx tuning to find out the optimal sampling
+> point for data lines, this device id information will be used as a golden
+> data.
+
+Using only 6 bytes as golden pattern seems fragile, but you are aware of
+that, as I see that you chose to read the ID 10 times to make the
+decision whether the tap is valid or not. Other option (which is not
+perfect) is to use SFDP data as golden pattern. If I remember
+correctly, JESD216 suggests to use the Read SFDP cmd at 50 MHz, so it
+won't help you much. In practice SPI NOR uses the Read SFDP command at
+the flash's maximum speed and we haven't seen problems. But better would
+be to use some flash OTP data maybe? I remember Pratyush has submitted a
+phy calibration series in the past, I haven't had the chance to read his
+proposal. Did you? How's your proposal different than his?
+
+Cheers,
+ta
+
+> The reason behind choosing this approach instead of reading the ID again
+> in the controller driver is to make it generic solution.
+> - Other controller drivers which want to use similar tuning process, they
+> will make use of this ID instead of reading the ID again in the driver.
+> - Also, we can avoid hardcoding the command information and initiating the
+> transfer in the controller driver as this should happen from spi-nor.
+> 
+> Sai Krishna Potthuri (3):
+>    spi: cadence-quadspi: Add support for PHY module and DQS
+>    mtd: spi-nor: Add and update device_id field in spi_mem structure
+>    spi: cadence-quadspi: Add Rx tuning support for Xilinx Versal OSPI
+> 
+>   drivers/mtd/spi-nor/core.c        |   1 +
+>   drivers/spi/spi-cadence-quadspi.c | 226 +++++++++++++++++++++++++++++-
+>   include/linux/spi/spi-mem.h       |   4 +
+>   3 files changed, 230 insertions(+), 1 deletion(-)
+> 
