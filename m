@@ -2,93 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9E668DEF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AF768DEF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjBGRbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        id S231421AbjBGRcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:32:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjBGRbH (ORCPT
+        with ESMTP id S229585AbjBGRcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:31:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0590C1E9ED
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:30:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AD96B81A5F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 17:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F09C433D2;
-        Tue,  7 Feb 2023 17:30:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675791048;
-        bh=Wmit7s0XDZGseMoaHNMsaLbPp1g2aCFjJOI4HtoV9r0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FX9NFSxzBeZMRCk9dS74Q3QofjjPJl91Aw8tEiV2w2RzBlcaOxaPLoXVL6eIiaxrv
-         riNlQdsFeWeqgZfbAF5ACuiQhvWIGnRHGF2PkdfW/eAkNdfq+zFW612eDB9Z5vXAh1
-         3J48ymWHbEFUnmguNEVhxeBVsbN4S4LOcyhIcMj5aVNsgvfBy9hmeScktfXV3Lbz1v
-         NdJnVkMx8KdsBF25DZgsv5wu9Po0aZVYDug9UVAbvKo/H9J9xbgq3RR15U9hzXHCjV
-         8IIhuYtR0VtXakn2QtAM9DQMBOM7ISuV84ygTud/k5r7+k7CCflGUTZHrQjHknfLQ3
-         PFaDF2TtD7waw==
-Date:   Tue, 7 Feb 2023 09:30:45 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] objtool: reduce maximum memory usage
-Message-ID: <20230207173045.ue77yxvp67p3hsrv@treble>
-References: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
- <20230129214339.76hyytrllggbvuat@t-8ch.de>
- <20230131000356.5u2siglndnjyarql@treble>
- <20230131035442.yzq4opasci7azt2j@t-8ch.de>
- <20230131172713.lhsunmdhww4kduwv@treble>
+        Tue, 7 Feb 2023 12:32:22 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F8F392B9;
+        Tue,  7 Feb 2023 09:32:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675791142; x=1707327142;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=s9XYyOhSDhlb3x72J9xbcE+E8WZUiOaJL5RBPD5rP9w=;
+  b=jkA8OJ22tTCfTPiImy8uLrDmhlaOltsZN6Qnn4ADb9LIUu5CEX7Ivvve
+   PI8FNU4lZISng0znvIF+k0IICNwzts0e7w//ixSbagjLzdcKocNr+N/Wv
+   LOAcyWCOUdH4hTVgzaVWjhtgxSHzm1bGExwMfM8vOGIU6/P9ion1UTy9B
+   4d3FDmHnnEqByg4IZN2YEOVK2M62RiCm+U1YdnyHEmOx0UJFZRfWNifmH
+   1ttWwguceJfZe1rz02fIv3Cvlkk8LER2XiPl2ontEEGWARJQlGLQ68+A5
+   l5ZPXq2586Sy85T1/RNg8bASpcC0fhKNJegLK/pim9+WedOSRn04IHUtT
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="331702652"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="331702652"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 09:32:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="699325494"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="699325494"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2023 09:32:21 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v3 0/2] intel_powerclamp: New module parameter
+Date:   Tue,  7 Feb 2023 09:32:17 -0800
+Message-Id: <20230207173219.4190013-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230131172713.lhsunmdhww4kduwv@treble>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 09:27:15AM -0800, Josh Poimboeuf wrote:
-> On Tue, Jan 31, 2023 at 03:54:42AM +0000, Thomas Weißschuh wrote:
-> > On Mon, Jan 30, 2023 at 04:03:56PM -0800, Josh Poimboeuf wrote:
-> > > On Sun, Jan 29, 2023 at 09:43:39PM +0000, Thomas Weißschuh wrote:
-> > > > On Tue, Dec 27, 2022 at 04:00:57PM +0000, Thomas Weißschuh wrote:
-> > > > > The processing of vmlinux.o with objtool is the most memory-intensive step
-> > > > > of a kernel build. By reducing the maximum memory usage here we can reduce
-> > > > > the maximum memory usage of the whole kernel build.
-> > > > > Therefore memory pressure on memory starved machines is relieved during
-> > > > > kernel builds and the build is faster as less swapping has to occur.
-> > > > 
-> > > > Friendly ping.
-> > > > 
-> > > > These patches can also applied one by one, the only dependency is from
-> > > > patch 5 to patch 4.
-> > > 
-> > > Thanks, I'll go ahead and take five of them now.
-> > 
-> > Thanks.
-> > 
-> > I have another half-finished series that replaces the doubly-linked
-> > list_heads used by elf.h with a custom singly-linked list.
-> > This would save a few pointers per struct.
-> > 
-> > Do you think this is worth it?
-> 
-> Maybe, depending on the memory savings.
+Split from the series for powerclamp user of powercap idle-inject
+series:
+Use idle_inject framework for intel_powerclamp version v5.
 
-FYI, there were more memory usage complaints, so Peter worked up a nice
-series to do this and more:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=objtool/core
+v3:
+minor document change
+
+v2
+- Build warnings reported by Rui
+- Moved the powerclamp documentation to admin guide folder
+- Commit log updated as suggested by Rafael and other code suggestion
+
+Srinivas Pandruvada (2):
+  Documentation:admin-guide: Move intel_powerclamp documentation
+  thermal/drivers/intel_powerclamp: Add two module parameters
+
+ Documentation/admin-guide/index.rst           |   1 +
+ .../thermal/intel_powerclamp.rst              |  22 +++
+ Documentation/driver-api/thermal/index.rst    |   1 -
+ MAINTAINERS                                   |   1 +
+ drivers/thermal/intel/intel_powerclamp.c      | 177 +++++++++++++++---
+ 5 files changed, 180 insertions(+), 22 deletions(-)
+ rename Documentation/{driver-api => admin-guide}/thermal/intel_powerclamp.rst (93%)
 
 -- 
-Josh
+2.39.1
+
