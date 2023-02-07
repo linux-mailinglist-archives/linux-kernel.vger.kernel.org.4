@@ -2,104 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5A768D6A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B1268D6B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:29:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjBGM1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:27:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
+        id S231627AbjBGM25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:28:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBGM1M (ORCPT
+        with ESMTP id S230510AbjBGM24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:27:12 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE2A40E9;
-        Tue,  7 Feb 2023 04:27:11 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317CN8oo007026;
-        Tue, 7 Feb 2023 12:26:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=f6fEWe4OAE4fM+i//dFKCN7ccGyAzf3rmrGevLiN1u8=;
- b=Ij41e0KlX4WWnZ4LxmzjhP/tlvBW44t6r4KUaqTDfXNt1RRq/MWZZtEK6Iu9qWaQFhqZ
- xd50TzoLKJbtcpLfevfEGzanR6dvNhDXJSj77k4Ou7esl/rttFccWCHTnYIAyWmSkRNc
- 3IFfZkDZ9/dB/6/8sE3HTliguT3aW+NXHN7vdJ46QDRimsu4NWaf1C+gY7hU+ICQrFST
- KYbnfD6+N6jGCLQynRrFipyXaO1j/Pq5z6gAPwhnBpswNQxnAUA0TevlybGM4TIcBQiY
- sMmsEwQf2XrCXnhDIM22hOQQEiU9qL+HpiXRolgtF/r8+t1/lU2FqoRG3/K7s2VO37FF Qg== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nkpktg2mh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 12:26:55 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 317BCEAI001916;
-        Tue, 7 Feb 2023 12:26:54 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3nhf07bse0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 12:26:54 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 317CQrm138142514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Feb 2023 12:26:53 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 60EA758058;
-        Tue,  7 Feb 2023 12:26:53 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40E1058057;
-        Tue,  7 Feb 2023 12:26:51 +0000 (GMT)
-Received: from [172.20.7.120] (unknown [9.211.110.248])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Feb 2023 12:26:50 +0000 (GMT)
-Message-ID: <9a78cdd254d5d962450242d2e01c3a0f702a63a0.camel@linux.ibm.com>
-Subject: Re: [PATCH] scsi: FlashPoint: Replace arithmetic addition by
- bitwise OR
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Deepak R Varma <drv@mailo.com>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Date:   Tue, 07 Feb 2023 15:26:48 +0300
-In-Reply-To: <Y+I0HXsHezZRtFOM@ubun2204.myguest.virtualbox.org>
-References: <Y+I0HXsHezZRtFOM@ubun2204.myguest.virtualbox.org>
+        Tue, 7 Feb 2023 07:28:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A74E367D3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:28:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675772886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/RnkO+dPA0w7/M71/Ly3fKFHUybkkW32brBa43F/Fvk=;
+        b=WXdTt/zvKHAdIhyPHbPAk98YkVDeWIizpzetxa++T48vIwUYUx442rYPxLHEhyRreURmD0
+        uR9nq9RQx6ogdrt/fyaEMZWgJhp3lNAK3y1h1qqhs3rfjhBf9KF3qumHpIx2vqzQYUMmaa
+        lMYT6IEHlYBbiNE5FQu3+vYbsi7Lqlk=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-662-A88WCa2CPl-P3Q3tv5t2nA-1; Tue, 07 Feb 2023 07:28:05 -0500
+X-MC-Unique: A88WCa2CPl-P3Q3tv5t2nA-1
+Received: by mail-qv1-f72.google.com with SMTP id o12-20020a056214108c00b0056c0896ed81so718765qvr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 04:28:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/RnkO+dPA0w7/M71/Ly3fKFHUybkkW32brBa43F/Fvk=;
+        b=g12Rw+daGQyrJtNPweSYfDSGhXLiuBkencyaT2/GEkyNPErrRVhtiZonDjLqWu27RZ
+         bdSm1RP+oWbY3/9wDQehf9K0rSMMUT2jeLpwA+sNyu0RqnDXl4jXKC1Pb8QBjkYSfvFt
+         e5MN3vX7YIl7bm4OzJxlSAFQxXUmQNFBU5yNnIuDqS8nc+Ob7Jj4mu1dX6R0NUN5HfHe
+         bT0Gm29MXQGhUqkEuICGhlEfOpu2mgz+9RpE7mfsvCGUN2vVsBtAI5njqo/xqbrCCIJQ
+         XyEzHUqq3ildi36EfBu5QJkPuyXvOJyV77wk6SLPLkSdmPa/lf6bXvrbAO5tPD7hiOXK
+         3JdA==
+X-Gm-Message-State: AO0yUKX8Kj8FItUfLp0Hy3t5qgPk4nr6WTFvoQiluSsYmMwb1CmYpJno
+        FJb3tULLZebUMCjI7fCGW73hRn9PNgFceL0BY884EvwYekimpDkxO/+OdWilrqfvotZDKasVKSo
+        Lm7yZtNJsXKIsV0JEph/4AZBA
+X-Received: by 2002:ac8:4e8d:0:b0:3b8:5f47:aac2 with SMTP id 13-20020ac84e8d000000b003b85f47aac2mr6276004qtp.1.1675772884867;
+        Tue, 07 Feb 2023 04:28:04 -0800 (PST)
+X-Google-Smtp-Source: AK7set8VnRCzqtHWA98pt4o+ZD18G9GZ7OpRO+gXLVl9dCjIKA18pdC0brh+4nZnm8WlJsLe1vlV/g==
+X-Received: by 2002:ac8:4e8d:0:b0:3b8:5f47:aac2 with SMTP id 13-20020ac84e8d000000b003b85f47aac2mr6275968qtp.1.1675772884593;
+        Tue, 07 Feb 2023 04:28:04 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
+        by smtp.gmail.com with ESMTPSA id i8-20020a05620a248800b00727538eb831sm9556089qkn.86.2023.02.07.04.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 04:28:03 -0800 (PST)
+Message-ID: <f5fd80ab32931e7367c3181635f40179536608b8.camel@redhat.com>
+Subject: Re: [net-next PATCH V3 2/4] octeontx2-pf: qos send queues management
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Hariprasad Kelam <hkelam@marvell.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+        jerinj@marvell.com, sbhatta@marvell.com, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, saeedm@nvidia.com,
+        richardcochran@gmail.com, tariqt@nvidia.com,
+        linux-rdma@vger.kernel.org, maxtram95@gmail.com,
+        naveenm@marvell.com, hariprasad.netdev@gmail.com
+Date:   Tue, 07 Feb 2023 13:27:58 +0100
+In-Reply-To: <20230206054640.5854-3-hkelam@marvell.com>
+References: <20230206054640.5854-1-hkelam@marvell.com>
+         <20230206054640.5854-3-hkelam@marvell.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: IAHIiI2-jd_foMGK-OtMw21XjGlX_uEi
-X-Proofpoint-GUID: IAHIiI2-jd_foMGK-OtMw21XjGlX_uEi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_03,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=315
- priorityscore=1501 suspectscore=0 adultscore=0 spamscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0 bulkscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070108
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-07 at 16:51 +0530, Deepak R Varma wrote:
-> When adding two bit-field mask values, an OR operation offers higher
-> performance over an arithmetic operation. So, convert such additions
-> to an OR based expressions. Issue identified using orplus.cocci
-> semantic patch script.
+On Mon, 2023-02-06 at 11:16 +0530, Hariprasad Kelam wrote:
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/d=
+rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> index 8a41ad8ca04f..f3ad4491ffb8 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> @@ -758,11 +758,16 @@ int otx2_txschq_stop(struct otx2_nic *pfvf)
+>  void otx2_sqb_flush(struct otx2_nic *pfvf)
+>  {
+>  	int qidx, sqe_tail, sqe_head;
+> +	struct otx2_snd_queue *sq;
+>  	u64 incr, *ptr, val;
+>  	int timeout =3D 1000;
+> =20
+>  	ptr =3D (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
+> -	for (qidx =3D 0; qidx < pfvf->hw.tot_tx_queues; qidx++) {
+> +	for (qidx =3D 0; qidx < otx2_get_total_tx_queues(pfvf);
+> +	     qidx++) {
 
-No it doesn't, at least not for constants, which is the entirety of
-this patch: the compiler can find the value at compile time, so the
-whole lot becomes a load immediate of a single value.  Whether the
-compiler sees OR or + is immaterial to the compile time computation. 
-Perhaps Coccinelle should be fixed not to complain about this case?
+The above can and should fit a single line.
 
-James
+> @@ -189,7 +190,8 @@ struct otx2_hw {
+>  	u16                     rx_queues;
+>  	u16                     tx_queues;
+>  	u16                     xdp_queues;
+> -	u16                     tot_tx_queues;
+> +	u16			tc_tx_queues;
+> +	u16                     non_qos_queues; //tx_queues and xdp_tx_queues
+
+Please, avoid c++ style comments. Use plain /* */ instead.
+
+>  	u16			max_queues;
+>  	u16			pool_cnt;
+>  	u16			rqpool_cnt;
+
+[...]
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c b/driver=
+s/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+> new file mode 100644
+> index 000000000000..13a8cc53eb19
+
+[...]
+
+> +static void otx2_qos_sq_free_sqbs(struct otx2_nic *pfvf, int qidx)
+> +{
+> +	struct otx2_qset *qset =3D &pfvf->qset;
+> +	struct otx2_hw *hw =3D &pfvf->hw;
+> +	struct otx2_snd_queue *sq;
+> +	u64 iova, pa;
+> +	int sqb;
+> +
+> +	sq =3D &qset->sq[qidx];
+> +	if (!sq->sqb_ptrs)
+> +		return;
+> +	for (sqb =3D 0; sqb < sq->sqb_count; sqb++) {
+> +		if (!sq->sqb_ptrs[sqb])
+> +			continue;
+> +		iova =3D sq->sqb_ptrs[sqb];
+> +		pa =3D otx2_iova_to_phys(pfvf->iommu_domain, iova);
+> +		dma_unmap_page_attrs(pfvf->dev, iova, hw->sqb_size,
+> +				     DMA_FROM_DEVICE,
+> +				     DMA_ATTR_SKIP_CPU_SYNC);
+> +		put_page(virt_to_page(phys_to_virt(pa)));
+> +	}
+> +
+> +	sq->sqb_count =3D 0;
+> +
+> +	sq =3D &qset->sq[qidx];
+> +	qmem_free(pfvf->dev, sq->sqe);
+> +	qmem_free(pfvf->dev, sq->tso_hdrs);
+> +	kfree(sq->sg);
+> +	kfree(sq->sqb_ptrs);
+> +	qmem_free(pfvf->dev, sq->timestamps);
+> +
+> +	memset((void *)sq, 0, sizeof(*sq));
+> +}
+> +
+> +/* send queue id */
+> +static void otx2_qos_sqb_flush(struct otx2_nic *pfvf, int qidx)
+> +{
+> +	int sqe_tail, sqe_head;
+> +	u64 incr, *ptr, val;
+> +
+> +	ptr =3D (u64 *)otx2_get_regaddr(pfvf, NIX_LF_SQ_OP_STATUS);
+
+This introduces a sparse warning:
+
+drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c:164:16: warning: cast r=
+emoves address space '__iomem' of expression
+
+...
+	=09
+> +	incr =3D (u64)qidx << 32;
+> +	val =3D otx2_atomic64_add(incr, ptr);
+
+... which means the above is likely broken on some arches.
+
+Thanks,
+
+Paolo
+
 
