@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6484C68E09A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B50F68E097
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjBGSwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:52:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S232629AbjBGSwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjBGSwH (ORCPT
+        with ESMTP id S232361AbjBGSvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:52:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2668E103
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:51:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675795878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TVeylEZeMhpYYMRKttVHrNV6zbKjTMnp/gJrjK7L9wE=;
-        b=PhC9t63zH/0IbOgY4lbdE7cpFWU++QIF2uKOOcNRYRKA91g78L6zYSfdHNdrMwlsec6cN4
-        huFHyq5lTC6hpaouxWWfybcxPNat/B6IRloeX6QUNgQZa7vZO81eIRx+m7aUi4Y9Ha4z/e
-        fvcIXTuwBKlQhRfJm0fPCzExi01/2s0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-ZzkiR0mOOiKjrHHzY8209A-1; Tue, 07 Feb 2023 13:51:14 -0500
-X-MC-Unique: ZzkiR0mOOiKjrHHzY8209A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 7 Feb 2023 13:51:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270B317CFE;
+        Tue,  7 Feb 2023 10:51:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2F2DB101A52E;
-        Tue,  7 Feb 2023 18:51:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 54773140EBF4;
-        Tue,  7 Feb 2023 18:51:10 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <88fcfd5a-cf73-f417-cea6-eed5094d71ed@kernel.dk>
-References: <88fcfd5a-cf73-f417-cea6-eed5094d71ed@kernel.dk> <20230207171305.3716974-1-dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v12 00/10] iov_iter: Improve page extraction (pin or just list)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E688B81AB7;
+        Tue,  7 Feb 2023 18:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E53C433EF;
+        Tue,  7 Feb 2023 18:51:50 +0000 (UTC)
+Date:   Tue, 7 Feb 2023 13:51:47 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH] tracing/selftests: Ignore __pfx_ symbols in kprobe test
+Message-ID: <20230207135147.5ce618d6@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3814632.1675795869.1@warthog.procyon.org.uk>
-Date:   Tue, 07 Feb 2023 18:51:09 +0000
-Message-ID: <3814633.1675795869@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe <axboe@kernel.dk> wrote:
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-> I've updated the for-6.3/iov-extract branch and the for-next branch. This
-> isn't done to bypass any review, just so we can get some more testing on
-> this (and because the old one is known broken).
+The kprobe probepoint.tc test started failing because of the added __pfx_
+symbols that were added because of -fpatchable-function-entry=X,Y causing
+unwinders to see them as part of the previous functions. But kprobes can
+not be added on top of them. The selftest looks for tracefs_create_dir and
+picks it and the previous and following functions to add at their address.
+This caused it to include __pfx_tracefs_create_dir which is invalid to
+attach a kprobe to and caused the test to fail.
 
-Thanks!
+Fixes: 9f2899fe36a62 ("objtool: Add option to generate prefix symbols")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-David
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc b/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
+index 624269c8d534..e1b7506c1b11 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
+@@ -21,7 +21,7 @@ set_offs() { # prev target next
+ 
+ # We have to decode symbol addresses to get correct offsets.
+ # If the offset is not an instruction boundary, it cause -EILSEQ.
+-set_offs `grep -A1 -B1 ${TARGET_FUNC} /proc/kallsyms | cut -f 1 -d " " | xargs`
++set_offs `grep -v __pfx_ /proc/kallsyms | grep -A1 -B1 ${TARGET_FUNC} |  cut -f 1 -d " " | xargs`
+ 
+ UINT_TEST=no
+ # printf "%x" -1 returns (unsigned long)-1.
+-- 
+2.39.0
 
