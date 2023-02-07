@@ -2,84 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D051968DE3B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A44D68DE3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjBGQv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36722 "EHLO
+        id S231823AbjBGQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbjBGQvZ (ORCPT
+        with ESMTP id S230503AbjBGQwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:51:25 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2893B0C6;
-        Tue,  7 Feb 2023 08:51:24 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1675788682;
-        bh=9AP4I0rjgvgt9DJJZ6qcFwMfymICKIz69p/X/bUnTjg=;
-        h=From:Date:Subject:To:Cc:From;
-        b=WEzf0kyDPFHYWy3niUlAhr/HsK73J5NoudUA4a7qb0ShJqHcD5LCSViNIi6H02y3f
-         CNyLll39ArCY2jVdkL2+ZFaWp6gVFixoA3kxtqjePw3ml2I4zaIe7SdsLrUk14CzvC
-         FFgAEry3ynoVmTADiqIauNaJQBjkY1sa36yslbkI=
-Date:   Tue, 07 Feb 2023 16:51:19 +0000
-Subject: [PATCH RFC] MAINTAINERS: dell-wmi-sysman: drop Divya Bharathi
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230207-maintainers-dell-wmi-sysman-v1-1-6594fea12f6c@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAIaB4mMC/x2NuwoCQQxFf2VJbWB2FAVbwQ+wFYvZSdYNzESZ+
- GTZfzdY3OLc4pwZjJuwwb6bofFLTG7q0K86yFPSK6OQM8QQ1yGGHdYk+vBxMyQuBd9V0L5Wk+I
- m0DZTn5loBDcMyRiHljRP7tBnKX7eG4/y+SfPcDoe4LIsP4wzkfuHAAAA
-To:     Prasanth Ksr <prasanth.ksr@dell.com>,
-        Divya Bharathi <divya.bharathi@dell.com>
-Cc:     Dell.Client.Kernel@dell.com, platform-driver-x86@vger.kernel.org,
+        Tue, 7 Feb 2023 11:52:46 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6E946B0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:52:44 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id w3so17427749qts.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=90LXWSidw5JtQbA5QjDdZbPVfE/311Yqzr/kJ+sttOM=;
+        b=pYf4Wm2yX5Db/EesL6WWX79wefRSPeDXmP+JdbgruotStM4aTAg2EEmqAmFcafVsOQ
+         qVZWuUrBQcBVM89VJJ7Lg4bX/OLfvPC1JnVU38e0oEClpG1YyWHd0+1D5TuFyOmu9tci
+         7MwIi4JbzEUI59mW7MaUZ/BNcb7O8lzbaqyOkMte4VWLeUgGN2267ypBgPNhYD5pWixE
+         7FMX6ON/ZNDrK1hq08B5q/9FdOFoJ38kat9YP6xjerL7XjmkjB4pkTIVGToAAidXO5G/
+         MQeEU/d9tJ/c2Ix5Z2oWzN6/Eq3r3KwCryG0x4+v8QGkNaxF/8oRrWFBcMl3Dd67WCf4
+         AwwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=90LXWSidw5JtQbA5QjDdZbPVfE/311Yqzr/kJ+sttOM=;
+        b=YQXJCFHETspekf2i1QFOXOqOAA4xuYIk2Wb3xK6XCLkV3YetFa9ehdjsWxHj8wcai0
+         8aeD0WJ11+vKq4EIH35DbqrLHr8+qUnsUSs8pMXC+zyQrhrTcMhp9c0qjnd7eqi/PlOs
+         HirUhaEuDiXchYB/WIDrII0oSr7q5YXbkM7mfE7mR6uzVtBKPocAAq9X1D5byjkoR5U/
+         tqHv/MP0aHGq1VvTQHXylGLfaURM7KkcA3BV5CRYDROLbWbTZ04pKF+Tg9JMNAQLOZXO
+         K1WzKogINc2yzTNJwvrVGI97JFtXrSm+fm5aaiRsns4G8mhHzDxyNGOMwogjjUwJKXWB
+         Lt7w==
+X-Gm-Message-State: AO0yUKWcO0dJQQuPH2dZ1b4BQUuKW0y5jcPJWxwBJrHGaf1hwvmz6c0m
+        yU+8ytnq18rUdbcTCkeQhvBr9w==
+X-Google-Smtp-Source: AK7set/uMLJlKX7oaJVhg/E1eUJJiYug4Xd2CDFycpOG8k49bTxnQu/j0dxXX9P9xRATm5qsym0V1A==
+X-Received: by 2002:a05:622a:54c:b0:3b8:68fa:afc6 with SMTP id m12-20020a05622a054c00b003b868faafc6mr7290880qtx.29.1675788763797;
+        Tue, 07 Feb 2023 08:52:43 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id f10-20020ac840ca000000b003b84b92052asm9621428qtm.57.2023.02.07.08.52.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 08:52:43 -0800 (PST)
+Date:   Tue, 7 Feb 2023 11:52:42 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Yang Shi <shy828301@gmail.com>, Michal Hocko <mhocko@suse.com>,
+        Shakeel Butt <shakeelb@google.com>, Tejun Heo <tj@kernel.org>,
+        linux-mm@kvack.org, cgroups@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675788680; l=829;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=9AP4I0rjgvgt9DJJZ6qcFwMfymICKIz69p/X/bUnTjg=;
- b=Di9GeoIzHdRAuVaJ0poJJdc3LaaldKGfY4uJn4/rer+v+m/fFKm4wQI9o6RjGj/HEbcp2x1kz
- T/g4dHm2bK4D8A5qPdUTuROsjdkPVhX8fIKVNT4e3AVkJLUi6jfB/3S
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [RFC PATCH] mm: memcontrol: don't account swap failures not due
+ to cgroup limits
+Message-ID: <Y+KB2lcAH3vhw0Xj@cmpxchg.org>
+References: <20230202155626.1829121-1-hannes@cmpxchg.org>
+ <Y91ZsDSIr2oFHu3E@P9FQF9L96D.corp.robot.car>
+ <CAHbLzkpk+6+kzsxmJ_MK+708rpCEjB2njnarLkzfzXX-MUyG7g@mail.gmail.com>
+ <Y91eRKKutWBZwmSG@P9FQF9L96D.corp.robot.car>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y91eRKKutWBZwmSG@P9FQF9L96D.corp.robot.car>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the bounce sent by Dell's mailserver this user does not
-exist (anymore).
+On Fri, Feb 03, 2023 at 11:19:32AM -0800, Roman Gushchin wrote:
+> On Fri, Feb 03, 2023 at 11:07:30AM -0800, Yang Shi wrote:
+> > On Fri, Feb 3, 2023 at 11:00 AM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+> > >
+> > > On Thu, Feb 02, 2023 at 10:56:26AM -0500, Johannes Weiner wrote:
+> > > > Christian reports the following situation in a cgroup that doesn't
+> > > > have memory.swap.max configured:
+> > > >
+> > > >   $ cat memory.swap.events
+> > > >   high 0
+> > > >   max 0
+> > > >   fail 6218
+> > > >
+> > > > Upon closer examination, this is an ARM64 machine that doesn't support
+> > > > swapping out THPs.
+> > >
+> > > Do we expect it to be added any time soon or it's caused by some system
+> > > limitations?
+> > 
+> > AFAIK, it has been supported since 6.0. See commit d0637c505f8a1
+> 
+> Great, thank you for the link!
+> Then it looks like we have even fewer reasons to change the interface.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+Yes, ARM supports it now. But the point wasn't necessarily to fix this
+because of ARM. THP swap can fall back due to plenty of other reasons,
+for example fragmentation. It always falls back on swapfiles since
+they don't have the cluster allocator that bdevs have.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fb1471cb5ed3..396bb00d98a1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5930,7 +5930,6 @@ F:	Documentation/ABI/testing/sysfs-platform-dell-wmi-ddv
- F:	drivers/platform/x86/dell/dell-wmi-ddv.c
- 
- DELL WMI SYSMAN DRIVER
--M:	Divya Bharathi <divya.bharathi@dell.com>
- M:	Prasanth Ksr <prasanth.ksr@dell.com>
- L:	Dell.Client.Kernel@dell.com
- L:	platform-driver-x86@vger.kernel.org
-
----
-base-commit: d2d11f342b179f1894a901f143ec7c008caba43e
-change-id: 20230207-maintainers-dell-wmi-sysman-40d6cd1ceddf
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+The broader point was that we show failures in the cgroup event
+counter that have nothing to do with the cgroup's configuration.
