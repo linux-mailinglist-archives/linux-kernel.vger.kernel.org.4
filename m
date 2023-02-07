@@ -2,84 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1F968CE67
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDC168CE59
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjBGE60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 23:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S229899AbjBGEut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 23:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjBGE6Z (ORCPT
+        with ESMTP id S229515AbjBGEur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 23:58:25 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA81717CCF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 20:58:20 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 83ED824E263;
-        Tue,  7 Feb 2023 12:58:08 +0800 (CST)
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Feb
- 2023 12:58:08 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Tue, 7 Feb 2023 12:58:08 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor@kernel.org>
-CC:     "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: RE: [PATCH v3 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Topic: [PATCH v3 4/4] RISC-V: Add arch functions to support
- hibernation/suspend-to-disk
-Thread-Index: AQHZMi9ZN0+4F1UUIkevO0NjoPA20663GzgAgACv2gCACzF7MA==
-Date:   Tue, 7 Feb 2023 04:58:08 +0000
-Message-ID: <167319074e1644868e0e5461590f7ada@EXMBX066.cuchost.com>
-References: <20230127091051.1465278-1-jeeheng.sia@starfivetech.com>
- <20230127091051.1465278-5-jeeheng.sia@starfivetech.com>
- <Y9hTGo6dfgeusW4B@spud>
- <CAHVXubgoi8FsfdAXVocL=ZcfGT=mA72uiq60jPVJB52ovKhdzA@mail.gmail.com>
-In-Reply-To: <CAHVXubgoi8FsfdAXVocL=ZcfGT=mA72uiq60jPVJB52ovKhdzA@mail.gmail.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [202.188.176.82]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 23:50:47 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90E3D3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 20:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675745445; x=1707281445;
+  h=from:to:cc:subject:date:message-id;
+  bh=7GgVi6GPMAG8QUql3A3GPf6CEBkQu2TkL/xf7cGOBbc=;
+  b=XWhu1K9W7toK7evthc3s9YCiRyU9PzdlnrxK9aIedxnDKBgHkZmsNBdo
+   PvcKvjAGIUofKm7uLx6BsQutbm+ilBwFvocAWnEAH/Ljt6JlGO/3YSRcH
+   qaDbb/7m/Ig2iBKYtFJJtLJO85yrvJfuSeMT9ho98AKBSwi8gl8T6Xypy
+   fcjl3nlVpgAvCInkwLv9v84uaWQVOryZwVIzMgGFnAC85y1hV+l3wcwI2
+   OakzkD/RW8ezvYqHD/n7WMDUhd2YhClizC3CjHCtYTL6/XFAW9RAk38NG
+   1RqHx4Uba8lr8m8h9PGajtgKC5poFww09cKlABAwWKAGlYz3tEynkMicM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415623967"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="415623967"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 20:50:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668653775"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="668653775"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 20:50:45 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 00/10] sched/fair: Avoid unnecessary migrations within SMT domains
+Date:   Mon,  6 Feb 2023 20:58:28 -0800
+Message-Id: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQWxleGFuZHJlIEdoaXRp
-IDxhbGV4Z2hpdGlAcml2b3NpbmMuY29tPg0KPiBTZW50OiBUdWVzZGF5LCAzMSBKYW51YXJ5LCAy
-MDIzIDY6MDAgUE0NCj4gVG86IENvbm9yIERvb2xleSA8Y29ub3JAa2VybmVsLm9yZz4NCj4gQ2M6
-IEplZUhlbmcgU2lhIDxqZWVoZW5nLnNpYUBzdGFyZml2ZXRlY2guY29tPjsgcGF1bC53YWxtc2xl
-eUBzaWZpdmUuY29tOyBwYWxtZXJAZGFiYmVsdC5jb207IGFvdUBlZWNzLmJlcmtlbGV5LmVkdTsg
-bGludXgtDQo+IHJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmc7IExleWZvb24gVGFuIDxsZXlmb29uLnRhbkBzdGFyZml2ZXRlY2guY29tPjsgTWFz
-b24gSHVvDQo+IDxtYXNvbi5odW9Ac3RhcmZpdmV0ZWNoLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCB2MyA0LzRdIFJJU0MtVjogQWRkIGFyY2ggZnVuY3Rpb25zIHRvIHN1cHBvcnQgaGliZXJu
-YXRpb24vc3VzcGVuZC10by1kaXNrDQo+IA0KPiBIaSwNCj4gDQo+IE9uIFR1ZSwgSmFuIDMxLCAy
-MDIzIGF0IDEyOjMwIEFNIENvbm9yIERvb2xleSA8Y29ub3JAa2VybmVsLm9yZz4gd3JvdGU6DQo+
-ID4NCj4gPiArQ0MgQWxleA0KPiA+DQo+ID4gQWxleCwgY291bGQgeW91IHRha2UgYSBsb29rIGF0
-IHRoZSBwYWdlIHRhYmxlIGJpdHMgaGVyZSB3aGVuIHlvdSBnZXQgYQ0KPiA+IGNoYW5jZSBwbGVh
-c2U/DQo+IA0KPiBZZXMsIEknbGwgZG8gdGhhdCBzb29uLg0KSGkgQWxleCwgZG8geW91IGhhdmUg
-YW55IGNvbW1lbnQ/IEkgc2hhbGwgc2VuZCBvdXQgdGhlIHY0IHNvb24gYW5kIHlvdSBjYW4gcHJv
-dmlkZSBjb21tZW50IHRvIHRoZSB2NCBzZXJpZXM/DQo+IA0KPiBUaGFua3MsDQo+IA0KPiBBbGV4
-DQo+IA0KPiA+DQo=
+Hi,
+
+This is v3 of this series. Previous versions can be found here [1] and
+here [2]. To avoid duplication, I do not include the cover letter of the
+original submission. You can read it in [1].
+
+Changes since v2:
+
+Vincent correctly indicated that I was abusing asym_packing to force load
+balances unrelated to CPU priority. The underlying issue is that the
+scheduler cannot not handle load balances between SMT and non-SMT cores
+correctly. I added several prework patches to fix it... and I removed the
+abuse of asym_packing.
+
+Dietmar helped me to realize that there is a better way to check the idle
+state of SMT cores. Now I give the task to the scheduler instead of
+architecture-specific overrides. I unconditionally obey CPU priorities
+at the SMT level. This keeps Power7 happy. At upper levels (i.e., when
+balancing load between cores) the scheduler also considers the idle state
+of the core in addition to CPU priority. This satisfies x86.
+
+Ionela spotted a violation of the scheduler topology sanity checks. We did
+not find a check that suits both Power7 and x86. For now, I removed the
+NEEDS_CHILD flag of SD_ASYM_PACKING.
+
+Hopefully, these patches are in sufficiently good shape to be merged.
+
+Thank you for your feedback and I look forward to getting more of it!
+
+New patches 2, 3, 4, 5, 6, 7, 8
+Updated patches: 1
+Unchanged patches: 9, 10
+
+BR,
+Ricardo
+
+[1]. https://lore.kernel.org/lkml/20220825225529.26465-1-ricardo.neri-calderon@linux.intel.com/
+[2]. https://lore.kernel.org/lkml/20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com/
+
+
+Ricardo Neri (10):
+  sched/fair: Generalize asym_packing logic for SMT cores
+  sched/fair: Move is_core_idle() out of CONFIG_NUMA
+  sched/fair: Only do asym_packing load balancing from fully idle SMT
+    cores
+  sched/fair: Let low-priority cores help high-priority busy SMT cores
+  sched/fair: Keep a fully_busy SMT sched group as busiest
+  sched/fair: Use the prefer_sibling flag of the current sched domain
+  sched/fair: Do not even the number of busy CPUs via asym_packing
+  sched/topology: Remove SHARED_CHILD from ASYM_PACKING
+  x86/sched: Remove SD_ASYM_PACKING from the SMT domain flags
+  x86/sched/itmt: Give all SMT siblings of a core the same priority
+
+ arch/x86/kernel/itmt.c         |  23 +----
+ arch/x86/kernel/smpboot.c      |   2 +-
+ include/linux/sched/sd_flags.h |   5 +-
+ kernel/sched/fair.c            | 175 +++++++++++++++++----------------
+ 4 files changed, 99 insertions(+), 106 deletions(-)
+
+-- 
+2.25.1
+
