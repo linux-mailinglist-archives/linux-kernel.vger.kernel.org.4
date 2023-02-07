@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C8B68E136
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE5768E137
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjBGTaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 14:30:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S231536AbjBGTaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 14:30:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjBGT3r (ORCPT
+        with ESMTP id S230450AbjBGTaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 14:29:47 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772B83EFE0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:29:21 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id ba1so10575961wrb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 11:29:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8w0MpZ2V4rLYFppvKGuA9m6PNERjPDODLlDLq+kfjPs=;
-        b=woz3ID5u3YeS4AXaGqdutfXO9eSzuXNOLyF41ssaOAEufE0kNsS7bUpAFGyGgpjxLe
-         WZDFzfdrIX7h1KW9flxdSs4Br6vTZXw5mzKNcP2mhKfiOd0MqN3f/mTB3bkjcv5WH+6I
-         UCLx77fWQkMqeXO0Mh6o37OsY7D9/M7trF9GFJ/HsylJ3PFJNGep88m4kQExYGnLTEoU
-         nuDL779dgdLlpnLHsKz5Uk+yBrOLzZYLDdu4KT6OGflkYGuVISrSl4VaT7kZTZb+NZO0
-         MNHH6z25P9Zx4RAeLrqy9JleX+epp6urvAtQfTe4pTlESBDld2Ptql1h3BGU4flOKYgh
-         Rcxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8w0MpZ2V4rLYFppvKGuA9m6PNERjPDODLlDLq+kfjPs=;
-        b=j9ARrpgpyvB6ZdPd/G5xsvzCMdnmOs+/LKqj5GP/OpoZHyrCx/ewnjCkMWlI0oLmdp
-         OvbPXFj6fo+8T9OASbb4AvkEmWV0xvMxDxg2SZVH/+zHd3QikzsEulD+xKfbsy4HFfea
-         zNYCHsIs/Sv4sLZbKwuFIXbfKKu4k7qH6jZcQgcF5PSHoKziAftnLXHBGlvGawCyadpU
-         tLj38qPBzt90NA2XcCh25u4BVhQC472ha5CS4pN+LHFPpkL0wXMU4SV/xuIi7SyeW8lu
-         BXTaLX+anBH5Jy/7rTa2Eix2YdMyvRMR2GKSYa+MKvuBlTj3di2nbbj7UYA2gUnEwOaV
-         Gh9w==
-X-Gm-Message-State: AO0yUKWohVWLizWbjuGjIhAWRy+K/pqIKG1Tt8EZtpFkhKHAkLSxlwLM
-        9YgbHMUT3Nzyhqhio7d5OXNF1aPQus3Ak/Oh
-X-Google-Smtp-Source: AK7set+fKDoZgdl0m3cHJ1U/S0ylQq/28w1ACr5wlTWMsE+Xd2BplfMkuCaDRrTX7zGGg4M/ccU6pQ==
-X-Received: by 2002:a5d:4cc6:0:b0:242:800:9a7f with SMTP id c6-20020a5d4cc6000000b0024208009a7fmr3911742wrt.65.1675798159433;
-        Tue, 07 Feb 2023 11:29:19 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id bd16-20020a05600c1f1000b003db0ee277b2sm19858623wmb.5.2023.02.07.11.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 11:29:19 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] media: dt-bindings: samsung-fimc: drop simple-bus
-Date:   Tue,  7 Feb 2023 20:29:14 +0100
-Message-Id: <20230207192914.549309-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230207192914.549309-1-krzysztof.kozlowski@linaro.org>
-References: <20230207192914.549309-1-krzysztof.kozlowski@linaro.org>
+        Tue, 7 Feb 2023 14:30:30 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3256F34032
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:30:30 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pPTfg-0001Jg-4v; Tue, 07 Feb 2023 20:30:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pPTfe-003Lw7-5I; Tue, 07 Feb 2023 20:30:27 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pPTfe-001f0B-Ky; Tue, 07 Feb 2023 20:30:26 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] clocksource: em_sti: Mark driver as non-removable
+Date:   Tue,  7 Feb 2023 20:30:10 +0100
+Message-Id: <20230207193010.469495-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1533; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=xWky83UVbDs3U7xsklzu4J26bU89FAvP72/120mKghk=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj4qa/XOLrE4HohTQuYtMSEZKT5EVA766EqYoT1gZU xeA2gMqJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY+KmvwAKCRDB/BR4rcrsCYNqB/ 96Oetl/NgUCLlz5RCD0Sr/+ErBlDWWWBPi1eGRTJuGIHJy62dyq/PkLFo6FEZMVPtUyXBUzIYoKaAV QhBc2L6h1wQalwRl5y6WQ0I5G2q72l56hrMDl6hl/9gkstBGyqF6qh2BNkMMq9gaQpbgq8aAL7bGYr dYCVSdsWm2xokewmtfKLjbcwC8FGkEzZZMWgDnRbIMy22FQKkVukLt99UM1UwVa5kD78jvbDzNPI3w xK6nQ75D92fdG3bzAUqLwFVAxG+83XH1qYtMs/9BMsdkTT6moH99SsJ1v2L4MxbOlXiVBqwm/xVmhu Ev0/prh4vKcFPlk5i5VNZVobyypbLF
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The FIMC camera node wrapper is not a bus, so using simple-bus fallback
-compatible just to instantiate its children nodes was never correct.
-Drop the simple-bus compatible and expect driver to explicitly populate
-children devices.
+The comment in the remove callback suggests that the driver is not
+supposed to be unbound. However returning an error code in the remove
+callback doesn't accomplish that. Instead set the suppress_bind_attrs
+property (which makes it impossible to unbind the driver via sysfs).
+The only remaining way to unbind a em_sti device would be module
+unloading, but that doesn't apply here, as the driver cannot be built as
+a module.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Also drop the useless remove callback.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- Documentation/devicetree/bindings/media/samsung-fimc.txt | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/clocksource/em_sti.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/samsung-fimc.txt b/Documentation/devicetree/bindings/media/samsung-fimc.txt
-index 20447529c985..f90267f1180e 100644
---- a/Documentation/devicetree/bindings/media/samsung-fimc.txt
-+++ b/Documentation/devicetree/bindings/media/samsung-fimc.txt
-@@ -15,7 +15,7 @@ Common 'camera' node
+diff --git a/drivers/clocksource/em_sti.c b/drivers/clocksource/em_sti.c
+index ab190dffb1ed..c04b47bd4868 100644
+--- a/drivers/clocksource/em_sti.c
++++ b/drivers/clocksource/em_sti.c
+@@ -333,11 +333,6 @@ static int em_sti_probe(struct platform_device *pdev)
+ 	return 0;
+ }
  
- Required properties:
+-static int em_sti_remove(struct platform_device *pdev)
+-{
+-	return -EBUSY; /* cannot unregister clockevent and clocksource */
+-}
+-
+ static const struct of_device_id em_sti_dt_ids[] = {
+ 	{ .compatible = "renesas,em-sti", },
+ 	{},
+@@ -346,10 +341,10 @@ MODULE_DEVICE_TABLE(of, em_sti_dt_ids);
  
--- compatible: must be "samsung,fimc", "simple-bus"
-+- compatible: must be "samsung,fimc"
- - clocks: list of clock specifiers, corresponding to entries in
-   the clock-names property;
- - clock-names : must contain "sclk_cam0", "sclk_cam1", "pxl_async0",
-@@ -156,8 +156,8 @@ Example:
- 		};
- 	};
+ static struct platform_driver em_sti_device_driver = {
+ 	.probe		= em_sti_probe,
+-	.remove		= em_sti_remove,
+ 	.driver		= {
+ 		.name	= "em_sti",
+ 		.of_match_table = em_sti_dt_ids,
++		.suppress_bind_attrs = true,
+ 	}
+ };
  
--	camera {
--		compatible = "samsung,fimc", "simple-bus";
-+	camera@11800000 {
-+		compatible = "samsung,fimc";
- 		clocks = <&clock 132>, <&clock 133>, <&clock 351>,
- 			 <&clock 352>;
- 		clock-names = "sclk_cam0", "sclk_cam1", "pxl_async0",
-@@ -166,6 +166,7 @@ Example:
- 		clock-output-names = "cam_a_clkout", "cam_b_clkout";
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&cam_port_a_clk_active>;
-+		ranges;
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 
+
+base-commit: 05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
 -- 
-2.34.1
+2.39.0
 
