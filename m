@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AE968DE9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BEC68DEB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjBGRPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S230516AbjBGRQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:16:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbjBGROu (ORCPT
+        with ESMTP id S232465AbjBGRPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:14:50 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4428698
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:14:00 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id h126-20020a636c84000000b004d31ad79086so7082420pgc.23
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:14:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gaqlkUHlROHo1Iu/mvu/VhOVerpPZOfXGd0nbt/7zs8=;
-        b=aFSF+mDkwXMPhNXoGe9Q/j26WS0JRqyy750UYsBMIHe2uxsn5RTNKfWiXtceSvhxa5
-         jtE+wKy5v7XDg0HNBzSH2kcs5k0RPiVdlmiHEigKt+L/Dx/GRZ95cfV/8haSHCcm6e/6
-         OybLUuEDpssvqVROntd3VOoMTRGRn3FgHA9N+aXExjoJwgShq1wHpm1S9S4NV9pWuTKE
-         i5zm3mZuh6Ca6I6q+iuYH0CnU3MAA2KomIjb8tuhX7oH1H7M0Apn3rrYCm++euStY1AV
-         PNE0SoqrGOrbbcoQEfj7ugB8nDtisZYJRPB0h5jKDccuxm6DHEpGAQlJRqPlDIfjEJLR
-         nlSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gaqlkUHlROHo1Iu/mvu/VhOVerpPZOfXGd0nbt/7zs8=;
-        b=JcKRtAF23reVy3BSyvgibVPmyon0S46qXBwM0V8oR4U8MLHukalEY5GazhjzuZ7SSp
-         Tg7NBtQV3vuV82SJYlZwlzrohMqjARUqtUReQKIRSruaT8lA0HlTaBPQDXJ9C1cD5QS2
-         S9pOXZk48oBSbQc4b0xUhlFpno6wTrXvnmN7uIfHwDw0bZdGQUsLnaezqcsofOBn00zP
-         zqaqnNuX9P2Be3NU4vGabfrJE5kFumu6l2HzC1G7ytgm1hvUD4Itx3RaJmvCY3c5ENHI
-         Js9iti97vmobhHQc+PPYIkN/YOv8vfRJh/t5ORZAgK7sbuPN0pEenM8vqaYZVz+IhKBX
-         jvqw==
-X-Gm-Message-State: AO0yUKVNSsKaP/MIqvU/lrRhOJir9Amdj1QoUPj/wJpXnFy3gHFIDNCC
-        IC0g9xoMB2Syc5Jiz20etr6VfPFdCYs=
-X-Google-Smtp-Source: AK7set+er4Uv/iKukfLeR1lCffkTft0lTR8HoB29ISgFrwHdoSYSqGHr9L2MtrFudzW2cCM4F0rt08AXC9k=
-X-Received: from pgonda1.kir.corp.google.com ([2620:0:1008:11:346e:6fd8:c3bf:b38f])
- (user=pgonda job=sendgmr) by 2002:a17:902:a3ce:b0:196:3672:f24b with SMTP id
- q14-20020a170902a3ce00b001963672f24bmr868930plb.32.1675790039532; Tue, 07 Feb
- 2023 09:13:59 -0800 (PST)
-Date:   Tue,  7 Feb 2023 09:13:54 -0800
-Message-Id: <20230207171354.4012821-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
-Subject: [PATCH V2] KVM: sev: Fix potential overflow send|recieve_update_data
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Peter Gonda <pgonda@google.com>, Andy Nguyen <theflow@google.com>,
-        Thomas Lendacky <thomas.lendacky@amd.com>,
-        David Rientjes <rientjes@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Tue, 7 Feb 2023 12:15:50 -0500
+Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82BD3F281;
+        Tue,  7 Feb 2023 09:15:20 -0800 (PST)
+Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
+        by mxout1.routing.net (Postfix) with ESMTP id E42B441A6D;
+        Tue,  7 Feb 2023 17:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1675790119;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JLrL4iWympNnVNwAETpNE1kjBqSNjCEjKLn1CYJsz9g=;
+        b=s8/mNx/3hM5Z1BYZzXx5/GGPmL6fAfaQZV9DpVzN3oIYNqzMtl75EC9k/1Y8y/zd0bRaWX
+        CgAB6WfedG3wqUIB5pJxKlSjm4keFwfeeYJvkRapmLtnr8O7fbAGOEpFdmDoag7+LkCu4U
+        obWTm6EXVkSvv9RzF0AUXySe+yJj6g4=
+Received: from frank-G5.. (fttx-pool-217.61.159.155.bambit.de [217.61.159.155])
+        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 8A269802E7;
+        Tue,  7 Feb 2023 17:15:17 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: mt76: allow up to 4 interrupts for mt7986
+Date:   Tue,  7 Feb 2023 18:15:12 +0100
+Message-Id: <20230207171512.35425-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 335c7e56-e374-4379-9b78-55056f0c79f6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,64 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM_SEV_SEND_UPDATE_DATA and KVM_SEV_RECEIVE_UPDATE_DATA have an integer
-overflow issue. Params.guest_len and offset are both 32bite wide, with a
-large params.guest_len the check to confirm a page boundary is not
-crossed can falsely pass:
+From: Frank Wunderlich <frank-w@public-files.de>
 
-    /* Check if we are crossing the page boundary *
-    offset = params.guest_uaddr & (PAGE_SIZE - 1);
-    if ((params.guest_len + offset > PAGE_SIZE))
+Mt7986 needs 4 interrupts which are already defined in mt7986a.dtsi.
+Update binding to reflect it
 
-Add an additional check to this conditional to confirm that
-params.guest_len itself is not greater than PAGE_SIZE.
+This fixes this error in dtbs_check (here only bpi-r3 example):
 
-The current code is can only overflow with a params.guest_len of greater
-than 0xfffff000. And the FW spec says these commands fail with lengths
-greater than 16KB. So this issue should not be a security concern
+arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtb: wifi@18000000:
+interrupts: [[0, 213, 4], [0, 214, 4], [0, 215, 4], [0, 216, 4]] is too long
+	From schema: Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtb: wifi@18000000:
+Unevaluated properties are not allowed ('interrupts' was unexpected)
+	From schema: Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
 
-Fixes: 15fb7de1a7f5 ("KVM: SVM: Add KVM_SEV_RECEIVE_UPDATE_DATA command")
-Fixes: d3d1af85e2c7 ("KVM: SVM: Add KVM_SEND_UPDATE_DATA command")
-Reported-by: Andy Nguyen <theflow@google.com>
-Suggested-by: Thomas Lendacky <thomas.lendacky@amd.com>
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org
-Cc: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
+ .../devicetree/bindings/net/wireless/mediatek,mt76.yaml      | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-V2
- * Updated conditional based on feedback from Tom.
-
----
- arch/x86/kvm/svm/sev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index 273cba809328..3d74facaead8 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -1294,7 +1294,7 @@ static int sev_send_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
+diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+index 212508672979..222b657fe4ea 100644
+--- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
++++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+@@ -38,7 +38,10 @@ properties:
+       MT7986 should contain 3 regions consys, dcm, and sku, in this order.
  
- 	/* Check if we are crossing the page boundary */
- 	offset = params.guest_uaddr & (PAGE_SIZE - 1);
--	if ((params.guest_len + offset > PAGE_SIZE))
-+	if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
- 		return -EINVAL;
+   interrupts:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 4
++    description:
++      MT7986 should contain 4 items.
  
- 	/* Pin guest memory */
-@@ -1474,7 +1474,7 @@ static int sev_receive_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 
- 	/* Check if we are crossing the page boundary */
- 	offset = params.guest_uaddr & (PAGE_SIZE - 1);
--	if ((params.guest_len + offset > PAGE_SIZE))
-+	if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
- 		return -EINVAL;
- 
- 	hdr = psp_copy_user_blob(params.hdr_uaddr, params.hdr_len);
+   power-domains:
+     maxItems: 1
 -- 
-2.39.1.519.gcb327c4b5f-goog
+2.34.1
 
