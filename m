@@ -2,128 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8203868DEDC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAD868DEE0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjBGR0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S231327AbjBGR1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjBGR0F (ORCPT
+        with ESMTP id S231222AbjBGR1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:26:05 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2106.outbound.protection.outlook.com [40.107.96.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3D5126EB;
-        Tue,  7 Feb 2023 09:26:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P7L4aO7DZ754z7o2edb63vU3smcVAlVrw4l1cvU/3vjLfJth7myDyDcvcmyWgATWavNeFPCBKZnze50tW2oiDWTCQOAvZZBuD17R7ZJlHB07N3U0IYCpSYWuNoZLNsU7qwCiPlf2DAT7TaNopBwtouFP3xirrigdgcJh0/CYkQRH2NFvH7vz35Be++So5r8NdBRgYsawwWexW/rUiK+aLWxA/2GUJJqEV2TZl+k1wJv23TKPSku1EXCWyA2czHB8/2vgJkwkcjOUYTx3ilkP/GS3KmamWtWwSqOIuPJcBdbkJvrafy8lZyXXyFXH55v0npx7/nWAWeAH9lIt+1izEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l+s3a/+gsf+03KekP/UgvQZWg5UnY+qCrvRjCrdfVKA=;
- b=nbHzSNIHNUJUUiDzeGLQJZZ/Zld9DTMdk4GVR452wtyi5Aw2L2b8mWPUGsYnRmLLoG2t6kzTTlEghyY0TlXDG3b+GcS+/zeIJ9bPkkIz3HhhgUCCSsjj8WoXSkoF83YU0tiaww7PifiLXivvk0aqBWJmhZQ6LRF36kuRqBEuUnAxQCZIkUGUu0Ct75nIbLEOiyfOIlr4+3NNTzuSuUjrQ6kYZNWWS8Nw9sJ9RFypWuoYmaWajg5Yq6nV83IL/eCz3bfZIu1rWQ/cvsKTE3qFEAllyWxpTNSQwCTmXg/wREs++4WcumBx/RZ/4pH/CZEo3GuJcqzg4b9IHQOA7yI3tQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l+s3a/+gsf+03KekP/UgvQZWg5UnY+qCrvRjCrdfVKA=;
- b=pbvOD13HjZGH6LoRtdcTcBbSrIONDFOAPZhlc3CPOTANQ+rjXTnilzmiWQIDc6LtlMZqnQjO+mkFg/8jFrf1uXp0DSID+Pus1H988mnjZ/RrWtAy1zhymoPek4KViUAyJRyI6L8FuJuXuPZ5K9YStAu0zVScFP+7y9BhUJ7usH0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB6028.namprd13.prod.outlook.com (2603:10b6:a03:3e3::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Tue, 7 Feb
- 2023 17:25:57 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
- 17:25:57 +0000
-Date:   Tue, 7 Feb 2023 18:25:49 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ath10k: Remove redundant assignment to changed_flags
-Message-ID: <Y+KJnbJImJGQAnoS@corigine.com>
-References: <20230207052410.26337-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207052410.26337-1-jiapeng.chong@linux.alibaba.com>
-X-ClientProxiedBy: AS4PR10CA0015.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5dc::11) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 7 Feb 2023 12:27:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6412316336
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:26:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675790798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A1UvW0wrHQWigj5Ouf4r26jfQmoM0gSCL18qsIrw6jw=;
+        b=IV/F7MMQ9nZaN88vHBpbdl9vKxVMnNU5ifiypG2uWnu7KnheUDUugJa055meV2m3mi65X+
+        IBGr++eTAcAm6ARHEgySdT9+500/As0dBp0JU3LhfaAvigqk3K0mdQoe+wBmqqmhAXB/Em
+        lH5iIVdLLpdgInJDDJu9dgv2KtsZN2M=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-622-abhNB9arMn-bmum1btLoQw-1; Tue, 07 Feb 2023 12:26:37 -0500
+X-MC-Unique: abhNB9arMn-bmum1btLoQw-1
+Received: by mail-qk1-f198.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so10238927qkn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:26:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A1UvW0wrHQWigj5Ouf4r26jfQmoM0gSCL18qsIrw6jw=;
+        b=Dc+fnNbI3m3UAPrGHPVsR2NSOoMMfHQ43R4R77bHhSs/1E8QDFzXZPeTCgjkXQejlP
+         5SC4ETtoVLRzi1F3z8bevdOpUMidNRYC36YdtG/K2dxW1veTeSNmCtmQk1tbqk2FQ6DK
+         o7wyRrTl1IfrSUoMopsUlgn6xIT/hG1kBp8YpyZSZzPeo2USC40PL9CDuv8g3xfTvb27
+         OjOeqiFywjzURhcrsX5yGCIVl/wnFrS9Kds8WjtpGn5wCmCS6a8rs/e+Vqs3RKoqDgG0
+         PdKaiDceAvu9cnnXhwt8jCwcovndFyugN7LLpKmtZPVN0YdyYRYWxz6XHOUfqZCcaBHh
+         X5Ig==
+X-Gm-Message-State: AO0yUKVl+rEpsMxPXZLp/9OTGt8F7OmFBNTJku6bTrB21MjIW7uSevA1
+        c3sZP9ldSKLYMwbejzS/lkTP0JjHzfm/8qATiX4iSyIHMloc9rVNPnLSkyX6vDx6H5YJd+7L58u
+        EWFKU5/UdRViAV5/K5WpPoK/r
+X-Received: by 2002:ac8:5f4a:0:b0:3b8:6801:90b3 with SMTP id y10-20020ac85f4a000000b003b8680190b3mr8018617qta.0.1675790796180;
+        Tue, 07 Feb 2023 09:26:36 -0800 (PST)
+X-Google-Smtp-Source: AK7set+G8xGUvyalZMLlK6nlAAPgyJL+bwcDkz+CtGrVcO3QWHRQv0maEwKkbLk5D0mzcwb/8BJN8A==
+X-Received: by 2002:ac8:5f4a:0:b0:3b8:6801:90b3 with SMTP id y10-20020ac85f4a000000b003b8680190b3mr8018567qta.0.1675790795820;
+        Tue, 07 Feb 2023 09:26:35 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id j24-20020a37ef18000000b0072396cb73cdsm9781553qkk.13.2023.02.07.09.26.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 09:26:35 -0800 (PST)
+Date:   Tue, 7 Feb 2023 12:26:33 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Jann Horn <jannh@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
+Message-ID: <Y+KJyTsiio0XMQJ+@x1n>
+References: <20230207125634.292109991@linuxfoundation.org>
+ <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB6028:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2ac5942-f6ee-4e75-9015-08db09305f3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: st/w9PK4FMYor1TKRi+Xvrr/d7DCWOu/MAXwFE52i3uGRr0Dvj/LdK7RmSpXm42sP4qQ+smTLRCOwSG94/G+vNs+ZkVHLocdZc4s9DZvPN+2Ggb0iCv1S9qbznXMZfARAZX/rOtLR23xbqg9JfVxDRa2Js6nRjL2xXSedXYHkKLS9HWor87wazf3gPnER1ilC8r/PRzy68p/4ba+5z14HPocJtAjpl4HZl7TViRenau8ckQ+TObKUXPw7/jW0qQSpto1Y63wn8EJupP5gOynZee/S2Z+WM1pu6j/MB2/J5/0Sxw/4Cj1VuNrkT0thyx3ymA84FXkJIRsJHQwFWOJ/OyJYHubnispNWPpCYxolJ8fahTp5FZRLVM7bd3Y5ind3PP9GTfm1Fi7xKg+k5aT9CLozWBjN0oTG/fkDGZi6Ylbg9jAtXFBxzGDJyJN0jR6LgvgzxnYGn1FWiH/jGkKHueteLYIxExKnQ+AoQgEDWZUIlPoTw3WX8e0Xemao6XbNRLOOPgLWd5GHZdYZbLGt0wBU9PKcu1zIjMkSNIfV5m8Ztj98PEiYP5V4Lxc2ULMqlB2QuspANjfJd5sDhTGTQ1wjvVlvCnjncv0mIz/KAhxyjr47CwUTqG8J7zyoBX27MD0CPukYIJkj68VVvasGvV6r+8GEacQMY4kGHLMg1ukmkqxPemS/H7lUOjSP2zKAX1Iq2nmc5Z1Sq5y4qQ0DUdTBo08+wPghBWu2g3rq/6hq2CGvXO2R/sfgAgEYdX8OA0VXrdIL0anC2PjXB0whw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(136003)(376002)(346002)(366004)(396003)(451199018)(6666004)(6506007)(6512007)(186003)(26005)(38100700002)(2616005)(83380400001)(6486002)(478600001)(966005)(4326008)(8676002)(316002)(66556008)(6916009)(66476007)(41300700001)(4744005)(86362001)(8936002)(7416002)(5660300002)(44832011)(36756003)(2906002)(66946007)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9EQI7uuRJyK9w42CnVAgf/YCF1WndA1bZFKBZT3EwuRyo6FOMAfUs3ZMNb/b?=
- =?us-ascii?Q?cxEGh076PpaWQyiXS0ai9IKFBWUEPHkm/agWcfLjZeaZMiDqH20t1JJxz87a?=
- =?us-ascii?Q?CdP4qkzsKpT4HtsLQaLCXxxLFG/hxNH+1egKz1pJagx0mnK7BUGlhD8x2aiF?=
- =?us-ascii?Q?a5wZZ+vDqQNC0IlFnAvd8NIDVVszpX3fuqAlyc/2pXblTMH/AJxMLmJQzVY6?=
- =?us-ascii?Q?ei5lwICySwI+L4VxW17+Rd8de2hNltLze1tTQd/mpA1cyGpB6ikxBb90J/47?=
- =?us-ascii?Q?zu+wCDrMOAw56X5etoVCyGAjPwb0dMXVlqbNq1CSZKAGHF3uYWdj8hB1oGq7?=
- =?us-ascii?Q?UeL6Me4LVOguGZIHXO5TM2aZCNsaFKiFwYqejEqK+YJo1Nr7EgUAekJ5IUpD?=
- =?us-ascii?Q?i6vzRGXUbjmnVHbzSQIlU8Y3a7hseTjlC/lCEm1P+CYwPdrWJq+nkAK8kdPH?=
- =?us-ascii?Q?8RTA8aD5QOxH8VLkLfGWrHYP/zMkLi7G+x95evZ54Z88BzOK0biK3soNu0Ko?=
- =?us-ascii?Q?K9sXeVR+8dkQkaUGU9FyRpFiObtbxEBWKkYMfU/vhsNvu1tHxiZOCzCfkOLH?=
- =?us-ascii?Q?Z8fTwwcwo2Ywk/9H7Jet89kNiM0u3GLxtoLsaOfR2OeUf+oLPWg5TJY7HCvY?=
- =?us-ascii?Q?r7LKmWYyxaFvO15hxnqxLg8zuCyqGdyJzzFDi5v8pmeZY28+m51sXqYSS4VW?=
- =?us-ascii?Q?Kv4aVGxfHsr+1GhsJ5zSfKNjkgpDvTJiSeeWGLFhy1ppNDUBJP4RMIiUPnYc?=
- =?us-ascii?Q?pVbKOGP47Nrghk1j4gh7zOLyThqPLmG/qKOIHF4e+r57NqBQ4Qwgr7NQ6L+U?=
- =?us-ascii?Q?PfDHPIEuXAyv+57/ffO40uD3DIDy2Elq58VbnqvtYnCpqlsB8AaXATfONPlF?=
- =?us-ascii?Q?dXBk1U1heTuyUj/rSo0WbPIHoGB4l01x5kLs+iU69GPITQK/A8PT/YQ2Seid?=
- =?us-ascii?Q?KCDKPtv3dgPW+X3WzI3y8WBEorhAFdMVhNJS72eEFOea/76mrM8f2Q9uWgU0?=
- =?us-ascii?Q?P6SEPBShS17Q/Dsk1orQ1SWb7zL+Up6mw/hqNP60FyT1A568Byo1bXIqYSKK?=
- =?us-ascii?Q?+lwbcJPr+Mvk3NlMhDALiRZcJx3ZXyhKFdtExvrzQUsBVQEpoE/fSyR8d7HM?=
- =?us-ascii?Q?Yrz5GuJlMcauhnszB2ssg5hQ4xNEtEjpIFCyislAZy1BRyDdMTKULimnULl6?=
- =?us-ascii?Q?iL1aZCeJlTgRyOHhB8CO39OKSQjXZkWytJyPMDh3JJ76bed4FOs4JbYAZuws?=
- =?us-ascii?Q?5jX0Yizcs3nUCgaQu4fBmwBfS12v9mAcqZGliqlLMY7SOJBBU0z8mhBeE/Fi?=
- =?us-ascii?Q?6TdmLy133KzpFyiPztLvqzQ5Fm82chulBsoD2rZfAO3/6Z11VMeg5G3wgCq2?=
- =?us-ascii?Q?DrxNa54NDFRyfrrUotkL9jPviYewBYko2dFQFU9tOWAwFpN/SddhxCAXFP0s?=
- =?us-ascii?Q?Pd+dngpLJPKjTUCKRXOH1wBNVhUueoz/Zh1SJQJG6hNmYXQgMTG+L13mZNxr?=
- =?us-ascii?Q?vKQlWUMXVuc4nz0Yg5mOUk18bwdiwmeKIGcHxaX+90BUQjfJfdz1bVThuAZv?=
- =?us-ascii?Q?RKe6vuAEcOjYdblquQvUdKYe32/myHDtkxDAL8j2dcI/lgJ/JWTXQnrXzt7w?=
- =?us-ascii?Q?QQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2ac5942-f6ee-4e75-9015-08db09305f3f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 17:25:57.4775
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KHyObuL5D9MVMVFzoKk8an5mz6L7detm0QZSGfksZdnW455p+zcVP6ERpw7sa97/JpZl3SP4nonEVB+UCq2T7FIZi/SqKvy/hanuCiADTug=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB6028
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 01:24:10PM +0800, Jiapeng Chong wrote:
-> Variable changed_flags is assigned, but is not effectively used, so
-> delete it.
+On Tue, Feb 07, 2023 at 10:35:19PM +0530, Naresh Kamboju wrote:
+> On Tue, 7 Feb 2023 at 18:29, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > This is the start of the stable review cycle for the 6.1.11 release.
+> > There are 208 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> drivers/net/wireless/ath/ath10k/mac.c:6024:22: warning: parameter 'changed_flags' set but not used.
+> Results from Linaro’s test farm.
+> Following build regressions noticed while building
+> selftests/vm/hugetlb-madvise.c
+> with kselftest-merge configs.
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3963
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Build errors:
+> ----------
+> hugetlb-madvise.c:242:13: warning: implicit declaration of function
+> 'fallocate'; did you mean 'alloca'? [-Wimplicit-function-declaration]
+>   242 |         if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+>       |             ^~~~~~~~~
+>       |             alloca
+> hugetlb-madvise.c:289:27: error: 'FALLOC_FL_PUNCH_HOLE' undeclared
+> (first use in this function)
+>   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+>       |                           ^~~~~~~~~~~~~~~~~~~~
+> hugetlb-madvise.c:289:27: note: each undeclared identifier is reported
+> only once for each function it appears in
+> hugetlb-madvise.c:289:50: error: 'FALLOC_FL_KEEP_SIZE' undeclared
+> (first use in this function)
+>   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+>       |                                                  ^~~~~~~~~~~~~~~~~~~
+> make[3]: *** [../lib.mk:145:
+> /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/vm/hugetlb-madvise]
+> Error 1
+> 
+> Build log:
+> https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/3728198425#L1676
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/2LPeQeCIu0YEfltwqAFCvDaj29A/
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+I think we should drop the patch "[PATCH 6.1 012/208] selftests/vm: remove
+__USE_GNU in hugetlb-madvise.c" from this merge.
+
+That patch fixes commit 62f33fa22800 ("selftests/vm: use memfd for
+hugetlb-madvise test"), but that's only in 6.2-rc1 and it's not in 6.1.
+
+I don't really know why it got picked for 6.1 stable backport, because the
+original patch doesn't contain "CC: stable".
+
+Thanks,
+
+-- 
+Peter Xu
 
