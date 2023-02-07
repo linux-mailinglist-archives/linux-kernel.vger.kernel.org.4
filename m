@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEC368DDE5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA1A68DDE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbjBGQZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        id S232358AbjBGQZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:25:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjBGQZl (ORCPT
+        with ESMTP id S231280AbjBGQZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:25:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CFE3B0D0;
-        Tue,  7 Feb 2023 08:25:40 -0800 (PST)
+        Tue, 7 Feb 2023 11:25:42 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5D61A5;
+        Tue,  7 Feb 2023 08:25:41 -0800 (PST)
 Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C913666020C4;
-        Tue,  7 Feb 2023 16:25:38 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 29C3E66020E8;
+        Tue,  7 Feb 2023 16:25:39 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1675787139;
-        bh=npqt0IMTyKKxWj2IKLUrG7ISyOoM5z/+NANPBGIZ2jg=;
+        bh=HOrC+xKoDbYva3mi7kNRHfK88vh1PiAgWULb+aXfcI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H21yTG4elW4u0ZyA7SwQw9QsMj3uBHskO0cyzPEEcU+/6Aijaf/FJD1r8oRqKCxAC
-         8mdajuWMvalXapr3+i5KAJmZ5DrBFZwkf9VAPTZfoCvG+7BHXRXqPO5p3GzDzoJa9H
-         6zO4C3hK7QlAn66jFCVrEKSlFmqP3HvUzlvc6eEbfkLTlpLW21T+rHxff+RCSUX3PP
-         MQBiLKFZntNir3QoUITDVKY1/gz/NgwT9WjMsrMte25kFwOMAM1r5MEH1aWOpIZtLz
-         osLvlxqYWBZ9USZ6vvKkMeDsk8sDlxjP30VB3Eprz1fjDiDyUFxvuZ+ZV5vYQCYSfO
-         2Q30PUBU7czGA==
+        b=i5F9gkSN0PTfhpMPj6BBMRxWK14vLVR6Up5CF2yPvbptxFGrxnApAmPNx7cB8ttzZ
+         eLtTAiSMe+3zf1Mxm1apv+4umlAqO9Zie6Sicjxzgfi9LuOFROHsj3ppa1G4okLuho
+         gnBpTQbJwUOcsLO3mW4eQZf/9FNIGe9BQBWfzeZAboMmxLE9qLsptLDPuDpElryVNa
+         3C+ych2kZy3yaMq1ZproHJlpKpVpFaH5Ihptu6bp4V0XxTP8MULWNSjHKXXPMcwVuZ
+         X/JO+Tcxyj9W6QpoDJ+9ANb/ZHErq3zaBUT8ccgToUv0kXmlWd6RslmlNQzMBVdvmM
+         j2Hc+az8NxlLQ==
 From:   Lucas Tanure <lucas.tanure@collabora.com>
 To:     David Rhodes <david.rhodes@cirrus.com>,
         Charles Keepax <ckeepax@opensource.cirrus.com>,
@@ -43,9 +43,9 @@ To:     David Rhodes <david.rhodes@cirrus.com>,
 Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
         kernel@collabora.com, Lucas Tanure <lucas.tanure@collabora.com>
-Subject: [PATCH v2 4/5] ASoC: cs35l41: Document CS35l41 external boost without VSPK
-Date:   Tue,  7 Feb 2023 16:25:25 +0000
-Message-Id: <20230207162526.1024286-5-lucas.tanure@collabora.com>
+Subject: [PATCH v2 5/5] ASoC: cs35l41: Document CS35l41 shared boost
+Date:   Tue,  7 Feb 2023 16:25:26 +0000
+Message-Id: <20230207162526.1024286-6-lucas.tanure@collabora.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230207162526.1024286-1-lucas.tanure@collabora.com>
 References: <20230207162526.1024286-1-lucas.tanure@collabora.com>
@@ -60,31 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-External Boost without GPIO1 as VSPK switch
-is no longer supported, but there is laptop
-models using this feature.
+Describe the properties used for shared boost
+configuration.
+Based on David Rhodes shared boost patches.
 
 Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
 ---
- Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/sound/cirrus,cs35l41.yaml      | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-index 18fb471aa891..8465623bbd96 100644
+index 8465623bbd96..54f769159ce4 100644
 --- a/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
 +++ b/Documentation/devicetree/bindings/sound/cirrus,cs35l41.yaml
-@@ -85,11 +85,13 @@ properties:
-       boost-cap-microfarad.
+@@ -86,12 +86,20 @@ properties:
        External Boost must have GPIO1 as GPIO output. GPIO1 will be set high to
        enable boost voltage.
-+      External Boost without GPIO1 as VSPK switch is no longer supported.
+       External Boost without GPIO1 as VSPK switch is no longer supported.
++      Shared boost allows two amplifiers to share a single boost circuit by
++      communicating on the MDSYNC bus. The passive amplifier does not control
++      the boost and receives data from the active amplifier. GPIO1 should be
++      configured for Sync when shared boost is used. Shared boost is not
++      compatible with External boost. Active amplifier requires
++      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
        0 = Internal Boost
        1 = External Boost
-+      2 = External Boost without VPSK switch (Do not use in new systems)
+       2 = External Boost without VPSK switch (Do not use in new systems)
++      3 = Shared Boost Active
++      4 = Shared Boost Passive
      $ref: /schemas/types.yaml#/definitions/uint32
      minimum: 0
--    maximum: 1
-+    maximum: 2
+-    maximum: 2
++    maximum: 4
  
    cirrus,gpio1-polarity-invert:
      description:
