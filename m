@@ -2,168 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006B468CFA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD09668CFA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjBGGml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S230312AbjBGGmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjBGGmb (ORCPT
+        with ESMTP id S229479AbjBGGme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:42:31 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C525F4C1D;
-        Mon,  6 Feb 2023 22:42:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675752148; x=1707288148;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1THSEr5oL6UyWmp1MZ/7OTIi8oyobqTFm9kIlDCpJsY=;
-  b=U4uGQfw0UebZ+T4GYA5rVl5o1peocyna6NLqI8XCEMWiwkckQ5D15oGV
-   RUUq9kN74+u56+lLN6SPVyrBoJTpsvxheDcPoJ97kDfLcEvt6cx18wDM7
-   Z4zXacbmfkQ/MKu7r92/vr2uny6kPsIgb/YkBVPgWS4w9fYrpNZlzOjD2
-   hVse6YmCBzHOW6ojCPTLyt3hrFrEmQ7RgteOi260pc0v3k11Voguq4gcI
-   vCKqWMmfM/d5y/IGEFaxWaQ1kuaxF60slBL9Db5VrEqUd7ePD/D+QsI7F
-   ARy1ymtomMF/yevsYIQ3v5eEyTjQLHrE8X7ITnRMqyD0M4eVX3uZsAm4g
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="328060877"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="328060877"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 22:42:11 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="755526126"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="755526126"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.209.26]) ([10.254.209.26])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 22:42:08 -0800
-Message-ID: <8ab16dfb-8fd1-2035-c191-1b22f72eb30e@linux.intel.com>
-Date:   Tue, 7 Feb 2023 14:42:06 +0800
+        Tue, 7 Feb 2023 01:42:34 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2120.outbound.protection.outlook.com [40.107.244.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A12A2728;
+        Mon,  6 Feb 2023 22:42:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Oj81ZHRFw6ksys/eH4H03GN8TnRigebXGGD6dn0UaHrom2XYsfwTAp3yu8dQrcMyx0Dav1vvoMfTXlIA3B3dcdTQb9BnJjAbAyyy8rqtmEwix/3NbhT8Bf6bvR4UM2N2C+uE137TWtp2i1N3mBslP2+yQP9ngJYCFFFAnckr1tv3DxQJbSUaJF5ulB9+jSKvTphUjq5IAEHlCjfupF3Z5klWQw3L8ZjYSBBrEBTtxJx2qvPn28KWd9J+0O8A/Ze+ikUKTp8TgOJO4+5dNDPR3mIjpIWk4bGI094nDt4r7R8dSISDyEWnh+gumpCGmgD3idUFhAIMmK3NttxtsJqEQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MPXwwPXoeoAQIpeAu9hJBYXmpJ1yJGzHpR9D4jgIL+0=;
+ b=gl8O6fipan62W4/7upqWFOFWrM3FsFKS/TqtoXf/QlzsWVxHi7uppEyQ4IxMSfdvb8k8vUePjBTeXdGydblngTAtyN6dYFl9IPS7p0ja/JcI28aYdFbal3HStIUN/V7AeDyqLeIkmp9Lxsyo6xvim8Hg0x5+jHpG8NVm2g4UpPTDc0h1H5Qgc05z24A+jRDaBBRJZ6oisJE0CkGlSCbg0geksknHVBgggH9dawYX+8gqr0fKhTb587u1XW09MSLLeQNpNg8UE5ifiAKzvGS14w3NAAZdf2SBTYDDSKc2V1lEslAtVmjCyomoO7K7mc45jZR/tDJL37K+/tq9c7UMlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MPXwwPXoeoAQIpeAu9hJBYXmpJ1yJGzHpR9D4jgIL+0=;
+ b=qYjyOX16KjHqFCdWhpK/fGybfG8Nolf/eYTLgce3v8arifxh/P3VRZ1m/qQzXo2BMy8I0bNxdMDx5BnfexBR8SNiXQcC3K/6NF3eSmAtzfRP1CDdM5jlnWervU4Vrvk3YpXneD/K6OUUIJmZexFXpCCUETcKsEUZ5jfcqreUydY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB3867.namprd13.prod.outlook.com (2603:10b6:5:245::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.22; Tue, 7 Feb
+ 2023 06:42:26 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
+ 06:42:26 +0000
+Date:   Tue, 7 Feb 2023 07:42:17 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Moshe Shemesh <moshe@nvidia.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Jiri Pirko <jiri@nvidia.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] devlink: Fix memleak in health diagnose callback
+Message-ID: <Y+HyyZ7KmAWQGzbC@corigine.com>
+References: <1675698976-45993-1-git-send-email-moshe@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675698976-45993-1-git-send-email-moshe@nvidia.com>
+X-ClientProxiedBy: AM0PR08CA0021.eurprd08.prod.outlook.com
+ (2603:10a6:208:d2::34) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        stable@vger.kernel.org, Sanjay Kumar <sanjay.k.kumar@intel.com>
-Subject: Re: [PATCH] iommu/vt-d: Avoid superfluous IOTLB tracking in lazy mode
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>
-References: <20230203230417.1287325-1-jacob.jun.pan@linux.intel.com>
- <ef65f1cf-d04c-8c35-7144-d30504bf7a1c@linux.intel.com>
- <4d90da14-8c08-62e1-814f-ee14fab375f8@arm.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <4d90da14-8c08-62e1-814f-ee14fab375f8@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3867:EE_
+X-MS-Office365-Filtering-Correlation-Id: b82bc637-62ef-48bc-a1f0-08db08d67983
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SrsPCrmbGk+Uypo3HZste20bjM9OEPuzVMtzGb8gA8bLdTjU/zGebYJXssiXZnB7veEBKGfFVBVD4YWbHBL66pR0K0pSCKfMMmjEwfUnO9wJFiiUOffMY4bkDtbrQcg5bQgig60ziyO1Mkeq9UNMrKDQchhvNlGcYgpGXARdb754j/TE8rcL3OnoIJo2fZudJTytooDI9hSleECVf1WZc2qhX4amhbBtcyWIsEpG0xtbKtpQaRpKmzp7Y9kC3p1N/1S6QpBtNzBpZYbxVrh8THgDDh+c2+PMu8SQVLA7MURwyaDyuiYiPj4RxjOLva5q1sqzEIGEapJGt5z6OKdsu50lV2NXQvBnvLClybtJE1by1j27ySAQnToINbSwjNvWJWBg1Zjrmi3SUkebPCfNjZts/XcieCD835oDjXNgfgghxj5KWY0JIIimLnXj+Bw3HygS0f/qUUKU5sHao9pm+b0Z9CESUGD4xew9L+89tKQHi3AplkkKjmKSuLMopiyFQ0UTz7HYXBe6T2GLloZF9d4UhZA/xiez/UqdXioqAIziFNPIw6cRttC/PXqAQtljhu/TWsZbyF50nNa6AJMODA/j8RjEBpWCzGT19sg9CpEj4l/AetTQiWDbxz/b7Cl/C9+70snkYDKcBGlPnoZ8RXOixqTxFQ81iI5tLNq07HwCWw4+fTVvOJqDuCLnxgPW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(39840400004)(376002)(346002)(136003)(451199018)(316002)(54906003)(38100700002)(4744005)(44832011)(2906002)(41300700001)(36756003)(8936002)(5660300002)(66946007)(66556008)(66476007)(8676002)(6666004)(6916009)(478600001)(86362001)(186003)(2616005)(6486002)(4326008)(6506007)(6512007)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?W94VxcIqRC2DFl6rGf2sMvHx7nzwlFO1jcmUcKSVoi5IOaX2peojV52gmlI2?=
+ =?us-ascii?Q?Eiu5xFWa7kRWnReDswT6jpqJraovmCkvdkixzs25EMy8xhJhiFAbyQjNNwR2?=
+ =?us-ascii?Q?Rx6bZZH3MRFZFTxLYvlWv1ND4906S+xUXQvON8A7dzaiWI5MAjTkPAgHgwUd?=
+ =?us-ascii?Q?9lzDQbHd0cIcMJMJGAuZ2c4wNxO2mRSK1do6jIzwcw13YBrE8pTiRb/0eVT8?=
+ =?us-ascii?Q?AkUf1MMJC9MqxCVVvvNd/sHs6yqkM4eq8kRqE5Jfrf1LI+eu2Df5tdXtUKyH?=
+ =?us-ascii?Q?H+2YgYIARz5sGin31kjVQZhAl3QWr77pd+l1wUl3QFtvwj1GC+aFsK9u8lu9?=
+ =?us-ascii?Q?ZeTIhGIQn/xR+ZZxH10PJJtKttmHUqQA9wBlMSksBKfEhcDTxF+XrG7z0mBQ?=
+ =?us-ascii?Q?GrOLV2YAD6HdqB7PnRcNBDuqLgSy/Pfq8oH/1+LoDLT54CXB1mIoCnxwmdUq?=
+ =?us-ascii?Q?v/W3iZ3qrY0PsArByhkc/XLgqU8rISXaxUEJKRZCB0rg/3brxWmWvBV8iX6p?=
+ =?us-ascii?Q?qdjoce2z+mKTdx0UKCGFJrkRp7WTgBsv5p0cnTVK4aBEE5FNWhaGZPAsyzYM?=
+ =?us-ascii?Q?8akysP5P+CaDqEklZbr8BvdmKpqLvBsH8h5CL3dfkxBB5pbQM3EmFZsiz5Fx?=
+ =?us-ascii?Q?xNauekUiLGg1rLlZSyfhjWcP76tOCm+vIOjn/WyT5/yL+G3SZz/EQXe1SEck?=
+ =?us-ascii?Q?b2gGsqVyvfAOhP53TcqLBecp2hqKk/T8K/BDg55k1ArxCICnAkhyQoHf6gpX?=
+ =?us-ascii?Q?IsK4vlcVI+SIBRI5nvQkaKqLd1qRRvBQQI3WLoDa2xpVvTbIuQYg+LhpSyRn?=
+ =?us-ascii?Q?68YnyURAQpO1heAnzZXeNKex5wnXr3eNHoEHRw817b3WMbfMbGzmV72+EWbX?=
+ =?us-ascii?Q?yBzVz1OaAucCgdo6z1WWS7ZQ6/oxvnX3X7McrSW7iohRuzzU9oFSXJFqPdWS?=
+ =?us-ascii?Q?443JiPrTp7nz4K+DwDPbO4mcLUo9RG8wgPJdayoKpkQ1r2wqw3ndoi/juydY?=
+ =?us-ascii?Q?kB99/XwaCo/fdnJgqtoy4CapbqLJrt9a1v8W1q4er40SJ1mfMVGjZoQcWyW+?=
+ =?us-ascii?Q?xvyhYDhkYfzUPlBW1cWHCdAzt8HKch4NZ+wKBrT8LPgD6BaZx6TUy8EjhMZb?=
+ =?us-ascii?Q?Tm1edGt3CDqo/iXiyFsmCrJhhyPE/BlGNonKB9TwdVBc87XMlmajiihHDUjj?=
+ =?us-ascii?Q?FRvpOssD2taQirnX6fbMp8ZSY4HS/cMw1JCql5q8y1JyJHys1c5KonjSmSj/?=
+ =?us-ascii?Q?UbKNnFoiqyEDpk/OBx880IZtHB6odYtvIOji6nfFEWTnhlgJh2IxOsv2evPy?=
+ =?us-ascii?Q?aWcNrZBIgAHD0jo54AwaAK7gf+SorYbEzyYKKtUeLyXdUSwJJuIGx8a+PHN9?=
+ =?us-ascii?Q?xBp97wdnEbZT5f8wNxTFx+MavIN5u6rBL2aGHHx7Nab2BqWNNLMneWGYMQe+?=
+ =?us-ascii?Q?utnqTSvq2lauZVZdNCX3Ff6gQqoQeMGaPUpLZH1TPVTx+hVtLNuifCyaAZVZ?=
+ =?us-ascii?Q?K3bWl0gJBtOpDbD7UErRUEeUn8wxwH3XqV8lNXheTi1B4EQoEK0khNwukNH2?=
+ =?us-ascii?Q?jVjyUXBoSXos6yBqbFGcCE/CXFSIGLU395PabGdz9kOXWaByTVequmxyNVjN?=
+ =?us-ascii?Q?FaMh9BsMPqZaaVoe6h27DCPK2B5khL2iuoH4xQs5jNhd9ItAfUsgKGmrts48?=
+ =?us-ascii?Q?eB4cRQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b82bc637-62ef-48bc-a1f0-08db08d67983
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 06:42:26.0406
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oAWrfJPtbF/dCoLgfTCIn0lQeDFeBDY/Dox3HGiN4Lix4ewv05aYCOhZdYdjX/233sn53YI414XqWPlHkeaTrdTAaVZ1n8Fn0dD7mCAcE0M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3867
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/6 19:20, Robin Murphy wrote:
-> On 2023-02-04 06:32, Baolu Lu wrote:
->> On 2023/2/4 7:04, Jacob Pan wrote:
->>> Intel IOMMU driver implements IOTLB flush queue with domain selective
->>> or PASID selective invalidations. In this case there's no need to track
->>> IOVA page range and sync IOTLBs, which may cause significant performance
->>> hit.
->>
->> [Add cc Robin]
->>
->> If I understand this patch correctly, this might be caused by below
->> helper:
->>
->> /**
->>   * iommu_iotlb_gather_add_page - Gather for page-based TLB invalidation
->>   * @domain: IOMMU domain to be invalidated
->>   * @gather: TLB gather data
->>   * @iova: start of page to invalidate
->>   * @size: size of page to invalidate
->>   *
->>   * Helper for IOMMU drivers to build invalidation commands based on 
->> individual
->>   * pages, or with page size/table level hints which cannot be 
->> gathered if they
->>   * differ.
->>   */
->> static inline void iommu_iotlb_gather_add_page(struct iommu_domain 
->> *domain,
->>                                                 struct 
->> iommu_iotlb_gather *gather,
->>                                                 unsigned long iova, 
->> size_t size)
->> {
->>          /*
->>           * If the new page is disjoint from the current range or is 
->> mapped at
->>           * a different granularity, then sync the TLB so that the gather
->>           * structure can be rewritten.
->>           */
->>          if ((gather->pgsize && gather->pgsize != size) ||
->>              iommu_iotlb_gather_is_disjoint(gather, iova, size))
->>                  iommu_iotlb_sync(domain, gather);
->>
->>          gather->pgsize = size;
->>          iommu_iotlb_gather_add_range(gather, iova, size);
->> }
->>
->> As the comments for iommu_iotlb_gather_is_disjoint() says,
->>
->> "...For many IOMMUs, flushing the IOMMU in this case is better
->>   than merging the two, which might lead to unnecessary invalidations.
->>   ..."
->>
->> So, perhaps the right fix for this performance issue is to add
->>
->>      if (!gather->queued)
->>
->> in iommu_iotlb_gather_add_page() or iommu_iotlb_gather_is_disjoint()?
->> It should benefit other arch's as well.
+On Mon, Feb 06, 2023 at 05:56:16PM +0200, Moshe Shemesh wrote:
+> The callback devlink_nl_cmd_health_reporter_diagnose_doit() miss
+> devlink_fmsg_free(), which leads to memory leak.
 > 
-> The iotlb_gather helpers are really just that - little tools to help 
-> drivers with various common iotlb_gather accounting patterns. The 
-> decision whether to bother with that accounting at all should really 
-> come beforehand, and whether a driver supports flush queues is 
-> orthogonal to whether it uses any particular gather helper(s) or not, so 
-> I think the patch as-is is correct.
-
-Okay, that's fine. Thanks for the explanation.
-
+> Fix it by adding devlink_fmsg_free().
 > 
->>> This patch adds a check to avoid IOVA gather page and IOTLB sync for
->>> the lazy path.
->>>
->>> The performance difference on Sapphire Rapids 100Gb NIC is improved by
->>> the following (as measured by iperf send):
->>
->> Which test case have you done? Post the real data if you have any.
->>
->>>
->>> w/o this fix~48 Gbits/s. with this fix ~54 Gbits/s
->>>
->>> Cc: <stable@vger.kernel.org>
->>
->> Again, add a Fixes tag so that people know how far this fix should be
->> back ported.
-> 
-> Note that the overall issue probably dates back to the initial iommu-dma 
-> conversion, but if you think it's important enough to go back beyond 
-> 5.15 when gather->queued was introduced, that'll need a different fix.
+> Fixes: e994a75fb7f9 ("devlink: remove reporter reference counting")
+> Signed-off-by: Moshe Shemesh <moshe@nvidia.com>
+> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 
-So perhaps
-
-Cc: stable@vger.kernel.org # 5.15+
-
-is enough?
-
-Best regards,
-baolu
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
