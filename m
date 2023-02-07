@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1A568DF98
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A459A68DF92
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjBGSIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S229565AbjBGSF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjBGSIK (ORCPT
+        with ESMTP id S231604AbjBGSFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:08:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD262A161
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:07:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675793242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S4x5qKj4mZKoGvyjVYSHB2H2PnDfOerrf3LVzTj3YME=;
-        b=gaU9Fbf1W4LEBDUhHwza78QdJ8gvH7ilPxliiHoEN9TH51MmcOR/uG8tD8fvkh/xhG5pm3
-        6iTdFmjY9m1NKXSR+jin9BCuACPiNs+//EZVr4QvGtn6rJVEChDAPnB2uMg2keDkfszAHQ
-        MsvAXLlFs68qnp+qkZKOEw5POLHrFg8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-116-om2wEwPjMO2xl2nJZl_oQw-1; Tue, 07 Feb 2023 13:07:21 -0500
-X-MC-Unique: om2wEwPjMO2xl2nJZl_oQw-1
-Received: by mail-qt1-f198.google.com with SMTP id t5-20020a05622a180500b003b9c03cd525so9140241qtc.20
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:07:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S4x5qKj4mZKoGvyjVYSHB2H2PnDfOerrf3LVzTj3YME=;
-        b=aD/kba3QtLG0jUW8ectEfnov7Whqv2y/6yXESVNhj9dT5RI78zBqQxCeqYr0uSPouX
-         afp6+CKSHawlz6CCZOXl4yOWpUrLWnDGN6yGrdTpgbML21tpBl6gKEB1S+6Cb67Yu++D
-         rwNQ4gYSVN0duogxFyRkDD6G8D/nbs4dJvYdcuNHjYBDFILzrTvsZDIsWseIoPjN90hY
-         qdyhFgnIB0h4p6hCOCONvYMyLGA2Ol3ZhUgWLbfF6fkHyCuZFUvYF6C1+RsX9nPeQ5Lq
-         GXZj8KdBRznF78sqlmFLChvEEo1wcNSHQZr8AC4CGnuck2bzCXky0PpCVUU5Io3nmxoC
-         HrBA==
-X-Gm-Message-State: AO0yUKV9ch6FEFI+zYyvYHmhBXAm6P+x6Zsf4VG0IubL5KQQP6dElE51
-        hDyGxqlhwi3Ud53w1RDyLCsTMHFgz3HrHTv5IMldboDv5q9emw5l9yFaKhjgn2TP66Vlp4TD5U6
-        09WprmCAQ0ghxdPShOQ3R5pKA
-X-Received: by 2002:a05:622a:112:b0:3b8:68df:fc72 with SMTP id u18-20020a05622a011200b003b868dffc72mr7825076qtw.2.1675793240272;
-        Tue, 07 Feb 2023 10:07:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set8cjC27SSuAC4+6fF6WgMSxS73grqiRMo482W5gZoUazjLcTL2TOyKMixk5mjoE5yE6VOcJ8w==
-X-Received: by 2002:a05:622a:112:b0:3b8:68df:fc72 with SMTP id u18-20020a05622a011200b003b868dffc72mr7825024qtw.2.1675793239958;
-        Tue, 07 Feb 2023 10:07:19 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id cr17-20020a05622a429100b003b63238615fsm9781225qtb.46.2023.02.07.10.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 10:07:19 -0800 (PST)
-Message-ID: <056934c443a57293f925d8f18f603b6ec76b91db.camel@redhat.com>
-Subject: Re: [PATCH net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU
- port becomes VLAN-aware
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, richard@routerhints.com
-Date:   Tue, 07 Feb 2023 19:07:14 +0100
-In-Reply-To: <20230207123952.r2r7tnama3vcr7vt@skbuf>
-References: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
-         <3649b6f9-a028-8eaf-ac89-c4d0fce412da@arinc9.com>
-         <20230205203906.i3jci4pxd6mw74in@skbuf>
-         <b055e42f-ff0f-d05a-d462-961694b035c1@arinc9.com>
-         <20230205235053.g5cttegcdsvh7uk3@skbuf>
-         <116ff532-4ebc-4422-6599-1d5872ff9eb8@arinc9.com>
-         <20230206174627.mv4ljr4gtkpr7w55@skbuf>
-         <c4c90e6576f1bc4ef9d634edda5862c5f003ae3c.camel@redhat.com>
-         <20230207123952.r2r7tnama3vcr7vt@skbuf>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 7 Feb 2023 13:05:23 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B53137577;
+        Tue,  7 Feb 2023 10:05:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675793122; x=1707329122;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ANDeNRsZmH3w3WfIltlmOn5XAx/Tp1OF+vVUO9znJlw=;
+  b=N+ofJOBlI2hW+zuYMlMiaA0eb6FXO/Au5KHMYJM7LvpnqeEmUszMdxKh
+   xDiZIycJoVwsI9z52fZ2lSFPuHKX2VAwJJqG98HPcgOQx0BFadEvMzgKK
+   W1BBMUWOMWl8GM2sSpKHuITdBIubb3PFaDsmrxdKDDxZIYfNl32rnONjq
+   tpJT66vxaqtcbmDgrrpN1+lke0u7bowIRcwu5Xo1TDKgKDCynWoKyVIUO
+   jesP4PRIN/A4Ua9RdqG8+y9x9OIKV13sn15IdCl9RtX130a29r+rBrxTV
+   oe5XEfPRpCzmtYsFtcg63yrt1sIoac7Hguvt1mnrDJcPrle+NnALqQVXc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="415799206"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="415799206"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 10:04:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="995826311"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="995826311"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 10:04:58 -0800
+Date:   Tue, 7 Feb 2023 10:08:35 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        stable@vger.kernel.org, Sukumar Ghorai <sukumar.ghorai@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH] iommu/vt-d: Fix PASID directory pointer coherency
+Message-ID: <20230207100835.2dd3cb3b@jacob-builder>
+In-Reply-To: <4a22577b-2bbc-d731-95e1-aee95d4a8c8e@linux.intel.com>
+References: <20230203220714.1283383-1-jacob.jun.pan@linux.intel.com>
+        <de4d0617-ceef-efca-69f1-a095ce91588e@linux.intel.com>
+        <20230206092527.670f7ef7@jacob-builder>
+        <4a22577b-2bbc-d731-95e1-aee95d4a8c8e@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-02-07 at 14:39 +0200, Vladimir Oltean wrote:
-> On Tue, Feb 07, 2023 at 11:56:13AM +0100, Paolo Abeni wrote:
-> > Thank you Vladimir for the quick turn-around!=20
-> >=20
-> > For future case, please avoid replying with new patches - tag area
-> > included - to existing patch/thread, as it confuses tag propagation,
-> > thanks!
->=20
-> Ah, yes, I see (and thanks for fixing it up).
->=20
-> Although I need to ask, since I think I made legitimate use of the tools
-> given to me. What should I have done instead? Post an RFC patch (even
-> though I didn't know whether it worked or not) in a thread separate to
-> the debugging session? I didn't want to diverge from the thread reporting
-> the issue. Maybe we should have started a new thread, decoupled from the
-> patch?
+Hi Baolu,
 
-Here what specifically confused the bot were the additional tags
-present in the debug patch. One possible alternative would have been
-posting - in the same thread - the code of the tentative patch without
-the formal commit message/tag area.
+On Tue, 7 Feb 2023 15:10:48 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
 
-That option is quite convenient toome, as writing the changelog takes
-me a measurable amount of time and I could spend that effort only when
-the patch is finalize/tested.
+> On 2023/2/7 1:25, Jacob Pan wrote:
+> >>> ---
+> >>>    drivers/iommu/intel/iommu.c | 6 ++++++
+> >>>    1 file changed, 6 insertions(+)
+> >>>
+> >>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> >>> index 59df7e42fd53..b4878c7ac008 100644
+> >>> --- a/drivers/iommu/intel/iommu.c
+> >>> +++ b/drivers/iommu/intel/iommu.c
+> >>> @@ -1976,6 +1976,12 @@ static int domain_context_mapping_one(struct
+> >>> dmar_domain *domain, pds = context_get_sm_pds(table);
+> >>>    		context->lo = (u64)virt_to_phys(table->table) |
+> >>>    				context_pdts(pds);
+> >>> +		/*
+> >>> +		 * Scalable-mode PASID directory pointer is not
+> >>> snooped if the
+> >>> +		 * coherent bit is not set.
+> >>> +		 */
+> >>> +		if (!ecap_coherent(iommu->ecap))
+> >>> +			clflush_cache_range(table->table, sizeof(void
+> >>> *));  
+> >> This isn't comprehensive. The clflush should be called whenever the
+> >> pasid directory table is allocated or updated.
+> >>  
+> > allocate a pasid table does not mean it gets used by iommu hw, not
+> > until it is programmed into context entry.  
+> 
+> Hi Jacob,
+> 
+> This page is used by the device, and the device's access to this memory
+> is not coherent. So after the page is allocated, any changes made by the
+> CPU to this page must be written back to the real memory.
+> 
+> This patch only flushes the first 8 bytes of the table. That's not
+> enough.
+> 
+make sense, thanks for the explanation.
+> Be aware that page allocation also requires a clflush, because at least
+> __GFP_ ZERO implies modification to page.
+> 
+Yes, zeroing dir page does change it but I think if we intercept every
+update to the directory entry, it should be sufficient?
 
-Please let me know if the above makes sense to you.
+will send an updated version.
 
-Cheers,
 
-Paolo
+Thanks,
 
+Jacob
