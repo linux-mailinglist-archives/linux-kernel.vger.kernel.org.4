@@ -2,124 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD1E68DE72
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A08E68DE75
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjBGRDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S231750AbjBGRFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbjBGRDg (ORCPT
+        with ESMTP id S230509AbjBGRFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:03:36 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AD92720;
-        Tue,  7 Feb 2023 09:03:35 -0800 (PST)
-Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2C934660208F;
-        Tue,  7 Feb 2023 17:03:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675789413;
-        bh=wXQQ9hKZcEEkrcDxicfFkwdm2d8cPyM0mRqhWTqAu6Y=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=N0cro9P2kAQnSsWLmuFFbK3gcDv0FZGpHvAI+aLTLUDMBB68kJrNayxCDhdlMmZz+
-         yWCnkvqvSJKpky5rK2mwNKhHpEZzpFnpErscf4Yf0hC0deRzrz6x0d7K+aqvvmM9JX
-         I5UunF0z12QtQUXu6KZoKF13rI9PUF/2uqN8LzwrzNh6TlRMzQ8LZEtEWv4eR8cXxT
-         YrqLDoeFglAsx8Knhlgx5NCLPQclycuSG0rbHv+MA0oegwT52QEz4d0kfNMD/3nWKx
-         hsY9NTzq8cN8Zz03fGGkU7Iz4OQ38hiCJw72phfM5rgmDXUNRwfS258FHjLSwTVN86
-         kt+EUCcTrwRTw==
-Message-ID: <e8aa571a-2d96-47da-34f0-47cc048dc655@collabora.com>
-Date:   Tue, 7 Feb 2023 17:03:31 +0000
+        Tue, 7 Feb 2023 12:05:33 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992CB2720
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:05:31 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id v26so9197636vsk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jy30Q5CoBNY/fYhc8eo/JNrKPpHvqjYzbsThzSZQ05U=;
+        b=Y31FS5ez5mYuEOMGf2wYCnFBEFEciLaVqR+RLWmFlbxCWqOcmkY14QtUZ7dkFhmC+O
+         PDMSq5yzcXI0T51xRc/2s/UUFykhNMSyTQzICJHHIJRU2izA1t4KSHk8yktXRxJNxVrT
+         ZiT8DXZJ5smC06drjvdCOyyl7mjXb42jQEBBKggsQI+/+KFu841IuGjrTVshxJ6Av/0+
+         QqaZKhEPbLglpIHV8DjD3RJiOR8xMrEwyxhEQXoO2NuEEafSRYCBlBMshBy1jA1qpsOp
+         MO2V3JVupMw82IwwE7ysHQm4YaNsvaLHusal1GRsGQQM4P5uH6J3KdukdTJeqkJVjalb
+         Xqiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jy30Q5CoBNY/fYhc8eo/JNrKPpHvqjYzbsThzSZQ05U=;
+        b=qvdxBUGClJ7KSM6AzZ6gKkZUuD9MPXjfx3XRm5YwC0D2fDmTEjvg961xDTD1alTz13
+         zA9OsmB3MO5am9v41ar/DyBoFKXO92MmnZeaoGrcISnlUxsWpCAxQJ0eJMHOYqVIXALp
+         OeG2V31E3Q5ffXMSQFWjX2kpXD9dbxZCli7HrjSwP3kpzptp14+qrI77gJ3lEohxIe3S
+         Dy6qrBx31Iz4zPifjkAUZICwh57+pFh+NUTkaCsqdAg+EZqmMji5dsH9KzpOEni703k3
+         Fi6zNMr4mJU2+8dHgJTNQVC+FGNGLtYkDVCeB85nK6x1o0HCJ4651cewbsUV7t453lFD
+         Obhg==
+X-Gm-Message-State: AO0yUKWZgVS7brXVcptfKoaAnPAgRJcLVAhB0kQAEYzSEHr0tcPyd36b
+        x5ZfCv30vApfB+F85z802GRkXOwhDNKYYiUPiIudMw==
+X-Google-Smtp-Source: AK7set9uk3OElOHb0yhkRGf2onss+eUAKY+U2mMVPjOU31IcxZDvidX54UErqpO3uYDm9FSXb5UH8kR/BztMfS422qM=
+X-Received: by 2002:a05:6102:3c4:b0:3ed:7a8f:d181 with SMTP id
+ n4-20020a05610203c400b003ed7a8fd181mr794571vsq.3.1675789530500; Tue, 07 Feb
+ 2023 09:05:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   lucas.tanure@collabora.com
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 2/2] Documentation: cs35l41: Shared boost properties
-References: <20230207104021.2842-1-lucas.tanure@collabora.com>
- <20230207104021.2842-3-lucas.tanure@collabora.com>
- <44faeca1-94c9-4423-d87a-03d80e286812@linaro.org>
- <e7257f9a-86c5-74e8-c538-6f6d2ba13274@collabora.com>
- <44c7274f-8a5e-0235-413a-6c3260018601@linaro.org>
- <4efe9796-6d3e-09d1-d5f7-cfb25a439061@collabora.com>
- <56ce2617-4fd1-d597-a4dc-918654cdd3f6@linaro.org>
-In-Reply-To: <56ce2617-4fd1-d597-a4dc-918654cdd3f6@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230207125634.292109991@linuxfoundation.org>
+In-Reply-To: <20230207125634.292109991@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 7 Feb 2023 22:35:19 +0530
+Message-ID: <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Peter Xu <peterx@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Jann Horn <jannh@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/23 4:48 PM, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> On 07/02/2023 17:34, Lucas Tanure wrote:
-> > On 07-02-2023 16:13, Krzysztof Kozlowski wrote:
-> >> On 07/02/2023 16:46, Lucas Tanure wrote:
-> >>>>> +      Shared boost allows two amplifiers to share a single boost circuit by
-> >>>>> +      communicating on the MDSYNC bus. The passive amplifier does not control
-> >>>>> +      the boost and receives data from the active amplifier. GPIO1 should be
-> >>>>> +      configured for Sync when shared boost is used. Shared boost is not
-> >>>>> +      compatible with External boost. Active amplifier requires
-> >>>>> +      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
-> >>>>>           0 = Internal Boost
-> >>>>>           1 = External Boost
-> >>>>> +      2 = Reserved
-> >>>>
-> >>>> How binding can be reserved? For what and why? Drop. 2 is shared active,
-> >>>> 3 is shared passive.
-> >>> 2 Is shared boost without VSPK switch, a mode not supported for new
-> >>> system designs. But there is laptops using it, so we need to keep
-> >>> supporting in the driver.
-> >>
-> >> That's not the answer. 2 is nothing here, so it cannot be reserved.
-> >> Aren't you mixing now some register value with bindings?
-> >>
-> >> Best regards,
-> >> Krzysztof
-> >>
-> >>
-> > I have added a new patch with propper documentation.
-> > And I would like to use 3 and 4 for shared boost as
-> > CS35L41_EXT_BOOST_NO_VSPK_SWITCH already exist as 2 and is used in the
-> > current driver.
-> 
-> I don't see CS35L41_EXT_BOOST_NO_VSPK_SWITCH in the bindings.
-> 
-> > The laptop that uses CS35L41_EXT_BOOST_NO_VSPK_SWITCH doesn't have the
-> > property "cirrus,boost-type", but to make everything consistent I would
-> > prefer to use 3 and 4 for the new boost types.
-> > Is that ok with you?
-> 
-> I don't see how it is related. The value does not exist, so whether
-> laptop has that property or not, is not really related, right?
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-The value does exist in the code, but no device should have that in ACPI/DTB, so yes the value doesn't exist for ACPI/DTB purposes.
-I can change CS35L41_EXT_BOOST_NO_VSPK_SWITCH to another value, like 99, and use 2 and 3 for shared boost.
-I will re-submit that with v3.
-Is that ok with you?
+On Tue, 7 Feb 2023 at 18:29, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.11 release.
+> There are 208 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.11-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thanks
-Lucas
+Results from Linaro=E2=80=99s test farm.
+Following build regressions noticed while building
+selftests/vm/hugetlb-madvise.c
+with kselftest-merge configs.
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Build errors:
+----------
+hugetlb-madvise.c:242:13: warning: implicit declaration of function
+'fallocate'; did you mean 'alloca'? [-Wimplicit-function-declaration]
+  242 |         if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+      |             ^~~~~~~~~
+      |             alloca
+hugetlb-madvise.c:289:27: error: 'FALLOC_FL_PUNCH_HOLE' undeclared
+(first use in this function)
+  289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZ=
+E,
+      |                           ^~~~~~~~~~~~~~~~~~~~
+hugetlb-madvise.c:289:27: note: each undeclared identifier is reported
+only once for each function it appears in
+hugetlb-madvise.c:289:50: error: 'FALLOC_FL_KEEP_SIZE' undeclared
+(first use in this function)
+  289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZ=
+E,
+      |                                                  ^~~~~~~~~~~~~~~~~~=
+~
+make[3]: *** [../lib.mk:145:
+/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/vm/hugetlb-madvise]
+Error 1
+
+Build log:
+https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/372819=
+8425#L1676
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2LPeQeCIu0YEfltwqAFC=
+vDaj29A/
+
+--
+Linaro LKFT
+https://lkft.linaro.org
