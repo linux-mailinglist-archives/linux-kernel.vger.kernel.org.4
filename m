@@ -2,191 +2,370 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EB368CB50
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 01:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A7068CB5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 01:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjBGAl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 19:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S229967AbjBGAnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 19:43:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBGAlZ (ORCPT
+        with ESMTP id S229663AbjBGAnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 19:41:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC7C24100;
-        Mon,  6 Feb 2023 16:41:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675730484; x=1707266484;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=jaeME6ttix+E4q8PyW1dRtFiEK7OjvLhV+Jwn7ouBfk=;
-  b=RhOTTBkAjA1mQng4PqTN9sN8I6pX2OsCw6ZQzYROFFdWurZCc8x2Mg/T
-   9GfVwEPT8qm6YTPin2s3OxUg31juli7VgeldFlzTJliPDNDcFLVpRscPS
-   0Pq5fyvEc6mMX8CrQ+ACMkSmsseXmdAT7Wx7fk6bSoUNdsi8E6x/nwN5T
-   xe/j+6uE3i0Mb8d38NGLg3NM/8Qx3Gf2TKv9DbbEThgTINcxaD5tdxsr5
-   ej8BjBi7XHG68utg6FOZnl9nINy6ZpTlIoxqlUSMhtrwYYnyKjMjDvteb
-   MeIxPA8MCFZywvy+5uR9CwWHJV62sgmcS+8OvEjnDJ6UEtGpJp0K6t9cZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="356725212"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="356725212"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 16:41:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="912126454"
-X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
-   d="scan'208";a="912126454"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Feb 2023 16:41:23 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 6 Feb 2023 16:41:23 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 6 Feb 2023 16:41:23 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 6 Feb 2023 16:41:22 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 6 Feb 2023 16:41:22 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i9w7p5Hr2INSO6mBNhaXxpMBExHEK8QQSC+7U84ysITZvTMsElnQZRQO6FD/bz/708msPJjAwhSz57AxVxIurvfR9e3Cr57vos/JTn5/hsZpTtUug83u/lnKn63ynCNZPzi2kKSZu2LUVskFDTtZfoGT5LGiyJ2QiD8uyCPyd35X3HeFc+m+SdkPZ2Qly33v7FWXkjpNM4l1rX26BTeD/PJiiSYkHydmz/Sv/V7sJnGnnapAaCc/90xVgTF3ADn+70KHOmoKjC+xlUhWvEfWKh6LW4M/Q952UB/7rDxIrAzGDQKZW1KptXnF2uGNhk+UZ3uzpYGe/DR3agCQUIMdBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pI2hRgYUUMYiONAMVV/lbOiKibrvtJ7taiuUvQSXbiU=;
- b=XJkKvbUQ7ENzxXxbt9HGY56EYiDOp9/TvriP1sXe679/y4fLx6TPQGPX7CAtWDX5Oj7cMrzakjAz3HA1SSagFmis/7MTgzrIHn+/36kCQDLe84IPMuo/60aBQpZuX4p0Kcf7MRXfpTOM4uwS7cyc6ZnQP3f4/7Jb+zxFXfv+KwGcyNuE5PqFvhfG/c+R/ZurgKDplM3+IRraxmIkHyl0gENWuh1qL+/FgJ/sMCqqyE85kuB502BNm+53PnMy7QTpZDGsu91Uga5XQQTTUo+viglsKy6pJ9wt1rBHZ6epJQENMW1CMfZK0VrlRc/8U3uWhJ/AVb1id/j3/eeaS9IVkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BL1PR11MB6002.namprd11.prod.outlook.com (2603:10b6:208:386::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Tue, 7 Feb
- 2023 00:41:16 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
- 00:41:16 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Ghorai, Sukumar" <sukumar.ghorai@intel.com>
-Subject: RE: [PATCH] iommu/vt-d: Fix PASID directory pointer coherency
-Thread-Topic: [PATCH] iommu/vt-d: Fix PASID directory pointer coherency
-Thread-Index: AQHZOBtmLBuHwLKazUOSk0ZXb6TPPK6+JViAgAQKcoCAAHjjQA==
-Date:   Tue, 7 Feb 2023 00:41:16 +0000
-Message-ID: <BN9PR11MB52762264B58BA63D81F50F3E8CDB9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230203220714.1283383-1-jacob.jun.pan@linux.intel.com>
-        <de4d0617-ceef-efca-69f1-a095ce91588e@linux.intel.com>
- <20230206092527.670f7ef7@jacob-builder>
-In-Reply-To: <20230206092527.670f7ef7@jacob-builder>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB6002:EE_
-x-ms-office365-filtering-correlation-id: b221a450-b9e5-442a-9718-08db08a40565
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0S/FRBw+f/yluE7/Bl/OHchyydaBXaCFtVxCUaKQna66Wz//ZHZ2DL6OO5kFOc4k2eA2BNQ13paynu5NFn6jEYOjONq9qcUY7OrkJk2rFaREKi+Mqcn3HDbxCT7x0i1mCgCGla47/s/2Ow89wF3ExUlu3kC201mvxH0xq1POuvUV07YiGSO3ey81CNeRAy8VLWL1E3SBk2f914ff55ejcsLIMcuFDnErYmibMX1B4uXjcr/vS2m+pvLmm9/OZ07Uy0Rj9X9mUgLTgyDysQ0AW9Fw1sB5mwJeg+XI5r+UuhDbCyKQRY7UcqUKPIVTrjmYh1lMUbvFgqLZY7R4V0GX4ohQ2LM/dRqSn5urRokIn9nKncx4gFrQYF3CuupcZ3nDc9dCA+i4LacI320wMTCW09FqHEhckU6bMPdQ0PK03ucnqcw1fL81z955dszZrBjEDjUkco7++m0E0icrI9fxsw17FXn0GmkLo7dc7iYMfY3y0hPYCoCm+wpsIUYBd5KEQrybl3/bnVU9VQRxPXd5bG2/9nRmELfCVYdg4KjN/OQ7xzfOzJmcvK4OpGRlJJ+ihY8OuCECkdzVbtyx9DiZdSsn7F8zhm7mY9JDubYU+y1noGNPo1/rE8T3RRMgSgM6Q3xmcOfQjQjbmwqAJIdAg7Wi9YO0yRFqnGutzKwn00+PgRDBhV6Mg0BeOmfCqgmKSEjB6tdhm9XBplRpVh03Hg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(346002)(39860400002)(396003)(366004)(451199018)(33656002)(122000001)(86362001)(38100700002)(38070700005)(55016003)(82960400001)(66446008)(316002)(64756008)(8936002)(41300700001)(8676002)(4326008)(66946007)(5660300002)(52536014)(110136005)(54906003)(66476007)(66556008)(76116006)(2906002)(4744005)(83380400001)(478600001)(186003)(6506007)(71200400001)(9686003)(26005)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8IDHbo3C9BBTPtQfNCJvJBWy7ZkJPdlkjOh1DqI57ldmC+KJc/r8jHtggjYz?=
- =?us-ascii?Q?4REQExiKM1+NIOzIY11cKIofb/qjx4BCQjHRkYZtmXMHTKNY/a7n7OIEu4KW?=
- =?us-ascii?Q?vxJGVXmJNg4Xv3l+BiNahe1y2dNjcU8edzcKLmXqb/T25nxWPf/KuOnAHWkX?=
- =?us-ascii?Q?Bv5MLmP5RKbBSFliGa5/Lkd9B0LDgl+B6dVUS9mL4IvEpH3+aCp6pidKeySM?=
- =?us-ascii?Q?/GV7IQv10CGbUGrU1bSQ6PUD1pq2D9D8mCwWptylurjlKmqfRtAQuEGzdyTJ?=
- =?us-ascii?Q?dKYIkDHtpx33B6ljQXHe6UWz5mtqwHvITP3/PGcLTJ6CqNW/+SmKbpkDrN+n?=
- =?us-ascii?Q?JLwmm5gkwvJRAsr3bWYBGRzVCbLehqjldcgm9tky71tVWOVHIuwcYcS2hwQh?=
- =?us-ascii?Q?p46tj4ISSZKXZcxN0v1rsO6Heafad5jiqXFrzuYXGQIXMjFX2mHvZ+J9KkEF?=
- =?us-ascii?Q?YTlmNPdi/0BjDSXdZHctcXBNYojzTRgpsl0y3mvlWtus9lYfPFiMlOKb/gDM?=
- =?us-ascii?Q?pRTLqNLP8XhRXCOHAj5XTA4HivRCk1hiBoqKopkAZUkHBhHHxuje+ntDQwCu?=
- =?us-ascii?Q?6Dj2kfVwcWNjDw4j4P2tHz9istvHXYn2CHRd4k5P0TfP8PQ2mEkLNknfJZDG?=
- =?us-ascii?Q?cKL0vrysf8zO3fih6YmZBsJV+ccPzNGImH8hl00LLQ2mQcT6Aq5ymN4nIZU5?=
- =?us-ascii?Q?R+fAyMe1Q4R1e+IZj0Le+qq7FdrAzce5EH3Mf7ILP1WuxlXDzxEn90ZI40sh?=
- =?us-ascii?Q?vagMaDEJUtItuu+7pP75Zfmp0bILRGanZmpTR0K+sRSuAURjY3EHTSzIGojn?=
- =?us-ascii?Q?fbDpMb/kESdl6hrDO1emx11kD4bOvm2oTYBbLOiPU5wXN1tMlrQBMnCuRm42?=
- =?us-ascii?Q?KfVwScp9oDyzEZSZJt4bbDh6T2FSuipbC7B2WFB7t3wsjVpd5UWOgms0BLqn?=
- =?us-ascii?Q?mJO36ynUD7wIO+btExNopSxSUhMV279cAbqOHL/ICuQDhi2bebA1ph7+XomZ?=
- =?us-ascii?Q?n93lcIsTnHjMGuaHMU9c9nEzCYjZa/CRsx9v8ETZW4Ek1TGEGA2MkPzvIxZw?=
- =?us-ascii?Q?kTDKHbbn3hcAB6darwKLV/V1XKoT6wnQDEERby0L54rhvtlzroLonxWInNnJ?=
- =?us-ascii?Q?SssFe8X+KwrRbhb3qCF4JnRD5uabjD26VTXeH4VN6nO600O06WT/OlRyS+dQ?=
- =?us-ascii?Q?YTTpg7BjV7h7lcJ0gFRL25iC6JRSwBizdZt1jLgA1ODNzsNtGnMFrKstWc+C?=
- =?us-ascii?Q?lbeiOnJF+GCxIRxjCj2uFusBLcoLMXHI69x/8u6iLu4jn7c18nDVikDI7ZiA?=
- =?us-ascii?Q?yanGSyLKIThxsHCT5QjaaU0Y+vjVF2bpLaQQv82M0zpOoE/jpB13qGslrvC1?=
- =?us-ascii?Q?/SzG3fGLViI5uoBFcrbSycDcocLg3IXTdu3CAACAfBgmSoo0njHYQ3x79DHN?=
- =?us-ascii?Q?e6EealGNcfBSiyCM8daLNTPoqPlhAi3GtFcY6vhipNI3cqOfT8mqJmLx9ikd?=
- =?us-ascii?Q?JtW5rgzJCRpLsE/O2GQPepCqdJIKQ2ecT62nxbBk1vSPWoZMoEWnBZn1MNjx?=
- =?us-ascii?Q?6q/+wv76BrH4FJ30iM9P/oiQC2TxkDnwtFzizR4C?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 6 Feb 2023 19:43:05 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4192824CBB;
+        Mon,  6 Feb 2023 16:43:03 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id d8so13887545ljq.9;
+        Mon, 06 Feb 2023 16:43:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZutm5hPrBdZUb67UXyFX833bOiP7wUg+HuM8BYZCPc=;
+        b=gsIAlDkYYd+bR20KKCVDS6qXI7hHNUh2ZyKeYcuquWVc9tNPcxLgDNNd4WeKnZIwof
+         6mFhvPj1cAhRwTzHGXrDXFSxTHl36z7UF1DvT3tQYGjVdRHLOIqCrKcM4DCe23S4BVk7
+         yKmP2vLQosQ9npUlFnifSdPnLhMkr96cMZoW2Xx3Pcxr0Gg4tgww53FRR7KX6H6OlIAK
+         NcSlR3pZzkb9D7jmw2aVPXVO/knYoqO5DiS1kNn/r+7tVR+T46gpr7reWDW9JpTuvtT9
+         j6BuZRgoFGJNpfM+8ABL3mmdE8qiY9gu/fv8NBs9g7IGlE5syGZUU2b9+U/YBso2f0PI
+         fMOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aZutm5hPrBdZUb67UXyFX833bOiP7wUg+HuM8BYZCPc=;
+        b=WVAKxizZZ7Lf0ZTy3KZ11N9RIKFdqvyFUFpJy6YWfzMRp0dlURUyVqQyMW5YU744HO
+         DrGL1G0h0YI4udyfim5ldLcTPofTHvZPj8QUtDURzJuBuIfBLmFugWPM0NWM3qG2QVHV
+         /bn25nlUM+3eHs1JyQQhnkcRCs1qP5sf4Xe8hMBiR/q6KKxeRRXAh/F36zhHr2+IFGD8
+         f6bWnf/UHMqAcyS5lyT9at7ZUy4nxsDjrYwntLDQPoJ7A1/Ao2XuQj/af5x891lrHHsX
+         wPiUawltgLpL4LhRxf71NczB50iRwHXuVnWGC1pgj292B7T66Gyir9mKwDf9A+Y030zw
+         beVQ==
+X-Gm-Message-State: AO0yUKXE/nXwnOpb4dQH8oAI+H0A+/SQGd3RDa9vFcqGkok+YSEAt7uV
+        PFp63xwtJI3Jvy9wW08BmxcAVvlzwil9DMRYSNo=
+X-Google-Smtp-Source: AK7set87PYXzpGAQX0poJ1aVH7vFdN80t4jSB+Vmc3Blj+rHFthMrYCfPH4yXHNHnUki46CYU5g0YqsflkIUGG2IxGA=
+X-Received: by 2002:a2e:9c4b:0:b0:293:ed1:ee6f with SMTP id
+ t11-20020a2e9c4b000000b002930ed1ee6fmr192493ljj.119.1675730581330; Mon, 06
+ Feb 2023 16:43:01 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b221a450-b9e5-442a-9718-08db08a40565
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 00:41:16.0947
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: syZxDXoR/x6VWQ/Fp44Qirq9GcHlEb64tib5cUgSZxKCEG571bpUDou+By/By4EzBiSnEk3JbzokrMwdxHIUvg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB6002
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206233912.9410-1-bage@debian.org> <20230206233912.9410-3-bage@debian.org>
+In-Reply-To: <20230206233912.9410-3-bage@debian.org>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Mon, 6 Feb 2023 16:42:49 -0800
+Message-ID: <CABBYNZJo_y9zoF_YbjWYgkNrXUne-cp7vkBB7omFE-W4fTihLg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] Bluetooth: btrtl: add support for the RTL8723CS
+To:     Bastian Germann <bage@debian.org>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> Sent: Tuesday, February 7, 2023 1:25 AM
->=20
-> > > @@ -1976,6 +1976,12 @@ static int
-> domain_context_mapping_one(struct
-> > > dmar_domain *domain, pds =3D context_get_sm_pds(table);
-> > >   		context->lo =3D (u64)virt_to_phys(table->table) |
-> > >   				context_pdts(pds);
-> > > +		/*
-> > > +		 * Scalable-mode PASID directory pointer is not
-> > > snooped if the
-> > > +		 * coherent bit is not set.
-> > > +		 */
-> > > +		if (!ecap_coherent(iommu->ecap))
-> > > +			clflush_cache_range(table->table, sizeof(void
-> > > *));
-> >
-> > This isn't comprehensive. The clflush should be called whenever the
-> > pasid directory table is allocated or updated.
-> >
-> allocate a pasid table does not mean it gets used by iommu hw, not until =
-it
-> is programmed into context entry.
->=20
+Hi Bastian,
 
-this is insufficient.
+On Mon, Feb 6, 2023 at 3:39 PM Bastian Germann <bage@debian.org> wrote:
+>
+> From: Vasily Khoruzhick <anarsoul@gmail.com>
+>
+> The Realtek RTL8723CS is SDIO WiFi chip. It also contains a Bluetooth
+> module which is connected via UART to the host.
+>
+> It shares lmp subversion with 8703B, so Realtek's userspace
+> initialization tool (rtk_hciattach) differentiates varieties of RTL8723CS
+> (CG, VF, XX) with RTL8703B using vendor's command to read chip type.
+>
+> Also this chip declares support for some features it doesn't support
+> so add a quirk to indicate that these features are broken.
+>
+> Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> Signed-off-by: Bastian Germann <bage@debian.org>
+> ---
+>  drivers/bluetooth/btrtl.c  | 120 +++++++++++++++++++++++++++++++++++--
+>  drivers/bluetooth/btrtl.h  |   5 ++
+>  drivers/bluetooth/hci_h5.c |   4 ++
+>  3 files changed, 125 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+> index 69c3fe649ca7..97716cab7617 100644
+> --- a/drivers/bluetooth/btrtl.c
+> +++ b/drivers/bluetooth/btrtl.c
+> @@ -17,7 +17,11 @@
+>
+>  #define VERSION "0.1"
+>
+> +#define RTL_CHIP_8723CS_CG     3
+> +#define RTL_CHIP_8723CS_VF     4
+> +#define RTL_CHIP_8723CS_XX     5
+>  #define RTL_EPATCH_SIGNATURE   "Realtech"
+> +#define RTL_ROM_LMP_8703B      0x8703
+>  #define RTL_ROM_LMP_8723A      0x1200
+>  #define RTL_ROM_LMP_8723B      0x8723
+>  #define RTL_ROM_LMP_8821A      0x8821
+> @@ -30,6 +34,7 @@
+>  #define IC_MATCH_FL_HCIREV     (1 << 1)
+>  #define IC_MATCH_FL_HCIVER     (1 << 2)
+>  #define IC_MATCH_FL_HCIBUS     (1 << 3)
+> +#define IC_MATCH_FL_CHIP_TYPE  (1 << 4)
+>  #define IC_INFO(lmps, hcir, hciv, bus) \
+>         .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_HCIREV | \
+>                        IC_MATCH_FL_HCIVER | IC_MATCH_FL_HCIBUS, \
+> @@ -59,6 +64,7 @@ struct id_table {
+>         __u16 hci_rev;
+>         __u8 hci_ver;
+>         __u8 hci_bus;
+> +       __u8 chip_type;
+>         bool config_needed;
+>         bool has_rom_version;
+>         bool has_msft_ext;
+> @@ -99,6 +105,39 @@ static const struct id_table ic_id_table[] = {
+>           .fw_name  = "rtl_bt/rtl8723b_fw.bin",
+>           .cfg_name = "rtl_bt/rtl8723b_config" },
+>
+> +       /* 8723CS-CG */
+> +       { .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
+> +                        IC_MATCH_FL_HCIBUS,
+> +         .lmp_subver = RTL_ROM_LMP_8703B,
+> +         .chip_type = RTL_CHIP_8723CS_CG,
+> +         .hci_bus = HCI_UART,
+> +         .config_needed = true,
+> +         .has_rom_version = true,
+> +         .fw_name  = "rtl_bt/rtl8723cs_cg_fw.bin",
+> +         .cfg_name = "rtl_bt/rtl8723cs_cg_config" },
+> +
+> +       /* 8723CS-VF */
+> +       { .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
+> +                        IC_MATCH_FL_HCIBUS,
+> +         .lmp_subver = RTL_ROM_LMP_8703B,
+> +         .chip_type = RTL_CHIP_8723CS_VF,
+> +         .hci_bus = HCI_UART,
+> +         .config_needed = true,
+> +         .has_rom_version = true,
+> +         .fw_name  = "rtl_bt/rtl8723cs_vf_fw.bin",
+> +         .cfg_name = "rtl_bt/rtl8723cs_vf_config" },
+> +
+> +       /* 8723CS-XX */
+> +       { .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
+> +                        IC_MATCH_FL_HCIBUS,
+> +         .lmp_subver = RTL_ROM_LMP_8703B,
+> +         .chip_type = RTL_CHIP_8723CS_XX,
+> +         .hci_bus = HCI_UART,
+> +         .config_needed = true,
+> +         .has_rom_version = true,
+> +         .fw_name  = "rtl_bt/rtl8723cs_xx_fw.bin",
+> +         .cfg_name = "rtl_bt/rtl8723cs_xx_config" },
+> +
+>         /* 8723D */
+>         { IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
+>           .config_needed = true,
+> @@ -208,7 +247,8 @@ static const struct id_table ic_id_table[] = {
+>         };
+>
+>  static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
+> -                                            u8 hci_ver, u8 hci_bus)
+> +                                            u8 hci_ver, u8 hci_bus,
+> +                                            u8 chip_type)
+>  {
+>         int i;
+>
+> @@ -225,6 +265,9 @@ static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
+>                 if ((ic_id_table[i].match_flags & IC_MATCH_FL_HCIBUS) &&
+>                     (ic_id_table[i].hci_bus != hci_bus))
+>                         continue;
+> +               if ((ic_id_table[i].match_flags & IC_MATCH_FL_CHIP_TYPE) &&
+> +                   (ic_id_table[i].chip_type != chip_type))
+> +                       continue;
+>
+>                 break;
+>         }
+> @@ -307,6 +350,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
+>                 { RTL_ROM_LMP_8723B, 1 },
+>                 { RTL_ROM_LMP_8821A, 2 },
+>                 { RTL_ROM_LMP_8761A, 3 },
+> +               { RTL_ROM_LMP_8703B, 7 },
+>                 { RTL_ROM_LMP_8822B, 8 },
+>                 { RTL_ROM_LMP_8723B, 9 },       /* 8723D */
+>                 { RTL_ROM_LMP_8821A, 10 },      /* 8821C */
+> @@ -587,6 +631,48 @@ static int btrtl_setup_rtl8723b(struct hci_dev *hdev,
+>         return ret;
+>  }
+>
+> +static bool rtl_has_chip_type(u16 lmp_subver)
+> +{
+> +       switch (lmp_subver) {
+> +       case RTL_ROM_LMP_8703B:
+> +               return true;
+> +       default:
+> +               break;
+> +       }
+> +
+> +       return  false;
+> +}
+> +
+> +static int rtl_read_chip_type(struct hci_dev *hdev, u8 *type)
+> +{
+> +       struct rtl_chip_type_evt *chip_type;
+> +       struct sk_buff *skb;
+> +       const unsigned char cmd_buf[] = {0x00, 0x94, 0xa0, 0x00, 0xb0};
+> +
+> +       /* Read RTL chip type command */
+> +       skb = __hci_cmd_sync(hdev, 0xfc61, 5, cmd_buf, HCI_INIT_TIMEOUT);
+> +       if (IS_ERR(skb)) {
+> +               rtl_dev_err(hdev, "Read chip type failed (%ld)",
+> +                           PTR_ERR(skb));
+> +               return PTR_ERR(skb);
+> +       }
+> +
+> +       if (skb->len != sizeof(*chip_type)) {
+> +               rtl_dev_err(hdev, "RTL chip type event length mismatch");
+> +               kfree_skb(skb);
+> +               return -EIO;
+> +       }
+> +
+> +       chip_type = (struct rtl_chip_type_evt *)skb->data;
 
-Even after this point the PASID directory entry could be changed when
-a new PASID table is allocated, e.g. in intel_pasid_get_entry().
+You can probably use skb_pull_data instead of trying to cast skb->data directly.
 
+> +       rtl_dev_info(hdev, "chip_type status=%x type=%x",
+> +                    chip_type->status, chip_type->type);
+> +
+> +       *type = chip_type->type & 0x0f;
+> +
+> +       kfree_skb(skb);
+> +       return 0;
+> +}
+> +
+>  void btrtl_free(struct btrtl_device_info *btrtl_dev)
+>  {
+>         kvfree(btrtl_dev->fw_data);
+> @@ -603,7 +689,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
+>         struct hci_rp_read_local_version *resp;
+>         char cfg_name[40];
+>         u16 hci_rev, lmp_subver;
+> -       u8 hci_ver;
+> +       u8 hci_ver, chip_type = 0;
+>         int ret;
+>         u16 opcode;
+>         u8 cmd[2];
+> @@ -629,8 +715,14 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
+>         hci_rev = le16_to_cpu(resp->hci_rev);
+>         lmp_subver = le16_to_cpu(resp->lmp_subver);
+>
+> +       if (rtl_has_chip_type(lmp_subver)) {
+> +               ret = rtl_read_chip_type(hdev, &chip_type);
+> +               if (ret)
+> +                       goto err_free;
+> +       }
+> +
+>         btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
+> -                                           hdev->bus);
+> +                                           hdev->bus, chip_type);
+>
+>         if (!btrtl_dev->ic_info)
+>                 btrtl_dev->drop_fw = true;
+> @@ -673,7 +765,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
+>                 lmp_subver = le16_to_cpu(resp->lmp_subver);
+>
+>                 btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
+> -                                                   hdev->bus);
+> +                                                   hdev->bus, chip_type);
+>         }
+>  out_free:
+>         kfree_skb(skb);
+> @@ -755,6 +847,7 @@ int btrtl_download_firmware(struct hci_dev *hdev,
+>         case RTL_ROM_LMP_8761A:
+>         case RTL_ROM_LMP_8822B:
+>         case RTL_ROM_LMP_8852A:
+> +       case RTL_ROM_LMP_8703B:
+>                 return btrtl_setup_rtl8723b(hdev, btrtl_dev);
+>         default:
+>                 rtl_dev_info(hdev, "assuming no firmware upload needed");
+> @@ -795,6 +888,19 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
+>                 rtl_dev_dbg(hdev, "WBS supported not enabled.");
+>                 break;
+>         }
+> +
+> +       switch (btrtl_dev->ic_info->lmp_subver) {
+> +       case RTL_ROM_LMP_8703B:
+> +               /* 8723CS reports two pages for local ext features,
+> +                * but it doesn't support any features from page 2 -
+> +                * it either responds with garbage or with error status
+> +                */
+> +               set_bit(HCI_QUIRK_BROKEN_LOCAL_EXT_FEATURES_PAGE_2,
+> +                       &hdev->quirks);
+> +               break;
+> +       default:
+> +               break;
+> +       }
+>  }
+>  EXPORT_SYMBOL_GPL(btrtl_set_quirks);
+>
+> @@ -953,6 +1059,12 @@ MODULE_FIRMWARE("rtl_bt/rtl8723b_fw.bin");
+>  MODULE_FIRMWARE("rtl_bt/rtl8723b_config.bin");
+>  MODULE_FIRMWARE("rtl_bt/rtl8723bs_fw.bin");
+>  MODULE_FIRMWARE("rtl_bt/rtl8723bs_config.bin");
+> +MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_fw.bin");
+> +MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_config.bin");
+> +MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_fw.bin");
+> +MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_config.bin");
+> +MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_fw.bin");
+> +MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_config.bin");
+>  MODULE_FIRMWARE("rtl_bt/rtl8723ds_fw.bin");
+>  MODULE_FIRMWARE("rtl_bt/rtl8723ds_config.bin");
+>  MODULE_FIRMWARE("rtl_bt/rtl8761a_fw.bin");
+> diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
+> index ebf0101c959b..349d72ee571b 100644
+> --- a/drivers/bluetooth/btrtl.h
+> +++ b/drivers/bluetooth/btrtl.h
+> @@ -14,6 +14,11 @@
+>
+>  struct btrtl_device_info;
+>
+> +struct rtl_chip_type_evt {
+> +       __u8 status;
+> +       __u8 type;
+> +} __packed;
+> +
+>  struct rtl_download_cmd {
+>         __u8 index;
+>         __u8 data[RTL_FRAG_LEN];
+> diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
+> index 6455bc4fb5bb..e90670955df2 100644
+> --- a/drivers/bluetooth/hci_h5.c
+> +++ b/drivers/bluetooth/hci_h5.c
+> @@ -936,6 +936,8 @@ static int h5_btrtl_setup(struct h5 *h5)
+>         err = btrtl_download_firmware(h5->hu->hdev, btrtl_dev);
+>         /* Give the device some time before the hci-core sends it a reset */
+>         usleep_range(10000, 20000);
+> +       if (err)
+> +               goto out_free;
+>
+>         btrtl_set_quirks(h5->hu->hdev, btrtl_dev);
+>
+> @@ -1100,6 +1102,8 @@ static const struct of_device_id rtl_bluetooth_of_match[] = {
+>           .data = (const void *)&h5_data_rtl8822cs },
+>         { .compatible = "realtek,rtl8723bs-bt",
+>           .data = (const void *)&h5_data_rtl8723bs },
+> +       { .compatible = "realtek,rtl8723cs-bt",
+> +         .data = (const void *)&h5_data_rtl8723bs },
+>         { .compatible = "realtek,rtl8723ds-bt",
+>           .data = (const void *)&h5_data_rtl8723bs },
+>  #endif
+> --
+> 2.39.1
+>
+
+
+-- 
+Luiz Augusto von Dentz
