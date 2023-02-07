@@ -2,211 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E33368CF57
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA4D68CF62
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjBGGLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S230082AbjBGGQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjBGGLj (ORCPT
+        with ESMTP id S229519AbjBGGP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:11:39 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2300F2F787
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:11:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EX5jRl0CWgoSNuT+dyIxvoYqXi/dox/9VDw2/ZaWTlMSRLMRKLNjhIVQrcdYxhoOOTfNCixjl4W4+V6HZx1WYISqbn/eI3b+7fsnkNQNMgdiI8DM529mOXU0ENbOphXXeqW/+RQV40S2/5icZ8+E/bMpRwKRxIWppYADuE+DWlKDS7TwwNl12vVib43HlgUEvt9i2Dow+NEOIWd2E6NevxiNM3SfoKyP4uCoUHZd81t5go2VuLDVguoN1/XTNsIQ7Y4WuRcMKXhzHoZjGaGjWe9XMR7rdeC2xQ2NiArB7j559nz/FT5zsr2JgsyETxW4Q2iiHssf3HqQx5X1xfJOkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PV6v/WkswbVjsPWdPZSOcb5/h7qKanj/McBDREErgfg=;
- b=MJl4bjZkpXWhpThbEjbdVRdxHU7Ri/91ykk7f/WMTg4E2Xnu+ePspg/zq+wRF/delmFFleEkKbBm0vXgQ30HeHfPR10HJ5qEg7XVUxkTU8nd/Zjoqjy1JHEX9Q4AFnQ+XCn6anW/mLB9TreWxwY+xSOMD7wtokCdUsF8PFfF1NvGB9TUaVRyOSVvWzMki2/rBv6dCLuU/Yuam0lXFbmqNheh355xC9dVYQtffa2XvfSNi05v1qul0pCL0Ky3bvxeJa8VOvFz5Ezz+dY8jgUapxRXGIyrRtOzEQriRkDq0kkOgIvHvlZQKtBCJksyHkuT9/96lR/cq6VKhZ2knRTfaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PV6v/WkswbVjsPWdPZSOcb5/h7qKanj/McBDREErgfg=;
- b=X3r2fz32ODtdx4hTLrGi2UmNRsGxnSKKcMJ2Gsuei3fqWdCBeAXhByES0aM3Mhx1F+shSnZflulsrrwnidU3I/PxL2+8mmH5QjUx/zDCGj47Lf47yWMzxk8s5v9Mb5qCAhMXI1AfeS5Y/NaC0LoSg1p+SlFyKAEywwolAqcRcUo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by SJ0PR12MB5663.namprd12.prod.outlook.com (2603:10b6:a03:42a::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.32; Tue, 7 Feb
- 2023 06:11:33 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866%8]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
- 06:11:33 +0000
-Message-ID: <21972585-503c-da7e-6b9c-bd6c0f01a882@amd.com>
-Date:   Tue, 7 Feb 2023 11:44:16 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] soundwire: export sdw_compute_slave_ports() function
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org, alsa-devel@alsa-project.org,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-Cc:     Basavaraj.Hiregoudar@amd.com, Sunilkumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
-        arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230201165944.3169125-1-Vijendar.Mukunda@amd.com>
- <84adef23-fecf-76ec-c597-5f8b4be214da@linux.intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <84adef23-fecf-76ec-c597-5f8b4be214da@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0117.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:96::21) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+        Tue, 7 Feb 2023 01:15:58 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89885A0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:15:57 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id az37so7333795vkb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:15:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YTjQiyosWxthU58WlgDXThqF+F9aTUK0CMslx80hUwY=;
+        b=Xc7lweU8aAZbcFpCkRSu5sKNXsTPygGVdzDK1iKRJYctzI2Ct4LJTUmZS/GxSapZS/
+         CWO303+bC3bUtepKEUhsg8ZgfX9ECndrkE8TmfW7yQOP4JeED3xsmX6qGZqHII2/e2fU
+         7J0ZvkCUGrErw1hvGOLplhM1MxOwr/Qjc+7hc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YTjQiyosWxthU58WlgDXThqF+F9aTUK0CMslx80hUwY=;
+        b=5EBxz4H96pImN67H5VpxcwK0LkP+vcQEfDbM0pWO6Cgq9z0nPS55IsEGZ2USEd9YCu
+         4slFXqcU2x3bWlwUfXv9cCDGWNuw3n4qddXA1N9OC2mEZgbbflJNo/l9IgKYxhyoPets
+         VZFCf3zsqWLv+YgkR3HtQ5KMfQ+X036+tqZvuVCqybHLs827rhmzNdvH7ZD62qV2Dsfl
+         OWH1AhY2kPbmmfcrtmcoc4l4tLuIWn/pENCS4s1e7A3xvCgZOznFvVCx7JltxSc6wlBB
+         Kk3fcdLGpqrR/7FZ+y+UA6vzEUSFccx3pSdEtkRBUmL4ZiacsLfHlvzlgKLjSMiuQkLr
+         BiqA==
+X-Gm-Message-State: AO0yUKVdR8+i6xH4UJr0aY/C0Z3s/BhgLo8XJzbIoQhojSFeMrWordVV
+        0h6bhnOt9ezRD9RI2h95ulNBYpPgbTSsHpaTE5QLiQ==
+X-Google-Smtp-Source: AK7set8mjFUJySYXRimSiwIbHAy8wpkjAOcLOC+zyHxCXibLAi/1kue7IPAWcZTu+ytamq1HwE3isG1vaH6/UhR2pZk=
+X-Received: by 2002:a1f:a757:0:b0:3ea:94ea:110b with SMTP id
+ q84-20020a1fa757000000b003ea94ea110bmr246643vke.22.1675750556666; Mon, 06 Feb
+ 2023 22:15:56 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|SJ0PR12MB5663:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb8dfbf5-80a6-4e69-f4a2-08db08d21dcf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uhB2HPTb6GUfw5uuAO2Kw2XPNW3+Er8d3G6SLIZjM1agLP3clxjkREfOotpnPMsZzIL0smMe1QZy6zXYUpjLy7SZ3iEpqVsX/gIGixNA9o8QGY0EpshDy4yDzCRks9Fh8uv+jlg9hvEEM7qk1j8yKGKHpEOhQqXUAFdawbQYexi4xU1n1Bt2MeukakZxLxq+MvueLv2IgheWT/YeV5s9YCqJXsdmC4ySbLh1rCcVD2IL3I4+6R/qrH7EhdViKKu8I218Tzs4lAGH2F8tQ9eYgNg2hrZADV21cqyRpsD4JulKSrEOY2RhOMxtdm2epWN8Rfo83DLVGh7zOK6Lr1N2RfjOTHqz/Pgbve4B/oxF2BvyoEfquHrFGiCMX4txbRCYXrGnd5/wph+TytyPJeJ+BLsRiZuEVtOM947+78a3V/2DYgjArCQz/kV234q3M95k3InH2UZ9nRr4yNOb0cU4kQxMp9hk4IzonsKTYRck6Vyi6u+LdbueWiLCYUVB52L56vA+UvW67Poju0ANu0+VgFvwk8MIhkVkgOx61mhovyARXBM0n2k6MKJa0wAkj7A/cL2mpAmEA67ybie8Gp8rbWutRQcljCHbBBrxnhajKAUrJ3ZSRUofN4fnVFzWejhZoLRvTNagZ+Zb3ABUkNJ2OLtuElwn9yKzLG4pigpkWumxLkEntbxQ0RlI3TulvHelJ1EjEdXtt67xuz1/9H23RV1WBeFlpiTrraYrVWO7qJc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(366004)(346002)(39860400002)(451199018)(31696002)(54906003)(110136005)(8936002)(316002)(36756003)(86362001)(6666004)(186003)(478600001)(6486002)(6506007)(53546011)(2616005)(38100700002)(26005)(5660300002)(6512007)(2906002)(31686004)(83380400001)(41300700001)(8676002)(66946007)(66476007)(66556008)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bEMxK3cwbVFVQ3FseXIvRXVFc3gzMllxeXhmSHdFUmhXVjJGTUYyUDVSR3hj?=
- =?utf-8?B?aDBSYUdMNzVBR2p4MkVWNkZCbGl5RktEN1ZwUU9WdlVDUG02RVBLUzVpWUtG?=
- =?utf-8?B?MXZhQ2NSVVhBdzRmejF0bmpDTktyM0wvK3ZmZkhzcE1VdEVzaXNFYVgvdFlk?=
- =?utf-8?B?UnA4WFRmZVptUlIzeHc3ajNZSWFrbXJoNGhJczhnMlNMUjdKL3pZNXc1VlA5?=
- =?utf-8?B?UEdiSWtSUkI1OVdsS0hDM3N0UklUOGUwNllBSURGU3lHaFh4WGxSR2w0b2lY?=
- =?utf-8?B?MHVGN1VPdktFVkZJL05zRFkydDRpZ2tCRHcySDJTdXlSMTdGalBqeGVrNll0?=
- =?utf-8?B?eDJ2NTZib3hEMTc4bFZFSkovZXRiMjRPYzNqTUFrTXpTQncwMWxtZmxqaUJv?=
- =?utf-8?B?S1NNa3Y4MnBwc0RMRTVJSUh4OHd4UFpGZWdNcEg1ZzNaZ2hZVTlxZkRsN3pu?=
- =?utf-8?B?ZVZmWjlQUWR5MGJaSEZPKzhFSlNuSHZrOFpXWjN4ZGxyNHZ0Q1RNblZYc2ht?=
- =?utf-8?B?WEtLQUI1MHoxWnFINGR2QW9Tb0FKdVRFSC9zTmlvVkRrMnFXWVIrWkVEejRV?=
- =?utf-8?B?VGUrRmRxR0NvZjZZNy9MMEZNK2E4dTEvSFUwMnpRKzlYV1c3bHZXbE5vSVVF?=
- =?utf-8?B?b0JPQ3Bid2tiQzRMWFdTZXRMb3NSUkNBWm1OT1R3UWlRc09ma3pRcklrQlNL?=
- =?utf-8?B?cG9McTJCVm9kT0xQT3lPZmlJUFhmdC9lbmFqL1l0M0pEc1Q2UXg4RnZMMzRl?=
- =?utf-8?B?UjFMWURBY2dtZmdiTUJaRWJpc0dsZ09GVnV6Ui9CZm9KYXRYT1lpM2p5ZllJ?=
- =?utf-8?B?UWxQcVR3bmIra3ZOQUhJOTJHNEtwVWVxNWxFM3RCYkc5TGwzWUJUOHBwd1Jo?=
- =?utf-8?B?T1hFY3dtdTRBdkZWT1hoVUtGOUk3b0JFd24vSkZUbW5YRlBqNzkvYklVWTUz?=
- =?utf-8?B?emk0UzVHRFlZWnEwNUlIZ1JPVUpLcFp6RldGNEZMcGVPMnlQUytNUnlvcXVX?=
- =?utf-8?B?RC9IL2JhWVpBV1Z0d1RSZ1gxZHVSeG1JSWlyTEl6K3U3b0RKWGFGOVhBcmhj?=
- =?utf-8?B?U2Q3cm9jQmRwbmNKaWJjMVNMSHRTNXJ5ck5KZ3BpcGhVbCt3ZUpvU0ZURm92?=
- =?utf-8?B?RjZhZkVQdGpmKzAwV2VvSU1lbzRLWDBNUjhDRVdnMy9qcWtMd243M1pLTlJu?=
- =?utf-8?B?SFkvTlJOem0zdU5qUW4rc0lIZGlacHVTRmQ2aGxTYTV0TlNqWE9MR0FnWWc4?=
- =?utf-8?B?Wk0rNmIyRThNWWVKaTVYcjAxMVAyVUtPTWZyQUZHNlN2cEFZRjRQMDl3Z3lt?=
- =?utf-8?B?Y3FBTDc5dUl5TS92aGN3Q2xXeTdmRzRFZGRNdEQ0ekRmMGltbFVvOFJaZlV4?=
- =?utf-8?B?dGJzZGVtem92bFFkMG1NNFEwYzR2TjJOQlJWSjV3cmY0TTNscUxxZTg1S2I4?=
- =?utf-8?B?QkVXS05jNGN1UFJVeTZRbjNyY1d6TjVtMktsUU5xeTcwWGJseWZ2Mm9XRkFq?=
- =?utf-8?B?bE1zTmJKdno4WGNtZlRzdysrakJnbUczWXpOSEd5eTdrQWdGVjJ4d1RtUEpk?=
- =?utf-8?B?K3R4N3FkQ2YzQkpSVUVNYk9Mak9nY1JiNGgxSHZoOEVrV3lXQ1BBYTF3cnlr?=
- =?utf-8?B?WHJJRlVORnhULzZ4blB4eEdCUnZxNWhPSUJxVnY0R2NienY3REQ5NFIyaHBL?=
- =?utf-8?B?dVFVWFUrV3NMb0JBQ3R4c3ZKQkFaMkEvTHptaEpITVVpd3Jrb1FmekMySC9k?=
- =?utf-8?B?T1ZBK1I2UW5GY29neE5BTUFDekpzV2NrUGdxd3QzMDhNb1pMNnJGZVFsc2Zo?=
- =?utf-8?B?Z2NiUU5vNFo3bzRLV2FDc3pWV2dsZ2d2cC9nSnNMOWxKSVZVVzQ5MStsYmpT?=
- =?utf-8?B?dkNidXJYa1lYOC8zTnNUK2JDRzRPeEE0OVd0TDc4bTQ2YzRTN0J5TmVWSmpv?=
- =?utf-8?B?TzVsWlhTS0ZaTml1TWRMUHZ1VWpYS1lhMjF0bUxab2JSL01FUnpLSDBsSEN6?=
- =?utf-8?B?YzFJa3ZIWGxEakIySEVyQmlrSXViVURWUTRxbm5FRU8wT1NudnhtWXZoQ2Yx?=
- =?utf-8?B?TFlkMTBUOGdsNDFkZU5sWkdleEZRb1BBNEFxNHVLR2RyYTI3M3VDOXp3YklW?=
- =?utf-8?Q?V/NAr9kLFLqRMR+4xihalPZcp?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb8dfbf5-80a6-4e69-f4a2-08db08d21dcf
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 06:11:33.5511
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aOjHGcalCHXCtQBp2GkwRXrTKxBqF7UtAlGZkFZT+8Tugw8YHWN6vDBl45FPuHi6tbKg1fLm0bQw9yX1d+Fr3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5663
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-6-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206152928.918562-6-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Feb 2023 14:15:45 +0800
+Message-ID: <CAGXv+5Gg60-4B29V9cYUw7b1OVcZvU+w9qdiiBbt10LJsAJiCA@mail.gmail.com>
+Subject: Re: [PATCH v1 05/45] clk: mediatek: mt2712: Migrate topckgen/mcucfg
+ to mtk_clk_simple_probe()
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/23 04:51, Pierre-Louis Bossart wrote:
+On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> On 2/1/23 10:59, Vijendar Mukunda wrote:
->> Export sdw_compute_slave_ports() function to use it in another
->> soundwire manager module.
->> Move sdw_transport_data structure to bus header file to export
->> sdw_compute_slave_ports() function.
->>
->> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+> Now that the common mtk_clk_simple_{probe,remove}() functions can deal
+> with divider clocks it is possible to migrate more clock drivers to it:
+> in this case, it's about topckgen.
+> While at it, also perform a fast migration for mcucfg.
 >
-> If a specific platform has a need to modify parts of the bit allocation
-> but can reuse parts of the code, that's fine. The 'generic bandwidth
-> allocation' was meant to be a reference, not a one-size-fits-all solution.
->
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-We will use vkoul soundwire git repository as base and will post the
-patch.
->> ---
->>  drivers/soundwire/bus.h                          |  9 +++++++++
->>  drivers/soundwire/generic_bandwidth_allocation.c | 12 +++---------
->>  2 files changed, 12 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/soundwire/bus.h b/drivers/soundwire/bus.h
->> index 7631ef5e71fb..141b99ac58de 100644
->> --- a/drivers/soundwire/bus.h
->> +++ b/drivers/soundwire/bus.h
->> @@ -144,6 +144,13 @@ struct sdw_master_runtime {
->>  	struct list_head bus_node;
->>  };
->>  
->> +struct sdw_transport_data {
->> +	int hstart;
->> +	int hstop;
->> +	int block_offset;
->> +	int sub_block_offset;
->> +};
->> +
->>  struct sdw_dpn_prop *sdw_get_slave_dpn_prop(struct sdw_slave *slave,
->>  					    enum sdw_data_direction direction,
->>  					    unsigned int port_num);
->> @@ -213,5 +220,7 @@ int sdw_bwrite_no_pm_unlocked(struct sdw_bus *bus, u16 dev_num, u32 addr, u8 val
->>  
->>  void sdw_clear_slave_status(struct sdw_bus *bus, u32 request);
->>  int sdw_slave_modalias(const struct sdw_slave *slave, char *buf, size_t size);
->> +void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
->> +			     struct sdw_transport_data *t_data);
->>  
->>  #endif /* __SDW_BUS_H */
->> diff --git a/drivers/soundwire/generic_bandwidth_allocation.c b/drivers/soundwire/generic_bandwidth_allocation.c
->> index f7c66083a4dd..39543048baa7 100644
->> --- a/drivers/soundwire/generic_bandwidth_allocation.c
->> +++ b/drivers/soundwire/generic_bandwidth_allocation.c
->> @@ -28,15 +28,8 @@ struct sdw_group {
->>  	unsigned int *rates;
->>  };
->>  
->> -struct sdw_transport_data {
->> -	int hstart;
->> -	int hstop;
->> -	int block_offset;
->> -	int sub_block_offset;
->> -};
->> -
->> -static void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
->> -				    struct sdw_transport_data *t_data)
->> +void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
->> +			     struct sdw_transport_data *t_data)
->>  {
->>  	struct sdw_slave_runtime *s_rt = NULL;
->>  	struct sdw_port_runtime *p_rt;
->> @@ -85,6 +78,7 @@ static void sdw_compute_slave_ports(struct sdw_master_runtime *m_rt,
->>  		}
->>  	}
->>  }
->> +EXPORT_SYMBOL(sdw_compute_slave_ports);
->>  
->>  static void sdw_compute_master_ports(struct sdw_master_runtime *m_rt,
->>  				     struct sdw_group_params *params,
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+
+> ---
+>  drivers/clk/mediatek/clk-mt2712.c | 127 +++++-------------------------
+>  1 file changed, 21 insertions(+), 106 deletions(-)
+>
+> diff --git a/drivers/clk/mediatek/clk-mt2712.c b/drivers/clk/mediatek/clk-mt2712.c
+> index 94f8fc2a4f7b..db20c46e088b 100644
+> --- a/drivers/clk/mediatek/clk-mt2712.c
+> +++ b/drivers/clk/mediatek/clk-mt2712.c
+> @@ -36,14 +36,11 @@ static const struct mtk_fixed_clk top_fixed_clks[] = {
+>         FIXED_CLK(CLK_TOP_CVBSPLL, "cvbspll", NULL, 108000000),
+>  };
+>
+> -static const struct mtk_fixed_factor top_early_divs[] = {
+> +static const struct mtk_fixed_factor top_divs[] = {
+>         FACTOR(CLK_TOP_SYS_26M, "sys_26m", "clk26m", 1,
+>                 1),
+>         FACTOR(CLK_TOP_CLK26M_D2, "clk26m_d2", "sys_26m", 1,
+>                 2),
+> -};
+> -
+> -static const struct mtk_fixed_factor top_divs[] = {
+>         FACTOR(CLK_TOP_ARMCA35PLL, "armca35pll_ck", "armca35pll", 1,
+>                 1),
+>         FACTOR(CLK_TOP_ARMCA35PLL_600M, "armca35pll_600m", "armca35pll_ck", 1,
+> @@ -1295,114 +1292,30 @@ static int clk_mt2712_apmixed_probe(struct platform_device *pdev)
+>         return r;
+>  }
+>
+> -static struct clk_hw_onecell_data *top_clk_data;
+> -
+> -static void clk_mt2712_top_init_early(struct device_node *node)
+> -{
+> -       int r, i;
+> -
+> -       if (!top_clk_data) {
+> -               top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
+> -
+> -               for (i = 0; i < CLK_TOP_NR_CLK; i++)
+> -                       top_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+> -       }
+> -
+> -       mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs),
+> -                       top_clk_data);
+> -
+> -       r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, top_clk_data);
+> -       if (r)
+> -               pr_err("%s(): could not register clock provider: %d\n",
+> -                       __func__, r);
+> -}
+> -
+> -CLK_OF_DECLARE_DRIVER(mt2712_topckgen, "mediatek,mt2712-topckgen",
+> -                       clk_mt2712_top_init_early);
+> -
+> -static int clk_mt2712_top_probe(struct platform_device *pdev)
+> -{
+> -       int r, i;
+> -       struct device_node *node = pdev->dev.of_node;
+> -       void __iomem *base;
+> -
+> -       base = devm_platform_ioremap_resource(pdev, 0);
+> -       if (IS_ERR(base)) {
+> -               pr_err("%s(): ioremap failed\n", __func__);
+> -               return PTR_ERR(base);
+> -       }
+> -
+> -       if (!top_clk_data) {
+> -               top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
+> -       } else {
+> -               for (i = 0; i < CLK_TOP_NR_CLK; i++) {
+> -                       if (top_clk_data->hws[i] == ERR_PTR(-EPROBE_DEFER))
+> -                               top_clk_data->hws[i] = ERR_PTR(-ENOENT);
+> -               }
+> -       }
+> -
+> -       mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
+> -                       top_clk_data);
+> -       mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs),
+> -                       top_clk_data);
+> -       mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
+> -       mtk_clk_register_composites(&pdev->dev, top_muxes,
+> -                                   ARRAY_SIZE(top_muxes), base,
+> -                                   &mt2712_clk_lock, top_clk_data);
+> -       mtk_clk_register_dividers(top_adj_divs, ARRAY_SIZE(top_adj_divs), base,
+> -                       &mt2712_clk_lock, top_clk_data);
+> -       mtk_clk_register_gates(&pdev->dev, node, top_clks,
+> -                              ARRAY_SIZE(top_clks), top_clk_data);
+> -
+> -       r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, top_clk_data);
+> -
+> -       if (r != 0)
+> -               pr_err("%s(): could not register clock provider: %d\n",
+> -                       __func__, r);
+> -
+> -       return r;
+> -}
+> -
+> -static int clk_mt2712_mcu_probe(struct platform_device *pdev)
+> -{
+> -       struct clk_hw_onecell_data *clk_data;
+> -       int r;
+> -       struct device_node *node = pdev->dev.of_node;
+> -       void __iomem *base;
+> -
+> -       base = devm_platform_ioremap_resource(pdev, 0);
+> -       if (IS_ERR(base)) {
+> -               pr_err("%s(): ioremap failed\n", __func__);
+> -               return PTR_ERR(base);
+> -       }
+> -
+> -       clk_data = mtk_alloc_clk_data(CLK_MCU_NR_CLK);
+> -
+> -       r = mtk_clk_register_composites(&pdev->dev, mcu_muxes,
+> -                                       ARRAY_SIZE(mcu_muxes), base,
+> -                                       &mt2712_clk_lock, clk_data);
+> -       if (r)
+> -               dev_err(&pdev->dev, "Could not register composites: %d\n", r);
+> -
+> -       r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
+> -
+> -       if (r != 0)
+> -               pr_err("%s(): could not register clock provider: %d\n",
+> -                       __func__, r);
+> +static const struct mtk_clk_desc topck_desc = {
+> +       .clks = top_clks,
+> +       .num_clks = ARRAY_SIZE(top_clks),
+> +       .fixed_clks = top_fixed_clks,
+> +       .num_fixed_clks = ARRAY_SIZE(top_fixed_clks),
+> +       .factor_clks = top_divs,
+> +       .num_factor_clks = ARRAY_SIZE(top_divs),
+> +       .composite_clks = top_muxes,
+> +       .num_composite_clks = ARRAY_SIZE(top_muxes),
+> +       .divider_clks = top_adj_divs,
+> +       .num_divider_clks = ARRAY_SIZE(top_adj_divs),
+> +       .clk_lock = &mt2712_clk_lock,
+
+At some point maybe we should look into splitting up the locks to one
+per block, or converting everything to regmap.
+
+ChenYu
