@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D970A68D63F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6D768D642
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjBGMNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:13:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S231332AbjBGMO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjBGMNI (ORCPT
+        with ESMTP id S229447AbjBGMOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:13:08 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C207AEFA2;
-        Tue,  7 Feb 2023 04:13:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1675771928;
-        bh=SZ69qIin1bOhcHFHX74qsjeogSVMDRGBQzd0Cfhbs2E=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=aThNGe0oN9xWnJyHr7GmeaUAcFgS91VHwl3T4h6Bh5LX2gFUMzsOaliBZPtELWzWu
-         3JmiYNBBbPDGOzd4cWpTbu8JgX+2ayddP/XXDnBMSdtpA1yCGZUkPJ/DaMuMl4pYUi
-         jf4Cyb2kLI9QRiblEb++hArVvoFRE84yuHXO6ljvBpi/SBYOqfQpJ0Tg9GFoZW9S2c
-         NoVnWie2tTsuF3ZpmYlW75PN6K68svmpp22rqULWLrmcgZs8EFmZWA31u5HiRcDXOw
-         MFJli+T+9k6wXLONIsxHZJ/wuNc7MERLHVO/HZCZelDVKlwkJa6EyrrCPxcXtWBxPO
-         wnU6MF+Wj46nQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.159.155] ([217.61.159.155]) by web-mail.gmx.net
- (3c-app-gmx-bap02.server.lan [172.19.172.72]) (via HTTP); Tue, 7 Feb 2023
- 13:12:08 +0100
+        Tue, 7 Feb 2023 07:14:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03F913DEF;
+        Tue,  7 Feb 2023 04:14:54 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 04B8C660207F;
+        Tue,  7 Feb 2023 12:14:51 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675772093;
+        bh=L0/T/7mYU2a6r4txVoxLosoJmH3FkDFA5tvP+rxF8Og=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dEZE2vT4OwG3P66WvrYpMwfdRchqT1Jr+WhxHIsiCd39pm2a4RjvzZD24pxPJ4rE+
+         /Xvjd/808xPFiInZQJmEogEzuTH9ysPUglGpbeLzor2NG5zpfLtr8wy7eGjUzQ98fv
+         yysRHQEfyeeBELhOgVAd96UlVhUyLWXimKS5OEfrUcZUPI5KPkDYWoIy45sDDnpwkp
+         BJv2Dzpf5Ecu7Ogfs329O9WJpaA5YqHj7BYr1FdMO6fmiDOTsW61XZWdNtplnPplai
+         4vNkmCKxibbdISVZz+ChIknChQ6xfHdA7LGPIURUx/5A086izgAFPcsZ7hizyyR8Mm
+         iAv89b9DCwDkg==
+Message-ID: <7adadf24-c14f-6eb4-edfd-265dca93e907@collabora.com>
+Date:   Tue, 7 Feb 2023 13:14:49 +0100
 MIME-Version: 1.0
-Message-ID: <trinity-808b2619-4325-4d03-b2f5-1a7bc27d42ea-1675771928390@3c-app-gmx-bap02>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Aw: Re: [PATCH] dt-bindings: mt76: add active-low property to led
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 7 Feb 2023 13:12:08 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <fe3673d9-b921-c445-0f5f-a6bc824e8582@linaro.org>
-References: <20230207102501.11418-1-linux@fw-web.de>
- <fe3673d9-b921-c445-0f5f-a6bc824e8582@linaro.org>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:+4vKtr2ePMdUPyHJjXQx8kjAst9kx6vKtoEZ0xKiTT993WQMGKiXQ7eai7/oGn6SLz9nI
- ExIu7cc+kU3n1HPesxF6zHZqoD5uSYv30WVUhVvbh4whPGhV1ClwgCBYqTPR72g31ap06OVSWIuS
- kUhgkM/shASAqUFcQMHCf1yopvlNodRCkHi1GjXiTfn2XD2HV+1w6HQ4fSmXYeRaajB/sv3vXklv
- 3fRlFtg0JVx4PchdKiX+uLoeEA5pW9+LCRNBGAys0H0frB9UAALUBht9ZxjXFjmLLb45w8iazMo2
- S8=
-UI-OutboundReport: notjunk:1;M01:P0:MvbBDhuOXcc=;48R3pzi9pbTRbbvz53aZgp+LQH9
- JOc/6fcqxIWF0aacjcgq8+IJ3jRjhxIhdwMJnFr5Y1pr5pUZdjZF0h9ti8ekdXI2fFBVTrkfW
- mn3s/vPiBScFlXx5NiahBjaoqTVuwJcnY1BZ/ICTCv14lpPkOcQrru29OFvaO5RQhWevVhgmc
- lCc1+g3erJ87M7oCsS4KeX6VImQhNVzzY4IEeexbbBgilKn+v6OZD8Bz6RSPa7Kxg/e950lZ5
- H3WFPHzE3hmhVK7DyBQfpHce3NoM5xoqn5N5sNb0uXeNGr1ZfARJli3idt2NTVrjvVS5Q9yem
- 6QeHUf4hDD20a+WIfjkLP05zkztHPsF3twaH4Yvs8Qk5fT9FxGjdeaZWW7EhuEfIGBYDLRK0A
- 2S8f3L3NwhLd1pdPANh1VdF6+8YdYos+mxk2kQdx5e52JuhsqJkF9oOrPLRp6K//z3e6OpSuk
- a1Ah/srrTOOfg+NWTZDAddu+8nJqP0FN955ZdGB44eg8Mdx7fKPsATkb0hFpxfb0GP+VPsU1R
- eQVLd9LB1hIn7ApvSNTcekZuiYBosX6krL7xejrcr7jLH9ZbNYwDeoFSyZ3ifPRCFT2QVQyKo
- vX2OhyE7j3sm1eYajY4dvPexarxpENtj8vWh/8kK6xtlu/2L5CULkazncboYqY9A5txcoepYf
- pRuN5Bro41Gc6vRSjePZb4+ItkcreGKv3FY0RzCtD8hBvFAUGExarBMZDPcMtGAGch4AXSGxN
- IJrmehVPbNbg42Jcu/na4jMWveY8HHJpr9s3018sdPYkBfxmP69+A58CmpVlptFrvBqhkl3ZU
- EshiDhaI48OoE50v+9COOxsg==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 19/45] clk: mediatek: mt8183: Convert all remaining
+ clocks to common probe
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
+ <20230206152928.918562-20-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5G0ksgGMXUGk-=CXUANtGQa2M5RLY+wG7c-0cMSKS5DJQ@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5G0ksgGMXUGk-=CXUANtGQa2M5RLY+wG7c-0cMSKS5DJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Dienstag, 07. Februar 2023 um 11:40 Uhr
-> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-> On 07/02/2023 11:25, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > LEDs can be in low-active mode, so add dt property for it.
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > ---
-> >  .../devicetree/bindings/net/wireless/mediatek,mt76.yaml      | 5 ++++=
-+
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,m=
-t76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.ya=
-ml
-> > index f0c78f994491..212508672979 100644
-> > --- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yam=
-l
-> > +++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yam=
-l
-> > @@ -112,6 +112,11 @@ properties:
-> >      $ref: /schemas/leds/common.yaml#
-> >      additionalProperties: false
-> >      properties:
-> > +      led-active-low:
-> > +        description:
-> > +          LED is enabled with ground signal.
->
-> What does it mean? You set voltage of regulator to 0? Or you set GPIO as
-> 0? If the latter, it's not the property of LED...
+Il 07/02/23 10:58, Chen-Yu Tsai ha scritto:
+> On Mon, Feb 6, 2023 at 11:30 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Switch to mtk_clk_simple_{probe,remove}() for infracfg and topckgen
+>> clocks on MT8183 to allow full module build for clock drivers.
+>> In order to do this, like done for other MediaTek clock drivers, it
+>> was necessary to join top_early_divs with top_divs and to stop
+>> registering the `clk13m` clock early.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/clk/mediatek/clk-mt8183.c | 160 ++++++------------------------
+>>   1 file changed, 28 insertions(+), 132 deletions(-)
+>>
+>> diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
+>> index 0fad2cf7f41b..035fdd02f0be 100644
+>> --- a/drivers/clk/mediatek/clk-mt8183.c
+>> +++ b/drivers/clk/mediatek/clk-mt8183.c
+>> @@ -25,11 +25,8 @@ static const struct mtk_fixed_clk top_fixed_clks[] = {
+>>          FIXED_CLK(CLK_TOP_UNIVP_192M, "univpll_192m", "univpll", 192000000),
+>>   };
+>>
+>> -static const struct mtk_fixed_factor top_early_divs[] = {
+>> -       FACTOR(CLK_TOP_CLK13M, "clk13m", "clk26m", 1, 2),
+>> -};
+>> -
+>>   static const struct mtk_fixed_factor top_divs[] = {
+>> +       FACTOR(CLK_TOP_CLK13M, "clk13m", "clk26m", 1, 2),
+> 
+> A clock with the same name is now present in the DT, and so this clock
+> would fail to register. We should drop this one completely and point
+> any references to it internally to "csw_f26m_ck_d2".
+> 
+>>          FACTOR(CLK_TOP_F26M_CK_D2, "csw_f26m_ck_d2", "clk26m", 1, 2),
+> 
+> MT8192 and MT8195 aren't affected because they only have "csw_f26m_ck_d2",
+> which systimer was referencing.
+> 
+>>          FACTOR_FLAGS(CLK_TOP_SYSPLL_CK, "syspll_ck", "mainpll", 1, 1, 0),
+>>          FACTOR_FLAGS(CLK_TOP_SYSPLL_D2, "syspll_d2", "syspll_ck", 1, 2, 0),
+>> @@ -809,26 +806,6 @@ static const struct mtk_clk_rst_desc clk_rst_desc = {
+>>          .rst_bank_nr = ARRAY_SIZE(infra_rst_ofs),
+>>   };
+>>
+>> -static struct clk_hw_onecell_data *top_clk_data;
+>> -
+>> -static void clk_mt8183_top_init_early(struct device_node *node)
+>> -{
+>> -       int i;
+>> -
+>> -       top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
+>> -
+>> -       for (i = 0; i < CLK_TOP_NR_CLK; i++)
+>> -               top_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
+>> -
+>> -       mtk_clk_register_factors(top_early_divs, ARRAY_SIZE(top_early_divs),
+>> -                       top_clk_data);
+> 
+> And since we used to not do error checking, the name conflict was OK.
+> With the new common probe, it's not.
+> 
 
-basicly it is a gpio-led mapped into the mt76 driver, but not passing gpio=
- itself in this property (like gpio-led does).
-This gpio is set to 0 signal (gnd) to let the led go on ;) so imho it is a=
- led-property, but below the wifi-node as
-the trigger comes from mt76 hardware, not an external (soc) gpio controlle=
-r.
+That makes me proud of my changes to extend the new common probe mechanism,
+as this is one of (hopefully not) many wrongs that slipped through without
+any apparent issue.
+Anyway, there was no reference to this clk13m (nor CLK_TOP_CLK13M) anywhere
+so I changed this commit to just "forget about this clock" (advertising the
+reason in the commit description, of course).
 
-mt76 driver supports it already like i post change here:
+Is MT8183's cpufreq working after this change, or is it still not behaving?
 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20230205174833.1=
-07050-1-linux@fw-web.de/
+If not, can you please provide a log for me to check?
+I don't have any MT8183 device locally, for now at least.
 
-only needed the binding for it.
+Thanks,
+Angelo
 
-> Best regards,
-> Krzysztof
->
->
