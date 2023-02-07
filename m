@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9439C68D9F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB6F68DC11
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbjBGN5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:57:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S231422AbjBGOuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbjBGN4p (ORCPT
+        with ESMTP id S230210AbjBGOuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:56:45 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EDE3A59D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:56:19 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id m14so13595182wrg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:56:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V1aUOJzlnvog/gfPWV5JW0Qf9tdncCWCmWydTboOvKw=;
-        b=bO5sg5C5vYk9TdSOnLjR4vlhtn9sPiCyuwTtqnTTgWRlpu6ZIHi2AuSfyxwDUhH1E3
-         7iIfij9Fjz7f1MYJpQy2hjG1h8vjsYElgJEhcWCYbarfC1ZcxdyLCyd/IPGwYUz+3Mde
-         oqQp5TY/prn2vOHVAiD4YbRNxJmoIEX9aMEGWawsmNYceIIZqF3dZuYM8TqTJFLpiItC
-         gUZj8ZewAg+J/0uxy84V7Sd9T7B9STa6We5Gn5QUkuDdBa0eSe6ZESufOyJ8RqKi93Fd
-         zZeqp4/kmqKAY2c8yu6aJKqcT81K8WZv25+Y4RCXZ0TR+A81ExbJ+Ite5QCLES6P4aWw
-         A8eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V1aUOJzlnvog/gfPWV5JW0Qf9tdncCWCmWydTboOvKw=;
-        b=Q3UGNjKwOKbjaG6bVnqLRHBHbrSYOdrwN8Vzro3Ei7T+8FXSjuTMG5koAZ1S/GVIJa
-         VD/SaRnjmBVW/TJLmt7Kb0UjsirAtyQE8HOm2Jp5gHSvIPlZrSf1eTw58jF9WDEMyiUr
-         WbmvknoM/MCoCj2QrcrxFFYl9dP6tghjY2y1+IrL2vi3XSBkDAFuuzPate8aIwiHN+St
-         B5Qlyu4AprCf32azL8/hceQPMQnuRThpCcqdix8pBWllqBbuEXruyLP/XZKNx8YuNzfs
-         vRRnO4aYp1DJUb8cn/7+UzLe3C2gFxQANKD9Mz8067n41K0AxXyqXBRWwwh5E6TkKqjW
-         Azxg==
-X-Gm-Message-State: AO0yUKXQD2a/Q/IiNE33NgNMcHCUPl4ez4vDDmTE+Xl2ZVLNYBmqeMtv
-        oWEIk6fm6ielfXvCrEvxP5yLO5knAYzoAu8i
-X-Google-Smtp-Source: AK7set8/7pguR2nkrh5sfxWhRMJoc0cANOCX7qiQNTzv4aIYl17VUb020gXBfptdCuTi7LOG4aoGAA==
-X-Received: by 2002:a5d:6d82:0:b0:2c3:c138:e52d with SMTP id l2-20020a5d6d82000000b002c3c138e52dmr14202450wrs.4.1675778164473;
-        Tue, 07 Feb 2023 05:56:04 -0800 (PST)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id p10-20020a5d59aa000000b002be5401ef5fsm11611312wrr.39.2023.02.07.05.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 05:56:03 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/7] arm64: dts: qcom: sm8550-mtp: Add eUSB2 repeater node
-Date:   Tue,  7 Feb 2023 15:55:51 +0200
-Message-Id: <20230207135551.1418637-8-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230207135551.1418637-1-abel.vesa@linaro.org>
-References: <20230207135551.1418637-1-abel.vesa@linaro.org>
+        Tue, 7 Feb 2023 09:50:00 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E218D7;
+        Tue,  7 Feb 2023 06:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=AMCBklPpZiJm6G+yI87fmT6RWZwGjjZhJUPUbbl1SrM=; b=r6xXnZyXYevGlxKGGwgcZW/CJm
+        ezl5C4pcwNrZuiifVl2gaIqYeXSDcSZJahz0ebZT4gOAJr0HiHo4/8EEBGrbWEuEGiwtqBbGNoItk
+        QSVbiWh2lOfajfyv6C910kc14wBP4cfsuotI4CBbK/d4ThNGzESE94rSLTVHGETgs9gwxk9+4j54o
+        cVXAjUt+sDkluLQ1T3zzc03hkj3xxKYAa8s8cte0TlLaRuZC5oFc6f6/vTNG2nAUIVK3Ome/Eq3AX
+        Gi7qeNpMCjLp8ZJPov0Tpbmu988nGveCOPhs0fs17rnKudOvwVW24SBm0Q9LPb8oiIXikUSOZUOZc
+        oSjLMn3w==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1pPOSV-002qTL-L6; Tue, 07 Feb 2023 15:56:31 +0200
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Srikar Srimath Tirumala <srikars@nvidia.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] thermal: tegra-bpmp: Handle offline zones
+Date:   Tue,  7 Feb 2023 15:56:08 +0200
+Message-Id: <20230207135610.3100865-1-cyndis@kapsi.fi>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the PMIC eUSB2 repeater node and add the usb-repeater
-property to the eUSB2 PHY to allow it to be controlled by the
-PHY driver.
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Thermal zones located in power domains may not be accessible when
+the domain is powergated. In this situation, reading the temperature
+will return -BPMP_EFAULT and the temperature is considered to be
+-256C for calculating trips.
+
+For smooth operation, for offline zones, return -EAGAIN when reading
+the temperature and allow registration of zones even if they are
+offline during probe.
+
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
 ---
+ drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-The v3 (rfc) is here:
-https://lore.kernel.org/all/20230202133816.4026990-8-abel.vesa@linaro.org/
-
-Changes since v3:
- * Dropped the phy-names property from usb_1_hsphy, like Dmitry suggested
-
- arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-index 56aab7cafcbc..6b6ec0fe5e5e 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-@@ -457,6 +457,11 @@ sdc2_card_det_n: sdc2-card-det-state {
- 	};
- };
+diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+index c76e1ea62c8a..628b18818ae9 100644
+--- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
++++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+@@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_bpmp_thermal_zone *zone,
+ 	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
+ 	if (err)
+ 		return err;
++	if (msg.rx.ret == -BPMP_EFAULT)
++		return -EAGAIN;
+ 	if (msg.rx.ret)
+ 		return -EINVAL;
  
-+&pm8550b_eusb2_repeater {
-+	vdd18-supply = <&vreg_l15b_1p8>;
-+	vdd3-supply = <&vreg_l5b_3p1>;
-+};
+@@ -257,7 +259,12 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
+ 		zone->tegra = tegra;
+ 
+ 		err = __tegra_bpmp_thermal_get_temp(zone, &temp);
+-		if (err < 0) {
 +
- &qupv3_id_0 {
- 	status = "okay";
- };
-@@ -563,6 +568,8 @@ &usb_1_hsphy {
- 	vdd-supply = <&vreg_l1e_0p88>;
- 	vdda12-supply = <&vreg_l3e_1p2>;
- 
-+	phys = <&pm8550b_eusb2_repeater>;
-+
- 	status = "okay";
- };
- 
++		/*
++		 * Sensors in powergated domains may temporarily fail to be read
++		 * (-EAGAIN), but will become accessible when the domain is powered on.
++		 */
++		if (err < 0 && err != -EAGAIN) {
+ 			devm_kfree(&pdev->dev, zone);
+ 			continue;
+ 		}
 -- 
-2.34.1
+2.39.0
 
