@@ -2,74 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD0C68E330
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F073768E331
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 22:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjBGVyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 16:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S229726AbjBGV4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 16:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBGVyX (ORCPT
+        with ESMTP id S229517AbjBGV4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 16:54:23 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5B93B3F7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:54:11 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id z2so6655465ilq.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 13:54:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0hubqKtMuYwUvUIi4swYjWUkw4EbQmDjYbC8mfiwm2w=;
-        b=A1Msn2PKzn7+ypZXcJEEO+KbfACpwv+YUpC0RQgNRx0kwSGAW9ARdUBZRDNV7zF3oH
-         azuv26Gsgrga1pR6AimoOrdpDF9RwA7ZyXwyARW3FCOBegQFyCTMR+XUIWJRZ6aNks8l
-         MYfk4vAYR3Qof/DO/2CErbfvcAGaR4dE5liyg=
+        Tue, 7 Feb 2023 16:56:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1EE3A5BA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 13:55:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675806910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ns5gbnLKn7zHOFaovfJzTuDPPi31RWqzHCdX60ieJbU=;
+        b=ZSilrOmE0+nZvFp7s6UN5fVoYB7GKidDdBzPslSHDMRnLMtu6GZvvX2LmWQUTGu6Kvt3Yd
+        1tjVLGf+/tuVSoNIM8rPG3GXlX+dPDF35fbRLSbMJIxuDGn+VHlbZtc9EGPuEe7uvhBQxM
+        2LuFf58YDRPdVPSYi55yFG7JcJc8niI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-250-etq72OqYPNiTH7CdAKj8Bw-1; Tue, 07 Feb 2023 16:55:09 -0500
+X-MC-Unique: etq72OqYPNiTH7CdAKj8Bw-1
+Received: by mail-wm1-f72.google.com with SMTP id iz20-20020a05600c555400b003dc53fcc88fso67453wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 13:55:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0hubqKtMuYwUvUIi4swYjWUkw4EbQmDjYbC8mfiwm2w=;
-        b=k3AIOGySNnPyEaGDgv1S2SY2X5XfRmdd8IJQK6SeSSRoZW7DAoE/Nnlyo6zMf+nwh9
-         YK2yj02NPb0llTo+UDrEdS6m7PwpRZC2IAf5MjlndrW1inlHnmUe+IadM0f22De/WHcQ
-         7nLZ9IcjpByAUR3aljmQSuhz/YKkgXrgl+dsGHfuCNx+RpK3z4nRAJSjRu7Y0MxHsL/q
-         qHvdyjrTvZF95B4ADNhLTyJmrkW9LDW8M/jRZJ7zz9ZmS2ERmzE7Apku1/ztxC/0BcKt
-         25AgmzBmmUXXilh7EsWAih2Zu1Upz/WRHXREzpEpewEBOg50S+QT2AN92sssZS/AoLuC
-         T25Q==
-X-Gm-Message-State: AO0yUKXjsDPX9wymBgzk2eFJwvVQjMTB0AIsQme/Hwi9gGdRGB5hsM7K
-        LkFiV1cuFyZTSan5xT7aKOp1gQ==
-X-Google-Smtp-Source: AK7set/eL/42HZlwEKUPckXmYxlgeRZ4Hwxiiwjnfo5/shFUQKriZV27m5QUZM3kAA2AfnAKtDWXKg==
-X-Received: by 2002:a92:d484:0:b0:313:cd79:adc2 with SMTP id p4-20020a92d484000000b00313cd79adc2mr3810400ilg.2.1675806851274;
-        Tue, 07 Feb 2023 13:54:11 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id r12-20020a056638130c00b003a432de0547sm4861530jad.163.2023.02.07.13.54.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 13:54:10 -0800 (PST)
-Message-ID: <96536043-2afe-c10d-b4ee-9625203c6242@linuxfoundation.org>
-Date:   Tue, 7 Feb 2023 14:54:09 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ns5gbnLKn7zHOFaovfJzTuDPPi31RWqzHCdX60ieJbU=;
+        b=iIpqPnrz6wdu2hieon8O6NtInrroJS2QkT8Ik3gqEXwGrH+HatTHpKb2NNGF33RDr/
+         /aRELBpMt6VMxk0FCzGebIqcC0jGkNS0nfPim4glwmt5rCPxY4hb/F60DChd7poGJzEy
+         Ivg19iKKuTMw/lE3ofUkwdSSzCK8NIsDYEmvw3SJ5qznqgzScn070aJGCACAD4RnE7Ym
+         pNI+gNj+XXj0qp30+C4ss/tLVmiJNxYgy++dHT2ZHcJNdDIlEUg+xaLtsY7b2U/0ZToq
+         6qgvIjcJOwr9Hp3iNIZh1JeURsH1cON/Q8WEK4jZXq7H5zaWuMLYmudbf30+Y4+IUB4q
+         pmig==
+X-Gm-Message-State: AO0yUKWqQhyNcZd4gjcCg15ffGW5tVFXh4K5rUjMdcYio4SU4crqlbN2
+        WZkdOIVhJBhDcFsUFPVtM77ZNvgtBJ3GABr6rA575rBAf3deMnSs8bTzBbWUbs56ptr9EXyqWgk
+        eT0O6BrZG/LTDWWKgf51H3kru
+X-Received: by 2002:adf:e80e:0:b0:2bf:f44b:7a29 with SMTP id o14-20020adfe80e000000b002bff44b7a29mr3760648wrm.40.1675806908266;
+        Tue, 07 Feb 2023 13:55:08 -0800 (PST)
+X-Google-Smtp-Source: AK7set9fLl/1R5rJGBWgHb0QWMHHDY5vy4t3o0CvEvD9BeBmDvf9BeYOTUlFuO7kX7ZNygt81a0bVA==
+X-Received: by 2002:adf:e80e:0:b0:2bf:f44b:7a29 with SMTP id o14-20020adfe80e000000b002bff44b7a29mr3760626wrm.40.1675806908075;
+        Tue, 07 Feb 2023 13:55:08 -0800 (PST)
+Received: from redhat.com ([2.52.8.17])
+        by smtp.gmail.com with ESMTPSA id a18-20020a5d4572000000b002c3e7474b0fsm6558116wrc.13.2023.02.07.13.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 13:55:07 -0800 (PST)
+Date:   Tue, 7 Feb 2023 16:55:02 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230207165103-mutt-send-email-mst@kernel.org>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <658272b5-9547-a69f-b6c9-a7ff2dd2d468@amd.com>
+ <Y+HpmIesY96cYcWQ@kroah.com>
+ <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] selftests: use printf instead of echo -ne
-Content-Language: en-US
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>,
-        David Laight <David.Laight@ACULAB.COM>
-Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernelci@lists.linux.dev,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230204135652.336495-1-guillaume.tucker@collabora.com>
- <97df8ef0-5eef-91cd-2d6d-eeff764c5e35@collabora.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <97df8ef0-5eef-91cd-2d6d-eeff764c5e35@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,46 +101,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/7/23 01:36, Guillaume Tucker wrote:
-> On 04/02/2023 14:56, Guillaume Tucker wrote:
->> On some systems, the default echo command doesn't handle the -e option
->> and the output looks like this (arm64 build):
->>
->> -ne Emit Tests for alsa
->>
->> -ne Emit Tests for amd-pstate
->>
->> -ne Emit Tests for arm64
->>
->> This is for example the case with the KernelCI Docker images
->> e.g. kernelci/gcc-10:x86-kselftest-kernelci.  To avoid this issue, use
->> printf which handles escape characters as a standard feature and is
->> more widespread among modern shells.
->>
->> The output is now formatted as expected (x86 build this time):
->>
->> Emit Tests for alsa
->> Emit Tests for amd-pstate
->> Skipping non-existent dir: arm64
->>
->> Reported-by: "kernelci.org bot" <bot@kernelci.org>
->> Suggested-by: David Laight <David.Laight@ACULAB.COM>
->> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->> ---
->>
->> Notes:
->>      v2: use printf insead of $(which echo)
-> 
-> Oh I see you've already applied the v1 on kselftest/next branch:
-> 
->    79c16b1120fe selftests: find echo binary to use -ne options
-> 
-> Do you want me to send this printf fix rebased on top?
-> 
+On Tue, Feb 07, 2023 at 01:53:34PM -0600, Carlos Bilbao wrote:
+> Given the limitations of current approach, does anyone have any other ideas
+> for filtering devices prior to their initialization?
 
-Yes please. Thank you.
+/me mumbles ... something something ... bpf ...
 
-thanks,
---- Shuah
+-- 
+MST
 
