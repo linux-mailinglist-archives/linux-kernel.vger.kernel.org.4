@@ -2,107 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280B868DFD8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A0068DFD9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbjBGSWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S232529AbjBGSWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjBGSVi (ORCPT
+        with ESMTP id S229895AbjBGSV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:21:38 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D899F3CE0B;
-        Tue,  7 Feb 2023 10:21:03 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id g18so15461556qtb.6;
-        Tue, 07 Feb 2023 10:21:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uNoCuvF8k/IGVgv9MTdzYZCHzKUcqEKM38i1vceSI2Y=;
-        b=QdQ71qYYT0xgyoNJdybVu6bekywG/lSvp5wx6rU5hsJ2AFd2ia5f8Ph/6NHAe5LXvM
-         yIbiTtMpv2qYiM61f69Lez0/bP2x0TqWbe8ew7/1nW38tkG33CP4zCJsry/SmepvR9lU
-         bYflQM1HrvqymwOAt1OwBRM0Nd4JWlpYBk6fWITv/grNz34I4aOAykUJ5bmXq9ogA8Oc
-         vQwnGB5Z6cSiCx5Wf7iT46AWJbbtbwUUoDouMowKJkPqiL2BaFl8XF84ITq9xVisOyEP
-         FuKg7hBmze3nvJ7JfdkClDMN82eU3T0wEzQzYDoBJeGoghnB8Vtzd+BypUcera2UZeJn
-         IsTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNoCuvF8k/IGVgv9MTdzYZCHzKUcqEKM38i1vceSI2Y=;
-        b=nEdFUlzyJwKp4J9qr1ZSzWaPR/nMIec6BhIyjJRHjQxtzSyhs8waJHDc7gySD2yHbD
-         rW19xz8LG2XDzJZwyE64cOE9JVVUhaygWU6miMRcwCPsTA9pnWgJwAkIwj8dnqbbEhfq
-         YkCZA25n6czn6+RTa2mjkKahmEk3nBQd01KD+0hgp5dgYtz1JwCkIy4t25KgM1S1BI49
-         dF6bvHgZ/l37SbwX4OF6I+rr8blA3gj1irVANCtaXQ3H9bVhd5pINH3GdPMLTYweS7cu
-         NVMmXDlg8InL9AThfBC/lF7eDD8Tvi+lDqx+VHOuLSZtnnj9TK8RY9SehKBGgDoNewQA
-         zbHw==
-X-Gm-Message-State: AO0yUKXmlQZYe9U14zeSpktHWk/0+JtG1I9BG66JF1S954Qg6u1p0DrJ
-        FeMtqm180ZGmoZadldCCzTo=
-X-Google-Smtp-Source: AK7set8P7XEs+Z1mylqUEpNqmN5S6L1etKNkQzg5lRXZj0sNtQz45dsph1NS3hqwt2mCcBsBFjitTA==
-X-Received: by 2002:a05:622a:18d:b0:3b8:aa16:82c1 with SMTP id s13-20020a05622a018d00b003b8aa1682c1mr4725673qtw.60.1675794062929;
-        Tue, 07 Feb 2023 10:21:02 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g25-20020ac870d9000000b003a7e38055c9sm9733458qtp.63.2023.02.07.10.21.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 10:21:02 -0800 (PST)
-Message-ID: <ad03daa9-8317-a289-865e-9cad591d91f7@gmail.com>
-Date:   Tue, 7 Feb 2023 10:20:59 -0800
+        Tue, 7 Feb 2023 13:21:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3140F22A1E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:21:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA2F2B81A1F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 18:21:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4039DC433EF;
+        Tue,  7 Feb 2023 18:21:23 +0000 (UTC)
+Date:   Tue, 7 Feb 2023 18:21:20 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kaihao Bai <carlo.bai@linux.alibaba.com>
+Cc:     will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, anshuman.khandual@arm.com,
+        baolin.wang@linux.alibaba.com
+Subject: Re: [RFC PATCH 1/1] arm64: mm: remove unnecessary multiple tlb flush
+ of contiguous hugetlb
+Message-ID: <Y+KWoDw1ppliQ5Sg@arm.com>
+References: <1675768181-41518-1-git-send-email-carlo.bai@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.15 000/120] 5.15.93-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230207125618.699726054@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230207125618.699726054@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675768181-41518-1-git-send-email-carlo.bai@linux.alibaba.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 07, 2023 at 07:09:41PM +0800, Kaihao Bai wrote:
+> In arm64, contiguous flag refers to the same TLB entry that shared by a
+> contiguous address range. If flush one entry of the address range, it
+> would cover the whole contiguous address range. Thus there's no need to
+> flush all contiguous range that CONT_PMD/PTE points to.
 
+This doesn't work. The contiguous bit is a hint, so the CPU may not
+coalesce multiple PTEs into a single TLB entry.
 
-On 2/7/2023 4:56 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.93 release.
-> There are 120 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.93-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Florian
+Catalin
