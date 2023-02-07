@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDBB68CCA7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE1268CCA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjBGCfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:35:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S229630AbjBGCjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 21:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjBGCf1 (ORCPT
+        with ESMTP id S229523AbjBGCjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:35:27 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7E2E360B3;
-        Mon,  6 Feb 2023 18:35:25 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 07 Feb 2023 11:35:21 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 613CC2020780;
-        Tue,  7 Feb 2023 11:35:21 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 7 Feb 2023 11:35:14 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 2486F7368;
-        Tue,  7 Feb 2023 11:35:21 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH 8/8] arm64: dts: uniphier: Add syscon-uhs-mode to SD node
-Date:   Tue,  7 Feb 2023 11:35:14 +0900
-Message-Id: <20230207023514.29783-9-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230207023514.29783-1-hayashi.kunihiko@socionext.com>
-References: <20230207023514.29783-1-hayashi.kunihiko@socionext.com>
+        Mon, 6 Feb 2023 21:39:21 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56B11BCF;
+        Mon,  6 Feb 2023 18:39:19 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id x8so8503149ybt.13;
+        Mon, 06 Feb 2023 18:39:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X/DM3ZHFWH9+5S1qy4cWZ8ku1jvaebrV19OOb7VPWCE=;
+        b=E4fEMnY3w6e/c+JBeP/QCib+VbVtKssBHY7FUZxS0phG4XsyqJMZrF0ZsO+zJ1epw3
+         HAtT/bA6uxjwaVyMzsMHcPhITBLECR1tX/9AI77Xel6kBlG4dPeCJadLrn8Rx0ydq9nN
+         aaYHn/Q0Izel+P2z1Nyb2IfWsmarbuSv/Wqo6BMwKyLtgnEhBugkPLcQcNsft1HbliEV
+         bUDgENAF2xwW6V8V2XxgMEBjtKQYyctlihlNrcoBCU0TBDUZzXqjlZkZhUKegm1Ke2CR
+         dLWM9OMM1fhB5ByOwtI4DgefYMgbfVPgw47R/tiRhYCOBT8YNZeMrIKLZoY2U9s2/INJ
+         DSSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X/DM3ZHFWH9+5S1qy4cWZ8ku1jvaebrV19OOb7VPWCE=;
+        b=JdrNyH0pOOqbJGFvn14PK0iTTgQb3cnW9ChWVYUdstWuZ5w6KudUJwGyWerk2kIDMf
+         2eYMejHACS7z6pCM/k8vRfix/6odDhHpfKVnEW7PYczvc2VDvii2jh120aOB2OwfFucU
+         Ds/rfQSV84enYdIe4f0MdjI6kUwq1C1EV+DA9asv1lMFUv8sd6C7rLBQZe0/Hkwq2y84
+         vUcf1iIPS8p5NhnNO27HSvZ13X0GUDMuTIQy6zO4kfr0jI51m2AB7+TaJtb0gXcHQmQV
+         DMEv8ZQbqtQ3u/QajjAoTGD8R9vNCV0JsIoKKw7b1TY5c0HUAp9vW6BbVFkaHEwi6fkc
+         UeqQ==
+X-Gm-Message-State: AO0yUKXGr7jeGz5KBeTJe+neNR3pokZ1hlEO1HETpS67sQfyeZTx73Q5
+        xMFuHCQ+YUR3OWp5fXnHsFOjnqgdfaRMEHsTlq6i3+CL
+X-Google-Smtp-Source: AK7set9x+pCh4zkjdzoTJfNRupzo3lOSBI7ynBJQraf4uzfSI6TylOwOwDUh2q7lsTxp2cIWb5YqYbMPMgYXsfUBKhE=
+X-Received: by 2002:a25:2414:0:b0:86a:3232:d062 with SMTP id
+ k20-20020a252414000000b0086a3232d062mr243212ybk.222.1675737559025; Mon, 06
+ Feb 2023 18:39:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203031742.1730761-1-imagedong@tencent.com>
+ <20230203031742.1730761-3-imagedong@tencent.com> <CAEf4BzYh90NyyYvfTT=M=-KLspydMX4PZK8jCwNDydAP=kFgYw@mail.gmail.com>
+In-Reply-To: <CAEf4BzYh90NyyYvfTT=M=-KLspydMX4PZK8jCwNDydAP=kFgYw@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 7 Feb 2023 10:39:07 +0800
+Message-ID: <CADxym3a6_wBHW_c_ZYtZ5QXbbunhKxau6k-fn4TNrn+6qzW6fw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add test for legacy/perf
+ kprobe/uprobe attach mode
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sociopnext,syscon-uhs-mode prpperty to the SD node to refer the handle
-of the control logic node.
+On Tue, Feb 7, 2023 at 4:05 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Feb 2, 2023 at 7:18 PM <menglong8.dong@gmail.com> wrote:
+> >
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > Add the testing for kprobe/uprobe attaching in legacy and perf mode.
+> > And the testing passed:
+> >
+> > ./test_progs -t attach_probe
+> > $5       attach_probe:OK
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+>
+> Do you mind refactoring attach_probe test into multiple subtests,
+> where each subtest will only test one of the attach mode and type. The
+> reason is that libbpf CI runs tests with latest selftests and libbpf
+> against old kernels (4.9 and 5.5, currently). Due to attach_probe
+> testing all these uprobe/kprobe attach modes with extra features (like
+> cookie, ref count, etc), we had to disable attach_probe test in libbpf
+> CI on old kernels.
+>
+> If we can split each individual uprobe/kprobe mode, that will give us
+> flexibility to selectively allowlist those tests that don't force
+> libbpf to use newer features (like cookies, LINK or PERF mode, etc).
+>
+> It would be a great improvement and highly appreciated! If you don't
+> mind doing this, let's do the split of existing use cases into subtest
+> in a separate patch, and then add PERF/LEGACY/LINK mode tests on top
+> of that patch.
+>
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi | 3 ++-
- arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Of course, with pleasure. For the existing use cases, we split it into
+subtests, such as:
 
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-index 5dace1137cd1..4e2171630272 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
-@@ -548,7 +548,7 @@ smpctrl@59801000 {
- 			reg = <0x59801000 0x400>;
- 		};
- 
--		syscon@59810000 {
-+		sdctrl: syscon@59810000 {
- 			compatible = "socionext,uniphier-ld20-sdctrl",
- 				     "simple-mfd", "syscon";
- 			reg = <0x59810000 0x400>;
-@@ -611,6 +611,7 @@ sd: mmc@5a400000 {
- 			resets = <&sd_rst 0>;
- 			bus-width = <4>;
- 			cap-sd-highspeed;
-+			socionext,syscon-uhs-mode = <&sdctrl 0>;
- 		};
- 
- 		soc_glue: syscon@5f800000 {
-diff --git a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-index f62e3048d4dc..38ccfb46ea42 100644
---- a/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-+++ b/arch/arm64/boot/dts/socionext/uniphier-pxs3.dtsi
-@@ -370,7 +370,7 @@ smpctrl@59801000 {
- 			reg = <0x59801000 0x400>;
- 		};
- 
--		syscon@59810000 {
-+		sdctrl: syscon@59810000 {
- 			compatible = "socionext,uniphier-pxs3-sdctrl",
- 				     "simple-mfd", "syscon";
- 			reg = <0x59810000 0x400>;
-@@ -437,6 +437,7 @@ sd: mmc@5a400000 {
- 			sd-uhs-sdr12;
- 			sd-uhs-sdr25;
- 			sd-uhs-sdr50;
-+			socionext,syscon-uhs-mode = <&sdctrl 0>;
- 		};
- 
- 		soc_glue: syscon@5f800000 {
--- 
-2.25.1
+  kprobe/kretprobe auto attach
+  kprobe/kretprobe manual attach
+  uprobe/uretprobe ref_ctr test
+  uprobe/uretprobe auto attach
+  sleepable kprobe/uprobe
+  ......
 
+Am I right?
+
+Thanks!
+Dongmeng Long
+
+>
+> >  .../selftests/bpf/prog_tests/attach_probe.c   | 61 ++++++++++++++++++-
+> >  .../selftests/bpf/progs/test_attach_probe.c   | 32 ++++++++++
+> >  2 files changed, 92 insertions(+), 1 deletion(-)
+> >
+>
+> [...]
