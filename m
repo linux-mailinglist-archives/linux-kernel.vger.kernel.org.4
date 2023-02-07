@@ -2,164 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB2B68DD9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B54FA68DDAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbjBGQLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
+        id S231960AbjBGQNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbjBGQLK (ORCPT
+        with ESMTP id S232005AbjBGQMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:11:10 -0500
-Received: from mailout2n.rrzn.uni-hannover.de (mailout2n.rrzn.uni-hannover.de [130.75.2.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9E81204F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:11:02 -0800 (PST)
-Received: from [10.23.33.223] (lab.sra.uni-hannover.de [130.75.33.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailout2n.rrzn.uni-hannover.de (Postfix) with ESMTPSA id 4787B1F53B;
-        Tue,  7 Feb 2023 17:11:00 +0100 (CET)
-Message-ID: <68ba44d8-6899-c018-dcb3-36f3a96e6bea@sra.uni-hannover.de>
-Date:   Tue, 7 Feb 2023 17:11:00 +0100
+        Tue, 7 Feb 2023 11:12:42 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1962276A2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:12:39 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id z1so16107602plg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:12:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=20K67K9edwRh0ZAf2p1ADQD2Xsmwqcm4t/xw8k9j5dk=;
+        b=AoF+pK17KeWga6/gfHCf5yHbKRSGJFnueL7IsWIbszgBvma2IhRB52/8yoPorV3frY
+         0tz93kpERxaUv//F2L5fpiY6l2QIZbFFUkipoOSwguDJluQgAMUzqDoXam4zbwgixYZX
+         a8Q/34uIhjyoJ7hHEh9NbFk4EvLT4Nk6wMybk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=20K67K9edwRh0ZAf2p1ADQD2Xsmwqcm4t/xw8k9j5dk=;
+        b=c3gCTVERsg5o9O7Y+lPHC5GBMb7mi7aonKwNx6WtwwLkdsN0eLcvWmNrka/cuAvQsr
+         eT2myeynEo3j0of3p1UU4VG3rMogDFbcQDba0s/fBG5046WhzhnPo8K5V2Dv1sYCK4bG
+         maLD/EcrJkqAN5QstjApizmuIap7Dc/BdDCgJdlz7H6plw1uc14a/bcOCscu8HqYNLL1
+         WISIh/yI2Xd8iTXrBWmtl+tETCnn0mFHz2eKQyLqX+Ps0f8WotAGuPuXC9BPojYjd4iH
+         L75ynuTmC6CgHTENJdYPjJe+cbMqzQnRscdYpshKI5Gd0aCN9cSfXz5Xgzic2FQvehvl
+         MyfQ==
+X-Gm-Message-State: AO0yUKW6vd8h+pEIzSBd80NDI+X03PJnyozZHs9EmUGg7J1zHd+7Lnzp
+        Yb5Nb317Jv5wNWWrjk2XJkkZFg==
+X-Google-Smtp-Source: AK7set/18UhSh4y8tsQvk2Wb2TNH4BmdUcUYZKUCiuZ1gvdK/0bx2qtjXyO98XA9L1w3+ObchL8DFA==
+X-Received: by 2002:a17:903:1252:b0:198:adc4:22a2 with SMTP id u18-20020a170903125200b00198adc422a2mr17215569plh.29.1675786358610;
+        Tue, 07 Feb 2023 08:12:38 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:29fb:a635:f0df:f45a])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170902c1c400b00186a2dd3ffdsm9082889plc.15.2023.02.07.08.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 08:12:38 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        David Gow <davidgow@google.com>,
+        Jack Rosenthal <jrosenth@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] firmware: coreboot: Remove GOOGLE_COREBOOT_TABLE_ACPI/OF Kconfig entries
+Date:   Tue,  7 Feb 2023 08:12:00 -0800
+Message-Id: <20230207081130.1.I657776750156793721efa247ce6293445137bc8a@changeid>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] mm: reduce lock contention of pcp buffer refill
-Content-Language: en-US, de-DE
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20230201162549.68384-1-halbuer@sra.uni-hannover.de>
- <20230202152501.297639031e96baad35cdab17@linux-foundation.org>
-From:   Alexander Halbuer <halbuer@sra.uni-hannover.de>
-In-Reply-To: <20230202152501.297639031e96baad35cdab17@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.7 at mailout2n
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 00:25, Andrew Morton wrote:
-> On Wed,  1 Feb 2023 17:25:49 +0100 Alexander Halbuer <halbuer@sra.uni-hannover.de> wrote:
->
->> The `rmqueue_bulk` function batches the allocation of multiple elements to
->> refill the per-CPU buffers into a single hold of the zone lock. Each
->> element is allocated and checked using the `check_pcp_refill` function.
->> The check touches every related struct page which is especially expensive
->> for higher order allocations (huge pages). This patch reduces the time
->> holding the lock by moving the check out of the critical section similar
->> to the `rmqueue_buddy` function which allocates a single element.
->> Measurements of parallel allocation-heavy workloads show a reduction of
->> the average huge page allocation latency of 50 percent for two cores and
->> nearly 90 percent for 24 cores.
-> Sounds nice.
->
-> Were you able to test how much benefit we get by simply removing the
-> check_new_pages() call from rmqueue_bulk()?
-I did some further investigations and measurements to quantify potential
-performance gains. Benchmarks ran on a machine with 24 physical cores
-fixed at 2.1 GHz. The results show significant performance gains with the
-patch applied in parallel scenarios. Eliminating the check reduces
-allocation latency further, especially for low core counts.
+Ever since commit a28aad66da8b ("firmware: coreboot: Collapse platform
+drivers into bus core") the Kconfig entries GOOGLE_COREBOOT_TABLE_OF
+and GOOGLE_COREBOOT_TABLE_ACPI have been dead. They have no "help"
+text and thus aren't user choosable. They also aren't "select"ed by
+anything. They also control the compilation of no code.
 
-The following tables show the average allocation latencies for huge pages
-and normal pages for three different configurations:
-The unpatched kernel, the patched kernel, and an additional version
-without the check.
+Let's remove them.
 
-Huge pages
-+-------+---------+-------+----------+---------+----------+
-| Cores | Default | Patch |    Patch | NoCheck |  NoCheck |
-|       |    (ns) |  (ns) |     Diff |    (ns) |     Diff |
-+-------+---------+-------+----------+---------+----------+
-|     1 |     127 |   124 |  (-2.4%) |     118 |  (-7.1%) |
-|     2 |     140 |   140 |  (-0.0%) |     134 |  (-4.3%) |
-|     3 |     143 |   142 |  (-0.7%) |     134 |  (-6.3%) |
-|     4 |     178 |   159 | (-10.7%) |     156 | (-12.4%) |
-|     6 |     269 |   239 | (-11.2%) |     237 | (-11.9%) |
-|     8 |     363 |   321 | (-11.6%) |     319 | (-12.1%) |
-|    10 |     454 |   409 |  (-9.9%) |     409 |  (-9.9%) |
-|    12 |     545 |   494 |  (-9.4%) |     488 | (-10.5%) |
-|    14 |     639 |   578 |  (-9.5%) |     574 | (-10.2%) |
-|    16 |     735 |   660 | (-10.2%) |     653 | (-11.2%) |
-|    20 |     915 |   826 |  (-9.7%) |     815 | (-10.9%) |
-|    24 |    1105 |   992 | (-10.2%) |     982 | (-11.1%) |
-+-------+---------+-------+----------+---------+----------+
+Fixes: a28aad66da8b ("firmware: coreboot: Collapse platform drivers into bus core")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-Normal pages
-+-------+---------+-------+----------+---------+----------+
-| Cores | Default | Patch |    Patch | NoCheck |  NoCheck |
-|       |    (ns) |  (ns) |     Diff |    (ns) |     Diff |
-+-------+---------+-------+----------+---------+----------+
-|     1 |    2790 |  2767 |  (-0.8%) |     171 | (-93.9%) |
-|     2 |    6685 |  3484 | (-47.9%) |     519 | (-92.2%) |
-|     3 |   10501 |  3599 | (-65.7%) |     855 | (-91.9%) |
-|     4 |   14264 |  3635 | (-74.5%) |    1139 | (-92.0%) |
-|     6 |   21800 |  3551 | (-83.7%) |    1713 | (-92.1%) |
-|     8 |   29563 |  3570 | (-87.9%) |    2268 | (-92.3%) |
-|    10 |   37210 |  3845 | (-89.7%) |    2872 | (-92.3%) |
-|    12 |   44780 |  4452 | (-90.1%) |    3417 | (-92.4%) |
-|    14 |   52576 |  5100 | (-90.3%) |    4020 | (-92.4%) |
-|    16 |   60118 |  5785 | (-90.4%) |    4604 | (-92.3%) |
-|    20 |   75037 |  7270 | (-90.3%) |    6486 | (-91.4%) |
-|    24 |   90226 |  8712 | (-90.3%) |    7061 | (-92.2%) |
-+-------+---------+-------+----------+---------+----------+
+ drivers/firmware/google/Kconfig | 8 --------
+ 1 file changed, 8 deletions(-)
 
->
-> Vlastimil, I find this quite confusing:
->
-> #ifdef CONFIG_DEBUG_VM
-> /*
->  * With DEBUG_VM enabled, order-0 pages are checked for expected state when
->  * being allocated from pcp lists. With debug_pagealloc also enabled, they are
->  * also checked when pcp lists are refilled from the free lists.
->  */
-> static inline bool check_pcp_refill(struct page *page, unsigned int order)
-> {
-> 	if (debug_pagealloc_enabled_static())
-> 		return check_new_pages(page, order);
-> 	else
-> 		return false;
-> }
->
-> static inline bool check_new_pcp(struct page *page, unsigned int order)
-> {
-> 	return check_new_pages(page, order);
-> }
-> #else
-> /*
->  * With DEBUG_VM disabled, free order-0 pages are checked for expected state
->  * when pcp lists are being refilled from the free lists. With debug_pagealloc
->  * enabled, they are also checked when being allocated from the pcp lists.
->  */
-> static inline bool check_pcp_refill(struct page *page, unsigned int order)
-> {
-> 	return check_new_pages(page, order);
-> }
-> static inline bool check_new_pcp(struct page *page, unsigned int order)
-> {
-> 	if (debug_pagealloc_enabled_static())
-> 		return check_new_pages(page, order);
-> 	else
-> 		return false;
-> }
-> #endif /* CONFIG_DEBUG_VM */
->
-> and the 4462b32c9285b5 changelog is a struggle to follow.
->
-> Why are we performing *any* checks when CONFIG_DEBUG_VM=n and when
-> debug_pagealloc_enabled is false?
->
-> Anyway, these checks sounds quite costly so let's revisit their
-> desirability?
->
+diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
+index 9f190eab43ed..1bc7cbf2f65d 100644
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -44,14 +44,6 @@ config GOOGLE_COREBOOT_TABLE
+ 	  device tree node /firmware/coreboot.
+ 	  If unsure say N.
+ 
+-config GOOGLE_COREBOOT_TABLE_ACPI
+-	tristate
+-	select GOOGLE_COREBOOT_TABLE
+-
+-config GOOGLE_COREBOOT_TABLE_OF
+-	tristate
+-	select GOOGLE_COREBOOT_TABLE
+-
+ config GOOGLE_MEMCONSOLE
+ 	tristate
+ 	depends on GOOGLE_MEMCONSOLE_X86_LEGACY || GOOGLE_MEMCONSOLE_COREBOOT
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
