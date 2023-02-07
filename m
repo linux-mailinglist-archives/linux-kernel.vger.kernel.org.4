@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9749F68D47C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AA468D47F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbjBGKiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:38:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S229508AbjBGKie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbjBGKiC (ORCPT
+        with ESMTP id S231528AbjBGKiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:38:02 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BC038674
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:37:30 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id m2so42005168ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:37:30 -0800 (PST)
+        Tue, 7 Feb 2023 05:38:16 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E63538647
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:37:48 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id t19so3015500pfe.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:37:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CnpykC9OMn5+FOQw3Ft9zbugwWLplrL12mc+TPKFVjA=;
-        b=NsvgcJYOCzuCxf0XwS/RJ3GZy2iLuM9XJRlXt8cu+kjHTsiwYzA42r9v5/MjYYipOE
-         CUwuMbJ6Cq/6Py62scGR292a8pVIkWTfIFA35uWzOuen2dT9cL5qlmdfsjQ/Wl39p+sB
-         AvpZo7JhM2JfS0Ztx3oe9MbqqFuMuvqpbUlYEwT8YHjhxXXj+GMunEKZs5iqfsoWLH5x
-         rre0P+bOrV5uvR2gEo8YCHjNyTgbAG2j7cGqYe9Ui0dz754W7DV/uZC5BopmEH6pRlP1
-         QCCU/no55soAjuGM/YaWE/QjkIQ59SCN9bfnS3xO0rMbdkOf1DSajg059Bj41rpwcFf3
-         HAGQ==
+        d=sartura.hr; s=sartura;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLh9pEVrRCrNudQh0YY993IrWd2qZxs35VLB+sjiW8Q=;
+        b=gbofRDFYEVoX+XklzMQeWEvjHnnc6Y9axDfL3ISYpqray65HFFngOOBGnKC/ZO9nUT
+         QyYyvBHpRHubhD+9+YCBw/g+o8uSQNb6pfKIQSS/klrcnRXYAMxEXdnmnoF0aLdV34YS
+         KN0R6J3tHfne8rdlfR8Tqifok01q3JoynzW+lw0SwY7wxjKyn8mt/NiWxzdRSmD9YJGi
+         N1QVlSoYJjXfeBxxQUrC1yl6Q1sjxnWzT1a6TBzD10sAFSuemKIhaaUuNhIKbuklv+4E
+         mPdBagUICGqeRUra8iu/8NUukHpnFlFDlWd6kMH5ibpohgWIFvT8FjZQSn4yNJryfDkN
+         YoUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CnpykC9OMn5+FOQw3Ft9zbugwWLplrL12mc+TPKFVjA=;
-        b=Z49Bx2KeMQjGU0BnhIeddZsUb6SMFeTfjC/es34D6PkmC29cs1QO2q1FNriS2yH7Y/
-         1ql/iDfNlfUmIj++B5Pom0D7EFMtly4LwVlE0cxqnLPLSwz+O3Q3G/kcMgiUyX3cU/qx
-         37amclUqlOIEDLC3vh80ZZ7nHBLPCGqWw/L0jD6AiLTJKu2rrDeVXdWY2wIr1W113q03
-         9YYRDCRV2RdxA4ANL6IbmoffvH4OBbKc4jp2DGBeTdWucwgOvyCyuZTiNj0vfgxZSrWw
-         SHpMDTxMHlE0S5qkXX95BfxX/4Y04KQIpZLSChDLziOPVuLXMMRl9/Wd7dPEsHg9bhxb
-         LP/w==
-X-Gm-Message-State: AO0yUKUNZ3r+XqcUuoknb+tdbaIq/0AcG1FN7a0Lv+XZUHDwcODxkSrN
-        +lkgC+MtsXEVaFkFpOqEsmMXMg==
-X-Google-Smtp-Source: AK7set+qgk+/M3O0bE1uN4phV5fkrTsB+Dyy4OVItYHgNq169XEkFil4UHMyi46tjic5CN8xQUc49w==
-X-Received: by 2002:a17:906:d28b:b0:878:60da:1f63 with SMTP id ay11-20020a170906d28b00b0087860da1f63mr3005655ejb.43.1675766248807;
-        Tue, 07 Feb 2023 02:37:28 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id bn18-20020a170906c0d200b0087f68a2681bsm6746772ejb.96.2023.02.07.02.37.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 02:37:28 -0800 (PST)
-Date:   Tue, 7 Feb 2023 11:37:27 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Subject: Re: [PATCH v6 1/8] RISC-V: KVM: Add skeleton support for perf
-Message-ID: <20230207103727.jqgkyugsufgmsjrt@orel>
-References: <20230207095529.1787260-1-atishp@rivosinc.com>
- <20230207095529.1787260-2-atishp@rivosinc.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jLh9pEVrRCrNudQh0YY993IrWd2qZxs35VLB+sjiW8Q=;
+        b=wowU9hx2tQK6Xc7LOGgBcxBX5/fYpmEN2bE3+MyojCqa2z5wFRGpUPQFcCE9iv0yFX
+         hlyIZRlPR9irJLpTbIJ/0cLIalQ1HIrH5YtWjgZQM7LtHXjDlzVcukUK74pqWRDF9qjH
+         PKzDnHgKMyioxzsPHlBoJReAUCgH4OhweKatDiJJIoAuX50H4k4DlZ36ytOK8ZmcVXuk
+         Rwy9jyDDFE05/SB5dzAHxZKEOinGRQcy+GEAmUKFuZ5dEPqRx9C+2VcAYl117Nqyi6rv
+         Wk1nDB/2Wlq3Q+gDtjczKWxGh0ArnOOZXlhP19xFbzY/qSFpFekgBWLYANjVuCRPXu/9
+         d6Uw==
+X-Gm-Message-State: AO0yUKWlY0RantXV/phzDfJMw0gTpZeBT/w22vFL9JZgF7DlYXRQZS1c
+        tgsiVUiNnALihodqvR2hdg0AmV6ajU32aIaQKxlSaw==
+X-Google-Smtp-Source: AK7set/yvpTNpygND1JZcdOTmd7gU6Z2SnqIvdZ3UlYgqI16MYWRblxUFMhpDU3/H1AaaYGaCi3dANjJrxpfc83xzJ0=
+X-Received: by 2002:a63:9550:0:b0:4db:99fb:e855 with SMTP id
+ t16-20020a639550000000b004db99fbe855mr435594pgn.42.1675766267461; Tue, 07 Feb
+ 2023 02:37:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207095529.1787260-2-atishp@rivosinc.com>
+References: <20230207103207.759-1-quic_youghand@quicinc.com> <20230207103207.759-4-quic_youghand@quicinc.com>
+In-Reply-To: <20230207103207.759-4-quic_youghand@quicinc.com>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Tue, 7 Feb 2023 11:37:36 +0100
+Message-ID: <CA+HBbNFQ9N3cZyPoP6i7HSate181_6TREPss_UD7RX1746sVXA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] wifi: ath11k: PMIC XO cal data support
+To:     Youghandhar Chintala <quic_youghand@quicinc.com>
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,324 +69,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 01:55:22AM -0800, Atish Patra wrote:
-> This patch only adds barebone structure of perf implementation. Most of
-> the function returns zero at this point and will be implemented
-> fully in the future.
-> 
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/include/asm/kvm_host.h     |   4 +
->  arch/riscv/include/asm/kvm_vcpu_pmu.h |  75 ++++++++++++++
->  arch/riscv/kvm/Makefile               |   1 +
->  arch/riscv/kvm/vcpu.c                 |   7 ++
->  arch/riscv/kvm/vcpu_pmu.c             | 138 ++++++++++++++++++++++++++
->  5 files changed, 225 insertions(+)
->  create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
->  create mode 100644 arch/riscv/kvm/vcpu_pmu.c
-> 
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> index 93f43a3..b90be9a 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -18,6 +18,7 @@
->  #include <asm/kvm_vcpu_insn.h>
->  #include <asm/kvm_vcpu_sbi.h>
->  #include <asm/kvm_vcpu_timer.h>
-> +#include <asm/kvm_vcpu_pmu.h>
->  
->  #define KVM_MAX_VCPUS			1024
->  
-> @@ -228,6 +229,9 @@ struct kvm_vcpu_arch {
->  
->  	/* Don't run the VCPU (blocked) */
->  	bool pause;
-> +
-> +	/* Performance monitoring context */
-> +	struct kvm_pmu pmu_context;
->  };
->  
->  static inline void kvm_arch_hardware_unsetup(void) {}
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> new file mode 100644
-> index 0000000..0b86a47
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> @@ -0,0 +1,75 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2023 Rivos Inc
-> + *
-> + * Authors:
-> + *     Atish Patra <atishp@rivosinc.com>
-> + */
-> +
-> +#ifndef __KVM_VCPU_RISCV_PMU_H
-> +#define __KVM_VCPU_RISCV_PMU_H
-> +
-> +#include <linux/perf/riscv_pmu.h>
-> +#include <asm/kvm_vcpu_sbi.h>
-> +#include <asm/sbi.h>
-> +
-> +#ifdef CONFIG_RISCV_PMU_SBI
-> +#define RISCV_KVM_MAX_FW_CTRS	32
-> +#define RISCV_KVM_MAX_HW_CTRS	32
-> +#define RISCV_KVM_MAX_COUNTERS	(RISCV_KVM_MAX_HW_CTRS + RISCV_KVM_MAX_FW_CTRS)
-> +static_assert(RISCV_KVM_MAX_COUNTERS <= 64);
-> +
-> +/* Per virtual pmu counter data */
-> +struct kvm_pmc {
-> +	u8 idx;
-> +	struct perf_event *perf_event;
-> +	u64 counter_val;
-> +	union sbi_pmu_ctr_info cinfo;
-> +	/* Event monitoring status */
-> +	bool started;
-> +};
-> +
-> +/* PMU data structure per vcpu */
-> +struct kvm_pmu {
-> +	struct kvm_pmc pmc[RISCV_KVM_MAX_COUNTERS];
-> +	/* Number of the virtual firmware counters available */
-> +	int num_fw_ctrs;
-> +	/* Number of the virtual hardware counters available */
-> +	int num_hw_ctrs;
-> +	/* A flag to indicate that pmu initialization is done */
-> +	bool init_done;
-> +	/* Bit map of all the virtual counter used */
-> +	DECLARE_BITMAP(pmc_in_use, RISCV_KVM_MAX_COUNTERS);
-> +};
-> +
-> +#define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu_context)
-> +#define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu_context))
-> +
-> +int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_return *retdata);
-> +int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
-> +				struct kvm_vcpu_sbi_return *retdata);
-> +int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
-> +				 unsigned long ctr_mask, unsigned long flags, u64 ival,
-> +				 struct kvm_vcpu_sbi_return *retdata);
-> +int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
-> +				unsigned long ctr_mask, unsigned long flags,
-> +				struct kvm_vcpu_sbi_return *retdata);
-> +int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_base,
-> +				     unsigned long ctr_mask, unsigned long flags,
-> +				     unsigned long eidx, u64 evtdata,
-> +				     struct kvm_vcpu_sbi_return *retdata);
-> +int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
-> +				struct kvm_vcpu_sbi_return *retdata);
-> +void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu);
-> +void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu);
-> +void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
-> +
-> +#else
-> +struct kvm_pmu {
-> +};
-> +
-> +static inline void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu) {}
-> +static inline void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu) {}
-> +static inline void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu) {}
-> +#endif /* CONFIG_RISCV_PMU_SBI */
-> +#endif /* !__KVM_VCPU_RISCV_PMU_H */
-> diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
-> index 019df920..5de1053 100644
-> --- a/arch/riscv/kvm/Makefile
-> +++ b/arch/riscv/kvm/Makefile
-> @@ -25,3 +25,4 @@ kvm-y += vcpu_sbi_base.o
->  kvm-y += vcpu_sbi_replace.o
->  kvm-y += vcpu_sbi_hsm.o
->  kvm-y += vcpu_timer.o
-> +kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 7c08567..7d010b0 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -138,6 +138,8 @@ static void kvm_riscv_reset_vcpu(struct kvm_vcpu *vcpu)
->  	WRITE_ONCE(vcpu->arch.irqs_pending, 0);
->  	WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
->  
-> +	kvm_riscv_vcpu_pmu_reset(vcpu);
-> +
->  	vcpu->arch.hfence_head = 0;
->  	vcpu->arch.hfence_tail = 0;
->  	memset(vcpu->arch.hfence_queue, 0, sizeof(vcpu->arch.hfence_queue));
-> @@ -194,6 +196,9 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->  	/* Setup VCPU timer */
->  	kvm_riscv_vcpu_timer_init(vcpu);
->  
-> +	/* setup performance monitoring */
-> +	kvm_riscv_vcpu_pmu_init(vcpu);
-> +
->  	/* Reset VCPU */
->  	kvm_riscv_reset_vcpu(vcpu);
->  
-> @@ -216,6 +221,8 @@ void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
->  	/* Cleanup VCPU timer */
->  	kvm_riscv_vcpu_timer_deinit(vcpu);
->  
-> +	kvm_riscv_vcpu_pmu_deinit(vcpu);
-> +
->  	/* Free unused pages pre-allocated for G-stage page table mappings */
->  	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
->  }
-> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-> new file mode 100644
-> index 0000000..e79721b
-> --- /dev/null
-> +++ b/arch/riscv/kvm/vcpu_pmu.c
-> @@ -0,0 +1,138 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2023 Rivos Inc
-> + *
-> + * Authors:
-> + *     Atish Patra <atishp@rivosinc.com>
-> + */
-> +
-> +#include <linux/errno.h>
-> +#include <linux/err.h>
-> +#include <linux/kvm_host.h>
-> +#include <linux/perf/riscv_pmu.h>
-> +#include <asm/csr.h>
-> +#include <asm/kvm_vcpu_sbi.h>
-> +#include <asm/kvm_vcpu_pmu.h>
-> +#include <linux/kvm_host.h>
-> +
-> +#define kvm_pmu_num_counters(pmu) ((pmu)->num_hw_ctrs + (pmu)->num_fw_ctrs)
-> +
-> +int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_return *retdata)
-> +{
-> +	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +
-> +	retdata->out_val = kvm_pmu_num_counters(kvpmu);
-> +
-> +	return 0;
-> +}
-> +
-> +int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
-> +				struct kvm_vcpu_sbi_return *retdata)
-> +{
-> +	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +
-> +	if (cidx > RISCV_KVM_MAX_COUNTERS || cidx == 1) {
-> +		retdata->err_val = SBI_ERR_INVALID_PARAM;
-> +		return 0;
-> +	}
-> +
-> +	retdata->out_val = kvpmu->pmc[cidx].cinfo.value;
-> +
-> +	return 0;
-> +}
-> +
-> +int kvm_riscv_vcpu_pmu_ctr_start(struct kvm_vcpu *vcpu, unsigned long ctr_base,
-> +				 unsigned long ctr_mask, unsigned long flags, u64 ival,
-> +				 struct kvm_vcpu_sbi_return *retdata)
-> +{
-> +	/* TODO */
-> +	return 0;
-> +}
-> +
-> +int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
-> +				unsigned long ctr_mask, unsigned long flags,
-> +				struct kvm_vcpu_sbi_return *retdata)
-> +{
-> +	/* TODO */
-> +	return 0;
-> +}
-> +
-> +int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_base,
-> +				     unsigned long ctr_mask, unsigned long flags,
-> +				     unsigned long eidx, u64 evtdata,
-> +				     struct kvm_vcpu_sbi_return *retdata)
-> +{
-> +	/* TODO */
-> +	return 0;
-> +}
-> +
-> +int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
-> +				struct kvm_vcpu_sbi_return *retdata)
-> +{
-> +	/* TODO */
-> +	return 0;
-> +}
-> +
-> +void kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
-> +{
-> +	int i = 0, ret, num_hw_ctrs = 0, hpm_width = 0;
-> +	struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +	struct kvm_pmc *pmc;
-> +
-> +	ret = riscv_pmu_get_hpm_info(&hpm_width, &num_hw_ctrs);
-> +	if (ret < 0 || !hpm_width || !num_hw_ctrs)
-> +		return;
-
-need blank line here
-
-> +	/*
-> +	 * Increase the number of hardware counters to offset the time counter.
-> +	 */
-> +	kvpmu->num_hw_ctrs = num_hw_ctrs + 1;
-> +	kvpmu->num_fw_ctrs = SBI_PMU_FW_MAX;
-> +
-> +	if (kvpmu->num_hw_ctrs > RISCV_KVM_MAX_HW_CTRS) {
-> +		pr_warn("Limiting the hardware counters to 32 as specified by the ISA");
-
-pr_warn_once() and we need to set the prefix.
-
-> +		kvpmu->num_hw_ctrs = RISCV_KVM_MAX_HW_CTRS;
-> +	}
-
-need blank line here
-
-> +	/*
-> +	 * There is no correlation between the logical hardware counter and virtual counters.
-> +	 * However, we need to encode a hpmcounter CSR in the counter info field so that
-> +	 * KVM can trap n emulate the read. This works well in the migration use case as
-> +	 * KVM doesn't care if the actual hpmcounter is available in the hardware or not.
-> +	 */
-> +	for (i = 0; i < kvm_pmu_num_counters(kvpmu); i++) {
-> +		/* TIME CSR shouldn't be read from perf interface */
-> +		if (i == 1)
-> +			continue;
-> +		pmc = &kvpmu->pmc[i];
-> +		pmc->idx = i;
-> +		if (i < kvpmu->num_hw_ctrs) {
-> +			pmc->cinfo.type = SBI_PMU_CTR_TYPE_HW;
-> +			if (i < 3)
-> +				/* CY, IR counters */
-> +				pmc->cinfo.width = 63;
-> +			else
-> +				pmc->cinfo.width = hpm_width;
-> +			/*
-> +			 * The CSR number doesn't have any relation with the logical
-> +			 * hardware counters. The CSR numbers are encoded sequentially
-> +			 * to avoid maintaining a map between the virtual counter
-> +			 * and CSR number.
-> +			 */
-> +			pmc->cinfo.csr = CSR_CYCLE + i;
-> +		} else {
-> +			pmc->cinfo.type = SBI_PMU_CTR_TYPE_FW;
-> +			pmc->cinfo.width = BITS_PER_LONG - 1;
-> +		}
-> +	}
-> +
-> +	kvpmu->init_done = true;
-> +}
-> +
-> +void kvm_riscv_vcpu_pmu_deinit(struct kvm_vcpu *vcpu)
-> +{
-> +	/* TODO */
-> +}
-> +
-> +void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu)
-> +{
-> +	kvm_riscv_vcpu_pmu_deinit(vcpu);
-> +}
-> -- 
-> 2.25.1
+On Tue, Feb 7, 2023 at 11:33 AM Youghandhar Chintala
+<quic_youghand@quicinc.com> wrote:
 >
+> PMIC XO is the clock source for Wi-Fi RF clock in integrated Wi-Fi
+> chipset ex: WCN6750. Due to board layout errors XO frequency drifts
+> can cause Wi-Fi RF clock inaccuracy.
+> XO calibration test tree in Factory Test Mode is used to find the
+> best frequency offset(for example +/-2 KHz )by programming XO trim
+> register. This ensure system clock stays within required 20 ppm
+> WLAN RF clock.
+>
+> Retrieve the XO trim offset via system firmware (e.g., device tree),
+> especially in the case where the device doesn't have a useful EEPROM
+> on which to store the calibrated XO offset (e.g., for integrated Wi-Fi).
+> Calibrated XO offset is sent to firmware, which compensate the clock drift
+> by programing the XO trim register.
 
-Thanks,
-drew
+This is still a bit too vague for me and the DT binding is allowing
+for pretty much
+anything to be passed.
+
+This XO trim offset is offset from which register base?
+And, what is supposed to populate it?
+
+Regards,
+Robert
+>
+> Tested-on: WCN6750 hw1.0 AHB WLAN.MSL.1.0.1-00887-QCAMSLSWPLZ-1
+>
+> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+> ---
+>  drivers/net/wireless/ath/ath11k/ahb.c  |  8 ++++++++
+>  drivers/net/wireless/ath/ath11k/core.h |  3 +++
+>  drivers/net/wireless/ath/ath11k/qmi.c  | 24 ++++++++++++++++++++++++
+>  drivers/net/wireless/ath/ath11k/qmi.h  |  4 +++-
+>  4 files changed, 38 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/ath/ath11k/ahb.c b/drivers/net/wireless/ath/ath11k/ahb.c
+> index d34a4d6325b2..89580b4e47a9 100644
+> --- a/drivers/net/wireless/ath/ath11k/ahb.c
+> +++ b/drivers/net/wireless/ath/ath11k/ahb.c
+> @@ -1039,6 +1039,14 @@ static int ath11k_ahb_fw_resources_init(struct ath11k_base *ab)
+>         ab_ahb->fw.iommu_domain = iommu_dom;
+>         of_node_put(node);
+>
+> +       ret = of_property_read_u32(pdev->dev.of_node, "xo-cal-data", &ab->xo_cal_data);
+> +       if (ret) {
+> +               ath11k_dbg(ab, ATH11K_DBG_AHB, "failed to get xo-cal-data property\n");
+> +               return 0;
+> +       }
+> +       ab->xo_cal_supported = true;
+> +       ath11k_dbg(ab, ATH11K_DBG_AHB, "xo cal data 0x%x\n", ab->xo_cal_data);
+> +
+>         return 0;
+>
+>  err_iommu_unmap:
+> diff --git a/drivers/net/wireless/ath/ath11k/core.h b/drivers/net/wireless/ath/ath11k/core.h
+> index 22460b0abf03..783398e98915 100644
+> --- a/drivers/net/wireless/ath/ath11k/core.h
+> +++ b/drivers/net/wireless/ath/ath11k/core.h
+> @@ -969,6 +969,9 @@ struct ath11k_base {
+>                 const struct ath11k_pci_ops *ops;
+>         } pci;
+>
+> +       bool xo_cal_supported;
+> +       u32 xo_cal_data;
+> +
+>         /* must be last */
+>         u8 drv_priv[] __aligned(sizeof(void *));
+>  };
+> diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+> index 145f20a681bd..67f386b001ab 100644
+> --- a/drivers/net/wireless/ath/ath11k/qmi.c
+> +++ b/drivers/net/wireless/ath/ath11k/qmi.c
+> @@ -1451,6 +1451,24 @@ static struct qmi_elem_info qmi_wlanfw_wlan_mode_req_msg_v01_ei[] = {
+>                 .offset         = offsetof(struct qmi_wlanfw_wlan_mode_req_msg_v01,
+>                                            hw_debug),
+>         },
+> +       {
+> +               .data_type  = QMI_OPT_FLAG,
+> +               .elem_len   = 1,
+> +               .elem_size  = sizeof(u8),
+> +               .array_type = NO_ARRAY,
+> +               .tlv_type   = 0x11,
+> +               .offset     = offsetof(struct qmi_wlanfw_wlan_mode_req_msg_v01,
+> +                                      xo_cal_data_valid),
+> +       },
+> +       {
+> +               .data_type  = QMI_UNSIGNED_1_BYTE,
+> +               .elem_len   = 1,
+> +               .elem_size  = sizeof(u8),
+> +               .array_type = NO_ARRAY,
+> +               .tlv_type   = 0x11,
+> +               .offset     = offsetof(struct qmi_wlanfw_wlan_mode_req_msg_v01,
+> +                                      xo_cal_data),
+> +       },
+>         {
+>                 .data_type      = QMI_EOTI,
+>                 .array_type     = NO_ARRAY,
+> @@ -2610,6 +2628,12 @@ static int ath11k_qmi_wlanfw_mode_send(struct ath11k_base *ab,
+>         req.hw_debug_valid = 1;
+>         req.hw_debug = 0;
+>
+> +       if (ab->xo_cal_supported) {
+> +               req.xo_cal_data_valid = 1;
+> +               req.xo_cal_data = ab->xo_cal_data;
+> +       }
+> +       ath11k_dbg(ab, ATH11K_DBG_QMI, "xo_cal_supported %d\n", ab->xo_cal_supported);
+> +
+>         ret = qmi_txn_init(&ab->qmi.handle, &txn,
+>                            qmi_wlanfw_wlan_mode_resp_msg_v01_ei, &resp);
+>         if (ret < 0)
+> diff --git a/drivers/net/wireless/ath/ath11k/qmi.h b/drivers/net/wireless/ath/ath11k/qmi.h
+> index 2ec56a34fa81..db61ce0d5689 100644
+> --- a/drivers/net/wireless/ath/ath11k/qmi.h
+> +++ b/drivers/net/wireless/ath/ath11k/qmi.h
+> @@ -450,7 +450,7 @@ struct qmi_wlanfw_m3_info_resp_msg_v01 {
+>         struct qmi_response_type_v01 resp;
+>  };
+>
+> -#define QMI_WLANFW_WLAN_MODE_REQ_MSG_V01_MAX_LEN       11
+> +#define QMI_WLANFW_WLAN_MODE_REQ_MSG_V01_MAX_LEN       17
+>  #define QMI_WLANFW_WLAN_MODE_RESP_MSG_V01_MAX_LEN      7
+>  #define QMI_WLANFW_WLAN_CFG_REQ_MSG_V01_MAX_LEN                803
+>  #define QMI_WLANFW_WLAN_CFG_RESP_MSG_V01_MAX_LEN       7
+> @@ -470,6 +470,8 @@ struct qmi_wlanfw_wlan_mode_req_msg_v01 {
+>         u32 mode;
+>         u8 hw_debug_valid;
+>         u8 hw_debug;
+> +       u8 xo_cal_data_valid;
+> +       u8 xo_cal_data;
+>  };
+>
+>  struct qmi_wlanfw_wlan_mode_resp_msg_v01 {
+> --
+> 2.38.0
+>
+>
+> --
+> ath11k mailing list
+> ath11k@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/ath11k
+
+
+
+-- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
