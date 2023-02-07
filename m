@@ -2,129 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925F468CFC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4FC68CFCA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjBGGsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S229564AbjBGGto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:49:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjBGGsJ (ORCPT
+        with ESMTP id S229460AbjBGGtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:48:09 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2752298F2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:48:07 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so10631413wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:48:07 -0800 (PST)
+        Tue, 7 Feb 2023 01:49:42 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34703298DA
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:49:41 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id r18so9790177pgr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:49:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0+/U+QeK9hEvR6ABz+IUCKA1l4N6KPAD5pigWZc0fCI=;
-        b=PuElOJ85V+kFpfl3zu7zCKumBa64kSyH1+BScbb0uNTmSHsLoKEBVtlCQcoxSAASOr
-         kzdOwtho7xSPQJ638hf/8BkmHQM3ghsoJOfZSnagx0kVzGk0PtjKB4++QsGlfES+s1oF
-         L/xpGmzlhjFMLQZq5J46Fiirv2V63YA8P3gVSU56CeuIvaHQ3b4jPZ/IpwLXzaWuidNY
-         YfcqmJPSo7AtuiMn5dGrneo1gPHQZ+OELT2dzmloA7f5x+pwvdWCxlFcj2/YV+7/h8+4
-         of3pa1wV436yuX59pcLro+vfLxW3Cy4OxlhoCnzQFDeIeBrd+irSUt1XDUzqFPWPZNKV
-         5kFg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/CSckEZneREzc3kHdu+J2V8qJBWUsoyPtYrVkjFwzw=;
+        b=C+5Ke/dVYng9xNOxfIb7Bl2YdIxdAFsoCC+OHbabOrEGBsvxTP/wtrmxzcLbIEvWlY
+         050mjkwkuB626xi+GO/4+95ANuVQN5GUBhUrTlSJrYtsd1RSL+TETEtGYKb841badoo7
+         LqT89HDljGkRKpaAXFodNrBN3iTSo0zT0nmmzZkX+SsyKXlgZhuHb8J+BjRDy3jnu5AW
+         nKuZGcoIdonMIcFlk1HpBacf8shtAPfNp3fPsBfi9QNuug6A2E/igUKJpcR/hWOOEp9B
+         RPxUrZZrwIVm2UBFJpjP33zjGa6Zf+tjN2xJNPb9Avtji18vizwPYHTDQrh1SwOgHcys
+         84JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0+/U+QeK9hEvR6ABz+IUCKA1l4N6KPAD5pigWZc0fCI=;
-        b=zwBbZUx6/1rbjZgJDc2luBIq/AWb4pYbNnnxXkQjxuNH+07P9lkVq/ok4uzw+qk8ul
-         c3z92jKnEpQ6I6JpzZuM79k19ifmVKFDmdMKY+dmHWEgdTUmWYBMeSI4/WJ0CuPhuw3H
-         IB85H/+ncFGKl9nCRUysDs8onBPUMwbc5RFgUFLnEdgDU+jbTOoPeqsybcDbis3rvu6N
-         IE00joz/IMjm2kacMMAyZhT9UrmfQx011UB++GZyVnV2B4ddScK13vgBivdFw5y9cF8o
-         WEZcbw+rlFGQ7h4hs36wg+mEY9yuovGQEUGvqKLWLz8nvoYcriYy+2N3FH2MCkJflP9k
-         TxVw==
-X-Gm-Message-State: AO0yUKXu+AG85oe3W08IMtmfcCZRX/g0ynz2MTevJHFYBJAHXL1AXYsn
-        RtHZso+cMcPs/TVIgAfXRoCUTg==
-X-Google-Smtp-Source: AK7set8/0UZWOQVVrAPWQTpokDH093Y0jNluxoRsQ7HVW1Y5DviGGWIwbHisbRqsQTbbkAN+r4DDkQ==
-X-Received: by 2002:a05:600c:44c9:b0:3df:f9e9:7600 with SMTP id f9-20020a05600c44c900b003dff9e97600mr2042146wmo.25.1675752486463;
-        Mon, 06 Feb 2023 22:48:06 -0800 (PST)
-Received: from [192.168.0.104] ([82.77.80.113])
-        by smtp.gmail.com with ESMTPSA id s22-20020a1cf216000000b003dffe312925sm6097811wmc.15.2023.02.06.22.48.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 22:48:06 -0800 (PST)
-Message-ID: <67e1d3af-d106-bd5c-f8d8-3f43a58975a0@linaro.org>
-Date:   Tue, 7 Feb 2023 06:48:04 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o/CSckEZneREzc3kHdu+J2V8qJBWUsoyPtYrVkjFwzw=;
+        b=PlMT8yL+62ye+qg2jMKuDZ8da8oTkx5EUQ+kcfR40nkblx/JS31f+Z83V63yJ1Pcr4
+         s9PFQmrKCcgR63jDr5MvT7TX0tAm58UnCQ2LClwxpXM9KfU2/VUbC4qBOLZr04we/51a
+         p5oPuiyJNA1JYqwTZVj0csHzplnh3xXxaHLaxltcm2FP4sIEu2CqCoOfQJ+f4e4zYysM
+         PWlI8CVaf/DgPNGT7ujcyytBMnyhTRhywltctzXLKq1KhJUVlq3l9LdFCCRP/w9meASD
+         5opDj0ZVn5YQWDYm+nbMtDSqea5dXROPN1eFDpqkIVQpCsQfDejOsFv5l+m7Sae+zSU5
+         G1Fg==
+X-Gm-Message-State: AO0yUKVTZd8oF0Lc3uSHK9Jhfckpz+uYQkVZDnJj0TmENFFCEW/HstyG
+        Da3pVSdVnYoPlvYgIppnyNVw4RJKIQ3yqz+NIESauw==
+X-Google-Smtp-Source: AK7set+lSF6h4ihqXMsgGagqqFaj6yB78FXTHOazJ1c86xZkVfF7VhvjVOu5aO/JI9I3OprkBFQIP9PiP+HGMh6pZ9s=
+X-Received: by 2002:aa7:8ede:0:b0:590:7829:f566 with SMTP id
+ b30-20020aa78ede000000b005907829f566mr490179pfr.50.1675752580282; Mon, 06 Feb
+ 2023 22:49:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 0/3] spi: spi-cadence-quadspi: Add Rx tuning support for
- DTR mode
-Content-Language: en-US
-To:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, saikrishna12468@gmail.com,
-        git@amd.com
-References: <20230207060924.265789-1-sai.krishna.potthuri@amd.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230207060924.265789-1-sai.krishna.potthuri@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221222134844.lbzyx5hz7z5n763n@skbuf> <4263dc33-0344-16b6-df22-1db9718721b1@linaro.org>
+ <20221223134459.6bmiidn4mp6mnggx@skbuf>
+In-Reply-To: <20221223134459.6bmiidn4mp6mnggx@skbuf>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 6 Feb 2023 22:49:03 -0800
+Message-ID: <CAGETcx8De_qm9hVtK5CznfWke9nmOfV8OcvAW6kmwyeb7APr=g@mail.gmail.com>
+Subject: Re: Advice on MFD-style probing of DSA switch SoCs
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 23, 2022 at 5:44 AM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+>
+> On Fri, Dec 23, 2022 at 09:44:14AM +0100, Krzysztof Kozlowski wrote:
+> > just trim the code... we do not need to scroll over unrelated pieces.
+>
+> ok
+>
+> > > However, the irq_domain/irqchip handling code in this case will go to
+> > > drivers/net/dsa/, and it won't really be a "driver" (there is no struct
+> >
+> > Why? Devicetree hierarchy has nothing to do with Linux driver hierarchy
+> > and nothing stops you from putting irqchip code in respective directory
+> > for such DT. Your parent device can be MFD, can be same old DSA switch
+> > driver etc. Several options.
+
+Hi Vladimir,
+
+I stumbled onto this thread when searching for some old emails between
+us to refresh my memory on fw_devlink + DSA issues.
 
 
-On 2/7/23 06:09, Sai Krishna Potthuri wrote:
-> Enable PHY and DQS required for Xilinx Versal Octal SPI to operate in DTR
-> protocol.
-> Add and update device_id field in spi_mem structure with flash id
-> information. Xilinx Versal Octal SPI driver requires the device id
-> information to perform the Rx tuning operation. Since there is no common
-> Tuning Data Pattern defined across all vendors, controllers like Xilinx
-> Versal Octal SPI which requires Rx tuning to find out the optimal sampling
-> point for data lines, this device id information will be used as a golden
-> data.
+>
+> True, in fact I've already migrated in my tree the drivers for
+> nxp,sja1110-base-tx-mdio and nxp,sja1110-base-t1-mdio (which in the
+> current bindings, are under ethernet-switch/mdios/mdio@N) to dedicated
+> platform drivers under drivers/net/mdio/. The sja1105 driver will have
+> to support old bindings as well, so code in sja1105_mdio.c which
+> registers platform devices for MDIO nodes for compatibility will have to
+> stay.
+>
+> But I don't want to keep doing that for other peripherals. The irqchip
+> is not a child of the ethernet-switch, not in any sense at all. The
+> ethernet-switch even has 2 IRQ lines which need to be provided by the
+> irqchip, so there would be a circular dependency in the device tree
+> description if the ethernet-switch was the parent.
 
-Using only 6 bytes as golden pattern seems fragile, but you are aware of
-that, as I see that you chose to read the ID 10 times to make the
-decision whether the tap is valid or not. Other option (which is not
-perfect) is to use SFDP data as golden pattern. If I remember
-correctly, JESD216 suggests to use the Read SFDP cmd at 50 MHz, so it
-won't help you much. In practice SPI NOR uses the Read SFDP command at
-the flash's maximum speed and we haven't seen problems. But better would
-be to use some flash OTP data maybe? I remember Pratyush has submitted a
-phy calibration series in the past, I haven't had the chance to read his
-proposal. Did you? How's your proposal different than his?
+I'm glad you are looking into this and agree how IRQ controllers are
+independent of the rest of the ethernet-switch, etc.
 
-Cheers,
-ta
+> fw_devlink doesn't really like that, and has been causing problems for
+> similar topologies with other DSA switches. There have been discussions
+> with Saravana Kannan, and he proposed introducing a FWNODE_FLAG_BROKEN_PARENT
+> flag, that says "don't create device links between a consumer and a
+> supplier, if the consumer needs a resource from the supplier to probe,
+> and the supplier needs to manually probe the consumer to finish its own
+> probing".
+> https://patchwork.kernel.org/project/netdevbpf/cover/20210826074526.825517-1-saravanak@google.com/
 
-> The reason behind choosing this approach instead of reading the ID again
-> in the controller driver is to make it generic solution.
-> - Other controller drivers which want to use similar tuning process, they
-> will make use of this ID instead of reading the ID again in the driver.
-> - Also, we can avoid hardcoding the command information and initiating the
-> transfer in the controller driver as this should happen from spi-nor.
-> 
-> Sai Krishna Potthuri (3):
->    spi: cadence-quadspi: Add support for PHY module and DQS
->    mtd: spi-nor: Add and update device_id field in spi_mem structure
->    spi: cadence-quadspi: Add Rx tuning support for Xilinx Versal OSPI
-> 
->   drivers/mtd/spi-nor/core.c        |   1 +
->   drivers/spi/spi-cadence-quadspi.c | 226 +++++++++++++++++++++++++++++-
->   include/linux/spi/spi-mem.h       |   4 +
->   3 files changed, 230 insertions(+), 1 deletion(-)
-> 
+It did land as FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD and it's used for
+PHYs. But yeah, it's not a great long term solution.
+
+> That patch didn't really go anywhere to my knowledge, but I'd prefer to
+> sidestep all that discussion about what constitutes a broken parent and
+> what doesn't, and here, introducing an irqchip driver which is a fwnode
+> child of the ethernet-switch driver seems like a big mistake, given past
+> experience.
+
+IMHO, the DSA is a logical device that's made up of many different
+pieces of real hardware IP. IMHO an ideal solution would be something
+like a dsa_bus type where we add a dsa_device. The dsa_device will
+list all the necessary devices (IRQ, PHY, MDIO, etc -- they can be
+wherever they want in DT) as its suppliers and when the dsa_device is
+probed, it can assume all its suppliers are present and then do the
+DSA initialization.
+
+This would also solve the PHYs problem you stated earlier. So,
+basically you'd move some of the dsa initialization code into the
+dsa_probe() function of the dsa_bus.
+
+Hope I'm making some sense. Let me know if you want to discuss this
+further and I can try and provide more context and details.
+
+Also, there's already a driver core feature that does just this --
+component devices -- but the implementation is old and not so great
+IMHO. Component device model can be done better using device links. I
+want to refactor the component device framework to use device links,
+but that's a problem for another time.
+
+-Saravana
