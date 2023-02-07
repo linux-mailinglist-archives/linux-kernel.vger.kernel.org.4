@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA5068D9E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D167268D9E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjBGN44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S232344AbjBGN46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:56:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjBGN4l (ORCPT
+        with ESMTP id S231909AbjBGN4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:56:41 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB733802E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:56:11 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id k13so6225946wrh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:56:11 -0800 (PST)
+        Tue, 7 Feb 2023 08:56:42 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B8E38E82
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:56:15 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id i5so6461233wrc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:56:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QX4rZ/apusxA+kOocMUgPZzFJ0GB7RlYqxdsd8KGKjw=;
-        b=ZePF7sbU5Y7OjGS2yW0g9dLDgyFY7/XNsDvb4KSI8zVo4duMujEAIRIDEAYzgW/aJA
-         FXn4Dgir0houDF4USc1XH2s73/6rqJurfSkOeT1oH1oxUfxBf6PCNk3HVe/YGNwhKxjZ
-         qPZVgPpkhtfd0Ru0984YUutdfo1dTodUWIjs4lNTELSKRLfCXPDs0+9zz1wsd8bIIZFl
-         iyjbxsWzCmYzqO7DjEQkem0WgEleR8XNZPpIIvOCgElV+Tx2q5aeKr9ebSPBCsaKUIbz
-         Z1pxs8ovrpq5wYQf/FbdwaBu0nh/mBbWqiGn3+0OHZ52xsseHlNpqcNp+POJSV7GzykX
-         629A==
+        bh=woyCLhhr9GNDZ+ZK9imdrAaOvVCw51EmSZRJm9R7J5w=;
+        b=NtU54NwNW0ruK/8LURJT6C7S7FeX/i5HcbZpzVPSd8N4FDeryJMrp6kX0Ad05ncNEc
+         g9vDeJ1/IVQLVx3XzIc+t86oT6mr60a2tMn0UqqxrOC8LSTRd3ycdIRBs7chpFuPc0X+
+         qNqC4otwYGd4bjSgMGjhAh9e1OMmbbFXvFVFQk2fS0fSVcPbp2uq0k6KMaYkKSDnhysS
+         88iL/fSSSKruvvOoLlrRofeuXgpaYWHUsuRSg+VS1V/wvSI6x2njwiqw/sSFXA8M80/r
+         x/pD2M37xtEOV4yy03FSeC9nDx60cjzg8MdiBWM/e85wWIfOP82P5LNmh1KzLIACptYD
+         Fomw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QX4rZ/apusxA+kOocMUgPZzFJ0GB7RlYqxdsd8KGKjw=;
-        b=EWfZq5/FrKxlZHCizvpuqPYGMb6aHdl+t8xsKGbMzfQL7/rtI7BgWQuUfSGNJKd0US
-         d/qggqvwrRqHeZ9OE9TY4rjCE07Brj9IlwJ7O6iwD1kgMRuX8khFvR0v9rWYMg94zBVL
-         cNujCyy3OiLdGxQ3zs9dAhe0axzMEAQKeTCFbsmZl9xtrQQmod8NVA5N7q9+/cuPg4M2
-         vq1rGC4iBSmCDsNBSep+Ig9pd77Aw/lwPlZjSyYyjsiV74Uu6p+rctTDO+aKtcarJ84J
-         1gioTCFp9gn/Rog0kNIgYfZqvV+GQ1AefapZy97IKWHAje0zS/Jz8IpCrNLY9fI6ZC6p
-         5C7Q==
-X-Gm-Message-State: AO0yUKWQVRY7I5cC5CGPaEDFA93UPoxN5R+YkNNVgwDpckHnxDmBXZIS
-        Q7Z8AVliycXvtfU+2NtxCGKTOw==
-X-Google-Smtp-Source: AK7set/3HsxRPjRdhDnMoTIKD5/HI3EB5DMI/wZsOGOaUNEUdIzsU4vzJeppub9ye2E67JzGIA9cbA==
-X-Received: by 2002:adf:dc04:0:b0:2c3:ea92:3494 with SMTP id t4-20020adfdc04000000b002c3ea923494mr2499644wri.55.1675778156573;
-        Tue, 07 Feb 2023 05:55:56 -0800 (PST)
+        bh=woyCLhhr9GNDZ+ZK9imdrAaOvVCw51EmSZRJm9R7J5w=;
+        b=IV8UZj9rPrpiW2jY1rOp5181j5OBqChjj2DZjKu+hbuwjA1ltTllFLgUxKyMoL8FqC
+         uzE3xroFKpJGGld3cXmEjAdQ37Dq+uPAXfxVU9Bbh1DeedoAytTqjp6uLmBeFq1Xfknn
+         NN2YLbDyU2+/dh9TUv+5H+zIFGVCjlcihW9D7ggreCaCYhLOJuhCjz7WKuNQPwMqovZk
+         1F53cax9km4sMODuwgOJd2Jg6Gee5uAcZm3DZuyc9Doj7M5N5hNWWT5GAf/WPW4Tv+bz
+         nCV2BQ70hTNoebtcZNlxwtgnlMRnXdK0NXTsSOt+GqMrIvfKqB+8tW3QxWIM0Pu4YxFt
+         YqEQ==
+X-Gm-Message-State: AO0yUKULoTp9oPosmxbZ/KCpDA/EMWYjMIuru+S8bLCzNk+NWAXzQiLT
+        suz3+zc1DtMY63o4+oSaQWGe/g==
+X-Google-Smtp-Source: AK7set+310+2rkvwM3A7GBlhW9EtKuxs3n1k3TNZRXyXkrqITOpLCmAe3j3hq/Bam4I+ObeiHtxrgQ==
+X-Received: by 2002:a05:6000:188d:b0:2c3:be89:7c36 with SMTP id a13-20020a056000188d00b002c3be897c36mr15394572wri.25.1675778157897;
+        Tue, 07 Feb 2023 05:55:57 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id p10-20020a5d59aa000000b002be5401ef5fsm11611312wrr.39.2023.02.07.05.55.55
+        by smtp.gmail.com with ESMTPSA id p10-20020a5d59aa000000b002be5401ef5fsm11611312wrr.39.2023.02.07.05.55.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 05:55:56 -0800 (PST)
+        Tue, 07 Feb 2023 05:55:57 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,9 +62,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 1/7] dt-bindings: phy: Add qcom,snps-eusb2-repeater schema file
-Date:   Tue,  7 Feb 2023 15:55:45 +0200
-Message-Id: <20230207135551.1418637-2-abel.vesa@linaro.org>
+Subject: [PATCH v4 2/7] dt-bindings: mfd: qcom,spmi-pmic: Add pattern property for phy
+Date:   Tue,  7 Feb 2023 15:55:46 +0200
+Message-Id: <20230207135551.1418637-3-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230207135551.1418637-1-abel.vesa@linaro.org>
 References: <20230207135551.1418637-1-abel.vesa@linaro.org>
@@ -72,86 +72,44 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SM8550 SoC uses Synopsis eUSB2 repeater found in PM8550b.
-Add a dt-binding schema for the new driver.
+The phy pattern property will be used for providing eUSB2 repeater
+functionality. This will be modelled as a Qualcomm PHY driver.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
 
 The v3 (rfc) is here:
-https://lore.kernel.org/all/20230202133816.4026990-3-abel.vesa@linaro.org/
+https://lore.kernel.org/all/20230202133816.4026990-2-abel.vesa@linaro.org/
 
 Changes since v3:
- * made this patch the first one in the series to fix the binding check
-   for the 2nd patch.
- * dropped the compatible for pmic in the example. This is due to the
-   dependency between this patch and the next one.
+ * made this the second patch rather than the first in the series
 
- .../phy/qcom,snps-eusb2-repeater.yaml         | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,snps-eusb2-repeater.yaml
+ Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,snps-eusb2-repeater.yaml b/Documentation/devicetree/bindings/phy/qcom,snps-eusb2-repeater.yaml
-new file mode 100644
-index 000000000000..54afab7e21fb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/qcom,snps-eusb2-repeater.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/qcom,snps-eusb2-repeater.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+index adf88245c409..1e6fadec1301 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -135,6 +135,10 @@ patternProperties:
+     type: object
+     $ref: /schemas/pinctrl/qcom,pmic-gpio.yaml#
+ 
++  "phy@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/phy/qcom,snps-eusb2-repeater.yaml#
 +
-+title: Qualcomm Synopsis eUSB2 to USB 2.0 repeater
-+
-+maintainers:
-+  - Abel Vesa <abel.vesa@linaro.org>
-+
-+properties:
-+  compatible:
-+    const: qcom,pm8550b-eusb2-repeater
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  vdd18-supply: true
-+
-+  vdd3-supply: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/spmi/spmi.h>
-+
-+    pmic@7 {
-+      reg = <0x7 SPMI_USID>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      pm8550b_eusb2_repeater: phy@fd00 {
-+        compatible = "qcom,pm8550b-eusb2-repeater";
-+        reg = <0xfd00>;
-+        #phy-cells = <0>;
-+      };
-+    };
-+...
+   "pon@[0-9a-f]+$":
+     type: object
+     $ref: /schemas/power/reset/qcom,pon.yaml#
 -- 
 2.34.1
 
