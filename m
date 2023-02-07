@@ -2,142 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0688F68CD28
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DEA68CD30
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjBGDOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 22:14:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S229656AbjBGDPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 22:15:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBGDOl (ORCPT
+        with ESMTP id S229630AbjBGDO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 22:14:41 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C73813DFA
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 19:14:39 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxDesewuFjMGUPAA--.30238S3;
-        Tue, 07 Feb 2023 11:14:38 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx6r0cwuFjzzUrAA--.17348S3;
-        Tue, 07 Feb 2023 11:14:38 +0800 (CST)
-Subject: Re: [PATCH v12 0/5] Add kprobe and kretprobe support for LoongArch
-To:     Jeff Xie <xiehuan09@gmail.com>, Huacai Chen <chenhuacai@kernel.org>
-References: <1674007261-9198-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H4aTd6_cSy45KKjv-KrLTiwT4iG6+fkb84KfCrL3Y+hpg@mail.gmail.com>
- <CAAhV-H5WN5E=0Z9wpbXDc6VO7Nc+j7PGvnyAAGOmCRMJkdwSYw@mail.gmail.com>
- <CAEr6+ECO-=jfhzHrcdKGx0MsjMBMiN6wsBPCfv7CaXo_amAWWg@mail.gmail.com>
- <02806f85-bc09-d316-f058-3947353cb190@loongson.cn>
- <CAEr6+EBYF2xqZWEuZaz5un5FF3Jb-rSAQp3s3uojsovm9RcUYA@mail.gmail.com>
- <CAAhV-H5dJGrL3kEwzC-XwMqJTCsYHq-YVDTDRntGcYg9RMz02w@mail.gmail.com>
- <CAEr6+EDvaqpfvyJhe9TpDbhzrgu9aPPtePi2Vp=vAB5xgMNhXQ@mail.gmail.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <8f306f68-7517-7c45-b2ef-668af9cf5f6a@loongson.cn>
-Date:   Tue, 7 Feb 2023 11:14:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Mon, 6 Feb 2023 22:14:59 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D9F3608A;
+        Mon,  6 Feb 2023 19:14:55 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3172IQvg018396;
+        Tue, 7 Feb 2023 03:14:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=XEa7zvdIaL+HF1k+wBz2+SKvXEtxFyOfUBYDCboRxMo=;
+ b=hc8UaxEHlTVp/L3e8SXT4070UhsYm+A5Fe8Wg4ytaKH/+su3X+LVMKKRDgtKUfAFQXKQ
+ x3e3kLSdS1l3PPGGXcvSg3GMEBmloCg799i712Woo+F/SaFyp6SAewFKTi0UZmlXXDLb
+ cn5Rgjgi4mgF2WRBFsPVUVFfB/X8GXi4Oq+ALEcxr0ZTmJpI7VuHM7Dufr9YBJghlkyI
+ emkI9boUguaD9kVMetz7HoNlwAIMCK7zGpgv1WCBMtmPkmdHppooQr42f1if183kMpZO
+ zwO3/IzVtqJdk6ff6gxuPXciTmr7+lWgVNQ2E3LP/YNj/0DeP1l0LArNjZdCB1NseQ0Y 5Q== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nhg4rn59v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 03:14:47 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3173EkLY004622
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Feb 2023 03:14:46 GMT
+Received: from [10.47.206.1] (10.49.16.6) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 6 Feb 2023
+ 19:14:45 -0800
+Message-ID: <1eef640f-7d3d-6213-fd5b-6731283b3049@quicinc.com>
+Date:   Mon, 6 Feb 2023 19:14:44 -0800
 MIME-Version: 1.0
-In-Reply-To: <CAEr6+EDvaqpfvyJhe9TpDbhzrgu9aPPtePi2Vp=vAB5xgMNhXQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 04/22] rtc: pm8xxx: drop bogus locking
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230202155448.6715-1-johan+linaro@kernel.org>
+ <20230202155448.6715-5-johan+linaro@kernel.org>
+From:   David Collins <quic_collinsd@quicinc.com>
+In-Reply-To: <20230202155448.6715-5-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Dx6r0cwuFjzzUrAA--.17348S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7WFWxGr4fAFWxCw48XrW5Jrb_yoW5JFyfpF
-        yDZrZ5CF4kX34DAw1q93WUXw4rtasrAa4I9FZxJF1Yyr1qvr17Jw10qr47ZF1Utr4Fkr1S
-        q3sxtw1YvF1UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jUsqXUUUUU=
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: DY_NK85ekIc8gtz1bv6vZP1flpZZv-jT
+X-Proofpoint-GUID: DY_NK85ekIc8gtz1bv6vZP1flpZZv-jT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 impostorscore=0 phishscore=0 suspectscore=0
+ clxscore=1015 priorityscore=1501 adultscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=452 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302070028
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/2/23 07:54, Johan Hovold wrote:
+> Since commit c8d523a4b053 ("drivers/rtc/rtc-pm8xxx.c: rework to support
+> pm8941 rtc") which removed the shadow control register there is no need
+> for a driver lock.
+> 
+> Specifically, the rtc ops are serialised by rtc core and the interrupt
+> handler only unconditionally disables the alarm using the alarm_ctrl
+> register.
+> 
+> Note that since only the alarm enable bit of alarm_ctrl is used after
+> enabling the RTC at probe, the locking was not needed when doing open
+> coded read-modify-write cycles either.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/rtc/rtc-pm8xxx.c | 67 +++++++++++++---------------------------
+>  1 file changed, 21 insertions(+), 46 deletions(-)
 
+Reviewed-by: David Collins <quic_collinsd@quicinc.com>
 
-On 02/06/2023 08:48 PM, Jeff Xie wrote:
-> On Mon, Feb 6, 2023 at 8:13 PM Huacai Chen <chenhuacai@kernel.org> wrote:
->>
->> Hi, Jeff,
->>
->> Now I add kprobes on ftrace support in
->> https://github.com/loongson/linux/commits/loongarch-next, please test
->> again. Thank you.
->>
->
-> When using the kprobe example module kprobe_example.ko, I haven't seen
-> any errors.
->
-> But when using the ftrace to probe the symbol + offset, the kernel will panic:
-> e.g. probe the scheduler_tick+4 is fine, but when probe the
-> scheduler_tick+5, the kernel will panic.
->
-
-Thanks for your test.
-
-We can see that the instruction address is 4-byte alignment,
-this is because the instruction length is 32-bit on LoongArch.
-
-$ objdump -d vmlinux > dump.txt
-$ grep -A 20 scheduler_tick dump.txt | head -21
-9000000000279fc8 <scheduler_tick>:
-9000000000279fc8:	03400000 	andi        	$zero, $zero, 0x0
-9000000000279fcc:	03400000 	andi        	$zero, $zero, 0x0
-9000000000279fd0:	02ff4063 	addi.d      	$sp, $sp, -48(0xfd0)
-9000000000279fd4:	29c08077 	st.d        	$s0, $sp, 32(0x20)
-9000000000279fd8:	29c06078 	st.d        	$s1, $sp, 24(0x18)
-9000000000279fdc:	29c04079 	st.d        	$s2, $sp, 16(0x10)
-9000000000279fe0:	29c0207a 	st.d        	$s3, $sp, 8(0x8)
-9000000000279fe4:	29c0a061 	st.d        	$ra, $sp, 40(0x28)
-9000000000279fe8:	2700007b 	stptr.d     	$s4, $sp, 0
-9000000000279fec:	24001844 	ldptr.w     	$a0, $tp, 24(0x18)
-9000000000279ff0:	1a02edd9 	pcalau12i   	$s2, 5998(0x176e)
-9000000000279ff4:	1a034bac 	pcalau12i   	$t0, 6749(0x1a5d)
-9000000000279ff8:	02f56339 	addi.d      	$s2, $s2, -680(0xd58)
-9000000000279ffc:	00410c9a 	slli.d      	$s3, $a0, 0x3
-900000000027a000:	28aae18d 	ld.w        	$t1, $t0, -1352(0xab8)
-900000000027a004:	380c6b2e 	ldx.d       	$t2, $s2, $s3
-900000000027a008:	1a022fcc 	pcalau12i   	$t0, 4478(0x117e)
-900000000027a00c:	02f20198 	addi.d      	$s1, $t0, -896(0xc80)
-900000000027a010:	00150317 	move        	$s0, $s1
-900000000027a014:	004081ac 	slli.w      	$t0, $t1, 0x0
-
-So we should check the probe address at the beginning of
-arch_prepare_kprobe(), some other archs do the same thing.
-
-$ git diff
-diff --git a/arch/loongarch/kernel/kprobes.c 
-b/arch/loongarch/kernel/kprobes.c
-index bdab707b6edf..56c8c4b09a42 100644
---- a/arch/loongarch/kernel/kprobes.c
-+++ b/arch/loongarch/kernel/kprobes.c
-@@ -79,6 +79,9 @@ NOKPROBE_SYMBOL(arch_prepare_simulate);
-
-  int arch_prepare_kprobe(struct kprobe *p)
-  {
-+       if ((unsigned long)p->addr & 0x3)
-+               return -EILSEQ;
-+
-         /* copy instruction */
-         p->opcode = *p->addr;
-
-
-Thanks,
-Tiezhu
+Take care,
+David
 
