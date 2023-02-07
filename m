@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B8168E18C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E4268E191
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjBGTyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 14:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S232086AbjBGTym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 14:54:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231942AbjBGTy3 (ORCPT
+        with ESMTP id S231942AbjBGTyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 14:54:29 -0500
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542E329E3A;
-        Tue,  7 Feb 2023 11:54:23 -0800 (PST)
-Received: by mail-ej1-f54.google.com with SMTP id dr8so45454515ejc.12;
-        Tue, 07 Feb 2023 11:54:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R8L+fDqx/TATGXdlDVn7mRHD70aOLHjjh1VpJFWElUY=;
-        b=jPrPwL/UYa5KvOF27gBPGfTyl57yeOswaFseD1yVSkEKS5YtPp7yuorqh0NXOgK2cv
-         nSRU79ddTx3F1KMkT1k28R9u2hBGYY68/R5GF2elzmyv5MAzS96jLPm1TfNufg0jj0Zx
-         GBVz0hgK9n5PnrAlmY3IdperXquaC8yrpbMTbVE8uW/+e/cfj+LhKi+A+/+nw9MzAY6z
-         dAyArs3gkgmtuc6U0UnO0auP9qyxXmbApumdUhA+dGLDrqbjgSikPsS8CkvDk535Bo89
-         aGq7lX0C0j0nsbvD/rWyhKojz36l3R6eqiNZf+bf4MA0ea2G9izAdEhVU+nj9mfYdBZi
-         Ad4w==
-X-Gm-Message-State: AO0yUKVc8fnlvS8J+iKaRj+qPU+iQBhczOmJeYnniVV3zmVuAcjSbhia
-        djygNOP0RJdbVj9zIBC0KL8SU3lKkO8SkHmkqyMD1B1t
-X-Google-Smtp-Source: AK7set+aVzY12H258It3Xpxffy0h28oufgUAgJSwUd57c+FoWyGTsQsfpCo1xNqWlgKouZn+6j0utz/QP0OCJpfykcQ=
-X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr1230384ejb.274.1675799661789; Tue, 07
- Feb 2023 11:54:21 -0800 (PST)
+        Tue, 7 Feb 2023 14:54:39 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AA73928A;
+        Tue,  7 Feb 2023 11:54:38 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 01EB41EC0589;
+        Tue,  7 Feb 2023 20:54:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675799677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=F01BghZYAExExKb8hKMl8+wgDEDxdqMpIdI7ohJ0mJM=;
+        b=dYX3Lfb9YiBDkJJlJsKeLhm9BYQSXcDLue3zWs9WGdyRbnAGJ8Dq52lzaJYxpdr6aZ7pHv
+        0nho2omyi5OWajNoExaRuyN5VWr4YsvljBeQSNN56jWpfIhgDI/1P9ZtGlQpB4DrTJA4x4
+        SjRvRG2zTF4zb/Ui6Rcz7MKaXwFXvPo=
+Date:   Tue, 7 Feb 2023 20:54:33 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+Message-ID: <Y+KseRfWlnf/bvnF@zn.tnic>
+References: <1673559753-94403-1-git-send-email-mikelley@microsoft.com>
+ <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
+ <Y8r2TjW/R3jymmqT@zn.tnic>
+ <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y9FC7Dpzr5Uge/Mi@zn.tnic>
+ <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+JG9+zdSwZlz6FU@zn.tnic>
+ <BYAPR21MB1688A80B91CC4957D938191ED7DB9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+KndbrS1/1i0IFd@zn.tnic>
+ <BYAPR21MB1688608129815E4F90B9CAA3D7DB9@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230204042902.2555347-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230204042902.2555347-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Feb 2023 20:54:10 +0100
-Message-ID: <CAJZ5v0hPV+hhUqC3i2CWU1NT35tBrTAA20mFnhAudS8xCi8MtA@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: intel_powerclamp: Return last requested state
- as cur_state
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB1688608129815E4F90B9CAA3D7DB9@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 4, 2023 at 5:29 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> When the user is reading cur_state from the thermal cooling device for
-> Intel powerclamp device:
-> - It returns the idle ratio from Package C-state counters when
-> there is active idle injection session.
-> - -1, when there is no active idle injection session.
->
-> This information is not very useful as the package C-state counters vary
-> a lot from read to read. Instead just return the last requested cur_state.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v2:
-> Fixed setting of *state
->
->  drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index 5f54c88b1977..0282503ecaaf 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -539,17 +539,7 @@ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
->                                  unsigned long *state)
->  {
->         mutex_lock(&powerclamp_lock);
-> -
-> -       if (powerclamp_data.clamping) {
-> -               if (poll_pkg_cstate_enable)
-> -                       *state = pkg_cstate_ratio_cur;
-> -               else
-> -                       *state = powerclamp_data.target_ratio;
-> -       } else {
-> -               /* to save power, do not poll idle ratio while not clamping */
-> -               *state = -1; /* indicates invalid state */
-> -       }
-> -
-> +       *state = powerclamp_data.target_ratio;
->         mutex_unlock(&powerclamp_lock);
->
->         return 0;
-> --
+On Tue, Feb 07, 2023 at 07:48:06PM +0000, Michael Kelley (LINUX) wrote:
+> From: Borislav Petkov <bp@alien8.de> Sent: Tuesday, February 7, 2023 11:33 AM
+> > 
+> > On Tue, Feb 07, 2023 at 07:01:25PM +0000, Michael Kelley (LINUX) wrote:
+> > > Unless there are objections, I'll go with CC_ATTR_PARAVISOR_DEVICES,
+> > 
+> > What does "DEVICES" mean in this context?
+> > 
+> > You need to think about !virt people too who are already confused by the
+> > word "paravisor". :-)
+> > 
+> 
+> Maybe I misunderstood your previous comment about "Either 1".   We can
+> avoid "PARAVISOR" entirely by going with two attributes:
 
-Applied as 6.3 material, thanks!
+No, I'm fine with CC_ATTR_PARAVISOR. Why would you have to have
+CC_ATTR_PARAVISOR_DEVICES? I.e., the string "_DEVICES" appended after
+"PARAVISOR". Isn't CC_ATTR_PARAVISOR enough?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
