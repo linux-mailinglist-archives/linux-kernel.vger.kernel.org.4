@@ -2,159 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C730D68D3E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881E668D3F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjBGKRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
+        id S230134AbjBGKVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjBGKR1 (ORCPT
+        with ESMTP id S229925AbjBGKVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:17:27 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E2723132
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:17:26 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id 6so7587535vko.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:17:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bPrtilAJKVUhxbrBamxio2CjQmx+CrJRcxuPGVzs45k=;
-        b=pssdcCwvP27quF2aTGuKZzmApPpisR2l632+QyiiP68had1rAPT5eRROk7FWjFJeMc
-         uwMDwWP4rUj9cZ5XQGiLH0gYdVNev8DBDLvN4qdw6blaN2MJoI7V/e2A+Xho2jMqxPdf
-         akpeQAPksniPJOz59KARWsf0U92ZvolJ44lrRt1/taSFAnlqNgyiAQhk7J2d2/a4fwTj
-         B4teXgtKIZjLSGwjeEuHWJZTzgxjiZfGi1v1elusTIGFRZnRXGLplEkIYR7J5ALqll8d
-         zXe5kS88lmBHMR3AK58Q3l1IRHFghxIHavMnNoP8+T/yyVzLbvAq3uLqISme4aFMwfas
-         KwOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bPrtilAJKVUhxbrBamxio2CjQmx+CrJRcxuPGVzs45k=;
-        b=yTj8zEcDmQ+xPSdLyEOC+3CpMWtI0mSbYmd03oNl3HL5LzHILOMd8ZIyVEtkpqqcLF
-         4bSABOBPo3JfH6cLHarFpCWsGUsJ522Maaddx+T56VMUIRp9xU4orVD3BcG7GfppzYgg
-         YsJEiVJ2raB6YIdfk54lkpwu4Ks6Gm2f6zd/GutlOIrCTAlUulQo4WmVIagPqq0ut9Z7
-         pFeULwSnssvNfCtpDVM6aYDfeBbLBTUwIAuE/psz6vB5SgLWcVrQDnYHrWFYcjwdeb0w
-         YXgAM0Vlhlm23IXJWrwhK/DQ9NvB5hXezgCDvFqikJTUh/47TgMUmSPcyrwIlQkDBeDA
-         zIYQ==
-X-Gm-Message-State: AO0yUKWowO+kBC74WZAS2XnrnHt59zdB9G8+lqsSQWYJwjuPB0ZZDb0s
-        QkKpLVhHNOaRZHPLmLdEzL0Ac5FixqqEUnKmK1aL6g==
-X-Google-Smtp-Source: AK7set+9OKX9NitD6L8UNyZEvBjr/8igyirMEC8nb/njn0S4M5nhl04teC5aADC0Ic8fO43SlijMven9RIQ74gvPu1A=
-X-Received: by 2002:a05:6122:5ab:b0:3ea:135:e0bd with SMTP id
- w11-20020a05612205ab00b003ea0135e0bdmr350219vko.21.1675765045579; Tue, 07 Feb
- 2023 02:17:25 -0800 (PST)
+        Tue, 7 Feb 2023 05:21:20 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2C223C76;
+        Tue,  7 Feb 2023 02:21:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675765278; x=1707301278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y2U9WIJPBm0L0FSDgjHarSz3qorOt0PpIQPRP0xPIhs=;
+  b=P1r2BWA416sRpEVK+ck+im98BF6t1cnVyfrKtoRS8fHn95oIUyaZvSMU
+   q3nNIXwxdWsU/NKXfqwKjkXeBu5pBQzEESZa+1YuxAOFVlFYU40ZbXH6U
+   s8FLS3VQnEP9mX0+icsiS4aqFVHLH0nFsnEk4dHvIzyxwi1VJx68ijTSn
+   Oymr8FRAUPEwhnJQBpFEjs77NJigX8EH6oL8H1D/w4K+EpAi0XK0Uusu6
+   /rmNryV/FsaycESSYhC3+P5+oNqXgkuHpEingHyYVoUrZKxBwWr+cIIC5
+   1/JedTcM4j5BKsL++JK3orBI0+t45NmPC+dRp5O3oCHBXGdYPHOfPAdl0
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="328112313"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="328112313"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 02:21:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="697227157"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="697227157"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2023 02:21:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pPL5v-003Z31-2O;
+        Tue, 07 Feb 2023 12:20:59 +0200
+Date:   Tue, 7 Feb 2023 12:20:59 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v3 04/12] gpiolib: Clear the gpio_device's fwnode
+ initialized flag before adding
+Message-ID: <Y+ImCyHS7ZIr8bNd@smile.fi.intel.com>
+References: <20230207014207.1678715-1-saravanak@google.com>
+ <20230207014207.1678715-5-saravanak@google.com>
 MIME-Version: 1.0
-References: <20230203100418.2981144-1-mie@igel.co.jp> <20230205050122-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230205050122-mutt-send-email-mst@kernel.org>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 7 Feb 2023 19:17:14 +0900
-Message-ID: <CANXvt5q_qgLuAfF7dxxrqUirT_Ld4B=POCq8JcB9uPRvCGDiKg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP function
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Wang <jasowang@redhat.com>, Frank Li <Frank.Li@nxp.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207014207.1678715-5-saravanak@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023=E5=B9=B42=E6=9C=885=E6=97=A5(=E6=97=A5) 19:02 Michael S. Tsirkin <mst@=
-redhat.com>:
->
-> On Fri, Feb 03, 2023 at 07:04:14PM +0900, Shunsuke Mie wrote:
-> > This patchset introduce a virtio-net EP device function. It provides a
-> > new option to communiate between PCIe host and endpoint over IP.
-> > Advantage of this option is that the driver fully uses a PCIe embedded =
-DMA.
-> > It is used to transport data between virtio ring directly each other. I=
-t
-> > can be expected to better throughput.
-> >
-> > To realize the function, this patchset has few changes and introduces a
-> > new APIs to PCI EP framework related to virtio. Furthermore, it device
-> > depends on the some patchtes that is discussing. Those depended patchse=
-t
-> > are following:
-> > - [PATCH 1/2] dmaengine: dw-edma: Fix to change for continuous transfer
-> > link: https://lore.kernel.org/dmaengine/20221223022608.550697-1-mie@ige=
-l.co.jp/
-> > - [RFC PATCH 0/3] Deal with alignment restriction on EP side
-> > link: https://lore.kernel.org/linux-pci/20230113090350.1103494-1-mie@ig=
-el.co.jp/
-> > - [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
-> > link: https://lore.kernel.org/virtualization/20230202090934.549556-1-mi=
-e@igel.co.jp/
-> >
-> > About this patchset has 4 patches. The first of two patch is little cha=
-nges
-> > to virtio. The third patch add APIs to easily access virtio data struct=
-ure
-> > on PCIe Host side memory. The last one introduce a virtio-net EP device
-> > function. Details are in commit respectively.
-> >
-> > Currently those network devices are testd using ping only. I'll add a
-> > result of performance evaluation using iperf and etc to the future vers=
-ion
-> > of this patchset.
->
->
-> All this feels like it'd need a virtio spec extension but I'm not 100%
-> sure without spending much more time understanding this.
-> what do you say?
-This patch shows the virtio-net device as pcie device. Could you tell
-me what part
-of the spec are you concerned about?
+On Mon, Feb 06, 2023 at 05:41:56PM -0800, Saravana Kannan wrote:
+> Registering an irqdomain sets the flag for the fwnode. But having the
+> flag set when a device is added is interpreted by fw_devlink to mean the
+> device has already been initialized and will never probe. This prevents
+> fw_devlink from creating device links with the gpio_device as a
+> supplier. So, clear the flag before adding the device.
 
-> > Shunsuke Mie (4):
-> >   virtio_pci: add a definition of queue flag in ISR
-> >   virtio_ring: remove const from vring getter
-> >   PCI: endpoint: Introduce virtio library for EP functions
-> >   PCI: endpoint: function: Add EP function driver to provide virtio net
-> >     device
-> >
-> >  drivers/pci/endpoint/Kconfig                  |   7 +
-> >  drivers/pci/endpoint/Makefile                 |   1 +
-> >  drivers/pci/endpoint/functions/Kconfig        |  12 +
-> >  drivers/pci/endpoint/functions/Makefile       |   1 +
-> >  .../pci/endpoint/functions/pci-epf-vnet-ep.c  | 343 ++++++++++
-> >  .../pci/endpoint/functions/pci-epf-vnet-rc.c  | 635 ++++++++++++++++++
-> >  drivers/pci/endpoint/functions/pci-epf-vnet.c | 387 +++++++++++
-> >  drivers/pci/endpoint/functions/pci-epf-vnet.h |  62 ++
-> >  drivers/pci/endpoint/pci-epf-virtio.c         | 113 ++++
-> >  drivers/virtio/virtio_ring.c                  |   2 +-
-> >  include/linux/pci-epf-virtio.h                |  25 +
-> >  include/linux/virtio.h                        |   2 +-
-> >  include/uapi/linux/virtio_pci.h               |   2 +
-> >  13 files changed, 1590 insertions(+), 2 deletions(-)
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-ep.c
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-rc.c
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.c
-> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.h
-> >  create mode 100644 drivers/pci/endpoint/pci-epf-virtio.c
-> >  create mode 100644 include/linux/pci-epf-virtio.h
-> >
-> > --
-> > 2.25.1
->
+...
 
-Best,
-Shunsuke
+> +	if (gdev->dev.fwnode && !gdev->dev.fwnode->dev)
+> +		fwnode_dev_initialized(gdev->dev.fwnode, false);
+
+Please, do not dereference fwnode from struct device. We have dev_fwnode()
+for that.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
