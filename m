@@ -2,373 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EEB68DEF9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8135E68DF03
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbjBGRcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S231602AbjBGRdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:33:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjBGRcY (ORCPT
+        with ESMTP id S230421AbjBGRdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:32:24 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70002392B9;
-        Tue,  7 Feb 2023 09:32:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675791143; x=1707327143;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LgaM/eL4ZYtuEB6rT3YB4v9Fo0M7Kdytr6RlmkFy/II=;
-  b=DFNrC77SZHK0FThzgQ1tU88jDG8fQmfN2eDnQykJu/wKhM3vNhvoBrdP
-   g6gs9fpz26lqEvkJ73e5G7JD+exwIwPHss0RiQE/IZPMIXhAwy8jN43wU
-   aG1OzhieXPKvLk7O2AN91108sZtiNa0WzeKbIVVmtEKUgpYvR2/9di6Px
-   5HPY7wKbXggzcwSKcteIukliTIH461FWyG0w/0Lh6VwtaCfDHysCeYWYq
-   Xz53hPDcNyTHfHzkVi0KxIQVNc/6kp+4iZvgzyWyC2fKsJr8LSp7+WhH7
-   NL7WfCv+JT2wljRovZpU1AAlDKVCPPIj1BrwD1xZYVQVoVzaeOzL7Uel0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="331702659"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="331702659"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 09:32:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="699325500"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="699325500"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga001.jf.intel.com with ESMTP; 07 Feb 2023 09:32:21 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v3 2/2] thermal/drivers/intel_powerclamp: Add two module parameters
-Date:   Tue,  7 Feb 2023 09:32:19 -0800
-Message-Id: <20230207173219.4190013-3-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230207173219.4190013-1-srinivas.pandruvada@linux.intel.com>
-References: <20230207173219.4190013-1-srinivas.pandruvada@linux.intel.com>
+        Tue, 7 Feb 2023 12:33:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9733CE32;
+        Tue,  7 Feb 2023 09:33:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E891F60F95;
+        Tue,  7 Feb 2023 17:33:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45330C433EF;
+        Tue,  7 Feb 2023 17:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675791189;
+        bh=OOFodDg/RJjo5qTVphmNP/E/fr/ShyEQVDZAWMtFoM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tXxwcE/gOF0eNx0XF92RAoYkNum7JZnXOZnnavM7kzrO0MQevxJJtXQxPJNmPEoZR
+         tAMLz9nlYUiMrkjH/XKT2k/4CJZ7++RadCYpn6C4IHt8JHwnxoVyjFlB66hlg6cJRQ
+         RtVlmuj69eecz4+uNG9d2OCUVRkR6tgweGdQ7Ag3A9B3i0x3l1Z/3o2JXHp4uErqyf
+         t3GKQ32zFVa94qvR26M0CjRf2YghqCdXlloIl2kbFkmDdMkoXcoi91RlDvfyQm8h4p
+         fB3bxwZHldFOuKK/WwIFRqJvJxjNiXAvBoMPfmM9C2dJCIEbPzS8z2Zbf2jvHi7ZV3
+         3Wl3kMwIvcAmA==
+Date:   Tue, 7 Feb 2023 09:33:04 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     jgross@suse.com, richard.henderson@linaro.org,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        linux-alpha@vger.kernel.org, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, loongarch@lists.linux.dev, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, jiaxun.yang@flygoat.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, ysato@users.sourceforge.jp,
+        dalias@libc.org, linux-sh@vger.kernel.org, davem@davemloft.net,
+        sparclinux@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        linux-xtensa@linux-xtensa.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org
+Subject: [PATCH v1.1 22/22] sched/idle: Mark arch_cpu_idle_dead() __noreturn
+Message-ID: <20230207173304.le5rvsz2emasye7s@treble>
+References: <cover.1675461757.git.jpoimboe@kernel.org>
+ <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2eeb4425572785d1f05d8761dba1cf88c2105304.1675461757.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some use cases, it is desirable to only inject idle on certain set
-of CPUs. For example on Alder Lake systems, it is possible that we force
-idle only on P-Cores for thermal reasons. Also the idle percent can be
-more than 50% if we only choose partial set of CPUs in the system.
+Before commit 076cbf5d2163 ("x86/xen: don't let xen_pv_play_dead()
+return"), in Xen, when a previously offlined CPU was brought back
+online, it unexpectedly resumed execution where it left off in the
+middle of the idle loop.
 
-Introduce 2 new module parameters for this purpose. They can be only
-changed when the cooling device is inactive.
+There were some hacks to make that work, but the behavior was surprising
+as do_idle() doesn't expect an offlined CPU to return from the dead (in
+arch_cpu_idle_dead()).
 
-cpumask (Read/Write): A bit mask of CPUs to inject idle. The format of
-this bitmask is same as used in other subsystems like in
-/proc/irq/*/smp_affinity. The mask is comma separated 32 bit groups.
-Each CPU is one bit. For example for 256 CPU system the full mask is:
-ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
-The leftmost mask is for CPU 0-32.
+Now that Xen has been fixed, and the arch-specific implementations of
+arch_cpu_idle_dead() also don't return, give it a __noreturn attribute.
 
-max_idle (Read/Write): Maximum injected idle time to the total CPU time
-ratio in percent range from 1 to 100. Even if the cooling device max_state
-is always 100 (100%), this parameter allows to add a max idle percent
-limit. The default is 50, to match the current implementation of powerclamp
-driver. Also doesn't allow value more than 75, if the cpumask includes
-every CPU present in the system.
+This will cause the compiler to complain if an arch-specific
+implementation might return.  It also improves code generation for both
+caller and callee.
 
-Also when the cpumask doesn't include every CPU, there is no use of
-compensation using package C-state idle counters. Hence don't start
-package C-state polling thread even for a single package or a single die
-system in this case.
+Also fixes the following warning:
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+  vmlinux.o: warning: objtool: do_idle+0x25f: unreachable instruction
+
+Reported-by: Paul E. McKenney <paulmck@kernel.org>
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
-v3:
-One word document change from leftmost to rightmost
+v1.1:
+- add __noreturn to the implementations (in addition to just the
+  prototype)
 
-v2:
-Addressed comments from v5 series from Rafael
-Build issue reported by Rui
+ arch/alpha/kernel/process.c     | 2 +-
+ arch/arm/kernel/smp.c           | 2 +-
+ arch/arm64/kernel/process.c     | 2 +-
+ arch/csky/kernel/smp.c          | 2 +-
+ arch/ia64/kernel/process.c      | 2 +-
+ arch/loongarch/kernel/process.c | 2 +-
+ arch/mips/kernel/process.c      | 2 +-
+ arch/parisc/kernel/process.c    | 2 +-
+ arch/powerpc/kernel/smp.c       | 2 +-
+ arch/riscv/kernel/cpu-hotplug.c | 2 +-
+ arch/s390/kernel/idle.c         | 2 +-
+ arch/sh/kernel/idle.c           | 2 +-
+ arch/sparc/kernel/process_64.c  | 2 +-
+ arch/x86/kernel/process.c       | 2 +-
+ arch/xtensa/kernel/smp.c        | 2 +-
+ include/linux/cpu.h             | 2 +-
+ tools/objtool/check.c           | 1 +
+ 17 files changed, 17 insertions(+), 16 deletions(-)
 
- .../admin-guide/thermal/intel_powerclamp.rst  |  22 +++
- drivers/thermal/intel/intel_powerclamp.c      | 177 +++++++++++++++---
- 2 files changed, 178 insertions(+), 21 deletions(-)
-
-diff --git a/Documentation/admin-guide/thermal/intel_powerclamp.rst b/Documentation/admin-guide/thermal/intel_powerclamp.rst
-index 3f6dfb0b3ea6..2d9d2d739f02 100644
---- a/Documentation/admin-guide/thermal/intel_powerclamp.rst
-+++ b/Documentation/admin-guide/thermal/intel_powerclamp.rst
-@@ -26,6 +26,8 @@ By:
- 	    - Generic Thermal Layer (sysfs)
- 	    - Kernel APIs (TBD)
- 
-+	(*) Module Parameters
-+
- INTRODUCTION
- ============
- 
-@@ -318,3 +320,23 @@ device, a PID based userspace thermal controller can manage to
- control CPU temperature effectively, when no other thermal influence
- is added. For example, a UltraBook user can compile the kernel under
- certain temperature (below most active trip points).
-+
-+Module Parameters
-+=================
-+
-+``cpumask`` (RW)
-+	A bit mask of CPUs to inject idle. The format of the bitmask is same as
-+	used in other subsystems like in /proc/irq/*/smp_affinity. The mask is
-+	comma separated 32 bit groups. Each CPU is one bit. For example for a 256
-+	CPU system the full mask is:
-+	ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff,ffffffff
-+
-+	The rightmost mask is for CPU 0-32.
-+
-+``max_idle`` (RW)
-+	Maximum injected idle time to the total CPU time ratio in percent range
-+	from 1 to 100. Even if the cooling device max_state is always 100 (100%),
-+	this parameter allows to add a max idle percent limit. The default is 50,
-+	to match the current implementation of powerclamp driver. Also doesn't
-+	allow value more than 75, if the cpumask includes every CPU present in
-+	the system.
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 1390748706a6..6d00ac597b8a 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -37,7 +37,7 @@
- #include <asm/mwait.h>
- #include <asm/cpu_device_id.h>
- 
--#define MAX_TARGET_RATIO (50U)
-+#define MAX_TARGET_RATIO (100U)
- /* For each undisturbed clamping period (no extra wake ups during idle time),
-  * we increment the confidence counter for the given target ratio.
-  * CONFIDENCE_OK defines the level where runtime calibration results are
-@@ -105,10 +105,144 @@ static const struct kernel_param_ops duration_ops = {
- 	.get = param_get_int,
- };
- 
--
- module_param_cb(duration, &duration_ops, &duration, 0644);
- MODULE_PARM_DESC(duration, "forced idle time for each attempt in msec.");
- 
-+#define DEFAULT_MAX_IDLE	50
-+#define MAX_ALL_CPU_IDLE	75
-+
-+static u8 max_idle = DEFAULT_MAX_IDLE;
-+
-+static cpumask_var_t idle_injection_cpu_mask;
-+
-+static int allocate_copy_idle_injection_mask(const struct cpumask *copy_mask)
-+{
-+	if (cpumask_available(idle_injection_cpu_mask))
-+		goto copy_mask;
-+
-+	/* This mask is allocated only one time and freed during module exit */
-+	if (!alloc_cpumask_var(&idle_injection_cpu_mask, GFP_KERNEL))
-+		return -ENOMEM;
-+
-+copy_mask:
-+	cpumask_copy(idle_injection_cpu_mask, copy_mask);
-+
-+	return 0;
-+}
-+
-+/* Return true if the cpumask and idle percent combination is invalid */
-+static bool check_invalid(cpumask_var_t mask, u8 idle)
-+{
-+	if (cpumask_equal(cpu_present_mask, mask) && idle > MAX_ALL_CPU_IDLE)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int cpumask_set(const char *arg, const struct kernel_param *kp)
-+{
-+	cpumask_var_t new_mask;
-+	int ret;
-+
-+	mutex_lock(&powerclamp_lock);
-+
-+	/* Can't set mask when cooling device is in use */
-+	if (powerclamp_data.clamping) {
-+		ret = -EAGAIN;
-+		goto skip_cpumask_set;
-+	}
-+
-+	ret = alloc_cpumask_var(&new_mask, GFP_KERNEL);
-+	if (!ret)
-+		goto skip_cpumask_set;
-+
-+	ret = bitmap_parse(arg, strlen(arg), cpumask_bits(new_mask),
-+			   nr_cpumask_bits);
-+	if (ret)
-+		goto free_cpumask_set;
-+
-+	if (cpumask_empty(new_mask) || check_invalid(new_mask, max_idle)) {
-+		ret = -EINVAL;
-+		goto free_cpumask_set;
-+	}
-+
-+	/*
-+	 * When module parameters are passed from kernel command line
-+	 * during insmod, the module parameter callback is called
-+	 * before powerclamp_init(), so we can't assume that some
-+	 * cpumask can be allocated and copied before here. Also
-+	 * in this case this cpumask is used as the default mask.
-+	 */
-+	ret = allocate_copy_idle_injection_mask(new_mask);
-+
-+free_cpumask_set:
-+	free_cpumask_var(new_mask);
-+skip_cpumask_set:
-+	mutex_unlock(&powerclamp_lock);
-+
-+	return ret;
-+}
-+
-+static int cpumask_get(char *buf, const struct kernel_param *kp)
-+{
-+	if (!cpumask_available(idle_injection_cpu_mask))
-+		return -ENODEV;
-+
-+	return bitmap_print_to_pagebuf(false, buf, cpumask_bits(idle_injection_cpu_mask),
-+				       nr_cpumask_bits);
-+}
-+
-+static const struct kernel_param_ops cpumask_ops = {
-+	.set = cpumask_set,
-+	.get = cpumask_get,
-+};
-+
-+module_param_cb(cpumask, &cpumask_ops, NULL, 0644);
-+MODULE_PARM_DESC(cpumask, "Mask of CPUs to use for idle injection.");
-+
-+static int max_idle_set(const char *arg, const struct kernel_param *kp)
-+{
-+	u8 new_max_idle;
-+	int ret = 0;
-+
-+	mutex_lock(&powerclamp_lock);
-+
-+	/* Can't set mask when cooling device is in use */
-+	if (powerclamp_data.clamping) {
-+		ret = -EAGAIN;
-+		goto skip_limit_set;
-+	}
-+
-+	ret = kstrtou8(arg, 10, &new_max_idle);
-+	if (ret)
-+		goto skip_limit_set;
-+
-+	if (new_max_idle > MAX_TARGET_RATIO) {
-+		ret = -EINVAL;
-+		goto skip_limit_set;
-+	}
-+
-+	if (check_invalid(idle_injection_cpu_mask, new_max_idle)) {
-+		ret = -EINVAL;
-+		goto skip_limit_set;
-+	}
-+
-+	max_idle = new_max_idle;
-+
-+skip_limit_set:
-+	mutex_unlock(&powerclamp_lock);
-+
-+	return ret;
-+}
-+
-+static const struct kernel_param_ops max_idle_ops = {
-+	.set = max_idle_set,
-+	.get = param_get_int,
-+};
-+
-+module_param_cb(max_idle, &max_idle_ops, &max_idle, 0644);
-+MODULE_PARM_DESC(max_idle, "maximum injected idle time to the total CPU time ratio in percent range:1-100");
-+
- struct powerclamp_calibration_data {
- 	unsigned long confidence;  /* used for calibration, basically a counter
- 				    * gets incremented each time a clamping
-@@ -460,21 +594,15 @@ static void trigger_idle_injection(void)
-  */
- static int powerclamp_idle_injection_register(void)
- {
--	/*
--	 * The idle inject core will only inject for online CPUs,
--	 * So we can register for all present CPUs. In this way
--	 * if some CPU goes online/offline while idle inject
--	 * is registered, nothing additional calls are required.
--	 * The same runtime and idle time is applicable for
--	 * newly onlined CPUs if any.
--	 *
--	 * Here cpu_present_mask can be used as is.
--	 * cast to (struct cpumask *) is required as the
--	 * cpu_present_mask is const struct cpumask *, otherwise
--	 * there will be compiler warnings.
--	 */
--	ii_dev = idle_inject_register_full((struct cpumask *)cpu_present_mask,
--					   idle_inject_update);
-+	poll_pkg_cstate_enable = false;
-+	if (cpumask_equal(cpu_present_mask, idle_injection_cpu_mask)) {
-+		ii_dev = idle_inject_register_full(idle_injection_cpu_mask, idle_inject_update);
-+		if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
-+			poll_pkg_cstate_enable = true;
-+	} else {
-+		ii_dev = idle_inject_register(idle_injection_cpu_mask);
-+	}
-+
- 	if (!ii_dev) {
- 		pr_err("powerclamp: idle_inject_register failed\n");
- 		return -EAGAIN;
-@@ -555,7 +683,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
- 	mutex_lock(&powerclamp_lock);
- 
- 	new_target_ratio = clamp(new_target_ratio, 0UL,
--				(unsigned long) (MAX_TARGET_RATIO - 1));
-+				(unsigned long) (max_idle - 1));
- 	if (!powerclamp_data.target_ratio && new_target_ratio > 0) {
- 		pr_info("Start idle injection to reduce power\n");
- 		powerclamp_data.target_ratio = new_target_ratio;
-@@ -646,15 +774,19 @@ static int __init powerclamp_init(void)
- 
- 	/* probe cpu features and ids here */
- 	retval = powerclamp_probe();
-+	if (retval)
-+		return retval;
-+
-+	mutex_lock(&powerclamp_lock);
-+	retval = allocate_copy_idle_injection_mask(cpu_present_mask);
-+	mutex_unlock(&powerclamp_lock);
-+
- 	if (retval)
- 		return retval;
- 
- 	/* set default limit, maybe adjusted during runtime based on feedback */
- 	window_size = 2;
- 
--	if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
--		poll_pkg_cstate_enable = true;
--
- 	cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
- 						      &powerclamp_cooling_ops);
- 	if (IS_ERR(cooling_dev))
-@@ -679,6 +811,9 @@ static void __exit powerclamp_exit(void)
- 
- 	cancel_delayed_work_sync(&poll_pkg_cstate_work);
- 	debugfs_remove_recursive(debug_dir);
-+
-+	if (cpumask_available(idle_injection_cpu_mask))
-+		free_cpumask_var(idle_injection_cpu_mask);
+diff --git a/arch/alpha/kernel/process.c b/arch/alpha/kernel/process.c
+index 94938f856545..c9a5ed23c5a6 100644
+--- a/arch/alpha/kernel/process.c
++++ b/arch/alpha/kernel/process.c
+@@ -60,7 +60,7 @@ void arch_cpu_idle(void)
+ 	wtint(0);
  }
- module_exit(powerclamp_exit);
  
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	wtint(INT_MAX);
+ 	BUG();
+diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
+index adcd417c526b..c2daa0f2f784 100644
+--- a/arch/arm/kernel/smp.c
++++ b/arch/arm/kernel/smp.c
+@@ -320,7 +320,7 @@ void __cpu_die(unsigned int cpu)
+  * of the other hotplug-cpu capable cores, so presumably coming
+  * out of idle fixes this.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	unsigned int cpu = smp_processor_id();
+ 
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 71d59b5abede..089ced6d6bd6 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -69,7 +69,7 @@ void (*pm_power_off)(void);
+ EXPORT_SYMBOL_GPL(pm_power_off);
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+        cpu_die();
+ }
+diff --git a/arch/csky/kernel/smp.c b/arch/csky/kernel/smp.c
+index 0ec20efaf5fd..9c7a20b73ac6 100644
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -300,7 +300,7 @@ void __cpu_die(unsigned int cpu)
+ 	pr_notice("CPU%u: shutdown\n", cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	idle_task_exit();
+ 
+diff --git a/arch/ia64/kernel/process.c b/arch/ia64/kernel/process.c
+index 78f5794b2dde..9a5cd9fad3a9 100644
+--- a/arch/ia64/kernel/process.c
++++ b/arch/ia64/kernel/process.c
+@@ -225,7 +225,7 @@ static inline void __noreturn play_dead(void)
+ }
+ #endif /* CONFIG_HOTPLUG_CPU */
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
+index edfd220a3737..ba70e94eb996 100644
+--- a/arch/loongarch/kernel/process.c
++++ b/arch/loongarch/kernel/process.c
+@@ -61,7 +61,7 @@ unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
+ EXPORT_SYMBOL(boot_option_idle_override);
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 093dbbd6b843..a3225912c862 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -40,7 +40,7 @@
+ #include <asm/stacktrace.h>
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
+index c064719b49b0..97c6f875bd0e 100644
+--- a/arch/parisc/kernel/process.c
++++ b/arch/parisc/kernel/process.c
+@@ -159,7 +159,7 @@ EXPORT_SYMBOL(running_on_qemu);
+ /*
+  * Called from the idle thread for the CPU which has been shutdown.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ #ifdef CONFIG_HOTPLUG_CPU
+ 	idle_task_exit();
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 6b90f10a6c81..f62e5e651bcd 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -1752,7 +1752,7 @@ void __cpu_die(unsigned int cpu)
+ 		smp_ops->cpu_die(cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	/*
+ 	 * Disable on the down path. This will be re-enabled by
+diff --git a/arch/riscv/kernel/cpu-hotplug.c b/arch/riscv/kernel/cpu-hotplug.c
+index f7a832e3a1d1..59b80211c25f 100644
+--- a/arch/riscv/kernel/cpu-hotplug.c
++++ b/arch/riscv/kernel/cpu-hotplug.c
+@@ -71,7 +71,7 @@ void __cpu_die(unsigned int cpu)
+ /*
+  * Called from the idle thread for the CPU which has been shutdown.
+  */
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	idle_task_exit();
+ 
+diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
+index cb653c87018f..481ca32e628e 100644
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@ -143,7 +143,7 @@ void arch_cpu_idle_exit(void)
+ {
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	cpu_die();
+ }
+diff --git a/arch/sh/kernel/idle.c b/arch/sh/kernel/idle.c
+index 114f0c4abeac..d662503b0665 100644
+--- a/arch/sh/kernel/idle.c
++++ b/arch/sh/kernel/idle.c
+@@ -30,7 +30,7 @@ void default_idle(void)
+ 	clear_bl_bit();
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
+index 91c2b8124527..b51d8fb0ecdc 100644
+--- a/arch/sparc/kernel/process_64.c
++++ b/arch/sparc/kernel/process_64.c
+@@ -95,7 +95,7 @@ void arch_cpu_idle(void)
+ }
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	sched_preempt_enable_no_resched();
+ 	cpu_play_dead();
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index f1ec36caf1d8..3e30147a537e 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -727,7 +727,7 @@ void arch_cpu_idle_enter(void)
+ 	local_touch_nmi();
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	play_dead();
+ }
+diff --git a/arch/xtensa/kernel/smp.c b/arch/xtensa/kernel/smp.c
+index 7bad78495536..054bd64eab19 100644
+--- a/arch/xtensa/kernel/smp.c
++++ b/arch/xtensa/kernel/smp.c
+@@ -322,7 +322,7 @@ void __cpu_die(unsigned int cpu)
+ 	pr_err("CPU%u: unable to kill\n", cpu);
+ }
+ 
+-void arch_cpu_idle_dead(void)
++void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	cpu_die();
+ }
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index f83e4519c5f0..8582a7142623 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -182,7 +182,7 @@ void arch_cpu_idle(void);
+ void arch_cpu_idle_prepare(void);
+ void arch_cpu_idle_enter(void);
+ void arch_cpu_idle_exit(void);
+-void arch_cpu_idle_dead(void);
++void __noreturn arch_cpu_idle_dead(void);
+ 
+ int cpu_report_state(int cpu);
+ int cpu_check_up_prepare(int cpu);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 0f67c6a8bc98..e3fa2279d612 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -167,6 +167,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+ 		"__reiserfs_panic",
+ 		"__stack_chk_fail",
+ 		"__ubsan_handle_builtin_unreachable",
++		"arch_cpu_idle_dead",
+ 		"cpu_bringup_and_idle",
+ 		"cpu_startup_entry",
+ 		"do_exit",
 -- 
-2.39.1
+2.39.0
 
