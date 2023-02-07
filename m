@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A3C68D28D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F32568D291
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjBGJUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 04:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S231587AbjBGJU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbjBGJUL (ORCPT
+        with ESMTP id S231535AbjBGJUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:20:11 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E05024C96;
-        Tue,  7 Feb 2023 01:20:10 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id ge21-20020a17090b0e1500b002308aac5b5eso8126565pjb.4;
-        Tue, 07 Feb 2023 01:20:10 -0800 (PST)
+        Tue, 7 Feb 2023 04:20:15 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AFC2386B;
+        Tue,  7 Feb 2023 01:20:13 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id v18-20020a17090ae99200b00230f079dcd9so671640pjy.1;
+        Tue, 07 Feb 2023 01:20:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fuPzabFK+ItSAS4Njr3Xe+weyJyvM5VjKuGON2TO41E=;
-        b=qEusEdBfiDNNg0zGCZwalUdnyayrG6oU5MiTBryyzBd1czaeGECDhBevI1tbbKuDuJ
-         /GGbdoZfVdSIb8QuveSZNeX7jt3CGlNov0mCvuu5QmP0QDf6AAWtl9YrCVwqS4GVGTVm
-         5Ft2CMAKaFlJJ71+JKkQ1NqpAicK7EOTCTW7SLTAcBhI1INeJBrqKB1lh+nWv5J9uKUM
-         UexXt4BVA7UOzfMga1Tpnz8jVLfSUZbonclTlpoHW9qusRxKJAU9AnwZ1cdak1tuyGaQ
-         PyYsx/PHnKkyMJS8FAzdeFGbTM/Nm5Mrzfr12adVAOD4MxCk0hjrDAFAdNhZnjN8I++6
-         FTGw==
+        bh=3OFIOC5oKZ0F+p/C6qXyoQWPtbp1a9uFnXmP1cOo5xc=;
+        b=RCckrOHJt/6VqyUvHwDqR4hyvGBdRsW0dlw51lOl4qRPoiRmUXtVk2h4voIJsUUPzT
+         uMYgFYCIoS6r6p42rj59oqDbAy1gDl6aYBXfcsak3k6DAN1WzdwqsOb13aQ3gaQwghZ1
+         YFHojoYwTHU3rJQEba9U4Fl0VL2Hf5r/nrRoACaZQGcnPNmXPsW3hmGjpsbFrGqwW28I
+         umXq+30/KYeUk4JcV9GwxCBziK9m9cCixAmRhSaevaT+gv3Jlay8+9zSsLfu5aCI/lVF
+         4vG2f/BUwFJDAuitWszUgRLulNRVUaZeOCFs/B/TTr9DJjVnMrDUHVLYkStAcf8kOCRx
+         UNUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fuPzabFK+ItSAS4Njr3Xe+weyJyvM5VjKuGON2TO41E=;
-        b=W6r9kSGRMg6bV/YVE6v4bB26KChclMIDjLLookiReI51Gu8plWhJEDbOUA/Mg7iorG
-         NIEW8OndGtUnP5gbAXckM5EgssPIFatKf0S3JN+PDoAjPdihyjjCiptlet/3NaYvGmxH
-         HAP21pQ8/W09LUnKrsbnRZoIrRyrfe/IdccWcHZ7w5CYge5qs0h+znPgc95O2R59FiKD
-         Ew/PuRhtaZN4FgYV4ODT7qyyy45Qdg7exaroz1+OQQ7DvV8coXCDGn00JrE9EEM1vS/o
-         /T15kXNq88vcacjUrTHwg0Dr1tXojDBj9CNyZ5MSMfSn7yaymjqwd4ZFM22xSg5h9BO+
-         0M7Q==
-X-Gm-Message-State: AO0yUKVRIQMipOzoYMto4za+ELBgZbBbUqe1K+YMlpfzjskchySQD+po
-        4ZlqB/HIloonKsDt1PkfRbM=
-X-Google-Smtp-Source: AK7set/oVVeXo2TGPpYMYfdUuGjB0RDyXCE8/IaXWR+Fn0JwqDiuqoGygI5uS9c6BnH8nSFh/7oqmA==
-X-Received: by 2002:a17:902:c94e:b0:196:88b8:8616 with SMTP id i14-20020a170902c94e00b0019688b88616mr2447248pla.5.1675761610014;
-        Tue, 07 Feb 2023 01:20:10 -0800 (PST)
+        bh=3OFIOC5oKZ0F+p/C6qXyoQWPtbp1a9uFnXmP1cOo5xc=;
+        b=r9PGQ3AowyRC16QRr9ySV3ZmDuwDtu9JOQF+szzWbNXk2weV1p6Mg86xP32GH47/VN
+         SNqbL6gHKGfXQQHxJl0z+NnxqcuR1YhPBK9ngzXfkySB0aU/Iq3qUyzr+3IVPSaNDuMO
+         tP2cB4+WioPn3KNhF492gLvwCmMee43q7bNuEOsIzawR2HpqwD4xR7LNMH/f9UGv7Guf
+         PP0++2L8WF3D06b9uBFPRdXM9VG6+qngnzt2gubU+y2UyXN8TXzgClFzFlquB2Orp7cT
+         HGp0+iFClmSp7Q9d65eXN0E5UDpzMbTkY9ckBqL4rCiWcNjck5LnHVro8lgEBzRn3dx9
+         R6Kg==
+X-Gm-Message-State: AO0yUKXezxXCZO+iVOxgyKD8UZkLoXUZQEvgRAccB5JKG/tabcZ7zND0
+        wLFyEGJ6xLaJdkPch7ka2EA=
+X-Google-Smtp-Source: AK7set9fOvvpWgMDcJz2u3rQ6XeaRoL8y0BrUuZA0oF+0zCMiynADcbV0RWtD/cr9OOcpieGPhlEzQ==
+X-Received: by 2002:a05:6a20:4298:b0:bf:8c0c:978b with SMTP id o24-20020a056a20429800b000bf8c0c978bmr3212423pzj.5.1675761613269;
+        Tue, 07 Feb 2023 01:20:13 -0800 (PST)
 Received: from hcdev-d520mt2.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id io20-20020a17090312d400b0019934030f46sm545327plb.132.2023.02.07.01.20.07
+        by smtp.gmail.com with ESMTPSA id io20-20020a17090312d400b0019934030f46sm545327plb.132.2023.02.07.01.20.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 01:20:09 -0800 (PST)
+        Tue, 07 Feb 2023 01:20:12 -0800 (PST)
 From:   Marvin Lin <milkfafa@gmail.com>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
@@ -59,10 +59,11 @@ To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
 Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         kwliu@nuvoton.com, kflin@nuvoton.com,
-        Marvin Lin <milkfafa@gmail.com>
-Subject: [PATCH v11 1/7] ARM: dts: nuvoton: Add node for NPCM VCD and ECE engine
-Date:   Tue,  7 Feb 2023 17:18:56 +0800
-Message-Id: <20230207091902.2512905-2-milkfafa@gmail.com>
+        Marvin Lin <milkfafa@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v11 2/7] media: dt-bindings: nuvoton: Add NPCM VCD and ECE engine
+Date:   Tue,  7 Feb 2023 17:18:57 +0800
+Message-Id: <20230207091902.2512905-3-milkfafa@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230207091902.2512905-1-milkfafa@gmail.com>
 References: <20230207091902.2512905-1-milkfafa@gmail.com>
@@ -78,56 +79,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add node for Video Capture/Differentiation Engine (VCD) and Encoding
-Compression Engine (ECE) present on Nuvoton NPCM SoCs. Tested with
-Nuvoton NPCM750 evaluation board.
+Add dt-binding document for Video Capture/Differentiation Engine (VCD)
+and Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
 
 Signed-off-by: Marvin Lin <milkfafa@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ .../bindings/media/nuvoton,npcm-ece.yaml      | 43 +++++++++++
+ .../bindings/media/nuvoton,npcm-vcd.yaml      | 72 +++++++++++++++++++
+ 2 files changed, 115 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
 
-diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-index c7b5ef15b716..13a76689e14a 100644
---- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-@@ -179,6 +179,24 @@ fiux: spi@fb001000 {
- 			status = "disabled";
- 		};
- 
-+		vcd: vcd@f0810000 {
-+			compatible = "nuvoton,npcm750-vcd";
-+			reg = <0xf0810000 0x10000>;
-+			interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
-+			resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_VCD>;
-+			nuvoton,sysgcr = <&gcr>;
-+			nuvoton,sysgfxi = <&gfxi>;
-+			nuvoton,ece = <&ece>;
-+			status = "disabled";
-+		};
+diff --git a/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml b/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+new file mode 100644
+index 000000000000..b47468e54504
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/nuvoton,npcm-ece.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+		ece: video-codec@f0820000 {
-+			compatible = "nuvoton,npcm750-ece";
-+			reg = <0xf0820000 0x2000>;
-+			resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_ECE>;
-+			status = "disabled";
-+		};
++title: Nuvoton NPCM Encoding Compression Engine
 +
- 		apb {
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-@@ -554,6 +572,11 @@ i2c15: i2c@8f000 {
- 				pinctrl-0 = <&smb15_pins>;
- 				status = "disabled";
- 			};
++maintainers:
++  - Joseph Liu <kwliu@nuvoton.com>
++  - Marvin Lin <kflin@nuvoton.com>
 +
-+			gfxi: gfxi@e000 {
-+				compatible = "nuvoton,npcm750-gfxi", "syscon";
-+				reg = <0xe000 0x100>;
-+			};
- 		};
- 	};
- 
++description: |
++  Video Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,npcm750-ece
++      - nuvoton,npcm845-ece
++
++  reg:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/reset/nuvoton,npcm7xx-reset.h>
++
++    ece: video-codec@f0820000 {
++        compatible = "nuvoton,npcm750-ece";
++        reg = <0xf0820000 0x2000>;
++        resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_ECE>;
++    };
+diff --git a/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml b/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
+new file mode 100644
+index 000000000000..c885f559d2e5
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/nuvoton,npcm-vcd.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NPCM Video Capture/Differentiation Engine
++
++maintainers:
++  - Joseph Liu <kwliu@nuvoton.com>
++  - Marvin Lin <kflin@nuvoton.com>
++
++description: |
++  Video Capture/Differentiation Engine (VCD) present on Nuvoton NPCM SoCs.
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,npcm750-vcd
++      - nuvoton,npcm845-vcd
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  nuvoton,sysgcr:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to access GCR (Global Control Register) registers.
++
++  nuvoton,sysgfxi:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to access GFXI (Graphics Core Information) registers.
++
++  nuvoton,ece:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to access ECE (Encoding Compression Engine) registers.
++
++  memory-region:
++    maxItems: 1
++    description:
++      CMA pool to use for buffers allocation instead of the default CMA pool.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - resets
++  - nuvoton,sysgcr
++  - nuvoton,sysgfxi
++  - nuvoton,ece
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/reset/nuvoton,npcm7xx-reset.h>
++
++    vcd: vcd@f0810000 {
++        compatible = "nuvoton,npcm750-vcd";
++        reg = <0xf0810000 0x10000>;
++        interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
++        resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_VCD>;
++        nuvoton,sysgcr = <&gcr>;
++        nuvoton,sysgfxi = <&gfxi>;
++        nuvoton,ece = <&ece>;
++    };
 -- 
 2.34.1
 
