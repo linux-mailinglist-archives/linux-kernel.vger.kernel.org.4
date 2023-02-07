@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5DA68E33C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86DA68E33E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjBGWET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 17:04:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S229765AbjBGWHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 17:07:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBGWER (ORCPT
+        with ESMTP id S229732AbjBGWHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 17:04:17 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65A02C665
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 14:04:13 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id r28so13921907oiw.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 14:04:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=18jRupMh16+/uXzavR13DGUSqgv0Qy3QJjjKfXMMewg=;
-        b=LYo/mAKBuROPxd9MzX0DM9RM7tvN7Ac3HLu7QqWSivvZSW0dQrVnw81esfrnPdM1IF
-         Baf9wAawX9uLiGquIocxaJTcuHP2fy29DrpbacRK2HeXuPdr8FiKKj8f7FAQrWkhNIKw
-         tTvNhGoQt8XjYWlKMF1AlcpXyRd9e7m6Uc1V+EHY3ZV+npY3426IoR+g3qlMdtmWEHCf
-         I9R+uUUL72SgOu2edFEXRY59cXCOQ+ySY+Kw9e7ixkYx5zd41smEzJDGUDFLk8HVXvCO
-         b55JnSbTsLv++LGWlTPrxVkt5xcOdoWAtbvI+UZEwoxjfWNhg0AEcUNWlE+J03qBwAzO
-         Bsng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=18jRupMh16+/uXzavR13DGUSqgv0Qy3QJjjKfXMMewg=;
-        b=h1kkUE5vPgtRv6J8FZ+9qjDJ0m/7Lzse6DWXxokh/5wPfE67Wfsuy24VuAbCm9TV8J
-         YckdjKgX1WVzwUfLbbhduTNNqbMGoH8hSDWNaRU8NL8QGQzEIj/eBoGb6YgtIkbMmj2n
-         uoWiBMiUu2X51j7wKZ5f4gSz6uZjaGxNRfSBPe1tMBPoB3jCQtzHgYfAl5btcYRx+3vl
-         h6hZOQXpfzfqlrFgP3IQ8VBrS1XtHdGVP6mwKx+98mkhNa/ZmakDhnfFklKWlO9Fko53
-         uvjf+zEk38rSbbhTpHSbMBbPvyD8DY50UX3xEWXM5FyFARxGhzPwperHOf2Ww4Lu7iBn
-         79ng==
-X-Gm-Message-State: AO0yUKXs0NvzXSyWNufvzTgFshNo+UXCuspQhuGQ/rjpaKD0irfXzISs
-        bvEJrwb7WqwUc6oTgqXHHgu+ciNxvf9oPQ98qwIIHA==
-X-Google-Smtp-Source: AK7set+BetbNycdErPWad6WA0SzBBdjoa67KDl1WBR7VlRJfzkifphWG/++ZPLv2lbbhLocxRhcGA14MNdAVsdaZq6Y=
-X-Received: by 2002:aca:e187:0:b0:378:2684:14a9 with SMTP id
- y129-20020acae187000000b00378268414a9mr29659oig.273.1675807453023; Tue, 07
- Feb 2023 14:04:13 -0800 (PST)
+        Tue, 7 Feb 2023 17:07:16 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C31E4226;
+        Tue,  7 Feb 2023 14:07:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675807630; x=1707343630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZY6Ki7VN2EVVLpc44J2WKNXk7yMANdJzThAVNunvAuc=;
+  b=PuMGcqPM+UP7wVe3NHGH6xmvamGYvMRrftd9r89HnQZIYorGg2gN6EYa
+   21XZDYCoX0rZrMcbiNgmDWTXsPDdT7saUwj7gERojh0IhwUPiXT4ccbEr
+   drNBRh2d8TNhQ8Ipo1mXkeC+VaODqk14+zhcoOUO3eJ+ysmKjBiHO+6KZ
+   kS30LO8jmZpSY06CB8wIXs7TXtbCaqK5io/0/3IpiHJizFkwavjXurfwS
+   yWGkpDH5XaOG1RLl/lHHPYrW3Kvq+ynme5htWkyrBt5KDWkyR8s7qq+Wx
+   p/H24XbIUShlhO27rYYchd2qmiZdm6imwFl2QSHhXb647fW+b9Cn5DfYq
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="392037719"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="392037719"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 14:06:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="755785563"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="755785563"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2023 14:06:51 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pPW6z-003nyL-37;
+        Wed, 08 Feb 2023 00:06:49 +0200
+Date:   Wed, 8 Feb 2023 00:06:49 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kees Cook <keescook@chromium.org>, ionut_n2001@yahoo.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvideo: Silence memcpy() run-time false
+ positive warnings
+Message-ID: <Y+LLeYF7CtLjeLbt@smile.fi.intel.com>
+References: <20230106061659.never.817-kees@kernel.org>
+ <CANiDSCtTz4mpTz4RHBzNXL=yBvXNXHBZQ-HYMFegLytoScW4eA@mail.gmail.com>
+ <202301061217.816FC0313D@keescook>
+ <Y7jODnbUqCwfwwHI@pendragon.ideasonboard.com>
+ <CANiDSCvB8vRp43A1J4BpNZveCvG66XbDmnkKZykbWSFCLX1XUQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230204040452.3699111-1-davidgow@google.com>
-In-Reply-To: <20230204040452.3699111-1-davidgow@google.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 7 Feb 2023 17:03:59 -0500
-Message-ID: <CA+GJov4EV--7zdORh2wy2eN+YY3Wc8RJR0Y05gsu-rHqp3s5oA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Add printf attribute to fail_current_test_impl
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCvB8vRp43A1J4BpNZveCvG66XbDmnkKZykbWSFCLX1XUQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 11:05 PM David Gow <davidgow@google.com> wrote:
->
-> Add the gnu_printf (__printf()) attribute to the
-> kunit_fail_current_test() implementation in
-> __kunit_fail_current_test_impl(). While it's not actually useful here,
-> as this function is never called directly, it nevertheless was
-> triggering -Wsuggest-attribute=format warnings, so we should add it to
-> reduce the noise.
->
-> Fixes: cc3ed2fe5c93 ("kunit: Add "hooks" to call into KUnit when it's built as a module")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: David Gow <davidgow@google.com>
+On Mon, Jan 09, 2023 at 11:46:00AM +0100, Ricardo Ribalda wrote:
+> Hi Laurent
+> 
+> I was thinking about something on the line of the attached patch,
+> 
+> uvc_frame_header->data could also be replaced with a union.
+> 
+> Warning, not tested ;)
 
-Hi David,
+...
 
-I have tested and reviewed this and it looks good to me.
+> +struct uvc_frame_header {
+> +	u8 length;
+> +	u8 flags;
+> +	u8 data[];
+> +} __packed;
 
-Thanks for fixing this!
+__packed! (See below)
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+...
 
-> ---
->  lib/kunit/hooks-impl.h | 4 +++-
->  lib/kunit/test.c       | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/lib/kunit/hooks-impl.h b/lib/kunit/hooks-impl.h
-> index ec745a39832c..4e71b2d0143b 100644
-> --- a/lib/kunit/hooks-impl.h
-> +++ b/lib/kunit/hooks-impl.h
-> @@ -15,7 +15,9 @@
->  #include <kunit/test-bug.h>
->
->  /* List of declarations. */
-> -void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...);
-> +void __printf(3, 4) __kunit_fail_current_test_impl(const char *file,
-> +                                                  int line,
-> +                                                  const char *fmt, ...);
->  void *__kunit_get_static_stub_address_impl(struct kunit *test, void *real_fn_addr);
->
->  /* Code to set all of the function pointers. */
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 51cae59d8aae..c9e15bb60058 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -24,7 +24,7 @@
->  /*
->   * Hook to fail the current test and print an error message to the log.
->   */
-> -void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
-> +void __printf(3, 4) __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
->  {
->         va_list args;
->         int len;
-> --
-> 2.39.1.519.gcb327c4b5f-goog
->
+> +		pts = (u32 *) header->data;
+
+Ai-ai-ai.
+Here is just a yellow flag...
+
+...
+
+>  	uvc_dbg(stream->dev, FRAME,
+>  		"%s(): t-sys %lluns, SOF %u, len %u, flags 0x%x, PTS %u, STC %u frame SOF %u\n",
+>  		__func__, ktime_to_ns(time), meta->sof, meta->length,
+>  		meta->flags,
+> +		has_pts ? *pts : 0,
+
+...and here is a red flag. What you need to have is
+
+	void *pts;
+	u32 pts_val;
+
+	pts_val = get_unaligned_be32(); // or le32
+
+	...use pts_val...
+
+> +		has_scr ? scr->scr : 0,
+> +		has_scr ? scr->frame_sof & 0x7ff : 0);
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
