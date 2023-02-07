@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC74268D4D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961E468D4DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbjBGKvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S231817AbjBGKwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjBGKvS (ORCPT
+        with ESMTP id S230289AbjBGKwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:51:18 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E9D38675
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:51:06 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id y1so13131564wru.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:51:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4zbgcjKYoWJCkhckrue0q7TZn73MXFvSGOBBrPy6j+Y=;
-        b=s4CbjzO6J6A9v5S/sUwlmOQ7sOpwKcZ2drd9lFpEQbKXN0DC52EPkz+/dF0voMq8GJ
-         FNts/ikE6jxXG87f54+V7O0rgTTljqknT1ds8ArF/vffQypPxvR0qvlyXbk3L6yXbdVY
-         Gn12EALOA1vpxLqKowcAKrIkEkl8M2L19faTbEf2sLqE2Jg6cKDdx2PnAJmlFIgV4AEU
-         3lFHFhMENCZKrxRKdedtg5APRkfBelNKXhD+TYty4K1q0FuVwjYbzO/8rj2XsRiiZd+i
-         hyKPekOLBJ7fnv0iJG4dgFHJaziCyrwffYPsQjrgY16GTWzn0HPJX0nl0s2ZWYN2OFQH
-         EKFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4zbgcjKYoWJCkhckrue0q7TZn73MXFvSGOBBrPy6j+Y=;
-        b=o9xKtmUgRhApKM8b7O6e5OErS7WsD+buqxj/Yk+ZLiuGz2PpYrv+4pSGMb6NoLYV8I
-         t+s1ru/1Vdm5o2XmLFFApLQAG00s5TqGiqIcceLBN13UxkeljuQOQkjDNde74IZRFtlJ
-         XC9gO3uBIY74srwy9DoPaaXc9TIcbAd6cxd1Mn3klWYj0ImrIemq+8YF/0q/xo4yidIf
-         teFtP4B/YU34Kws2Fx2c0FOrH4Be03Vhus15HDABLBqRBpMUEzml3Bpc3c3lNvaA1bBx
-         pG7yyTTuYP0ewS7YniC4FQ09RtnrgyokZkVcggkhsHrPf/JFmOjpV/cgUpmJ1cjavlwW
-         tqSA==
-X-Gm-Message-State: AO0yUKX13Z/lkyKpgqtL1u1MUXpUxNIHNT//AJYKuRwMSDX/TGlJ0z8v
-        JkaJvFq+zTReqQc4H1DqaVAOvt/CVybAcysw
-X-Google-Smtp-Source: AK7set8ZyDYnJ2rUSDX4dEM3L1E32b7g2/1USCexOeAEGZ0Q5WtJ5TEnJ2xG8h7Cy4JEcl5mzBt1+Q==
-X-Received: by 2002:a5d:4685:0:b0:2c3:c4cd:2e28 with SMTP id u5-20020a5d4685000000b002c3c4cd2e28mr2209426wrq.26.1675767065169;
-        Tue, 07 Feb 2023 02:51:05 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l5-20020adfe585000000b002c3e3ee7d1asm6316806wrm.79.2023.02.07.02.51.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 02:51:04 -0800 (PST)
-Message-ID: <dff4bad0-c2e2-ff5a-41fa-f419e3d4b957@linaro.org>
-Date:   Tue, 7 Feb 2023 11:51:03 +0100
+        Tue, 7 Feb 2023 05:52:41 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384C410C8;
+        Tue,  7 Feb 2023 02:52:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675767160; x=1707303160;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sOUztMt//nWE+XKIz2ePb4hJ5WIVQx9GXgsItfzAIAA=;
+  b=HQynwof7pHPLyh2dQEuM5OfaqrJ2G3FO53Lcq2yTSqZkzZ8gW75X2c9c
+   MOIZifbWkSotStElBuV+FdUypykewvq27DMOpmKWe1q11RQOgVPSWwOc6
+   FVS4d+6oETiEjOmLeFRcMdXy1lHhoqnk7Sr5FoQ8Mahbe4tykHsw24RYB
+   NSt/jVRVslaGyAcx6+t7LSHENRVLS4XTw8DEQ3WxRFZ/wSUZL7EY4KkAk
+   kgz0I3I/IneRnxNSMA+qBpp2t8Nx1HCZm4exbRt2zKrrm5wX5Z+rGUvjP
+   KcwNRR+ycwbeps22GnYo0C1RUxOoOrP5Sk3CFT6CVw2Ffd3dCqBiu9/oL
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,278,1669100400"; 
+   d="scan'208";a="199639742"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Feb 2023 03:52:39 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 7 Feb 2023 03:52:38 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 03:52:36 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <michael@walle.cc>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next v4 0/2] net: micrel: Add support for lan8841 PHY
+Date:   Tue, 7 Feb 2023 11:52:10 +0100
+Message-ID: <20230207105212.1275396-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/3] dt-bindings: arm: add the SoC ID for qcom SA8775P
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230207100730.218725-1-brgl@bgdev.pl>
- <20230207100730.218725-3-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230207100730.218725-3-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 11:07, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
+Add support for lan8841 PHY.
 
-subject prefixes:
-dt-bindings: arm: qcom:
+The first patch add the support for lan8841 PHY which can run at
+10/100/1000Mbit. It also has support for other features, but they are not
+added in this series.
 
-(or last piece qcom,ids)
+The second patch updates the documentation for the dt-bindings which is
+similar to the ksz9131.
 
-> Add the SoC ID entry for SA8775P.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+v3->v4:
+- add space between defines and function names
+- inside lan8841_config_init use only ret variable
 
+v2->v3:
+- reuse ksz9131_config_init
+- allow only open-drain configuration
+- change from single patch to a patch series
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+v1->v2:
+- Remove hardcoded values
+- Fix typo in commit message
 
-Best regards,
-Krzysztof
+Horatiu Vultur (2):
+  net: micrel: Add support for lan8841 PHY
+  dt-bindings: net: micrel-ksz90x1.txt: Update for lan8841
+
+ .../bindings/net/micrel-ksz90x1.txt           |   1 +
+ drivers/net/phy/micrel.c                      | 189 +++++++++++++++++-
+ include/linux/micrel_phy.h                    |   1 +
+ 3 files changed, 182 insertions(+), 9 deletions(-)
+
+-- 
+2.38.0
 
