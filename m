@@ -2,493 +2,401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A10668DBAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D45968DBB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbjBGOfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S232772AbjBGOf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:35:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbjBGOe0 (ORCPT
+        with ESMTP id S231266AbjBGOeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:34:26 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6113E3EFFE;
-        Tue,  7 Feb 2023 06:30:55 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pPOze-0002Fi-0s;
-        Tue, 07 Feb 2023 15:30:46 +0100
-Date:   Tue, 7 Feb 2023 14:30:42 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v2 10/11] net: ethernet: mtk_eth_soc: switch to external
- PCS driver
-Message-ID: <Y+JgkvmhiC8aL4hG@makrotopia.org>
-References: <cover.1675779094.git.daniel@makrotopia.org>
- <31a51ca7231a2c8fd1e51d11858896cf43bb4aed.1675779094.git.daniel@makrotopia.org>
+        Tue, 7 Feb 2023 09:34:24 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2984A3EFE2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:30:53 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so10127723wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 06:30:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YOpPEC2Awvgh2+il+1cdOelaxS0kr6969CW5gfZdK9s=;
+        b=mvmIayQ6kbXX2V1Crl0tHuqqPSYFLB/Jc8zYwglHDcxyt934fkl+bWG6tLuCpQ1g5M
+         Jb9KOLyEms2XLQ3wir9yiiaWxp2b+zzlB/xYywUOiCIuPwI6UKMcX3PMOvoSNkWe8fkN
+         Nw8Ws+PMzukriLOCXNBIBORq3847BjCpUi1rIvGpmgEUWjDNwdRHURkSNd1oA39bkNTP
+         QaLerpe41EPHHKUA1OnajCdSskROLxC2RJ9KgPNEV15H9cLQdIO+8S7kqxWcA1KA7BRx
+         r6PN8jB5gMHWV7Ltvt/T0Tm+PHOqMBpmj3WxvPkvSnBGvvC/3B63h/jtFoGsKnOVsqij
+         tYLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YOpPEC2Awvgh2+il+1cdOelaxS0kr6969CW5gfZdK9s=;
+        b=vFNYhp2Sxwadf/CAQtLhlm5xpm9SW96oPTvbuM+RCZtDRhzPz5Mc8+bSoioH2Mwdm5
+         yQHA/tXqfG0fagpNdRS5j4EEuGhXjQoHRTNRCX95mkFI3mOphty3LImYUK7Fzklwe6os
+         Ch3JTeaiF55wEPFzzrPbePreLOWP7tf2FqIebpkfwqVtvNz5cpuZ0Y/cvIFazfbSxOdu
+         RWgPgBEi9fzbY8mY/HgC3Fo6ILV1QbZB9N5HC2Dm3FXs4zOXc0+G6/OXMXfJMX6ijlxR
+         GVhj1j4fGgFatoFeOkSSn09PZUvb9TFoz67u8wdNzbxHrDCqJMwNaUO9kmlDAqOePjC4
+         te3A==
+X-Gm-Message-State: AO0yUKWttPBCV5yTY7owgyGx4Y5S6Gdaq4Z0Jg7/om1RD0p/hWaZbVu5
+        i0DB95juXkjEpwocOWRgDWVb3w==
+X-Google-Smtp-Source: AK7set8jcs1Fi07SodeYKm3KsVNy19Z8Ks0GBdzOiILFELxjwbjn+1rpRCWpD+Y0NUJHjqjrlI6mSA==
+X-Received: by 2002:a05:600c:920:b0:3df:d817:df98 with SMTP id m32-20020a05600c092000b003dfd817df98mr3295961wmp.10.1675780248891;
+        Tue, 07 Feb 2023 06:30:48 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id j14-20020a05600c190e00b003daf681d05dsm15344363wmq.26.2023.02.07.06.30.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 06:30:47 -0800 (PST)
+Message-ID: <724a79fe-304d-f8db-c66c-9fdbfac873c8@linaro.org>
+Date:   Tue, 7 Feb 2023 14:30:46 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31a51ca7231a2c8fd1e51d11858896cf43bb4aed.1675779094.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 26/27] virt: gunyah: Add irqfd interface
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-27-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230120224627.4053418-27-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 02:23:48PM +0000, Daniel Golle wrote:
-> Now that we got a PCS driver, use it and remove the now redundant
-> PCS code and it's header macros from the Ethernet driver.
+
+
+On 20/01/2023 22:46, Elliot Berman wrote:
+> Enable support for creating irqfds which can raise an interrupt on a
+> Gunyah virtual machine. irqfds are exposed to userspace as a Gunyah VM
+> function with the name "irqfd". If the VM devicetree is not configured
+> to create a doorbell with the corresponding label, userspace will still
+> be able to assert the eventfd but no interrupt will be raised on the
+> guest.
 > 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 > ---
->  drivers/net/ethernet/mediatek/Kconfig       |   2 +
->  drivers/net/ethernet/mediatek/mtk_eth_soc.c |  13 +-
->  drivers/net/ethernet/mediatek/mtk_eth_soc.h |  80 +-------
->  drivers/net/ethernet/mediatek/mtk_sgmii.c   | 202 +++-----------------
->  4 files changed, 38 insertions(+), 259 deletions(-)
+>   Documentation/virt/gunyah/vm-manager.rst |  22 +++
+>   drivers/virt/gunyah/Kconfig              |   9 ++
+>   drivers/virt/gunyah/Makefile             |   1 +
+>   drivers/virt/gunyah/gunyah_irqfd.c       | 166 +++++++++++++++++++++++
+>   include/linux/gunyah.h                   |   5 +
+>   include/uapi/linux/gunyah.h              |  11 +-
+>   6 files changed, 213 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/virt/gunyah/gunyah_irqfd.c
 > 
-> diff --git a/drivers/net/ethernet/mediatek/Kconfig b/drivers/net/ethernet/mediatek/Kconfig
-> index 97374fb3ee79..da0db417ab69 100644
-> --- a/drivers/net/ethernet/mediatek/Kconfig
-> +++ b/drivers/net/ethernet/mediatek/Kconfig
-> @@ -19,6 +19,8 @@ config NET_MEDIATEK_SOC
->  	select DIMLIB
->  	select PAGE_POOL
->  	select PAGE_POOL_STATS
-> +	select PCS_MTK_LYNXI
-> +	select REGMAP_MMIO
->  	help
->  	  This driver supports the gigabit ethernet MACs in the
->  	  MediaTek SoC family.
-> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> index 97df77c7999e..54e85f54d7fc 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> @@ -4077,6 +4077,7 @@ static int mtk_unreg_dev(struct mtk_eth *eth)
->  
->  static int mtk_cleanup(struct mtk_eth *eth)
->  {
-> +	mtk_sgmii_destroy(eth->sgmii);
->  	mtk_unreg_dev(eth);
->  	mtk_free_dev(eth);
->  	cancel_work_sync(&eth->pending_work);
-> @@ -4580,6 +4581,7 @@ static int mtk_probe(struct platform_device *pdev)
->  		if (!eth->sgmii)
->  			return -ENOMEM;
->  
-> +		eth->sgmii->dev = eth->dev;
->  		err = mtk_sgmii_init(eth->sgmii, pdev->dev.of_node,
->  				     eth->soc->ana_rgc3);
->  
-> @@ -4592,14 +4594,17 @@ static int mtk_probe(struct platform_device *pdev)
->  							    "mediatek,pctl");
->  		if (IS_ERR(eth->pctl)) {
->  			dev_err(&pdev->dev, "no pctl regmap found\n");
-> -			return PTR_ERR(eth->pctl);
-> +			err = PTR_ERR(eth->pctl);
-> +			goto err_destroy_sgmii;
->  		}
->  	}
->  
->  	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
->  		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -		if (!res)
-> -			return -EINVAL;
-> +		if (!res) {
-> +			err = -EINVAL;
-> +			goto err_destroy_sgmii;
-> +		}
->  	}
->  
->  	if (eth->soc->offload_version) {
-> @@ -4749,6 +4754,8 @@ static int mtk_probe(struct platform_device *pdev)
->  
->  	return 0;
->  
-> +err_destroy_sgmii:
-> +	mtk_sgmii_destroy(eth->sgmii);
->  err_deinit_ppe:
->  	mtk_ppe_deinit(eth);
->  	mtk_mdio_cleanup(eth);
-> diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> index c2e0fd773cc2..a72748d80bba 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-> @@ -510,65 +510,6 @@
->  #define ETHSYS_DMA_AG_MAP_QDMA	BIT(1)
->  #define ETHSYS_DMA_AG_MAP_PPE	BIT(2)
->  
-> -/* SGMII subsystem config registers */
-> -/* BMCR (low 16) BMSR (high 16) */
-> -#define SGMSYS_PCS_CONTROL_1	0x0
-> -#define SGMII_BMCR		GENMASK(15, 0)
-> -#define SGMII_BMSR		GENMASK(31, 16)
-> -#define SGMII_AN_RESTART	BIT(9)
-> -#define SGMII_ISOLATE		BIT(10)
-> -#define SGMII_AN_ENABLE		BIT(12)
-> -#define SGMII_LINK_STATYS	BIT(18)
-> -#define SGMII_AN_ABILITY	BIT(19)
-> -#define SGMII_AN_COMPLETE	BIT(21)
-> -#define SGMII_PCS_FAULT		BIT(23)
-> -#define SGMII_AN_EXPANSION_CLR	BIT(30)
-> -
-> -#define SGMSYS_PCS_ADVERTISE	0x8
-> -#define SGMII_ADVERTISE		GENMASK(15, 0)
-> -#define SGMII_LPA		GENMASK(31, 16)
-> -
-> -/* Register to programmable link timer, the unit in 2 * 8ns */
-> -#define SGMSYS_PCS_LINK_TIMER	0x18
-> -#define SGMII_LINK_TIMER_MASK	GENMASK(19, 0)
-> -#define SGMII_LINK_TIMER_DEFAULT	(0x186a0 & SGMII_LINK_TIMER_MASK)
-> -
-> -/* Register to control remote fault */
-> -#define SGMSYS_SGMII_MODE		0x20
-> -#define SGMII_IF_MODE_SGMII		BIT(0)
-> -#define SGMII_SPEED_DUPLEX_AN		BIT(1)
-> -#define SGMII_SPEED_MASK		GENMASK(3, 2)
-> -#define SGMII_SPEED_10			FIELD_PREP(SGMII_SPEED_MASK, 0)
-> -#define SGMII_SPEED_100			FIELD_PREP(SGMII_SPEED_MASK, 1)
-> -#define SGMII_SPEED_1000		FIELD_PREP(SGMII_SPEED_MASK, 2)
-> -#define SGMII_DUPLEX_HALF		BIT(4)
-> -#define SGMII_IF_MODE_BIT5		BIT(5)
-> -#define SGMII_REMOTE_FAULT_DIS		BIT(8)
-> -#define SGMII_CODE_SYNC_SET_VAL		BIT(9)
-> -#define SGMII_CODE_SYNC_SET_EN		BIT(10)
-> -#define SGMII_SEND_AN_ERROR_EN		BIT(11)
-> -#define SGMII_IF_MODE_MASK		GENMASK(5, 1)
-> -
-> -/* Register to reset SGMII design */
-> -#define SGMII_RESERVED_0	0x34
-> -#define SGMII_SW_RESET		BIT(0)
-> -
-> -/* Register to set SGMII speed, ANA RG_ Control Signals III*/
-> -#define SGMSYS_ANA_RG_CS3	0x2028
-> -#define RG_PHY_SPEED_MASK	(BIT(2) | BIT(3))
-> -#define RG_PHY_SPEED_1_25G	0x0
-> -#define RG_PHY_SPEED_3_125G	BIT(2)
-> -
-> -/* Register to power up QPHY */
-> -#define SGMSYS_QPHY_PWR_STATE_CTRL 0xe8
-> -#define	SGMII_PHYA_PWD		BIT(4)
-> -
-> -/* Register to QPHY wrapper control */
-> -#define SGMSYS_QPHY_WRAP_CTRL	0xec
-> -#define SGMII_PN_SWAP_MASK	GENMASK(1, 0)
-> -#define SGMII_PN_SWAP_TX_RX	(BIT(0) | BIT(1))
-> -#define MTK_SGMII_FLAG_PN_SWAP	BIT(0)
-> -
->  /* Infrasys subsystem config registers */
->  #define INFRA_MISC2            0x70c
->  #define CO_QPHY_SEL            BIT(0)
-> @@ -1103,29 +1044,13 @@ struct mtk_soc_data {
->  /* currently no SoC has more than 2 macs */
->  #define MTK_MAX_DEVS			2
->  
-> -/* struct mtk_pcs -    This structure holds each sgmii regmap and associated
-> - *                     data
-> - * @regmap:            The register map pointing at the range used to setup
-> - *                     SGMII modes
-> - * @ana_rgc3:          The offset refers to register ANA_RGC3 related to regmap
-> - * @interface:         Currently configured interface mode
-> - * @pcs:               Phylink PCS structure
-> - * @flags:             Flags indicating hardware properties
-> - */
-> -struct mtk_pcs {
-> -	struct regmap	*regmap;
-> -	u32             ana_rgc3;
-> -	phy_interface_t	interface;
-> -	struct phylink_pcs pcs;
-> -	u32		flags;
-> -};
-> -
->  /* struct mtk_sgmii -  This is the structure holding sgmii regmap and its
->   *                     characteristics
->   * @pcs                Array of individual PCS structures
->   */
->  struct mtk_sgmii {
-> -	struct mtk_pcs	pcs[MTK_MAX_DEVS];
-> +	struct phylink_pcs *pcs[MTK_MAX_DEVS];
-> +	struct device *dev;
->  };
->  
->  /* struct mtk_eth -	This is the main datasructure for holding the state
-> @@ -1353,6 +1278,7 @@ u32 mtk_r32(struct mtk_eth *eth, unsigned reg);
->  struct phylink_pcs *mtk_sgmii_select_pcs(struct mtk_sgmii *ss, int id);
->  int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *np,
->  		   u32 ana_rgc3);
-> +void mtk_sgmii_destroy(struct mtk_sgmii *ss);
->  
->  int mtk_gmac_sgmii_path_setup(struct mtk_eth *eth, int mac_id);
->  int mtk_gmac_gephy_path_setup(struct mtk_eth *eth, int mac_id);
-> diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> index 9c58006d1c33..d4b428e23cfc 100644
-> --- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> +++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-> @@ -10,199 +10,35 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/of.h>
->  #include <linux/phylink.h>
-> +#include <linux/pcs/pcs-mtk-lynxi.h>
->  #include <linux/regmap.h>
->  
->  #include "mtk_eth_soc.h"
->  
-> -static struct mtk_pcs *pcs_to_mtk_pcs(struct phylink_pcs *pcs)
-> -{
-> -	return container_of(pcs, struct mtk_pcs, pcs);
-> -}
-> -
-> -static void mtk_pcs_get_state(struct phylink_pcs *pcs,
-> -			      struct phylink_link_state *state)
-> -{
-> -	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
-> -	unsigned int bm, adv;
-> -
-> -	/* Read the BMSR and LPA */
-> -	regmap_read(mpcs->regmap, SGMSYS_PCS_CONTROL_1, &bm);
-> -	regmap_read(mpcs->regmap, SGMSYS_PCS_ADVERTISE, &adv);
-> -
-> -	phylink_mii_c22_pcs_decode_state(state, FIELD_GET(SGMII_BMSR, bm),
-> -					 FIELD_GET(SGMII_LPA, adv));
-> -}
-> -
-> -static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
-> -			  phy_interface_t interface,
-> -			  const unsigned long *advertising,
-> -			  bool permit_pause_to_mac)
-> -{
-> -	bool mode_changed = false, changed, use_an;
-> -	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
-> -	unsigned int rgc3, sgm_mode, bmcr;
-> -	int advertise, link_timer;
-> -
-> -	advertise = phylink_mii_c22_pcs_encode_advertisement(interface,
-> -							     advertising);
-> -	if (advertise < 0)
-> -		return advertise;
-> -
-> -	/* Clearing IF_MODE_BIT0 switches the PCS to BASE-X mode, and
-> -	 * we assume that fixes it's speed at bitrate = line rate (in
-> -	 * other words, 1000Mbps or 2500Mbps).
-> -	 */
-> -	if (interface == PHY_INTERFACE_MODE_SGMII) {
-> -		sgm_mode = SGMII_IF_MODE_SGMII;
-> -		if (phylink_autoneg_inband(mode)) {
-> -			sgm_mode |= SGMII_REMOTE_FAULT_DIS |
-> -				    SGMII_SPEED_DUPLEX_AN;
-> -			use_an = true;
-> -		} else {
-> -			use_an = false;
-> -		}
-> -	} else if (phylink_autoneg_inband(mode)) {
-> -		/* 1000base-X or 2500base-X autoneg */
-> -		sgm_mode = SGMII_REMOTE_FAULT_DIS;
-> -		use_an = linkmode_test_bit(ETHTOOL_LINK_MODE_Autoneg_BIT,
-> -					   advertising);
-> -	} else {
-> -		/* 1000base-X or 2500base-X without autoneg */
-> -		sgm_mode = 0;
-> -		use_an = false;
-> -	}
-> -
-> -	if (use_an) {
-> -		bmcr = SGMII_AN_ENABLE;
-> -	} else {
-> -		bmcr = 0;
-> -	}
-> -
-> -	if (mpcs->interface != interface) {
-> -		/* PHYA power down */
-> -		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
-> -				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
-> -
-> -		/* Reset SGMII PCS state */
-> -		regmap_update_bits(mpcs->regmap, SGMII_RESERVED_0,
-> -				   SGMII_SW_RESET, SGMII_SW_RESET);
-> -
-> -		if (mpcs->flags & MTK_SGMII_FLAG_PN_SWAP)
-> -			regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_WRAP_CTRL,
-> -					   SGMII_PN_SWAP_MASK,
-> -					   SGMII_PN_SWAP_TX_RX);
-> -
-> -		if (interface == PHY_INTERFACE_MODE_2500BASEX)
-> -			rgc3 = RG_PHY_SPEED_3_125G;
-> -		else
-> -			rgc3 = 0;
-> -
-> -		/* Configure the underlying interface speed */
-> -		regmap_update_bits(mpcs->regmap, mpcs->ana_rgc3,
-> -				   RG_PHY_SPEED_3_125G, rgc3);
-> -
-> -		/* Setup the link timer and QPHY power up inside SGMIISYS */
-> -		link_timer = phylink_get_link_timer_ns(interface);
-> -		if (link_timer < 0)
-> -			return link_timer;
-> -
-> -		regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
-> -
-> -		mpcs->interface = interface;
-> -		mode_changed = true;
-> -	}
-> -
-> -	/* Update the advertisement, noting whether it has changed */
-> -	regmap_update_bits_check(mpcs->regmap, SGMSYS_PCS_ADVERTISE,
-> -				 SGMII_ADVERTISE, advertise, &changed);
-> -
-> -	/* Update the sgmsys mode register */
-> -	regmap_update_bits(mpcs->regmap, SGMSYS_SGMII_MODE,
-> -			   SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN |
-> -			   SGMII_IF_MODE_SGMII, sgm_mode);
-> -
-> -	/* Update the BMCR */
-> -	regmap_update_bits(mpcs->regmap, SGMSYS_PCS_CONTROL_1,
-> -			   SGMII_AN_ENABLE, bmcr);
-> -
-> -	/* Release PHYA power down state
-> -	 * Only removing bit SGMII_PHYA_PWD isn't enough.
-> -	 * There are cases when the SGMII_PHYA_PWD register contains 0x9 which
-> -	 * prevents SGMII from working. The SGMII still shows link but no traffic
-> -	 * can flow. Writing 0x0 to the PHYA_PWD register fix the issue. 0x0 was
-> -	 * taken from a good working state of the SGMII interface.
-> -	 * Unknown how much the QPHY needs but it is racy without a sleep.
-> -	 * Tested on mt7622 & mt7986.
-> -	 */
-> -	usleep_range(50, 100);
-> -	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, 0);
-> -
-> -	return changed || mode_changed;
-> -}
-> -
-> -static void mtk_pcs_restart_an(struct phylink_pcs *pcs)
-> -{
-> -	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
-> -
-> -	regmap_update_bits(mpcs->regmap, SGMSYS_PCS_CONTROL_1,
-> -			   SGMII_AN_RESTART, SGMII_AN_RESTART);
-> -}
-> -
-> -static void mtk_pcs_link_up(struct phylink_pcs *pcs, unsigned int mode,
-> -			    phy_interface_t interface, int speed, int duplex)
-> -{
-> -	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
-> -	unsigned int sgm_mode;
-> -
-> -	if (!phylink_autoneg_inband(mode)) {
-> -		/* Force the speed and duplex setting */
-> -		if (speed == SPEED_10)
-> -			sgm_mode = SGMII_SPEED_10;
-> -		else if (speed == SPEED_100)
-> -			sgm_mode = SGMII_SPEED_100;
-> -		else
-> -			sgm_mode = SGMII_SPEED_1000;
-> -
-> -		if (duplex != DUPLEX_FULL)
-> -			sgm_mode |= SGMII_DUPLEX_HALF;
-> -
-> -		regmap_update_bits(mpcs->regmap, SGMSYS_SGMII_MODE,
-> -				   SGMII_DUPLEX_HALF | SGMII_SPEED_MASK,
-> -				   sgm_mode);
-> -	}
-> -}
-> -
-> -static const struct phylink_pcs_ops mtk_pcs_ops = {
-> -	.pcs_get_state = mtk_pcs_get_state,
-> -	.pcs_config = mtk_pcs_config,
-> -	.pcs_an_restart = mtk_pcs_restart_an,
-> -	.pcs_link_up = mtk_pcs_link_up,
-> -};
-> -
->  int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
->  {
->  	struct device_node *np;
-> +	struct regmap *regmap;
-> +	u32 flags;
->  	int i;
->  
-> -	for (i = 0; i < MTK_MAX_DEVS; i++) {
-> +	for (i = 0; id < MTK_MAX_DEVS; i++) {
-
-This change was unintentional and will break the build. I've fixed it
-for my test builds, but forgot to commit it before sending out the series.
-Please discard for now.
-
->  		np = of_parse_phandle(r, "mediatek,sgmiisys", i);
->  		if (!np)
->  			break;
->  
-> -		ss->pcs[i].ana_rgc3 = ana_rgc3;
-> -		ss->pcs[i].regmap = syscon_node_to_regmap(np);
-> -
-> -		ss->pcs[i].flags = 0;
-> +		regmap = syscon_node_to_regmap(np);
-> +		flags = 0;
->  		if (of_property_read_bool(np, "mediatek,pn_swap"))
-> -			ss->pcs[i].flags |= MTK_SGMII_FLAG_PN_SWAP;
-> +			flags |= MTK_SGMII_FLAG_PN_SWAP;
->  
->  		of_node_put(np);
-> -		if (IS_ERR(ss->pcs[i].regmap))
-> -			return PTR_ERR(ss->pcs[i].regmap);
->  
-> -		ss->pcs[i].pcs.ops = &mtk_pcs_ops;
-> -		ss->pcs[i].pcs.poll = true;
-> -		ss->pcs[i].interface = PHY_INTERFACE_MODE_NA;
-> +		if (IS_ERR(regmap))
-> +			return PTR_ERR(regmap);
+> diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
+> index d11267d59802..b6cf8db826b8 100644
+> --- a/Documentation/virt/gunyah/vm-manager.rst
+> +++ b/Documentation/virt/gunyah/vm-manager.rst
+> @@ -142,3 +142,25 @@ The vcpu type will register with the VM Manager to expect to control
+>   vCPU number `vcpu_id`. It returns a file descriptor allowing interaction with
+>   the vCPU. See the Gunyah vCPU API description sections for interacting with
+>   the Gunyah vCPU file descriptors.
 > +
-> +		ss->pcs[i] = mtk_pcs_lynxi_create(ss->dev, regmap, ana_rgc3,
-> +						  flags);
->  	}
->  
->  	return 0;
-> @@ -210,8 +46,16 @@ int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
->  
->  struct phylink_pcs *mtk_sgmii_select_pcs(struct mtk_sgmii *ss, int id)
->  {
-> -	if (!ss->pcs[id].regmap)
-> -		return NULL;
-> +	return ss->pcs[id];
+> +Type: "irqfd"
+> +^^^^^^^^^^^^^
+> +
+> +::
+> +
+> +  struct gh_fn_irqfd_arg {
+> +	__u32 fd;
+> +	__u32 label;
+> +  #define GH_IRQFD_LEVEL			(1UL << 0)
+> +  #define GH_IRQFD_DEASSIGN		(1UL << 1)
+> +	__u32 flags;
+> +  };
+> +
+> +Allows setting an eventfd to directly trigger a guest interrupt.
+> +irqfd.fd specifies the file descriptor to use as the eventfd.
+> +irqfd.label corresponds to the doorbell label used in the guest VM's devicetree.
+> +The irqfd is removed using the GH_IRQFD_DEASSIGN flag and specifying at least
+> +the irqfd.label.
+> +
+> +GH_IRQFD_LEVEL configures the corresponding doorbell to behave like a level
+> +triggered interrupt.
+> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+> index 4c1c6110b50e..2cde24d429d1 100644
+> --- a/drivers/virt/gunyah/Kconfig
+> +++ b/drivers/virt/gunyah/Kconfig
+> @@ -26,3 +26,12 @@ config GUNYAH_VCPU
+>   	  VMMs can also handle stage 2 faults of the vCPUs.
+>   
+>   	  Say Y/M here if unsure and you want to support Gunyah VMMs.
+> +
+> +config GUNYAH_IRQFD
+> +	tristate "Gunyah irqfd interface"
+> +	depends on GUNYAH
+> +	help
+> +	  Enable kernel support for creating irqfds which can raise an interrupt
+> +	  on Gunyah virtual machine.
+> +
+> +	  Say Y/M here if unsure and you want to support Gunyah VMMs.
+> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+> index 2d1b604a7b03..6cf756bfa3c2 100644
+> --- a/drivers/virt/gunyah/Makefile
+> +++ b/drivers/virt/gunyah/Makefile
+> @@ -7,3 +7,4 @@ gunyah_rsc_mgr-y += rsc_mgr.o rsc_mgr_rpc.o vm_mgr.o vm_mgr_mm.o
+>   obj-$(CONFIG_GUNYAH) += gunyah_rsc_mgr.o
+>   
+>   obj-$(CONFIG_GUNYAH_VCPU) += gunyah_vcpu.o
+> +obj-$(CONFIG_GUNYAH_IRQFD) += gunyah_irqfd.o
+> diff --git a/drivers/virt/gunyah/gunyah_irqfd.c b/drivers/virt/gunyah/gunyah_irqfd.c
+> new file mode 100644
+> index 000000000000..a3be9ca2377a
+> --- /dev/null
+> +++ b/drivers/virt/gunyah/gunyah_irqfd.c
+> @@ -0,0 +1,166 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/eventfd.h>
+> +#include <linux/file.h>
+> +#include <linux/fs.h>
+> +#include <linux/gunyah.h>
+> +#include <linux/gunyah_vm_mgr.h>
+> +#include <linux/kref.h>
+> +#include <linux/module.h>
+> +#include <linux/poll.h>
+> +#include <linux/printk.h>
+> +
+> +#include <uapi/linux/gunyah.h>
+> +
+> +struct gunyah_irqfd {
+> +	struct gunyah_resource *ghrsc;
+> +	struct gunyah_vm_resource_ticket ticket;
+> +	struct gunyah_vm_function *f;
+> +
+> +	struct kref kref;
+> +	bool level;
+> +
+> +	struct eventfd_ctx *ctx;
+> +	wait_queue_entry_t wait;
+> +	poll_table pt;
+> +	struct fd fd;
+> +};
+> +
+> +static void gh_irqfd_cleanup(struct kref *kref)
+> +{
+> +	struct gunyah_irqfd *irqfd = container_of(kref, struct gunyah_irqfd, kref);
+> +
+> +	kfree(irqfd);
 > +}
 > +
-> +void mtk_sgmii_destroy(struct mtk_sgmii *ss)
+> +static int irqfd_wakeup(wait_queue_entry_t *wait, unsigned int mode, int sync, void *key)
 > +{
-> +	int i;
+> +	struct gunyah_irqfd *irqfd = container_of(wait, struct gunyah_irqfd, wait);
+> +	__poll_t flags = key_to_poll(key);
+> +	u64 enable_mask = GH_DBL_NONBLOCK;
+> +	u64 old_flags;
+> +	int ret = 0;
 > +
-> +	if (!ss)
-> +		return;
->  
-> -	return &ss->pcs[id].pcs;
-> +	for (i = 0; i < MTK_MAX_DEVS; i++)
-> +		mtk_pcs_lynxi_destroy(ss->pcs[i]);
->  }
-> -- 
-> 2.39.1
-> 
-> 
+> +	if (flags & EPOLLIN) {
+> +		if (irqfd->ghrsc) {
+> +			ret = gh_hypercall_dbl_send(irqfd->ghrsc->capid, enable_mask, &old_flags);
+> +			if (ret)
+> +				pr_err("Failed to assert irq %d\n", irqfd->f->fn.irqfd.label);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void irqfd_ptable_queue_proc(struct file *file, wait_queue_head_t *wqh, poll_table *pt)
+> +{
+> +	struct gunyah_irqfd *irq_ctx = container_of(pt, struct gunyah_irqfd, pt);
+> +
+> +	add_wait_queue(wqh, &irq_ctx->wait);
+> +}
+> +
+> +static int gunyah_irqfd_populate(struct gunyah_vm_resource_ticket *ticket,
+> +				struct gunyah_resource *ghrsc)
+> +{
+> +	struct gunyah_irqfd *irqfd = container_of(ticket, struct gunyah_irqfd, ticket);
+> +	u64 enable_mask = GH_DBL_NONBLOCK;
+> +	u64 ack_mask = ~0;
+> +	int ret = 0;
+> +
+> +	irqfd->ghrsc = ghrsc;
+> +	if (irqfd->level) {
+> +		ret = gh_hypercall_dbl_set_mask(irqfd->ghrsc->capid, enable_mask, ack_mask);
+> +		if (ret)
+> +			pr_warn("irq %d couldn't be set as level triggered. Might cause IRQ storm if asserted\n",
+> +				irqfd->f->fn.irqfd.label);
+> +	}
+> +	kref_get(&irqfd->kref);
+> +
+> +	return 0;
+> +}
+> +
+> +static void gunyah_irqfd_unpopulate(struct gunyah_vm_resource_ticket *ticket,
+> +					struct gunyah_resource *ghrsc)
+> +{
+> +	struct gunyah_irqfd *irqfd = container_of(ticket, struct gunyah_irqfd, ticket);
+> +	u64 cnt;
+> +
+> +	eventfd_ctx_remove_wait_queue(irqfd->ctx, &irqfd->wait, &cnt);
+> +	eventfd_ctx_put(irqfd->ctx);
+
+> +	fdput(irqfd->fd);
+<--
+> +	irqfd->ctx = NULL;
+> +	irqfd->fd.file = NULL;
+> +	irqfd->ghrsc = NULL;
+-->
+
+How do we know that this is the last reference ?
+
+> +	kref_put(&irqfd->kref, gh_irqfd_cleanup);
+> +}
+> +
+> +static long gunyah_irqfd_bind(struct gunyah_vm_function *f)
+> +{
+> +	__poll_t events;
+> +	struct gunyah_irqfd *irqfd;
+> +	long r;
+> +
+> +	irqfd = kzalloc(sizeof(*irqfd), GFP_KERNEL);
+> +	if (!irqfd)
+> +		return -ENOMEM;
+> +
+> +	irqfd->f = f;
+> +	f->data = irqfd;
+> +
+> +	irqfd->fd = fdget(f->fn.irqfd.fd);
+> +	if (!irqfd->fd.file) {
+> +		r = -EBADF;
+> +		goto err_free;
+> +	}
+> +
+> +	irqfd->ctx = eventfd_ctx_fileget(irqfd->fd.file);
+> +	if (IS_ERR(irqfd->ctx)) {
+> +		r = PTR_ERR(irqfd->ctx);
+> +		goto err_fdput;
+> +	}
+> +
+> +	if (f->fn.irqfd.flags & GH_IRQFD_LEVEL)
+> +		irqfd->level = true;
+> +
+> +	init_waitqueue_func_entry(&irqfd->wait, irqfd_wakeup);
+> +	init_poll_funcptr(&irqfd->pt, irqfd_ptable_queue_proc);
+> +	kref_init(&irqfd->kref);
+> +
+> +	irqfd->ticket.resource_type = GUNYAH_RESOURCE_TYPE_BELL_TX;
+> +	irqfd->ticket.label = f->fn.irqfd.label;
+> +	irqfd->ticket.owner = THIS_MODULE;
+> +	irqfd->ticket.populate = gunyah_irqfd_populate;
+> +	irqfd->ticket.unpopulate = gunyah_irqfd_unpopulate;
+> +
+> +	r = ghvm_add_resource_ticket(f->ghvm, &irqfd->ticket);
+> +	if (r)
+> +		goto err_ctx;
+> +
+> +	events = vfs_poll(irqfd->fd.file, &irqfd->pt);
+> +	if (events & EPOLLIN)
+> +		pr_warn("Premature injection of interrupt\n");
+> +
+> +	return 0;
+> +err_ctx:
+kref_put missing?
+
+> +	eventfd_ctx_put(irqfd->ctx);
+> +err_fdput:
+> +	fdput(irqfd->fd);
+> +err_free:
+> +	kfree(irqfd);
+> +	return r;
+> +}
+> +
+> +static void gunyah_irqfd_release(struct gunyah_vm_function *f)
+> +{
+> +	struct gunyah_irqfd *irqfd = f->data;
+> +
+> +	/* unpopulate will trigger clean up of the eventfd */
+> +	ghvm_remove_resource_ticket(irqfd->f->ghvm, &irqfd->ticket);
+> +}
+> +
+> +DECLARE_GUNYAH_VM_FUNCTION_INIT(irqfd, gunyah_irqfd_bind, gunyah_irqfd_release);
+> +MODULE_DESCRIPTION("Gunyah irqfds");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/linux/gunyah.h b/include/linux/gunyah.h
+> index ac4879940c10..6b363707a901 100644
+> --- a/include/linux/gunyah.h
+> +++ b/include/linux/gunyah.h
+> @@ -33,6 +33,11 @@ struct gunyah_resource {
+>   	u32 rm_label;
+>   };
+>   
+> +/**
+> + * Gunyah Doorbells
+> + */
+> +#define GH_DBL_NONBLOCK		BIT(32)
+> +
+>   /**
+>    * Gunyah Message Queues
+>    */
+> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+> index b4afb11f538a..a947f0317ca9 100644
+> --- a/include/uapi/linux/gunyah.h
+> +++ b/include/uapi/linux/gunyah.h
+> @@ -57,10 +57,19 @@ struct gh_fn_vcpu_arg {
+>   	__u32 vcpu_id;
+>   };
+>   
+> +struct gh_fn_irqfd_arg {
+> +	__u32 fd;
+> +	__u32 label;
+> +#define GH_IRQFD_LEVEL			(1UL << 0)
+> +#define GH_IRQFD_DEASSIGN		(1UL << 1)
+> +	__u32 flags;
+
+same issue here, this is not naturaly aligned.
+
+for details take a look at Documentation/driver-api/ioctl.rst
+
+> +};
+> +
+>   struct gh_vm_function {
+>   	char name[GUNYAH_FUNCTION_NAME_SIZE];
+>   	union {
+> -		struct gh_device_vcpu_arg vcpu;
+> +		struct gh_fn_vcpu_arg vcpu;
+> +		struct gh_fn_irqfd_arg irqfd;
+>   		char data[GUNYAH_FUNCTION_MAX_ARG_SIZE];
+>   	};
+>   };
