@@ -2,151 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7217468DA65
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C3C68DA69
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbjBGOT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S232401AbjBGOUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbjBGOT4 (ORCPT
+        with ESMTP id S232371AbjBGOUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:19:56 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A54D29434;
-        Tue,  7 Feb 2023 06:19:54 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317DcmHH020942;
-        Tue, 7 Feb 2023 14:19:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=k1M9nmRiFDLPQ8oXfcmTfW98qcSBYVvYTWTZ/0q5I4w=;
- b=DZIpm5grI/gZVmCeGCJ0pYqkGEJb4FeOpZqTHjrwW0GHuWOBxqXch9AqKV/hTLPLcuDr
- Mu+JP4Xa3P5aBpn/fDO0b/mbmESlK/IL8HfnXiYVphewn7MSGLQ4L8Qf4qLJuVVlIRpS
- cIaTG5G2u2T+bU7ZGDjOKcjtKQy2qBX/cXQLUs0DMb5JxRdgqGx60RTRTwp3A+0LAV8R
- aPIzNnLmxQU/UqGdO7/I1jXa5e+NLcXYKEM15dHobHh9UHxzUXsB+WmzPb4fX9Wo7ljg
- Jxj6/El5RusyOQ/fWb6lgyOFHRlbb95lMcaUyxqL4xNDn9oW094qQUiWyS/z8UbOD9mx 9Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkfes98dg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 14:19:48 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 317EJlPJ026357
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Feb 2023 14:19:47 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 7 Feb 2023 06:19:47 -0800
-Date:   Tue, 7 Feb 2023 06:19:45 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Tue, 7 Feb 2023 09:20:00 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CFB35267
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:19:58 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id ee13so9104096edb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 06:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ncddaZZzsCJCjKrAiWzC5f6YjHdCJZJ4++SOQQ4JbMo=;
+        b=oQbzvmK0cLGzJH5QVQnHx+5mc3P4weM+Unh0JOo3FPep2+qVVVRF48gdNUfALDg7PD
+         SEV/Y6mGiEnMysUaB/eiudjd5i5WJZvGi7xk2JiPRQSYvjINQfmKu2PVh1kyQcV46qBo
+         oF9vu0XqUT9hT4rDkmxURs6G6RKsJfBYkms0BlLNw28WHk2XPFYHK7o3ePkMH05V8q5k
+         OFu9WeumQqfA80v903ZqampsI5jUomJKVu5eCJV+dLrWxxbQ4XW21V+mYi63Jg2vP/6W
+         N8pH1oZZkwQD0ucjFFFUuR4rCffowbHb2B1v8IFwenGj8API65NSCetlIqVLYSPLe83g
+         uxFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ncddaZZzsCJCjKrAiWzC5f6YjHdCJZJ4++SOQQ4JbMo=;
+        b=4CUnOo52p84CJk4dGFfSYPuWV997QoDQNVsvxWOkfgcp0/qdDqrsksxk5M1irhkANJ
+         6BK6rdq2U0A8BxZoo1pg6q+77TyuXn+lBfA+Gi996i9AhmVOQ/5XIPVJAPK0kzEeixXp
+         GzLtMN9oI/cRerB7FTKnAuHtJpCMQKjnGgwjnPt1s1BvbzXBvLCJTAsoqc9pHQ+hriy1
+         6ZjY5mo3TodmC8h8QnhItntUWhCFmpdf5d9F9KG3YIHp2Vb4MOLkxsVppfiFA7gQKQgw
+         iJj/6edsDm6AO+deqiGOKiM0A0IUPN974Y/3tHBuAo8Nnb2hUUllYU2WtfjNOyCOlIp+
+         d91A==
+X-Gm-Message-State: AO0yUKV0iIB/xnQn9ouy60W2u27mjCYW+EA5lvcv6+FmSpZQi8/5WMVM
+        FAc5ZLOwYgIH/7dQe6RXeSGjWA==
+X-Google-Smtp-Source: AK7set946nsuL321n2/lGqU9eRrqJ9mkSYOuw4VJXij8dCzC+Yqa8ZC2PRnYkxlJF2tt1ThwIoShxQ==
+X-Received: by 2002:a50:d741:0:b0:4a2:3d2e:6502 with SMTP id i1-20020a50d741000000b004a23d2e6502mr3970815edj.4.1675779597008;
+        Tue, 07 Feb 2023 06:19:57 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id fd8-20020a056402388800b004a245350e0fsm6526428edb.36.2023.02.07.06.19.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 06:19:56 -0800 (PST)
+Message-ID: <73ab93b9-be0b-2fc0-81ee-49b4f5780e3e@linaro.org>
+Date:   Tue, 7 Feb 2023 14:19:54 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v9 27/27] virt: gunyah: Add ioeventfd
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v4 4/4] power: supply: Introduce Qualcomm PMIC GLINK
- power supply
-Message-ID: <20230207141945.GA1639831@hu-bjorande-lv.qualcomm.com>
-References: <20230201041853.1934355-1-quic_bjorande@quicinc.com>
- <20230201041853.1934355-5-quic_bjorande@quicinc.com>
- <20230203112720.oa7e2psevbazicqo@mercury.elektranox.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230203112720.oa7e2psevbazicqo@mercury.elektranox.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uC5Zdx35CjGFUL6WPEEJmo0TCVbfweKQ
-X-Proofpoint-ORIG-GUID: uC5Zdx35CjGFUL6WPEEJmo0TCVbfweKQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_05,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- malwarescore=0 spamscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302070126
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-28-quic_eberman@quicinc.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230120224627.4053418-28-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 12:27:20PM +0100, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Tue, Jan 31, 2023 at 08:18:53PM -0800, Bjorn Andersson wrote:
-> ...
-> > +static const enum power_supply_property sm8350_bat_props[] = {
-> > +	POWER_SUPPLY_PROP_STATUS,
-> > +	POWER_SUPPLY_PROP_HEALTH,
-> > +	POWER_SUPPLY_PROP_PRESENT,
-> > +	POWER_SUPPLY_PROP_CHARGE_TYPE,
-> > +	POWER_SUPPLY_PROP_CAPACITY,
-> > +	POWER_SUPPLY_PROP_VOLTAGE_OCV,
-> > +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> > +	POWER_SUPPLY_PROP_VOLTAGE_MAX,
-> > +	POWER_SUPPLY_PROP_CURRENT_NOW,
-> > +	POWER_SUPPLY_PROP_TEMP,
-> > +	POWER_SUPPLY_PROP_TECHNOLOGY,
-> > +	POWER_SUPPLY_PROP_CHARGE_COUNTER,
-> > +	POWER_SUPPLY_PROP_CYCLE_COUNT,
-> > +	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-> > +	POWER_SUPPLY_PROP_CHARGE_FULL,
-> 
-> no CHARGE_NOW?
-> 
-
-This doesn't seem to be exposed by the firmware...
-
-> > +	POWER_SUPPLY_PROP_MODEL_NAME,
-> > +	POWER_SUPPLY_PROP_TIME_TO_FULL_AVG,
-> > +	POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG,
-> > +	POWER_SUPPLY_PROP_POWER_NOW,
-> > +};
-> 
-> ...
-> 
-> > +static struct auxiliary_driver qcom_battmgr_driver = {
-> > +	.name = "pmic_glink_power_supply",
-> > +	.probe = qcom_battmgr_probe,
-> > +	.id_table = qcom_battmgr_id_table,
-> > +};
-> > +
-> > +static int __init qcom_battmgr_init(void)
-> > +{
-> > +	return auxiliary_driver_register(&qcom_battmgr_driver);
-> > +}
-> > +module_init(qcom_battmgr_init);
-> > +
-> > +static void __exit qcom_battmgr_exit(void)
-> > +{
-> > +	auxiliary_driver_unregister(&qcom_battmgr_driver);
-> > +}
-> > +module_exit(qcom_battmgr_exit);
-> 
-> module_auxiliary_driver()
-
-Missed that we have one of those, will update and resend.
-
-> 
-> Otherwise LGTM.
-> 
-> -- Sebastian 
 
 
-Thanks,
-Bjorn
+On 20/01/2023 22:46, Elliot Berman wrote:
+> Allow userspace to attach an ioeventfd to an mmio address within the guest.
+> 
+> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   Documentation/virt/gunyah/vm-manager.rst |  21 +++++
+>   drivers/virt/gunyah/Kconfig              |   9 ++
+>   drivers/virt/gunyah/Makefile             |   1 +
+>   drivers/virt/gunyah/gunyah_ioeventfd.c   | 109 +++++++++++++++++++++++
+>   include/uapi/linux/gunyah.h              |  10 +++
+>   5 files changed, 150 insertions(+)
+>   create mode 100644 drivers/virt/gunyah/gunyah_ioeventfd.c
+
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
+> index a947f0317ca9..3cc387f0831a 100644
+> --- a/include/uapi/linux/gunyah.h
+> +++ b/include/uapi/linux/gunyah.h
+> @@ -65,11 +65,21 @@ struct gh_fn_irqfd_arg {
+>   	__u32 flags;
+>   };
+>   
+> +struct gh_fn_ioeventfd_arg {
+> +	__u64 datamatch;
+> +	__u64 addr;        /* legal mmio address */
+> +	__u32 len;         /* 1, 2, 4, or 8 bytes; or 0 to ignore length */
+> +	__s32 fd;
+> +#define GH_IOEVENTFD_DATAMATCH		(1UL << 0)
+> +	__u32 flags;
+
+This is not naturally aligned, consider adding a reserved __u32 field to 
+be able to make this compatible with both 32 and 64 bit machines.
+
+I see few other uapi structures that suffer exact same issue.
+
+--srini
+
+> +};
+> +
+>   struct gh_vm_function {
+>   	char name[GUNYAH_FUNCTION_NAME_SIZE];
+>   	union {
+>   		struct gh_fn_vcpu_arg vcpu;
+>   		struct gh_fn_irqfd_arg irqfd;
+> +		struct gh_fn_ioeventfd_arg ioeventfd;
+>   		char data[GUNYAH_FUNCTION_MAX_ARG_SIZE];
+>   	};
+>   };
