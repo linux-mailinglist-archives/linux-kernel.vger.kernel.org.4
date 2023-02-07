@@ -2,162 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C03568D17E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B1668D180
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjBGIes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S231173AbjBGIfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 03:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBGIeq (ORCPT
+        with ESMTP id S231171AbjBGIfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:34:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2EF13C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675758834;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aje4RdzF0Q+1EGZpi8bjbDR7Z7zWGOlp8M/MHmqcL8I=;
-        b=Ytevb3zts3RWyZxTWunmlODZXy0dpKPGhWSdFEs2a2rU/g5LSZpyQPAFLDTux4MwaVUWj4
-        L/eLWyRfNmKvlfoBXuefCsQY3JKyUPVD7ClNBSUcVUhOHpdQhQNcGRulJhMQgKOopAJXMC
-        UCo1KsK5aURD+1mV/2KD1cND5BLIJmk=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-272-cMbwZ0zxNfSi5sx11D5grw-1; Tue, 07 Feb 2023 03:33:53 -0500
-X-MC-Unique: cMbwZ0zxNfSi5sx11D5grw-1
-Received: by mail-ed1-f72.google.com with SMTP id g25-20020aa7c859000000b004a3fe4cbb0cso9437812edt.17
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 00:33:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aje4RdzF0Q+1EGZpi8bjbDR7Z7zWGOlp8M/MHmqcL8I=;
-        b=ZwvKtizx6cqXT4uwwVb3+D0DJc+tolF3U7hsyieAPC3c57JJ9dlpURKZmy7HlWGTmK
-         kZtUgJ7k3a1/5zC/sg7inb6hUNN5Y6gWhOMBoyDtDMwifMFBmftDgUOU5DhIfhYJKSMc
-         4GHUz7Rtc2UE9U5lO3UKkPHcNU7U20jvNffF+mqgGmERDvJvjABjBXZad7J6VgEhrkUz
-         e/USRC77TMZj73jNlhPmm8oIpE+1/wSuNex+DpuO2HT8//4ILp2Whs1jf8J3QyvGJjgk
-         3LR93qUWyTPaRaMHVJD9SWsZKVE10V80Mk7dU4ahNmYmPpm47MVeM/bI2uLKQF7m/9my
-         w7tg==
-X-Gm-Message-State: AO0yUKVtg0qaYa8+zH7K/aH1OlS7srOgJSbqxKSqdIPFbUOkdLVgnnBU
-        v5hRTYi0SoRCtNq64MxqkLVwKZngR9EuGpxiCeZF4jqDtWiTGl07QQ0TPDKhKV+Mwz2fNis+AUf
-        WZXcK2Qm/+umergAcrtdU8Lfj
-X-Received: by 2002:a50:cddc:0:b0:4a2:73bb:304b with SMTP id h28-20020a50cddc000000b004a273bb304bmr2521677edj.4.1675758831952;
-        Tue, 07 Feb 2023 00:33:51 -0800 (PST)
-X-Google-Smtp-Source: AK7set+2jeJzPFuAEiychAHoDMvoCLlBTqDbTBF2tPEKgxtQ8/oVa5171ZwQQHW6FB4YIWZakGWb3A==
-X-Received: by 2002:a50:cddc:0:b0:4a2:73bb:304b with SMTP id h28-20020a50cddc000000b004a273bb304bmr2521668edj.4.1675758831798;
-        Tue, 07 Feb 2023 00:33:51 -0800 (PST)
-Received: from imammedo.users.ipa.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id zm9-20020a170906994900b008aa2c0c738bsm300300ejb.214.2023.02.07.00.33.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 00:33:50 -0800 (PST)
-Date:   Tue, 7 Feb 2023 09:33:50 +0100
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Subject: Re: [PATCH v2 2/3] KVM: SVM: Modify AVIC GATag to support max
- number of 512 vCPUs
-Message-ID: <20230207093350.5db155ca@imammedo.users.ipa.redhat.com>
-In-Reply-To: <20230207002156.521736-3-seanjc@google.com>
-References: <20230207002156.521736-1-seanjc@google.com>
-        <20230207002156.521736-3-seanjc@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Tue, 7 Feb 2023 03:35:02 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE372ED66
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675758899; x=1707294899;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7h93IpIj5ozX3HQ0og1Lx/oTF8dHsl4ZE8UKhuKLWso=;
+  b=GPt8KhNxUplMBbYTdV2IdcvueBUwBQhHjamWyO11ncivwofqZW4zWY6/
+   eDSnd7hUW8vtvIRqJw7+scIeXhNQ4aaSwKMrI8tdRYbdyrAA4USUZqmq4
+   +mddcKYgKfj1dgJUJ3jZkx+ngoSrDBgUcqtbSk85CoK7jZFmzKSH2iCLx
+   eBj2tiyu0/9cahcC+U9pv84vG94N11/Jd5xpFFHsBpwpUVaAxRbBwUf/0
+   vx16CWCXIuwZHAJOC36kf/b7GvcAC/3HJwEyIQO5MYpmfpeMB58jN2etd
+   j1MVqs/J9hFWF+dNl0IeFWahIsaJRKuRuQn6vg7VneefReRb/xKWF29xo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="317469640"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="317469640"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 00:34:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="755552657"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="755552657"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2023 00:34:51 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPJRD-0003MK-00;
+        Tue, 07 Feb 2023 08:34:51 +0000
+Date:   Tue, 7 Feb 2023 16:34:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/video/fbdev/omap/omapfb_main.c:549 set_fb_var() warn:
+ inconsistent indenting
+Message-ID: <202302071628.D2cZY8jL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  7 Feb 2023 00:21:55 +0000
-Sean Christopherson <seanjc@google.com> wrote:
+Hi Arnd,
 
-> From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> 
-> Define AVIC_VCPU_ID_MASK based on AVIC_PHYSICAL_MAX_INDEX, i.e. the mask
-> that effectively controls the largest guest physical APIC ID supported by
-> x2AVIC, instead of hardcoding the number of bits to 8 (and the number of
-> VM bits to 24).
+First bad commit (maybe != root cause):
 
-Is there any particular reason not to tie it to max supported by KVM
-KVM_MAX_VCPU_IDS?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   05ecb680708a1dbe6554d6fc17e5d9a8a7cb5e6a
+commit: 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b fbdev: omap: avoid using mach/*.h files
+date:   10 months ago
+config: arm-randconfig-m031-20230207 (https://download.01.org/0day-ci/archive/20230207/202302071628.D2cZY8jL-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
 
-Another question:
- will guest fail to start when configured with more than 512 vCPUs
- or it will start broken?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> The AVIC GATag is programmed into the AMD IOMMU IRTE to provide a
-> reference back to KVM in case the IOMMU cannot inject an interrupt into a
-> non-running vCPU.  In such a case, the IOMMU notifies software by creating
-> a GALog entry with the corresponded GATag, and KVM then uses the GATag to
-> find the correct VM+vCPU to kick.  Dropping bit 8 from the GATag results
-> in kicking the wrong vCPU when targeting vCPUs with x2APIC ID > 255.
-> 
-> Fixes: 4d1d7942e36a ("KVM: SVM: Introduce logic to (de)activate x2AVIC mode")
-> Cc: stable@vger.kernel.org
-> Reported-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 26 ++++++++++++++++++--------
->  1 file changed, 18 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index ca684979e90d..326341a22153 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -27,19 +27,29 @@
->  #include "irq.h"
->  #include "svm.h"
->  
-> -/* AVIC GATAG is encoded using VM and VCPU IDs */
-> -#define AVIC_VCPU_ID_BITS		8
-> -#define AVIC_VCPU_ID_MASK		((1 << AVIC_VCPU_ID_BITS) - 1)
-> +/*
-> + * Encode the arbitrary VM ID and the vCPU's default APIC ID, i.e the vCPU ID,
-> + * into the GATag so that KVM can retrieve the correct vCPU from a GALog entry
-> + * if an interrupt can't be delivered, e.g. because the vCPU isn't running.
-> + *
-> + * For the vCPU ID, use however many bits are currently allowed for the max
-> + * guest physical APIC ID (limited by the size of the physical ID table), and
-> + * use whatever bits remain to assign arbitrary AVIC IDs to VMs.  Note, the
-> + * size of the GATag is defined by hardware (32 bits), but is an opaque value
-> + * as far as hardware is concerned.
-> + */
-> +#define AVIC_VCPU_ID_MASK		AVIC_PHYSICAL_MAX_INDEX_MASK
->  
-> -#define AVIC_VM_ID_BITS			24
-> -#define AVIC_VM_ID_NR			(1 << AVIC_VM_ID_BITS)
-> -#define AVIC_VM_ID_MASK			((1 << AVIC_VM_ID_BITS) - 1)
-> +#define AVIC_VM_ID_SHIFT		HWEIGHT32(AVIC_PHYSICAL_MAX_INDEX_MASK)
-> +#define AVIC_VM_ID_MASK			(GENMASK(31, AVIC_VM_ID_SHIFT) >> AVIC_VM_ID_SHIFT)
->  
-> -#define AVIC_GATAG(x, y)		(((x & AVIC_VM_ID_MASK) << AVIC_VCPU_ID_BITS) | \
-> +#define AVIC_GATAG(x, y)		(((x & AVIC_VM_ID_MASK) << AVIC_VM_ID_SHIFT) | \
->  						(y & AVIC_VCPU_ID_MASK))
-> -#define AVIC_GATAG_TO_VMID(x)		((x >> AVIC_VCPU_ID_BITS) & AVIC_VM_ID_MASK)
-> +#define AVIC_GATAG_TO_VMID(x)		((x >> AVIC_VM_ID_SHIFT) & AVIC_VM_ID_MASK)
->  #define AVIC_GATAG_TO_VCPUID(x)		(x & AVIC_VCPU_ID_MASK)
->  
-> +static_assert(AVIC_GATAG(AVIC_VM_ID_MASK, AVIC_VCPU_ID_MASK) == -1u);
-> +
->  static bool force_avic;
->  module_param_unsafe(force_avic, bool, 0444);
->  
+New smatch warnings:
+drivers/video/fbdev/omap/omapfb_main.c:549 set_fb_var() warn: inconsistent indenting
 
+Old smatch warnings:
+drivers/video/fbdev/omap/omapfb_main.c:551 set_fb_var() warn: inconsistent indenting
+drivers/video/fbdev/omap/omapfb_main.c:556 set_fb_var() warn: inconsistent indenting
+drivers/video/fbdev/omap/omapfb_main.c:558 set_fb_var() warn: inconsistent indenting
+drivers/video/fbdev/omap/omapfb_main.c:1646 omapfb_do_probe() warn: platform_get_irq() does not return zero
+drivers/video/fbdev/omap/omapfb_main.c:1653 omapfb_do_probe() warn: platform_get_irq() does not return zero
+
+vim +549 drivers/video/fbdev/omap/omapfb_main.c
+
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  457  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  458  /*
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  459   * Check the values in var against our capabilities and in case of out of
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  460   * bound values try to adjust them.
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  461   */
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  462  static int set_fb_var(struct fb_info *fbi,
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  463  		      struct fb_var_screeninfo *var)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  464  {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  465  	int		bpp;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  466  	unsigned long	max_frame_size;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  467  	unsigned long	line_size;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  468  	int		xres_min, xres_max;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  469  	int		yres_min, yres_max;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  470  	struct omapfb_plane_struct *plane = fbi->par;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  471  	struct omapfb_device *fbdev = plane->fbdev;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  472  	struct lcd_panel *panel = fbdev->panel;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  473  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  474  	if (set_color_mode(plane, var) < 0)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  475  		return -EINVAL;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  476  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  477  	bpp = var->bits_per_pixel;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  478  	if (plane->color_mode == OMAPFB_COLOR_RGB444)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  479  		bpp = 16;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  480  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  481  	switch (var->rotate) {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  482  	case 0:
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  483  	case 180:
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  484  		xres_min = OMAPFB_PLANE_XRES_MIN;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  485  		xres_max = panel->x_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  486  		yres_min = OMAPFB_PLANE_YRES_MIN;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  487  		yres_max = panel->y_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  488  		if (cpu_is_omap15xx()) {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  489  			var->xres = panel->x_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  490  			var->yres = panel->y_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  491  		}
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  492  		break;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  493  	case 90:
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  494  	case 270:
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  495  		xres_min = OMAPFB_PLANE_YRES_MIN;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  496  		xres_max = panel->y_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  497  		yres_min = OMAPFB_PLANE_XRES_MIN;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  498  		yres_max = panel->x_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  499  		if (cpu_is_omap15xx()) {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  500  			var->xres = panel->y_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  501  			var->yres = panel->x_res;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  502  		}
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  503  		break;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  504  	default:
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  505  		return -EINVAL;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  506  	}
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  507  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  508  	if (var->xres < xres_min)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  509  		var->xres = xres_min;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  510  	if (var->yres < yres_min)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  511  		var->yres = yres_min;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  512  	if (var->xres > xres_max)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  513  		var->xres = xres_max;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  514  	if (var->yres > yres_max)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  515  		var->yres = yres_max;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  516  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  517  	if (var->xres_virtual < var->xres)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  518  		var->xres_virtual = var->xres;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  519  	if (var->yres_virtual < var->yres)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  520  		var->yres_virtual = var->yres;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  521  	max_frame_size = fbdev->mem_desc.region[plane->idx].size;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  522  	line_size = var->xres_virtual * bpp / 8;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  523  	if (line_size * var->yres_virtual > max_frame_size) {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  524  		/* Try to keep yres_virtual first */
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  525  		line_size = max_frame_size / var->yres_virtual;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  526  		var->xres_virtual = line_size * 8 / bpp;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  527  		if (var->xres_virtual < var->xres) {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  528  			/* Still doesn't fit. Shrink yres_virtual too */
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  529  			var->xres_virtual = var->xres;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  530  			line_size = var->xres * bpp / 8;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  531  			var->yres_virtual = max_frame_size / line_size;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  532  		}
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  533  		/* Recheck this, as the virtual size changed. */
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  534  		if (var->xres_virtual < var->xres)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  535  			var->xres = var->xres_virtual;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  536  		if (var->yres_virtual < var->yres)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  537  			var->yres = var->yres_virtual;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  538  		if (var->xres < xres_min || var->yres < yres_min)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  539  			return -EINVAL;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  540  	}
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  541  	if (var->xres + var->xoffset > var->xres_virtual)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  542  		var->xoffset = var->xres_virtual - var->xres;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  543  	if (var->yres + var->yoffset > var->yres_virtual)
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  544  		var->yoffset = var->yres_virtual - var->yres;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  545  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  546  	if (plane->color_mode == OMAPFB_COLOR_RGB444) {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  547  		var->red.offset	  = 8; var->red.length	 = 4;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  548  						var->red.msb_right   = 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17 @549  		var->green.offset = 4; var->green.length = 4;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  550  						var->green.msb_right = 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  551  		var->blue.offset  = 0; var->blue.length  = 4;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  552  						var->blue.msb_right  = 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  553  	} else {
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  554  		var->red.offset	 = 11; var->red.length	 = 5;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  555  						var->red.msb_right   = 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  556  		var->green.offset = 5;  var->green.length = 6;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  557  						var->green.msb_right = 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  558  		var->blue.offset = 0;  var->blue.length  = 5;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  559  						var->blue.msb_right  = 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  560  	}
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  561  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  562  	var->height		= -1;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  563  	var->width		= -1;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  564  	var->grayscale		= 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  565  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  566  	/* pixclock in ps, the rest in pixclock */
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  567  	var->pixclock		= 10000000 / (panel->pixel_clock / 100);
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  568  	var->left_margin	= panel->hfp;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  569  	var->right_margin	= panel->hbp;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  570  	var->upper_margin	= panel->vfp;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  571  	var->lower_margin	= panel->vbp;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  572  	var->hsync_len		= panel->hsw;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  573  	var->vsync_len		= panel->vsw;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  574  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  575  	/* TODO: get these from panel->config */
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  576  	var->vmode		= FB_VMODE_NONINTERLACED;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  577  	var->sync		= 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  578  
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  579  	return 0;
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  580  }
+8b08cf2b64f5a6 drivers/video/omap/omapfb_main.c Imre Deak 2007-07-17  581  
+
+:::::: The code at line 549 was first introduced by commit
+:::::: 8b08cf2b64f5a60594b07795b2ad518c6d044566 OMAP: add TI OMAP framebuffer driver
+
+:::::: TO: Imre Deak <imre.deak@solidboot.com>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
