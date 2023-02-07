@@ -2,511 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1377268CCE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A832368CD0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjBGCzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S230196AbjBGDBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 22:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjBGCzr (ORCPT
+        with ESMTP id S229667AbjBGDAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:55:47 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057F434C37
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 18:55:44 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vb4xRPa_1675738540;
-Received: from 30.97.49.4(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vb4xRPa_1675738540)
-          by smtp.aliyun-inc.com;
-          Tue, 07 Feb 2023 10:55:41 +0800
-Message-ID: <126ddd77-edae-d942-6fec-fe6bcc3c54ff@linux.alibaba.com>
-Date:   Tue, 7 Feb 2023 10:55:40 +0800
+        Mon, 6 Feb 2023 22:00:38 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CFF35274;
+        Mon,  6 Feb 2023 19:00:35 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 316KDw60024677;
+        Tue, 7 Feb 2023 02:59:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=x3yfkIF61NtJvUeIXWIEiM9DfOna4/Sh6rkeHIWAD6U=;
+ b=I+/+de6cUJPDZxSqWjq9csMIiWonHhb01cFT8p1SVF2DKLiodSPJJycq7t0eEG383N2v
+ 6FEESBI2iCaa5xuCwcmLfwRa683eRrPHhtWJ10gxyTKr3aZGs3aNHYsVsre/GF2PklLo
+ BhsTX3CGI14W4AJFSN1h8sDN8MlBrF7NWdxYMt97G55iySkj9Vn6me/effDX7YY0W2/K
+ syqkmlZaZhGESL0r6Xw0cVGHjxQUjWINUX7iyq0b4QYAYVGvlxe4Bp9FPIRUvJRVndu8
+ 5Zhq6cILXwPJ/xsPrxVxL3ZuTrFkER/7XKJyXuDGudIWS5VqWAnXoX66panYZD1uiBZT ow== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhfwu4ckq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Feb 2023 02:59:58 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 3172svPo001622;
+        Tue, 7 Feb 2023 02:59:57 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdtbfngs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Feb 2023 02:59:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YJiCLvTm7yNCfxSisVGSbkno18V+fwtWhW2MsFwFH5Ud87dKvBoJ1cCfa6JvAAKdToU10bkbo8l367mivo0fme96ylrKs/qJDxmVhfmR+4hvBsHqT9oLsmLM7dpUVlJqgjv3DT1flQmvyB0Ii73b9WY+SHCBuG4gXPiIycEzp23Ja9dReSbEIIMQzkIcZkwhwEJXPvgvXZ3INGvZi8w5cnVAjRJBZwdCxE3ONFNihIWJp/1OlJm6DQR6cR9M82u7PRqMz2q9LLfpAv07WQgLwz2U8DAaMI+AXaVpvoapva15RM+SGlVJ25A6nTxECPDWh55+LlMSUwmPbvJbVeACxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x3yfkIF61NtJvUeIXWIEiM9DfOna4/Sh6rkeHIWAD6U=;
+ b=Wt01SiJu2LAZmoXGCypI5/xvdIVn0zg/5X4patE5F5/xf++vyoSWXY8IIM3Ml8zz7K6Rv8FsBX3gU/yH2p60sExe2q2JsoMjv5iIg5F3MM+Yl+cuG/Ph0iVHWLzDDdCcuvrRHOt85zD0RZ4eeOJHJceKL6cJX+DedOE1DARKa6v2xj4C+GySdXVJEefIKPx/nwUZvq4i4hPsKjbydhfsFhNwbLl/yKk4mYxHVdr4Z7O0WYc4g92pU0ApNBGSS7GLkK86Yg3JpP3xJIb0moPzwj+VT21pRvagxqKAshuE62gHmlaws7O0OFmWpInU+zZzdFGoCb+AZU8Wq1d9U/k3lQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x3yfkIF61NtJvUeIXWIEiM9DfOna4/Sh6rkeHIWAD6U=;
+ b=TNNaSkju0Nx8ufKmw9Tw1oRaaAURuH/LA2VTtKQyBLJbgcBych4hnV3oDFX/gfj+Z3XEtpCGgHoSbs15q1vwJt9oWgftEvOHQncc2YEAnjN/6eJsoJvmT6ICZs47sN8DklCa1p+xn7b3YOilq7x0293QZxSmhyNvF/RHT5IjqUo=
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com (2603:10b6:610:ac::13)
+ by SA2PR10MB4602.namprd10.prod.outlook.com (2603:10b6:806:f8::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.7; Tue, 7 Feb
+ 2023 02:59:55 +0000
+Received: from CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::7c66:aec8:b4fd:4554]) by CH2PR10MB4150.namprd10.prod.outlook.com
+ ([fe80::7c66:aec8:b4fd:4554%9]) with mapi id 15.20.6086.011; Tue, 7 Feb 2023
+ 02:59:54 +0000
+From:   Eric Snowberg <eric.snowberg@oracle.com>
+To:     jarkko@kernel.org, zohar@linux.ibm.com, dhowells@redhat.com,
+        dwmw2@infradead.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, tadeusz.struk@intel.com,
+        eric.snowberg@oracle.com, kanth.ghatraju@oracle.com,
+        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
+        coxu@redhat.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v4 0/6] Add CA enforcement keyring restrictions
+Date:   Mon,  6 Feb 2023 21:59:52 -0500
+Message-Id: <20230207025958.974056-1-eric.snowberg@oracle.com>
+X-Mailer: git-send-email 2.27.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SA9PR11CA0024.namprd11.prod.outlook.com
+ (2603:10b6:806:6e::29) To CH2PR10MB4150.namprd10.prod.outlook.com
+ (2603:10b6:610:ac::13)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v4] erofs: replace erofs_unzipd workqueue with per-cpu
- threads
-To:     Sandeep Dhavale <dhavale@google.com>
-References: <20230106073502.4017276-1-dhavale@google.com>
- <Y+DP6V9fZG7XPPGy@debian>
- <CAB=BE-Ttt6mO6x+xNv+VSWnoRgzXd_VyQuYiuz55uR3zqxWMFA@mail.gmail.com>
-Cc:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <CAB=BE-Ttt6mO6x+xNv+VSWnoRgzXd_VyQuYiuz55uR3zqxWMFA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PR10MB4150:EE_|SA2PR10MB4602:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1aaaa8c7-7db1-497f-c4ef-08db08b7639b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gfKnG72vj4S3kkalR/km7ttTyp5TwPQnzsrlFUH1gq0NZGahQlO5Yf9/iqV8R3F4vdy8Gk2Y/5t2uV8q/mzcBVqtEGgZehFx0kCt/KgOMj6Ua5K3x3vAKtui2QZXvY/7/f+IPcIaGsFVfnR6KJuRePkm04pVWWzq/Gk+hXI8sm2MoRNcUGRN9tDo9HwOizPBx3YEr2as6IFNndCi57w48lmE+Vd3k0XG1JMRA4hIMCfer0hgPzI3n8a2/5lTw0GIlaRc6jGcy1f+LvphETEpwZTQN0nRykfisaq2xvVnW2o0wBN9ewpDCE+R25b1RnSC9yy0lEU8ID8jLj+L6JBtWIct1KdL8mdKgDHGipDTibgP/u00fnjPACv8cZ3s0E6GB7SXEgxoAoR8s617QmhTr5ZQ36b9QaXyPAlMX+N2lc3HyAD7wDSOyjas5wKwNaDODgdDQFK4oDEPo9hXaPBb2kNP1vsKcrBXvWJlRX+vwpUKXxqv20/+DhP0ftcb7Sn0ylfh652q5t8/yFeOxoZ37aGLQecFQkd/zFg2dQ/B2sFnk4J8RmoUSh8cwzUv6ZE38YkMnQJmJGcTpbMHOxVvJOeqWOQHruhyY34YO3sKSsPrEINBW7vkrm3G4+H550oar7uIYo4Q/cGP1ExqPv4jQA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4150.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(346002)(39860400002)(136003)(376002)(366004)(451199018)(66476007)(7416002)(6506007)(36756003)(38100700002)(316002)(186003)(6512007)(6486002)(478600001)(44832011)(86362001)(1076003)(8936002)(5660300002)(4326008)(83380400001)(66946007)(2616005)(66556008)(41300700001)(2906002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KrvYmZSYr1E0evqOp8AJQeL1xR5yr5ilyP8LPi6rpSGALhv+bbynEunAAtCM?=
+ =?us-ascii?Q?LR/aM9UrDjD1tjvb2y7DqqVAzxiGEtyRoidfeoagojzFjHRlZFSyZ5mCrUZ0?=
+ =?us-ascii?Q?A+gu90VrYyfNIrwGSsEhCCW3hLG0Oo4qGQkdk6/j0uMGTOnE0X1a51zZftzr?=
+ =?us-ascii?Q?MVmCyle9q1pj9xwGtQ3c9USMpuhiE5iOcd0xMGXTm+5rRDPna2W330/JTRqt?=
+ =?us-ascii?Q?4ja7hGMFynoj8GZQedF6400mQsQwYZwnDFizjfIduUg3tKrwMlAuVmJMPWLp?=
+ =?us-ascii?Q?77TnSiMjh/VZ2KpSerpfviYEOu7wUAn0eaKzJIo4zzecGeC5pK+9eCTKLRB6?=
+ =?us-ascii?Q?ozL7Jhc3ys2+phsPUWjG5qUQF0CNBLUHhCClXwcdfHMMDhgkm1rh0yFrNSMD?=
+ =?us-ascii?Q?Dm2DKRXj77Y0vomt2/Rgat5L+8o9aW1yoUsqiD809g4cb5BM4p4ORhqvQzUC?=
+ =?us-ascii?Q?FoHZGMmHvTFhGa32gdBVHOgQ7LHxUhOU+mXWWGCtDrgnMmE+sz2cPaWS3vW8?=
+ =?us-ascii?Q?/Cdf3NN52ePFbbd2FJXit6nMmTLKZ9lw41Qe53J0bL0hCLWJkB5ZqloC4f/8?=
+ =?us-ascii?Q?+76cGU0QUP272Z/PhIzQ0rCcnsEr2OyYMcZbCoxAHFWavgpJQ8CHybef9ysm?=
+ =?us-ascii?Q?IgdCstg4Yf1OSIVkPoSybSsq1D8YLhPzS0DgjlGQ+3g1ZqUKuusoIpfQV/kK?=
+ =?us-ascii?Q?ViQyHGs9ZLSEUdkmzTe0pbvhx1RjfdN3BXw8ZaHVZUNdvSiS7gjGxXx+iYVN?=
+ =?us-ascii?Q?ZV8FdUmUvEUIISQYCAeZdGeD0yhAjmH3HZPMfHumTyeWf+370k0UZovh1s8i?=
+ =?us-ascii?Q?LjPciq86bocrQFP+hYZfffxd5ZRCCmmHvll3rUCtiDONh4G9zugdaUBUG0Jm?=
+ =?us-ascii?Q?sVdCaVKbrxvrCwFYbKH5aATJUA0v7mA1yT7GcXpUlAqhl+sEjqw7AZ+36kyv?=
+ =?us-ascii?Q?Fv4xP2aSGi6DYGNkp3GMzJ2MqF9nV5eyECTFTLLNHWohgrFm+GN9bQZvHXwy?=
+ =?us-ascii?Q?C2Mvw+pzzxuH83jIOI/W/wya9aD7DRiqQIyIoV4xoaWnM6LnbDU+SZwk7o+E?=
+ =?us-ascii?Q?Gb0pyfFJ9uK80I02kpOcITJ+soSsRzgMPUUtUcv9XzIclR1G/sKkQkwjngCO?=
+ =?us-ascii?Q?+Qws7OwwlWlo0GFuiOQlxwfLidJewUrH03mOlb5E2pNpGF1z/hRUqD7IuEkD?=
+ =?us-ascii?Q?NdLwFoJpSMzIdEjxSMsEUFc38YjAC3BqHnpl7nmB1xuPLfDkPmCRGuTFhkit?=
+ =?us-ascii?Q?bcuhjR5nmulyJBb8KmDRQMi2IL1hGlk5cdp+uiuP5YGX0enlZbLig7nJ4wwa?=
+ =?us-ascii?Q?yvIBqsOT1gvL/F2TgfaOR8IjSL9Vtnia1thUboNPWr5ec8ujsOsjSAeI+kqu?=
+ =?us-ascii?Q?/inOhV6+8+uTGSpv5pdw/vEUSR6oTr22m9ZAGu2boxCskj2O8SMPEhIvb62b?=
+ =?us-ascii?Q?xlwIsOcekb7f8bO96nbC94de6UPhSUrwbqBTN3Bx95g2J/9cGaYSZwvKZ68t?=
+ =?us-ascii?Q?ilMQmdAy3aXt4+YqlTjMCuyrFVF9CV7PGgLihM+GVFXDyDipmS7kHeLJPaY3?=
+ =?us-ascii?Q?puGVQ9m8Z6Nid8vFAIi3qIdt86P/C/XRz1KplShLOdAbRU7qI+P33sPxCCmb?=
+ =?us-ascii?Q?edL6rituwCZdNAmlPR7XqfA=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?TjcRjz/3pbxckW8o2GL2N0rKBDwsvTHgNhjSJdlxvAqZniSFkRscSJ9plys6?=
+ =?us-ascii?Q?cmTxiF3IhmA+hDarZeN7yq425fY81CJA6NZFodvnTsclDwWRv8x1JZxhJ/tA?=
+ =?us-ascii?Q?GyMOEy2iTuQ/tR82ldjMD9se1z9Dx28Zbf4bGuyx84VFv39EOSZ7H39kye/P?=
+ =?us-ascii?Q?ra4luguxFzLrqKHryzQqxlX4P3Hrc3IDQ53KfyzNnPpRtpdhIDqrX5Oe5xEC?=
+ =?us-ascii?Q?rz+H9VEZrqLrRfQ1YDF50B5AsVRgAjnlDCK/9ME+z6D2ipWCkUMFHCYiyX1t?=
+ =?us-ascii?Q?jfAu4jdjm0sYJNtt9IMNDHAKzu5fcw/83A7wEN3gv98yUFVl6xT1ZkdbiDdf?=
+ =?us-ascii?Q?O7MOnihXAsyCjygpS65dvOOWB/fzlCFtxm5fAtLJ4B/JLfcumwsPXzTCBHmF?=
+ =?us-ascii?Q?ZHAyY6YNHB5trmq6PQrboK9FznFm5vPZrEZrLtMmY1e72sZ2yDZJN5+Bc6zV?=
+ =?us-ascii?Q?opOMDxu8f4KpigJDmizIs1x+8A40+O+zQncJK+rea2P/cib7oDPEox8mmWud?=
+ =?us-ascii?Q?UBFpZSw+HVBq9LOk7dHR8aPAZQ/OOi0QSNADKfZtPzi7EOf6hlaKPPebqPy9?=
+ =?us-ascii?Q?ahDovoqCeF66YXtWexEWc2pxmaAzxD4rIqvWtBTek95Qu+JYat+tR2zEW6wM?=
+ =?us-ascii?Q?kSZIzPtTTwSfPVn7fd7QbfYytQuF7m+3sLP60xghSQ0RcJUVFUGl/SUKKVx+?=
+ =?us-ascii?Q?a94Rf+v/VVZQrN5XDDvLnjQaLbDXbNuvF5UJR4mwEgvv05KB27qPLBcPkV0C?=
+ =?us-ascii?Q?qVY06PtAKT8dmAGABFjg+jXUHu+aFfAJmLsMmb89nUbMt9Gcn7G31VOsYqh5?=
+ =?us-ascii?Q?wAv8QN5zixxIy3sEZth15qDuWX7XX6+REP1A/hm183IWV9deMkgZi5t116jr?=
+ =?us-ascii?Q?df/e5tPe5dvSbvuBedcfin61jEqiIwAG29UrE+DCpIm5JmbJ4yEaGzDZutlo?=
+ =?us-ascii?Q?uySFBIDKMH8JfABgJd3cqfVL2vXclJhvMS1TeZ+t4YvHuGAWC8QtyOHeOK1S?=
+ =?us-ascii?Q?6BQsU0koKIiugQavT8bGUgbdaWcDnAUVeMtfVEz61w5KyoGD0/Skj/W0KEIi?=
+ =?us-ascii?Q?CdcCEN8u+hrhh6Ly70zMOqWzZEbG9fyRHfsJ+tpn8D9+7nmptZxc6d/IgW+S?=
+ =?us-ascii?Q?TJgil/Gk3zrGozIlb4duworJ/xI8l3UZ89czKjNXKJye+GKmlaRbqvn5076A?=
+ =?us-ascii?Q?0cjhiW0GoSdtT9+3?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1aaaa8c7-7db1-497f-c4ef-08db08b7639b
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4150.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 02:59:54.7965
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /k8NGCujfsLF6fBH+IMP9QXvlOWnTr4a/7Qq0+iv5ghaqTHclS30PWD0Iz+QAVMYdHObNAxYpKBlkWsWAFpVEC1omSCNmiooxJYSwCeFQtA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4602
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-06_07,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302070025
+X-Proofpoint-GUID: F2inXX-w7bWyZCm7ypFJKbqm-m9gl6IK
+X-Proofpoint-ORIG-GUID: F2inXX-w7bWyZCm7ypFJKbqm-m9gl6IK
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Prior to the introduction of the machine keyring, most distros simply 
+allowed all keys contained within the platform keyring to be used
+for both kernel and module verification.  This was done by an out of
+tree patch.  Some distros took it even further and loaded all these keys
+into the secondary trusted keyring.  This also allowed the system owner 
+to add their own key for IMA usage.
+
+Each distro contains similar documentation on how to sign kernel modules
+and enroll the key into the MOK.  The process is fairly straightforward.
+With the introduction of the machine keyring, the process remains
+basically the same, without the need for any out of tree patches.
+
+The machine keyring allowed distros to eliminate the out of tree patches
+for kernel module signing.  However, it falls short in allowing the end 
+user to add their own keys for IMA. Currently, the machine keyring can not 
+be used as another trust anchor for adding keys to the ima keyring, since 
+CA enforcement does not currently exist.  This would expand the current 
+integrity gap. The IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY 
+Kconfig states that keys may be added to the ima keyrings if the key is 
+validly signed by a CA cert in the system built-in or secondary trusted 
+keyring.  Currently, there is not code that enforces the contents of a
+CA cert.
+
+This series introduces a way to do CA enforement with the machine
+keyring. It introduces three different ways to configure the machine
+keyring. A new menu option is added to control the type of keys that may
+be added to it.  The options include none, min, and max restrictions. The
+default is CONFIG_INTEGRITY_CA_MACHINE_KEYRING_NONE. This allows all MOK
+keys into the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN
+is selected, the X.509 CA bit must be true.  Also, the key usage must
+contain keyCertSign, any other usage field may also be set. When 
+CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the X.509 CA bit
+must be true.  Also, the key usage must contain keyCertSign and the
+digitialSignature usage may not be set. If a key doesn't pass the CA
+restriction check, instead of going into the machine keyring, it is
+added to the platform keyring. With the ability to configure the machine
+keyring with CA restrictions, code that prevented the machine keyring
+from being enabled with IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
+has been removed.
+
+Changelog:
+v4:
+- Removed all code that validated the certificate chain back to the root
+  CA. Now the only restriction is what is initially placed in the
+  machine keyring.
+- Check and store if the X.509 usage contains digitalSignature
+- New Kconfig menu item with none, min and max CA restriction on the 
+  machine keyring
+
+v3:
+- Allow Intermediate CA certs to be enrolled through the MOK. The
+  Intermediate CA cert must contain keyCertSign key usage and have the 
+  CA bit set to true. This was done by removing the self signed
+  requirement.
+
+Eric Snowberg (6):
+  KEYS: Create static version of public_key_verify_signature
+  KEYS: Add missing function documentation
+  KEYS: X.509: Parse Basic Constraints for CA
+  KEYS: X.509: Parse Key Usage
+  KEYS: CA link restriction
+  integrity: machine keyring CA configuration
+
+ certs/system_keyring.c                    | 14 +++++--
+ crypto/asymmetric_keys/restrict.c         | 40 ++++++++++++++++++
+ crypto/asymmetric_keys/x509_cert_parser.c | 50 +++++++++++++++++++++++
+ include/crypto/public_key.h               | 28 +++++++++++++
+ security/integrity/Kconfig                | 39 +++++++++++++++++-
+ security/integrity/digsig.c               |  8 +++-
+ 6 files changed, 173 insertions(+), 6 deletions(-)
 
 
-On 2023/2/7 03:41, Sandeep Dhavale wrote:
-> On Mon, Feb 6, 2023 at 2:01 AM Gao Xiang <xiang@kernel.org> wrote:
->>
->> Hi Sandeep,
->>
->> On Fri, Jan 06, 2023 at 07:35:01AM +0000, Sandeep Dhavale wrote:
->>> Using per-cpu thread pool we can reduce the scheduling latency compared
->>> to workqueue implementation. With this patch scheduling latency and
->>> variation is reduced as per-cpu threads are high priority kthread_workers.
->>>
->>> The results were evaluated on arm64 Android devices running 5.10 kernel.
->>>
->>> The table below shows resulting improvements of total scheduling latency
->>> for the same app launch benchmark runs with 50 iterations. Scheduling
->>> latency is the latency between when the task (workqueue kworker vs
->>> kthread_worker) became eligible to run to when it actually started
->>> running.
->>> +-------------------------+-----------+----------------+---------+
->>> |                         | workqueue | kthread_worker |  diff   |
->>> +-------------------------+-----------+----------------+---------+
->>> | Average (us)            |     15253 |           2914 | -80.89% |
->>> | Median (us)             |     14001 |           2912 | -79.20% |
->>> | Minimum (us)            |      3117 |           1027 | -67.05% |
->>> | Maximum (us)            |     30170 |           3805 | -87.39% |
->>> | Standard deviation (us) |      7166 |            359 |         |
->>> +-------------------------+-----------+----------------+---------+
->>>
->>> Background: Boot times and cold app launch benchmarks are very
->>> important to the android ecosystem as they directly translate to
->>> responsiveness from user point of view. While erofs provides
->>> a lot of important features like space savings, we saw some
->>> performance penalty in cold app launch benchmarks in few scenarios.
->>> Analysis showed that the significant variance was coming from the
->>> scheduling cost while decompression cost was more or less the same.
->>>
->>> Having per-cpu thread pool we can see from the above table that this
->>> variation is reduced by ~80% on average. This problem was discussed
->>> at LPC 2022. Link to LPC 2022 slides and
->>> talk at [1]
->>>
->>> [1] https://lpc.events/event/16/contributions/1338/
->>>
->>> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
->>> ---
->>> V3 -> V4
->>> * Updated commit message with background information
->>> V2 -> V3
->>> * Fix a warning Reported-by: kernel test robot <lkp@intel.com>
->>> V1 -> V2
->>> * Changed name of kthread_workers from z_erofs to erofs_worker
->>> * Added kernel configuration to run kthread_workers at normal or
->>>    high priority
->>> * Added cpu hotplug support
->>> * Added wrapped kthread_workers under worker_pool
->>> * Added one unbound thread in a pool to handle a context where
->>>    we already stopped per-cpu kthread worker
->>> * Updated commit message
->>
->> I've just modified your v4 patch based on erofs -dev branch with
->> my previous suggestion [1], but I haven't tested it.
->>
->> Could you help check if the updated patch looks good to you and
->> test it on your side?  If there are unexpected behaviors, please
->> help update as well, thanks!
-> Thanks Xiang, I was working on the same. I see that you have cleaned it up.
-> I will test it and report/fix any problems.
-> 
-> Thanks,
-> Sandeep.
+base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
+-- 
+2.27.0
 
-Thanks! Look forward to your test. BTW, we have < 2 weeks for 6.3, so I'd
-like to fix it this week so that we could catch 6.3 merge window.
-
-
-I've fixed some cpu hotplug errors as below and added to a branch for 0day CI
-testing.
-
-Thanks,
-Gao Xiang
-
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 73198f494a6a..92a9e20948b0 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -398,7 +398,7 @@ static inline void erofs_destroy_percpu_workers(void) {}
-  static inline int erofs_init_percpu_workers(void) { return 0; }
-  #endif
-
--#if defined(CONFIG_HOTPLUG_CPU) && defined(EROFS_FS_PCPU_KTHREAD)
-+#if defined(CONFIG_HOTPLUG_CPU) && defined(CONFIG_EROFS_FS_PCPU_KTHREAD)
-  static DEFINE_SPINLOCK(z_erofs_pcpu_worker_lock);
-  static enum cpuhp_state erofs_cpuhp_state;
-
-@@ -408,7 +408,7 @@ static int erofs_cpu_online(unsigned int cpu)
-
-  	worker = erofs_init_percpu_worker(cpu);
-  	if (IS_ERR(worker))
--		return ERR_PTR(worker);
-+		return PTR_ERR(worker);
-
-  	spin_lock(&z_erofs_pcpu_worker_lock);
-  	old = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
-@@ -428,7 +428,7 @@ static int erofs_cpu_offline(unsigned int cpu)
-  	spin_lock(&z_erofs_pcpu_worker_lock);
-  	worker = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
-  			lockdep_is_held(&z_erofs_pcpu_worker_lock));
--	rcu_assign_pointer(worker_pool.workers[cpu], NULL);
-+	rcu_assign_pointer(z_erofs_pcpu_workers[cpu], NULL);
-  	spin_unlock(&z_erofs_pcpu_worker_lock);
-
-  	synchronize_rcu();
-
-> 
->>
->> [1] https://lore.kernel.org/r/5e1b7191-9ea6-3781-7928-72ac4cd88591@linux.alibaba.com/
->>
->> Thanks,
->> Gao Xiang
->>
->>  From 2e87235abc745c0fef8e32abcd3a51546b4378ad Mon Sep 17 00:00:00 2001
->> From: Sandeep Dhavale <dhavale@google.com>
->> Date: Mon, 6 Feb 2023 17:53:39 +0800
->> Subject: [PATCH] erofs: add per-cpu threads for decompression
->>
->> Using per-cpu thread pool we can reduce the scheduling latency compared
->> to workqueue implementation. With this patch scheduling latency and
->> variation is reduced as per-cpu threads are high priority kthread_workers.
->>
->> The results were evaluated on arm64 Android devices running 5.10 kernel.
->>
->> The table below shows resulting improvements of total scheduling latency
->> for the same app launch benchmark runs with 50 iterations. Scheduling
->> latency is the latency between when the task (workqueue kworker vs
->> kthread_worker) became eligible to run to when it actually started
->> running.
->> +-------------------------+-----------+----------------+---------+
->> |                         | workqueue | kthread_worker |  diff   |
->> +-------------------------+-----------+----------------+---------+
->> | Average (us)            |     15253 |           2914 | -80.89% |
->> | Median (us)             |     14001 |           2912 | -79.20% |
->> | Minimum (us)            |      3117 |           1027 | -67.05% |
->> | Maximum (us)            |     30170 |           3805 | -87.39% |
->> | Standard deviation (us) |      7166 |            359 |         |
->> +-------------------------+-----------+----------------+---------+
->>
->> Background: Boot times and cold app launch benchmarks are very
->> important to the android ecosystem as they directly translate to
->> responsiveness from user point of view. While erofs provides
->> a lot of important features like space savings, we saw some
->> performance penalty in cold app launch benchmarks in few scenarios.
->> Analysis showed that the significant variance was coming from the
->> scheduling cost while decompression cost was more or less the same.
->>
->> Having per-cpu thread pool we can see from the above table that this
->> variation is reduced by ~80% on average. This problem was discussed
->> at LPC 2022. Link to LPC 2022 slides and
->> talk at [1]
->>
->> [1] https://lpc.events/event/16/contributions/1338/
->>
->> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
->> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
->> ---
->>   fs/erofs/Kconfig |  18 +++++
->>   fs/erofs/zdata.c | 190 ++++++++++++++++++++++++++++++++++++++++++-----
->>   2 files changed, 189 insertions(+), 19 deletions(-)
->>
->> diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
->> index 85490370e0ca..704fb59577e0 100644
->> --- a/fs/erofs/Kconfig
->> +++ b/fs/erofs/Kconfig
->> @@ -108,3 +108,21 @@ config EROFS_FS_ONDEMAND
->>            read support.
->>
->>            If unsure, say N.
->> +
->> +config EROFS_FS_PCPU_KTHREAD
->> +       bool "EROFS per-cpu decompression kthread workers"
->> +       depends on EROFS_FS_ZIP
->> +       help
->> +         Saying Y here enables per-CPU kthread workers pool to carry out
->> +         async decompression for low latencies on some architectures.
->> +
->> +         If unsure, say N.
->> +
->> +config EROFS_FS_PCPU_KTHREAD_HIPRI
->> +       bool "EROFS high priority per-CPU kthread workers"
->> +       depends on EROFS_FS_ZIP && EROFS_FS_PCPU_KTHREAD
->> +       help
->> +         This permits EROFS to configure per-CPU kthread workers to run
->> +         at higher priority.
->> +
->> +         If unsure, say N.
->> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
->> index 384f64292f73..73198f494a6a 100644
->> --- a/fs/erofs/zdata.c
->> +++ b/fs/erofs/zdata.c
->> @@ -7,6 +7,8 @@
->>   #include "compress.h"
->>   #include <linux/prefetch.h>
->>   #include <linux/psi.h>
->> +#include <linux/slab.h>
->> +#include <linux/cpuhotplug.h>
->>
->>   #include <trace/events/erofs.h>
->>
->> @@ -109,6 +111,7 @@ struct z_erofs_decompressqueue {
->>          union {
->>                  struct completion done;
->>                  struct work_struct work;
->> +               struct kthread_work kthread_work;
->>          } u;
->>          bool eio, sync;
->>   };
->> @@ -341,24 +344,128 @@ static void z_erofs_free_pcluster(struct z_erofs_pcluster *pcl)
->>
->>   static struct workqueue_struct *z_erofs_workqueue __read_mostly;
->>
->> -void z_erofs_exit_zip_subsystem(void)
->> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
->> +static struct kthread_worker __rcu **z_erofs_pcpu_workers;
->> +
->> +static void erofs_destroy_percpu_workers(void)
->>   {
->> -       destroy_workqueue(z_erofs_workqueue);
->> -       z_erofs_destroy_pcluster_pool();
->> +       struct kthread_worker *worker;
->> +       unsigned int cpu;
->> +
->> +       for_each_possible_cpu(cpu) {
->> +               worker = rcu_dereference_protected(
->> +                                       z_erofs_pcpu_workers[cpu], 1);
->> +               rcu_assign_pointer(z_erofs_pcpu_workers[cpu], NULL);
->> +               if (worker)
->> +                       kthread_destroy_worker(worker);
->> +       }
->> +       kfree(z_erofs_pcpu_workers);
->>   }
->>
->> -static inline int z_erofs_init_workqueue(void)
->> +static struct kthread_worker *erofs_init_percpu_worker(int cpu)
->>   {
->> -       const unsigned int onlinecpus = num_possible_cpus();
->> +       struct kthread_worker *worker =
->> +               kthread_create_worker_on_cpu(cpu, 0, "erofs_worker/%u", cpu);
->>
->> -       /*
->> -        * no need to spawn too many threads, limiting threads could minimum
->> -        * scheduling overhead, perhaps per-CPU threads should be better?
->> -        */
->> -       z_erofs_workqueue = alloc_workqueue("erofs_unzipd",
->> -                                           WQ_UNBOUND | WQ_HIGHPRI,
->> -                                           onlinecpus + onlinecpus / 4);
->> -       return z_erofs_workqueue ? 0 : -ENOMEM;
->> +       if (IS_ERR(worker))
->> +               return worker;
->> +       if (IS_ENABLED(CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI))
->> +               sched_set_fifo_low(worker->task);
->> +       else
->> +               sched_set_normal(worker->task, 0);
->> +       return worker;
->> +}
->> +
->> +static int erofs_init_percpu_workers(void)
->> +{
->> +       struct kthread_worker *worker;
->> +       unsigned int cpu;
->> +
->> +       z_erofs_pcpu_workers = kcalloc(num_possible_cpus(),
->> +                       sizeof(struct kthread_worker *), GFP_ATOMIC);
->> +       if (!z_erofs_pcpu_workers)
->> +               return -ENOMEM;
->> +
->> +       for_each_online_cpu(cpu) {      /* could miss cpu{off,on}line? */
->> +               worker = erofs_init_percpu_worker(cpu);
->> +               if (!IS_ERR(worker))
->> +                       rcu_assign_pointer(z_erofs_pcpu_workers[cpu], worker);
->> +       }
->> +       return 0;
->> +}
->> +#else
->> +static inline void erofs_destroy_percpu_workers(void) {}
->> +static inline int erofs_init_percpu_workers(void) { return 0; }
->> +#endif
->> +
->> +#if defined(CONFIG_HOTPLUG_CPU) && defined(EROFS_FS_PCPU_KTHREAD)
->> +static DEFINE_SPINLOCK(z_erofs_pcpu_worker_lock);
->> +static enum cpuhp_state erofs_cpuhp_state;
->> +
->> +static int erofs_cpu_online(unsigned int cpu)
->> +{
->> +       struct kthread_worker *worker, *old;
->> +
->> +       worker = erofs_init_percpu_worker(cpu);
->> +       if (IS_ERR(worker))
->> +               return ERR_PTR(worker);
->> +
->> +       spin_lock(&z_erofs_pcpu_worker_lock);
->> +       old = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
->> +                       lockdep_is_held(&z_erofs_pcpu_worker_lock));
->> +       if (!old)
->> +               rcu_assign_pointer(z_erofs_pcpu_workers[cpu], worker);
->> +       spin_unlock(&z_erofs_pcpu_worker_lock);
->> +       if (old)
->> +               kthread_destroy_worker(worker);
->> +       return 0;
->> +}
->> +
->> +static int erofs_cpu_offline(unsigned int cpu)
->> +{
->> +       struct kthread_worker *worker;
->> +
->> +       spin_lock(&z_erofs_pcpu_worker_lock);
->> +       worker = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
->> +                       lockdep_is_held(&z_erofs_pcpu_worker_lock));
->> +       rcu_assign_pointer(worker_pool.workers[cpu], NULL);
->> +       spin_unlock(&z_erofs_pcpu_worker_lock);
->> +
->> +       synchronize_rcu();
->> +       if (worker)
->> +               kthread_destroy_worker(worker);
->> +       return 0;
->> +}
->> +
->> +static int erofs_cpu_hotplug_init(void)
->> +{
->> +       int state;
->> +
->> +       state = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
->> +                       "fs/erofs:online", erofs_cpu_online, erofs_cpu_offline);
->> +       if (state < 0)
->> +               return state;
->> +
->> +       erofs_cpuhp_state = state;
->> +       return 0;
->> +}
->> +
->> +static void erofs_cpu_hotplug_destroy(void)
->> +{
->> +       if (erofs_cpuhp_state)
->> +               cpuhp_remove_state_nocalls(erofs_cpuhp_state);
->> +}
->> +#else /* !CONFIG_HOTPLUG_CPU || !CONFIG_EROFS_FS_PCPU_KTHREAD */
->> +static inline int erofs_cpu_hotplug_init(void) { return 0; }
->> +static inline void erofs_cpu_hotplug_destroy(void) {}
->> +#endif
->> +
->> +void z_erofs_exit_zip_subsystem(void)
->> +{
->> +       erofs_cpu_hotplug_destroy();
->> +       erofs_destroy_percpu_workers();
->> +       destroy_workqueue(z_erofs_workqueue);
->> +       z_erofs_destroy_pcluster_pool();
->>   }
->>
->>   int __init z_erofs_init_zip_subsystem(void)
->> @@ -366,10 +473,29 @@ int __init z_erofs_init_zip_subsystem(void)
->>          int err = z_erofs_create_pcluster_pool();
->>
->>          if (err)
->> -               return err;
->> -       err = z_erofs_init_workqueue();
->> +               goto out_error_pcluster_pool;
->> +
->> +       z_erofs_workqueue = alloc_workqueue("erofs_worker",
->> +                       WQ_UNBOUND | WQ_HIGHPRI, num_possible_cpus());
->> +       if (!z_erofs_workqueue)
->> +               goto out_error_workqueue_init;
->> +
->> +       err = erofs_init_percpu_workers();
->>          if (err)
->> -               z_erofs_destroy_pcluster_pool();
->> +               goto out_error_pcpu_worker;
->> +
->> +       err = erofs_cpu_hotplug_init();
->> +       if (err < 0)
->> +               goto out_error_cpuhp_init;
->> +       return err;
->> +
->> +out_error_cpuhp_init:
->> +       erofs_destroy_percpu_workers();
->> +out_error_pcpu_worker:
->> +       destroy_workqueue(z_erofs_workqueue);
->> +out_error_workqueue_init:
->> +       z_erofs_destroy_pcluster_pool();
->> +out_error_pcluster_pool:
->>          return err;
->>   }
->>
->> @@ -1305,11 +1431,17 @@ static void z_erofs_decompressqueue_work(struct work_struct *work)
->>
->>          DBG_BUGON(bgq->head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
->>          z_erofs_decompress_queue(bgq, &pagepool);
->> -
->>          erofs_release_pages(&pagepool);
->>          kvfree(bgq);
->>   }
->>
->> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
->> +static void z_erofs_decompressqueue_kthread_work(struct kthread_work *work)
->> +{
->> +       z_erofs_decompressqueue_work((struct work_struct *)work);
->> +}
->> +#endif
->> +
->>   static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
->>                                         int bios)
->>   {
->> @@ -1324,9 +1456,24 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
->>
->>          if (atomic_add_return(bios, &io->pending_bios))
->>                  return;
->> -       /* Use workqueue and sync decompression for atomic contexts only */
->> +       /* Use (kthread_)work and sync decompression for atomic contexts only */
->>          if (in_atomic() || irqs_disabled()) {
->> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
->> +               struct kthread_worker *worker;
->> +
->> +               rcu_read_lock();
->> +               worker = rcu_dereference(
->> +                               z_erofs_pcpu_workers[raw_smp_processor_id()]);
->> +               if (!worker) {
->> +                       INIT_WORK(&io->u.work, z_erofs_decompressqueue_work);
->> +                       queue_work(z_erofs_workqueue, &io->u.work);
->> +               } else {
->> +                       kthread_queue_work(worker, &io->u.kthread_work);
->> +               }
->> +               rcu_read_unlock();
->> +#else
->>                  queue_work(z_erofs_workqueue, &io->u.work);
->> +#endif
->>                  /* enable sync decompression for readahead */
->>                  if (sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
->>                          sbi->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
->> @@ -1455,7 +1602,12 @@ static struct z_erofs_decompressqueue *jobqueue_init(struct super_block *sb,
->>                          *fg = true;
->>                          goto fg_out;
->>                  }
->> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
->> +               kthread_init_work(&q->u.kthread_work,
->> +                                 z_erofs_decompressqueue_kthread_work);
->> +#else
->>                  INIT_WORK(&q->u.work, z_erofs_decompressqueue_work);
->> +#endif
->>          } else {
->>   fg_out:
->>                  q = fgq;
->> @@ -1640,7 +1792,7 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
->>
->>          /*
->>           * although background is preferred, no one is pending for submission.
->> -        * don't issue workqueue for decompression but drop it directly instead.
->> +        * don't issue decompression but drop it directly instead.
->>           */
->>          if (!*force_fg && !nr_bios) {
->>                  kvfree(q[JQ_SUBMIT]);
->> --
->> 2.30.2
->>
