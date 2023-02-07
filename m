@@ -2,146 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F39E268E412
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB4C68E41B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 00:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjBGXBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 18:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S229965AbjBGXDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 18:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjBGXBW (ORCPT
+        with ESMTP id S229709AbjBGXDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 18:01:22 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C912F06
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 15:01:21 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso2634990pju.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 15:01:21 -0800 (PST)
+        Tue, 7 Feb 2023 18:03:38 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAFE1D90E;
+        Tue,  7 Feb 2023 15:03:36 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id 203so11877105pfx.6;
+        Tue, 07 Feb 2023 15:03:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=yTf07qTobRvFNEOlYlJqV5SF3piK99zxyELcaKNScNs=;
-        b=izbdy8nkqes83emxWyH2/f6utXKy4skfO3eStORNppJy6CYGvLj/pDh/CoVGCJaGTP
-         M9ZPgGUA4vPVEusXc9xSs5bwYkLul4PwP9X1zlVYYddG/8Vs8lWNJEYLfOotZk5Bcw6m
-         82sqiPDITLEKVrOiLprXUFqcwkKbDp4dGRbSI=
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mKRyLs14cQMLkdQlb1k9GTQd3JA97HIjZ/46MwZ+z08=;
+        b=Js/HNexDSwOKgRBcmYiuHgQCRxp8/HlVnCuGxHWIUi9YAXcklBawiUgPzAJ1XHFhf1
+         XeOA6jrBLKXLHd5xUiqpz2G6d3YYYvc0m0Kl0QRF3s+wDWkcd4xdVenO7EFf1V7jHWJa
+         7mO6FpXCD2hmzhqp0kt5jTGzOLEcdioFtof51Qdmj/icKjukD3ThgYJM0Z8yNR1EMbRL
+         xJ/gdRQ3YLtCa8oz3N3V+67WZfd6c2rHc7LWPQfOc1YL49yOMbLz3gSF7xhV73JcM2Gl
+         ha9n+6nUZnNrhwmYfw6vWWWMSfocijWxgV0giTs1YC8Qa8GgNZTuhxfk/3QcXyDfxnDd
+         qHoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yTf07qTobRvFNEOlYlJqV5SF3piK99zxyELcaKNScNs=;
-        b=GIGudRwYD9dWA6tnyO5Q3ph4IyJvJjUSlV99ZqB+fCq0uz8WLjSm6HSkiuCjtWQ5xp
-         GaCMluHZiJ7vwRkeJ6XLG3MpMhKkeAIcwN/4BHncGv1R0HxWTqMvMvHCTiM2feeH1Rfq
-         GCQ4kH1iQAcsQReX+2uTaTMCEWofnV7/6FpNZNItShZ9cTuKV1s5zk8kSB51gPtyDt+/
-         zPnwkTT0X2N33c8CMbOaVOTk+frmvMdtIPGKCfqN7XA2iJiTIAIEr23YrOFYOr9j2h/e
-         HAFljL1JEz8SjndWTybQzjopmi0yBc8YhKX2Ev/G1/E8TNnBPy+bxMYxng76BdUsXbcY
-         29XA==
-X-Gm-Message-State: AO0yUKVDGqrAS3e/iihDIEyR9WWH9wbYdPwv7XFQD34CPA1eTyDoH+sF
-        /A0GruutbCJxJKOFL9IrN+oEsA==
-X-Google-Smtp-Source: AK7set+fDacQiRQcwTpDjwGKlzv2yYCCHtNdjZcTiWEgD+0zpQZ6cdterIjVrP204wVOR+2UF9VL8w==
-X-Received: by 2002:a17:902:e205:b0:196:77fd:abfd with SMTP id u5-20020a170902e20500b0019677fdabfdmr4121073plb.64.1675810880741;
-        Tue, 07 Feb 2023 15:01:20 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p11-20020a1709026b8b00b0017fe9b038fdsm9405296plk.14.2023.02.07.15.01.19
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mKRyLs14cQMLkdQlb1k9GTQd3JA97HIjZ/46MwZ+z08=;
+        b=5UmqVNLsOcxbEnXQymAdJ71H5tV4YLRihdFm9/Phbty9IzZiq0cMuL+zXeRkGjCUus
+         EdXKAyU1cXqZxDb5WXxPo7bF7caV5p27U4KfPz6bvh+dZ2sf+8LGIQTTQhbSFtXRPu75
+         BH2UzsMPhOXiCKQ2bfMXdyOPWuqQ1LjgPzXd0ONK/3pAaNa4tB8EPezaxCq/4PHiqgYr
+         kPRDT1kpdTeF4sexi6e5JRbKRNELtNTSA+rov/ruY7NDqrJvQqogspcDzLXicEyKipGT
+         H2eI8Csn4TDKuvBp7IQqS/cWZQ781GF7nUe+8oG2ND49lbTG6r/oWCcFZGLL2Rn85np+
+         wfDQ==
+X-Gm-Message-State: AO0yUKWLs8KEXRcnogFZh7JvZzS5IYXSqIf5O/NEYRtIN8X9BMLq5ptQ
+        ynQgdcKujVxdnOHrozs4X3M=
+X-Google-Smtp-Source: AK7set8HPr4JHDvwWO6Wuy0bMS2wszHrJPMyBH1MxEmU9ElP0BS5OCyXQOYHimhySgzzXYjBt5KiGw==
+X-Received: by 2002:aa7:9603:0:b0:57f:c170:dc6 with SMTP id q3-20020aa79603000000b0057fc1700dc6mr4815885pfg.14.1675811016365;
+        Tue, 07 Feb 2023 15:03:36 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:c930:81ab:3aec:b9cb])
+        by smtp.gmail.com with ESMTPSA id a22-20020a62bd16000000b00580a0bb411fsm1913537pff.174.2023.02.07.15.03.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 15:01:20 -0800 (PST)
-Message-ID: <63e2d840.170a0220.2b199.00a7@mx.google.com>
-X-Google-Original-Message-ID: <202302071500.@keescook>
-Date:   Tue, 7 Feb 2023 15:01:19 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Don Brace <don.brace@microchip.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        storagedev@microchip.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3][next] scsi: smartpqi: Replace one-element array with
- flexible-array member
-References: <Y+LJz/r6+UeLqnV3@work>
+        Tue, 07 Feb 2023 15:03:35 -0800 (PST)
+Date:   Tue, 7 Feb 2023 15:03:30 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Guenter Roeck <groeck@chromium.org>,
+        Allen Ballway <ballway@chromium.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] HID: retain initial quirks set up when creating HID
+ devices
+Message-ID: <Y+LYwu3Zs13hdVDy@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+LJz/r6+UeLqnV3@work>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 03:59:43PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element array with flexible-array
-> member in struct report_log_lun_list.
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
-> on memcpy().
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/204
-> Acked-by: Don Brace <don.brace@microchip.com>
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+In certain circumstances, such as when creating I2C-connected HID
+devices, we want to pass and retain some quirks (axis inversion, etc).
+The source of such quirks may be device tree, or DMI data, or something
+else not readily available to the HID core itself and therefore cannot
+be reconstructed easily. To allow this, introduce "initial_quirks" field
+in hid_device structure and use it when determining the final set of
+quirks.
 
-Looks good to me -- both before and after, there is 1 extra all-zero
-entry at the end. But now the struct is using a flex array correctly.
+This fixes the problem with i2c-hid setting up device-tree sourced
+quirks too late and losing them on device rebind, and also allows to
+sever the tie between hid-code and i2c-hid when applying DMI-based
+quirks.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Fixes: b60d3c803d76 ("HID: i2c-hid-of: Expose the touchscreen-inverted properties")
+Fixes: a2f416bf062a ("HID: multitouch: Add quirks for flipped axes")
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Tested-by: Allen Ballway <ballway@chromium.org>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
 
--Kees
+v2:
+- corrected spelling/grammar in the commit message per Guenter
+- added reviewed-by/tested-by tags
 
-> ---
-> Changes in v3:
->  - Amplify the existing comment instead of adding a new one. By Don
->    Brace[1].
->  - Add Don's Acked-by tag to the changelog.
->    Link: https://lore.kernel.org/linux-hardening/d881ad98-a291-1c9b-53dc-199f23f1625e@embeddedor.com/ [1]
-> 
-> Changes in v2:
->  - In v1 we thought that the original code was allocating one too-many
->    entries for the list. However, Don Brace commented that the allocation
->    was actually intentional[2]. So, I added a code comment with his feedback.
->    Link: https://lore.kernel.org/linux-hardening/16e6c434-44af-2efb-d4bc-a253e93e5590@embeddedor.com/  [2]
-> 
-> v1:
->  - Link: https://lore.kernel.org/linux-hardening/c80c0979933e0c05e80d95792ef167a28640a14b.1663816572.git.gustavoars@kernel.org/
-> 
->  drivers/scsi/smartpqi/smartpqi.h      | 2 +-
->  drivers/scsi/smartpqi/smartpqi_init.c | 3 ++-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
-> index af27bb0f3133..228838eb3686 100644
-> --- a/drivers/scsi/smartpqi/smartpqi.h
-> +++ b/drivers/scsi/smartpqi/smartpqi.h
-> @@ -954,7 +954,7 @@ struct report_log_lun {
->  
->  struct report_log_lun_list {
->  	struct report_lun_header header;
-> -	struct report_log_lun lun_entries[1];
-> +	struct report_log_lun lun_entries[];
->  };
->  
->  struct report_phys_lun_8byte_wwid {
-> diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-> index d0446d4d4465..49a8f91810b6 100644
-> --- a/drivers/scsi/smartpqi/smartpqi_init.c
-> +++ b/drivers/scsi/smartpqi/smartpqi_init.c
-> @@ -1259,7 +1259,8 @@ static int pqi_get_device_lists(struct pqi_ctrl_info *ctrl_info,
->  			"report logical LUNs failed\n");
->  
->  	/*
-> -	 * Tack the controller itself onto the end of the logical device list.
-> +	 * Tack the controller itself onto the end of the logical device list
-> +	 * by adding a list entry that is all zeros.
->  	 */
->  
->  	logdev_data = *logdev_list;
-> -- 
-> 2.34.1
-> 
+
+ drivers/hid/hid-quirks.c                 | 8 +-------
+ drivers/hid/i2c-hid/i2c-hid-core.c       | 6 ++++--
+ drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 1 -
+ include/linux/hid.h                      | 1 +
+ 4 files changed, 6 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index 30e35f79def4..66e64350f138 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -19,7 +19,6 @@
+ #include <linux/input/elan-i2c-ids.h>
+ 
+ #include "hid-ids.h"
+-#include "i2c-hid/i2c-hid.h"
+ 
+ /*
+  * Alphabetically sorted by vendor then product.
+@@ -1238,7 +1237,7 @@ EXPORT_SYMBOL_GPL(hid_quirks_exit);
+ static unsigned long hid_gets_squirk(const struct hid_device *hdev)
+ {
+ 	const struct hid_device_id *bl_entry;
+-	unsigned long quirks = 0;
++	unsigned long quirks = hdev->initial_quirks;
+ 
+ 	if (hid_match_id(hdev, hid_ignore_list))
+ 		quirks |= HID_QUIRK_IGNORE;
+@@ -1299,11 +1298,6 @@ unsigned long hid_lookup_quirk(const struct hid_device *hdev)
+ 		quirks = hid_gets_squirk(hdev);
+ 	mutex_unlock(&dquirks_lock);
+ 
+-	/* Get quirks specific to I2C devices */
+-	if (IS_ENABLED(CONFIG_I2C_DMI_CORE) && IS_ENABLED(CONFIG_DMI) &&
+-	    hdev->bus == BUS_I2C)
+-		quirks |= i2c_hid_get_dmi_quirks(hdev->vendor, hdev->product);
+-
+ 	return quirks;
+ }
+ EXPORT_SYMBOL_GPL(hid_lookup_quirk);
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index 0ab8f47a84e9..efbba0465eef 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -1025,6 +1025,10 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
+ 	hid->vendor = le16_to_cpu(ihid->hdesc.wVendorID);
+ 	hid->product = le16_to_cpu(ihid->hdesc.wProductID);
+ 
++	hid->initial_quirks = quirks;
++	hid->initial_quirks |= i2c_hid_get_dmi_quirks(hid->vendor,
++						      hid->product);
++
+ 	snprintf(hid->name, sizeof(hid->name), "%s %04X:%04X",
+ 		 client->name, (u16)hid->vendor, (u16)hid->product);
+ 	strscpy(hid->phys, dev_name(&client->dev), sizeof(hid->phys));
+@@ -1038,8 +1042,6 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
+ 		goto err_mem_free;
+ 	}
+ 
+-	hid->quirks |= quirks;
+-
+ 	return 0;
+ 
+ err_mem_free:
+diff --git a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
+index 554a7dc28536..210f17c3a0be 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
++++ b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
+@@ -492,4 +492,3 @@ u32 i2c_hid_get_dmi_quirks(const u16 vendor, const u16 product)
+ 
+ 	return quirks;
+ }
+-EXPORT_SYMBOL_GPL(i2c_hid_get_dmi_quirks);
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index daaac4d7f370..56dac09c99d9 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -622,6 +622,7 @@ struct hid_device {							/* device report descriptor */
+ 	unsigned long status;						/* see STAT flags above */
+ 	unsigned claimed;						/* Claimed by hidinput, hiddev? */
+ 	unsigned quirks;						/* Various quirks the device can pull on us */
++	unsigned initial_quirks;					/* Initial set of quirks supplied when creating device */
+ 	bool io_started;						/* If IO has started */
+ 
+ 	struct list_head inputs;					/* The list of inputs */
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
 
 -- 
-Kees Cook
+Dmitry
