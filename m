@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310A968CE9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFB668CEA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjBGFDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:03:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S230484AbjBGFDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:03:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjBGFCA (ORCPT
+        with ESMTP id S230176AbjBGFCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 00:02:00 -0500
+        Tue, 7 Feb 2023 00:02:02 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BF511EBA;
-        Mon,  6 Feb 2023 21:01:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD801E9F5;
+        Mon,  6 Feb 2023 21:02:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675746119; x=1707282119;
+  t=1675746121; x=1707282121;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=LRruVzFjzKpVUadVEuZKwelOSSQHqDO6Cu2BUXGn/i0=;
-  b=lIT7rH82m7j2ydTUSyTFAOE1oQoG9CuZrVnEL911ibaoIZCKxF2LVrU7
-   ELMtviurQo4F/kRMQBuVTfeD2+O6BexIzlNousae+dIaMBft3Yx57FoFi
-   DcOjS3KpHPTj/QALr8DzEJ6SG90f8o+w1fCj+A1Anq3LCSMNXPVAqNpPe
-   sJCuL4sfzXsD3izaZRm0Yyh0nyrX7XNcf7Z+piTmw76JpC+rxSi1Ejn05
-   aSpt6gKezZDx2D1tCtISx0KgudexZSC4H35g0a3JTBEtwYv4nqeXx+CCg
-   ULxy6wm4D+9SjrXXaeXehv07wq32/SNFuNyy3HC2lNpFQc07g/27rUbOo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625961"
+  bh=goElNzOu/cMaBcsm8/fX9KbVxksjtxFjfuJIL57mdrg=;
+  b=WpC0sW0pWEipNNeTvEKSOjPIUQuuytPxTSJoQTE1NqlGPAH4vgDuToLZ
+   5VYDwr2L5bwivqAu7eXIDwl/llPbnTLCFP1O7rcxdsLdDkg+6sgNnNlXx
+   LbTqYXMp7GZ7AFBpj6kpHFd1woQMrqYW5B4pRtWenUHEcpGNCbhgJzslC
+   OvLCDU5Dn9qoeGWuqMGEhG1rqIt+wvj1rlqkBHnfnyQTBJSgHJFJEVe08
+   Aey3i3l3V11bWCUl7AyGfkqdKmppGHIkjmwjo3l/57BAEGAnQIuh/8/sK
+   L/Vci0tKsojEYaRyr0i+eGjx+jx7K/ay2wheXK4U9k9xRZkwjOS6j9jVl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625971"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415625961"
+   d="scan'208";a="415625971"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:01:46 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657779"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657783"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668657779"
+   d="scan'208";a="668657783"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:46 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -60,9 +60,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v3 21/24] thermal: intel: hfi: Implement model-specific checks for task classification
-Date:   Mon,  6 Feb 2023 21:11:02 -0800
-Message-Id: <20230207051105.11575-22-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 22/24] x86/cpufeatures: Add feature bit for HRESET
+Date:   Mon,  6 Feb 2023 21:11:03 -0800
+Message-Id: <20230207051105.11575-23-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
@@ -75,12 +75,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In Alder Lake and Raptor Lake, the result of thread classification is more
-accurate when only one SMT sibling is busy. Classification results for
-class 2 and 3 are always reliable.
-
-To avoid unnecessary migrations, only update the class of a task if it has
-been the same during 4 consecutive user ticks.
+The HRESET instruction prevents the classification of the current task
+from influencing the classification of the next task when running serially
+on the same logical processor.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -104,104 +101,57 @@ Changes since v2:
  * None
 
 Changes since v1:
- * Adjusted the result the classification of Intel Thread Director to start
-   at class 1. Class 0 for the scheduler means that the task is
-   unclassified.
- * Used the new names of the IPC classes members in task_struct.
- * Reworked helper functions to use sched_smt_siblings_idle() to query
-   the idle state of the SMT siblings of a CPU.
+ * None
 ---
- drivers/thermal/intel/intel_hfi.c | 60 ++++++++++++++++++++++++++++++-
- 1 file changed, 59 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ arch/x86/include/asm/msr-index.h   | 4 +++-
+ arch/x86/kernel/cpu/scattered.c    | 1 +
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 35d947f47550..fdb53e4cabc1 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -40,6 +40,7 @@
- #include <linux/workqueue.h>
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 8a6261a5dbbf..eb859a82b22a 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -309,6 +309,7 @@
+ #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
+ #define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
+ #define X86_FEATURE_BMEC		(11*32+22) /* "" Bandwidth Monitoring Event Configuration */
++#define X86_FEATURE_HRESET		(11*32+23) /* Hardware history reset instruction */
  
- #include <asm/msr.h>
-+#include <asm/intel-family.h>
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 0ea25cc9c621..dc96944d61a6 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -1109,6 +1109,9 @@
+ #define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
+ #define MSR_IA32_HW_FEEDBACK_CHAR	0x17d2
  
- #include "../thermal_core.h"
- #include "intel_hfi.h"
-@@ -209,9 +210,64 @@ static int __percpu *hfi_ipcc_scores;
-  */
- #define HFI_UNCLASSIFIED_DEFAULT 1
- 
-+#define CLASS_DEBOUNCER_SKIPS 4
++/* Hardware History Reset  */
++#define MSR_IA32_HW_HRESET_ENABLE	0x17da
 +
-+/**
-+ * debounce_and_update_class() - Process and update a task's classification
-+ *
-+ * @p:		The task of which the classification will be updated
-+ * @new_ipcc:	The new IPC classification
-+ *
-+ * Update the classification of @p with the new value that hardware provides.
-+ * Only update the classification of @p if it has been the same during
-+ * CLASS_DEBOUNCER_SKIPS consecutive ticks.
-+ */
-+static void debounce_and_update_class(struct task_struct *p, u8 new_ipcc)
-+{
-+	u16 debounce_skip;
-+
-+	/* The class of @p changed. Only restart the debounce counter. */
-+	if (p->ipcc_tmp != new_ipcc) {
-+		p->ipcc_cntr = 1;
-+		goto out;
-+	}
-+
-+	/*
-+	 * The class of @p did not change. Update it if it has been the same
-+	 * for CLASS_DEBOUNCER_SKIPS user ticks.
-+	 */
-+	debounce_skip = p->ipcc_cntr + 1;
-+	if (debounce_skip < CLASS_DEBOUNCER_SKIPS)
-+		p->ipcc_cntr++;
-+	else
-+		p->ipcc = new_ipcc;
-+
-+out:
-+	p->ipcc_tmp = new_ipcc;
-+}
-+
-+static bool classification_is_accurate(u8 hfi_class, bool smt_siblings_idle)
-+{
-+	switch (boot_cpu_data.x86_model) {
-+	case INTEL_FAM6_ALDERLAKE:
-+	case INTEL_FAM6_ALDERLAKE_L:
-+	case INTEL_FAM6_RAPTORLAKE:
-+	case INTEL_FAM6_RAPTORLAKE_P:
-+	case INTEL_FAM6_RAPTORLAKE_S:
-+		if (hfi_class == 3 || hfi_class == 2 || smt_siblings_idle)
-+			return true;
-+
-+		return false;
-+
-+	default:
-+		return true;
-+	}
-+}
-+
- void intel_hfi_update_ipcc(struct task_struct *curr)
- {
- 	union hfi_thread_feedback_char_msr msr;
-+	bool idle;
- 
- 	/* We should not be here if ITD is not supported. */
- 	if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
-@@ -227,7 +283,9 @@ void intel_hfi_update_ipcc(struct task_struct *curr)
- 	 * 0 is a valid classification for Intel Thread Director. A scheduler
- 	 * IPCC class of 0 means that the task is unclassified. Adjust.
- 	 */
--	curr->ipcc = msr.split.classid + 1;
-+	idle = sched_smt_siblings_idle(task_cpu(curr));
-+	if (classification_is_accurate(msr.split.classid, idle))
-+		debounce_and_update_class(curr, msr.split.classid + 1);
- }
- 
- unsigned long intel_hfi_get_ipcc_score(unsigned short ipcc, int cpu)
+ /* x2APIC locked status */
+ #define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
+ #define LEGACY_XAPIC_DISABLED		BIT(0) /*
+@@ -1116,5 +1119,4 @@
+ 						* disabling x2APIC will cause
+ 						* a #GP
+ 						*/
+-
+ #endif /* _ASM_X86_MSR_INDEX_H */
+diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
+index 0dad49a09b7a..cb8a0e7a4fdb 100644
+--- a/arch/x86/kernel/cpu/scattered.c
++++ b/arch/x86/kernel/cpu/scattered.c
+@@ -28,6 +28,7 @@ static const struct cpuid_bit cpuid_bits[] = {
+ 	{ X86_FEATURE_EPB,		CPUID_ECX,  3, 0x00000006, 0 },
+ 	{ X86_FEATURE_INTEL_PPIN,	CPUID_EBX,  0, 0x00000007, 1 },
+ 	{ X86_FEATURE_RRSBA_CTRL,	CPUID_EDX,  2, 0x00000007, 2 },
++	{ X86_FEATURE_HRESET,		CPUID_EAX, 22, 0x00000007, 1 },
+ 	{ X86_FEATURE_CQM_LLC,		CPUID_EDX,  1, 0x0000000f, 0 },
+ 	{ X86_FEATURE_CQM_OCCUP_LLC,	CPUID_EDX,  0, 0x0000000f, 1 },
+ 	{ X86_FEATURE_CQM_MBM_TOTAL,	CPUID_EDX,  1, 0x0000000f, 1 },
 -- 
 2.25.1
 
