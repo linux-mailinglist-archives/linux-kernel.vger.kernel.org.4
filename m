@@ -2,116 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD4468D992
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E0268D966
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbjBGNlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
+        id S232052AbjBGNdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjBGNkv (ORCPT
+        with ESMTP id S232008AbjBGNdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:40:51 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689F42DE78
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:40:42 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id r2so13581169wrv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=urkAIxuw0vH+tmqjpky10ko8VbPTxFMdI1E8QACAnss=;
-        b=hQRx+/nCyCWiqMX210IH4LQUymrymE1yjavw4Lt99bs0YUHEqoLJOtRQXNJ9F6siXO
-         r7+l7weL97KXIAddry/5olN+KHoBgjycgv1KrZpqx61bYgYV9z+dD/FMhSoksTf/NEnq
-         LOsWAUzXOX89eomlIg5UkpXmrd7SJ2tvun4XhFXeQOvibDXmOU3m075KMB2wX0RBsasr
-         7np4HCk1WWgbQPyo/trnok0BJ4mFBgeyUbPrf1q43oxiPs6IONiEqEELwD/+FncxVJTN
-         B0/l6n1J/uTSXiDrtinlPrkuwRbB/w5eBiiwBr8Mlu+tNkoAjAceFnQZJyc9YNeVMBke
-         ehfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=urkAIxuw0vH+tmqjpky10ko8VbPTxFMdI1E8QACAnss=;
-        b=SnUjcPUO1mvAv/kzcVz8HJT+LvPA1MY3Tqcqfi/4ntAZ1FKqfmvJCY6pYdJGtyWBta
-         xXm+0GQ1iFirq1MaSzNEuUMgqUWJftS15brbn42hhmCYyu3Kx5YPnTGAmRWtooVwiWzj
-         Aw2nevkpRbdxqY8FDoZkQtB++4Aub1kUPzVjLKcXdUuizyWkuMvWGasqqNNWHX6nphvy
-         esFrjk4t85lUJikRbTvVlsILCD9k2EZ+OPaS7GfddDXU+qZ2/KlU21dKPv9bomL5rUko
-         fn4ai3y820igazPj6c2/gmM+C7x13OiFN9BjrJIupBjAGWRlcrjbGFwb+pqAOppwV8NU
-         fwrQ==
-X-Gm-Message-State: AO0yUKWVgjgx155mj4WJb2PS4SPDqP7OXvFjboWEVZi3gDESBKSdcL4i
-        11DTszJv+SW7vK6zGm2PA7RMHg==
-X-Google-Smtp-Source: AK7set9e1f+KMJDJ5s1jQQQtxkd8i0niz6R2HKOrVZkG+bItiOLwyLcSPAi3KM9YcZ2sW5cGUxsiWw==
-X-Received: by 2002:adf:f6cc:0:b0:2c3:e356:694e with SMTP id y12-20020adff6cc000000b002c3e356694emr2916605wrp.22.1675777240965;
-        Tue, 07 Feb 2023 05:40:40 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id o1-20020a5d4a81000000b002c3d67aac74sm10866280wrq.88.2023.02.07.05.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 05:40:40 -0800 (PST)
-From:   neil.armstrong@linaro.org
-Date:   Tue, 07 Feb 2023 14:40:39 +0100
-Subject: [PATCH v2] dt-bindings: arm-smmu: Add compatible for SM8550 SoC
+        Tue, 7 Feb 2023 08:33:08 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA8B1F5C2;
+        Tue,  7 Feb 2023 05:33:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675776780; x=1707312780;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JXEbPFglSuiQr9d7wSUk0H3DKc91xWhi0p9Mc42n5FA=;
+  b=PTWVqzeiZVa8JSHw6vt4+wmYHw9mJ8c6mmINi97695zS7K0A7+MEgOsm
+   S9iVLdQZGRUxWfGpnGbHI2m1C/jGCksrH2mId+86tJzNk6DXP5GtK6HPg
+   wYF6gTeF+Kn/+CuVfPALaqMEFqe+SSZKZFkd3CqXWOuP5XgqCPOUu21PZ
+   /niOUNuoG6SjnyHJc6+/LQIpNLKjjB1woq+bKjblFTMrvJa+W96NdXtwp
+   7BxHOXRTi3ccpVW2CCEGwhWPqI3K1adens4sPx6XAdX24ULgmbjIUc8DK
+   tlXHjk7JU6L/+yu0RFixfItVCySS1fR+RHzHQdCJaqmw9iOkiATEiQ97Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="391899591"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="391899591"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 05:32:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="755628365"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="755628365"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Feb 2023 05:32:59 -0800
+Date:   Tue, 7 Feb 2023 05:42:37 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "Neri, Ricardo" <ricardo.neri@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v2 0/2] intel_powerclamp: New module parameter
+Message-ID: <20230207134237.GA13076@ranerica-svr.sc.intel.com>
+References: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
+ <a68a6f8c76cb719cd4865bd6aa726306772d4ee3.camel@intel.com>
+ <60514763753f572f854f1bbf287c3c16fbbc12c3.camel@linux.intel.com>
+ <468eedb9d8a839d22ffd18125d3104f8c014965c.camel@intel.com>
+ <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230207-topic-sm8550-upstream-smmu-bindings-v2-1-680cbfae6dac@linaro.org>
-X-B4-Tracking: v=1; b=H4sIANZU4mMC/x3NywqDMBCF4VeRrDuQTiq9vEpxkcuoAyZKxpSC+
- O4duvzO4j+HEapMYl7dYSp9WHgtCrx0Js6+TASc1AYtOov2Dvu6cQTJj7630DbZK/mszg0Cl8R
- lEkhhfOINY3RXZ7QUvBCE6kuctVXasui4VRr5+79+D+f5A05+/BGKAAAA
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abel Vesa <abel.vesa@linaro.org>
+On Mon, Feb 06, 2023 at 02:02:28AM -0800, srinivas pandruvada wrote:
+> On Mon, 2023-02-06 at 08:05 +0000, Zhang, Rui wrote:
+> > On Sun, 2023-02-05 at 18:45 -0800, srinivas pandruvada wrote:
+> > > Hi Rui,
+> > > 
+> > > On Sun, 2023-02-05 at 15:57 +0000, Zhang, Rui wrote:
+> > > > Hi, Srinivas,
+> > > > 
+> > > > First of all, the previous build error is gone.
+> > > > 
+> > > > Second, I found something strange, which may be related with the
+> > > > scheduler asym-packing, so CC Ricardo.
+> > > > 
+> > > I thought you disable ITMT before idle injection and reenebale
+> > > after
+> > > removal.
+> > 
+> > No.
+> > 
+> > I can reproduce this by playing with raw intel_powerclamp sysfs knobs
+> > and ITMT enabled.
+> > 
+> 
+> This issue is happening even if ITMT disabled. If the module mask is
+> composed of P-cores it works or even on servers as expected.
+> Also if you offline all P-cores then select mask among E-cores, it is
+> working. Somehow P-core influences E-cores.
+> 
+> Since this patch is module mask related, that is functioning correctly.
+> We have to debug this interaction with P and E cores separately.
 
-Add the SoC specific compatible for SM8550 implementing
-arm,mmu-500.
+Currently, when doing asym_packing, ECores will only pull tasks from a
+PCore only if both SMT siblings are busy. It will only pull from the
+lower-priority sibling. These patches [1] let ECores pull from either
+sibling, if both are busy.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-Changes in v2:
-- Rebased on new bindings using qcom,smmu-500 & arm,mmu-500
-- Dropped driver changes since we rely on qcom,smmu-500 fallback
-- Link to v1: https://lore.kernel.org/all/20221116114001.2669003-1-abel.vesa@linaro.org/
----
- Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 1 +
- 1 file changed, 1 insertion(+)
+I presume that by injecting idle, the scheduler thinks that the CPU is
+idle (i.e., idle_cpu() returns true) and it will not do asym_packing from
+lower-priority CPUs.
 
-diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-index 807cb511fe18..bc27919ab9f9 100644
---- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-+++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-@@ -53,6 +53,7 @@ properties:
-               - qcom,sm8250-smmu-500
-               - qcom,sm8350-smmu-500
-               - qcom,sm8450-smmu-500
-+              - qcom,sm8550-smmu-500
-           - const: qcom,smmu-500
-           - const: arm,mmu-500
+However, in your experiment you have 16 threads. If a Pcore is overloaded,
+an ECore should be able to help.
+
+[1]. https://lore.kernel.org/lkml/20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com/
  
-
----
-base-commit: 49a8133221c71b935f36a7c340c0271c2a9ee2db
-change-id: 20230207-topic-sm8550-upstream-smmu-bindings-dbf9242cc313
-
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
-
