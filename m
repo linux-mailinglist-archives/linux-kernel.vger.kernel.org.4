@@ -2,87 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAD868DEE0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE1F68DEE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjBGR1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:27:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S231408AbjBGR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjBGR1d (ORCPT
+        with ESMTP id S231222AbjBGR1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:27:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6412316336
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:26:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675790798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A1UvW0wrHQWigj5Ouf4r26jfQmoM0gSCL18qsIrw6jw=;
-        b=IV/F7MMQ9nZaN88vHBpbdl9vKxVMnNU5ifiypG2uWnu7KnheUDUugJa055meV2m3mi65X+
-        IBGr++eTAcAm6ARHEgySdT9+500/As0dBp0JU3LhfaAvigqk3K0mdQoe+wBmqqmhAXB/Em
-        lH5iIVdLLpdgInJDDJu9dgv2KtsZN2M=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-622-abhNB9arMn-bmum1btLoQw-1; Tue, 07 Feb 2023 12:26:37 -0500
-X-MC-Unique: abhNB9arMn-bmum1btLoQw-1
-Received: by mail-qk1-f198.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so10238927qkn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:26:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A1UvW0wrHQWigj5Ouf4r26jfQmoM0gSCL18qsIrw6jw=;
-        b=Dc+fnNbI3m3UAPrGHPVsR2NSOoMMfHQ43R4R77bHhSs/1E8QDFzXZPeTCgjkXQejlP
-         5SC4ETtoVLRzi1F3z8bevdOpUMidNRYC36YdtG/K2dxW1veTeSNmCtmQk1tbqk2FQ6DK
-         o7wyRrTl1IfrSUoMopsUlgn6xIT/hG1kBp8YpyZSZzPeo2USC40PL9CDuv8g3xfTvb27
-         OjOeqiFywjzURhcrsX5yGCIVl/wnFrS9Kds8WjtpGn5wCmCS6a8rs/e+Vqs3RKoqDgG0
-         PdKaiDceAvu9cnnXhwt8jCwcovndFyugN7LLpKmtZPVN0YdyYRYWxz6XHOUfqZCcaBHh
-         X5Ig==
-X-Gm-Message-State: AO0yUKVl+rEpsMxPXZLp/9OTGt8F7OmFBNTJku6bTrB21MjIW7uSevA1
-        c3sZP9ldSKLYMwbejzS/lkTP0JjHzfm/8qATiX4iSyIHMloc9rVNPnLSkyX6vDx6H5YJd+7L58u
-        EWFKU5/UdRViAV5/K5WpPoK/r
-X-Received: by 2002:ac8:5f4a:0:b0:3b8:6801:90b3 with SMTP id y10-20020ac85f4a000000b003b8680190b3mr8018617qta.0.1675790796180;
-        Tue, 07 Feb 2023 09:26:36 -0800 (PST)
-X-Google-Smtp-Source: AK7set+G8xGUvyalZMLlK6nlAAPgyJL+bwcDkz+CtGrVcO3QWHRQv0maEwKkbLk5D0mzcwb/8BJN8A==
-X-Received: by 2002:ac8:5f4a:0:b0:3b8:6801:90b3 with SMTP id y10-20020ac85f4a000000b003b8680190b3mr8018567qta.0.1675790795820;
-        Tue, 07 Feb 2023 09:26:35 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id j24-20020a37ef18000000b0072396cb73cdsm9781553qkk.13.2023.02.07.09.26.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 09:26:35 -0800 (PST)
-Date:   Tue, 7 Feb 2023 12:26:33 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Jann Horn <jannh@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
-Message-ID: <Y+KJyTsiio0XMQJ+@x1n>
-References: <20230207125634.292109991@linuxfoundation.org>
- <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
+        Tue, 7 Feb 2023 12:27:37 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C1116302
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:27:34 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vb8Hrdu_1675790847;
+Received: from 30.25.213.166(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0Vb8Hrdu_1675790847)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Feb 2023 01:27:30 +0800
+Message-ID: <9fc4c31c-d5a5-60de-b5db-32fd4c77b1ee@linux.alibaba.com>
+Date:   Wed, 8 Feb 2023 01:27:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH -v4 4/9] migrate_pages: split unmap_and_move() to _unmap()
+ and _move()
+From:   haoxin <xhao@linux.alibaba.com>
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <20230206063313.635011-1-ying.huang@intel.com>
+ <20230206063313.635011-5-ying.huang@intel.com>
+ <28b77814-efea-d5e5-100b-d96da72254ad@linux.alibaba.com>
+In-Reply-To: <28b77814-efea-d5e5-100b-d96da72254ad@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,71 +55,308 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 10:35:19PM +0530, Naresh Kamboju wrote:
-> On Tue, 7 Feb 2023 at 18:29, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.1.11 release.
-> > There are 208 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> Results from Linaro’s test farm.
-> Following build regressions noticed while building
-> selftests/vm/hugetlb-madvise.c
-> with kselftest-merge configs.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Build errors:
-> ----------
-> hugetlb-madvise.c:242:13: warning: implicit declaration of function
-> 'fallocate'; did you mean 'alloca'? [-Wimplicit-function-declaration]
->   242 |         if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
->       |             ^~~~~~~~~
->       |             alloca
-> hugetlb-madvise.c:289:27: error: 'FALLOC_FL_PUNCH_HOLE' undeclared
-> (first use in this function)
->   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
->       |                           ^~~~~~~~~~~~~~~~~~~~
-> hugetlb-madvise.c:289:27: note: each undeclared identifier is reported
-> only once for each function it appears in
-> hugetlb-madvise.c:289:50: error: 'FALLOC_FL_KEEP_SIZE' undeclared
-> (first use in this function)
->   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
->       |                                                  ^~~~~~~~~~~~~~~~~~~
-> make[3]: *** [../lib.mk:145:
-> /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/vm/hugetlb-madvise]
-> Error 1
-> 
-> Build log:
-> https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/3728198425#L1676
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2LPeQeCIu0YEfltwqAFCvDaj29A/
 
-I think we should drop the patch "[PATCH 6.1 012/208] selftests/vm: remove
-__USE_GNU in hugetlb-madvise.c" from this merge.
+在 2023/2/8 上午1:11, haoxin 写道:
+>
+> 在 2023/2/6 下午2:33, Huang Ying 写道:
+>> This is a preparation patch to batch the folio unmapping and moving.
+>>
+>> In this patch, unmap_and_move() is split to migrate_folio_unmap() and
+>> migrate_folio_move().  So, we can batch _unmap() and _move() in
+>> different loops later.  To pass some information between unmap and
+>> move, the original unused dst->mapping and dst->private are used.
+>>
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Cc: Oscar Salvador <osalvador@suse.de>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Bharata B Rao <bharata@amd.com>
+>> Cc: Alistair Popple <apopple@nvidia.com>
+>> Cc: haoxin <xhao@linux.alibaba.com>
+>> Cc: Minchan Kim <minchan@kernel.org>
+>> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+>> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>> ---
+>>   include/linux/migrate.h |   1 +
+>>   mm/migrate.c            | 170 ++++++++++++++++++++++++++++++----------
+>>   2 files changed, 130 insertions(+), 41 deletions(-)
+>>
+>> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+>> index 3ef77f52a4f0..7376074f2e1e 100644
+>> --- a/include/linux/migrate.h
+>> +++ b/include/linux/migrate.h
+>> @@ -18,6 +18,7 @@ struct migration_target_control;
+>>    * - zero on page migration success;
+>>    */
+>>   #define MIGRATEPAGE_SUCCESS        0
+>> +#define MIGRATEPAGE_UNMAP        1
+>>     /**
+>>    * struct movable_operations - Driver page migration
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 9a667039c34c..0428449149f4 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1009,11 +1009,53 @@ static int move_to_new_folio(struct folio 
+>> *dst, struct folio *src,
+>>       return rc;
+>>   }
+>>   -static int __unmap_and_move(struct folio *src, struct folio *dst,
+>> +/*
+>> + * To record some information during migration, we uses
+> uses / use
+>>   some unused
+>> + * fields (mapping and private) of struct folio of the newly allocated
+>> + * destination folio.  This is safe because nobody is using them
+>> + * except us.
+>> + */
+>> +static void __migrate_folio_record(struct folio *dst,
+>> +                   unsigned long page_was_mapped,
+>> +                   struct anon_vma *anon_vma)
+>> +{
+>> +    dst->mapping = (void *)anon_vma;
+>> +    dst->private = (void *)page_was_mapped;
+>> +}
+>> +
+>> +static void __migrate_folio_extract(struct folio *dst,
+>> +                   int *page_was_mappedp,
+>> +                   struct anon_vma **anon_vmap)
+>> +{
+>> +    *anon_vmap = (void *)dst->mapping;
+>> +    *page_was_mappedp = (unsigned long)dst->private;
+>> +    dst->mapping = NULL;
+>> +    dst->private = NULL;
+>> +}
+>> +
+>> +/* Cleanup src folio upon migration success */
+>> +static void migrate_folio_done(struct folio *src,
+>> +                   enum migrate_reason reason)
+>> +{
+>> +    /*
+>> +     * Compaction can migrate also non-LRU pages which are
+>> +     * not accounted to NR_ISOLATED_*. They can be recognized
+>> +     * as __PageMovable
+>> +     */
+>> +    if (likely(!__folio_test_movable(src)))
+>> +        mod_node_page_state(folio_pgdat(src), NR_ISOLATED_ANON +
+>> +                    folio_is_file_lru(src), -folio_nr_pages(src));
+>> +
+>> +    if (reason != MR_MEMORY_FAILURE)
+>> +        /* We release the page in page_handle_poison. */
+>> +        folio_put(src);
+>> +}
+>> +
+>> +static int __migrate_folio_unmap(struct folio *src, struct folio *dst,
+>>                   int force, enum migrate_mode mode)
+>>   {
+>>       int rc = -EAGAIN;
+>> -    bool page_was_mapped = false;
+>> +    int page_was_mapped = 0;
+>>       struct anon_vma *anon_vma = NULL;
+>>       bool is_lru = !__PageMovable(&src->page);
+>>   @@ -1089,8 +1131,8 @@ static int __unmap_and_move(struct folio 
+>> *src, struct folio *dst,
+>>           goto out_unlock;
+>>         if (unlikely(!is_lru)) {
+>> -        rc = move_to_new_folio(dst, src, mode);
+>> -        goto out_unlock_both;
+>> +        __migrate_folio_record(dst, page_was_mapped, anon_vma);
+>> +        return MIGRATEPAGE_UNMAP;
+>>       }
+>>         /*
+>> @@ -1115,11 +1157,42 @@ static int __unmap_and_move(struct folio 
+>> *src, struct folio *dst,
+>>           VM_BUG_ON_FOLIO(folio_test_anon(src) &&
+>>                      !folio_test_ksm(src) && !anon_vma, src);
+>>           try_to_migrate(src, 0);
+>> -        page_was_mapped = true;
+>> +        page_was_mapped = 1;
+>>       }
+>>   -    if (!folio_mapped(src))
+>> -        rc = move_to_new_folio(dst, src, mode);
+>> +    if (!folio_mapped(src)) {
+>> +        __migrate_folio_record(dst, page_was_mapped, anon_vma);
+>> +        return MIGRATEPAGE_UNMAP;
+>> +    }
+>> +
+>> +    if (page_was_mapped)
+>> +        remove_migration_ptes(src, src, false);
+>> +
+>> +out_unlock_both:
+>> +    folio_unlock(dst);
+>> +out_unlock:
+>> +    /* Drop an anon_vma reference if we took one */
+>> +    if (anon_vma)
+>> +        put_anon_vma(anon_vma);
+>> +    folio_unlock(src);
+>> +out:
+>> +
+>> +    return rc;
+>> +}
+>> +
+>> +static int __migrate_folio_move(struct folio *src, struct folio *dst,
+>> +                enum migrate_mode mode)
+>> +{
+>> +    int rc;
+>> +    int page_was_mapped = 0;
+>> +    struct anon_vma *anon_vma = NULL;
+>> +    bool is_lru = !__PageMovable(&src->page);
+>> +
+>> +    __migrate_folio_extract(dst, &page_was_mapped, &anon_vma);
+>> +
+>> +    rc = move_to_new_folio(dst, src, mode);
+>> +    if (unlikely(!is_lru))
+>> +        goto out_unlock_both;
+>>         /*
+>>        * When successful, push dst to LRU immediately: so that if it
+>> @@ -1142,12 +1215,10 @@ static int __unmap_and_move(struct folio 
+>> *src, struct folio *dst,
+>>     out_unlock_both:
+>>       folio_unlock(dst);
+>> -out_unlock:
+>>       /* Drop an anon_vma reference if we took one */
+>>       if (anon_vma)
+>>           put_anon_vma(anon_vma);
+>>       folio_unlock(src);
+>> -out:
+>>       /*
+>>        * If migration is successful, decrease refcount of dst,
+>>        * which will not free the page because new page owner increased
+>> @@ -1159,19 +1230,15 @@ static int __unmap_and_move(struct folio 
+>> *src, struct folio *dst,
+>>       return rc;
+>>   }
+>>   -/*
+>> - * Obtain the lock on folio, remove all ptes and migrate the folio
+>> - * to the newly allocated folio in dst.
+>> - */
+>> -static int unmap_and_move(new_page_t get_new_page,
+>> -                   free_page_t put_new_page,
+>> -                   unsigned long private, struct folio *src,
+>> -                   int force, enum migrate_mode mode,
+>> -                   enum migrate_reason reason,
+>> -                   struct list_head *ret)
+>> +/* Obtain the lock on page, remove all ptes. */
+>> +static int migrate_folio_unmap(new_page_t get_new_page, free_page_t 
+>> put_new_page,
+>> +                   unsigned long private, struct folio *src,
+>> +                   struct folio **dstp, int force,
+>> +                   enum migrate_mode mode, enum migrate_reason reason,
+>> +                   struct list_head *ret)
+>>   {
+>>       struct folio *dst;
+>> -    int rc = MIGRATEPAGE_SUCCESS;
+>> +    int rc = MIGRATEPAGE_UNMAP;
+>>       struct page *newpage = NULL;
+>>         if (!thp_migration_supported() && folio_test_transhuge(src))
+>> @@ -1182,20 +1249,50 @@ static int unmap_and_move(new_page_t 
+>> get_new_page,
+>>           folio_clear_active(src);
+>>           folio_clear_unevictable(src);
+>>           /* free_pages_prepare() will clear PG_isolated. */
+>> -        goto out;
+>> +        list_del(&src->lru);
+>> +        migrate_folio_done(src, reason);
+>> +        return MIGRATEPAGE_SUCCESS;
+>>       }
+>>         newpage = get_new_page(&src->page, private);
+>>       if (!newpage)
+>>           return -ENOMEM;
+>>       dst = page_folio(newpage);
+>> +    *dstp = dst;
+>>         dst->private = NULL;
+>> -    rc = __unmap_and_move(src, dst, force, mode);
+>> +    rc = __migrate_folio_unmap(src, dst, force, mode);
+>> +    if (rc == MIGRATEPAGE_UNMAP)
+>> +        return rc;
+>> +
+>> +    /*
+>> +     * A page that has not been migrated will have kept its
+>> +     * references and be restored.
+>> +     */
+>> +    /* restore the folio to right list. */
+>> +    if (rc != -EAGAIN)
+>> +        list_move_tail(&src->lru, ret);
+>> +
+>> +    if (put_new_page)
+>> +        put_new_page(&dst->page, private);
+>> +    else
+>> +        folio_put(dst);
+>> +
+>> +    return rc;
+>> +}
+>> +
+>> +/* Migrate the folio to the newly allocated folio in dst. */
+>> +static int migrate_folio_move(free_page_t put_new_page, unsigned 
+>> long private,
+>> +                  struct folio *src, struct folio *dst,
+>> +                  enum migrate_mode mode, enum migrate_reason reason,
+>> +                  struct list_head *ret)
+>> +{
+>> +    int rc;
+>> +
+>> +    rc = __migrate_folio_move(src, dst, mode);
+>>       if (rc == MIGRATEPAGE_SUCCESS)
+>>           set_page_owner_migrate_reason(&dst->page, reason);
+>>   -out:
+>>       if (rc != -EAGAIN) {
+>>           /*
+>>            * A folio that has been migrated has all references
+>> @@ -1211,20 +1308,7 @@ static int unmap_and_move(new_page_t 
+>> get_new_page,
+>>        * we want to retry.
+>>        */
+>>       if (rc == MIGRATEPAGE_SUCCESS) {
+>> -        /*
+>> -         * Compaction can migrate also non-LRU folios which are
+>> -         * not accounted to NR_ISOLATED_*. They can be recognized
+>> -         * as __folio_test_movable
+>> -         */
+>> -        if (likely(!__folio_test_movable(src)))
+>> -            mod_node_page_state(folio_pgdat(src), NR_ISOLATED_ANON +
+>> -                    folio_is_file_lru(src), -folio_nr_pages(src));
+>> -
+>> -        if (reason != MR_MEMORY_FAILURE)
+>> -            /*
+>> -             * We release the folio in page_handle_poison.
+>> -             */
+>> -            folio_put(src);
+>> +        migrate_folio_done(src, reason);
+>>       } else {
+>>           if (rc != -EAGAIN)
+>>               list_add_tail(&src->lru, ret);
+>> @@ -1516,7 +1600,7 @@ static int migrate_pages_batch(struct list_head 
+>> *from, new_page_t get_new_page,
+>>       int pass = 0;
+>>       bool is_large = false;
+>>       bool is_thp = false;
+>> -    struct folio *folio, *folio2;
+>> +    struct folio *folio, *folio2, *dst = NULL;
+>>       int rc, nr_pages;
+>>       LIST_HEAD(split_folios);
+>>       bool nosplit = (reason == MR_NUMA_MISPLACED);
+>> @@ -1543,9 +1627,13 @@ static int migrate_pages_batch(struct 
+>> list_head *from, new_page_t get_new_page,
+>>                 cond_resched();
+>>   -            rc = unmap_and_move(get_new_page, put_new_page,
+>> -                        private, folio, pass > 2, mode,
+>> -                        reason, ret_folios);
+>> +            rc = migrate_folio_unmap(get_new_page, put_new_page, 
+>> private,
+>> +                         folio, &dst, pass > 2, mode,
+>> +                         reason, ret_folios);
+>> +            if (rc == MIGRATEPAGE_UNMAP)
+>> +                rc = migrate_folio_move(put_new_page, private,
+>> +                            folio, dst, mode,
+>> +                            reason, ret_folios);
+> How to deal with the whole  pages are ummaped success,  but only part  
+> pages are moved success ?
 
-That patch fixes commit 62f33fa22800 ("selftests/vm: use memfd for
-hugetlb-madvise test"), but that's only in 6.2-rc1 and it's not in 6.1.
+Please ignore this, i get answer from patch 5.
 
-I don't really know why it got picked for 6.1 stable backport, because the
-original patch doesn't contain "CC: stable".
+Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
 
-Thanks,
-
--- 
-Peter Xu
-
+>>               /*
+>>                * The rules are:
+>>                *    Success: folio will be freed
