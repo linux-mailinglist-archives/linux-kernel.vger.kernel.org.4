@@ -2,127 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB6368E38C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85EBB68E38F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjBGWqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 17:46:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
+        id S229662AbjBGWrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 17:47:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBGWqo (ORCPT
+        with ESMTP id S229478AbjBGWrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 17:46:44 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43B91D91F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 14:46:43 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id k4so17962334vsc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 14:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1675810002;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dd4k2clGQvAYBUq7oYGCfW0nQaeNii+CVBUcnHja++A=;
-        b=aFdGcBbsSwnv7E8NykVKcj5yUXrHS/JVFsmAQ7a4DD1xn86ypvDBdJBqMwPbgoVSz5
-         JovXcDp6p+vlVpM2KdoX+Fc6U8beRHxay4MyGFe2X4onczuMTGcTtEVFDuZCq0+m9b+o
-         hZDmW+lwCZ0AQu/bVUVg613ApPOZ1DzqYq365zpOGjLBoWx7T/uer5s5MmwY25I2J6oE
-         nlNwhZB9Tc2ocy+ygTlcUTphmtyW2Q+ywO87gfnXvbszKxDSGXu5hAsZrWO7DQYkAQPM
-         GNVoI837kC/kSfrgiMQup3r9V8Qh/IfGr8ZxNCCo/uLNwmIJzevHbvXuZ6eChLJ7luvs
-         aUMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1675810002;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dd4k2clGQvAYBUq7oYGCfW0nQaeNii+CVBUcnHja++A=;
-        b=jLlolHHaIxhpNC7Etl3L7oTvRfwJzgcdfZ/D1ETMz65WJIYNQjB+SQLCjFhJ5SN5p1
-         cDaqWvwB1qsko3kuPL0Xjy4hEiCp68I+QEl8Rh9QGOC7yrKQav5Wm3VJh6Q5T0uYf5je
-         JZMaHNhDlAYHW0qJqs93AFdD70SPOoevf7tf2JCDRY1iNghC5ovVM9uEy97lHQqXSDP4
-         GkUFuLz5FhiWBEDZbRE6vH/b9KTUkOzvYkmWDRMzdxdqTjwfQBl8CZG8sLMi245fYjw5
-         W2s6tQgHcVobLeuecmWfjP/o4fk/aaYw7oObhIBHzF71+DGJV1A+hpexp68CxQhL5z7g
-         0oTw==
-X-Gm-Message-State: AO0yUKWyBkOs6sFlOOtE+3psCr7R5+i6oBr7AIppAtlBy8tVXXmEYfyN
-        pbezbu2nU5RDIqMiHgWiTUVP8I2JRffqbwEiKM5r7w==
-X-Google-Smtp-Source: AK7set9KdE7K2VwpkmpPDdbgRPU9KWW0L/1ytARhlMr9eWAC9KK+OPs217EpAVwaL9S1d9Ug0mbZtnDwK65brTseVCU=
-X-Received: by 2002:a05:6102:201b:b0:3f7:dda3:f85 with SMTP id
- p27-20020a056102201b00b003f7dda30f85mr1048272vsr.66.1675810002563; Tue, 07
- Feb 2023 14:46:42 -0800 (PST)
+        Tue, 7 Feb 2023 17:47:09 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323341422A;
+        Tue,  7 Feb 2023 14:47:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PBJCl4FWrz4xxJ;
+        Wed,  8 Feb 2023 09:46:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675810020;
+        bh=P1+2yR2zPHMLQNlCBWy7GQs27yRvZDYPL0p+TeY0y2U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EHDuh/fTrz6PCn9HuZxfdFDjtZlZCBjzHoD0RGKU1UdmmKdS0pLr6i2l+j1IsRVjU
+         iHqhtAvFzKdLSMrQhLoH97wg264/ClyTa77ZWByUqxDhLdRAUjb5ZfWwibWwUiUY86
+         x4pIP+GQ52CuMua1OK3o2EHlg1PlGlTVrAb8BvUuqeOBJlzWD3uxFtfmTJOG0wOFvA
+         t4oiVOb2s5s0BlnKALZckQDTlzh78pME2HtiYRuWpyH4X5+GfgGCTVEyylvlnxHljT
+         2jaONguOJ03zhakC0r0wbqJWDQYiZlmpPQ1Wcv4ZFHm3lHWTRsjbZDWIhbay/E6l+I
+         H+y0/Kd70oIeg==
+Date:   Wed, 8 Feb 2023 09:46:57 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230208094657.379f2b1a@canb.auug.org.au>
 MIME-Version: 1.0
-References: <Y9Li93O6Ffwcr+vn@x1n> <CADrL8HVJb9mA3Lbz5UKJ8EudTk9sGDY-pdRqvW3TGawD_bJB0A@mail.gmail.com>
- <Y9f+jMLWy6ngpYuR@x1n> <CADrL8HX3sf6OO3PXS1g6b2dKf8b5phQ7oyNR0dVT=sAOdTmmqw@mail.gmail.com>
- <Y9gzOqwKcu7p/PEw@x1n> <CADrL8HXX9YDFUxmPPsm2s3Pno0XXgAyFB40fV1PdtP9eb-5D2A@mail.gmail.com>
- <Y9m/VVRABt0Blfjh@x1n> <CADrL8HXpfTE1+eE3rNGQyOr1QRtDtG5mBp-b3xcNX22QJRvPaQ@mail.gmail.com>
- <Y9qRta3bd4JqjUHx@x1n> <CADrL8HU809O0cPa9hXjf3k+ob139SQqvxOvpqm6UEv=zrPjHSg@mail.gmail.com>
- <Y9re82gctIZf08cX@x1n> <CADrL8HVja_xJ9qczsd-fQfEPvEEXswhXQwoan=a_LSMyORvqww@mail.gmail.com>
- <CADrL8HUSx6=K0QXQtTmv9ZJQmvhe6KEb+FiAviRfO3HjmRUeTw@mail.gmail.com>
-In-Reply-To: <CADrL8HUSx6=K0QXQtTmv9ZJQmvhe6KEb+FiAviRfO3HjmRUeTw@mail.gmail.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Tue, 7 Feb 2023 14:46:04 -0800
-Message-ID: <CADrL8HUm7g4pBLv9vjmB-LhJqxm4jyksGJQAdwRsweKKAnofDg@mail.gmail.com>
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+8DOz_+V1FFnl7K3zhMZ5WD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Here is the result: [1] (sorry it took a little while heh). The
-> implementation of the "RFC v1" way is pretty horrible[2] (and this
-> implementation probably has bugs anyway; it doesn't account for the
-> folio_referenced() problem).
->
-> Matthew is trying to solve the same problem with THPs right now: [3].
-> I haven't figured out how we can apply Matthews's approach to HGM
-> right now, but there probably is a way. (If we left the mapcount
-> increment bits in the same place, we couldn't just check the
-> hstate-level PTE; it would have already been made present.)
->
-> We could:
-> - use the THP-like way and tolerate ~1 second collapses
+--Sig_/+8DOz_+V1FFnl7K3zhMZ5WD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Another thought here. We don't necessarily *need* to collapse the page
-table mappings in between mmu_notifier_invalidate_range_start() and
-mmu_notifier_invalidate_range_end(), as the pfns aren't changing,
-we aren't punching any holes, and we aren't changing permission bits.
-If we had an MMU notifier that simply informed KVM that we collapsed
-the page tables *after* we finished collapsing, then it would be ok
-for hugetlb_collapse() to be slow.
+Hi all,
 
-If this MMU notifier is something that makes sense, it probably
-applies to MADV_COLLAPSE for THPs as well.
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  net/devlink/leftover.c (net/core/devlink.c in the net tree)
 
-> - use the (non-RFC) v1 way and tolerate the migration/smaps differences
-> - use the RFC v1 way and tolerate the complicated mapcount accounting
-> - flesh out [3] and see if it can be applied to HGM nicely
->
-> I'm happy to go with any of these approaches.
->
-> [1]: https://pastebin.com/raw/hJzFJHiD
-> [2]: https://github.com/48ca/linux/commit/4495f16a09b660aff44b3edcc125aa3a3df85976
-> [3]: https://lore.kernel.org/linux-mm/Y+FkV4fBxHlp6FTH@casper.infradead.org/
+between commit:
 
-- James
+  565b4824c39f ("devlink: change port event netdev notifier from per-net to=
+ global")
+
+from the net tree and commits:
+
+  f05bd8ebeb69 ("devlink: move code to a dedicated directory")
+  687125b5799c ("devlink: split out core code")
+
+from the net-next tree.
+
+I fixed it up (I used the latter version of this file and applied the
+following merge fix up) and can carry the fix as necessary. This is now
+fixed as far as linux-next is concerned, but any non trivial conflicts
+should be mentioned to your upstream maintainer when your tree is
+submitted for merging.  You may also want to consider cooperating with
+the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 8 Feb 2023 09:43:53 +1100
+Subject: [PATCH] fxup for "devlink: split out core code"
+
+interacting with "devlink: change port event netdev notifier from per-net t=
+o global"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ net/devlink/core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/net/devlink/core.c b/net/devlink/core.c
+index aeffd1b8206d..a4f47dafb864 100644
+--- a/net/devlink/core.c
++++ b/net/devlink/core.c
+@@ -205,7 +205,7 @@ struct devlink *devlink_alloc_ns(const struct devlink_o=
+ps *ops,
+ 		goto err_xa_alloc;
+=20
+ 	devlink->netdevice_nb.notifier_call =3D devlink_port_netdevice_event;
+-	ret =3D register_netdevice_notifier_net(net, &devlink->netdevice_nb);
++	ret =3D register_netdevice_notifier(&devlink->netdevice_nb);
+ 	if (ret)
+ 		goto err_register_netdevice_notifier;
+=20
+@@ -266,8 +266,7 @@ void devlink_free(struct devlink *devlink)
+ 	xa_destroy(&devlink->snapshot_ids);
+ 	xa_destroy(&devlink->ports);
+=20
+-	WARN_ON_ONCE(unregister_netdevice_notifier_net(devlink_net(devlink),
+-						       &devlink->netdevice_nb));
++	WARN_ON_ONCE(unregister_netdevice_notifier(&devlink->netdevice_nb));
+=20
+ 	xa_erase(&devlinks, devlink->index);
+=20
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+8DOz_+V1FFnl7K3zhMZ5WD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPi1OEACgkQAVBC80lX
+0Gyr6Af8D5ccqmxFbA9hgoiZb052vn+jecHB0bGwMBeCv2FaVstxixIYVh8HyeBE
+hVCzGlnlVGxUyS1BUEF2a//zzvEfh3xwGbXajTyIyM0VPEWizeTFYUIOHWeOJVY4
++Ku8c8TAUwfFiCNkY46a2nZ8dfUaxiAPiiwjONyui021vs/6VkNxNktG9572gBAp
+tA8XKPvhca7InaLs8Kgyh0+IktME7jyxeAc31nYSEU6UtOZcEAzmCOXDqfAgI1Hp
+X+pfzsPtGD/EFO+f2d6MG07frwAlfbuJpZHXhNTw+lZpniEp9NlF/95LFbC1BASq
+r+1OolyiN55c2v1rEu+oe3hf8phR0Q==
+=Cig5
+-----END PGP SIGNATURE-----
+
+--Sig_/+8DOz_+V1FFnl7K3zhMZ5WD--
