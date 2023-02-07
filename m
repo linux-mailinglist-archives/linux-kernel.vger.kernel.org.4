@@ -2,70 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9675168D29D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B95068D2AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjBGJU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 04:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        id S229960AbjBGJYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbjBGJUa (ORCPT
+        with ESMTP id S231637AbjBGJXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:20:30 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A51624C96
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:20:24 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id w20so10305468pfn.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 01:20:24 -0800 (PST)
+        Tue, 7 Feb 2023 04:23:44 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADF236684
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:23:09 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id gr7so41497886ejb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 01:23:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=616h4CPqRb9+yGgK1+zMae6bPtCXWD1O+JIiZJuuAN4=;
-        b=POuFDmmZM+HsSNu3Ig6MrYzwr3GM4CyOQdDe7V11yiwyZPXSCPNLzrlt076FyPn9N3
-         Ra3OCljjkArBP9GamaRLVX37vdcbOskg+wqXX/KuFLOrm5AYkm4n/TmA6Zn3pxImfTlT
-         OL0CV63kV1gNyVRmGC8U56R9ST6dZfBwW6N/w=
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I70HhxHLsI2HHGcZI04fStNVNeSuevhKRqsln0/FI/A=;
+        b=yrMGmfrMG5RKmVutlzGybx2TOoPNybxgeoFTGv81EX+SrqeMxTBh6j1swNcISVyw+p
+         AgxQ+dFKkqs4M+u7dP5WPvcw6t/6BiMCzK+bOyEBzFiotz/5L2G3eEMdJFEYX4+4bwpJ
+         Z0MRw+rSaCVL7tO3EKomyzEQp/H7CkFnKCW7+mzsAR0ABkwjVvW9n6FRXkKWS8OtlSVW
+         0GnttzP+aRl1UBX6dKSXSyf58HWn/JgZXGprVJzROGcIll13KS+KQKtI+car/sh4sQk3
+         i7b90CA7JynTrQkutLlEKl4SxpFEHmuY9HM0fTBVmDHIJUDDQFwDmwPsvnJidHbLmfFO
+         CVaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=616h4CPqRb9+yGgK1+zMae6bPtCXWD1O+JIiZJuuAN4=;
-        b=MLh8rdkkiUOp0mX8gRMfp6B9jZ1dXElHVZdcTU799Nn/Df/PZOl1XRcz+/3oGFSE6J
-         bUfH1G7J6UvIg4WbDM/5on4hlb6FD/+c0UR4iltBkK+1QUtC3YxZsYniBTNeZISlteUX
-         OvB9gfgyzhTb4bc+V4OldaGeVenYmS4U5yNhZMdHqL1H8Dwii7tQDDv1jwMAimox1beR
-         KrGLSQ2nwQjGb7t5Wry3AZByCH7hAqCVyX3767aAJaa6nIG6L5D2ZBJ8n6lUKVe5H98N
-         D29wU4wKaslFrt3vj46Tkw3dlceY538qo+w9n8EoWbrORQdJSDOEVeCSueLHns3yGjnx
-         +rNw==
-X-Gm-Message-State: AO0yUKWAbdG3z55mmALq+f9eJsfpooCvmiiELbYJ2neDMhRJ2i5xmaOd
-        yP3kLNZZEYgKCyN590Wf75fULU6ywcYL+xZtJjGI
-X-Google-Smtp-Source: AK7set8u2ObsZbLlP0iS0NBdphAYXHsP07SB/g80AsW6PNgCWskBsHThfsh9+Xa6vPihwEdNRDQUptXNmQK/81bFsSg=
-X-Received: by 2002:a63:7a56:0:b0:4c7:ef33:bbe1 with SMTP id
- j22-20020a637a56000000b004c7ef33bbe1mr415970pgn.73.1675761624040; Tue, 07 Feb
- 2023 01:20:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20230201231250.3806412-1-atishp@rivosinc.com> <20230201231250.3806412-8-atishp@rivosinc.com>
- <20230202170345.uwi72dauzunlzxex@orel> <CAOnJCUJfc8y729GiUdtqhv+PZu8v9rH+kfpwPwdW=GQPEs9FNw@mail.gmail.com>
- <CAOnJCUKn_pLKqYO71S6MrZd=rnTdSShZk+XksX2uxTiVtthmTA@mail.gmail.com>
- <20230206092204.aiyo43uxlm4xdmgn@orel> <20230206113945.vcnrokltvzgifsqu@orel>
-In-Reply-To: <20230206113945.vcnrokltvzgifsqu@orel>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 7 Feb 2023 01:20:12 -0800
-Message-ID: <CAOnJCUK8FUFYGgTh0Zx=_nN8BwZ1rnCXccg212y=dVKkOXuwww@mail.gmail.com>
-Subject: Re: [PATCH v4 07/14] RISC-V: KVM: Add skeleton support for perf
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=I70HhxHLsI2HHGcZI04fStNVNeSuevhKRqsln0/FI/A=;
+        b=nd38aduuO84xRSamxtI00AxAshO5QUbaThIMZ+atIMEvApdG6JBeElaJ4YFkOYuI3e
+         QN9oxHOc599QfU4+nLnO6pP/C7Auq5h5AmeQzgC07MuZJSgfSQYYmQ3LrWhWBsdzIn+f
+         2bdsYY2kBZaS4sfh8yhe+1BTU+7YF5V5qCvGPD8uubxFfol93aFU3aqA9ZJFQV5DWkNf
+         SpXeIqYz6jVRNDVllCv42nTFjcOsHDg5kptUXbvmvZl88LbVXjJfJg1Iv/N93Jyd2Y43
+         eTy8hrLPRf7LnyzXFGbD9sNd+HBStgBj1cd/Okse20I57umZDGLy6urPayBIu1lGb3tL
+         SX2Q==
+X-Gm-Message-State: AO0yUKUygIlz7qYIUW2X60B3OUXJibLpFtB4Jmd48LplXCOixnWOj9h6
+        R8/bUy4+Hm8SmSc1gBYUk0gB2g==
+X-Google-Smtp-Source: AK7set/4jc5ZZLArDJD4G8kQ0dT4ezIRyv/eZI/G0ee7KmVpY7u9jRJrKjLsy6MxGRs020d764r0jA==
+X-Received: by 2002:a17:906:448c:b0:88a:4a22:dd5 with SMTP id y12-20020a170906448c00b0088a4a220dd5mr2585928ejo.23.1675761787520;
+        Tue, 07 Feb 2023 01:23:07 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id ml18-20020a170906cc1200b00882f9130eafsm6599467ejb.26.2023.02.07.01.23.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 01:23:07 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 07 Feb 2023 10:23:06 +0100
+Message-Id: <CQC7Z4ZMDRKJ.3UUSZY1495PEQ@otso>
+Cc:     "Abel Vesa" <abel.vesa@linaro.org>,
+        "Alexander Stein" <alexander.stein@ew.tq-group.com>,
+        "Tony Lindgren" <tony@atomide.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "John Stultz" <jstultz@google.com>,
+        "Doug Anderson" <dianders@chromium.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        "Maxim Kiselev" <bigunclemax@gmail.com>,
+        "Maxim Kochetkov" <fido_max@inbox.ru>,
+        "Colin Foster" <colin.foster@in-advantage.com>,
+        "Martin Kepplinger" <martin.kepplinger@puri.sm>,
+        "Jean-Philippe Brucker" <jpb@kernel.org>,
+        "Vladimir Oltean" <vladimir.oltean@nxp.com>,
+        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v3 00/12] fw_devlink improvements
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Saravana Kannan" <saravanak@google.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Sudeep Holla" <sudeep.holla@arm.com>,
+        "Cristian Marussi" <cristian.marussi@arm.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Marc Zyngier" <maz@kernel.org>, "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        "NXP Linux Team" <linux-imx@nxp.com>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Richard Weinberger" <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Frank Rowand" <frowand.list@gmail.com>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        "Magnus Damm" <magnus.damm@gmail.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Daniel Scally" <djrscally@gmail.com>,
+        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
+        "Len Brown" <lenb@kernel.org>,
+        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+X-Mailer: aerc 0.14.0
+References: <20230207014207.1678715-1-saravanak@google.com>
+In-Reply-To: <20230207014207.1678715-1-saravanak@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,157 +114,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 3:39 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+On Tue Feb 7, 2023 at 2:41 AM CET, Saravana Kannan wrote:
+> Naresh, Tony, Abel, Geert, Dmitry, Maxim(s), Miquel, Luca, Doug, Martin,
+> Jean-Philippe,
 >
-> On Mon, Feb 06, 2023 at 10:22:04AM +0100, Andrew Jones wrote:
-> > On Sat, Feb 04, 2023 at 11:37:47PM -0800, Atish Patra wrote:
-> > > On Fri, Feb 3, 2023 at 12:47 AM Atish Patra <atishp@atishpatra.org> wrote:
-> > > >
-> > > > On Thu, Feb 2, 2023 at 9:03 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> > > > >
-> > > > > On Wed, Feb 01, 2023 at 03:12:43PM -0800, Atish Patra wrote:
-> > > > > > This patch only adds barebone structure of perf implementation. Most of
-> > > > > > the function returns zero at this point and will be implemented
-> > > > > > fully in the future.
-> > > > > >
-> > > > > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > > > > > ---
-> > > > > >  arch/riscv/include/asm/kvm_host.h     |   4 +
-> > > > > >  arch/riscv/include/asm/kvm_vcpu_pmu.h |  78 +++++++++++++++
-> > > > > >  arch/riscv/kvm/Makefile               |   1 +
-> > > > > >  arch/riscv/kvm/vcpu.c                 |   7 ++
-> > > > > >  arch/riscv/kvm/vcpu_pmu.c             | 136 ++++++++++++++++++++++++++
-> > > > > >  5 files changed, 226 insertions(+)
-> > > > > >  create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > > > > >  create mode 100644 arch/riscv/kvm/vcpu_pmu.c
-> > > > > >
-> > > > > > diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-> > > > > > index 93f43a3..b90be9a 100644
-> > > > > > --- a/arch/riscv/include/asm/kvm_host.h
-> > > > > > +++ b/arch/riscv/include/asm/kvm_host.h
-> > > > > > @@ -18,6 +18,7 @@
-> > > > > >  #include <asm/kvm_vcpu_insn.h>
-> > > > > >  #include <asm/kvm_vcpu_sbi.h>
-> > > > > >  #include <asm/kvm_vcpu_timer.h>
-> > > > > > +#include <asm/kvm_vcpu_pmu.h>
-> > > > > >
-> > > > > >  #define KVM_MAX_VCPUS                        1024
-> > > > > >
-> > > > > > @@ -228,6 +229,9 @@ struct kvm_vcpu_arch {
-> > > > > >
-> > > > > >       /* Don't run the VCPU (blocked) */
-> > > > > >       bool pause;
-> > > > > > +
-> > > > > > +     /* Performance monitoring context */
-> > > > > > +     struct kvm_pmu pmu_context;
-> > > > > >  };
-> > > > > >
-> > > > > >  static inline void kvm_arch_hardware_unsetup(void) {}
-> > > > > > diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > > > > > new file mode 100644
-> > > > > > index 0000000..e2b4038
-> > > > > > --- /dev/null
-> > > > > > +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > > > > > @@ -0,0 +1,78 @@
-> > > > > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > > > > +/*
-> > > > > > + * Copyright (c) 2023 Rivos Inc
-> > > > > > + *
-> > > > > > + * Authors:
-> > > > > > + *     Atish Patra <atishp@rivosinc.com>
-> > > > > > + */
-> > > > > > +
-> > > > > > +#ifndef __KVM_VCPU_RISCV_PMU_H
-> > > > > > +#define __KVM_VCPU_RISCV_PMU_H
-> > > > > > +
-> > > > > > +#include <linux/perf/riscv_pmu.h>
-> > > > > > +#include <asm/kvm_vcpu_sbi.h>
-> > > > > > +#include <asm/sbi.h>
-> > > > > > +
-> > > > > > +#ifdef CONFIG_RISCV_PMU_SBI
-> > > > > > +#define RISCV_KVM_MAX_FW_CTRS        32
-> > > > > > +
-> > > > > > +#if RISCV_KVM_MAX_FW_CTRS > 32
-> > > > > > +#error "Maximum firmware counter can't exceed 32 without increasing the RISCV_MAX_COUNTERS"
-> > > > >
-> > > > > "The number of firmware counters cannot exceed 32 without increasing RISCV_MAX_COUNTERS"
-> > > > >
-> > > > > > +#endif
-> > > > > > +
-> > > > > > +#define RISCV_MAX_COUNTERS      64
-> > > > >
-> > > > > But instead of that message, what I think we need is something like
-> > > > >
-> > > > >  #define RISCV_KVM_MAX_HW_CTRS  32
-> > > > >  #define RISCV_KVM_MAX_FW_CTRS  32
-> > > > >  #define RISCV_MAX_COUNTERS     (RISCV_KVM_MAX_HW_CTRS + RISCV_KVM_MAX_FW_CTRS)
-> > > > >
-> > > > >  static_assert(RISCV_MAX_COUNTERS <= 64)
-> > > > >
-> > > > > And then in pmu_sbi_device_probe() should ensure
-> > > > >
-> > > > >   num_counters <= RISCV_MAX_COUNTERS
-> > > > >
-> > > > > and pmu_sbi_get_ctrinfo() should ensure
-> > > > >
-> > > > >   num_hw_ctr <= RISCV_KVM_MAX_HW_CTRS
-> > > > >   num_fw_ctr <= RISCV_KVM_MAX_FW_CTRS
-> > > > >
-> > > > > which has to be done at runtime.
-> > > > >
-> > > >
-> > > > Sure. I will add the additional sanity checks.
-> > > >
-> > >
-> > > As explained above, I feel we shouldn't mix the firmware number of
-> > > counters that the host gets and it exposes to a guest.
-> > > So I have not included this suggestion in the v5.
-> > > I have changed the num_fw_ctrs to PMU_FW_MAX though to accurately
-> > > reflect the firmware counters KVM is actually using.
-> >
-> > Sounds good
->
-> I just looked at v5. IMO, much of what I proposed above still makes
-> sense, since what I'm proposing is that the relationship between
-> RISCV_KVM_MAX_HW_CTRS, RISCV_KVM_MAX_FW_CTRS, RISCV_MAX_COUNTERS, and 64
-> (our current max bitmap size) be explicitly checked. So, even if we want
-> RISCV_KVM_MAX_FW_CTRS to be SBI_PMU_FW_MAX, it'd be good to have
->
-> #define RISCV_KVM_MAX_HW_CTRS  32
->
-> (And a runtime check confirming num_hw_ctrs + 1 <= RISCV_KVM_MAX_HW_CTRS,
->  and then either silently capping or issuing a warning and capping)
->
-> And, to be sure the sum of RISCV_KVM_MAX_FW_CTRS and RISCV_KVM_MAX_HW_CTRS
-> doesn't exceed the size of the bitmap
->
-> #define RISCV_KVM_MAX_FW_CTRS   SBI_PMU_FW_MAX
-> #define RISCV_MAX_COUNTERS      (RISCV_KVM_MAX_HW_CTRS + RISCV_KVM_MAX_FW_CTRS)
-> static_assert(RISCV_MAX_COUNTERS <= 64)
->
+> Can I get your Tested-by's for this v3 series please?
 
-ok. I have added those changes but I have modified RISCV_MAX_COUNTERS
-to RISCV_KVM_MAX_COUNTERS,
-to avoid overlapping with the RISCV_MAX_COUNTERS defined in the host.
-Logically, the host and the guest can have separate counters anyways.
+Hi Saravana,
 
+Seems to be alright on the same platform where it broke previously.
+
+Tested-by: Luca Weiss <luca.weiss@fairphone.com> # qcom/sm7225-fairphone-fp=
+4
+
+Regards
+Luca
+
+>
+> Vladimir,
+>
+> Ccing you because DSA's and fw_devlink have known/existing problems
+> (still in my TODOs to fix). But I want to make sure this series doesn't
+> cause additional problems for DSA.
+>
+> All,
+>
+> This patch series improves fw_devlink in the following ways:
+>
+> 1. It no longer cares about a fwnode having a "compatible" property. It
+>    figures this out more dynamically. The only expectation is that
+>    fwnodes that are converted to devices actually get probed by a driver
+>    for the dependencies to be enforced correctly.
+>
+> 2. Finer grained dependency tracking. fw_devlink will now create device
+>    links from the consumer to the actual resource's device (if it has one=
+,
+>    Eg: gpio_device) instead of the parent supplier device. This improves
+>    things like async suspend/resume ordering, potentially remove the need
+>    for frameworks to create device links, more parallelized async probing=
+,
+>    and better sync_state() tracking.
+>
+> 3. Handle hardware/software quirks where a child firmware node gets
+>    populated as a device before its parent firmware node AND actually
+>    supplies a non-optional resource to the parent firmware node's
+>    device.
+>
+> 4. Way more robust at cycle handling (see patch for the insane cases).
+>
+> 5. Stops depending on OF_POPULATED to figure out some corner cases.
+>
+> 6. Simplifies the work that needs to be done by the firmware specific
+>    code.
+>
+> The v3 series has gone through my usual testing on my end and looks good
+> to me.
+>
 > Thanks,
-> drew
+> Saravana
 >
-> >
-> > > I don't know if there is any benefit of static_assert over #error.
-> > > Please let me know if you feel strongly about that.
-> >
-> > One "normal" line vs. three #-lines?
-> >
+> [1] - https://lore.kernel.org/lkml/20220810060040.321697-1-saravanak@goog=
+le.com/
+> [2] - https://lore.kernel.org/lkml/CAGETcx-JUV1nj8wBJrTPfyvM7=3DMre5j_vkV=
+mZojeiumUGG6QZQ@mail.gmail.com/
+>
+> v1 -> v2:
+> - Fixed Patch 1 to handle a corner case discussed in [2].
+> - New patch 10 to handle "fsl,imx8mq-gpc" being initialized by 2 drivers.
+> - New patch 11 to add fw_devlink support for SCMI devices.
+>
+> v2 -> v3:
+> - Addressed most of Andy's comments in v2
+> - Added Colin and Sudeep's Tested-by for the series (except the imx and
+>   renesas patches)
+> - Added Sudeep's Acked-by for the scmi patch.
+> - Added Geert's Reviewed-by for the renesas patch.
+> - Fixed gpiolib crash reported by Naresh.
+> - Patch 6: Fix __fwnode_links_move_consumers() to preserve fwnode link fl=
+ags.
+> - New Patch 12 to fix nvmem-cells issue reported by Maxim(s)/Miquel.
+> - Deleted some stale function doc in Patch 8
+>
+> Cc: Abel Vesa <abel.vesa@linaro.org>
+> Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Doug Anderson <dianders@chromium.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Maxim Kiselev <bigunclemax@gmail.com>
+> Cc: Maxim Kochetkov <fido_max@inbox.ru>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Luca Weiss <luca.weiss@fairphone.com>
+> Cc: Colin Foster <colin.foster@in-advantage.com>
+> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+> Cc: Jean-Philippe Brucker <jpb@kernel.org>
+> Cc: Vladimir Oltean <vladimir.oltean@nxp.com>
+>
+> Saravana Kannan (12):
+>   driver core: fw_devlink: Don't purge child fwnode's consumer links
+>   driver core: fw_devlink: Improve check for fwnode with no
+>     device/driver
+>   soc: renesas: Move away from using OF_POPULATED for fw_devlink
+>   gpiolib: Clear the gpio_device's fwnode initialized flag before adding
+>   driver core: fw_devlink: Add DL_FLAG_CYCLE support to device links
+>   driver core: fw_devlink: Allow marking a fwnode link as being part of
+>     a cycle
+>   driver core: fw_devlink: Consolidate device link flag computation
+>   driver core: fw_devlink: Make cycle detection more robust
+>   of: property: Simplify of_link_to_phandle()
+>   irqchip/irq-imx-gpcv2: Mark fwnode device as not initialized
+>   firmware: arm_scmi: Set fwnode for the scmi_device
+>   mtd: mtdpart: Don't create platform device that'll never probe
+>
+>  drivers/base/core.c             | 449 +++++++++++++++++++++-----------
+>  drivers/firmware/arm_scmi/bus.c |   3 +-
+>  drivers/gpio/gpiolib.c          |   7 +
+>  drivers/irqchip/irq-imx-gpcv2.c |   1 +
+>  drivers/mtd/mtdpart.c           |  10 +
+>  drivers/of/property.c           |  84 +-----
+>  drivers/soc/imx/gpcv2.c         |   2 +-
+>  drivers/soc/renesas/rcar-sysc.c |   2 +-
+>  include/linux/device.h          |   1 +
+>  include/linux/fwnode.h          |  12 +-
+>  10 files changed, 344 insertions(+), 227 deletions(-)
+>
+> --=20
+> 2.39.1.519.gcb327c4b5f-goog
 
-Fair enough. Fixed.
-
-> > Thanks,
-> > drew
-
-
-
--- 
-Regards,
-Atish
