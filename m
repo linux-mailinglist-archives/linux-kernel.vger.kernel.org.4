@@ -2,95 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1033668D6E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF3E68D6E8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbjBGMhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S231414AbjBGMiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjBGMhZ (ORCPT
+        with ESMTP id S230501AbjBGMiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:37:25 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78761E2B9;
-        Tue,  7 Feb 2023 04:37:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675773444; x=1707309444;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LiSxcagqNB+5kdb9BVVbcrT1QJr/8pqeefoLK3ITSQA=;
-  b=Bg6A8O/9PBpkWNomYDrP164OIOQjpvRzyp0WemoXr22Fo9b38t2NBSjQ
-   WGkDnVP/Lpl91hxUCxU8KX/Yr0b+ZHMnj9suPYkf27Jw04QCQ3y1XPZhi
-   EUmX6Ae2GQlZRY1U83M+6u6quaj69b8ifNUZdTWShGdr7SRrHlStutATr
-   CS5iQtcMsOvKOwLP0NpkWkycjYkTIwyDT+x4SDvODSyqEwZSrXGy5WCwg
-   BrX1dAo4eZFGwKadKS2Okhzgv7LuuVZ01tIQb6s2zrkiKQvlfJCb+pspA
-   EAVO4yKxga2sCnsL775hQxllTK3WB0l0kryXBXsURqH/nMO3C65pVJBpC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="309140933"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="309140933"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 04:37:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="697268000"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="697268000"
-Received: from tdx-lm.sh.intel.com ([10.239.53.27])
-  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2023 04:37:22 -0800
-From:   Wei Wang <wei.w.wang@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, mhal@rbox.co
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Wang <wei.w.wang@intel.com>
-Subject: [PATCH v2 2/2] kvm/eventfd: use list_for_each_entry when deassign ioeventfd
-Date:   Tue,  7 Feb 2023 20:37:13 +0800
-Message-Id: <20230207123713.3905-3-wei.w.wang@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20230207123713.3905-1-wei.w.wang@intel.com>
-References: <20230207123713.3905-1-wei.w.wang@intel.com>
+        Tue, 7 Feb 2023 07:38:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840AB38672
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:37:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D00C61341
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 12:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64938C433EF;
+        Tue,  7 Feb 2023 12:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675773474;
+        bh=b9flB4uOxysA7XLZ81GSdAGuhvvYN16nX7ol1cEkayk=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=TuTS6aRz+0b2o1CLt1xTjIGFZIvZUs3bjPIdnIeTkgK43G4HcpkCT5f4oHnRgQ5O5
+         k6mG2b5+QA4XU4XkIcqUZay4308yncWrYFByyVDREWq9Xn0tTvT4VsofVQXJVSycKx
+         UCQZ7HVhRYAQ5IR8s8LENIzeKpAQCHko/T6j/sKaf7WBHWzmEg78M1BKAbVSEx4RD+
+         dQTdf+55qZN+YKjPDG0mK5ZvfYDN+PsP8pS5RmGuB0tUvEVszwhiThz/qYhFLDrELp
+         OYWbxTpJKb8pWf8AWM/oB401Xm4y7VZf5qqyC0RJMCTqGiHLDYbRVK3xFYEhttIu04
+         ljLKFZIvniI5Q==
+Message-ID: <27713531-1367-bf5a-1225-32cc83bbd545@kernel.org>
+Date:   Tue, 7 Feb 2023 20:37:51 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] f2fs: fix typos in comments
+Content-Language: en-US
+To:     j-young.choi@samsung.com,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20230206115600epcms2p736f05524a361d5926dbb401bdd218f85@epcms2p7>
+ <20230206115600epcms2p736f05524a361d5926dbb401bdd218f85@epcms2p7>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230206115600epcms2p736f05524a361d5926dbb401bdd218f85@epcms2p7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simpify kvm_deassign_ioeventfd_idx to use list_for_each_entry as the
-loop just ends at the entry that's founded and deleted.
+On 2023/2/6 19:56, Jinyoung CHOI wrote:
+> This patch is to fix typos in f2fs files.
+> 
+> Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
 
-Signed-off-by: Wei Wang <wei.w.wang@intel.com>
----
- virt/kvm/eventfd.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-index 1b277afb545b..2b56a3c81957 100644
---- a/virt/kvm/eventfd.c
-+++ b/virt/kvm/eventfd.c
-@@ -868,7 +868,7 @@ static int
- kvm_deassign_ioeventfd_idx(struct kvm *kvm, enum kvm_bus bus_idx,
- 			   struct kvm_ioeventfd *args)
- {
--	struct _ioeventfd        *p, *tmp;
-+	struct _ioeventfd        *p;
- 	struct eventfd_ctx       *eventfd;
- 	struct kvm_io_bus	 *bus;
- 	int                       ret = -ENOENT;
-@@ -882,8 +882,7 @@ kvm_deassign_ioeventfd_idx(struct kvm *kvm, enum kvm_bus bus_idx,
- 
- 	mutex_lock(&kvm->slots_lock);
- 
--	list_for_each_entry_safe(p, tmp, &kvm->ioeventfds, list) {
--
-+	list_for_each_entry(p, &kvm->ioeventfds, list) {
- 		if (p->bus_idx != bus_idx ||
- 		    p->eventfd != eventfd  ||
- 		    p->addr != args->addr  ||
--- 
-2.27.0
-
+Thanks,
