@@ -2,106 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F78E68D97E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F82168D980
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbjBGNgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:36:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S232027AbjBGNg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbjBGNgL (ORCPT
+        with ESMTP id S229992AbjBGNg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:36:11 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185682A9BE
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:36:07 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id l21-20020a05600c1d1500b003dfe462b7e4so1072445wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:36:07 -0800 (PST)
+        Tue, 7 Feb 2023 08:36:57 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F421EFDA;
+        Tue,  7 Feb 2023 05:36:56 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id j17so3768918ioa.9;
+        Tue, 07 Feb 2023 05:36:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sVI9K8PTnFNIA9pBOwdmxa5ImYWaocXFHnfUICArsyc=;
-        b=o//KoGPZUfzC+aaVmqoPmdDF3gEsLKbwWosUMg6bek/AA4Yrd8KHkISWUiJkXmwKNW
-         sHMRYnI8ksoYk2iP9kg41StksvoqVcEdy8IV3qeONv9hdlfr3RJYvNb/SRM+NHqWWv9L
-         SchKchF+G4Ag4QRlh7ttPW6/5XILWWW3a+S7wRKOKgZKoiAnt7/4gOEct+FIGtkaq6CZ
-         5loXQWPNCn+UnHry0EXjVRT8hjV2sey78lctBneVVrW/k2a3bReMNMs2s9QndbQaaaMl
-         iJ+H2EjJGe0EclobqFIe/3ynpomFtuRhNF3FsJ2kToT1Yg3Npu9FQwFOXgiaUhAhJdHf
-         0z1g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LqXpd+6GmWYDfrIRkTLB84J6lnICdBCs34DL0km+tCE=;
+        b=N3TcmGJVFjBtrwsZ2RG4pjyGUp1IacyuB4Ge+jbQnCYjWpR5tk8nUHdMH+Z6obEI1H
+         z0X/O0xRNqMEDdgccTlG9Y7gpbfwsLpp3hKMEJrcBQop3wpBQzBcgoajBmlsE4AfkDwC
+         8X8LuX5Iapn3LX1vHaRqUhsoAxb51bYWCuyBJ791BfFsPMMtmPLbwAx0sueTkfy321ad
+         2NlzL0mInVCrooOWVM3xc5glk/MdRjO8RScLzBvgBPtJmDGMwLBRhI8mXXTsn0LdGQM5
+         MJcHAEf29hMH+FSFiqrTw+L4zDL/Vd182Xv/iXLjSMjQxD3YG4lHyM8uChvuZww93qA1
+         C4hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sVI9K8PTnFNIA9pBOwdmxa5ImYWaocXFHnfUICArsyc=;
-        b=e1GjZ974drK2pnuTPUesLhccmfoDAiVtP9Fycv7PDkhoFHH82jmc0asJXCBOPBkr5P
-         FRpE8UVN2TLUIvK5HDCtwPIkwm09H53+KeQNlSPZ+ij08O6yc8MXzOW119U6bIlbWJO2
-         oZUN8opYh1NKnq7h1aMGxSE14kSR7WESGq+2ZqCydgNwsIsZdRWASWPeI2/YBVgTqjf6
-         ESdfZY/2nH9Qr90dkSLo2zmZbGcuSHv/LeNjD3qKBMn3eTSittgcSZAviJtLyXyUFqBH
-         4788TjZ7CafDiBzR4KSp2a1f55Yfm0HcHzMplkEWUcWrUcoKTPu+tPMbmjgH9yI6w+3i
-         7Suw==
-X-Gm-Message-State: AO0yUKXSCxTMRIy0svRSOBxXQfsLkaEp3UW62AhXEPgaUrZPaRNXDq5m
-        HQzMxT1CaJh153g13WHOtDSvQg==
-X-Google-Smtp-Source: AK7set+XnY7pfbNfFjLHPCUL8D1u9EwDQ3lhz21ktvYLT+GXdOmtMNVGdaRInzpMwcC+w81j3R+1wQ==
-X-Received: by 2002:a05:600c:330a:b0:3df:de27:4191 with SMTP id q10-20020a05600c330a00b003dfde274191mr3115551wmp.16.1675776965685;
-        Tue, 07 Feb 2023 05:36:05 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h27-20020a05600c2cbb00b003db12112fcfsm15385748wmc.4.2023.02.07.05.36.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 05:36:05 -0800 (PST)
-Message-ID: <7aa132aa-d2fe-e2a1-a2a7-97321a74165c@linaro.org>
-Date:   Tue, 7 Feb 2023 14:36:03 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LqXpd+6GmWYDfrIRkTLB84J6lnICdBCs34DL0km+tCE=;
+        b=Mo7g1jA3U0vNJ6rOoJC1+zQNzsZRKszPxkXSQfGw1BeZBh0esxSz8/8ar43sOpVIrs
+         xnYcIpNrcZENzPe3djFI3kdPtFJZNtxNlOqdY8UIQzZq1Gt6mtIgRBc5qf3+qQLSdaKX
+         /HVLsLw2ezE2IG5lLi2w+kNc3H226G987GZZLdVYPJHDtfdlYf+yKOlr78/aagdFLOG6
+         mZoRve2zVBc6weYw2ldysay5OWkgHO/XcSIqm4rMkgB7T9v77GmZZNxSOLBvRv2CSUmG
+         aUyygy4oC/440mPgCs/6Mlf+0HRr+xsLA1ZjMi6loEluejKBmH8pwbDIK/2vyMaBr2LY
+         xYRw==
+X-Gm-Message-State: AO0yUKXZ0Go3gzZbzMUEibmP4923EaDF3TCig/pnpMluaylKqfpRS40l
+        MYwXbkePbxaSqJdebJ/lrHk=
+X-Google-Smtp-Source: AK7set+ex0hb9lnsfVO1HWuaLoiKbuVU/Q+WxlhALTQlZDZjPXz+qVJEZ/j5ztvo/L3YqjPNy9cF5w==
+X-Received: by 2002:a6b:7019:0:b0:72c:f57a:a37b with SMTP id l25-20020a6b7019000000b0072cf57aa37bmr2265815ioc.2.1675777016160;
+        Tue, 07 Feb 2023 05:36:56 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id l7-20020a056638220700b0039e89ea68f9sm4254787jas.135.2023.02.07.05.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 05:36:55 -0800 (PST)
+Date:   Tue, 7 Feb 2023 15:36:51 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 3/6] KVM: x86: Do not unload MMU roots when only
+ toggling CR0.WP
+Message-ID: <20230207153651.000067f8@gmail.com>
+In-Reply-To: <20230201194604.11135-4-minipli@grsecurity.net>
+References: <20230201194604.11135-1-minipli@grsecurity.net>
+        <20230201194604.11135-4-minipli@grsecurity.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] dt-bindings: mt76: add active-low property for led
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230207133504.21826-1-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230207133504.21826-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 14:35, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On Wed,  1 Feb 2023 20:46:01 +0100
+Mathias Krause <minipli@grsecurity.net> wrote:
+
+> There is no need to unload the MMU roots for a direct MMU role when only
+> CR0.WP has changed -- the paging structures are still valid, only the
+> permission bitmap needs to be updated.
 > 
-> LEDs can be in low-active mode, driver already supports it, but
-> documentation is missing. Add documentation for the dt property.
+> One heavy user of toggling CR0.WP is grsecurity's KERNEXEC feature to
+> implement kernel W^X.
 > 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>\
 
+Wouldn't it be better to factor out update_permission_bitmask and
+update_pkru_bitmask in a common function and call it from here? So that
+we can also skip: bunches of if..else..., recalculation of the rsvd mask
+and shadow_zero_bit masks.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I suppose this is a critical path according to the patch comments and
+kvm_init_mmu() is a non-critical path. Is it better to seperate 
+them now for saving the maintanence efforts in future? E.g. something heavier 
+might be introduced into the kvm_init_mmu() path and slows down this path.
 
-Best regards,
-Krzysztof
+> The optimization brings a huge performance gain for this case as the
+> following micro-benchmark running 'ssdd 10 50000' from rt-tests[1] on a
+> grsecurity L1 VM shows (runtime in seconds, lower is better):
+> 
+>                        legacy     TDP    shadow
+> kvm.git/queue          11.55s   13.91s    75.2s
+> kvm.git/queue+patch     7.32s    7.31s    74.6s
+> 
+> For legacy MMU this is ~36% faster, for TTP MMU even ~47% faster. Also
+> TDP and legacy MMU now both have around the same runtime which vanishes
+> the need to disable TDP MMU for grsecurity.
+> 
+> Shadow MMU sees no measurable difference and is still slow, as expected.
+> 
+> [1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+> 
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+> ---
+> v2: handle the CR0.WP case directly in kvm_post_set_cr0() and only for
+> the direct MMU role -- Sean
+> 
+> I re-ran the benchmark and it's even faster than with my patch, as the
+> critical path is now the first one handled and is now inline. Thanks a
+> lot for the suggestion, Sean!
+> 
+>  arch/x86/kvm/x86.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 508074e47bc0..f09bfc0a3cc1 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -902,6 +902,15 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
+>  
+>  void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
+>  {
+> +	/*
+> +	 * Toggling just CR0.WP doesn't invalidate page tables per se, only the
+> +	 * permission bits.
+> +	 */
+> +	if (vcpu->arch.mmu->root_role.direct && (cr0 ^ old_cr0) == X86_CR0_WP) {
+> +		kvm_init_mmu(vcpu);
+> +		return;
+> +	}
+> +
+>  	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
+>  		kvm_clear_async_pf_completion_queue(vcpu);
+>  		kvm_async_pf_hash_reset(vcpu);
 
