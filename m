@@ -2,78 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3220468DE81
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C581E68DE84
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjBGRIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
+        id S231527AbjBGRKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjBGRIR (ORCPT
+        with ESMTP id S229565AbjBGRKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:08:17 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C873BDAB;
-        Tue,  7 Feb 2023 09:08:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=BtF4TWVZ7Fb1fvpOPOUkeR6eY8gtFqrdC32AYabBIIo=; b=QUWLlT535g9Pp1HOsnV/ZfVl4a
-        7SC+c2zT4nKjaZLPFLshFeXdAWVfsGIHN8A49D3zyeVS06F63DihkP3ymZ5LY2JegFBOcbr9rZgAQ
-        9RcByhVdDCWS1cGbcb3IjN/1noMM6d7M/qbLMSmfDugmXoIepSDPWYu2UfEhlQ0Ho5mY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pPRRm-004K8H-90; Tue, 07 Feb 2023 18:07:58 +0100
-Date:   Tue, 7 Feb 2023 18:07:58 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v2 04/11] net: ethernet: mtk_eth_soc: set MDIO bus clock
- frequency
-Message-ID: <Y+KFbuumUJ83tRHj@lunn.ch>
-References: <cover.1675779094.git.daniel@makrotopia.org>
- <4bd0d0c834b7e8852504f27fc2db586b3c95979e.1675779094.git.daniel@makrotopia.org>
+        Tue, 7 Feb 2023 12:10:16 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FAE3BDAA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:10:15 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 13075200F5;
+        Tue,  7 Feb 2023 17:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675789814; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xqgHSvZVuaq+v+IH67EMkppDRKeF2E4q4iKhI5vfsLs=;
+        b=JWBKD3zEhW9u5PTpMzNIu5j3KMSTM70D3oiK4riBRNbi68OWFrAZfwTt7ul4ba6YxAqYkY
+        ZAhBr9G5gBFzPbkOmd2MWl+dbDGhbs40pL26JnFvw9l9MUvUMO+vZBxAwb/fwCui4yovzH
+        ruIh4pRAQEX2ZaavPUUHBRHd8l36vKo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675789814;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xqgHSvZVuaq+v+IH67EMkppDRKeF2E4q4iKhI5vfsLs=;
+        b=wSmncD+h99/IocMDuo/nxBQbi5BfdRLwWaofsg2xub6KDx+ougC0aeAtyBqe9i7T1q2959
+        jYGeV9sE9pgNS9BQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E06C613467;
+        Tue,  7 Feb 2023 17:10:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cSEiNvWF4mPMVAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 07 Feb 2023 17:10:13 +0000
+Message-ID: <cf3788c7-1b84-dac2-6f83-6da6baa36dd6@suse.cz>
+Date:   Tue, 7 Feb 2023 18:10:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4bd0d0c834b7e8852504f27fc2db586b3c95979e.1675779094.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/4] mm, compaction: Finish scanning the current pageblock
+ if requested
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230125134434.18017-1-mgorman@techsingularity.net>
+ <20230125134434.18017-4-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230125134434.18017-4-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 02:20:40PM +0000, Daniel Golle wrote:
-> Set MDIO bus clock frequency and allow setting a custom maximum
-> frquency from device tree.
+On 1/25/23 14:44, Mel Gorman wrote:
+> cc->finish_pageblock is set when the current pageblock should be
+> rescanned but fast_find_migrateblock can select an alternative
+> block. Disable fast_find_migrateblock when the current pageblock
+> scan should be completed.
 > 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-    Andrew
+> ---
+>  mm/compaction.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index 28711a21a8a2..4b3a0238879c 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -1762,6 +1762,13 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
+>  	if (cc->ignore_skip_hint)
+>  		return pfn;
+>  
+> +	/*
+> +	 * If the pageblock should be finished then do not select a different
+> +	 * pageblock.
+> +	 */
+> +	if (cc->finish_pageblock)
+> +		return pfn;
+> +
+>  	/*
+>  	 * If the migrate_pfn is not at the start of a zone or the start
+>  	 * of a pageblock then assume this is a continuation of a previous
+
