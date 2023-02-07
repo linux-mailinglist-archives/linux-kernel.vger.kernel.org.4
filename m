@@ -2,157 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4FC68CFCA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D60D068CFCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 07:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjBGGto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 01:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S230335AbjBGGuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 01:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBGGtm (ORCPT
+        with ESMTP id S229890AbjBGGur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 01:49:42 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34703298DA
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:49:41 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id r18so9790177pgr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:49:41 -0800 (PST)
+        Tue, 7 Feb 2023 01:50:47 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE89298F2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 22:50:46 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id g3so3899854vsr.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 22:50:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o/CSckEZneREzc3kHdu+J2V8qJBWUsoyPtYrVkjFwzw=;
-        b=C+5Ke/dVYng9xNOxfIb7Bl2YdIxdAFsoCC+OHbabOrEGBsvxTP/wtrmxzcLbIEvWlY
-         050mjkwkuB626xi+GO/4+95ANuVQN5GUBhUrTlSJrYtsd1RSL+TETEtGYKb841badoo7
-         LqT89HDljGkRKpaAXFodNrBN3iTSo0zT0nmmzZkX+SsyKXlgZhuHb8J+BjRDy3jnu5AW
-         nKuZGcoIdonMIcFlk1HpBacf8shtAPfNp3fPsBfi9QNuug6A2E/igUKJpcR/hWOOEp9B
-         RPxUrZZrwIVm2UBFJpjP33zjGa6Zf+tjN2xJNPb9Avtji18vizwPYHTDQrh1SwOgHcys
-         84JQ==
+        bh=ovD4NTkRVtFpsf9ep+ByBKc78lLKrAGdTdRbhoRExPc=;
+        b=aSz1OItET9lgxK/S1Ryjin49/fpFyBf/eXdaBxZu3kafmKocBA7g/+H7Dc6o8PE9ml
+         TpgXs1r44ebC1xHMW2isjHKBewi5M6NwitN4otd+IlASmD+fEKgdmtNl34/v69XDAGPE
+         Y2L13X715ApbH8k5GDcCZLUdwbW0SgrXbEXKw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=o/CSckEZneREzc3kHdu+J2V8qJBWUsoyPtYrVkjFwzw=;
-        b=PlMT8yL+62ye+qg2jMKuDZ8da8oTkx5EUQ+kcfR40nkblx/JS31f+Z83V63yJ1Pcr4
-         s9PFQmrKCcgR63jDr5MvT7TX0tAm58UnCQ2LClwxpXM9KfU2/VUbC4qBOLZr04we/51a
-         p5oPuiyJNA1JYqwTZVj0csHzplnh3xXxaHLaxltcm2FP4sIEu2CqCoOfQJ+f4e4zYysM
-         PWlI8CVaf/DgPNGT7ujcyytBMnyhTRhywltctzXLKq1KhJUVlq3l9LdFCCRP/w9meASD
-         5opDj0ZVn5YQWDYm+nbMtDSqea5dXROPN1eFDpqkIVQpCsQfDejOsFv5l+m7Sae+zSU5
-         G1Fg==
-X-Gm-Message-State: AO0yUKVTZd8oF0Lc3uSHK9Jhfckpz+uYQkVZDnJj0TmENFFCEW/HstyG
-        Da3pVSdVnYoPlvYgIppnyNVw4RJKIQ3yqz+NIESauw==
-X-Google-Smtp-Source: AK7set+lSF6h4ihqXMsgGagqqFaj6yB78FXTHOazJ1c86xZkVfF7VhvjVOu5aO/JI9I3OprkBFQIP9PiP+HGMh6pZ9s=
-X-Received: by 2002:aa7:8ede:0:b0:590:7829:f566 with SMTP id
- b30-20020aa78ede000000b005907829f566mr490179pfr.50.1675752580282; Mon, 06 Feb
- 2023 22:49:40 -0800 (PST)
+        bh=ovD4NTkRVtFpsf9ep+ByBKc78lLKrAGdTdRbhoRExPc=;
+        b=t55zWCTAe/2gSDvQ9kOMtaXYjr+LnhdFhHctdwguhyYAbiPMo3FZOIP2O+NCjxBRrz
+         lP9zUebQXHwPR6xH/VM7ZE2AFueEwm6u5OO+6gXcDZkUvT5f/1C1/T0+XH/HZM8GgiM6
+         FcS7rY+QAhrzrkpWmVS1jdvSGmCgnvskaDyp3xzeWKiBTtx0pK4MwjtrwX9KzO8Kr8nW
+         oc3RU2ebsp/oj4IFr2GGQ62b0GrTN4aWUGehEDuExuccZFLkCp/6aRZnvtRHpieEQsw6
+         2KZOQIRwaE3XT7umZr31ZE1NGdiSHbYw6dblJ/9Yyjle2zvvIlPZ2iDD7/RJO2tE/3i1
+         uM3Q==
+X-Gm-Message-State: AO0yUKXUollZWmnL6oUm4GTCpr/x3vBmf8IBFBZ7CLqa+vjRtAUmPGsG
+        Ai0g3gkGIVxj+FhzpRtpZTsuYneAmPvLvr/veD02hw==
+X-Google-Smtp-Source: AK7set99t3gC07Hg4yA0UO3w3cEuRbQykjCNUiz+MsYe6moWdFHqfF8gGT+ZkK7EQ8lATbxIIWMvgDhlF5i8p+oiQ3k=
+X-Received: by 2002:a05:6102:4b8:b0:3fe:ae88:d22 with SMTP id
+ r24-20020a05610204b800b003feae880d22mr463700vsa.65.1675752645237; Mon, 06 Feb
+ 2023 22:50:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20221222134844.lbzyx5hz7z5n763n@skbuf> <4263dc33-0344-16b6-df22-1db9718721b1@linaro.org>
- <20221223134459.6bmiidn4mp6mnggx@skbuf>
-In-Reply-To: <20221223134459.6bmiidn4mp6mnggx@skbuf>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 6 Feb 2023 22:49:03 -0800
-Message-ID: <CAGETcx8De_qm9hVtK5CznfWke9nmOfV8OcvAW6kmwyeb7APr=g@mail.gmail.com>
-Subject: Re: Advice on MFD-style probing of DSA switch SoCs
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-9-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206152928.918562-9-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Feb 2023 14:50:34 +0800
+Message-ID: <CAGXv+5EFKxx8-8aD1VeMpPmNsztPJMsirpDc4Nd17ZMi7ED_9Q@mail.gmail.com>
+Subject: Re: [PATCH v1 08/45] clk: mediatek: mt2712: Move apmixedsys clock
+ driver to its own file
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 23, 2022 at 5:44 AM Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> On Fri, Dec 23, 2022 at 09:44:14AM +0100, Krzysztof Kozlowski wrote:
-> > just trim the code... we do not need to scroll over unrelated pieces.
+> The only clock driver that does not support mtk_clk_simple_probe() is
+> apmixedsys: in preparation for enabling module build of non-critical
+> mt2712 clocks, move this to its own file.
+> While at it, also fix some indentation issues in the PLLs table.
 >
-> ok
->
-> > > However, the irq_domain/irqchip handling code in this case will go to
-> > > drivers/net/dsa/, and it won't really be a "driver" (there is no struct
-> >
-> > Why? Devicetree hierarchy has nothing to do with Linux driver hierarchy
-> > and nothing stops you from putting irqchip code in respective directory
-> > for such DT. Your parent device can be MFD, can be same old DSA switch
-> > driver etc. Several options.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/clk/mediatek/Makefile                |   2 +-
+>  drivers/clk/mediatek/clk-mt2712-apmixedsys.c | 152 +++++++++++++++++
+>  drivers/clk/mediatek/clk-mt2712.c            | 164 -------------------
+>  3 files changed, 153 insertions(+), 165 deletions(-)
+>  create mode 100644 drivers/clk/mediatek/clk-mt2712-apmixedsys.c
 
-Hi Vladimir,
+`git diff --color-moved=dimmed-zebra --color-moved-ws=ignore-all-space`
+agrees this is mostly code movement.
 
-I stumbled onto this thread when searching for some old emails between
-us to refresh my memory on fw_devlink + DSA issues.
+> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> index e5d018270ed0..3c7dd19cdddf 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -38,7 +38,7 @@ obj-$(CONFIG_COMMON_CLK_MT2701_HIFSYS) += clk-mt2701-hif.o
+>  obj-$(CONFIG_COMMON_CLK_MT2701_IMGSYS) += clk-mt2701-img.o
+>  obj-$(CONFIG_COMMON_CLK_MT2701_MMSYS) += clk-mt2701-mm.o
+>  obj-$(CONFIG_COMMON_CLK_MT2701_VDECSYS) += clk-mt2701-vdec.o
+> -obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712.o
+> +obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712.o clk-mt2712-apmixedsys.o
+>  obj-$(CONFIG_COMMON_CLK_MT2712_BDPSYS) += clk-mt2712-bdp.o
+>  obj-$(CONFIG_COMMON_CLK_MT2712_IMGSYS) += clk-mt2712-img.o
+>  obj-$(CONFIG_COMMON_CLK_MT2712_JPGDECSYS) += clk-mt2712-jpgdec.o
+> diff --git a/drivers/clk/mediatek/clk-mt2712-apmixedsys.c b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+> new file mode 100644
+> index 000000000000..e841be3a02c9
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+> @@ -0,0 +1,152 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2017 MediaTek Inc.
+> + * Copyright (c) 2023 Collabora Ltd.
+> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+I think the original author still applies, given you are mostly just
+moving the code?
+
+[...]
+
+> +static const struct of_device_id of_match_clk_mt2712_apmixed[] = {
+> +       { .compatible = "mediatek,mt2712-apmixedsys" },
+> +       { /* sentinel */ }
+> +};
+> +
+> +static struct platform_driver clk_mt2712_apmixed_drv = {
+> +       .probe = clk_mt2712_apmixed_probe,
+> +       .driver = {
+> +               .name = "clk-mt2712",
+
+I'd change the name as well, but I'm not sure if that constitutes a
+uAPI change.
+
+> +               .of_match_table = of_match_clk_mt2712_apmixed,
+> +       },
+> +};
+> +builtin_platform_driver(clk_mt2712_apmixed_drv)
 
 
->
-> True, in fact I've already migrated in my tree the drivers for
-> nxp,sja1110-base-tx-mdio and nxp,sja1110-base-t1-mdio (which in the
-> current bindings, are under ethernet-switch/mdios/mdio@N) to dedicated
-> platform drivers under drivers/net/mdio/. The sja1105 driver will have
-> to support old bindings as well, so code in sja1105_mdio.c which
-> registers platform devices for MDIO nodes for compatibility will have to
-> stay.
->
-> But I don't want to keep doing that for other peripherals. The irqchip
-> is not a child of the ethernet-switch, not in any sense at all. The
-> ethernet-switch even has 2 IRQ lines which need to be provided by the
-> irqchip, so there would be a circular dependency in the device tree
-> description if the ethernet-switch was the parent.
-
-I'm glad you are looking into this and agree how IRQ controllers are
-independent of the rest of the ethernet-switch, etc.
-
-> fw_devlink doesn't really like that, and has been causing problems for
-> similar topologies with other DSA switches. There have been discussions
-> with Saravana Kannan, and he proposed introducing a FWNODE_FLAG_BROKEN_PARENT
-> flag, that says "don't create device links between a consumer and a
-> supplier, if the consumer needs a resource from the supplier to probe,
-> and the supplier needs to manually probe the consumer to finish its own
-> probing".
-> https://patchwork.kernel.org/project/netdevbpf/cover/20210826074526.825517-1-saravanak@google.com/
-
-It did land as FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD and it's used for
-PHYs. But yeah, it's not a great long term solution.
-
-> That patch didn't really go anywhere to my knowledge, but I'd prefer to
-> sidestep all that discussion about what constitutes a broken parent and
-> what doesn't, and here, introducing an irqchip driver which is a fwnode
-> child of the ethernet-switch driver seems like a big mistake, given past
-> experience.
-
-IMHO, the DSA is a logical device that's made up of many different
-pieces of real hardware IP. IMHO an ideal solution would be something
-like a dsa_bus type where we add a dsa_device. The dsa_device will
-list all the necessary devices (IRQ, PHY, MDIO, etc -- they can be
-wherever they want in DT) as its suppliers and when the dsa_device is
-probed, it can assume all its suppliers are present and then do the
-DSA initialization.
-
-This would also solve the PHYs problem you stated earlier. So,
-basically you'd move some of the dsa initialization code into the
-dsa_probe() function of the dsa_bus.
-
-Hope I'm making some sense. Let me know if you want to discuss this
-further and I can try and provide more context and details.
-
-Also, there's already a driver core feature that does just this --
-component devices -- but the implementation is old and not so great
-IMHO. Component device model can be done better using device links. I
-want to refactor the component device framework to use device links,
-but that's a problem for another time.
-
--Saravana
+ChenYu
