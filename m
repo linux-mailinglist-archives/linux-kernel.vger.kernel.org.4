@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6298268D1C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DFA68D1C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjBGIu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S230461AbjBGIuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 03:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbjBGIur (ORCPT
+        with ESMTP id S231278AbjBGIuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:50:47 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B192118;
-        Tue,  7 Feb 2023 00:50:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675759846; x=1707295846;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=1Cg0BkZLcjjnL2oGDwOtUOGPwzfbs6tORc0ZeGAodwI=;
-  b=erHulSN00x2m4X00S/8RRwyeo5ARoiPw5GfGdI7Z77WsNhJRlv2VCODi
-   RLak9iBpmMkNdVZ8Fiu65PSH3rSCXFhrmYkVC+4MXZAvRiWsyfmt1N2Iz
-   Olntl/RG91oz+25Nrx3wZa+HmUf9Mdhydg/Wgrbc3AK/3kMa0DiBUZXwx
-   ccsDD5BA5b3ATflbDn5TebC8J4TcvgeE0Zc8TkHVV31QdAV6h5q+3TmDW
-   OIzqL2HHY5xzI1s/+EHyWFSbSs6rt7rmZkOkhtg7E5XircUmFKqL4a5Kb
-   YGUjtpvJDcBf9J5r23suEB7IfGBhWFnpxx9cKzOA/kEr2sGIJQsdR3Bwf
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="317472521"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="317472521"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 00:50:37 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775482535"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="775482535"
-Received: from aamakine-mobl.ger.corp.intel.com ([10.249.36.72])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 00:50:29 -0800
-Date:   Tue, 7 Feb 2023 10:50:23 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
- occurs in CAT test
-In-Reply-To: <TYAPR01MB6330A24D0B7B52567453FF388BDB9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-Message-ID: <406496b7-877b-d9e7-10e-d7b31da51add@linux.intel.com>
-References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com> <a9ab65a6-f750-7fd9-99ba-1cbd15427d2c@linux.intel.com> <TYAPR01MB6330A24D0B7B52567453FF388BDB9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+        Tue, 7 Feb 2023 03:50:46 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8373014202
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:50:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1675759829; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=WgmlCvAAFn4Gt9ZmijArDO1jcwx++DCPHyFCFAGJ1AETX8e3eKegsqwscVsAYhXT9RlMvHr8HJ2Q0LG2TxpDpaCLro4MhQ9YoB07VrmZSQ1YXq0PkXfkCKuHhbPZ6FvUFcCeTjTW7kOD/bdZCq+M6WePpvYU5agijkLqWHfeqVo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1675759829; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=n6uraEzQ7snd1B3mJHkhy+yrztmpCqfklvd8VQqyxbk=; 
+        b=ZE8wm38ZpR9ITNUd9hsmFd55Xh4UbrqyXLkmi1RohHlNsxzTaEYo7NPtgFZiblJKsTrD0L4jULYhe6Q/xAvuafJ7cx1G2ebrC4jGxt9HWUkVGiX/HRvIvmMPuHLMRaK5ZYj6zqD4ZMd7ODVhs1C0vP/aTPpd2St4i4WtXP1k9fw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1675759829;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=n6uraEzQ7snd1B3mJHkhy+yrztmpCqfklvd8VQqyxbk=;
+        b=itA3r0vePIpOYB7BOz/KNvAyl1tGMM/dTJRYV6LGmCF4vlSDxj0RGm1mfyuBOKbh
+        v0qOfk1CaF/K1OqfIKyCtA/OfCTFM+lcUcRz6/BKcrzJy7A6Hc6kPxcfJwj+aMM/gQW
+        pl0Xsliuf0ACjOahxfKeLCx5JBkT5ugX+gmTSkJc=
+Received: from [10.10.10.3] (31.223.26.239 [31.223.26.239]) by mx.zohomail.com
+        with SMTPS id 1675759827730423.8160413004782; Tue, 7 Feb 2023 00:50:27 -0800 (PST)
+Message-ID: <dca5d799-a562-4494-bbf4-79b7e9420cac@arinc9.com>
+Date:   Tue, 7 Feb 2023 11:50:23 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 0/2] nvmem: brcm_nvram: use buffered nvram data for
+ cell values
+To:     Willem-Jan de Hoog <wdehoog@exalondelft.nl>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1675717472.git.wdehoog@exalondelft.nl>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <cover.1675717472.git.wdehoog@exalondelft.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023, Shaopeng Tan (Fujitsu) wrote:
-
-> > On Tue, 31 Jan 2023, Shaopeng Tan wrote:
-> > 
-> > > After creating a child process with fork() in CAT test, if an error
-> > > occurs or a signal such as SIGINT is received, the parent process will
-> > > be terminated immediately, and therefor the child process will not be
-> > > killed and also resctrlfs is not unmounted.
-> > >
-> > > There is a signal handler registered in CMT/MBM/MBA tests, which kills
-> > > child process, unmount resctrlfs, cleanups result files, etc., if a
-> > > signal such as SIGINT is received.
-> > >
-> > > Commonize the signal handler registered for CMT/MBM/MBA tests and
-> > > reuse it in CAT too.
-> > >
-> > > To reuse the signal handler, make the child process in CAT wait to be
-> > > killed by parent process in any case (an error occurred or a signal
-> > > was received), and when killing child process use global bm_pid
-> > > instead of local bm_pid.
-> > >
-> > > Also, since the MBA/MBA/CMT/CAT are run in order, unregister the
-> > > signal handler at the end of each test so that the signal handler
-> > > cannot be inherited by other tests.
-> > >
-> > > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> > > ---
-
-> > >  	ret = cat_val(&param);
-> > > -	if (ret)
-> > > -		return ret;
-> > > -
-> > > -	ret = check_results(&param);
-> > > -	if (ret)
-> > > -		return ret;
-> > > +	if (ret == 0)
-> > > +		ret = check_results(&param);
-> > 
-> > It would be take this program flow fix out of the signal handler change into a
-> > separate change.
+On 7.02.2023 11:42, Willem-Jan de Hoog wrote:
+> On OpenWrt 22.03.3, Asus RT-AC88U does not boot anymore:
 > 
-> Do you mean this fix should be separated into two patches?
-
-Yes.
-
-Currently, I see your patch doing (mainly) two things:
-1) cleaning up the messy signal handler logic
-2) fixing the early return in case of error from cat_val() or 
-   check_results()
-
-Both are good changes and both are needed to fully fix things. But (IMHO) 
-those are indepedent enough that it would warrant to split this change 
-into two.
-
--- 
- i.
-
-> To make the child process wait to be killed by parent process
-> in any case(an error occurred or a signal was received),
-> I fixed it like this.
+>    UBI: auto-attach mtd4
+>    ubi0: attaching mtd4
+>    ubi0 error: 0xc04f0b3c: PEB 0 contains corrupted VID header, and the
+>       data does not contain all 0xFF
+>    ubi0 error: 0xc04f0b4c: this may be a non-UBI PEB or a severe VID
+>       header corruption which requires manual inspection
 > 
-> This fix was discussed here.
-> https://lore.kernel.org/lkml/2ab9ca20-c757-7dd8-b770-2b84d171cbfb@intel.com/
+> The problem seems to be that brcm_nvram_read accesses its (mapped) io
+> memory. When doing so the correct data is read but after that the
+> mtd/ubi process fails to work.
+> 
+> The bcm47xx_nvram.c code has buffered the nvram data so the cells value
+> can be read from there.
+> 
+> v3:
+> - Export symbol for modules.
+> - No dependency on Kconfig.
+> 
+> v2:
+> - Fix the wrong author information.
+> 
+> v1:
+> - arinc.unal: Improved patch subject and log
+> 
+> Willem-Jan de Hoog (2):
+>    The bcm47xx code makes a copy of the NVRAM data in ram. Allow access
+>      to this data so property values can be read using nvmem cell api.
+>    The bcm47xx module has a copy of the NVRAM data in ram. When available
+>      use this one instead of reading from io memory since it causes
+>      mtd/ubi to fail.
 
+I believe you're supposed to put the subject of the patches here, keep 
+that in mind for future contributions. No need to resubmit as this is 
+just composition.
 
+Arınç
