@@ -2,152 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A558668DA8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEEA68DA7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjBGOXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        id S232437AbjBGOWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbjBGOXH (ORCPT
+        with ESMTP id S232454AbjBGOV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:23:07 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3EA43C285;
-        Tue,  7 Feb 2023 06:23:04 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pPOsA-0002Af-01;
-        Tue, 07 Feb 2023 15:23:02 +0100
-Date:   Tue, 7 Feb 2023 14:21:25 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: [PATCH v2 06/11] net: ethernet: mtk_eth_soc: only write values if
- needed
-Message-ID: <ce55597e584e2d85dea14083bda56aa5bf18ea8b.1675779094.git.daniel@makrotopia.org>
-References: <cover.1675779094.git.daniel@makrotopia.org>
+        Tue, 7 Feb 2023 09:21:57 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAF6EC54
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:21:53 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id hv11-20020a17090ae40b00b002307b580d7eso11299134pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 06:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PuLo5xmCQA7HCDPYB+dPYCIEzUJh8YFIDf7ruxM4qCE=;
+        b=mymHd5wVulEhDFURIvOVP6Canl4YaLV7h7awsmV6Nul3FH+zKN7q74r17SdAJYSeuP
+         8JL5z/f/a7fW38AfgDMHY4+0SrSkuX186tfukvztq5d5D+cpoumBkozUNSUKrtqS5kWx
+         jGfq5jYJk8pPqFEHPJVzH7Cq5eLFdyv+Ygh5OfoNCxwLlv7kRu5mDVv/Tm0DP9j5vmMR
+         PnubS3nBbOdCuE1UIF7n1fIXwYdXEHHA4wqV0rfzRnZh0oICVMLJVxRA513Iolwpml1+
+         KrXX/mk8GeXw+PSa+AvcFZH6meQ7USMkugMRBYJTL9oYTScX7lGL1D0YTOxa7t9HuQFX
+         VEjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PuLo5xmCQA7HCDPYB+dPYCIEzUJh8YFIDf7ruxM4qCE=;
+        b=KbNWo8tmk7Dr9Oy2KY4BWwNABemaWNvd4KQZl0ExhscSDcB6miI+yFVE/AgL5L3YFQ
+         0HbwBdM/X2tnAZhMYTELZQeA8Urjm+q/w8WaqKiaJn3t7vQQsGsyjJvh3BPFfobK1GYL
+         WsKgZUCsiu/iAvuDmVt2SWPkV+36SKarFHNc5V9ujULZvzocoTuX/piXy8h5eUkx3yYw
+         yxQvoK6+zmFWuKmMj3Jbs4MOB9ZCIlxRA7/63yIKg+mwQ8iMSsIgi4fbzJlbmGwzOovt
+         ivW/U2Lmv3obYQUzUWu0yZjmmx3JWgGb2nAXdHovDeRlszYGtPhn+omlh60xT05oUhPR
+         1TBQ==
+X-Gm-Message-State: AO0yUKVNKaUOdBqvZDsvzrRCB3Sgi75M15ENGiH8hVJ+7ZL3rrxGeufb
+        Y7KdXH2xnHp0GeQCkcXOwpGrELtbpjM2nauF
+X-Google-Smtp-Source: AK7set+lo6k1ZYQG6kZyGznnpvWpXiNfKJmSb4W9HbiZmZf0HC8PVSLbclmFhLiAR0S6qAJuDTZq4w==
+X-Received: by 2002:a17:903:182:b0:198:a5d9:f2fd with SMTP id z2-20020a170903018200b00198a5d9f2fdmr3372813plg.6.1675779712592;
+        Tue, 07 Feb 2023 06:21:52 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id x20-20020a1709027c1400b0018963b8e131sm8937392pll.290.2023.02.07.06.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 06:21:52 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     ming.lei@redhat.com, Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com
+In-Reply-To: <20230207070839.370817-1-ZiyangZhang@linux.alibaba.com>
+References: <20230207070839.370817-1-ZiyangZhang@linux.alibaba.com>
+Subject: Re: [PATCH RESEND 0/3] cleanup for ublk
+Message-Id: <167577971177.163087.4942198134039715702.b4-ty@kernel.dk>
+Date:   Tue, 07 Feb 2023 07:21:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1675779094.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only restart auto-negotiation and write link timer if actually
-necessary.
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/ethernet/mediatek/mtk_sgmii.c | 24 +++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+On Tue, 07 Feb 2023 15:08:36 +0800, Ziyang Zhang wrote:
+> removing unnecessary NULL check, unused variable and comment fix.
+> 
+> Ziyang Zhang (3):
+>   ublk: remove unnecessary NULL check in ublk_rq_has_data()
+>   ublk: mention WRITE_ZEROES in comment of ublk_complete_rq()
+>   ublk: pass NULL to blk_mq_alloc_disk() as queuedata
+> 
+> [...]
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-index d8184448cd5a..9c58006d1c33 100644
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -38,20 +38,16 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 			  const unsigned long *advertising,
- 			  bool permit_pause_to_mac)
- {
-+	bool mode_changed = false, changed, use_an;
- 	struct mtk_pcs *mpcs = pcs_to_mtk_pcs(pcs);
- 	unsigned int rgc3, sgm_mode, bmcr;
- 	int advertise, link_timer;
--	bool changed, use_an;
- 
- 	advertise = phylink_mii_c22_pcs_encode_advertisement(interface,
- 							     advertising);
- 	if (advertise < 0)
- 		return advertise;
- 
--	link_timer = phylink_get_link_timer_ns(interface);
--	if (link_timer < 0)
--		return link_timer;
--
- 	/* Clearing IF_MODE_BIT0 switches the PCS to BASE-X mode, and
- 	 * we assume that fixes it's speed at bitrate = line rate (in
- 	 * other words, 1000Mbps or 2500Mbps).
-@@ -77,8 +73,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 	}
- 
- 	if (use_an) {
--		/* FIXME: Do we need to set AN_RESTART here? */
--		bmcr = SGMII_AN_RESTART | SGMII_AN_ENABLE;
-+		bmcr = SGMII_AN_ENABLE;
- 	} else {
- 		bmcr = 0;
- 	}
-@@ -106,16 +101,21 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 		regmap_update_bits(mpcs->regmap, mpcs->ana_rgc3,
- 				   RG_PHY_SPEED_3_125G, rgc3);
- 
-+		/* Setup the link timer and QPHY power up inside SGMIISYS */
-+		link_timer = phylink_get_link_timer_ns(interface);
-+		if (link_timer < 0)
-+			return link_timer;
-+
-+		regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
-+
- 		mpcs->interface = interface;
-+		mode_changed = true;
- 	}
- 
- 	/* Update the advertisement, noting whether it has changed */
- 	regmap_update_bits_check(mpcs->regmap, SGMSYS_PCS_ADVERTISE,
- 				 SGMII_ADVERTISE, advertise, &changed);
- 
--	/* Setup the link timer and QPHY power up inside SGMIISYS */
--	regmap_write(mpcs->regmap, SGMSYS_PCS_LINK_TIMER, link_timer / 2 / 8);
--
- 	/* Update the sgmsys mode register */
- 	regmap_update_bits(mpcs->regmap, SGMSYS_SGMII_MODE,
- 			   SGMII_REMOTE_FAULT_DIS | SGMII_SPEED_DUPLEX_AN |
-@@ -123,7 +123,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 
- 	/* Update the BMCR */
- 	regmap_update_bits(mpcs->regmap, SGMSYS_PCS_CONTROL_1,
--			   SGMII_AN_RESTART | SGMII_AN_ENABLE, bmcr);
-+			   SGMII_AN_ENABLE, bmcr);
- 
- 	/* Release PHYA power down state
- 	 * Only removing bit SGMII_PHYA_PWD isn't enough.
-@@ -137,7 +137,7 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 	usleep_range(50, 100);
- 	regmap_write(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL, 0);
- 
--	return changed;
-+	return changed || mode_changed;
- }
- 
- static void mtk_pcs_restart_an(struct phylink_pcs *pcs)
+Applied, thanks!
+
+[1/3] ublk: remove unnecessary NULL check in ublk_rq_has_data()
+      commit: 731e208d7b4b38d2bac4b7c53403c8abbf306d01
+[2/3] ublk: mention WRITE_ZEROES in comment of ublk_complete_rq()
+      commit: b352389e7ba34bdb5bcf4254fa1e85319ba76352
+[3/3] ublk: pass NULL to blk_mq_alloc_disk() as queuedata
+      commit: 1972d038a5401781377d3ce2d901bf7763a43589
+
+Best regards,
 -- 
-2.39.1
+Jens Axboe
+
+
 
