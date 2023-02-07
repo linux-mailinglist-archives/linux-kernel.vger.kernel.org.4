@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524AE68D727
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E53F68D73B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjBGMs0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Feb 2023 07:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
+        id S231899AbjBGMvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjBGMsY (ORCPT
+        with ESMTP id S231621AbjBGMvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:48:24 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91765AD04;
-        Tue,  7 Feb 2023 04:48:22 -0800 (PST)
-Received: from frapeml500006.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PB2rN2XLRz6J6fN;
-        Tue,  7 Feb 2023 20:44:20 +0800 (CST)
-Received: from frapeml500005.china.huawei.com (7.182.85.13) by
- frapeml500006.china.huawei.com (7.182.85.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Feb 2023 13:48:20 +0100
-Received: from frapeml500005.china.huawei.com ([7.182.85.13]) by
- frapeml500005.china.huawei.com ([7.182.85.13]) with mapi id 15.01.2507.017;
- Tue, 7 Feb 2023 13:48:20 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-Subject: RE: linux-next: build failure after merge of the integrity tree
-Thread-Topic: linux-next: build failure after merge of the integrity tree
-Thread-Index: AQHZOo5Tct5gClMYeE2iR8mZbs+mTq7DbyMw
-Date:   Tue, 7 Feb 2023 12:48:19 +0000
-Message-ID: <b02ea122f029407099950c5a0a8b935d@huawei.com>
-References: <20230207115113.21efd917@canb.auug.org.au>
-In-Reply-To: <20230207115113.21efd917@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 7 Feb 2023 07:51:06 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF2E38B78;
+        Tue,  7 Feb 2023 04:51:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675774265; x=1707310265;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=O++/lZ2sf4hbS8bnGvK860mCGQ70J8LnSKDU0DNNpQQ=;
+  b=NlshjeuQbs7kLfpuDf0HGc7wWRbNFIYbPb4VdDBN3xJSE6zRwTcp6RnO
+   0SKvqq4J1jndQjrPDk82dOGZymcJzZC8tTaDHRE6XelUfb8hY/FOXfBYA
+   m9Mj/9Ia9TzMyDqtYp1GO5Ag1h0DwozS30qIs477H8r0oD5ZaNz2RMNu1
+   5oCrzE8PZMJh6l0qlC5JVdyAGngMTnAuxQs+86/sYU8d4yBjVtPutNGbR
+   TQzsGVeegpz/vyfWQGmY5E2O3J0lTIpbrv39CvDEtuJ909PGNkaDxcWGf
+   uKsvBgobhRVp6lMEaPuKgcAHAjADTcAQPof2r9lbAbOP4XFSaRvnunLdw
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="329513427"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="329513427"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 04:51:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="775551488"
+X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
+   d="scan'208";a="775551488"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Feb 2023 04:51:01 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPNR7-0003YH-0V;
+        Tue, 07 Feb 2023 12:51:01 +0000
+Date:   Tue, 7 Feb 2023 20:50:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [linux-next:master 911/10933] arch/x86/kvm/mmu/mmu.c:102:22: sparse:
+ sparse: symbol 'tdp_mmu_allowed' was not declared. Should it be static?
+Message-ID: <202302072055.odjDVd5V-lkp@intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Stephen Rothwell [mailto:sfr@canb.auug.org.au]
-> Sent: Tuesday, February 7, 2023 1:51 AM
-> Hi all,
-> 
-> After merging the integrity tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> security/integrity/ima/ima_main.c: In function 'ima_file_mprotect':
-> security/integrity/ima/ima_main.c:473:34: error: implicit declaration of
-> function 'file_mnt_user_ns'; did you mean 'get_user_ns'? [-Werror=implicit-
-> function-declaration]
->   473 |         action |= ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
->       |                                  ^~~~~~~~~~~~~~~~
->       |                                  get_user_ns
-> security/integrity/ima/ima_main.c:473:34: error: passing argument 1 of
-> 'ima_get_action' makes pointer from integer without a cast [-Werror=int-
-> conversion]
->   473 |         action |= ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
->       |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                                  |
->       |                                  int
-> In file included from security/integrity/ima/ima_main.c:30:
-> security/integrity/ima/ima.h:258:38: note: expected 'struct mnt_idmap *' but
-> argument is of type 'int'
->   258 | int ima_get_action(struct mnt_idmap *idmap, struct inode *inode,
->       |                    ~~~~~~~~~~~~~~~~~~^~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   4958db3245fa ("ima: Introduce MMAP_CHECK_REQPROT hook")
-> 
-> interacting with commit
-> 
->   39f60c1ccee7 ("fs: port xattr to mnt_idmap")
-> 
-> from the vfs-idmapping tree.
-> 
-> I have applied the following merge fix patch for today.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   49a8133221c71b935f36a7c340c0271c2a9ee2db
+commit: 3af15ff47c4df3af7b36ea8315f43c6b0af49253 [911/10933] KVM: x86/mmu: Change tdp_mmu to a read-only parameter
+config: x86_64-randconfig-s023-20230206 (https://download.01.org/0day-ci/archive/20230207/202302072055.odjDVd5V-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=3af15ff47c4df3af7b36ea8315f43c6b0af49253
+        git remote add linux-next https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+        git fetch --no-tags linux-next master
+        git checkout 3af15ff47c4df3af7b36ea8315f43c6b0af49253
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
 
-Hi Stephen
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-the fix looks ok for me.
+sparse warnings: (new ones prefixed by >>)
+>> arch/x86/kvm/mmu/mmu.c:102:22: sparse: sparse: symbol 'tdp_mmu_allowed' was not declared. Should it be static?
+   arch/x86/kvm/mmu/mmu.c:621:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_begin' - different lock contexts for basic block
+   arch/x86/kvm/mmu/mmu.c: note: in included file (through include/linux/rbtree.h, include/linux/mm_types.h, arch/x86/kvm/irq.h):
+   include/linux/rcupdate.h:769:9: sparse: sparse: context imbalance in 'walk_shadow_page_lockless_end' - unexpected unlock
+   arch/x86/kvm/mmu/mmu.c:2741:9: sparse: sparse: context imbalance in 'mmu_try_to_unsync_pages' - different lock contexts for basic block
+   arch/x86/kvm/mmu/mmu.c: note: in included file:
+   arch/x86/kvm/mmu/paging_tmpl.h:106:24: sparse: sparse: cast truncates bits from constant value (ffffffffff000 becomes fffff000)
+   arch/x86/kvm/mmu/paging_tmpl.h:426:24: sparse: sparse: cast truncates bits from constant value (ffffffffff000 becomes fffff000)
+   arch/x86/kvm/mmu/mmu.c:4871:57: sparse: sparse: cast truncates bits from constant value (ffffff33 becomes 33)
+   arch/x86/kvm/mmu/mmu.c:4873:56: sparse: sparse: cast truncates bits from constant value (ffffff0f becomes f)
+   arch/x86/kvm/mmu/mmu.c:4875:57: sparse: sparse: cast truncates bits from constant value (ffffff55 becomes 55)
 
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Thanks
-
-Roberto
-
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 7 Feb 2023 11:31:16 +1100
-> Subject: [PATCH] fixup for "ima: Introduce MMAP_CHECK_REQPROT hook"
-> 
-> interacting with "fs: port xattr to mnt_idmap"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  security/integrity/ima/ima_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/ima/ima_main.c
-> b/security/integrity/ima/ima_main.c
-> index 7a05af9f481f..d66a0a36415e 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -470,7 +470,7 @@ int ima_file_mprotect(struct vm_area_struct *vma,
-> unsigned long prot)
->  	action = ima_get_action(file_mnt_idmap(vma->vm_file), inode,
->  				current_cred(), secid, MAY_EXEC,
-> MMAP_CHECK,
->  				&pcr, &template, NULL, NULL);
-> -	action |= ima_get_action(file_mnt_user_ns(vma->vm_file), inode,
-> +	action |= ima_get_action(file_mnt_idmap(vma->vm_file), inode,
->  				 current_cred(), secid, MAY_EXEC,
->  				 MMAP_CHECK_REQPROT, &pcr, &template,
-> NULL,
->  				 NULL);
-> --
-> 2.35.1
-> x
-> --
-> Cheers,
-> Stephen Rothwell
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
