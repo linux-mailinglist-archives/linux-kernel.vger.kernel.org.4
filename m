@@ -2,224 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1271068D1D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1DA68D1DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbjBGIyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S230429AbjBGI4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 03:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjBGIyl (ORCPT
+        with ESMTP id S229685AbjBGI4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:54:41 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B5034C03;
-        Tue,  7 Feb 2023 00:54:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675760079; x=1707296079;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=PAmStPmfnYXnVqJoiukGRBt/x7QdyeEkjQpN8+ZLoRI=;
-  b=NCE+ujDfbPNDNyMij8h/7j3wmRx7Lx1dLwtQMvGVHxt1WQiqhneJOi3l
-   VlIAsZ3+d5nrl0LFy/CBqZQc3SC51//BH7yaDMDq+8ckU/4t6gDTKWQTK
-   pL/2+iaxYvnWvFTfPeNJjwagpf/7Bd/sp1Mh8snMBdSuX34SmibfgtTYb
-   zuFFI3BGimhT6dWDXhiBBYUhIDVwjqRVDQdxD82FN3+Gkdc7jPhCOQTMh
-   0M1O5tT1YOpU/msIKUFnY2i1aDVFsQbGzUzIvbcjCp95CQeyMohmxkNzW
-   dwWe5+SfBh0osUS8qnhgPnt42iLlBgyxmR+I80Pqh7k134g/W18PHmqZX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415673548"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415673548"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 00:54:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="809447277"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="809447277"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2023 00:54:37 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 00:54:36 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 00:54:36 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 00:54:36 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.172)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 7 Feb 2023 00:54:35 -0800
+        Tue, 7 Feb 2023 03:56:06 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855AE37F3B;
+        Tue,  7 Feb 2023 00:55:43 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XUWVl1fhPUyuUgk4l1SkqDEJK4p2Pedc8vDLanZZ4MlFzU84Yagg92SNnaw+BgLzcnaG0TUMLgdF7UpXc3iaDZNcD4+5QATBEM9q8Hxulaa+uoXQ6G+FgErikEXH0wF5j9UWbnnE3E67V8GoKSv0wNk/S9FtjNQgry8gXDY1XkTTtWTCuhFQ05E71NxXuRjUZTm7xbjQzqH0GKSSw+6ii3koUDTwXUKSIn3tLEuRfTz2FziuglyIm3prKqBm3aqRVqYLqyrydl75fM5CEHJnQT6ogFD43egGI7fpfYZKfdG2U3sOjyU6lLOqYtcMQDawOzRHVkWR9GLfwhLoPalQMA==
+ b=HZAVwHBr1DnCHAJJGHKdBY2OrVYnatAK0KpmA9eNsGULSfG5r8r3QLC+xEcWDDcpYOsiwU/qU51muX8nkD1yk0afRJATpSw/mX6Iep7PbAHc5G3y7kUSnSxQfvYZ+4FCuBvlmV8K+VlDnB8DG570L9wBrGI15CgClf3rBe6l2/5kdNcOXH1Qw38crcaC0YeLKLFdPLXgiGZajyiJkrA8RQkeMno3YImL2oEH9RsTLCqD2GM/CPxLc1tq5XFvrXVNceqU/lUBUtyzn8S5XuBBy4dqzvFAiYpVSl7y4sMjfuNluNeUPiQ9l6HeCzVUu+iPOLxStiEn29w2FjDglO8w6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I0obsrwdpDyZ+UsO7i2PHXCZBrvqwa8pgLKT/THh9hc=;
- b=OcYyj8YmnVJ6wV3MYFCCPLtK32asKlLgmMZUpAjE46nagRE0gdDvUnX5rf1zLOac0iLSx3wYrvQMQNcxgBaEujLeLUT/ZXMNFlc+l7HYRDkAPRWPN6ASv+tNMj1JFRrA3YAc6pcWA7kTDGi7gevsoRWt498qA3hu5nv/XjF3OZpzMoXghxq/Tt/sFp98XQ7j5C2+01RTQFBCx5aK79rCy36fRTYpCvaOgx+2iOUOKCOrOoMSgGSY3I7lQ9C775LLwtI9mtS+ww1y+HlLJ+8VL3snLbuh8kDkhl+6t2HC3VJJPpWgGZ2rcYlV9O0pqoWtmcBB0cxESXFT9JRkQiWMSw==
+ bh=4oSqoWxnLsTtBW1uRbXBh1Y5ZvDSUYjPXqKBkisucPM=;
+ b=fwcSAgSdbl6OsdJ19ivlM4q45iOOCUPg1BUmdasABRbQtXDyXBXPQmtFtYWAGJTvkKVKds2rZC3hd9ijir3FPYBdFyI7E0CEpJre2fAPa7iwKflkcPix6LRcq6GDF5PO+iRcR6nQftOuUFK36S5oENjAJh1ihfil8TmvtcGqVMbnAdTkVJUt/ptyKRhfdwwv5u5fYfSzMraHwQUIpVpAL8hVqp0Bwfdjjg9FS/5UKU+LaV9oq3MoySshra5ex+cpCkV8l8b/FEyzV/BF2DgDSP2kBBQatQboG1ZtgB9zOOat5BKL/2DoXcSd/jETjmenErls/BJemaefoVX9ARM//Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by CY8PR11MB6868.namprd11.prod.outlook.com (2603:10b6:930:5c::13) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4oSqoWxnLsTtBW1uRbXBh1Y5ZvDSUYjPXqKBkisucPM=;
+ b=eyIYO0HgNWjb11eqhzmgsAVUmC4Cpss/JhtJ5eFO1iM4dd07v6avKlfQ0+LfxfKxGXZiVBVJ36mkpd1NixPPQdbHBxgGf8sngAI96ETau8okf6TIvdU3hk24zZMTTLZ1qGuCRr7EleYygy8XtDD7aI5zoVcaL/xELrx3cBh4LzY=
+Received: from DM6PR12MB3082.namprd12.prod.outlook.com (2603:10b6:5:11b::12)
+ by MN2PR12MB4191.namprd12.prod.outlook.com (2603:10b6:208:1d3::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Tue, 7 Feb
- 2023 08:54:33 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e1fa:abbe:2009:b0a3]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e1fa:abbe:2009:b0a3%3]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
- 08:54:33 +0000
-From:   "Liu, Yi L" <yi.l.liu@intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
+ 2023 08:55:40 +0000
+Received: from DM6PR12MB3082.namprd12.prod.outlook.com
+ ([fe80::12bb:9697:46d5:c65d]) by DM6PR12MB3082.namprd12.prod.outlook.com
+ ([fe80::12bb:9697:46d5:c65d%6]) with mapi id 15.20.6064.034; Tue, 7 Feb 2023
+ 08:55:40 +0000
+From:   "Gupta, Nipun" <Nipun.Gupta@amd.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
         "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>
-Subject: RE: [PATCH v2 11/14] vfio: Make vfio_device_open() exclusive between
- group path and device cdev path
-Thread-Topic: [PATCH v2 11/14] vfio: Make vfio_device_open() exclusive between
- group path and device cdev path
-Thread-Index: AQHZOgpBwImAS0LRl0mKfU0T5wA5rK7DBbMAgAApJqA=
-Date:   Tue, 7 Feb 2023 08:54:33 +0000
-Message-ID: <DS0PR11MB75299599F5DCFA79D894536AC3DB9@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <20230206090532.95598-1-yi.l.liu@intel.com>
- <20230206090532.95598-12-yi.l.liu@intel.com>
- <BN9PR11MB52764ED1F43F717E04B8E3588CDB9@BN9PR11MB5276.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB52764ED1F43F717E04B8E3588CDB9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [PATCH v7 3/7] dt-bindings: bus: add CDX bus controller for
+ versal net
+Thread-Topic: [PATCH v7 3/7] dt-bindings: bus: add CDX bus controller for
+ versal net
+Thread-Index: AQHZNU/YpDV0RwkJikC6UJPDVGpD+K66VkCAgAjiKlA=
+Date:   Tue, 7 Feb 2023 08:55:40 +0000
+Message-ID: <DM6PR12MB3082B4C2A0486CA742DD20C2E8DB9@DM6PR12MB3082.namprd12.prod.outlook.com>
+References: <20230131084049.23698-1-nipun.gupta@amd.com>
+ <20230131084049.23698-4-nipun.gupta@amd.com>
+ <20230201171301.GA3606391-robh@kernel.org>
+In-Reply-To: <20230201171301.GA3606391-robh@kernel.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-02-07T08:55:37Z;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=cda62fa8-d345-46a0-8db2-82617edb9c3c;
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
+ header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|CY8PR11MB6868:EE_
-x-ms-office365-filtering-correlation-id: 142be129-1b52-40da-cd40-08db08e8eec4
+x-ms-traffictypediagnostic: DM6PR12MB3082:EE_|MN2PR12MB4191:EE_
+x-ms-office365-filtering-correlation-id: ed22aa5d-b120-459f-6ea1-08db08e916c4
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Xj4qIq5iVSjbqBnec6gPiE4uNnB58bRUBYOdZH0e1jW2ZHFg6GyvV+cpNJ7mVTH/xYaNqbiZIbFyBATel6NCX8Tdranfzywj+yyzuXYkknG5QdwViEcp4vS6J7T9jeUXGwjOj/4seqrcJ0gcl83rhbI4CxWe83KhibwWax8lr0Admpf/yi+OEh3wpkzrPtHWzMPKAlarISlTfdmpF1CbTDNUEIb1j2L6lRVgRMp3raf/h4rfr3ocEi+IbdeEAx8CqChN8bDKu4GNuNICwCxMgKmQFzg72IhWBToig5aleu4pWtkB6cScYPlBsJiZnioZx+YBhX7qiN7ks04bii06eWdmh9LtA0HfjgWHISIa+jeo+A4/tmQNdyOBxRBXdNRz1M6EGWplfOdVsFJERXf2GMXs407Q6iLA4MzjYuF/7LW6zO255TbuJumogqf3JC3Ebbo8AahlFDo+mtQs0pv38gIpHJAdjhSbS/ifj2XjJ8GWFqqQR05LmuXFdahVjxqTZEUI8lTe3XOzlZHG2Me6MS+DDc4ye6izNSuXqIUtdNSgVheeEoWixGrVaMc53Qq3pxSvpwWIUps7SUa8KkGLcoVNhJEDpZO7kEVaACRtxbpjbTnMVvD2ntrxTDzFuFxHjX76WTBtllNaH4cN2+sKdJeCFBXvRYN203oUeRuAhOcfDjPVwkjyzSFIiDmXNgA8XXjatrL970HpW+MUtIm3R4KcPXHHA9dO7dnwSma5fbE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(396003)(136003)(39860400002)(366004)(451199018)(86362001)(54906003)(110136005)(186003)(33656002)(45080400002)(7696005)(71200400001)(55016003)(4326008)(2906002)(66946007)(76116006)(7416002)(5660300002)(64756008)(8676002)(8936002)(66556008)(66446008)(66476007)(41300700001)(26005)(478600001)(9686003)(966005)(6506007)(38100700002)(82960400001)(52536014)(316002)(38070700005)(122000001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: nq3AdJC/3vwv3MWwdDaIhGWqfasU67WcUw4a8dXOoXZfZ/SmXIE2N96hYLyGkN52PD1T/6dIBVuUzkDexl4CQCBe3QeqG+B6uHHbr8Bpv1jlNYixjmOvQbjALVyF/Mif3WFSFPHwVnkoRn3vkjFZKY2BGD2buPCJRNeMnoaghyB8WerOE4xcb780PfoAS2lfIQQemv9tyrk8vrsHw7S14gAmaQVO9vlZrXPiwGBop798Bid1nDt3uoo5JeHLGuG0Hv+tA5IYjr8GeYKko268bOJbLAQrHbRleHiNZWJEKxFCTU2irk+BM+wJrdy+lCSFSF0GwK9RatPnUlAMXsepUiuIcEr18iqFDvhbNSrTiRuCj5sm9r0X5rJVMrCs3EpLyXIoDZtnlXWhETqTj1ioMrGnZDvvYSNwpM8YNpNL5IMfZUryqgOdTwWJadcrPKv8z/vHwOR7RCvAj7YYddgqrzeEZDQKE65fowCJY1H394vkDxa5//wgr/18DEwPwx9cVfh8z7H55rmST6RW5WegMF3mRr1iwUOtX82rtBKOb8nTdTiP4z7pXB6wRqAGgqugUMu77D2zXi123X0d8k2cxYNuw3froiF5Z6pLPCth+WlHkDVbWQOIhqCfwwhPpfxw8FmbZgCILCkbbX32jAJcMplgE6fcRKNL97t/cQbACn9+d775pKkgsvHCSpc3zOGuVXmsy9lDegbveAmAMJ5dfl8wVzFsz5e6u1hBSdKlXxrLAvQiocR6wZ2PqD8LpMo75N3/aJH2BuoVx4xS1E7eng==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3082.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(451199018)(186003)(6506007)(26005)(53546011)(9686003)(122000001)(38100700002)(83380400001)(7696005)(71200400001)(966005)(478600001)(38070700005)(4326008)(76116006)(8676002)(316002)(54906003)(6916009)(66476007)(66556008)(64756008)(66446008)(41300700001)(86362001)(8936002)(52536014)(7406005)(7416002)(5660300002)(2906002)(66946007)(55016003)(33656002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?t1s2RA9vrTw3h1eFDmlM3OieoA0ahBSS1IVo6Av+52c5ofwqbJLO7K4eSPA8?=
- =?us-ascii?Q?G6bFgJcGQoW8MJYNWiU/oMIaIZGepIXrCRn4nEHftg5ZZ69k7is1rH7mXhtE?=
- =?us-ascii?Q?ofddUsE1H6AaJ1mg/s/uMM7X/sOlrdlB9poPQq4UrfKn/nSVUcpV80Z/4ih5?=
- =?us-ascii?Q?5D0Lvk2RQ3Aua3dI8bMHUaaSuSGkzQ3sQ/RLyN9kMIQLUOLZvune+nUh1EgA?=
- =?us-ascii?Q?XWF36Qlqrj2O0QZLUwXhyyH9OTHHRYmLU3AwGKc/kSDBIQ2DNyZd9aD9SVQF?=
- =?us-ascii?Q?GksZoPWETJZczZU1exCYNNzfq7D68eBoOQOOewoyaxeESKSZwhzMjaOOj5if?=
- =?us-ascii?Q?IwVbe8DEI1+NTR+jlbm3TwjqtTmLyqMFDCmprfv20sv7cKxLGJVXPWeuehwi?=
- =?us-ascii?Q?/CIuZQ2trQPkD6CS/hjM6PEPwO2Xb3oheOLVSPoFxUwMq2DtOv3i2gEhxbu4?=
- =?us-ascii?Q?LQekq+hwjto74yKBWCwGMUz1/VBG2cj3XxSAvG6AxhDLyK2RQSj4C6QTEnrc?=
- =?us-ascii?Q?sf+7kcCQTPDSaWpcMw3Ko+IuL49tPRW/vhJXMOdI6+nu2SSBiXIZXiiEyKF8?=
- =?us-ascii?Q?6A4JflpC1/6gtIlM+1PUlLITAyGGrSRHEFEVtaf4WU5LlTJx3V5UqqigLx5j?=
- =?us-ascii?Q?lqWEgpbWU7AE56MNc6UQA739b2MU/YzuSO5XihfsNaGXyVSHYvw+j4eJDx/O?=
- =?us-ascii?Q?wLBaK6YEQVQcqe5DscC34QCEwm4KIL3Te/74janbUH6ZS8kp9bqEmpSt8vu8?=
- =?us-ascii?Q?tMIA+rsKbh5hLpw+WZuteng1P0OXrsP2b5qQ8ieXkNlvRSuP7W7Mk7jerS5o?=
- =?us-ascii?Q?8nhPRghYgMSSWcnSOE6fQNNPIrecx5sSIzKwZ10pO0RL2vBDaMKhiyZEfQ97?=
- =?us-ascii?Q?Xx2C3RbUfOqi/3ZTgjXkzwJW9saVRgbz4Uoz3PpuJVFkCbQyjv4VO/UdCqXm?=
- =?us-ascii?Q?gKlwjWZNrjHz9l20KxyI375yeqw9VzLfF1PVXHg5557vtndbQ9H6Qumji6Kf?=
- =?us-ascii?Q?LXJSz/JYllZg3CJ3WaXijFOrWwHCg54XmU9aD52eLn5W5WBWJGCdZ5Y/HX+0?=
- =?us-ascii?Q?U9NzE58d0yi8vw+R/fh+WclSVKvSRhIPuslTKY2Z+sjNI3pxG0z/Tzuig8P1?=
- =?us-ascii?Q?opEeEtSvA5X7pumLS6UxukXmZhSm70pZcnczsortilHOcKL1qAxJNamhrvwa?=
- =?us-ascii?Q?6Dx6BvEtatm7WIncFr3dNbEnTeMVPNJGYPba0k9R8tqxgyk6TqXj6IMfPtmo?=
- =?us-ascii?Q?GSxB/kyklzsStYdA40brPCEvdh8jOcaudz4G7+DIfI6EO6M37ri3nEJeCz5f?=
- =?us-ascii?Q?V/rJRCFWJFqTU3vI5uEa0nWeEYKOcJzO35uFPmjtfrVw0TG3zgxAOuoYag6h?=
- =?us-ascii?Q?LItjWxdcQpXXTgRo8Lsc56YT/3LNWKPPg8AbYVudO/aN5iJlvZw/UTmBsdR6?=
- =?us-ascii?Q?1OYvmcy4oZPxd55wyI2Msgdpt8lQNklK6X7mXuKUg6lgNb+Q9k8aVuKC2CjJ?=
- =?us-ascii?Q?+lqlVFu2mhf6EPQ141KtZ3LDYbENt74U6nWtxc5PBm/nvJEiFnU5GOlDyKEI?=
- =?us-ascii?Q?sRN4KeqM9AyQAtd/umSIRY7ynrZ5hAoXbQaiSayd?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YKn8KkaUPWFMGb8pPzkHT1NmAhfCnpMDwiKB5ZAKZ4kcfon3kkYkz4Sagitw?=
+ =?us-ascii?Q?+cWX2HE/Ueuu9A50P/VBJFPU3KNgIbCm/UKhEQuCowiOuwT/7JPistNjzIQT?=
+ =?us-ascii?Q?wn/fznjXWt0ewNNrXEsDBMeuc7Y+/hLX//s8mQkeYANX3d+SiGHii9h7WpuG?=
+ =?us-ascii?Q?cWr3ejZf30MFWI+ZBdSMh3+Vhm5rVFLVQZoY50N4avTLeh2OVNzvOeoZ458S?=
+ =?us-ascii?Q?1wKQPAUZ6SEoRb2emRRO3Qjcg6ZNEa8HPYmuSRW8+t8iYP23AyADqS21O7o+?=
+ =?us-ascii?Q?pgIzqkNpomto3N0q107yqpjkwUku3lUU++KjQqEUB8xwjHJp+7nX44TqRRit?=
+ =?us-ascii?Q?zrBcIyevQMwIyrj2aD/9YSiMGRVlLn44RGoDSRGm8kz3qf7gPZV/REZSxaf3?=
+ =?us-ascii?Q?C6RP1X+HN+8Mo/9VJqE19nyqL+5JrNDq+dhU9OSQccI/Hx46eOgCTEBPs5op?=
+ =?us-ascii?Q?UX4Zv1zI0prClncM0RZ1pPqeImgbswCRQ3a7a7Uis8El2+jYnU1FlNhDVn8u?=
+ =?us-ascii?Q?+PKlVTeCCeXVhQc9Ho/VpR4nbod9Tpj8cUw33rTXpRcStn7tqJtYw9DOR5KV?=
+ =?us-ascii?Q?JcrhmauZWwecFQgtB5A0PQGMOfsEGFg0lWGml3jgoDlRyxRayKzW7dXZXVK8?=
+ =?us-ascii?Q?D+1gDJSRJp1R9zdExE6lUEsUe3RSByF4sM+uOuVqLaNGJkzKY9ScUIMvXr/a?=
+ =?us-ascii?Q?i/tNpEdPCpj5rD1t2t3LDTley8+5A8VC5Qy07MHqE1dP9mV1opk1M0Ccm2WJ?=
+ =?us-ascii?Q?tHu0tQu6vJTrUD5adUQjkQSa7DMd9iO15e7jf88ZjgQVDj5E0mM4W7zEPtyi?=
+ =?us-ascii?Q?OkoHjvGRuxV7AouiTreFoqXMzox5kCUJmIeKNoP7AsGBoN/YpX3NmemVqfc+?=
+ =?us-ascii?Q?vnuCN23d5Q1TON1aHzzlYJn9XzUvqS/KUGEyfRykgtmjUy1lElgypX4BxDII?=
+ =?us-ascii?Q?1Iu6UJf5ZxE9OxZr9LkzxzepBpFboIgwvL0bXlY/YXcLYjRrLFqTfyLtACbA?=
+ =?us-ascii?Q?gpzD9vjoZM3dGyUBtiyPa+CEh16Qlrqieu3qx79DwkmsTwOyn1s+nzbT/x9o?=
+ =?us-ascii?Q?d5h5O//iAm4p0SYvxcsf5WDmIZcsh2BfSse6t2OPOpCTiRaS/cIFOXUCWT3q?=
+ =?us-ascii?Q?0QuMlOwOC8o5NyNCKgy7jkXOQ3sLDDviMiPPQYPSzBVYyIiRdUoObGO8Wyob?=
+ =?us-ascii?Q?YPq1d3bskWwK/5adzSV9I2tZ0TeP0rFmDQeFAWVibR+cDhA1NU9SdUu8An3r?=
+ =?us-ascii?Q?rAmxHiNXinp5pjBn2TncZ3fHAxfZP52Y14uHTSz96h7UXdfWonjIuog+zn4y?=
+ =?us-ascii?Q?hqXeyte8dRP5BmL40WreMj29HxQVLvWD8YdSHVHGW2pm9cXIEp8fK/LvdGpb?=
+ =?us-ascii?Q?By6hMtLhQS5WRVLXsS7MwDh9nv/KQvMEvv3q33/d0xQ35PBjTRHFsbbZxuJ1?=
+ =?us-ascii?Q?UoToWn/J1nnZtogxQBUvpbcuRvJJB05LObTAS8q15MtEpvbmpygnDQpOjjTz?=
+ =?us-ascii?Q?jcK3laITnuM6POrGqUVuf5iZqzm0dntKw9/20+OXRqKRzO/4oyy00z/fwNTc?=
+ =?us-ascii?Q?4BBvH9fsoNv3ergLWBo=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 142be129-1b52-40da-cd40-08db08e8eec4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 08:54:33.3741
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3082.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed22aa5d-b120-459f-6ea1-08db08e916c4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 08:55:40.5275
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fRpKoSmpQ/54FOgMDC6jtnllLoQGtQ2xWIbJerYL04XSRtp1nCRNI0P5nlwQYJP7vQtOCPfSdZmycEMMkQ0Myw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB6868
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: 1xzGpp/ctUtCzJalE1NROyq8eOtI8YwdFBeuvtEXxKNfgiclL+p1Ss+aksaQ5cn2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4191
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Tian, Kevin <kevin.tian@intel.com>
-> Sent: Tuesday, February 7, 2023 2:25 PM
->=20
-> > From: Liu, Yi L <yi.l.liu@intel.com>
-> > Sent: Monday, February 6, 2023 5:05 PM
-> >
-> >  struct vfio_device_file *
-> > -vfio_allocate_device_file(struct vfio_device *device)
-> > +vfio_allocate_device_file(struct vfio_device *device, bool
-> is_cdev_device)
-> >  {
-> >  	struct vfio_device_file *df;
-> >
-> > @@ -407,6 +407,7 @@ vfio_allocate_device_file(struct vfio_device
-> *device)
-> >  		return ERR_PTR(-ENOMEM);
-> >
-> >  	df->device =3D device;
-> > +	df->is_cdev_device =3D is_cdev_device;
->=20
-> You missed Alex's comment that the one caller can open code the
-> assignment instead of introducing an unmemorable Boolean arg here.
+[AMD Official Use Only - General]
 
-Oh, yes. will open code to set it in cdev path.
 
+
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Wednesday, February 1, 2023 10:43 PM
+> To: Gupta, Nipun <Nipun.Gupta@amd.com>
+> Cc: krzysztof.kozlowski+dt@linaro.org; gregkh@linuxfoundation.org;
+> rafael@kernel.org; eric.auger@redhat.com; alex.williamson@redhat.com;
+> cohuck@redhat.com; song.bao.hua@hisilicon.com;
+> mchehab+huawei@kernel.org; maz@kernel.org; f.fainelli@gmail.com;
+> jeffrey.l.hugo@gmail.com; saravanak@google.com; Michael.Srba@seznam.cz;
+> mani@kernel.org; yishaih@nvidia.com; jgg@ziepe.ca; jgg@nvidia.com;
+> robin.murphy@arm.com; will@kernel.org; joro@8bytes.org;
+> masahiroy@kernel.org; ndesaulniers@google.com; rdunlap@infradead.org;
+> linux-arm-kernel@lists.infradead.org; linux-kbuild@vger.kernel.org; linux=
+-
+> kernel@vger.kernel.org; devicetree@vger.kernel.org; okaya@kernel.org;
+> Anand, Harpreet <harpreet.anand@amd.com>; Agarwal, Nikhil
+> <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>; git
+> (AMD-Xilinx) <git@amd.com>
+> Subject: Re: [PATCH v7 3/7] dt-bindings: bus: add CDX bus controller for =
+versal
+> net
+>=20
+> Caution: This message originated from an External Source. Use proper caut=
+ion
+> when opening attachments, clicking links, or responding.
+>=20
+>=20
+> On Tue, Jan 31, 2023 at 02:10:45PM +0530, Nipun Gupta wrote:
+> > Add CDX bus controller device tree bindings for versal-net
+> > devices.
 > >
-> > +	/*
-> > +	 * Device cdev path cannot support multiple device open since
-> > +	 * it doesn't have a secure way for it. So a second device
-> > +	 * open attempt should be failed if the caller is from a cdev
-> > +	 * path or the device has already been opened by a cdev path.
-> > +	 */
-> > +	if (device->open_count !=3D 0 &&
-> > +	    (df->is_cdev_device || device->single_open))
-> > +		return -EINVAL;
+> > Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> > ---
+> >  .../bindings/bus/xlnx,versal-net-cdx.yaml     | 68 +++++++++++++++++++
+> >  MAINTAINERS                                   |  1 +
+> >  2 files changed, 69 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/bus/xlnx,versal-
+> net-cdx.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/bus/xlnx,versal-net-cdx.=
+yaml
+> b/Documentation/devicetree/bindings/bus/xlnx,versal-net-cdx.yaml
+> > new file mode 100644
+> > index 000000000000..8452185b9d70
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/bus/xlnx,versal-net-cdx.yaml
+> > @@ -0,0 +1,68 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/bus/xlnx,versal-net-cdx.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > > +
+> > +title: AMD CDX bus controller
+> > +
+> > +description: |
+> > +  CDX bus controller for AMD devices is implemented to dynamically
+> > +  detect CDX bus and devices on these bus using the firmware.
+> > +  The CDX bus manages multiple FPGA based hardware devices, which
+> > +  can support network, crypto or any other specialized type of
+> > +  devices. These FPGA based devices can be added/modified dynamically
+> > +  on run-time.
+> > +
+> > +  All devices on the CDX bus will have a unique streamid (for IOMMU)
+> > +  and a unique device ID (for MSI) corresponding to a requestor ID
+> > +  (one to one associated with the device). The streamid and deviceid
+> > +  are used to configure SMMU and GIC-ITS respectively.
+> > +
+> > +  iommu-map property is used to define the set of stream ids
+> > +  corresponding to each device and the associated IOMMU.
+> > +
+> > +  The MSI writes are accompanied by sideband data (Device ID).
+> > +  The msi-map property is used to associate the devices with the
+> > +  device ID as well as the associated ITS controller.
+> > +
+> > +  rproc property (xlnx,rproc) is used to identify the remote processor
+> > +  with which APU (Application Processor Unit) interacts to find out
+> > +  the bus and device configuration.
+> > +
+> > +maintainers:
+> > +  - Nipun Gupta <nipun.gupta@amd.com>
+> > +  - Nikhil Agarwal <nikhil.agarwal@amd.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: xlnx,versal-net-cdx
+> > +
+> > +  iommu-map: true
+> > +
+> > +  msi-map: true
+> > +
+> > +  xlnx,rproc:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description:
+> > +      phandle to the remoteproc_r5 rproc node using which APU interact=
+s
+> > +      with remote processor.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - iommu-map
+> > +  - msi-map
+> > +  - xlnx,rproc
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    cdx {
+> > +        compatible =3D "xlnx,versal-net-cdx";
+> > +        /* define map for RIDs 250-259 */
+> > +        iommu-map =3D <250 &smmu 250 10>;
+> > +        /* define msi map for RIDs 250-259 */
+> > +        msi-map =3D <250 &its 250 10>;
+> > +        xlnx,rproc =3D <&remoteproc_r5>;
 >=20
-> If we are gonna handle the exclusive open via dma ownership, then
-> here we don't need a new single_open flag inside vfio_device since
-> only one interface (cdev or group) could be used to open this device.
+> There's no addresses associated with this bus? Like the address range
+> the devices are at.
+
+Hi Rob,
+
+There is a remoteproc device which is associated with this controller, whic=
+h
+exposes the address for CDX bus controller and hence no reg/address require=
+d
+in this node.=20
+
+> You should have 'ranges' whether Linux needs it yet
+> or not.
+
+Agree, will add this to the next spin.
+
+Thanks,
+Nipun
+
 >=20
-> Just preventing multi-open in cdev is sufficient here.
-
-I see. Per below discussion, just need to make group path always
-use vfio_group pointer as DMA marker.
-
-https://lore.kernel.org/kvm/BN9PR11MB5276FA68E8CAD6394A8887848CDB9@BN9PR11M=
-B5276.namprd11.prod.outlook.com/
-
-Regards,
-Yi Liu
+> Rob
