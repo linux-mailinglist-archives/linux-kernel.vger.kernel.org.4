@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23E268D2D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1D568D2D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjBGJbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 04:31:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S231601AbjBGJcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjBGJa7 (ORCPT
+        with ESMTP id S231332AbjBGJcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:30:59 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C86810C8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:30:58 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id e204so5452236iof.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 01:30:58 -0800 (PST)
+        Tue, 7 Feb 2023 04:32:21 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB0E12F24
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:32:20 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id d16so1474057ioz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 01:32:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGPdj3+0FQHNiPlabma7Fo13cRWsc/bEceVgDPVg2Rs=;
-        b=J4tfCPx1y44l8NRf6xJpVwWLh9GHJZKYvOJaxHtIncPoZNTdRIMKnKX7k3na0U9tJr
-         Rsu0Nz94cH73T58Ufkl4WZmz1tBAFO5GRltdajj0I19fAa0EPKSg9Z7iQ58GW1DTZFUZ
-         AnoJweCalPXKyU718fyK+jh5ZrLVjHGwo1d3E=
+        bh=cRXSfd6e9716QbppzdgQ8z2xt//jsIISZELh4l/6gtY=;
+        b=lIrS0gys+CPEeNt7gbULOHl5XLVA7zCvVI8f8ECN/dloKVAvCwUpD2rarVvcO1aD4f
+         faW+Y6iNT7EWppoj0jjbibXOj/UqQgTBWfIYR1uCzOS8kDjRoe9pItP+5SxGfZsYe/+L
+         zwfdkdkY7cZY26FZdFrVLWOQbPiAPNTYrARag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zGPdj3+0FQHNiPlabma7Fo13cRWsc/bEceVgDPVg2Rs=;
-        b=fYncBWAFL0oZDc8Ypne3VJve/6NJJjSvcHvgLF+ON3WAs3b0rC8/IL1/3dH8C3fpI5
-         VUCu86Q5qdKrdrMvN6xVEGDBtapa61Wb26zsyGsHUjW4NcHKHT46Y/1r8qN1U0/ye9AG
-         1hON79rMxD2xSZboffnVOhyiuYbyuJx+KJE1qN0H8Z16N2ixgc74jm0uBHaTiLj3PzsZ
-         FCUULMKIZbSj2Y/3VZj52/p6zrVXMgjtVGvMQEneprHQGCWdEIlelBF9sADAgR3KWBwm
-         lMZY4EPc/zIa/8O91iphawGQTJtcgKTNVtp5UDv/As2x1e0LkMei4RRN5e4Aqt5920zT
-         SAjQ==
-X-Gm-Message-State: AO0yUKUlwyR8FQoLEQRqttsiWsYRSrIzmOj+WuQn1NhbXtGGf78Xjl9c
-        AvdhjZzeFVInfo27FNI/b/mweHhlpAm4eGIo1ZkfZw==
-X-Google-Smtp-Source: AK7set9upZf6hhkKYsM0jB1B7IVVQUghW9jQDrSwas90o37+8CzNkccZTDjq+kvkxMrya0irHJOrnaVm7dIRvhwz/aQ=
-X-Received: by 2002:a02:8795:0:b0:3b2:7985:6624 with SMTP id
- t21-20020a028795000000b003b279856624mr1884923jai.32.1675762257571; Tue, 07
- Feb 2023 01:30:57 -0800 (PST)
+        bh=cRXSfd6e9716QbppzdgQ8z2xt//jsIISZELh4l/6gtY=;
+        b=6RppWkJkEVt28jzwNZEszfthh1BBe6QP4qNsDMDYrwmrwX0vb7dpanGLd5cNRoWPR7
+         uXkRFQdS3gDbKUcdQkz4kqVHSY4kTOYASQjRz5CFVFA00sdYLFxZqSgZyXzkqVpcZApM
+         IYFZ9c+QFs1bIPAAeaWIG/TyUiKoksQ4TDG/aZrUNhrYFK8WxX9QChk0R8pqXZ1I901g
+         LpiXIJl2le9bifx7SiVJh4o8cKgq/IpObYEbd3aRz0WTC1CYfHKJHQfHFnlQIsveZ/5r
+         WQkk4rysFV/N7osytXyen64kMzAGvjtDby1dRQMa0XG9a76U8u+iLgAij+3WqVrhHuti
+         ezuw==
+X-Gm-Message-State: AO0yUKXYNljIF9w9MsSU7/M058FmHLKAtZmxpxaOQxwkbaAukG36RJ+X
+        /5JCtN/icI3XaIiCk+f5/v9kT9nxTlE7eKdvVJp27g==
+X-Google-Smtp-Source: AK7set9Yo867+ovcrV9dNzgN5dLXUt67stBygvDeLPD+B7i0BJvL5wMfCmAdIR47VbCIvhkfwWyVVrGHJIPgVUdApbU=
+X-Received: by 2002:a02:cacf:0:b0:3a9:6f3a:4b55 with SMTP id
+ f15-20020a02cacf000000b003a96f3a4b55mr2255989jap.6.1675762339979; Tue, 07 Feb
+ 2023 01:32:19 -0800 (PST)
 MIME-Version: 1.0
 References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
- <20230206152928.918562-10-angelogioacchino.delregno@collabora.com>
- <CAGXv+5GfwY2+55UupTUNYVudg3-YDQtkkfhT=M53CJwdqG=ERg@mail.gmail.com> <b7b35901-59aa-5342-1bd1-5ed591a0469c@collabora.com>
-In-Reply-To: <b7b35901-59aa-5342-1bd1-5ed591a0469c@collabora.com>
+ <20230206152928.918562-12-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5EvYq9eJkfvrEt-LEN0ODt-_tQ+wiAK-BjKeSi6VCDzEA@mail.gmail.com> <0cf002b1-73ca-29c4-6e6d-5b0a54d356de@collabora.com>
+In-Reply-To: <0cf002b1-73ca-29c4-6e6d-5b0a54d356de@collabora.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 7 Feb 2023 17:30:45 +0800
-Message-ID: <CAGXv+5HNs-74COE_5V4O_ykLJN=K4YVR-5SNwcPTBcxFMoRm5g@mail.gmail.com>
-Subject: Re: [PATCH v1 09/45] clk: mediatek: mt2712: Change to use
- module_platform_driver macro
+Date:   Tue, 7 Feb 2023 17:32:08 +0800
+Message-ID: <CAGXv+5EtwpkUz0euDpaQC45JBH+vSwJs5EKisE+y5px-3c8K7A@mail.gmail.com>
+Subject: Re: [PATCH v1 11/45] clk: mediatek: mt8365: Move apmixedsys clock
+ driver to its own file
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
@@ -77,108 +77,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 5:00 PM AngeloGioacchino Del Regno
+On Tue, Feb 7, 2023 at 5:14 PM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> Il 07/02/23 07:33, Chen-Yu Tsai ha scritto:
-> > On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+> Il 07/02/23 08:12, Chen-Yu Tsai ha scritto:
+> > On Mon, Feb 6, 2023 at 11:30 PM AngeloGioacchino Del Regno
 > > <angelogioacchino.delregno@collabora.com> wrote:
 > >>
-> >> Now that all of the clocks in clk-mt2712.c are using the common
-> >> mtk_clk_simple_{probe,remove}() callbacks we can safely migrate
-> >> to module_platform_driver.
+> >> In preparation for migrating all other mt8365 clocks to the common
+> >> mtk_clk_simple_probe(), move apmixedsys clocks to a different file.
+> >> While at it, use the builtin_platform_driver() macro for it.
 > >
-> > Instead of splitting the conversion into a module among many patches,
-> > I'd do it in one go. With one patch we get a working module instead
-> > of a half-baked one half way through the series.
+> > `git diff --color-moved=dimmed-zebra --color-moved-ws=ignore-all-space`
+> > agrees this is mostly a code move.
 > >
->
-> If you really want I can eventually do that in one go - in any case, the
-> sense of having this split in multiple commits is:
->   - Bisectability: topckgen/mcucfg migration being faulty would point at
->                    one commit doing just that, making it easier for whoever
->                    is trying to debug that to find what could've gone wrong;
-
-This part I agree with.
-
->   - Slow changes:  A driver being a platform_driver doesn't mean that it *has*
->                    to be compiled as a module: infact, we can use the .remove()
->                    callback even with built-in drivers (as you can remove one
->                    and re-add it during runtime from sysfs)
-
-I think the part that tripped me up was that in this patch's case it
-was already a platform driver, just a builtin one (without the
-builtin_platform_driver sugar).
-
->   - Signaling completion:
->                    Saying "this is complete" in this case is performed in the
->                    last patches of the series, where only the Kconfig is being
->                    changed to allow the module build for (most)all.
-
-I'm concerned about people randomly cherry-picking patches. Unfortunately
-not everyone lives on mainline, us included. (I'm sure Android has it
-worse.) Many won't see the complete patch series, doubly so if we merge
-it in stages. Better we give one complete patch that converts the
-boilerplate code from "can't work as module" to "can work as module".
-I do agree we should keep all the other cleanups and migration to
-simple/pdev_probe separate for bisectability.
-
-> > The subject could say "Convert X driver from builtin to module". And
-> > instead of "migrate to module_platform_driver", the body could say
-> > "convert to module by switching to module_platform_driver, and adding
-> > missing MODULE_* statements". I believe this constitutes one logical
-> > change. Maybe the accompanying Kconfig change should be included as
-> > well?
-> >
->
-> But again, I don't have *really strong* opinions on this, if not preferences
-> for how I'd like to see the changes getting in: this series brings big changes
-> that would be done in many more commits if they were scattered in more series.
-> Another point about having this conversion performed in multiple commits is
-> showing how it was done and how to replicate it for a different driver...
-
-In the past I've seen some comments from other maintainers about keeping
-(module|builtin)_X_driver consistent with its Kconfig entry. That sort of
-plays into my argument that this bit should be kept atomic.
-
-There are a couple patches where you convert directly from CLK_OF_DECLARE
-to module_platform_driver. We could work those out case by case?
-
 > >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > >> ---
-> >>   drivers/clk/mediatek/clk-mt2712.c | 10 ++--------
-> >>   1 file changed, 2 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/drivers/clk/mediatek/clk-mt2712.c b/drivers/clk/mediatek/clk-mt2712.c
-> >> index c5fd76d1b9df..65c1cbcbd54e 100644
-> >> --- a/drivers/clk/mediatek/clk-mt2712.c
-> >> +++ b/drivers/clk/mediatek/clk-mt2712.c
-> >> @@ -1028,7 +1028,7 @@ static const struct of_device_id of_match_clk_mt2712_simple[] = {
-> >>          { /* sentinel */ }
-> >>   };
-> >>
-> >> -static struct platform_driver clk_mt2712_simple_drv = {
-> >> +static struct platform_driver clk_mt2712_drv = {
+> >>   drivers/clk/mediatek/Makefile                |   2 +-
+> >>   drivers/clk/mediatek/clk-mt8365-apmixedsys.c | 164 +++++++++++++++++++
+> >>   drivers/clk/mediatek/clk-mt8365.c            | 142 ----------------
 > >
-> > Why the name change? If you do change the name, could you also change
-> > the of match table's name as well to be consistent, and also mention
-> > the change in the commit log?
->
-> It simply looked like being a good idea, as "simple" made sense when we had two
-> platform_driver in one file, one using simple_probe, one using a custom probe
-> function.
-> The latter going away forever means that there's no more distinction to do
-> between the two, hence my rename here...
->
-> Regarding the of_match_table name change... I'm sorry, I genuinely forgot to
-> change it, my intention was infact to actually be consistent... :-)
->
+> > Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 > >
-> > I'd just leave it alone though.
+> > But see below.
+> >
+> >>   3 files changed, 165 insertions(+), 143 deletions(-)
+> >>   create mode 100644 drivers/clk/mediatek/clk-mt8365-apmixedsys.c
+> >>
+> >> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> >> index 3c7dd19cdddf..b004a47026d4 100644
+> >> --- a/drivers/clk/mediatek/Makefile
+> >> +++ b/drivers/clk/mediatek/Makefile
+> >> @@ -112,7 +112,7 @@ obj-$(CONFIG_COMMON_CLK_MT8195) += clk-mt8195-apmixedsys.o clk-mt8195-topckgen.o
+> >>                                     clk-mt8195-venc.o clk-mt8195-vpp0.o clk-mt8195-vpp1.o \
+> >>                                     clk-mt8195-wpe.o clk-mt8195-imp_iic_wrap.o \
+> >>                                     clk-mt8195-apusys_pll.o
+> >> -obj-$(CONFIG_COMMON_CLK_MT8365) += clk-mt8365.o
+> >> +obj-$(CONFIG_COMMON_CLK_MT8365) += clk-mt8365.o clk-mt8365-apmixedsys.o
+> >>   obj-$(CONFIG_COMMON_CLK_MT8365_APU) += clk-mt8365-apu.o
+> >>   obj-$(CONFIG_COMMON_CLK_MT8365_CAM) += clk-mt8365-cam.o
+> >>   obj-$(CONFIG_COMMON_CLK_MT8365_MFG) += clk-mt8365-mfg.o
+> >> diff --git a/drivers/clk/mediatek/clk-mt8365-apmixedsys.c b/drivers/clk/mediatek/clk-mt8365-apmixedsys.c
+> >> new file mode 100644
+> >> index 000000000000..6f0fdf92bbd2
+> >> --- /dev/null
+> >> +++ b/drivers/clk/mediatek/clk-mt8365-apmixedsys.c
+> >> @@ -0,0 +1,164 @@
+> >> +// SPDX-License-Identifier: GPL-2.0-only
+> >> +/*
+> >> + * Copyright (c) 2022 MediaTek Inc.
+> >> + * Copyright (c) 2023 Collabora Ltd.
+> >> + */
+> >> +
+> >> +#include <dt-bindings/clock/mediatek,mt8365-clk.h>
+> >> +#include <linux/clk.h>
+> >
+> > like in the MT2712 patch, this could be clk-provider.h .
+> > Or maybe we should do a pass of header cleanup? There's a bunch left
+> > over from the conversion from |struct clk| to |structk clk_hw|, and
+> > then migration to mtk_clk_simple_probe.
+> >
+> > What do you think?
+> >
 >
-> I had to explain my reasoning about all of the above, so I'll just wait for
-> your opinion again before going for a v2! :-)
+> I'm more for a separated pass of header cleanup, honestly...
 
-Thanks again for working on this.
-
-ChenYu
+I'm OK with that. Or maybe someone notices as does drive-by cleanups.
