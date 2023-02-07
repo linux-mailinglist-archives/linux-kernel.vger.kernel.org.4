@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376DE68DF51
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E0868DF4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjBGRvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
+        id S232193AbjBGRuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:50:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjBGRu5 (ORCPT
+        with ESMTP id S230027AbjBGRua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:50:57 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3AC1716D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:50:51 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id d189so11369450ybc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:50:51 -0800 (PST)
+        Tue, 7 Feb 2023 12:50:30 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7603C284
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:50:29 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id t17so11349039pfj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:50:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NHYthNCs/uoF20ZFkRUqehTGzlGvEoUQyE80/wwf1c0=;
-        b=P682S4xmhi0gmdf3Pkax1AWCRl+BRXMVfM8MaPqlBDlER+3t6zfvCM2uePuXqncLDL
-         nktKxPRDUmG6t32WjlKjkMb6cudhfSbKwPulG44Wlq9X14aMFJhFXg7LD/BeWr5V0t/y
-         9Owauh6LCbLVot2lEGI5s+UrFdN/mKPTvO8Ednd8sWlQPe9+n3E5kc/AajhQxVmhJX66
-         u6QIuZ/v5e1mbQER+rQEwNb00x+ip248stHpV+EYXIVDbXRuEkwCMHvqRZGYMEdkpC5O
-         SEfl0YGeUXDi5XmOQtmUQCkKvujFX538zSXgq8ncG5ZaEWGgkEkVmeCigdEq/NHNlIta
-         03lA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w48o95h0egkihevp24LUCBIapstbM68U7lsO7f0kOXg=;
+        b=BZCdQiS8PQ0sH5xkOHzQo75rW6+sbgQX6onEtJD9T2EGtsClWZxEcITBKW4PX5BE86
+         oB9geZ214JhL2uE5DpswdhkU9pV1OqrD5fllQtbR1pJWq9EFhBqAgH4fabKMxysbjTb2
+         WZszCS46F+nRIuF/iBwfMUwgkpDGDuJuYPhmCobLbnEa1d6+29hvhetlEphHCTskt/d1
+         +YrYcDUHGpEiiAHei8QzbvJGcElhC2aUP8ZE84392gtiPs/s/j6UnbSpuCVV0TBC4vVT
+         9XPmCt/7+0UhRwq59KWRqIfG6fTAggYR7xa2Wc2Mg9xqpp5aefwcVZK24+5+Trj9Nh01
+         /CnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NHYthNCs/uoF20ZFkRUqehTGzlGvEoUQyE80/wwf1c0=;
-        b=vEypUcmMsHjnWVt+xn5eDE7Y+5tJi/3vhE1+5EAlfoXnNodYmSVMrxJv+iGT13fM6r
-         y9t+wYWTeu4Ij4EBRfnICmUjG0nPeXq7kAzFjQcNomUWJzzecgJVvYmhpPfILlL/DFvc
-         nfQAI0zbmTxm2z/nq608imBxiM8RrEKx5VCoSXa96EkbWzHzUj/wlQYDNsOmcrmPwA3n
-         vdZpJAHaQ8OxYxKCKzMBCqUvXYX9FjApNEMj9h/SgynsEilNd7egpWQDahAWqAjVcITN
-         ROBWuWEE1s9tE/Lnb5RbzaAfVw33tcIExdC9o/YpJmm6r4W5xUqjqXxkzuyK59opnCEf
-         IP9g==
-X-Gm-Message-State: AO0yUKUeX3nuOhO1mLnavVikzd8BgFZGrBX3G4kcyiEItmLSHVgaFe9P
-        pKX1VaVd15qm1f+GSr5N/ornv8FGafv/pjgb0UsYhA==
-X-Google-Smtp-Source: AK7set9anGmKon0xVKOvpGVdGi7bxLITfCkJwK78pPfBsAQO/8Xxo0kriOrfr3wa8rlWE9+RN2w0633Iazi/MlIzDz0=
-X-Received: by 2002:a05:6902:45:b0:8b1:b64c:648 with SMTP id
- m5-20020a056902004500b008b1b64c0648mr259185ybh.401.1675792250899; Tue, 07 Feb
- 2023 09:50:50 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w48o95h0egkihevp24LUCBIapstbM68U7lsO7f0kOXg=;
+        b=r9tUQbtKfPILlZm8v3W9A0H9qWd2OzVv8vVd0One0/3C3PcA1JvkZlONeEHJNr99uQ
+         osu59VY1OQDAiXllrJDQE+88Df40yTZlkHgRNbpazbsaGo5khpGmuU7z0nlAR9r2vOTh
+         mgZSunOZrXG3OJ6TImnOoTLBAi/aSKqCoxYTma3VJppN5PHtQcWJw9VF6/S3XFVaGJTG
+         veISkyIB1gWx4PFedacAMEGgxTXVCZvrODQ3y2xxAiI82aO+SHbfcsntdg3q94dtFqXr
+         fS6imO98tJ8X3ZeovnWQN4IA0fjFzi7SdOcO+gIxJfGFZIRIy4cAqAFDg3VSPs8M0LlL
+         uSag==
+X-Gm-Message-State: AO0yUKW040hMh9ivXmJYcTzQY1HSTR2yQdQsCAQTCkgsnyf3Fzm1X8yM
+        6NLvgIwzD+g6eAaeGoiJtm6+3gXv0xWDIO43alVYHh8/O45Eq0eTLD4=
+X-Google-Smtp-Source: AK7set8EMz1NCWIcsUMWJWJ6NuvWvNL0fF7AImNaPIwI0omUP301DOLkM/u16KYeK5+5gWtlYm+IfUrVLUguMFMU2q0=
+X-Received: by 2002:aa7:9472:0:b0:5a7:6ee6:6710 with SMTP id
+ t18-20020aa79472000000b005a76ee66710mr771984pfq.29.1675792228338; Tue, 07 Feb
+ 2023 09:50:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230203192822.106773-1-vipinsh@google.com> <20230203192822.106773-4-vipinsh@google.com>
- <Y+GTyVHvpskr8YxD@google.com>
-In-Reply-To: <Y+GTyVHvpskr8YxD@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 7 Feb 2023 09:50:15 -0800
-Message-ID: <CAHVum0dxAnm7SP9iCBk2eMeTNr5u_H=TTgZZJSJpx0Fxw5P-Ag@mail.gmail.com>
-Subject: Re: [Patch v2 3/5] KVM: x86/mmu: Optimize SPTE change for aging gfn range
-To:     David Matlack <dmatlack@google.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, bgardon@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <9698eff1-9680-4f0a-94de-590eaa923e94@app.fastmail.com>
+ <Y+J5ev/R/Sz6nwBF@hirez.programming.kicks-ass.net> <20230207174227.rimpkz3b3y7m4fch@treble>
+In-Reply-To: <20230207174227.rimpkz3b3y7m4fch@treble>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 7 Feb 2023 09:50:16 -0800
+Message-ID: <CAKwvOdnd2X+m9YhOqXbw912BW2vP-RtFusch3_fughriqvruaw@mail.gmail.com>
+Subject: Re: current objtool warnings from randconfig builds
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Josh Poimboeuf <jpoimboe@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -69,48 +72,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 3:57 PM David Matlack <dmatlack@google.com> wrote:
+On Tue, Feb 7, 2023 at 9:42 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 >
-> On Fri, Feb 03, 2023 at 11:28:20AM -0800, Vipin Sharma wrote:
-> > No need to check all of the conditions in __handle_changed_spte(). Aging
-> > a gfn range implies resetting access bit or marking spte for access
-> > tracking.
+> On Tue, Feb 07, 2023 at 05:16:58PM +0100, Peter Zijlstra wrote:
+> > On Tue, Feb 07, 2023 at 11:25:27AM +0100, Arnd Bergmann wrote:
+> > > Hi Josh and Peter,
+> > >
+> > > I've updated my randconfig test setup to use gcc-13 and clang-16, and
+> > > have sent fixes for all normal WERROR=3Dy build warnings, but there a=
+re a
+> > > lot of objtool warnings that remain. I've reported some of them in
+> > > the past, some others are new. It would be nice to at least reduce
+> > > the number of warnings either through code changes or workarounds
+> > > in objtool for any false positives.
+> > >
+> > > Out of 1500 builds, about a third had any warnings, this is the full
+> > > list sorted by frequency. Let me know if there are any that you haven=
+'t
+> > > seen before, I can provide the corresponding object and config files
+> > > for reproducing.
+> > >
+> > >     Arnd
+> > >
+> > > 8<---
+> > > 205 mm/kasan/shadow.o: warning: objtool: __asan_memset+0x2e: call to =
+__memset() with UACCESS enabled
+> > > 205 mm/kasan/shadow.o: warning: objtool: __asan_memmove+0x48: call to=
+ __memmove() with UACCESS enabled
+> > > 205 mm/kasan/shadow.o: warning: objtool: __asan_memcpy+0x48: call to =
+__memcpy() with UACCESS enabled
 > >
-> > Use atomic operation to only reset those bits. This avoids checking many
-> > conditions in __handle_changed_spte() API. Also, clean up code by
-> > removing dead code and API parameters.
+> > Patch pending here:
+> >
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/comm=
+it/?h=3Dsched/core-robot&id=3D79cdfdacd5b8d1ac77e24ccbc178bba0294d0d78
+> > =EF=BF=BC
+> >
+> > > 80 vmlinux.o: warning: objtool: ibt_selftest+0x11: sibling call from =
+callable instruction with modified stack frame
+> >
+> > Can you provide details on how to reproduce this?
 >
-> Suggest splitting out the dead code cleanup to make it easier to review.
+> Arnd, thanks for rounding these up and posting them.
+>
+> I agree we need to get these all cleaned up, but before we go too far
+> down the rabbit hole, is there some better way to track these?
+>
+> Not that I would suggest using an external tracker, but maybe at least
+> put each set of related warnings (e.g., those having the same frequency)
+> in its own subthread with the config/compiler info included.
+
+If any are specific to clang, please use
+https://github.com/ClangBuiltLinux/linux/issues
+We have a tag for issues flagged by objtool
+https://github.com/ClangBuiltLinux/linux/issues?q=3Dis%3Aopen+is%3Aissue+la=
+bel%3A%22%5BTOOL%5D+objtool%22
+
+>
+> --
+> Josh
 >
 
-Sounds good.
 
-> >
-> > Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> > ---
-> >  arch/x86/kvm/mmu/tdp_mmu.c | 68 ++++++++++++++------------------------
-> >  1 file changed, 25 insertions(+), 43 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 83f15052aa6c..18630a06fa1f 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -1251,32 +1228,37 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
-> >  /*
-> >   * Mark the SPTEs range of GFNs [start, end) unaccessed and return non-zero
-> >   * if any of the GFNs in the range have been accessed.
-> > + *
-> > + * No need to mark corresponding PFN as accessed as this call is coming from
-> > + * MMU notifier for that page via HVA.
->
-> Thanks for adding this comment.
->
-> Can you just extend it to mention that the information is passed via the
-> return value? e.g.
->
->  * No need to mark corresponding PFN as accessed as this call is coming
->  * from the clear_young() or clear_flush_young() notifier, which uses
->  * the return value to determine if the page has been accessed.
->
-
-Sure.
+--=20
+Thanks,
+~Nick Desaulniers
