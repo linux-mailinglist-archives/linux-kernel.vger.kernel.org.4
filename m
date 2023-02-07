@@ -2,176 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDE368D814
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3522368D825
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbjBGNFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S232163AbjBGNG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:06:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjBGNFA (ORCPT
+        with ESMTP id S232068AbjBGNG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:05:00 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7423A5A6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:04:50 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a2so13209125wrd.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:04:49 -0800 (PST)
+        Tue, 7 Feb 2023 08:06:27 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473553A59F;
+        Tue,  7 Feb 2023 05:05:47 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id e2so5615937iot.11;
+        Tue, 07 Feb 2023 05:05:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hw9n2rz8EZk7Zwt4b/TCgbVGXyOC2ofikV1UOhbOy28=;
-        b=h0oK28sxWQ1yiqlMPhLdbuZWdEiu8VJlzmakwm4khsZ3Pcw3Uc4PYyty82iPHrAEBN
-         vmQhIRRuVpTpUsCLcNwLDmYy3SxIfS8mmABlz5UAWrfpaMFnQyb4LSaMX+inmt5oxUvs
-         PwtEBJZ7HK7TcRCALF0k84zaCwfjRDy6JN0rY0XSJg2aHb8jEpZ2Z1yufZn683gaSBrR
-         uqsB14inHMxquGjIF6L1biGZBTrtDsXUjps0gaBo2WBqT7WBGLknJhVA5n9IzvYhw0rM
-         xKPINz/lHHvwsETQ2x3V//PQGJAAvOhrgMiRwxNe2zf1NZjMXicjJj+YEehS8E4bsA5P
-         R8hg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EXW6KJjSl/14WnK5/Cozb5DZDDl3Rz7gP+uZX13BYEQ=;
+        b=kQre80ZXRD/+STet/ShaaHOWuCYLhnjimY+XyKotPv7kf7CTMARAt6HcUCIfk/dazp
+         a5P4x1fTutCe0WLTt4gjd5BRNSCHNBk3+degLasWCbnira/j1WeaqNhMDbq0dqrKGApM
+         3Iord7V1i2lkj9PWc1Uqm92dOofWXdoBb+nckyC6W8dtjokqgMuV6ob4j7g19mSB4icx
+         FbIZRyDOjp6SU8Y/8oV+z3giUTs6WYYzDTQJh8U6SHQBo6V+kcJqXftC1/1/ZsIGT9sv
+         OupNIXTxBl3kHnAA468HqKxiaZzMJqFeK5lBDBeC0svCesNWmonc/Xt6SJV4E4EvDlvu
+         kxVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hw9n2rz8EZk7Zwt4b/TCgbVGXyOC2ofikV1UOhbOy28=;
-        b=Xa/VupuWDSY6xq/wjk0CnxNfxqjnTY4SmpZTYlm7vF/1i3u2wDB2OvD8Y7GpOLBfwe
-         LpsxLajqgDwvFhYT8KdkxSwgGgjlMw+ILXW5VHQkZcHP/7n+T2yhnLNh1+UuSF9nvFn2
-         +qNembZfRZU6so2sdmd7Apin9jau94blBphKaX88OlOZOFDiUnOQIrrCZqxqKHrCww3u
-         8SH12cCKUOYIhRcKtHoU/uHvbXV2qnGrhem0WmbR8Nn7RQXvEKnmk95e6UBS4s9MKmru
-         /6VGcicpE3DKOJLrrg3tlde1X9+Tsm+99B8Znzs6jV1KHtKUbTbyB30qaAoEU5tmLcX6
-         ebdw==
-X-Gm-Message-State: AO0yUKW0B1fpFfiM8llaCRBM/JPSCz/xxZmwjK58nIgg3t16dVzyRXdL
-        jsQFBskac7rp/ScWsUVzLrQvag==
-X-Google-Smtp-Source: AK7set8r31gVm7sG7P21njAagUkRUkg13ZEgePjdspPbk83jINW58WYZkT0Yj4PsigiNCJj09jtAaA==
-X-Received: by 2002:adf:df83:0:b0:2bf:f027:3c30 with SMTP id z3-20020adfdf83000000b002bff0273c30mr2725354wrl.56.1675775088552;
-        Tue, 07 Feb 2023 05:04:48 -0800 (PST)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n9-20020a5d5989000000b002bc7fcf08ddsm11645394wri.103.2023.02.07.05.04.47
+        bh=EXW6KJjSl/14WnK5/Cozb5DZDDl3Rz7gP+uZX13BYEQ=;
+        b=i7STw47tgwg70p0d7ocUIUB6z3jO7UY4hTFaH32FsAOP/YSICUxz2c7oVD9s3nJMyu
+         4XcTJ5vBxA5rFR/WvjcSTMtehWIxg6Ha42+Gr9fwLQILyXpYJ06fRHPFnzdGJ5Uz57TT
+         e31LqwtMwvEgatLVAoPgTvARgYuLqS1EcfvnoD5ECuICwNXkMurUYu/26hLz7oG8EYrO
+         Jn281rEwCIWPR6aAte2ELtdd/iZpGLZ0jCIjzYGLQdkuMOnw/7GjfCG734IzDbCmGREg
+         UKUsTU4+qIoa79+WZlq+F8CcFBwOUeBd3ZV9Njz+Vsd2nUqlOSmR8KCXbGEuLbrOWiK+
+         2JpQ==
+X-Gm-Message-State: AO0yUKXYbzCA4PDegaVFFptDVuCpqY6dEZ2l2R9YAEekqK1mEL0SPzTN
+        1MzEGgPK0ijubacScnwFXQ0=
+X-Google-Smtp-Source: AK7set9VSExZPQRpgj8kPF8t2b8Blfhc41Cf+GeiZjCOQYJkE8FTqJwstgFSOvO9eFEhrOVjsFeNlw==
+X-Received: by 2002:a6b:7d4c:0:b0:715:f031:a7f5 with SMTP id d12-20020a6b7d4c000000b00715f031a7f5mr2288236ioq.1.1675775140895;
+        Tue, 07 Feb 2023 05:05:40 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id b8-20020a05663805a800b003c29ccd3019sm1174965jar.44.2023.02.07.05.05.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 05:04:48 -0800 (PST)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Tue, 07 Feb 2023 14:04:18 +0100
-Subject: [PATCH net 6/6] selftests: mptcp: stop tests earlier
+        Tue, 07 Feb 2023 05:05:40 -0800 (PST)
+Date:   Tue, 7 Feb 2023 15:05:35 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 4/6] KVM: x86: Make use of kvm_read_cr*_bits() when
+ testing bits
+Message-ID: <20230207150535.00004453@gmail.com>
+In-Reply-To: <20230201194604.11135-5-minipli@grsecurity.net>
+References: <20230201194604.11135-1-minipli@grsecurity.net>
+        <20230201194604.11135-5-minipli@grsecurity.net>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230207-upstream-net-20230207-various-fix-6-2-v1-6-2031b495c7cc@tessares.net>
-References: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
-In-Reply-To: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Benjamin Hesmans <benjamin.hesmans@tessares.net>,
-        Geliang Tang <geliangtang@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2465;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=KTY0Kro9lRunsEJq380yUjc2D3jyyLZ/WohBOjvZgO8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBj4kxokI/kZwP6C9bNbWeMsWwDSDCb5JP9QFQRt
- trEDx7PjpGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCY+JMaAAKCRD2t4JPQmmg
- c5NDEADmKOaYKUbBF/+HG67xP7kMvxCcOzFsp1s9zGzVvE0+pyXFA2MJIfp3qxHnYQBIuoIbQUf
- iyCFcfok/5Yqy6eKpWprWVXJ/u3i9GxXgGwDb2zpfqWBzCBrjy3l1Q9IZ/nrZZkO92tMC6BjEek
- KgTuYMdlTWZuSLP98K0jOGbgiUjZpqs8GVBv0IhV3ucjYowAq6PbZSqtGb6/y6Y9Nhf/Pd1V2ac
- bLxCSnJCHtqZEdM5iT2EnrTGQkffFuCyi7fSRklOQQ0WSdQ9/1Bahdz2JCVTfdO/QpptzX7UGnU
- 4GFvMlwy8E7tM3KMAekkq5Z60C059BwSfCFsr6npt/hnxebwWFQ41LMrWo6705cpUutECeYN3LN
- gWzH3zFXc9jFw3KZVvsiQWC+Oy0OUV6nXNb1NfkRbfzQMESWhbJlnnDX3QW0CaEg2eigLE/ciXw
- d32t/4ENVtroYL/bmKZMBRDGwPHM2g14GBpJ2Hq0bePkvhjUKfw5JHrTMu4coUHilTn1hS7E5Vr
- 2t6smyy1HHPGqAnc8bSpLTLILvvkEbVDW0881pcI59kM903uYKlseyU3kkk61kogi1dSXEmJF8j
- h0PN+ZF9XOlqQkhYiQYaSSSSNdDYy0meih/C8uPQKmD2fS9X1JZE2YLYzJAbrV2U2p/2nTZp/zZ
- cgAz6jAPYs9n+yA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These 'endpoint' tests from 'mptcp_join.sh' selftest start a transfer in
-the background and check the status during this transfer.
+On Wed,  1 Feb 2023 20:46:02 +0100
+Mathias Krause <minipli@grsecurity.net> wrote:
 
-Once the expected events have been recorded, there is no reason to wait
-for the data transfer to finish. It can be stopped earlier to reduce the
-execution time by more than half.
+> Make use of the kvm_read_cr{0,4}_bits() helper functions when we only
+> want to know the state of certain bits instead of the whole register.
+> 
+> This not only makes the intend cleaner, it also avoids a VMREAD in case
+> the tested bits aren't guest owned.
+                    ^
+The patch comment is a little confusing. Not sure if I misunderstood here:
 
-For these tests, the exchanged data were not verified. Errors, if any,
-were ignored but that's fine, plenty of other tests are looking at that.
-It is then OK to mute stderr now that we are sure errors will be printed
-(and still ignored) because the transfer is stopped before the end.
+Check the code of kvm_read_cr0_bits
 
-Fixes: e274f7154008 ("selftests: mptcp: add subflow limits test-cases")
-Cc: stable@vger.kernel.org
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+static inline ulong kvm_read_cr0_bits(struct kvm_vcpu *vcpu, ulong mask)
+{
+        ulong tmask = mask & KVM_POSSIBLE_CR0_GUEST_BITS;
+        if ((tmask & vcpu->arch.cr0_guest_owned_bits) &&
+            !kvm_register_is_available(vcpu, VCPU_EXREG_CR0))
+                static_call(kvm_x86_cache_reg)(vcpu, VCPU_EXREG_CR0);
+        return vcpu->arch.cr0 & mask;
+}
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index f8a969300ef4..079f8f46849d 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -498,6 +498,12 @@ kill_events_pids()
- 	kill_wait $evts_ns2_pid
- }
- 
-+kill_tests_wait()
-+{
-+	kill -SIGUSR1 $(ip netns pids $ns2) $(ip netns pids $ns1)
-+	wait
-+}
-+
- pm_nl_set_limits()
- {
- 	local ns=$1
-@@ -3055,7 +3061,7 @@ endpoint_tests()
- 		pm_nl_set_limits $ns1 2 2
- 		pm_nl_set_limits $ns2 2 2
- 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
--		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow &
-+		run_tests $ns1 $ns2 10.0.1.1 0 0 0 slow 2>/dev/null &
- 
- 		wait_mpj $ns1
- 		pm_nl_check_endpoint 1 "creation" \
-@@ -3068,14 +3074,14 @@ endpoint_tests()
- 		pm_nl_add_endpoint $ns2 10.0.2.2 flags signal
- 		pm_nl_check_endpoint 0 "modif is allowed" \
- 			$ns2 10.0.2.2 id 1 flags signal
--		wait
-+		kill_tests_wait
- 	fi
- 
- 	if reset "delete and re-add"; then
- 		pm_nl_set_limits $ns1 1 1
- 		pm_nl_set_limits $ns2 1 1
- 		pm_nl_add_endpoint $ns2 10.0.2.2 id 2 dev ns2eth2 flags subflow
--		run_tests $ns1 $ns2 10.0.1.1 4 0 0 speed_20 &
-+		run_tests $ns1 $ns2 10.0.1.1 4 0 0 speed_20 2>/dev/null &
- 
- 		wait_mpj $ns2
- 		pm_nl_del_endpoint $ns2 2 10.0.2.2
-@@ -3085,7 +3091,7 @@ endpoint_tests()
- 		pm_nl_add_endpoint $ns2 10.0.2.2 dev ns2eth2 flags subflow
- 		wait_mpj $ns2
- 		chk_subflow_nr "" "after re-add" 2
--		wait
-+		kill_tests_wait
- 	fi
- }
- 
+I suppose the conditions that can avoids a VMREAD is to avoid the vmread in
+static_call(kvm_x86_cache_reg):
 
--- 
-2.38.1
+Conditions are not triggering vmread:
+
+1) The test bits are guest_owned_bits and cache register is available.
+2) The test bits are *not* guest_owned bits.
+
+I agree that this makes the intend cleaner, but not sure the later statement
+is true in the patch comment. If the test bits are not guest owned, it will
+not reach static_call(kvm_x86_cache_reg).
+> 
+> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+> ---
+>  arch/x86/kvm/pmu.c     | 4 ++--
+>  arch/x86/kvm/vmx/vmx.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index d939d3b84e6f..d9922277df67 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -439,9 +439,9 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+>  	if (!pmc)
+>  		return 1;
+>  
+> -	if (!(kvm_read_cr4(vcpu) & X86_CR4_PCE) &&
+> +	if (!(kvm_read_cr4_bits(vcpu, X86_CR4_PCE)) &&
+>  	    (static_call(kvm_x86_get_cpl)(vcpu) != 0) &&
+> -	    (kvm_read_cr0(vcpu) & X86_CR0_PE))
+> +	    (kvm_read_cr0_bits(vcpu, X86_CR0_PE)))
+>  		return 1;
+>  
+>  	*data = pmc_read_counter(pmc) & mask;
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c8198c8a9b55..d3b49e0b6c32 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -5487,7 +5487,7 @@ static int handle_cr(struct kvm_vcpu *vcpu)
+>  		break;
+>  	case 3: /* lmsw */
+>  		val = (exit_qualification >> LMSW_SOURCE_DATA_SHIFT) & 0x0f;
+> -		trace_kvm_cr_write(0, (kvm_read_cr0(vcpu) & ~0xful) | val);
+> +		trace_kvm_cr_write(0, (kvm_read_cr0_bits(vcpu, ~0xful) | val));
+>  		kvm_lmsw(vcpu, val);
+>  
+>  		return kvm_skip_emulated_instruction(vcpu);
+> @@ -7547,7 +7547,7 @@ static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+>  	if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
+>  		return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
+>  
+> -	if (kvm_read_cr0(vcpu) & X86_CR0_CD) {
+> +	if (kvm_read_cr0_bits(vcpu, X86_CR0_CD)) {
+>  		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+>  			cache = MTRR_TYPE_WRBACK;
+>  		else
 
