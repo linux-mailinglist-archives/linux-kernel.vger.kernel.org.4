@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7F368DDAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D63DE68DDB1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjBGQNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S231986AbjBGQNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbjBGQND (ORCPT
+        with ESMTP id S232791AbjBGQN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:13:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED98DBEF;
-        Tue,  7 Feb 2023 08:13:01 -0800 (PST)
+        Tue, 7 Feb 2023 11:13:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C274E055;
+        Tue,  7 Feb 2023 08:13:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA1060F16;
-        Tue,  7 Feb 2023 16:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A13AC433D2;
-        Tue,  7 Feb 2023 16:12:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB8360EA6;
+        Tue,  7 Feb 2023 16:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5C26C433EF;
+        Tue,  7 Feb 2023 16:13:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675786380;
-        bh=cC2tkzskefDBrZsRvMNSczr6SitbzsKg7wGCqoUStHs=;
+        s=k20201202; t=1675786399;
+        bh=FLLBP0tTZMTEFNWTFRCOfoqXmh7TMFj9z2SwwwQ+5qo=;
         h=From:To:Cc:Subject:Date:From;
-        b=f6UuGFSLOAa3/jEqTL8xCu752LB/v8U3T4/n7H7TP+DnA7MHVJ5Vo5N6wy95yp83P
-         3RzDdYgxP0osFCxQoOpBVQ6QBH2x9upd1ijSxseNfiXM2jyY23tInRrYN/inEEjIEG
-         GPvz+k1Z1MlR7IVEt67M5aTJrybyZw5jDsUOkUFymVJjX/SlCwn7n24j6Vx5Dctp4F
-         YNCXUtoEGBQ1XJt914hG+MgsBiPcZ5bSnpnmdS6Gtknc5EOYbsBxUAljNC75gS2rh8
-         CMmRnOw9YU/dCZC6ACchSa1JcLgx1HKsBsJwkEtVF8w3aPEVcwndJ12mLguLm7M7wO
-         ZuWqcudZxdoyQ==
+        b=nhhBAWfFDWtPwtP5V87mG2i7Se7blpUDpt0dX0s1B2Nz8J9dHcar/LTEE4M2F5/yM
+         E28Y0A+5GYWCzYXlSv7zJv5A44VpQS74C7z3Lb6oWWf/VVnmPzVPw9z7b1kD8Cf6Ih
+         1mePSowwg3p65lzzLBB8pWQrSdIwquj5+0ELfVZ4g5rIp4DhdopEpfMedZTDwGQUcY
+         kMHKKjMiatRL3vqMusbbsqcpxO55rY30nr07BbirYbZqnBSkPrmLyBhIjVQRzdsr5v
+         bz6QlUCL+ZuccEB7nOAZVRzWmcbVl9vQATNgIXJ4w+M+f1KO6XKeb7Vtrm+TzjoUhq
+         B0qttGVTChpdg==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Mario Limonciello <Mario.Limonciello@amd.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Perry Yuan <perry.yuan@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>, Meng Li <li.meng@amd.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: amd-pstate: avoid uninitialized variable use
-Date:   Tue,  7 Feb 2023 17:12:51 +0100
-Message-Id: <20230207161256.271613-1-arnd@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: i2c: imx290: fix conditional function defintions
+Date:   Tue,  7 Feb 2023 17:13:12 +0100
+Message-Id: <20230207161316.293923-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,91 +58,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The new epp support causes warnings about three separate
-but related bugs:
+The runtime suspend/resume functions are only referenced from the
+dev_pm_ops, but they use the old SET_RUNTIME_PM_OPS() helper
+that requires a __maybe_unused annotation to avoid a warning:
 
-1) failing before allocation should just return an error:
+drivers/media/i2c/imx290.c:1082:12: error: unused function 'imx290_runtime_resume' [-Werror,-Wunused-function]
+static int imx290_runtime_resume(struct device *dev)
+           ^
+drivers/media/i2c/imx290.c:1090:12: error: unused function 'imx290_runtime_suspend' [-Werror,-Wunused-function]
+static int imx290_runtime_suspend(struct device *dev)
+           ^
 
-drivers/cpufreq/amd-pstate.c:951:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (!dev)
-            ^~~~
-drivers/cpufreq/amd-pstate.c:1018:9: note: uninitialized use occurs here
-        return ret;
-               ^~~
+Convert this to the new RUNTIME_PM_OPS() helper that so this
+is not required. To improve this further, also use the pm_ptr()
+helper that lets the dev_pm_ops get dropped entirely when
+CONFIG_PM is disabled.
 
-2) wrong variable to store return code:
+A related mistake happened in the of_match_ptr() macro here, which
+like SET_RUNTIME_PM_OPS() requires the match table to be marked
+as __maybe_unused, though I could not reproduce building this without
+CONFIG_OF. Remove the of_match_ptr() here as there is no point in
+dropping the match table in configurations without CONFIG_OF.
 
-drivers/cpufreq/amd-pstate.c:963:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (rc)
-            ^~
-drivers/cpufreq/amd-pstate.c:1019:9: note: uninitialized use occurs here
-        return ret;
-               ^~~
-drivers/cpufreq/amd-pstate.c:963:2: note: remove the 'if' if its condition is always false
-        if (rc)
-        ^~~~~~~
-
-3) calling amd_pstate_set_epp() in cleanup path after determining
-that it should not be called:
-
-drivers/cpufreq/amd-pstate.c:1055:6: error: variable 'epp' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
-        if (cpudata->epp_policy == cpudata->policy)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/cpufreq/amd-pstate.c:1080:30: note: uninitialized use occurs here
-        amd_pstate_set_epp(cpudata, epp);
-                                    ^~~
-
-All three are trivial to fix, but most likely there are additional bugs
-in this function when the error handling was not really tested.
-
-Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
+Fixes: 02852c01f654 ("media: i2c: imx290: Initialize runtime PM before subdev")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/cpufreq/amd-pstate.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/media/i2c/imx290.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 168a28bed6ee..847f5f31396d 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -940,7 +940,6 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
- 	struct amd_cpudata *cpudata;
- 	struct device *dev;
--	int rc;
- 	u64 value;
- 
- 	/*
-@@ -950,7 +949,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 	amd_perf_ctl_reset(policy->cpu);
- 	dev = get_cpu_device(policy->cpu);
- 	if (!dev)
--		goto free_cpudata1;
-+		return -ENODEV;
- 
- 	cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
- 	if (!cpudata)
-@@ -959,8 +958,8 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
- 	cpudata->cpu = policy->cpu;
- 	cpudata->epp_policy = 0;
- 
--	rc = amd_pstate_init_perf(cpudata);
--	if (rc)
-+	ret = amd_pstate_init_perf(cpudata);
-+	if (ret)
- 		goto free_cpudata1;
- 
- 	min_freq = amd_get_min_freq(cpudata);
-@@ -1076,9 +1075,9 @@ static void amd_pstate_epp_init(unsigned int cpu)
- 		value |= (u64)epp << 24;
- 	}
- 
-+	amd_pstate_set_epp(cpudata, epp);
- skip_epp:
- 	WRITE_ONCE(cpudata->cppc_req_cached, value);
--	amd_pstate_set_epp(cpudata, epp);
- 	cpufreq_cpu_put(policy);
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index 49d6c8bdec41..48ae2e0adf9e 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -1098,7 +1098,7 @@ static int imx290_runtime_suspend(struct device *dev)
  }
+ 
+ static const struct dev_pm_ops imx290_pm_ops = {
+-	SET_RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
++	RUNTIME_PM_OPS(imx290_runtime_suspend, imx290_runtime_resume, NULL)
+ };
+ 
+ /* ----------------------------------------------------------------------------
+@@ -1362,8 +1362,8 @@ static struct i2c_driver imx290_i2c_driver = {
+ 	.remove = imx290_remove,
+ 	.driver = {
+ 		.name  = "imx290",
+-		.pm = &imx290_pm_ops,
+-		.of_match_table = of_match_ptr(imx290_of_match),
++		.pm = pm_ptr(&imx290_pm_ops),
++		.of_match_table = imx290_of_match,
+ 	},
+ };
  
 -- 
 2.39.1
