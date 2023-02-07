@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA0268CE90
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C79B68CE97
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 06:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjBGFCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 00:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S230408AbjBGFDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 00:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjBGFB5 (ORCPT
+        with ESMTP id S229960AbjBGFB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Feb 2023 00:01:57 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90246C67C;
-        Mon,  6 Feb 2023 21:01:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518F9CDCB;
+        Mon,  6 Feb 2023 21:01:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675746115; x=1707282115;
+  t=1675746116; x=1707282116;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=+1DtJmYoUbMLlAjJEQ1d3h7xcYK1w4mnpef+1fxd8fs=;
-  b=FT6uX/2Z2cJDqxB5UQdPg6yPU4mrWILNCMAbkcAW/F+e/3uy6Qs/0kEF
-   0XfIcNOwyLA75YRzVxpsWrrf+3UZ3uXHqSvt5KobjKrmL/EsQRSPjSI1h
-   M6BrDUgLkm2WB1VHRiPl2q6HDPof2pE362N5D8yj6dTRGbKjFfAmUHoDk
-   2vpL+iUZ0xIbh56yd9qHd6WZMi509xW0C8O00Fz6W8XETeQhaDwlzaLKE
-   tIDSGHVgWdEEBwXmBVdeIZdv7uYy+a4H64M9rtpmM2v9NtMPl/4OlZOkW
-   JuNtzcQi/sNh/azzkLMTbA8AP69uc2Flsg1o/GHUXjJ6xRrZEY0YMbB4b
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625878"
+  bh=3mEF+X1OQu4dffb2wbCkr1lz7Fm3ISrkb07VTK8J8lk=;
+  b=W4bVfXgZ4TDooAdFk0rCdotTO+9FgnsoPB4KQuc1cHFEbK6hlQBY2ZCt
+   LymnpowYpI6ElxLMO2Y4We9FDf9WOlAwChKUXGZVvm1IEShyajI+RjXQc
+   ZryVBGaY5kIRPfmdDsofC+uy4oIHnHvGZ2Km7D/0bR2s9dxjdYZ4Pbiio
+   e7wxwopXaIoB7/Lxff+oNuzh79YrPYLy8OJR7oW5Fp2QendG2bYPDNf6L
+   I3bnIxtMrUiRnTOXGY/9J9bpAy3h7S+Fr05c3RPfPnrGkhLNRMNq7uYnB
+   rWdG6LmTSqDZ5rAHWhfx4Uwbi4P4jNDLQF6mDBdVYk+J6zLS3SpBTCfUq
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415625888"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415625878"
+   d="scan'208";a="415625888"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 21:01:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657740"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668657749"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668657740"
+   d="scan'208";a="668657749"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:43 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 21:01:44 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -60,9 +60,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v3 12/24] x86/cpufeatures: Add the Intel Thread Director feature definitions
-Date:   Mon,  6 Feb 2023 21:10:53 -0800
-Message-Id: <20230207051105.11575-13-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 14/24] thermal: intel: hfi: Update the IPC class of the current task
+Date:   Mon,  6 Feb 2023 21:10:55 -0800
+Message-Id: <20230207051105.11575-15-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230207051105.11575-1-ricardo.neri-calderon@linux.intel.com>
@@ -75,13 +75,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intel Thread Director (ITD) provides hardware resources to classify
-the current task. The classification reflects the type of instructions that
-a task currently executes.
-
-ITD extends the Hardware Feedback Interface table to provide performance
-and energy efficiency capabilities for each of the supported classes of
-tasks.
+Use Intel Thread Director classification to update the IPC class of a
+task. Implement the arch_update_ipcc() interface of the scheduler.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -102,68 +97,88 @@ Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v2:
- * None
+ * Removed the implementation of arch_has_ipc_classes().
 
 Changes since v1:
- * Removed dependency on CONFIG_INTEL_THREAD_DIRECTOR. Instead, depend on
-   CONFIG_IPC_CLASSES.
- * Added DISABLE_ITD to the correct DISABLE_MASK: 14 instead of 13.
+ * Adjusted the result the classification of Intel Thread Director to start
+   at class 1. Class 0 for the scheduler means that the task is
+   unclassified.
+ * Redefined union hfi_thread_feedback_char_msr to ensure all
+   bit-fields are packed. (PeterZ)
+ * Removed CONFIG_INTEL_THREAD_DIRECTOR. (PeterZ)
+ * Shortened the names of the functions that implement IPC classes.
+ * Removed argument smt_siblings_idle from intel_hfi_update_ipcc().
+   (PeterZ)
 ---
- arch/x86/include/asm/cpufeatures.h       | 1 +
- arch/x86/include/asm/disabled-features.h | 8 +++++++-
- arch/x86/kernel/cpu/cpuid-deps.c         | 1 +
- 3 files changed, 9 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/topology.h   |  6 ++++++
+ drivers/thermal/intel/intel_hfi.c | 32 +++++++++++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index fdb8e09234ba..8a6261a5dbbf 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -349,6 +349,7 @@
- #define X86_FEATURE_HWP_EPP		(14*32+10) /* HWP Energy Perf. Preference */
- #define X86_FEATURE_HWP_PKG_REQ		(14*32+11) /* HWP Package Level Request */
- #define X86_FEATURE_HFI			(14*32+19) /* Hardware Feedback Interface */
-+#define X86_FEATURE_ITD			(14*32+23) /* Intel Thread Director */
- 
- /* AMD SVM Feature Identification, CPUID level 0x8000000a (EDX), word 15 */
- #define X86_FEATURE_NPT			(15*32+ 0) /* Nested Page Table support */
-diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
-index 5dfa4fb76f4b..f8e145a8c5dd 100644
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@ -99,6 +99,12 @@
- # define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
+diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+index 458c891a8273..ffcdac3f398f 100644
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -227,4 +227,10 @@ void init_freq_invariance_cppc(void);
+ #define arch_init_invariance_cppc init_freq_invariance_cppc
  #endif
  
-+#ifdef CONFIG_IPC_CLASSES
-+# define DISABLE_ITD	0
-+#else
-+# define DISABLE_ITD	(1 << (X86_FEATURE_ITD & 31))
-+#endif
++#if defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL)
++void intel_hfi_update_ipcc(struct task_struct *curr);
 +
- /*
-  * Make sure to add features to the correct mask
-  */
-@@ -117,7 +123,7 @@
- 			 DISABLE_CALL_DEPTH_TRACKING)
- #define DISABLED_MASK12	0
- #define DISABLED_MASK13	0
--#define DISABLED_MASK14	0
-+#define DISABLED_MASK14	(DISABLE_ITD)
- #define DISABLED_MASK15	0
- #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
- 			 DISABLE_ENQCMD)
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index f6748c8bd647..7a87b823eef3 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -81,6 +81,7 @@ static const struct cpuid_dep cpuid_deps[] = {
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
- 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
-+	{ X86_FEATURE_ITD,			X86_FEATURE_HFI       },
- 	{}
++#define arch_update_ipcc intel_hfi_update_ipcc
++#endif /* defined(CONFIG_IPC_CLASSES) && defined(CONFIG_INTEL_HFI_THERMAL) */
++
+ #endif /* _ASM_X86_TOPOLOGY_H */
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index b06021828892..530dcf57e06e 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -72,6 +72,17 @@ union cpuid6_edx {
+ 	u32 full;
  };
  
++#ifdef CONFIG_IPC_CLASSES
++union hfi_thread_feedback_char_msr {
++	struct {
++		u64	classid : 8;
++		u64	__reserved : 55;
++		u64	valid : 1;
++	} split;
++	u64 full;
++};
++#endif
++
+ /**
+  * struct hfi_cpu_data - HFI capabilities per CPU
+  * @perf_cap:		Performance capability
+@@ -174,6 +185,27 @@ static struct workqueue_struct *hfi_updates_wq;
+ #ifdef CONFIG_IPC_CLASSES
+ static int __percpu *hfi_ipcc_scores;
+ 
++void intel_hfi_update_ipcc(struct task_struct *curr)
++{
++	union hfi_thread_feedback_char_msr msr;
++
++	/* We should not be here if ITD is not supported. */
++	if (!cpu_feature_enabled(X86_FEATURE_ITD)) {
++		pr_warn_once("task classification requested but not supported!");
++		return;
++	}
++
++	rdmsrl(MSR_IA32_HW_FEEDBACK_CHAR, msr.full);
++	if (!msr.split.valid)
++		return;
++
++	/*
++	 * 0 is a valid classification for Intel Thread Director. A scheduler
++	 * IPCC class of 0 means that the task is unclassified. Adjust.
++	 */
++	curr->ipcc = msr.split.classid + 1;
++}
++
+ static int alloc_hfi_ipcc_scores(void)
+ {
+ 	if (!cpu_feature_enabled(X86_FEATURE_ITD))
 -- 
 2.25.1
 
