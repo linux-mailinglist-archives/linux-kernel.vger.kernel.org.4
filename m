@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5758B68E213
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED0B68E215
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjBGUnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 15:43:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
+        id S229617AbjBGUoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 15:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBGUng (ORCPT
+        with ESMTP id S229574AbjBGUoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 15:43:36 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8576E98;
-        Tue,  7 Feb 2023 12:43:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675802615; x=1707338615;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LGMTUCV6l/iT3A7JdzQEA4khN4yhKfcPeFoiLiMB1Xw=;
-  b=SsJ+CdcAXC2Jx6GaSbXC9IMUWKKKCEMhW9gskKaedjl1EEPKY306uQvA
-   Y7DaLWM40GaR/hLEPh+pBdwdJlSdDi3ssSiSYUbbqiPL8T1AHYUL4jqqJ
-   WWJeJXLO2IyvWhUk44H/FTahhmu2a/2mrYXlsXcM7HDUo5NMBfF9oPS+/
-   oUDtV5phisaOxmNascvwTAv7z7KqJPw2jEqJCHtfFLb3gXzqeRTaNtPgA
-   86aH/pmlYS5toz3Zvzaf102P2lQfmLetTawYCLhx5HXx4JhPNuKjcwWEb
-   h2LHoYb2j0USeAnOBKm2ldfeBeCQi3bZJJzHnxRhL/pcQyOZjk1i7W4FV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="330913843"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="330913843"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 12:43:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="644589173"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="644589173"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Feb 2023 12:43:32 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPUoN-0003sY-2I;
-        Tue, 07 Feb 2023 20:43:31 +0000
-Date:   Wed, 8 Feb 2023 04:42:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tumic@gpxsee.org, Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhi Hou <lizhi.hou@amd.com>,
-        Martin =?utf-8?B?VMWvbWE=?= <martin.tuma@digiteqautomotive.com>
-Subject: Re: [PATCH RESEND v5 1/1] Added Digiteq Automotive MGB4 driver
-Message-ID: <202302080423.3mOPztPU-lkp@intel.com>
-References: <20230207150119.5542-2-tumic@gpxsee.org>
+        Tue, 7 Feb 2023 15:44:19 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22236A5C0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 12:44:18 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-526f0b3d8d9so144997777b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 12:44:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eclypsium.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jWFC63SFa0NEc04b7LNBtIqeFtJCBIQD+K/SNTi845Q=;
+        b=fVPo5IU7vrw2G79Uns9xhh+yX9RWHZEDAnlyQPITgooDlQZ9qF5SdKL1M2wiznu9xc
+         b44kQvrFlOGvGypWo+MsswqGQkWPqX6sMDbXcj8t+sPm/bkWylhyFysNH5FLlpkoCEDk
+         qJZDeC+lfR/4bABJegb3VItk8eyv6uOR0j7xWf/OmJYPKXK2Kv05xC6lQ3XvbP4YMgLD
+         1MGUa9ZUB5ekyTSbwzI1oswsSgDXkKd2a/jcsm/9bfZK/+UJmQYZmr5Ze6QRZcpuN6Rr
+         BkMPCPw7uMz8hYQzMu0Y5Wva0ODgEvceIqCdOM5UNwGZ1MkEeoLhmYACKReML7fr8YGW
+         8bsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jWFC63SFa0NEc04b7LNBtIqeFtJCBIQD+K/SNTi845Q=;
+        b=rvzfwUthB//bFJtzisuOlWJqw7Ed2/p1chefs7x+Bg0a52+AKWXmWGI21kTrcmrEnj
+         3hTbhNHpHaLcYkEWJVlX7lZ/XNgHK9wK/fO402btiLuz9wr6nPgbQeggkAbcuszZcp0n
+         3usz0FNQkv3qW9I893/ghjg41rvwUnyiDi62a33SGk4CfC9Ue5He6OBFZXLlPSf0uQG/
+         VkKYs9NzEwhuwkc4LFSh6HkJuYtyxtgHqKu3sDJv9TlCk61LcCcpL1dLS6eM96nyt39l
+         tSm64cpiiZWU01qK35dduURVZLNqDAwoxA7yn/LayhAMFkEbg4knTRprZpGPDPQ90+aN
+         LkBA==
+X-Gm-Message-State: AO0yUKVlBncFGaCeHhmGC1fJFpgVkgcvr+itH9GrzlXvJ+wfni7PxEZP
+        JWk5ZuXY1cB5HmnqMCMPY7LNKa/hxCb7wzAQMZp0pbJjWNBNnA==
+X-Google-Smtp-Source: AK7set8z9ZcIO81WbXWw7jnMiKbg0cEX46ErTgpJNTE5P5o5u6Fuf6duLayicU/xxbYIfhFR8y4wokCmDLqUjRjSULE=
+X-Received: by 2002:a0d:cb07:0:b0:529:a614:4d9f with SMTP id
+ n7-20020a0dcb07000000b00529a6144d9fmr419015ywd.144.1675802657339; Tue, 07 Feb
+ 2023 12:44:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207150119.5542-2-tumic@gpxsee.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206183143.75274-2-mauro.lima@eclypsium.com>
+ <20230207135254.2465816-1-michael@walle.cc> <Y+JaKF4FZQKqeGs7@black.fi.intel.com>
+ <8797addc6c063b867b94cce352191aab@walle.cc> <Y+JkArdW747OtMO9@black.fi.intel.com>
+In-Reply-To: <Y+JkArdW747OtMO9@black.fi.intel.com>
+From:   Mauro Lima <mauro.lima@eclypsium.com>
+Date:   Tue, 7 Feb 2023 17:44:06 -0300
+Message-ID: <CAArk9MMC=xq3HetGG-F8OQk4J6=b5rNpoPfou0e5T8w4fpDFnQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] spi: intel: Remove DANGEROUS tag from pci driver
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Michael Walle <michael@walle.cc>, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi all,
 
-Thank you for the patch! Yet something to improve:
+On Tue, Feb 7, 2023 at 2:25 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> Hi,
+>
+> On Tue, Feb 07, 2023 at 03:11:26PM +0100, Michael Walle wrote:
+> > Hi Mika,
+> >
+> > Am 2023-02-07 15:03, schrieb Mika Westerberg:
+> > > On Tue, Feb 07, 2023 at 02:52:54PM +0100, Michael Walle wrote:
+> > > > > Modern CPUs exposes this controller as PCI device that only uses
+> > > > > hardware sequencing capabilities which is safer than software
+> > > > > sequencing.
+> > > > > Leave the platform driver as *DANGEROUS* and update help text since
+> > > > > most of these controllers are using software sequencing.
+> > > >
+> > > > Out of curiosity, what is hardware sequencing? Maybe this should
+> > > > be explained a bit more in the Kconfig help text. Looks like the
+> > > > dangerous was there because you can update the bios and that
+> > > > could eventually lead to a bricked mainboard. So hardware
+> > > > sequencing helps there? how?
+> > >
+> > > Hardware sequencing means the controller exposes just a bunch of "high
+> > > level" operations to the software.
+> >
+> > Ok, I figured it would have been something to do with the SPI driver
+> > just supporting these high level ops. But even with that background
+> > it was hard to connect that to the "hardware sequencing". The help
+> > text should be somewhat understandable to the user/distro people/whoever,
+> > right? So I'd suggest to explain that a bit more in detail, or don't
+> > use the term hardware sequencing at all. I'm not sure.
+>
+> I agree it should be made more understandable for the distro folks. At
+> least add some explanation why it is OK to select this.
+I agree with this.
+> Mauro, can you do that in the next version?
+Sure thing.
+> > > Such as read, write, erase and so on
+> > > but does not allow running the actual "low level" SPI-NOR opcodes.
+> > > Software sequencing on the other hand allows running pretty much any
+> > > opcode and this is what caused problems for certain Lenovo laptops few
+> > > years back that then resulted adding DANGEROUS to the Kconfig.
+> >
+> > That information should go into the commit message.
+>
+> +1
+Sorry about this, still learning :)
 
-[auto build test ERROR on sailus-media-tree/streams]
-[also build test ERROR on linus/master v6.2-rc7]
-[cannot apply to media-tree/master next-20230207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/tumic-gpxsee-org/Added-Digiteq-Automotive-MGB4-driver/20230207-210120
-base:   git://linuxtv.org/sailus/media_tree.git streams
-patch link:    https://lore.kernel.org/r/20230207150119.5542-2-tumic%40gpxsee.org
-patch subject: [PATCH RESEND v5 1/1] Added Digiteq Automotive MGB4 driver
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230208/202302080423.3mOPztPU-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ece664ba09047f289e8573fc17738d5eb29c265a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review tumic-gpxsee-org/Added-Digiteq-Automotive-MGB4-driver/20230207-210120
-        git checkout ece664ba09047f289e8573fc17738d5eb29c265a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/media/pci/mgb4/mgb4_trigger.c:19:10: fatal error: linux/dma/amd_xdma.h: No such file or directory
-      19 | #include <linux/dma/amd_xdma.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
---
->> drivers/media/pci/mgb4/mgb4_core.c:29:10: fatal error: linux/dma/amd_xdma.h: No such file or directory
-      29 | #include <linux/dma/amd_xdma.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
---
->> drivers/media/pci/mgb4/mgb4_vin.c:24:10: fatal error: linux/dma/amd_xdma.h: No such file or directory
-      24 | #include <linux/dma/amd_xdma.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
---
->> drivers/media/pci/mgb4/mgb4_vout.c:17:10: fatal error: linux/dma/amd_xdma.h: No such file or directory
-      17 | #include <linux/dma/amd_xdma.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +19 drivers/media/pci/mgb4/mgb4_trigger.c
-
-  > 19	#include <linux/dma/amd_xdma.h>
-    20	#include "mgb4_core.h"
-    21	#include "mgb4_trigger.h"
-    22	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks all for your comments and time.
