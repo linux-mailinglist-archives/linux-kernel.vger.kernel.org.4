@@ -2,73 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1271E68E1D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD2E68E1D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 21:27:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbjBGU0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 15:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S231178AbjBGU1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 15:27:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjBGU0M (ORCPT
+        with ESMTP id S229457AbjBGU1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 15:26:12 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F093E227B3;
-        Tue,  7 Feb 2023 12:26:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675801538; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=MFNHmG7/lU5lU0u3G9nsYk1cs8rNbzIqyvaRcbnB5KpOJpiz1rcXcz4sK6/NjVBY85Yx21w445bxaJR5/MqgkSkguqsTnlvscLfep1WlZq8cWO9WdIvy+Q4m0k1y76tZPvz0gd428FUeZB/fW9i8YxLvjmIRZmcnLVeP9jscz8g=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1675801538; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=wcVHq/ToninKh97wZonejb3L1j9muvYR02fKr1OcN9Y=; 
-        b=a/fzL72QLxOBJMUYylu0AoOyhN0d2IeV0FwcwbJtUhSuYOTbkObmEChV0V77wB6yiYpWWrNgq/Bw5FHdBer/uCVKTp9ka2CCNHS8O/NkqBJBQ6KdKrNW20zagTcsRenv1Ljsa5xunkL0d2K6Yl57aGWHE6a+3kVBRoCAT87iQwo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1675801538;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=wcVHq/ToninKh97wZonejb3L1j9muvYR02fKr1OcN9Y=;
-        b=HCTmg4BsxKu2cQiWm7Vd0BPwN7+baK7Ii1vSGLDOApk77vppQvPowE+frPfj4Hoo
-        SzvqIfZ/GjYhr5GhrrCd15HHkGUqMUqNRdcmc6moxU1IglCi/D+u8P3rLUEiwYmB4hF
-        TcYGP+v5yo5mWtxVir7Y5DpnyGpPUIklqSu/82ck=
-Received: from [10.10.10.3] (31.223.26.239 [31.223.26.239]) by mx.zohomail.com
-        with SMTPS id 167580153785286.01988633069698; Tue, 7 Feb 2023 12:25:37 -0800 (PST)
-Message-ID: <52f8fc7f-9578-6873-61ae-b4bf85151c0f@arinc9.com>
-Date:   Tue, 7 Feb 2023 23:25:32 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: enable special tag when
- any MAC uses DSA
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     Jakub Kicinski <kuba@kernel.org>, arinc9.unal@gmail.com
-Cc:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-References: <20230205175331.511332-1-arinc.unal@arinc9.com>
- <20230207105613.4f56b445@kernel.org>
- <5d025125-77e4-cbfb-8caa-b71dd4adfc40@arinc9.com>
-In-Reply-To: <5d025125-77e4-cbfb-8caa-b71dd4adfc40@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 7 Feb 2023 15:27:41 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7643F1F5D1;
+        Tue,  7 Feb 2023 12:27:39 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id p26so45643531ejx.13;
+        Tue, 07 Feb 2023 12:27:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pdt3r8F0nSwJUtUlnjS+OscQHvPRPPKG/eygJQ/b7P4=;
+        b=lDRCVQVqITuizkFMENZplglVXc0Yrp+P61RobQiuR1vksbK8bAHO4a0w1h7ISVbKv3
+         LGwRnr8tXOkWMLNUdIPB3rmNPExk7RN3fZYcvILINOIcCb2uY/9R86KBru9kIMKaybT4
+         wR3gj7LO7AiUyJO3LMllLjLI2QJar6AKjYBabYFdq4PQWiqbFjGY/6OZqSb53k0qXUIn
+         AoNlIGOLXDo5dSIZaO6y+lHrPer5evJTqKVC43mhcpTorohlMs9xioy8yaBWv3T/NJkG
+         UjR2J7lXolby9bzugSe5O978mltKf9TdDJUjhZczy2EbRffyfQ9/EsNDQtyQT+s8hAJQ
+         EJ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Pdt3r8F0nSwJUtUlnjS+OscQHvPRPPKG/eygJQ/b7P4=;
+        b=p2Bnp9f0Q4Z0klbQgkd9HEoLt0mvJrikkBzucZAHP1Y2gXMxJnHtRk7eqrg8FbCwof
+         xw42kZRP4TZuICLprDdd5Q0iR0t49PZTIThJAQFTKHRKa3JbiJzRFEARKAg6NRKVtGvN
+         DiDs7rq1upTPIPHru+x3w9rQ60W0d3xfkNquX2peluB8ZjZH0YIZOvZE8aDps+lE+zq3
+         7w9xNnPckTCgZGLjzlyJqKY200HqE0MOj0AWST9DcpvcNR3umX2c0qy7vNrI7rfkBw3N
+         Wq44KxcmZjD/X60du6XXHFUYMx0hPsZjMF66cg+6V9NPgMq+wp6yV9H7LAe5SEpXN8tl
+         OviQ==
+X-Gm-Message-State: AO0yUKWHBiIF342xRyqiiZLJhm6aDCzXp8D01sgBeW0L7WMujAbSXy6h
+        pxncKAgPihPlv6XCdMH3flE=
+X-Google-Smtp-Source: AK7set/taA3xBa9SnogtEBJBflPUblm2ZUlhPWAZ9lM9iKHPhDJEaVjLS7VApSbP3At8rFIMZsPoEQ==
+X-Received: by 2002:a17:906:6453:b0:884:4806:c39 with SMTP id l19-20020a170906645300b0088448060c39mr4546153ejn.11.1675801657927;
+        Tue, 07 Feb 2023 12:27:37 -0800 (PST)
+Received: from localhost (93-55-83-125.ip262.fastwebnet.it. [93.55.83.125])
+        by smtp.gmail.com with ESMTPSA id qt17-20020a170906ecf100b0085fc3dec567sm7443202ejb.175.2023.02.07.12.27.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 12:27:37 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 07 Feb 2023 20:27:35 +0000
+Message-Id: <CQCM3WH323TM.19ARH3F75R3C7@vincent-arch>
+Cc:     "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Gary Guo" <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        =?utf-8?q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>,
+        "Finn Behrens" <fin@nyantec.com>
+Subject: Re: [PATCH v2 1/2] rust: sync: impl {Debug,Display} for
+ {Unique,}Arc
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Carlos Bilbao" <carlos.bilbao@amd.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230207185216.1314638-1-boqun.feng@gmail.com>
+ <20230207185216.1314638-2-boqun.feng@gmail.com>
+ <718cd090-1a0b-d485-c595-f14ea1d41d9d@amd.com>
+In-Reply-To: <718cd090-1a0b-d485-c595-f14ea1d41d9d@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,32 +87,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7.02.2023 23:24, Arınç ÜNAL wrote:
-> On 7.02.2023 21:56, Jakub Kicinski wrote:
->> On Sun,  5 Feb 2023 20:53:31 +0300 arinc9.unal@gmail.com wrote:
->>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>>
->>> The special tag is only enabled when the first MAC uses DSA. However, it
->>> must be enabled when any MAC uses DSA. Change the check accordingly.
->>>
->>> This fixes hardware DSA untagging not working on the second MAC of the
->>> MT7621 and MT7623 SoCs, and likely other SoCs too. Therefore, remove the
->>> check that disables hardware DSA untagging for the second MAC of the 
->>> MT7621
->>> and MT7623 SoCs.
->>>
->>> Fixes: a1f47752fd62 ("net: ethernet: mtk_eth_soc: disable hardware 
->>> DSA untagging for second MAC")
->>
->> As Paolo pointed out to me off-list this is pretty much a revert of
->> commit under Fixes. Is this an actual regression fix, or second MAC
->> as DSA port never worked but now you found a way to make it work?
-> 
-> Second MAC as DSA master after hardware DSA untagging was enabled never 
-> worked. I first disabled it to make the communication work again, then, 
-> with this patch, I found a way to make it work which is what should've 
-> been done with the commit for adding hardware DSA untagging support.
-
-Should both commits be mentioned with Fixes tag?
-
-Arınç
+On Tue Feb 7, 2023 at 7:03 PM UTC, Carlos Bilbao wrote:
+> On 2/7/23 12:52, Boqun Feng wrote:
+>
+> > This allows printing the inner data of `Arc` and its friends if the
+> > inner data implements `Display` or `Debug`. It's useful for logging and
+> > debugging purpose.
+> >
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > Reviwed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+>
+>
+> s/Reviwed/Reviewed
+Ops! this is my fautl! I will review the version 2.
