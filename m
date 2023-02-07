@@ -2,139 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751F368D66E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEB068D6A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbjBGMZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:25:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S231730AbjBGM02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjBGMZo (ORCPT
+        with ESMTP id S231685AbjBGM0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:25:44 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CFE37F26
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:25:42 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id k13so5969885wrh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 04:25:42 -0800 (PST)
+        Tue, 7 Feb 2023 07:26:22 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F7B37F23
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 04:26:18 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id g6so5394124wrv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 04:26:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EnZqUDs+vOL9eLigF5zhRBTNLnRQCkndCOjGhTOrE2Y=;
-        b=JM441Qqy+1fZmCJblSylYs6tj2fTsSrjmHEBvTFWYOCXkTdIp6bWHaNlTrN/gMI2LM
-         +tuwvNETO57Xy5HH6EfrZRKMyVf5msaPShQfmXx5XED+SpBUl7jrNqS6AJwoyd0xTSQB
-         bjYsDhCfsOMCJuRHlUUxwP17LalQGdrQgi7aBZ4qtuheMEg3/7vbWf9Z8gU/sWwMqNMa
-         llN5umaTQX3fhTYJBh41eGqGHccL+Ui1Zu6pNkua9T54lMbevLn+tj62Or9yLKAdYieF
-         PIfUwyWXLHo7TC3hefPdfd6MUo0MXo6dynyMJgFbMAY1tgtBEgreMERHEAgr5+wi/Zjn
-         LtOQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5xYnHX1Erl5u5KfXsFsM2CCOcYE1hgAFey0pHbtrlGw=;
+        b=a0bYF8vFZ81omWoSjjcDJcOsQPx0IJKXO2MNRiT9l9onGXaGU/wJv/i2K99OGIqcp7
+         ihdwgekxx34k/NvtSiaofvZjKIRkq1Gr46OJM4n4ysLojX6AZ2xR1xvSjnBut7H/2Mm5
+         8fi1YvW7KVgOJ1rXKQn7mg4bC89gcex54BUyX418qwHJ7IdMfDUxIXyFJ1oW3XbTbubd
+         /ieHDCdsL1zjj0I/unn0HAHeDghr6unOEfRIAlgeJ2dj8xHT/gk42owOCUPeMedXbbyz
+         j+AivNuy9YL3wEAIJ2NKTETQpyVQuPor+n9so2GzpBypaEyYTWGpIOrft7HAPnHDPCTc
+         IggQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EnZqUDs+vOL9eLigF5zhRBTNLnRQCkndCOjGhTOrE2Y=;
-        b=mwqWKCXZR1AFYOWuoDVIz8ElbhQOtuJXCZ872bt+rnR428omNEn5dMwYqtdDzdrNpb
-         5avUlLly50eythb/ffz+hyWC7I2PvyDjV6KVCaIn2SzBp+zc5DEozMeTypBQnqar9BFs
-         W4GAoZchxrj0TZP+Q1OCAuN2jIkGaGvHp/TMvsf+GT00n+uv2lPv//Fu8N91R7Yl6TuG
-         +cj6B+rs0qn1ock9a+UFtTKETocjwuX9BnwkvUCn0fNUiGRg3YQhO1ZxdRzEQuySfoWW
-         A/lJ9/CjNoWijiEcspwl5UKR5vOzdJb+FIyn5ErKoU2S2hTMUw9eYvJlXQ1s9lupSmdl
-         5y2Q==
-X-Gm-Message-State: AO0yUKWUUZmJkpEAHFHQ0fL44HhcXCg94IesAzC0A+NX1II1RUs0xPtb
-        DVMoZE0OQ3QYDVMY82CRyplsyw==
-X-Google-Smtp-Source: AK7set96v9kQl3blLgDHsC9KtC7U5aHC8Yd0qc798XB5lCqQIh/WZdWAaO6kvfN+pCiHtWLrDSOvog==
-X-Received: by 2002:a5d:4144:0:b0:2c3:e5f5:9fa9 with SMTP id c4-20020a5d4144000000b002c3e5f59fa9mr2444692wrq.67.1675772740668;
-        Tue, 07 Feb 2023 04:25:40 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id x18-20020adfffd2000000b002c3f1223059sm2099785wrs.36.2023.02.07.04.25.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 04:25:40 -0800 (PST)
-Date:   Tue, 7 Feb 2023 14:25:38 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-phy@lists.infradead.org
-Subject: Re: [RFC v3 4/7] phy: qcom: Add QCOM SNPS eUSB2 repeater driver
-Message-ID: <Y+JDQt/T7pXh2/P7@linaro.org>
-References: <20230202133816.4026990-1-abel.vesa@linaro.org>
- <20230202133816.4026990-5-abel.vesa@linaro.org>
- <6f326ed7-6799-b965-fe3a-1f046546ed44@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5xYnHX1Erl5u5KfXsFsM2CCOcYE1hgAFey0pHbtrlGw=;
+        b=K3H4wIT48cyMwGg8sXmIIkDAnKFyh3vJ5JsUoflhy1CB8prmKOmlu2J5bqaMsYAhKN
+         VUu5x2J6aUhd5flrlMMsgeU+v13QoAJFRpKpswBcO1zShirPst82BSbdcLCe48nZN9hf
+         PDvyHiOHzkHMRisf7KJl3pXREEgzGD0OhAH5wJvYCCPz4J6dMTsKgRNYF7Sh5G4Dqpx5
+         BIgy9mzBAu8FISVm/fE3YVU04TsobcjJVDw6C9+yAvVT1JOSZPDrmMBnLP5smEK6xtxD
+         AzqP3YFEL8vMd+1KSqzD5mVnoryFABDd0XjFOtvqbwZxHnt+iAcSaICVD3Z8G6fEe428
+         iDMQ==
+X-Gm-Message-State: AO0yUKV+05hz4+7NBj4oD25qeuBLq+jSdVJocltayyvytA/I8cMEEyTk
+        rwOn9RzPBJlWve0bKpSo4XoQDw==
+X-Google-Smtp-Source: AK7set88Lxl1qHumI/CfBw3/LLuxkMuEJHa+tXasBGB44CpUVlsBGzjZqivjRlNLNjNxDs0SM2+K5w==
+X-Received: by 2002:adf:efcc:0:b0:2c3:e07d:46cc with SMTP id i12-20020adfefcc000000b002c3e07d46ccmr2519530wrp.41.1675772776749;
+        Tue, 07 Feb 2023 04:26:16 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id i14-20020a0560001ace00b002bfb8f829eesm11816006wry.71.2023.02.07.04.26.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 04:26:16 -0800 (PST)
+Message-ID: <cd2f7933-6f51-5100-f7c1-cd9900e796e5@linaro.org>
+Date:   Tue, 7 Feb 2023 13:26:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f326ed7-6799-b965-fe3a-1f046546ed44@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: Aw: Re: [PATCH] dt-bindings: mt76: add active-low property to led
+Content-Language: en-US
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230207102501.11418-1-linux@fw-web.de>
+ <fe3673d9-b921-c445-0f5f-a6bc824e8582@linaro.org>
+ <trinity-808b2619-4325-4d03-b2f5-1a7bc27d42ea-1675771928390@3c-app-gmx-bap02>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <trinity-808b2619-4325-4d03-b2f5-1a7bc27d42ea-1675771928390@3c-app-gmx-bap02>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-03 18:51:13, Dmitry Baryshkov wrote:
-> On 02/02/2023 15:38, Abel Vesa wrote:
-> > PM8550B contains a eUSB2 repeater used for making the eUSB2 from
-> > SM8550 USB 2.0 compliant. This can be modelled SW-wise as a Phy.
-> > So add a new phy driver for it.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >   drivers/phy/qualcomm/Kconfig                  |   9 +
-> >   drivers/phy/qualcomm/Makefile                 |   1 +
-> >   .../phy/qualcomm/phy-qcom-eusb2-repeater.c    | 278 ++++++++++++++++++
-> >   3 files changed, 288 insertions(+)
-> >   create mode 100644 drivers/phy/qualcomm/phy-qcom-eusb2-repeater.c
-> > 
-
-[ ... ]
-
-> > +
-> > +static int eusb2_repeater_init(struct phy *phy)
-> > +{
-> > +	struct eusb2_repeater *rptr = phy_get_drvdata(phy);
-> > +	const struct eusb2_repeater_init_tbl *init_tbl = rptr->cfg->init_tbl;
-> > +	int num = rptr->cfg->init_tbl_num;
-> > +	int ret = 0;
-> > +	u32 val;
-> > +	int i;
-> > +
-> > +	ret = regulator_bulk_enable(rptr->cfg->num_vregs, rptr->vregs);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	regmap_update_bits(rptr->regmap, rptr->base + EUSB2_EN_CTL1,
-> > +				EUSB2_RPTR_EN, EUSB2_RPTR_EN);
-> > +
-> > +	for (i = 0; i < num; i++)
-> > +		regmap_update_bits(rptr->regmap,
-> > +					rptr->base + init_tbl[i].offset,
-> > +					init_tbl[i].val, init_tbl[i].val);
+On 07/02/2023 13:12, Frank Wunderlich wrote:
+>> Gesendet: Dienstag, 07. Februar 2023 um 11:40 Uhr
+>> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+>> On 07/02/2023 11:25, Frank Wunderlich wrote:
+>>> From: Frank Wunderlich <frank-w@public-files.de>
+>>>
+>>> LEDs can be in low-active mode, so add dt property for it.
+>>>
+>>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>>> ---
+>>>  .../devicetree/bindings/net/wireless/mediatek,mt76.yaml      | 5 +++++
+>>>  1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+>>> index f0c78f994491..212508672979 100644
+>>> --- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+>>> @@ -112,6 +112,11 @@ properties:
+>>>      $ref: /schemas/leds/common.yaml#
+>>>      additionalProperties: false
+>>>      properties:
+>>> +      led-active-low:
+>>> +        description:
+>>> +          LED is enabled with ground signal.
+>>
+>> What does it mean? You set voltage of regulator to 0? Or you set GPIO as
+>> 0? If the latter, it's not the property of LED...
 > 
-> I'd move this to a separate function. Then you can use it in the set_mode()
-> too.
+> basicly it is a gpio-led mapped into the mt76 driver, but not passing gpio itself in this property (like gpio-led does).
+> This gpio is set to 0 signal (gnd) to let the led go on ;) so imho it is a led-property, but below the wifi-node as
+> the trigger comes from mt76 hardware, not an external (soc) gpio controller.
+> 
+> mt76 driver supports it already like i post change here:
 > 
 
-I don't think this is necessary in set_mode.
+If the driver supports it already and it was never documented, please
+state it. Your commit says you add a new property.
 
-> > +
-> > +	ret = regmap_read_poll_timeout(rptr->regmap,
-> > +					rptr->base + EUSB2_RPTR_STATUS, val,
-> > +					val & RPTR_OK, 10, 5);
-> > +	if (ret)
-> > +		dev_err(rptr->dev, "initialization timed-out\n");
-> > +
-> > +	return ret;
-> > +}
-> > +
+Best regards,
+Krzysztof
 
-[ ... ]
