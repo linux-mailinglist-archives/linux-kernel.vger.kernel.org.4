@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B8468DFA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CAC68DFAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjBGSNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S231426AbjBGSPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjBGSNE (ORCPT
+        with ESMTP id S229679AbjBGSPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:13:04 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D893B0FA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:13:00 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id o1so5979829ioo.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:13:00 -0800 (PST)
+        Tue, 7 Feb 2023 13:15:36 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4413A87D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:15:34 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so15911349pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:15:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZ45IrDKWNh1GNaH0rrm//oqvmlJdwek0NLAA12C2Vo=;
-        b=T59XGzvemWTikM7hwUHfvZCLjUg5glA42NwS6JXky+FROsPYDZt3ETpCRj+yhMmtlq
-         jG7gMn3L/yC6/WeestH3Je3lwsmD12d78g1J1RBSB0hSAaibXqOLuu37W+5LdoK0Wy3/
-         j84c5/iCgZ5wE3MyUe7FJQGCvHElhfv6bznwo=
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ki5DOsdj+I7V0iQm8c+gc68aPy9B9pJYIHBnvaR1rFo=;
+        b=A07E34blrOf+RFVP72blgH8SbduWvX6cBnnfjRZ2CzllY/8fAJkqPEVNWtIK9VHV3G
+         NbHsgqj7AkQ+2sRd9xHvgd5/iJ54AgAJlVf+Z2/iPcX5oXc2Xzkk02jNKgu+6/TL5ugC
+         9uo6rAd8z6K0yL55sIIsjZmh+dM5biPINJZdM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EZ45IrDKWNh1GNaH0rrm//oqvmlJdwek0NLAA12C2Vo=;
-        b=yKmcTHYMgJ8BzG9+4cNtAKwPKinaaAQXWQXFh3DJz8XCfDXbvXLASg9vfiN3MFQzlU
-         4k4YBcZQf6II3/uk15+9ldkx+ZDPJkaueV3uFA76g5/V069d+poJS+0zEQ3ZpbYXBIfG
-         O/4lqCwXjrO1AAOQFd6IY2WxzReuuFc0UaeBY4A9zewk4ZSZ9LuSpjFLjfK55sxeewug
-         ox9BYDSkkXnhBGLAEEeDudF/C4yKa1eN6/M+puXAZpxkFm3Bm+bPFWeMSmYnACH8O+ty
-         3iVIzVgCQyk5Pc6OtBA0WXBJN8Y6Hn7SDaZzhkgTtMchCnX50VAWTHZewKWlTK7ijn+Q
-         6evw==
-X-Gm-Message-State: AO0yUKUreOq9RDLzRWaLnBydrv3RRQhJ+t4EjyaC9R8rBoC+vTd7Pf9Q
-        6J1WX7jy5y3qOf0t/9wvNDEATQ==
-X-Google-Smtp-Source: AK7set/2CIz6vckraH4+UdivsUaT7YNmbbx2aeIn8vJA1GS+BD+ZOfrqFLZZ0fOBAu7/GBnr5etJzA==
-X-Received: by 2002:a5d:97cc:0:b0:719:80c7:43c2 with SMTP id k12-20020a5d97cc000000b0071980c743c2mr3734058ios.9.1675793580147;
-        Tue, 07 Feb 2023 10:13:00 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id c6-20020a92cf06000000b00313dda6b853sm818226ilo.39.2023.02.07.10.12.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 10:12:59 -0800 (PST)
-Date:   Tue, 7 Feb 2023 18:12:59 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] arm64: dts: qcom: sc7280: On QCard, regulator L3C
- should be 1.8V
-Message-ID: <Y+KUq8zc/kmtovVJ@google.com>
-References: <20230207024816.525938-1-dianders@chromium.org>
- <20230206184744.1.I784f4b3d7e4a06edafff4a3129f52e749889bc05@changeid>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ki5DOsdj+I7V0iQm8c+gc68aPy9B9pJYIHBnvaR1rFo=;
+        b=YFpoZ5fXmU33zfqCKuzzfvDyUzxCFi6KiHsuku6Y9xmZu4IvlXkbMkVpy42G9paIAy
+         gObkqvTW6iEudfVKRAP0pQscj5k0gVLWDWrvHnkz18c+uhyIZpRxCgw2LkCnns/At40w
+         2GQ99OtJpeaN8xLwHngJ+pd47qc5ZrMxPiFEM90TOkOZrS1b3Y2tL0CV1Ebgg10ldm25
+         xhOZM8R9YJqwjeHOtDKEUfzhKQTi7PRcQF+J0rpr565pDqyIBonzDk+9uXEIEHWHh2DI
+         kS4YUIzHjs6xeXSKGw0+ilQ+f+K9F1RBOCEk8qe6pzL86G9VKlJ/0c2s5Nc5fSiyXz3B
+         LlAw==
+X-Gm-Message-State: AO0yUKU61eX7FvktwCn4WAfmiDW7qIndHDobH8Itb/I2x5A3m5yzFQZJ
+        X69VcO5XJDqjvHnjuQ558rJz2nnTX/vfDbQp4f+tbkuM7Ycdtgw=
+X-Google-Smtp-Source: AK7set/YrPhx5DtOD8Hema0OE/cOhtAcN2EmCieWwUvZ0K1SqOrSl8cw8V7VYiGAiEYa2sV/BqvLr1rX2qChP/KNeGA=
+X-Received: by 2002:a17:902:d889:b0:199:21af:cba0 with SMTP id
+ b9-20020a170902d88900b0019921afcba0mr992775plz.23.1675793734355; Tue, 07 Feb
+ 2023 10:15:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230206184744.1.I784f4b3d7e4a06edafff4a3129f52e749889bc05@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20230128072737.2995881-3-apatel@ventanamicro.com>
+ <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
+ <CAK9=C2X8C4yswGhDwe1OzQXTELXQxp8=ayiFxh1aVMk4TxeDjw@mail.gmail.com> <Y+KS16ZNXrDU+xun@spud>
+In-Reply-To: <Y+KS16ZNXrDU+xun@spud>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 7 Feb 2023 10:15:22 -0800
+Message-ID: <CAOnJCUKKRRCrKN17ytczYXVLTcMkFaZsg6QXKjPUuSk=PqL6JQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
+To:     Conor Dooley <conor@kernel.org>,
+        Stephano Cetola <stephano@riscv.org>,
+        Jeff Scheel <jeff@riscv.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, pbonzini@redhat.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,31 +72,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 06:48:10PM -0800, Douglas Anderson wrote:
-> On the first sc7280 QCards the L3C rail was never really used for
-> anything. Stuffing options on the QCard meant that the QCard itself
-> didn't use this rail for anything. This rail did get sent to the
-> mainboard, but no existing mainboards ever did anything with it other
-> that route it to a testpoint.
+On Tue, Feb 7, 2023 at 10:05 AM Conor Dooley <conor@kernel.org> wrote:
+>
+> Hey Anup, Palmer,
+>
+> On Fri, Feb 03, 2023 at 05:31:01PM +0530, Anup Patel wrote:
+> > On Fri, Feb 3, 2023 at 5:54 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> > >
+> > > On Fri, 27 Jan 2023 23:27:32 PST (-0800), apatel@ventanamicro.com wrote:
+> > > > We have two extension names for AIA ISA support: Smaia (M-mode AIA CSRs)
+> > > > and Ssaia (S-mode AIA CSRs).
+> > >
+> > > This has pretty much the same problem that we had with the other
+> > > AIA-related ISA string patches, where there's that ambiguity with the
+> > > non-ratified chapters.  IIRC when this came up in GCC the rough idea was
+> > > to try and document that we're going to interpret the standard ISA
+> > > strings that way, but now that we're doing custom ISA extensions it
+> > > seems saner to just define on here that removes the ambiguity.
+> > >
+> > > I just sent
+> > > <https://lore.kernel.org/r/20230203001201.14770-1-palmer@rivosinc.com/>
+> > > which documents that.
+> >
+> > I am not sure why you say that these are custom extensions.
+> >
+> > Multiple folks have clarified that both Smaia and Ssaia are frozen
+> > ISA extensions as-per RVI process. The individual chapters which
+> > are in the draft state have nothing to do with Smaia and Ssaia CSRs.
+> >
+> > Please refer:
+> > https://github.com/riscv/riscv-aia/pull/36
+> > https://lists.riscv.org/g/tech-aia/message/336
+> > https://lists.riscv.org/g/tech-aia/message/337
+>
+> All of these links seem to discuss the draft chapters somehow being
+> incompatible with the non-draft ones. I would very expect that that,
+> as pointed out in several places there, that the draft chapters
+> finalisation would not lead to meaningful (and incompatible!) changes
+> being made to the non-draft chapters.
+>
 
-nit: s/that/than/
+Here is the status of all RVI specs. It states that the Smaia, Ssaia
+extensions are frozen (i.e. public review complete).
+https://wiki.riscv.org/display/HOME/Specification+Status
 
-no need to re-spin just for that
+I have added stephano/Jeff to confirm the same.
 
-> On later sc7280 QCards, the L3C rail was repurposed. Instead of being
-> a (nominally) 3.3V rail, it was decided to make it a 1.8V rail. It is
-> now provided to the display connector (which might route it to the
-> touchscreen) and also used to power some buffers relating to
-> touchscreen IO. This rail is getting the additional tag "ts_avccio",
-> though some places still refer to it as "vreg_l3c_3p0" despite the
-> fact that the name now specifies the wrong voltage.
-> 
-> Since it never hurts for this rail to be 1.8V (even on old QCards /
-> old boards), let's just change it to 1.8V across the board and add the
-> extra "ts_avccio" moniker as a label in the device tree.
-> 
-> Future patches will start using this rail in their touchscreens.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+AFAIK, IOMMU spec is close to the public review phase and should be
+frozen in this or next quarter.
+IIRC, this chapter in AIA will be frozen along with IOMMU spec.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Anup: Please correct me if that's not correct.
+
+> Maybe yourself and Palmer are looking at this from different
+> perspectives? Looking at his patch from Friday:
+> https://lore.kernel.org/linux-riscv/20230203001201.14770-1-palmer@rivosinc.com/
+> He specifically mentioned this aspect, as opposed to the aspect that
+> your links refer to.
+>
+> Surely a duo-plic, if that ever comes to be, could be detected from
+> compatible strings in DT or w/e - but how do you intend differentiating
+> between an implementation of S*aia that contains the IOMMU support in
+> Chapter 9 in a finalised form, versus an implementation that may make
+> "different decisions" when it comes to that chapter of the spec?
+
+We will most likely have an extension specific to iommu spec as well.
+
+> I thought that would be handled by extension versions, but I am told
+> that those are not a thing any more.
+> If that's not true, and there'll be a version number that we can pull in
+> from a DT and parse which will distinguish between the two, then please
+> correct my misunderstanding here!
+>
+> Thanks,
+> Conor.
+>
+> > > > We extend the ISA string parsing to detect Smaia and Ssaia extensions.
+> > > >
+> > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > > > ---
+> > > >  arch/riscv/include/asm/hwcap.h | 2 ++
+> > > >  arch/riscv/kernel/cpu.c        | 2 ++
+> > > >  arch/riscv/kernel/cpufeature.c | 2 ++
+> > > >  3 files changed, 6 insertions(+)
+> > > >
+> > > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > > > index 86328e3acb02..341ef30a3718 100644
+> > > > --- a/arch/riscv/include/asm/hwcap.h
+> > > > +++ b/arch/riscv/include/asm/hwcap.h
+> > > > @@ -59,6 +59,8 @@ enum riscv_isa_ext_id {
+> > > >       RISCV_ISA_EXT_ZIHINTPAUSE,
+> > > >       RISCV_ISA_EXT_SSTC,
+> > > >       RISCV_ISA_EXT_SVINVAL,
+> > > > +     RISCV_ISA_EXT_SMAIA,
+> > > > +     RISCV_ISA_EXT_SSAIA,
+> > > >       RISCV_ISA_EXT_ID_MAX
+> > > >  };
+> > > >  static_assert(RISCV_ISA_EXT_ID_MAX <= RISCV_ISA_EXT_MAX);
+> > > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > > > index 1b9a5a66e55a..a215ec929160 100644
+> > > > --- a/arch/riscv/kernel/cpu.c
+> > > > +++ b/arch/riscv/kernel/cpu.c
+> > > > @@ -162,6 +162,8 @@ arch_initcall(riscv_cpuinfo_init);
+> > > >   *    extensions by an underscore.
+> > > >   */
+> > > >  static struct riscv_isa_ext_data isa_ext_arr[] = {
+> > > > +     __RISCV_ISA_EXT_DATA(smaia, RISCV_ISA_EXT_SMAIA),
+> > > > +     __RISCV_ISA_EXT_DATA(ssaia, RISCV_ISA_EXT_SSAIA),
+> > >
+> > > This will conflict with that ISA string refactoring I just merged.  It
+> > > should be a pretty mechanical merge conflict, but if you want we can do
+> > > a shared tag with the first few patches and I can handle the merge
+> > > conflict locally.
+> >
+> > I am planning to send this series as a second PR for Linux-6.3 after your
+> > PR (which includes ISA string refactoring) is merged. Is that okay with you?
+> >
+> > With that said, it would request you to ACK this patch as well.
+> >
+> > >
+> > > >       __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> > > >       __RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+> > > >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > > > index 93e45560af30..3c5b51f519d5 100644
+> > > > --- a/arch/riscv/kernel/cpufeature.c
+> > > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > > @@ -228,6 +228,8 @@ void __init riscv_fill_hwcap(void)
+> > > >                               SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+> > > >                               SET_ISA_EXT_MAP("sstc", RISCV_ISA_EXT_SSTC);
+> > > >                               SET_ISA_EXT_MAP("svinval", RISCV_ISA_EXT_SVINVAL);
+> > > > +                             SET_ISA_EXT_MAP("smaia", RISCV_ISA_EXT_SMAIA);
+> > > > +                             SET_ISA_EXT_MAP("ssaia", RISCV_ISA_EXT_SSAIA);
+> > > >                       }
+> > > >  #undef SET_ISA_EXT_MAP
+> > > >               }
+> >
+> > Thanks,
+> > Anup
+
+
+
+-- 
+Regards,
+Atish
