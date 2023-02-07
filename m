@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD2968D178
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F85568D176
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbjBGIba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S230402AbjBGIbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 03:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjBGIb2 (ORCPT
+        with ESMTP id S229535AbjBGIbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:31:28 -0500
-X-Greylist: delayed 152 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Feb 2023 00:31:26 PST
-Received: from a27-20.smtp-out.us-west-2.amazonses.com (a27-20.smtp-out.us-west-2.amazonses.com [54.240.27.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552DF1E9D7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ude52klaz7ukvnrchdbsicqdl2lnui6h; d=aaront.org; t=1675758534;
-        h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Content-Type:Content-Transfer-Encoding;
-        bh=DIGix3F5T9og6+WxgGgK886KZaBCASdhWQMNzU+2lIE=;
-        b=FENvOgWfFQTbFoXrEp0uH557hqLhKJlE4JXvvna+POIXGPqqVtPXc+VzzEVU5sar
-        vgkJ1t+Xv8FNARWuKgPZBFqsGZUqfSHOo2FBq2U8NkoZLaxLpjwOl/YOkvZbR5aKT4f
-        NZVaNSgs0xeyc87qSoQ9LwdAKDdyi+CbZ+GW7NbA=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1675758534;
-        h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Content-Type:Content-Transfer-Encoding:Feedback-ID;
-        bh=DIGix3F5T9og6+WxgGgK886KZaBCASdhWQMNzU+2lIE=;
-        b=FKPuf/QYn2kk8uGO272Mi6QAdZhAMfPXrvQHG+L8hKdS9y68Ifuj3MqATf2bJwvm
-        goXZ2wqABSDn2Hu+f+cpc889KTeITOVi1nHMt4j2a3RZBhDF876HFGlYW/1AgGAgUGM
-        CjJ3BXZIYccCuTvNkZlLKrzDqdQGi43t7Z2jUzgk=
+        Tue, 7 Feb 2023 03:31:09 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC6E1DB9B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:31:04 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.101.197.31])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 0425D428D4;
+        Tue,  7 Feb 2023 08:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675758661;
+        bh=RX8W3mFnoYHX95Y8s7hMAv7+ZHWXmRl7KuYFA5MlRDY=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=AOGLN2M5Ni06I7JCK+xzYUqtS38r+SuE5bCXX6mWylwZ6n5CieOUTkexGOiuiFlDd
+         JRmihm4od3jkpJY5uKHuVvfHn324Lz7va8bM7dzg0VIsWBteprxCN8cNqes7V9Khot
+         8Ps/JyL4ov8h+dg7KxWXwTmvfbA0cq2HPHTxJEE/5u67Qwj17818OOSzQ8mT6PC0zs
+         J1sZp9z+hgatpWlTuPMzJziZXqviUiwaTSCLvPKKKE6HecRQESJU6F7jLekQL8bqXh
+         6XG1oK9UM4CAYh2KQkGQ+ocbTcyk1qKLfSwnCAJdZkBMKggAI7AdJqcY2U6v++S8Uz
+         oxbL6e/D2awhw==
+From:   Andy Chi <andy.chi@canonical.com>
+Cc:     andy.chi@canonical.com, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
+        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+        Yuchi Yang <yangyuchi66@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA: hda/realtek: fix mute/micmute LEDs don't work for a HP platform.
+Date:   Tue,  7 Feb 2023 16:30:09 +0800
+Message-Id: <20230207083011.100189-1-andy.chi@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Tue, 7 Feb 2023 08:28:53 +0000
-From:   Aaron Thompson <dev@aaront.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] Fix memblock_free_late() deferred init bug, redux
-In-Reply-To: <Y+IFmA1FVNRtpEFZ@kernel.org>
-References: <20230206071211.3157-1-dev@aaront.org>
- <Y+IFmA1FVNRtpEFZ@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <010101862afdfc6b-a0abd268-f5d1-4d24-b7e5-c0af94bdb933-000000@us-west-2.amazonses.com>
-X-Sender: dev@aaront.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Feedback-ID: 1.us-west-2.OwdjDcIoZWY+bZWuVZYzryiuW455iyNkDEZFeL97Dng=:AmazonSES
-X-SES-Outgoing: 2023.02.07-54.240.27.20
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+There is a HP platform needs ALC236_FIXUP_HP_GPIO_LED quirk to
+make mic-mute/audio-mute working.
 
-On 2023-02-07 00:02, Mike Rapoport wrote:
-> Hi Aaron,
-> 
-> [snip]
-> 
-> At this point of the release cycle I prefer to revert 115d9d77bb0f 
-> ("mm:
-> Always release pages to the buddy allocator in memblock_free_late()") 
-> and
-> to work on the proper fix for the next release.
+Signed-off-by: Andy Chi <andy.chi@canonical.com>
+---
+ sound/pci/hda/patch_realtek.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Makes sense. I just sent a revert patch, and I'll work on a better fix.
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 4055a8f5880a..d1258dd803e8 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9433,6 +9433,11 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
++	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b7d, "HP", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b8a, "HP", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b8b, "HP", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b8d, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b92, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8bf0, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
+-- 
+2.34.1
 
-Thanks,
--- Aaron
