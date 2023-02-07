@@ -2,117 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708A168CCB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9612068CCBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjBGCse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S229963AbjBGCtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 21:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBGCsb (ORCPT
+        with ESMTP id S229822AbjBGCsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:48:31 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FFF23C76
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 18:48:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675738110; x=1707274110;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qyfWluBTUabINdZciAlGImW7+arPgzQdw6flw909Ysc=;
-  b=KTMt0jMl5x0kpt3YZ0jjsmp5IXryczquBfoo7AW9ihEcZpJ6sdJ9SHmE
-   y/kLdPZtI5JA4E6/Tm4E10iaofzbAyXcVa1VW4l0kdQjhahDMUB9+rCp5
-   0Kr/Phx59CZBAw7JM0upnyO1CilmzN3MSStYOeP1rBVpcDCYAQv1A/d1Y
-   2Iw7lJxiwPD8hZSNV21OEzGNo9mZbKfQeb3hpkK/8wB1+4R5T2p4TXBd9
-   lKvHIkKuM64I7pOV9wRjDqjsWOzClVNqMlE60xxwQVbttwSxm9v5VH5OE
-   0xtm5bga4NNAcJR1imkfEfedYePmxhA+feE62BdKky6OFxpB4iiUN7+VZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="330677141"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="330677141"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 18:48:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="755470719"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="755470719"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Feb 2023 18:48:28 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPE1z-0002yZ-2c;
-        Tue, 07 Feb 2023 02:48:27 +0000
-Date:   Tue, 07 Feb 2023 10:48:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:locking/core] BUILD SUCCESS
- 3b4863fa5b7dd50dab1b10abbed938efd203752f
-Message-ID: <63e1bbe6.sTQQyuootjiHFsnG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 6 Feb 2023 21:48:55 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7341436463
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 18:48:46 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id e19so6339074plc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 18:48:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLClDN2mw8UPzR2Mt0bhcLHPl8f4SmjcZHaBzl3SwMQ=;
+        b=W0W7US80iiNOz0nxN4KOFrjFuNsG9BK93IQfqi2yAaf/IQw25EYxXvAAzjrbpsTx1Z
+         Qqf1SoXTX2tzuE1q7Az7/AWdpnqzb9oDfsoOgiqLT+owtX39aZRghRJwUwspUZN55btY
+         HZwkoAUfUXOwX5ujJDuSyOQvp1N8iqD5ojSAo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wLClDN2mw8UPzR2Mt0bhcLHPl8f4SmjcZHaBzl3SwMQ=;
+        b=4E/XSGVNCDoQoJzqnBSAdPF811JJ+AFxFMWn18WdML9I2/odtnmzBjhuAOVGCRT2BU
+         aUE8w/OCcfYfunD310Ek9Rj2Q8SZOLxUt2L648RJJ6O5foeCoCeQlUC29KonAvlTwYM6
+         qiHEvsLB0cGGV2BkH3HGviPDxEz+ZXwEOvPYFuosWc8a6YBrlAqE11aDuo3/vUSDTGgp
+         cHznn7E4SXreu897QS2gpMYwq/PPYsuS3hZQlo/AamHF8lMw4Oh0AwpyJFpYw/4rHnlo
+         OhPq90jTIMNE3UfWGp54rts8VAyWTaUUx8c1aEEsYTlh9R0BwSwiHREdxLsiveUjQv8F
+         iBvw==
+X-Gm-Message-State: AO0yUKUmlG7UhQsc8xFbbrp30ZOKP0SNU5r8UubnYDlq8CaP7EwQFECS
+        EFV1hlKITXDQ0hSjGieHh0eurQ==
+X-Google-Smtp-Source: AK7set8CMMbpCNH76H+LBfbAD2TNUn+FqqoBLyDbtbOyIt4X4bKv2DEMb7QFDIt2d709r5a3n8UZ+Q==
+X-Received: by 2002:a17:90b:2251:b0:230:c57b:7c24 with SMTP id hk17-20020a17090b225100b00230c57b7c24mr2034728pjb.26.1675738125883;
+        Mon, 06 Feb 2023 18:48:45 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:29fb:a635:f0df:f45a])
+        by smtp.gmail.com with ESMTPSA id s17-20020a63a311000000b0045dc85c4a5fsm6882430pge.44.2023.02.06.18.48.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 18:48:45 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        devicetree@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] arm: qcom: Fix touchscreen voltage for sc7280-herobrine boards
+Date:   Mon,  6 Feb 2023 18:48:09 -0800
+Message-Id: <20230207024816.525938-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
-branch HEAD: 3b4863fa5b7dd50dab1b10abbed938efd203752f  vduse: Remove include of rwlock.h
+Trying to figure out how to talk to the touchscreen properly on
+sc7280-herobrine boards was a long and difficult process. Many
+Engineering hours were spent deciding how exactly one should talk over
+i2c to a peripheral. In the end, a solution has been found and this
+patch series attempts to implement it in a way that will work for all
+herobrine-based boards.
 
-elapsed time: 727m
+Validation of this code has actually been done on
+sc7280-herobrine-villager. Those patches are device-tree only and are
+placed first. They shouldn't be super controversial, I hope.
 
-configs tested: 34
-configs skipped: 2
+In order to make this work, we also need to support
+sc7280-herobrine-evoker. For evoker, things are a bit tricker, though
+(I think) the solution we ended up with is not terrible. See the
+"Goodix" bindings patch for the full details. Unfortunately, I haven't
+tested the final version of these patches on evoker hardware. Thus
+those patches are at the end of the series and marked as such. It
+still wouldn't hurt to land them, if people are OK with it, since
+nobody in the wild has this hardware and and the evoker-specific parts
+of the patch are very easy to validate.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-ia64                             allmodconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-i386                             allyesconfig
-i386                                defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-bpf
-x86_64                         rhel-8.3-kunit
-um                             i386_defconfig
-um                           x86_64_defconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-powerpc                           allnoconfig
-arc                              allyesconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                          randconfig-c001
-powerpc              randconfig-c003-20230205
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
+Douglas Anderson (7):
+  arm64: dts: qcom: sc7280: On QCard, regulator L3C should be 1.8V
+  arm64: dts: qcom: sc7280: Add 3ms ramp to herobrine's
+    pp3300_left_in_mlb
+  arm64: dts: qcom: sc7280: Hook up the touchscreen IO rail on villager
+  HID: i2c-hid: goodix: Stop tying the reset line to the regulator
+  dt-bindings: HID: i2c-hid: goodix: Add mainboard-vddio-supply
+  HID: i2c-hid: goodix: Add mainboard-vddio-supply
+  arm64: dts: qcom: sc7280: Hook up the touchscreen IO rail on evoker
 
-clang tested configs:
-x86_64                        randconfig-k001
-x86_64                          rhel-8.3-rust
+ .../bindings/input/goodix,gt7375p.yaml        |  7 ++
+ .../dts/qcom/sc7280-herobrine-evoker.dtsi     |  1 +
+ .../dts/qcom/sc7280-herobrine-villager.dtsi   |  1 +
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  2 +
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    | 10 +-
+ drivers/hid/i2c-hid/i2c-hid-of-goodix.c       | 98 +++++--------------
+ 6 files changed, 42 insertions(+), 77 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1.519.gcb327c4b5f-goog
+
