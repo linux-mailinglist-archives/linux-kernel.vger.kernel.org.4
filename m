@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8BB68DFD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280B868DFD8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjBGSVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S232471AbjBGSWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbjBGSVZ (ORCPT
+        with ESMTP id S231263AbjBGSVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:21:25 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DBC2C646
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:20:35 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675794032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IqVOLnVnMX6UDkY+RItugHfiHw/9Kb9FpGSA2i9DJ5E=;
-        b=WhXBviB4BHJjJVen8eb1aP1fjEnWzw/FPqfRhmVafIcygitIIvMF2oO/bMETw1JvYk9RE2
-        jYgLcMOywf/6tPjPVlqqkWa9FLM1FB7klKskPFRewD1ItQaG1usHibIeZCE1XR8q3JX6JG
-        t+CCacFkgQ1ZPXjfMcuE9mxRm/rKOY3W1WM2hEAICaV1p0mCdpAanNlPc6tQwWnjR2AQ6V
-        ZBA/fIYF5Q7jGizAhE0L7X806XDdGGbH112pr+gO32rtLqq8kTsJ28EtjrjbKIeyBUll3y
-        yAeI+JnmFOBQ5OBzAAUXZNsmcB5gdGuRCf4rYSBuzEOOnss/De8KxTJ0z12AXw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675794032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IqVOLnVnMX6UDkY+RItugHfiHw/9Kb9FpGSA2i9DJ5E=;
-        b=djI7tbngs34lJ3Yv4vHU19/5lNr1NS22fGrjPTpBd4Gu8gqFRqFbopZBYtsDn+810r5iIs
-        8cTx7NyDVX3LUSDQ==
-To:     Vlastimil Babka <vbabka@suse.cz>,
-        kernel test robot <oliver.sang@intel.com>,
-        Shanker Donthineni <sdonthineni@nvidia.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-mm@kvack.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Subject: Re: mm, slab/slub: Ensure kmem_cache_alloc_bulk() is available early
-In-Reply-To: <8b7762c3-02be-a5c9-1c4d-507cfb51a15c@suse.cz>
-References: <202302011308.f53123d2-oliver.sang@intel.com>
- <87o7qdzfay.ffs@tglx> <9a682773-df56-f36c-f582-e8eeef55d7f8@suse.cz>
- <875ycdwyx6.ffs@tglx> <871qn1wofe.ffs@tglx>
- <6c0b681e-97bc-d975-a8b9-500abdaaf0bc@suse.cz>
- <8b7762c3-02be-a5c9-1c4d-507cfb51a15c@suse.cz>
-Date:   Tue, 07 Feb 2023 19:20:31 +0100
-Message-ID: <87edr1uykw.ffs@tglx>
+        Tue, 7 Feb 2023 13:21:38 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D899F3CE0B;
+        Tue,  7 Feb 2023 10:21:03 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id g18so15461556qtb.6;
+        Tue, 07 Feb 2023 10:21:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uNoCuvF8k/IGVgv9MTdzYZCHzKUcqEKM38i1vceSI2Y=;
+        b=QdQ71qYYT0xgyoNJdybVu6bekywG/lSvp5wx6rU5hsJ2AFd2ia5f8Ph/6NHAe5LXvM
+         yIbiTtMpv2qYiM61f69Lez0/bP2x0TqWbe8ew7/1nW38tkG33CP4zCJsry/SmepvR9lU
+         bYflQM1HrvqymwOAt1OwBRM0Nd4JWlpYBk6fWITv/grNz34I4aOAykUJ5bmXq9ogA8Oc
+         vQwnGB5Z6cSiCx5Wf7iT46AWJbbtbwUUoDouMowKJkPqiL2BaFl8XF84ITq9xVisOyEP
+         FuKg7hBmze3nvJ7JfdkClDMN82eU3T0wEzQzYDoBJeGoghnB8Vtzd+BypUcera2UZeJn
+         IsTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uNoCuvF8k/IGVgv9MTdzYZCHzKUcqEKM38i1vceSI2Y=;
+        b=nEdFUlzyJwKp4J9qr1ZSzWaPR/nMIec6BhIyjJRHjQxtzSyhs8waJHDc7gySD2yHbD
+         rW19xz8LG2XDzJZwyE64cOE9JVVUhaygWU6miMRcwCPsTA9pnWgJwAkIwj8dnqbbEhfq
+         YkCZA25n6czn6+RTa2mjkKahmEk3nBQd01KD+0hgp5dgYtz1JwCkIy4t25KgM1S1BI49
+         dF6bvHgZ/l37SbwX4OF6I+rr8blA3gj1irVANCtaXQ3H9bVhd5pINH3GdPMLTYweS7cu
+         NVMmXDlg8InL9AThfBC/lF7eDD8Tvi+lDqx+VHOuLSZtnnj9TK8RY9SehKBGgDoNewQA
+         zbHw==
+X-Gm-Message-State: AO0yUKXmlQZYe9U14zeSpktHWk/0+JtG1I9BG66JF1S954Qg6u1p0DrJ
+        FeMtqm180ZGmoZadldCCzTo=
+X-Google-Smtp-Source: AK7set8P7XEs+Z1mylqUEpNqmN5S6L1etKNkQzg5lRXZj0sNtQz45dsph1NS3hqwt2mCcBsBFjitTA==
+X-Received: by 2002:a05:622a:18d:b0:3b8:aa16:82c1 with SMTP id s13-20020a05622a018d00b003b8aa1682c1mr4725673qtw.60.1675794062929;
+        Tue, 07 Feb 2023 10:21:02 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id g25-20020ac870d9000000b003a7e38055c9sm9733458qtp.63.2023.02.07.10.21.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 10:21:02 -0800 (PST)
+Message-ID: <ad03daa9-8317-a289-865e-9cad591d91f7@gmail.com>
+Date:   Tue, 7 Feb 2023 10:20:59 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5.15 000/120] 5.15.93-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230207125618.699726054@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230207125618.699726054@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07 2023 at 15:47, Vlastimil Babka wrote:
-> From 340d7c7b99f3e67780f6dec480ed1d27e6f325eb Mon Sep 17 00:00:00 2001
-> From: Vlastimil Babka <vbabka@suse.cz>
-> Date: Tue, 7 Feb 2023 15:34:53 +0100
-> Subject: [PATCH] mm, slab/slub: remove notes that bulk alloc/free needs
->  interrupts enabled
->
-> The slab functions kmem_cache_[alloc|free]_bulk() have been documented
-> as requiring interrupts to be enabled, since their addition in 2015.
-> It's unclear whether that was a fundamental restriction, or an attempt
-> to save some cpu cycles by not having to save and restore the irq
-> flags.
 
-I don't think so. The restriction is rather meant to avoid huge
-allocations in atomic context which causes latencies and also might
-deplete the atomic reserves.
 
-So I rather avoid that and enforce !ATOMIC mode despite the
-local_irq_save/restore() change which is really only to accomodate with
-early boot.
+On 2/7/2023 4:56 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.93 release.
+> There are 120 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.93-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Thanks,
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-        tglx
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
