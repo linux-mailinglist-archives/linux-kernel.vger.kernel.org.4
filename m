@@ -2,466 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCC568DB89
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF5B68DBA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbjBGOce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S232754AbjBGOd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbjBGOac (ORCPT
+        with ESMTP id S232946AbjBGOc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:30:32 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245213E0B7;
-        Tue,  7 Feb 2023 06:29:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675780187; x=1707316187;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A4CXaCS1V5YYLH/ZOzB/EoGrp/Od1buKWHTb7RvcWAk=;
-  b=ZCHQ22qDErP4hNS/reIPHR8VZjEiIaorzIFb9JnR0ZLXSGhY6LMpwBf5
-   jJfJjX1ZIzwSBDv6Jfof5q4WcBP+g49q+P33KqSS6ToXJ2nIvCbC42N0U
-   JUOyMzNogKUO4pNvjSjN/Yq1sUZeLA3tiUAR9lK+ZAMjEcdwS6CLqXPTE
-   zbExXLHHk1wkaNzn+MeO//PBuOfvxcChkyIt1JXToQeB+4ACyaEGe2X12
-   WEDTG1CzWAjwcEO7XBn1EbAGrTTUAfZO6owG6+/GS9H3QMRuJPj5UQDTI
-   RiSrW2rDbSFy8xTrlp0qSSvj0Q3m19XV/BtgbKsiYiLtaDbUlD31hmJKh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="391915711"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="391915711"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 06:29:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="912355058"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="912355058"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Feb 2023 06:29:41 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id DD3DF556; Tue,  7 Feb 2023 16:30:02 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-arch@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Russell King <linux@armlinux.org.uk>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: [PATCH v3 12/12] gpiolib: Clean up headers
-Date:   Tue,  7 Feb 2023 16:29:52 +0200
-Message-Id: <20230207142952.51844-13-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230207142952.51844-1-andriy.shevchenko@linux.intel.com>
-References: <20230207142952.51844-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Feb 2023 09:32:58 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6DA3E63D;
+        Tue,  7 Feb 2023 06:30:12 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 317D1BIq014116;
+        Tue, 7 Feb 2023 14:30:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=N41xLjn+12+v1ZKVERN6vkTnXkUFrsG1k5+y1ti13LA=;
+ b=dNd0O41M6ZWp85Vtd6pEbIPZ1SjLPOpR5X3rNocMIZHMKQGYnQAmyQLmjRP4U/qDIG3Y
+ 1e5IA8k6g0KwU618h0zl69omr1v+iTqR8momeV4mBw8ANI2jxt3EzqinLK77sco4xrU6
+ YENBbbkvisWsPAD/fDyJEla3/gM8cQrVa+f/M/72xdahbpPAbeKAebtzA4kU4RPFkmQo
+ sBEjEunNKGNDxtR0+z45KA+VPJNpV/QtW2wjhnI8iPbspwXOzJF0wIHRObksWgg9jRAy
+ tu2wyGW9kPMwQH8+/2khbcu/4JSEX3B0EEgk7HKFrc/P3RbymiW4pXq8yMrVkmqGN84z Pw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkeny1a1e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Feb 2023 14:30:05 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 317EU1Mc002892;
+        Tue, 7 Feb 2023 14:30:01 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgeke6d4-1;
+        Tue, 07 Feb 2023 14:30:01 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 317EU1Gn002886;
+        Tue, 7 Feb 2023 14:30:01 GMT
+Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 317EU0ci002882;
+        Tue, 07 Feb 2023 14:30:01 +0000
+Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
+        id 24F1F4BE0; Tue,  7 Feb 2023 06:30:00 -0800 (PST)
+From:   Kalyan Thota <quic_kalyant@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, marijn.suijten@somainline.org
+Subject: [PATCH v2 1/4] drm/msm/dpu: clear DSPP reservations in rm release
+Date:   Tue,  7 Feb 2023 06:29:53 -0800
+Message-Id: <1675780196-3076-2-git-send-email-quic_kalyant@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1675780196-3076-1-git-send-email-quic_kalyant@quicinc.com>
+References: <1675780196-3076-1-git-send-email-quic_kalyant@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7ZXjkCzfrYQ7Nflp3MINy7ELbYlx01C3
+X-Proofpoint-ORIG-GUID: 7ZXjkCzfrYQ7Nflp3MINy7ELbYlx01C3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_06,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ clxscore=1015 phishscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=762
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302070129
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a few things done:
-- include only the headers we are direct user of
-- when pointer is in use, provide a forward declaration
-- add missing headers
-- group generic headers and subsystem headers
-- sort each group alphabetically
+Clear DSPP reservations from the global state during
+rm release
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fixes: e47616df008b ("drm/msm/dpu: add support for color
+		     processing blocks in dpu driver")
+
+Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpio/gpiolib-acpi.c   | 10 ++++++----
- drivers/gpio/gpiolib-acpi.h   |  1 -
- drivers/gpio/gpiolib-of.c     |  6 ++++--
- drivers/gpio/gpiolib-of.h     |  1 -
- drivers/gpio/gpiolib-swnode.c |  5 +++--
- drivers/gpio/gpiolib-sysfs.c  | 21 ++++++++++++++++-----
- drivers/gpio/gpiolib.c        |  9 ++++++---
- include/linux/gpio.h          |  9 +++------
- include/linux/gpio/consumer.h | 14 ++++++++++----
- include/linux/gpio/driver.h   | 30 +++++++++++++++++++++++-------
- 10 files changed, 71 insertions(+), 35 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
-index bb583cea366c..3871dade186a 100644
---- a/drivers/gpio/gpiolib-acpi.c
-+++ b/drivers/gpio/gpiolib-acpi.c
-@@ -7,17 +7,19 @@
-  *          Mika Westerberg <mika.westerberg@linux.intel.com>
-  */
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+index 73b3442..718ea0a 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+@@ -572,6 +572,8 @@ void dpu_rm_release(struct dpu_global_state *global_state,
+ 		ARRAY_SIZE(global_state->ctl_to_enc_id), enc->base.id);
+ 	_dpu_rm_clear_mapping(global_state->dsc_to_enc_id,
+ 		ARRAY_SIZE(global_state->dsc_to_enc_id), enc->base.id);
++	_dpu_rm_clear_mapping(global_state->dspp_to_enc_id,
++		ARRAY_SIZE(global_state->dspp_to_enc_id), enc->base.id);
+ }
  
-+#include <linux/acpi.h>
- #include <linux/dmi.h>
- #include <linux/errno.h>
--#include <linux/gpio/consumer.h>
--#include <linux/gpio/driver.h>
--#include <linux/gpio/machine.h>
- #include <linux/export.h>
--#include <linux/acpi.h>
- #include <linux/interrupt.h>
-+#include <linux/irq.h>
- #include <linux/mutex.h>
- #include <linux/pinctrl/pinctrl.h>
- 
-+#include <linux/gpio/consumer.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/gpio/machine.h>
-+
- #include "gpiolib.h"
- #include "gpiolib-acpi.h"
- 
-diff --git a/drivers/gpio/gpiolib-acpi.h b/drivers/gpio/gpiolib-acpi.h
-index 5fa315b3c912..a6f3be0bb921 100644
---- a/drivers/gpio/gpiolib-acpi.h
-+++ b/drivers/gpio/gpiolib-acpi.h
-@@ -9,7 +9,6 @@
- #define GPIOLIB_ACPI_H
- 
- #include <linux/err.h>
--#include <linux/errno.h>
- #include <linux/types.h>
- 
- #include <linux/gpio/consumer.h>
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 0f699af438b0..1436cdb5fa26 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -10,14 +10,16 @@
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/errno.h>
--#include <linux/module.h>
- #include <linux/io.h>
--#include <linux/gpio/consumer.h>
-+#include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_gpio.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/slab.h>
-+#include <linux/string.h>
-+
-+#include <linux/gpio/consumer.h>
- #include <linux/gpio/machine.h>
- 
- #include "gpiolib.h"
-diff --git a/drivers/gpio/gpiolib-of.h b/drivers/gpio/gpiolib-of.h
-index e5bb065d82ef..6b3a5347c5d9 100644
---- a/drivers/gpio/gpiolib-of.h
-+++ b/drivers/gpio/gpiolib-of.h
-@@ -4,7 +4,6 @@
- #define GPIOLIB_OF_H
- 
- #include <linux/err.h>
--#include <linux/errno.h>
- #include <linux/types.h>
- 
- #include <linux/notifier.h>
-diff --git a/drivers/gpio/gpiolib-swnode.c b/drivers/gpio/gpiolib-swnode.c
-index dd9ccac214d1..b5a6eaf3729b 100644
---- a/drivers/gpio/gpiolib-swnode.c
-+++ b/drivers/gpio/gpiolib-swnode.c
-@@ -6,13 +6,14 @@
-  */
- #include <linux/err.h>
- #include <linux/errno.h>
--#include <linux/gpio/consumer.h>
--#include <linux/gpio/driver.h>
- #include <linux/kernel.h>
- #include <linux/printk.h>
- #include <linux/property.h>
- #include <linux/string.h>
- 
-+#include <linux/gpio/consumer.h>
-+#include <linux/gpio/driver.h>
-+
- #include "gpiolib.h"
- #include "gpiolib-swnode.h"
- 
-diff --git a/drivers/gpio/gpiolib-sysfs.c b/drivers/gpio/gpiolib-sysfs.c
-index 6e4267944f80..c1cbf71329f0 100644
---- a/drivers/gpio/gpiolib-sysfs.c
-+++ b/drivers/gpio/gpiolib-sysfs.c
-@@ -1,18 +1,29 @@
- // SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bitops.h>
-+#include <linux/device.h>
- #include <linux/idr.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/kdev_t.h>
-+#include <linux/kstrtox.h>
-+#include <linux/list.h>
- #include <linux/mutex.h>
--#include <linux/device.h>
-+#include <linux/printk.h>
-+#include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/string.h>
- #include <linux/sysfs.h>
-+#include <linux/types.h>
-+
- #include <linux/gpio/consumer.h>
- #include <linux/gpio/driver.h>
--#include <linux/interrupt.h>
--#include <linux/kdev_t.h>
--#include <linux/slab.h>
--#include <linux/ctype.h>
- 
- #include "gpiolib.h"
- #include "gpiolib-sysfs.h"
- 
-+struct kernfs_node;
-+
- #define GPIO_IRQF_TRIGGER_NONE		0
- #define GPIO_IRQF_TRIGGER_FALLING	BIT(0)
- #define GPIO_IRQF_TRIGGER_RISING	BIT(1)
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 99a2c77c3711..900f6573c070 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -6,22 +6,25 @@
- #include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/err.h>
-+#include <linux/errno.h>
- #include <linux/file.h>
- #include <linux/fs.h>
--#include <linux/gpio.h>
--#include <linux/gpio/driver.h>
--#include <linux/gpio/machine.h>
- #include <linux/idr.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/seq_file.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
- 
-+#include <linux/gpio.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/gpio/machine.h>
-+
- #include <uapi/linux/gpio.h>
- 
- #include "gpiolib-acpi.h"
-diff --git a/include/linux/gpio.h b/include/linux/gpio.h
-index 84bb49939d6e..574c45be924b 100644
---- a/include/linux/gpio.h
-+++ b/include/linux/gpio.h
-@@ -12,7 +12,7 @@
- #ifndef __LINUX_GPIO_H
- #define __LINUX_GPIO_H
- 
--#include <linux/errno.h>
-+struct device;
- 
- /* see Documentation/driver-api/gpio/legacy.rst */
- 
-@@ -132,20 +132,17 @@ void gpio_free_array(const struct gpio *array, size_t num);
- 
- /* CONFIG_GPIOLIB: bindings for managed devices that want to request gpios */
- 
--struct device;
--
- int devm_gpio_request(struct device *dev, unsigned gpio, const char *label);
- int devm_gpio_request_one(struct device *dev, unsigned gpio,
- 			  unsigned long flags, const char *label);
- 
- #else /* ! CONFIG_GPIOLIB */
- 
--#include <linux/bug.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- 
--struct device;
--struct gpio_chip;
-+#include <asm/bug.h>
-+#include <asm/errno.h>
- 
- static inline bool gpio_is_valid(int number)
- {
-diff --git a/include/linux/gpio/consumer.h b/include/linux/gpio/consumer.h
-index 5432e5d5fbfb..1c4385a00f88 100644
---- a/include/linux/gpio/consumer.h
-+++ b/include/linux/gpio/consumer.h
-@@ -3,15 +3,14 @@
- #define __LINUX_GPIO_CONSUMER_H
- 
- #include <linux/bits.h>
--#include <linux/bug.h>
--#include <linux/compiler_types.h>
--#include <linux/err.h>
-+#include <linux/types.h>
- 
- struct acpi_device;
- struct device;
- struct fwnode_handle;
--struct gpio_desc;
-+
- struct gpio_array;
-+struct gpio_desc;
- 
- /**
-  * struct gpio_descs - Struct containing an array of descriptors that can be
-@@ -185,8 +184,11 @@ struct gpio_desc *devm_fwnode_gpiod_get_index(struct device *dev,
- 
- #else /* CONFIG_GPIOLIB */
- 
-+#include <linux/err.h>
- #include <linux/kernel.h>
- 
-+#include <asm/bug.h>
-+
- static inline int gpiod_count(struct device *dev, const char *con_id)
- {
- 	return 0;
-@@ -616,6 +618,8 @@ struct gpio_desc *acpi_get_and_request_gpiod(char *path, unsigned int pin, char
- 
- #else  /* CONFIG_GPIOLIB && CONFIG_ACPI */
- 
-+#include <linux/err.h>
-+
- static inline int acpi_dev_add_driver_gpios(struct acpi_device *adev,
- 			      const struct acpi_gpio_mapping *gpios)
- {
-@@ -647,6 +651,8 @@ void gpiod_unexport(struct gpio_desc *desc);
- 
- #else  /* CONFIG_GPIOLIB && CONFIG_GPIO_SYSFS */
- 
-+#include <asm/errno.h>
-+
- static inline int gpiod_export(struct gpio_desc *desc,
- 			       bool direction_may_change)
- {
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index 262a84ce9bcb..5c6db5533be6 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -2,27 +2,35 @@
- #ifndef __LINUX_GPIO_DRIVER_H
- #define __LINUX_GPIO_DRIVER_H
- 
--#include <linux/device.h>
--#include <linux/irq.h>
-+#include <linux/bits.h>
- #include <linux/irqchip/chained_irq.h>
- #include <linux/irqdomain.h>
-+#include <linux/irqhandler.h>
- #include <linux/lockdep.h>
- #include <linux/pinctrl/pinconf-generic.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/property.h>
-+#include <linux/spinlock_types.h>
- #include <linux/types.h>
- 
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- #include <asm/msi.h>
-+#endif
- 
--struct gpio_desc;
-+struct device;
-+struct irq_chip;
-+struct irq_data;
-+struct module;
- struct of_phandle_args;
-+struct pinctrl_dev;
- struct seq_file;
--struct gpio_device;
--struct module;
--enum gpiod_flags;
--enum gpio_lookup_flags;
- 
- struct gpio_chip;
-+struct gpio_desc;
-+struct gpio_device;
-+
-+enum gpio_lookup_flags;
-+enum gpiod_flags;
- 
- union gpio_irq_fwspec {
- 	struct irq_fwspec	fwspec;
-@@ -679,6 +687,10 @@ bool gpiochip_irqchip_irq_valid(const struct gpio_chip *gc,
- int gpiochip_irqchip_add_domain(struct gpio_chip *gc,
- 				struct irq_domain *domain);
- #else
-+
-+#include <asm/bug.h>
-+#include <asm/errno.h>
-+
- static inline int gpiochip_irqchip_add_domain(struct gpio_chip *gc,
- 					      struct irq_domain *domain)
- {
-@@ -756,6 +768,10 @@ struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc);
- 
- #else /* CONFIG_GPIOLIB */
- 
-+#include <linux/err.h>
-+
-+#include <asm/bug.h>
-+
- static inline struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc)
- {
- 	/* GPIO can never have been requested */
+ int dpu_rm_reserve(
 -- 
-2.39.1
+2.7.4
 
