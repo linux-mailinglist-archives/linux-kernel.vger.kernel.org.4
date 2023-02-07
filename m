@@ -2,137 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7966568E013
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F15A568E018
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbjBGScK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S232684AbjBGScU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232647AbjBGScD (ORCPT
+        with ESMTP id S231509AbjBGScJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:32:03 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544A28A7F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:31:49 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id j12so2913809ila.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:31:49 -0800 (PST)
+        Tue, 7 Feb 2023 13:32:09 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55670C150
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:31:50 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id d16so2040879ioz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:31:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OVGv953a/TRW+zFGloKXvKsCRvM9/SxchdtuwLei+Fo=;
-        b=jz/Op+8b4+niNTCYz0rUEA4y/ac+GvW59915DrFptkw1bsxdR8dhDMijIXH9CWlchg
-         PUvECpeICr8G9+jezzp4Vtn2SLurCe0I1XymMjzcBEiVFkz8igHdmDUbzNWlG3UjHfJQ
-         Mht3RDKpDhJVNIui/bQDplWjhxWtsNOIjP0zI=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rjbym9T42skdhF3uprIyztEKnRUBwwO5JRXMfWu4kCE=;
+        b=gDm3Jh36GzECUYz3DEmO/uU/d8Fzj76lmFWCFJIhZkfWVYtqk3zemDDW2K3Um4VvGY
+         x4O/btY5sPmlw/V3dG/yuRMq7PkBrGCcxSKE8OifIbdnEkYGgJEKswnn3EF6Lu8dGsqr
+         aA7mrG00AmuC3emnhKTeS0ufeWqKKD36fzBmfSxtwU9LWoPr9xuXezWSOSs+IgfcJESN
+         jEIdYUiXU54YElX1VgP34784cGElVrrgVG3sKttM8qvz8JosIuD7Zfi/fHK92axOD167
+         /SMPWJc8NfWiOU1txcdKHOQ2f+8jXaTpW6JSSE7ojbiB3BkkfukNRrUIQLYZmA4QOBuS
+         a+Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OVGv953a/TRW+zFGloKXvKsCRvM9/SxchdtuwLei+Fo=;
-        b=x/otucLv/xWI1EF+mttShLqvd7hthyGwyPLB9a4kdqKDJqbzWamOjLFADauGOgwdLL
-         SHOJkDXQfcsNPUCPuPpBOfxzmV4O+AvGZ01T1MwI6tNJxTpFmkUqBcxlK//1Gxel/bRM
-         O1DaieHDaeLXodXT8B3Q9DXxZDv9TxlNhzHEexfDNXnJRK9h1fYdDvuiC6pIMJK4vSf5
-         Os/0iN8toelMm3e8Y1F19hyd2HVdD4KoITOwbW1YjUr4FAN9kCynteFHjZ1MjLje4t71
-         B1S/BxkNNEDFOuaoMtR28/f7gkkxgkdPchSszDEf43Xgk1HYHSvv6Polh1w10MbjwRri
-         ggDw==
-X-Gm-Message-State: AO0yUKVXDepvlYw+mgekjTsIzgZbZabsZNHwKkZfH5/+GP60/ExUGrTQ
-        PQrvNpaVDyVZyMwiNohYfxIv7A==
-X-Google-Smtp-Source: AK7set/ap571v3p51svWnKT+r9LLpAmOse7WGsIyA3foorSztB6PQDbjr2IVAC/t+XfclX9fNwITXQ==
-X-Received: by 2002:a05:6e02:1be6:b0:30f:6400:f7dd with SMTP id y6-20020a056e021be600b0030f6400f7ddmr5307831ilv.17.1675794708781;
-        Tue, 07 Feb 2023 10:31:48 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id n4-20020a92d9c4000000b00310a40e669esm1601859ilq.11.2023.02.07.10.31.48
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rjbym9T42skdhF3uprIyztEKnRUBwwO5JRXMfWu4kCE=;
+        b=TIXg5vGgFmTT7rNiHnVkKbC4G6KLR+VAeC3gdjl2Qehe31nvJUCSsdWf3HFpwcYOPm
+         1kYLhBL52hxTsB6HKZKDlriGEHw21H+xFhX9ouiUkFkCRyvPJ57plr6TsdM1BDjg8tuc
+         6YazTfyWXTUmj9mVnVIgG0lz78KqbxNBKDrSCUbakq4JAE6grrG8Gd+1JdFY9Jc3n/Sz
+         X8/938Kz4EAHC4OdOltF5Hji8yyk8HaS3TkOCQn5Ykt5EmygbRL6UgbZfslqjf6ErX/9
+         1vVZmuf+LRdxCYUkYM/d4m2yHPg1rWmA5LHxeK1rM3Idus+EcceBvOLRq2Wheqfbgp2B
+         TR4Q==
+X-Gm-Message-State: AO0yUKUSW4ux9O2OSCEMSzHtKsRDWB0ZyTJ2QU41TZHrWSbwzfKtZSuB
+        6GeRALcAiKKQv/CgY22POQaoKQ==
+X-Google-Smtp-Source: AK7set+kKa8MSqpN9ip1YSu+ZSBe0pk67J4DGBXcnAdqH79MN97IWjNReIVmgvraOjNw+qoFnzIuhg==
+X-Received: by 2002:a6b:ed05:0:b0:716:8f6a:f480 with SMTP id n5-20020a6bed05000000b007168f6af480mr3494848iog.0.1675794709421;
+        Tue, 07 Feb 2023 10:31:49 -0800 (PST)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id o184-20020a6bbec1000000b006e02c489089sm4148604iof.32.2023.02.07.10.31.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Tue, 07 Feb 2023 10:31:48 -0800 (PST)
-Date:   Tue, 7 Feb 2023 18:31:47 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] HID: i2c-hid: goodix: Stop tying the reset line to
- the regulator
-Message-ID: <Y+KZE1tqTH3lqafJ@google.com>
-References: <20230207024816.525938-1-dianders@chromium.org>
- <20230206184744.4.I085b32b6140c7d1ac4e7e97b712bff9dd5962b62@changeid>
+Message-ID: <4321724d-9a24-926c-5d2d-5d5d902bda72@kernel.dk>
+Date:   Tue, 7 Feb 2023 11:31:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230206184744.4.I085b32b6140c7d1ac4e7e97b712bff9dd5962b62@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: block: sleeping in atomic warnings
+Content-Language: en-US
+To:     Dan Carpenter <error27@gmail.com>, linux-block@vger.kernel.org
+Cc:     Julia Lawall <julia.lawall@inria.fr>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maobibo <maobibo@loongson.cn>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
+ <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
+ <Y+EjmnRqpLuBFPX1@bombadil.infradead.org>
+ <4ffbb0c8-c5d0-73b3-7a4e-2da9a7b03669@inria.fr> <Y+Ja5SRs886CEz7a@kadam>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <Y+Ja5SRs886CEz7a@kadam>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 06:48:13PM -0800, Douglas Anderson wrote:
-> In commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the reset line to
-> true state of the regulator"), we started tying the reset line of
-> Goodix touchscreens to the regulator.
-> 
-> The primary motivation for that patch was some pre-production hardware
-> (specifically sc7180-trogdor-homestar) where it was proposed to hook
-> the touchscreen's main 3.3V power rail to an always-on supply. In such
-> a case, when we turned "off" the touchscreen in Linux it was bad to
-> assert the "reset" GPIO because that was causing a power drain. The
-> patch accomplished that goal and did it in a general sort of way that
-> didn't require special properties to be added in the device tree for
-> homestar.
-> 
-> It turns out that the design of using an always-on power rail for the
-> touchscreen was rejected soon after the patch was written and long
-> before sc7180-trogdor-homestar went into production. The final design
-> of homestar actually fully separates the rail for the touchscreen and
-> the display panel and both can be powered off and on. That means that
-> the original motivation for the feature is gone.
-> 
-> There are 3 other users of the goodix i2c-hid driver in mainline.
-> 
-> I'll first talk about 2 of the other users in mainline: coachz and
-> mrbland. On both coachz and mrbland the touchscreen power and panel
-> power _are_ shared. That means that the patch to tie the reset line to
-> the true state of the regulator _is_ doing something on those
-> boards. Specifically, the patch reduced power consumption by tens of
-> mA in the case where we turned the touchscreen off but left the panel
-> on. Other than saving a small bit of power, the patch wasn't truly
-> necessary. That being said, even though a small bit of power was saved
-> in the state of "panel on + touchscreen off", that's not actually a
-> state we ever expect to be in, except perhaps for very short periods
-> of time at boot or during suspend/resume. Thus, the patch is truly not
-> necessary. It should be further noted that, as documented in the
-> original patch, the current code still didn't optimize power for every
-> corner case of the "shared rail" situation.
-> 
-> The last user in mainline was very recently added: evoker. Evoker is
-> actually the motivation for me removing this bit of code. It turns out
-> that for evoker we need to manage a second power rail for IO to the
-> touchscreen. Trying to fit the management of this IO rail into the
-> regulator notifiers turns out to be extremely hard. To avoid lockdep
-> splats you shouldn't enable/disable other regulators in regulator
-> notifiers and trying to find a way around this was going to be fairly
-> difficult.
-> 
-> Given the lack of any true motivation to tie the reset line to the
-> regulator, lets go back to the simpler days and remove the code. This
-> is, effectively, a revert of commit bdbc65eb77ee ("HID: i2c-hid:
-> goodix: Fix a lockdep splat"), commit 25ddd7cfc582 ("HID: i2c-hid:
-> goodix: Use the devm variant of regulator_register_notifier()"), and
-> commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the reset line to true
-> state of the regulator").
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On 2/7/23 7:06?AM, Dan Carpenter wrote:
+> block/blk-mq.c:206 blk_freeze_queue() warn: sleeping in atomic context
+> rexmit_timer() <- disables preempt
+> -> aoedev_downdev()
+>    -> blk_mq_freeze_queue()
+>       -> blk_freeze_queue()
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+That is definitely a legit bug, aoe should punt to a workqueue or
+similar.
+
+> block/blk-mq.c:4083 blk_mq_destroy_queue() warn: sleeping in atomic context
+> nvme_fc_match_disconn_ls() <- disables preempt
+> -> nvme_fc_ctrl_put()
+>    -> nvme_fc_ctrl_free()
+>       -> nvme_remove_admin_tag_set()
+> nvme_fc_ctrl_free() <duplicate>
+> -> nvme_remove_io_tag_set()
+>          -> blk_mq_destroy_queue()
+
+Also looks like a legitimate bug.
+
+> block/blk-mq.c:2174 __blk_mq_run_hw_queue() warn: sleeping in atomic context
+> __blk_mq_run_hw_queue() <duplicate>
+> -> blk_mq_sched_dispatch_requests()
+>    -> __blk_mq_sched_dispatch_requests()
+>       -> blk_mq_do_dispatch_sched()
+> blk_mq_do_dispatch_sched() <duplicate>
+> -> __blk_mq_do_dispatch_sched()
+>    -> blk_mq_dispatch_hctx_list()
+> __blk_mq_do_dispatch_sched() <duplicate>
+> __blk_mq_sched_dispatch_requests() <duplicate>
+> -> blk_mq_do_dispatch_ctx()
+> __blk_mq_sched_dispatch_requests() <duplicate>
+>       -> blk_mq_dispatch_rq_list()
+> __blk_mq_do_dispatch_sched() <duplicate>
+> blk_mq_do_dispatch_ctx() <duplicate>
+> -> blk_mq_delay_run_hw_queues()
+>          -> blk_mq_delay_run_hw_queue()
+
+This one I'm not really following... Would it be possible to expand the
+reporting to be a bit more verbose?
+
+> sg_remove_sfp_usercontext() <- disables preempt
+> block/blk-wbt.c:843 wbt_init() warn: sleeping in atomic context
+> ioc_qos_write() <- disables preempt
+> -> wbt_enable_default()
+>    -> wbt_init()
+
+Also definitely a bug.
+
+-- 
+Jens Axboe
+
