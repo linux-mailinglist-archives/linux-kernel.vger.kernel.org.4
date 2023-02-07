@@ -2,114 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D6F68CBEE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 02:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1435B68CBF1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 02:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjBGB1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 20:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
+        id S230291AbjBGBaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 20:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBGB13 (ORCPT
+        with ESMTP id S229792AbjBGBaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 20:27:29 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B92062BF0A;
-        Mon,  6 Feb 2023 17:27:27 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.155])
-        by gateway (Coremail) with SMTP id _____8Cxe+r+qOFjhV4PAA--.29870S3;
-        Tue, 07 Feb 2023 09:27:26 +0800 (CST)
-Received: from [10.20.42.155] (unknown [10.20.42.155])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF739qOFjhiwrAA--.17524S3;
-        Tue, 07 Feb 2023 09:27:25 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-To:     Xi Ruoyao <xry111@xry111.site>, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
- <5fc85453-1e2c-1f00-7879-1b5fa318c78a@xen0n.name>
- <5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn>
- <b1809500e4d55564a1084a3014fb9603ba3d1438.camel@xry111.site>
- <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
- <74ffc2c05475c6af391b87a06df477ae390cc45c.camel@xry111.site>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <85fb9d71-b956-3d3e-f279-1310eec8e5c9@loongson.cn>
-Date:   Tue, 7 Feb 2023 09:27:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 6 Feb 2023 20:30:17 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCAF34C37
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 17:30:15 -0800 (PST)
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 81F973F2FA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675733413;
+        bh=J2kutiaYAv0H4jCNv3t7c5H2zC3p7YBPhiEHmD+719E=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=I3pIaxHYalrlo9/7QMHiVwX51+ApWKLMfjZ2dXl6wy2/2RUOYr3rf8nx03LcdAtHO
+         eXtds1XhV9y7UAyvjWxrHxcxdaPbZXnTIzvRRQi6h2vJbLRvs0Ipgru0gIXykpMoYK
+         SVM9bUFx9UeCYF9KUWc/+igxr/cJEQIuJDYYB3pp5SONN5MZwBzT5XWehHf36I8sbe
+         bMnkzAayz6IWFxI7uiqoRxf4UZsyPwtmnUYqyA/VhhT7HoYtP1iQnIUwbIwMOW9Kqs
+         NLvJnT7RkYGK2WW7mVtQ1ScmthWtEyEu4r9ilIZpylJiceO2D4Gh570nomG2sIotpd
+         8vUptU9ISjB6w==
+Received: by mail-pl1-f199.google.com with SMTP id y9-20020a1709027c8900b00195e237dc8bso7297155pll.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 17:30:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J2kutiaYAv0H4jCNv3t7c5H2zC3p7YBPhiEHmD+719E=;
+        b=hDzYkMXA7PoK7rq7VOZ4HAnSu1rDNp2+igyAXIj+30LAQehJcz6mqFZG83eT4UIPEN
+         fDUUXSpeANnErYVcxRpSeRDkq0jKXYSGKgAe7NuHa2fpE0vOsJHA0AaGUDo4JXPor5+H
+         3I55DgrQJGfgjaKjhr/cZWkDv9qHhWKiqNFFlkDC7ND7VJBED/XTjcA+RO6LC/8C/0ko
+         GNm3HSKRX3BYx+dXA9X7862hRwV70B5aPSEr6GfsV/Et6wy6G8pQa+3a3LQsZ/v9kP0z
+         icxS/QCp18gDxDkx+WTKRUgFuK9FRCyiBOx3QJncXRJiejrIlxm4OeBqcyWAHnDCXepJ
+         wDug==
+X-Gm-Message-State: AO0yUKWrRKQyIgzkzhGUjIMSvBdXxOE6bU3HX/r183iQjU29AwSUb36U
+        xdeYckkYb8Rj9FEUJavMjme8ww73FcdmcwiCWhm49tTfY0hNsCB+SfBaWLAJxxbTwoDPh5r+N23
+        d0vG8n9VB78v+1j+HZcsA+K9IxbvGED+/picap5wIz+aeF7rWn1K2UFmvFQ==
+X-Received: by 2002:a17:90a:c7cf:b0:230:a5d7:a479 with SMTP id gf15-20020a17090ac7cf00b00230a5d7a479mr1598355pjb.62.1675733411818;
+        Mon, 06 Feb 2023 17:30:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Uh0toKiT475EtXbxzlp+MXeCTb9iY9IWEPZgYWWmIJQHfK+jc0rlN8WIE5pHSQ4oUs3gdEbQU47xKfnN4sgs=
+X-Received: by 2002:a17:90a:c7cf:b0:230:a5d7:a479 with SMTP id
+ gf15-20020a17090ac7cf00b00230a5d7a479mr1598339pjb.62.1675733411328; Mon, 06
+ Feb 2023 17:30:11 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <74ffc2c05475c6af391b87a06df477ae390cc45c.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxF739qOFjhiwrAA--.17524S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KFyftFWDGFWktFW8Gr17Jrb_yoW8Cry5pa
-        y2kasIkFnrXr10kayIk3yUXFZ0v3WkCr15Cr1rGryYgr1Y9a4IgFWIq3Z8WasrCw1Ikw12
-        qr1Iq3W7uwsrAFDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
-        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU4AhLUUUUU
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230110081938.30308-1-yangyinglu@loongson.cn>
+ <CAAd53p6eUNJf7aNkiXcTKAfhL_cM1Ki7JnW7s4oP7BeFQkP6ag@mail.gmail.com>
+ <e684e8d7-6fc9-3331-868c-6cc4122f2cef@loongson.cn> <CAAd53p7_dQc0z_2Bw29xxnxMx6rSdJE7hj-MvH3HszSyE0uWCQ@mail.gmail.com>
+ <55bc0144-6d04-db68-b77b-59bd9e7206dc@loongson.cn>
+In-Reply-To: <55bc0144-6d04-db68-b77b-59bd9e7206dc@loongson.cn>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 7 Feb 2023 09:30:00 +0800
+Message-ID: <CAAd53p6hyHDV1s6=6ML_Gqw_=w1VypoQhtTGiLLvNMwGw930Vw@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: handle warm-reset port requests on hub_init
+To:     yangyinglu <yangyinglu@loongson.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi yangyinglu,
 
+On Wed, Feb 1, 2023 at 5:25 PM yangyinglu <yangyinglu@loongson.cn> wrote:
+>
+> Hi  Kai-Heng,
+>
+> I'm sorry that it took so long to reply. I found other ways to fix this
+> problem. I don't need to fix this code. Thank you.
 
-On 2023/2/6 下午9:30, Xi Ruoyao wrote:
-> On Mon, 2023-02-06 at 21:13 +0800, Jianmin Lv wrote:
->>> (1) Is the difference contributed by a bad code generation of GCC?  If
->>> true, it's better to improve GCC before someone starts to build a distro
->>> for LA264 as it would benefit the user space as well.
->>>
->> AFAIK, GCC builds to produce unaligned-access-enabled target binary by
->> default (without -mstrict-align) for improving user space performance
->> (small size and runtime high performance), which is also based the fact
->> that the vast majority of LoongArch CPUs support unaligned-access.
-> 
-> I mean: if someone starts to build a distro for a less-capable LoongArch
-> processor, (s)he will need an entire user space compiled with -mstrict-
-> align.  So it would be better to start preparation now.
-> 
-> And it's likely (s)he will either submit a GCC patch to make GCC
-> enable/disable -mstrict-align based on the -march= (--with-arch at
-> configure time) value, or hack GCC to enable -mstrict-align by default
-> for the distro.  So I think we'll also need:
-> 
->> +ifdef CONFIG_ARCH_STRICT_ALIGN may enable strict align by default.
->>   # Don't emit unaligned accesses.
->>   # Not all LoongArch cores support unaligned access, and as kernel we can't
->>   # rely on others to provide emulation for these accesses.
->>   KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
->    +else
->    +# Distros designed for running on both kind of processors may disable
->    +# strict align by default, but the user may want a no-strict-align
->    +# kernel for his/her specific hardware.
->     KBUILD_CFLAGS += $(call cc-option,-mno-strict-align)
->> +endif
-> 
+I actually think this patch is a valid fix, I just want to see more
+details for better understanding.
 
-Thanks, Ruoyao, I think it's good suggestion. After talking about it 
-with GCC colleague, it's very likely make GCC enable/disable 
--mstrict-align based on the -march= in future, just as you said.
+But it's also good that you found other ways to fix it.
 
+Kai-Heng
+
+>
+>
+> =E5=9C=A8 2023/1/11 =E4=B8=8B=E5=8D=883:04, Kai-Heng Feng =E5=86=99=E9=81=
+=93:
+> > Hi yangyinglu,
+> >
+> > On Wed, Jan 11, 2023 at 11:32 AM yangyinglu <yangyinglu@loongson.cn> wr=
+ote:
+> >>
+> >>
+> >>
+> >> =E5=9C=A8 2023/1/11 =E4=B8=8A=E5=8D=8810:33, Kai-Heng Feng =E5=86=99=
+=E9=81=93:
+> >>> Hi yangyinglu,
+> >>>
+> >>> On Tue, Jan 10, 2023 at 4:20 PM yangyinglu <yangyinglu@loongson.cn> w=
+rote:
+> >>>>
+> >>>> USB-C storage device not detected on USB 3.0 host when
+> >>>> plugged in after boot, so need to warm-reset port
+> >>>
+> >>> Is it possible to enable USB dyndbg, plug a USB 3.0 device, then past=
+e
+> >>> the relevant dmesg here? Thanks!
+> >>>
+> >>> Kai-Heng
+> >>
+> >>    hi,
+> >>       After entering the system, directly plug and unplug the USB flas=
+h
+> >> disk. usb control is  etron Technology Inc.The log is as follows:
+> >>    [   10.354484] radeon 0000:04:00.0: vgaarb: changed VGA decodes:
+> >> olddecodes=3Dio+mem,decodes=3Dnone:owns=3Dnone
+> >>    [   10.484794] bridge: filtering via arp/ip/ip6tables is no longer
+> >> available by default. Update your scripts to load br_netfilter if you
+> >> need this.
+> >>    [   10.506968] tun: Universal TUN/TAP device driver, 1.6
+> >>    [   10.514128] virbr0: port 1(virbr0-nic) entered blocking state
+> >>    [   10.519858] virbr0: port 1(virbr0-nic) entered disabled state
+> >>    [   10.525646] device virbr0-nic entered promiscuous mode
+> >>    [   10.666536] virbr0: port 1(virbr0-nic) entered blocking state
+> >>    [   10.672268] virbr0: port 1(virbr0-nic) entered listening state
+> >>    [   10.748564] virbr0: port 1(virbr0-nic) entered disabled state
+> >>
+> >>    Loongnix GNU/Linux 20 Release 3 loongson-pc ttyS0
+> >>
+> >>
+> >>    loongson-pc login: [  147.701011] usb usb4-port1: Cannot enable. Ma=
+ybe
+> >> the USB cable is bad?
+> >>    [  151.793206] usb usb4-port1: Cannot enable. Maybe the USB cable i=
+s bad?
+> >>    [  151.799726] usb usb4-port1: attempt power cycle
+> >>    [  157.465465] usb usb4-port1: Cannot enable. Maybe the USB cable i=
+s bad?
+> >>    [  161.557649] usb usb4-port1: Cannot enable. Maybe the USB cable i=
+s bad?
+> >>    [  161.564167] usb usb4-port1: unable to enumerate USB device
+> >>    [  165.641834] usb usb4-port1: Cannot enable. Maybe the USB cable i=
+s bad?
+> >
+> > Is it possible to enable USB dyndbg by adding kernel parameter
+> > "usbcore.dyndbg" so we can see the portsc?
+> >
+> > Kai-Heng
+> >
+> >>
+> >>>
+> >>>>
+> >>>> Signed-off-by: yangyinglu <yangyinglu@loongson.cn>
+> >>>> ---
+> >>>>    drivers/usb/core/hub.c | 2 +-
+> >>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> >>>> index 77e73fc8d673..bd4496b80c2d 100644
+> >>>> --- a/drivers/usb/core/hub.c
+> >>>> +++ b/drivers/usb/core/hub.c
+> >>>> @@ -1159,7 +1159,7 @@ static void hub_activate(struct usb_hub *hub, =
+enum hub_activation_type type)
+> >>>>                   }
+> >>>>
+> >>>>                   /* Make sure a warm-reset request is handled by po=
+rt_event */
+> >>>> -               if (type =3D=3D HUB_RESUME &&
+> >>>> +               if ((type =3D=3D HUB_RESUME || type =3D=3D HUB_INIT2=
+) &&
+> >>>>                       hub_port_warm_reset_required(hub, port1, ports=
+tatus))
+> >>>>                           set_bit(port1, hub->event_bits);
+> >>>>
+> >>>> --
+> >>>> 2.20.1
+> >>>>
+> >>
+>
