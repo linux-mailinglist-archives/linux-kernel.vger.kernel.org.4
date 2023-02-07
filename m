@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819BD68CAEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 01:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8781C68CAF0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 01:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjBGACj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 19:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S229975AbjBGAHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 19:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBGACh (ORCPT
+        with ESMTP id S229523AbjBGAHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 19:02:37 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A23417140
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 16:02:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1675728156; x=1707264156;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yIILzYCcjLp2tVEtzbfoT4seV8GM2Y4g3HEmolE1Uuc=;
-  b=gPBaPSMr3o3fglHDqgxokpNpTm8Tsq++rW5AYMvKfSiOf8BaxoaR+Wml
-   cxhLXQhSLZ8CSdWoAgE/hFQCHzfhUNaEhj8htgI4z5R9KxA4G56UoZOfu
-   j86RYN7U6hFU/Oc4LuLcnwWT4X0U5biDXMEXaAlExSZnSLkZRHIPhrC3E
-   txl0alLP4H3RTuTr825N+q0tBAwzoa7Mdq/XaA13P/euOKsjphY1dokkt
-   Ve34UtFZcANoq+5/MHVJPRkof0St3WWI2Mkl8Nth64hZ+IGFkfnSvrqVH
-   +2j/tZLCJ9svw5xC5vvmyUrUMxpmWMM8WU29dX1DBE9Imb7kRBdxa1sBJ
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,276,1669046400"; 
-   d="scan'208";a="220974929"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Feb 2023 08:02:34 +0800
-IronPort-SDR: coW0NJ/+AAVlNg5CbdZAILsxeyCAOpiXZuZqX+ENjMpRnX65nouT/Rs6CouuHjOfdqD4fOI/eX
- A2sUeZINaKpEShCEY8pi8rI3QqwOnekyP2i3YVNlmnjiGwp3WBxJ9ZT/8OFp3C8UTC2bo3FZPA
- iTain4sTyMt+QJozcdIK5q6FuBMs5xCj+0H8FCdJBegH5s20MfGgHXHXvMsy8sxXqUtjP6iRAD
- 2FXMHCSpQKYmGQOMZD2PPJtzyei5jnErAz9xNLfzqzTRjcg3pd4ABGWeh/PXQtxlqFrG5lySkr
- Nkc=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Feb 2023 15:19:51 -0800
-IronPort-SDR: 0urPiEdZQqAVE7rczdVeYjMN91JYkQtHYKx84PklOEH80lWRvm5/E3cPzA3FAzYsERflB8/38L
- Vdxt+RNb3icMFw/02m6+YSKZ6C17cN26YKCDDaZaXFfDK8dvbDApl2b58jkS+6j7LPL6+eTNL+
- XyzsdU4sp6u9LZiyiV4mplGIDLZelgUdrRCXd9hdx95crZCJUCNnkj7kbgq1+77AHU9433l02I
- eOXF4DeuAntaEgUZ9hvY0vS+4y67gLHoFRUBxpWEqyS0j3PWvpDdnBQ9qM81C2yM+AFTWc4Jg5
- twk=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Feb 2023 16:02:34 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P9jxP6vRrz1RwtC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 16:02:33 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1675728153; x=1678320154; bh=yIILzYCcjLp2tVEtzbfoT4seV8GM2Y4g3HE
-        molE1Uuc=; b=HqIYs8r/GoSN6NzdbYUtYnRT7iAsoYp1CdgEooJ9d2YCrVFLfzb
-        rjEttICX1G/oxDPb6AwDU7V2TQJB+HfJaf1M88xEH1vsUFzhMYbRnHaptWM7l3y+
-        0N/93UZf3/zIpKVs1GgeYskEr8olM7rJ3MTh1mJzLj57GqlNjpfQF0p5wYlWq0S2
-        Na4PZ8u2htHUX8QXv1HmrZ8E3zqd2Gmq/NnVSby3EuLZr2E6J1MHcfVAe7i4gJW1
-        70gb/GfBIdcQvJCl82dQ2P89ZcTAUaYyEBY7mSFZSS0GMZKDQADgu59DkEkmqfXS
-        7WQ6T4EXJatWSwa5lc9VZYa5cr6xtn4mFmQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id mn3pEenXsnYJ for <linux-kernel@vger.kernel.org>;
-        Mon,  6 Feb 2023 16:02:33 -0800 (PST)
-Received: from [10.225.163.96] (unknown [10.225.163.96])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P9jxM5t2Mz1RvLy;
-        Mon,  6 Feb 2023 16:02:31 -0800 (PST)
-Message-ID: <605df8c8-ee93-9411-f90b-5b80102b8f79@opensource.wdc.com>
-Date:   Tue, 7 Feb 2023 09:02:30 +0900
+        Mon, 6 Feb 2023 19:07:48 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DFA729F;
+        Mon,  6 Feb 2023 16:07:47 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675728466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jl0lcdzSqip5Ug3EWqw6Ae+3gPuqa0MNpUhY/ze7gyc=;
+        b=J7YpdMcJ379WbduRVCoE1hQ7QjKRU3d6mf4p1VG0t7ShLltCECtuHe0+Tjf6Om8ZJMwya2
+        48w+swDyyrKg0Q42TQ/TJ7SP4rw93qVkDg8Jy3GFKU5OlMQFiuk7XrrFT0MyqUuqf33CgT
+        sIOhR4UIKjwebFzbznnqG1JoCKoOLFU6yRXBSPrrgGLsxgbP3LRq8pRq9fGflcOEJJU9le
+        +ttMVVbzfEF7eu3uRWfEFOZfU1Vf9Wh2QQ+Zf04c3ia8GyPjqcegyX1QnS+fmMZICjiQSB
+        LqqRKEwUTkd4UzW4mZly8RPuv6PH79+NEfuNNf3uAyj5PMBckHl82+uMWJBQQg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675728466;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jl0lcdzSqip5Ug3EWqw6Ae+3gPuqa0MNpUhY/ze7gyc=;
+        b=MVlXZoDZaedna3EG3tELEQmhuNsAC+4g4o092ioPjTcohkFmMNt/JQtAWPBN/8qaZxHWz2
+        4hKwHjM4Ye92yGDg==
+To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
+        arjan@linux.intel.com
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com, Usama Arif <usama.arif@bytedance.com>
+Subject: Re: [PATCH v6 06/11] x86/smpboot: Support parallel startup of
+ secondary CPUs
+In-Reply-To: <20230202215625.3248306-7-usama.arif@bytedance.com>
+References: <20230202215625.3248306-1-usama.arif@bytedance.com>
+ <20230202215625.3248306-7-usama.arif@bytedance.com>
+Date:   Tue, 07 Feb 2023 01:07:45 +0100
+Message-ID: <87v8kewd66.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] pata_parport: Fix ida_alloc return value error check
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     Dan Carpenter <error27@gmail.com>, Christoph Hellwig <hch@lst.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Jens Axboe <axboe@kernel.dk>, Tim Waugh <tim@cyberelk.net>,
-        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y9uwqRothHhaOeDO@kili> <20230204205527.16716-1-linux@zary.sk>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230204205527.16716-1-linux@zary.sk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/5/23 05:55, Ondrej Zary wrote:
-> pi->dev.id is unsigned so error checking of ida_alloc return value does
-> not work. Fix it.
-> 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+On Thu, Feb 02 2023 at 21:56, Usama Arif wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+>
+> To allow for parallel AP bringup, we need to avoid the use of global
+> variables for passing information to the APs, as well as preventing them
+> from all trying to use the same real-mode stack simultaneously.
+>
+> So, introduce a 'lock' field in struct trampoline_header to use as a
+> simple bit-spinlock for the real-mode stack. That lock also protects
+> the global variables initial_gs, initial_stack and early_gdt_descr,
+> which can now be calculated...
+>
+> So how do we calculate those addresses? Well, they they can all be found
+> from the per_cpu data for this CPU. Simples! Except... how does it know
+> what its CPU# is? OK, we export the cpuid_to_apicid[] array and it can
+> search it to find its APIC ID in there.
+>
+> But now you whine at me that it doesn't even know its APIC ID? Well, if
+> it's a relatively modern CPU then the APIC ID is in CPUID leaf 0x0B so
+> we can use that. Otherwise... erm... OK, otherwise it can't have parallel
+> CPU bringup for now. We'll still use a global variable for those CPUs and
+> bring them up one at a time.
+>
+> So add a global 'smpboot_control' field which either contains the APIC
+> ID, or a flag indicating that it can be found in CPUID.
+>
+> This adds the 'do_parallel_bringup' flag in preparation but doesn't
+> actually enable parallel bringup yet.
+>
+> [ dwmw2: Minor tweaks, write a commit message ]
+> [ seanc: Fix stray override of initial_gs in common_cpu_up() ]
+> Not-signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Applied. Thanks !
-
--- 
-Damien Le Moal
-Western Digital Research
-
+I'm happy to add my SOB if someone actually writes a coherent changelog
+which complies with the documented rules :)
