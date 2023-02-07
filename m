@@ -2,130 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FC068D617
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C83768D61A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjBGL73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
+        id S231440AbjBGL7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjBGL71 (ORCPT
+        with ESMTP id S231402AbjBGL7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:59:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4751C336
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:58:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675771120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rRLNgCZg6aYRN6xn9+boV6EQE4Kq4pgHIUbO7Kac8ww=;
-        b=eaE+kHCnh6qWd8Ha2BOR+11vj86VaveAyPoUbo/RBzj8x/cw7cDbMSr8S8Euh+RNPBRpIy
-        /SPbS0q2F0DByIxWWh8FEUvxT4/mgdks/PJEI6tFblrF+sb0ExQjGS8zgyswjTR9PZCb8j
-        9OrihT5zp6lxO8QiYTYvrgDfkZ5pGZs=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-635-S_ABWPCOPHKw0VBlAF2TLg-1; Tue, 07 Feb 2023 06:58:38 -0500
-X-MC-Unique: S_ABWPCOPHKw0VBlAF2TLg-1
-Received: by mail-qv1-f69.google.com with SMTP id lw11-20020a05621457cb00b005376b828c22so7405081qvb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 03:58:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rRLNgCZg6aYRN6xn9+boV6EQE4Kq4pgHIUbO7Kac8ww=;
-        b=z9pgaujjUI/wX4ee+35jeLLKGdM7RnjG6xfdOEsKmItBGJ3e/gXYgIldGT4epF80TM
-         tM19uPLl9l6qSmrFaklQCw4kRyJitz7+0U8ulGjPhUs8N90FftXaD1frcci4xmkU2n71
-         YyKA6wM3CSAkiQFubuGjbmr0g3hSoiFzHafapu3M5gqVD9eWV+iVQkVVPU5CnceWnFE8
-         NjdYOwRlwP9DOyX+HOgXlr1RzZmmrZj1JoUCWiNG9eT0FlqPbH0Y7lq50kVkRrX4OrIb
-         licdNWmDJQcgdjdh54HnK+/p3glv1y8hTgLdW0kBlvdJkgX46MISlaVtMdGsHnDxBvjN
-         onZw==
-X-Gm-Message-State: AO0yUKV9saOWwd+iGmEFLE5+e+NdE3kg2NGH5q9JyLA/UqxHdhUUyqoj
-        gY1YMQ6FfaJ90zG8Rtn1q0GX5be3IQD2PRFXUiVhwR6s0Cs+QTkvg7ReehEe3L3JrRtoHk4TSFx
-        wbzcDCNduCqKfYVuGQNa7Gdth
-X-Received: by 2002:a05:622a:118d:b0:3b8:2ce4:3e9 with SMTP id m13-20020a05622a118d00b003b82ce403e9mr4924307qtk.32.1675771118240;
-        Tue, 07 Feb 2023 03:58:38 -0800 (PST)
-X-Google-Smtp-Source: AK7set/PMOoOqpsIOjZx215xrBJzxJ4wQ3sDL/4QeoTXh+0Me+lZiwPwA+1Kc6h/5/fdLnw7CiZV2Q==
-X-Received: by 2002:a05:622a:118d:b0:3b8:2ce4:3e9 with SMTP id m13-20020a05622a118d00b003b82ce403e9mr4924278qtk.32.1675771117968;
-        Tue, 07 Feb 2023 03:58:37 -0800 (PST)
-Received: from localhost.localdomain ([2a00:23c6:4a21:6f01:ac73:9611:643a:5397])
-        by smtp.gmail.com with ESMTPSA id x10-20020a05620a12aa00b0071d57a0eb17sm9127281qki.136.2023.02.07.03.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 03:58:37 -0800 (PST)
-Date:   Tue, 7 Feb 2023 11:58:34 +0000
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Eder Zulian <ezulian@redhat.com>
-Subject: Re: [RFC PATCH v2] sched/deadline: Add more reschedule cases to
- prio_changed_dl()
-Message-ID: <Y+I86kr73LlKVmW/@localhost.localdomain>
-References: <20230206140612.701871-1-vschneid@redhat.com>
+        Tue, 7 Feb 2023 06:59:47 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381881C336;
+        Tue,  7 Feb 2023 03:59:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=SwNfBQdytqcD5R0x5w6EaPtW4xgLiprOimA8MmIP7zQ=; b=Alw8R
+        760YfE+zq25EJElMa0mhL/bf1uj118PAmzIqwjuwNNsnEfdTym1WTLlRGiIXrnu/edJHEY+vFPIVI
+        1lz4WSHE76N9FzSVDtMg0ia1XcElqw/r+1oN+V1X/oFqVUWIO4VPdtJungDFzv5uPql0DzHnfMJmu
+        kD1grnJjXPrUrSIzV5RnbEtCgfj1uwX36cvgfWflgbPba+BbWeIYZCPHeNmJ2gZuiVVZ8dI18sFvM
+        k5LBsga0ZXgjuhIEGaKB/gzg1Qm2VbdiN/7unegDQVd3CXD4zzwQF6N0U3FQIkn9GuTWfb8FUJoEH
+        ywMgSG/SGIjsrMrE7rA6V/CIpFoZA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <john@metanate.com>)
+        id 1pPMdC-0000ef-Jv;
+        Tue, 07 Feb 2023 11:59:26 +0000
+Date:   Tue, 7 Feb 2023 11:59:25 +0000
+From:   John Keeping <john@metanate.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Xin Zhao <xnzhao@google.com>, gregkh@linuxfoundation.org,
+        jakobkoschel@gmail.com, rdunlap@infradead.org, ira.weiny@intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: dummyhcd: Fix use-after-free in
+ dummy_free_request
+Message-ID: <Y+I9HcPvrm1TzUCw@donbot>
+References: <20230206225258.2302954-1-xnzhao@google.com>
+ <Y+GcoFKiAkrCoAsv@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230206140612.701871-1-vschneid@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y+GcoFKiAkrCoAsv@rowland.harvard.edu>
+X-Authenticated: YES
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Feb 06, 2023 at 07:34:40PM -0500, Alan Stern wrote:
+> On Mon, Feb 06, 2023 at 10:52:58PM +0000, Xin Zhao wrote:
+> > DummyHCD assume when dummy_free_request is called, the request
+> > is already detached from request queues. It is correct in most
+> > cases.
+> > But when DummyHCD is detached from gadget configfs with pending
+> > requests and some requests are still in pending queue,
+> > dummy_free_request would free them directly.
+> > Later on, dummy_udc_stop would iterate pending queue to release
+> > the requests again.
+> > 
+> > Stacktrace for dummy_free_reqeust
+> > ```
+> > kfree(const void * x) (slub.c:4200)
+> > dummy_free_request(struct usb_ep * _ep, struct usb_request * _req) (dummy_hcd.c:691)
+> > usb_ep_free_request(struct usb_ep * ep, struct usb_request * req) (core.c:201)
+> > functionfs_unbind(struct ffs_data * ffs) (f_fs.c:1894)
+> 
+> That's the bug right there.  The kerneldoc for usb_ep_free_request() 
+> says "Caller guarantees the request is not queued".  So it looks like 
+> the real solution is to fix functionfs_unbind().
 
-On 06/02/23 14:06, Valentin Schneider wrote:
-> I've been tracking down an issue on a ~5.17ish kernel where:
-> 
->   CPUx                           CPUy
-> 
->   <DL task p0 owns an rtmutex M>
->   <p0 depletes its runtime, gets throttled>
->   <rq switches to the idle task>
-> 				 <DL task p1 blocks on M, boost/replenish p0>
-> 				 <No call to resched_curr() happens here>
-> 
->   [idle task keeps running here until *something*
->    accidentally sets TIF_NEED_RESCHED]
-> 
-> On that kernel, it is quite easy to trigger using rt-tests's deadline_test
-> [1] with the test running on isolated CPUs (this reduces the chance of
-> something unrelated setting TIF_NEED_RESCHED on the idle tasks, making the
-> issue even more obvious as the hung task detector chimes in).
-> 
-> I haven't been able to reproduce this using a mainline kernel, even if I
-> revert
-> 
->   2972e3050e35 ("tracing: Make trace_marker{,_raw} stream-like")
-> 
-> which gets rid of the lock involved in the above test, *but* I cannot
-> convince myself the issue isn't there from looking at the code.
-> 
-> Make prio_changed_dl() issue a reschedule if the current task isn't a
-> deadline one. While at it, ensure a reschedule is emitted when a
-> queued-but-not-current task gets boosted with an earlier deadline that
-> current's.
-> 
-> [1]: https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-> ---
+This is commit ce405d561b02 ("usb: gadget: f_fs: Ensure ep0req is
+dequeued before free_request") IIUC.
 
-This looks now good to me, thanks!
-
-Acked-by: Juri Lelli <juri.lelli@redhat.com>
-
-Best,
-Juri
-
+Xin, are you able to test a version with that commit?
