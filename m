@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A35468CD5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A9A68CD62
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjBGDRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 22:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S229705AbjBGDVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 22:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjBGDRl (ORCPT
+        with ESMTP id S229483AbjBGDVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 22:17:41 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC94A6EB4;
-        Mon,  6 Feb 2023 19:17:18 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id s8so7476849pgg.11;
-        Mon, 06 Feb 2023 19:17:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gEdx9HDblWu1Giy1hcfGtLMQdifTw+HkdbmqOyodOVw=;
-        b=ZQguRZWuUDg7ejfZ/13IUqBONLkGw/N7iaWg0B8vANmtG84iFjPnY6fM1T5sxuvWr4
-         BVXFn6dpf0dSLPAoIYvSchUqB8uw7ldaR5AZm6NwPimviECDkBFkBm6pQa2095BxMH92
-         OwNggtDAhapuz3RfH2ox88YncBCOeggM6qJQBO0EK58MjVlFx+gHpgXQvOM5/e3qiOvx
-         5hzyq46Q4AcvttjGTckqq9ZvzwOrSUI8nxEDPt4S7GdqHyPvcMjJj8v8dR98M6bCFQjh
-         rVRusBUsoQJCJLQPhRneG4bZoWWGE50xquMq99QwVcRPcbqhAFpgf79Yz3cGuuxHb1bk
-         G6uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gEdx9HDblWu1Giy1hcfGtLMQdifTw+HkdbmqOyodOVw=;
-        b=YDzSoI6NccQxB2MGZxnXemr16HjSbmPoHbJak2Wgz8zpobJKN5jLyOxxa0H9/+as3a
-         xnxQombb+2QNN05Mmw2y29k9OpE4L8fFtMeGvnXUlAtVbkmioJTjyooZfAGX21USoUTU
-         pwhlBloEi27XLtkWonNPSFAc07QnQcnxyHP2ZsUA5CgSjDdp3v6avE0Bs7oRlhCfBDtY
-         8OVl7yxns9PV5Zq24rPsCIdjaJHimCV+XXlQoeVAKP/ClzMl14LE0hZJciGTH4mXjLYQ
-         NVqH+oP/dntf3yM2h7Da+Gp4EPZ+a+4KNpjeS1IFdtUTkn0x8pt2edBB09rMn3fKUYTA
-         6+/w==
-X-Gm-Message-State: AO0yUKWYAvRbndCNQKPaYKIPpZObzjICuVRgcaFDQayjUcZ7nTYuRLuJ
-        gI001Po5ac5JWN+by0B3h7G87DRZidnF6DufcH0=
-X-Google-Smtp-Source: AK7set/IgnWvC+1T7ik0Cn8q8NqR2wk3vROsEsFNmbgUQDJ+HPmjizDorws0xZCeIry6U0mHESWMMzbsaq+75SD8HP4=
-X-Received: by 2002:a62:2506:0:b0:5a7:2295:cb03 with SMTP id
- l6-20020a622506000000b005a72295cb03mr330917pfl.18.1675739838359; Mon, 06 Feb
- 2023 19:17:18 -0800 (PST)
+        Mon, 6 Feb 2023 22:21:21 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A5731B5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 19:21:18 -0800 (PST)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 3173LEHA016291;
+        Tue, 7 Feb 2023 04:21:14 +0100
+Date:   Tue, 7 Feb 2023 04:21:14 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Vincent Dagonneau <v@vda.io>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] tools/nolibc: Adding stdint.h, more integer types
+ and tests
+Message-ID: <Y+HDqlMR6QndYSN4@1wt.eu>
+References: <20230206013248.471664-1-v@vda.io>
+ <Y+C6mj4F77U43atS@1wt.eu>
+ <bff2a9f8-6f70-409a-8acb-cf8917f653a6@app.fastmail.com>
 MIME-Version: 1.0
-References: <20221222072603.1175248-1-korantwork@gmail.com>
- <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev> <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
- <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev> <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
- <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev> <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
- <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
- <9e6cfda1-4309-d1bb-a0cf-404a7fe7d3aa@linux.intel.com> <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
-In-Reply-To: <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Tue, 7 Feb 2023 11:18:14 +0800
-Message-ID: <CAEm4hYWjaVCDFtCCyHrq5vOie4wV5LFn-UVZ5qQbpASxVGy1TA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     "Patel, Nirmal" <nirmal.patel@linux.intel.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bff2a9f8-6f70-409a-8acb-cf8917f653a6@app.fastmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Keith Busch <kbusch@kernel.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=887=E6=97=A5=
-=E5=91=A8=E4=BA=8C 02:28=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Mon, Feb 06, 2023 at 11:11:36AM -0700, Patel, Nirmal wrote:
-> > I like the idea of module parameter to allow switching between the mode=
-s
-> > but keep MSI remapping enabled (non-bypass) by default.
->
-> Isn't there a more programatic way to go about selecting the best option =
-at
-> runtime?
-Do you mean that the operating mode is automatically selected by
-detecting the number of devices and CPUs instead of being set
-manually?
->I suspect bypass is the better choice if "num_active_cpus() > pci_msix_vec=
-_count(vmd->dev)".
-For this situation, My speculation is that the PCIE nodes are
-over-mounted and not just because of the CPU to Drive ratio.
-We considered designing online nodes, because we were concerned that
-the IO of different chunk sizes would adapt to different MSI-X modes.
-I privately think that it may be logically complicated if programmatic
-judgments are made.
+On Mon, Feb 06, 2023 at 05:19:18PM -0500, Vincent Dagonneau wrote:
+> >   - do not forget your signed-off-by on patches.
+> >
+> 
+> Again, sorry. I'm quite new to the send-email workflow. I just figured that I
+> was probably supposed to use format-patch then send-email rather than just
+> send-email... Makes way more sense though and now I can have a file with my
+> cover letter and carry it over to the next version.
+
+Don't be sorry. It can take a bit of time to get used to send-email (and
+can be scary at times). And yes, I, too, prefer to first produce the
+patches then send them. One advice is to produce them into a different
+directory each time, it will save you from accidently sending a mix of
+the previous version and the current one, and it will also help you
+double-check the differences between the patches to see check if you
+missed anything.
+
+> >> I tested it successfully on x86_64 and arm64 (on qemu). I have some
+> >> trouble setting up my cross compilation chain for i386, arm and mips
+> >> however.
+> >
+> > What compilers do you use ? I'm using version 11.3 from these ones:
+> >
+> >   https://mirrors.edge.kernel.org/pub/tools/crosstool/
+> >
+> > All supported archs work fine for me. Usually on x86_64 you can even
+> > start the i386 binaries locally (if your kernel has COMPAT or COMPAT_32
+> > built in, which is most often the case). And very commonly arm64 support
+> > armv7 binaries as well.
+> > 
+> > Just let me know if I can help you set up your environment, it's always
+> > a good long-term investment!
+> >
+> 
+> Ah, foolishly I was relying on the packaged cross compiler for Arch. Compiled
+> everything just fine with the packaged versions on Ubuntu (gcc-10
+> mips/arm/arm64/i386). I'll try with the toolchains @
+> https://mirrors.edge.kernel.org/pub/tools/crosstool/ as well.
+
+OK!
+
+Cheers,
+Willy
