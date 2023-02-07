@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881E668D3F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4B268D3FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjBGKVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        id S230211AbjBGKXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjBGKVU (ORCPT
+        with ESMTP id S229508AbjBGKXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:21:20 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2C223C76;
-        Tue,  7 Feb 2023 02:21:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675765278; x=1707301278;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y2U9WIJPBm0L0FSDgjHarSz3qorOt0PpIQPRP0xPIhs=;
-  b=P1r2BWA416sRpEVK+ck+im98BF6t1cnVyfrKtoRS8fHn95oIUyaZvSMU
-   q3nNIXwxdWsU/NKXfqwKjkXeBu5pBQzEESZa+1YuxAOFVlFYU40ZbXH6U
-   s8FLS3VQnEP9mX0+icsiS4aqFVHLH0nFsnEk4dHvIzyxwi1VJx68ijTSn
-   Oymr8FRAUPEwhnJQBpFEjs77NJigX8EH6oL8H1D/w4K+EpAi0XK0Uusu6
-   /rmNryV/FsaycESSYhC3+P5+oNqXgkuHpEingHyYVoUrZKxBwWr+cIIC5
-   1/JedTcM4j5BKsL++JK3orBI0+t45NmPC+dRp5O3oCHBXGdYPHOfPAdl0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="328112313"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="328112313"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 02:21:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="697227157"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="697227157"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2023 02:21:04 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pPL5v-003Z31-2O;
-        Tue, 07 Feb 2023 12:20:59 +0200
-Date:   Tue, 7 Feb 2023 12:20:59 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v3 04/12] gpiolib: Clear the gpio_device's fwnode
- initialized flag before adding
-Message-ID: <Y+ImCyHS7ZIr8bNd@smile.fi.intel.com>
-References: <20230207014207.1678715-1-saravanak@google.com>
- <20230207014207.1678715-5-saravanak@google.com>
+        Tue, 7 Feb 2023 05:23:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DE916AF7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:23:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675765380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kaGTXgzMg0XGfm10jL8cEFT/Bw3WHCNbxpsPm5Ff46U=;
+        b=XSY7mx6L3jX9bQKe0qwtwVGRC9lS0FgJxup/NWXS1iZ9yFGfoRQ3+aMwl6zT09DiktbUO/
+        vlOtFT4oI+R37cDA4ZVKLkh+9llXZJJd5mNB0XHg52GC8WOQv38pmDWn8b5pVVPMLkP9Bt
+        J7B2yjUvc7Bwe1zyOm4grB7FZPSzjBE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-590-yA9R5vuuPnyAHZUdS59F8A-1; Tue, 07 Feb 2023 05:22:58 -0500
+X-MC-Unique: yA9R5vuuPnyAHZUdS59F8A-1
+Received: by mail-wm1-f72.google.com with SMTP id d14-20020a05600c34ce00b003dd07ce79c8so7951412wmq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:22:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kaGTXgzMg0XGfm10jL8cEFT/Bw3WHCNbxpsPm5Ff46U=;
+        b=q6IPSunLdFdVAzO+0jrgwNhnWdeDhGkY8Nf/OB6N8t1mbF1KnK5pHfbDUeCbQDTI5z
+         GEFJLv8DJOcRqlHeS5P3zLF9ZaT5890QqFeub6bGTK+qHsB4GuWxSxBoQ+LC8mPfQRiV
+         c8ph7FpAPTGkAk76nFkqEhvlrBgLuvyFPwDSGxXfyfrxT0nNoSRn2FjxPWUjnpsOjntc
+         2DVkLLfn5x0y3pVGNm3csiAMre8HungQux15l9iWelJLFGI538j5A4PE/l1DZREaKUHL
+         Mta/tjrEDiQV8i+cTZ7CFxJ3xRf2Pgr0pRLoZ8MOMP7po9zvwIDIEk5wr/b8qSCRwzYP
+         jBbQ==
+X-Gm-Message-State: AO0yUKUfp1U2UyJM8cJMM4PXnaCBPJPNX3CP5QR0NuLPKZsd8TrqxerQ
+        3P/v1q/cvZsglDSDAdEFMY6Rbio6ku/EVUfLNaFNXLz6L3n9tzIWQmCHlrYyw0y+AgTWKGbKmn6
+        AYc6yPz7wijKnsMMnfvlXLp7Q0pD8h6Hmur8y0cdndhKDsd6AHgvuesf1GTsSgHUOOdAospfy7i
+        trXAq/
+X-Received: by 2002:a05:600c:30d3:b0:3dc:2137:d67d with SMTP id h19-20020a05600c30d300b003dc2137d67dmr2548340wmn.16.1675765377550;
+        Tue, 07 Feb 2023 02:22:57 -0800 (PST)
+X-Google-Smtp-Source: AK7set+kFJF3IIArixCkhseEqNzPTZb4cGYHwhhx51Ic3oP3/RY+LTlDYZBBIOlKPPts4sizqXDatw==
+X-Received: by 2002:a05:600c:30d3:b0:3dc:2137:d67d with SMTP id h19-20020a05600c30d300b003dc2137d67dmr2548318wmn.16.1675765377333;
+        Tue, 07 Feb 2023 02:22:57 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id r16-20020a05600c459000b003e00c9888besm2632708wmo.30.2023.02.07.02.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 02:22:57 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Albert Esteve <aesteve@redhat.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH] Revert "venus: firmware: Correct non-pix start and end addresses"
+Date:   Tue,  7 Feb 2023 11:22:54 +0100
+Message-Id: <20230207102254.1446461-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207014207.1678715-5-saravanak@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 05:41:56PM -0800, Saravana Kannan wrote:
-> Registering an irqdomain sets the flag for the fwnode. But having the
-> flag set when a device is added is interpreted by fw_devlink to mean the
-> device has already been initialized and will never probe. This prevents
-> fw_devlink from creating device links with the gpio_device as a
-> supplier. So, clear the flag before adding the device.
+This reverts commit a837e5161cfffbb3242cc0eb574f8bf65fd32640, which broke
+probing of the venus driver, at least on the SC7180 SoC HP X2 Chromebook:
 
-...
+  [   11.455782] qcom-venus aa00000.video-codec: Adding to iommu group 11
+  [   11.506980] qcom-venus aa00000.video-codec: non legacy binding
+  [   12.143432] qcom-venus aa00000.video-codec: failed to reset venus core
+  [   12.156440] qcom-venus: probe of aa00000.video-codec failed with error -110
 
-> +	if (gdev->dev.fwnode && !gdev->dev.fwnode->dev)
-> +		fwnode_dev_initialized(gdev->dev.fwnode, false);
+Matthias Kaehlcke also reported that the same change caused a regression in
+SC7180 and sc7280, that prevents AOSS from entering sleep mode during system
+suspend. So let's revert this commit for now to fix both issues.
 
-Please, do not dereference fwnode from struct device. We have dev_fwnode()
-for that.
+Fixes: a837e5161cff ("venus: firmware: Correct non-pix start and end addresses")
+Reported-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
+ drivers/media/platform/qcom/venus/firmware.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+index 142d4c74017c..d59ecf776715 100644
+--- a/drivers/media/platform/qcom/venus/firmware.c
++++ b/drivers/media/platform/qcom/venus/firmware.c
+@@ -38,8 +38,8 @@ static void venus_reset_cpu(struct venus_core *core)
+ 	writel(fw_size, wrapper_base + WRAPPER_FW_END_ADDR);
+ 	writel(0, wrapper_base + WRAPPER_CPA_START_ADDR);
+ 	writel(fw_size, wrapper_base + WRAPPER_CPA_END_ADDR);
+-	writel(0, wrapper_base + WRAPPER_NONPIX_START_ADDR);
+-	writel(0, wrapper_base + WRAPPER_NONPIX_END_ADDR);
++	writel(fw_size, wrapper_base + WRAPPER_NONPIX_START_ADDR);
++	writel(fw_size, wrapper_base + WRAPPER_NONPIX_END_ADDR);
+ 
+ 	if (IS_V6(core)) {
+ 		/* Bring XTSS out of reset */
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.1
 
