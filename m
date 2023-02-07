@@ -2,103 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C80768D13C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:05:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF8E68D145
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjBGIF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
+        id S230151AbjBGIHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 03:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjBGIF1 (ORCPT
+        with ESMTP id S229698AbjBGIHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:05:27 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9EEEF80
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:05:25 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id o18so12677218wrj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 00:05:25 -0800 (PST)
+        Tue, 7 Feb 2023 03:07:41 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF3E46A7;
+        Tue,  7 Feb 2023 00:07:40 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so17764649pjd.2;
+        Tue, 07 Feb 2023 00:07:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E84y+vKONIcM3mXhEEy2z1fhX1fI78cKOFVSdVHWpv0=;
-        b=Yd6jGK6jhUojjZW5dnKQZI/EOMPU01Jjp4shryndwBM0hSOJVzFozY9oRvYv1i0kkI
-         6cRh9Fi1gXzfql0/lJ24R8JbdN6DTQmH1Mf+2ma2/ZKT0SiY1HxvGBAtAiYXI9vdznUL
-         DQD4k6BkLJMZ+SN+p9HR2Ceg9EmDFblXq+sF7OEOia56dhv5b2DgOgQcgf+CxNajQ3q9
-         zT4o+7G4M4+dP0PdBxUScteNxxuxHRsce5kd8tjROlcn9DgINvuZ0MpdveNL9llA5yN0
-         qQDsm5mM3/4wzmA8C6jYtQG/4sTq6QebxKJeMXGfdfKC+dooLILuSGrbJkOhKwk/i8bQ
-         QhSQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kPFp1H7zEWEo65JRGCNO5MC+wGJcuBqHDrDuJftgqJI=;
+        b=QfmhmHTNpzuf6D9N5mERvovFH91AIhO2K+rkGhNnrsBQYNUjJPwohIcjoro2zeAW2b
+         VnaOnep/T37mkF4uADGp3L+E2m49RfEgZjFYmobughoa8H+oyGSOuvMfFoczGMpaYhrA
+         7lhATEPfMmY5B/hV9iOpmyhHIC/mTGvMJROv/Q/guZPjuVHotFhWfe222pQ6b679LzFt
+         yeh+BHWOiajURIYv1Ofxz6r+ljJ2CtaVb/fpbSaa0lQXcRhwpV0KSXN1SfNcMhilbiBW
+         N4kl1L04Pv0HcW0C6ejGmAfS4/ciUfPnk50Yk3+e/ieZZyR1JdwlETy1He/qA/i5Dnjt
+         wQjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E84y+vKONIcM3mXhEEy2z1fhX1fI78cKOFVSdVHWpv0=;
-        b=zyXljSq7J3c00D5i/FD705jhbNlolzzYtEw3Slz02UW3GvHABMYrizYywqZlnhVuZC
-         EuwfOugOUjxeQoOtsFwuROF9jz6Qi24BRZZvLKXEvdMtzz0ntWpCPr/xhidy/2meBQyN
-         9b9YtAEG5cv/txEu4XhH8iJeBbOFBX2p/D3T9QvOLCZjR2QtBjdqqkGf3GRukfnpS17r
-         pWE9auoBDCZfjQTMBud8X7OZcepJhtE4YYfvMrrgr8nPQ63wcPjHcJ5EpUQltd7O2zSL
-         dbjnJLLhrDr6ot75wkF5KzN1mNsQUn/VD9NqN9TO3DhNDUVNagIMK9he0rDK7cVbvUXN
-         ISWQ==
-X-Gm-Message-State: AO0yUKUxlC3SyNnQ6ueZd+vdF1owXNueh3Rgj3GSDjv1Nr/GRgLR0Nmc
-        n8ENlG0pCO/apbehd5A4XCYeSw==
-X-Google-Smtp-Source: AK7set9PKPCq1x4e9ZzuqO7fkp35tM9IXqxzQ0JsTgYnwNa2tqr7oD7Ks+S9d1vMDNf7iT8Z0q0w7A==
-X-Received: by 2002:adf:e389:0:b0:2be:546f:50c2 with SMTP id e9-20020adfe389000000b002be546f50c2mr1788041wrm.12.1675757124552;
-        Tue, 07 Feb 2023 00:05:24 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600c46ce00b003dc47d458cdsm13714167wmo.15.2023.02.07.00.05.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 00:05:24 -0800 (PST)
-Message-ID: <b8f800ac-d9f5-c8d5-ab6b-c1c25fafbeaa@linaro.org>
-Date:   Tue, 7 Feb 2023 09:05:21 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kPFp1H7zEWEo65JRGCNO5MC+wGJcuBqHDrDuJftgqJI=;
+        b=io64s4EpjqEBFjzOMrBgzawusVxNlntqq2FmU+1WTb1HEBCn6rEUe/5fNOlFSSrCCa
+         /Okza0BJ056JTpMdlm28+Gcb7GdmqisJh8fYgH/QA/sZRgTAouKevEO2i1w0r6u2L+0+
+         s908tcosCON4GKoS1bU8FYraIjTxmIaSw3Y/3LMofAaUTfCDrVgnCNykgOPv0Jx4BW68
+         9OzQoCkFponvTGrGzuOjo13pIN1Zq4HP4Rmbi2tl82B/1azsptX+/YAjj47ffWYRD35Z
+         3nhzmnLJX9mzhTDKqUkATnbGtmDXTgj8DOrNFWHA03plfoCHq17QvGVhhQeFGX/hJgiO
+         RC4A==
+X-Gm-Message-State: AO0yUKXDNqEHh+hDJVqRnp+NRIGKVZOK0yLAdXy9WYdBX86mVQHQbf12
+        JfuNwuPl/q21OZC4Sr0T+Bo=
+X-Google-Smtp-Source: AK7set8QSpbu+THG1Hof14mcYgYPGNK7e4i1ewUzFXmTu8m2xKUm0z/BpqTVDZIYJvBv6JpRXZUDew==
+X-Received: by 2002:a05:6a20:8f04:b0:c0:5903:d4b2 with SMTP id b4-20020a056a208f0400b000c05903d4b2mr3057872pzk.5.1675757260274;
+        Tue, 07 Feb 2023 00:07:40 -0800 (PST)
+Received: from hbh25y.. ([129.227.150.140])
+        by smtp.gmail.com with ESMTPSA id v7-20020a63b947000000b004facdf070d6sm3716490pgo.39.2023.02.07.00.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 00:07:39 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     linkinjeon@kernel.org, sfrench@samba.org, senozhatsky@chromium.org,
+        tom@talpey.com, hyc.lee@gmail.com, lsahlber@redhat.com
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v3] ksmbd: fix possible memory leak in smb2_lock()
+Date:   Tue,  7 Feb 2023 16:07:28 +0800
+Message-Id: <20230207080728.15725-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/4] dt-bindings: net: Add WCN6855 Bluetooth
-Content-Language: en-US
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-References: <20230207052829.3996-1-steev@kali.org>
- <20230207052829.3996-2-steev@kali.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230207052829.3996-2-steev@kali.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 06:28, Steev Klimaszewski wrote:
-> Add bindings for the QTI WCN6855 chipset.
-> 
-> Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> ---
-> 
+argv needs to be free when setup_async_work fails or when the current
+process is woken up.
 
+Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+v2: avoid NULL pointer dereference in set_close_state_blocked_works()
+v3: avoid race condition between smb2_lock() and smb2_cancel()
 
-Best regards,
-Krzysztof
+ fs/ksmbd/smb2pdu.c   | 23 ++++++++++++++---------
+ fs/ksmbd/vfs_cache.c |  2 ++
+ 2 files changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index d681f91947d9..f4079518eaf6 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -6644,7 +6644,7 @@ int smb2_cancel(struct ksmbd_work *work)
+ 	struct ksmbd_conn *conn = work->conn;
+ 	struct smb2_hdr *hdr = smb2_get_msg(work->request_buf);
+ 	struct smb2_hdr *chdr;
+-	struct ksmbd_work *cancel_work = NULL, *iter;
++	struct ksmbd_work *iter;
+ 	struct list_head *command_list;
+ 
+ 	ksmbd_debug(SMB, "smb2 cancel called on mid %llu, async flags 0x%x\n",
+@@ -6666,7 +6666,9 @@ int smb2_cancel(struct ksmbd_work *work)
+ 				    "smb2 with AsyncId %llu cancelled command = 0x%x\n",
+ 				    le64_to_cpu(hdr->Id.AsyncId),
+ 				    le16_to_cpu(chdr->Command));
+-			cancel_work = iter;
++			iter->state = KSMBD_WORK_CANCELLED;
++			if (iter->cancel_fn)
++				iter->cancel_fn(iter->cancel_argv);
+ 			break;
+ 		}
+ 		spin_unlock(&conn->request_lock);
+@@ -6685,18 +6687,12 @@ int smb2_cancel(struct ksmbd_work *work)
+ 				    "smb2 with mid %llu cancelled command = 0x%x\n",
+ 				    le64_to_cpu(hdr->MessageId),
+ 				    le16_to_cpu(chdr->Command));
+-			cancel_work = iter;
++			iter->state = KSMBD_WORK_CANCELLED;
+ 			break;
+ 		}
+ 		spin_unlock(&conn->request_lock);
+ 	}
+ 
+-	if (cancel_work) {
+-		cancel_work->state = KSMBD_WORK_CANCELLED;
+-		if (cancel_work->cancel_fn)
+-			cancel_work->cancel_fn(cancel_work->cancel_argv);
+-	}
+-
+ 	/* For SMB2_CANCEL command itself send no response*/
+ 	work->send_no_response = 1;
+ 	return 0;
+@@ -7050,6 +7046,7 @@ int smb2_lock(struct ksmbd_work *work)
+ 						      smb2_remove_blocked_lock,
+ 						      argv);
+ 				if (rc) {
++					kfree(argv);
+ 					err = -ENOMEM;
+ 					goto out;
+ 				}
+@@ -7061,6 +7058,10 @@ int smb2_lock(struct ksmbd_work *work)
+ 
+ 				ksmbd_vfs_posix_lock_wait(flock);
+ 
++				spin_lock(&work->conn->request_lock);
++				list_del_init(&work->async_request_entry);
++				spin_unlock(&work->conn->request_lock);
++
+ 				if (work->state != KSMBD_WORK_ACTIVE) {
+ 					list_del(&smb_lock->llist);
+ 					spin_lock(&work->conn->llist_lock);
+@@ -7072,6 +7073,8 @@ int smb2_lock(struct ksmbd_work *work)
+ 						spin_lock(&fp->f_lock);
+ 						list_del(&work->fp_entry);
+ 						spin_unlock(&fp->f_lock);
++						work->cancel_fn = NULL;
++						kfree(argv);
+ 						rsp->hdr.Status =
+ 							STATUS_CANCELLED;
+ 						kfree(smb_lock);
+@@ -7096,6 +7099,8 @@ int smb2_lock(struct ksmbd_work *work)
+ 				spin_lock(&fp->f_lock);
+ 				list_del(&work->fp_entry);
+ 				spin_unlock(&fp->f_lock);
++				work->cancel_fn = NULL;
++				kfree(argv);
+ 				goto retry;
+ 			} else if (!rc) {
+ 				spin_lock(&work->conn->llist_lock);
+diff --git a/fs/ksmbd/vfs_cache.c b/fs/ksmbd/vfs_cache.c
+index da9163b00350..761a8aa540ce 100644
+--- a/fs/ksmbd/vfs_cache.c
++++ b/fs/ksmbd/vfs_cache.c
+@@ -372,6 +372,8 @@ static void set_close_state_blocked_works(struct ksmbd_file *fp)
+ 		list_del(&cancel_work->fp_entry);
+ 		cancel_work->state = KSMBD_WORK_CLOSED;
+ 		cancel_work->cancel_fn(cancel_work->cancel_argv);
++		cancel_work->cancel_fn = NULL;
++		kfree(cancel_work->cancel_argv);
+ 	}
+ 	spin_unlock(&fp->f_lock);
+ }
+-- 
+2.34.1
 
