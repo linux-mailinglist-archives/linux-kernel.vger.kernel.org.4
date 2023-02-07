@@ -2,85 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F6768DE0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29D768DE0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjBGQhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S229512AbjBGQiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBGQhl (ORCPT
+        with ESMTP id S229500AbjBGQiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:37:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D251EA4;
-        Tue,  7 Feb 2023 08:37:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68DED60F4A;
-        Tue,  7 Feb 2023 16:37:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E187C433EF;
-        Tue,  7 Feb 2023 16:37:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675787859;
-        bh=53K+tJd24PX6VrTjyzROobjqX3rQ8W3Mg2Iop6ThxQA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dP2chd5jZgT66rivj0sunx1wshBqtC9KMKudxvChxShyThsxOoZyELd+7/mszhE1h
-         Lk2dP3F7sUs5CIxEeIazH7H2mzVRYdYKOjpUQOw/iN3zDs05TxP6ZJQc7zXvgr5LQ1
-         4TeEOFdzWCxuiO/IdxQpMC5QAbLvJ56R1RTAXfPwV6iDXD85Mi9Wcav/dhXf7fhw48
-         IePU1jNVs6Pny1heH3/HsVCPvGOia3GIQ/orciNBvqgqLRHscHHTp60iv95C6EFgyT
-         k7/9RA9+R1t7PzvQ5K+NWudthSyubN/1sXLD8bQ5TArkILwzUUPc/UAmfAjbQk1WwJ
-         i6wipfpmnHR2A==
-Date:   Tue, 7 Feb 2023 09:37:37 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, llvm@lists.linux.dev,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: x86/include/asm/arch_hweight.h:49:15: error: invalid input size
- for constraint 'D'
-Message-ID: <Y+J+UQ1vAKr6RHuH@dev-arch.thelio-3990X>
-References: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
- <Y+J8SobyVojJWuFv@dev-arch.thelio-3990X>
- <Y+J8rtEBlSTsCBLa@zn.tnic>
+        Tue, 7 Feb 2023 11:38:18 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F4F44AE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:38:18 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id z1so16193513plg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2So4hv1hi8BG5UUukFb3+REHHKPjn28YFwULPpBOJLk=;
+        b=WD7a0RXfAR2IFHAOllVUw8jakwuoLsXLLs6ixFHKdmY+6Wus3qK8CD/1XDZtC1dIUg
+         RooS0coMvNT1WjlROoiAdP0pX0azC1wONTrncHHJ3s9oDsVzX5WXfUl/lYQkxZheCUEA
+         Jml0u0duRfANlAvmzewqFgpOfW+rkz1gSU4tsz+swQJG9Fo3+BlQXRlbIYkDD+rMNUEw
+         mHlGLJ3F9McQ0HaPNCq0GYqhXdpVom79f1QGeNqqStbsu/5XIrOM7xRen4LQngq5iJSx
+         RLP2fUvsyYdFP0Cep+OZiRVLnmprzZPt/iciVhmbmrAMMNhHek0DJI16UFfCxDFkR///
+         790A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2So4hv1hi8BG5UUukFb3+REHHKPjn28YFwULPpBOJLk=;
+        b=pc/aLTjw2mRZS5sm8VrvNpMxfE8ko9qJeVabwHenIHcb126KaNE66li7VdlSGPLD5h
+         LQXWFjnfAZSOVKykHwLmXfuK7FAQwiCukJ0agSh/qNir7GZkbXY+MtTDTd2KkLgfBh9j
+         jau3EKFysbdO7QywIuvNqkPuBZ0e7M00QRLHISbNGjMKTEdbX9MXd4ocHifRvlz7jymr
+         tGQ8nkUiJURag5J2AOxoIfLDcY1uWWkQmy/+OORwNuMHzK2aUAMzuzwsqdH9QIFJJ8pY
+         l36yxBvNHw1PC/cW+uBP27YgYgR1ssxzyLx9F1zxv3YjA6EKpPIGXEpBmAJHjPdASBHJ
+         9WnQ==
+X-Gm-Message-State: AO0yUKVMlr7X8yxrIT38E/LccyiBaJEJ3WNiRTXA/RnqiA+O2fjIVqk9
+        8/2H9+Rls59oY5YzLagEkUOa1A==
+X-Google-Smtp-Source: AK7set8T2dPADRrjmHIwQIhOi9y6Kjuq37Aqt8tThmQ4Y9zHFhM0wAaRxTzdegYDmj8jOjGAFntBsg==
+X-Received: by 2002:a17:902:8697:b0:198:af4f:de0b with SMTP id g23-20020a170902869700b00198af4fde0bmr213146plo.11.1675787897388;
+        Tue, 07 Feb 2023 08:38:17 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z11-20020a17090a170b00b0023087e8adf8sm6542524pjd.21.2023.02.07.08.38.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 08:38:16 -0800 (PST)
+Date:   Tue, 7 Feb 2023 16:38:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Joao Martins <joao.m.martins@oracle.com>
+Cc:     Igor Mammedov <imammedo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Subject: Re: [PATCH v2 2/3] KVM: SVM: Modify AVIC GATag to support max number
+ of 512 vCPUs
+Message-ID: <Y+J+dS8ZRX07kgt7@google.com>
+References: <20230207002156.521736-1-seanjc@google.com>
+ <20230207002156.521736-3-seanjc@google.com>
+ <20230207093350.5db155ca@imammedo.users.ipa.redhat.com>
+ <0e12d654-d388-a0f9-e7f9-7e96921786b7@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+J8rtEBlSTsCBLa@zn.tnic>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0e12d654-d388-a0f9-e7f9-7e96921786b7@oracle.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 05:30:38PM +0100, Borislav Petkov wrote:
-> On Tue, Feb 07, 2023 at 09:28:58AM -0700, Nathan Chancellor wrote:
-> > Thanks a lot for the report as always! Looks like there is a fix pending
-> > on the list:
+On Tue, Feb 07, 2023, Joao Martins wrote:
+> On 07/02/2023 08:33, Igor Mammedov wrote:
+> > On Tue,  7 Feb 2023 00:21:55 +0000
+> > Sean Christopherson <seanjc@google.com> wrote:
 > > 
-> > https://lore.kernel.org/Y+IsCWQdXEr8d9Vy@linutronix.de/
+> >> From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> >>
+> >> Define AVIC_VCPU_ID_MASK based on AVIC_PHYSICAL_MAX_INDEX, i.e. the mask
+> >> that effectively controls the largest guest physical APIC ID supported by
+> >> x2AVIC, instead of hardcoding the number of bits to 8 (and the number of
+> >> VM bits to 24).
+> > 
+> > Is there any particular reason not to tie it to max supported by KVM
+> > KVM_MAX_VCPU_IDS?
+> > 
+> > Another question:
+> >  will guest fail to start when configured with more than 512 vCPUs
+> >  or it will start broken?
+> > 
 > 
-> Btw, while I have you, do you know why clang isn't DCOing this chunk
-> like gcc does?
+> I think the problem is not so much the GATag (which can really be anything at
+> the resolution you want). It's more of an SVM limit AIUI. Provided you can't
+> have GATAgs if you don't have guest-mode/AVIC active, then makes sense have the
+> same limit on both.
 
-Clang does its semantic analysis before optimization, so it cannot dead
-code eliminate that chunk before it checks the validity of the asm
-constraints, that is just how the pipeline is structured as far as I
-understand it. That is one of the biggest and longest standing
-differences between clang and GCC that we know about, the upstream link
-in the issue below has some more info.
+Yep.  The physical ID table, which is needed to achieve full AVIC benefits for a
+vCPU, is a single 4KiB page that holds 512 64-bit entries.  AIUI, the GATag is
+used if and only if the interrupt target is in the physical ID table, so using
+more GATag bits for vCPU ID is pointless.
 
-https://github.com/ClangBuiltLinux/linux/issues/3
+> SVM seems to be limited to 256 vcpus in xAPIC mode or 512 vcpus in x2APIC
+> mode[0]. IIUC You actually won't be able to create guests with more than
+> 512vcpus as KVM bound checks those max limits very early in the vCPU init (see
+> avic_init_vcpu()). I guess the alternative would an AVIC inhibit if vCPU count
+> goes beyond those limits -- probably a must have once avic flips to 1 by default
+> like Intel.
 
-I am not super familiar with the internal details of LLVM and clang as
-other folks are though so I could be wrong or missing something :)
+I don't _think_ KVM would have to explicitly inhibit AVIC.  I believe the fallout
+would be that vCPUs >= 512 would simply not be eligible for virtual interrupt
+delivery, e.g. KVM would get a "Invalid Target in IPI" exit.  I haven't dug into
+the IOMMU side of things though, so it's possible something in that world would
+necessitate disabling (x2)AVIC.
 
-Cheers,
-Nathan
+> [0] in APM Volume 2 15.29.4.3 Physical Address Pointer Restrictions,
+> 
+> * All the addresses point to 4-Kbyte aligned data structures. Bits 11:0 are
+> reserved (except for offset 0F8h) and should be set to zero. The lower 8 bits of
+> offset 0F8h are used for the field AVIC_PHYSICAL_MAX_INDEX. VMRUN fails with
+> #VMEXIT(VMEXIT_INVALID) if AVIC_PHYSICAL_MAX_INDEX is greater than 255 in xAVIC
+> mode or greater than 511 in x2AVIC mode.
