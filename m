@@ -2,191 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C8B68D4EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DEA68D4ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjBGK4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
+        id S231842AbjBGK5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjBGK4R (ORCPT
+        with ESMTP id S231792AbjBGK5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:56:17 -0500
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6979744
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:56:14 -0800 (PST)
-Received: by mail-vs1-xe2a.google.com with SMTP id y8so15872113vsq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eh6n76XKXwkWQFKv24FSFfZ2Z3Kdasw4AtrqkamX9UM=;
-        b=3bRuHxRHNfgNh/U9x9Z0OChjKOxnf23Qq1s4ZVRqD79+wZUL3y8dYHCJeVVYw1Gk3b
-         caFgoAj4BGpbB+0rddJneTJyACwZLBM6oQl/WHJeMWQ/6e4Eg9Wgc81z6oRhBaT2LPOk
-         TREvubm1ognsVxQVgdkm3yflazGy+YytqGO/PSuPpzgzteTqkd8nDf/Z0jB0pmYTGx0f
-         Iv2nysL/rN50+2lL8dMnGzsEmOSkxwVYeiihvE65fw4LTPl3C++Mi/tvdJ5cNL0orluK
-         yawkySoBZSGlZgkj5UFYBdkSCKPEAgJHit9yaXBwYo53kzzwmEHg19LBY7Tl9wEFolVa
-         GM/g==
+        Tue, 7 Feb 2023 05:57:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5BC39CCD
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:56:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675767382;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=utLBczvzekSz+cWIa2fZgxlACvw9W5bN6q2slvl+YPI=;
+        b=UCT/BJaxs27NZ7p5rreCdopTQJPhxKxcWljt+EzTdMYhCtCLbAaDAmhHL23zkUyrooC5nh
+        FKuWPCYB5bl59p54V6uAluC0Zrya/Y+z+W4Aos+vMi0YV8HkhSZ28PH0JZuJ4Q1cmR4bI5
+        JXfTvddeJSdahccER3JJLXXkJokzAnk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-672-vQXgwyeuNieDfstWqR2I8g-1; Tue, 07 Feb 2023 05:56:20 -0500
+X-MC-Unique: vQXgwyeuNieDfstWqR2I8g-1
+Received: by mail-qv1-f70.google.com with SMTP id dy3-20020ad44e83000000b0056bf716c68bso2844422qvb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:56:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eh6n76XKXwkWQFKv24FSFfZ2Z3Kdasw4AtrqkamX9UM=;
-        b=4LshWRqwFntm8qplPTrqvrGCJCMl3qYsUu5krCo3NGQXtz/eoPzYK0vuKsPbPQ8VcB
-         +9ohUnHLjl5fWJ5tIQqyp303Mq3L3P+NAFOYkD9HePI5uHur8matGsiZCwaBisQcxrcu
-         oIydE7v7WoR0ntXDIXkmKGgiulY3ZjCKdZTRj/24JExmhiPwQimnxsoW1IEyHrg+O+nf
-         f1pKLOSHJQm0Dq9zQNHuIPKfFBfNT97LIhKsUUnn4iqGKRS17qPCqOIGRcC3NyPVOII4
-         qv5QFIfbN7wupUOhkBpRKkRSaNotu09RaI0oRV9ijeOHb4idBguDAJc1fEm1WFhhsh1O
-         31xQ==
-X-Gm-Message-State: AO0yUKVqih6cF+e+oTghkTHgtrTLLouPyOS9hjK1dubiw+Tou0f/gr8U
-        BDr4fXEoWsVwEGwLeRjTZvhVup92QZtVmsPFyLZN5g==
-X-Google-Smtp-Source: AK7set/+QocsElN2HAp7zqZEXhXbN49fvEFr+puDDmo2Tj8R93i+EnA3nNuF3VGJjfw7/LYPrLlggfaxFNUmNo4A9B8=
-X-Received: by 2002:a67:e10e:0:b0:3d3:d797:33c3 with SMTP id
- d14-20020a67e10e000000b003d3d79733c3mr564644vsl.51.1675767373472; Tue, 07 Feb
- 2023 02:56:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20230203100418.2981144-1-mie@igel.co.jp> <20230203100418.2981144-5-mie@igel.co.jp>
- <20230203052114-mutt-send-email-mst@kernel.org> <HE1PR0401MB23313FC60955EADE8A00133088D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-In-Reply-To: <HE1PR0401MB23313FC60955EADE8A00133088D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-Date:   Tue, 7 Feb 2023 19:56:02 +0900
-Message-ID: <CANXvt5qjgVKccRcsARSkDF+boVkVi7h=AMHC+iWyOfp4dJ-_tQ@mail.gmail.com>
-Subject: Re: [EXT] Re: [RFC PATCH 4/4] PCI: endpoint: function: Add EP
- function driver to provide virtio net device
-To:     Frank Li <frank.li@nxp.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=utLBczvzekSz+cWIa2fZgxlACvw9W5bN6q2slvl+YPI=;
+        b=z45YOCtCAJ8/k+qS8cd8m1a4zXo6ea8jCRJESAQ1RJaimW6TOhTvdwlTf5PHk5IPTj
+         MdbNtht9wyJi2HEbxAy5WZy0q9quXi+qFHg0fDqeY9KTF6jSx513Hu1YSFL/H6e2LPeE
+         sqBveO1OfARSJgtSkHracKAZI+CAjTpPs7eTRl7O4ad/iZ6G23pl9qHPHoI01DKnQhh5
+         5gSHuTP4PAq1rYiIxZ5tsg5gkVGKI/bqduizaz+nC8xnQ+iTUrbge+PIImsxR7aogzl7
+         W2m0kvGpxpCdsJYLr2rtWkgGvoHwwKnxO9hQopTNTTQfp0dbHBad7VQuV0NXocdMnRE4
+         d/Rg==
+X-Gm-Message-State: AO0yUKXWNj+rcGgep3dD/um+wX7+EoOEJJ3+TsT4cPoNXIfQn2HrNeBR
+        0DkKj8+hQ5xP3qPmzsrkvRnC8RK+T19KK9LtiQcO7L3R6e8XB1lpO6sbJ4QM6yzpoxE3DkTjT7w
+        sv6sKKiekxBEWGwIX74LlbSSB
+X-Received: by 2002:ac8:5709:0:b0:3b8:4951:57bb with SMTP id 9-20020ac85709000000b003b8495157bbmr5547278qtw.5.1675767379822;
+        Tue, 07 Feb 2023 02:56:19 -0800 (PST)
+X-Google-Smtp-Source: AK7set/zTGzMRBR7nAgHkQ8IpNXUs+WHjz4jc2IOn+RfYLyKZo3Xwo4UgiGqPFMVxiMcEINisz+yfw==
+X-Received: by 2002:ac8:5709:0:b0:3b8:4951:57bb with SMTP id 9-20020ac85709000000b003b8495157bbmr5547245qtw.5.1675767379532;
+        Tue, 07 Feb 2023 02:56:19 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
+        by smtp.gmail.com with ESMTPSA id s26-20020a05622a1a9a00b003b62e8b77e7sm9218291qtc.68.2023.02.07.02.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 02:56:19 -0800 (PST)
+Message-ID: <c4c90e6576f1bc4ef9d634edda5862c5f003ae3c.camel@redhat.com>
+Subject: Re: [PATCH net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU
+ port becomes VLAN-aware
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, richard@routerhints.com
+Date:   Tue, 07 Feb 2023 11:56:13 +0100
+In-Reply-To: <20230206174627.mv4ljr4gtkpr7w55@skbuf>
+References: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
+         <3649b6f9-a028-8eaf-ac89-c4d0fce412da@arinc9.com>
+         <20230205203906.i3jci4pxd6mw74in@skbuf>
+         <b055e42f-ff0f-d05a-d462-961694b035c1@arinc9.com>
+         <20230205235053.g5cttegcdsvh7uk3@skbuf>
+         <116ff532-4ebc-4422-6599-1d5872ff9eb8@arinc9.com>
+         <20230206174627.mv4ljr4gtkpr7w55@skbuf>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023=E5=B9=B42=E6=9C=884=E6=97=A5(=E5=9C=9F) 7:15 Frank Li <frank.li@nxp.co=
-m>:
->
-> >
-> > Caution: EXT Email
-> >
-> > On Fri, Feb 03, 2023 at 07:04:18PM +0900, Shunsuke Mie wrote:
-> > > Add a new endpoint(EP) function driver to provide virtio-net device. =
-This
-> > > function not only shows virtio-net device for PCIe host system, but a=
-lso
-> > > provides virtio-net device to EP side(local) system. Virtualy those n=
-etwork
-> > > devices are connected, so we can use to communicate over IP like a si=
-mple
-> > > NIC.
-> > >
-> > > Architecture overview is following:
-> > >
-> > > to Host       |                       to Endpoint
-> > > network stack |                 network stack
-> > >       |       |                       |
-> > > +-----------+ |       +-----------+   +-----------+
-> > > |virtio-net | |       |virtio-net |   |virtio-net |
-> > > |driver     | |       |EP function|---|driver     |
-> > > +-----------+ |       +-----------+   +-----------+
-> > >       |       |             |
-> > > +-----------+ | +-----------+
-> > > |PCIeC      | | |PCIeC      |
-> > > |Rootcomplex|-|-|Endpoint   |
-> > > +-----------+ | +-----------+
-> > >   Host side   |          Endpoint side
-> > >
-> > > This driver uses PCIe EP framework to show virtio-net (pci) device Ho=
-st
-> > > side, and generate virtual virtio-net device and register to EP side.
-> > > A communication date
-> >
-> > data?
-> >
-> > > is diractly
-> >
-> > directly?
-> >
-> > > transported between virtqueue level
-> > > with each other using PCIe embedded DMA controller.
-> > >
-> > > by a limitation of the hardware and Linux EP framework, this function
-> > > follows a virtio legacy specification.
-> >
-> > what exactly is the limitation and why does it force legacy?
-> >
-> > > This function driver has beed tested on S4 Rcar (r8a779fa-spider) boa=
-rd but
-> > > just use the PCIe EP framework and depends on the PCIe EDMA.
-> > >
-> > > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> > > Signed-off-by: Takanari Hayama <taki@igel.co.jp>
-> > > ---
-> > >  drivers/pci/endpoint/functions/Kconfig        |  12 +
-> > >  drivers/pci/endpoint/functions/Makefile       |   1 +
-> > >  .../pci/endpoint/functions/pci-epf-vnet-ep.c  | 343 ++++++++++
->
-> It is actually that not related vnet. Just virtio.
-> I think pci-epf-virtio.c is better.
-Yes, it have to be.
-> > >  .../pci/endpoint/functions/pci-epf-vnet-rc.c  | 635 ++++++++++++++++=
-++
->
-> It is epf driver. rc is quite confused.
-> Maybe you can combine pci-epf-vnet-ep.c and pci-epf-vnet-rc.c to one file=
-.
-I agree. Try to combine them
-> > >  drivers/pci/endpoint/functions/pci-epf-vnet.c | 387 +++++++++++
->
-> This file setup dma transfer according virtio-ring.
-> How about pci-epf-virtio-dma.c ?
-I attempt to rearrange the location of code and filenames.
-> > > +
-> > > +     epf_vnet_rc_set_config16(vnet, VIRTIO_PCI_ISR,
-> > VIRTIO_PCI_ISR_QUEUE);
-> > > +     /*
-> > > +      * Initialize the queue notify and selector to outside of the a=
-ppropriate
-> > > +      * virtqueue index. It is used to detect change with polling. T=
-here is no
-> > > +      * other ways to detect host side driver updateing those values
-> > > +      */
->
-> I am try to use gic-its or other msi controller as doorbell.
-> https://lore.kernel.org/imx/20221125192729.1722913-1-Frank.Li@nxp.com/T/#=
-u
->
-> but it may need update host side pci virtio driver.
-Thanks, is it possible to use  MSI-X as well? The virtio spec
-indicates to use legacy irq or
-MSI-X only.
-> > > +     epf_vnet_rc_set_config16(vnet, VIRTIO_PCI_QUEUE_NOTIFY,
-> > default_qindex);
-> > > +     epf_vnet_rc_set_config16(vnet, VIRTIO_PCI_QUEUE_SEL,
-> > default_qindex);
-> > > +     /* This pfn is also set to 0 for the polling as well */
-> > > +     epf_vnet_rc_set_config16(vnet, VIRTIO_PCI_QUEUE_PFN, 0);
-> > > +
-> > --
-> > > 2.25.1
->
-Best,
-Shunsuke.
+Hi,
+
+On Mon, 2023-02-06 at 19:46 +0200, Vladimir Oltean wrote:
+> On Mon, Feb 06, 2023 at 07:41:06PM +0300, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote=
+:
+> > Finally I got time. It's been a seismically active day where I'm from.
+>=20
+> My deepest condolences to those who experienced tragedies after today's
+> earthquakes. A lot of people in neighboring countries are horrified
+> thinking when this will happen to them. Hopefully you aren't living in
+> Gaziantep or nearby cities.
+>=20
+> > # ping 192.168.2.2
+> > PING 192.168.2.2
+> > [   39.508013] mtk_soc_eth 1b100000.ethernet eth1: dsa_switch_rcv: ther=
+e is no metadata dst attached to skb 0xc2dfecc0
+> >=20
+> > # ping 192.168.2.2
+> > PING 192.168.2.2
+> > [   22.674182] mtk_soc_eth 1b100000.ethernet eth1: mtk_poll_rx: receive=
+d skb 0xc2d67840 without VLAN/DSA tag present
+>=20
+> Thank you so much for testing. Would you mind cleaning everything up and
+> testing with this patch instead (formatted on top of net-next)?
+> Even if you need to adapt to your tree, hopefully you get the idea from
+> the commit message.
+>=20
+> From 218025fd0c33a06865e4202c5170bfc17e26cc75 Mon Sep 17 00:00:00 2001
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Date: Mon, 6 Feb 2023 19:03:53 +0200
+> Subject: [PATCH] net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel for s=
+witch
+>  port 0
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=3DUTF-8
+> Content-Transfer-Encoding: 8bit
+>=20
+> Ar=C4=B1n=C3=A7 reports that on his MT7621AT Unielec U7621-06 board and M=
+T7623NI
+> Bananapi BPI-R2, packets received by the CPU over mt7530 switch port 0
+> (of which this driver acts as the DSA master) are not processed
+> correctly by software. More precisely, they arrive without a DSA tag
+> (in packet or in the hwaccel area - skb_metadata_dst()), so DSA cannot
+> demux them towards the switch's interface for port 0. Traffic from other
+> ports receives a skb_metadata_dst() with the correct port and is demuxed
+> properly.
+>=20
+> Looking at mtk_poll_rx(), it becomes apparent that this driver uses the
+> skb vlan hwaccel area:
+>=20
+> 	union {
+> 		u32		vlan_all;
+> 		struct {
+> 			__be16	vlan_proto;
+> 			__u16	vlan_tci;
+> 		};
+> 	};
+>=20
+> as a temporary storage for the VLAN hwaccel tag, or the DSA hwaccel tag.
+> If this is a DSA master it's a DSA hwaccel tag, and finally clears up
+> the skb VLAN hwaccel header.
+>=20
+> I'm guessing that the problem is the (mis)use of API.
+> skb_vlan_tag_present() looks like this:
+>=20
+>  #define skb_vlan_tag_present(__skb)	(!!(__skb)->vlan_all)
+>=20
+> So if both vlan_proto and vlan_tci are zeroes, skb_vlan_tag_present()
+> returns precisely false. I don't know for sure what is the format of the
+> DSA hwaccel tag, but I surely know that lowermost 3 bits of vlan_proto
+> are 0 when receiving from port 0:
+>=20
+> 	unsigned int port =3D vlan_proto & GENMASK(2, 0);
+>=20
+> If the RX descriptor has no other bits set to non-zero values in
+> RX_DMA_VTAG, then the call to __vlan_hwaccel_put_tag() will not, in
+> fact, make the subsequent skb_vlan_tag_present() return true, because
+> it's implemented like this:
+>=20
+> static inline void __vlan_hwaccel_put_tag(struct sk_buff *skb,
+> 					  __be16 vlan_proto, u16 vlan_tci)
+> {
+> 	skb->vlan_proto =3D vlan_proto;
+> 	skb->vlan_tci =3D vlan_tci;
+> }
+>=20
+> What we need to do to fix this problem (assuming this is the problem) is
+> to stop using skb->vlan_all as temporary storage for driver affairs, and
+> just create some local variables that serve the same purpose, but
+> hopefully better. Instead of calling skb_vlan_tag_present(), let's look
+> at a boolean has_hwaccel_tag which we set to true when the RX DMA
+> descriptors have something. Disambiguate based on netdev_uses_dsa()
+> whether this is a VLAN or DSA hwaccel tag, and only call
+> __vlan_hwaccel_put_tag() if we're certain it's a VLAN tag.
+>=20
+> Link: https://lore.kernel.org/netdev/704f3a72-fc9e-714a-db54-272e17612637=
+@arinc9.com/
+> Fixes: 2d7605a72906 ("net: ethernet: mtk_eth_soc: enable hardware DSA unt=
+agging")
+> Reported-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+
+Thank you Vladimir for the quick turn-around!=20
+
+For future case, please avoid replying with new patches - tag area
+included - to existing patch/thread, as it confuses tag propagation,
+thanks!
+
+Paolo
+
