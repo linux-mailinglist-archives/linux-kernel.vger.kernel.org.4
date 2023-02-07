@@ -2,177 +2,511 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B17B68CCDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1377268CCE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjBGCxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S229973AbjBGCzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 21:55:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjBGCxN (ORCPT
+        with ESMTP id S229781AbjBGCzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:53:13 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459198F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 18:53:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=tHEHYU6fwwSgYtD4IiT1K2TtAGYnTqD5ffLm2GBmZUI=; b=n3Xzbpwvi5oAiSo5zYlxk8sfdB
-        7WVyFF3CjHjFDkGUujgYcbAC9WFOsz2K3HCPL7jlrhJ31kurxtDK2v/eYtMu0fq0FvLAq94pd/Yig
-        Wr6906Jfnc0ktSQfgiH7WhxLuAV4eUFplQBu+1wf3jWeKpVUQg9ZvmUPN4v4OFeKp7DN1KsCYiAJl
-        GCta8WSWj7WZ3mzcytPX2363rN5qT10QiCologeRtELY3PNjzb129tAoZ2K4byHBeFigqL3W9RdHS
-        CGCkjCivYb/giDRn4a52UDQ+Quqb+J5lt8wR3OJJKI1gkKE2bVvyL4SZ66CKP2ebUSgLoDLkrjvGM
-        ilnor7xQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPE6U-00AaJC-4H; Tue, 07 Feb 2023 02:53:06 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     hughd@google.com, akpm@linux-foundation.org, willy@infradead.org
-Cc:     linux-mm@kvack.org, p.raghav@samsung.com, dave@stgolabs.net,
-        a.manzanares@samsung.com, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [RFC 2/2] shmem: add support to ignore swap
-Date:   Mon,  6 Feb 2023 18:52:59 -0800
-Message-Id: <20230207025259.2522793-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230207025259.2522793-1-mcgrof@kernel.org>
-References: <20230207025259.2522793-1-mcgrof@kernel.org>
+        Mon, 6 Feb 2023 21:55:47 -0500
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057F434C37
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 18:55:44 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vb4xRPa_1675738540;
+Received: from 30.97.49.4(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vb4xRPa_1675738540)
+          by smtp.aliyun-inc.com;
+          Tue, 07 Feb 2023 10:55:41 +0800
+Message-ID: <126ddd77-edae-d942-6fec-fe6bcc3c54ff@linux.alibaba.com>
+Date:   Tue, 7 Feb 2023 10:55:40 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v4] erofs: replace erofs_unzipd workqueue with per-cpu
+ threads
+To:     Sandeep Dhavale <dhavale@google.com>
+References: <20230106073502.4017276-1-dhavale@google.com>
+ <Y+DP6V9fZG7XPPGy@debian>
+ <CAB=BE-Ttt6mO6x+xNv+VSWnoRgzXd_VyQuYiuz55uR3zqxWMFA@mail.gmail.com>
+Cc:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <CAB=BE-Ttt6mO6x+xNv+VSWnoRgzXd_VyQuYiuz55uR3zqxWMFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In doing experimentations with shmem having the option to avoid becomes
-a useful mechanism. One of the *raves* about brd over shmem is you can
-avoid swap, but that's not really a good reason to use brd if we can
-instead use shmem. Using brd has its own good reasons to exist, but
-just because "tmpfs" doesn't let you do that is not a great reason
-to avoid it if we can easily add support for it.
 
-I don't add support for reconfiguring incompatible options, but if
-we really wanted to we can add support for that.
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- include/linux/shmem_fs.h |  1 +
- mm/shmem.c               | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+On 2023/2/7 03:41, Sandeep Dhavale wrote:
+> On Mon, Feb 6, 2023 at 2:01 AM Gao Xiang <xiang@kernel.org> wrote:
+>>
+>> Hi Sandeep,
+>>
+>> On Fri, Jan 06, 2023 at 07:35:01AM +0000, Sandeep Dhavale wrote:
+>>> Using per-cpu thread pool we can reduce the scheduling latency compared
+>>> to workqueue implementation. With this patch scheduling latency and
+>>> variation is reduced as per-cpu threads are high priority kthread_workers.
+>>>
+>>> The results were evaluated on arm64 Android devices running 5.10 kernel.
+>>>
+>>> The table below shows resulting improvements of total scheduling latency
+>>> for the same app launch benchmark runs with 50 iterations. Scheduling
+>>> latency is the latency between when the task (workqueue kworker vs
+>>> kthread_worker) became eligible to run to when it actually started
+>>> running.
+>>> +-------------------------+-----------+----------------+---------+
+>>> |                         | workqueue | kthread_worker |  diff   |
+>>> +-------------------------+-----------+----------------+---------+
+>>> | Average (us)            |     15253 |           2914 | -80.89% |
+>>> | Median (us)             |     14001 |           2912 | -79.20% |
+>>> | Minimum (us)            |      3117 |           1027 | -67.05% |
+>>> | Maximum (us)            |     30170 |           3805 | -87.39% |
+>>> | Standard deviation (us) |      7166 |            359 |         |
+>>> +-------------------------+-----------+----------------+---------+
+>>>
+>>> Background: Boot times and cold app launch benchmarks are very
+>>> important to the android ecosystem as they directly translate to
+>>> responsiveness from user point of view. While erofs provides
+>>> a lot of important features like space savings, we saw some
+>>> performance penalty in cold app launch benchmarks in few scenarios.
+>>> Analysis showed that the significant variance was coming from the
+>>> scheduling cost while decompression cost was more or less the same.
+>>>
+>>> Having per-cpu thread pool we can see from the above table that this
+>>> variation is reduced by ~80% on average. This problem was discussed
+>>> at LPC 2022. Link to LPC 2022 slides and
+>>> talk at [1]
+>>>
+>>> [1] https://lpc.events/event/16/contributions/1338/
+>>>
+>>> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
+>>> ---
+>>> V3 -> V4
+>>> * Updated commit message with background information
+>>> V2 -> V3
+>>> * Fix a warning Reported-by: kernel test robot <lkp@intel.com>
+>>> V1 -> V2
+>>> * Changed name of kthread_workers from z_erofs to erofs_worker
+>>> * Added kernel configuration to run kthread_workers at normal or
+>>>    high priority
+>>> * Added cpu hotplug support
+>>> * Added wrapped kthread_workers under worker_pool
+>>> * Added one unbound thread in a pool to handle a context where
+>>>    we already stopped per-cpu kthread worker
+>>> * Updated commit message
+>>
+>> I've just modified your v4 patch based on erofs -dev branch with
+>> my previous suggestion [1], but I haven't tested it.
+>>
+>> Could you help check if the updated patch looks good to you and
+>> test it on your side?  If there are unexpected behaviors, please
+>> help update as well, thanks!
+> Thanks Xiang, I was working on the same. I see that you have cleaned it up.
+> I will test it and report/fix any problems.
+> 
+> Thanks,
+> Sandeep.
 
-diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index d09d54be4ffd..98a7d53f6cc5 100644
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -45,6 +45,7 @@ struct shmem_sb_info {
- 	kuid_t uid;		    /* Mount uid for root directory */
- 	kgid_t gid;		    /* Mount gid for root directory */
- 	bool full_inums;	    /* If i_ino should be uint or ino_t */
-+	bool noswap;	    	    /* ingores VM relcaim / swap requests */
- 	ino_t next_ino;		    /* The next per-sb inode number to use */
- 	ino_t __percpu *ino_batch;  /* The next per-cpu inode number to use */
- 	struct mempolicy *mpol;     /* default memory policy for mappings */
-diff --git a/mm/shmem.c b/mm/shmem.c
-index a2c6aa11aab8..92aa927cf569 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -116,10 +116,12 @@ struct shmem_options {
- 	bool full_inums;
- 	int huge;
- 	int seen;
-+	bool noswap;
- #define SHMEM_SEEN_BLOCKS 1
- #define SHMEM_SEEN_INODES 2
- #define SHMEM_SEEN_HUGE 4
- #define SHMEM_SEEN_INUMS 8
-+#define SHMEM_SEEN_NOSWAP 16
- };
- 
- #ifdef CONFIG_TMPFS
-@@ -1334,11 +1336,15 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
- 	struct shmem_inode_info *info;
- 	struct address_space *mapping = folio->mapping;
- 	struct inode *inode = mapping->host;
-+	struct shmem_sb_info *sbinfo = SHMEM_SB(inode->i_sb);
- 	swp_entry_t swap;
- 	pgoff_t index;
- 
- 	BUG_ON(!folio_test_locked(folio));
- 
-+	if (wbc->for_reclaim && unlikely(sbinfo->noswap))
-+		return AOP_WRITEPAGE_ACTIVATE;
-+
- 	/*
- 	 * If /sys/kernel/mm/transparent_hugepage/shmem_enabled is "always" or
- 	 * "force", drivers/gpu/drm/i915/gem/i915_gem_shmem.c gets huge pages,
-@@ -3465,6 +3471,7 @@ enum shmem_param {
- 	Opt_uid,
- 	Opt_inode32,
- 	Opt_inode64,
-+	Opt_noswap,
- };
- 
- static const struct constant_table shmem_param_enums_huge[] = {
-@@ -3486,6 +3493,7 @@ const struct fs_parameter_spec shmem_fs_parameters[] = {
- 	fsparam_u32   ("uid",		Opt_uid),
- 	fsparam_flag  ("inode32",	Opt_inode32),
- 	fsparam_flag  ("inode64",	Opt_inode64),
-+	fsparam_flag  ("noswap",	Opt_noswap),
- 	{}
- };
- 
-@@ -3569,6 +3577,10 @@ static int shmem_parse_one(struct fs_context *fc, struct fs_parameter *param)
- 		ctx->full_inums = true;
- 		ctx->seen |= SHMEM_SEEN_INUMS;
- 		break;
-+	case Opt_noswap:
-+		ctx->noswap = true;
-+		ctx->seen |= SHMEM_SEEN_NOSWAP;
-+		break;
- 	}
- 	return 0;
- 
-@@ -3667,6 +3679,14 @@ static int shmem_reconfigure(struct fs_context *fc)
- 		err = "Current inum too high to switch to 32-bit inums";
- 		goto out;
- 	}
-+	if ((ctx->seen & SHMEM_SEEN_NOSWAP) && ctx->noswap && !sbinfo->noswap) {
-+		err = "Cannot disable swap on remount";
-+		goto out;
-+	}
-+	if (!(ctx->seen & SHMEM_SEEN_NOSWAP) && !ctx->noswap && sbinfo->noswap) {
-+		err = "Cannot enable swap on remount if it was disabled on first mount";
-+		goto out;
-+	}
- 
- 	if (ctx->seen & SHMEM_SEEN_HUGE)
- 		sbinfo->huge = ctx->huge;
-@@ -3687,6 +3707,10 @@ static int shmem_reconfigure(struct fs_context *fc)
- 		sbinfo->mpol = ctx->mpol;	/* transfers initial ref */
- 		ctx->mpol = NULL;
- 	}
-+
-+	if (ctx->noswap)
-+		sbinfo->noswap = true;
-+
- 	raw_spin_unlock(&sbinfo->stat_lock);
- 	mpol_put(mpol);
- 	return 0;
-@@ -3784,6 +3808,7 @@ static int shmem_fill_super(struct super_block *sb, struct fs_context *fc)
- 			ctx->inodes = shmem_default_max_inodes();
- 		if (!(ctx->seen & SHMEM_SEEN_INUMS))
- 			ctx->full_inums = IS_ENABLED(CONFIG_TMPFS_INODE64);
-+		sbinfo->noswap = ctx->noswap;
- 	} else {
- 		sb->s_flags |= SB_NOUSER;
- 	}
--- 
-2.39.0
+Thanks! Look forward to your test. BTW, we have < 2 weeks for 6.3, so I'd
+like to fix it this week so that we could catch 6.3 merge window.
 
+
+I've fixed some cpu hotplug errors as below and added to a branch for 0day CI
+testing.
+
+Thanks,
+Gao Xiang
+
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index 73198f494a6a..92a9e20948b0 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -398,7 +398,7 @@ static inline void erofs_destroy_percpu_workers(void) {}
+  static inline int erofs_init_percpu_workers(void) { return 0; }
+  #endif
+
+-#if defined(CONFIG_HOTPLUG_CPU) && defined(EROFS_FS_PCPU_KTHREAD)
++#if defined(CONFIG_HOTPLUG_CPU) && defined(CONFIG_EROFS_FS_PCPU_KTHREAD)
+  static DEFINE_SPINLOCK(z_erofs_pcpu_worker_lock);
+  static enum cpuhp_state erofs_cpuhp_state;
+
+@@ -408,7 +408,7 @@ static int erofs_cpu_online(unsigned int cpu)
+
+  	worker = erofs_init_percpu_worker(cpu);
+  	if (IS_ERR(worker))
+-		return ERR_PTR(worker);
++		return PTR_ERR(worker);
+
+  	spin_lock(&z_erofs_pcpu_worker_lock);
+  	old = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
+@@ -428,7 +428,7 @@ static int erofs_cpu_offline(unsigned int cpu)
+  	spin_lock(&z_erofs_pcpu_worker_lock);
+  	worker = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
+  			lockdep_is_held(&z_erofs_pcpu_worker_lock));
+-	rcu_assign_pointer(worker_pool.workers[cpu], NULL);
++	rcu_assign_pointer(z_erofs_pcpu_workers[cpu], NULL);
+  	spin_unlock(&z_erofs_pcpu_worker_lock);
+
+  	synchronize_rcu();
+
+> 
+>>
+>> [1] https://lore.kernel.org/r/5e1b7191-9ea6-3781-7928-72ac4cd88591@linux.alibaba.com/
+>>
+>> Thanks,
+>> Gao Xiang
+>>
+>>  From 2e87235abc745c0fef8e32abcd3a51546b4378ad Mon Sep 17 00:00:00 2001
+>> From: Sandeep Dhavale <dhavale@google.com>
+>> Date: Mon, 6 Feb 2023 17:53:39 +0800
+>> Subject: [PATCH] erofs: add per-cpu threads for decompression
+>>
+>> Using per-cpu thread pool we can reduce the scheduling latency compared
+>> to workqueue implementation. With this patch scheduling latency and
+>> variation is reduced as per-cpu threads are high priority kthread_workers.
+>>
+>> The results were evaluated on arm64 Android devices running 5.10 kernel.
+>>
+>> The table below shows resulting improvements of total scheduling latency
+>> for the same app launch benchmark runs with 50 iterations. Scheduling
+>> latency is the latency between when the task (workqueue kworker vs
+>> kthread_worker) became eligible to run to when it actually started
+>> running.
+>> +-------------------------+-----------+----------------+---------+
+>> |                         | workqueue | kthread_worker |  diff   |
+>> +-------------------------+-----------+----------------+---------+
+>> | Average (us)            |     15253 |           2914 | -80.89% |
+>> | Median (us)             |     14001 |           2912 | -79.20% |
+>> | Minimum (us)            |      3117 |           1027 | -67.05% |
+>> | Maximum (us)            |     30170 |           3805 | -87.39% |
+>> | Standard deviation (us) |      7166 |            359 |         |
+>> +-------------------------+-----------+----------------+---------+
+>>
+>> Background: Boot times and cold app launch benchmarks are very
+>> important to the android ecosystem as they directly translate to
+>> responsiveness from user point of view. While erofs provides
+>> a lot of important features like space savings, we saw some
+>> performance penalty in cold app launch benchmarks in few scenarios.
+>> Analysis showed that the significant variance was coming from the
+>> scheduling cost while decompression cost was more or less the same.
+>>
+>> Having per-cpu thread pool we can see from the above table that this
+>> variation is reduced by ~80% on average. This problem was discussed
+>> at LPC 2022. Link to LPC 2022 slides and
+>> talk at [1]
+>>
+>> [1] https://lpc.events/event/16/contributions/1338/
+>>
+>> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
+>> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+>> ---
+>>   fs/erofs/Kconfig |  18 +++++
+>>   fs/erofs/zdata.c | 190 ++++++++++++++++++++++++++++++++++++++++++-----
+>>   2 files changed, 189 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
+>> index 85490370e0ca..704fb59577e0 100644
+>> --- a/fs/erofs/Kconfig
+>> +++ b/fs/erofs/Kconfig
+>> @@ -108,3 +108,21 @@ config EROFS_FS_ONDEMAND
+>>            read support.
+>>
+>>            If unsure, say N.
+>> +
+>> +config EROFS_FS_PCPU_KTHREAD
+>> +       bool "EROFS per-cpu decompression kthread workers"
+>> +       depends on EROFS_FS_ZIP
+>> +       help
+>> +         Saying Y here enables per-CPU kthread workers pool to carry out
+>> +         async decompression for low latencies on some architectures.
+>> +
+>> +         If unsure, say N.
+>> +
+>> +config EROFS_FS_PCPU_KTHREAD_HIPRI
+>> +       bool "EROFS high priority per-CPU kthread workers"
+>> +       depends on EROFS_FS_ZIP && EROFS_FS_PCPU_KTHREAD
+>> +       help
+>> +         This permits EROFS to configure per-CPU kthread workers to run
+>> +         at higher priority.
+>> +
+>> +         If unsure, say N.
+>> diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+>> index 384f64292f73..73198f494a6a 100644
+>> --- a/fs/erofs/zdata.c
+>> +++ b/fs/erofs/zdata.c
+>> @@ -7,6 +7,8 @@
+>>   #include "compress.h"
+>>   #include <linux/prefetch.h>
+>>   #include <linux/psi.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/cpuhotplug.h>
+>>
+>>   #include <trace/events/erofs.h>
+>>
+>> @@ -109,6 +111,7 @@ struct z_erofs_decompressqueue {
+>>          union {
+>>                  struct completion done;
+>>                  struct work_struct work;
+>> +               struct kthread_work kthread_work;
+>>          } u;
+>>          bool eio, sync;
+>>   };
+>> @@ -341,24 +344,128 @@ static void z_erofs_free_pcluster(struct z_erofs_pcluster *pcl)
+>>
+>>   static struct workqueue_struct *z_erofs_workqueue __read_mostly;
+>>
+>> -void z_erofs_exit_zip_subsystem(void)
+>> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
+>> +static struct kthread_worker __rcu **z_erofs_pcpu_workers;
+>> +
+>> +static void erofs_destroy_percpu_workers(void)
+>>   {
+>> -       destroy_workqueue(z_erofs_workqueue);
+>> -       z_erofs_destroy_pcluster_pool();
+>> +       struct kthread_worker *worker;
+>> +       unsigned int cpu;
+>> +
+>> +       for_each_possible_cpu(cpu) {
+>> +               worker = rcu_dereference_protected(
+>> +                                       z_erofs_pcpu_workers[cpu], 1);
+>> +               rcu_assign_pointer(z_erofs_pcpu_workers[cpu], NULL);
+>> +               if (worker)
+>> +                       kthread_destroy_worker(worker);
+>> +       }
+>> +       kfree(z_erofs_pcpu_workers);
+>>   }
+>>
+>> -static inline int z_erofs_init_workqueue(void)
+>> +static struct kthread_worker *erofs_init_percpu_worker(int cpu)
+>>   {
+>> -       const unsigned int onlinecpus = num_possible_cpus();
+>> +       struct kthread_worker *worker =
+>> +               kthread_create_worker_on_cpu(cpu, 0, "erofs_worker/%u", cpu);
+>>
+>> -       /*
+>> -        * no need to spawn too many threads, limiting threads could minimum
+>> -        * scheduling overhead, perhaps per-CPU threads should be better?
+>> -        */
+>> -       z_erofs_workqueue = alloc_workqueue("erofs_unzipd",
+>> -                                           WQ_UNBOUND | WQ_HIGHPRI,
+>> -                                           onlinecpus + onlinecpus / 4);
+>> -       return z_erofs_workqueue ? 0 : -ENOMEM;
+>> +       if (IS_ERR(worker))
+>> +               return worker;
+>> +       if (IS_ENABLED(CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI))
+>> +               sched_set_fifo_low(worker->task);
+>> +       else
+>> +               sched_set_normal(worker->task, 0);
+>> +       return worker;
+>> +}
+>> +
+>> +static int erofs_init_percpu_workers(void)
+>> +{
+>> +       struct kthread_worker *worker;
+>> +       unsigned int cpu;
+>> +
+>> +       z_erofs_pcpu_workers = kcalloc(num_possible_cpus(),
+>> +                       sizeof(struct kthread_worker *), GFP_ATOMIC);
+>> +       if (!z_erofs_pcpu_workers)
+>> +               return -ENOMEM;
+>> +
+>> +       for_each_online_cpu(cpu) {      /* could miss cpu{off,on}line? */
+>> +               worker = erofs_init_percpu_worker(cpu);
+>> +               if (!IS_ERR(worker))
+>> +                       rcu_assign_pointer(z_erofs_pcpu_workers[cpu], worker);
+>> +       }
+>> +       return 0;
+>> +}
+>> +#else
+>> +static inline void erofs_destroy_percpu_workers(void) {}
+>> +static inline int erofs_init_percpu_workers(void) { return 0; }
+>> +#endif
+>> +
+>> +#if defined(CONFIG_HOTPLUG_CPU) && defined(EROFS_FS_PCPU_KTHREAD)
+>> +static DEFINE_SPINLOCK(z_erofs_pcpu_worker_lock);
+>> +static enum cpuhp_state erofs_cpuhp_state;
+>> +
+>> +static int erofs_cpu_online(unsigned int cpu)
+>> +{
+>> +       struct kthread_worker *worker, *old;
+>> +
+>> +       worker = erofs_init_percpu_worker(cpu);
+>> +       if (IS_ERR(worker))
+>> +               return ERR_PTR(worker);
+>> +
+>> +       spin_lock(&z_erofs_pcpu_worker_lock);
+>> +       old = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
+>> +                       lockdep_is_held(&z_erofs_pcpu_worker_lock));
+>> +       if (!old)
+>> +               rcu_assign_pointer(z_erofs_pcpu_workers[cpu], worker);
+>> +       spin_unlock(&z_erofs_pcpu_worker_lock);
+>> +       if (old)
+>> +               kthread_destroy_worker(worker);
+>> +       return 0;
+>> +}
+>> +
+>> +static int erofs_cpu_offline(unsigned int cpu)
+>> +{
+>> +       struct kthread_worker *worker;
+>> +
+>> +       spin_lock(&z_erofs_pcpu_worker_lock);
+>> +       worker = rcu_dereference_protected(z_erofs_pcpu_workers[cpu],
+>> +                       lockdep_is_held(&z_erofs_pcpu_worker_lock));
+>> +       rcu_assign_pointer(worker_pool.workers[cpu], NULL);
+>> +       spin_unlock(&z_erofs_pcpu_worker_lock);
+>> +
+>> +       synchronize_rcu();
+>> +       if (worker)
+>> +               kthread_destroy_worker(worker);
+>> +       return 0;
+>> +}
+>> +
+>> +static int erofs_cpu_hotplug_init(void)
+>> +{
+>> +       int state;
+>> +
+>> +       state = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+>> +                       "fs/erofs:online", erofs_cpu_online, erofs_cpu_offline);
+>> +       if (state < 0)
+>> +               return state;
+>> +
+>> +       erofs_cpuhp_state = state;
+>> +       return 0;
+>> +}
+>> +
+>> +static void erofs_cpu_hotplug_destroy(void)
+>> +{
+>> +       if (erofs_cpuhp_state)
+>> +               cpuhp_remove_state_nocalls(erofs_cpuhp_state);
+>> +}
+>> +#else /* !CONFIG_HOTPLUG_CPU || !CONFIG_EROFS_FS_PCPU_KTHREAD */
+>> +static inline int erofs_cpu_hotplug_init(void) { return 0; }
+>> +static inline void erofs_cpu_hotplug_destroy(void) {}
+>> +#endif
+>> +
+>> +void z_erofs_exit_zip_subsystem(void)
+>> +{
+>> +       erofs_cpu_hotplug_destroy();
+>> +       erofs_destroy_percpu_workers();
+>> +       destroy_workqueue(z_erofs_workqueue);
+>> +       z_erofs_destroy_pcluster_pool();
+>>   }
+>>
+>>   int __init z_erofs_init_zip_subsystem(void)
+>> @@ -366,10 +473,29 @@ int __init z_erofs_init_zip_subsystem(void)
+>>          int err = z_erofs_create_pcluster_pool();
+>>
+>>          if (err)
+>> -               return err;
+>> -       err = z_erofs_init_workqueue();
+>> +               goto out_error_pcluster_pool;
+>> +
+>> +       z_erofs_workqueue = alloc_workqueue("erofs_worker",
+>> +                       WQ_UNBOUND | WQ_HIGHPRI, num_possible_cpus());
+>> +       if (!z_erofs_workqueue)
+>> +               goto out_error_workqueue_init;
+>> +
+>> +       err = erofs_init_percpu_workers();
+>>          if (err)
+>> -               z_erofs_destroy_pcluster_pool();
+>> +               goto out_error_pcpu_worker;
+>> +
+>> +       err = erofs_cpu_hotplug_init();
+>> +       if (err < 0)
+>> +               goto out_error_cpuhp_init;
+>> +       return err;
+>> +
+>> +out_error_cpuhp_init:
+>> +       erofs_destroy_percpu_workers();
+>> +out_error_pcpu_worker:
+>> +       destroy_workqueue(z_erofs_workqueue);
+>> +out_error_workqueue_init:
+>> +       z_erofs_destroy_pcluster_pool();
+>> +out_error_pcluster_pool:
+>>          return err;
+>>   }
+>>
+>> @@ -1305,11 +1431,17 @@ static void z_erofs_decompressqueue_work(struct work_struct *work)
+>>
+>>          DBG_BUGON(bgq->head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
+>>          z_erofs_decompress_queue(bgq, &pagepool);
+>> -
+>>          erofs_release_pages(&pagepool);
+>>          kvfree(bgq);
+>>   }
+>>
+>> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
+>> +static void z_erofs_decompressqueue_kthread_work(struct kthread_work *work)
+>> +{
+>> +       z_erofs_decompressqueue_work((struct work_struct *)work);
+>> +}
+>> +#endif
+>> +
+>>   static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+>>                                         int bios)
+>>   {
+>> @@ -1324,9 +1456,24 @@ static void z_erofs_decompress_kickoff(struct z_erofs_decompressqueue *io,
+>>
+>>          if (atomic_add_return(bios, &io->pending_bios))
+>>                  return;
+>> -       /* Use workqueue and sync decompression for atomic contexts only */
+>> +       /* Use (kthread_)work and sync decompression for atomic contexts only */
+>>          if (in_atomic() || irqs_disabled()) {
+>> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
+>> +               struct kthread_worker *worker;
+>> +
+>> +               rcu_read_lock();
+>> +               worker = rcu_dereference(
+>> +                               z_erofs_pcpu_workers[raw_smp_processor_id()]);
+>> +               if (!worker) {
+>> +                       INIT_WORK(&io->u.work, z_erofs_decompressqueue_work);
+>> +                       queue_work(z_erofs_workqueue, &io->u.work);
+>> +               } else {
+>> +                       kthread_queue_work(worker, &io->u.kthread_work);
+>> +               }
+>> +               rcu_read_unlock();
+>> +#else
+>>                  queue_work(z_erofs_workqueue, &io->u.work);
+>> +#endif
+>>                  /* enable sync decompression for readahead */
+>>                  if (sbi->opt.sync_decompress == EROFS_SYNC_DECOMPRESS_AUTO)
+>>                          sbi->opt.sync_decompress = EROFS_SYNC_DECOMPRESS_FORCE_ON;
+>> @@ -1455,7 +1602,12 @@ static struct z_erofs_decompressqueue *jobqueue_init(struct super_block *sb,
+>>                          *fg = true;
+>>                          goto fg_out;
+>>                  }
+>> +#ifdef CONFIG_EROFS_FS_PCPU_KTHREAD
+>> +               kthread_init_work(&q->u.kthread_work,
+>> +                                 z_erofs_decompressqueue_kthread_work);
+>> +#else
+>>                  INIT_WORK(&q->u.work, z_erofs_decompressqueue_work);
+>> +#endif
+>>          } else {
+>>   fg_out:
+>>                  q = fgq;
+>> @@ -1640,7 +1792,7 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+>>
+>>          /*
+>>           * although background is preferred, no one is pending for submission.
+>> -        * don't issue workqueue for decompression but drop it directly instead.
+>> +        * don't issue decompression but drop it directly instead.
+>>           */
+>>          if (!*force_fg && !nr_bios) {
+>>                  kvfree(q[JQ_SUBMIT]);
+>> --
+>> 2.30.2
+>>
