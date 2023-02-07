@@ -2,137 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72DE68DBBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B97068DBFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbjBGOga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S231565AbjBGOqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbjBGOgI (ORCPT
+        with ESMTP id S232021AbjBGOpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:36:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A314410B1
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:32:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7DC9AB8198A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 14:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 891F4C43443;
-        Tue,  7 Feb 2023 14:31:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675780297;
-        bh=49yr/FtTuZBsppzLS6kTX9ewOWDHt7Ufj7812zHXhac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UethI1XnoHOFrnTAZjkOJeIMc83MR9S09pTS/YPudqvDnQUOdSdu2uvOfSde5tq2b
-         5CLBQiEy7tAnKGF/ZNwBi2iEUR7vYx1bTGMUY4/KzHqWds4rt5m+FnhGnLzrwf7vI9
-         0uNuNeWmaaNJ8NcjrmjcAHxp1zy350La4YNYCvNMcmCNdAVeyJaO2AkR0Id1Hw5O9P
-         Nc/lPqOrl8uAc32jcD+D46llco/yPq1f/Dbwqsrgz2UneboS9p1W65JPY6JqMZdfRJ
-         sQpQ/TssInUYjJ5qo05r/Jty+R5qi5LU1DduOsHhcXJEYgqaSCOTgHFsi9yO08TIEe
-         GSQH/m2uQJTtQ==
-Date:   Tue, 7 Feb 2023 14:31:31 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Muchun Song <muchun.song@linux.dev>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
-Message-ID: <20230207143131.GA12475@willie-the-truck>
-References: <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
- <20230126133321.GB29148@willie-the-truck>
- <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
- <20230131154950.GB2646@willie-the-truck>
- <Y9pZALdn3pKiJUeQ@arm.com>
- <A8DF7D56-C145-4B49-A034-022917B87C89@linux.dev>
- <Y9uUO9AadE+8ik/0@arm.com>
- <F10F1618-7153-41C7-A475-522D833C41D4@linux.dev>
- <20230203101023.GA5597@willie-the-truck>
- <93461768-791A-45BE-BEF2-344CC5228C92@linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93461768-791A-45BE-BEF2-344CC5228C92@linux.dev>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Feb 2023 09:45:53 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C81D1BD3;
+        Tue,  7 Feb 2023 06:45:51 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2D8E45C0196;
+        Tue,  7 Feb 2023 09:34:29 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 07 Feb 2023 09:34:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675780469; x=1675866869; bh=AVCUu1MGS8
+        jO+7PBj7/h/6q0QIji1++TygwsCvCXgFA=; b=Ohn5a44HCVWZixV9/E2k2oqAbo
+        PaqllPYG63xXI2UeWsfdIUgRN/SP8xSmNthGhW7dOutxSSc5uhxMiv4kbPPqClMI
+        dyc2ILYQRSQhSD3cgxUc8QmSIVlj3tj9CstZhZXqal/+0pxvF43I974bbB+/HTjd
+        ad3Y6OZmlBLWeva7Ri8TnI1b/6sOboklYD0Zl9enJ+9KZT5nTwv++ULMp6I7UC/e
+        N6fra/2AuKq65R6F1hgepGPxZqTgVsk8TBmB8fS/twgw8xeGEDMpaEXyr63mC63o
+        ijSid+KMOo35M7OEau1ppNY+jL1u0WdzyWPS+E4oJ8A/LMVg3P7YNORy6A8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675780469; x=1675866869; bh=AVCUu1MGS8jO+7PBj7/h/6q0QIji
+        1++TygwsCvCXgFA=; b=itoDtjY6+ry+GHdfHAGYuaRGyQ8h3i6PWeWFrKDeCPsM
+        HKULM/SZ16GfzaUmNp7oGfBA2cSamCtJ83Cj34DLNNbKB4G8pea4dx4b2qyxeIxN
+        NLIstfsepEdhu36phnto21uFCBzeGQf66X5MgibGpX5Ym3mImw/JLeO7n80cfS5f
+        pR/Sp8TaYYJeeEzyPF+Zm/IpjF+sSVQnZCk03Tz65PydcVpyTsijL7f05mQxvlwC
+        SOpy0Y+/c1jjJug1QC5/ryXqtQjvei+1pQG6Jq9HQEKSBLjEg3IyAGN7DuSN1WFY
+        G6UWT0233+dq1A2J3pYeQbvim7Lie6lxlv09EmTX+g==
+X-ME-Sender: <xms:dGHiY-uRNR-cKvzVBEHQJj2HtWilXm_u5c2TMJtqS3sWtcfW4w5Fsw>
+    <xme:dGHiYzdfggGuTImtQAiCbW39Hm4_EcAirl6MIXBOIXs5fHNmh_6rec-kcU38RoCs6
+    IKg3aIuqbaEA-b-qNw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegkedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:dWHiY5xMIjaeIG45LwPnmGKEpD14PL7cJ8QZxyJXKa24zsLHRpH6Vg>
+    <xmx:dWHiY5MyIgp4SKed-gxDMjEtixZCjLyRGJp4pjA7r27TgY_nqUVHwA>
+    <xmx:dWHiY-9ex18D_l2oN-nLz0ON3SKEKLgUe3hUhIGeuP_iZB7hgznZkA>
+    <xmx:dWHiY1mPYutPxqSRXdBx0FFglmFEw4jnIdDHE5Mrd21Vs6xiKTyXoA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EBC62B60086; Tue,  7 Feb 2023 09:34:28 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <7974a715-db69-4693-b8c8-543c5828775f@app.fastmail.com>
+In-Reply-To: <Y+I1Orh74wR5Sese@smile.fi.intel.com>
+References: <20230127101149.3475929-1-arnd@kernel.org>
+ <20230127101149.3475929-5-arnd@kernel.org> <Y9n8P1rP+cYyoNIH@google.com>
+ <Y9qwJtOaKrgB5n+T@smile.fi.intel.com> <Y9q4d50lSdPn8myb@google.com>
+ <Y+I1Orh74wR5Sese@smile.fi.intel.com>
+Date:   Tue, 07 Feb 2023 15:34:10 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
+Cc:     "Arnd Bergmann" <arnd@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] gpiolib: remove gpio_set_debounce
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 11:28:12AM +0800, Muchun Song wrote:
-> 
-> 
-> > On Feb 3, 2023, at 18:10, Will Deacon <will@kernel.org> wrote:
-> > 
-> > On Fri, Feb 03, 2023 at 10:40:18AM +0800, Muchun Song wrote:
-> >> 
-> >> 
-> >>> On Feb 2, 2023, at 18:45, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> >>> 
-> >>> On Thu, Feb 02, 2023 at 05:51:39PM +0800, Muchun Song wrote:
-> >>>>> On Feb 1, 2023, at 20:20, Catalin Marinas <catalin.marinas@arm.com> wrote:
-> >>>>>> Bah, sorry! Catalin reckons it may have been him talking about the vmemmap.
-> >>>>> 
-> >>>>> Indeed. The discussion with Anshuman started from this thread:
-> >>>>> 
-> >>>>> https://lore.kernel.org/all/20221025014215.3466904-1-mawupeng1@huawei.com/
-> >>>>> 
-> >>>>> We already trip over the existing checks even without Anshuman's patch,
-> >>>>> though only by chance. We are not setting the software PTE_DIRTY on the
-> >>>>> new pte (we don't bother with this bit for kernel mappings).
-> >>>>> 
-> >>>>> Given that the vmemmap ptes are still live when such change happens and
-> >>>>> no-one came with a solution to the break-before-make problem, I propose
-> >>>>> we revert the arm64 part of commit 47010c040dec ("mm: hugetlb_vmemmap:
-> >>>>> cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*"). We just need this hunk:
-> >>>>> 
-> >>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> >>>>> index 27b2592698b0..5263454a5794 100644
-> >>>>> --- a/arch/arm64/Kconfig
-> >>>>> +++ b/arch/arm64/Kconfig
-> >>>>> @@ -100,7 +100,6 @@ config ARM64
-> >>>>> select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> >>>>> select ARCH_WANT_FRAME_POINTERS
-> >>>>> select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || (ARM64_16K_PAGES && !ARM64_VA_BITS_36)
-> >>>>> - select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> >>>> 
-> >>>> Maybe it is a little overkill for HVO as it can significantly minimize the
-> >>>> overhead of vmemmap on ARM64 servers for some workloads (like qemu, DPDK).
-> >>>> So I don't think disabling it is a good approach. Indeed, HVO broke BBM,
-> >>>> but the waring does not affect anything since the tail vmemmap pages are
-> >>>> supposed to be read-only. So, I suggest skipping warnings if it is the
-> >>>> vmemmap address in set_pte_at(). What do you think of?
-> >>> 
-> >>> IIUC, vmemmap_remap_pte() not only makes the pte read-only but also
-> >>> changes the output address. Architecturally, this needs a BBM sequence.
-> >>> We can avoid going through an invalid pte if we first make the pte
-> >>> read-only, TLBI but keeping the same pfn, followed by a change of the
-> >>> pfn while keeping the pte readonly. This also assumes that the content
-> >>> of the page pointed at by the pte is the same at both old and new pfn.
-> >> 
-> >> Right. I think using BBM is to avoid possibly creating multiple TLB entries
-> >> for the same address for a extremely short period. But accessing either the
-> >> old page or the new page is fine in this case. Is it acceptable for this
-> >> special case without using BBM?
-> > 
-> > Sadly, the architecture allows the CPU to conjure up a mapping based on a
-> > combination of the old and the new descriptor (a process known as
-> > "amalgamation") so we _really_ need the BBM sequence.
-> 
-> I am not familiar with ARM64, what's the user-visible effect if this
-> "amalgamation" occurs?
+On Tue, Feb 7, 2023, at 12:25, Andy Shevchenko wrote:
+> On Wed, Feb 01, 2023 at 11:07:35AM -0800, Dmitry Torokhov wrote:
+>> On Wed, Feb 01, 2023 at 08:32:06PM +0200, Andy Shevchenko wrote:
+>> > On Tue, Jan 31, 2023 at 09:44:31PM -0800, Dmitry Torokhov wrote:
+>> > > On Fri, Jan 27, 2023 at 11:11:46AM +0100, Arnd Bergmann wrote:
+>
+> ...
+>
+>> > > > -	return !gpio_get_value(ts->gpio_pendown);
+>> > > > +	return !gpiod_get_value(ts->gpio_pendown);
+>> > > 
+>> > > No, we can not blindly do that without checking annotations on GPIOs.
+>> > 
+>> > But this is easy to fix, i.e. use raw API, no?
+>> 
+>> I'd rather not (I hope I can make this driver respect declared polarity
+>> at some point), so for debounce we could do:
+>> 
+>> 	gpiod_set_debounce(gpio_to_gpiod(), ...);
+>> 
+>> in ads7846 for now, and get rid of gpio_set_debounce() as a publc API.
+>
+> This will work and we can keep it for a while (gpio_to_desc(), I believe you
+> meant this one, is part of the new API to keep this bridge for the cases like
+> this).
+>
+> Arnd, are you going to send a v3? It would be really nice to have less
+> collisions next cycle if your series is applied.
 
-The user-visible effects would probably be data corruption and instability,
-since the amalgamated TLB entry could result in a bogus physical address and
-bogus permissions.
+I was planning to, but I see you beat me to it already, sorry for
+dropping the ball here and thanks for picking it up!
 
-Will
+      Arnd
