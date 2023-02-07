@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE1268CCA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53ED68CCAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 03:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjBGCjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 21:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S229740AbjBGClt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 21:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjBGCjV (ORCPT
+        with ESMTP id S229690AbjBGClp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 21:39:21 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56B11BCF;
-        Mon,  6 Feb 2023 18:39:19 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id x8so8503149ybt.13;
-        Mon, 06 Feb 2023 18:39:19 -0800 (PST)
+        Mon, 6 Feb 2023 21:41:45 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C70A1734
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 18:41:42 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id sa10so9284824ejc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 18:41:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/DM3ZHFWH9+5S1qy4cWZ8ku1jvaebrV19OOb7VPWCE=;
-        b=E4fEMnY3w6e/c+JBeP/QCib+VbVtKssBHY7FUZxS0phG4XsyqJMZrF0ZsO+zJ1epw3
-         HAtT/bA6uxjwaVyMzsMHcPhITBLECR1tX/9AI77Xel6kBlG4dPeCJadLrn8Rx0ydq9nN
-         aaYHn/Q0Izel+P2z1Nyb2IfWsmarbuSv/Wqo6BMwKyLtgnEhBugkPLcQcNsft1HbliEV
-         bUDgENAF2xwW6V8V2XxgMEBjtKQYyctlihlNrcoBCU0TBDUZzXqjlZkZhUKegm1Ke2CR
-         dLWM9OMM1fhB5ByOwtI4DgefYMgbfVPgw47R/tiRhYCOBT8YNZeMrIKLZoY2U9s2/INJ
-         DSSQ==
+        h=mime-version:user-agent:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s91+oEnSweyrYJ7zOZXbJcjJdLANF4FIs4mTGGeIDMQ=;
+        b=YMe/uZDCbnhDaSVnvzdwIpnoXqToDEgkK/wvAOVAGROldzLAoL8psy6ygrWLF2kY+L
+         VSEUAF6l8dDfKkQTxykXCMWsZA9rJG3kk+OMAeSk0MNG+rlYc/8sjyaxEaRP7/QPx1cw
+         1H7W458Pm5wr3z6JAb+LQP5xcat1krsqi6mnlHTNorybcD18LEK0wJIUJqaWwk0yf6Ak
+         IgobIfnySqTxqImZR/boCge0WGNswtl3jlx2NNmdVfXgQYUw+GvL2XO//wHt8FFREykE
+         AsEoCOGYmMQnPrZnWUrTzbgBQ22dreOkwHWBL5hvTyOKsVhJ3L2/8fbfk3l8+K3hyzkJ
+         p/LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X/DM3ZHFWH9+5S1qy4cWZ8ku1jvaebrV19OOb7VPWCE=;
-        b=JdrNyH0pOOqbJGFvn14PK0iTTgQb3cnW9ChWVYUdstWuZ5w6KudUJwGyWerk2kIDMf
-         2eYMejHACS7z6pCM/k8vRfix/6odDhHpfKVnEW7PYczvc2VDvii2jh120aOB2OwfFucU
-         Ds/rfQSV84enYdIe4f0MdjI6kUwq1C1EV+DA9asv1lMFUv8sd6C7rLBQZe0/Hkwq2y84
-         vUcf1iIPS8p5NhnNO27HSvZ13X0GUDMuTIQy6zO4kfr0jI51m2AB7+TaJtb0gXcHQmQV
-         DMEv8ZQbqtQ3u/QajjAoTGD8R9vNCV0JsIoKKw7b1TY5c0HUAp9vW6BbVFkaHEwi6fkc
-         UeqQ==
-X-Gm-Message-State: AO0yUKXGr7jeGz5KBeTJe+neNR3pokZ1hlEO1HETpS67sQfyeZTx73Q5
-        xMFuHCQ+YUR3OWp5fXnHsFOjnqgdfaRMEHsTlq6i3+CL
-X-Google-Smtp-Source: AK7set9x+pCh4zkjdzoTJfNRupzo3lOSBI7ynBJQraf4uzfSI6TylOwOwDUh2q7lsTxp2cIWb5YqYbMPMgYXsfUBKhE=
-X-Received: by 2002:a25:2414:0:b0:86a:3232:d062 with SMTP id
- k20-20020a252414000000b0086a3232d062mr243212ybk.222.1675737559025; Mon, 06
- Feb 2023 18:39:19 -0800 (PST)
+        h=mime-version:user-agent:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s91+oEnSweyrYJ7zOZXbJcjJdLANF4FIs4mTGGeIDMQ=;
+        b=H3x30GPfsGAtvWDOZwqygaXYJRnBPmMrYvSjlnl3x4JbaSDAM/UscuYykWw81UJbg2
+         FACEY7sz5/B9I6TrYzhvrGZp0uqE5AzxJElioPddC0C3n6RYf33raedTnioxX+Nu8X+h
+         BNmnNOLSZgs0iXrgxPq+HHzF+pIrTxXDwmjas+7PuGphOdnWWPrRaxOLT5vm+PtmbQ+A
+         M94WkT0I1WOnJmAb7sfCOH1z1v/IFiVFm6AcCgK2iNRrHLoCT9kx/nrGTF7R/I7jzqGx
+         XZbvbj2ACzcbEwJvQ+RSzgFYFJZcBaRNPlf5bmQygmgALglS45bfYxDquoLZs+yQiWAL
+         PPhw==
+X-Gm-Message-State: AO0yUKUTXoSYSe6IEKVkevDeJliMOEDsjSHXzLOdNUoFcdCpcZ+KM+6U
+        g3/bPysK/6YcSXyL4+G9oFwplOZK6oRsZQ==
+X-Google-Smtp-Source: AK7set96GHsjy5MMPhjXojl5tl68cK1PeI4zYySwd/yFTzbhIGH1ou2Wh7tLUVeyF2ZgMP8/57GybA==
+X-Received: by 2002:a17:906:81c9:b0:88d:ba89:1840 with SMTP id e9-20020a17090681c900b0088dba891840mr15672819ejx.17.1675737700791;
+        Mon, 06 Feb 2023 18:41:40 -0800 (PST)
+Received: from smurf (80.71.142.58.ipv4.parknet.dk. [80.71.142.58])
+        by smtp.gmail.com with ESMTPSA id gw1-20020a170906f14100b0087bd4e34eb8sm6152954ejb.203.2023.02.06.18.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Feb 2023 18:41:40 -0800 (PST)
+Date:   Tue, 7 Feb 2023 03:41:18 +0100 (CET)
+From:   Jesper Juhl <jesperjuhl76@gmail.com>
+To:     linux-kernel@vger.kernel.org
+cc:     Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH] Update CREDITS file entry for Jesper Juhl
+Message-ID: <8e18fa82-1095-330f-29fb-80743d22443c@gmail.com>
+User-Agent: Alpine 2.26 (LNX 649 2022-06-02)
 MIME-Version: 1.0
-References: <20230203031742.1730761-1-imagedong@tencent.com>
- <20230203031742.1730761-3-imagedong@tencent.com> <CAEf4BzYh90NyyYvfTT=M=-KLspydMX4PZK8jCwNDydAP=kFgYw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYh90NyyYvfTT=M=-KLspydMX4PZK8jCwNDydAP=kFgYw@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 7 Feb 2023 10:39:07 +0800
-Message-ID: <CADxym3a6_wBHW_c_ZYtZ5QXbbunhKxau6k-fn4TNrn+6qzW6fw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add test for legacy/perf
- kprobe/uprobe attach mode
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     alan.maguire@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,60 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 4:05 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Feb 2, 2023 at 7:18 PM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > Add the testing for kprobe/uprobe attaching in legacy and perf mode.
-> > And the testing passed:
-> >
-> > ./test_progs -t attach_probe
-> > $5       attach_probe:OK
-> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> >
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
->
-> Do you mind refactoring attach_probe test into multiple subtests,
-> where each subtest will only test one of the attach mode and type. The
-> reason is that libbpf CI runs tests with latest selftests and libbpf
-> against old kernels (4.9 and 5.5, currently). Due to attach_probe
-> testing all these uprobe/kprobe attach modes with extra features (like
-> cookie, ref count, etc), we had to disable attach_probe test in libbpf
-> CI on old kernels.
->
-> If we can split each individual uprobe/kprobe mode, that will give us
-> flexibility to selectively allowlist those tests that don't force
-> libbpf to use newer features (like cookies, LINK or PERF mode, etc).
->
-> It would be a great improvement and highly appreciated! If you don't
-> mind doing this, let's do the split of existing use cases into subtest
-> in a separate patch, and then add PERF/LEGACY/LINK mode tests on top
-> of that patch.
->
+From 6e44eab54e48c76f7e738d642b9a680282787ee9 Mon Sep 17 00:00:00 2001
+From: Jesper Juhl <jesperjuhl76@gmail.com>
+Date: Tue, 7 Feb 2023 03:37:56 +0100
+Subject: [PATCH] Update CREDITS file entry for Jesper Juhl
 
-Of course, with pleasure. For the existing use cases, we split it into
-subtests, such as:
+Signed-Off-by: Jesper Juhl <jesperjuhl76@gmail.com>
 
-  kprobe/kretprobe auto attach
-  kprobe/kretprobe manual attach
-  uprobe/uretprobe ref_ctr test
-  uprobe/uretprobe auto attach
-  sleepable kprobe/uprobe
-  ......
+---
+  CREDITS | 6 +++---
+  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Am I right?
+diff --git a/CREDITS b/CREDITS
+index 5f5d70c9c038..847059166a15 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -1852,11 +1852,11 @@ E: ajoshi@shell.unixbox.com
+  D: fbdev hacking
 
-Thanks!
-Dongmeng Long
+  N: Jesper Juhl
+-E: jj@chaosbits.net
++E: jesperjuhl76@gmail.com
+  D: Various fixes, cleanups and minor features all over the tree.
+  D: Wrote initial version of the hdaps driver (since passed on to others).
+-S: Lemnosvej 1, 3.tv
+-S: 2300 Copenhagen S.
++S: Titangade 5G, 2.tv
++S: 2200 Copenhagen N.
+  S: Denmark
 
->
-> >  .../selftests/bpf/prog_tests/attach_probe.c   | 61 ++++++++++++++++++-
-> >  .../selftests/bpf/progs/test_attach_probe.c   | 32 ++++++++++
-> >  2 files changed, 92 insertions(+), 1 deletion(-)
-> >
->
-> [...]
+  N: Jozsef Kadlecsik
+-- 
+2.39.1
+
