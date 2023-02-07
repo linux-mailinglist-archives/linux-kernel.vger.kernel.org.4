@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D70268DE06
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F6768DE0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjBGQes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        id S231171AbjBGQhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:37:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjBGQeq (ORCPT
+        with ESMTP id S229512AbjBGQhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:34:46 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B077536448;
-        Tue,  7 Feb 2023 08:34:45 -0800 (PST)
-Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 7 Feb 2023 11:37:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D251EA4;
+        Tue,  7 Feb 2023 08:37:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37CA1660208D;
-        Tue,  7 Feb 2023 16:34:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675787684;
-        bh=Ju9beePp7bAYEhek0mXetGx1R+Zbuu/Si/5uQYOpoYQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=edQKC4NEPBgk6xe98pLs1bQKH/mVHP9YXgIKmxRpaFkpenX2o/OQ+p83JRoc98JIu
-         s5vkVGN/Q3Tj2Or/cTy3yxAjr10QlhINvyc333vtYnB+y3Z03j7M4sXTRDKyRSzUVv
-         aDl6VlVamlv+1h1kaKIG3iQ6WuDLUB+HFyMuKki0rCv1/uYtizueGxxXRamCI1/6gO
-         hP+dQq9wfMXVMCXavKYoqjuNhUlyqAMuQunVAjhnIBanTd/hpxLc0jIYcElCHEHib8
-         ZWl2KyMZDKnwX/WX6495BOgPIhDt+1fAtjnQVrZNkwwaRB81ApYUv/r14QG5jwblfb
-         6qDOxL8gzupbw==
-Message-ID: <4efe9796-6d3e-09d1-d5f7-cfb25a439061@collabora.com>
-Date:   Tue, 7 Feb 2023 16:34:42 +0000
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68DED60F4A;
+        Tue,  7 Feb 2023 16:37:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E187C433EF;
+        Tue,  7 Feb 2023 16:37:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675787859;
+        bh=53K+tJd24PX6VrTjyzROobjqX3rQ8W3Mg2Iop6ThxQA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dP2chd5jZgT66rivj0sunx1wshBqtC9KMKudxvChxShyThsxOoZyELd+7/mszhE1h
+         Lk2dP3F7sUs5CIxEeIazH7H2mzVRYdYKOjpUQOw/iN3zDs05TxP6ZJQc7zXvgr5LQ1
+         4TeEOFdzWCxuiO/IdxQpMC5QAbLvJ56R1RTAXfPwV6iDXD85Mi9Wcav/dhXf7fhw48
+         IePU1jNVs6Pny1heH3/HsVCPvGOia3GIQ/orciNBvqgqLRHscHHTp60iv95C6EFgyT
+         k7/9RA9+R1t7PzvQ5K+NWudthSyubN/1sXLD8bQ5TArkILwzUUPc/UAmfAjbQk1WwJ
+         i6wipfpmnHR2A==
+Date:   Tue, 7 Feb 2023 09:37:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, llvm@lists.linux.dev,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: x86/include/asm/arch_hweight.h:49:15: error: invalid input size
+ for constraint 'D'
+Message-ID: <Y+J+UQ1vAKr6RHuH@dev-arch.thelio-3990X>
+References: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
+ <Y+J8SobyVojJWuFv@dev-arch.thelio-3990X>
+ <Y+J8rtEBlSTsCBLa@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] Documentation: cs35l41: Shared boost properties
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230207104021.2842-1-lucas.tanure@collabora.com>
- <20230207104021.2842-3-lucas.tanure@collabora.com>
- <44faeca1-94c9-4423-d87a-03d80e286812@linaro.org>
- <e7257f9a-86c5-74e8-c538-6f6d2ba13274@collabora.com>
- <44c7274f-8a5e-0235-413a-6c3260018601@linaro.org>
-From:   Lucas Tanure <lucas.tanure@collabora.com>
-In-Reply-To: <44c7274f-8a5e-0235-413a-6c3260018601@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+J8rtEBlSTsCBLa@zn.tnic>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-02-2023 16:13, Krzysztof Kozlowski wrote:
-> On 07/02/2023 16:46, Lucas Tanure wrote:
->>>> +      Shared boost allows two amplifiers to share a single boost circuit by
->>>> +      communicating on the MDSYNC bus. The passive amplifier does not control
->>>> +      the boost and receives data from the active amplifier. GPIO1 should be
->>>> +      configured for Sync when shared boost is used. Shared boost is not
->>>> +      compatible with External boost. Active amplifier requires
->>>> +      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
->>>>          0 = Internal Boost
->>>>          1 = External Boost
->>>> +      2 = Reserved
->>>
->>> How binding can be reserved? For what and why? Drop. 2 is shared active,
->>> 3 is shared passive.
->> 2 Is shared boost without VSPK switch, a mode not supported for new
->> system designs. But there is laptops using it, so we need to keep
->> supporting in the driver.
+On Tue, Feb 07, 2023 at 05:30:38PM +0100, Borislav Petkov wrote:
+> On Tue, Feb 07, 2023 at 09:28:58AM -0700, Nathan Chancellor wrote:
+> > Thanks a lot for the report as always! Looks like there is a fix pending
+> > on the list:
+> > 
+> > https://lore.kernel.org/Y+IsCWQdXEr8d9Vy@linutronix.de/
 > 
-> That's not the answer. 2 is nothing here, so it cannot be reserved.
-> Aren't you mixing now some register value with bindings?
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
-I have added a new patch with propper documentation.
-And I would like to use 3 and 4 for shared boost as 
-CS35L41_EXT_BOOST_NO_VSPK_SWITCH already exist as 2 and is used in the 
-current driver.
-The laptop that uses CS35L41_EXT_BOOST_NO_VSPK_SWITCH doesn't have the 
-property "cirrus,boost-type", but to make everything consistent I would 
-prefer to use 3 and 4 for the new boost types.
-Is that ok with you?
+> Btw, while I have you, do you know why clang isn't DCOing this chunk
+> like gcc does?
 
-Thanks
-Lucas
+Clang does its semantic analysis before optimization, so it cannot dead
+code eliminate that chunk before it checks the validity of the asm
+constraints, that is just how the pipeline is structured as far as I
+understand it. That is one of the biggest and longest standing
+differences between clang and GCC that we know about, the upstream link
+in the issue below has some more info.
+
+https://github.com/ClangBuiltLinux/linux/issues/3
+
+I am not super familiar with the internal details of LLVM and clang as
+other folks are though so I could be wrong or missing something :)
+
+Cheers,
+Nathan
