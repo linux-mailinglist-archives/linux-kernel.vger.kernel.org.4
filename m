@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0CC68DE4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1249368DE4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 17:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjBGQzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 11:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        id S231841AbjBGQ4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 11:56:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjBGQy6 (ORCPT
+        with ESMTP id S230503AbjBGQ4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 11:54:58 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB2746B0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:54:56 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id c2so17426116qtw.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:54:56 -0800 (PST)
+        Tue, 7 Feb 2023 11:56:21 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876A365BD
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 08:56:20 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-52a849206adso57851837b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 08:56:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gzBHkLfEnVFDEK+KjgVtsPAXlm9EVCQtMhAcZQTuuh0=;
-        b=3R5dDZ6GGGovkkLkQKUaYxu0foL+1lSJ8IYIIwmffq4aZeogM3A10O2HibgSIDGKm6
-         P7pHWBdcrdY/tHJxBL8olfaSswF+l0AOUBQwRFILopVOkqOWeq+fkuGRn/KV2miGfB3R
-         u2vfrnTiS6VZZdXL1OihlaQjXHY5+EQIfDuv8ApYEIwNiQ+tgj6bt1TEcvup3q5bEnCV
-         6X8WgXeM41DC7cVzX/pLIbQCt5v/NoP7/Xe8rOEgPF+0w6pktkLf4mXIh6XVxykeW53+
-         OoHO/9ALa/Yjs0ssGNlGiW1Gqwin4AsAZ9YzG1koYj2hrBCPfTY81/kOEme7WiTmWusk
-         n0gg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GoBqPByP0q/RasE1UC460ExA2FKRxZXp/KeIkZ7c+rM=;
+        b=sm9YPiJH9InbcrluLaZ8PfuBNR+JO/cR+R+Wps0a7BDKmT92kwftQaJPhjPTXmxqF+
+         Gd/gTg3u9TklZp/h6sSeNUdyAVdB/BNlDDR+Cotrb+X1atYx087sh0XzFMQflrKJafsq
+         Xc0UjRFv1hIUseZVxZPdAQcrWeIJ7UzKEPSt28eQyQtrGWNcEX2+aYhZW1T/NG9bDjGC
+         JMzFWtXiEyjOqV9zs6OVK/81+8vjN0M7X9V+0aHejQEjBk1pEc26sBF3BgfaUjEG2k3A
+         o3FEtuIozUy6W/cjtA29E14qRb9Brz3C9KZyGzzku4mPgeSBerDrKuYc8cU8Ggu9yea1
+         8YVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzBHkLfEnVFDEK+KjgVtsPAXlm9EVCQtMhAcZQTuuh0=;
-        b=tk6geCzoKp3F4yR2mtIa/QTPNDT5reGnreANtQzEc7DGvXNBncCgHRpyYOwEl7bgdn
-         iS/G/D2vxcAQRHhIruliPo4YmPVizzZS2I92LspRWn3paDZ/NyLLMd1jvcZZB6z8k4b5
-         v116+sgsr2d0ylpB3T29woUAHp0bh1GmLL+u8Qp06DlbjXSOO9rhubr9QhyFmxT3B8+p
-         mdgi8wnf2fj6WH8C7NjdyaLR/iTj7tFkJlbFI9fp8CHZ5kgZaBX0iG+5CO6OPPJQLUgl
-         rWwO1OtIoC/okFkqhTjtXb8+onOOBHWlYTRmJPx8uVqeDl4k3OsgbxngaWxHEbpvxl6J
-         otLg==
-X-Gm-Message-State: AO0yUKXNa4iDJ77BGj8kDpRterXK2Pdz5P5cBmaxcFlSeyZ1AC//NNPD
-        3mgMBN0ET3gJmUpcAPpp37mIbg==
-X-Google-Smtp-Source: AK7set+qMzUiEaYmqgBIuMjwJYZXmESXV2XKb3as1asM/N2cPgZ2RgC9pfsk9faWyzv7DV7GhtKZIA==
-X-Received: by 2002:a05:622a:196:b0:3b9:b422:4d5b with SMTP id s22-20020a05622a019600b003b9b4224d5bmr6436646qtw.26.1675788896058;
-        Tue, 07 Feb 2023 08:54:56 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
-        by smtp.gmail.com with ESMTPSA id j6-20020ac84c86000000b003b642c7c772sm9611834qtv.71.2023.02.07.08.54.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 08:54:55 -0800 (PST)
-Date:   Tue, 7 Feb 2023 11:54:55 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [RFC PATCH] mm: memcontrol: don't account swap failures not due
- to cgroup limits
-Message-ID: <Y+KCX6XHj/lv9ul3@cmpxchg.org>
-References: <20230202155626.1829121-1-hannes@cmpxchg.org>
- <CAJD7tkaCpD0LpzdA+NsZj2WK=iQCLn7RS9qc7K53Qonxhp4TgA@mail.gmail.com>
- <20230206161843.GD21332@blackbody.suse.cz>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GoBqPByP0q/RasE1UC460ExA2FKRxZXp/KeIkZ7c+rM=;
+        b=b3PMSODW7qOzXldv4o9Rjq+ktQG4hCIrriT7RSHbsa9YYS314OZ299gG9atoP0XWay
+         0mkL8vaBkCiNCRBwyUzPWhApjb5yK+02BsrCF85DeAvkhCMELN/NXAauFEyEC+IbvxQ0
+         k7F4keF8tQEUYW4F9D4yVT2kS+iZgHHTsIfvlPfNHzTlFGG0pAhZQTGSr3b877QLwxBC
+         5gBbvfdhh+gm9iMJbN0IQHm+H3xKKS15AKGgXRadDpEbcFDIw0kniSlearQ0vGko4Tru
+         xPjIYEptcqPM4RMhUBGwHcYYDIFPGMpRQbbPw+Xq5zm6nWyQPzXL7eiMO5Z9ocYf9inp
+         ZYZA==
+X-Gm-Message-State: AO0yUKWyXvaljhD67RXM0KYAa3FJI3YnRcPTDpV7KPsX4ItzddFjhyrp
+        QICvmKxpfQUAnA9iaXkbd3pWNG617mDJl/AEFzj7
+X-Google-Smtp-Source: AK7set/lGFUD8trb7Vv6Bm1hGBjXHqr17EYv+SAYpiRHAofHJ+9Oij26D22fEgTKfXmq0epDM0gmSsU2vbH91U8kxpw=
+X-Received: by 2002:a0d:cc8d:0:b0:52a:858b:2840 with SMTP id
+ o135-20020a0dcc8d000000b0052a858b2840mr388141ywd.14.1675788979659; Tue, 07
+ Feb 2023 08:56:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230206161843.GD21332@blackbody.suse.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CABdmKX3HFuaE0qwcADk-KLtVUdao-uhH-1zn4gv7ezq+bZE94w@mail.gmail.com>
+ <20230117082508.8953-1-jaewon31.kim@samsung.com> <20230117083103epcms1p63382eee1cce1077248a4b634681b0aca@epcms1p6>
+ <CANDhNCpKY5Af059ok8ZcgJ=wt7NaorZxqQXaTS848CwY0LNFiw@mail.gmail.com>
+ <20230125095646epcms1p2a97e403a9589ee1b74a3e7ac7d573f9b@epcms1p2>
+ <20230125101957epcms1p2d06d65a9147e16f3281b13c085e5a74c@epcms1p2>
+ <CANDhNCoAKtHmxFomdGfTfXy8ZvFMfMRj4jZ+b8wMMD+5AmAB0g@mail.gmail.com>
+ <20230126044218epcms1p35474178c2f2b18524f35c7d9799e3aed@epcms1p3>
+ <CANDhNCo1JRmfouBn985GZLmPY-xLn9JKNJfubY0PAUrCpY8K4g@mail.gmail.com>
+ <20230204150215epcms1p8d466d002c1e4dc2005d38f847adea6fa@epcms1p8>
+ <CGME20230117082521epcas1p22a709521a9e6d2346d06ac220786560d@epcms1p1>
+ <CANDhNCrAMVT3rg0GPJhYKD75EAUn8bsivrp3yMJcsd6bouj1rQ@mail.gmail.com> <20230207073335epcms1p15df191db83bec0cb791e6f79dcecb31f@epcms1p1>
+In-Reply-To: <20230207073335epcms1p15df191db83bec0cb791e6f79dcecb31f@epcms1p1>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 7 Feb 2023 08:56:07 -0800
+Message-ID: <CANDhNCpM+R0sPuGoeBW0=he+6YMKTn2YLm4AZZ2+C=5YRLZBLg@mail.gmail.com>
+Subject: Re: (2) [PATCH] dma-buf: system_heap: avoid reclaim for order 4
+To:     jaewon31.kim@samsung.com
+Cc:     "T.J. Mercier" <tjmercier@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,35 +85,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 05:18:43PM +0100, Michal Koutný wrote:
-> On Thu, Feb 02, 2023 at 10:30:40AM -0800, Yosry Ahmed <yosryahmed@google.com> wrote:
-> > > b) Only count cgroup swap events when they are actually due to a
-> > >    cgroup's own limit. Exclude failures that are due to physical swap
-> > >    shortage or other system-level conditions (like !THP_SWAP). Also
-> > >    count them at the level where the limit is configured, which may be
-> > >    above the local cgroup that holds the page-to-be-swapped.
-> > >
-> > >    This is in line with how memory.swap.high, memory.high and
-> > >    memory.max events are counted.
-> > >
-> > >    However, it's a change in documented behavior.
-> > 
-> > This option makes sense to me, but I can't speak to the change of
-> > documented behavior. However, looking at the code, it seems like if we do this
-> > the "max" & "fail" counters become effectively the same. "fail" would
-> > not provide much value then.
-> > 
-> > I wonder if it makes sense to have both, and clarify that "fail" -
-> > "max" would be non-limit based failures (e.g. ran out of swap space),
-> > or would this cause confusion as to whether those non-limit failures
-> > were transient (THP fallback) or eventual?
-> 
-> I somewhat second this.
-> 
-> Perhaps, could the patch (and arguments) be split in two:
-> 1) count .max events on respective limit's level (other limits consistency),
+On Mon, Feb 6, 2023 at 11:33 PM Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+> >I don't mean to discourage you, especially after all the effort here.
+> >
+> >Do you think evaluating the before and after impact to buffer usage
+> >
+> >(not just allocation) would be doable in the near term?
+> >
+>
+> Hello sorry but I don't have expertise on iommu. Actually I'm also wondering
+> all IOMMU can use order 4 free pages, if they are allocated. I am not sure
+> but I remember I heard order 9 (2MB) could be used, but I don't know about order 8 4.
+>
+> I guess IOMMU mmap also be same patern like we expect. I mean if order 4 is
+> prepared it could be faster like 1 to 4 times. But it, I think, should NOT be
+> that much slow even though the entire free memory is prepared as order 0 pages.
+>
+> >
+> >
+> >If you don't think so, given the benefit to allocation under pressure
+> >
+> >is large (and I don't mean to give you hurdles to jump), I'm willing
+> >
+> >to ack your change to get it merged, but if we later see performance
+> >
+> >trouble, I'll be quick to advocate for reverting it.  Is that ok?
+> >
+>
+> Yes sure. I also want to know if it is.
 
-Okay, I'll split this one out. It's good to have regardless of what we
-do with the fail counter.
+Ok. Please resend your latest patch and I'll go ahead and ack it and
+we'll watch.
 
-Thanks
+Thanks again for your efforts here!
+-john
