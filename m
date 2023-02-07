@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC7668DEB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AE968DE9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbjBGRQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:16:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S232034AbjBGRPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:15:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjBGRPi (ORCPT
+        with ESMTP id S232249AbjBGROu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:15:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6C23E099
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:13:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675790022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7RYncx3d2QCFno76YxQ26A3gARIW2WsBk/g5n5z32ew=;
-        b=Fb5N9j1DK4txVX8jjSwT4ku0o8MUsDH3kpVvEg/zeEaG++D5pac1Jd7+d1e1W56qyDPRq6
-        HNOMYBQRGXKWQpx5Xr/I3Ohg5qXDNPCL0zZsNyftC1Niu1J3WlC/bvYt1icdG5awFQpJMh
-        q2V8WfXI1go5TeEF61/YjXHZ5W2ftss=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-73-lolXqV_9N4uHxYJn3WqZgg-1; Tue, 07 Feb 2023 12:13:39 -0500
-X-MC-Unique: lolXqV_9N4uHxYJn3WqZgg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC1C480D0E2;
-        Tue,  7 Feb 2023 17:13:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A3F01121314;
-        Tue,  7 Feb 2023 17:13:36 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v12 10/10] block: convert bio_map_user_iov to use iov_iter_extract_pages
-Date:   Tue,  7 Feb 2023 17:13:05 +0000
-Message-Id: <20230207171305.3716974-11-dhowells@redhat.com>
-In-Reply-To: <20230207171305.3716974-1-dhowells@redhat.com>
-References: <20230207171305.3716974-1-dhowells@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Tue, 7 Feb 2023 12:14:50 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4428698
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:14:00 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id h126-20020a636c84000000b004d31ad79086so7082420pgc.23
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:14:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gaqlkUHlROHo1Iu/mvu/VhOVerpPZOfXGd0nbt/7zs8=;
+        b=aFSF+mDkwXMPhNXoGe9Q/j26WS0JRqyy750UYsBMIHe2uxsn5RTNKfWiXtceSvhxa5
+         jtE+wKy5v7XDg0HNBzSH2kcs5k0RPiVdlmiHEigKt+L/Dx/GRZ95cfV/8haSHCcm6e/6
+         OybLUuEDpssvqVROntd3VOoMTRGRn3FgHA9N+aXExjoJwgShq1wHpm1S9S4NV9pWuTKE
+         i5zm3mZuh6Ca6I6q+iuYH0CnU3MAA2KomIjb8tuhX7oH1H7M0Apn3rrYCm++euStY1AV
+         PNE0SoqrGOrbbcoQEfj7ugB8nDtisZYJRPB0h5jKDccuxm6DHEpGAQlJRqPlDIfjEJLR
+         nlSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gaqlkUHlROHo1Iu/mvu/VhOVerpPZOfXGd0nbt/7zs8=;
+        b=JcKRtAF23reVy3BSyvgibVPmyon0S46qXBwM0V8oR4U8MLHukalEY5GazhjzuZ7SSp
+         Tg7NBtQV3vuV82SJYlZwlzrohMqjARUqtUReQKIRSruaT8lA0HlTaBPQDXJ9C1cD5QS2
+         S9pOXZk48oBSbQc4b0xUhlFpno6wTrXvnmN7uIfHwDw0bZdGQUsLnaezqcsofOBn00zP
+         zqaqnNuX9P2Be3NU4vGabfrJE5kFumu6l2HzC1G7ytgm1hvUD4Itx3RaJmvCY3c5ENHI
+         Js9iti97vmobhHQc+PPYIkN/YOv8vfRJh/t5ORZAgK7sbuPN0pEenM8vqaYZVz+IhKBX
+         jvqw==
+X-Gm-Message-State: AO0yUKVNSsKaP/MIqvU/lrRhOJir9Amdj1QoUPj/wJpXnFy3gHFIDNCC
+        IC0g9xoMB2Syc5Jiz20etr6VfPFdCYs=
+X-Google-Smtp-Source: AK7set+er4Uv/iKukfLeR1lCffkTft0lTR8HoB29ISgFrwHdoSYSqGHr9L2MtrFudzW2cCM4F0rt08AXC9k=
+X-Received: from pgonda1.kir.corp.google.com ([2620:0:1008:11:346e:6fd8:c3bf:b38f])
+ (user=pgonda job=sendgmr) by 2002:a17:902:a3ce:b0:196:3672:f24b with SMTP id
+ q14-20020a170902a3ce00b001963672f24bmr868930plb.32.1675790039532; Tue, 07 Feb
+ 2023 09:13:59 -0800 (PST)
+Date:   Tue,  7 Feb 2023 09:13:54 -0800
+Message-Id: <20230207171354.4012821-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Subject: [PATCH V2] KVM: sev: Fix potential overflow send|recieve_update_data
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>, Andy Nguyen <theflow@google.com>,
+        Thomas Lendacky <thomas.lendacky@amd.com>,
+        David Rientjes <rientjes@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,97 +70,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will pin pages or leave them unaltered rather than getting a ref on
-them as appropriate to the iterator.
+KVM_SEV_SEND_UPDATE_DATA and KVM_SEV_RECEIVE_UPDATE_DATA have an integer
+overflow issue. Params.guest_len and offset are both 32bite wide, with a
+large params.guest_len the check to confirm a page boundary is not
+crossed can falsely pass:
 
-The pages need to be pinned for DIO rather than having refs taken on them
-to prevent VM copy-on-write from malfunctioning during a concurrent fork()
-(the result of the I/O could otherwise end up being visible to/affected by
-the child process).
+    /* Check if we are crossing the page boundary *
+    offset = params.guest_uaddr & (PAGE_SIZE - 1);
+    if ((params.guest_len + offset > PAGE_SIZE))
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Jan Kara <jack@suse.cz>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: linux-block@vger.kernel.org
+Add an additional check to this conditional to confirm that
+params.guest_len itself is not greater than PAGE_SIZE.
+
+The current code is can only overflow with a params.guest_len of greater
+than 0xfffff000. And the FW spec says these commands fail with lengths
+greater than 16KB. So this issue should not be a security concern
+
+Fixes: 15fb7de1a7f5 ("KVM: SVM: Add KVM_SEV_RECEIVE_UPDATE_DATA command")
+Fixes: d3d1af85e2c7 ("KVM: SVM: Add KVM_SEND_UPDATE_DATA command")
+Reported-by: Andy Nguyen <theflow@google.com>
+Suggested-by: Thomas Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org
+Cc: stable@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 ---
 
-Notes:
-    ver #10)
-     - Drop bio_set_cleanup_mode(), open coding it instead.
-    
-    ver #8)
-     - Split the patch up a bit [hch].
-     - We should only be using pinned/non-pinned pages and not ref'd pages,
-       so adjust the comments appropriately.
-    
-    ver #7)
-     - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
-    
-    ver #5)
-     - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
-       BIO_* flags and got rid of bi_cleanup_mode.
-     - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
+V2
+ * Updated conditional based on feedback from Tom.
 
- block/blk-map.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+---
+ arch/x86/kvm/svm/sev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index f1f70b50388d..0f1593e144da 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -281,22 +281,21 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 273cba809328..3d74facaead8 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1294,7 +1294,7 @@ static int sev_send_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
  
- 	if (blk_queue_pci_p2pdma(rq->q))
- 		extraction_flags |= ITER_ALLOW_P2PDMA;
-+	if (iov_iter_extract_will_pin(iter))
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
+ 	/* Check if we are crossing the page boundary */
+ 	offset = params.guest_uaddr & (PAGE_SIZE - 1);
+-	if ((params.guest_len + offset > PAGE_SIZE))
++	if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
+ 		return -EINVAL;
  
--	bio_set_flag(bio, BIO_PAGE_REFFED);
- 	while (iov_iter_count(iter)) {
--		struct page **pages, *stack_pages[UIO_FASTIOV];
-+		struct page *stack_pages[UIO_FASTIOV];
-+		struct page **pages = stack_pages;
- 		ssize_t bytes;
- 		size_t offs;
- 		int npages;
+ 	/* Pin guest memory */
+@@ -1474,7 +1474,7 @@ static int sev_receive_update_data(struct kvm *kvm, struct kvm_sev_cmd *argp)
  
--		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
--			pages = stack_pages;
--			bytes = iov_iter_get_pages(iter, pages, LONG_MAX,
--						   nr_vecs, &offs, extraction_flags);
--		} else {
--			bytes = iov_iter_get_pages_alloc(iter, &pages,
--						LONG_MAX, &offs, extraction_flags);
--		}
-+		if (nr_vecs > ARRAY_SIZE(stack_pages))
-+			pages = NULL;
-+
-+		bytes = iov_iter_extract_pages(iter, &pages, LONG_MAX,
-+					       nr_vecs, extraction_flags, &offs);
- 		if (unlikely(bytes <= 0)) {
- 			ret = bytes ? bytes : -EFAULT;
- 			goto out_unmap;
-@@ -318,7 +317,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
- 						     max_sectors, &same_page)) {
- 					if (same_page)
--						put_page(page);
-+						bio_release_page(bio, page);
- 					break;
- 				}
+ 	/* Check if we are crossing the page boundary */
+ 	offset = params.guest_uaddr & (PAGE_SIZE - 1);
+-	if ((params.guest_len + offset > PAGE_SIZE))
++	if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
+ 		return -EINVAL;
  
-@@ -330,7 +329,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 		 * release the pages we didn't map into the bio, if any
- 		 */
- 		while (j < npages)
--			put_page(pages[j++]);
-+			bio_release_page(bio, pages[j++]);
- 		if (pages != stack_pages)
- 			kvfree(pages);
- 		/* couldn't stuff something into bio? */
+ 	hdr = psp_copy_user_blob(params.hdr_uaddr, params.hdr_len);
+-- 
+2.39.1.519.gcb327c4b5f-goog
 
