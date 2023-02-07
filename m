@@ -2,50 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2B368E068
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2165268E073
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232168AbjBGSqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
+        id S232181AbjBGSrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjBGSqk (ORCPT
+        with ESMTP id S232615AbjBGSrL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:46:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C15828865
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:46:37 -0800 (PST)
+        Tue, 7 Feb 2023 13:47:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C86159C0;
+        Tue,  7 Feb 2023 10:46:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B8B610E8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 18:46:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3B5C433EF;
-        Tue,  7 Feb 2023 18:46:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5395AB81A12;
+        Tue,  7 Feb 2023 18:46:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F209C433D2;
+        Tue,  7 Feb 2023 18:46:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675795596;
-        bh=4je8DQ6Wvl4DxIzB00Dv4dXmBZ+27+JwMBbzEDWzQCY=;
+        s=k20201202; t=1675795615;
+        bh=79Ve8zbRSZKXUOr26T060d7rk1wu/IUoUiO3VoAxXac=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kc9d0APtXAiufKqPbIZJXDx5wQo4qdJcXBoUFY5NK0NsmidBzBNLGGaTNjB4bVd++
-         Lo7mtK9OsPxplj8XQuy3j2AfKjeLbLmSAGsKffYts6Li/aoS5V4raT/rTxT9ujciIl
-         Mt1vR90qSAdnLFBhn1t6ca+PVG9dq4r/aE8Noo1mJ9O0r08ucY2cBsYFAgVw5g1SpS
-         uFc+hCsgb95l7pGH7h2BDy+7dgTCupmXO/DdTIxFzLgSrwX4BdBxfRgNQDRLq36Pzw
-         TBSGvZWG8IwFf8d+YTrFzKS0bMxFosuisVgDZVrx9irdN8jpMysLE4O3LgMDn3DYcH
-         Ovxl/7PRVhyeQ==
-Date:   Tue, 7 Feb 2023 10:46:34 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] f2fs: fix to set ipu policy
-Message-ID: <Y+KcivkBV6rep3R0@google.com>
-References: <20230206144310.2344-1-frank.li@vivo.com>
- <5b47f58a-4c3c-a183-777c-d4750f6b4d6c@kernel.org>
+        b=imfyLm/8XLyx7W4hNcJ8UkbdKqdEXUgXCD2omuZN2z6yBad2IUuR04SxYRxX9Vv4d
+         9eGFGxuP4X32xfvf0VD3vdruzFEgqW1WY+PYkt6VUn65C5QYeVuFgTNvPH5faR7jdh
+         klZwa9QzmN6E/c0y86i3At1MXKQGMT28+Hq76KZBNd2LSaFFtciGJGrS5nekLB98mL
+         M1M+xuRJCLW+bFdcfyzSeHxjzqJX+96zXBsnbe5obhNu6XoYoGW65WmMISDjz+jp0o
+         LNJ1GVQhCi/65TGqXJXNrYecK7j+htJLkGRtlma6gzyrr857T5wbl49j43lRqCU9tc
+         wASALxsFZwbZQ==
+Date:   Tue, 7 Feb 2023 10:46:53 -0800
+From:   Lee Jones <lee@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        jacek.anaszewski@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        thunder.leizhen@huawei.com, festevam@gmail.com
+Subject: Re: [PATCH v4] dt-bindings: leds: Document commonly used LED triggers
+Message-ID: <Y+KcndmBBQw16hfM@google.com>
+References: <20221129174906.97749-1-manivannan.sadhasivam@linaro.org>
+ <41ade5cb-98c1-e859-be4d-68eb05d0ea44@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5b47f58a-4c3c-a183-777c-d4750f6b4d6c@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <41ade5cb-98c1-e859-be4d-68eb05d0ea44@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,123 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/07, Chao Yu wrote:
-> On 2023/2/6 22:43, Yangtao Li wrote:
-> > For LFS mode, it should update outplace and no need inplace update.
-> > When using LFS mode for small-volume devices, IPU will not be used,
-> > and the OPU writing method is actually used, but F2FS_IPU_FORCE can
-> > be read from the ipu_policy node, which is different from the actual
-> > situation. And remount to lfs mode should be disallowed when
-> > f2fs ipu is enabled, let's fix it.
+On Tue, 07 Feb 2023, Krzysztof Kozlowski wrote:
+
+> On 29/11/2022 18:49, Manivannan Sadhasivam wrote:
+> > Document the commonly used LED triggers by the SoCs. Not all triggers
+> > are documented as some of them are very application specific. Most of the
+> > triggers documented here are currently used in devicetrees of many SoCs.
 > > 
-> > Fixes: 84b89e5d943d ("f2fs: add auto tuning for small devices")
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > > ---
-> > v4:
-> > -allow set 0 in lfs mode for ipu_policy node
-> >   fs/f2fs/segment.h | 10 +++++++++-
-> >   fs/f2fs/super.c   | 17 +++++++++++------
-> >   fs/f2fs/sysfs.c   |  9 +++++++++
-> >   3 files changed, 29 insertions(+), 7 deletions(-)
 > > 
-> > diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-> > index 0f3f05cb8c29..8ee5e5db9287 100644
-> > --- a/fs/f2fs/segment.h
-> > +++ b/fs/f2fs/segment.h
-> > @@ -670,6 +670,8 @@ static inline int utilization(struct f2fs_sb_info *sbi)
-> >   #define SMALL_VOLUME_SEGMENTS	(16 * 512)	/* 16GB */
-> > +#define F2FS_IPU_DISABLE	0
-> > +
-> >   enum {
-> >   	F2FS_IPU_FORCE,
-> >   	F2FS_IPU_SSR,
-> > @@ -679,10 +681,16 @@ enum {
-> >   	F2FS_IPU_ASYNC,
-> >   	F2FS_IPU_NOCACHE,
-> >   	F2FS_IPU_HONOR_OPU_WRITE,
-> > +	F2FS_IPU_MAX,
-> >   };
-> > +static inline bool IS_F2FS_IPU_DISABLE(struct f2fs_sb_info *sbi)
-> > +{
-> > +	return SM_I(sbi)->ipu_policy == F2FS_IPU_DISABLE;
-> > +}
-> > +
-> >   #define F2FS_IPU_POLICY(name)					\
-> > -static inline int IS_##name(struct f2fs_sb_info *sbi)		\
-> > +static inline bool IS_##name(struct f2fs_sb_info *sbi)		\
-> >   {								\
-> >   	return SM_I(sbi)->ipu_policy & BIT(name);		\
-> >   }
-> > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > index 4ec2cbbc47eb..09696fc844ab 100644
-> > --- a/fs/f2fs/super.c
-> > +++ b/fs/f2fs/super.c
-> > @@ -1346,12 +1346,12 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
-> >   	}
-> >   	if (test_opt(sbi, DISABLE_CHECKPOINT) && f2fs_lfs_mode(sbi)) {
-> > -		f2fs_err(sbi, "LFS not compatible with checkpoint=disable");
-> > +		f2fs_err(sbi, "LFS is not compatible with checkpoint=disable");
-> >   		return -EINVAL;
-> >   	}
-> >   	if (test_opt(sbi, ATGC) && f2fs_lfs_mode(sbi)) {
-> > -		f2fs_err(sbi, "LFS not compatible with ATGC");
-> > +		f2fs_err(sbi, "LFS is not compatible with ATGC");
-> >   		return -EINVAL;
-> >   	}
-> > @@ -2304,6 +2304,12 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
-> >   		}
-> >   	}
-> >   #endif
-> > +	if (f2fs_lfs_mode(sbi) && !IS_F2FS_IPU_DISABLE(sbi)) {
-> > +		err = -EINVAL;
-> > +		f2fs_warn(sbi, "LFS is not compatible with IPU");
-> > +		goto restore_opts;
-> > +	}
-> > +
-> >   	/* disallow enable atgc dynamically */
-> >   	if (no_atgc == !!test_opt(sbi, ATGC)) {
-> >   		err = -EINVAL;
-> > @@ -4083,10 +4089,9 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
-> >   	/* adjust parameters according to the volume size */
-> >   	if (MAIN_SEGS(sbi) <= SMALL_VOLUME_SEGMENTS) {
-> >   		if (f2fs_block_unit_discard(sbi))
-> > -			SM_I(sbi)->dcc_info->discard_granularity =
-> > -						MIN_DISCARD_GRANULARITY;
-> > -		SM_I(sbi)->ipu_policy = BIT(F2FS_IPU_FORCE) |
-> > -					BIT(F2FS_IPU_HONOR_OPU_WRITE);
-> > +			SM_I(sbi)->dcc_info->discard_granularity = MIN_DISCARD_GRANULARITY;
-> > +		if (!f2fs_lfs_mode(sbi))
-> > +			SM_I(sbi)->ipu_policy = BIT(F2FS_IPU_FORCE) | BIT(F2FS_IPU_HONOR_OPU_WRITE);
+> > Changes in v4:
+> > 
+> > * Removed the sorting of triggers
+> > * Removed the "items" as they were not needed
+> > * Reworded the description
+> > * Dropped Zhen Lei's tested-by tag as the patch has changed
+> > * Added kbd-capslock trigger
 > 
-> 	SM_I(sbi)->ipu_policy = BIT(F2FS_IPU_FORCE) |
-> 				BIT(F2FS_IPU_HONOR_OPU_WRITE);
-> 
-> I prefer to not exceed 80 lines, otherwise it looks good to me.
+> Any plans for this patch?
 
-Applied.
+Who are you asking?
 
-> 
-> Reviewed-by: Chao Yu <chao@kernel.org>
-> 
-> Thanks,
-> 
-> >   	}
-> >   	sbi->readdir_ra = true;
-> > diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> > index 575a5536c0e7..3c3dae3ce84e 100644
-> > --- a/fs/f2fs/sysfs.c
-> > +++ b/fs/f2fs/sysfs.c
-> > @@ -706,6 +706,15 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
-> >   		return count;
-> >   	}
-> > +	if (!strcmp(a->attr.name, "ipu_policy")) {
-> > +		if (t >= BIT(F2FS_IPU_MAX))
-> > +			return -EINVAL;
-> > +		if (t && f2fs_lfs_mode(sbi))
-> > +			return -EINVAL;
-> > +		SM_I(sbi)->ipu_policy = (unsigned int)t;
-> > +		return count;
-> > +	}
-> > +
-> >   	*ui = (unsigned int)t;
-> >   	return count;
+This patch is not in my inbox.
+
+-- 
+Lee Jones [李琼斯]
