@@ -2,111 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A29D68DA2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DAC68DA1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjBGOJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S232208AbjBGOHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbjBGOJW (ORCPT
+        with ESMTP id S232317AbjBGOGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:09:22 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A7B61B8;
-        Tue,  7 Feb 2023 06:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675778961; x=1707314961;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=D+s+xJYNtyKUrNWPCUskYm55IKEKSH1iYwC7Lk3zkZk=;
-  b=SgSDFNDWoG71siBVVMLa39T0HSfCrAny+rX295IAN/33D+6RgPQ+4IgF
-   6yuqzHEslTj45oqS7/zus1EGs62HuqbLaB13zMc9qZg/aG4eX2lT8ymHZ
-   0ax9LCdHBg4pCsqRtjhX9cosbHdV1JnAaFVke4zNc/IcTxs2UEyTSViLZ
-   DT8sFX8/rZG6wgt/rMrF0YuNUIOgklAne5KVvq9zfa1Dd98hazUcYYdIJ
-   Nw4+K9vXZMmjZuSoDqYBn8xPmTC4go/NmyA/ZwRY37O3G7dT9A/b1IHbk
-   JYEIRNksrfB5EY8xPrpD/aUJGhoMNSSVe/Lh1B+AZ3xcmBHvqKgu6Aclo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="329531025"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="329531025"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 06:05:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="660240909"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="660240909"
-Received: from msharawy-mobl.ger.corp.intel.com ([10.249.37.46])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 06:05:10 -0800
-Date:   Tue, 7 Feb 2023 16:05:04 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
- occurs in CAT test
-In-Reply-To: <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
-Message-ID: <83e1de31-b448-1a51-ba39-faec794694f@linux.intel.com>
-References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com>
+        Tue, 7 Feb 2023 09:06:50 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E2E2734
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:06:44 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pPObi-0008HA-7V; Tue, 07 Feb 2023 15:06:02 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:b5cc:20f3:3e4b:3812])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4AC0617277A;
+        Tue,  7 Feb 2023 14:06:00 +0000 (UTC)
+Date:   Tue, 7 Feb 2023 15:05:52 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Devid Antonio Filoni <devid.filoni@egluetechnologies.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] can: j1939: do not wait 250 ms if the same addr was
+ already claimed
+Message-ID: <20230207140552.bhsq5a2j5rxmwlao@pengutronix.de>
+References: <20221124051611.GA7870@pengutronix.de>
+ <20221125170418.34575-1-devid.filoni@egluetechnologies.com>
+ <20221126102840.GA21761@pengutronix.de>
+ <1ae01ab918876941dc57d01d4c2f1d7376dda87b.camel@egluetechnologies.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tjaisgwns5axhr7i"
+Content-Disposition: inline
+In-Reply-To: <1ae01ab918876941dc57d01d4c2f1d7376dda87b.camel@egluetechnologies.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 Jan 2023, Shaopeng Tan wrote:
 
-> After creating a child process with fork() in CAT test, if an error
-> occurs or a signal such as SIGINT is received, the parent process will
-> be terminated immediately, and therefor the child process will not
-> be killed and also resctrlfs is not unmounted.
-> 
-> There is a signal handler registered in CMT/MBM/MBA tests, which kills
-> child process, unmount resctrlfs, cleanups result files, etc., if a
-> signal such as SIGINT is received.
-> 
-> Commonize the signal handler registered for CMT/MBM/MBA tests and reuse
-> it in CAT too.
-> 
-> To reuse the signal handler, make the child process in CAT wait to be
-> killed by parent process in any case (an error occurred or a signal was
-> received), and when killing child process use global bm_pid instead of
-> local bm_pid.
-> 
-> Also, since the MBA/MBA/CMT/CAT are run in order, unregister the signal
-> handler at the end of each test so that the signal handler cannot be
-> inherited by other tests.
-> 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
+--tjaisgwns5axhr7i
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  	if (bm_pid == 0) {
->  		/* Tell parent that child is ready */
->  		close(pipefd[0]);
->  		pipe_message = 1;
->  		if (write(pipefd[1], &pipe_message, sizeof(pipe_message)) <
-> -		    sizeof(pipe_message)) {
-> -			close(pipefd[1]);
-> +		    sizeof(pipe_message))
-> +			/*
-> +			 * Just print the error message.
-> +			 * Let while(1) run and wait for itself to be killed.
-> +			 */
->  			perror("# failed signaling parent process");
+On 07.02.2023 14:50:15, Devid Antonio Filoni wrote:
+[...]
+> I noticed that this patch has not been integrated in upstream yet. Are
+> there problems with it?
 
-If the write error is ignored here, won't it just lead to parent hanging 
-forever waiting for the child to send the message through the pipe which 
-will never come?
+Thanks for the heads up, I've send a PR.
 
+Marc
 
--- 
- i.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--tjaisgwns5axhr7i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPiWr4ACgkQvlAcSiqK
+BOhGygf/UdoRT6XNx2iC0H5I6wLEb8zsIOtlwzphvfAavWLy78Ri/GZTCLVHkGA1
+9K0HV5AKAqrUjp24bfJ5oiYGBymKqV8R4Dw9NpLebF8NqdZ58WtP1Ejx4oC4c6Rv
+JqvUObqQ5+7zEveK3jDgFl5wQTqyf2vf7IhcOcURCGat/dxrcnuSrDT4wwt1gg5F
+H5Nn80rZjEPeQniFFVXA2ivAdGqQIhLV1Setps1czVPF/yMvGXMgYamGVkIEgnY6
+ecgFdwlmKNdr5rN4Oa+crofLXcN0OSc+SS51EZ6LM8u6jZuwDDXajyc6t2LkC+YG
+OwmZ2asb6dhMBxy21krSdjGvmdnHQQ==
+=Quy/
+-----END PGP SIGNATURE-----
+
+--tjaisgwns5axhr7i--
