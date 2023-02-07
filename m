@@ -2,107 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E43068DA99
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C9868DAB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 15:26:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbjBGOYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 09:24:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S232636AbjBGO0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 09:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbjBGOYp (ORCPT
+        with ESMTP id S232630AbjBGO0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 09:24:45 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E3824CB3;
-        Tue,  7 Feb 2023 06:24:39 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675779878;
+        Tue, 7 Feb 2023 09:26:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F923BDA9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 06:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675779942;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=48zTNCiq8jyQl85rZUjjKFb4zKzbUXhtUJ1Hwi8S0CA=;
-        b=HtKMdz8LlTmkbYTe/u01gq+8liQo8V4y0xKSVfKLz8kWn9e+g+8KTUmW5FlgkQXkCAvrEy
-        tsty9t1gAis6jVlJlKzvbA/bldqioOfgr7EFTfHaoZHRInOBFwRWdXsvsBrar8L5KF2jcz
-        i1jEBvew8OBdyxa44yjZk2uzLCGKreegVF1WBwi94YPOEtLzsu5NGWulfrYCmhzhUCZGYv
-        StO6tmeCMnji+F8/FkVhZhl3QoMgg0lM53MkHjE4af6rDFNk9kQpnxJbLL4F77q1RjnMVf
-        2NMmZl/y482tYELfhSpVRQBAsCqiyHoxlEhyt92HCe3+WeZW6U4NyXe8NeOPyg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675779878;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=48zTNCiq8jyQl85rZUjjKFb4zKzbUXhtUJ1Hwi8S0CA=;
-        b=d5xsa3caE7KBVhLFcJhb3fyVD5ad+qU4xOetisuvWAC04OuM0Fpg7Htn7w5YXoHaMhmnhI
-        rLi7LspkXjaPaIAA==
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-Subject: Re: [PATCH v6 01/11] x86/apic/x2apic: Fix parallel handling of
- cluster_mask
-In-Reply-To: <921cfe295fcd398168e5454e01193045de312688.camel@infradead.org>
-References: <20230202215625.3248306-1-usama.arif@bytedance.com>
- <20230202215625.3248306-2-usama.arif@bytedance.com> <87a61qxtx0.ffs@tglx>
- <d37f3af69df09ff542024ed93a37865b28dfa86e.camel@infradead.org>
- <921cfe295fcd398168e5454e01193045de312688.camel@infradead.org>
-Date:   Tue, 07 Feb 2023 15:24:38 +0100
-Message-ID: <87v8kdv9i1.ffs@tglx>
+        bh=FNwOLNIcIOa8N+GIFK2MFiHQPefHbhJcU7pUi7i1bsY=;
+        b=bortJQEQIlpab3fmAUsU/N1bvmrX1tiOt90VpW9/CgN6sqY1hU0VSrOAuNq90mL5wtxYIi
+        ekfiT3HjNz/llbaQBkL9h1zUdNZpdc1BCeMaX0bkA3ypcUe6Yy66tLusqfTOCeReDwQv5a
+        syG8D4YhaLowxh0EAXkT73Ruhh5CNzY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-i4xfSdVsNHmBbDvrASF2fw-1; Tue, 07 Feb 2023 09:25:39 -0500
+X-MC-Unique: i4xfSdVsNHmBbDvrASF2fw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 907D688B7A2;
+        Tue,  7 Feb 2023 14:25:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 84F4A2026D38;
+        Tue,  7 Feb 2023 14:25:37 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y+JBak3Tt8Pdw3yE@nvidia.com>
+References: <Y+JBak3Tt8Pdw3yE@nvidia.com> <20230207153706.1821393e@canb.auug.org.au>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3189180.1675779936.1@warthog.procyon.org.uk>
+Date:   Tue, 07 Feb 2023 14:25:36 +0000
+Message-ID: <3189181.1675779936@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07 2023 at 11:27, David Woodhouse wrote:
-> On Tue, 2023-02-07 at 10:57 +0000, David Woodhouse wrote:
->> =C2=A0=E2=80=A2 This CPU was present but no other CPU in this cluster wa=
-s actually
->> =C2=A0=C2=A0 brought up at boot time so the cluster_mask wasn't allocate=
-d.
->>=20
->> The code looks right, I don't grok the comment about partial clusters
->> and virtualization, and would have worded it something along the above
->> lines?
->
-> As I get my head around that, I think the code needs to change too.
-> What if we *unplug* the only CPU in a cluster (present=E2=86=92possible),=
- then
-> add a new one in the same cluster? The new one would get a new
-> cluster_mask. Which is kind of OK for now but then if we re-add the
-> original CPU it'd continue to use its old cluster_mask.
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Indeed.
+> David can you send a patch to the block tree to fix it?
 
-> Now, that's kind of weird if it's physical CPUs because that cluster is
-> within a given chip, isn't it? But with virtualization maybe that's
-> something that could happen, and it doesn't hurt to be completely safe
-> by using for_each_possible_cpu() instead?
+I'll see.  Given that the patch series introduces a memory corruptor bug that
+someone might bisect through, I want to see if Jens will let me replace it to
+put the fix first, in which case I can just alter the patch that adds the
+FOLL_PIN usage.
 
-Yes. Virtualization does aweful things....
+David
 
-> Now looks like this:
-> 	/*
-> 	 * On post boot hotplug for a CPU which was not present at boot time,
-> 	 * iterate over all possible CPUs (even those which are not present
-> 	 * any more) to find any existing cluster mask.
-> 	 */
-> 	for_each_possible_cpu(cpu_i) {
-
-Looks good!
-
-      tglx
