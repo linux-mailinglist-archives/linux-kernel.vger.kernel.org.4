@@ -2,112 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547C168B7AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 09:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4770268B67A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Feb 2023 08:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjBFIrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 03:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S229754AbjBFHeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 02:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjBFIrI (ORCPT
+        with ESMTP id S229567AbjBFHeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 03:47:08 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA3311178
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 00:46:57 -0800 (PST)
-Received: from kwepemm600015.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P9KZQ2YnGznW3B;
-        Mon,  6 Feb 2023 16:44:46 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 6 Feb
- 2023 16:46:51 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <rpeterso@redhat.com>, <agruenba@redhat.com>
-CC:     <cluster-devel@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <chenxiaosong2@huawei.com>
-Subject: [PATCH 2/2] gfs2: fix sleep from invalid context bug in gfs2_glock_wait()
-Date:   Mon, 6 Feb 2023 17:55:43 +0800
-Message-ID: <20230206095543.539186-3-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230206095543.539186-1-chenxiaosong2@huawei.com>
-References: <20230206095543.539186-1-chenxiaosong2@huawei.com>
+        Mon, 6 Feb 2023 02:34:01 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32B94EDF
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Feb 2023 23:33:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675668837; x=1707204837;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X2WBQ9RJBzamhY9mmwq8nKykzM0EbKzq7klufUYGkLY=;
+  b=LYbb8rppbhihxKmLiRibhXcPaKkXxx9yX+VDGNZuPOUIfv3gEhEiAnc3
+   0Dvcg7vuFjLWEQqX0mkfkkYdXgXgR5MIPOeu3yvT6zMG9q8U+1UhkO/KO
+   AFzrI4f1/AegCEpw0wd4NCsSie3eK547m3xzmlkAzgeZ3Vj5hvQfsArwz
+   pkBVEfOeBaZhyv1uhxhBeeGsEqDTf2AvmkjnReoRpvLCxLasdSGcapmE/
+   xX7tRm5Vr0L84Bz1O9580SOykUoLpJ8RAszPFQfrVMoQDLEZNwnY7FJBJ
+   XHJvrDSO2n8nQISa8BtlF6HzbRP6JyA7ntSZcDiPV7g3P6JDUkSIkXxHK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="309481425"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="309481425"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 23:33:57 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10612"; a="698757186"
+X-IronPort-AV: E=Sophos;i="5.97,276,1669104000"; 
+   d="scan'208";a="698757186"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2023 23:33:54 -0800
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH] platform/chrome: Avoid fetching the type-C parameters again
+Date:   Tue,  7 Feb 2023 13:06:10 +0530
+Message-Id: <20230207073610.3290391-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reported BUG as follows:
+The struct 'cros_typec_port' incorporates three type-C parameters,
+'ori_sw', 'retimer', and 'mux'.
+These parameters in the struct 'typec_port' are being already
+configured when 'typec_register_port' is being called.
 
-  BUG: sleeping function called from invalid context at
-       fs/gfs2/glock.c:1316
-  Call Trace:
-   __dump_stack lib/dump_stack.c:88 [inline]
-   dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
-   __might_resched+0x4e9/0x6b0 kernel/sched/core.c:10036
-   gfs2_glock_wait+0x52/0x2a0 fs/gfs2/glock.c:1316
-   gfs2_glock_nq_init fs/gfs2/glock.h:262 [inline]
-   gfs2_freeze_lock+0x5f/0xc0 fs/gfs2/util.c:107
-   signal_our_withdraw fs/gfs2/util.c:160 [inline]
-   gfs2_withdraw+0x5cc/0x1540 fs/gfs2/util.c:351
-   gfs2_ail1_empty+0x8c9/0x950 fs/gfs2/log.c:368
-   gfs2_flush_revokes+0x59/0x80 fs/gfs2/log.c:806
-   revoke_lo_before_commit+0x2b/0xcf0 fs/gfs2/lops.c:869
-   lops_before_commit fs/gfs2/lops.h:40 [inline]
-   gfs2_log_flush+0xc8e/0x26a0 fs/gfs2/log.c:1093
-   do_sync+0xa3c/0xc80 fs/gfs2/quota.c:975
-   gfs2_quota_sync+0x3da/0x8b0 fs/gfs2/quota.c:1318
-   gfs2_sync_fs+0x49/0xb0 fs/gfs2/super.c:650
-   sync_filesystem+0xe8/0x220 fs/sync.c:56
-   generic_shutdown_super+0x6b/0x310 fs/super.c:474
-   kill_block_super+0x79/0xd0 fs/super.c:1386
-   deactivate_locked_super+0xa7/0xf0 fs/super.c:332
-   cleanup_mnt+0x494/0x520 fs/namespace.c:1291
-   task_work_run+0x243/0x300 kernel/task_work.c:179
-   exit_task_work include/linux/task_work.h:38 [inline]
-   do_exit+0x644/0x2150 kernel/exit.c:867
-   do_group_exit+0x1fd/0x2b0 kernel/exit.c:1012
-   __do_sys_exit_group kernel/exit.c:1023 [inline]
-   __se_sys_exit_group kernel/exit.c:1021 [inline]
-   __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:1021
-   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-   do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+The bigger picture - 'typec_register_port' can return an error and
+the type-C parameters could go unconfigured. However, the callback
+will return EPROBE_DEFER and the driver will again be getting probed
+trying to configure them again.
+However, currently, they are again tried to get fetched for the
+'cros_typec_port' struct, which sometimes could result in an error
+and these parameters could go unconfigured (no provision of deferring
+the probe in this case, so we are left with unconfigured parameters).
 
-Fix this by calling gfs2_withdraw() outside of the spinlock context.
+Hence, assign the parameters to the corresponding ones in the struct
+'typec_port' after they are fetched in 'typec_register_port'.
 
-Link: https://syzkaller.appspot.com/bug?id=7bd882c47078df844b5a82550559d69482d5c3c1
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
 ---
- fs/gfs2/log.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/platform/chrome/cros_ec_typec.c | 58 ++++++++++---------------
+ 1 file changed, 22 insertions(+), 36 deletions(-)
 
-diff --git a/fs/gfs2/log.c b/fs/gfs2/log.c
-index c62c914702ba..945540c0a3cf 100644
---- a/fs/gfs2/log.c
-+++ b/fs/gfs2/log.c
-@@ -825,8 +825,10 @@ void gfs2_flush_revokes(struct gfs2_sbd *sdp)
- 	unsigned int max_revokes = atomic_read(&sdp->sd_log_revokes_available);
+diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+index 001b0de95a46..0265c0d38bd6 100644
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -24,6 +24,8 @@
+ #include <linux/usb/typec_tbt.h>
+ #include <linux/usb/role.h>
  
- 	gfs2_log_lock(sdp);
--	gfs2_ail1_empty(sdp, max_revokes);
-+	__gfs2_ail1_empty(sdp, max_revokes);
- 	gfs2_log_unlock(sdp);
++#include "../../usb/typec/class.h"
 +
-+	gfs2_ail1_withdraw(sdp);
+ #define DRV_NAME "cros-ec-typec"
+ 
+ #define DP_PORT_VDO	(DP_CONF_SET_PIN_ASSIGN(BIT(DP_PIN_ASSIGN_C) | BIT(DP_PIN_ASSIGN_D)) | \
+@@ -141,47 +143,17 @@ static int cros_typec_parse_port_props(struct typec_capability *cap,
+ 	return 0;
  }
  
- /**
+-static int cros_typec_get_switch_handles(struct cros_typec_port *port,
+-					 struct fwnode_handle *fwnode,
+-					 struct device *dev)
++static int cros_typec_get_role_switch_handle(struct cros_typec_port *port,
++					     struct fwnode_handle *fwnode,
++					     struct device *dev)
+ {
+-	port->mux = fwnode_typec_mux_get(fwnode, NULL);
+-	if (IS_ERR(port->mux)) {
+-		dev_dbg(dev, "Mux handle not found.\n");
+-		goto mux_err;
+-	}
+-
+-	port->retimer = fwnode_typec_retimer_get(fwnode);
+-	if (IS_ERR(port->retimer)) {
+-		dev_dbg(dev, "Retimer handle not found.\n");
+-		goto retimer_sw_err;
+-	}
+-
+-	port->ori_sw = fwnode_typec_switch_get(fwnode);
+-	if (IS_ERR(port->ori_sw)) {
+-		dev_dbg(dev, "Orientation switch handle not found.\n");
+-		goto ori_sw_err;
+-	}
+-
+ 	port->role_sw = fwnode_usb_role_switch_get(fwnode);
+ 	if (IS_ERR(port->role_sw)) {
+ 		dev_dbg(dev, "USB role switch handle not found.\n");
+-		goto role_sw_err;
++		return -ENODEV;
+ 	}
+ 
+ 	return 0;
+-
+-role_sw_err:
+-	typec_switch_put(port->ori_sw);
+-	port->ori_sw = NULL;
+-ori_sw_err:
+-	typec_retimer_put(port->retimer);
+-	port->retimer = NULL;
+-retimer_sw_err:
+-	typec_mux_put(port->mux);
+-	port->mux = NULL;
+-mux_err:
+-	return -ENODEV;
+ }
+ 
+ static int cros_typec_add_partner(struct cros_typec_data *typec, int port_num,
+@@ -363,6 +335,18 @@ static int cros_typec_register_port_altmodes(struct cros_typec_data *typec,
+ 	return 0;
+ }
+ 
++static void cros_typec_copy_port_params(struct cros_typec_port *cros_port)
++{
++	struct typec_port *port = cros_port->port;
++
++	if (IS_ERR_OR_NULL(port))
++		return;
++
++	cros_port->mux = port->mux;
++	cros_port->retimer = port->retimer;
++	cros_port->ori_sw = port->sw;
++}
++
+ static int cros_typec_init_ports(struct cros_typec_data *typec)
+ {
+ 	struct device *dev = typec->dev;
+@@ -422,9 +406,11 @@ static int cros_typec_init_ports(struct cros_typec_data *typec)
+ 			goto unregister_ports;
+ 		}
+ 
+-		ret = cros_typec_get_switch_handles(cros_port, fwnode, dev);
++		cros_typec_copy_port_params(cros_port);
++
++		ret = cros_typec_get_role_switch_handle(cros_port, fwnode, dev);
+ 		if (ret)
+-			dev_dbg(dev, "No switch control for port %d\n",
++			dev_dbg(dev, "No role-switch control for port %d\n",
+ 				port_num);
+ 
+ 		ret = cros_typec_register_port_altmodes(typec, port_num);
 -- 
-2.31.1
+2.34.1
 
