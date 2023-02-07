@@ -2,218 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0FD68DF2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D7E68DF30
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjBGRnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        id S230176AbjBGRoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjBGRnD (ORCPT
+        with ESMTP id S229792AbjBGRoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:43:03 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014863A582
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:42:53 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 89A9533715;
-        Tue,  7 Feb 2023 17:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675791772; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rK233bHLDEXe46WUIootRSCrWBp07XfQWGcCqinPeAc=;
-        b=DEzN9Bmi6rl0rImh+WSXXyxctKrfRz3c4N+mheldPJXhzPABsK/Ueo4ASPyYSbJehE50n+
-        ox38clmLbHXA+PrF91w90VOrpsHM4p37wgbpld6+ocWKOosb2uEsJemLdn9VyvyxH1v8mD
-        +jmc5kfJ4G0ro8itdnkBbaRSze8/eEY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675791772;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rK233bHLDEXe46WUIootRSCrWBp07XfQWGcCqinPeAc=;
-        b=bh6ieUQboL/m0cocoRlKNEA9IvjS9X5qoKHXA2YJ3i4BU0ygCO7ts08CbAFP4c/w/TNm+I
-        rtqRIO98HGQ4NnBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 650A313467;
-        Tue,  7 Feb 2023 17:42:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id tPUBGJyN4mPaYAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 07 Feb 2023 17:42:52 +0000
-Message-ID: <a55cf026-a2f9-ef01-9a4c-398693e048ea@suse.cz>
-Date:   Tue, 7 Feb 2023 18:42:52 +0100
+        Tue, 7 Feb 2023 12:44:13 -0500
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD333BD8A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:44:10 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vb8Lda5_1675791845;
+Received: from 30.25.213.166(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0Vb8Lda5_1675791845)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Feb 2023 01:44:06 +0800
+Message-ID: <8464725c-40ce-3e3f-baaf-5c2c136cc870@linux.alibaba.com>
+Date:   Wed, 8 Feb 2023 01:44:04 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4/4] mm, compaction: Finish pageblocks on complete
- migration failure
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chuyi Zhou <zhouchuyi@bytedance.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230125134434.18017-1-mgorman@techsingularity.net>
- <20230125134434.18017-5-mgorman@techsingularity.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230125134434.18017-5-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH -v4 8/9] migrate_pages: batch flushing TLB
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+References: <20230206063313.635011-1-ying.huang@intel.com>
+ <20230206063313.635011-9-ying.huang@intel.com>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20230206063313.635011-9-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/25/23 14:44, Mel Gorman wrote:
-> Commit 7efc3b726103 ("mm/compaction: fix set skip in
-> fast_find_migrateblock") address an issue where a pageblock selected
-> by fast_find_migrateblock() was ignored. Unfortunately, the same fix
-> resulted in numerous reports of khugepaged or kcompactd stalling for
-> long periods of time or consuming 100% of CPU.
-> 
-> Tracing showed that there was a lot of rescanning between a small subset
-> of pageblocks because the conditions for marking the block skip are not
-> met. The scan is not reaching the end of the pageblock because enough
-> pages were isolated but none were migrated successfully. Eventually it
-> circles back to the same block.
-> 
-> Pageblock skip tracking tries to minimise both latency and excessive
-> scanning but tracking exactly when a block is fully scanned requires an
-> excessive amount of state. This patch forcibly rescans a pageblock when
-> all isolated pages fail to migrate even though it could be for transient
-> reasons such as page writeback or page dirty. This will sometimes migrate
-> too many pages but pageblocks will be marked skip and forward progress
-> will be made.
-> 
-> "Usemen" from the mmtests configuration
-> workload-usemem-stress-numa-compact was used to stress compaction.
-> The compaction trace events were recorded using a 6.2-rc5 kernel that
-> includes commit 7efc3b726103 and count of unique ranges were measured. The
-> top 5 ranges were
-> 
->    3076 range=(0x10ca00-0x10cc00)
->    3076 range=(0x110a00-0x110c00)
->    3098 range=(0x13b600-0x13b800)
->    3104 range=(0x141c00-0x141e00)
->   11424 range=(0x11b600-0x11b800)
-> 
-> While this workload is very different than what the bugs reported,
-> the pattern of the same subset of blocks being repeatedly scanned is
-> observed. At one point, *only* the range range=(0x11b600 ~ 0x11b800)
-> was scanned for 2 seconds. 14 seconds passed between the first
-> migration-related event and the last.
-> 
-> With the series applied including this patch, the top 5 ranges were
-> 
->       1 range=(0x11607e-0x116200)
->       1 range=(0x116200-0x116278)
->       1 range=(0x116278-0x116400)
->       1 range=(0x116400-0x116424)
->       1 range=(0x116424-0x116600)
-> 
-> Only unique ranges were scanned and the time between the first
-> migration-related event was 0.11 milliseconds.
-> 
-> Fixes: 7efc3b726103 ("mm/compaction: fix set skip in fast_find_migrateblock")
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 
-While this seems like it will mostly prevent the issue at hand (I think
-kcompactd is still a hazard, see below), I'm not super happy about some of
-the implementation details.
-
-1. it modifies code that was meant to quickly skip an order-aligned block
-where a page migration failed during MIGRATE_ASYNC direct compaction, as
-it's very unlikely to sucessfully form a free page of that order in that
-block. Now instead it will finish the whole pageblock in that case, which
-could be lots of useless work and thus exactly the opposite of what we
-wanted for MIGRATE_ASYNC direct compaction.
-
-2. The conditions "cc->direct_compaction" and "(cc->mode < MIGRATE_SYNC)"
-seem a bit hazardous. I think we can have a compaction where these are not
-true, and yet it uses fast_find_migrateblock() and thus can exhibit the bug
-but won't be forced to rescan?
-AFAICS kcompactd_do_work()
-- is MIGRATE_SYNC_LIGHT
-- has ignore_skip_hint = false
-- has direct_compaction = false
-
-so AFAICS it will use fast_find_migrateblock() and not bail out in one of
-the preconditions. But the cc->direct_compaction condition here won't apply.
-
-So it might be better to leave the current "skip the rest of block" check
-alone, and add a separate check for the finish_pageblock rescan that will
-not miss some cases where it should apply - maybe it could check for a
-complete migration failure specifically as well?
+在 2023/2/6 下午2:33, Huang Ying 写道:
+> The TLB flushing will cost quite some CPU cycles during the folio
+> migration in some situations.  For example, when migrate a folio of a
+> process with multiple active threads that run on multiple CPUs.  After
+> batching the _unmap and _move in migrate_pages(), the TLB flushing can
+> be batched easily with the existing TLB flush batching mechanism.
+> This patch implements that.
+>
+> We use the following test case to test the patch.
+>
+> On a 2-socket Intel server,
+>
+> - Run pmbench memory accessing benchmark
+>
+> - Run `migratepages` to migrate pages of pmbench between node 0 and
+>    node 1 back and forth.
+>
+> With the patch, the TLB flushing IPI reduces 99.1% during the test and
+> the number of pages migrated successfully per second increases 291.7%.
+>
+> NOTE: TLB flushing is batched only for normal folios, not for THP
+> folios.  Because the overhead of TLB flushing for THP folios is much
+> lower than that for normal folios (about 1/512 on x86 platform).
+>
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Bharata B Rao <bharata@amd.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: haoxin <xhao@linux.alibaba.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 > ---
->  mm/compaction.c | 30 ++++++++++++++++++++++--------
->  1 file changed, 22 insertions(+), 8 deletions(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 4b3a0238879c..937ec2f05f2c 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -2394,6 +2394,7 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
->  			cc->finish_pageblock = true;
->  		}
->  
-> +rescan:
->  		switch (isolate_migratepages(cc)) {
->  		case ISOLATE_ABORT:
->  			ret = COMPACT_CONTENDED;
-> @@ -2436,15 +2437,28 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
->  				goto out;
->  			}
->  			/*
-> -			 * We failed to migrate at least one page in the current
-> -			 * order-aligned block, so skip the rest of it.
-> +			 * If an ASYNC or SYNC_LIGHT fails to migrate a page
-> +			 * within the current order-aligned block, scan the
-> +			 * remainder of the pageblock. This will mark the
-> +			 * pageblock "skip" to avoid rescanning in the near
-> +			 * future. This will isolate more pages than necessary
-> +			 * for the request but avoid loops due to
-> +			 * fast_find_migrateblock revisiting blocks that were
-> +			 * recently partially scanned.
->  			 */
-> -			if (cc->direct_compaction &&
-> -						(cc->mode == MIGRATE_ASYNC)) {
-> -				cc->migrate_pfn = block_end_pfn(
-> -						cc->migrate_pfn - 1, cc->order);
-> -				/* Draining pcplists is useless in this case */
-> -				last_migrated_pfn = 0;
-> +			if (cc->direct_compaction && !cc->finish_pageblock &&
-> +						(cc->mode < MIGRATE_SYNC)) {
-> +				cc->finish_pageblock = true;
+>   mm/migrate.c |  4 +++-
+>   mm/rmap.c    | 20 +++++++++++++++++---
+>   2 files changed, 20 insertions(+), 4 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 9378fa2ad4a5..ca6e2ff02a09 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1230,7 +1230,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+>   		/* Establish migration ptes */
+>   		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
+>   			       !folio_test_ksm(src) && !anon_vma, src);
+> -		try_to_migrate(src, 0);
+> +		try_to_migrate(src, TTU_BATCH_FLUSH);
+>   		page_was_mapped = 1;
+>   	}
+>   
+> @@ -1781,6 +1781,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>   	stats->nr_thp_failed += thp_retry;
+>   	stats->nr_failed_pages += nr_retry_pages;
+>   move:
+> +	try_to_unmap_flush();
 > +
+>   	retry = 1;
+>   	for (pass = 0;
+>   	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index b616870a09be..2e125f3e462e 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1976,7 +1976,21 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>   		} else {
+>   			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+>   			/* Nuke the page table entry. */
+> -			pteval = ptep_clear_flush(vma, address, pvmw.pte);
+> +			if (should_defer_flush(mm, flags)) {
 > +				/*
-> +				 * Draining pcplists does not help THP if
-> +				 * any page failed to migrate. Even after
-> +				 * drain, the pageblock will not be free.
+> +				 * We clear the PTE but do not flush so potentially
+> +				 * a remote CPU could still be writing to the folio.
+> +				 * If the entry was previously clean then the
+> +				 * architecture must guarantee that a clear->dirty
+> +				 * transition on a cached TLB entry is written through
+> +				 * and traps if the PTE is unmapped.
 > +				 */
-> +				if (cc->order == COMPACTION_HPAGE_ORDER)
-> +					last_migrated_pfn = 0;
+> +				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+Nice work， Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
 > +
-> +				goto rescan;
->  			}
->  		}
->  
-
+> +				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
+> +			} else {
+> +				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+> +			}
+>   		}
+>   
+>   		/* Set the dirty flag on the folio now the pte is gone. */
+> @@ -2148,10 +2162,10 @@ void try_to_migrate(struct folio *folio, enum ttu_flags flags)
+>   
+>   	/*
+>   	 * Migration always ignores mlock and only supports TTU_RMAP_LOCKED and
+> -	 * TTU_SPLIT_HUGE_PMD and TTU_SYNC flags.
+> +	 * TTU_SPLIT_HUGE_PMD, TTU_SYNC, and TTU_BATCH_FLUSH flags.
+>   	 */
+>   	if (WARN_ON_ONCE(flags & ~(TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
+> -					TTU_SYNC)))
+> +					TTU_SYNC | TTU_BATCH_FLUSH)))
+>   		return;
+>   
+>   	if (folio_is_zone_device(folio) &&
