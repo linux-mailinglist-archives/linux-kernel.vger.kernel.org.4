@@ -2,146 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E305468E0AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E7868E168
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 20:46:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjBGS6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S231966AbjBGTqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 14:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjBGS6b (ORCPT
+        with ESMTP id S231927AbjBGTqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:58:31 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3890B1F48F;
-        Tue,  7 Feb 2023 10:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675796310; x=1707332310;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dSXSHlEWikcv5Z/BCN//ZPxm4jYckMqyZIAa1x0kq5A=;
-  b=lqgHbWBY8wqNEs5t0bEJDlpE5EyZy/+5zoR2ZaIWzK/v8NoARpp+ta18
-   qOz4lI9+tJjP0UieL6sFvugi6bnslO3QAeNA22c8NWuWcui54hiSz3pFo
-   BZwlu0+7FdK9cuoDw4TwWQP956JtHAL/EAkLefAkGlVuda2GMw2X7Ltt/
-   MQiWXQ+ZL9mVtElJAZkin7JT5bpx3rU77oyjAQzTH6r3QVpCgnfGGyC1U
-   x0WS2e4ifDT8SUUo0htpFLVPFd/HwOjCYlQCCU8LQbuRRuDlOAgxprgGj
-   qt+AJ0CbNRdJfAKJwk2nocHrAvGBDGswz+sVqeS4qzM3qdav1aIUAR4iQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="309938274"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="309938274"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 10:58:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="730562558"
-X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="730562558"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Feb 2023 10:58:29 -0800
-Date:   Tue, 7 Feb 2023 11:08:08 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "Neri, Ricardo" <ricardo.neri@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v2 0/2] intel_powerclamp: New module parameter
-Message-ID: <20230207190808.GA14018@ranerica-svr.sc.intel.com>
-References: <20230205025902.2899734-1-srinivas.pandruvada@linux.intel.com>
- <a68a6f8c76cb719cd4865bd6aa726306772d4ee3.camel@intel.com>
- <60514763753f572f854f1bbf287c3c16fbbc12c3.camel@linux.intel.com>
- <468eedb9d8a839d22ffd18125d3104f8c014965c.camel@intel.com>
- <f33bc346d8d4ae086ddf59db2670ce9a8f80a250.camel@linux.intel.com>
- <20230207134237.GA13076@ranerica-svr.sc.intel.com>
- <1395f577409bb7928dc1d9dc954e1af039253111.camel@linux.intel.com>
+        Tue, 7 Feb 2023 14:46:17 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3640C3BDB2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 11:46:14 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-16a27344a17so11040807fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 11:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W57wzZYsbIJZQpPVkemrOHsbaIu0hnor4kfOcH0Od4c=;
+        b=qQLwVhZ270H3VGVANdcjtqqRppTerXYZ6I40r+1bS9MWm1u73znQl4be/O4+sRGhkl
+         Ce35RngMI2NJZsHTbjqmF1nrYBbSc3Cu5JvJOHqP0dfOM9e8aR36jlj5e4Z5uQ8IhLQn
+         k5b5AircWsWO3B4DrR9mSrxsITztRhtFKjkVJNFgLoIZrlgbCYiV0T62L11TeRh+fCTQ
+         /69D1GLmS65UqVL937ee3EVEfbxTEhGZ/qybf+uJujuY5c9VNaRe3wkqB9od37qWI6Xi
+         tGgx2cdvOgLw7/vcn/wuFGK7PfFW3H1XwUO/BVQMCeLDZKd9BFQa6UQUgUK1iGXPHA/f
+         vgzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W57wzZYsbIJZQpPVkemrOHsbaIu0hnor4kfOcH0Od4c=;
+        b=1bv6UlqTJka4q2bpi0O6TJWLLzU5ESCuXqt7qBWTWPINqYkrej/a8UXgAxgEugluUc
+         LwdNk11OKuEW9joIaQKYVdmUlqTEDjtga+gUouw4vkk+HGpco8WELmdDm+CmfDLqHLe4
+         nCEPVyQe9M4DW0/piIOpnSOo4Ph6huCcxzrhp0ns0GQrnrb2mqX/RifKlKhGQDi/K16M
+         SnxBO07Zkxj263PoS/gXsWQ6cvDT/lqAQ+h1cTYll6ECf+FF0a22DSYbjgfPonen0HDW
+         TWuBVpFGi/1cbmKU9VQShF40XqtTI8U2M2cRrh+JmrmB6HdiXsrAi6bGK7JH2zrH7GER
+         kgGw==
+X-Gm-Message-State: AO0yUKVCF+P1eh+RK7coT91DnvPWOcxGvxiT2IKwASTKD3NV+pRJ2Knd
+        LklZWIlV2kilf0K/Z++uK7Q=
+X-Google-Smtp-Source: AK7set8EQJJrF3sqkkw6+s06OzoOlz8vfZY+v0BYwKhl+DAPy0UmiD+hZ1iTgYzy5ldhZ+BBuk7oLQ==
+X-Received: by 2002:a05:6870:328b:b0:166:fc4a:aec7 with SMTP id q11-20020a056870328b00b00166fc4aaec7mr1880532oac.41.1675799172607;
+        Tue, 07 Feb 2023 11:46:12 -0800 (PST)
+Received: from policorp.cardume.local (177.207.126.10.dynamic.adsl.gvt.net.br. [177.207.126.10])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056870a58500b0010c727a3c79sm1027497oam.26.2023.02.07.11.46.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 11:46:12 -0800 (PST)
+From:   drosdeck <edson.drosdeck@gmail.com>
+To:     perex@perex.cz
+Cc:     tiwai@suse.com, tcrawford@system76.com,
+        sbinding@opensource.cirrus.com, tangmeng@uniontech.com,
+        kai.heng.feng@canonical.com, p.jungkamp@gmx.net,
+        kasper93@gmail.com, gabriele.mzt@gmail.com, yangyuchi66@gmail.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        edson.drosdeck@gmail.com
+Subject: [PATCH] ALSA: hda/realtek: Add Positivo N14KP6-TG
+Date:   Tue,  7 Feb 2023 15:37:20 -0300
+Message-Id: <20230207183720.2519-1-edson.drosdeck@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1395f577409bb7928dc1d9dc954e1af039253111.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 05:51:59AM -0800, srinivas pandruvada wrote:
-> On Tue, 2023-02-07 at 05:42 -0800, Ricardo Neri wrote:
-> > On Mon, Feb 06, 2023 at 02:02:28AM -0800, srinivas pandruvada wrote:
-> > > On Mon, 2023-02-06 at 08:05 +0000, Zhang, Rui wrote:
-> > > > On Sun, 2023-02-05 at 18:45 -0800, srinivas pandruvada wrote:
-> > > > > Hi Rui,
-> > > > > 
-> > > > > On Sun, 2023-02-05 at 15:57 +0000, Zhang, Rui wrote:
-> > > > > > Hi, Srinivas,
-> > > > > > 
-> > > > > > First of all, the previous build error is gone.
-> > > > > > 
-> > > > > > Second, I found something strange, which may be related with
-> > > > > > the
-> > > > > > scheduler asym-packing, so CC Ricardo.
-> > > > > > 
-> > > > > I thought you disable ITMT before idle injection and reenebale
-> > > > > after
-> > > > > removal.
-> > > > 
-> > > > No.
-> > > > 
-> > > > I can reproduce this by playing with raw intel_powerclamp sysfs
-> > > > knobs
-> > > > and ITMT enabled.
-> > > > 
-> > > 
-> > > This issue is happening even if ITMT disabled. If the module mask
-> > > is
-> > > composed of P-cores it works or even on servers as expected.
-> > > Also if you offline all P-cores then select mask among E-cores, it
-> > > is
-> > > working. Somehow P-core influences E-cores.
-> > > 
-> > > Since this patch is module mask related, that is functioning
-> > > correctly.
-> > > We have to debug this interaction with P and E cores separately.
-> > 
-> > Currently, when doing asym_packing, ECores will only pull tasks from
-> > a
-> > PCore only if both SMT siblings are busy. It will only pull from the
-> > lower-priority sibling. These patches [1] let ECores pull from either
-> > sibling, if both are busy.
-> > 
-> > I presume that by injecting idle, the scheduler thinks that the CPU
-> > is
-> > idle (i.e., idle_cpu() returns true) and it will not do asym_packing
-> > from
-> > lower-priority CPUs.
-> > 
-> > However, in your experiment you have 16 threads. If a Pcore is
-> > overloaded,
-> > an ECore should be able to help.
-> This issue happens with or without ITMT and also without any idle
-> injection active.
+Positivo N14KP6-TG (1c6c:1251)
+require quirk for enabling headset-mic
 
-I was not able to reproduce this issue on my ADL-S system with ITMT. The
-described bug is exactly what and old patchset of mine was supposed to
-fix [2]. Maybe the CPU priorities in the failing system are such that it
-prevents asym_packing from kicking in.
+Signed-off-by: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I was able to reproduce the issue without ITMT.
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index db9518de9343..ee5d3347354c 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9701,6 +9701,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1b7d, 0xa831, "Ordissimo EVE2 ", ALC269VB_FIXUP_ORDISSIMO_EVE2), /* Also known as Malata PC-B1303 */
+ 	SND_PCI_QUIRK(0x1c06, 0x2013, "Lemote A1802", ALC269_FIXUP_LEMOTE_A1802),
+ 	SND_PCI_QUIRK(0x1c06, 0x2015, "Lemote A190X", ALC269_FIXUP_LEMOTE_A190X),
++	SND_PCI_QUIRK(0x1c6c, 0x1251, "Positivo N14KP6-TG", ALC288_FIXUP_DELL1_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1d05, 0x1132, "TongFang PHxTxX1", ALC256_FIXUP_SET_COEF_DEFAULTS),
+ 	SND_PCI_QUIRK(0x1d05, 0x1096, "TongFang GMxMRxx", ALC269_FIXUP_NO_SHUTUP),
+ 	SND_PCI_QUIRK(0x1d05, 0x1100, "TongFang GKxNRxx", ALC269_FIXUP_NO_SHUTUP),
+-- 
+2.30.2
 
-I had found that the scheduler cannot handle load balance between SMT and
-non-SMT cores correctly. My patchset [1] includes fixes for this case. I
-applied it on top of Rafael's linux-next branch and it fixed the issue for
-me in the non-ITMT case. Perhaps patches 5 and 6 are sufficient, but I
-applied the whole series.
-
-Thanks and BR,
-Ricardo
-
-[1]. https://lore.kernel.org/lkml/20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com/
-[2]. https://lore.kernel.org/all/20210911011819.12184-7-ricardo.neri-calderon@linux.intel.com/
