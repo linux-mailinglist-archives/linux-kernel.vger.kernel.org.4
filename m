@@ -2,59 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F4868D1E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 09:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F9368D1EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjBGI6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 03:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S231322AbjBGJAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjBGI6Q (ORCPT
+        with ESMTP id S229685AbjBGJAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 03:58:16 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345281114B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 00:58:15 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id a24so15543551vsl.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 00:58:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bJGUTHNzVk0CrDLPjREXJzjqiBi2pjaUdCgiLmgCaNE=;
-        b=YsQ1SJKp9ric8eetL2Txcs9f3CUPHJidqRiInmtOn+W9Sgc4ANb5a4fPTp8NepJeK2
-         d0BVtGtvFURucArLag7vF2lXxRRWEoM7QgEVoqkRdxp48E1/ZmvL0r9EtyNWyktyUKlT
-         TDiqxW9IlaHadd8ZnNM+qtf7gED6kJrCCdDyY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bJGUTHNzVk0CrDLPjREXJzjqiBi2pjaUdCgiLmgCaNE=;
-        b=zZyBrqbmiOWgUT9ZQ2xrgz4YK0ZUdH95hvHvLElMXSelVUcMVNTCPKTMUEhUWXjRY4
-         RpVLlJ+AELTlcEAGBlXVU1PSSxB2q+YaG3wwN9Vo+I1XPWXYQ3znkB47NpXXjkIRMhNl
-         Fe41b5g2L1vZ5PiEQyyd4oHLJVQU0IEVVYwHhRxY3W4WXwZ9j1Q3zMVUT2MkeC1GHKck
-         +iZrkUVTrFk26O/VSCb+R+FJ/Wui6BxbMjlh4tsHAsjGEnSdM+/1XfkZhhrSCQ1Jfsjz
-         AScAzDtRNDBwHcjF7zBC3ZF9h1dCPZu3ts0fZWKjEHdf2iwd05f2S+chbCbESRUeOt3r
-         VjVg==
-X-Gm-Message-State: AO0yUKXQJwMEhn6/ryVeyPYVkXmxgsxZv9U9HE1+jNGVN1m5YCYxF4dG
-        /jFicMh0X208iroXhhvTcfJYoFrOGKONh07hRjZkgw==
-X-Google-Smtp-Source: AK7set8q/Np50pceKj/VI+JvmP79bjSmnUhKoBbzRgRnOhvnmB0W3alAQiNAxbYLsMfSSntXfkhvFzvLcr3TP50xUVc=
-X-Received: by 2002:a05:6102:4b8:b0:3fe:ae88:d22 with SMTP id
- r24-20020a05610204b800b003feae880d22mr515509vsa.65.1675760294338; Tue, 07 Feb
- 2023 00:58:14 -0800 (PST)
+        Tue, 7 Feb 2023 04:00:09 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1B11114B;
+        Tue,  7 Feb 2023 01:00:08 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A0860660206C;
+        Tue,  7 Feb 2023 09:00:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675760407;
+        bh=f0nG3eBmFCxeHuko6fB9k/VrHD/2/5hvPtzYHQjF/mE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EBlKZzWFAbkQVTjKrIdQ9x6AY1pe9kN5uINajGuaobbCgOCWtNToRktnj2XxumZXg
+         ySms93OfBxwnsPGbPr9Vuswn6ecvenRGPynpXsreVy0kU8gM5aisU64pZdlfmmN2yV
+         hdSGEeYM40FMCtxrpsJssbJqwxd4ZDEbScg5ZI599Szw2SM6okBksfmIknOsbG945K
+         bW+HWSmUAipY7ZgHa5FcRSx7dZiIUh/5qP/vyfXIjUt9LafqmFiIzxWn7vCWPn9TyW
+         m1ihU/2iTbUftKp9mHp29SVO5RdxW4aa499K1F6IMKYt4OZyzloAlOKHCi71enwXRJ
+         6TPUwMNLaEDWA==
+Message-ID: <b7b35901-59aa-5342-1bd1-5ed591a0469c@collabora.com>
+Date:   Tue, 7 Feb 2023 10:00:02 +0100
 MIME-Version: 1.0
-References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
- <20230206152928.918562-6-angelogioacchino.delregno@collabora.com>
- <CAGXv+5Gg60-4B29V9cYUw7b1OVcZvU+w9qdiiBbt10LJsAJiCA@mail.gmail.com> <93d95309-84eb-16c6-b64e-b0c43d784900@collabora.com>
-In-Reply-To: <93d95309-84eb-16c6-b64e-b0c43d784900@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 7 Feb 2023 16:58:03 +0800
-Message-ID: <CAGXv+5HYLOuqzgepTbaT+3bAeDp3Ofa_JWLPqQ7M6e0dQrof4A@mail.gmail.com>
-Subject: Re: [PATCH v1 05/45] clk: mediatek: mt2712: Migrate topckgen/mcucfg
- to mtk_clk_simple_probe()
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 09/45] clk: mediatek: mt2712: Change to use
+ module_platform_driver macro
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
 Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
         johnson.wang@mediatek.com, miles.chen@mediatek.com,
         chun-jie.chen@mediatek.com, daniel@makrotopia.org,
@@ -66,65 +52,99 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
         chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
+ <20230206152928.918562-10-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5GfwY2+55UupTUNYVudg3-YDQtkkfhT=M53CJwdqG=ERg@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5GfwY2+55UupTUNYVudg3-YDQtkkfhT=M53CJwdqG=ERg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 4:45 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 07/02/23 07:15, Chen-Yu Tsai ha scritto:
-> > On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> >>
-> >> Now that the common mtk_clk_simple_{probe,remove}() functions can deal
-> >> with divider clocks it is possible to migrate more clock drivers to it:
-> >> in this case, it's about topckgen.
-> >> While at it, also perform a fast migration for mcucfg.
-> >>
-> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> >
-> > Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> >
-> >> ---
-> >>   drivers/clk/mediatek/clk-mt2712.c | 127 +++++-------------------------
-> >>   1 file changed, 21 insertions(+), 106 deletions(-)
-> >>
->
-> ..snip..
->                       __func__, r);
-> >> +static const struct mtk_clk_desc topck_desc = {
-> >> +       .clks = top_clks,
-> >> +       .num_clks = ARRAY_SIZE(top_clks),
-> >> +       .fixed_clks = top_fixed_clks,
-> >> +       .num_fixed_clks = ARRAY_SIZE(top_fixed_clks),
-> >> +       .factor_clks = top_divs,
-> >> +       .num_factor_clks = ARRAY_SIZE(top_divs),
-> >> +       .composite_clks = top_muxes,
-> >> +       .num_composite_clks = ARRAY_SIZE(top_muxes),
-> >> +       .divider_clks = top_adj_divs,
-> >> +       .num_divider_clks = ARRAY_SIZE(top_adj_divs),
-> >> +       .clk_lock = &mt2712_clk_lock,
-> >
-> > At some point maybe we should look into splitting up the locks to one
-> > per block, or converting everything to regmap.
-> >
->
-> I was thinking the same about the locks... but about regmap, that would
-> actually add up some overhead at every R/W operation and I would really
-> like to measure that precisely before doing any kind of regmap conversion
-> for the MediaTek clocks.
->
-> Perhaps I'll even find a way to avoid any kind of (even if small) overhead
-> while doing that sometime in the future, which wouldn't be benefitting only
-> MediaTek, but also other users like Qualcomm (as they have practically all
-> clocks on regmap!).
+Il 07/02/23 07:33, Chen-Yu Tsai ha scritto:
+> On Mon, Feb 6, 2023 at 11:29 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Now that all of the clocks in clk-mt2712.c are using the common
+>> mtk_clk_simple_{probe,remove}() callbacks we can safely migrate
+>> to module_platform_driver.
+> 
+> Instead of splitting the conversion into a module among many patches,
+> I'd do it in one go. With one patch we get a working module instead
+> of a half-baked one half way through the series.
+> 
 
-Stephen would likely appreciate a unified regmap clock library :D
+If you really want I can eventually do that in one go - in any case, the
+sense of having this split in multiple commits is:
+  - Bisectability: topckgen/mcucfg migration being faulty would point at
+                   one commit doing just that, making it easier for whoever
+                   is trying to debug that to find what could've gone wrong;
+  - Slow changes:  A driver being a platform_driver doesn't mean that it *has*
+                   to be compiled as a module: infact, we can use the .remove()
+                   callback even with built-in drivers (as you can remove one
+                   and re-add it during runtime from sysfs)
+  - Signaling completion:
+                   Saying "this is complete" in this case is performed in the
+                   last patches of the series, where only the Kconfig is being
+                   changed to allow the module build for (most)all.
+
+> The subject could say "Convert X driver from builtin to module". And
+> instead of "migrate to module_platform_driver", the body could say
+> "convert to module by switching to module_platform_driver, and adding
+> missing MODULE_* statements". I believe this constitutes one logical
+> change. Maybe the accompanying Kconfig change should be included as
+> well?
+> 
+
+But again, I don't have *really strong* opinions on this, if not preferences
+for how I'd like to see the changes getting in: this series brings big changes
+that would be done in many more commits if they were scattered in more series.
+Another point about having this conversion performed in multiple commits is
+showing how it was done and how to replicate it for a different driver...
+
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/clk/mediatek/clk-mt2712.c | 10 ++--------
+>>   1 file changed, 2 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/clk/mediatek/clk-mt2712.c b/drivers/clk/mediatek/clk-mt2712.c
+>> index c5fd76d1b9df..65c1cbcbd54e 100644
+>> --- a/drivers/clk/mediatek/clk-mt2712.c
+>> +++ b/drivers/clk/mediatek/clk-mt2712.c
+>> @@ -1028,7 +1028,7 @@ static const struct of_device_id of_match_clk_mt2712_simple[] = {
+>>          { /* sentinel */ }
+>>   };
+>>
+>> -static struct platform_driver clk_mt2712_simple_drv = {
+>> +static struct platform_driver clk_mt2712_drv = {
+> 
+> Why the name change? If you do change the name, could you also change
+> the of match table's name as well to be consistent, and also mention
+> the change in the commit log?
+
+It simply looked like being a good idea, as "simple" made sense when we had two
+platform_driver in one file, one using simple_probe, one using a custom probe
+function.
+The latter going away forever means that there's no more distinction to do
+between the two, hence my rename here...
+
+Regarding the of_match_table name change... I'm sorry, I genuinely forgot to
+change it, my intention was infact to actually be consistent... :-)
+
+> 
+> I'd just leave it alone though.
+
+I had to explain my reasoning about all of the above, so I'll just wait for
+your opinion again before going for a v2! :-)
+
+Cheers,
+Angelo
+
