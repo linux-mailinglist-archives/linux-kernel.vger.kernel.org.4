@@ -2,113 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5CB68DD4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9854968DD4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbjBGPse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 10:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S232405AbjBGPtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 10:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbjBGPsc (ORCPT
+        with ESMTP id S231158AbjBGPtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 10:48:32 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EFA5FEF
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:48:31 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id u9so11770907plf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 07:48:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=344MbQ5Aogx4TbSHT23t8yYX3VVQUnb53jmXZ8Ta6+U=;
-        b=D2nx2e6v0uOHYhJ/HCEsinnnMK+TtbG250AgmjRzeMNrzgdCYNJwualCwtmvNMBQMu
-         TypvhDWgPwn4IkJ9xaZdfIWqFaZraTe6B1bn4pAGrTIZ34aH8sv1xQRJXTfX0mpm8qFa
-         4z0T/tgzsj4rESnPSfxbyiGHxCireDk8j42G3FWSAlJixs21Esf+o9D6Ebd70z2mYVF4
-         0SIu98uEPUYdpJhl57+Eb9vujiRntKckzNNS16PBEG0Z2Q2u1CeJqHHzPaJWcZTPfIzU
-         iqEkXZKs5+pm+3EMK6F0WDFR+xnle+ATa7CFu1srK5CdT1ptiY46dgWqTGBFLAxx8Mqo
-         TKxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=344MbQ5Aogx4TbSHT23t8yYX3VVQUnb53jmXZ8Ta6+U=;
-        b=WaqfENuNJzCjkGvbvExobQM/ROMHCjT5maRDmjkhfXHEKj2MuuKl2mhBKd4oG3grRn
-         +W7yxIChX1BnrzKoer1dgQ2GgWu6hze2lI0KlPEp6Xzd4SKHIPd7Nd+YgNKH6Zjur3Pp
-         luuVI8LyI90NDK0xL9vbUbEIebSH3IFNu3uDfaOqgCcbmZyJap7DrjNfHZcykMI1gvbg
-         LNOVJVjGpSSe5839lIcm4D+BXZ/+7VWbTEr7nq9TEmiWkwHUnbUA/1FnbyFOV2RB1p/e
-         dPFfzDeB1sLD1NK8rbfwiPOnl7jeXMTrrXU4+3hxGkCh1vP3pSfGeO9EEawON7zgR9Ym
-         mRDg==
-X-Gm-Message-State: AO0yUKVnd0lqqQn7vg7wzHBBk1Qm3SY8PB/EvGD1w29luM5xfHE1YVfx
-        l5hVCO1G1DG7ZpS7PVGvaR9kL/IiYXBLxUZqUnq/Mxg8iHQ=
-X-Google-Smtp-Source: AK7set/2ed2qey7Q7Ye3j2Cy7zIPmnAhR6m2DNLZk/aCKTvEekzuCIO211zE+Lr6hiFgotYZZumB8cJkspi1asjtKr4=
-X-Received: by 2002:a17:90a:3d01:b0:22c:19cb:948a with SMTP id
- h1-20020a17090a3d0100b0022c19cb948amr1033130pjc.98.1675784911094; Tue, 07 Feb
- 2023 07:48:31 -0800 (PST)
+        Tue, 7 Feb 2023 10:49:33 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1403C3E;
+        Tue,  7 Feb 2023 07:49:32 -0800 (PST)
+Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: tanureal)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0E3DE6602086;
+        Tue,  7 Feb 2023 15:49:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675784971;
+        bh=cfvcfREHPh+IggvFYU/1ryO6SCNcrW7aAlVSVH/ZGNQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CeR53vBJRzwPjXGUbYyL6Oqi6B9zBJGFT2gHfCaC67eoPDJq3DTT0n1mUCNdEpRAp
+         bILX7Qq0QU7ek5QOtvnMdsO7Up22uzZsWNpQByGkZwd88WEZvaWfETwUTrYFRVuPPd
+         KJHBw/oS+BLqlYyYVPsZci/lbZDuaY1MN++Cb5ObSr5N5ohZ5l4I2qPMuktyG49scq
+         W5YrmFVI+cppp2Xr6C6jRGNwEJUpYre4/nZZ1NertMnLJj4bIFvPoKHzzh24ljxXgb
+         mNFmMitYeZTziWVGmOXa+XxSp0X4mIHM49dEsobi8ZS1EGaRTxINdtLfwIcfp8b5f1
+         R5AWl8kcZopcg==
+Message-ID: <dd1bad2b-a56a-c4d2-cc28-6703febdc475@collabora.com>
+Date:   Tue, 7 Feb 2023 15:49:28 +0000
 MIME-Version: 1.0
-References: <20230204090139.1789264-1-xiehuan09@gmail.com>
-In-Reply-To: <20230204090139.1789264-1-xiehuan09@gmail.com>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Tue, 7 Feb 2023 23:48:19 +0800
-Message-ID: <CAEr6+EA7L68kGPW43YwDOhpBVMQhJ0WNbMEreNFpz=8Q=C_S+A@mail.gmail.com>
-Subject: Re: [PATCH] scripts/gdb: fix 'lx-current' for x86
-To:     jan.kiszka@siemens.com, kbingham@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] ALSA: cs35l41: Add shared boost feature
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     David Rhodes <david.rhodes@cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20230207104021.2842-1-lucas.tanure@collabora.com>
+ <20230207104021.2842-2-lucas.tanure@collabora.com>
+ <20230207114855.GC36097@ediswmail.ad.cirrus.com>
+From:   Lucas Tanure <lucas.tanure@collabora.com>
+In-Reply-To: <20230207114855.GC36097@ediswmail.ad.cirrus.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew was added.
+On 07-02-2023 11:48, Charles Keepax wrote:
+> On Tue, Feb 07, 2023 at 10:40:20AM +0000, Lucas Tanure wrote:
+>> Shared boost allows two amplifiers to share a single boost
+>> circuit by communicating on the MDSYNC bus.
+>> The passive amplifier does not control the boost and receives
+>> data from the active amplifier.
+>>
+>> Shared Boost is not supported in HDA Systems.
+>>
+> 
+> Probably would be nice to put at least a note to say based on
+> David's patches.
+ack
+> 
+>> +static const struct reg_sequence cs35l41_shd_boost_seq[] = {
+>> +	{CS35L41_PWR_CTRL3,	0x01000110},
+> 
+> This will blat whatever the user set in the DRE switch.
+> Technically blats the CLASS H enable from the DAPM widget too,
+> but as that always turns on should be a no-op. Probably should
+> either not register the DRE switch or have setting it return an
+> error for these boost modes.
+Fixed in v2.
+Changed to regmap_update_bits.
+> 
+>> +int cs35l41_global_enable(struct regmap *regmap, enum cs35l41_boost_type b_type, int enable,
+>> +			  struct completion *pll_lock)
+>>   {
+>>   	int ret;
+>> +	unsigned int gpio1;
+>>   
+>>   	switch (b_type) {
+>> +	case CS35L41_SHD_BOOST_ACTV:
+>> +	case CS35L41_SHD_BOOST_PASS:
+>> +		regmap_update_bits(regmap, CS35L41_PWR_CTRL3, CS35L41_SYNC_EN_MASK, 0);
+>> +
+>> +		gpio1 = enable ? CS35L41_GPIO1_MDSYNC : CS35L41_GPIO1_HIZ;
+>> +		regmap_update_bits(regmap, CS35L41_GPIO_PAD_CONTROL, CS35L41_GPIO1_CTRL_MASK,
+>> +				   gpio1 << CS35L41_GPIO1_CTRL_SHIFT);
+>> +
+>> +		ret = regmap_update_bits(regmap, CS35L41_PWR_CTRL1, CS35L41_GLOBAL_EN_MASK,
+>> +					 enable << CS35L41_GLOBAL_EN_SHIFT);
+>> +		usleep_range(3000, 3100);
+>> +		if (!enable)
+>> +			break;
+>> +
+>> +		if (!pll_lock)
+>> +			return -EINVAL;
+>> +
+>> +		ret = wait_for_completion_timeout(pll_lock, msecs_to_jiffies(1000));
+>> +		if (ret == 0)
+>> +			ret = -ETIMEDOUT;
+> 
+> This feels kinda scary, in that you are relying on a 1 to 1
+> correspondence between this code running and getting a PLL lock
+> signal. The datasheet is helpfully completely vague on when PLL
+> locks are triggered.
+> 
+> The PLL enable seems to be set through set_sysclk, which could
+> be called multiple times, per DAPM power up.  Does the PLL
+> lock only go once global enable has been set? Can't help
+> but wonder if a reinit_completion should probably go somewhere
+> to ensure we are getting this lock of the PLL not a past one.
+Added a reinit_completion at cs35l41_pcm_startup
 
-Hi Andrew,
+> 
+>> @@ -483,6 +483,11 @@ static irqreturn_t cs35l41_irq(int irq, void *data)
+>>   		ret = IRQ_HANDLED;
+>>   	}
+>>   
+>> +	if (status[2] & CS35L41_PLL_LOCK) {
+>> +		regmap_write(cs35l41->regmap, CS35L41_IRQ1_STATUS3, CS35L41_PLL_LOCK);
+>> +		complete(&cs35l41->pll_lock);
+>> +	}
+>> +
+> 
+> If you fall into any of the error cases in this IRQ handler above
+> this, it will blat values you don't want into BST_EN although, to
+> be fair that does look currently broken for external boost as
+> well.
+Fixed with a new patch in v2 series.
 
-I found the patches for the ./scripts/gdb/*  were merged by you before,
-but the "./scripts/get_maintainer.pl ./scripts/gdb/linux/cpus.py"
-can't find your name,  so added you.
+> 
+> Thanks,
+> Charles
+> 
 
-Can you review this patch ;-)
-
-On Sat, Feb 4, 2023 at 5:02 PM Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> When printing the name of the current process, it will report an error:
-> (gdb) p $lx_current().comm
-> Python Exception <class 'gdb.error'> No symbol "current_task" in current context.:
-> Error occurred in Python: No symbol "current_task" in current context.
->
-> Because the commit <e57ef2ed97c1> ("x86: Put hot per CPU variables into a struct")
-> changed it.
->
-> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
-> ---
->  scripts/gdb/linux/cpus.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
-> index 15fc4626d236..9ee99f9fae8d 100644
-> --- a/scripts/gdb/linux/cpus.py
-> +++ b/scripts/gdb/linux/cpus.py
-> @@ -163,7 +163,7 @@ def get_current_task(cpu):
->      task_ptr_type = task_type.get_type().pointer()
->
->      if utils.is_target_arch("x86"):
-> -         var_ptr = gdb.parse_and_eval("&current_task")
-> +         var_ptr = gdb.parse_and_eval("&pcpu_hot.current_task")
->           return per_cpu(var_ptr, cpu).dereference()
->      elif utils.is_target_arch("aarch64"):
->           current_task_addr = gdb.parse_and_eval("$SP_EL0")
-> --
-> 2.25.1
->
-
--- 
-Thanks,
-JeffXie
