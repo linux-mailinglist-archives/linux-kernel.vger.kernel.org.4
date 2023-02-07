@@ -2,127 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E0468D3E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C730D68D3E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjBGKRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S231381AbjBGKRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjBGKRQ (ORCPT
+        with ESMTP id S231356AbjBGKR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:17:16 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216CB22016;
-        Tue,  7 Feb 2023 02:17:14 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P9zP50dcBz9v7Hy;
-        Tue,  7 Feb 2023 18:08:57 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBnMVgUJeJjjRf9AA--.25523S2;
-        Tue, 07 Feb 2023 11:17:00 +0100 (CET)
-Message-ID: <d6efb292273eee6caff9afc8b64e42984a3ae517.camel@huaweicloud.com>
-Subject: Re: [PATCH ima-evm-utils v5] Add tests for MMAP_CHECK and
- MMAP_CHECK_REQPROT hooks
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        viro@zeniv.linux.org.uk, pvorel@suse.cz,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue, 07 Feb 2023 11:16:45 +0100
-In-Reply-To: <cd21f0d2a65f9673a0abe7f0a7219d5f1fe55911.camel@linux.ibm.com>
-References: <20230203125637.2673781-1-roberto.sassu@huaweicloud.com>
-         <cd21f0d2a65f9673a0abe7f0a7219d5f1fe55911.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 7 Feb 2023 05:17:27 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E2723132
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:17:26 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id 6so7587535vko.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bPrtilAJKVUhxbrBamxio2CjQmx+CrJRcxuPGVzs45k=;
+        b=pssdcCwvP27quF2aTGuKZzmApPpisR2l632+QyiiP68had1rAPT5eRROk7FWjFJeMc
+         uwMDwWP4rUj9cZ5XQGiLH0gYdVNev8DBDLvN4qdw6blaN2MJoI7V/e2A+Xho2jMqxPdf
+         akpeQAPksniPJOz59KARWsf0U92ZvolJ44lrRt1/taSFAnlqNgyiAQhk7J2d2/a4fwTj
+         B4teXgtKIZjLSGwjeEuHWJZTzgxjiZfGi1v1elusTIGFRZnRXGLplEkIYR7J5ALqll8d
+         zXe5kS88lmBHMR3AK58Q3l1IRHFghxIHavMnNoP8+T/yyVzLbvAq3uLqISme4aFMwfas
+         KwOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bPrtilAJKVUhxbrBamxio2CjQmx+CrJRcxuPGVzs45k=;
+        b=yTj8zEcDmQ+xPSdLyEOC+3CpMWtI0mSbYmd03oNl3HL5LzHILOMd8ZIyVEtkpqqcLF
+         4bSABOBPo3JfH6cLHarFpCWsGUsJ522Maaddx+T56VMUIRp9xU4orVD3BcG7GfppzYgg
+         YsJEiVJ2raB6YIdfk54lkpwu4Ks6Gm2f6zd/GutlOIrCTAlUulQo4WmVIagPqq0ut9Z7
+         pFeULwSnssvNfCtpDVM6aYDfeBbLBTUwIAuE/psz6vB5SgLWcVrQDnYHrWFYcjwdeb0w
+         YXgAM0Vlhlm23IXJWrwhK/DQ9NvB5hXezgCDvFqikJTUh/47TgMUmSPcyrwIlQkDBeDA
+         zIYQ==
+X-Gm-Message-State: AO0yUKWowO+kBC74WZAS2XnrnHt59zdB9G8+lqsSQWYJwjuPB0ZZDb0s
+        QkKpLVhHNOaRZHPLmLdEzL0Ac5FixqqEUnKmK1aL6g==
+X-Google-Smtp-Source: AK7set+9OKX9NitD6L8UNyZEvBjr/8igyirMEC8nb/njn0S4M5nhl04teC5aADC0Ic8fO43SlijMven9RIQ74gvPu1A=
+X-Received: by 2002:a05:6122:5ab:b0:3ea:135:e0bd with SMTP id
+ w11-20020a05612205ab00b003ea0135e0bdmr350219vko.21.1675765045579; Tue, 07 Feb
+ 2023 02:17:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwBnMVgUJeJjjRf9AA--.25523S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr4fZr4xAF45AFyxtFW8WFg_yoW5Jr4kpF
-        Z3Xas0kFs5JF1Ik34Ikay8Xr4Fvw4xtayUJ34DA340k3ZxXFn2kr43JFW3urykGrs5Wwnr
-        ZF43t3yUuwnFkFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4Sq1gAAsO
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203100418.2981144-1-mie@igel.co.jp> <20230205050122-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230205050122-mutt-send-email-mst@kernel.org>
+From:   Shunsuke Mie <mie@igel.co.jp>
+Date:   Tue, 7 Feb 2023 19:17:14 +0900
+Message-ID: <CANXvt5q_qgLuAfF7dxxrqUirT_Ld4B=POCq8JcB9uPRvCGDiKg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP function
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Wang <jasowang@redhat.com>, Frank Li <Frank.Li@nxp.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Takanari Hayama <taki@igel.co.jp>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-06 at 08:20 -0500, Mimi Zohar wrote:
-> On Fri, 2023-02-03 at 13:56 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Add tests to ensure that, after applying the kernel patch 'ima: Align
-> > ima_file_mmap() parameters with mmap_file LSM hook', the MMAP_CHECK hook
-> > checks the protections applied by the kernel and not those requested by the
-> > application.
-> > 
-> > Also ensure that after applying 'ima: Introduce MMAP_CHECK_REQPROT hook',
-> > the MMAP_CHECK_REQPROT hook checks the protections requested by the
-> > application.
-> > 
-> > Test both with the test_mmap application that by default requests the
-> > PROT_READ protection flag. Its syntax is:
-> > 
-> > test_mmap <file> <mode>
-> > 
-> > where mode can be:
-> > - exec: adds the PROT_EXEC protection flag to mmap()
-> > - read_implies_exec: calls the personality() system call with
-> >                      READ_IMPLIES_EXEC as the first argument before mmap()
-> > - mprotect: adds the PROT_EXEC protection flag to a memory area in addition
-> >             to PROT_READ
-> > - exec_on_writable: calls mmap() with PROT_EXEC on a file which has a
-> >                     writable mapping
-> > 
-> > Check the different combinations of hooks/modes and ensure that a
-> > measurement entry is found in the IMA measurement list only when it is
-> > expected. No measurement entry should be found when only the PROT_READ
-> > protection flag is requested or the matching policy rule has the
-> > MMAP_CHECK_REQPROT hook and the personality() system call was called with
-> > READ_IMPLIES_EXEC.
-> > 
-> > mprotect() with PROT_EXEC on an existing memory area protected with
-> > PROT_READ should be denied (with an appraisal rule), regardless of the MMAP
-> > hook specified in the policy. The same applies for mmap() with PROT_EXEC on
-> > a file with a writable mapping.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Thanks, Roberto.  Other than the one comment below, it looks good.
-> 
-> > +
-> > +if ! awk '$0 ~ /^(measure|appraise)/ && $0 !~ /fsuuid=/ && $0 !~ /fowner=/ { exit 1 }' < /sys/kernel/security/ima/policy; then
-> > +	echo "${CYAN}IMA policy rules without fsuuid= and fowner=, cannot continue due to possible interference with the tests${NORM}"
-> > +	exit "$SKIP"
-> > +fi
-> 
-> The test should be limited to just MMAP_CHECK and MMAP_CHECK_REQPROT
-> policy rules.
-> 
-> +if ! awk '$0 ~ /^(measure|appraise)/ && $0 ~ /func=MMAP_CHECK/ && $0 !~ /fsuuid=/ && ...
+2023=E5=B9=B42=E6=9C=885=E6=97=A5(=E6=97=A5) 19:02 Michael S. Tsirkin <mst@=
+redhat.com>:
+>
+> On Fri, Feb 03, 2023 at 07:04:14PM +0900, Shunsuke Mie wrote:
+> > This patchset introduce a virtio-net EP device function. It provides a
+> > new option to communiate between PCIe host and endpoint over IP.
+> > Advantage of this option is that the driver fully uses a PCIe embedded =
+DMA.
+> > It is used to transport data between virtio ring directly each other. I=
+t
+> > can be expected to better throughput.
+> >
+> > To realize the function, this patchset has few changes and introduces a
+> > new APIs to PCI EP framework related to virtio. Furthermore, it device
+> > depends on the some patchtes that is discussing. Those depended patchse=
+t
+> > are following:
+> > - [PATCH 1/2] dmaengine: dw-edma: Fix to change for continuous transfer
+> > link: https://lore.kernel.org/dmaengine/20221223022608.550697-1-mie@ige=
+l.co.jp/
+> > - [RFC PATCH 0/3] Deal with alignment restriction on EP side
+> > link: https://lore.kernel.org/linux-pci/20230113090350.1103494-1-mie@ig=
+el.co.jp/
+> > - [RFC PATCH v2 0/7] Introduce a vringh accessor for IO memory
+> > link: https://lore.kernel.org/virtualization/20230202090934.549556-1-mi=
+e@igel.co.jp/
+> >
+> > About this patchset has 4 patches. The first of two patch is little cha=
+nges
+> > to virtio. The third patch add APIs to easily access virtio data struct=
+ure
+> > on PCIe Host side memory. The last one introduce a virtio-net EP device
+> > function. Details are in commit respectively.
+> >
+> > Currently those network devices are testd using ping only. I'll add a
+> > result of performance evaluation using iperf and etc to the future vers=
+ion
+> > of this patchset.
+>
+>
+> All this feels like it'd need a virtio spec extension but I'm not 100%
+> sure without spending much more time understanding this.
+> what do you say?
+This patch shows the virtio-net device as pcie device. Could you tell
+me what part
+of the spec are you concerned about?
 
-Oh, yes. Better.
+> > Shunsuke Mie (4):
+> >   virtio_pci: add a definition of queue flag in ISR
+> >   virtio_ring: remove const from vring getter
+> >   PCI: endpoint: Introduce virtio library for EP functions
+> >   PCI: endpoint: function: Add EP function driver to provide virtio net
+> >     device
+> >
+> >  drivers/pci/endpoint/Kconfig                  |   7 +
+> >  drivers/pci/endpoint/Makefile                 |   1 +
+> >  drivers/pci/endpoint/functions/Kconfig        |  12 +
+> >  drivers/pci/endpoint/functions/Makefile       |   1 +
+> >  .../pci/endpoint/functions/pci-epf-vnet-ep.c  | 343 ++++++++++
+> >  .../pci/endpoint/functions/pci-epf-vnet-rc.c  | 635 ++++++++++++++++++
+> >  drivers/pci/endpoint/functions/pci-epf-vnet.c | 387 +++++++++++
+> >  drivers/pci/endpoint/functions/pci-epf-vnet.h |  62 ++
+> >  drivers/pci/endpoint/pci-epf-virtio.c         | 113 ++++
+> >  drivers/virtio/virtio_ring.c                  |   2 +-
+> >  include/linux/pci-epf-virtio.h                |  25 +
+> >  include/linux/virtio.h                        |   2 +-
+> >  include/uapi/linux/virtio_pci.h               |   2 +
+> >  13 files changed, 1590 insertions(+), 2 deletions(-)
+> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-ep.c
+> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet-rc.c
+> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.c
+> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vnet.h
+> >  create mode 100644 drivers/pci/endpoint/pci-epf-virtio.c
+> >  create mode 100644 include/linux/pci-epf-virtio.h
+> >
+> > --
+> > 2.25.1
+>
 
-Thanks
-
-Roberto
-
+Best,
+Shunsuke
