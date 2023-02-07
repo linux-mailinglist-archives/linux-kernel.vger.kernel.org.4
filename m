@@ -2,210 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DEA68D4ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:57:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CE768D4F1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjBGK5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S231853AbjBGK54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjBGK5J (ORCPT
+        with ESMTP id S231825AbjBGK5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:57:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5BC39CCD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:56:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675767382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=utLBczvzekSz+cWIa2fZgxlACvw9W5bN6q2slvl+YPI=;
-        b=UCT/BJaxs27NZ7p5rreCdopTQJPhxKxcWljt+EzTdMYhCtCLbAaDAmhHL23zkUyrooC5nh
-        FKuWPCYB5bl59p54V6uAluC0Zrya/Y+z+W4Aos+vMi0YV8HkhSZ28PH0JZuJ4Q1cmR4bI5
-        JXfTvddeJSdahccER3JJLXXkJokzAnk=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-672-vQXgwyeuNieDfstWqR2I8g-1; Tue, 07 Feb 2023 05:56:20 -0500
-X-MC-Unique: vQXgwyeuNieDfstWqR2I8g-1
-Received: by mail-qv1-f70.google.com with SMTP id dy3-20020ad44e83000000b0056bf716c68bso2844422qvb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 02:56:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=utLBczvzekSz+cWIa2fZgxlACvw9W5bN6q2slvl+YPI=;
-        b=z45YOCtCAJ8/k+qS8cd8m1a4zXo6ea8jCRJESAQ1RJaimW6TOhTvdwlTf5PHk5IPTj
-         MdbNtht9wyJi2HEbxAy5WZy0q9quXi+qFHg0fDqeY9KTF6jSx513Hu1YSFL/H6e2LPeE
-         sqBveO1OfARSJgtSkHracKAZI+CAjTpPs7eTRl7O4ad/iZ6G23pl9qHPHoI01DKnQhh5
-         5gSHuTP4PAq1rYiIxZ5tsg5gkVGKI/bqduizaz+nC8xnQ+iTUrbge+PIImsxR7aogzl7
-         W2m0kvGpxpCdsJYLr2rtWkgGvoHwwKnxO9hQopTNTTQfp0dbHBad7VQuV0NXocdMnRE4
-         d/Rg==
-X-Gm-Message-State: AO0yUKXWNj+rcGgep3dD/um+wX7+EoOEJJ3+TsT4cPoNXIfQn2HrNeBR
-        0DkKj8+hQ5xP3qPmzsrkvRnC8RK+T19KK9LtiQcO7L3R6e8XB1lpO6sbJ4QM6yzpoxE3DkTjT7w
-        sv6sKKiekxBEWGwIX74LlbSSB
-X-Received: by 2002:ac8:5709:0:b0:3b8:4951:57bb with SMTP id 9-20020ac85709000000b003b8495157bbmr5547278qtw.5.1675767379822;
-        Tue, 07 Feb 2023 02:56:19 -0800 (PST)
-X-Google-Smtp-Source: AK7set/zTGzMRBR7nAgHkQ8IpNXUs+WHjz4jc2IOn+RfYLyKZo3Xwo4UgiGqPFMVxiMcEINisz+yfw==
-X-Received: by 2002:ac8:5709:0:b0:3b8:4951:57bb with SMTP id 9-20020ac85709000000b003b8495157bbmr5547245qtw.5.1675767379532;
-        Tue, 07 Feb 2023 02:56:19 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id s26-20020a05622a1a9a00b003b62e8b77e7sm9218291qtc.68.2023.02.07.02.56.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 02:56:19 -0800 (PST)
-Message-ID: <c4c90e6576f1bc4ef9d634edda5862c5f003ae3c.camel@redhat.com>
-Subject: Re: [PATCH net] net: dsa: mt7530: don't change PVC_EG_TAG when CPU
- port becomes VLAN-aware
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, richard@routerhints.com
-Date:   Tue, 07 Feb 2023 11:56:13 +0100
-In-Reply-To: <20230206174627.mv4ljr4gtkpr7w55@skbuf>
-References: <20230205140713.1609281-1-vladimir.oltean@nxp.com>
-         <3649b6f9-a028-8eaf-ac89-c4d0fce412da@arinc9.com>
-         <20230205203906.i3jci4pxd6mw74in@skbuf>
-         <b055e42f-ff0f-d05a-d462-961694b035c1@arinc9.com>
-         <20230205235053.g5cttegcdsvh7uk3@skbuf>
-         <116ff532-4ebc-4422-6599-1d5872ff9eb8@arinc9.com>
-         <20230206174627.mv4ljr4gtkpr7w55@skbuf>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 7 Feb 2023 05:57:49 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC2439BBD;
+        Tue,  7 Feb 2023 02:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Zyfmu6UPbMQ7dAOL0TbUtfOvq7o1ioKQtmz/vntrZlk=; b=d2DyKxSysm7zcy5mftfxyKN1l5
+        Sti2hfLe6g9mDI94ogFj+ZlMWV5hgouYVoC5Ez4lITkuaaILRRF2SI+Lz+1WO6QNObN0PzBUgPr8P
+        w3kGcTRXwLdLYIcxDErtyhGxLOh7X5a44PpdDbFAFB98ulNPoQCOboEBdBih7GSW3Cm1rbXiarpG3
+        IBDRywXm9VRvkp+nV+nb2igVKKe076tCOmguSwbzgfmUzgYXwNNvr/vwjeGXfRUJ8/vRJd/a5K0Gy
+        gy5vsLied8HhFnqrADu2FPYqIUyPWRfRN0GklqA7RQpdYHGp0ubTAH9B4LinnPUL9Bo81j9cOhHsw
+        p2/rX+og==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPLeu-0005hb-3J; Tue, 07 Feb 2023 10:57:08 +0000
+Message-ID: <d37f3af69df09ff542024ed93a37865b28dfa86e.camel@infradead.org>
+Subject: Re: [PATCH v6 01/11] x86/apic/x2apic: Fix parallel handling of
+ cluster_mask
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, arjan@linux.intel.com
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+Date:   Tue, 07 Feb 2023 10:57:05 +0000
+In-Reply-To: <87a61qxtx0.ffs@tglx>
+References: <20230202215625.3248306-1-usama.arif@bytedance.com>
+         <20230202215625.3248306-2-usama.arif@bytedance.com> <87a61qxtx0.ffs@tglx>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-sXYYLHDo3EIodFyasVVr"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, 2023-02-06 at 19:46 +0200, Vladimir Oltean wrote:
-> On Mon, Feb 06, 2023 at 07:41:06PM +0300, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote=
-:
-> > Finally I got time. It's been a seismically active day where I'm from.
->=20
-> My deepest condolences to those who experienced tragedies after today's
-> earthquakes. A lot of people in neighboring countries are horrified
-> thinking when this will happen to them. Hopefully you aren't living in
-> Gaziantep or nearby cities.
->=20
-> > # ping 192.168.2.2
-> > PING 192.168.2.2
-> > [   39.508013] mtk_soc_eth 1b100000.ethernet eth1: dsa_switch_rcv: ther=
-e is no metadata dst attached to skb 0xc2dfecc0
-> >=20
-> > # ping 192.168.2.2
-> > PING 192.168.2.2
-> > [   22.674182] mtk_soc_eth 1b100000.ethernet eth1: mtk_poll_rx: receive=
-d skb 0xc2d67840 without VLAN/DSA tag present
->=20
-> Thank you so much for testing. Would you mind cleaning everything up and
-> testing with this patch instead (formatted on top of net-next)?
-> Even if you need to adapt to your tree, hopefully you get the idea from
-> the commit message.
->=20
-> From 218025fd0c33a06865e4202c5170bfc17e26cc75 Mon Sep 17 00:00:00 2001
-> From: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Date: Mon, 6 Feb 2023 19:03:53 +0200
-> Subject: [PATCH] net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel for s=
-witch
->  port 0
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=3DUTF-8
-> Content-Transfer-Encoding: 8bit
->=20
-> Ar=C4=B1n=C3=A7 reports that on his MT7621AT Unielec U7621-06 board and M=
-T7623NI
-> Bananapi BPI-R2, packets received by the CPU over mt7530 switch port 0
-> (of which this driver acts as the DSA master) are not processed
-> correctly by software. More precisely, they arrive without a DSA tag
-> (in packet or in the hwaccel area - skb_metadata_dst()), so DSA cannot
-> demux them towards the switch's interface for port 0. Traffic from other
-> ports receives a skb_metadata_dst() with the correct port and is demuxed
-> properly.
->=20
-> Looking at mtk_poll_rx(), it becomes apparent that this driver uses the
-> skb vlan hwaccel area:
->=20
-> 	union {
-> 		u32		vlan_all;
-> 		struct {
-> 			__be16	vlan_proto;
-> 			__u16	vlan_tci;
-> 		};
-> 	};
->=20
-> as a temporary storage for the VLAN hwaccel tag, or the DSA hwaccel tag.
-> If this is a DSA master it's a DSA hwaccel tag, and finally clears up
-> the skb VLAN hwaccel header.
->=20
-> I'm guessing that the problem is the (mis)use of API.
-> skb_vlan_tag_present() looks like this:
->=20
->  #define skb_vlan_tag_present(__skb)	(!!(__skb)->vlan_all)
->=20
-> So if both vlan_proto and vlan_tci are zeroes, skb_vlan_tag_present()
-> returns precisely false. I don't know for sure what is the format of the
-> DSA hwaccel tag, but I surely know that lowermost 3 bits of vlan_proto
-> are 0 when receiving from port 0:
->=20
-> 	unsigned int port =3D vlan_proto & GENMASK(2, 0);
->=20
-> If the RX descriptor has no other bits set to non-zero values in
-> RX_DMA_VTAG, then the call to __vlan_hwaccel_put_tag() will not, in
-> fact, make the subsequent skb_vlan_tag_present() return true, because
-> it's implemented like this:
->=20
-> static inline void __vlan_hwaccel_put_tag(struct sk_buff *skb,
-> 					  __be16 vlan_proto, u16 vlan_tci)
-> {
-> 	skb->vlan_proto =3D vlan_proto;
-> 	skb->vlan_tci =3D vlan_tci;
-> }
->=20
-> What we need to do to fix this problem (assuming this is the problem) is
-> to stop using skb->vlan_all as temporary storage for driver affairs, and
-> just create some local variables that serve the same purpose, but
-> hopefully better. Instead of calling skb_vlan_tag_present(), let's look
-> at a boolean has_hwaccel_tag which we set to true when the RX DMA
-> descriptors have something. Disambiguate based on netdev_uses_dsa()
-> whether this is a VLAN or DSA hwaccel tag, and only call
-> __vlan_hwaccel_put_tag() if we're certain it's a VLAN tag.
->=20
-> Link: https://lore.kernel.org/netdev/704f3a72-fc9e-714a-db54-272e17612637=
-@arinc9.com/
-> Fixes: 2d7605a72906 ("net: ethernet: mtk_eth_soc: enable hardware DSA unt=
-agging")
-> Reported-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+--=-sXYYLHDo3EIodFyasVVr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-Thank you Vladimir for the quick turn-around!=20
+T24gVHVlLCAyMDIzLTAyLTA3IGF0IDAwOjIwICswMTAwLCBUaG9tYXMgR2xlaXhuZXIgd3JvdGU6
+Cj4gCj4gCj4gVEJILiBUaGUgbG9naWMgb2YgdGhpcyBjb2RlIGlzIGFueXRoaW5nIGJ1dCBvYnZp
+b3VzLiBTb21ldGhpbmcgbGlrZSB0aGUKPiB1bmNvbXBpbGVkIGJlbG93IHBlcmhhcHM/CgpMb29r
+cyBzYW5lIHRvIG1lLiBJJ2xsIHR3ZWFrIHRoZSBjb21tZW50cyBhIGJpdCBhbmQgZ2l2ZSBpdCBh
+IHNwaW47CnRoYW5rcy4KCi4uLgoKPiArwqDCoMKgwqDCoMKgwqAgKiBBdCBib290IHRpbWUgQ1BV
+IHByZXNlbnQgbWFzayBpcyBzdGFibGUuIElmIHRoZSBjbHVzdGVyIGlzIG5vdAo+ICvCoMKgwqDC
+oMKgwqDCoCAqIHlldCBpbml0aWFsaXplZCwgYWxsb2NhdGUgdGhlIG1hc2sgYW5kIHByb3BhZ2F0
+ZSBpdCB0byBhbGwKPiArwqDCoMKgwqDCoMKgwqAgKiBzaWJsaW5ncyBpbiB0aGlzIGNsdXN0ZXIu
+Cj4gwqDCoMKgwqDCoMKgwqDCoCAqLwo+IC3CoMKgwqDCoMKgwqDCoGlmIChjbHVzdGVyX2hvdHBs
+dWdfbWFzaykgewo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoY2x1c3Rlcl9o
+b3RwbHVnX21hc2stPm5vZGUgPT0gbm9kZSkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBrZnJlZShjbHVzdGVyX2hvdHBsdWdfbWFzayk7Cj4gLcKgwqDCoMKgwqDCoMKgfQo+ICvC
+oMKgwqDCoMKgwqDCoGlmIChzeXN0ZW1fc3RhdGUgPCBTWVNURU1fUlVOTklORykKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBhbGxvYzsKPiArCj4gK8KgwqDCoMKgwqDCoMKg
+LyoKPiArwqDCoMKgwqDCoMKgwqAgKiBPbiBwb3N0IGJvb3QgaG90cGx1ZyBpdGVyYXRlIG92ZXIg
+dGhlIHByZXNlbnQgQ1BVcyB0byBoYW5kbGUgdGhlCj4gK8KgwqDCoMKgwqDCoMKgICogY2FzZSBv
+ZiBwYXJ0aWFsIGNsdXN0ZXJzIGFzIHRoZXkgbWlnaHQgYmUgcHJlc2VudGVkIGJ5Cj4gK8KgwqDC
+oMKgwqDCoMKgICogdmlydHVhbGl6YXRpb24uCj4gK8KgwqDCoMKgwqDCoMKgICovCj4gK8KgwqDC
+oMKgwqDCoMKgZm9yX2VhY2hfcHJlc2VudF9jcHUoY3B1X2kpIHsKCgpTby4uLiBpZiB0aGlzIENQ
+VSB3YXMgKnByZXNlbnQqIGF0IGJvb3QgdGltZSAoYW5kIGlmIGFueSBvdGhlciBDUFUgaW4KdGhp
+cyBjbHVzdGVyIHdhcyBwcmVzZW50KSwgaXQgd2lsbCBhbHJlYWR5IGhhdmUgYSBjbHVzdGVyX21h
+c2suCgpXaGljaCBtZWFucyB3ZSBnZXQgaGVyZSBpbiB0d28gY2FzZXM6IAoKIOKAoiBUaGlzIENQ
+VSB3YXNuJ3QgYWN0dWFsbHkgcHJlc2VudCAod2FzIGp1c3QgJ3Bvc3NpYmxlJykgYXQgYm9vdCB0
+aW1lLgogICAoSXMgdGhhdCBhY3R1YWxseSBhIHRoaW5nIHRoYXQgaGFwcGVucz8pCgog4oCiIFRo
+aXMgQ1BVIHdhcyBwcmVzZW50IGJ1dCBubyBvdGhlciBDUFUgaW4gdGhpcyBjbHVzdGVyIHdhcyBh
+Y3R1YWxseQogICBicm91Z2h0IHVwIGF0IGJvb3QgdGltZSBzbyB0aGUgY2x1c3Rlcl9tYXNrIHdh
+c24ndCBhbGxvY2F0ZWQuCgpUaGUgY29kZSBsb29rcyByaWdodCwgSSBkb24ndCBncm9rIHRoZSBj
+b21tZW50IGFib3V0IHBhcnRpYWwgY2x1c3RlcnMKYW5kIHZpcnR1YWxpemF0aW9uLCBhbmQgd291
+bGQgaGF2ZSB3b3JkZWQgaXQgc29tZXRoaW5nIGFsb25nIHRoZSBhYm92ZQpsaW5lcz8KCg==
 
-For future case, please avoid replying with new patches - tag area
-included - to existing patch/thread, as it confuses tag propagation,
-thanks!
 
-Paolo
+--=-sXYYLHDo3EIodFyasVVr
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjA3MTA1NzA1WjAvBgkqhkiG9w0BCQQxIgQgq2vIuUN+
+O4NqwL11eDARlAy4AkZGOQ3mooSfmQL7pwgwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAKO2seRqTpsuRuVwJdBdZ1VKeOJnCXqyxI
+oHzO/aBVhmn6kOvRRqPPHbJO+o6qvfFiFsYEvSi+4UKx/I0ArHlF1sMo9KApW7VU+/Sbw1rXlezl
+OEByzBbjSJc9xSbmNt5e96BzjPDJyLUud9gZ9ufF97JcY6aaB/Si/KiFTK6U15bcUUqepRPb0+Hb
+guCPYhVVJrC8u9OXt1dN9s3zesbt/iO/Il6CfLuttGfX+8WwbbXaOaXkXXc2PK5qgEWUyr7eL6wC
+NoxZiHBU2izhXIj3DhzvjckTJseHQJl+oOn3lA4wZalJpFDydLs5F0EpCjw2Ft3f13TPXeP5ZR0K
+oJHnbaciErq6l2ZiY2HFfRta4/svj4nQORQfkxLelSnH2FlHyqid46cWJp/XhIMwruTMabOiL1uo
+IF2IbAsJMGvQK+YHYl86UZVCVGKhNoerx5f8igesJ7QxH82SP4Ew8xF2tyZN3cz817NROkOi/uxI
+imxKO0orhT21pIBbRMqx6KZokBTMyHxKiytuKRBTPn4GOdU9UoVvvH7y3UjR0E9kRHXM+4nNz8+k
+YC4p8JvMMLckyuVYCkWD/A+9hmAVvyPjezV8nmWY1ONTxqmaLv6RNRln86OXnHU6IalAM7M0V/iB
+ksnolgBS7UaOo+hHUMK91jrsbYnXLP1vsV1dKyYccwAAAAAAAA==
+
+
+--=-sXYYLHDo3EIodFyasVVr--
