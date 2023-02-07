@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BEC68DEB5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F56868DEC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjBGRQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S231370AbjBGRRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbjBGRPu (ORCPT
+        with ESMTP id S231439AbjBGRRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:15:50 -0500
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82BD3F281;
-        Tue,  7 Feb 2023 09:15:20 -0800 (PST)
-Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-        by mxout1.routing.net (Postfix) with ESMTP id E42B441A6D;
-        Tue,  7 Feb 2023 17:15:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1675790119;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=JLrL4iWympNnVNwAETpNE1kjBqSNjCEjKLn1CYJsz9g=;
-        b=s8/mNx/3hM5Z1BYZzXx5/GGPmL6fAfaQZV9DpVzN3oIYNqzMtl75EC9k/1Y8y/zd0bRaWX
-        CgAB6WfedG3wqUIB5pJxKlSjm4keFwfeeYJvkRapmLtnr8O7fbAGOEpFdmDoag7+LkCu4U
-        obWTm6EXVkSvv9RzF0AUXySe+yJj6g4=
-Received: from frank-G5.. (fttx-pool-217.61.159.155.bambit.de [217.61.159.155])
-        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 8A269802E7;
-        Tue,  7 Feb 2023 17:15:17 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: mt76: allow up to 4 interrupts for mt7986
-Date:   Tue,  7 Feb 2023 18:15:12 +0100
-Message-Id: <20230207171512.35425-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
+        Tue, 7 Feb 2023 12:17:02 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FF23F28C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:16:22 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so19298836pjd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:16:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sc8Dzie9A8y8S45kzCPXX5BYzIIhqs78gp47BlQd0i8=;
+        b=Ll2X9VD0OteaIRqAqdVdEYSZyu0gSNQwuSfB9Rrn2fwPWRX1u7pghVhAcREsP2+lGk
+         HVglbUWsQBazz2zBgjvN/8RW4U+/JA80B6vZHzLSpfnPVAPfDwMIlElMZfzna+NTuxPQ
+         FINzOStCndAXqlMJVvndo5XC7u2wsw6HjP3KT1hq9p3C8ghI5p6kxjFDQfEucFV07QF8
+         rEu8eW/zunu6ER3FaTFankMS23LaH3w4X+stdpQPcK/x9izguRwY/NkOOOmf+8cx98r/
+         Uiu+zSf819YyMm4At/RW4mX2rOFl0nazUkwdz9LpmRqqNirNhtXfWtA6HBdqWlUG28Of
+         3sPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sc8Dzie9A8y8S45kzCPXX5BYzIIhqs78gp47BlQd0i8=;
+        b=TN2R2PZxZvvxwjCzvGFQw9usabQhv7cDnMDzjc9gcIfmZN+cPaGHLYrhLPxh4KuwQt
+         6O+E2KOpWQfTOFea7ZXlQPvxSp6yW8ZCZ7Lgo6dm7GsfkLfTmOHRBqZkP9K052TADutp
+         2nw3lAfqsSmbLJ25EAnpavgjnwmaCbvGUv14EWuc6myuIijsbI5gAtwcNEFjMsl/icLf
+         sFRQqxpeuntZDIh8DY+w+L4//57O4Lxyjcd9dk5zsUQKAIMPNoS81zO0WrLfmuzVyRNG
+         sCHzyq20O2tfCYYpii3V//mDYKmaks6L9To53wwdJq0xjgJiwSwvIrw7jSurYwfuvEpw
+         rNMw==
+X-Gm-Message-State: AO0yUKVnrQtyj7cc8yavklMYj2xPao7yW/KFCP7Tpr4VEOmgbZzuS+pK
+        ED4Cz1stBiWgt9BtoMYtyeSgGw==
+X-Google-Smtp-Source: AK7set+VDV5Y413ktncXB7sF4EsTzFuW3K3pRZJn4EaA5h/D6ZlGr+w9UI/RIwZTZ5Z+S0MJKONyMQ==
+X-Received: by 2002:a17:902:9895:b0:198:af50:e4eb with SMTP id s21-20020a170902989500b00198af50e4ebmr223213plp.17.1675790171184;
+        Tue, 07 Feb 2023 09:16:11 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 200-20020a6214d1000000b0058de0998f17sm9431054pfu.154.2023.02.07.09.16.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 09:16:10 -0800 (PST)
+Date:   Tue, 7 Feb 2023 17:16:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jianfeng Gao <jianfeng.gao@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
+ Intel hybrid CPUs
+Message-ID: <Y+KHVdYG3tyBGfuk@google.com>
+References: <20230131085031.88939-1-likexu@tencent.com>
+ <Y9k7eyfmXjqW9lYF@google.com>
+ <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
+ <Y9v7tEXPlki7YOT4@google.com>
+ <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
+ <Y91DUmMjCLzIXlp+@google.com>
+ <f0f6dbed-0e1d-059c-11a4-07fd4bec5c99@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 335c7e56-e374-4379-9b78-55056f0c79f6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0f6dbed-0e1d-059c-11a4-07fd4bec5c99@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,41 +81,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Mon, Feb 06, 2023, Like Xu wrote:
+> On 4/2/2023 1:28 am, Sean Christopherson wrote:
+> > On Fri, Feb 03, 2023, Like Xu wrote:
+> > > On 3/2/2023 2:06 am, Sean Christopherson wrote:
+> > > > On Thu, Feb 02, 2023, Like Xu wrote:
+> > > > > On 1/2/2023 12:02 am, Sean Christopherson wrote:
+> > > > > The perf interface only provides host PMU capabilities and the logic for
+> > > > > choosing to disable (or enable) vPMU based on perf input should be left
+> > > > > in the KVM part so that subsequent development work can add most code
+> > > > > to the just KVM, which is very helpful for downstream users to upgrade
+> > > > > loadable KVM module rather than the entire core kernel.
+> > > > > 
+> > > > > My experience interacting with the perf subsystem has taught me that
+> > > > > perf change required from KVM should be made as small as possible.
+> > > > 
+> > > > I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
+> > > > provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
+> > > > somehow able to get away with enumerating a very stripped down vPMU, additional
+> > > > modifications to perf_get_x86_pmu_capability() will be required.
+> > > > 
+> > > > What I care more about though is this ugliness in perf_get_x86_pmu_capability():
+> > > > 
+> > > > 	/*
+> > > > 	 * KVM doesn't support the hybrid PMU yet.
+> > > > 	 * Return the common value in global x86_pmu,
+> > > > 	 * which available for all cores.
+> > > 
+> > > I would have expected w/ current code base, vpmu (excluding pebs and lbr, intel_pt)
+> > > to continue to work on any type of pCPU until you decide to disable them completely.
+> > 
+> > Didn't follow this.
+> 
+> My expectation is that, if a guest doesn't enable "PEBS, LBR and intel_pt",
+> and only has the most basic pmu conters (its number is the lesser number
+> of big and small cores supported), with some pmu_event_fileter allow list
+> mechanism, vPMU works regardless of the vcpu model and does not
+> require cpu pined. Any complaints from users on this usages ?
 
-Mt7986 needs 4 interrupts which are already defined in mt7986a.dtsi.
-Update binding to reflect it
+No?  But I highly doubt the average user is even aware of KVM_SET_PMU_EVENT_FILTER,
+let alone knows how to use it.  E.g. AFAICT QEMU doesn't support the ioctl().
+And for people that do use event filters, I doubt they're running on hybrid CPUs.
 
-This fixes this error in dtbs_check (here only bpi-r3 example):
+> > > > I really don't want to leave that comment lying around as it's flat out wrong in
+> > > > that it obviously doesn't address the other differences beyond the number of
+> > > > counters.  And since there are dependencies on perf, my preference is to disable
+> > > > PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
+> > > > forced to consider the perf side of things, and get buy in from the perf folks.
+> > > 
+> > > The perf_get_x86_pmu_capability() obviously needs to be revamped,
+> > > but until real effective KVM enabling work arrives, any inconsequential intrusion
+> > > into perf/core code will only lead to trivial system maintenance.
+> > 
+> > Trivial doesn't mean useless or unnecessary though.  IMO, there's value in capturing,
+> > in code, that perf_get_x86_pmu_capability() doesn't properly support hybrid vPMUs.
+> > 
+> > That said, poking around perf, checking is_hybrid() is wrong.  This quirk suggests
+> > that if E-cores are disabled via BIOS, (a) X86_FEATURE_HYBRID_CPU is _supposed_ to
+> > be cleared, and (b) the base PMU will reflect the P-core PMU.  I.e. someone can
+> > enable vPMU by disabling E-cores.
+> > 
+> >                  /*
+> >                   * Quirk: For some Alder Lake machine, when all E-cores are disabled in
+> >                   * a BIOS, the leaf 0xA will enumerate all counters of P-cores. However,
+> >                   * the X86_FEATURE_HYBRID_CPU is still set. The above codes will
+> 
+> Sigh. Then what if E-cores are manually offline via "/.../cpu$/online" and
+> then init kvm module ?
 
-arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtb: wifi@18000000:
-interrupts: [[0, 213, 4], [0, 214, 4], [0, 215, 4], [0, 216, 4]] is too long
-	From schema: Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtb: wifi@18000000:
-Unevaluated properties are not allowed ('interrupts' was unexpected)
-	From schema: Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+KVM has to be paranoid and assume those CPUs could be onlined in the future.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- .../devicetree/bindings/net/wireless/mediatek,mt76.yaml      | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> I suggest leaving these open issues to that enabling guy (or maybe it's still me).
+> 
+> >                   * mistakenly add extra counters for P-cores. Correct the number of
+> >                   * counters here.
+> >                   */
+> >                  if ((pmu->num_counters > 8) || (pmu->num_counters_fixed > 4)) {
+> >                          pmu->num_counters = x86_pmu.num_counters;
+> >                          pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
+> >                  }
+> > 
+> > Side topic, someone (*cough* Intel) should fix that, e.g. detect the scenario
+> > during boot and manually clear X86_FEATURE_HYBRID_CPU.
+> 
+> Maybe they did it on purpose.
 
-diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-index 212508672979..222b657fe4ea 100644
---- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-+++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
-@@ -38,7 +38,10 @@ properties:
-       MT7986 should contain 3 regions consys, dcm, and sku, in this order.
- 
-   interrupts:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 4
-+    description:
-+      MT7986 should contain 4 items.
- 
-   power-domains:
-     maxItems: 1
--- 
-2.34.1
+That seems unlikely.  My interpretation of the comment, specifically the "Quirk" and
+"some ... machine" parts, is that the intended behavior is to clear the HYBRID bit,
+but _some_ platforms fail to do so.
 
+I don't think Intel's intent matters though.  If the kernel benefits from clearing
+HYBRID and there are no downsides, then it should be cleared regardless of what
+Intel intended ucode to do.
