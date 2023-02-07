@@ -2,134 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22A468D11C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2767F68D11E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 08:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjBGH5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 02:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S230104AbjBGH7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 02:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBGH5U (ORCPT
+        with ESMTP id S229695AbjBGH7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 02:57:20 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD51228D30
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 23:57:18 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id dr8so40918987ejc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 23:57:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hjsB+AGSljRnQpA+58k97XCvwuzQDyJ3UN6KNCrj/C4=;
-        b=pN1+ghys/kOt1G6oDLNcsqOKPC0GBRpCTvNgXY4pyab/kLCRMENic/vyj0vzi6c4/8
-         EoK+/lRrHx8BJz0JTLDrb9Dz+QA3DoX++R1OGxa8vGW7ACwFZa32OhCovDBYjfzoazTe
-         NXsZHaS5Ax+Q1VrttS0Zth3l3wfCRshuKzh8I6SOVmJvPR7qCWXfuN7DwSJQ6zdJL76W
-         kINDEA6JlaqlX8mYnrWqgkwZGlv+GY8XnvALqebRPKdzzDWeQaFm4WLOO5W0DoW01fop
-         PSaXOfVrbeXomDPbvO52xD6979y7rAagSmhzJQWmFpk8/Drjov4kOqJ+YAAtCpizkXUr
-         voIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hjsB+AGSljRnQpA+58k97XCvwuzQDyJ3UN6KNCrj/C4=;
-        b=kJdIX9hFNBQWNTLGc+b39Ftnb+l0mnNK0x9UoyzUST+sKs/gfjcCPyEPAtIMSJsBpt
-         hjUYAVxx7ffYo7okx/pKMaorwiIyBo5zpUPB1/knN7WB+DouV0gCyAx4xn7czZKxfjqV
-         FyRZMS4+duGHNAbjnjJgUfkrrXqytcp+a4q9LF9LnHKx9yql7kW5JGUgVFhzSdqroXyV
-         4vH5yyy/dr0XL48gkC0tNjIyuVpRBfpC/1/saD8tRa+jz3qay0RsGDxO68nu1L2XXlFc
-         G2NGCanL7wU/nlmxr/mUixMuhw33dvptyUwTQELLEE0N8VOn0UTjYIz7Rv049t3ClbGT
-         F59Q==
-X-Gm-Message-State: AO0yUKWvv4HLDIkhqeLMmlHKt6lKYlZ1XvXMeQOCJGJr6kp7qxtGNG4n
-        j2933ZeC71OywhZHdfCKcqaygCjaZ8cj7UHfewB0H8Ax9yJQ6Qyl
-X-Google-Smtp-Source: AK7set9V3pgczMpgtevwU7e3NotwVmoDa6/EjWoWewDNkfPAzcq1B9PF5l3vDjS6m4TKEpRPyMZk5erMRliHmTK98EQ=
-X-Received: by 2002:a17:906:38c2:b0:88c:f92e:a13e with SMTP id
- r2-20020a17090638c200b0088cf92ea13emr593049ejd.172.1675756637037; Mon, 06 Feb
- 2023 23:57:17 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 7 Feb 2023 13:27:05 +0530
-Message-ID: <CA+G9fYuSWodh1teau4jGG_P15yT-ev1+bS7HAAmMu5D5J-d2vw@mail.gmail.com>
-Subject: x86/include/asm/arch_hweight.h:49:15: error: invalid input size for
- constraint 'D'
-To:     llvm@lists.linux.dev, open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     borislav.petkov@amd.com, "H. Peter Anvin" <hpa@zytor.com>,
+        Tue, 7 Feb 2023 02:59:07 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864021E9E0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 23:59:05 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4186C340B7;
+        Tue,  7 Feb 2023 07:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675756744; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=5gbyCaKdJ8Mi2SS92SeXVfp2L0hg2wIdbGtZaSSemJk=;
+        b=cSLouw+eDRwsEhh4tCdzm/mXIkiN3VaizXDinxf3AxfRlZvMB13J7nYgvv8ambeU0sM7ey
+        DfSm73Mxx8bw6U4fEBZZv1JatzASdbZIRMW3lo65fJ3jM7DsZCHiJEcXBD8HwsYeoYT9mU
+        PVM2qzsER8TVJkPgRfU9baF5PVtydIw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C8DD613467;
+        Tue,  7 Feb 2023 07:59:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id k7yxL8cE4mOhXgAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 07 Feb 2023 07:59:03 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        virtualization@lists.linux-foundation.org
+Cc:     Juergen Gross <jgross@suse.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org
+Subject: [PATCH v2] x86/paravirt: merge activate_mm and dup_mmap callbacks
+Date:   Tue,  7 Feb 2023 08:59:02 +0100
+Message-Id: <20230207075902.7539-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following Build regressions warnings / errors noticed on Linux next-20230207.
+The two paravirt callbacks .mmu.activate_mm and .mmu.dup_mmap are
+sharing the same implementations in all cases: for Xen PV guests they
+are pinning the PGD of the new mm_struct, and for all other cases
+they are a NOP.
 
-Regressions found on x86_64:
+In the end both callbacks are meant to register an address space with
+the underlying hypervisor, so there needs to be only a single callback
+for that purpose.
 
-    - build/clang-15-lkftconfig-compat
-    - build/clang-nightly-lkftconfig
-    - build/clang-15-lkftconfig
-    - build/clang-15-lkftconfig-kcsan
-    - build/clang-lkftconfig
+So merge them to a common callback .mmu.enter_mmap (in contrast to the
+corresponding already existing .mmu.exit_mmap).
 
-In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-In file included from include/linux/kernel.h:22:
-In file included from include/linux/bitops.h:68:
-In file included from arch/x86/include/asm/bitops.h:420:
-arch/x86/include/asm/arch_hweight.h:49:15: error: invalid input size
-for constraint 'D'
-                         : REG_IN (w));
-                                   ^
-In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
-In file included from arch/x86/entry/vdso/vdso32/../vgetcpu.c:8:
-In file included from include/linux/kernel.h:25:
-In file included from include/linux/math.h:6:
-arch/x86/include/asm/div64.h:85:34: error: invalid output size for
-constraint '=a'
-        asm ("mulq %2; divq %3" : "=a" (q)
-                                        ^
-2 errors generated.
+As the first parameter of the old callbacks isn't used, drop it from
+the replacement one.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+---
+V2:
+- expand commit message (Srivatsa S. Bhat)
+---
+ arch/x86/include/asm/mmu_context.h    |  4 ++--
+ arch/x86/include/asm/paravirt.h       | 14 +++-----------
+ arch/x86/include/asm/paravirt_types.h |  7 ++-----
+ arch/x86/kernel/paravirt.c            |  3 +--
+ arch/x86/mm/init.c                    |  2 +-
+ arch/x86/xen/mmu_pv.c                 | 12 ++----------
+ 6 files changed, 11 insertions(+), 31 deletions(-)
 
-Following config diff found.
- + CONFIG_COMPAT_WARN_32BIT_FILESYSTEM_ACCESS=y
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index b8d40ddeab00..6a14b6c2165c 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -134,7 +134,7 @@ extern void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+ 
+ #define activate_mm(prev, next)			\
+ do {						\
+-	paravirt_activate_mm((prev), (next));	\
++	paravirt_enter_mmap(next);		\
+ 	switch_mm((prev), (next), NULL);	\
+ } while (0);
+ 
+@@ -167,7 +167,7 @@ static inline void arch_dup_pkeys(struct mm_struct *oldmm,
+ static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
+ {
+ 	arch_dup_pkeys(oldmm, mm);
+-	paravirt_arch_dup_mmap(oldmm, mm);
++	paravirt_enter_mmap(mm);
+ 	return ldt_dup_context(oldmm, mm);
+ }
+ 
+diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
+index 73e9522db7c1..07bbdceaf35a 100644
+--- a/arch/x86/include/asm/paravirt.h
++++ b/arch/x86/include/asm/paravirt.h
+@@ -332,16 +332,9 @@ static inline void tss_update_io_bitmap(void)
+ }
+ #endif
+ 
+-static inline void paravirt_activate_mm(struct mm_struct *prev,
+-					struct mm_struct *next)
++static inline void paravirt_enter_mmap(struct mm_struct *next)
+ {
+-	PVOP_VCALL2(mmu.activate_mm, prev, next);
+-}
+-
+-static inline void paravirt_arch_dup_mmap(struct mm_struct *oldmm,
+-					  struct mm_struct *mm)
+-{
+-	PVOP_VCALL2(mmu.dup_mmap, oldmm, mm);
++	PVOP_VCALL1(mmu.enter_mmap, next);
+ }
+ 
+ static inline int paravirt_pgd_alloc(struct mm_struct *mm)
+@@ -787,8 +780,7 @@ extern void default_banner(void);
+ 
+ #ifndef __ASSEMBLY__
+ #ifndef CONFIG_PARAVIRT_XXL
+-static inline void paravirt_arch_dup_mmap(struct mm_struct *oldmm,
+-					  struct mm_struct *mm)
++static inline void paravirt_enter_mmap(struct mm_struct *mm)
+ {
+ }
+ #endif
+diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+index 8c1da419260f..71bf64b963df 100644
+--- a/arch/x86/include/asm/paravirt_types.h
++++ b/arch/x86/include/asm/paravirt_types.h
+@@ -164,11 +164,8 @@ struct pv_mmu_ops {
+ 	unsigned long (*read_cr3)(void);
+ 	void (*write_cr3)(unsigned long);
+ 
+-	/* Hooks for intercepting the creation/use of an mm_struct. */
+-	void (*activate_mm)(struct mm_struct *prev,
+-			    struct mm_struct *next);
+-	void (*dup_mmap)(struct mm_struct *oldmm,
+-			 struct mm_struct *mm);
++	/* Hook for intercepting the creation/use of an mm_struct. */
++	void (*enter_mmap)(struct mm_struct *mm);
+ 
+ 	/* Hooks for allocating and freeing a pagetable top-level */
+ 	int  (*pgd_alloc)(struct mm_struct *mm);
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 327757afb027..ff1109b9c6cd 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -352,8 +352,7 @@ struct paravirt_patch_template pv_ops = {
+ 	.mmu.make_pte		= PTE_IDENT,
+ 	.mmu.make_pgd		= PTE_IDENT,
+ 
+-	.mmu.dup_mmap		= paravirt_nop,
+-	.mmu.activate_mm	= paravirt_nop,
++	.mmu.enter_mmap		= paravirt_nop,
+ 
+ 	.mmu.lazy_mode = {
+ 		.enter		= paravirt_nop,
+diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+index cb258f58fdc8..cbc53da4c1b4 100644
+--- a/arch/x86/mm/init.c
++++ b/arch/x86/mm/init.c
+@@ -806,7 +806,7 @@ void __init poking_init(void)
+ 	BUG_ON(!poking_mm);
+ 
+ 	/* Xen PV guests need the PGD to be pinned. */
+-	paravirt_arch_dup_mmap(NULL, poking_mm);
++	paravirt_enter_mmap(poking_mm);
+ 
+ 	/*
+ 	 * Randomize the poking address, but make sure that the following page
+diff --git a/arch/x86/xen/mmu_pv.c b/arch/x86/xen/mmu_pv.c
+index ee29fb558f2e..b3b8d289b9ab 100644
+--- a/arch/x86/xen/mmu_pv.c
++++ b/arch/x86/xen/mmu_pv.c
+@@ -885,14 +885,7 @@ void xen_mm_unpin_all(void)
+ 	spin_unlock(&pgd_lock);
+ }
+ 
+-static void xen_activate_mm(struct mm_struct *prev, struct mm_struct *next)
+-{
+-	spin_lock(&next->page_table_lock);
+-	xen_pgd_pin(next);
+-	spin_unlock(&next->page_table_lock);
+-}
+-
+-static void xen_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
++static void xen_enter_mmap(struct mm_struct *mm)
+ {
+ 	spin_lock(&mm->page_table_lock);
+ 	xen_pgd_pin(mm);
+@@ -2153,8 +2146,7 @@ static const typeof(pv_ops) xen_mmu_ops __initconst = {
+ 		.make_p4d = PV_CALLEE_SAVE(xen_make_p4d),
+ #endif
+ 
+-		.activate_mm = xen_activate_mm,
+-		.dup_mmap = xen_dup_mmap,
++		.enter_mmap = xen_enter_mmap,
+ 		.exit_mmap = xen_exit_mmap,
+ 
+ 		.lazy_mode = {
+-- 
+2.35.3
 
-Build details link,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230207/testrun/14611359/suite/build/test/clang-lkftconfig/details/
-
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-tuxmake \
- --runtime podman \
- --target-arch x86_64 \
- --toolchain clang-15 \
- --kconfig defconfig \
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
-\
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
-\
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
-\
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
-\
- --kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
-\
- --kconfig-add CONFIG_IGB=y \
- --kconfig-add CONFIG_UNWINDER_FRAME_POINTER=y LLVM=1 LLVM_IAS=1
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
