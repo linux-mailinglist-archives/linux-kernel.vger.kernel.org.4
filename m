@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D80768DFB6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7DA68DFB7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjBGSQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S232118AbjBGSQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjBGSQV (ORCPT
+        with ESMTP id S231586AbjBGSQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:16:21 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61F03CE04
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:16:14 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so3524069wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:16:14 -0800 (PST)
+        Tue, 7 Feb 2023 13:16:29 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB4D3BDBD
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:16:19 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so3524294wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OKb3TZUek2HqmZm24nIdjxpAgxRn7zyw1dpq0C4JxaM=;
-        b=UADcJhenEukdNJPsH4qL18yi0P8qdk4xW5PT23pPNSbkWqV2fdU+ExgcHN9jLTd5DJ
-         5fiolyeCDgJDw+J6dr9i1xrq+dhNYimAEUHjzRQBM+gGSoxqeefSAcFAwLWd+YspprIB
-         Jaca/QMdvdf7XUIZ/wRobwyhVYfUtEv1KXSxt1EtduJGnmSpv5j1ccmgrI+18xlZPPgG
-         1snABnIaRsElD24rZJ1AaReHKcKj9SzWjg0vTC3ebPt/XDLuo9Wouv0ybOL/J1V1jD5W
-         jdQpjSKGZqsGUNIDJpoOEH/zZmMCq8Ycpy8fXyE3Ra0Talslh01bI3KC9OtIB8+qPljh
-         Kfrw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oRI/8f4x1/QMBaZh6y3RspGVRS7CNQfcVSPIlmfTuKk=;
+        b=CEHDaKlFnjq8eOJ7jtg6rh8X1kLNTaq4jOzDRjY7pMD9YLrZzZLETWcVbasFEIYNW+
+         L50fI+ldxT5HOZoDJtuiN3igNjiWmxJx5AaxyeV/s9xgvZ7/6NjtYFueV8q6iW8YjeeH
+         cu1Qu+fAMZ9Sv6+6WIMoZEYlU7/qPXs6FsCi9LqqGzGN9VeBY4g2gdo9foAyzBQI50dG
+         8+4lvw6R0dPITSGRzJgPLegkQ8eir6GXNVRcvOArfWkZWMZY/Cda5W4l6qRGFzFb/KoM
+         PsLbrLUclqnGvpv3wdjMsnomwPSYNNuTtlfLx7bvwBXyO4xEJFLJ1gGLbe+jtLTN/jDu
+         SEWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OKb3TZUek2HqmZm24nIdjxpAgxRn7zyw1dpq0C4JxaM=;
-        b=3ELTXUxD/xI1icx3N9H8aEHjirjbxa+uorQVOHQfbp6miCbvnKZoDWzSbT+uEAfrdJ
-         XvtqGUblEMWeb2XbZq05/KjPDMQPjS/0cNrXWjf8mQQIsiNJVL2wFO823P+/yxehI6YK
-         ksNTQtc1BhmBn5VkzGfeDP64ufEWZpg8cmOVqmshkW3NPArSq5+Krs6DVkcrGjENkHxy
-         KFw2+dvsS+5PHEDQuLVwTNzDHRcuhmKVEwIf4DJiLlRQax53ysPWzIJ7LkR/AKY9fbeZ
-         7C/IZyXom1Zu8nuAui6P4Ll42MYfa7MmSrPnmfnXumDsekYm6ydp79e32PPaLwRY9Xpx
-         qZyg==
-X-Gm-Message-State: AO0yUKVsytDCKN29zAvwWCGbi33W97IoSEaMnMQSOKhsAl2d5CywA9++
-        GuSQR43qRa0HRvYZA6HAYxw=
-X-Google-Smtp-Source: AK7set8ATmtKImeOQFkQuVpNj8JmYvU2ELUB1+tOeaIgJOI9rzZF5uMA/mUPeFVIXerXL3FERcortg==
-X-Received: by 2002:a05:600c:1c1b:b0:3dc:4234:fe89 with SMTP id j27-20020a05600c1c1b00b003dc4234fe89mr5185724wms.2.1675793773412;
-        Tue, 07 Feb 2023 10:16:13 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oRI/8f4x1/QMBaZh6y3RspGVRS7CNQfcVSPIlmfTuKk=;
+        b=zSBsfK4yATBFwdI9upSuGzepENgHq8eOmpBSsWu+cPLEKp45akoaar+86s/wHrAjzp
+         LDVuNtos/Vcqc0AIitBndAwyvX+zsetPQIzZ0zsgwVS/vjc67XMGoUOBaGhxiiE2vZtC
+         pKW49Xksxyy2/EWiqwYTa7h/himIAB22cB89WiKTCS4c6r/tEBD+NmG/VDsYZCrxB3i5
+         4f7y7cShR0c9meNMxU12x6BWXEhYQ0/dhbXrwDAD6urG2wxVN1+pR/MIIDoy8IE+eeBt
+         kFVehloJuzzgoV7/HQF/Kz6e9mizWufkeri3bIvDc6g3UcubsE5mwCURKqqNmC9YflfK
+         W5oQ==
+X-Gm-Message-State: AO0yUKXmWuT4LtsOItmFDXx4kKdDJLPE9ULlFRK2kpcxYm1SfwWQBplB
+        2XDzG4dNpMn1ShDsEtet7okKJIM1I3Q=
+X-Google-Smtp-Source: AK7set+B67Bh1dRfeNspsTlJQnRrz9pcEn3pM31L9206j4TGSDjPGmt8U8EHphPWUTTF8vtMoA5vzQ==
+X-Received: by 2002:a05:600c:35c5:b0:3d2:231a:cb30 with SMTP id r5-20020a05600c35c500b003d2231acb30mr5182214wmq.3.1675793778171;
+        Tue, 07 Feb 2023 10:16:18 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id bd16-20020a05600c1f1000b003db0ee277b2sm19706599wmb.5.2023.02.07.10.16.12
+        by smtp.gmail.com with ESMTPSA id hg15-20020a05600c538f00b003df7b40f99fsm17363729wmb.11.2023.02.07.10.16.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 10:16:12 -0800 (PST)
-Date:   Tue, 7 Feb 2023 19:16:09 +0100
+        Tue, 07 Feb 2023 10:16:17 -0800 (PST)
+Date:   Tue, 7 Feb 2023 19:16:15 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 00/10] staging: rtl8192e: Rename constants and variables from
- rtl_dm.h
-Message-ID: <cover.1675792435.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 01/10] staging: rtl8192e: Rename AcmHw_ViqEn, AcmHw_VoqEn and
+ ANAPAR_FOR_8192PciE
+Message-ID: <ecdb350dcd9b1860496c1835980d34c5bca0d39e.1675792435.git.philipp.g.hortmann@gmail.com>
+References: <cover.1675792435.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1675792435.git.philipp.g.hortmann@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,39 +71,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename constants and variables mainly from rtl_dm.h to fix checkpatch
-issues as CamelCase, missing spaces and double line breaks.
-Remove dead code in case of double definition.
+Rename constants AcmHw_ViqEn to ACM_HW_VIQ_EN and AcmHw_VoqEn to
+ACM_HW_VOQ_EN and ANAPAR_FOR_8192PciE to ANAPAR_FOR_8192PCIE to avoid
+CamelCase which is not accepted by checkpatch.
 
-Tested with rtl8192e
-Transferred this patch over wlan connection of rtl8192e
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 6 +++---
+ drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h  | 6 +++---
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Philipp Hortmann (10):
-  staging: rtl8192e: Rename AcmHw_ViqEn, AcmHw_VoqEn and
-    ANAPAR_FOR_8192PciE
-  staging: rtl8192e: Calculate definition of MSR_LINK_MASK
-  staging: rtl8192e: Remove blank lines in r8192E_hw.h, rtl_core.h and
-    ..
-  staging: rtl8192e: Rename MacBlkCtrl and remove double definition
-  staging: rtl8192e: Rename OFDM_Table.., CCK_Table_.. and
-    RxPathSelecti..
-  staging: rtl8192e: Rename RxPathSelectio.., RateAdaptive.. and
-    RateAdap..
-  staging: rtl8192e: Rename RateAdaptiveTH.., VeryLowRSSI and WAIotTHVal
-  staging: rtl8192e: Rename Enable, cck_Rx_path and SS_TH_low
-  staging: rtl8192e: Rename diff_TH and disabledRF
-  staging: rtl8192e: Rename DM_RxPathSelTable
-
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 22 ++---
- drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h | 15 ++-
- .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  2 +-
- .../staging/rtl8192e/rtl8192e/r8192E_phyreg.h |  2 -
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  3 -
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 96 +++++++++----------
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.h    | 37 +++----
- drivers/staging/rtl8192e/rtl8192e/rtl_pm.c    |  2 +-
- 8 files changed, 82 insertions(+), 97 deletions(-)
-
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+index dc6e694840af..cb455969f5dc 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
+@@ -225,11 +225,11 @@ void rtl92e_set_reg(struct net_device *dev, u8 variable, u8 *val)
+ 				break;
+ 
+ 			case AC2_VI:
+-				AcmCtrl |= AcmHw_ViqEn;
++				AcmCtrl |= ACM_HW_VIQ_EN;
+ 				break;
+ 
+ 			case AC3_VO:
+-				AcmCtrl |= AcmHw_VoqEn;
++				AcmCtrl |= ACM_HW_VOQ_EN;
+ 				break;
+ 			}
+ 		} else {
+@@ -239,7 +239,7 @@ void rtl92e_set_reg(struct net_device *dev, u8 variable, u8 *val)
+ 				break;
+ 
+ 			case AC2_VI:
+-				AcmCtrl &= (~AcmHw_ViqEn);
++				AcmCtrl &= (~ACM_HW_VIQ_EN);
+ 				break;
+ 
+ 			case AC3_VO:
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+index c3b573090d39..1546bb575293 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+@@ -144,8 +144,8 @@ enum _RTL8192PCI_HW {
+ #define CPU_GEN_NO_LOOPBACK_SET	0x00080000
+ 	ACM_HW_CTRL		= 0x171,
+ #define	ACM_HW_BEQ_EN		BIT1
+-#define	AcmHw_ViqEn		BIT2
+-#define	AcmHw_VoqEn		BIT3
++#define	ACM_HW_VIQ_EN		BIT2
++#define	ACM_HW_VOQ_EN		BIT3
+ 	RQPN1			= 0x180,
+ 	RQPN2			= 0x184,
+ 	RQPN3			= 0x188,
+@@ -250,6 +250,6 @@ enum _RTL8192PCI_HW {
+ 
+ #define GPI 0x108
+ 
+-#define	ANAPAR_FOR_8192PciE				0x17
++#define	ANAPAR_FOR_8192PCIE	0x17
+ 
+ #endif
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+index cbda027656dc..c6cbdea6d5b2 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+@@ -1273,7 +1273,7 @@ void rtl92e_set_rf_off(struct net_device *dev)
+ 	rtl92e_set_bb_reg(dev, rOFDM1_TRxPathEnable, 0xf, 0x0);
+ 	rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1, 0x60, 0x0);
+ 	rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1, 0x4, 0x0);
+-	rtl92e_writeb(dev, ANAPAR_FOR_8192PciE, 0x07);
++	rtl92e_writeb(dev, ANAPAR_FOR_8192PCIE, 0x07);
+ 
+ }
+ 
 -- 
 2.39.1
 
