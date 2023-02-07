@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCF568DFBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F6F68DFC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 19:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjBGSRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 13:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
+        id S231947AbjBGSSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 13:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjBGSR2 (ORCPT
+        with ESMTP id S231876AbjBGSRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 13:17:28 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51053EC6B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 10:17:04 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o36so11671939wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 10:17:04 -0800 (PST)
+        Tue, 7 Feb 2023 13:17:31 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197C283F4;
+        Tue,  7 Feb 2023 10:17:11 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id u22so252414ejj.10;
+        Tue, 07 Feb 2023 10:17:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WGwqZUsDnGRvbERNE55E/iqBGAJKPmXKHucUfptNjuE=;
-        b=g4cKbTwaTW/Mk5IWf4FL266QBdQso0Ex5EBXUrFXqWcrYoNG/HcXJ68UIrAMBSWqHG
-         sKj1UWvYDrOKvNxXGJZp8u4Ezt5d/ibzzo1qwq6zuXXXDXHiL9wwHm5X9vKLJarNwA5Q
-         vSPYKgURQ3gDIiPq2cHtCEG/s1cekORMmz2oplfXRgmq1JqVnHxnPmeY+LDIYWNR5YYi
-         qOBX0Gz9qZtYYpRLjvNHynjS5V1lOZH797bRdUU3roBukgckqqi3W1bU+BMaAyxJcU4a
-         GWSd86LUDgYDyF2lZFWlluqU5k3WtliPorl2WZtNnUFSARTrvRgWGUoXY1/0p0eK0QM+
-         ju5g==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DyS0e8ODQcZLL8R+DhS/GEUd+bmqbIzU17oRZ+uJh00=;
+        b=TJXziBFfxz2Pe122lSG1GlRJXaO6If9SEpQ3jGGa5QfGSlXh0Y4CpyIkgMQsmb/pa2
+         38bSfPQH959vu+8mxfVLDYWcw6LpAdALD/IJaD4/QCWrw8yqqsJ+IsgCsCpDlGxyy5Al
+         AVJf6Ke2E1awRXAHrsRuxGCN9OgtrvxKfuvY4j2asTYJLY8F3dL3A4dh17lJNw+LWiP2
+         ZUHrMSDLVWpXcktBH8LVahRFH7QO5ENyRH3wVz+Lc4JxqeMSv4NiUugnRfiNwrndGxqH
+         LzAamiB1SqgNqXkuyk8XsjcMP3iAe7nc4GWKY2BY3JDaA88Exmk02gMo4ArDuw0xgNhN
+         zilg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WGwqZUsDnGRvbERNE55E/iqBGAJKPmXKHucUfptNjuE=;
-        b=m/dUAYox7HIT9KF/CyHZAP/6FbfcVXz+/CSIVsLrQh6F5OMDRIWdr3AmzD+XrkQtQM
-         deNmqdrbD56M5U3lJBTtCdcoN4RISuhI0BobGZ4kJIh1uZr13P2+wETT3OEJ7AwZGzfU
-         82ADmbd6Rqv2AuksfwgCBN9aahK0jdbIunehsR/+MtJ+mFatV51UomAwjWGvjRz98fAM
-         YPEa+42Tq92UEZLB25MHovYefTMO7Gsx4tt/e2diYkTEbiv9dbKk/X7DoTnhhmssRl59
-         O8NAAnsIm83expjzzDSknhRVmXXvKF+xNHAQbe3Dvt7SupTaXCB/etc/NTHsqy7mm31U
-         pvRw==
-X-Gm-Message-State: AO0yUKXjP1K4mpp+biB/f3qZU81G8z7ZDGvAZ7H+4MFO+afUQVjbAKjQ
-        8oCqV3C3MhzCJeDAgMG5E3c=
-X-Google-Smtp-Source: AK7set9FfqUA9hTHe2Ir6IOwB6OVABkct9dUWH3zjza2f7QZbPKgi87IEl2HI+d+Q5C4YMCZKSDvHQ==
-X-Received: by 2002:a05:600c:35c5:b0:3d2:231a:cb30 with SMTP id r5-20020a05600c35c500b003d2231acb30mr5185165wmq.3.1675793823149;
-        Tue, 07 Feb 2023 10:17:03 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id r12-20020a05600c35cc00b003d9fba3c7a4sm21260423wmq.16.2023.02.07.10.17.02
+        bh=DyS0e8ODQcZLL8R+DhS/GEUd+bmqbIzU17oRZ+uJh00=;
+        b=PvbrXHsPVaRHBKdc9XQJzrXuNpG7qm7cOQT/dOC1aQnUPP1AcaCA7MHXN82hamBpH3
+         k+TpDkpKV/6PRv1TXk8Mn47gtqIfL2PG9lBg23vjbhDauajSUfDPLqpH/2UCsBJ5/RyO
+         y1geSAv3/x8Akb3yHmx6FdvYocnj76oUMT6VRLfpFJsjEPZZ/CL4nPXGs6ktLpe8zMgW
+         ToElbx8kqYkTjeiu/2jpBUBOOqS/t9NK6uIwKx37bNESwRLfzStF9+LL20brTud1AikQ
+         qslrpC947nh8D/wiwPuprINOkzHjxbLQZhB14aBvPNuVfxe40/KXDugOsCmybBnESDhA
+         +4Fw==
+X-Gm-Message-State: AO0yUKVz7eGgm7ObBIMFckH1V2p07q7MgtQ4Ad6TAuHN7yU2R7BLeBa3
+        FBD48rStExJeaUAqz59bAw==
+X-Google-Smtp-Source: AK7set89O6/pkec47ExsoKO7Bz6P9RPCw+WjDLDwV4lI8CenZjv3bQGcMO33ky8qBGUVqk74AY/j3w==
+X-Received: by 2002:a17:906:d0c4:b0:891:a330:c890 with SMTP id bq4-20020a170906d0c400b00891a330c890mr4722632ejb.0.1675793826660;
+        Tue, 07 Feb 2023 10:17:06 -0800 (PST)
+Received: from p183 ([46.53.250.18])
+        by smtp.gmail.com with ESMTPSA id d20-20020a17090694d400b0088e682e3a4csm7115929ejy.185.2023.02.07.10.17.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 10:17:02 -0800 (PST)
-Date:   Tue, 7 Feb 2023 19:17:00 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 07/10] staging: rtl8192e: Rename RateAdaptiveTH..,
- VeryLowRSSI and WAIotTHVal
-Message-ID: <ebca576cae161442e51cd5b73930dc53f8ae26ba.1675792435.git.philipp.g.hortmann@gmail.com>
-References: <cover.1675792435.git.philipp.g.hortmann@gmail.com>
+        Tue, 07 Feb 2023 10:17:06 -0800 (PST)
+Date:   Tue, 7 Feb 2023 21:17:04 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Chao Yu <chao@kernel.org>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] proc: remove mark_inode_dirty() in .setattr()
+Message-ID: <Y+KVoI/GVaoEFQxa@p183>
+References: <20230131150840.34726-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1675792435.git.philipp.g.hortmann@gmail.com>
+In-Reply-To: <20230131150840.34726-1-chao@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -71,87 +71,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename constants RateAdaptiveTH_Low_40M to RATE_ADAPTIVE_TH_LOW_40M,
-VeryLowRSSI to VERY_LOW_RSSI and WAIotTHVal to WA_IOT_TH_VAL to avoid
-CamelCase which is not accepted by checkpatch.
+On Tue, Jan 31, 2023 at 11:08:40PM +0800, Chao Yu wrote:
+> procfs' .setattr() has updated i_uid, i_gid and i_mode into proc
+> dirent, we don't need to call mark_inode_dirty() for delayed
+> update, remove it.
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 6 +++---
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 6 +++---
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.h     | 6 +++---
- 3 files changed, 9 insertions(+), 9 deletions(-)
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -699,7 +699,6 @@ int proc_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
+>  		return error;
+>  
+>  	setattr_copy(&init_user_ns, inode, attr);
+> -	mark_inode_dirty(inode);
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 7e445a168daa..0b5b2ae27f9e 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -2021,17 +2021,17 @@ bool rtl92e_is_rx_stuck(struct net_device *dev)
- 		rx_chk_cnt = 0;
- 	} else if ((priv->undecorated_smoothed_pwdb < (RATE_ADAPTIVE_TH_HIGH + 5))
- 	  && (((priv->current_chnl_bw != HT_CHANNEL_WIDTH_20) &&
--	  (priv->undecorated_smoothed_pwdb >= RateAdaptiveTH_Low_40M))
-+	  (priv->undecorated_smoothed_pwdb >= RATE_ADAPTIVE_TH_LOW_40M))
- 	  || ((priv->current_chnl_bw == HT_CHANNEL_WIDTH_20) &&
- 	  (priv->undecorated_smoothed_pwdb >= RATE_ADAPTIVE_TH_LOW_20M)))) {
- 		if (rx_chk_cnt < 2)
- 			return bStuck;
- 		rx_chk_cnt = 0;
- 	} else if ((((priv->current_chnl_bw != HT_CHANNEL_WIDTH_20) &&
--		  (priv->undecorated_smoothed_pwdb < RateAdaptiveTH_Low_40M)) ||
-+		  (priv->undecorated_smoothed_pwdb < RATE_ADAPTIVE_TH_LOW_40M)) ||
- 		((priv->current_chnl_bw == HT_CHANNEL_WIDTH_20) &&
- 		 (priv->undecorated_smoothed_pwdb < RATE_ADAPTIVE_TH_LOW_20M))) &&
--		priv->undecorated_smoothed_pwdb >= VeryLowRSSI) {
-+		priv->undecorated_smoothed_pwdb >= VERY_LOW_RSSI) {
- 		if (rx_chk_cnt < 4)
- 			return bStuck;
- 		rx_chk_cnt = 0;
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 739f7c512831..55e03eaf9219 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -284,11 +284,11 @@ void rtl92e_init_adaptive_rate(struct net_device *dev)
- 	pra->ratr_state = DM_RATR_STA_MAX;
- 	pra->high2low_rssi_thresh_for_ra = RATE_ADAPTIVE_TH_HIGH;
- 	pra->low2high_rssi_thresh_for_ra20M = RATE_ADAPTIVE_TH_LOW_20M + 5;
--	pra->low2high_rssi_thresh_for_ra40M = RateAdaptiveTH_Low_40M+5;
-+	pra->low2high_rssi_thresh_for_ra40M = RATE_ADAPTIVE_TH_LOW_40M + 5;
- 
- 	pra->high_rssi_thresh_for_ra = RATE_ADAPTIVE_TH_HIGH + 5;
- 	pra->low_rssi_thresh_for_ra20M = RATE_ADAPTIVE_TH_LOW_20M;
--	pra->low_rssi_thresh_for_ra40M = RateAdaptiveTH_Low_40M;
-+	pra->low_rssi_thresh_for_ra40M = RATE_ADAPTIVE_TH_LOW_40M;
- 
- 	if (priv->customer_id == RT_CID_819X_NETCORE)
- 		pra->ping_rssi_enable = 1;
-@@ -1649,7 +1649,7 @@ static void _rtl92e_dm_init_wa_broadcom_iot(struct net_device *dev)
- 	struct rt_hi_throughput *ht_info = priv->rtllib->ht_info;
- 
- 	ht_info->bWAIotBroadcom = false;
--	ht_info->WAIotTH = WAIotTHVal;
-+	ht_info->WAIotTH = WA_IOT_TH_VAL;
- }
- 
- static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h
-index ea698e894146..86974abea19c 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.h
-@@ -30,10 +30,10 @@
- 
- #define		RATE_ADAPTIVE_TH_HIGH			50
- #define		RATE_ADAPTIVE_TH_LOW_20M		30
--#define		RateAdaptiveTH_Low_40M		10
--#define		VeryLowRSSI					15
-+#define		RATE_ADAPTIVE_TH_LOW_40M		10
-+#define		VERY_LOW_RSSI				15
- 
--#define		WAIotTHVal						25
-+#define		WA_IOT_TH_VAL				25
- 
- #define		E_FOR_TX_POWER_TRACK	       300
- #define		TX_POWER_NEAR_FIELD_THRESH_HIGH		68
--- 
-2.39.1
-
+Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
