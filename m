@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E7768D5CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2280F68D5CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:41:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjBGLlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S231748AbjBGLlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:41:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjBGLk7 (ORCPT
+        with ESMTP id S231785AbjBGLlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:40:59 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B95014E99
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:40:49 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so12959990wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 03:40:49 -0800 (PST)
+        Tue, 7 Feb 2023 06:41:01 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229DE18AA8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:40:51 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id bg5-20020a05600c3c8500b003e00c739ce4so2569998wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 03:40:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TxBtF1ODPOfrnP1uvkmtykMhTcc0CM2qY3ptrcM0tQo=;
-        b=DAFh39XfA9JjnQDq/uKysmd+vXgWAUhMx2Mk+bDCWM8/x216dDgDSOOBiK17ArSL+z
-         jsKC4z9SdecAc1zUcGM/3HHsm4+h5FBUXmehi13Nqxz80hI2X+R82I2T2CZWPoh/0Mpj
-         T8x/moUuBMbabgbd1z1AaW8V0GI/KytMa3/TEVaW5zvtDvHlBADIQQ8/JDuFBZLLgeLj
-         1VJf3+4N6JOlslL6SIHbXxUDRFqEEPRaE7skgjksEh3mxv18sCK0hmckewV+o9JKfEPj
-         BEkOruFsByEJfdJIBtvXPrn/+EWX69mmqamIFQFJYMcorHT1wXaY9/KPWBzwS+GN8p4c
-         3XJA==
+        bh=nJj7gGBxaDtI7Dk7IzDCWGMAsOchBp2v8Bo2jum9xMw=;
+        b=NbuQs2Kw0EntfnKW3njcuFFnkz7c+HfDtwA9VdonyQA9sB9TXo1sdFRcZwL7U+gf+X
+         7p2+fDEFxrpM06BO0eB/YeVxKEejuEe/CYTHrqYXcgNMjWUom0SizXi6v/CDGN24ZzaW
+         9DcAOhc/MbcrlB0bm6hMj/uPFWN44iN7mJD4K7sj7i5224J+GDU36le16lU0VDGCsJ3v
+         wm2/f70PbO8YIayJL7q3s+CQeL9bKsTFDqjYXZxN0xHS+Vu8NviJ+FijTWEDPEbbLwWG
+         qrIpa1wW63BhvSzCO3i9g3uoFe82dyS4+ypWoZFdzSS9aTMsuCXym7QDDOtPRYcrqqaD
+         Sg5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TxBtF1ODPOfrnP1uvkmtykMhTcc0CM2qY3ptrcM0tQo=;
-        b=Cyv5+FiuPVBuu1jw0FiUlY15DW4CXe6N4E31tNdR2Y51gumMlSQ/kmUXdD9yHIeu8P
-         tGVNhANQgwXJnvianRDTq4J4nvUY8I6RsH8Q0Evr96k0XyrgW0AuKFaSqYmvj67Q8pJ0
-         KGXS9LpDsUETHM9Tr2Jplr0K3MqiFpz5OPxyrXqZdoroNHjGaqwkNBtY5YUozhDhgeQ6
-         G9gG/OHpwN+YY83npDSWzeblmQq0lze6Y49rO7TZbDY3rza1XExLkeuqYt6dl1OVUn5m
-         znoWQYksb7e7yRgyirq2bv1TulHHIC+W+wB4H5suo1gzhJ65iTaYkQ7kDHaBUopwc8z3
-         Oa6w==
-X-Gm-Message-State: AO0yUKUZmFIJ9COnx/aO5ECOXiLoDyO83Mag8acwjY4/Tdor4wWhpF3D
-        1M93o1kseTKdUfA2mIEXcz413g==
-X-Google-Smtp-Source: AK7set8Otdf1st+dq00tU/Rmozb+djdNHI2LVyZrhllm030UHikPlPhdgDKTteBEQPkvLhvix5TCvg==
-X-Received: by 2002:a05:600c:829:b0:3dd:1c45:a36d with SMTP id k41-20020a05600c082900b003dd1c45a36dmr1710771wmp.27.1675770048096;
-        Tue, 07 Feb 2023 03:40:48 -0800 (PST)
+        bh=nJj7gGBxaDtI7Dk7IzDCWGMAsOchBp2v8Bo2jum9xMw=;
+        b=WZ+mqAtZ9Z+cSkfDQ7oWHV0kdTtZlZViWqD4D+PRoQ/D3Haym2pw/x5kmlD6ziof/a
+         FPO4IZ4z/zsipnDQPxstW8dfQGWRjSwmiCsvDTAj+jvii9WkOWJasUZjOBQkb243pkqr
+         CaFc7m3PWcMy1lyYLZw5hZTqRZI04xznT/juPLJ6ZNsnWSACKAMexy5F4+da6BxO79Z8
+         uLLsOoU0fMYcTwO7yf0ydYoI2DHPSzwrTV5NAhNMAMM/q7eDzu+3qqEODi40E4+j6bvr
+         +gOp877TEFV/fkgEJRjRS7WjPO/67pURe2N5lrAzG4N9XI+Bc8YOKxFEQ6aArQX5MjG2
+         dciA==
+X-Gm-Message-State: AO0yUKXXpVacb6ExQn2iOEZud7kKGswkEWoKU1D+ZV30hUF4E7pxwP5z
+        cjcd0AWLbRW5iRoCGD9m5RL1rw==
+X-Google-Smtp-Source: AK7set8tq37XnI2V3z9QG6lYxxWA+N7NlrZB9jLcWpWnmDBkNzCGYpp2CEN30gQhd92aUgmPhsCwew==
+X-Received: by 2002:a05:600c:80f:b0:3d2:2d2a:d581 with SMTP id k15-20020a05600c080f00b003d22d2ad581mr2797658wmp.30.1675770049373;
+        Tue, 07 Feb 2023 03:40:49 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0ac700b003d1d5a83b2esm18326005wmr.35.2023.02.07.03.40.47
+        by smtp.gmail.com with ESMTPSA id c7-20020a05600c0ac700b003d1d5a83b2esm18326005wmr.35.2023.02.07.03.40.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 03:40:47 -0800 (PST)
+        Tue, 07 Feb 2023 03:40:48 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,9 +62,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 3/6] dt-bindings: phy: qcom,sc8280xp-qmp-usb43dp: Document SM8550 compatible
-Date:   Tue,  7 Feb 2023 13:40:21 +0200
-Message-Id: <20230207114024.944314-4-abel.vesa@linaro.org>
+Subject: [PATCH v5 4/6] phy: qcom-qmp: pcs-usb: Add v6 register offsets
+Date:   Tue,  7 Feb 2023 13:40:22 +0200
+Message-Id: <20230207114024.944314-5-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230207114024.944314-1-abel.vesa@linaro.org>
 References: <20230207114024.944314-1-abel.vesa@linaro.org>
@@ -80,44 +80,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the SM8550 compatible to the list.
+The new SM8550 SoC bumps up the HW version of QMP phy to v6 for USB.
+Add the new PCS USB specific offsets in a dedicated header file.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 ---
 
 The v4 version of this patch was here:
-https://lore.kernel.org/all/20230202132511.3983095-4-abel.vesa@linaro.org/
+https://lore.kernel.org/all/20230202132511.3983095-5-abel.vesa@linaro.org/
 
 Changes since v4:
- * added Johan's R-b tag
- * changed qcom,qmp-usb to qcom,sc8280xp-qmp-usb43dp in subject line
+ * none
 
 Changes since v3:
- * added Rob's A-b tag
+ * none
 
 Changes since v2:
  * none
 
 Changes since v1:
- * moved to sc8280xp bindings
+ * split all the offsets into separate patches, like Vinod suggested
 
- .../devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml   | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
-index 0764cd977e76..83944959d394 100644
---- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
-@@ -18,6 +18,7 @@ properties:
-     enum:
-       - qcom,sc8280xp-qmp-usb43dp-phy
-       - qcom,sm6350-qmp-usb3-dp-phy
-+      - qcom,sm8550-qmp-usb3-dp-phy
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |  1 +
+ .../phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h    | 31 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index 82b46f4c6df0..1cf643cb0218 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -26,6 +26,7 @@
+ #include "phy-qcom-qmp-pcs-misc-v3.h"
+ #include "phy-qcom-qmp-pcs-usb-v4.h"
+ #include "phy-qcom-qmp-pcs-usb-v5.h"
++#include "phy-qcom-qmp-pcs-usb-v6.h"
  
-   reg:
-     maxItems: 1
+ /* QPHY_SW_RESET bit */
+ #define SW_RESET				BIT(0)
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h
+new file mode 100644
+index 000000000000..9510e63ba9d8
+--- /dev/null
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcs-usb-v6.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef QCOM_PHY_QMP_PCS_USB_V6_H_
++#define QCOM_PHY_QMP_PCS_USB_V6_H_
++
++/* Only for QMP V6 PHY - USB3 have different offsets than V5 */
++#define QPHY_USB_V6_PCS_LOCK_DETECT_CONFIG1		0xc4
++#define QPHY_USB_V6_PCS_LOCK_DETECT_CONFIG2		0xc8
++#define QPHY_USB_V6_PCS_LOCK_DETECT_CONFIG3		0xcc
++#define QPHY_USB_V6_PCS_LOCK_DETECT_CONFIG6		0xd8
++#define QPHY_USB_V6_PCS_REFGEN_REQ_CONFIG1		0xdc
++#define QPHY_USB_V6_PCS_USB3_POWER_STATE_CONFIG1	0x90
++#define QPHY_USB_V6_PCS_RX_SIGDET_LVL			0x188
++#define QPHY_USB_V6_PCS_RCVR_DTCT_DLY_P1U2_L		0x190
++#define QPHY_USB_V6_PCS_RCVR_DTCT_DLY_P1U2_H		0x194
++#define QPHY_USB_V6_PCS_CDR_RESET_TIME			0x1b0
++#define QPHY_USB_V6_PCS_ALIGN_DETECT_CONFIG1		0x1c0
++#define QPHY_USB_V6_PCS_ALIGN_DETECT_CONFIG2		0x1c4
++#define QPHY_USB_V6_PCS_PCS_TX_RX_CONFIG		0x1d0
++#define QPHY_USB_V6_PCS_EQ_CONFIG1			0x1dc
++#define QPHY_USB_V6_PCS_EQ_CONFIG5			0x1ec
++
++#define QPHY_USB_V6_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL	0x18
++#define QPHY_USB_V6_PCS_USB3_RXEQTRAINING_DFE_TIME_S2	0x3c
++#define QPHY_USB_V6_PCS_USB3_RCVR_DTCT_DLY_U3_L		0x40
++#define QPHY_USB_V6_PCS_USB3_RCVR_DTCT_DLY_U3_H		0x44
++
++#endif
 -- 
 2.34.1
 
