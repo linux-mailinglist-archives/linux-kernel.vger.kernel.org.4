@@ -2,100 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527A268D45A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BF568D457
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 11:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjBGKd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 05:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S230474AbjBGKdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 05:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjBGKdl (ORCPT
+        with ESMTP id S231431AbjBGKdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 05:33:41 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C693018D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 02:33:24 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
+        Tue, 7 Feb 2023 05:33:40 -0500
+Received: from mail.multiname.org (h4.multiname.org [94.130.68.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05738526A;
+        Tue,  7 Feb 2023 02:33:23 -0800 (PST)
+Received: from webmail.multiname.org (unknown [10.0.10.104])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 6589E42458;
-        Tue,  7 Feb 2023 10:33:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1675765990;
-        bh=hAMlWeDJ4c/zMHDvd5uFXNWbzM/FlEFJhQdmya+1U7E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Tj8QR0jq995v24jo/ri2KPjXagTxIHEwYohVVXKwH6LlT43N86YeG3PgFRgE9+xPX
-         9W3bSaHJhPnSz2HdvF5TgyXkYm6LyM58+NugJGbAV6gQpFyFMDQB4TX26OO3pTIoIL
-         W7CEQ+lXhMtEs2OMlysnXembeLZ9ZLxHM/QI6/2ytpm5Y/dpZqKwGVTmMXEbmMg0t2
-         tqOWxjWWqYVe3Mo8/JOQ25+AD2QfGg2pDIBeCwqMVn7b/TUPYU/GQDA5Qw/g6r34oU
-         WGkK91NnfoIjsNYUas0CeNzs4m4vt14tk5cVD+goYGL/U2RJixqYD3ugLWvPhjIUly
-         lBcxi9YrjwpVw==
-Message-ID: <d3331cf8-02df-bf15-586b-af9d10830758@asahilina.net>
-Date:   Tue, 7 Feb 2023 19:33:05 +0900
+        by mail.multiname.org (Postfix) with ESMTPSA id 4P9zx24dG7zPLtYq;
+        Tue,  7 Feb 2023 11:33:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ccbib.org; s=20220806;
+        t=1675765990;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IH4m9/aT70CL9qCSU6oRU8toMh0R6PwiQAQjFw7f5D8=;
+        b=Ew+bc/YPk9F3k1BsTsq0B4A4p0+ClwA6NJkd0x+a4YIWnLtWLg9hs2YzANA8F6kPMBZVG5
+        gKRUWAtIECRB7WTX6C7kb0EJYNOwNfpY+ugjG+45ELtEqxqic5f7t1kD2O+nXBW/D+d/A+
+        A3Hx8uiGgmUjnKR1fKwtVsqziZnDxvJFSlAftimx901A6ja8yuIx9gREn/vaJvfJhDvPfY
+        objzHwK8tolsIgOR3fW5jFc7s3kLP9FBSlK0WLJwcIRHjWaZslO2MHRdoQZdWLYHI6qGjl
+        b4K2UrVw4ehxBzvbb4684Gw3pIqto7BxGQabWhX8h3rILqXWPyasLNFGvQUGhhI3DeElgp
+        m2+Wk5U50uRrDYqkWLJvEZIoRMSFvZhJPR2PpQPhS8z8E6bBhGcmjSw5xrhVj/fvuNP9sE
+        FBTKtz0DPatYKrQk3dSqsxSD7Cp7WL7ZrpwpKSoqTZpO1rrIhZ4c1zSvJMQy/GvR+ezFEE
+        HzKjWeLne0YHMUbmUVya9LCfgWkBkdgWAGmrL/tuoMjGeyoYPntS51FFZ22SRdprOCyeez
+        jBIIaqsjYN7y2f+CtwHCY8AEtHUagD0dDSCJKx6No+HKTa+XzG8qVYRAKGKfJgFbdWDLsG
+        PTiAXkUc1nHfYxFKWS5qDzGxFj5Nf8VEkammEZCwIBpI2BBwpW4E0=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] drm/shmem-helper: Fix locking for
- drm_gem_shmem_get_pages_sgt()
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        asahi@lists.linux.dev, Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20230205125124.2260-1-lina@asahilina.net>
- <a1cd8c74-98f4-bff0-0344-cbece787c6e8@redhat.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <a1cd8c74-98f4-bff0-0344-cbece787c6e8@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 07 Feb 2023 11:33:10 +0100
+From:   harald@ccbib.org
+To:     pelzi@flying-snail.de
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: dht11: Read bit stream from IRQ on falling edges
+ only
+In-Reply-To: <e1acd14e-400b-8896-bdc1-0b364cc52198@feldner-bv.de>
+References: <Y9a0RZ+inWs44Kn8@debian-qemu.internal.flying-snail.de>
+ <20230130202216.42034309@jic23-huawei>
+ <45efc11e5b4cdba3766f19190bb65840@ccbib.org>
+ <e1acd14e-400b-8896-bdc1-0b364cc52198@feldner-bv.de>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <ac9ab2224ad19ac606de38fa474dce0c@ccbib.org>
+X-Sender: harald@ccbib.org
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 03.47, Javier Martinez Canillas wrote:
-> Hello Lina,
+On 2023-02-05 21:41, pelzi@flying-snail.de wrote:
+> Following up on Harald's remark, I can provide some first comparison
+> data indeed:
 > 
-> On 2/5/23 13:51, Asahi Lina wrote:
->> Other functions touching shmem->sgt take the pages lock, so do that here
->> too. drm_gem_shmem_get_pages() & co take the same lock, so move to the
->> _locked() variants to avoid recursive locking.
->>
->> Discovered while auditing locking to write the Rust abstractions.
->>
->> Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
->> Fixes: 4fa3d66f132b ("drm/shmem: Do dma_unmap_sg before purging pages")
->> Signed-off-by: Asahi Lina <lina@asahilina.net>
->> ---
+> Am 31.01.23 um 10:44 schrieb harald@ccbib.org:
+>> This seems like a really small benefit. And we would lose the
+>> low state timings in debug output, which I personally find quite
+>> convenient. Unless there is data, that this change actually improves
+>> something for somebody, I'd reject it.
 > 
-> Good catch. The patch looks good to me.
+> Running test script against the original kernel module (see below where 
+> on):
 > 
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> #     real [s]    user [s]  sys [s]  success fails  err per succ
+> 1     222,068     0,515     0,506     83     96     115,66 %
+> 2     223,152     0,603     0,493     86     99     115,12 %
+> *3*   223,502     0,563     0,411     91     68     74,73 %
+> *4*   209,626     0,431     0,189     100    15     15,00 %
+> *5*   209,689     0,46      0,193     100    19     19,00 %
+> *6*   220,35      0,413     0,315     100    35     35,00 %
 > 
-> What about drm_gem_shmem_free() BTW, I believe that the helper should also
-> grab the lock before unmap / free the sgtable?
+> 
+> Running the patched module:
+> 
+> # 	Real 	User 	Sys 	Successes 	Failures 	Error rate
+> 1 	223,061 	0,459 	0,258 	88 	25 	28,41 %
+> 2 	222,431 	0,561 	0,367 	75 	57 	76,00 %
+> 3 	225,675 	0,436 	0,178 	92 	19 	20,65 %
+> 4 	222,746 	0,444 	0,194 	98 	23 	23,47 %
+> 5 	222,668 	0,416 	0,205 	97 	20 	20,62 %
+> *6* 	204,126 	0,34 	0,138 	100 	0 	0,00 %
+> *7* 	210,495 	0,393 	0,199 	100 	16 	16,00 %
+> *8* 	212,563 	0,447 	0,139 	100 	19 	19,00 %
+> 
+> All tests run on the same board, Allwinner H3 sold as BananaPi M2 Zero,
+> under kernel 6.2.0-rc5+. The devicetree overlay is setting the
+> input-debounce property of &pio to 5µs, or, because of the excessive
+> error rates of the original driver in this configuration, to 1µs (lines
+> marked with an asterisk).
+> 
+> The test simply tries to read temperature and humidity from the 
+> IIO/dht11
+> exposed input files every 2 seconds, immediately repeating after an 
+> error.
+> 
+> Real/User/Sys is determined by good ol' time command, successes and
+> failures are counted by the test script.
+> 
+> Two aspects strike:
+> 
+> 1) the patched version of the driver is working satisfactory even with
+> 5µs input-debounce filter, where the original driver shows more failed
+> than successful reads in this configuration.
+> 
+> 2) The error rate is consistently lower with the patched driver
+> (67,9% to 33,8% average)
+> 
+> I believe to see similar results, i.e. a noticable improvement on the 
+> error
+> rate, on my old trusted RaspberryPi 2B (without any devicetree 
+> fiddling, of
+> course), however without quantitative comparison and based on some 
+> Raspbian
+> patch level rather than based on kernel 6.2.0-rc5+.
+> 
+> Of course I have only access to a handful of DHT22 devices, most 
+> probably
+> from the same production batch. But I think at least I'd like to stick
+> with the patched version, tbh.
 
-That's called from driver free callbacks, so it should only be called
-when there are no other users left and the refcount is zero, right? If
-there's anyone else racing it I think we have bigger problems than the
-pages lock at that point, since the last thing it does is `kfree(shmem);` ^^
+Aside from different chips (and mostly the old DHT11) there are many 
+things,
+that influence timing: cable lenght, input characteristic etc.
 
-(In Rust terms this is equivalent to the Drop trait, which takes a
-mutable/exclusive reference, which means no other reference to the
-object can exist at that point, so no races are possible. And in fact in
-my Rust abstraction I trigger a drop of the Rust object embedded in the
-shmem object before calling drm_gem_shmem_free(), so if this invariant
-doesn't hold that code would be wrong too!)
+It looks good, but we should still be careful.
 
-~~ Lina
+> Hope this helps, let me know if it'd pay to work on another version of
+> the patch!
+
+Thanks, these are indeed interresting results. If you want to move this
+forward, the next steps would be:
+1) Sharing your test script - yes it's trivial, but still ...
+2) A theoretical analysis about possible regressions depending on timer
+resolution as mentioned in an earlier message.
+3) Ideally figuring out, why your version performs better then what we
+currently have. I have some suspicions, but better understanding might
+lead to a better approach. E.g. maybe recording the other edges isn't
+the problem so long as we ignore them during decoding?
+
+As I see it, the main thing we are losing with your current proposal is
+some diagnostic features. If we keep them as much as possible and have
+regressions understood and covered, I see no reason to reject your idea.
+
+best regards,
+Harald
+
+> Best wishes
+> 
+> Andreas
