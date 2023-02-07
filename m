@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8D168D75E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C7C68D77F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjBGM7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        id S231451AbjBGNAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjBGM7E (ORCPT
+        with ESMTP id S231725AbjBGNAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:59:04 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8653D1B56D;
-        Tue,  7 Feb 2023 04:59:03 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E96738DC1;
-        Tue,  7 Feb 2023 12:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1675774742; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7QoTLoXlIMxSw37JX85ExzUtBnHWAzOyLQ2c0uIpTLM=;
-        b=IgskfTMKEaO1jmC/N1nUWksgS2w7L8hHtYNz/l/0AgYHAEeL8SvjUTb1X8N2aT+oc21fQK
-        uVxDNfqkoggQQalEcTuNbwT7BnJg3edJ2qvl5KTiMunxb80wXQkiLAlWEaNbjCA56AE9lC
-        dWFgdQMn5ORKYrhQw9DZoNFkuARlRtw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BCE7513467;
-        Tue,  7 Feb 2023 12:59:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sMA0LRVL4mMdZQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 07 Feb 2023 12:59:01 +0000
-Date:   Tue, 7 Feb 2023 13:59:00 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Leonardo <leobras@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 1/2] sched/isolation: Merge individual nohz_full features
- into a common housekeeping flag
-Message-ID: <20230207125900.GA24523@blackbody.suse.cz>
-References: <20230203232409.163847-1-frederic@kernel.org>
- <20230203232409.163847-2-frederic@kernel.org>
- <20230206155107.GA31453@blackbody.suse.cz>
- <Y+I61dp5qPkWK4s2@lothringen>
+        Tue, 7 Feb 2023 08:00:18 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A63B39CE6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:00:00 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id bg26so10995100wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:00:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b8356G0ixrthqJeN28CG9y80D2Z75FJcc11F+7VGnio=;
+        b=S3wzBB5NFcZmPn5qH9zTuYEcJa1RBcpsC4cQ+IpUqG5G8wDtO/rNhgluXYICZnpa2E
+         h0H191B53OVYM0GecQv2GO5AzzI3KrpV20JXyjN6Bwd9qNhYaOEVyIaL8NkmayyZylxY
+         CXt/z/fxlf5yd9ZGyJW66nDvfwqIFU5Ehams64KFxym9mhOXSredFEFxePTVDRSlcJ7T
+         rsN16PTsHp0cjCmKdEjdpIkCHxK7daJIDFAdueUYxy/5n8RJDwNdBxMOmPTJlA6HA67e
+         muKjYCkA8+rvSX5hvrYiL3UzvL2iY2cUdJeLrSzjP32Taaup9y9JqoJ7+q/1/HwsA8h0
+         wEUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b8356G0ixrthqJeN28CG9y80D2Z75FJcc11F+7VGnio=;
+        b=6T2qwKfG8INlwEH1t4uPS4TJUsMhRmQ4NkTizbrBfSKtZPLpdr5x/YU211XL12Dp6z
+         +h2AECxPL9BspPmAiR5vfY1ka2FYFlpYi9GVe56ALbX+v//wcwAHxVoL18fORxXkhc/P
+         Jy5JEJ9ER6i8imIqZZr7jt6OdSr2moiMRSKdU6N+xVhOTsUoIrNBukYpGdpxZyZ+ek5L
+         q+IJeUO2Fs7vjGbnhjcjeaV4dg7qyD65gIRsAzECMm2yIMXddDwuMrQ1wfVlvSM5gl2X
+         jsGqmbjGaQ+mdjjYgk6zL7xUCOYAGOwy3lV7rJK5wL5NI1ZZ1ryDjfcszB9q75JR82eT
+         XUOw==
+X-Gm-Message-State: AO0yUKXUyMOVkeObcP3tpuHg7UYG+87/GTUAtPQFk7rsgg6TZzUfJzWy
+        hMFn0Q1qnI//RfHyEvOZfE+2WQ==
+X-Google-Smtp-Source: AK7set+FOWndI8Z6n4n8EYKXWdmdd4I/2cAiD7qwm96lBb0MjLTo70rwDS+uJ5+vgp2K0dZOmLirJQ==
+X-Received: by 2002:a05:600c:3412:b0:3e0:481:c88f with SMTP id y18-20020a05600c341200b003e00481c88fmr3759507wmp.30.1675774799551;
+        Tue, 07 Feb 2023 04:59:59 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j10-20020a05600c1c0a00b003dd1c45a7b0sm15203438wms.23.2023.02.07.04.59.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 04:59:59 -0800 (PST)
+Message-ID: <8337e4a3-a25b-aa1a-9409-6fe1fb4ea84e@linaro.org>
+Date:   Tue, 7 Feb 2023 13:59:57 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FCuugMFkClbJLl1L"
-Content-Disposition: inline
-In-Reply-To: <Y+I61dp5qPkWK4s2@lothringen>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCHv2 2/4] wiegand: add Wiegand bus driver
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Zhou Furong <furong.zhou@linux.intel.com>
+Cc:     =?UTF-8?Q?Martin_Za=c5=a5ovi=c4=8d?= <m.zatovic1@gmail.com>,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, martin.petersen@oracle.com,
+        beanhuo@micron.com, arnd@arndb.de, avri.altman@wdc.com,
+        iwona.winiarska@intel.com, fmdefrancesco@gmail.com,
+        dipenp@nvidia.com, ogabbay@kernel.org, bvanassche@acm.org,
+        mathieu.poirier@linaro.org, yangyicong@hisilicon.com,
+        dan.j.williams@intel.com, devicetree@vger.kernel.org,
+        linus.walleij@linaro.org
+References: <20230202143305.21789-1-m.zatovic1@gmail.com>
+ <20230202143305.21789-3-m.zatovic1@gmail.com> <Y9ynYmIhygqp3U5u@kroah.com>
+ <cd6bd118-68ef-1742-fd9d-08a65872b02c@linux.intel.com>
+ <Y+DVyPUXBliomobN@kroah.com>
+ <581353bc-cc2c-295b-1f9a-04bcf705261b@linux.intel.com>
+ <Y+Hq9gqq9tRhP+eD@kroah.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y+Hq9gqq9tRhP+eD@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/02/2023 07:08, Greg KH wrote:
+> On Tue, Feb 07, 2023 at 08:36:47AM +0800, Zhou Furong wrote:
+>>
+>>
+>> On 2023/2/6 18:26, Greg KH wrote:
+>>> On Mon, Feb 06, 2023 at 05:49:44PM +0800, Zhou Furong wrote:
+>>>>
+>>>>>> +
+>>>>>> +#include <linux/device.h>
+>>>>>> +#include <linux/module.h>
+>>>>>> +#include <linux/of.h>
+>>>>>> +#include <linux/of_device.h>
+>>>>>> +#include <linux/slab.h>
+>>>>>> +#include <linux/wiegand.h>
+>>>>>> +#include <linux/dma-mapping.h>
+>>>>>> +#include <linux/dmaengine.h>
+>>>>>> +#include <linux/property.h>
+>>>>>> +
+>>>>
+>>>> please order headers
+>>>
+>>> Why?  What order?  For what gain >
+>>
+>> If all header file ordered in alphabet, it will be easy to find if a header
+>> file has been included or not when header file list is long.
+> 
+> That's what search in your editor is for :)
+> 
+> This is not a real problem with this code, sorry.
 
---FCuugMFkClbJLl1L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I would say the only argument is reducing conflicts for simultaneous
+edits, mostly when adding new headers. If everyone add at the end, you
+get conflicts which could not happen if entries were ordered.
 
-On Tue, Feb 07, 2023 at 12:49:41PM +0100, Frederic Weisbecker <frederic@kernel.org> wrote:
-> But what do we need these annotations for? The only outcome I've ever
-> seen with these is that it confuses everyone.
+Another thing is that actual order allows easier to spot duplicates or
+unneeded headers by looking. At least to me it's easier to read.
 
-Take that as a note of a lone actor then who found it useful documenting
-relations between various parts of the code.
+Best regards,
+Krzysztof
 
-> This way I can add the support for each part smoothly.
-
-Yeah, that makes sense.
-
-> For example first patch moves HK_TYPE_TIMER to HK_TYPE_KERNEL_NOISE
-> and unbound timers are supported by cpuset.kernel_noise, second patch
-> moves HK_TYPE_WQ to HK_TYPE_KERNEL_NOISE and unbound workqueues are
-> supported by cpuset.kernel_noise, etc until all of them turned by
-> nohz_full= are supported...
-
-So does this mean you'll re-introduce the finer grained HK_* flags
-again?
-
-The idea (not only mine?) is that this would extend
-cpuset.cpus.partition that only allows HK_TYPE_DOMAIN analogy. The
-mapping to individual flags may not be exposed to users. The graduality
-could be achieved by adding more flags under user_exposed_term.
-
-Just to be on the same page -- that's how I understand it, the original
-HK_* resolution turned out impractical for users and that's why the
-direction is towards some loose combinations representing user
-intentions. Is that right?
-
-
-Cheers,
-Michal
-
---FCuugMFkClbJLl1L
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHQEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY+JLBQAKCRAkDQmsBEOq
-udOKAPdJq+O7uJgDbO4QNyCO7NcKnOeMid700809Y9NpPfptAP94KF/OZau1bPKP
-nGKv3/uKXc7NKO/TqZ2HmKeGpdNzDg==
-=vDYK
------END PGP SIGNATURE-----
-
---FCuugMFkClbJLl1L--
