@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F3068CD0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A2C68CD10
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjBGDDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 22:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S229893AbjBGDEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 22:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbjBGDDI (ORCPT
+        with ESMTP id S230214AbjBGDDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 22:03:08 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531F6166D1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 19:02:11 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id e22so10454863ejb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Feb 2023 19:02:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Z9fF9bTJAs7hPku1qwOb0bPsrz0j5pBb+IfpjHYUWA4=;
-        b=qOLgDWSfs4FgJTpu9qQ+S43PK+nmS3drAj4Y11r1/1YTp6uDCeKnhT2myFuAE73B7P
-         7PodQDMWV0DHRCqegJrGFs4+oNGZTQM4H8d7Rtcx9vrOUww5PTYcCY0wZqzuWZIZwe9r
-         QWs84FXy2GKUT2N3gZejNLp1ySCcq3OBCSKdWdQYBNAVybxXN2uqPv6KJ/4LM/7V5BPD
-         WN1qADF6v20TK9l2FKt81UFxoOtOwJkFzUaV7jDCFQwBKg5lwG7NTrbo2TbXbmgse7AD
-         QH9LPIpchEbBrB/VZi5tlIRwsyJBVrmWOU8P5ZP9slGnggFEWAPla2wJyMB+hNZZ9a7N
-         PDJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z9fF9bTJAs7hPku1qwOb0bPsrz0j5pBb+IfpjHYUWA4=;
-        b=ImmJ2IH7X/k1fWJxD87rze1Lo63RBhSjxdPdbu1VpxEyITpVLeisIhuPS/cSL7leY2
-         sLkpcEU4IRSgHNmZ69q+hYrH8kOPfUI4XtkGju+bjhiAiaoZNvt14QD8liyfHC4g8OxQ
-         1jgkmR79+8fzxYGOqRGdAzy17Y2mk9sgAPqj0UL8o3MpNQtHbW2hiJsoTqekweW9kAoh
-         QFSTIdY7VpSzUKSlY1CfLB9MFkmT6ry3YjBEhPcGQgsZX95jn3weOuUB6sQIOF9QPPcP
-         DehYf9g55CZrasq2eic0NlmNEmkds4ju4dW1RVzwDPYq+P0MSFg+g/1YxJnUo/6Ivj7h
-         ihTA==
-X-Gm-Message-State: AO0yUKUfMDR/4CTRovYqECjXh3fW00wiexF4SLkSmt5B1T/Qn26WLjWa
-        93f2EekumKN9d7oV5KBqJid3Tc6URGd3Ig==
-X-Google-Smtp-Source: AK7set/jd6vI+mTg/L++Qzv4jnB+cDkKrStQf9aN4wMXGPaqpRuyka/syvFkPR13agb9W3jC8l3u2A==
-X-Received: by 2002:a17:906:6557:b0:885:d02f:d4ad with SMTP id u23-20020a170906655700b00885d02fd4admr1854114ejn.43.1675738928785;
-        Mon, 06 Feb 2023 19:02:08 -0800 (PST)
-Received: from smurf (80.71.142.58.ipv4.parknet.dk. [80.71.142.58])
-        by smtp.gmail.com with ESMTPSA id n14-20020a17090625ce00b008711cab8875sm6159110ejb.216.2023.02.06.19.02.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Feb 2023 19:02:08 -0800 (PST)
-Date:   Tue, 7 Feb 2023 04:01:44 +0100 (CET)
-From:   Jesper Juhl <jesperjuhl76@gmail.com>
-To:     linux-kernel@vger.kernel.org
-cc:     trivial@kernel.org, Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] Mark a few scripts as executable
-Message-ID: <b0615ab1-f6be-08cb-5736-52625dd11b23@gmail.com>
-User-Agent: Alpine 2.26 (LNX 649 2022-06-02)
+        Mon, 6 Feb 2023 22:03:48 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62E361B2;
+        Mon,  6 Feb 2023 19:03:37 -0800 (PST)
+Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P9nxz6qR0zfYyd;
+        Tue,  7 Feb 2023 11:03:19 +0800 (CST)
+Received: from [10.67.101.98] (10.67.101.98) by dggpeml500019.china.huawei.com
+ (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 7 Feb
+ 2023 11:03:35 +0800
+Message-ID: <08a68444-efb0-9d2e-7e70-0e495ad6ddc1@hisilicon.com>
+Date:   Tue, 7 Feb 2023 11:03:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC PATCH v1 1/4] docs: perf: Add documentation for HiSilicon
+ PMCU
+To:     <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <john.g.garry@oracle.com>, <james.clark@arm.com>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <corbet@lwn.net>, <jonathan.cameron@huawei.com>
+CC:     <zhangshaokun@hisilicon.com>, <shenyang39@huawei.com>,
+        <hejunhao3@huawei.com>, <yangyicong@hisilicon.com>,
+        <prime.zeng@huawei.com>, <suntao25@huawei.com>,
+        <jiazhao4@hisilicon.com>, <linuxarm@huawei.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>
+References: <20230206065146.645505-1-zhanjie9@hisilicon.com>
+ <20230206065146.645505-2-zhanjie9@hisilicon.com>
+From:   Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20230206065146.645505-2-zhanjie9@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.98]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,29 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From d161e017b98de5abf7765aa0dab907f22f25c90f Mon Sep 17 00:00:00 2001
-From: Jesper Juhl <jesperjuhl76@gmail.com>
-Date: Tue, 7 Feb 2023 03:55:53 +0100
-Subject: [PATCH] Mark a few scripts as executable
 
-The scripts in scripts/ should be marked executable by default, but a
-few were not.
+On 06/02/2023 14:51, Jie Zhan wrote:
 
-Signed-Off-by: Jesper Juhl <jesperjuhl76@gmail.com>
+> +
+> +2. Profiling with ``perf-record``.
+> +
+> +   The command to start the sampling is::
+> +
+> +        perf record -e hisi_pmcu_sccl3/<configs>/
+> +
+> +   Users can pass the following optional parameters to ``<configs>``:
+> +
+> +   - nr_sample: number of samples to take. This defaults to 128.
+> +   - sample_period_ms: time interval in microseconds for PMU counters to keep
 
----
-  scripts/spdxcheck-test.sh | 0
-  scripts/test_fortify.sh   | 0
-  2 files changed, 0 insertions(+), 0 deletions(-)
-  mode change 100644 => 100755 scripts/spdxcheck-test.sh
-  mode change 100644 => 100755 scripts/test_fortify.sh
+Spot a typo before causing any confusion. This should be "milliseconds" 
+rather than "microseconds".
 
-diff --git a/scripts/spdxcheck-test.sh b/scripts/spdxcheck-test.sh
-old mode 100644
-new mode 100755
-diff --git a/scripts/test_fortify.sh b/scripts/test_fortify.sh
-old mode 100644
-new mode 100755
--- 
-2.39.1
+Jie
 
+> +     counting for each event. This defaults to 3, i.e. 3ms, and its max
+> +     value is 85,899, i.e. 85 seconds.
+> +   - pmccfiltr: bits 31-24 of the sysreg PMCCFILTR_EL0, which controls how the
+> +     cycle counter increments. This defaults to 0x00. Please refer to the
+> +     "Performance Monitors external register descriptions" of *Arm Architecture
+> +     Reference Manual for A-profile architecture* on how to configure
+> +     PMCCFILTR_EL0.
+> +
+> ...
