@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51E968CE5F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA7368CE61
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjBGEvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 23:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S229967AbjBGEvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 23:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjBGEut (ORCPT
+        with ESMTP id S229535AbjBGEuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 23:50:49 -0500
+        Mon, 6 Feb 2023 23:50:50 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3EE4224
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 20:50:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784574236
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Feb 2023 20:50:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675745448; x=1707281448;
+  t=1675745449; x=1707281449;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=YXCyBdAQ0Q8XIVxjs4jHd98vK+N1vGYP5jLh9y5xDlw=;
-  b=SsRNjdSSrN7/Pechmo0lvFWLJlMbcut3thdz6lEyVulzntW2fqLGpEoe
-   MMkA8ZZaZm7UY5JjrC3MgQurO7pLd8nchhy2nvRcdbeSRX/+H1zyNOROI
-   m/oeS9/hUPgDoB9lr/ygETgGQkP908ws2naKl6ZxTqurrtVUMfBWe2i46
-   lJDNrkgebccArGTGSv199qzuQe86DMEIoH/6b2XuSIyNOMG52aCZyEVsS
-   dlytJghiMrliO3eIkbWhw8XncPTJIacKdqsAwW+HPED8dmWR3pNrPhpAk
-   pKm7+WaPb14KjKcFqrvnpWvLkyO+qIZkhId8cBKdNNsNBkaRWonDW2VnD
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415624023"
+  bh=fNzFE8GHMV6lK6aBMJxB809+PnuCf6ZrTheiPPiWiEE=;
+  b=Addoqy/WC6wa3n4JwXifYlMPFB/MmaXzJTJtb0yCk84Kj0cRFkcFazm3
+   aXO6LUMxUKGY7yARJUDwVOXMFkgfqRPN4cKo7MlJnOqeq2jTnx/xsuBsO
+   qMKjo2izp3EyTXVVHOzD3JkVLEK50TjdXaeNmmWZo7hWXD+9wngNjmRpl
+   NmCwSPCdpz9zWE6Ee35qVNxJRtPR0auGsa+EBJW3zO5+rF/X2twrH4vgm
+   oQ25dcqFhx69CZHi8X2zUumCXs7pjwoZIu0Nqiafi/A3JhXiwrNTx6b01
+   EzE4PDD3RUYBMZ5ZUrQWTaRczij6TqkTkWYj1U3Fljc6Me5mGYE6h1Y4S
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="415624032"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="415624023"
+   d="scan'208";a="415624032"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 20:50:47 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2023 20:50:48 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668653796"
+X-IronPort-AV: E=McAfee;i="6500,9779,10613"; a="668653799"
 X-IronPort-AV: E=Sophos;i="5.97,278,1669104000"; 
-   d="scan'208";a="668653796"
+   d="scan'208";a="668653799"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by fmsmga007.fm.intel.com with ESMTP; 06 Feb 2023 20:50:47 -0800
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the current sched domain
-Date:   Mon,  6 Feb 2023 20:58:34 -0800
-Message-Id: <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v3 07/10] sched/fair: Do not even the number of busy CPUs via asym_packing
+Date:   Mon,  6 Feb 2023 20:58:35 -0800
+Message-Id: <20230207045838.11243-8-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
@@ -73,24 +73,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SD_PREFER_SIBLING is set from the SMT scheduling domain up to the first
-non-NUMA domain (the exception is systems with SD_ASYM_CPUCAPACITY).
+Now that find_busiest_group() triggers load balancing between a fully_
+busy SMT2 core and an idle non-SMT core, it is no longer needed to force
+balancing via asym_packing. Use asym_packing only as intended: when there
+is high-priority CPU that is idle.
 
-Above the SMT sched domain, all domains have a child. The SD_PREFER_
-SIBLING is honored always regardless of the scheduling domain at which the
-load balance takes place.
-
-There are cases, however, in which the busiest CPU's sched domain has
-child but the destination CPU's does not. Consider, for instance a non-SMT
-core (or an SMT core with only one online sibling) doing load balance with
-an SMT core at the MC level. SD_PREFER_SIBLING will not be honored. We are
-left with a fully busy SMT core and an idle non-SMT core.
-
-Avoid inconsistent behavior. Use the prefer_sibling behavior at the current
-scheduling domain, not its child.
-
-The NUMA sched domain does not have the SD_PREFER_SIBLING flag. Thus, we
-will not spread load among NUMA sched groups, as desired.
+After this change, the same logic apply to SMT and non-SMT local groups.
+Simplify asym_smt_can_pull_tasks() accordingly.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -104,7 +93,6 @@ Cc: Tim C. Chen <tim.c.chen@intel.com>
 Cc: Valentin Schneider <vschneid@redhat.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
-Suggested-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v2:
@@ -113,44 +101,73 @@ Changes since v2:
 Changes since v1:
  * N/A
 ---
- kernel/sched/fair.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ kernel/sched/fair.c | 37 +++++--------------------------------
+ 1 file changed, 5 insertions(+), 32 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index df7bcbf634a8..a37ad59f20ea 100644
+index a37ad59f20ea..0ada2d18b934 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -10004,7 +10004,6 @@ static void update_idle_cpu_scan(struct lb_env *env,
- 
- static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sds)
+@@ -9247,20 +9247,15 @@ group_type group_classify(unsigned int imbalance_pct,
+  * @sgs:	Load-balancing statistics of the candidate busiest group
+  * @sg:		The candidate busiest group
+  *
+- * Check the state of the SMT siblings of both @sds::local and @sg and decide
+- * if @dst_cpu can pull tasks.
++ * Check the state of the SMT siblings of @sg and decide if @dst_cpu can pull
++ * tasks.
+  *
+  * This function must be called only if all the SMT siblings of @dst_cpu are
+  * idle, if any.
+  *
+- * If @dst_cpu does not have SMT siblings, it can pull tasks if two or more of
+- * the SMT siblings of @sg are busy. If only one CPU in @sg is busy, pull tasks
+- * only if @dst_cpu has higher priority.
+- *
+- * If @dst_cpu has SMT siblings, decide based on the priority of @sg. Do it only
+- * if @sg has exactly one busy CPU (i.e., one more than @sds::local). Bigger
+- * imbalances in the number of busy CPUs will be dealt with in
+- * find_busiest_group().
++ * @dst_cpu can pull tasks if @sg has exactly one busy CPU (i.e., one more than
++ * @sds::local) and has lower group priority than @sds::local. Bigger imbalances
++ * in the number of busy CPUs will be dealt with in find_busiest_group().
+  *
+  * Return: true if @dst_cpu can pull tasks, false otherwise.
+  */
+@@ -9269,33 +9264,11 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
+ 				    struct sched_group *sg)
  {
--	struct sched_domain *child = env->sd->child;
- 	struct sched_group *sg = env->sd->groups;
- 	struct sg_lb_stats *local = &sds->local_stat;
- 	struct sg_lb_stats tmp_sgs;
-@@ -10045,9 +10044,11 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
- 		sg = sg->next;
- 	} while (sg != env->sd->groups);
+ #ifdef CONFIG_SCHED_SMT
+-	bool local_is_smt;
+ 	int sg_busy_cpus;
  
--	/* Tag domain that child domain prefers tasks go to siblings first */
--	sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
+-	local_is_smt = sds->local->flags & SD_SHARE_CPUCAPACITY;
+ 	sg_busy_cpus = sgs->group_weight - sgs->idle_cpus;
+ 
+-	if (!local_is_smt) {
+-		/*
+-		 * If we are here, @dst_cpu is idle and does not have SMT
+-		 * siblings. Pull tasks if candidate group has two or more
+-		 * busy CPUs.
+-		 */
+-		if (sg_busy_cpus >= 2) /* implies sg_is_smt */
+-			return true;
 -
-+	/*
-+	 * Tag domain that @env::sd prefers to spread excess tasks among
-+	 * sibling sched groups.
-+	 */
-+	sds->prefer_sibling = env->sd->flags & SD_PREFER_SIBLING;
- 
- 	if (env->sd->flags & SD_NUMA)
- 		env->fbq_type = fbq_classify_group(&sds->busiest_stat);
-@@ -10346,7 +10347,6 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
- 			goto out_balanced;
- 	}
- 
--	/* Try to move all excess tasks to child's sibling domain */
- 	if (sds.prefer_sibling && local->group_type == group_has_spare &&
- 	    busiest->sum_nr_running > local->sum_nr_running + 1)
- 		goto force_balance;
+-		/*
+-		 * @dst_cpu does not have SMT siblings. @sg may have SMT
+-		 * siblings and only one is busy. In such case, @dst_cpu
+-		 * can help if it has higher priority and is idle (i.e.,
+-		 * it has no running tasks).
+-		 */
+-		return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+-	}
+-
+ 	/*
+-	 * @dst_cpu has SMT siblings and are also idle.
+-	 *
+ 	 * If the difference in the number of busy CPUs is two or more, let
+ 	 * find_busiest_group() take care of it. We only care if @sg has
+ 	 * exactly one busy CPU. This covers SMT and non-SMT sched groups.
 -- 
 2.25.1
 
