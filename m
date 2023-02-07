@@ -2,132 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2686168D9A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C470D68D9A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 14:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjBGNq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 08:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S231902AbjBGNsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 08:48:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbjBGNqy (ORCPT
+        with ESMTP id S231260AbjBGNs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 08:46:54 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5603BB9F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:46:50 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id h16so13574758wrz.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:46:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aG9xyJEWq8xfzQLUkXepXFg+WW0EUsU0Fq705yW4t3s=;
-        b=iE7TjlqZz6va0JTZBey0ugvYw+Hk9P/7K2DX5kDSL+OIcRwMuWbfPZidDTq3DHc3Tz
-         A0rW8LMOAaF5X1mkf334DG4Mqk3H4XOdOUwuEYdUCVwEZ1xfrZYi6XyOPWwcZ7QaHT+t
-         Ft8Gi8YOags67/SOK0mn24qLRZhDDMq2laXisnZOm8xQBmaCxuugnyzI3uHOkRer95tM
-         ZBgQHBEfvV8R6bTQ7gUTRhAV51iIIpOQppGDf+66xzCYlXQcKC0Sb1MTXFHN9Ry4RZ4a
-         zRVmX1mqCk6kxc23+JCFQs7uYrh0PThVZWxaLesj78tROG8josCnevfnSstSWm4gZgXB
-         +L+w==
+        Tue, 7 Feb 2023 08:48:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A54C3A9E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 05:47:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675777660;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XA/I3fzzNYZ//8/vwERAn+P62R3VluePPy0fivL+Wr8=;
+        b=FISClwm9n2lK3nXC1EJXUFPtyGgEYcjLqBDtj/ZfPDxoAT3GJXU4bIqo59efpvohntqtSq
+        wt1zmCfFG4hBABcgPqadv97DTpBcq4Bcq/tF2X50u2Z2u9m8ZOjApoWXDtZ1O21HzRBV0j
+        Q6NDaeBk2jRkpGBpF5wD4k3YIo7tBAo=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-222-VEd_Z1piPHuYosL-4KbFuQ-1; Tue, 07 Feb 2023 08:47:39 -0500
+X-MC-Unique: VEd_Z1piPHuYosL-4KbFuQ-1
+Received: by mail-qk1-f200.google.com with SMTP id q21-20020a05620a0d9500b0070572ccdbf9so9839413qkl.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 05:47:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aG9xyJEWq8xfzQLUkXepXFg+WW0EUsU0Fq705yW4t3s=;
-        b=SlxpMmAnHLlT6l87kiDuypJwLLd3Mzf2lMgWFd9wdObhzUtl37X1T9lY1PohlAN27L
-         0AMSg7ula11fFttgZI6yPfGq3fC2HpcO2AVg/LjojcsO+KQZ+RKdMwS60pNNZsdQ6Ilf
-         uh461VkpS+tMjNLsIIq316/2m6+cMvapDv5iAWpLbvC2TvgiZhh3lUeax/ctLrRsyhw8
-         3siMHA885R3C2b9ydWUNfbokRJByEX9v9QOfiYbhuAQ9LpREf4GUdUu394Q24e6xxdWI
-         twiGc0JV/NH0MNK1qSHfmDI8VrdlS58qZs34Qk9xqEKQhjOVSLvok78RIxOzyX7c7R4N
-         K2mg==
-X-Gm-Message-State: AO0yUKXDz/yNIm3S5Y08JidynctIX3TUIziKg9sLojrZLz87y/g/KHSu
-        vantvCP7q2Ibv353skH+N/NgYQ==
-X-Google-Smtp-Source: AK7set/foZL7LzUjzZNlYiTs9qS+b+uBwpRfHsoNPwLIc+5xmfCweBpO4Ts9Ae6+UXoQuVnEkAKxYQ==
-X-Received: by 2002:a5d:4685:0:b0:2c3:e5d5:5d77 with SMTP id u5-20020a5d4685000000b002c3e5d55d77mr2563126wrq.68.1675777608918;
-        Tue, 07 Feb 2023 05:46:48 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id s2-20020a5d69c2000000b002c3de83be0csm8610927wrw.87.2023.02.07.05.46.48
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XA/I3fzzNYZ//8/vwERAn+P62R3VluePPy0fivL+Wr8=;
+        b=NaRZc/pmsma9VbTAg/m999yPrFHV+kCN8X4PD5i2odV0owXUY/rcCOqOEXrJCKHLoL
+         8SghlITINTqRXrZqiC+mi+Atfgxte0DXmYOVr85+TDpE3/cYhet2ZC7Q06ex/4Y4UpeD
+         Q3rP5IAJQlbcrcttIqR6g67AtAfww4etb2lxfeaJij2N5zeBDg40EKZyb5NLkHfAH1V+
+         /JebS2zR+79wDB24PT2PnfOp/T27CKqyp6FZz6rhsbI0+LjCBdo76gzPqiILQKac0uFz
+         Ll1deOgU/ObtRihMAqj9T1O8AiTK/ZpY/m8eIg/oqbjsVmpYBM8cagPq+XrVBfvc2OKj
+         NIiw==
+X-Gm-Message-State: AO0yUKVBXXuRB7IAJwPJrTvt58TsisfXxE1hhUgJbfZTrlOsr0U8UJY6
+        XYpmk7fDNRRrpCCSwdrsLPkxTks+Y/PUtOTlkdtk17/ryX1kaa1DMFiFHFgEMO4wddRHzC0czdH
+        29YcvQSRspBfvV5oY3yuXDXKC
+X-Received: by 2002:a05:622a:508:b0:3b8:6075:5d16 with SMTP id l8-20020a05622a050800b003b860755d16mr5879064qtx.56.1675777658672;
+        Tue, 07 Feb 2023 05:47:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set/ejwgCvHaxLr87VY1OqTrLmCn+q6U4BxbYz736hZ4+blH4zqNep1u4j55SpjNPGPQlVa5mTQ==
+X-Received: by 2002:a05:622a:508:b0:3b8:6075:5d16 with SMTP id l8-20020a05622a050800b003b860755d16mr5879035qtx.56.1675777658395;
+        Tue, 07 Feb 2023 05:47:38 -0800 (PST)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id pe4-20020a05620a850400b0071ada51ab48sm9503353qkn.37.2023.02.07.05.47.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 05:46:48 -0800 (PST)
-From:   neil.armstrong@linaro.org
-Date:   Tue, 07 Feb 2023 14:46:46 +0100
-Subject: [PATCH v2] dt-bindings: firmware: document Qualcomm SM8550 SCM
+        Tue, 07 Feb 2023 05:47:37 -0800 (PST)
+Date:   Tue, 7 Feb 2023 08:47:35 -0500
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v4] cpuidle: psci: Do not suspend topology CPUs on
+ PREEMPT_RT
+Message-ID: <Y+JWd6NfhH0sAlim@fedora>
+References: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org>
+ <Y9L5VFPdDnsiCluu@fedora>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230207-topic-sm8550-upstream-scm-bindings-v2-1-ca12bd33fa1c@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAEZW4mMC/x2NywqDMBAAf0X23IWQNhr6K6WHPFZdMKtktRTEf
- 2/oceYwc4JSZVJ4didU+rDyKg3srYM0B5kIOTcGa+zdWDPgvm6cUIt3zuCx6V4pFNRUMLJklkm
- RzODjo8/96B20UAxKGGuQNLeUHMvS5FZp5O///Hpf1w/HkWbYiQAAAA==
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9L5VFPdDnsiCluu@fedora>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abel Vesa <abel.vesa@linaro.org>
+Is there still something preventing this patch from being picked up?
 
-Document the compatible for Qualcomm SM8550 SCM.
+Best,
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-Changes in v2:
-- Added missing allOf:if:then entries.
-- Link to v1: https://lore.kernel.org/all/20221116124038.2769028-1-abel.vesa@linaro.org/
----
- Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-index 4193492ba73e..4eee95f65f8e 100644
---- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-+++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-@@ -54,6 +54,7 @@ properties:
-           - qcom,scm-sm8250
-           - qcom,scm-sm8350
-           - qcom,scm-sm8450
-+          - qcom,scm-sm8550
-           - qcom,scm-qcs404
-       - const: qcom,scm
- 
-@@ -165,6 +166,7 @@ allOf:
-             contains:
-               enum:
-                 - qcom,scm-sm8450
-+                - qcom,scm-sm8550
-     then:
-       properties:
-         interconnects: false
-@@ -177,6 +179,7 @@ allOf:
-             contains:
-               enum:
-                 - qcom,scm-sm8450
-+                - qcom,scm-sm8550
-     then:
-       properties:
-         interrupts: false
-
----
-base-commit: 49a8133221c71b935f36a7c340c0271c2a9ee2db
-change-id: 20230207-topic-sm8550-upstream-scm-bindings-e078b46d6f85
-
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+Adrien
 
