@@ -2,458 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B3768D552
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D2368D553
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 12:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjBGLVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 06:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S231255AbjBGLWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 06:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjBGLVX (ORCPT
+        with ESMTP id S230234AbjBGLWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 06:21:23 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B9CF77B;
-        Tue,  7 Feb 2023 03:21:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1675768869; bh=zGU+arlaqHl8H8JmkChoKl3R8XiYU178ouOVJ7yBri4=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=j0Ts0K7sl/DRfP1JAvksdF41tyT8ja22LmeSXqSKaLTCo2OOQ96+3PGQ+q0ho+RnA
-         p6wlmRwHVMk7Bp49EYAemk3z2SXO/6bipvE5/wIdLQRGHwsbMdRAixzRx8qv46ynK7
-         UQCjVxfix+JpnSZN6jjPagqynfy6zPxlfOvAxfGs=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Tue,  7 Feb 2023 12:21:09 +0100 (CET)
-X-EA-Auth: JdEyjehX13xsM6I0QcuYhxHvDE76Xzp20TM6Dd4gKHs/FjAVzVh9YqTZBicJbSZQev2B6fD8g71+3QNjoLYq4IwU7fslrFh7
-Date:   Tue, 7 Feb 2023 16:51:01 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Khalid Aziz <khalid@gonehiking.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] scsi: FlashPoint: Replace arithmetic addition by bitwise OR
-Message-ID: <Y+I0HXsHezZRtFOM@ubun2204.myguest.virtualbox.org>
+        Tue, 7 Feb 2023 06:22:01 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2084.outbound.protection.outlook.com [40.107.7.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DC940D0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 03:22:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JoIQ2AS1wfbsjjqZcu4QZRDwxe9zctTxRljcD0hvWl/Dff6Fb7sGTUn+ilvaInAFapxfaSoL2GrTjT2tKQKUgjDepxKmvEgu2sZp4SufbPjqZ/mqf3bQBMiruOZck5VHQNHys2VLA3xV8pGeHYlSHiCMKWUcH9w5fhN043VDIEgJi/gWvVMcSJXU5yfAsUAPJf3aDmGOaPVYjnuvu8p/Z0tbSMg0XMg6iYV+P4Bb5NMMYPFl/zjCIL1hFqKqh83HwG+N4B8mRGQy6IEa3V8bM1Ify5i4w22z3cst91I/JFMCq+FPQyC2CoxsujXkho3mwvMo5CkxWdF2yz/01Fadpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dG23wThND3QslhZ248ndwcF/k9cizxEHZc8qGu0Xw/Y=;
+ b=hdpqplNGLP65hTgTjH+1yn1mKyAY2YEgK2nt343qxmxFqN23xzJ32Pbf3L1WMYOEu09677pXVjyRZfhL/+T5v4L8uyaBCOpIh2LRb1U+clj8RtUgbDpdYFzU6VWVB1FVl++F3HqIFX/j7vNpChk+p0UAgR9AKA+7lyy//gND/fHXaY7nimo3CYo6KUDSDht90Ot5MNcVGS2v6s7f/hyVRKB+WueZi48o7mwi1mxzeS419h21dlQFsqkqo2RJG9qrt/kJoOYBNuvl2PDrbGxJoyCBK8SYYN/e1H7Nz3ZtdEr9N3Vc8/7Hy//vQuE9BdePlRGpR8ki1x7U+9H6Jkj+1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dG23wThND3QslhZ248ndwcF/k9cizxEHZc8qGu0Xw/Y=;
+ b=ivvcm7X/GBbr1HlE5KSolD3Ge8HS4mJmx0FwzAaxVHqOkFvz6fUd8GusQiZIA7dutxeuCXwwpISzwg6XAz63Dg7536rlHKDJkSjbSc7MfG/x2eM9g2Nuwu7qIsAgQrA0b0QB42oPLVxG/nk9JKL1pC/I24BAH6ruWEu8baXZfGM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com (2603:10a6:10:30b::14)
+ by AS4PR04MB9434.eurprd04.prod.outlook.com (2603:10a6:20b:4ea::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25; Tue, 7 Feb
+ 2023 11:21:57 +0000
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886]) by DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886%5]) with mapi id 15.20.6043.038; Tue, 7 Feb 2023
+ 11:21:57 +0000
+Message-ID: <115aca23-a47c-3a92-ae19-b4fa71412ca2@nxp.com>
+Date:   Tue, 7 Feb 2023 13:21:54 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] ASoC: fsl_sai: fix getting version from VERID
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>, nicoleotsuka@gmail.com,
+        Xiubo.Lee@gmail.com, festevam@gmail.com, shengjiu.wang@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <1675760664-25193-1-git-send-email-shengjiu.wang@nxp.com>
+Content-Language: en-US
+From:   Iuliana Prodan <iuliana.prodan@nxp.com>
+In-Reply-To: <1675760664-25193-1-git-send-email-shengjiu.wang@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM4PR0501CA0043.eurprd05.prod.outlook.com
+ (2603:10a6:200:68::11) To DB9PR04MB9628.eurprd04.prod.outlook.com
+ (2603:10a6:10:30b::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9628:EE_|AS4PR04MB9434:EE_
+X-MS-Office365-Filtering-Correlation-Id: da656522-c7e8-4bc1-bdad-08db08fd85e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pb0VyUArfqOvcCMFm4KS5o5mXSStrMivnoqYByf4zlc4r/fxN/THSmNwYvuw53PL1OpFp9KswFse4eOrhUAoeyWUKX0lgRf5g9y/bNODjWnpPz/DicNgfxX9YpJCxNCET/28Hu4G2TrW0sUVI30L/l2tWW69nwKyx2y+pp3y+Rz/vwku2PEBu66aSqRzXHu9IinSAJNxOneNMbGLVJLZfxzjgbemOMcBOQYlMitae+6rKzovpNadxxUp++tydCZ//rGRD9r02yjP+zxRmDUJULAH9rjFRjdoDqG1tnWOmTM8kpwwxizFnqVHzP0tzfAJNOktkI2AYfYczjsSiGO6uOaBVADsnXRJVKa4XoQQ2FR54Amn0GUUmjh3lCwSyk9+IN/5M1qvTNhscuepQdP41v6iCmRK7vSsy1HrOayPT5IUe7nETV9z806iw5PCdQfeJXK7O4IoeE/ReAotxgGlPAEe6A/fGzrCJq05qkw+jlZPCA010b9EJlzXGcaA6wbvNpdBmyYSQsXCLUBTtbpnuyN4wfufq78TNh34Gf+GIMt49ZIicYzv1X0bo4eqeCJovVj8oUdehOrgPghDGCDEPYccUoqMnqsZQ24G9oa3fsy2AH5Z8S2HNie73IvH8DrX6/j21SlbDhy2HfV2mvaYNULOPcZnlIbqKsG5qtuhr7FYObp53GdUuT+loNX+Zq/lpPV99/6vlV/raUzY++TdC22wU9fmS2gbFSnC5L207iHn7pf3l5F4I65fPtVcBHae
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9628.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(451199018)(4326008)(2616005)(8676002)(6512007)(26005)(36756003)(55236004)(66946007)(66556008)(8936002)(41300700001)(186003)(66476007)(6486002)(83380400001)(31696002)(38100700002)(478600001)(316002)(44832011)(921005)(2906002)(31686004)(6666004)(7416002)(5660300002)(6506007)(86362001)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QzB2VFQrVk9xYVRZMEZObWcyOThkQjdXR1VEa0xEclFNNUhzTGxUTG8zejlj?=
+ =?utf-8?B?T0VkRkh3NVRZZURsNFBIaGNvN2UrTmQzdllxNDdUUEZTekF2UnB3SlJCMnl2?=
+ =?utf-8?B?bHNDbE83QVVlZjFtaTQrMWh4YzhPSHBxVm1rME5sa084TXk5bzhOTXNJYTRt?=
+ =?utf-8?B?MnBDNXBXNW55MFJGRWtpUERFcUl2YXUyckVEZnV0QXR2WGhhUS9abHRiMVFw?=
+ =?utf-8?B?MUx6YmJpcjJRWWh0WXEwVFl5M0o3U1JmMUhUelBkY1pPSU5kQUpGZ2ZiNkF2?=
+ =?utf-8?B?WldDOWhmOVorNGtGZHQwVFMzbkJHSE9sa1kzV2NkUzNJYmxNNGMyeTVvQVhJ?=
+ =?utf-8?B?bmNLeDhrelZTSHZqUzhmQTVMUjZmRDhuaHliTkNHNVk4bTA1b1hEQ1d4Y0tF?=
+ =?utf-8?B?aVYwZHI5c1JyZXhOekVNU1J0anlsTWtmakhrNWlkdnpwa3VIV1V4THVRY0xs?=
+ =?utf-8?B?STc0WUJTaHRLQmZ2M3h0aHo0dStBZHo1enl4ZURjUWZUR0h3bDY4QU85ZS84?=
+ =?utf-8?B?cUNPaUtVZEtaWm5keUprcjNGSUhuY2hWcE9jaWRGeDAzMWpaZE53TmtnVTNS?=
+ =?utf-8?B?dmZ1VzhvUFRsNnQzUDdtdzNoZDNaVUlmSzlmS2tHVE8xZEIyalN3UHpSQ2N1?=
+ =?utf-8?B?YlJ2RHpJMktPZkh3NWxUNTVUb3gvQXBFSjZQM3hMcE5CbDBFRVF3eDZ6SVFy?=
+ =?utf-8?B?VU50NTdWdkEyT04rbUhPQXVOM255UTlhUjUyMlJRcmdENzV0UHNsSWVMcjRy?=
+ =?utf-8?B?RHRoeVZaV2ZFc1d3OXQ1bGJaMkRScldXNkk2RTBtMVR0NHBkTVEwWUt0aFh4?=
+ =?utf-8?B?dkpkNjh0WlQ2d3pjalExcER5RXcyNS9udXRDMk1rd3YyM3RoQW81a29sY1pP?=
+ =?utf-8?B?V3FEaEk4ZWo0SElocVVjSUxQb1J4OGorOW51NDZBUjNNTFcrcTNNNndpbXRw?=
+ =?utf-8?B?ZDFnRnRGWFBlWkMrZlFUam5HWHQ3eE5BYXBBNUVBT0NENmNtN1I1b0wzc2Rk?=
+ =?utf-8?B?RG5Ua1B4bHVuTzJqaXlMRXRnaU9yWGZkeGhwL2U1d3ZPUjd3U3V6RGt0RFdZ?=
+ =?utf-8?B?ejBMTHZCMHVrRG5RSld3Mk4rMFFpN1I2anpOeVg1elBzaWxqOHozcElObitZ?=
+ =?utf-8?B?YnczWHFqZWRRMU1FS3luaEtkR2RQcjIyY29iL3JnL3RxRXhMQjlNamNMZ1Fl?=
+ =?utf-8?B?Q0xmdExkMlEzS3pXRjV5UjJnaGsrZEhEdTZER0RKZWsyMTFqNUZjWEkvYm14?=
+ =?utf-8?B?cWJwK25ES2R3R3FOMDVBd2w5VFFKU09XbkQ1VFBMWUhyUTM0Nk9iSWtndEVw?=
+ =?utf-8?B?c2w2OEtEN0dhSDFGeS9ndzVVeXUwSStPWWVDaHlBRDYvUnR2SnpSOHduclRt?=
+ =?utf-8?B?dHBPbERIVDNvaXJjTWg4djJCN2pYRFBNdzErQmdSNTBlNStjOTZ5Zi9hSTU1?=
+ =?utf-8?B?YmhCOTh1Y2VHRlFKUlJObWdKTkJHKzJaZUsrUUowMnBFcDFINWwrWmtSZVBY?=
+ =?utf-8?B?dkdpVjVxcy82bi91b21GeHRHdnpMVE1KZ1laYnlUZTJaaER2V0wwZVB4MEpr?=
+ =?utf-8?B?ZWJJdGU1aGdyVFhTODVNWFZ4Sm5LYU1TM1dDeEIycm9GZ285TndKb3loS0tE?=
+ =?utf-8?B?cituWjYzTGREQVFSS093WEVLeGFUeUVzalRqNldEdXlRVSsyNFlEZFMyS1Z0?=
+ =?utf-8?B?RVc3RHdTaUl0REpheGZyNVpHUmkxVURtR3B5d3IxRGNHTmxWSzdpellJaEpv?=
+ =?utf-8?B?SnovdmtUVXUrUlh1d2pkNDVyczNaTldDRWNiWXRTM1lIRE5rUndIWnF6OW9v?=
+ =?utf-8?B?ZXNHZmdQYmE2bFJqLzk2eXl2OFpBY1RycVdSVTNaejE5MEl2TkRJczk2OUpJ?=
+ =?utf-8?B?ZjRORlpzRkNmNlNiaEJmWHM3a1R0Ujh2MlpKZ2gwRmhZWGFxLzFBYWZIZVBH?=
+ =?utf-8?B?ZDdtOGdnbm9QOU9oS2o3UXZINGJwNWdtQjh4aGNUZDJiajdOQ0ZySW1tQ2da?=
+ =?utf-8?B?Nk9nd2UxU1V6VVdjMVNvcmZ3cEs2USt5UnhIUUFJQ3ZsakZDcjJaSkVGL1dR?=
+ =?utf-8?B?UysyMjUveUNLMEk2OUdiRDIrK1ZLZFlSK2s2ZklBVHBmTlBXZUlYTGxINUlt?=
+ =?utf-8?B?dFVUSmhxSTBScFpQQTJaQktCMUJQMnc5SWNqM1crY0s0OStRV1dOOUg1cEhy?=
+ =?utf-8?B?a1E9PQ==?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da656522-c7e8-4bc1-bdad-08db08fd85e8
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9628.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2023 11:21:57.1302
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TfyqgjThoKfZbVB6zkedd7qzorjdGZGuRHXAl9UTvM5o+gs7kwdfC9XpbcWHq9dsi2A9CLi70sSAwV+BA8DYIw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9434
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When adding two bit-field mask values, an OR operation offers higher
-performance over an arithmetic operation. So, convert such additions to
-an OR based expressions.
-Issue identified using orplus.cocci semantic patch script.
-
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/FlashPoint.c | 92 +++++++++++++++++++--------------------
- 1 file changed, 45 insertions(+), 47 deletions(-)
-
-diff --git a/drivers/scsi/FlashPoint.c b/drivers/scsi/FlashPoint.c
-index 3d9c56ac8224..1ecd7bd5a4ab 100644
---- a/drivers/scsi/FlashPoint.c
-+++ b/drivers/scsi/FlashPoint.c
-@@ -415,8 +415,8 @@ typedef struct SCCBscam_info {
- 
- #define  DISABLE_INT       BIT(7)	/*Do not interrupt at end of cmd. */
- 
--#define  HOST_WRT_CMD      ((DISABLE_INT + XFER_HOST_DMA + XFER_HOST_AUTO + XFER_DMA_8BIT))
--#define  HOST_RD_CMD       ((DISABLE_INT + XFER_DMA_HOST + XFER_HOST_AUTO + XFER_DMA_8BIT))
-+#define  HOST_WRT_CMD      ((DISABLE_INT | XFER_HOST_DMA | XFER_HOST_AUTO | XFER_DMA_8BIT))
-+#define  HOST_RD_CMD       ((DISABLE_INT | XFER_DMA_HOST | XFER_HOST_AUTO | XFER_DMA_8BIT))
- 
- #define  hp_host_addr_lo      0x1C
- #define  hp_host_addr_hmi     0x1E
-@@ -1892,7 +1892,7 @@ static int FlashPoint_HandleInterrupt(void *pcard)
- 					   (unsigned char)0x00);
- 				WR_HARPOON(ioport + hp_fifowrite, i);
- 				WR_HARPOON(ioport + hp_autostart_3,
--					   (AUTO_IMMED + TAG_STRT));
-+					   (AUTO_IMMED | TAG_STRT));
- 			}
- 		}
- 
-@@ -2218,14 +2218,14 @@ static unsigned char FPT_sfm(u32 port, struct sccb *pCurrSCCB)
- 
- 	message = RD_HARPOON(port + hp_scsidata_0);
- 
--	WR_HARPOON(port + hp_scsisig, SCSI_ACK + S_MSGI_PH);
-+	WR_HARPOON(port + hp_scsisig, (SCSI_ACK | S_MSGI_PH));
- 
- 	if (TimeOutLoop > 20000)
- 		message = 0x00;	/* force message byte = 0 if Time Out on Req */
- 
- 	if ((RDW_HARPOON((port + hp_intstat)) & PARITY) &&
- 	    (RD_HARPOON(port + hp_addstat) & SCSI_PAR_ERR)) {
--		WR_HARPOON(port + hp_scsisig, (SCSI_ACK + S_ILL_PH));
-+		WR_HARPOON(port + hp_scsisig, (SCSI_ACK | S_ILL_PH));
- 		WR_HARPOON(port + hp_xferstat, 0);
- 		WR_HARPOON(port + hp_fiforead, 0);
- 		WR_HARPOON(port + hp_fifowrite, 0);
-@@ -2252,12 +2252,12 @@ static unsigned char FPT_sfm(u32 port, struct sccb *pCurrSCCB)
- 
- 			RD_HARPOON(port + hp_scsidata_0);
- 
--			WR_HARPOON(port + hp_scsisig, (SCSI_ACK + S_ILL_PH));
-+			WR_HARPOON(port + hp_scsisig, (SCSI_ACK | S_ILL_PH));
- 
- 		} while (1);
- 
- 	}
--	WR_HARPOON(port + hp_scsisig, (SCSI_ACK + S_ILL_PH));
-+	WR_HARPOON(port + hp_scsisig, (SCSI_ACK | S_ILL_PH));
- 	WR_HARPOON(port + hp_xferstat, 0);
- 	WR_HARPOON(port + hp_fiforead, 0);
- 	WR_HARPOON(port + hp_fifowrite, 0);
-@@ -2385,7 +2385,7 @@ static void FPT_ssel(u32 port, unsigned char p_card)
- 
- 		currSCCB->Sccb_scsimsg = TARGET_RESET;
- 
--		WR_HARPOON(port + hp_autostart_3, (SELECT + SELCHK_STRT));
-+		WR_HARPOON(port + hp_autostart_3, (SELECT | SELCHK_STRT));
- 		auto_loaded = 1;
- 		currSCCB->Sccb_scsistat = SELECT_BDR_ST;
- 
-@@ -2421,7 +2421,7 @@ static void FPT_ssel(u32 port, unsigned char p_card)
- 			    (MPM_OP + AMSG_OUT + currSCCB->Sccb_tag));
- 		WRW_HARPOON((port + SYNC_MSGS + 4), (BRH_OP + ALWAYS + NP));
- 
--		WR_HARPOON(port + hp_autostart_3, (SELECT + SELCHK_STRT));
-+		WR_HARPOON(port + hp_autostart_3, (SELECT | SELCHK_STRT));
- 		auto_loaded = 1;
- 
- 	}
-@@ -2457,7 +2457,7 @@ static void FPT_ssel(u32 port, unsigned char p_card)
- 					     currSCCB->Sccb_idmsg));
- 
- 				WR_HARPOON(port + hp_autostart_3,
--					   (SELECT + SELCHK_STRT));
-+					   (SELECT | SELCHK_STRT));
- 
- 				/* Setup our STATE so we know what happened when
- 				   the wheels fall off. */
-@@ -2506,7 +2506,7 @@ static void FPT_ssel(u32 port, unsigned char p_card)
- 				currSCCB->Sccb_scsistat = SELECT_Q_ST;
- 
- 				WR_HARPOON(port + hp_autostart_3,
--					   (SELECT + SELCHK_STRT));
-+					   (SELECT | SELCHK_STRT));
- 			}
- 		}
- 
-@@ -2521,7 +2521,7 @@ static void FPT_ssel(u32 port, unsigned char p_card)
- 			currSCCB->Sccb_scsistat = SELECT_ST;
- 
- 			WR_HARPOON(port + hp_autostart_3,
--				   (SELECT + SELCHK_STRT));
-+				   (SELECT | SELCHK_STRT));
- 		}
- 
- 		theCCB = (unsigned char *)&currSCCB->Cdb[0];
-@@ -2826,7 +2826,7 @@ static void FPT_SendMsg(u32 port, unsigned char message)
- 
- 		WR_HARPOON(port + hp_scsidata_0, message);
- 
--		WR_HARPOON(port + hp_scsisig, (SCSI_ACK + S_ILL_PH));
-+		WR_HARPOON(port + hp_scsisig, (SCSI_ACK | S_ILL_PH));
- 
- 		ACCEPT_MSG(port);
- 
-@@ -2874,7 +2874,7 @@ static void FPT_sdecm(unsigned char message, u32 port, unsigned char p_card)
- 
- 		ACCEPT_MSG(port);
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 	}
- 
- 	else if (message == COMMAND_COMPLETE) {
-@@ -2895,7 +2895,7 @@ static void FPT_sdecm(unsigned char message, u32 port, unsigned char p_card)
- 
- 		ACCEPT_MSG(port);
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 	}
- 
- 	else if (message == MESSAGE_REJECT) {
-@@ -2979,7 +2979,7 @@ static void FPT_sdecm(unsigned char message, u32 port, unsigned char p_card)
- 				    ~(unsigned char)F_USE_CMD_Q;
- 
- 				WR_HARPOON(port + hp_autostart_1,
--					   (AUTO_IMMED + DISCONNECT_START));
-+					   (AUTO_IMMED | DISCONNECT_START));
- 
- 			}
- 		}
-@@ -2994,7 +2994,7 @@ static void FPT_sdecm(unsigned char message, u32 port, unsigned char p_card)
- 
- 			if (!(RDW_HARPOON((port + hp_intstat)) & BUS_FREE)) {
- 				WR_HARPOON(port + hp_autostart_1,
--					   (AUTO_IMMED + DISCONNECT_START));
-+					   (AUTO_IMMED | DISCONNECT_START));
- 			}
- 		}
- 	}
-@@ -3014,7 +3014,7 @@ static void FPT_sdecm(unsigned char message, u32 port, unsigned char p_card)
- 		if (currSCCB->Sccb_scsimsg != MSG_PARITY_ERROR)
- 			ACCEPT_MSG(port);
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 	}
- 
- 	else {
-@@ -3024,7 +3024,7 @@ static void FPT_sdecm(unsigned char message, u32 port, unsigned char p_card)
- 
- 		ACCEPT_MSG_ATN(port);
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 	}
- }
- 
-@@ -3069,27 +3069,25 @@ static void FPT_shandem(u32 port, unsigned char p_card, struct sccb *pCurrSCCB)
- 					ACCEPT_MSG_ATN(port);
- 
- 					WR_HARPOON(port + hp_autostart_1,
--						   (AUTO_IMMED +
--						    DISCONNECT_START));
-+						   (AUTO_IMMED | DISCONNECT_START));
- 				}
- 			} else {
- 
- 				pCurrSCCB->Sccb_scsimsg = MESSAGE_REJECT;
- 				ACCEPT_MSG_ATN(port);
- 
--				WR_HARPOON(port + hp_autostart_1,
--					   (AUTO_IMMED + DISCONNECT_START));
-+				WR_HARPOON(port + hp_autostart_1, (AUTO_IMMED | DISCONNECT_START));
- 			}
- 		} else {
- 			if (pCurrSCCB->Sccb_scsimsg != MSG_PARITY_ERROR)
- 				ACCEPT_MSG(port);
- 			WR_HARPOON(port + hp_autostart_1,
--				   (AUTO_IMMED + DISCONNECT_START));
-+				   (AUTO_IMMED | DISCONNECT_START));
- 		}
- 	} else {
- 		if (pCurrSCCB->Sccb_scsimsg == MSG_PARITY_ERROR)
- 			WR_HARPOON(port + hp_autostart_1,
--				   (AUTO_IMMED + DISCONNECT_START));
-+				   (AUTO_IMMED | DISCONNECT_START));
- 	}
- }
- 
-@@ -3154,14 +3152,14 @@ static unsigned char FPT_sisyncn(u32 port, unsigned char p_card,
- 
- 		if (syncFlag == 0) {
- 			WR_HARPOON(port + hp_autostart_3,
--				   (SELECT + SELCHK_STRT));
-+				   (SELECT | SELCHK_STRT));
- 			currTar_Info->TarStatus =
- 			    ((currTar_Info->
- 			      TarStatus & ~(unsigned char)TAR_SYNC_MASK) |
- 			     (unsigned char)SYNC_TRYING);
- 		} else {
- 			WR_HARPOON(port + hp_autostart_3,
--				   (AUTO_IMMED + CMD_ONLY_STRT));
-+				   (AUTO_IMMED | CMD_ONLY_STRT));
- 		}
- 
- 		return 1;
-@@ -3196,7 +3194,7 @@ static void FPT_stsyncn(u32 port, unsigned char p_card)
- 
- 	if ((sync_msg == 0x00) && (currSCCB->Sccb_scsimsg == MSG_PARITY_ERROR)) {
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 		return;
- 	}
- 
-@@ -3206,7 +3204,7 @@ static void FPT_stsyncn(u32 port, unsigned char p_card)
- 
- 	if ((offset == 0x00) && (currSCCB->Sccb_scsimsg == MSG_PARITY_ERROR)) {
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 		return;
- 	}
- 
-@@ -3290,7 +3288,7 @@ static void FPT_stsyncn(u32 port, unsigned char p_card)
- 					   (unsigned char)SYNC_SUPPORTED);
- 
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 	}
- 
- 	else {
-@@ -3330,7 +3328,7 @@ static void FPT_sisyncr(u32 port, unsigned char sync_pulse,
- 	WR_HARPOON(port + hp_portctrl_0, SCSI_PORT);
- 	WRW_HARPOON((port + hp_intstat), CLR_ALL_INT_1);
- 
--	WR_HARPOON(port + hp_autostart_3, (AUTO_IMMED + CMD_ONLY_STRT));
-+	WR_HARPOON(port + hp_autostart_3, (AUTO_IMMED | CMD_ONLY_STRT));
- 
- 	while (!(RDW_HARPOON((port + hp_intstat)) & (BUS_FREE | AUTO_INT))) {
- 	}
-@@ -3372,7 +3370,7 @@ static unsigned char FPT_siwidn(u32 port, unsigned char p_card)
- 			    (MPM_OP + AMSG_OUT + SM16BIT));
- 		WRW_HARPOON((port + SYNC_MSGS + 10), (BRH_OP + ALWAYS + NP));
- 
--		WR_HARPOON(port + hp_autostart_3, (SELECT + SELCHK_STRT));
-+		WR_HARPOON(port + hp_autostart_3, (SELECT | SELCHK_STRT));
- 
- 		currTar_Info->TarStatus = ((currTar_Info->TarStatus &
- 					    ~(unsigned char)TAR_WIDE_MASK) |
-@@ -3413,7 +3411,7 @@ static void FPT_stwidn(u32 port, unsigned char p_card)
- 
- 	if ((width == 0x00) && (currSCCB->Sccb_scsimsg == MSG_PARITY_ERROR)) {
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 		return;
- 	}
- 
-@@ -3445,7 +3443,7 @@ static void FPT_stwidn(u32 port, unsigned char p_card)
- 		} else {
- 			ACCEPT_MSG(port);
- 			WR_HARPOON(port + hp_autostart_1,
--				   (AUTO_IMMED + DISCONNECT_START));
-+				   (AUTO_IMMED | DISCONNECT_START));
- 		}
- 	}
- 
-@@ -3487,7 +3485,7 @@ static void FPT_siwidr(u32 port, unsigned char width)
- 	WR_HARPOON(port + hp_portctrl_0, SCSI_PORT);
- 	WRW_HARPOON((port + hp_intstat), CLR_ALL_INT_1);
- 
--	WR_HARPOON(port + hp_autostart_3, (AUTO_IMMED + CMD_ONLY_STRT));
-+	WR_HARPOON(port + hp_autostart_3, (AUTO_IMMED | CMD_ONLY_STRT));
- 
- 	while (!(RDW_HARPOON((port + hp_intstat)) & (BUS_FREE | AUTO_INT))) {
- 	}
-@@ -3751,7 +3749,7 @@ static void FPT_sxfrp(u32 p_port, unsigned char p_card)
- 
- 	if (!(RDW_HARPOON((p_port + hp_intstat)) & (BUS_FREE | RESET))) {
- 		WR_HARPOON(p_port + hp_autostart_0,
--			   (AUTO_IMMED + DISCONNECT_START));
-+			   (AUTO_IMMED | DISCONNECT_START));
- 		while (!(RDW_HARPOON((p_port + hp_intstat)) & AUTO_INT)) {
- 		}
- 
-@@ -3987,7 +3985,7 @@ static void FPT_phaseDataOut(u32 port, unsigned char p_card)
- 
- 	WRW_HARPOON((port + hp_intstat), XFER_CNT_0);
- 
--	WR_HARPOON(port + hp_autostart_0, (END_DATA + END_DATA_START));
-+	WR_HARPOON(port + hp_autostart_0, (END_DATA | END_DATA_START));
- 
- 	FPT_dataXferProcessor(port, &FPT_BL_Card[p_card]);
- 
-@@ -4030,7 +4028,7 @@ static void FPT_phaseDataIn(u32 port, unsigned char p_card)
- 
- 	WRW_HARPOON((port + hp_intstat), XFER_CNT_0);
- 
--	WR_HARPOON(port + hp_autostart_0, (END_DATA + END_DATA_START));
-+	WR_HARPOON(port + hp_autostart_0, (END_DATA | END_DATA_START));
- 
- 	FPT_dataXferProcessor(port, &FPT_BL_Card[p_card]);
- 
-@@ -4115,7 +4113,7 @@ static void FPT_phaseStatus(u32 port, unsigned char p_card)
- 
- 	WR_HARPOON(port + hp_scsisig, 0x00);
- 
--	WR_HARPOON(port + hp_autostart_0, (AUTO_IMMED + END_DATA_START));
-+	WR_HARPOON(port + hp_autostart_0, (AUTO_IMMED | END_DATA_START));
- }
- 
- /*---------------------------------------------------------------------
-@@ -4199,7 +4197,7 @@ static void FPT_phaseMsgOut(u32 port, unsigned char p_card)
- 
- 	WR_HARPOON(port + hp_scsidata_0, message);
- 
--	WR_HARPOON(port + hp_scsisig, (SCSI_ACK + S_ILL_PH));
-+	WR_HARPOON(port + hp_scsisig, (SCSI_ACK | S_ILL_PH));
- 
- 	ACCEPT_MSG(port);
- 
-@@ -4251,7 +4249,7 @@ static void FPT_phaseMsgOut(u32 port, unsigned char p_card)
- 		if (message == MSG_PARITY_ERROR) {
- 			currSCCB->Sccb_scsimsg = NOP;
- 			WR_HARPOON(port + hp_autostart_1,
--				   (AUTO_IMMED + DISCONNECT_START));
-+				   (AUTO_IMMED | DISCONNECT_START));
- 		} else {
- 			FPT_sxfrp(port, p_card);
- 		}
-@@ -4282,7 +4280,7 @@ static void FPT_phaseMsgIn(u32 port, unsigned char p_card)
- 	if ((message == DISCONNECT) || (message == SAVE_POINTERS)) {
- 
- 		WR_HARPOON(port + hp_autostart_1,
--			   (AUTO_IMMED + END_DATA_START));
-+			   (AUTO_IMMED | END_DATA_START));
- 
- 	}
- 
-@@ -4297,7 +4295,7 @@ static void FPT_phaseMsgIn(u32 port, unsigned char p_card)
- 			if (currSCCB->Sccb_scsimsg != MSG_PARITY_ERROR)
- 				ACCEPT_MSG(port);
- 			WR_HARPOON(port + hp_autostart_1,
--				   (AUTO_IMMED + DISCONNECT_START));
-+				   (AUTO_IMMED | DISCONNECT_START));
- 		}
- 	}
- 
-@@ -6134,7 +6132,7 @@ static unsigned char FPT_scsell(u32 p_port, unsigned char targ_id)
- 		while (!(RDW_HARPOON((p_port + hp_intstat)) & BUS_FREE)) {
- 			if (RD_HARPOON(p_port + hp_scsisig) & SCSI_REQ) {
- 				WR_HARPOON(p_port + hp_scsisig,
--					   (SCSI_ACK + S_ILL_PH));
-+					   (SCSI_ACK | S_ILL_PH));
- 				ACCEPT_MSG(p_port);
- 			}
- 		}
-@@ -7284,7 +7282,7 @@ static void FPT_utilEEWrite(u32 p_port, unsigned short ee_data,
- 
- 	FPT_utilEESendCmdAddr(p_port, EE_WRITE, ee_addr);
- 
--	ee_value |= (SEE_MS + SEE_CS);
-+	ee_value |= (SEE_MS | SEE_CS);
- 
- 	for (i = 0x8000; i != 0; i >>= 1) {
- 
-@@ -7364,7 +7362,7 @@ static unsigned short FPT_utilEEReadOrg(u32 p_port, unsigned short ee_addr)
- 
- 	FPT_utilEESendCmdAddr(p_port, EE_READ, ee_addr);
- 
--	ee_value |= (SEE_MS + SEE_CS);
-+	ee_value |= (SEE_MS | SEE_CS);
- 	ee_data = 0;
- 
- 	for (i = 1; i <= 16; i++) {
-@@ -7382,7 +7380,7 @@ static unsigned short FPT_utilEEReadOrg(u32 p_port, unsigned short ee_addr)
- 			ee_data |= 1;
- 	}
- 
--	ee_value &= ~(SEE_MS + SEE_CS);
-+	ee_value &= ~(SEE_MS | SEE_CS);
- 	WR_HARPOON(p_port + hp_ee_ctrl, (ee_value | SEE_MS));	/*Turn off CS */
- 	WR_HARPOON(p_port + hp_ee_ctrl, ee_value);	/*Turn off Master Select */
- 
--- 
-2.34.1
+On 2/7/2023 11:04 AM, Shengjiu Wang wrote:
+> The version information is at the bit31 ~ bit16 in the VERID
+> register, so need to right shift 16bit to get it, otherwise
+> the result of comparison "sai->verid.version >= 0x0301" is
+> wrong.
+>
+> Fixes: 99c1e74f25d4 ("ASoC: fsl_sai: store full version instead of major/minor")
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>   sound/soc/fsl/fsl_sai.c | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+> index c365afd6c4ea..1b197478b3d9 100644
+> --- a/sound/soc/fsl/fsl_sai.c
+> +++ b/sound/soc/fsl/fsl_sai.c
+> @@ -1142,6 +1142,7 @@ static int fsl_sai_check_version(struct device *dev)
+>   
+>   	sai->verid.version = val &
+>   		(FSL_SAI_VERID_MAJOR_MASK | FSL_SAI_VERID_MINOR_MASK);
+> +	sai->verid.version >>= FSL_SAI_VERID_MINOR_SHIFT;
+>   	sai->verid.feature = val & FSL_SAI_VERID_FEATURE_MASK;
+>   
+>   	ret = regmap_read(sai->regmap, FSL_SAI_PARAM, &val);
 
 
+I would put the version in one line, but probably is easier to read this 
+way.
+Also, please explain, in commit message, what and from where is 0x0301 - 
+might worth adding a macro for this, in another commit, of course.
+Otherwise,
+
+Reviewed-by: Iuliana Prodan <iuliana.prodan@nxp.com>
 
