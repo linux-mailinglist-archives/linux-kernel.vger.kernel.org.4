@@ -2,74 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F56868DEC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A6C68DEC3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 18:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjBGRRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 12:17:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
+        id S231722AbjBGRR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 12:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjBGRRC (ORCPT
+        with ESMTP id S231879AbjBGRRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 12:17:02 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FF23F28C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:16:22 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so19298836pjd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:16:22 -0800 (PST)
+        Tue, 7 Feb 2023 12:17:03 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C913E0BF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 09:16:24 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id h3so6427814wrp.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 09:16:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sc8Dzie9A8y8S45kzCPXX5BYzIIhqs78gp47BlQd0i8=;
-        b=Ll2X9VD0OteaIRqAqdVdEYSZyu0gSNQwuSfB9Rrn2fwPWRX1u7pghVhAcREsP2+lGk
-         HVglbUWsQBazz2zBgjvN/8RW4U+/JA80B6vZHzLSpfnPVAPfDwMIlElMZfzna+NTuxPQ
-         FINzOStCndAXqlMJVvndo5XC7u2wsw6HjP3KT1hq9p3C8ghI5p6kxjFDQfEucFV07QF8
-         rEu8eW/zunu6ER3FaTFankMS23LaH3w4X+stdpQPcK/x9izguRwY/NkOOOmf+8cx98r/
-         Uiu+zSf819YyMm4At/RW4mX2rOFl0nazUkwdz9LpmRqqNirNhtXfWtA6HBdqWlUG28Of
-         3sPg==
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z7B14u7hbB/VXiWZvddsL6aIZYt39FVX4bLARrPtAv0=;
+        b=Y9FmfEJaPUKP01BpBrAbyUYKx/RChLT6yUXZss4TzkZZpnxSibWVx6Ft9DTOKNZSlf
+         bbzELRho2ZJluKmjB595UuxnvHVIBSwm694bjmmrYm+OuT1ALInGSP3Qp1NZvBrRXrgB
+         lGn6Ds34sf3a038gEV1tz052BldGx7hPZAYSAvCkpHt5Yfw/AadKxqOqu19QdZ1sWaO6
+         amTDGpYaHu9W423M6iD5H1vqa+EweqMvK7pUi5qqpAUQmnIUjj/fg3Qh4aoNZaEzpeRO
+         JP0tMINwibFX5Il2vdPlZN2ptjO9vYxmwRp7I5p6XZn9gmRoXWpuWbMK/zHk6Xy5MtX/
+         nh4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sc8Dzie9A8y8S45kzCPXX5BYzIIhqs78gp47BlQd0i8=;
-        b=TN2R2PZxZvvxwjCzvGFQw9usabQhv7cDnMDzjc9gcIfmZN+cPaGHLYrhLPxh4KuwQt
-         6O+E2KOpWQfTOFea7ZXlQPvxSp6yW8ZCZ7Lgo6dm7GsfkLfTmOHRBqZkP9K052TADutp
-         2nw3lAfqsSmbLJ25EAnpavgjnwmaCbvGUv14EWuc6myuIijsbI5gAtwcNEFjMsl/icLf
-         sFRQqxpeuntZDIh8DY+w+L4//57O4Lxyjcd9dk5zsUQKAIMPNoS81zO0WrLfmuzVyRNG
-         sCHzyq20O2tfCYYpii3V//mDYKmaks6L9To53wwdJq0xjgJiwSwvIrw7jSurYwfuvEpw
-         rNMw==
-X-Gm-Message-State: AO0yUKVnrQtyj7cc8yavklMYj2xPao7yW/KFCP7Tpr4VEOmgbZzuS+pK
-        ED4Cz1stBiWgt9BtoMYtyeSgGw==
-X-Google-Smtp-Source: AK7set+VDV5Y413ktncXB7sF4EsTzFuW3K3pRZJn4EaA5h/D6ZlGr+w9UI/RIwZTZ5Z+S0MJKONyMQ==
-X-Received: by 2002:a17:902:9895:b0:198:af50:e4eb with SMTP id s21-20020a170902989500b00198af50e4ebmr223213plp.17.1675790171184;
-        Tue, 07 Feb 2023 09:16:11 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 200-20020a6214d1000000b0058de0998f17sm9431054pfu.154.2023.02.07.09.16.09
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z7B14u7hbB/VXiWZvddsL6aIZYt39FVX4bLARrPtAv0=;
+        b=FGLQ53B52SoU5HAju8TbU+QE2giWUi5ZxbTEJoxXtIE7kLS9y4VFXvHPsXxb2CLsbB
+         LyoTGTRjL8+PDb+u3D5Yl6w5rld7/ECOyggOEvNfPf+0fFVLW9VMMJeHWV/oXfbF1tn0
+         k/+G6uL6t5Zu9caQrY6wiA5qwHlZopodwMV9EJGm2u9nf9NnxntBjlVqgyghcA9WpDe+
+         okXan8o2e1HfK+d5pAKpDKdTT/gADyNR+SqTCRzZTlzTfp7XwunQnpGibVrQekLPVTi3
+         HvHRwBfS/zFyvxSaRlZmYyGZiXCdV+1giTwgz4bjBRgpxKSjGQWciGxuf9rH71vJ+5q4
+         nevA==
+X-Gm-Message-State: AO0yUKV/eUdkKLOxnEGuUnH1CJvsSXHyKjhv/kPaUfieaLdV0AO5AVWS
+        RemtogQ0hXS7do8Yn5BOoEBH6w==
+X-Google-Smtp-Source: AK7set/eY6l3j0tIm+E4Ulj8uu+N4HWCIJbO8QgFYfPq9KRYPC10pX+4fMH8NtYMAoGaEz1vRgHJQw==
+X-Received: by 2002:adf:f44b:0:b0:2bf:e4b2:64a8 with SMTP id f11-20020adff44b000000b002bfe4b264a8mr3630125wrp.42.1675790177410;
+        Tue, 07 Feb 2023 09:16:17 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:9c:201:57f3:e3b1:e247:9c58])
+        by smtp.gmail.com with ESMTPSA id s16-20020adff810000000b002c3dc4131f5sm9414897wrp.18.2023.02.07.09.16.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 09:16:10 -0800 (PST)
-Date:   Tue, 7 Feb 2023 17:16:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jianfeng Gao <jianfeng.gao@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
- Intel hybrid CPUs
-Message-ID: <Y+KHVdYG3tyBGfuk@google.com>
-References: <20230131085031.88939-1-likexu@tencent.com>
- <Y9k7eyfmXjqW9lYF@google.com>
- <afe1fdd8-9f3e-c988-cd38-476a6da26d46@gmail.com>
- <Y9v7tEXPlki7YOT4@google.com>
- <7dc66398-aa0c-991f-3fa9-43aac8c710fd@gmail.com>
- <Y91DUmMjCLzIXlp+@google.com>
- <f0f6dbed-0e1d-059c-11a4-07fd4bec5c99@gmail.com>
+        Tue, 07 Feb 2023 09:16:16 -0800 (PST)
+Date:   Tue, 7 Feb 2023 18:16:09 +0100
+From:   Marco Elver <elver@google.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, mingo@redhat.com, will@kernel.org,
+        luto@kernel.org, songliubraving@fb.com, peterx@redhat.com,
+        david@redhat.com, dhowells@redhat.com, hughd@google.com,
+        bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 1/7] kernel/fork: convert vma assignment to a memcpy
+Message-ID: <Y+KHWcpxd09prihv@elver.google.com>
+References: <20230125233554.153109-1-surenb@google.com>
+ <20230125233554.153109-2-surenb@google.com>
+ <20230125162159.a66e5ef05fecb405e85ffec9@linux-foundation.org>
+ <CAJuCfpG5HyMP3RM1jTJxCnN4WUz4APAcxbkOT48ZtJDXcb3z3w@mail.gmail.com>
+ <20230125173449.5472cffc989dfab4b83c491d@linux-foundation.org>
+ <20230126172726.GA682281@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f0f6dbed-0e1d-059c-11a4-07fd4bec5c99@gmail.com>
+In-Reply-To: <20230126172726.GA682281@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -81,95 +96,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023, Like Xu wrote:
-> On 4/2/2023 1:28 am, Sean Christopherson wrote:
-> > On Fri, Feb 03, 2023, Like Xu wrote:
-> > > On 3/2/2023 2:06 am, Sean Christopherson wrote:
-> > > > On Thu, Feb 02, 2023, Like Xu wrote:
-> > > > > On 1/2/2023 12:02 am, Sean Christopherson wrote:
-> > > > > The perf interface only provides host PMU capabilities and the logic for
-> > > > > choosing to disable (or enable) vPMU based on perf input should be left
-> > > > > in the KVM part so that subsequent development work can add most code
-> > > > > to the just KVM, which is very helpful for downstream users to upgrade
-> > > > > loadable KVM module rather than the entire core kernel.
-> > > > > 
-> > > > > My experience interacting with the perf subsystem has taught me that
-> > > > > perf change required from KVM should be made as small as possible.
-> > > > 
-> > > > I don't disagree, but I don't think that's relevant in this case.  Perf doesn't
-> > > > provide the necessary bits for KVM to virtualize a hybrid PMU, so unless KVM is
-> > > > somehow able to get away with enumerating a very stripped down vPMU, additional
-> > > > modifications to perf_get_x86_pmu_capability() will be required.
-> > > > 
-> > > > What I care more about though is this ugliness in perf_get_x86_pmu_capability():
-> > > > 
-> > > > 	/*
-> > > > 	 * KVM doesn't support the hybrid PMU yet.
-> > > > 	 * Return the common value in global x86_pmu,
-> > > > 	 * which available for all cores.
+On Thu, Jan 26, 2023 at 09:27AM -0800, Paul E. McKenney wrote:
+> On Wed, Jan 25, 2023 at 05:34:49PM -0800, Andrew Morton wrote:
+> > On Wed, 25 Jan 2023 16:50:01 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> > 
+> > > On Wed, Jan 25, 2023 at 4:22 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > >
+> > > > On Wed, 25 Jan 2023 15:35:48 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> > > >
+> > > > > Convert vma assignment in vm_area_dup() to a memcpy() to prevent compiler
+> > > > > errors when we add a const modifier to vma->vm_flags.
+> > > > >
+> > > > > ...
+> > > > >
+> > > > > --- a/kernel/fork.c
+> > > > > +++ b/kernel/fork.c
+> > > > > @@ -482,7 +482,7 @@ struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig)
+> > > > >                * orig->shared.rb may be modified concurrently, but the clone
+> > > > >                * will be reinitialized.
+> > > > >                */
+> > > > > -             *new = data_race(*orig);
+> > > > > +             memcpy(new, orig, sizeof(*new));
+> > > >
+> > > > The data_race() removal is unchangelogged?
 > > > 
-> > > I would have expected w/ current code base, vpmu (excluding pebs and lbr, intel_pt)
-> > > to continue to work on any type of pCPU until you decide to disable them completely.
+> > > True. I'll add a note in the changelog about that. Ideally I would
+> > > like to preserve it but I could not find a way to do that.
 > > 
-> > Didn't follow this.
+> > Perhaps Paul can comment?
+> > 
+> > I wonder if KCSAN knows how to detect this race, given that it's now in
+> > a memcpy.  I assume so.
 > 
-> My expectation is that, if a guest doesn't enable "PEBS, LBR and intel_pt",
-> and only has the most basic pmu conters (its number is the lesser number
-> of big and small cores supported), with some pmu_event_fileter allow list
-> mechanism, vPMU works regardless of the vcpu model and does not
-> require cpu pined. Any complaints from users on this usages ?
-
-No?  But I highly doubt the average user is even aware of KVM_SET_PMU_EVENT_FILTER,
-let alone knows how to use it.  E.g. AFAICT QEMU doesn't support the ioctl().
-And for people that do use event filters, I doubt they're running on hybrid CPUs.
-
-> > > > I really don't want to leave that comment lying around as it's flat out wrong in
-> > > > that it obviously doesn't address the other differences beyond the number of
-> > > > counters.  And since there are dependencies on perf, my preference is to disable
-> > > > PMU enumeration in perf specifically so that whoever takes on vPMU enabling is
-> > > > forced to consider the perf side of things, and get buy in from the perf folks.
-> > > 
-> > > The perf_get_x86_pmu_capability() obviously needs to be revamped,
-> > > but until real effective KVM enabling work arrives, any inconsequential intrusion
-> > > into perf/core code will only lead to trivial system maintenance.
-> > 
-> > Trivial doesn't mean useless or unnecessary though.  IMO, there's value in capturing,
-> > in code, that perf_get_x86_pmu_capability() doesn't properly support hybrid vPMUs.
-> > 
-> > That said, poking around perf, checking is_hybrid() is wrong.  This quirk suggests
-> > that if E-cores are disabled via BIOS, (a) X86_FEATURE_HYBRID_CPU is _supposed_ to
-> > be cleared, and (b) the base PMU will reflect the P-core PMU.  I.e. someone can
-> > enable vPMU by disabling E-cores.
-> > 
-> >                  /*
-> >                   * Quirk: For some Alder Lake machine, when all E-cores are disabled in
-> >                   * a BIOS, the leaf 0xA will enumerate all counters of P-cores. However,
-> >                   * the X86_FEATURE_HYBRID_CPU is still set. The above codes will
+> I ran an experiment memcpy()ing between a static array and an onstack
+> array, and KCSAN did not complain.  But maybe I was setting it up wrong.
 > 
-> Sigh. Then what if E-cores are manually offline via "/.../cpu$/online" and
-> then init kvm module ?
-
-KVM has to be paranoid and assume those CPUs could be onlined in the future.
-
-> I suggest leaving these open issues to that enabling guy (or maybe it's still me).
+> This is what I did:
 > 
-> >                   * mistakenly add extra counters for P-cores. Correct the number of
-> >                   * counters here.
-> >                   */
-> >                  if ((pmu->num_counters > 8) || (pmu->num_counters_fixed > 4)) {
-> >                          pmu->num_counters = x86_pmu.num_counters;
-> >                          pmu->num_counters_fixed = x86_pmu.num_counters_fixed;
-> >                  }
-> > 
-> > Side topic, someone (*cough* Intel) should fix that, e.g. detect the scenario
-> > during boot and manually clear X86_FEATURE_HYBRID_CPU.
+> 	long myid = (long)arg; /* different value for each task */
+> 	static unsigned long z1[10] = { 0 };
+> 	unsigned long z2[10];
 > 
-> Maybe they did it on purpose.
+> 	...
+> 
+> 	memcpy(z1, z2, ARRAY_SIZE(z1) * sizeof(z1[0]));
+> 	for (zi = 0; zi < ARRAY_SIZE(z1); zi++)
+> 		z2[zi] += myid;
+> 	memcpy(z2, z1, ARRAY_SIZE(z1) * sizeof(z1[0]));
+> 
+> Adding Marco on CC for his thoughts.
 
-That seems unlikely.  My interpretation of the comment, specifically the "Quirk" and
-"some ... machine" parts, is that the intended behavior is to clear the HYBRID bit,
-but _some_ platforms fail to do so.
+( Sorry for not seeing it earlier - just saw this by chance. )
 
-I don't think Intel's intent matters though.  If the kernel benefits from clearing
-HYBRID and there are no downsides, then it should be cleared regardless of what
-Intel intended ucode to do.
+memcpy() data races will be detected as of (given a relatively recent
+Clang compiler):
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7c201739beef
+
+Also beware that the compiler is free to "optimize" things by either
+inlining memcpy() (turning an explicit memcpy() into just a bunch of
+loads/stores), or outline plain assignments into memcpy() calls. So the
+only way to be sure what ends up there is to look at the disassembled
+code.
+
+The data_race() was introduced by:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cda099b37d716
+
+It says:
+ "vm_area_dup() blindly copies all fields of original VMA to the new one.
+  This includes coping vm_area_struct::shared.rb which is normally
+  protected by i_mmap_lock. But this is fine because the read value will
+  be overwritten on the following __vma_link_file() under proper
+  protection. Thus, mark it as an intentional data race and insert a few
+  assertions for the fields that should not be modified concurrently."
+
+And as far as I can tell this hasn't changed.
+
+Thanks,
+-- Marco
