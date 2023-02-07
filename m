@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A239A68D23E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D11568D246
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 10:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjBGJK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 04:10:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S229573AbjBGJMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 04:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjBGJK0 (ORCPT
+        with ESMTP id S229574AbjBGJMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:10:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E0C3867D;
-        Tue,  7 Feb 2023 01:10:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 7 Feb 2023 04:12:31 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FE623846
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 01:12:29 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1FB8B8171F;
-        Tue,  7 Feb 2023 09:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63880C4339C;
-        Tue,  7 Feb 2023 09:09:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675760978;
-        bh=v25yS98xXOuqzzO1dUZSyuA7/44T4tHhYy5xNWul2G8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mzlzERQGC5f4rgU24uSvTLR/8LtixAt/m9bAPKZctiU2yadT8HD5kLA6HS58cHuZg
-         zjVHzbfv+lCSW6pBGOx9jiKvIYO3xJSP76R8xRB2uaeIPcrgAOkOWJuIft6wEQ1STG
-         48m9azqcS6cHAz3d+2KMtY8qSUPn9mwjmvjgTseJchn+koeDhIPNvwpy56kxMhBZX8
-         JpCQxtGXBfVhJhvCkoGvuSkDwns4h0/UQoGdsmuY5TarUgZEWx6eMP1w0CfFUbl8KM
-         aba60nrrDAV09atA+7LL9L0/DfZ2XbegA9viGVxGe6py6D7nOl8ygkavJlQ51WQXYk
-         51OsQPdtxLsxQ==
-Received: by mail-lj1-f177.google.com with SMTP id b16so7039777ljr.11;
-        Tue, 07 Feb 2023 01:09:38 -0800 (PST)
-X-Gm-Message-State: AO0yUKUgiK/zEM/o9WgFkKepNCPoz/tFT1PU/yz6qUwOGN8Dpt/HEDH/
-        l+3XyRFefZ1C4tmrXxvcXTQtYv+j8tN003ElU+0=
-X-Google-Smtp-Source: AK7set/Q7jlGK3vXjv9uD8uTKZD4simHav0fWBqxTHeS+FkICYkNl6HcO+Nv1M8nFzYRti9PP7D0vWoyet3jQpLqxrE=
-X-Received: by 2002:a2e:b4b2:0:b0:290:66b3:53e5 with SMTP id
- q18-20020a2eb4b2000000b0029066b353e5mr414463ljm.57.1675760976412; Tue, 07 Feb
- 2023 01:09:36 -0800 (PST)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 88A4560FED;
+        Tue,  7 Feb 2023 09:12:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675761148; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ieDQhqhMvtIeZVOGVyZ9EHW2yeVFYggP1fdTqRjwWPw=;
+        b=Vc2P1BkV9tO1+P98cK8TsEy2Ra2CmmrYLd2ydrNif8RCs+MKbu8CgO+G2lSVdoEOfsmoxE
+        N97MZwKkPyl4yiPPdtuKOBmWW55peXpTbNV6PeIODTgQSH+noL3xrfp2FGZniDdH5IwB1S
+        NkMbBJIbUtZHDoQOYkUkBSBQg4elM+k=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2C67913A8C;
+        Tue,  7 Feb 2023 09:12:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YX0qCfwV4mNFfwAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 07 Feb 2023 09:12:28 +0000
+Message-ID: <47fcd1a8-1c5a-0044-38c4-cf04095c1150@suse.com>
+Date:   Tue, 7 Feb 2023 10:12:27 +0100
 MIME-Version: 1.0
-References: <20230131040355.3116-1-justin.he@arm.com> <CAMj1kXFTUXgaENBSYh+cGCS3wFCFunf+auk3nKwHVJWiZ7crig@mail.gmail.com>
- <DBBPR08MB45383B479656BA18FEFFB7D5F7D09@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <Y9lchEgyNGLKu/4R@zx2c4.com> <DBBPR08MB4538E2CE68BCBF15B9F0093AF7D69@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <DBBPR08MB4538A07A62DC4A10257B3277F7DB9@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <CAMj1kXFE7A0=+MA2tCtuwjeGMcc1hgzvDnEJy1xGE=fh9Kgc2Q@mail.gmail.com>
- <DBBPR08MB4538E402B7DC8C747252E22FF7DB9@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <CAMj1kXGKhWJii7Q7yQR9U+1F5Vo4SaVXVixNXeY4U0aZyrJBdA@mail.gmail.com>
- <DBBPR08MB453816F6266D9686CDE61F24F7DB9@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <CAMj1kXFwn9epkakWBd537seUK48EfmxQz0fNi=h3L2SDTW24Bw@mail.gmail.com> <DBBPR08MB45383609E2B01955E5E0C81AF7DB9@DBBPR08MB4538.eurprd08.prod.outlook.com>
-In-Reply-To: <DBBPR08MB45383609E2B01955E5E0C81AF7DB9@DBBPR08MB4538.eurprd08.prod.outlook.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 7 Feb 2023 10:09:25 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHQsbuEZbtH9XOp64BxwOroppockkEp7KhbKkWbdpExKw@mail.gmail.com>
-Message-ID: <CAMj1kXHQsbuEZbtH9XOp64BxwOroppockkEp7KhbKkWbdpExKw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
-To:     Justin He <Justin.He@arm.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alexandru Elisei <Alexandru.Elisei@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, nd <nd@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        torvalds@linux-foundation.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230207072902.5528-1-jgross@suse.com>
+ <20230207072902.5528-3-jgross@suse.com> <Y+IQlJI33snDiLT1@gmail.com>
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH 2/6] x86/pat: check for MTRRs enabled in memtype_reserve()
+In-Reply-To: <Y+IQlJI33snDiLT1@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------56CzqqYwcPQVkgangChrUD7S"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,116 +72,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023 at 10:08, Justin He <Justin.He@arm.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Ard Biesheuvel <ardb@kernel.org>
-> > Sent: Tuesday, February 7, 2023 5:04 PM
-> > To: Justin He <Justin.He@arm.com>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>; linux-efi@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; Alexandru Elisei <Alexandru.Elisei@arm.co=
-m>;
-> > Jason A. Donenfeld <Jason@zx2c4.com>; nd <nd@arm.com>
-> > Subject: Re: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
-> >
-> > On Tue, 7 Feb 2023 at 10:03, Justin He <Justin.He@arm.com> wrote:
-> > >
-> > > Hi Ard
-> > >
-> > > > -----Original Message-----
-> > > > From: Ard Biesheuvel <ardb@kernel.org>
-> > > > Sent: Tuesday, February 7, 2023 4:54 PM
-> > > > To: Justin He <Justin.He@arm.com>
-> > > > Cc: Huacai Chen <chenhuacai@kernel.org>; linux-efi@vger.kernel.org;
-> > > > linux-kernel@vger.kernel.org; Alexandru Elisei
-> > > > <Alexandru.Elisei@arm.com>; Jason A. Donenfeld <Jason@zx2c4.com>; n=
-d
-> > > > <nd@arm.com>
-> > > > Subject: Re: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
-> > > >
-> > > > On Tue, 7 Feb 2023 at 09:49, Justin He <Justin.He@arm.com> wrote:
-> > > > >
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > [..]
-> > > > > > > The root cause of the hung IMO might be similar to commit
-> > > > > > > 550b33cfd445296868a478e8413ffb2e963eed32
-> > > > > > > Author: Ard Biesheuvel <ardb@kernel.org>
-> > > > > > > Date:   Thu Nov 10 10:36:20 2022 +0100
-> > > > > > >
-> > > > > > >     arm64: efi: Force the use of SetVirtualAddressMap() on
-> > > > > > > Altra machines
-> > > > > > >
-> > > > > > > Do you agree with the idea if I add Ampere =E2=80=9DeMAG=E2=
-=80=9D machine into
-> > > > > > > the list of Using SetVirtualAddressMap() forcibly?
-> > > > > > >
-> > > > > > > Please note that even in previous kernel patch, the efibootmg=
-r
-> > > > > > > -t
-> > > > > > > 10 will make kernel hung if I passed "efi=3Dnovamap" to the b=
-oot
-> > > > parameter.
-> > > > > > >
-> > > > > >
-> > > > > > Interesting. What does dmidecode return for the family in the
-> > > > > > type 1
-> > > > record?
-> > > > >
-> > > > > # dmidecode |grep -i family
-> > > > >         Family: eMAG
-> > > > >         Family: ARMv8
-> > > > >
-> > > > > The full dmidecode log is at https://pastebin.com/M3MAJtUG
-> > > > >
-> > > >
-> > > > OK please try this:
-> > > >
-> > > > diff --git a/drivers/firmware/efi/libstub/arm64.c
-> > > > b/drivers/firmware/efi/libstub/arm64.c
-> > > > index ff2d18c42ee74979..fae930dec82be7c6 100644
-> > > > --- a/drivers/firmware/efi/libstub/arm64.c
-> > > > +++ b/drivers/firmware/efi/libstub/arm64.c
-> > > > @@ -22,7 +22,8 @@ static bool system_needs_vamap(void)
-> > > >          * Ampere Altra machines crash in SetTime() if
-> > > > SetVirtualAddressMap()
-> > > >          * has not been called prior.
-> > > >          */
-> > > > -       if (!type1_family || strcmp(type1_family, "Altra"))
-> > > > +       if (!type1_family ||
-> > > > +           (strcmp(type1_family, "Altra") && strcmp(type1_family,
-> > > > + "eMAG")))
-> > > >                 return false;
-> > > >
-> > > >         efi_warn("Working around broken SetVirtualAddressMap()\n");
-> > >
-> > > Yes, it works on my eMAG server: the kernel boots.
-> > > Other than efibootmgr failure. But I noticed this efibootmgr failure
-> > > even before Commit d3549a938b7 ("avoid SetVirtualAddressMap() when
-> > > possible ")
-> > >
-> > > root@:~/linux# efibootmgr -t 9; efibootmgr -t 5; Could not set
-> > > Timeout: Input/output error Could not set Timeout: Input/output error
-> > >
-> >
-> > Do you get any [Firmware Bug] lines in the kernel log?
->
-> No,
-> I built the kernel based on:
-> commit d2d11f342b179f1894a901f143ec7c008caba43e (HEAD -> master, origin/m=
-aster, origin/HEAD)
-> Author: Linus Torvalds <torvalds@linux-foundation.org>
-> Date:   Sun Feb 5 17:17:10 2023 -0800
->
->     Merge branch 'fixes' of git://git.kernel.org/pub/scm/linux/kernel/git=
-/viro/vfs
->
-> Are you worried about your sync exception fixup patch? I think it has bee=
-n included.
->
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------56CzqqYwcPQVkgangChrUD7S
+Content-Type: multipart/mixed; boundary="------------ygB52Fqzd40PUkLQBu5QNqll";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, lists@nerdbynature.de,
+ mikelley@microsoft.com, torvalds@linux-foundation.org,
+ Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <47fcd1a8-1c5a-0044-38c4-cf04095c1150@suse.com>
+Subject: Re: [PATCH 2/6] x86/pat: check for MTRRs enabled in memtype_reserve()
+References: <20230207072902.5528-1-jgross@suse.com>
+ <20230207072902.5528-3-jgross@suse.com> <Y+IQlJI33snDiLT1@gmail.com>
+In-Reply-To: <Y+IQlJI33snDiLT1@gmail.com>
 
+--------------ygB52Fqzd40PUkLQBu5QNqll
+Content-Type: multipart/mixed; boundary="------------Yh9nZUpsykTjqi2Snke3EUqA"
 
-I would just like to understand why setvariable is still broken for you.
+--------------Yh9nZUpsykTjqi2Snke3EUqA
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMDcuMDIuMjMgMDk6NDksIEluZ28gTW9sbmFyIHdyb3RlOg0KPiANCj4gKiBKdWVyZ2Vu
+IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+IHdyb3RlOg0KPiANCj4+IFRvZGF5IG1lbXR5cGVf
+cmVzZXJ2ZSgpIGJhaWxzIG91dCBlYXJseSBpZiBwYXRfZW5hYmxlZCgpIHJldHVybnMgZmFs
+c2UuDQo+PiBUaGUgc2FtZSBjYW4gYmUgZG9uZSBpbiBjYXNlIE1UUlJzIGFyZW4ndCBlbmFi
+bGVkLg0KPj4NCj4+IFRoaXMgd2lsbCByZWluc3RhdGUgdGhlIGJlaGF2aW9yIG9mIG1lbXR5
+cGVfcmVzZXJ2ZSgpIGJlZm9yZSBjb21taXQNCj4+IDcyY2JjOGYwNGZlMiAoIng4Ni9QQVQ6
+IEhhdmUgcGF0X2VuYWJsZWQoKSBwcm9wZXJseSByZWZsZWN0IHN0YXRlIHdoZW4NCj4+IHJ1
+bm5pbmcgb24gWGVuIikuIFRoZXJlIGhhdmUgYmVlbiByZXBvcnRzIGFib3V0IHRoYXQgY29t
+bWl0IGJyZWFraW5nDQo+PiBTRVYtU05QIGd1ZXN0cyB1bmRlciBIeXBlci1WLCB3aGljaCB3
+YXMgdHJpZWQgdG8gYmUgcmVzb2x2ZWQgYnkgY29tbWl0DQo+PiA5MGI5MjZlNjhmNTAgKCJ4
+ODYvcGF0OiBGaXggcGF0X3hfbXRycl90eXBlKCkgZm9yIE1UUlIgZGlzYWJsZWQgY2FzZSIp
+LA0KPj4gYnV0IHRoYXQgYWdhaW4gcmVzdWx0ZWQgaW4gcHJvYmxlbXMgd2l0aCBYZW4gUFYg
+Z3Vlc3RzLg0KPj4NCj4+IEZpeGVzOiA3MmNiYzhmMDRmZTIgKCJ4ODYvUEFUOiBIYXZlIHBh
+dF9lbmFibGVkKCkgcHJvcGVybHkgcmVmbGVjdCBzdGF0ZSB3aGVuIHJ1bm5pbmcgb24gWGVu
+IikNCj4+IEZpeGVzOiA5MGI5MjZlNjhmNTAgKCJ4ODYvcGF0OiBGaXggcGF0X3hfbXRycl90
+eXBlKCkgZm9yIE1UUlIgZGlzYWJsZWQgY2FzZSIpDQo+PiBTaWduZWQtb2ZmLWJ5OiBKdWVy
+Z2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQo+PiAtLS0NCj4+ICAgYXJjaC94ODYvbW0v
+cGF0L21lbXR5cGUuYyB8IDEwICsrKysrKystLS0NCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDcg
+aW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvYXJj
+aC94ODYvbW0vcGF0L21lbXR5cGUuYyBiL2FyY2gveDg2L21tL3BhdC9tZW10eXBlLmMNCj4+
+IGluZGV4IGZiNGIxYjVlMGRlYS4uMThmNjEyYjQzNzYzIDEwMDY0NA0KPj4gLS0tIGEvYXJj
+aC94ODYvbW0vcGF0L21lbXR5cGUuYw0KPj4gKysrIGIvYXJjaC94ODYvbW0vcGF0L21lbXR5
+cGUuYw0KPj4gQEAgLTU1Nyw4ICs1NTcsMTIgQEAgaW50IG1lbXR5cGVfcmVzZXJ2ZSh1NjQg
+c3RhcnQsIHU2NCBlbmQsIGVudW0gcGFnZV9jYWNoZV9tb2RlIHJlcV90eXBlLA0KPj4gICAJ
+CXJldHVybiAtRUlOVkFMOw0KPj4gICAJfQ0KPj4gICANCj4+IC0JaWYgKCFwYXRfZW5hYmxl
+ZCgpKSB7DQo+PiAtCQkvKiBUaGlzIGlzIGlkZW50aWNhbCB0byBwYWdlIHRhYmxlIHNldHRp
+bmcgd2l0aG91dCBQQVQgKi8NCj4+ICsJLyoNCj4+ICsJICogUEFUIGRpc2FibGVkIG9yIE1U
+UlJzIGRpc2FibGVkIGRvbid0IHJlcXVpcmUgYW55IG1lbW9yeSB0eXBlDQo+PiArCSAqIHRy
+YWNraW5nIG9yIHR5cGUgYWRqdXN0bWVudHMsIGFzIHRoZXJlIGNhbid0IGJlIGFueSBjb25m
+bGljdHMNCj4+ICsJICogYmV0d2VlbiBQQVQgYW5kIE1UUlJzIHdpdGggYXQgbGVhc3Qgb25l
+IG9mIGJvdGggYmVpbmcgZGlzYWJsZWQuDQo+PiArCSAqLw0KPj4gKwlpZiAoIXBhdF9lbmFi
+bGVkKCkgfHwgIW10cnJfZW5hYmxlZCgpKSB7DQo+PiAgIAkJaWYgKG5ld190eXBlKQ0KPj4g
+ICAJCQkqbmV3X3R5cGUgPSByZXFfdHlwZTsNCj4gDQo+IERvZXNuJ3QgbWVtdHlwZV9yZXNl
+cnZlKCkgYWxzbyBjaGVjayBmb3Igb3ZlcmxhcHBpbmcgcmFuZ2VzICYgdHlwZQ0KPiBjb21w
+YXRpYmlsaXR5IGluIG1lbXR5cGVfY2hlY2tfY29uZmxpY3QoKSwgZXRjLiwgd2hpY2ggY2Fu
+IG9jY3VyIGV2ZW4gaW4gYQ0KPiBwdXJlIFBBVCBzZXR1cD8gSWUuIGFyZSB3ZSAxMDAlIHN1
+cmUgdGhhdCBpbiB0aGUgIU1UUlIgY2FzZSBpdCB3b3VsZCBiZSBhDQo+IE5PUD8NCj4gDQo+
+IEJ1dCBldmVuIGlmIGl0J3MgYSBmdW5jdGlvbmFsIE5PUCBhcyB5b3UgY2xhaW0sIHdlJ2Qg
+c3RpbGwgYmUgYmV0dGVyIG9mZiBpZg0KPiB0aGUgbWVtdHlwZSB0cmVlIHdhcyBzdGlsbCBp
+bnRhY3QgLSBpbnN0ZWFkIG9mIGp1c3QgdHVybmluZyBvZmYgdGhlIEFQSS4NCg0KWWVzLCB0
+aGF0J3MgYmFzaWNhbGx5IHRoZSBpc3N1ZSBkaXNjdXNzZWQgaW4gW3BhdGNoIDAvNl0uDQoN
+Ckl0IHNob3VsZCBzdGlsbCBiZSBiZXR0ZXIgdGhhbiB0aGUgb3JpZ2luYWwgY2FzZSAoUEFU
+IGFuZCBNVFJSIG9mZiwgYnV0DQp0aGUgYWJpbGl0eSB0byB1c2UgUEFUIG5ldmVydGhlbGVz
+cyksIHRob3VnaC4NCg0KPiANCj4gQWxzbywgc3BlbGluZyBuaXQ6DQo+IA0KPiAgICAgcy9v
+bmUgb2YgYm90aA0KPiAgICAgIC9vbmUgb3IgYm90aA0KDQpIbW0sIGJ1dCBvbmx5IGlmIEkg
+ZHJvcCB0aGUgImF0IGxlYXN0Ii4gSSBkb24ndCByZWFsbHkgbWluZCBlaXRoZXIgd2F5Lg0K
+DQoNCkp1ZXJnZW4NCg==
+--------------Yh9nZUpsykTjqi2Snke3EUqA
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------Yh9nZUpsykTjqi2Snke3EUqA--
+
+--------------ygB52Fqzd40PUkLQBu5QNqll--
+
+--------------56CzqqYwcPQVkgangChrUD7S
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPiFfsFAwAAAAAACgkQsN6d1ii/Ey/q
+YAgAim/rpihkMhugugo5zwunFC68eRv84Gn+jSJFY312I7R/406i9WR7GShE7eyPYs2089GsbQLN
+IoHaAEyCu8sQMrXz/QtZuUNHlD/uEC3ecCwtDvtPXj+eZ4nQg/v+m5TU2dgBdS6kkmBCrAwmvbLK
+BhZj2EDw3zSclJ37pa9IPiBhTF6cmGTqupOe7koSxOdOq3RYX7nYOEMlavHH6mGq4hgCB9Gitot/
+Fe33Lj4eT44htMbr2zJnUeQsZhJ3BJSIQ3IIOprTnKwHi9rJ61bE3sC2Nz/XTokd6mdH1NcBNmr4
+XAFzwsdZshFAvlg7LBDgJuEbhkhO6BVsFz+VOmmn4A==
+=xnHm
+-----END PGP SIGNATURE-----
+
+--------------56CzqqYwcPQVkgangChrUD7S--
