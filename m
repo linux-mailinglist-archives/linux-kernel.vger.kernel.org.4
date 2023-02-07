@@ -2,164 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE1C68E350
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE7868E356
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 23:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjBGWP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 17:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S229949AbjBGWRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 17:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjBGWPw (ORCPT
+        with ESMTP id S229936AbjBGWRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 17:15:52 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5620793F6;
-        Tue,  7 Feb 2023 14:15:46 -0800 (PST)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 317LhBVJ027078;
-        Tue, 7 Feb 2023 14:15:46 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : mime-version; s=s2048-2021-q4;
- bh=ko6hKNI8ukYLprSb3pJzb0jDIxLS9ogI1SyMjFj+2eA=;
- b=U1jBRxvu78xQRM/gARZf5tdplCI1lryZMg997N6+QcCP4gWS5linjEZgR05XftUrjqGd
- Me5UiT575CIkM8ufdbKzz9KLuhfMvqerWUxEcTIGcqs93DeR7Zcg/1eDxSRoKREhtcnK
- 5auvgAUCLz/jv9GnO8hbWQOcnIusgrEn0O2rzrEO6tr2gZb5fKdqQjjOeBydx0rZsd3c
- z0ODsu6FimDS6CfSnDpBQ+FUYh0kjIfblHJnNea+iduO5bi4wQ3fP2kPitxkypvQInvW
- 6iIHkxuXdlgggFf8DPMkohIC7dryFkWTxs1Y2oYzTskSnYW+lrYoAkkU02DIuqUti5vQ Aw== 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3nk2whckd4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Feb 2023 14:15:46 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DIqIzjpzynIL+80l6WsXkVdWzr06r5GJtFqhV4f/9FLYI6aLvJCWcKhS5gCU4bw2QSw2FTI4YPiU7xkj5Dykxnui4AYfEzNL4oSMdNhAwFM3Mm6B7tCIBm9M7N7c5lfuMuQL1IMA3X1oPuKweDEcZHdzdNdwPWvR/BVRLKvMZJl/5j+KdwqC8ca+bR+XaAY50ZaggiKSJLCrqan0Itojs+ta4lp/ikFEqiLA+phRCFf289zvPKQJFBke9BUhz20gl77mEccxp7t+bUEfybjq7wNIgl/CXWQmpKSnhg8sJgzVuId5HfimSo4x5d+Kgzg61rb5BNOFCEdyC+tGujDkPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ko6hKNI8ukYLprSb3pJzb0jDIxLS9ogI1SyMjFj+2eA=;
- b=UWMHIoMnAbu5YMbbqf4qx9To6WBo117yj7+OCo4ZOA1UGyB/INZIMTbF45OPo4btFJvzpDHsz8uaizhs7IEeTvXiEUKkxn+h/umkwTDWOcD2FfEVKu/gUGeidvkEbZfSKS2awyoK+lbryAcrytYBm17IMfDhHA2TPlYIuO8VjleSlZB3pKfqMrg4301L7+kGxf9cwwLF7qqw4rFDFDhYnVTSgX2veGiLAJziqSVryi+H7gJJpTRyLMeoPG5ow5Uis4FDZC36MaXTKPqVb21etX0qNuTz44PCh4ydPcatgEy0u09n0mSJK8aOiA4lu/gMNsWMLvTbVE2vXTdTQFC7fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by MW4PR15MB4521.namprd15.prod.outlook.com (2603:10b6:303:106::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Tue, 7 Feb
- 2023 22:15:42 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::7b61:8691:5b41:ecf8]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::7b61:8691:5b41:ecf8%5]) with mapi id 15.20.6064.036; Tue, 7 Feb 2023
- 22:15:41 +0000
-From:   Song Liu <songliubraving@meta.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     Song Liu <songliubraving@meta.com>, Song Liu <song@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Kernel Team <kernel-team@meta.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v9] module: replace module_layout with module_memory
-Thread-Topic: [PATCH v9] module: replace module_layout with module_memory
-Thread-Index: AQHZOBjM9Um86gAGJEyMnpzD+3mYlq7CeI0AgAAcZICAALSGAIAAybcA
-Date:   Tue, 7 Feb 2023 22:15:41 +0000
-Message-ID: <7E141837-4629-445E-BB58-EC49475E36A9@fb.com>
-References: <20230203214500.745276-1-song@kernel.org> <87cz6mxyb7.ffs@tglx>
- <09C6F0A2-5AE5-4D8D-87DE-BFEC2C642A49@fb.com> <87edr1wzoz.ffs@tglx>
-In-Reply-To: <87edr1wzoz.ffs@tglx>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.300.101.1.3)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|MW4PR15MB4521:EE_
-x-ms-office365-filtering-correlation-id: a412e031-55b1-4f75-fc4c-08db0958d99e
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kRN6H36w+agq8M2ll9419ZHLqV8PoAJhEr7YAHzDwY1niVeF0MO2CsPmMCOCPjwfQzOiSUyOt7/1uLCY5Iwj7hxVGhsGnbePzL2KO589siXmxZyFa2buE3DPf/HErk38XIekjDqgthSN02PFJ+xq3rjtYpVfB3YJ3xBJ6xIfznHZ+ub6XAhNaokgBizHZNJW0Hvx/U7WkZayk7NFjDQZHEPBBQak85RcIonHveO6MSRWIWt3OeXNhGuOb3OKw8h3FAVx82o+4oHW7XI/4Zq+Fc6c4OckBeGAG8cTo7fYvmr+J8vTDNxjX6lvDAIXu92fk5xbtXAfoAJvH81tsDtdi2/Qi95C735iYhDPz/x33micHsGFyzKfp7uy+K8XPTwrHIFQzYBggTtCJNmnZxjHJnNYZlDwvk2JAlR4EnWi/3D3QET/XnXiUMiFlNrxgw6GXm7PU8aWa99ib1/HWm9RSBElX3BbWlB5msrPigYQctmrj5aPmv6WgVHdlLoh0Z6xEpbdT/OdRn9wiETQKSVqFm/z1D9hKQ1E84EGMwHaCkwfpRAjEHRy8UwaJV/VFV1oAbUsfRi1ggWwpEH8x3eSMAHLbR7D3TXkYda1B9PphBS6Mc5q4aVPuhsP/paBRnqEio//no7G+pdNRVjT0GjPiX6G57mAjlVayUuMcx8hwATZXXzclqyqkU42cAby6aAp3c6e3Ej4D8D8evGex6PiXg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(376002)(136003)(346002)(396003)(451199018)(71200400001)(83380400001)(33656002)(2906002)(36756003)(38100700002)(38070700005)(122000001)(54906003)(76116006)(66446008)(478600001)(66556008)(64756008)(66946007)(91956017)(6512007)(66476007)(6916009)(9686003)(53546011)(186003)(6486002)(6506007)(316002)(41300700001)(4744005)(8936002)(8676002)(4326008)(5660300002)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?MXVf02icJoEtlXZWNEotneSCbmq8t86V0WrNheh81R5nkqipLmmXJUj7mSSV?=
- =?us-ascii?Q?1yXFmGopJS/THpzzF5uSq8e32vlBj+LNQ6hC+n+ECxpQSkAotjRyV+PDxIWF?=
- =?us-ascii?Q?u35vFxdaobW6T54620BRTQWQg/KHGwO12HmydPD7eULj+Qc711qCVrGmaec0?=
- =?us-ascii?Q?1GEsYB0ax9Japxxz4xWIGYcf69XE0zdei8MgEv4v34cdfTdGkdxges/N/55Y?=
- =?us-ascii?Q?kBfJq2ugkc5IuVNw96oe8SfqD1FGkUcf+QDFx+CENaWXaJiOyWm8S4Lb7hNL?=
- =?us-ascii?Q?P02AZaN0kAmWZfuEJw+M3Obgpdf4smJmWYUds/zAvLckKIXdXyVmgxTT1DMd?=
- =?us-ascii?Q?92Ymt5lHaeEoFRIh3DwDbfwEzydzLiV+uhd303Z5VI8DkNN5C0+jZKZD0gse?=
- =?us-ascii?Q?Cb16RUYMDih1uKwtcaYGe5oLdSlJrdqaSMbeIs1a7INS5+ab4wCDTcpMAWso?=
- =?us-ascii?Q?b+9yoyY7Ij2dxtU7X5jFF77jKZIiHRYhAZtUs/jORrvhNtSqIvNCnWaYR0MI?=
- =?us-ascii?Q?zdEmUBE6t6XgbqaoT6zRNlC1Pa331Qwn3d1ZQb88FYTC2eL//1OgaOb0ZvVj?=
- =?us-ascii?Q?cRzmWnDG4AJRiRXh1L63FdOmePPhRSDLJJRX8yMzOncEy9o8d5YUtYI7vDfA?=
- =?us-ascii?Q?MR2FTrJQufUTdB2x0Va2Q2B6m0CfZO/JRbF4ohSvb1/nb5SrHzOxxnlNHusr?=
- =?us-ascii?Q?7TM21dC6K1V+uWAlwXddYbotIrVNSpCj6tCdsiLyswOGuPzb9pnafFgGBPog?=
- =?us-ascii?Q?juRyiKAFYQyISAYBnyUVbrPKpASu9g43Eddcfr5CXDpmVgkHJKcEr0jBLw0Y?=
- =?us-ascii?Q?sw247bkVOSRkT5HmRNJAjjgGSMFqgrwLNubE7yNM9E7X6rMleLm0DwJlfY/C?=
- =?us-ascii?Q?1zrhbp7pX5N1vDxPUF4/3WvHifoVcQ8TwvmaH6f8FmhZN59Rg1tQuaXfNLPX?=
- =?us-ascii?Q?5aRpAWDMIvrNMrWhnzdVscLi1b0U8GOQssznjM+gFzvcF2fRFmaEwQb6QEYg?=
- =?us-ascii?Q?8XL8ZV7gmD45dtPgOhEZlAM6g34lInbQ5GS+RfCee6lVk42ovxORWV54p3RC?=
- =?us-ascii?Q?d6c0uiaszAfQORrTXRSQPWDbeaJ6JxXH4zorysiTkHV9CQlOaRtvsCZ/7b5E?=
- =?us-ascii?Q?JOGZWN+5e4HiPWHA8CWzTegSlgwbnfxMUL/uNfzASYV5nmgEuoG8tzoFMQ5q?=
- =?us-ascii?Q?RJiIqZCKQRs1fSyRCSINZPeqlYxUI+dL5ANAiBE4qNqBsB0MwS6N/rqZxxE5?=
- =?us-ascii?Q?4L9c+Zbs3aJlPCGdXdIwlYimmSa5eK1Q/m9ydpUINtxRx0evJOHcHyPBZHq8?=
- =?us-ascii?Q?Lgjckig60s3nSdANPnRLMI5nNj6kllqT2AEfa2tfA3v2dgCfJ11jacXaP0ml?=
- =?us-ascii?Q?M/kuy/nx0TQpBnuEnIh1jIIrW3W9i12VXStJBrQkokIAMReb8cinu1Z8jVfG?=
- =?us-ascii?Q?OrjA3XAZvKSo/2AxMAmsVKoobAVK48EnNdjr+hfPZXuFrkbV38eZjXmvOiL2?=
- =?us-ascii?Q?tnHAXyQbISmgMmYIjB++CNOcQCNakm6SoiOAawOOpD7Av9Of/63cxhPM37B0?=
- =?us-ascii?Q?eWu3adyh6gzPgWIGAME4szqRu0pIys5nevVuM8EmxsTexkYP0ceD5OeoE3Tn?=
- =?us-ascii?Q?nu9FbUy8MC/6RhmQmh5VUWAeH0EbM6CqiwxBxP51YQtE?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E123780B6C2DC346A06B285BA9295EDA@namprd15.prod.outlook.com>
+        Tue, 7 Feb 2023 17:17:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3B03A98
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 14:16:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675808209;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mDzj9wY10naxVKPq3dw471YFh0Oey/zqoDGX1F3TBV0=;
+        b=SyWdvnGSXe0Ci2FBNkSHag2LeAKp1CSArPk2lHEG0Y+Qy+DWsQsGYnY8qBt3IT/ZzpAMDu
+        w7eFM0B0ROyNJVrhdbnJyfVNokmTMjy8cDJR8SbnLPTJZOdPUQJ9kHU7ModlAFtewmusA7
+        JZj1WhS5YnvLMkwa1xSTS22y+si4rio=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-572-RK1-NUkyMxK1ld44RDxq2g-1; Tue, 07 Feb 2023 17:16:46 -0500
+X-MC-Unique: RK1-NUkyMxK1ld44RDxq2g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B99329AA2CE;
+        Tue,  7 Feb 2023 22:16:45 +0000 (UTC)
+Received: from [10.64.54.63] (vpn2-54-63.bne.redhat.com [10.64.54.63])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 59D56C15BA0;
+        Tue,  7 Feb 2023 22:16:39 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 6/7] KVM: arm64: Change return type of
+ kvm_vm_ioctl_mte_copy_tags() to "int"
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Cornelia Huck <cohuck@redhat.com>
+Cc:     kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>
+References: <20230203094230.266952-1-thuth@redhat.com>
+ <20230203094230.266952-7-thuth@redhat.com>
+ <c6e605fe-f251-d8b6-64ed-bd1e17e79512@redhat.com>
+ <7b32d58b-846f-b8d7-165b-9f505e5f00f0@redhat.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <d0b3a1e7-0864-f169-cdea-60ad95951b3f@redhat.com>
+Date:   Wed, 8 Feb 2023 09:16:36 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a412e031-55b1-4f75-fc4c-08db0958d99e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Feb 2023 22:15:41.4810
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZTIRpyJNRk8wVMCiLGWMgztLvoAXKmLDIBO5RcQvHLjgKke8ejviSAt5qTN/1OcLkzGZqje3+jubwoqk4drLcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4521
-X-Proofpoint-GUID: -11g1cNvrmvjAkZ2Mdtr7ZNx-1wRAoaR
-X-Proofpoint-ORIG-GUID: -11g1cNvrmvjAkZ2Mdtr7ZNx-1wRAoaR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_13,2023-02-06_03,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7b32d58b-846f-b8d7-165b-9f505e5f00f0@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Feb 7, 2023, at 2:13 AM, Thomas Gleixner <tglx@linutronix.de> wrote:
+On 2/7/23 9:09 PM, Thomas Huth wrote:
+> On 07/02/2023 01.09, Gavin Shan wrote:
+>> Hi Thomas,
+>>
+>> On 2/3/23 8:42 PM, Thomas Huth wrote:
+>>> This function only returns normal integer values, so there is
+>>> no need to declare its return value as "long".
+>>>
+>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>>> ---
+>>>   arch/arm64/include/asm/kvm_host.h | 4 ++--
+>>>   arch/arm64/kvm/guest.c            | 4 ++--
+>>>   2 files changed, 4 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+>>> index 35a159d131b5..b1a16343767f 100644
+>>> --- a/arch/arm64/include/asm/kvm_host.h
+>>> +++ b/arch/arm64/include/asm/kvm_host.h
+>>> @@ -963,8 +963,8 @@ int kvm_arm_vcpu_arch_get_attr(struct kvm_vcpu *vcpu,
+>>>   int kvm_arm_vcpu_arch_has_attr(struct kvm_vcpu *vcpu,
+>>>                      struct kvm_device_attr *attr);
+>>> -long kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+>>> -                struct kvm_arm_copy_mte_tags *copy_tags);
+>>> +int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+>>> +                   struct kvm_arm_copy_mte_tags *copy_tags);
+>>>   /* Guest/host FPSIMD coordination helpers */
+>>>   int kvm_arch_vcpu_run_map_fp(struct kvm_vcpu *vcpu);
+>>> diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+>>> index cf4c495a4321..80e530549c34 100644
+>>> --- a/arch/arm64/kvm/guest.c
+>>> +++ b/arch/arm64/kvm/guest.c
+>>> @@ -1013,8 +1013,8 @@ int kvm_arm_vcpu_arch_has_attr(struct kvm_vcpu *vcpu,
+>>>       return ret;
+>>>   }
+>>> -long kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+>>> -                struct kvm_arm_copy_mte_tags *copy_tags)
+>>> +int kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+>>> +                   struct kvm_arm_copy_mte_tags *copy_tags)
+>>>   {
+>>>       gpa_t guest_ipa = copy_tags->guest_ipa;
+>>>       size_t length = copy_tags->length;
+>>>
+>>
+>> It's possible for the function to return number of bytes have been copied.
+>> Its type is 'size_t', same to 'unsigned long'. So 'int' doesn't have sufficient
+>> space for it if I'm correct.
+>>
+>> long kvm_vm_ioctl_mte_copy_tags(struct kvm *kvm,
+>>                                  struct kvm_arm_copy_mte_tags *copy_tags)
+>> {
+>>          gpa_t guest_ipa = copy_tags->guest_ipa;
+>>          size_t length = copy_tags->length;
+>>          :
+>>          :
+>> out:
+>>          mutex_unlock(&kvm->slots_lock);
+>>          /* If some data has been copied report the number of bytes copied */
+>>          if (length != copy_tags->length)
+>>                  return copy_tags->length - length;
+>>          return ret;
+>> }
 > 
-> On Mon, Feb 06 2023 at 23:27, Song Liu wrote:
->>> On Feb 6, 2023, at 1:45 PM, Thomas Gleixner <tglx@linutronix.de> wrote:
->>>> +static void free_mod_mem(struct module *mod)
->>>> +{
->>>> + /* free the memory in the right order to avoid use-after-free */
->>> 
->>> How do we end up with a UAF when the ordering is different?
->> 
->> IIUC, we need remove MOD_DATA at last, which hosts "mod".
+> Oh, drat, I thought I had checked all return statements ... this must have fallen through the cracks, sorry!
 > 
-> Oh. Please add a comment to that effect.
+> Anyway, this is already a problem now: The function is called from kvm_arch_vm_ioctl() (which still returns a long), which in turn is called from kvm_vm_ioctl() in virt/kvm/kvm_main.c. And that functions stores the return value in an "int r" variable. So the upper bits are already lost there.
+> 
+> Also, how is this supposed to work from user space? The normal "ioctl()" libc function just returns an "int" ? Is this ioctl already used in a userspace application somewhere? ... at least in QEMU, I didn't spot it yet...
 > 
 
-Oops, I sent v10 too fast. 
+The ioctl command KVM_ARM_MTE_COPY_TAGS was merged recently and not used
+by QEMU yet. I think struct kvm_arm_copy_mte_tags::length needs to be
+'__u32' instead of '__u64' in order to standardize the return value.
+Something like below. Documentation/virt/kvm/api.rst::section-4.130
+needs update accordingly.
+
+    struct kvm_arm_copy_mte_tags {
+         __u64 guest_ipa;
+         __u32 pad;
+         __u32 length;
+         void __user *addr;
+         __u64 flags;
+         __u64 reserved[2];
+   };
 
 Thanks,
-Song
+Gavin
 
