@@ -2,206 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CA368D62A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D970A68D63F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 13:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjBGMJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 07:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S231564AbjBGMNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 07:13:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjBGMJZ (ORCPT
+        with ESMTP id S229776AbjBGMNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 07:09:25 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB9C28234;
-        Tue,  7 Feb 2023 04:09:23 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 361743E760;
-        Tue,  7 Feb 2023 12:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675771762; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QUyJf6TCrq54OIvLnrvfLKhIRU9/0yDRM7YQm7FYDgo=;
-        b=pu3rDGFxJCnpdvBYXUVGahmS6bdRlq332LEcj2IBGnIHjcEs+F9LpHJJgW14/56NBMA0qZ
-        +WM6Mgmyulfj/xxUb8bp/uRmvuASQifhEMbVKiVqtkXEgbrrku377hdBG4iQ3ee1dpqa/2
-        pbCQ+Arf7y1Or4bQ7E2vq84i+OpM+Mc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675771762;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QUyJf6TCrq54OIvLnrvfLKhIRU9/0yDRM7YQm7FYDgo=;
-        b=v54CC9qQ4s7m4z6LLi1bJmNm+MxgE0DUIpi095ECTnV3SFVJtMEa5wZx3/F6XhhqglSrHm
-        RyJC2mT29zAbkeCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 26DD1139ED;
-        Tue,  7 Feb 2023 12:09:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id x4dzCXI/4mNpTwAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 07 Feb 2023 12:09:22 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 9C4CBA06D5; Tue,  7 Feb 2023 13:09:21 +0100 (CET)
-Date:   Tue, 7 Feb 2023 13:09:21 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v7 0/3] fanotify: Allow user space to pass back
- additional audit info
-Message-ID: <20230207120921.7pgh6uxs7ze7hkjo@quack3>
-References: <cover.1675373475.git.rgb@redhat.com>
+        Tue, 7 Feb 2023 07:13:08 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C207AEFA2;
+        Tue,  7 Feb 2023 04:13:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1675771928;
+        bh=SZ69qIin1bOhcHFHX74qsjeogSVMDRGBQzd0Cfhbs2E=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=aThNGe0oN9xWnJyHr7GmeaUAcFgS91VHwl3T4h6Bh5LX2gFUMzsOaliBZPtELWzWu
+         3JmiYNBBbPDGOzd4cWpTbu8JgX+2ayddP/XXDnBMSdtpA1yCGZUkPJ/DaMuMl4pYUi
+         jf4Cyb2kLI9QRiblEb++hArVvoFRE84yuHXO6ljvBpi/SBYOqfQpJ0Tg9GFoZW9S2c
+         NoVnWie2tTsuF3ZpmYlW75PN6K68svmpp22rqULWLrmcgZs8EFmZWA31u5HiRcDXOw
+         MFJli+T+9k6wXLONIsxHZJ/wuNc7MERLHVO/HZCZelDVKlwkJa6EyrrCPxcXtWBxPO
+         wnU6MF+Wj46nQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.159.155] ([217.61.159.155]) by web-mail.gmx.net
+ (3c-app-gmx-bap02.server.lan [172.19.172.72]) (via HTTP); Tue, 7 Feb 2023
+ 13:12:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1675373475.git.rgb@redhat.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <trinity-808b2619-4325-4d03-b2f5-1a7bc27d42ea-1675771928390@3c-app-gmx-bap02>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Aw: Re: [PATCH] dt-bindings: mt76: add active-low property to led
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 7 Feb 2023 13:12:08 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <fe3673d9-b921-c445-0f5f-a6bc824e8582@linaro.org>
+References: <20230207102501.11418-1-linux@fw-web.de>
+ <fe3673d9-b921-c445-0f5f-a6bc824e8582@linaro.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:+4vKtr2ePMdUPyHJjXQx8kjAst9kx6vKtoEZ0xKiTT993WQMGKiXQ7eai7/oGn6SLz9nI
+ ExIu7cc+kU3n1HPesxF6zHZqoD5uSYv30WVUhVvbh4whPGhV1ClwgCBYqTPR72g31ap06OVSWIuS
+ kUhgkM/shASAqUFcQMHCf1yopvlNodRCkHi1GjXiTfn2XD2HV+1w6HQ4fSmXYeRaajB/sv3vXklv
+ 3fRlFtg0JVx4PchdKiX+uLoeEA5pW9+LCRNBGAys0H0frB9UAALUBht9ZxjXFjmLLb45w8iazMo2
+ S8=
+UI-OutboundReport: notjunk:1;M01:P0:MvbBDhuOXcc=;48R3pzi9pbTRbbvz53aZgp+LQH9
+ JOc/6fcqxIWF0aacjcgq8+IJ3jRjhxIhdwMJnFr5Y1pr5pUZdjZF0h9ti8ekdXI2fFBVTrkfW
+ mn3s/vPiBScFlXx5NiahBjaoqTVuwJcnY1BZ/ICTCv14lpPkOcQrru29OFvaO5RQhWevVhgmc
+ lCc1+g3erJ87M7oCsS4KeX6VImQhNVzzY4IEeexbbBgilKn+v6OZD8Bz6RSPa7Kxg/e950lZ5
+ H3WFPHzE3hmhVK7DyBQfpHce3NoM5xoqn5N5sNb0uXeNGr1ZfARJli3idt2NTVrjvVS5Q9yem
+ 6QeHUf4hDD20a+WIfjkLP05zkztHPsF3twaH4Yvs8Qk5fT9FxGjdeaZWW7EhuEfIGBYDLRK0A
+ 2S8f3L3NwhLd1pdPANh1VdF6+8YdYos+mxk2kQdx5e52JuhsqJkF9oOrPLRp6K//z3e6OpSuk
+ a1Ah/srrTOOfg+NWTZDAddu+8nJqP0FN955ZdGB44eg8Mdx7fKPsATkb0hFpxfb0GP+VPsU1R
+ eQVLd9LB1hIn7ApvSNTcekZuiYBosX6krL7xejrcr7jLH9ZbNYwDeoFSyZ3ifPRCFT2QVQyKo
+ vX2OhyE7j3sm1eYajY4dvPexarxpENtj8vWh/8kK6xtlu/2L5CULkazncboYqY9A5txcoepYf
+ pRuN5Bro41Gc6vRSjePZb4+ItkcreGKv3FY0RzCtD8hBvFAUGExarBMZDPcMtGAGch4AXSGxN
+ IJrmehVPbNbg42Jcu/na4jMWveY8HHJpr9s3018sdPYkBfxmP69+A58CmpVlptFrvBqhkl3ZU
+ EshiDhaI48OoE50v+9COOxsg==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 03-02-23 16:35:13, Richard Guy Briggs wrote:
-> The Fanotify API can be used for access control by requesting permission
-> event notification. The user space tooling that uses it may have a
-> complicated policy that inherently contains additional context for the
-> decision. If this information were available in the audit trail, policy
-> writers can close the loop on debugging policy. Also, if this additional
-> information were available, it would enable the creation of tools that
-> can suggest changes to the policy similar to how audit2allow can help
-> refine labeled security.
-> 
-> This patchset defines a new flag (FAN_INFO) and new extensions that
-> define additional information which are appended after the response
-> structure returned from user space on a permission event.  The appended
-> information is organized with headers containing a type and size that
-> can be delegated to interested subsystems.  One new information type is
-> defined to audit the triggering rule number.  
-> 
-> A newer kernel will work with an older userspace and an older kernel
-> will behave as expected and reject a newer userspace, leaving it up to
-> the newer userspace to test appropriately and adapt as necessary.  This
-> is done by providing a a fully-formed FAN_INFO extension but setting the
-> fd to FAN_NOFD.  On a capable kernel, it will succeed but issue no audit
-> record, whereas on an older kernel it will fail.
-> 
-> The audit function was updated to log the additional information in the
-> AUDIT_FANOTIFY record. The following are examples of the new record
-> format:
->   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3137 subj_trust=3 obj_trust=5
->   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=0 subj_trust=2 obj_trust=2
+> Gesendet: Dienstag, 07. Februar 2023 um 11:40 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> On 07/02/2023 11:25, Frank Wunderlich wrote:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >
+> > LEDs can be in low-active mode, so add dt property for it.
+> >
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> >  .../devicetree/bindings/net/wireless/mediatek,mt76.yaml      | 5 ++++=
++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,m=
+t76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.ya=
+ml
+> > index f0c78f994491..212508672979 100644
+> > --- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yam=
+l
+> > +++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yam=
+l
+> > @@ -112,6 +112,11 @@ properties:
+> >      $ref: /schemas/leds/common.yaml#
+> >      additionalProperties: false
+> >      properties:
+> > +      led-active-low:
+> > +        description:
+> > +          LED is enabled with ground signal.
+>
+> What does it mean? You set voltage of regulator to 0? Or you set GPIO as
+> 0? If the latter, it's not the property of LED...
 
-Thanks! I've applied this series to my tree.
+basicly it is a gpio-led mapped into the mt76 driver, but not passing gpio=
+ itself in this property (like gpio-led does).
+This gpio is set to 0 signal (gnd) to let the led go on ;) so imho it is a=
+ led-property, but below the wifi-node as
+the trigger comes from mt76 hardware, not an external (soc) gpio controlle=
+r.
 
-								Honza
+mt76 driver supports it already like i post change here:
 
-> 
-> changelog:
-> v1:
-> - first version by Steve Grubb <sgrubb@redhat.com>
-> Link: https://lore.kernel.org/r/2042449.irdbgypaU6@x2
-> 
-> v2:
-> - enhancements suggested by Jan Kara <jack@suse.cz>
-> - 1/3 change %d to %u in pr_debug
-> - 2/3 change response from __u32 to __u16
-> - mod struct fanotify_response and fanotify_perm_event add extra_info_type, extra_info_buf
-> - extra_info_buf size max FANOTIFY_MAX_RESPONSE_EXTRA_LEN, add struct fanotify_response_audit_rule
-> - extend debug statements
-> - remove unneeded macros
-> - [internal] change interface to finish_permission_event() and process_access_response()
-> - 3/3 update format of extra information
-> - [internal] change interface to audit_fanotify()
-> - change ctx_type= to fan_type=
-> Link: https://lore.kernel.org/r/cover.1651174324.git.rgb@redhat.com
-> 
-> v3:
-> - 1/3 switch {,__}audit_fanotify() from uint to u32
-> - 2/3 re-add fanotify_get_response switch case FAN_DENY: to avoid unnecessary churn
-> - add FAN_EXTRA flag to indicate more info and break with old kernel
-> - change response from u16 to u32 to avoid endian issues
-> - change extra_info_buf to union
-> - move low-cost fd check earlier
-> - change FAN_RESPONSE_INFO_AUDIT_NONE to FAN_RESPONSE_INFO_NONE
-> - switch to u32 for internal and __u32 for uapi
-> Link: https://lore.kernel.org/all/cover.1652730821.git.rgb@redhat.com
-> 
-> v4:
-> - scrap FAN_INVALID_RESPONSE_MASK in favour of original to catch invalid response == 0
-> - introduce FANOTIFY_RESPONSE_* macros
-> - uapi: remove union
-> - keep original struct fanotify_response, add fan_info infra starting with audit reason
-> - uapi add struct fanotify_response_info_header{type/pad/len} and struct fanotify_response_info_audit_rule{hdr/rule}
-> - rename fan_ctx= to fan_info=, FAN_EXTRA to FAN_INFO
-> - change event struct from type/buf to len/buf
-> - enable multiple info extensions in one message
-> - hex encode fan_info in __audit_fanotify()
-> - record type FANOTIFY extended to "type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F"                                                                                                                     
-> Link: https://lore.kernel.org/all/cover.1659996830.git.rgb@redhat.com
-> 
-> v5:
-> - fixed warnings in p2/4 and p3/4 found by <lkp@intel.com>
-> - restore original behaviour for !FAN_INFO case and fanotify_get_response()
-> - rename member audit_rule to rule_number
-> - eliminate memory leak of info_buf on failure (no longer dynamic)
-> - rename buf:info, count:info_len, c:remain, ib:infop
-> - fix pr_debug
-> - return -ENOENT on FAN_INFO and fd==FAN_NOFD to signal new kernel
-> - fanotify_write() remove redundant size check
-> - add u32 subj_trust obj_trust fields with unknown value "2"
-> - split out to helper process_access_response_info()
-> - restore finish_permission_event() response_struct to u32
-> - assume and enforce one rule to audit, pass struct directly to __audit_fanotify()
-> - change fanotify_perm_event struct to union hdr/audir_rule
-> - add vspace to fanotify_write() and process_access_response_info()
-> - squash 3/4 with 4/4
-> - fix v3 and v4 links
-> Link: https://lore.kernel.org/all/cover.1670606054.git.rgb@redhat.com
-> 
-> v6:
-> - simplify __audit_fanotify() from audit_log_format/audit_log_n_hex to audit_log/%X
-> - add comment to clarify {subj,obj}_trust values
-> - remove fd processing from process_access_response_info()
-> - return info_len immediately from process_access_response() on FAN_NOFD after process_access_response_info()
-> Link: https://lore.kernel.org/all/cover.1673989212.git.rgb@redhat.com
-> 
-> v7:
-> - change non FAN_INFO case to "0"
-> - change from if-return to switch(type)-case, which now ignores non-audit info
-> Link: https://lore.kernel.org/all/cover.1675373475.git.rgb@redhat.com
-> 
-> Richard Guy Briggs (3):
->   fanotify: Ensure consistent variable type for response
->   fanotify: define struct members to hold response decision context
->   fanotify,audit: Allow audit to use the full permission event response
-> 
->  fs/notify/fanotify/fanotify.c      |  8 ++-
->  fs/notify/fanotify/fanotify.h      |  6 +-
->  fs/notify/fanotify/fanotify_user.c | 88 ++++++++++++++++++++++--------
->  include/linux/audit.h              |  9 +--
->  include/linux/fanotify.h           |  5 ++
->  include/uapi/linux/fanotify.h      | 30 +++++++++-
->  kernel/auditsc.c                   | 18 +++++-
->  7 files changed, 131 insertions(+), 33 deletions(-)
-> 
-> -- 
-> 2.27.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+https://patchwork.kernel.org/project/linux-mediatek/patch/20230205174833.1=
+07050-1-linux@fw-web.de/
+
+only needed the binding for it.
+
+> Best regards,
+> Krzysztof
+>
+>
