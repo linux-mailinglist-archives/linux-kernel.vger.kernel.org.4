@@ -2,66 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EB068DD4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5CB68DD4D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 16:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbjBGPrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 10:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S232259AbjBGPse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 10:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjBGPrm (ORCPT
+        with ESMTP id S232234AbjBGPsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 10:47:42 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9448F7EF9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:47:39 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 311211EC03D6;
-        Tue,  7 Feb 2023 16:47:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675784858;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=YsE5HwQMUDrzJ76Vw3Lqw6bgPowWoKGwItHq+J3fGf8=;
-        b=m6/mbO12myHd77TmFuTEimv638+JLuKdFV5YD9WZ2/9pRBiUy+tcHtcwXUFmN0OqaGwT31
-        +nCVkU8eWYGTo+Kp+P7N4kbN//14jNyenxn2wpg7Nbee7Eq06LOMup4mzE9tI6Aw75rupM
-        fLsw7ZDd8L8ye6a5Jv/KvMp48tEkT+c=
-Date:   Tue, 7 Feb 2023 16:47:33 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Terry Bowman <terry.bowman@amd.com>, linux-kernel@vger.kernel.org,
-        bp@suse.de, x86@kernel.org
-Subject: Re: [PATCH 2/3] tools/x86/kcpuid: Update AMD leaf Fn80000001
-Message-ID: <Y+JylWCLMA6mK7G0@zn.tnic>
-References: <20230206141832.4162264-1-terry.bowman@amd.com>
- <20230206141832.4162264-3-terry.bowman@amd.com>
- <Y+HKRLN//GnP0c5r@feng-clx>
+        Tue, 7 Feb 2023 10:48:32 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EFA5FEF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 07:48:31 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id u9so11770907plf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 07:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=344MbQ5Aogx4TbSHT23t8yYX3VVQUnb53jmXZ8Ta6+U=;
+        b=D2nx2e6v0uOHYhJ/HCEsinnnMK+TtbG250AgmjRzeMNrzgdCYNJwualCwtmvNMBQMu
+         TypvhDWgPwn4IkJ9xaZdfIWqFaZraTe6B1bn4pAGrTIZ34aH8sv1xQRJXTfX0mpm8qFa
+         4z0T/tgzsj4rESnPSfxbyiGHxCireDk8j42G3FWSAlJixs21Esf+o9D6Ebd70z2mYVF4
+         0SIu98uEPUYdpJhl57+Eb9vujiRntKckzNNS16PBEG0Z2Q2u1CeJqHHzPaJWcZTPfIzU
+         iqEkXZKs5+pm+3EMK6F0WDFR+xnle+ATa7CFu1srK5CdT1ptiY46dgWqTGBFLAxx8Mqo
+         TKxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=344MbQ5Aogx4TbSHT23t8yYX3VVQUnb53jmXZ8Ta6+U=;
+        b=WaqfENuNJzCjkGvbvExobQM/ROMHCjT5maRDmjkhfXHEKj2MuuKl2mhBKd4oG3grRn
+         +W7yxIChX1BnrzKoer1dgQ2GgWu6hze2lI0KlPEp6Xzd4SKHIPd7Nd+YgNKH6Zjur3Pp
+         luuVI8LyI90NDK0xL9vbUbEIebSH3IFNu3uDfaOqgCcbmZyJap7DrjNfHZcykMI1gvbg
+         LNOVJVjGpSSe5839lIcm4D+BXZ/+7VWbTEr7nq9TEmiWkwHUnbUA/1FnbyFOV2RB1p/e
+         dPFfzDeB1sLD1NK8rbfwiPOnl7jeXMTrrXU4+3hxGkCh1vP3pSfGeO9EEawON7zgR9Ym
+         mRDg==
+X-Gm-Message-State: AO0yUKVnd0lqqQn7vg7wzHBBk1Qm3SY8PB/EvGD1w29luM5xfHE1YVfx
+        l5hVCO1G1DG7ZpS7PVGvaR9kL/IiYXBLxUZqUnq/Mxg8iHQ=
+X-Google-Smtp-Source: AK7set/2ed2qey7Q7Ye3j2Cy7zIPmnAhR6m2DNLZk/aCKTvEekzuCIO211zE+Lr6hiFgotYZZumB8cJkspi1asjtKr4=
+X-Received: by 2002:a17:90a:3d01:b0:22c:19cb:948a with SMTP id
+ h1-20020a17090a3d0100b0022c19cb948amr1033130pjc.98.1675784911094; Tue, 07 Feb
+ 2023 07:48:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y+HKRLN//GnP0c5r@feng-clx>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230204090139.1789264-1-xiehuan09@gmail.com>
+In-Reply-To: <20230204090139.1789264-1-xiehuan09@gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Tue, 7 Feb 2023 23:48:19 +0800
+Message-ID: <CAEr6+EA7L68kGPW43YwDOhpBVMQhJ0WNbMEreNFpz=8Q=C_S+A@mail.gmail.com>
+Subject: Re: [PATCH] scripts/gdb: fix 'lx-current' for x86
+To:     jan.kiszka@siemens.com, kbingham@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 11:49:24AM +0800, Feng Tang wrote:
-> I'm not good at naming :) and you may find better names.
+Andrew was added.
 
-He's using the official PPR doc names so they'll remain like this so
-that they can be found in the respective doc.
+Hi Andrew,
 
-Thx.
+I found the patches for the ./scripts/gdb/*  were merged by you before,
+but the "./scripts/get_maintainer.pl ./scripts/gdb/linux/cpus.py"
+can't find your name,  so added you.
+
+Can you review this patch ;-)
+
+On Sat, Feb 4, 2023 at 5:02 PM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> When printing the name of the current process, it will report an error:
+> (gdb) p $lx_current().comm
+> Python Exception <class 'gdb.error'> No symbol "current_task" in current context.:
+> Error occurred in Python: No symbol "current_task" in current context.
+>
+> Because the commit <e57ef2ed97c1> ("x86: Put hot per CPU variables into a struct")
+> changed it.
+>
+> Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
+> ---
+>  scripts/gdb/linux/cpus.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
+> index 15fc4626d236..9ee99f9fae8d 100644
+> --- a/scripts/gdb/linux/cpus.py
+> +++ b/scripts/gdb/linux/cpus.py
+> @@ -163,7 +163,7 @@ def get_current_task(cpu):
+>      task_ptr_type = task_type.get_type().pointer()
+>
+>      if utils.is_target_arch("x86"):
+> -         var_ptr = gdb.parse_and_eval("&current_task")
+> +         var_ptr = gdb.parse_and_eval("&pcpu_hot.current_task")
+>           return per_cpu(var_ptr, cpu).dereference()
+>      elif utils.is_target_arch("aarch64"):
+>           current_task_addr = gdb.parse_and_eval("$SP_EL0")
+> --
+> 2.25.1
+>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+JeffXie
