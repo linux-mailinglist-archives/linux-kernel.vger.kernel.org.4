@@ -2,352 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00B968F7D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCA468F7DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjBHTKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
+        id S231768AbjBHTMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjBHTKg (ORCPT
+        with ESMTP id S231292AbjBHTMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:10:36 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895C94FAD2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:10:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9CB8CCE2241
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 19:10:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D145FC433D2;
-        Wed,  8 Feb 2023 19:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675883430;
-        bh=e+CLtWu0ezo1ss7QKSKjODeN5/LijFIlf3Ht4nMxC7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hTUScijhpQmEhJSz3fFTxAqv6LzID9GD/v6L+xoqlfb8F5sf7duNqNEdBnyQDKoSC
-         LaykZ3GsgCEYPzLYlEorlHRNyA+Dh7psBAknfTzIYbOhj8wibK8lU+8gk2igdUZiBK
-         EhrsMVc3tX4Uxl6YvOxpfiPu7hHkiWhBhT4Uz0XnqimBZcCNMIaXHErtMLt9JDXXca
-         rTti1GzZgAD/X+eHrL7hj0Fno00TbKPARKP+fn3R/fxsXYprrqVabksxFzYc3oYVJn
-         jYV9aEfguMQSDKDoMpW6zNGiokJCAFv5EnBxIEOlTgSZU1MdbHQeIGzVCwGkY9ukZ7
-         uGZJehyGCXXtg==
-Date:   Wed, 8 Feb 2023 12:10:28 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     qemu-devel@nongnu.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel P =?iso-8859-1?Q?=2E_Berrang=E9?= <berrange@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH] x86: temporarily remove all attempts to provide
- setup_data
-Message-ID: <Y+PzpLL8/o8vZCYV@dev-arch.thelio-3990X>
-References: <20230208180835.234638-1-Jason@zx2c4.com>
- <Y+PmfAuNViED6NmS@dev-arch.thelio-3990X>
+        Wed, 8 Feb 2023 14:12:21 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560304B76B;
+        Wed,  8 Feb 2023 11:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675883540; x=1707419540;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e2Np7z60q6pyAT4bXRj6Y5fYMN13NZueNrc/VvYOe08=;
+  b=RWGg+gsNxTyOrhmGOqbds13ipGqc6Tyb/WyLmJAg5PSOT2HMsSv8dKd+
+   p2lR8DrWr78kOQkpaawaBt5z3fH7Jv9qD2b9m+Fh5uDVaWWDMoTrewPlY
+   SPG2YJ+3n4KLongETmDzvbqrMc52SmWuyjbKbP73RhMczsQGqQaXF1oDv
+   E1m0BNX2FCiyp1TdEVl+oQiy5/aLzf1LUdNiGCfU0+/oFBBGVMu6KuJ6F
+   HrQ+0nTPE1h9jfxeipj2cZW4uxXdSBepSyi11v+oG2VfDjmMWzaI1pUYS
+   LdJpPars0Jd5CC5ofScdSmGtYXi/xJk2Q30mlk1dpY9qVFKl9mEz6RBa+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="332021769"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="332021769"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 11:12:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="644977624"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="644977624"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 08 Feb 2023 11:12:12 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPprW-0004bA-2e;
+        Wed, 08 Feb 2023 19:12:10 +0000
+Date:   Thu, 9 Feb 2023 03:11:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        yury.norov@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev, Jonathan.Cameron@huawei.com,
+        andriy.shevchenko@linux.intel.com, baohua@kernel.org,
+        bristot@redhat.com, bsegall@google.com, davem@davemloft.net,
+        dietmar.eggemann@arm.com, gal@nvidia.com,
+        gregkh@linuxfoundation.org, hca@linux.ibm.com,
+        jacob.e.keller@intel.com, jesse.brandeburg@intel.com,
+        jgg@nvidia.com, juri.lelli@redhat.com, kuba@kernel.org,
+        leonro@nvidia.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux@rasmusvillemoes.dk, mgorman@suse.de, mingo@redhat.com,
+        netdev@vger.kernel.org, peter@n8pjl.ca, rostedt@goodmis.org,
+        saeedm@nvidia.com, tariqt@nvidia.com, tony.luck@intel.com
+Subject: Re: [PATCH 1/1] ice: Change assigning method of the CPU affinity
+ masks
+Message-ID: <202302090307.GQOJ4jik-lkp@intel.com>
+References: <20230208153905.109912-1-pawel.chmielewski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y+PmfAuNViED6NmS@dev-arch.thelio-3990X>
+In-Reply-To: <20230208153905.109912-1-pawel.chmielewski@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 11:14:23AM -0700, Nathan Chancellor wrote:
-> On Wed, Feb 08, 2023 at 03:08:35PM -0300, Jason A. Donenfeld wrote:
-> > All attempts at providing setup_data have been made as an iteration on
-> > whatever was there before, stretching back to the original
-> > implementation used for DTBs that [mis]used the kernel image itself.
-> > We've now had a dozen rounds of bugs and hacks, and the result is
-> > turning into a pile of unmaintainable and increasingly brittle hacks.
-> > 
-> > Let's just rip out all the madness and start over. We can re-architect
-> > this based on having a separate standalone setup_data file, which is how
-> > it should have been done in the first place. This is a larger project
-> > with a few things to coordinate, but we can't really begin thinking
-> > about that while trying to play whack-a-mole with the current buggy
-> > implementation.
-> > 
-> > So this commit removes the setup_data setting from x86_load_linux(),
-> > while leaving intact the infrastructure we'll need in the future to try
-> > again.
-> > 
-> > Cc: Michael S. Tsirkin <mst@redhat.com>
-> > Cc: Dov Murik <dovmurik@linux.ibm.com>
-> > Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> > Cc: Gerd Hoffmann <kraxel@redhat.com>
-> > Cc: Daniel P. Berrangé <berrange@redhat.com>
-> > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > Cc: Richard Henderson <richard.henderson@linaro.org>
-> > Cc: H. Peter Anvin <hpa@zytor.com>
-> > Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Eric Biggers <ebiggers@kernel.org>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> 
-> Thanks for the quick patch! Both of my use cases appear fixed.
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+Hi Pawel,
 
-Unfortunately, I only tested qemu-system-x86_64 booting via EFI and just now came to
-find out this breaks booting without EFI in both qemu-system-i386 and
-qemu-system-x86_64 (just defconfig for both images):
+Thank you for the patch! Perhaps something to improve:
 
-$ qemu-system-i386 \
-    -d unimp,guest_errors \
-    -kernel arch/x86/boot/bzImage \
-    -append "console=ttyS0 earlycon=uart8250,io,0x3f8" \
-    -cpu host \
-    -enable-kvm \
-    -smp 8 \
-    -display none \
-    -initrd .../boot-utils-ro/images/x86/rootfs.cpio \
-    -m 512m \
-    -nodefaults \
-    -no-reboot \
-    -serial mon:stdio
+[auto build test WARNING on tnguy-next-queue/dev-queue]
+[also build test WARNING on linus/master v6.2-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-There is no output, which I suppose makes sense since we are very early
-in boot. Sorry for missing this initially, I'll ramp up my testing for
-future patches.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawel-Chmielewski/ice-Change-assigning-method-of-the-CPU-affinity-masks/20230208-234144
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
+patch link:    https://lore.kernel.org/r/20230208153905.109912-1-pawel.chmielewski%40intel.com
+patch subject: [PATCH 1/1] ice: Change assigning method of the CPU affinity masks
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230209/202302090307.GQOJ4jik-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/33971c3245ae75900dbc4cc9aa2b76ff9cdb534c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pawel-Chmielewski/ice-Change-assigning-method-of-the-CPU-affinity-masks/20230208-234144
+        git checkout 33971c3245ae75900dbc4cc9aa2b76ff9cdb534c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/
 
-Cheers,
-Nathan
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/20230208153905.109912-1-pawel.chmielewski@intel.com
 
-> > ---
-> >  hw/i386/microvm.c |  15 ++----
-> >  hw/i386/x86.c     | 120 +++++-----------------------------------------
-> >  2 files changed, 17 insertions(+), 118 deletions(-)
-> > 
-> > diff --git a/hw/i386/microvm.c b/hw/i386/microvm.c
-> > index 29f30dd6d3..170a331e3f 100644
-> > --- a/hw/i386/microvm.c
-> > +++ b/hw/i386/microvm.c
-> > @@ -378,8 +378,7 @@ static void microvm_fix_kernel_cmdline(MachineState *machine)
-> >      MicrovmMachineState *mms = MICROVM_MACHINE(machine);
-> >      BusState *bus;
-> >      BusChild *kid;
-> > -    char *cmdline, *existing_cmdline;
-> > -    size_t len;
-> > +    char *cmdline;
-> >  
-> >      /*
-> >       * Find MMIO transports with attached devices, and add them to the kernel
-> > @@ -388,8 +387,7 @@ static void microvm_fix_kernel_cmdline(MachineState *machine)
-> >       * Yes, this is a hack, but one that heavily improves the UX without
-> >       * introducing any significant issues.
-> >       */
-> > -    existing_cmdline = fw_cfg_read_bytes_ptr(x86ms->fw_cfg, FW_CFG_CMDLINE_DATA);
-> > -    cmdline = g_strdup(existing_cmdline);
-> > +    cmdline = g_strdup(machine->kernel_cmdline);
-> >      bus = sysbus_get_default();
-> >      QTAILQ_FOREACH(kid, &bus->children, sibling) {
-> >          DeviceState *dev = kid->child;
-> > @@ -413,12 +411,9 @@ static void microvm_fix_kernel_cmdline(MachineState *machine)
-> >          }
-> >      }
-> >  
-> > -    len = strlen(cmdline);
-> > -    if (len > VIRTIO_CMDLINE_TOTAL_MAX_LEN + strlen(existing_cmdline)) {
-> > -        fprintf(stderr, "qemu: virtio mmio cmdline too large, skipping\n");
-> > -    } else {
-> > -        memcpy(existing_cmdline, cmdline, len + 1);
-> > -    }
-> > +    fw_cfg_modify_i32(x86ms->fw_cfg, FW_CFG_CMDLINE_SIZE, strlen(cmdline) + 1);
-> > +    fw_cfg_modify_string(x86ms->fw_cfg, FW_CFG_CMDLINE_DATA, cmdline);
-> > +
-> >      g_free(cmdline);
-> >  }
-> >  
-> > diff --git a/hw/i386/x86.c b/hw/i386/x86.c
-> > index eaff4227bd..6cfdca9acd 100644
-> > --- a/hw/i386/x86.c
-> > +++ b/hw/i386/x86.c
-> > @@ -50,7 +50,6 @@
-> >  #include "hw/intc/i8259.h"
-> >  #include "hw/rtc/mc146818rtc.h"
-> >  #include "target/i386/sev.h"
-> > -#include "hw/i386/microvm.h"
-> >  
-> >  #include "hw/acpi/cpu_hotplug.h"
-> >  #include "hw/irq.h"
-> > @@ -770,30 +769,6 @@ static bool load_elfboot(const char *kernel_filename,
-> >      return true;
-> >  }
-> >  
-> > -typedef struct SetupDataFixup {
-> > -    void *pos;
-> > -    hwaddr orig_val, new_val;
-> > -    uint32_t addr;
-> > -} SetupDataFixup;
-> > -
-> > -static void fixup_setup_data(void *opaque)
-> > -{
-> > -    SetupDataFixup *fixup = opaque;
-> > -    stq_p(fixup->pos, fixup->new_val);
-> > -}
-> > -
-> > -static void reset_setup_data(void *opaque)
-> > -{
-> > -    SetupDataFixup *fixup = opaque;
-> > -    stq_p(fixup->pos, fixup->orig_val);
-> > -}
-> > -
-> > -static void reset_rng_seed(void *opaque)
-> > -{
-> > -    SetupData *setup_data = opaque;
-> > -    qemu_guest_getrandom_nofail(setup_data->data, le32_to_cpu(setup_data->len));
-> > -}
-> > -
-> >  void x86_load_linux(X86MachineState *x86ms,
-> >                      FWCfgState *fw_cfg,
-> >                      int acpi_data_size,
-> > @@ -803,29 +778,20 @@ void x86_load_linux(X86MachineState *x86ms,
-> >      bool linuxboot_dma_enabled = X86_MACHINE_GET_CLASS(x86ms)->fwcfg_dma_enabled;
-> >      uint16_t protocol;
-> >      int setup_size, kernel_size, cmdline_size;
-> > -    int dtb_size, setup_data_offset;
-> >      uint32_t initrd_max;
-> >      uint8_t header[8192], *setup, *kernel;
-> > -    hwaddr real_addr, prot_addr, cmdline_addr, initrd_addr = 0, first_setup_data = 0;
-> > +    hwaddr real_addr, prot_addr, cmdline_addr, initrd_addr = 0;
-> >      FILE *f;
-> >      char *vmode;
-> >      MachineState *machine = MACHINE(x86ms);
-> > -    SetupData *setup_data;
-> >      const char *kernel_filename = machine->kernel_filename;
-> >      const char *initrd_filename = machine->initrd_filename;
-> > -    const char *dtb_filename = machine->dtb;
-> > -    char *kernel_cmdline;
-> > +    const char *kernel_cmdline = machine->kernel_cmdline;
-> >      SevKernelLoaderContext sev_load_ctx = {};
-> >      enum { RNG_SEED_LENGTH = 32 };
-> >  
-> > -    /*
-> > -     * Add the NUL terminator, some padding for the microvm cmdline fiddling
-> > -     * hack, and then align to 16 bytes as a paranoia measure
-> > -     */
-> > -    cmdline_size = (strlen(machine->kernel_cmdline) + 1 +
-> > -                    VIRTIO_CMDLINE_TOTAL_MAX_LEN + 16) & ~15;
-> > -    /* Make a copy, since we might append arbitrary bytes to it later. */
-> > -    kernel_cmdline = g_strndup(machine->kernel_cmdline, cmdline_size);
-> > +    /* Align to 16 bytes as a paranoia measure */
-> > +    cmdline_size = (strlen(kernel_cmdline) + 16) & ~15;
-> >  
-> >      /* load the kernel header */
-> >      f = fopen(kernel_filename, "rb");
-> > @@ -966,6 +932,12 @@ void x86_load_linux(X86MachineState *x86ms,
-> >          initrd_max = x86ms->below_4g_mem_size - acpi_data_size - 1;
-> >      }
-> >  
-> > +    fw_cfg_add_i32(fw_cfg, FW_CFG_CMDLINE_ADDR, cmdline_addr);
-> > +    fw_cfg_add_i32(fw_cfg, FW_CFG_CMDLINE_SIZE, strlen(kernel_cmdline) + 1);
-> > +    fw_cfg_add_string(fw_cfg, FW_CFG_CMDLINE_DATA, kernel_cmdline);
-> > +    sev_load_ctx.cmdline_data = (char *)kernel_cmdline;
-> > +    sev_load_ctx.cmdline_size = strlen(kernel_cmdline) + 1;
-> > +
-> >      if (protocol >= 0x202) {
-> >          stl_p(header + 0x228, cmdline_addr);
-> >      } else {
-> > @@ -1078,81 +1050,13 @@ void x86_load_linux(X86MachineState *x86ms,
-> >      }
-> >      fclose(f);
-> >  
-> > -    /* append dtb to kernel */
-> > -    if (dtb_filename) {
-> > -        if (protocol < 0x209) {
-> > -            fprintf(stderr, "qemu: Linux kernel too old to load a dtb\n");
-> > -            exit(1);
-> > -        }
-> > -
-> > -        dtb_size = get_image_size(dtb_filename);
-> > -        if (dtb_size <= 0) {
-> > -            fprintf(stderr, "qemu: error reading dtb %s: %s\n",
-> > -                    dtb_filename, strerror(errno));
-> > -            exit(1);
-> > -        }
-> > -
-> > -        setup_data_offset = cmdline_size;
-> > -        cmdline_size += sizeof(SetupData) + dtb_size;
-> > -        kernel_cmdline = g_realloc(kernel_cmdline, cmdline_size);
-> > -        setup_data = (void *)kernel_cmdline + setup_data_offset;
-> > -        setup_data->next = cpu_to_le64(first_setup_data);
-> > -        first_setup_data = cmdline_addr + setup_data_offset;
-> > -        setup_data->type = cpu_to_le32(SETUP_DTB);
-> > -        setup_data->len = cpu_to_le32(dtb_size);
-> > -        load_image_size(dtb_filename, setup_data->data, dtb_size);
-> > -    }
-> > -
-> > -    if (!legacy_no_rng_seed && protocol >= 0x209) {
-> > -        setup_data_offset = cmdline_size;
-> > -        cmdline_size += sizeof(SetupData) + RNG_SEED_LENGTH;
-> > -        kernel_cmdline = g_realloc(kernel_cmdline, cmdline_size);
-> > -        setup_data = (void *)kernel_cmdline + setup_data_offset;
-> > -        setup_data->next = cpu_to_le64(first_setup_data);
-> > -        first_setup_data = cmdline_addr + setup_data_offset;
-> > -        setup_data->type = cpu_to_le32(SETUP_RNG_SEED);
-> > -        setup_data->len = cpu_to_le32(RNG_SEED_LENGTH);
-> > -        qemu_guest_getrandom_nofail(setup_data->data, RNG_SEED_LENGTH);
-> > -        qemu_register_reset_nosnapshotload(reset_rng_seed, setup_data);
-> > -        fw_cfg_add_bytes_callback(fw_cfg, FW_CFG_KERNEL_DATA, reset_rng_seed, NULL,
-> > -                                  setup_data, kernel, kernel_size, true);
-> > -    } else {
-> > -        fw_cfg_add_bytes(fw_cfg, FW_CFG_KERNEL_DATA, kernel, kernel_size);
-> > -    }
-> > -
-> > -    fw_cfg_add_i32(fw_cfg, FW_CFG_CMDLINE_ADDR, cmdline_addr);
-> > -    fw_cfg_add_i32(fw_cfg, FW_CFG_CMDLINE_SIZE, cmdline_size);
-> > -    fw_cfg_add_bytes(fw_cfg, FW_CFG_CMDLINE_DATA, kernel_cmdline, cmdline_size);
-> > -    sev_load_ctx.cmdline_data = (char *)kernel_cmdline;
-> > -    sev_load_ctx.cmdline_size = cmdline_size;
-> > -
-> > +    fw_cfg_add_bytes(fw_cfg, FW_CFG_KERNEL_DATA, kernel, kernel_size);
-> >      fw_cfg_add_i32(fw_cfg, FW_CFG_KERNEL_ADDR, prot_addr);
-> >      fw_cfg_add_i32(fw_cfg, FW_CFG_KERNEL_SIZE, kernel_size);
-> >      sev_load_ctx.kernel_data = (char *)kernel;
-> >      sev_load_ctx.kernel_size = kernel_size;
-> >  
-> > -    /*
-> > -     * If we're starting an encrypted VM, it will be OVMF based, which uses the
-> > -     * efi stub for booting and doesn't require any values to be placed in the
-> > -     * kernel header.  We therefore don't update the header so the hash of the
-> > -     * kernel on the other side of the fw_cfg interface matches the hash of the
-> > -     * file the user passed in.
-> > -     */
-> > -    if (!sev_enabled() && first_setup_data) {
-> > -        SetupDataFixup *fixup = g_malloc(sizeof(*fixup));
-> > -
-> > -        memcpy(setup, header, MIN(sizeof(header), setup_size));
-> > -        /* Offset 0x250 is a pointer to the first setup_data link. */
-> > -        fixup->pos = setup + 0x250;
-> > -        fixup->orig_val = ldq_p(fixup->pos);
-> > -        fixup->new_val = first_setup_data;
-> > -        fixup->addr = cpu_to_le32(real_addr);
-> > -        fw_cfg_add_bytes_callback(fw_cfg, FW_CFG_SETUP_ADDR, fixup_setup_data, NULL,
-> > -                                  fixup, &fixup->addr, sizeof(fixup->addr), true);
-> > -        qemu_register_reset(reset_setup_data, fixup);
-> > -    } else {
-> > -        fw_cfg_add_i32(fw_cfg, FW_CFG_SETUP_ADDR, real_addr);
-> > -    }
-> > +    fw_cfg_add_i32(fw_cfg, FW_CFG_SETUP_ADDR, real_addr);
-> >      fw_cfg_add_i32(fw_cfg, FW_CFG_SETUP_SIZE, setup_size);
-> >      fw_cfg_add_bytes(fw_cfg, FW_CFG_SETUP_DATA, setup, setup_size);
-> >      sev_load_ctx.setup_data = (char *)setup;
-> > -- 
-> > 2.39.1
-> > 
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/intel/ice/ice_base.c: In function 'ice_vsi_alloc_q_vectors':
+   drivers/net/ethernet/intel/ice/ice_base.c:678:9: error: implicit declaration of function 'for_each_numa_hop_mask'; did you mean 'for_each_node_mask'? [-Werror=implicit-function-declaration]
+     678 |         for_each_numa_hop_mask(aff_mask, numa_node) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+         |         for_each_node_mask
+   drivers/net/ethernet/intel/ice/ice_base.c:678:52: error: expected ';' before '{' token
+     678 |         for_each_numa_hop_mask(aff_mask, numa_node) {
+         |                                                    ^~
+         |                                                    ;
+>> drivers/net/ethernet/intel/ice/ice_base.c:663:20: warning: unused variable 'cpu' [-Wunused-variable]
+     663 |         u16 v_idx, cpu = 0;
+         |                    ^~~
+>> drivers/net/ethernet/intel/ice/ice_base.c:660:31: warning: unused variable 'last_aff_mask' [-Wunused-variable]
+     660 |         cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
+         |                               ^~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/cpu +663 drivers/net/ethernet/intel/ice/ice_base.c
+
+   650	
+   651	/**
+   652	 * ice_vsi_alloc_q_vectors - Allocate memory for interrupt vectors
+   653	 * @vsi: the VSI being configured
+   654	 *
+   655	 * We allocate one q_vector per queue interrupt. If allocation fails we
+   656	 * return -ENOMEM.
+   657	 */
+   658	int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
+   659	{
+ > 660		cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
+   661		struct device *dev = ice_pf_to_dev(vsi->back);
+   662		int numa_node = dev->numa_node;
+ > 663		u16 v_idx, cpu = 0;
+   664		int err;
+   665	
+   666		if (vsi->q_vectors[0]) {
+   667			dev_dbg(dev, "VSI %d has existing q_vectors\n", vsi->vsi_num);
+   668			return -EEXIST;
+   669		}
+   670	
+   671		for (v_idx = 0; v_idx < vsi->num_q_vectors; v_idx++) {
+   672			err = ice_vsi_alloc_q_vector(vsi, v_idx);
+   673			if (err)
+   674				goto err_out;
+   675		}
+   676	
+   677		v_idx = 0;
+ > 678		for_each_numa_hop_mask(aff_mask, numa_node) {
+   679			for_each_cpu_andnot(cpu, aff_mask, last_aff_mask)
+   680				if (v_idx < vsi->num_q_vectors) {
+   681					if (cpu_online(cpu))
+   682						cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
+   683					v_idx++;
+   684				}
+   685			last_aff_mask = aff_mask;
+   686		}
+   687	
+   688		return 0;
+   689	
+   690	err_out:
+   691		while (v_idx--)
+   692			ice_free_q_vector(vsi, v_idx);
+   693	
+   694		dev_err(dev, "Failed to allocate %d q_vector for VSI %d, ret=%d\n",
+   695			vsi->num_q_vectors, vsi->vsi_num, err);
+   696		vsi->num_q_vectors = 0;
+   697		return err;
+   698	}
+   699	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
