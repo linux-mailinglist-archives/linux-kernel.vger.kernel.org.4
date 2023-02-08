@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AE168F0DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE3B68F0D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjBHObc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S231405AbjBHOa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjBHOba (ORCPT
+        with ESMTP id S231280AbjBHOay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:31:30 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9005C95;
-        Wed,  8 Feb 2023 06:31:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1675866653;
-        bh=23X5TX+ESt6P/v6NFPb3Xe184rfenm6WbYS+JlMi6jE=;
-        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
-         References;
-        b=hdYqMIiBNAf/HN7Pxx3BF4z56sGOwZ+HAkIGgRreOLjSYd3KBjc2T2vrqeAqVcj6A
-         LX5q3AiAHGK82XxIqsCf+km7HnQOzdWvLnd7/0dfIbkUWRcbj4rul9OY16pe8my/K8
-         mWBDXr9NPdzEDNo1xpTBMgMOFkZhuOMFRGVNRglSMPqZsJXuoV1p/QBy191E425Nho
-         NWVXQCXUWMRBLGjANm9A3UtXe1mwEMho0b0lKU7VgU7rxNyp7bgeeCa38oEu1Gh9tg
-         R62W8zrSsiy78mzGCOxff1288Yp4R3uroMmgMMjMUVB8Dp5IpaupAIHHLSTT8lUhNU
-         as+e/D9UowduA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [127.0.0.1] ([157.180.227.18]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mnpns-1ondR84BFC-00pP73; Wed, 08
- Feb 2023 15:30:53 +0100
-Date:   Wed, 08 Feb 2023 15:30:49 +0100
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-CC:     arinc9.unal@gmail.com, Felix Fietkau <nbd@nbd.name>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net=5D_net=3A_ethernet=3A_mtk=5Feth=5Fsoc?= =?US-ASCII?Q?=3A_enable_special_tag_when_any_MAC_uses_DSA?=
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <20230207155801.3e6295b0@kernel.org>
-References: <20230205175331.511332-1-arinc.unal@arinc9.com> <20230207105613.4f56b445@kernel.org> <5d025125-77e4-cbfb-8caa-b71dd4adfc40@arinc9.com> <52f8fc7f-9578-6873-61ae-b4bf85151c0f@arinc9.com> <20230207155801.3e6295b0@kernel.org>
-Message-ID: <EAD9D5DE-571F-4D59-9F09-1B3C8F23ABCF@public-files.de>
+        Wed, 8 Feb 2023 09:30:54 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48D84480
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:30:52 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id gr7so51641612ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xv/iB69rY5MDb5hV5n9uwKuD5gimFsR45T01z2ZZ+d0=;
+        b=fRjJOhiNjdNfSD6yqiiAmA+P6IXUOtpIvMuZNsZPOdJl4VideDYpQIcH7mRY3Pt7nk
+         ESXoz1egOJvuv8e6ZdWiCFGN9GGZenSpnzsU2fMDeSLQiAd9kGW9oukeBQI/ofypfA8b
+         XJlX3GnSlBN4KHxrCpUQ+ioyo7koc+XceoYo35pNQG1FQ5qZG5acAlcgbQcbXCZFnUb+
+         dKTp07QKU7H9RqoRhhqd+/bKIVrrdCC/3DU4cJtYEq0mGZu8WOcI4Q3pEs4pLUt+r2qu
+         QJQoLp64LFTUDMhShbRh0Dw3xj9D5fW5YQeBO183UpTZJydq4m7cUE3UK5vv2LMtB3lH
+         P2rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xv/iB69rY5MDb5hV5n9uwKuD5gimFsR45T01z2ZZ+d0=;
+        b=mARJ0J0qegF22pzYVp64eKUpdcMkUfotwG6GP/Kdd74wwdOPJMBJ2xCjFtYNj3RUmQ
+         Mk0RMLmcyqDhVLQYCy4ylIoNA5mUtK7ln2doecuny/CPf28pcx71gUC6365XEZjF+e84
+         upDRyAl+hSmD3jWL3JGTu1QQQJYkDc3nHxhbO14HpOtcNc9b4aqlRncZz0sjQPGcO+Ty
+         6pvHXYDjL4QZN6RHVsaSk9hPs9L6Za5s7S88ra8gr499LD7hrPpOinwaoi2R4g4+HbJ1
+         W8uZwaEms0J/mLiSqfVwCxAyN7AZNd9LilUd8hc9Ni7JG3ILrA9fngyBIQUuklK+OzQv
+         rg0Q==
+X-Gm-Message-State: AO0yUKUInMVt8tfI0ckNKscPXqovxwi6FoY1Ou7g8MeiJFpxegNTCt27
+        uAfvg+mD9kaotd5oBZuECcegBQ==
+X-Google-Smtp-Source: AK7set/x2EDXjkMHYEQ6OzaRfTTMLZbpxjwchkhKBdHZQ4ZwIulS4CtS3mq/FdWV0ffPIP835Uo65w==
+X-Received: by 2002:a17:907:8d6:b0:8aa:1634:ba2a with SMTP id zu22-20020a17090708d600b008aa1634ba2amr5819792ejb.18.1675866651357;
+        Wed, 08 Feb 2023 06:30:51 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id lv3-20020a170906bc8300b00883410a786csm8258763ejb.207.2023.02.08.06.30.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 06:30:50 -0800 (PST)
+Message-ID: <ead8db2f-71bd-1b64-c663-faa0ce3bcc3e@linaro.org>
+Date:   Wed, 8 Feb 2023 16:30:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:EqlMNzwFUzUkFtQzw+PYkXe8Z7nZzAYLh3DyUnjXSbMS4TG9Q2B
- GpTBMhn+nciUSrAlKoUpi0W7L0ejEnQuf6mx9U6hcuyYrls/+ZcPObMLSZ1RKbc7rEben6B
- t98cuSi6LRkvFN/zLnCIvaPbVvbH5JEUzJjm86LWP4BURAIkPrcl8vTsmqe4z+SoPfvkXgc
- F+IXFV1e6yA1aWrrVtHRw==
-UI-OutboundReport: notjunk:1;M01:P0:leBRI6KhA0A=;SLewI2BJYjFVUaec1eIR4K21TPa
- CXaWujmp4/MCq15RQ6fElwypLw0s8OXmycTfj8oIcRcb131rwubDTlaat/3z8g3oBA8Cnui9r
- 5eeCx4R+PHOSG8qFv8QoYcjNR9iNezWvZrvAgp7kpE//fVCMWc00XY1PwcmnIv//6fNMMQEmV
- aOoWRwCGGI64BHI4tcSUyuV2/cqkWAd7VUtEPjG7nmBPeAGEzVnuyGxUnN5TWIAKhbMZPqtol
- GlBEzFrkpuZH0WiO+0lg/gM7QzmawwxzsnFBJqDUUwpjWjyV40/WeHX9NbOPWOiIQmy2sdD1w
- 7hRVKCi0ybpCxcj8+j9aVRKOGNvzUQ/OmSZTjuDb/wOmowwImmoSLLaCVdb7lkuc+KlXOT2bb
- Y4lUwPmRVel/nWnzo+DNrA3AGj+j9auf7H7MHuLnbfFsr7XxZTe0FKhgt4Yse2dMudySCTzLu
- nT2AW+9GLWDbtCuRTMfEBPkAYmVfmA+GzDjKwdr9FpSOYFp1dYoSWIzDlrl8QRYbDWE1g4Oi0
- wwgI5FLP6aBGSC0WTA6SG3hkNAZ1jBnfjYTwqcR+C9OnMi9tyQm9nUOMyRBHdnTnzw2ui1Ora
- euI9DOGdZg17YD0nPDATkFwnUIXo6c64S0DUeMlodDi1KB5B97E+8GhrdLx/UqNLAHfQ+ToDy
- eA+h+EZU+u/37wjDZ3GzUmvav0n5Q7hDxvrb2HAYnAHVUWrJ1PE15GYW5zWvo0R41BzufoJTO
- BkJ2FGBc26uQc4ZFqsyqmJNAtyd3hY/2/Oke9QwPrUrbrIrDXVoxA/7fFD8u1wdmLXHzwCab/
- Wj7EHDXhagxNd8b4ntzgLVFZgkSJ/efDpRt6HeFiVzk6BgfhPOOzmEt0gt4kZwNAmLZo5J7DH
- LaefLCP0EPSK4hsUNV4hcJXpqtEjmtq5V/v5Zw2GaY8zFPVUvvmez7fVb9bJyOEvIKxrTQ54d
- WdZDH4wd9rXHewKMlyBuFs9K6Hs=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 4/4] drm/msm/dpu: reserve the resources on topology
+ change
+Content-Language: en-GB
+To:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com,
+        marijn.suijten@somainline.org
+References: <1675863724-28412-1-git-send-email-quic_kalyant@quicinc.com>
+ <1675863724-28412-5-git-send-email-quic_kalyant@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1675863724-28412-5-git-send-email-quic_kalyant@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 8=2E Februar 2023 00:58:01 MEZ schrieb Jakub Kicinski <kuba@kernel=2Eorg=
->:
->
->No strong preference, TBH=2E
->
->The motivation for my question was to try to figure out how long we
->should wait with applying this patch=2E I applied the commit under Fixes
->without waiting for a test from Frank, which made me feel a bit guilty
->:)
+On 08/02/2023 15:42, Kalyan Thota wrote:
+> Some features like CTM can be enabled dynamically. Release
+> and reserve the DPU resources whenever a topology change
+> occurs such that required hw blocks are allocated appropriately.
+> 
+> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+> ---
+> Changes in v1:
+> - Avoid mode_set call directly (Dmitry)
+> 
+> Changes in v2:
+> - Minor nits (Dmitry)
+> 
+> Changes in v3:
+> - avoid unnecessary modeset check call (Dmitry)
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 24 +++++++++++++++++++-----
+>   2 files changed, 21 insertions(+), 5 deletions(-)
 
-No worry=2E You don't have to feel guilty for it=2E
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-My limited time currently does not allow test all patches in all circumsta=
-nces=2E=2E=2Ei trust arinc to make it better than before=2E=2E=2Ethere are =
-many patches floating around which fixing some corner cases in mtk eth driv=
-er=2E I hope these are applied i had tested and for the others i report a b=
-ug when i notice any problem :)
+-- 
+With best wishes
+Dmitry
 
-Would be nice if felix' series can be merged for fixing sw vlan on non-dsa=
- mac and the one from vladimir fixing the vlan_aware bridge without breakin=
-g dsa port outside the bridge on same gmac=2E
-regards Frank
