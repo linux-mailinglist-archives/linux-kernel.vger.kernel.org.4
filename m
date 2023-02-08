@@ -2,115 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2CA68FA09
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577F468FA0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbjBHWDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 17:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
+        id S232234AbjBHWDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 17:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjBHWDO (ORCPT
+        with ESMTP id S232241AbjBHWD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 17:03:14 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7E02ED63;
-        Wed,  8 Feb 2023 14:03:13 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id p26so936802ejx.13;
-        Wed, 08 Feb 2023 14:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=C8Oh32imDePBhLM4FeIlT6MIjaRd6r9QbfMQEX0XdGA=;
-        b=LE4L94KyO3Xi6Wh1VO3JNCpe9YTWlda3pgOyuFyIclmQ8lfJ66WiiFkqRVDB0gXG92
-         ZoPCwb/6M95QyRLd7WjqhszGdPgDNcXEZ0PCvz1VZzqMD+GAHoIhLiyTragF6Ul1SWqj
-         PmV255OXP3b5hj55lw3rQK5EOP15jbm2M97x5NJaZRQI64MSdRo9/ZhzUf1uzm/CzMfM
-         HmoXqbY8qC8iid+T7UtTe9I3tQ+kKB111kaiDft+8ycnQMX2p+EXafVlqjkemV3eGSVR
-         orr1aQwXbgJKS6jOV8wQRjugWER0EcvJHxEDX+JidlWrMJzI6Jqz8WAKOmBiajGot8QS
-         ewpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C8Oh32imDePBhLM4FeIlT6MIjaRd6r9QbfMQEX0XdGA=;
-        b=QfMnqILyZnFhIu+V4FQzguV2UI8OxSp7uDmqzrFCoj0b19wrIuDciepdJIOc/mNKIg
-         46Aq/SaCgmW7/HWWjPgadljaOIxdy4Ex6s/0+wCYwgVz6rJWPJI0/vZavH4JcrOLabIr
-         G1pYaVi9KZ5MdYkhSoSMr0SFhHmusfy3+mIhg4y/+1A+atK9K3/FIhWg1jrasJrDEw/i
-         xD90zpkO8y1yojTsApF5ICAl3s+fdk4Uqe/cZjAWGFNKXdg3USLwhUI4W5xymzrYALuu
-         uQZTdcb9MkRQSafsoq41eXo+3WBJ4IVRG1Vl7yCY85I3yKoq7t4l8JKrC1YK/a8qs7w7
-         FzLw==
-X-Gm-Message-State: AO0yUKVDqQnbXPWR9pOuJQg6OnfjT4LO9znSu0AXA4Fx/g1Dvf16ixaw
-        OOH41MWuj1UcswJR6UGQHeQ=
-X-Google-Smtp-Source: AK7set9lc7y4iyg50PnrD4nY3RAsR6cbyBA5LuSB9sC8bNNDMcvCudX9lg80d1kHqFBUtYe/Q44lFA==
-X-Received: by 2002:a17:906:584:b0:888:6294:a1fa with SMTP id 4-20020a170906058400b008886294a1famr9417392ejn.14.1675893791875;
-        Wed, 08 Feb 2023 14:03:11 -0800 (PST)
-Received: from skbuf ([188.26.185.183])
-        by smtp.gmail.com with ESMTPSA id v16-20020a170906381000b00889a9444e29sm19777ejc.14.2023.02.08.14.03.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 14:03:11 -0800 (PST)
-Date:   Thu, 9 Feb 2023 00:03:09 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 3/3] net: dsa: rzn1-a5psw: add vlan support
-Message-ID: <20230208220309.4ekk4xpmpx27rkt6@skbuf>
-References: <20230208161749.331965-1-clement.leger@bootlin.com>
- <20230208161749.331965-1-clement.leger@bootlin.com>
- <20230208161749.331965-4-clement.leger@bootlin.com>
- <20230208161749.331965-4-clement.leger@bootlin.com>
+        Wed, 8 Feb 2023 17:03:28 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9B722DCE;
+        Wed,  8 Feb 2023 14:03:23 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 06194346E1;
+        Wed,  8 Feb 2023 22:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675893802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RQV4Rg+rxKSLEejj3EobTgqtBroMYBCoiGQS4TDitEs=;
+        b=H0iy8tmDDQdBeQtaT0hVpMy0C0LFYb0gfPffGYJgv/No4r1/lgD7VBtsFY5aekxWd8lN2x
+        LvXJ4TZekdMl+ea3WPzw4EzBlSavSQ1JTYb/96HtR7QB+DdhrRRkQnb0FiIAlmwuwUZZNQ
+        YW4x//NtUzWGuvK0OuIudgHgZ16mwu0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C21AF13425;
+        Wed,  8 Feb 2023 22:03:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id D+pnLikc5GM7TgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 08 Feb 2023 22:03:21 +0000
+Date:   Wed, 8 Feb 2023 23:03:19 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Kairui Song <ryncsn@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Tejun Heo <tj@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>
+Subject: Re: [PATCH 2/2] sched/psi: iterate through cgroups directly
+Message-ID: <Y+QcJ2OvTmJzrObn@blackbook>
+References: <20230208161654.99556-1-ryncsn@gmail.com>
+ <20230208161654.99556-3-ryncsn@gmail.com>
+ <Y+P0wLTdZcOPiKPZ@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230208161749.331965-4-clement.leger@bootlin.com>
- <20230208161749.331965-4-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y+P0wLTdZcOPiKPZ@cmpxchg.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 05:17:49PM +0100, Clément Léger wrote:
-> +static void a5psw_port_vlan_tagged_cfg(struct a5psw *a5psw, int vlan_res_id,
-> +				       int port, bool set)
-> +{
-> +	u32 mask = A5PSW_VLAN_RES_WR_PORTMASK | A5PSW_VLAN_RES_RD_TAGMASK |
-> +		   BIT(port);
-> +	u32 vlan_res_off = A5PSW_VLAN_RES(vlan_res_id);
-> +	u32 val = A5PSW_VLAN_RES_WR_TAGMASK, reg;
-> +
-> +	if (set)
-> +		val |= BIT(port);
-> +
-> +	/* Toggle tag mask read */
-> +	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK);
-> +	reg = a5psw_reg_readl(a5psw, vlan_res_off);
-> +	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK);
+On Wed, Feb 08, 2023 at 02:15:12PM -0500, Johannes Weiner <hannes@cmpxchg.org> wrote:
+> Please name these psi_groups_first() and psi_groups_next().
 
-Is it intentional that this register is written twice?
+One more suggestion: s/next/parent/ to avoid impression of (sub)tree
+iteration and consistence with cg-related iters.
 
-> +
-> +	reg &= ~mask;
-> +	reg |= val;
-> +	a5psw_reg_writel(a5psw, vlan_res_off, reg);
-> +}
+Thanks,
+Michal
+
