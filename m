@@ -2,168 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D8E68FA72
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3226568FA77
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232504AbjBHWxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 17:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
+        id S232523AbjBHWy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 17:54:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjBHWxg (ORCPT
+        with ESMTP id S232513AbjBHWyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 17:53:36 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D06525282
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:53:33 -0800 (PST)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pPtJi-0003OP-Vu; Wed, 08 Feb 2023 23:53:31 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     palmer@rivosinc.com
-Cc:     conor@kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, christoph.muellner@vrull.eu,
-        ajones@ventanamicro.com, Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: [PATCH 2/2] RISC-V: improve string-function assembly
-Date:   Wed,  8 Feb 2023 23:53:28 +0100
-Message-Id: <20230208225328.1636017-3-heiko@sntech.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230208225328.1636017-1-heiko@sntech.de>
-References: <20230208225328.1636017-1-heiko@sntech.de>
+        Wed, 8 Feb 2023 17:54:23 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9D729E29;
+        Wed,  8 Feb 2023 14:54:11 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PBwKY4zFXz4xyp;
+        Thu,  9 Feb 2023 09:54:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675896849;
+        bh=qJeZfYZsZ95CdMmRTTcGcPpOnIE8j3xS/nlqggZjCVE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CSKora93YE9Vk1WuxmNXiwR6GTvcUXFXCJkj4hilbQIismvke1Jbz4x7lq2uMAbf5
+         WFNHYQQR9wTFvDer7Qxptn6YCC6wvn9jnF0d4ygPWpb/8SPUIHvDbk6ps0YlmsyAgI
+         pKvaCeHuKsJF8o3O6ZLwIAJtkUqbFtjfz8hIJzoGK2jIDRlREOKuguJlSz8/sMOtkC
+         hV4UE94XdsSNwBLlnC6gh0rtoVg+srPWWOrgPK0e1KHvgvWQtsF1fXS+nX1q7h/uQX
+         x6HErLrmUF/TgW5fC2J4S0J8xnjDIjvwElmHttDd1gDnyr3tBqBb5uHErDPoZPMwNx
+         zRxe2vzWJ6oJw==
+Date:   Thu, 9 Feb 2023 09:54:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20230209095408.59e2469e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/DV.10do=caCRq8i92cpRBw2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+--Sig_/DV.10do=caCRq8i92cpRBw2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Adapt the suggestions for the assembly string functions that Andrew
-suggested but that I didn't manage to include into the series that
-got applied.
+Hi all,
 
-This includes improvements to two comments, removal of unneeded labels
-and moving one instruction slightly higher to contradict an
-explanatory comment.
+In commit
 
-Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
----
- arch/riscv/lib/strcmp.S  |  6 ++++--
- arch/riscv/lib/strlen.S  | 10 +++++-----
- arch/riscv/lib/strncmp.S | 16 +++++++---------
- 3 files changed, 16 insertions(+), 16 deletions(-)
+  b2d7ff0d8741 ("drm/amd/pm/smu7: move variables to where they are used")
 
-diff --git a/arch/riscv/lib/strcmp.S b/arch/riscv/lib/strcmp.S
-index 8148b6418f61..fb186bf28f07 100644
---- a/arch/riscv/lib/strcmp.S
-+++ b/arch/riscv/lib/strcmp.S
-@@ -40,7 +40,9 @@ SYM_FUNC_START(strcmp)
- 	ret
- 
- /*
-- * Variant of strcmp using the ZBB extension if available
-+ * Variant of strcmp using the ZBB extension if available.
-+ * The code was published as part of the bitmanip manual
-+ * in Appendix A.
-  */
- #ifdef CONFIG_RISCV_ISA_ZBB
- strcmp_zbb:
-@@ -57,7 +59,7 @@ strcmp_zbb:
- 	 *   a1 - string2
- 	 *
- 	 * Clobbers
--	 *   t0, t1, t2, t3, t4, t5
-+	 *   t0, t1, t2, t3, t4
- 	 */
- 
- 	or	t2, a0, a1
-diff --git a/arch/riscv/lib/strlen.S b/arch/riscv/lib/strlen.S
-index 0f9dbf93301a..898466f67000 100644
---- a/arch/riscv/lib/strlen.S
-+++ b/arch/riscv/lib/strlen.S
-@@ -96,7 +96,7 @@ strlen_zbb:
- 	 * of valid bytes in this chunk.
- 	 */
- 	srli	a0, t1, 3
--	bgtu	t3, a0, 3f
-+	bgtu	t3, a0, 2f
- 
- 	/* Prepare for the word comparison loop. */
- 	addi	t2, t0, SZREG
-@@ -112,20 +112,20 @@ strlen_zbb:
- 	addi	t0, t0, SZREG
- 	orc.b	t1, t1
- 	beq	t1, t3, 1b
--2:
-+
- 	not	t1, t1
- 	CZ	t1, t1
-+	srli	t1, t1, 3
- 
--	/* Get number of processed words.  */
-+	/* Get number of processed bytes. */
- 	sub	t2, t0, t2
- 
- 	/* Add number of characters in the first word.  */
- 	add	a0, a0, t2
--	srli	t1, t1, 3
- 
- 	/* Add number of characters in the last word.  */
- 	add	a0, a0, t1
--3:
-+2:
- 	ret
- 
- .option pop
-diff --git a/arch/riscv/lib/strncmp.S b/arch/riscv/lib/strncmp.S
-index 7940ddab2d48..e36f5a6e1b16 100644
---- a/arch/riscv/lib/strncmp.S
-+++ b/arch/riscv/lib/strncmp.S
-@@ -70,7 +70,7 @@ strncmp_zbb:
- 	li	t5, -1
- 	and	t2, t2, SZREG-1
- 	add	t4, a0, a2
--	bnez	t2, 4f
-+	bnez	t2, 3f
- 
- 	/* Adjust limit for fast-path.  */
- 	andi	t6, t4, -SZREG
-@@ -114,23 +114,21 @@ strncmp_zbb:
- 	ret
- 
- 	/* Simple loop for misaligned strings.  */
--3:
--	/* Restore limit for slow-path.  */
- 	.p2align 3
--4:
--	bge	a0, t4, 6f
-+3:
-+	bge	a0, t4, 5f
- 	lbu	t0, 0(a0)
- 	lbu	t1, 0(a1)
- 	addi	a0, a0, 1
- 	addi	a1, a1, 1
--	bne	t0, t1, 5f
--	bnez	t0, 4b
-+	bne	t0, t1, 4f
-+	bnez	t0, 3b
- 
--5:
-+4:
- 	sub	a0, t0, t1
- 	ret
- 
--6:
-+5:
- 	li	a0, 0
- 	ret
- 
--- 
-2.39.0
+Fixes tag
 
+  Fixes: 711d3c39503b ("drm/amd/pm: fulfill powerplay peak profiling mode s=
+hader/memory clock settings")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: b1a9557a7d00 ("drm/amd/pm: fulfill powerplay peak profiling mode sha=
+der/memory clock settings")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DV.10do=caCRq8i92cpRBw2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkKBEACgkQAVBC80lX
+0Gyg1wf+P9Vgjffsk0qVyGJOTpJW3eq8twmhlZt5PnC3T9ga4w3YOrNrKjjsbQG0
+M9MstJwRhYbVz7zV1E3kwCQ/ZXpKG/x1wY8/pJZrF47y+5YQB80v9d6ANjNYQeMx
+JCmFs9WlgAmjsYnknsJBLc8+AFAvUsPkUaf8iuG/X9MlJbEYdWZ+mUO1NSmzXSDq
+qzWdIW15jFjmygmK8xy8vdYZoP5XhwqVZhB8ieFQezl3CIFj7bTkAiZlUNcLXkEr
+FdTMu5guA/847LF+wA/NMucL6qCd9BZqGzMJGuK9aUdq176uxA1TzYwKDN5uvTNK
+2Wy874/z8M75ygHeLOf+ZIy/8CahOg==
+=L0ud
+-----END PGP SIGNATURE-----
+
+--Sig_/DV.10do=caCRq8i92cpRBw2--
