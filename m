@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1354568EA4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4D268EA50
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBHJAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48148 "EHLO
+        id S229490AbjBHJBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBHJAq (ORCPT
+        with ESMTP id S229509AbjBHJBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:00:46 -0500
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADB0458A7;
-        Wed,  8 Feb 2023 01:00:41 -0800 (PST)
-Received: by mail-qt1-f174.google.com with SMTP id g7so19947588qto.11;
-        Wed, 08 Feb 2023 01:00:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ulipj+ekr9BdqMabMZbjdhUjgKznvujfTjbF2mwVL4I=;
-        b=ya/koxURVBVd3ekJIne1e2jCzVcm1ri/7uFC3QA4DfUtJ2EHBh2kWpJvwsqRURMzhi
-         tCFFmplmiGhP/F3zlXKau663TwKiXKlpIq+/1PhKMnt9k0LR+guuoy6aBslvWDPUsarM
-         j9Sd+4yy5upsBf6vZtRYxEKGds5t2c5Ldt72/3XxbXLsKxG/8/Nz5iiNMxlKV+blpIho
-         XFFNbiLgdprGrZ4I+KrYUaHgrU/oOhjqJBJvW21DBx4qPdh4hS/vfBtUO1gObV2wnkgs
-         jX5u6F9GPCh+vatO1Mz+aGQFy+FUUBhSIfoqYck9ldu7Kf4HtCjId3ixhbukc8bNq5+E
-         m25w==
-X-Gm-Message-State: AO0yUKU1aeAbGoUUkXyAkFjtSe89wZ4blo6knJIfokUJHvrdXgNwy25D
-        ceFydzqSYqeEwK1Eiuo6IcQeGievebd5mw==
-X-Google-Smtp-Source: AK7set9R3CdNsqj7Eh9w7Fz8rs0WU+fi/gST1ZIYYEhQ+gxf8wLtttOjJAQkQ9Hle7TrWAVVW7FSQw==
-X-Received: by 2002:ac8:5955:0:b0:3b3:7d5:a752 with SMTP id 21-20020ac85955000000b003b307d5a752mr11741273qtz.50.1675846840080;
-        Wed, 08 Feb 2023 01:00:40 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id s20-20020a05622a019400b003b860983973sm11011807qtw.60.2023.02.08.01.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 01:00:39 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id t1so12078272ybd.4;
-        Wed, 08 Feb 2023 01:00:39 -0800 (PST)
-X-Received: by 2002:a25:eb04:0:b0:7b4:6a33:d89f with SMTP id
- d4-20020a25eb04000000b007b46a33d89fmr504451ybs.543.1675846838981; Wed, 08 Feb
- 2023 01:00:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20230207165715.14617-1-glaubitz@physik.fu-berlin.de>
-In-Reply-To: <20230207165715.14617-1-glaubitz@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 8 Feb 2023 10:00:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWSuwu7LTpmUcOyTrZf0tOb4MfCAfHh7n7EL2JO2rtL9w@mail.gmail.com>
-Message-ID: <CAMuHMdWSuwu7LTpmUcOyTrZf0tOb4MfCAfHh7n7EL2JO2rtL9w@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add myself as maintainer for arch/sh (SUPERH)
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     linux-sh@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 04:01:19 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B003B3609C;
+        Wed,  8 Feb 2023 01:01:18 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PBYrX6pknz4xq27;
+        Wed,  8 Feb 2023 17:01:16 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl1.zte.com.cn with SMTP id 318913nN035729;
+        Wed, 8 Feb 2023 17:01:03 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 8 Feb 2023 17:01:06 +0800 (CST)
+Date:   Wed, 8 Feb 2023 17:01:06 +0800 (CST)
+X-Zmail-TransId: 2af963e364d24ec19659
+X-Mailer: Zmail v1.0
+Message-ID: <202302081701061413187@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <mchehab@kernel.org>
+Cc:     <mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+        <ye.xingchen@zte.com.cn>, <hugues.fruchet@st.com>,
+        <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBtZWRpYTogcGxhdGZvcm06IHN0bTMyOiB1c2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 318913nN035729
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63E364DC.001/4PBYrX6pknz4xq27
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-On Tue, Feb 7, 2023 at 5:57 PM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> Both Rich Felker and Yoshinori Sato haven't done any work on arch/sh
-> for a while. As I have been maintaining Debian's sh4 port since 2014,
-> I am interested to keep the architecture alive.
->
-> Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Thanks for stepping up!
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/media/platform/st/stm32/dma2d/dma2d.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+diff --git a/drivers/media/platform/st/stm32/dma2d/dma2d.c b/drivers/media/platform/st/stm32/dma2d/dma2d.c
+index 9706aa41b5d2..8e92efb842bf 100644
+--- a/drivers/media/platform/st/stm32/dma2d/dma2d.c
++++ b/drivers/media/platform/st/stm32/dma2d/dma2d.c
+@@ -603,7 +603,6 @@ static int dma2d_probe(struct platform_device *pdev)
+ {
+ 	struct dma2d_dev *dev;
+ 	struct video_device *vfd;
+-	struct resource *res;
+ 	int ret = 0;
 
-Gr{oetje,eeting}s,
+ 	dev = devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+@@ -614,9 +613,7 @@ static int dma2d_probe(struct platform_device *pdev)
+ 	mutex_init(&dev->mutex);
+ 	atomic_set(&dev->num_inst, 0);
 
-                        Geert
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-
+-	dev->regs = devm_ioremap_resource(&pdev->dev, res);
++	dev->regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(dev->regs))
+ 		return PTR_ERR(dev->regs);
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+2.25.1
