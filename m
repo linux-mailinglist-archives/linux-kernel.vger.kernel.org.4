@@ -2,92 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D6068ECCE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C05468ECD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjBHK2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:28:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
+        id S229936AbjBHK23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjBHK2S (ORCPT
+        with ESMTP id S230203AbjBHK2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:28:18 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A50146722
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:28:13 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id bg26so13001074wmb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:28:13 -0800 (PST)
+        Wed, 8 Feb 2023 05:28:20 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4CA46D53
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:28:17 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id bg26so13001211wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:28:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zPx3PngIR8DhUNEkJNoSw3b5IoN0UlUPn06sByvNhzk=;
-        b=V3Oqu9vyzZwsIQff8hANhqv/sm6hI+RKNCL8L1ddqodvuTOigdfNOR1sJ9krPX6n6F
-         lrVHKVnTuNA2PvxZnsCxzNEt+F/kTAOmjdHBHAyTd2GHzXeRigEFfEuF0+AcPs7mVn/5
-         nZU/78C+8Xit7MVWuo+IRGFPSTQDPS2v1lr0tnFqRm8DCvUcQnluTmFTdnyV/9skwFlI
-         /hLhIFlS/Jr/49Og9RN+S1rXtDGPM6fk9Qxuq/LpLXYk18JEd/vov3+7C0MQwdLzujPG
-         aMWaFoEM9PYEdPwHdA0i0mmd+4U2oCk7JOfs67O/dt6oLU+umO0nBcFISwIMcJ3NI4Q5
-         uCCg==
+        d=tessares.net; s=google;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BZ1dWC1byNAQOjBdAUAnKEJBqZ0AdL70cH56TWXyx2Y=;
+        b=LzNEhjgJu/8oOcBmBCacbwl/SqMdoG1Zi01G2zAk+NhTQHM7fQ65bnFg1YhpJD8ASv
+         ktrqNSkBo3aimuUU7QRRU/NAebbSJcUQq/pEQhgsPADaF4iQ0DTWATUI1wHsXcR+Xdax
+         hBrKPwyNewAqNbIF5cBLo97qD/eu3thJGnTVV2udZZp/iX1WJpBzVxnneEL6I1xcbR7R
+         8E6955GCWNIWIcaMIr7WHSoaszeQUTCTAgzKnx9qu5VHfpsWElHtZ/nNmQTenD9pZ0dq
+         2aM4meCFnv1CoyUWCSDsyd8PpFZ7h087yvlvCR5HWA6g7fXEUeDaBMypyQBsiKIDaP8h
+         8taA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPx3PngIR8DhUNEkJNoSw3b5IoN0UlUPn06sByvNhzk=;
-        b=cOaAXZmHBLIMEfC7pwq46rNRkrnkKenq+ID0ZvwMoznrX+M4kAUik1w4nf7qsL7Z1r
-         5H4i0pi4UbbKQoi99EX15u0TePs4yLye5ZdSf9/nIXBjCl+Cu+QN0ba+tieGXvVvoKOq
-         n/R9IUG+BPN1XQo88G9A7IiK/cy7Z9E4enZSuFjlj8AioHFRASBRVPCeoUiz3ha6O2VN
-         sp9OpFWq4NLrLEmlNObGEX+mLCNRFcNi+O2ik3zG6Wp3SJZh7zpHo2S6vN0TOnlniDuv
-         /0qlrR4fpxM9MSrBHM3zOsp4RtHE+3EAD2kH4gjTQaTd42hjP/6B5T9yo+7pCGTsg2a4
-         aybA==
-X-Gm-Message-State: AO0yUKVWAztKg4PXFmSruMqTAI4u78stgXlZJZq54FE5+l9Z0X2PYhfe
-        I2bBLDzqQELLqT/LxTA6F38VlQ==
-X-Google-Smtp-Source: AK7set/WsTpPNnLmbeDYcwU6ylA0LbbTvFVJcsPMQVF9uUqlxofQa+jEXReXVQ6i+OXENazVLtUXJw==
-X-Received: by 2002:a05:600c:1716:b0:3df:f7cc:4da2 with SMTP id c22-20020a05600c171600b003dff7cc4da2mr5966396wmn.16.1675852092080;
-        Wed, 08 Feb 2023 02:28:12 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id be7-20020a05600c1e8700b003dff2b493c8sm1601687wmb.36.2023.02.08.02.28.10
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BZ1dWC1byNAQOjBdAUAnKEJBqZ0AdL70cH56TWXyx2Y=;
+        b=29rpsSgZu1lnxKQ0gBROO2jQ9jHDuGp7fzD86x1N5D05cmB+qNy1oE121/f4YTsAqZ
+         K6BHELHTqCc2WAkv+nk5WouAVayyYK/FY1TuIA20Zd3m7GDZp6VYDLEqWKLmw/EaYPtl
+         wikPbOxj6NuC63YtucnYMpc9VJXgbI3+FYO2pEozvo3InBkNRN288etvLsCQ0ifl1Zn6
+         R4dcnmuMy8zBCS9nZkSKXQLvfUhTW1SGj4cpQtegFTXowdrhbLhmYxmcLTB+I2uwVaS0
+         lv90lWSFy1Ex2hFf6DlijUZHMHwwK+10HkaBJ3LyDTSnGK9gj0q9HSWHpQxKF4T2vv7A
+         80sg==
+X-Gm-Message-State: AO0yUKUD0oMHJRYOPdtYTPumwo6tffKPeLc4XpWwUapKI8B71qxxn7+n
+        bTQ2O18qYDc+zeKj7kF+0RB7hQ==
+X-Google-Smtp-Source: AK7set/GRn/4bHjkYEzWxRB3qG08sdIy1P5B+57Mx2QgJiO6QX7OpgojPZGQjzDGDTfunc5otA3QPg==
+X-Received: by 2002:a05:600c:810:b0:3df:f7e7:5f01 with SMTP id k16-20020a05600c081000b003dff7e75f01mr5956834wmp.15.1675852096468;
+        Wed, 08 Feb 2023 02:28:16 -0800 (PST)
+Received: from ?IPV6:2a02:578:8593:1200:5794:f85b:a7dd:b36? ([2a02:578:8593:1200:5794:f85b:a7dd:b36])
+        by smtp.gmail.com with ESMTPSA id d5-20020a1c7305000000b003dc4baaedd3sm1423345wmb.37.2023.02.08.02.28.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 02:28:11 -0800 (PST)
-Message-ID: <53818676-1e4d-2e58-00d3-ab06b3741fc2@linaro.org>
-Date:   Wed, 8 Feb 2023 11:28:10 +0100
+        Wed, 08 Feb 2023 02:28:16 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------am4rv3xJJnsfFj0Y66TcgcCp"
+Message-ID: <fab48356-3f31-2365-81b8-fc3734db273d@tessares.net>
+Date:   Wed, 8 Feb 2023 11:28:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add prefix for Ufi
- Space
-Content-Language: en-US
-To:     Jordan Chang <jordan.chang@ufispace.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        robh+dt@kernel.org
-Cc:     jay.tc.lin@ufispace.com, eason.ys.huang@ufispace.com
-References: <20230202081843.2358-1-jordan.chang@ufispace.com>
- <20230202081843.2358-2-jordan.chang@ufispace.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230202081843.2358-2-jordan.chang@ufispace.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Content-Language: en-GB
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Jiri Pirko <jiri@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <20230208094657.379f2b1a@canb.auug.org.au>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230208094657.379f2b1a@canb.auug.org.au>
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 09:18, Jordan Chang wrote:
-> Add a vendor prefix for Ufi Space (https://www.ufispace.com).
+This is a multi-part message in MIME format.
+--------------am4rv3xJJnsfFj0Y66TcgcCp
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Hi Stephen,
+
+On 07/02/2023 23:46, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Signed-off-by: Jordan Chang <jordan.chang@ufispace.com>
-> ---
+> Today's linux-next merge of the net-next tree got a conflict in:
+> 
+>   net/devlink/leftover.c (net/core/devlink.c in the net tree)
+> 
+> between commit:
+> 
+>   565b4824c39f ("devlink: change port event netdev notifier from per-net to global")
+> 
+> from the net tree and commits:
+> 
+>   f05bd8ebeb69 ("devlink: move code to a dedicated directory")
+>   687125b5799c ("devlink: split out core code")
+> 
+> from the net-next tree.
+> 
+> I fixed it up (I used the latter version of this file and applied the
+> following merge fix up) and can carry the fix as necessary.
 
+Thank you for the fix!
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I also had the same conflicts on MPTCP side when merging mptcp-next with
+-net and I used the same resolution:
 
-Best regards,
-Krzysztof
+Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 
+I was just a bit confused because I didn't see the modifications in
+net/devlink/leftover.c -- devlink_port_netdevice_event() function -- in
+the patch you attached but I saw them on linux-next. I guess that's
+because you used the latter version of this file.
+
+Just in case it would help the net maintainers, I attached to this email
+the modification I had on my side which looks the same as Jiri's
+original patch but using the new paths.
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
+--------------am4rv3xJJnsfFj0Y66TcgcCp
+Content-Type: text/x-patch; charset=UTF-8;
+ name="d5f649fee1672d3d077610dd4878d49be18debaf.patch"
+Content-Disposition: attachment;
+ filename="d5f649fee1672d3d077610dd4878d49be18debaf.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL25ldC9kZXZsaW5rL2NvcmUuYyBiL25ldC9kZXZsaW5rL2NvcmUuYwpp
+bmRleCBhZWZmZDFiODIwNmQuLmE0ZjQ3ZGFmYjg2NCAxMDA2NDQKLS0tIGEvbmV0L2Rldmxp
+bmsvY29yZS5jCisrKyBiL25ldC9kZXZsaW5rL2NvcmUuYwpAQCAtMjA1LDcgKzIwNSw3IEBA
+IHN0cnVjdCBkZXZsaW5rICpkZXZsaW5rX2FsbG9jX25zKGNvbnN0IHN0cnVjdCBkZXZsaW5r
+X29wcyAqb3BzLAogCQlnb3RvIGVycl94YV9hbGxvYzsKIAogCWRldmxpbmstPm5ldGRldmlj
+ZV9uYi5ub3RpZmllcl9jYWxsID0gZGV2bGlua19wb3J0X25ldGRldmljZV9ldmVudDsKLQly
+ZXQgPSByZWdpc3Rlcl9uZXRkZXZpY2Vfbm90aWZpZXJfbmV0KG5ldCwgJmRldmxpbmstPm5l
+dGRldmljZV9uYik7CisJcmV0ID0gcmVnaXN0ZXJfbmV0ZGV2aWNlX25vdGlmaWVyKCZkZXZs
+aW5rLT5uZXRkZXZpY2VfbmIpOwogCWlmIChyZXQpCiAJCWdvdG8gZXJyX3JlZ2lzdGVyX25l
+dGRldmljZV9ub3RpZmllcjsKIApAQCAtMjY2LDggKzI2Niw3IEBAIHZvaWQgZGV2bGlua19m
+cmVlKHN0cnVjdCBkZXZsaW5rICpkZXZsaW5rKQogCXhhX2Rlc3Ryb3koJmRldmxpbmstPnNu
+YXBzaG90X2lkcyk7CiAJeGFfZGVzdHJveSgmZGV2bGluay0+cG9ydHMpOwogCi0JV0FSTl9P
+Tl9PTkNFKHVucmVnaXN0ZXJfbmV0ZGV2aWNlX25vdGlmaWVyX25ldChkZXZsaW5rX25ldChk
+ZXZsaW5rKSwKLQkJCQkJCSAgICAgICAmZGV2bGluay0+bmV0ZGV2aWNlX25iKSk7CisJV0FS
+Tl9PTl9PTkNFKHVucmVnaXN0ZXJfbmV0ZGV2aWNlX25vdGlmaWVyKCZkZXZsaW5rLT5uZXRk
+ZXZpY2VfbmIpKTsKIAogCXhhX2VyYXNlKCZkZXZsaW5rcywgZGV2bGluay0+aW5kZXgpOwog
+CmRpZmYgLS1naXQgYS9uZXQvZGV2bGluay9sZWZ0b3Zlci5jIGIvbmV0L2RldmxpbmsvbGVm
+dG92ZXIuYwppbmRleCA5ZDYzNzM2MDMzNDAuLmYwNWFiMDkzZDIzMSAxMDA2NDQKLS0tIGEv
+bmV0L2RldmxpbmsvbGVmdG92ZXIuYworKysgYi9uZXQvZGV2bGluay9sZWZ0b3Zlci5jCkBA
+IC04NDMwLDYgKzg0MzAsOCBAQCBpbnQgZGV2bGlua19wb3J0X25ldGRldmljZV9ldmVudChz
+dHJ1Y3Qgbm90aWZpZXJfYmxvY2sgKm5iLAogCQlicmVhazsKIAljYXNlIE5FVERFVl9SRUdJ
+U1RFUjoKIAljYXNlIE5FVERFVl9DSEFOR0VOQU1FOgorCQlpZiAoZGV2bGlua19uZXQoZGV2
+bGluaykgIT0gZGV2X25ldChuZXRkZXYpKQorCQkJcmV0dXJuIE5PVElGWV9PSzsKIAkJLyog
+U2V0IHRoZSBuZXRkZXYgb24gdG9wIG9mIHByZXZpb3VzbHkgc2V0IHR5cGUuIE5vdGUgdGhp
+cwogCQkgKiBldmVudCBoYXBwZW5zIGFsc28gZHVyaW5nIG5ldCBuYW1lc3BhY2UgY2hhbmdl
+IHNvIGhlcmUKIAkJICogd2UgdGFrZSBpbnRvIGFjY291bnQgbmV0ZGV2IHBvaW50ZXIgYXBw
+ZWFyaW5nIGluIHRoaXMKQEAgLTg0MzksNiArODQ0MSw4IEBAIGludCBkZXZsaW5rX3BvcnRf
+bmV0ZGV2aWNlX2V2ZW50KHN0cnVjdCBub3RpZmllcl9ibG9jayAqbmIsCiAJCQkJCW5ldGRl
+dik7CiAJCWJyZWFrOwogCWNhc2UgTkVUREVWX1VOUkVHSVNURVI6CisJCWlmIChkZXZsaW5r
+X25ldChkZXZsaW5rKSAhPSBkZXZfbmV0KG5ldGRldikpCisJCQlyZXR1cm4gTk9USUZZX09L
+OwogCQkvKiBDbGVhciBuZXRkZXYgcG9pbnRlciwgYnV0IG5vdCB0aGUgdHlwZS4gVGhpcyBl
+dmVudCBoYXBwZW5zCiAJCSAqIGFsc28gZHVyaW5nIG5ldCBuYW1lc3BhY2UgY2hhbmdlIHNv
+IHdlIG5lZWQgdG8gY2xlYXIKIAkJICogcG9pbnRlciB0byBuZXRkZXYgdGhhdCBpcyBnb2lu
+ZyB0byBhbm90aGVyIG5ldCBuYW1lc3BhY2UuCg==
+
+--------------am4rv3xJJnsfFj0Y66TcgcCp--
