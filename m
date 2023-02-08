@@ -2,131 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1541168FB0D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 00:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6DD68FB0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 00:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBHXUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 18:20:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
+        id S229667AbjBHXUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 18:20:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjBHXUL (ORCPT
+        with ESMTP id S229662AbjBHXUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 18:20:11 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1343EB53
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 15:20:09 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-52bfc97f630so2707147b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 15:20:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SCoda6GVlJUCMEgaP5lPaK+3ESTiE3x/X85Mx974aXU=;
-        b=BOhMexM+VCdHXQh/QVZbzJHyumhrxhqyTt2CuvMH7lTp68/z+gaP3Wu9xOqUmMi+JB
-         mrrdzAIQS5IgMvvLESeevC/Ab3TlUwMbewpdRZ/zUx0Y82FQXKYzOeTxkST4GZDbMs54
-         bdNJm//D6to89ZuTxojonQAVWRuv9Z7ksH+y2Fkng+GggZovQ2CXp0Y+ob3G7vpvkpA+
-         DrNYqfDijWuCk8YdtgwZLUAXZiEqzXoPKXNelEj9fobF8XJ5dYblWPSyuKdeL0KI17O4
-         zb1jvbx9k1b9/14wdpulwjMcLCrsI5irymeM9A3/uL7UAA8qiFOsUvys67q2yh38HKl1
-         cHUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SCoda6GVlJUCMEgaP5lPaK+3ESTiE3x/X85Mx974aXU=;
-        b=yhEC9m0jZmABdGtnJrNkjWOBWLIbFQX6g0tqp4EeUTkPTXTHqOK1UuR4ZDUegYB9c8
-         18HtKtJIyGl2O4p+DWg2keFTD/1TnVEIQ0DEwYU6GpbdE7bdB+rntEYh7+23buUgo+eL
-         hso2uzoHYXXt5sUtlvIZro0CTlVDg4sHZY1JHllA9kh4aDzVq6dCbaZA/2knQ3Guxhnb
-         AJmguABViHjjETVSIxih8myNNkTc/d3BO/kIuhUSlr1tRiyMbeeSnKcn1/v+4idgHMMq
-         fKgxUzx2P+t2fQXh3m5IGT7viJGFN5lz8WitYk5OwEmD2qzVOEWxSPsMjJ685Dxw3DFo
-         c6uQ==
-X-Gm-Message-State: AO0yUKXCRlX3vVbv4NDbs0Hq6m4zbevbKDwm0/RwC3QszyXb69HP2Xle
-        tDhTD7hQS++faVB33bigId7D0o2r4Z70NP+hVXo0Ug==
-X-Google-Smtp-Source: AK7set/42Lq6W0kYDD0CkT7h1nmhW62J2WaSTP+TeY8dH0u9K20cQW4TZ3bI5L0bGpIY9ILamFJb+DNqD2WEeUFn24UATA==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:32e8:a89:521e:3f2e])
- (user=isaacmanjarres job=sendgmr) by 2002:a05:6902:101:b0:893:5f24:71b0 with
- SMTP id o1-20020a056902010100b008935f2471b0mr1029072ybh.163.1675898409119;
- Wed, 08 Feb 2023 15:20:09 -0800 (PST)
-Date:   Wed,  8 Feb 2023 15:20:00 -0800
-In-Reply-To: <20230208232001.2052777-1-isaacmanjarres@google.com>
-Mime-Version: 1.0
-References: <20230208232001.2052777-1-isaacmanjarres@google.com>
-X-Mailer: git-send-email 2.39.1.581.gbfd45094c4-goog
-Message-ID: <20230208232001.2052777-2-isaacmanjarres@google.com>
-Subject: [PATCH v2 1/1] of: reserved_mem: Have kmemleak ignore dynamically
- allocated reserved mem
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shtuemov@linux.intel.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Saravana Kannan <saravanak@google.com>, linux-mm@kvack.org,
-        "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 18:20:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638A726B7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 15:20:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3B64B81F05
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9496C43446;
+        Wed,  8 Feb 2023 23:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675898415;
+        bh=40KDbh9yQUF8FPl1H4ih3NBtJXrxGdDQYYikp1QWG/8=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=lorDt2UYnrxLxu+JIs8ExivCnkceibDIzMwiJP8Ayh4qHx4+9MtJnhbzX9c5TMrkr
+         P/mhxJtVHvWTlZMwKfUxbpTNYpKd3O6lD3PHmGBFYL4PqkqKj3E1hbOtwBJnsKx3qo
+         j+Su6DnRQsyCswqYku5SaxzOuh/mu2jMNgtkMRLstoeXZNW82RtoINIMWzk2YZ1wJF
+         7GooWYmhGxxu8YTLETWbAS1MMGf2oXKoyIqf0dlZaYIabtgodF24XsNIwbj5RSR5Yy
+         BePyDnn9erZTiCMDCVpLd7O9tThLoKIVzfagJwqTef0f5veHe+73LBiEpzUup6H+lo
+         ADNUZXBs5ZCIw==
+Date:   Wed, 08 Feb 2023 23:20:10 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Heiko Stuebner <heiko@sntech.de>, palmer@rivosinc.com
+CC:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        christoph.muellner@vrull.eu, ajones@ventanamicro.com,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH 1/2] RISC-V: fix ordering of Zbb extension
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230208225328.1636017-2-heiko@sntech.de>
+References: <20230208225328.1636017-1-heiko@sntech.de> <20230208225328.1636017-2-heiko@sntech.de>
+Message-ID: <C32D5495-F772-4887-9CAD-66206ECCFC3F@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, kmemleak ignores dynamically allocated reserved memory
-regions that don't have a kernel mapping. However, regions that do
-retain a kernel mapping (e.g. CMA regions) do get scanned by kmemleak.
+Hey Heiko,
 
-This is not ideal for two reasons:
+On 8 February 2023 22:53:27 GMT, Heiko Stuebner <heiko@sntech=2Ede> wrote:
+>From: Heiko Stuebner <heiko=2Estuebner@vrull=2Eeu>
+>
+>As Andrew reported,
+>    Zb* comes after Zi* according 27=2E11 "Subset Naming Convention"
+>so fix the ordering accordingly=2E
+>
+>Reported-by: Andrew Jones <ajones@ventanamicro=2Ecom>
+>Signed-off-by: Heiko Stuebner <heiko=2Estuebner@vrull=2Eeu>
 
-1. kmemleak works by scanning memory regions for pointers to
-allocated objects to determine if those objects have been leaked
-or not. However, reserved memory regions can be used between drivers
-and peripherals for DMA transfers, and thus, would not contain pointers
-to allocated objects, making it unnecessary for kmemleak to scan
-these reserved memory regions.
+The whole "getting it wrong immediately after fixing it up" ;)
 
-2. When CONFIG_DEBUG_PAGEALLOC is enabled, along with kmemleak, the
-CMA reserved memory regions are unmapped from the kernel's address
-space when they are freed to buddy at boot. These CMA reserved regions
-are still tracked by kmemleak, however, and when kmemleak attempts to
-scan them, a crash will happen, as accessing the CMA region will result
-in a page-fault, since the regions are unmapped.
+Reviewed-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
 
-Thus, use kmemleak_ignore_phys() for all dynamically allocated reserved
-memory regions, instead of those that do not have a kernel mapping
-associated with them.
-
-Cc: <stable@vger.kernel.org>    # 5.15+
-Fixes: a7259df76702 ("memblock: make memblock_find_in_range method private")
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
- drivers/of/of_reserved_mem.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
-index 65f3b02a0e4e..f90975e00446 100644
---- a/drivers/of/of_reserved_mem.c
-+++ b/drivers/of/of_reserved_mem.c
-@@ -48,9 +48,10 @@ static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
- 		err = memblock_mark_nomap(base, size);
- 		if (err)
- 			memblock_phys_free(base, size);
--		kmemleak_ignore_phys(base);
- 	}
- 
-+	kmemleak_ignore_phys(base);
-+
- 	return err;
- }
- 
--- 
-2.39.1.581.gbfd45094c4-goog
-
+>---
+> arch/riscv/kernel/cpu=2Ec | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/arch/riscv/kernel/cpu=2Ec b/arch/riscv/kernel/cpu=2Ec
+>index 420228e219f7=2E=2E8400f0cc9704 100644
+>--- a/arch/riscv/kernel/cpu=2Ec
+>+++ b/arch/riscv/kernel/cpu=2Ec
+>@@ -185,9 +185,9 @@ arch_initcall(riscv_cpuinfo_init);
+>  * New entries to this struct should follow the ordering rules described=
+ above=2E
+>  */
+> static struct riscv_isa_ext_data isa_ext_arr[] =3D {
+>-	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
+> 	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+> 	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>+	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
+> 	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> 	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+> 	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
