@@ -2,106 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D2068E9DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31FF68E9E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjBHI1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 03:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
+        id S230373AbjBHI2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 03:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjBHI1j (ORCPT
+        with ESMTP id S230203AbjBHI2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 03:27:39 -0500
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A47457C2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 00:27:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1675844855;
-        bh=+2J469dohyjlak5iPQx/w6sbyFoadZoRv4g88y0JLtU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=NfoA4oqLm7u/obUTCasF6heQxMdccUAAggvyoTcNpCEA9dpkhxCZuwbF5Z11NvoGO
-         eg0BOhj8+XHkE4sg7jqprxkaq/inLgghXjLkCy41QdnhK73C86yhUFR0rCrv6vJHFn
-         smzcs/Cu13P3huiqLqaRY+PQAWkcki7sA72igqag=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 556EA667AF;
-        Wed,  8 Feb 2023 03:27:34 -0500 (EST)
-Message-ID: <87b9f23ba8b123a765c4139c2112aa365546c1e5.camel@xry111.site>
-Subject: Re: [PATCH v2 0/5] LoongArch: Add kernel relocation and KASLR
- support
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Jinyang He <hejinyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 08 Feb 2023 16:27:31 +0800
-In-Reply-To: <70278d23-aa0e-19d9-796f-78c0fd06fee0@loongson.cn>
-References: <20230207142822.52172-1-xry111@xry111.site>
-         <70278d23-aa0e-19d9-796f-78c0fd06fee0@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Wed, 8 Feb 2023 03:28:34 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B494EB746
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 00:28:32 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id y8so19113012vsq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 00:28:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDwdCkBr+epoTFV8128V+K8ZDu4uZiFedibzdz23bSY=;
+        b=evtZGJLNjmw9Zm4yLdTXY8KBBja9oIjRep6uxIqQmpn4T0huYcPiv+gjhczlK27ZEA
+         1nIgQ8Vx2VTTBD5GZBYzQ+fmXsxYTrUkRNvIZfzFAyzT7rq0Z1c424O2AY3RxD6lM99p
+         bHFbQcz6EyNmWuDnfmpIshtHoFIbtyHaoYqO0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PDwdCkBr+epoTFV8128V+K8ZDu4uZiFedibzdz23bSY=;
+        b=76jehe9/mQG96IDqRjXwU6aO3zBKL+UuXQPR87p4L8Dxd9hd6ociPi7z8t9nTL8VgM
+         Pl9eqXI9Mg+D42VpIwJc2ZQRBSydxH0yfr5lIQF8nNTWunAF91i/cUx71gKPxszT2pGK
+         tCrJU61eQI/NJp2+xmrfAXyPIBBRY1GTsUMVLiYnLbxWTli27Z1dIZJQ8lxMjJL9bskF
+         WbjKE77d5HARUfDexHtVAh3Fh9O7oZTI8/Wgw3s4H3+OQUQNy0u4vUnxn0hDovX2Aws0
+         s31CvCV3WOs81yzgeTvmHg7luMuTcXd5YkZEHqQlQVHh2xsEjs2U/kqaSmL+pmeFPoEC
+         Z8Jg==
+X-Gm-Message-State: AO0yUKXFYYRv/sltbERAuU8JYtrNcDi8y0rU/mgc6AI5LxR2eWMDm9RX
+        c7ynWYyO4BWKDTfiw1JT0q/D64zBcWtotGlf71h2Ag==
+X-Google-Smtp-Source: AK7set/hpRWfHJFWXLG17yEKzouX556hGHZ4DtbxJ5D9T8cyICAY1smDzFL5vj/d6St643qyfmjA84QzpHZ0Ei2fbTQ=
+X-Received: by 2002:a05:6102:4b8:b0:3fe:ae88:d22 with SMTP id
+ r24-20020a05610204b800b003feae880d22mr1523855vsa.65.1675844911888; Wed, 08
+ Feb 2023 00:28:31 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com> <20230206152928.918562-36-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206152928.918562-36-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 8 Feb 2023 16:28:21 +0800
+Message-ID: <CAGXv+5HTP0cLGEQ+qkAt8nsOp5DqCOgPyAOJ66fF91SKX=hZvw@mail.gmail.com>
+Subject: Re: [PATCH v1 35/45] clk: mediatek: Split MT8195 clock drivers and
+ allow module build
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-08 at 12:37 +0800, Youling Tang wrote:
-> In the case of "[Patch v2 2/5] LoongArch: use la.pcrel instenad of
-> la.abs for exception handlerS", the above failure will occur.
->=20
-> Patch2 may have certain problems when using the old toolchains.
->=20
-> Youling.
+On Mon, Feb 6, 2023 at 11:30 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> MT8195 clock drivers were encapsulated in one single (and big) Kconfig
+> option: there's no reason to do that, as it is totally unnecessary to
+> build in all or none of them.
+>
+> Split them out: keep boot-critical clocks as bool and allow choosing
+> non critical clocks as tristate.
 
-Thanks for the test...
+The power domain controller references vppsys*, vdecsys*, vdosys*, wpesys,
+imgsys and camsys. I'd argue that this makes these clock drivers
+semi-boot-critical. Maybe mfgcfg as well when we add the GPU?
 
-The problem is: old toolchain uses pcaddu12i/ori/lu32i.d/lu52i.d/add.d
-for a 3-operand la.pcrel, while the new toolchain uses
-pcalau12i/addi.d/lu32i/lu52i/add.d.  (I've somehow forgotten all the
-difference!)
+They should be bundled together at the very least. The power domain
+controller not probing disables all display and multimedia capabilities.
 
-We can fix it with something like...
+Also wondering if we should have "default COMMON_CLK_MT8195" ...
 
-> +void reloc_handler(unsigned long handler, struct handler_reloc *rel)
-> +{
-> +	if (!rel)
-> +		return;
-> +
-> +	for (unsigned long i =3D 0; i < rel->cnt; i++) {
-> +		unsigned long pc =3D handler + rel->entries[i].offset;
-> +		unsigned long v =3D rel->entries[i].sym;
+I suppose the same questions apply to other SoCs.
 
-                /* anchor etc. moved into do_reloc_pcalau12i */
-
-> +		union loongarch_instruction *insn =3D
-> +			(union loongarch_instruction *)pc;
-
-                switch insn[0]->reg1i20_format->reg1i20_format {
-                case pcaddu12i_op:
-                        do_reloc_pcaddu12i(insn, pc, v);
-                        break;
-                case pcalau12i_op: /* TODO: add it for asm/inst.h */
-                        do_reloc_pcalau12i(insn, pc, v);
-                        break;
-                default:
-                        panic("what the f**k");
-                }
-
-Alternatively, we can also emit the pcalau12i/addi.d/lu32i/lu52i
-sequence and overwrite the pcaddu12i/ori sequence generated by the old
-toolchain.
-
-Which way do you like?
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+ChenYu
