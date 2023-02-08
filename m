@@ -2,117 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5519568E6CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD2468E6CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjBHDqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 22:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
+        id S230117AbjBHDrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:47:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBHDqj (ORCPT
+        with ESMTP id S230121AbjBHDqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 22:46:39 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5474EC9;
-        Tue,  7 Feb 2023 19:46:38 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3182G9Tw024822;
-        Wed, 8 Feb 2023 03:46:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=RNmGttpoXYrBvGohJMStVjnAJusAZYw29a9ND1e3Q9w=;
- b=R74uUYng/N5qqi1xdTx5iQsTT2pa+fOxyE4Qkbz9OIpdSug88t6ajGdGCo4L7pokiCfr
- 1WMOyBb/57r261SIBq3PpRx34uWmWpBzPn13cjaerZdMaZn8BaOTJvH+hVzkO6TJIiYS
- tplQhQqO4YNpPWcGOy6ZfUIjeF+00yYgEZnN1PbEXnfir3ZRO4MQuKSlEBtzGearBsLp
- Dv9VZn7GVQ8Zl/mYCxxxWGPzJrr6gwT5pNnoQZlGiLTvzRWplyHol7CFmaUUaBCjgCAe
- QBzeX2UiiVXCLRD/Ar19NfjRW8SxN76Y3ZHrkjmjDhSJDRo0++Xsj0D2M6LT2kY+tJJZ uw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm1yf09ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 03:46:28 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3183kRUn022217
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 03:46:27 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 7 Feb 2023 19:46:27 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 4/4] arm64: defconfig: Enable DisplayPort on SC8280XP laptops
-Date:   Tue, 7 Feb 2023 19:46:20 -0800
-Message-ID: <20230208034620.2048744-5-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230208034620.2048744-1-quic_bjorande@quicinc.com>
-References: <20230208034620.2048744-1-quic_bjorande@quicinc.com>
+        Tue, 7 Feb 2023 22:46:49 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B12D43922;
+        Tue,  7 Feb 2023 19:46:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675828007; x=1707364007;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=EXcEy3+NTVqbXxmCTNcpox9WrJ2qnr4ZecV4ken6AWQ=;
+  b=jM1qCzvG0NT9rsZysCs0zq93irUrjWI2awY+ChWi9D2fGoLHgd3lFDUb
+   YPsKqBD6VWD18iU8rhjQ9z5wWUWcn2HRTVTcf6sW9nFJ7c9U7ZuekK7Qo
+   b3IUAbAssIC5nIjSTWJrChZcUhayn554uhHk8ifWHQMffgZF8o31vZ0Mo
+   j1/53PjHRjb7cfwy5onchsyg7oW1FAIdgy9PIAe13yHSLlYSYI837q7NB
+   CwBdnOLWexAr2zmXtW25toOWcOVYOC1a2zT42KjgynS7BT7YsZHWcHZV5
+   7MjsXoF/hxbB8QrQgyXo4CYWxP42xEKGclH8JdVnjC9vTDXFrf2pPATVr
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="310049800"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="310049800"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 19:46:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="735779962"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="735779962"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.28.52]) ([10.255.28.52])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 19:46:40 -0800
+Message-ID: <18bbd442-c892-1f17-bf6c-b6d797379deb@linux.intel.com>
+Date:   Wed, 8 Feb 2023 11:46:37 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: yU5RdU6yD-anEJQtRX_7uEzBSxB1M1LV
-X-Proofpoint-GUID: yU5RdU6yD-anEJQtRX_7uEzBSxB1M1LV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-07_15,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015
- mlxlogscore=825 suspectscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302080032
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        stable@vger.kernel.org, Sukumar Ghorai <sukumar.ghorai@intel.com>
+Subject: Re: [PATCH v2] iommu/vt-d: Fix PASID directory pointer coherency
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>
+References: <20230208000938.1527079-1-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230208000938.1527079-1-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The QCOM_PMIC_GLINK implements the parts of a TCPM necessary for
-negotiating DP altmode and the TYPEC_MUX_GPIO_SBU driver is used for
-controlling connection and orientation switching of the SBU lanes in the
-USB-C connector  Enable these to enable USB Type-C DisplayPort on
-SC8280XP laptops.
+On 2023/2/8 8:09, Jacob Pan wrote:
+> On platforms that do not support IOMMU Extended capability bit 0
+> Page-walk Coherency, CPU caches are not snooped when IOMMU is accessing
+> any translation structures. IOMMU access goes only directly to
+> memory. Intel IOMMU code was missing a flush for the PASID table
+> directory that resulted in the unrecoverable fault as shown below.
+> 
+> This patch adds clflush calls whenever activating and updating
+> a PASID table directory to ensure cache coherency.
+> 
+> On the reverse direction, there's no need to clflush the PASID directory
+> pointer when we deactivate a context entry in that IOMMU hardware will
+> not see the old PASID directory pointer after we clear the context entry.
+> PASID directory entries are also never freed once allocated.
+> 
+> [    0.555386] DMAR: DRHD: handling fault status reg 3
+> [    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry is clear
+> [    0.556348] DMAR: Dump dmar1 table entries for IOVA 0x1026a4000
+> [    0.556348] DMAR: scalable mode root entry: hi 0x0000000102448001, low 0x0000000101b3e001
+> [    0.556348] DMAR: context entry: hi 0x0000000000000000, low 0x0000000101b4d401
+> [    0.556348] DMAR: pasid dir entry: 0x0000000101b4e001
+> [    0.556348] DMAR: pasid table entry[0]: 0x0000000000000109
+> [    0.556348] DMAR: pasid table entry[1]: 0x0000000000000001
+> [    0.556348] DMAR: pasid table entry[2]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[3]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[4]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[5]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[6]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[7]: 0x0000000000000000
+> [    0.556348] DMAR: PTE not present at level 4
+> 
+> Cc:<stable@vger.kernel.org>
+> Fixes: 0bbeb01a4faf ("iommu/vt-d: Manage scalalble mode PASID tables")
+> Reported-by: Sukumar Ghorai<sukumar.ghorai@intel.com>
+> Signed-off-by: Ashok Raj<ashok.raj@intel.com>
+> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
+> ---
+> v2: Add clflush to PASID directory update case (Baolu, Kevin review)
+> ---
+>   drivers/iommu/intel/iommu.c | 2 ++
+>   drivers/iommu/intel/pasid.c | 2 ++
+>   2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 59df7e42fd53..161342e7149d 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -1976,6 +1976,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+>   		pds = context_get_sm_pds(table);
+>   		context->lo = (u64)virt_to_phys(table->table) |
+>   				context_pdts(pds);
+> +		if (!ecap_coherent(iommu->ecap))
+> +			clflush_cache_range(table->table, sizeof(u64));
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+This leaves other pasid dir entries not clflush'ed. It is possible that
+IOMMU hardware sees different value from what CPU has set. This may
+leave security holes for malicious devices. It's same to the pasid entry
+table.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 0ec37aeec02f..e1d06a0ffc4e 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -973,6 +973,7 @@ CONFIG_TYPEC_TPS6598X=m
- CONFIG_TYPEC_HD3SS3220=m
- CONFIG_TYPEC_UCSI=m
- CONFIG_UCSI_CCG=m
-+CONFIG_TYPEC_MUX_GPIO_SBU=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
-@@ -1208,6 +1209,7 @@ CONFIG_QCOM_CPR=y
- CONFIG_QCOM_GENI_SE=y
- CONFIG_QCOM_LLCC=m
- CONFIG_QCOM_OCMEM=m
-+CONFIG_QCOM_PMIC_GLINK=m
- CONFIG_QCOM_RMTFS_MEM=m
- CONFIG_QCOM_RPMH=y
- CONFIG_QCOM_RPMHPD=y
--- 
-2.39.1
+How about below change? It does clflush whenever CPU changes the pasid
+dir/entry tables.
 
+diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
+index fb3c7020028d..aeb0517826a2 100644
+--- a/drivers/iommu/intel/pasid.c
++++ b/drivers/iommu/intel/pasid.c
+@@ -128,6 +128,9 @@ int intel_pasid_alloc_table(struct device *dev)
+         pasid_table->max_pasid = 1 << (order + PAGE_SHIFT + 3);
+         info->pasid_table = pasid_table;
+
++       if (!ecap_coherent(info->iommu->ecap))
++               clflush_cache_range(pasid_table->table, size);
++
+         return 0;
+  }
+
+@@ -215,6 +218,11 @@ static struct pasid_entry 
+*intel_pasid_get_entry(struct device *dev, u32 pasid)
+                         free_pgtable_page(entries);
+                         goto retry;
+                 }
++
++               if (!ecap_coherent(info->iommu->ecap)) {
++                       clflush_cache_range(entries, VTD_PAGE_SIZE);
++                       clflush_cache_range(&dir[dir_index].val, 
+sizeof(*dir));
++               }
+         }
+
+         return &entries[index];
+
+Best regards,
+baolu
