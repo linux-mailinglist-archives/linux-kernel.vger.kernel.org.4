@@ -2,162 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AEB68F1F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4E168F1F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjBHP2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S231473AbjBHP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjBHP2P (ORCPT
+        with ESMTP id S229895AbjBHP1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:28:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7276472A0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:27:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675870054;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bv1hNkrU2g6UxWBOzq5Zrksg0Vz8bda6nOp59Nylxvc=;
-        b=D2lMf7mJ5EevNlXuStuYaQmRCzXUBAPN/dHSNT0MNRjOydf5SQTVGARHpDrhJK6Q9QpI5Y
-        1B0pDsVH9DFyyrvnR8LEOj0XpmE/0jvRO7UgWP8aCGhf71zaXZ6ZMfWOvUon6vGvdbpq/w
-        nZ4IKSUBA6JUDvbal7tTTdmvpjiFOvg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-110-Jgwu0UbcPKiwXzc4uFF85Q-1; Wed, 08 Feb 2023 10:27:31 -0500
-X-MC-Unique: Jgwu0UbcPKiwXzc4uFF85Q-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8EE61C04322;
-        Wed,  8 Feb 2023 15:27:30 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.17.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4FD572026D4B;
-        Wed,  8 Feb 2023 15:27:30 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Jan Kara <jack@suse.cz>, Paul Moore <paul@paul-moore.com>
-Cc:     Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v7 0/3] fanotify: Allow user space to pass back additional audit
- info
-Date:   Wed, 08 Feb 2023 10:27:29 -0500
-Message-ID: <5912195.lOV4Wx5bFT@x2>
-Organization: Red Hat
-In-Reply-To: <CAHC9VhSumNxmoYQ9JPtBgV0dc1fgR38Lqbo0w4PRxhvBdS=W_w@mail.gmail.com>
-References: <cover.1675373475.git.rgb@redhat.com>
- <20230208120816.2qhck3sb7u67vsib@quack3>
- <CAHC9VhSumNxmoYQ9JPtBgV0dc1fgR38Lqbo0w4PRxhvBdS=W_w@mail.gmail.com>
+        Wed, 8 Feb 2023 10:27:37 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A77C301AD;
+        Wed,  8 Feb 2023 07:27:36 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D5660E79;
+        Wed,  8 Feb 2023 16:27:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675870055;
+        bh=v2kB8dThcKfo0PAIArXh+N1F/eUzy2P5U/bncrQmbsE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R7awEdcAld66PPze9JPXGjcVTmnb/GpMRs1PpsZkPs9hanKBY640Wx12a6BgNtEM4
+         T73mh/Cuepm9EgZLhnpfB4NXAjeF5Gev1afA+YiG8Ls4bgRB/pOb8aPyt49hzWnVf2
+         q5ZKOhfa2Kg0hRVDKYpdl4WCY4y75/A9BNFRRbWI=
+Date:   Wed, 8 Feb 2023 17:27:33 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v1 1/1] media: i2c: imx290: Use
+ device_property_read_u32() directly
+Message-ID: <Y+O/ZbAa3zu1nSI0@pendragon.ideasonboard.com>
+References: <20230208113348.16880-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230208113348.16880-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, February 8, 2023 10:03:24 AM EST Paul Moore wrote:
-> On Wed, Feb 8, 2023 at 7:08 AM Jan Kara <jack@suse.cz> wrote:
-> > On Tue 07-02-23 09:54:11, Paul Moore wrote:
-> > > On Tue, Feb 7, 2023 at 7:09 AM Jan Kara <jack@suse.cz> wrote:
-> > > > On Fri 03-02-23 16:35:13, Richard Guy Briggs wrote:
-> > > > > The Fanotify API can be used for access control by requesting
-> > > > > permission
-> > > > > event notification. The user space tooling that uses it may have a
-> > > > > complicated policy that inherently contains additional context for
-> > > > > the
-> > > > > decision. If this information were available in the audit trail,
-> > > > > policy
-> > > > > writers can close the loop on debugging policy. Also, if this
-> > > > > additional
-> > > > > information were available, it would enable the creation of tools
-> > > > > that
-> > > > > can suggest changes to the policy similar to how audit2allow can
-> > > > > help
-> > > > > refine labeled security.
-> > > > > 
-> > > > > This patchset defines a new flag (FAN_INFO) and new extensions that
-> > > > > define additional information which are appended after the response
-> > > > > structure returned from user space on a permission event.  The
-> > > > > appended
-> > > > > information is organized with headers containing a type and size
-> > > > > that
-> > > > > can be delegated to interested subsystems.  One new information
-> > > > > type is
-> > > > > defined to audit the triggering rule number.
-> > > > > 
-> > > > > A newer kernel will work with an older userspace and an older
-> > > > > kernel
-> > > > > will behave as expected and reject a newer userspace, leaving it up
-> > > > > to
-> > > > > the newer userspace to test appropriately and adapt as necessary. 
-> > > > > This
-> > > > > is done by providing a a fully-formed FAN_INFO extension but
-> > > > > setting the
-> > > > > fd to FAN_NOFD.  On a capable kernel, it will succeed but issue no
-> > > > > audit
-> > > > > record, whereas on an older kernel it will fail.
-> > > > > 
-> > > > > The audit function was updated to log the additional information in
-> > > > > the
-> > > > > AUDIT_FANOTIFY record. The following are examples of the new record
-> > > > > 
-> > > > > format:
-> > > > >   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1
-> > > > >   fan_info=3137 subj_trust=3 obj_trust=5 type=FANOTIFY
-> > > > >   msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=0
-> > > > >   subj_trust=2 obj_trust=2> > > 
-> > > > Thanks! I've applied this series to my tree.
-> > > 
-> > > While I think this version of the patchset is fine, for future
-> > > reference it would have been nice if you had waited for my ACK on
-> > > patch 3/3; while Steve maintains his userspace tools, I'm the one
-> > > responsible for maintaining the Linux Kernel's audit subsystem.
-> > 
-> > Aha, I'm sorry for that. I had the impression that on the last version of
-> > the series you've said you don't see anything for which the series should
-> > be respun so once Steve's objections where addressed and you were silent
-> > for a few days, I thought you consider the thing settled... My bad.
+Hi Andy,
+
+Thank you for the patch.
+
+On Wed, Feb 08, 2023 at 01:33:48PM +0200, Andy Shevchenko wrote:
+> No need to call fwnode_property_read_u32(dev_fwnode()), when
+> we have already existing helper. So use it.
 > 
-> That's understandable, especially given inconsistencies across
-> subsystems.  If it helps, if I'm going to ACK something I make it
-> explicit with a proper 'Acked-by: ...' line in my reply; if I say
-> something looks good but there is no explicit ACK, there is usually
-> something outstanding that needs to be resolved, e.g. questions,
-> additional testing, etc.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/media/i2c/imx290.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> In this particular case I posed some questions in that thread and
-> never saw a reply with any answers, hence the lack of an ACK.  While I
-> think the patches were reasonable, I withheld my ACK until the
-> questions were answered ... which they never were from what I can
-> tell, we just saw a new patchset with changes.
-> 
-> /me shrugs
+> diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> index 330098a0772d..e7aa2ecdcc88 100644
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -1137,8 +1137,7 @@ static int imx290_init_clk(struct imx290 *imx290)
+>  	u32 xclk_freq;
+>  	int ret;
+>  
+> -	ret = fwnode_property_read_u32(dev_fwnode(imx290->dev),
+> -				       "clock-frequency", &xclk_freq);
+> +	ret = device_property_read_u32(imx290->dev, "clock-frequency", &xclk_freq);
 
-Paul,
+I'd break the line here.
 
-I reread the thread. You only had a request to change if/else to a switch 
-construct only if there was a respin for the 3F. You otherwise said get 
-Steve's input and the 3F borders on being overly clever. Both were addressed. 
-If you had other questions that needed answers on, please restate them to 
-expedite approval of this set of patches. As far as I can tell, all comments 
-are addressed.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Best,
--Steve
+>  	if (ret) {
+>  		dev_err(imx290->dev, "Could not get xclk frequency\n");
+>  		return ret;
 
+-- 
+Regards,
 
-
+Laurent Pinchart
