@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA9669A7AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 10:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA39D69B157
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Feb 2023 17:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjBQJAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Feb 2023 04:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
+        id S229923AbjBQQtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Feb 2023 11:49:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjBQJAf (ORCPT
+        with ESMTP id S229539AbjBQQtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Feb 2023 04:00:35 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3058B60A5F
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:00:31 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id er25so1436961edb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 01:00:31 -0800 (PST)
+        Fri, 17 Feb 2023 11:49:40 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA64D47432
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:49:39 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id c10so1701369qvp.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Feb 2023 08:49:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ekNOF1bkOZQJm/qVwvKNIt0dSpLOM3/k1DSdulZe8LY=;
-        b=u0R7xCkg647d+PdFtOjae2NNauQmSugx0nA2CnibFYJNb2TqRH6QZUxXuPoW5E5otf
-         5x0s6r74XqEw2i+BBZpbvEUD4m8tp3h0qZvZ5cSSKfpQnnaN/Q7Uo3IuuRs+Uo4NTXm2
-         sBXp8os91H2PSM7ZiKznGecqPLNTZwVOxTSeOdo3bHJlL1eb4l2+ds3nqHt5UjBKiYQu
-         dkL4a/Hj84gZjPHoMjW3gax2UOBzw6ME+5HKDVsqezuk2EF9oJAkCIPjky7SdhwrCbbp
-         dKFCpCwcljp/4D2fSuabF0pHcEChhlQr/Mudc4RVN7+XHddW94cgrRCtjdy8QqiLALLo
-         1N1w==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JBYJ6k0k+VwIOBHwk5gBDh6Agwe69W8vixfj+NTwllQ=;
+        b=cbgLFejJCkpFAA1rG+0UhVL12J9Kobhzxs0sUeSCZnsDNZuzpFAfmYkqndjEtV5DI6
+         kW2GzbI/EGgOyvKiAUPizIKx9rIHbtAD6uh0yQJmEwX2G3wd19DeZjt5IBx7lhC7dWKV
+         Q7X5UAmCemucN9qoxsVo0IBoSCKebEk61Nhszx8Sl8Usu2DJ+Aqpz5aj7l6503HM9tzA
+         NnvgIlOBe0c+qyb2NAIM+aoTLTpFeWxjV0E/ucnvZc8gelIXfot1NkS/BQe9RcKsIxzk
+         L78sDo5LO9hkFyA0yyaQlf8yev3PON+TGZi9nncsFpbw3iq4OqrbksgUXl7V4eOYzT+K
+         QwsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ekNOF1bkOZQJm/qVwvKNIt0dSpLOM3/k1DSdulZe8LY=;
-        b=vYqmP8tmvVRHQM2x9WEQ2DuJvBIYPVwoW5X5ANEuqqkJgiOePMuQ/tOS+IFT7kkZGz
-         cJhV0Z6I3sqtHL9K6r+oV6CIxQcaNt99CFH0tzRtLkAF+9W1hd1hMxcE2aFcDO9Tcf6r
-         u6Lpzi3MCFw7zN4xNAisz7hApjlLCC3wmVPckWYVQAPjuUyA+9MlkeEXM5v4r8Ot8EyH
-         nFG4qBjb+m4LW3N2JO/NASLHqIJsEVzwS4wDuxkh4bdfViPbBVhzJfm6AqhINuhfy2wk
-         ZCUXr4iFH0GCNoBBNxZAfC+B2FpxsFIwjQS4SeYkpr0Bgdy6SDHTsr5P24EKlQqcqC4t
-         8zdQ==
-X-Gm-Message-State: AO0yUKWPgtTfYUMRoVpghvDlkkxosSShwbJaR6HBd5cvIvbedgvPcRe2
-        enG2Zk53kvfud7tsOy91VuD4cA==
-X-Google-Smtp-Source: AK7set/ELRtrQY+LPmu6Ny5BmCpwfAgT22qZ3hPf7KIQmiUV5HJahas5slRjT0KhbQCmxe6/O4yovw==
-X-Received: by 2002:a17:906:f28b:b0:870:b950:18d4 with SMTP id gu11-20020a170906f28b00b00870b95018d4mr34213ejb.5.1676624429688;
-        Fri, 17 Feb 2023 01:00:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id gx10-20020a170906f1ca00b007ad69e9d34dsm1877582ejb.54.2023.02.17.01.00.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Feb 2023 01:00:29 -0800 (PST)
-Message-ID: <943daa4a-8101-d5fa-b38e-97aded3e3b4c@linaro.org>
-Date:   Fri, 17 Feb 2023 10:00:27 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JBYJ6k0k+VwIOBHwk5gBDh6Agwe69W8vixfj+NTwllQ=;
+        b=IdW36U1LDv0KqU/BWcn36Ir2HE6ckibT6DLbHC7UG85YgFctiMrMpym9jLVsEjBt/U
+         ebqV/Ep71EJOww9S1GNoGkeV79Cbk+cUS/0TVAqd1EyelZ4p9/MDyLRmzD5JZjCnd1g1
+         EOxDicNpMMsw2dZ7qcXpD4IxLKJjBi66R5Pe0GThOon7h4EHv+INnvRRHJBvG5djPA9u
+         Awcgr82NX4fl/IvSU2ZXH+oEwevEWl2EMdstgJZff9pehJmtw0hotefSSOmlAIxzHE3R
+         D0NlnmWXtyjAmeVjP1lBgoeZsmrTHZlNlxbTk3dAvQZFzsjbuslowmoY5VB9geWAH0IA
+         VGzA==
+X-Gm-Message-State: AO0yUKXeZQ8muQYw4eUg4/JfdJVnV3XMQ9KfIMGqqizTkzSPxHAm2YRn
+        /cqf/NB4dja8vl6f15Dwn+guEA==
+X-Google-Smtp-Source: AK7set9tVasjBlEnZHW2dQ+jbQys+MEkEojuhwaDAbV3NzS4mykkijQTQKiIyqYuqqIuadRnPy2pHQ==
+X-Received: by 2002:a05:6214:1942:b0:56e:aa11:daa3 with SMTP id q2-20020a056214194200b0056eaa11daa3mr2767351qvk.14.1676652579014;
+        Fri, 17 Feb 2023 08:49:39 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id b68-20020a37b247000000b0073980414888sm3569161qkf.42.2023.02.17.08.49.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Feb 2023 08:49:38 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     broonie@kernel.org, andriy.shevchenko@linux.intel.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH 0/6] Migrate IDIO-16 GPIO drivers to regmap API
+Date:   Wed,  8 Feb 2023 12:18:15 -0500
+Message-Id: <cover.1675876659.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dt-bindings: display: msm: sm6115-mdss: Fix DSI
- compatible
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230216131426.3996378-1-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230216131426.3996378-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/02/2023 14:14, Konrad Dybcio wrote:
-> Since the DSI autodetection is bound to work correctly on 6115 now,
-> switch to using the correct per-SoC + generic fallback compatible
-> combo.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Depends on (and should have been a part of):
-> 
-> https://lore.kernel.org/linux-arm-msm/20230213121012.1768296-1-konrad.dybcio@linaro.org/
->  .../devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml     | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> index 2491cb100b33..146d3e36d1c9 100644
-> --- a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
-> @@ -40,7 +40,9 @@ patternProperties:
->      type: object
->      properties:
->        compatible:
-> -        const: qcom,dsi-ctrl-6g-qcm2290
-> +        items:
-> +          - const: qcom,sm6115-dsi-ctrl
-> +          - const: qcom,mdss-dsi-ctrl
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver. The 104-idio-16 and pci-idio-16 modules depend
+on the IDIO-16 library and are thus updated accordingly.
 
-You should rather keep old compatible as deprecated (so oneOf with two
-options - items and const with deprecated).
+The 104-IDIO-16 lacks a status register (as does the 104-DIO-48E), so a
+no_status flag is introduced to the regmap-irq API to properly handle
+such cases and avoid hacks. The 104-dio-48e module is updated in a
+subsequent patch to take advantage of this new no_status flag.
 
-Best regards,
-Krzysztof
+By leveraging the regmap API, the idio-16 library is reduced to simply a
+devm_idio_16_regmap_register() function and a configuration structure
+struct idio_16_regmap_config.
+
+William Breathitt Gray (6):
+  regmap-irq: Add no_status support
+  gpio: 104-dio-48e: Utilize no_status regmap-irq flag
+  gpio: idio-16: Migrate to the regmap API
+  gpio: 104-idio-16: Migrate to the regmap API
+  gpio: pci-idio-16: Migrate to the regmap API
+  gpio: idio-16: Remove unused legacy interface
+
+ drivers/base/regmap/regmap-irq.c |  23 ++-
+ drivers/gpio/Kconfig             |   7 +-
+ drivers/gpio/gpio-104-dio-48e.c  |   6 +-
+ drivers/gpio/gpio-104-idio-16.c  | 294 ++++++++----------------------
+ drivers/gpio/gpio-idio-16.c      | 255 ++++++++++++++------------
+ drivers/gpio/gpio-idio-16.h      |  80 +++------
+ drivers/gpio/gpio-pci-idio-16.c  | 295 +++++++------------------------
+ include/linux/regmap.h           |   2 +
+ 8 files changed, 326 insertions(+), 636 deletions(-)
+
+
+base-commit: 4827aae061337251bb91801b316157a78b845ec7
+-- 
+2.39.1
 
