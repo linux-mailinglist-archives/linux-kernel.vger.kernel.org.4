@@ -2,93 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC4468E727
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD91E68E724
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjBHEa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 23:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        id S230421AbjBHEak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 23:30:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjBHEaS (ORCPT
+        with ESMTP id S230412AbjBHEaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 23:30:18 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1F341B78
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 20:29:55 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id 23so13931550ybf.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 20:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhzeGnuICiPT2nrHJ6smEzbh41VKTVGE82e8/64PlQM=;
-        b=oAKD3y+xr/ym/8alzfe5iPecB5XDrzMt7d+dv9BB/BB7u4F4WzBRW1M29Rev6GNFGn
-         QMyM8q9EetdVsfmj+ACA6LwS+cvf0OJjz9vglnImwBdaLI5w+sYM5FSCcCB0YqC0PVvf
-         sp/d9nq9slG56HUgVNucOhSOorawa3CvGIxd18q/+FNVa2d/Eb+yCrCV2ZZFuqrBTF1P
-         r4bhSjN13EuVwtfnlBjLX+PubODVREgFrs9awGcedSpL6yQDAmqDjzgnBhH8e2SZelxM
-         7/IoWZONhPbe7XUDdw4o3FQYTYyAb1VDbK0trsvZGIjYP0meSxx4kooJPFacjtu8Srkh
-         C+Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fhzeGnuICiPT2nrHJ6smEzbh41VKTVGE82e8/64PlQM=;
-        b=jShTYesZTzglycBQHdzN4Ux7TNoJQc70JiyfQg0Hw0OIoOOV7KuhebimVSibwVl4qC
-         44l7b4Wz6RkxTDebg2hs+2C/YzP5Spqs+vL33rSkTt/hgCY1adirFkjA6hRjGNDikaz5
-         9ENGeSr09I3tOAcjS3ocZB6su3ckrTH56AdmlnxJZjQdW7BSiktpuFJNm6a2letawJsV
-         9ttYsFxBRBJq7DZ0W/p60j5pj0kzGqhCWJHErTAe+hRepfnPfy2QG5IAVvJBzIM4A/Cc
-         Xy301druDjQkO9oQDCA6uHm0/z4AI1a9EQI81lzV64GKicsAPbxrlY7NTb+ycmw+xEL9
-         NrLA==
-X-Gm-Message-State: AO0yUKWhoMYKrYvkb7nUiW9/Ye4M4b3V+qSXgiSMcjccazUlWySsvRcA
-        c1JG696iskofVyOvPTCD+m9ofJ2p6L3FsF7izPHjwQ==
-X-Google-Smtp-Source: AK7set+LttiKihHYlrzSgPN7LWtawaDSHE8vLY8wcxInWN2E3/8zSOtO95vAG+OOzodb+SbYXZumxfkB/znQ1PqBn1Q=
-X-Received: by 2002:a25:fe0c:0:b0:80b:69f5:3966 with SMTP id
- k12-20020a25fe0c000000b0080b69f53966mr717422ybe.519.1675830594250; Tue, 07
- Feb 2023 20:29:54 -0800 (PST)
+        Tue, 7 Feb 2023 23:30:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1BB442E3;
+        Tue,  7 Feb 2023 20:29:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31F69614AA;
+        Wed,  8 Feb 2023 04:29:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE12C433EF;
+        Wed,  8 Feb 2023 04:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675830586;
+        bh=a/+VYkPZb//IP5f1kx1v9iTH/S8V5BsO5GiI3+WJsFQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WBUgN+eL2ov9xOAASRBcvbDJyw6cauMy/FZPUP+SWXXM7FavUxTuBP/jhszz+qG+I
+         yttAv2RKCmF7SMNGAJs6UXvrP4Cq+wSVNip7cgHEkThriBZC6XJvhxTPpIeQ+9pBAg
+         nzQ03JIf5xrjD0K6TFO8nW6XZOf2BVCfHLK8D4YJubqVTsxwsfM6Wm/oC+rfMnsfa2
+         RHeWQaJtFiipnscII8Wzvd1aDydch5mnS4BjXc/OLD0JPLQbp7og5P4fX57OLw+Qi2
+         hEq6NWfc+QewcKkzGY0eYhoY3FmdJHEcnobOJE90FBFJ47G9D6SyRZjhXj08KwioCB
+         amw42+blQD3CA==
+Date:   Tue, 7 Feb 2023 20:29:45 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dev@openvswitch.org,
+        tipc-discussion@lists.sourceforge.net,
+        Andy Shevchenko <andy@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH net-next v2 1/3] string_helpers: Move string_is_valid()
+ to the header
+Message-ID: <20230207202945.155c6608@kernel.org>
+In-Reply-To: <20230206161314.15667-1-andriy.shevchenko@linux.intel.com>
+References: <20230206161314.15667-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20230111183408.104491-1-vipinsh@google.com> <167582135970.455074.533102478332510041.b4-ty@google.com>
-In-Reply-To: <167582135970.455074.533102478332510041.b4-ty@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Tue, 7 Feb 2023 20:29:18 -0800
-Message-ID: <CAHVum0e0ZL-Q7DwZ-SYSuqX1n_9EU85mYhyvUA=75zpJ6a29ow@mail.gmail.com>
-Subject: Re: [Patch v2] KVM: selftests: Make reclaim_period_ms input always be positive
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, bgardon@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 6:10 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, 11 Jan 2023 10:34:08 -0800, Vipin Sharma wrote:
-> > reclaim_period_ms use to be positive only but the commit 0001725d0f9b
-> > ("KVM: selftests: Add atoi_positive() and atoi_non_negative() for input
-> > validation") incorrectly changed it to non-negative validation.
-> >
-> > Change validation to allow only positive input.
-> >
-> >
-> > [...]
->
-> Applied to kvm-x86 selftests, thanks!
+On Mon,  6 Feb 2023 18:13:12 +0200 Andy Shevchenko wrote:
+> +static inline bool string_is_valid(const char *s, int len)
+> +{
+> +	return memchr(s, '\0', len) ? true : false;
+> +}
 
-Just FYI, this patch has already been applied to kvm/master branch.
-https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=c2c46b10d52624376322b01654095a84611c7e09
-
->
-> [1/1] KVM: selftests: Make reclaim_period_ms input always be positive
->       https://github.com/kvm-x86/linux/commit/4dfd8e37fa0f
->
-> --
-> https://github.com/kvm-x86/linux/tree/next
-> https://github.com/kvm-x86/linux/tree/fixes
+I was tempted to suggest adding a kdoc, but perhaps the function
+doesn't have an obvious enough name? Maybe we should call the helper
+string_is_terminated(), instead?
