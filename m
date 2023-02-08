@@ -2,143 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCC668F6CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A5F68F6D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjBHSTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        id S231807AbjBHSVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbjBHSTe (ORCPT
+        with ESMTP id S231603AbjBHSVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:19:34 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2381333475
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:19:32 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id rp23so2169603ejb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:19:32 -0800 (PST)
+        Wed, 8 Feb 2023 13:21:19 -0500
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D78046095;
+        Wed,  8 Feb 2023 10:21:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8j1Bi9kv3dnc4UgTQ2QLvAX5UEkvT1snCnRaL/lrdVc=;
-        b=ESo1UeW5CGGyokTezx8utgulMXPoyULquRvBzoZE6ZUKyhj7/BLN6FPAo7DWrGE8Cu
-         30xODadrJtq0/H3bx/s6LwBIf3pTNzQSVfWyHsBsAhDSXj4idgkXtceX3qRFDkuYWv/G
-         PXQbH7561MWKhaPdcDSxv/R08uhBgRk5gaW500kjUNLqmNu9Ao5yUvbu/GNeKo/X0IDi
-         oOfcgn5+k1meX/h65uBRhQHiybcrawHadD6dLoYvwYhQdg+OAKPhCgf53DKgh8E371mk
-         ZlWhVezQmkflGYVZ074xFbN4MdTeMVQZ68//EX2lOr3BpXE4ZMpoGp2KnrqbdaqZevRh
-         eQSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8j1Bi9kv3dnc4UgTQ2QLvAX5UEkvT1snCnRaL/lrdVc=;
-        b=ZYAuZRGe06xK8LnvjVEv2iTBfeIriqVyw9YE9f5ruTzeHzerq5tyWZTQEQGPvtTOnb
-         GzUM9tJFvze4z01tfhdcWvqMhz7bi1QiAnuHASFvzu8jteM2qKD/TckgrdTiGDybXRKu
-         TpsVpEsZAfUMd1i+YQqXcseeA14VLaYl7aODnoVKAW1uRLbIdTg1TGj7SBwMAxs+rnr3
-         +MGA/y6kyOe7g+ackPWQyPNRrQT2Jbvwwf1sGPy8T3oKL9aqzZKQZDdi2qtK/89+OPO5
-         7ODkFqjkcnOvcVsHIvVGR7CpnrIq4VEez89IyVfTp4iV7mKzR55bKJCnOREfjIL1MW9b
-         V3jQ==
-X-Gm-Message-State: AO0yUKW9G1LQJV6krbA8WXYCTzSqU7YhbUMnbPEBxiRn/6L5P8Z5hgzj
-        5m73iCjDnWQjk+NaJeu8QrD0AQ==
-X-Google-Smtp-Source: AK7set+DmXpRl0cOZjV99cvxKq1YbzS7UsUzQtQaOETK5opB59GdKb3+ogZDXDBqqph9fDCnEuRClw==
-X-Received: by 2002:a17:906:5fcb:b0:88d:ba89:183e with SMTP id k11-20020a1709065fcb00b0088dba89183emr4035691ejv.15.1675880370645;
-        Wed, 08 Feb 2023 10:19:30 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id gh25-20020a170906e09900b008841aa86484sm8645882ejb.211.2023.02.08.10.19.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 10:19:30 -0800 (PST)
-Message-ID: <e1f2a712-c4d1-2cb7-bbb2-e9e1c42e7f7f@linaro.org>
-Date:   Wed, 8 Feb 2023 19:19:28 +0100
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1675880478; x=1707416478;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=KBO2VYxNnhi+mYdSb2ex0Tcoin8hOOA965wqenytq3M=;
+  b=ta0f7vNn3y46sTvHMfRNOGbg6JR0L3UVV3npQn4AXdIb7my5e+tgWPNJ
+   Rs9a4JsC5J+eD4lJ1TamlUICVdFuUV3rNKOvrK8d2j45Mk+fP5uxMO0Qd
+   63sgPhWMuLXuwrfyDdERln5yS4FPgcC+c53nxlnu0y2mmDK256o1L5Ike
+   A=;
+X-IronPort-AV: E=Sophos;i="5.97,281,1669075200"; 
+   d="scan'208";a="179809775"
+Subject: Re: [Freedreno] [PATCH 09/14] drm/msm/a6xx: Fix some A619 tunables
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 18:21:16 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com (Postfix) with ESMTPS id D2B4C42F67;
+        Wed,  8 Feb 2023 18:21:04 +0000 (UTC)
+Received: from EX19D047UWB002.ant.amazon.com (10.13.138.34) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Wed, 8 Feb 2023 18:21:03 +0000
+Received: from amazon.com (10.43.160.120) by EX19D047UWB002.ant.amazon.com
+ (10.13.138.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24; Wed, 8 Feb 2023
+ 18:21:03 +0000
+Date:   Wed, 8 Feb 2023 11:21:01 -0700
+From:   Jordan Crouse <jorcrous@amazon.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>,
+        <agross@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <freedreno@lists.freedesktop.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        David Airlie <airlied@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <marijn.suijten@somainline.org>, Sean Paul <sean@poorly.run>,
+        Chia-I Wu <olvaffe@gmail.com>, <linux-kernel@vger.kernel.org>
+Message-ID: <20230208182101.53ykatzah6zvpy76@amazon.com>
+Mail-Followup-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        freedreno@lists.freedesktop.org,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        David Airlie <airlied@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel@lists.freedesktop.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        marijn.suijten@somainline.org, Sean Paul <sean@poorly.run>,
+        Chia-I Wu <olvaffe@gmail.com>, linux-kernel@vger.kernel.org
+References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
+ <20230126151618.225127-10-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/4] arm64: dts: qcom: sc8280xp-crd: Introduce pmic_glink
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230208034620.2048744-1-quic_bjorande@quicinc.com>
- <20230208034620.2048744-3-quic_bjorande@quicinc.com>
- <229edfec-736f-d94d-23ba-2a0649639556@linaro.org>
- <20230208155720.GA2397622@hu-bjorande-lv.qualcomm.com>
- <e9b6cdcc-079d-497a-6e8b-c2d69a393597@linaro.org>
- <20230208180007.GB2397622@hu-bjorande-lv.qualcomm.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230208180007.GB2397622@hu-bjorande-lv.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230126151618.225127-10-konrad.dybcio@linaro.org>
+X-Originating-IP: [10.43.160.120]
+X-ClientProxiedBy: EX13D32UWA002.ant.amazon.com (10.43.160.230) To
+ EX19D047UWB002.ant.amazon.com (10.13.138.34)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 26, 2023 at 04:16:13PM +0100, Konrad Dybcio wrote:
+> Adreno 619 expects some tunables to be set differently. Make up for it.
+> 
+> Fixes: b7616b5c69e6 ("drm/msm/adreno: Add A619 support")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 7a480705f407..f34ab3f39f09 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -1171,6 +1171,8 @@ static int hw_init(struct msm_gpu *gpu)
+>                 gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
+>         else if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
+>                 gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
+> +       else if (adreno_is_a619(adreno_gpu))
+> +               gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00018000);
+>         else if (adreno_is_a610(adreno_gpu))
+>                 gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00080000);
+>         else
+> @@ -1188,7 +1190,9 @@ static int hw_init(struct msm_gpu *gpu)
+>         a6xx_set_ubwc_config(gpu);
+> 
+>         /* Enable fault detection */
+> -       if (adreno_is_a610(adreno_gpu))
+> +       if (adreno_is_a619(adreno_gpu))
+> +               gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x3fffff);
+> +       else if (adreno_is_a610(adreno_gpu))
+>                 gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x3ffff);
+>         else
+>                 gpu_write(gpu, REG_A6XX_RBBM_INTERFACE_HANG_INT_CNTL, (1 << 30) | 0x1fffff);
 
+The number appended to the register is the number of clock ticks to wait
+before declaring a hang. 0x3fffff happens to be the largest value that
+can be set for the a6xx family (excepting the 610 which, IIRC, used older
+hardware that had a smaller field for the counter). Downstream the
+number would creep up over time as unexplained hangs were discovered and
+diagnosed or covered up as "just wait longer".
 
-On 8.02.2023 19:00, Bjorn Andersson wrote:
-> On Wed, Feb 08, 2023 at 05:40:44PM +0100, Konrad Dybcio wrote:
->> On 8.02.2023 16:57, Bjorn Andersson wrote:
->>> On Wed, Feb 08, 2023 at 09:14:46AM +0100, Konrad Dybcio wrote:
->>>> On 8.02.2023 04:46, Bjorn Andersson wrote:
-> [..]
->>>>>  &usb_0_dwc3 {
->>>>> -	/* TODO: Define USB-C connector properly */
->>>>>  	dr_mode = "host";
->>>>> +
->>>>> +	port {
->>>>> +		usb_0_role_switch: endpoint {
->>>>> +			remote-endpoint = <&pmic_glink_con0_hs>;
->>>>> +		};
->>>> This should be defined in the SoC DTSI, it's a standard dwc3 binding
->>>> with usb HS / SS / SBU ports. Especially since we can feed the endpoint
->>>> from any device now, as pmic-glink should work everywhere.
->>>>
->>>
->>> The sa8295p/sa8540p boards, derived from sc8280xp does not implement
->>> pmic_glink, so it seems moving this to the soc.dtsi would be messy.
->>>
->>>> Or /omit-if-no-ref/, I suppose.
->>>>
->>>
->>> Or you're saying I should put the skeleton of the port definition in the
->>> soc.dtsi and then fill it out the remote-endpoint here; and mark it
->>> omit-if-no-ref to avoid binding warnings?
->> I thought omit-if-no-ref actually omits the node before resolving phandles
->> that it references, but it seems to not be the case.. Still, we can define
->> the ports in the SoC DTSI and assign endpoints per-device (like we do with
->> DSI for example).
->>
-> 
-> You mean move the lines:
-> 
-> port {
-> 	usb_0_role_switch: endpoint {
-> 	};
-> };
-> 
-> to sc8280xp.dtsi and then do:
-> 
-> &usb_0_role_switch {
-> 	remote-endpoint = <&pmic_glink_con0_hs>;
-> };
-> 
-> here?
-Correct
+So in theory you could leave this with the "default value" or even bump
+up the default value to 0x3fffff for all targets if you wanted to. An
+alternate solution (that downstream does) is to put this as a
+pre-defined configuration in gpulist[].
 
-Konrad
-> 
-> Regards,
-> Bjorn
+Jordan
