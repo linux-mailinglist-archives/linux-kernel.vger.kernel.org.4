@@ -2,75 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C42B68F8B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED7068F8B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbjBHURM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S232049AbjBHURg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbjBHURJ (ORCPT
+        with ESMTP id S230082AbjBHURe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:17:09 -0500
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951765247
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:17:03 -0800 (PST)
-Received: (wp-smtpd smtp.wp.pl 40124 invoked from network); 8 Feb 2023 21:16:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1675887419; bh=TiixG+XfCI+6ARDvvHxIncEYUlRRdPVqZbEughK+Ino=;
-          h=From:To:Cc:Subject;
-          b=jxRVuMvbWnPjxbRPB1z1TBZ0XJBJHGXuI5Rg5pvbB5qIo5lqdxtqbSuwO6W5jWoMK
-           zWDt0cYHYKk6RWlHMMoZLlbLx9/i0kHEvOYxI8jru6WozzOCVPd+DFQydwxXd3yPLE
-           8ruxKYZNGJw6DmX8Qs2g+kkwkFeq/NULEsczk4cM=
-Received: from 89-64-15-40.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.15.40])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <jiasheng@iscas.ac.cn>; 8 Feb 2023 21:16:59 +0100
-Date:   Wed, 8 Feb 2023 21:16:58 +0100
-From:   Stanislaw Gruszka <stf_xl@wp.pl>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] iwl4965: Add missing check for
- create_singlethread_workqueue
-Message-ID: <20230208201658.GA1435569@wp.pl>
-References: <20230208063032.42763-1-jiasheng@iscas.ac.cn>
+        Wed, 8 Feb 2023 15:17:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BF05247;
+        Wed,  8 Feb 2023 12:17:33 -0800 (PST)
+Date:   Wed, 08 Feb 2023 20:17:31 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675887451;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=49o2DMV74m2/YRhGp6hKoz34L64JnGl89lPRWJulmhk=;
+        b=4LYdjyp1qGgsg63DQ8YosMrhz77UwnR42DiKXWdb9qKNN1+QIlrTz1m0tAu7SJ9oMzXiDC
+        WhrdI8pdT0CIm1qbDprWZsiirKu1ThVonEJqHognIe6posor+JGE+yJsIkeltzj7EWGOMe
+        OMR4WkEWYcdnmP7iX97gquGEH7qO9NKO07Gdy6hTad6XRGAeS9pBDN9yPB98nAmuF33s5h
+        Ftft3O3SRWDRBZsFV5jD6Qb2tjOfm3+Rpqy67Eclk6JwHrkWgFUeOMK1rOUPnbG0WD2hFj
+        NB76r3JnOl+mWRux72YmN1cssHyf35ePv1ShW/t6/iw4sqdCa4a+8P7K2ieAVg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675887451;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=49o2DMV74m2/YRhGp6hKoz34L64JnGl89lPRWJulmhk=;
+        b=sVF/37RdkTeYtwVfzDtIN+JWFyc8RNaDfDcY7642Lt04eXvXjmEHDcVD800SDrXxG+k+II
+        fz9khSEd1VOGFyCQ==
+From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/cpu: Add Lunar Lake M
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208063032.42763-1-jiasheng@iscas.ac.cn>
-X-WP-MailID: 7eca2eb9216ec3b4e515e2e46af58c62
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [wdNV]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167588745117.4906.6363903779678696215.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 02:30:31PM +0800, Jiasheng Jiang wrote:
-> Add the check for the return value of the create_singlethread_workqueue
-> in order to avoid NULL pointer dereference.
-> 
-> Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+The following commit has been merged into the x86/urgent branch of tip:
 
->  static void
-> @@ -6618,7 +6622,11 @@ il4965_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->  		goto out_disable_msi;
->  	}
->  
-> -	il4965_setup_deferred_work(il);
-> +	err = il4965_setup_deferred_work(il);
-> +	if (err) {
-> +		goto out_free_irq;
-> +	}
+Commit-ID:     f545e8831e70065e127f903fc7aca09aa50422c7
+Gitweb:        https://git.kernel.org/tip/f545e8831e70065e127f903fc7aca09aa50422c7
+Author:        Kan Liang <kan.liang@linux.intel.com>
+AuthorDate:    Wed, 08 Feb 2023 09:23:40 -08:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Wed, 08 Feb 2023 12:04:35 -08:00
 
-{} not needded.
+x86/cpu: Add Lunar Lake M
 
+Intel confirmed the existence of this CPU in Q4'2022
+earnings presentation.
+
+Add the CPU model number.
+
+[ dhansen: Merging these as soon as possible makes it easier
+	   on all the folks developing model-specific features. ]
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/all/20230208172340.158548-1-tony.luck%40intel.com
+---
+ arch/x86/include/asm/intel-family.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
+index 347707d..cbaf174 100644
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -123,6 +123,8 @@
+ #define INTEL_FAM6_METEORLAKE		0xAC
+ #define INTEL_FAM6_METEORLAKE_L		0xAA
+ 
++#define INTEL_FAM6_LUNARLAKE_M		0xBD
++
+ /* "Small Core" Processors (Atom/E-Core) */
+ 
+ #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
