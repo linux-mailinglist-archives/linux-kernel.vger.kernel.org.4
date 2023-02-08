@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA3E68F63C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECED968F63F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjBHR5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:57:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S231465AbjBHR6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjBHR5Q (ORCPT
+        with ESMTP id S229686AbjBHR6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:57:16 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8524FC33
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:57:11 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id o36so13913352wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:57:11 -0800 (PST)
+        Wed, 8 Feb 2023 12:58:32 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F205FEF96
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:58:30 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id t5so8664056oiw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:58:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bIbh91yDi3hjRSK7EFgWT8DXPfU5NF3sKbYrP5BUi94=;
-        b=dCopafmxD7OpCvsat1jY+V1MqgKO1ql0h/53QmoG71/cdD946DJ9co+DwFNWTOJR9U
-         FWNaGvHCnYkCLTWEPRqQUMPlOWXl2b0PnyQiJnyYwc9H5EYOErZrd7vKBGgNNIAfGl0+
-         rmZnvz1zUXttPEYTRahBL0uvBqus+vZ96RkiE5erVsdxVoMWG/1CWUxvkmaix1NkMs54
-         7Njd2GKZckFjlrjDen4MQUmvO+q8m7q05LXkRAd0a69LVibnsw4Q8+4SdLig8G6NWaCl
-         ZeL9ogJ/GnSZjn2bvQiZdIGGdtB/XFclNiH/JRgCPuL+G3zDZuG60oqZok4spnNT+Hnm
-         Ghwg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TgLgOCji2dZHQhls7vSUZNVdRziEGATWNkzFOavtl7k=;
+        b=fOCnLzkbcKGLOcFK7OOpRjsO/u5lhIFi5402KJzUU0RIdwDScGAT4a5RnQfTK+yaT5
+         Bg0IUgtDJpnBD/0YgfYqO0kMPETgjpxly47Af/KDh/J3CvntI8802BcHtygrsWTRJcMG
+         o7RxKdUzR5oH9FV9RkO1p5SuaJ+uujqH6zk6kGBqmLdBV2b6BRzMYn3tKn6jkcLQdxJs
+         5wUed+2YWAWB7gpfxPQI2vqHl4zOFdxVAk5xSKxjrnjqgKSfb30ChOcfbl4s6XYjKHgN
+         Y1dsfQHb03aQfNiBPEgIeZ5e7WUR4oRCSbgDt8QqOfg577W1FW9G7zHWCS43eX74kkA6
+         DoYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bIbh91yDi3hjRSK7EFgWT8DXPfU5NF3sKbYrP5BUi94=;
-        b=zDDnasTo+eNGubx7YuocqQ36blM6sY5/gWzxxmsHDgVlUOoUn+pbiI/jrGDwNAzhqL
-         Kry/ZeR1SdMRs5cTTTHp4b6lxWFt0iTZ5yGOXyFaz1xGMy2wgdd4QP/L5X9HYoY+Qg4e
-         1gNrtGgs/Zh6YDjXQNh3T9dmwMBg4mbGbcnFG61gne/fA5plcqXKlgDlP+f56uvwwc7q
-         HH2JT8qWQJJp983Y457EezvGROWNTp0N/4MT08hJZmytRe1eKJNVLb5jPK5XhLFltXGB
-         D8WpayilBKJqxLudpLpjEt5K96srT7rSIQfEUkb/+ZkQf92KTudg18xCl7p/sfx0ZFAk
-         zLoA==
-X-Gm-Message-State: AO0yUKVN1RUfIcO6daL2Kbo/Et8Bzkz2BhspKqZUslmOj1+MHVkOf+4I
-        3OtDR4n3kZQpFounknKA2IOYiw==
-X-Google-Smtp-Source: AK7set/agXvUr8o1RIcasdIWPQxgRIVGIS6wQ4uZ6pkHa3ZW0neyWPF4V2VmwO8dkPy+UxxjygeJ4A==
-X-Received: by 2002:a05:600c:491c:b0:3dc:1687:9ba2 with SMTP id f28-20020a05600c491c00b003dc16879ba2mr7082656wmp.35.1675879029806;
-        Wed, 08 Feb 2023 09:57:09 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003dc1d668866sm2519023wmc.10.2023.02.08.09.57.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 09:57:09 -0800 (PST)
-Message-ID: <313a6c91-e4d1-98da-9c77-fdafa66c0744@linaro.org>
-Date:   Wed, 8 Feb 2023 18:57:08 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TgLgOCji2dZHQhls7vSUZNVdRziEGATWNkzFOavtl7k=;
+        b=xFBQ8l7g7ILSEzKufq56MKqmKx1pbobDE0is/eFBn5HyMEbPl4jX046Gmnfz/Cw9J/
+         mqHa0VnDXNJ0mGhqmWwwki0QkKCkcKoQ5XJTI1G2gcrOdAVI27vJv2jmsj5uzBYoENhI
+         4XYcztHgGP0osk+/WjlQAQWO0Jns5Fu/A7Tmi6ODHAgXaeqpZuVNHa3sgQYE50+F0Eut
+         l4lfpFAK9F8BL7kfKMLFPNJUS2v8yMZMJ7oIKCzaX6u0XdOa0pXk667GEGj0Knmt7d6s
+         8MpJqZiJ1LRC7xIfKJFUSpUPPPx1jCL6Xb/PyzMkB0zffCTXR7EVu2SvgsyKkD0CMGPY
+         kpew==
+X-Gm-Message-State: AO0yUKU+yd6NeQ28CbYY+oyhabHAGG8oWJ1/icnOg/sZBtYt9CqYYEYk
+        fGs3EUWANcoljGCRle/eBsfugwMwf20r1ES/DS3v2w==
+X-Google-Smtp-Source: AK7set+6iqbUGkOSFPuPRA48hsKX5OEWbfcgbLkap8EeSLkkwks4o7YMriShi19kVRN8iLT1Kjp0Q/LIETiwvYTWu1g=
+X-Received: by 2002:aca:4107:0:b0:378:979:518b with SMTP id
+ o7-20020aca4107000000b003780979518bmr259808oia.82.1675879108824; Wed, 08 Feb
+ 2023 09:58:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] ASoC: dt-bindings: wlf,wm8994: Convert to dtschema
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230208172552.404324-1-krzysztof.kozlowski@linaro.org>
- <Y+PeR4EFfcVDbUfV@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y+PeR4EFfcVDbUfV@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230208163418.342210-1-jassisinghbrar@gmail.com> <Y+PafyViJMb6OOAn@kroah.com>
+In-Reply-To: <Y+PafyViJMb6OOAn@kroah.com>
+From:   Jassi Brar <jaswinder.singh@linaro.org>
+Date:   Wed, 8 Feb 2023 11:58:18 -0600
+Message-ID: <CAJe_ZhcuTX282zkkoa8ihnmNBpiXHWE7sTw2K+uB5OVkVU=P+Q@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: udc: max3420_udc: fix serialized access
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jassisinghbrar@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, error27@gmail.com,
+        stern@rowland.harvard.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 18:39, Mark Brown wrote:
-> On Wed, Feb 08, 2023 at 06:25:52PM +0100, Krzysztof Kozlowski wrote:
->> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
->> schema.
-> 
->> Changes against original binding:
->> 1. Add missing LDO1VDD-supply for WM1811.
-> 
-> Both LDOs are present on all variants.
+On Wed, 8 Feb 2023 at 11:23, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Feb 08, 2023 at 10:34:18AM -0600, jassisinghbrar@gmail.com wrote:
+> > From: Jassi Brar <jaswinder.singh@linaro.org>
+> >
+> >  The mutex 'spi_bus_mutex' should be used, instead of the spin-lock,
+> > while changing the state of the kernel-thread.
+>
+> You forgot to say why this is the case.
+>
+It was 'inherited' (my fault) from  drivers/usb/host/max3421-hcd.c
+which has the same issue.
+OK, I will also add to the log why that is a bad idea.
 
-I see LDO2VDD on WM8994 but not on WM1811 and WM8958.
+> > Also changing the
+> > usb-gadget state need not be protected by a spin-lock.
+>
+> Why not?  Why isn't this a separate change?
+>
+Because other low-level spi changes are protected by spin-lock and it
+seems ok to not to have to worry about such a race.
+I don't have the h/w anymore to actually test it, so it is just a
+patch from looking.
+I just got lazy to break it into two patches, will do that.
 
-Best regards,
-Krzysztof
+> >  This should fix the Smatch static checker warning
+> >     warn: sleeping in atomic context
+> >
+> > Fixes: 48ba02b2e2b1 ("usb: gadget: add udc driver for max3420")
+> > Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+> > ---
+> >  drivers/usb/gadget/udc/max3420_udc.c | 10 ++++++----
+> >  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> You forgot a "Reported-by:" line, right?
+>
+Yes, I forgot.
 
+thanks.
