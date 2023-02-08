@@ -2,147 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454DA68F7D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EEB68F7CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbjBHTGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S231721AbjBHTGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbjBHTGN (ORCPT
+        with ESMTP id S231598AbjBHTGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:06:13 -0500
-Received: from EX-PRD-EDGE01.vmware.com (ex-prd-edge01.vmware.com [208.91.3.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7F9552BF;
-        Wed,  8 Feb 2023 11:06:10 -0800 (PST)
+        Wed, 8 Feb 2023 14:06:05 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4004DBF4;
+        Wed,  8 Feb 2023 11:06:05 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gj9-20020a17090b108900b0023114156d36so3104227pjb.4;
+        Wed, 08 Feb 2023 11:06:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-    s=s1024; d=vmware.com;
-    h=from:to:cc:subject:date:message-id:mime-version:content-type;
-    bh=iWVfYEvdFCA33fRp+fF11AoqtOaP7LncwSYETK1k0jI=;
-    b=SsE4vWE7N2luBqilMuN/X6oBXADbNDTDbjgms26Y/niCKAliYw6+t6aHBZOeY9
-      6RXLh8uk9TrQd53MxHQnyCxseE0xaWKY42Ox+uGjrNzrKAo3AOHZw7W27EDQ/5
-      dqWbCTIlOLgDkfdSgqJR+SwtY29RWUzf0dN/Opqrmlm5i2U=
-Received: from sc9-mailhost1.vmware.com (10.113.161.71) by
- EX-PRD-EDGE01.vmware.com (10.188.245.6) with Microsoft SMTP Server id
- 15.1.2375.34; Wed, 8 Feb 2023 11:05:31 -0800
-Received: from htb-1n-eng-dhcp122.eng.vmware.com (unknown [10.20.114.216])
-        by sc9-mailhost1.vmware.com (Postfix) with ESMTP id 6FA8F200DE;
-        Wed,  8 Feb 2023 11:05:43 -0800 (PST)
-Received: by htb-1n-eng-dhcp122.eng.vmware.com (Postfix, from userid 0)
-        id 649BCAE1B2; Wed,  8 Feb 2023 11:05:43 -0800 (PST)
-From:   Ronak Doshi <doshir@vmware.com>
-To:     <netdev@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, Ronak Doshi <doshir@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guolin Yang <gyang@vmware.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH net v2] vmxnet3: move rss code block under eop descriptor
-Date:   Wed, 8 Feb 2023 11:05:30 -0800
-Message-ID: <20230208190531.5443-1-doshir@vmware.com>
-X-Mailer: git-send-email 2.11.0
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rRaVZ9/X0IStuyPV6O60UspWE6lsQv03L6mbYwCmPI4=;
+        b=BKzuUbCjDPwgJnJ3Jej0RMuyANAxCWK3m/MfztEgheROrMlQXQbl+C0fQhEkSkQqWM
+         c+HcZfCGMr21T2mRkK7wW4uDJnEQBxHIPFq0tSGFdthcOzh1UC8pBjM+Od5pI5gMRtVV
+         aXY/rHgTTfG4hQRP3m7twkNWPu5U+H/a2z8fp4O/sIsbzWmnyl5E+JvlzmsYNheFsLvZ
+         jRXzjQaAKD6mPamQd4kc0HJwzrQr2fbQYrwsKQPbfBu827q+sqPQcZ+64i3pa8BxTRTA
+         xDDri/kpY/8FtEBfumEf24xMYUdguB9wz/Ut02XU0lmFnpost9Ebhe1m/+3Bz+zhmNlT
+         9kbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rRaVZ9/X0IStuyPV6O60UspWE6lsQv03L6mbYwCmPI4=;
+        b=mBfs0ifxiPRlgsTHQDNTR1GCS5WsPbW4zne9pbNd8SVki/2iGkLbbOUYM2fJyA/IA3
+         zUHO1Qt6JeQk7jKwY2R7QKT0kSciQscNFTwV0U3BEw4IOENTxk9DWNMY46yzmVXxc/6P
+         TRRcjhJi+vmmHbcle/R6Q+HH8/8DUfkmMeACcNowQqXx2gj6wEfa8V30zy94eRoGE2Cr
+         RdsRuqHYpHsd7S369KQDhMEeBD88pO4bx5cmBbEbNtJj2E514lnXrz5sFPh/0jlcYXnX
+         fRJAqS/c2JoMpDH01ypJPZXADpZ3b2ez6nYgHONBMiXRN8sPIHDFo7oA4vJW083bpfPv
+         96Dg==
+X-Gm-Message-State: AO0yUKU3OJVgWOdI8Wfw3jTbbcI4j0VDYSGVpIViXGxfwS8E4BxlPR5o
+        A9u6LOrKdHNCt6sx4kapn3k=
+X-Google-Smtp-Source: AK7set/6Uklb/nCkvatjdOjFUff61kTIGa4nGNF3u5sSoYa4fLj8enWqLcwUPSyR5xEjIS8gCc54vw==
+X-Received: by 2002:a17:902:ced2:b0:199:fc6:9a9b with SMTP id d18-20020a170902ced200b001990fc69a9bmr10118044plg.17.1675883164447;
+        Wed, 08 Feb 2023 11:06:04 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001898ee9f723sm6469456plb.2.2023.02.08.11.06.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 11:06:03 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 8 Feb 2023 09:06:01 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     josef@toxicpanda.com, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH -next] blk-iocost: fix sleeping in atomic warning for
+ wbt_enable_default()
+Message-ID: <Y+PymbdtPVONbQAq@slm.duckdns.org>
+References: <20230208034803.2818155-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (EX-PRD-EDGE01.vmware.com: doshir@vmware.com does not
- designate permitted sender hosts)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208034803.2818155-1-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b3973bb40041 ("vmxnet3: set correct hash type based on
-rss information") added hashType information into skb. However,
-rssType field is populated for eop descriptor.
+On Wed, Feb 08, 2023 at 11:48:03AM +0800, Yu Kuai wrote:
+> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> index 7a2dc9dc8e3b..03bfe1dda07c 100644
+> --- a/block/blk-iocost.c
+> +++ b/block/blk-iocost.c
+> @@ -3279,11 +3279,9 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
+>  		blk_stat_enable_accounting(disk->queue);
+>  		blk_queue_flag_set(QUEUE_FLAG_RQ_ALLOC_TIME, disk->queue);
+>  		ioc->enabled = true;
+> -		wbt_disable_default(disk);
+>  	} else {
+>  		blk_queue_flag_clear(QUEUE_FLAG_RQ_ALLOC_TIME, disk->queue);
+>  		ioc->enabled = false;
+> -		wbt_enable_default(disk);
+>  	}
+>  
+>  	if (user) {
+> @@ -3296,6 +3294,10 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
+>  	ioc_refresh_params(ioc, true);
+>  	spin_unlock_irq(&ioc->lock);
+>  
+> +	if (enable)
+> +		wbt_disable_default(disk);
+> +	else
+> +		wbt_enable_default(disk);
 
-This patch moves the RSS codeblock under eop descritor.
+Wouldn't this allow two competiting config attempts to race each other and
+leave wbt in an unexpected state?
 
-Cc: stable@vger.kernel.org
-Fixes: b3973bb40041 ("vmxnet3: set correct hash type based on rss information")
-Signed-off-by: Ronak Doshi <doshir@vmware.com>
-Acked-by: Peng Li <lpeng@vmware.com>
-Acked-by: Guolin Yang <gyang@vmware.com>
----
-v1->v2: added Fixes tag and CC stable
----
- drivers/net/vmxnet3/vmxnet3_drv.c | 50 +++++++++++++++++++--------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+	task1				task2
 
-diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
-index 56267c327f0b..682987040ea8 100644
---- a/drivers/net/vmxnet3/vmxnet3_drv.c
-+++ b/drivers/net/vmxnet3/vmxnet3_drv.c
-@@ -1546,31 +1546,6 @@ vmxnet3_rq_rx_complete(struct vmxnet3_rx_queue *rq,
- 				rxd->len = rbi->len;
- 			}
- 
--#ifdef VMXNET3_RSS
--			if (rcd->rssType != VMXNET3_RCD_RSS_TYPE_NONE &&
--			    (adapter->netdev->features & NETIF_F_RXHASH)) {
--				enum pkt_hash_types hash_type;
--
--				switch (rcd->rssType) {
--				case VMXNET3_RCD_RSS_TYPE_IPV4:
--				case VMXNET3_RCD_RSS_TYPE_IPV6:
--					hash_type = PKT_HASH_TYPE_L3;
--					break;
--				case VMXNET3_RCD_RSS_TYPE_TCPIPV4:
--				case VMXNET3_RCD_RSS_TYPE_TCPIPV6:
--				case VMXNET3_RCD_RSS_TYPE_UDPIPV4:
--				case VMXNET3_RCD_RSS_TYPE_UDPIPV6:
--					hash_type = PKT_HASH_TYPE_L4;
--					break;
--				default:
--					hash_type = PKT_HASH_TYPE_L3;
--					break;
--				}
--				skb_set_hash(ctx->skb,
--					     le32_to_cpu(rcd->rssHash),
--					     hash_type);
--			}
--#endif
- 			skb_record_rx_queue(ctx->skb, rq->qid);
- 			skb_put(ctx->skb, rcd->len);
- 
-@@ -1653,6 +1628,31 @@ vmxnet3_rq_rx_complete(struct vmxnet3_rx_queue *rq,
- 			u32 mtu = adapter->netdev->mtu;
- 			skb->len += skb->data_len;
- 
-+#ifdef VMXNET3_RSS
-+			if (rcd->rssType != VMXNET3_RCD_RSS_TYPE_NONE &&
-+			    (adapter->netdev->features & NETIF_F_RXHASH)) {
-+				enum pkt_hash_types hash_type;
-+
-+				switch (rcd->rssType) {
-+				case VMXNET3_RCD_RSS_TYPE_IPV4:
-+				case VMXNET3_RCD_RSS_TYPE_IPV6:
-+					hash_type = PKT_HASH_TYPE_L3;
-+					break;
-+				case VMXNET3_RCD_RSS_TYPE_TCPIPV4:
-+				case VMXNET3_RCD_RSS_TYPE_TCPIPV6:
-+				case VMXNET3_RCD_RSS_TYPE_UDPIPV4:
-+				case VMXNET3_RCD_RSS_TYPE_UDPIPV6:
-+					hash_type = PKT_HASH_TYPE_L4;
-+					break;
-+				default:
-+					hash_type = PKT_HASH_TYPE_L3;
-+					break;
-+				}
-+				skb_set_hash(skb,
-+					     le32_to_cpu(rcd->rssHash),
-+					     hash_type);
-+			}
-+#endif
- 			vmxnet3_rx_csum(adapter, skb,
- 					(union Vmxnet3_GenericDesc *)rcd);
- 			skb->protocol = eth_type_trans(skb, adapter->netdev);
+	ioc_qos_write()			ioc_qos_write()
+	lock()
+	enable
+	unlock()
+					lock()
+					disable
+					unlock()
+					wbt_enable_default()
+	wbt_disable_default()
+
+Thanks.
+
 -- 
-2.11.0
-
+tejun
