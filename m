@@ -2,180 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC65668F32E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:32:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051CD68F33E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjBHQcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
+        id S231421AbjBHQfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:35:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjBHQcB (ORCPT
+        with ESMTP id S230331AbjBHQfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:32:01 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002A92CFD9;
-        Wed,  8 Feb 2023 08:31:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675873919; x=1707409919;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DrxyrS9fcF2Z7IFnOpdeLdaLWCYGNwXwVIJ5fncGZPM=;
-  b=iOOn9u8fC+iboDpmFbFHtLUjech+tjFG24ba9O1OdZ9mEL7A3K61vhao
-   pgFLgYHbcRkpIGZZTbBqVkYU8g8fW+F/YqeR8e76rQS7N7MGv6RbTfKcl
-   otKYGXx9nHQh3mcC40jJtlq2GMm4jaQPXnXmrDxHbSI0If5jZcRdJZMEo
-   8IidqUoH5yXKXazRJP9VDVN8Of546G9oxCPuMtP82jS64ie++DQoWK+wN
-   ytEaMH9yIBHYpP3qXceejpf8IaTPpbds1w6XnEObWHEK0OEQiwAwCC0S/
-   GIAumIp8APgUcETrjaVd5cNw+b+fV7eO6iaUA+QhfXaLuIA5yr7Cvennf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="329873842"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="329873842"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 08:31:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="617251555"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="617251555"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 08:31:59 -0800
-Date:   Wed, 8 Feb 2023 08:35:36 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        stable@vger.kernel.org, Sukumar Ghorai <sukumar.ghorai@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v2] iommu/vt-d: Fix PASID directory pointer coherency
-Message-ID: <20230208083536.3d8f5f7a@jacob-builder>
-In-Reply-To: <18bbd442-c892-1f17-bf6c-b6d797379deb@linux.intel.com>
-References: <20230208000938.1527079-1-jacob.jun.pan@linux.intel.com>
-        <18bbd442-c892-1f17-bf6c-b6d797379deb@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 8 Feb 2023 11:35:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DCDA47EFE;
+        Wed,  8 Feb 2023 08:35:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE574B81D42;
+        Wed,  8 Feb 2023 16:35:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DEA1C433D2;
+        Wed,  8 Feb 2023 16:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675874103;
+        bh=FXaPjW3ceCX1o65WyKM27JljalbZnb73IGkfHoLx/68=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qliT6IkiSi1hF7xhTXWkvU7HfK4mIU8Afeq6Yzp+vcamiVs0iXbnsKDtiMNQ5TqHr
+         VSfJ4t8eLGnUrqCkOR5gw7UJZkMmpDyIq03ftHiiB95twj+yaa7GmWKrDawq2DYxGm
+         NhOxI6EcZhKAGFKi03AEy3ahX7n04TTp6Ud2u81kJ0ZrdDIwk6Uan8fRC/KZwCMo+J
+         9+xzGdBUaCvktAcGiBI0pGRmmGrxMHprqKqOoi+Bv2sTlz5gbKMBGq489vsOOF/kEh
+         mB8i0hYjvYNzIyeIC6Hj0P09SFcnBjfHwu4Si3zCoOU8LlCKv6gnZ/DVRQ0XtAKLeo
+         v5Us3hk+xrqOQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pPnQ3-0005tJ-NM; Wed, 08 Feb 2023 17:35:39 +0100
+Date:   Wed, 8 Feb 2023 17:35:39 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v7 08/12] phy: qcom-qmp-pcie: Add support for SM8550 g3x2
+ and g4x2 PCIEs
+Message-ID: <Y+PPWymsIfYW9OHX@hovoldconsulting.com>
+References: <20230203081807.2248625-1-abel.vesa@linaro.org>
+ <20230203081807.2248625-9-abel.vesa@linaro.org>
+ <Y9zU2jBdSD72W28F@hovoldconsulting.com>
+ <Y+EJDofgt6I/abyp@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+EJDofgt6I/abyp@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baolu,
-
-On Wed, 8 Feb 2023 11:46:37 +0800, Baolu Lu <baolu.lu@linux.intel.com>
-wrote:
-
-> On 2023/2/8 8:09, Jacob Pan wrote:
-> > On platforms that do not support IOMMU Extended capability bit 0
-> > Page-walk Coherency, CPU caches are not snooped when IOMMU is accessing
-> > any translation structures. IOMMU access goes only directly to
-> > memory. Intel IOMMU code was missing a flush for the PASID table
-> > directory that resulted in the unrecoverable fault as shown below.
+On Mon, Feb 06, 2023 at 04:05:02PM +0200, Abel Vesa wrote:
+> On 23-02-03 10:33:14, Johan Hovold wrote:
+> > On Fri, Feb 03, 2023 at 10:18:03AM +0200, Abel Vesa wrote:
+> > > Add the SM8550 both g4 and g3 configurations. In addition, there is a
+> > > new "lane shared" table that needs to be configured for g4, along with
+> > > the No-CSR list of resets.
 > > 
-> > This patch adds clflush calls whenever activating and updating
-> > a PASID table directory to ensure cache coherency.
+> > Could you add a comment about the new nocsr reset and how it is used
+> > here?
+> >  
+> > > Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > > 
+> > > This patchset relies on the following patchset:
+> > > https://lore.kernel.org/all/20230117224148.1914627-1-abel.vesa@linaro.org/
+> > > 
+> > > The v6 of this patch is:
+> > > https://lore.kernel.org/all/20230202123902.3831491-9-abel.vesa@linaro.org/
+> > > 
+> > > Changes since v6:
+> > >  * none
+> > > 
+> > > Changes since v5:
+> > >  * renmaed the no-CSR reset to "phy_nocsr" as discussed off-list with
+> > >    Bjorn and Johan
+> > > 
+> > > Changes since v4:
+> > >  * dropped _serdes infix from ln_shrd table name and from every ln_shrd
+> > >    variable name
+> > >  * added hyphen between "no CSR" in both places
+> > >  * dropped has_ln_shrd_serdes_tbl
+> > >  * reordered qmp_pcie_offsets_v6_20 by struct members
+> > >  * added rollback for no-CSR reset in qmp_pcie_init fail path
+> > >  * moved ln_shrd offset calculation after port_b
+> > > 
+> > > Changes since v3:
+> > >  * added Dmitry's R-b tag
+> > > 
+> > > Changes since v2:
+> > >  * none
+> > > 
+> > > Changes since v1:
+> > >  * split all the offsets into separate patches, like Vinod suggested
+> > > 
+> > > 
+> > >  drivers/phy/qualcomm/phy-qcom-qmp-pcie.c | 367 ++++++++++++++++++++++-
+> > >  1 file changed, 365 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > > index 907f3f236f05..ff6c0b526fde 100644
+> > > --- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie.c
+> > > @@ -1506,6 +1506,234 @@ static const struct qmp_phy_init_tbl sm8450_qmp_gen4x2_pcie_ep_pcs_misc_tbl[] =
+> > >  	QMP_PHY_INIT_CFG(QPHY_V5_20_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5, 0x08),
+> > >  };
 > > 
-> > On the reverse direction, there's no need to clflush the PASID directory
-> > pointer when we deactivate a context entry in that IOMMU hardware will
-> > not see the old PASID directory pointer after we clear the context
-> > entry. PASID directory entries are also never freed once allocated.
+> [...]
 > > 
-> > [    0.555386] DMAR: DRHD: handling fault status reg 3
-> > [    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault
-> > addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry
-> > is clear [    0.556348] DMAR: Dump dmar1 table entries for IOVA
-> > 0x1026a4000 [    0.556348] DMAR: scalable mode root entry: hi
-> > 0x0000000102448001, low 0x0000000101b3e001 [    0.556348] DMAR: context
-> > entry: hi 0x0000000000000000, low 0x0000000101b4d401 [    0.556348]
-> > DMAR: pasid dir entry: 0x0000000101b4e001 [    0.556348] DMAR: pasid
-> > table entry[0]: 0x0000000000000109 [    0.556348] DMAR: pasid table
-> > entry[1]: 0x0000000000000001 [    0.556348] DMAR: pasid table entry[2]:
-> > 0x0000000000000000 [    0.556348] DMAR: pasid table entry[3]:
-> > 0x0000000000000000 [    0.556348] DMAR: pasid table entry[4]:
-> > 0x0000000000000000 [    0.556348] DMAR: pasid table entry[5]:
-> > 0x0000000000000000 [    0.556348] DMAR: pasid table entry[6]:
-> > 0x0000000000000000 [    0.556348] DMAR: pasid table entry[7]:
-> > 0x0000000000000000 [    0.556348] DMAR: PTE not present at level 4
+> > >  
+> > > @@ -2214,6 +2469,68 @@ static const struct qmp_phy_cfg sm8450_qmp_gen4x2_pciephy_cfg = {
+> > >  	.phy_status		= PHYSTATUS_4_20,
+> > >  };
+> > >  
+> > > +static const struct qmp_phy_cfg sm8550_qmp_gen3x2_pciephy_cfg = {
+> > > +	.lanes = 2,
+> > > +
+> > > +	.offsets		= &qmp_pcie_offsets_v5,
 > > 
-> > Cc:<stable@vger.kernel.org>
-> > Fixes: 0bbeb01a4faf ("iommu/vt-d: Manage scalalble mode PASID tables")
-> > Reported-by: Sukumar Ghorai<sukumar.ghorai@intel.com>
-> > Signed-off-by: Ashok Raj<ashok.raj@intel.com>
-> > Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
-> > ---
-> > v2: Add clflush to PASID directory update case (Baolu, Kevin review)
-> > ---
-> >   drivers/iommu/intel/iommu.c | 2 ++
-> >   drivers/iommu/intel/pasid.c | 2 ++
-> >   2 files changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 59df7e42fd53..161342e7149d 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -1976,6 +1976,8 @@ static int domain_context_mapping_one(struct
-> > dmar_domain *domain, pds = context_get_sm_pds(table);
-> >   		context->lo = (u64)virt_to_phys(table->table) |
-> >   				context_pdts(pds);
-> > +		if (!ecap_coherent(iommu->ecap))
-> > +			clflush_cache_range(table->table,
-> > sizeof(u64));  
+> > Did you really intend to use the v5 offsets here? It seems you use v6.20
+> > defines in the tables below. This may work but it looks a little strange
+> > and does not match how we name and use these resources for the other
+> > SoCs (e.g. reusing structures and defines from older IP revisions is
+> > fine, but not necessarily the other way round).
 > 
-> This leaves other pasid dir entries not clflush'ed. It is possible that
-> IOMMU hardware sees different value from what CPU has set. This may
-> leave security holes for malicious devices. It's same to the pasid entry
-> table.
-agreed, we need to address security and functional aspects. good point.
+> So here is what is happening here. The actual IP block version is 6 for
+> the g3x2. The offsets of the tables are the same as on v5, but the
+> actual offsets of some of the registers within those tables are
+> entirely different. Now, if you compare the PCS PCIe offsets (v5 vs v6)
+> you'll notice that all v6 registers currently added are the same as v5
+> (both names and values). With that in mind, we still need to keep the v6
+> offsets for the case when a new register, that might not be in v5, might
+> be added later on. As for the table offsets, since they look the same we
+> should probably not add a dedicated v6 one.
 
-thanks
+Ok, makes sense.
 
-Jacob
-
-> How about below change? It does clflush whenever CPU changes the pasid
-> dir/entry tables.
-> 
-> diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-> index fb3c7020028d..aeb0517826a2 100644
-> --- a/drivers/iommu/intel/pasid.c
-> +++ b/drivers/iommu/intel/pasid.c
-> @@ -128,6 +128,9 @@ int intel_pasid_alloc_table(struct device *dev)
->          pasid_table->max_pasid = 1 << (order + PAGE_SHIFT + 3);
->          info->pasid_table = pasid_table;
-> 
-> +       if (!ecap_coherent(info->iommu->ecap))
-> +               clflush_cache_range(pasid_table->table, size);
-> +
->          return 0;
->   }
-> 
-> @@ -215,6 +218,11 @@ static struct pasid_entry 
-> *intel_pasid_get_entry(struct device *dev, u32 pasid)
->                          free_pgtable_page(entries);
->                          goto retry;
->                  }
-> +
-> +               if (!ecap_coherent(info->iommu->ecap)) {
-> +                       clflush_cache_range(entries, VTD_PAGE_SIZE);
-> +                       clflush_cache_range(&dir[dir_index].val, 
-> sizeof(*dir));
-> +               }
->          }
-> 
->          return &entries[index];
-> 
-> Best regards,
-> baolu
-
-
-Thanks,
-
-Jacob
+Johan
