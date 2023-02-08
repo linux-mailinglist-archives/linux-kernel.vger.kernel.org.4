@@ -2,222 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EADF68EC2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E6568EC2F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:52:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjBHJwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:52:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
+        id S230140AbjBHJwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:52:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjBHJv6 (ORCPT
+        with ESMTP id S231243AbjBHJwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:51:58 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F7A22A12
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:51:56 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id m2so18680527plg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 01:51:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kYh8M6vevokJI+V4Ro+h9g2Pga1iRRG9fqvOPZ7TegI=;
-        b=rDmhaa2dHGY/YHfc6hjEOCWwmwTImMBrknStws9b9Bj6E12Afhx4geSDu8maV4Enug
-         ycqRa3M0K5c2JqrjKJsGIJgpk5LcJhVGj47IFnL7EHV8QDPkX4/pRTe+MS4miOhkz9pd
-         IHw/cliwr7eVrZJplHByFgWRs3SHF3PnnhtMApKG0QKmwmZFY2A7yq9R93I9qPKZutEj
-         FQJLOHuYxRdT58L1pclxYYktJh+fBh+gV8bvUvbpF7OHNA00aXGZcj5Xx18DJLjkTkg4
-         bnBo5f1/rcv9rQFxxKA2U9SX7n2f8z4XctK7JH2YbjHgY8rZxUMpgHv86IK/hN7D092f
-         jl9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYh8M6vevokJI+V4Ro+h9g2Pga1iRRG9fqvOPZ7TegI=;
-        b=hVLNokXx2ffL7Scw2SsRCyd6DlfE+Sb0bfG3bAzIxYWbaKV28wcSxWls3VCgzMv6fu
-         exCDTULYEvlGPI/uoHRcoAvPl7VITIGG2+VVez1ohuZXOKVBfWckju0ppBxDYtPqgGw/
-         AEaLirKu0wJxX347cSPpvxMdq6q5+zKE1ffuvDjUCW3j6sLuHQJCLv2n4D7vrmV/Z7U/
-         gY1n8fQWhEA5tCwdxpNl+BmA0o+Oipfhsz4rNfGYmHVRZu3b9+y4zTLkoKIjvOvRBivT
-         PdtN9l2RTjRb6k5YlZQsyarllhL5UIvjYNN4fLtFJsSCsRRYxz8tQsQaYIzCDf4Lrudq
-         dT3A==
-X-Gm-Message-State: AO0yUKUrSumYlXy37TZOe74i+pFSrcfxWg35Otfj6KPPx6QOa6+pJzCP
-        /ElT1hhzh+c8CI9PVPZJzHSzJw==
-X-Google-Smtp-Source: AK7set8bW2B8iUUW5m7PL4+mcbaaAm5oHge5Ef4FjgZJzpTejve/M9YjlMfbLTKDRe1j1kT5ItAZeg==
-X-Received: by 2002:a17:903:2352:b0:192:4f85:b91d with SMTP id c18-20020a170903235200b001924f85b91dmr7783961plh.46.1675849915915;
-        Wed, 08 Feb 2023 01:51:55 -0800 (PST)
-Received: from ?IPV6:2401:4900:1c5f:7a7d:9c44:b2ee:ae34:5374? ([2401:4900:1c5f:7a7d:9c44:b2ee:ae34:5374])
-        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b00194caf3e975sm10471321ply.208.2023.02.08.01.51.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 01:51:54 -0800 (PST)
-Message-ID: <48607619-3a7b-a9d7-1e6a-c24f52539671@linaro.org>
-Date:   Wed, 8 Feb 2023 15:21:48 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Move SDHC node(s)'s 'pinctrl'
- properties to dts
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        andersson@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, bhupesh.linux@gmail.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, konrad.dybcio@linaro.org
-References: <20221220113616.1556097-1-bhupesh.sharma@linaro.org>
- <20221221221000.mmahq3nsmyy2bowi@SoMainline.org>
+        Wed, 8 Feb 2023 04:52:20 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53509305CA;
+        Wed,  8 Feb 2023 01:52:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fy3OX5hXQqSl2XLplPaVYzLsXwIj7Ql8Ky/VM/jzpAom55yu33XP8V1jDQj4KrCIm7SI2/zCFX5bj9KKjjy4siD2W2c4RmxvjA6eJPuLi0ughiyeksbi/mIqNT7GZzAKSs9d7vJWtvYg3lHgPbLd13Y/A9EEfZFXvNGTFnwCMrGPman+IGdGP7jstRUNbXg+7BY3DEEFGxKiodgf6xBXOE7FJHUISUWwk6wVlRPq6seKo3NObY+1BDnplBpHU7KIIImUMjwQ3M8eeWq4JaWHpkzHWfNJHdRVv4WC4h0FgAJD5ZFY6cLnuSyyPUyrTb/A+PIOHlOEVy0bnOvf1hX5GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z9hgdHJOU/jjCO7hGPT9D9K5DzRQU9wN5xOTmk8Poi0=;
+ b=nmDhDQmXnx9FT6KY89d7Myb0hm/F8YvNBz33fFOd0zJNYcipu+EzI5uEMubbaJ8b2KpiKrSgUZsrHibHFpHsFKoRZunqtDxiHFzGmHnFodpy0DkvL4YHvkFbGZ4b8oSkWnb5Bc6tgrAt7rFUYwaE4SqCKCmGjvyX90Fq1dYIskF2DD0lBHKsOqmcj72rEze8HdfnqJD1DCcN66A7fT8cYSKeYN7gVVrAUylP/ZcCT2f05zVwKEPA8Hmw86NcplyIe5RTxAg6N/9b1ENeVrD6xSV0FogrQ5AwrqrQMYTpZxDQuRM5gdO90VJ3sdJc78AolBYt0foS8+IcBxuqH6cANg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z9hgdHJOU/jjCO7hGPT9D9K5DzRQU9wN5xOTmk8Poi0=;
+ b=Ru2PXQz9nVLYha0HrBXN1TmJ4CXKPxzXfNpriSQxzbblK5buJzlKVXAuJvQGUjaPmufI5VVyER0Qi62m7QLJw4UC17gN974GDn9aSmpVLKoFiTXj7YySMGP0c+URbedDciK/Vev+fBZ4CqQWITPXvuMVoqhRPZtID5HUWA9TtYo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com (2603:10b6:930:20::11)
+ by MN2PR12MB4486.namprd12.prod.outlook.com (2603:10b6:208:263::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Wed, 8 Feb
+ 2023 09:52:16 +0000
+Received: from CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::caf0:cffe:94c4:df18]) by CY5PR12MB6323.namprd12.prod.outlook.com
+ ([fe80::caf0:cffe:94c4:df18%2]) with mapi id 15.20.6064.031; Wed, 8 Feb 2023
+ 09:52:16 +0000
+Message-ID: <d3681058-224d-07c7-283f-5f81ab523844@amd.com>
+Date:   Wed, 8 Feb 2023 15:21:59 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection
+ interface
 Content-Language: en-US
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20221221221000.mmahq3nsmyy2bowi@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <20221129193717.513824-8-mlevitsk@redhat.com> <Y9mWFlGdzoa8ZDW7@google.com>
+ <Y9mtGV+q0P2U9+M1@google.com>
+From:   Santosh Shukla <santosh.shukla@amd.com>
+In-Reply-To: <Y9mtGV+q0P2U9+M1@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: PN2PR01CA0187.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e8::14) To CY5PR12MB6323.namprd12.prod.outlook.com
+ (2603:10b6:930:20::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6323:EE_|MN2PR12MB4486:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4195b6f-5059-4460-a9c5-08db09ba28eb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XV0Pv2dKodXeoKi+u2qtYe7mX/huJsCy3grPZ/gKUuFUPqlyXqK6yxj+cd8c8I2l4xhrf0EA0/DQESKRkhN8XiG64kbIhQN/ZX7S1ErtVbZd5x/7S+KcC7RerxD2oND18RhN/aggpmecWmnAEn2iz87n5gU8RMX4xKaQk2sWcs1hF/Hs+AHpzcb5eiBIPVMtaCCX804ynytyxcvzuhzhPI7IJejQOQsriOlqiJ0Cfg8DwFmkIgOTdacer96lLDTe+zUl6pW3+jl/SDId2zRowbqIYOhphcxHxBsJov+6AWuR+muBWJBSdwlG8Zj1x85vm3lRebjfod0yRkeK+RZEv38AINNEwV6ixQhD/phCBJ8W16GWCd+s+vuMM93ctvh2BOAIVDRIKvy3bfGPznamO68tOW8vks/8X3svyrHjNysX8/k1nD6NhiNeziSO3Fg+XzMqVY1CvnNnWq9WZfXWpPB2lv6hEHu7eoe8SGjHw9ygNprn3EqwnUenk46rUHJh4wd8TegEqiMzLFjshQi3md51e5i56pkSqIzNPbv63hAL7e1SJH0qpBVNlupsjmuKbZPvY/Ocn0Q7DrB57pRFSQKV8I8fWxcXv5vFZCykth69SDHYPOm6JNPxt1DXv1a1dx+fSvauwjYcJTsSArfYowZva2Xs8Bqm4jJUhtF8OWn4xInh5HYcMHZIqlf5iquPh9Of6FwBVxhvVN368YcK/d7eY2GbKqeMUxzf3s96pzk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6323.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(39860400002)(396003)(376002)(366004)(451199018)(31686004)(83380400001)(44832011)(36756003)(5660300002)(2906002)(7416002)(186003)(31696002)(6512007)(26005)(6506007)(53546011)(8936002)(6666004)(66556008)(41300700001)(66899018)(478600001)(6486002)(86362001)(38100700002)(2616005)(110136005)(54906003)(66946007)(4326008)(66476007)(316002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bld6RzJBbjVEQWlLNnBYWGxxTkJCak5LSUVTcmw3VkV2OFhWeDkybEVWZDh6?=
+ =?utf-8?B?NHZrNDY3a0paTHptZFJ1TUQrVml0QjNjVjcyQmlIVUw5L0VQRys0ZXBaNFBL?=
+ =?utf-8?B?dkdWTEpjaXVrQUtMbkxUY3BuRGdTSkJ6bk9jMzcxSW5lRGxnR3RWT0Q0NlZx?=
+ =?utf-8?B?cjROY21sN3hzUVg5TTV0RGtVRHp4WnNUNVlmTktaRGpPUFdEeXFrczVkQ1dE?=
+ =?utf-8?B?TURmZTVxTnVDTEN2b0pwTTN3d0JDeTFtbGFMUGI2KzUwMzFCT1JlOFhzQzJk?=
+ =?utf-8?B?TjJFZ01xOHFHYVF2VE1wWDljUzlMR0pYSGlJNG0zT3lBdUZyQVBZck5DUmJE?=
+ =?utf-8?B?QnI1SmJ5R3JxTWdoa0J0TUNCSEIyWEl3UFB1dXBjcTR0Z1EyL2FyWVg5ckU3?=
+ =?utf-8?B?dTgrM2NXOVM1YW42bkZJdVp2dThTV2IyQlNvTnRDaVAwMFNSNE5oMFpHdDgy?=
+ =?utf-8?B?SkxuMkgrR3p3L2ZySlpOc0J3d2FmNVFCWFo1VGRIUUxiV2xuZ21mN1pmSTB6?=
+ =?utf-8?B?b0ZsSmlndkFGTEJBRHpzc05YclB1Z1BrYTNUREVIb3RNbDkrcWoxT1p4ZmVX?=
+ =?utf-8?B?Zmx5SE5oTXNlSnZVMThVelFUUUlBV1BCOUhLTTlUNS9PMjMzWm1hVmhsRG9P?=
+ =?utf-8?B?aFJQWFJkR3l6NGM5cFdITzVCUG1CVDJNZGRNbGloTFBkaVh2c0lXbnpLVGZC?=
+ =?utf-8?B?RDUyKzFhZjdWanVUVFBTbkJ5bkVMUDFUbDJlKy85OE1HWWRLRlRaeFNITVU0?=
+ =?utf-8?B?K1BPM0JVTkwyYlIybGVWSFdoYXp0MVZkVktLU0k5cnhaV1dQQktxVm9kQW5P?=
+ =?utf-8?B?aVAzN0IrSFN2ajl5L1NWT3hkUXI0ME0vR0F1UW8xYUdoZ08rL0dWS3pDbSsy?=
+ =?utf-8?B?SjhHY0ZIS1lXaTMrSEVoZk9xL2pIdk5TeUFuTGhxVVN6ZytWOXhMUzh6aWR1?=
+ =?utf-8?B?VXVZNFNWcUNpYUk1MlRtTFNhbFIzTEsyc3hPS3BpN3UySzlUT2QrZlhyWndX?=
+ =?utf-8?B?VjBaaW9RNFM2WFZJV3E2bnFDcEowYUFpclF1RmdsZ0R3aVZGKzZ1VTVKNVQ3?=
+ =?utf-8?B?ZEhuRCtnZ05OUzlLRVB5SFc2Z3paZkdnamJ6ZmN3SysrS0Zmd1M3Ni9OSGpt?=
+ =?utf-8?B?UW5RK3UvOWZFM3lkdGk0eFR3VzU2azZJL3JmUGxsVVNqSUtYbzBaRCtlOFE2?=
+ =?utf-8?B?MEpDUWtVSzlTeTgvd3lpMjFHOU44SEYrUkFpektkSmxyektkenFsdVNtdXFl?=
+ =?utf-8?B?bEJNTkJRR3pCaUxUSDU4Q0h0UCtYYzkwQldpTktIY3B3eDZpUTU5RXZPaXcy?=
+ =?utf-8?B?WkRjWWo1RnlBOHVMMlZwMVh2NXV3VnZHOEFHQkZOMjlteGQxYm1mMndRRUI5?=
+ =?utf-8?B?TTlRWS9OWFlFVk5sMUh2MTB1QzdhVWhZbklpWTlmWE5vWEtwbnAzUk5wdVB6?=
+ =?utf-8?B?aHhuMWJRT2cvLzZMancxNXZTeGRQS3pzc3ZsV1BqZERCMlhhZkMyazd2L0wx?=
+ =?utf-8?B?eWsySkM2SWJZU1pid2ZmWmJQQmViRmtlQXZFaVlObXYxOW1IdjhZVEVvMU8w?=
+ =?utf-8?B?THVkaUwyVENNRHBHY01qMXc2b2tDU0xkK2NXRWswYVBMRVIvZDVjYjM2ZXBI?=
+ =?utf-8?B?L0xuVU9vS2VxMUZVTC9VaUlBd2VIVUh4SFRiZWFmV1crRklzbFp2R21hWW5m?=
+ =?utf-8?B?YnhVQjh6ZVk2UFk5bDNDSE9BRFc3S2NVdkdQaWZRR0dVSjdHTlVmN3ZNUEdi?=
+ =?utf-8?B?TjVYSWw2UFpjOFJ6cVZTWWpUdyswOFNFU0NCN1VvNEhmb3EzVzRKaS9jemdK?=
+ =?utf-8?B?U1ZQSGp2NWZpYTJISkhXZzlnOTNxZFZ2WEZDNFRmeTZCcW8wcjhzRzJHTnQ5?=
+ =?utf-8?B?K0g1RUtJNVZtclREeHZORVFvbUx6M0hiS3Q3UC9TMDFlRU5DUTRnU3RIa2JF?=
+ =?utf-8?B?aWpubExpRFh5b2Rlbm9FS09QZTRvdWlTNHNYV3ZuYXFGQjdvLzJTWGx0dUdi?=
+ =?utf-8?B?QVkxbjBjUGliUERraEJCWVJWc1Y3MVFPSUZQYzFvZWVDMk5FTEZLZkRQQVRy?=
+ =?utf-8?B?eWs5alB6Z2xmTjRrYUhLcFFEeXpUN1pBUHptd2dwazFXckR4KzVLWklwWTNW?=
+ =?utf-8?Q?d7+wgi8YDF0LeJ/VotCGU4CJg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4195b6f-5059-4460-a9c5-08db09ba28eb
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6323.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 09:52:16.0031
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2zIHrKzkk6eUyDo4OXBRoMZKd6xJG/5Grop4uWMTdCR9/a1UFj+CfVFPlj+xXr0cBSHvSS7aGuf4LPJiyqv1DA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4486
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Marjin for the review. Sorry for the delay in replying to your 
-comments.
-
-On 12/22/22 3:40 AM, Marijn Suijten wrote:
-> On 2022-12-20 17:06:16, Bhupesh Sharma wrote:
->> Normally the 'pinctrl' properties of a SDHC controller and the
->> chip detect pin settings are dependent on the type of the slots
->> (for e.g uSD card slot), regulators and GPIO(s) available on the
->> board(s).
-> 
-> I always thought it was okay to give the `sdcX_*` pins to the sdhc_X
-> node unconditionally in SoC DTSI, and leave board-dependent card-detect
-> (if this SDHCI slot is even used for removable cards) pins to the board
-> DTS.
-> 
->> So, move the same from the sm6115 dtsi file to the respective
->> board file(s).
+On 2/1/2023 5:36 AM, Sean Christopherson wrote:
+> On Tue, Jan 31, 2023, Sean Christopherson wrote:
+>> On Tue, Nov 29, 2022, Maxim Levitsky wrote:
+>>> @@ -10015,13 +10022,34 @@ static void process_nmi(struct kvm_vcpu *vcpu)
+>>>  	 * Otherwise, allow two (and we'll inject the first one immediately).
+>>>  	 */
+>>>  	if (static_call(kvm_x86_get_nmi_mask)(vcpu) || vcpu->arch.nmi_injected)
+>>> -		limit = 1;
+>>> +		limit--;
+>>> +
+>>> +	/* Also if there is already a NMI hardware queued to be injected,
+>>> +	 * decrease the limit again
+>>> +	 */
+>>> +	if (static_call(kvm_x86_get_hw_nmi_pending)(vcpu))
+>>> +		limit--;
 >>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> I don't think this is correct.  If a vNMI is pending and NMIs are blocked, then
+>> limit will end up '0' and KVM will fail to pend the additional NMI in software.
 > 
-> Thanks for cleaning this up, we're already using this pattern in quite a
-> few SoCs now.
-
-Sure. But since they are being used in other SoC DTSIs doesn't guarantee 
-the correct demarcation between SoC DTSI and Board DTS :)
-
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Scratch that, dropping the second NMI in this case is correct.  The "running" part
+> of the existing "x86 is limited to one NMI running, and one NMI pending after it"
+> confused me.  The "running" thing is really just a variant on NMIs being blocked.
 > 
-> Though...
+> I'd also like to avoid the double decrement logic.  Accounting the virtual NMI is
+> a very different thing than dealing with concurrent NMIs, I'd prefer to reflect
+> that in the code.
 > 
->> ---
->>   .../boot/dts/qcom/sm4250-oneplus-billie2.dts  | 10 +++++++++
->>   arch/arm64/boot/dts/qcom/sm6115.dtsi          | 22 -------------------
->>   2 files changed, 10 insertions(+), 22 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
->> index a3f1c7c41fd73..329eb496bbc5f 100644
->> --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
->> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
->> @@ -202,12 +202,22 @@ &sdhc_2 {
->>   	vqmmc-supply = <&vreg_l5a>;
->>   
->>   	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>;
->> +	pinctrl-names = "default", "sleep";
->> +	pinctrl-0 = <&sdc2_state_on &sdc2_card_det_n>;
->> +	pinctrl-1 = <&sdc2_state_off &sdc2_card_det_n>;
->>   
->>   	status = "okay";
->>   };
->>   
->>   &tlmm {
->>   	gpio-reserved-ranges = <14 4>;
->> +
->> +	sdc2_card_det_n: sd-card-det-n-state {
->> +		pins = "gpio88";
->> +		function = "gpio";
->> +		drive-strength = <2>;
->> +		bias-pull-up;
+> Any objection to folding in the below to end up with:
 > 
-> Note that SoC DTSI uses bias-disable in the off state.
-
-The downstream uses bias-pull-up instead, as is the case with other 
-upstream qcom dtsi (see [1] and [2]).
-
-[1]. 
-https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts#L1242
-
-[2]. 
-https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/qcom/sdm845-mtp.dts#L783
-
->> +	};
->>   };
->>   
->>   &ufs_mem_hc {
->> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> index 572bf04adf906..6be763d39870d 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> @@ -518,13 +518,6 @@ data-pins {
->>   					bias-pull-up;
->>   					drive-strength = <10>;
->>   				};
->> -
->> -				sd-cd-pins {
->> -					pins = "gpio88";
->> -					function = "gpio";
->> -					bias-pull-up;
->> -					drive-strength = <2>;
->> -				};
->>   			};
->>   
->>   			sdc2_state_off: sdc2-off-state {
->> @@ -545,13 +538,6 @@ data-pins {
->>   					bias-pull-up;
->>   					drive-strength = <2>;
->>   				};
->> -
->> -				sd-cd-pins {
->> -					pins = "gpio88";
->> -					function = "gpio";
->> -					bias-disable;
->> -					drive-strength = <2>;
->> -				};
->>   			};
->>   		};
->>   
->> @@ -652,10 +638,6 @@ sdhc_1: mmc@4744000 {
->>   				 <&gcc GCC_SDCC1_ICE_CORE_CLK>;
->>   			clock-names = "iface", "core", "xo", "ice";
->>   
->> -			pinctrl-0 = <&sdc1_state_on>;
->> -			pinctrl-1 = <&sdc1_state_off>;
->> -			pinctrl-names = "default", "sleep";
->> -
+> 	unsigned limit;
 > 
-> You can probably leave these and below?  Only boards needing to extend
-> pinctrl with board-specific SDCard pins would have to update/override
-> these properties that way?
+> 	/*
+> 	 * x86 is limited to one NMI pending, but because KVM can't react to
+> 	 * incoming NMIs as quickly as bare metal, e.g. if the vCPU is
+> 	 * scheduled out, KVM needs to play nice with two queued NMIs showing
+> 	 * up at the same time.  To handle this scenario, allow two NMIs to be
+> 	 * (temporarily) pending so long as NMIs are not blocked and KVM is not
+> 	 * waiting for a previous NMI injection to complete (which effectively
+> 	 * blocks NMIs).  KVM will immediately inject one of the two NMIs, and
+> 	 * will request an NMI window to handle the second NMI.
+> 	 */
+> 	if (static_call(kvm_x86_get_nmi_mask)(vcpu) || vcpu->arch.nmi_injected)
+> 		limit = 1;
+> 	else
+> 		limit = 2;
+> 
+> 	/*
+> 	 * Adjust the limit to account for pending virtual NMIs, which aren't
+> 	 * tracked in in vcpu->arch.nmi_pending.
+> 	 */
+> 	if (static_call(kvm_x86_is_vnmi_pending)(vcpu))
+> 		limit--;
+> 
+> 	vcpu->arch.nmi_pending += atomic_xchg(&vcpu->arch.nmi_queued, 0);
+> 	vcpu->arch.nmi_pending = min(vcpu->arch.nmi_pending, limit);
+> 
 
-I disagree on this. But let's defer to @Bjorn for further inputs on the 
-same.
+I believe, you missed the function below hunk -
+
+	if (vcpu->arch.nmi_pending &&
+	    static_call(kvm_x86_set_vnmi_pending(vcpu)))
+		vcpu->arch.nmi_pending--;
+
+Or am I missing something.. please suggest.
+
+> 	if (vcpu->arch.nmi_pending)
+> 		kvm_make_request(KVM_REQ_EVENT, vcpu);
+> 
+> --
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Tue, 31 Jan 2023 16:02:21 -0800
+> Subject: [PATCH] KVM: x86: Tweak the code and comment related to handling
+>  concurrent NMIs
+> 
+> Tweak the code and comment that deals with concurrent NMIs to explicitly
+> call out that x86 allows exactly one pending NMI, but that KVM needs to
+> temporarily allow two pending NMIs in order to workaround the fact that
+> the target vCPU cannot immediately recognize an incoming NMI, unlike bare
+> metal.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/x86.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 030136b6ebbd..fda09ba48b6b 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10122,15 +10122,22 @@ static int kvm_check_and_inject_events(struct kvm_vcpu *vcpu,
+>  
+>  static void process_nmi(struct kvm_vcpu *vcpu)
+>  {
+> -	unsigned limit = 2;
+> +	unsigned limit;
+>  
+>  	/*
+> -	 * x86 is limited to one NMI running, and one NMI pending after it.
+> -	 * If an NMI is already in progress, limit further NMIs to just one.
+> -	 * Otherwise, allow two (and we'll inject the first one immediately).
+> +	 * x86 is limited to one NMI pending, but because KVM can't react to
+> +	 * incoming NMIs as quickly as bare metal, e.g. if the vCPU is
+> +	 * scheduled out, KVM needs to play nice with two queued NMIs showing
+> +	 * up at the same time.  To handle this scenario, allow two NMIs to be
+> +	 * (temporarily) pending so long as NMIs are not blocked and KVM is not
+> +	 * waiting for a previous NMI injection to complete (which effectively
+> +	 * blocks NMIs).  KVM will immediately inject one of the two NMIs, and
+> +	 * will request an NMI window to handle the second NMI.
+>  	 */
+>  	if (static_call(kvm_x86_get_nmi_mask)(vcpu) || vcpu->arch.nmi_injected)
+>  		limit = 1;
+> +	else
+> +		limit = 2;
+>  
+>  	vcpu->arch.nmi_pending += atomic_xchg(&vcpu->arch.nmi_queued, 0);
+>  	vcpu->arch.nmi_pending = min(vcpu->arch.nmi_pending, limit);
+> 
+
+Looks good to me, will include in v3.
 
 Thanks,
-Bhupesh
+Santosh
 
->>   			bus-width = <8>;
->>   			status = "disabled";
->>   		};
->> @@ -672,10 +654,6 @@ sdhc_2: mmc@4784000 {
->>   			clocks = <&gcc GCC_SDCC2_AHB_CLK>, <&gcc GCC_SDCC2_APPS_CLK>, <&xo_board>;
->>   			clock-names = "iface", "core", "xo";
->>   
->> -			pinctrl-0 = <&sdc2_state_on>;
->> -			pinctrl-1 = <&sdc2_state_off>;
->> -			pinctrl-names = "default", "sleep";
->> -
->>   			power-domains = <&rpmpd SM6115_VDDCX>;
->>   			operating-points-v2 = <&sdhc2_opp_table>;
->>   			iommus = <&apps_smmu 0x00a0 0x0>;
->> -- 
->> 2.38.1
->>
