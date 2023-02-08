@@ -2,101 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3794E68F5CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC52368F60F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjBHRl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
+        id S229953AbjBHRt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjBHRlK (ORCPT
+        with ESMTP id S231341AbjBHRtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:41:10 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039825828D;
-        Wed,  8 Feb 2023 09:38:00 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318HHkOQ007083;
-        Wed, 8 Feb 2023 17:35:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=w8wjwMlgb9GsgoiOCFXp4yyLA2K11B5J/RaqzGmUZsQ=;
- b=iQlyfdDmDN5+8c2FxTO+NZYAeS/32r3k5LjX151TY4iQU9gpQ99bLxRJslWjYLg3Rbcs
- SpZ4AJFF+3LwRWYlp3/s9lheOrup6+zAmmHeDYSOj+pILxxke92luvi+GfifAo/eCkO1
- 9aOia16dX6fPgAT1Uq0FAB4wC607DPSAZ4nqeqAlT4Zrmn8s9GrJebzbbC5vsMkfb/vA
- prZjUimKOH7MCsmq9k73JDwg3TWQk+30/+9x9TMH0QxL1CyVqXYGeFl65u20XSbzl7VD
- NiDSIgGc9W0MphwU07hg9Z8nsAmQEs/4bGFuKrjTaPh6LR+NzKkdkvbISlH4ga3wxB0+ Zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmfx08w5m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 17:35:58 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318HI5Pn008839;
-        Wed, 8 Feb 2023 17:35:57 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmfx08w4a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 17:35:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3185ag5Q024247;
-        Wed, 8 Feb 2023 17:35:55 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06w746-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 17:35:54 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 318HZpH743647422
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Feb 2023 17:35:51 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 686DE2004B;
-        Wed,  8 Feb 2023 17:35:51 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E311C20040;
-        Wed,  8 Feb 2023 17:35:50 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.56])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Feb 2023 17:35:50 +0000 (GMT)
-Date:   Wed, 8 Feb 2023 18:35:49 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 7/7] KVM: Change return type of kvm_arch_vm_ioctl() to
- "int"
-Message-ID: <20230208183549.145b708d@p-imbrenda>
-In-Reply-To: <20230203094230.266952-8-thuth@redhat.com>
-References: <20230203094230.266952-1-thuth@redhat.com>
-        <20230203094230.266952-8-thuth@redhat.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Wed, 8 Feb 2023 12:49:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA7E530F7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675878489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=73qlzVdSesuYbBADd5jb1f0GQcPgrypQQspoUXs7DGs=;
+        b=QfP2Z2xEeRz9nSxP7KKXcjKv1CLp3/+6NA00aoex+MHGUBk3M+xx6TrB5vzTxO3hDECS4n
+        rFJMWUU7S6X0d0nufEA17RGkx8vXaY85D3G6z6hIsbqGOLMd7NjfXMiqzpuaCIm1uXYqO7
+        V5uFgBEjF8ExO5eulXfXDD5Q+/fTPzA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-436-RM1Y4A_mMIqvMs_dCdVlNQ-1; Wed, 08 Feb 2023 12:37:19 -0500
+X-MC-Unique: RM1Y4A_mMIqvMs_dCdVlNQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A09A31C29D40;
+        Wed,  8 Feb 2023 17:37:18 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.50.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DE21418EC2;
+        Wed,  8 Feb 2023 17:37:16 +0000 (UTC)
+Date:   Wed, 8 Feb 2023 12:37:14 -0500
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v7 0/3] fanotify: Allow user space to pass back
+ additional audit info
+Message-ID: <Y+PdyieoFNcNQgmQ@madcap2.tricolour.ca>
+References: <cover.1675373475.git.rgb@redhat.com>
+ <20230208120816.2qhck3sb7u67vsib@quack3>
+ <CAHC9VhSumNxmoYQ9JPtBgV0dc1fgR38Lqbo0w4PRxhvBdS=W_w@mail.gmail.com>
+ <5912195.lOV4Wx5bFT@x2>
+ <CAHC9VhQnajhwOiW-0GvgnkPJ=QOTuLaYt2WBbm8vJoyEDso=2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5z7FZjk3Eq_9afR6qjVBjFisFOAsYUoj
-X-Proofpoint-GUID: rTE80i3B1iv3R7DqYEkof08grhL3yDR7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_08,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=960
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302080153
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhQnajhwOiW-0GvgnkPJ=QOTuLaYt2WBbm8vJoyEDso=2Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,130 +69,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Feb 2023 10:42:30 +0100
-Thomas Huth <thuth@redhat.com> wrote:
-
-> All kvm_arch_vm_ioctl() implementations now only deal with "int"
-> types as return values, so we can change the return type of these
-> functions to use "int" instead of "long".
+On 2023-02-08 11:24, Paul Moore wrote:
+> On Wed, Feb 8, 2023 at 10:27 AM Steve Grubb <sgrubb@redhat.com> wrote:
+> > On Wednesday, February 8, 2023 10:03:24 AM EST Paul Moore wrote:
+> > > On Wed, Feb 8, 2023 at 7:08 AM Jan Kara <jack@suse.cz> wrote:
+> > > > On Tue 07-02-23 09:54:11, Paul Moore wrote:
+> > > > > On Tue, Feb 7, 2023 at 7:09 AM Jan Kara <jack@suse.cz> wrote:
+> > > > > > On Fri 03-02-23 16:35:13, Richard Guy Briggs wrote:
+> > > > > > > The Fanotify API can be used for access control by requesting
+> > > > > > > permission
+> > > > > > > event notification. The user space tooling that uses it may have a
+> > > > > > > complicated policy that inherently contains additional context for
+> > > > > > > the
+> > > > > > > decision. If this information were available in the audit trail,
+> > > > > > > policy
+> > > > > > > writers can close the loop on debugging policy. Also, if this
+> > > > > > > additional
+> > > > > > > information were available, it would enable the creation of tools
+> > > > > > > that
+> > > > > > > can suggest changes to the policy similar to how audit2allow can
+> > > > > > > help
+> > > > > > > refine labeled security.
+> > > > > > >
+> > > > > > > This patchset defines a new flag (FAN_INFO) and new extensions that
+> > > > > > > define additional information which are appended after the response
+> > > > > > > structure returned from user space on a permission event.  The
+> > > > > > > appended
+> > > > > > > information is organized with headers containing a type and size
+> > > > > > > that
+> > > > > > > can be delegated to interested subsystems.  One new information
+> > > > > > > type is
+> > > > > > > defined to audit the triggering rule number.
+> > > > > > >
+> > > > > > > A newer kernel will work with an older userspace and an older
+> > > > > > > kernel
+> > > > > > > will behave as expected and reject a newer userspace, leaving it up
+> > > > > > > to
+> > > > > > > the newer userspace to test appropriately and adapt as necessary.
+> > > > > > > This
+> > > > > > > is done by providing a a fully-formed FAN_INFO extension but
+> > > > > > > setting the
+> > > > > > > fd to FAN_NOFD.  On a capable kernel, it will succeed but issue no
+> > > > > > > audit
+> > > > > > > record, whereas on an older kernel it will fail.
+> > > > > > >
+> > > > > > > The audit function was updated to log the additional information in
+> > > > > > > the
+> > > > > > > AUDIT_FANOTIFY record. The following are examples of the new record
+> > > > > > >
+> > > > > > > format:
+> > > > > > >   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1
+> > > > > > >   fan_info=3137 subj_trust=3 obj_trust=5 type=FANOTIFY
+> > > > > > >   msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=0
+> > > > > > >   subj_trust=2 obj_trust=2> > >
+> > > > > > Thanks! I've applied this series to my tree.
+> > > > >
+> > > > > While I think this version of the patchset is fine, for future
+> > > > > reference it would have been nice if you had waited for my ACK on
+> > > > > patch 3/3; while Steve maintains his userspace tools, I'm the one
+> > > > > responsible for maintaining the Linux Kernel's audit subsystem.
+> > > >
+> > > > Aha, I'm sorry for that. I had the impression that on the last version of
+> > > > the series you've said you don't see anything for which the series should
+> > > > be respun so once Steve's objections where addressed and you were silent
+> > > > for a few days, I thought you consider the thing settled... My bad.
+> > >
+> > > That's understandable, especially given inconsistencies across
+> > > subsystems.  If it helps, if I'm going to ACK something I make it
+> > > explicit with a proper 'Acked-by: ...' line in my reply; if I say
+> > > something looks good but there is no explicit ACK, there is usually
+> > > something outstanding that needs to be resolved, e.g. questions,
+> > > additional testing, etc.
+> > >
+> > > In this particular case I posed some questions in that thread and
+> > > never saw a reply with any answers, hence the lack of an ACK.  While I
+> > > think the patches were reasonable, I withheld my ACK until the
+> > > questions were answered ... which they never were from what I can
+> > > tell, we just saw a new patchset with changes.
+> > >
+> > > /me shrugs
+> >
+> > Paul,
+> >
+> > I reread the thread. You only had a request to change if/else to a switch
+> > construct only if there was a respin for the 3F. You otherwise said get
+> > Steve's input and the 3F borders on being overly clever. Both were addressed.
+> > If you had other questions that needed answers on, please restate them to
+> > expedite approval of this set of patches. As far as I can tell, all comments
+> > are addressed.
 > 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-
-Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-
-> ---
->  arch/arm64/kvm/arm.c       | 3 +--
->  arch/mips/kvm/mips.c       | 4 ++--
->  arch/powerpc/kvm/powerpc.c | 5 ++---
->  arch/riscv/kvm/vm.c        | 3 +--
->  arch/s390/kvm/kvm-s390.c   | 3 +--
->  arch/x86/kvm/x86.c         | 3 +--
->  include/linux/kvm_host.h   | 3 +--
->  7 files changed, 9 insertions(+), 15 deletions(-)
+> Steve,
 > 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 9c5573bc4614..e791ad6137b8 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -1449,8 +1449,7 @@ static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
->  	}
->  }
->  
-> -long kvm_arch_vm_ioctl(struct file *filp,
-> -		       unsigned int ioctl, unsigned long arg)
-> +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
->  {
->  	struct kvm *kvm = filp->private_data;
->  	void __user *argp = (void __user *)arg;
-> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-> index a25e0b73ee70..84cadaa2c2d3 100644
-> --- a/arch/mips/kvm/mips.c
-> +++ b/arch/mips/kvm/mips.c
-> @@ -1003,9 +1003,9 @@ void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
->  	kvm_flush_remote_tlbs(kvm);
->  }
->  
-> -long kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
-> +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
->  {
-> -	long r;
-> +	int r;
->  
->  	switch (ioctl) {
->  	default:
-> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-> index 04494a4fb37a..6f6ba55c224f 100644
-> --- a/arch/powerpc/kvm/powerpc.c
-> +++ b/arch/powerpc/kvm/powerpc.c
-> @@ -2386,12 +2386,11 @@ static int kvmppc_get_cpu_char(struct kvm_ppc_cpu_char *cp)
->  }
->  #endif
->  
-> -long kvm_arch_vm_ioctl(struct file *filp,
-> -                       unsigned int ioctl, unsigned long arg)
-> +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
->  {
->  	struct kvm *kvm __maybe_unused = filp->private_data;
->  	void __user *argp = (void __user *)arg;
-> -	long r;
-> +	int r;
->  
->  	switch (ioctl) {
->  	case KVM_PPC_GET_PVINFO: {
-> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> index 65a964d7e70d..c13130ab459a 100644
-> --- a/arch/riscv/kvm/vm.c
-> +++ b/arch/riscv/kvm/vm.c
-> @@ -87,8 +87,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	return r;
->  }
->  
-> -long kvm_arch_vm_ioctl(struct file *filp,
-> -		       unsigned int ioctl, unsigned long arg)
-> +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
->  {
->  	return -EINVAL;
->  }
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 8ad1972b8a73..86ca49814983 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2850,8 +2850,7 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
->  	return r;
->  }
->  
-> -long kvm_arch_vm_ioctl(struct file *filp,
-> -		       unsigned int ioctl, unsigned long arg)
-> +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
->  {
->  	struct kvm *kvm = filp->private_data;
->  	void __user *argp = (void __user *)arg;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index caa2541833dd..c03363efc774 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -6653,8 +6653,7 @@ static int kvm_vm_ioctl_set_clock(struct kvm *kvm, void __user *argp)
->  	return 0;
->  }
->  
-> -long kvm_arch_vm_ioctl(struct file *filp,
-> -		       unsigned int ioctl, unsigned long arg)
-> +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
->  {
->  	struct kvm *kvm = filp->private_data;
->  	void __user *argp = (void __user *)arg;
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 4f26b244f6d0..ed2f1f02976b 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1398,8 +1398,7 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_level,
->  			bool line_status);
->  int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->  			    struct kvm_enable_cap *cap);
-> -long kvm_arch_vm_ioctl(struct file *filp,
-> -		       unsigned int ioctl, unsigned long arg);
-> +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg);
->  long kvm_arch_vm_compat_ioctl(struct file *filp, unsigned int ioctl,
->  			      unsigned long arg);
->  
+> It might be helpful to reread my reply below:
+> 
+> https://lore.kernel.org/linux-audit/CAHC9VhRWDD6Tk6AEmgoobBkcVKRYbVOte7-F0TGJD2dRk7NKxw@mail.gmail.com/
+> 
+> You'll see that I made a comment in that email about not following
+> Richard's explanation about "encoding the zero" (the patch was
+> encoding a "?" to the best I could tell).  I was hoping for some
+> clarification from Richard on his comments, and I never saw anything
+> in my inbox.  I just checked the archives on lore and I don't see
+> anything there either.
+
+Well, it could have been any of:
+	?
+	"?"
+	3F
+	30
+	0
+
+I can't answer that.  My preference is for 3F but good arguments can be
+made for any of these.  I defer to Steve since it is his tools and
+customers that have to deal with it.
+
+> paul-moore.com
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
 
