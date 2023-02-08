@@ -2,103 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6FF68E7F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E951368E801
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjBHF5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 00:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S230421AbjBHGAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 01:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjBHF5k (ORCPT
+        with ESMTP id S230390AbjBHGAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 00:57:40 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB498442C6;
-        Tue,  7 Feb 2023 21:57:39 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3185WEEk009587;
-        Wed, 8 Feb 2023 05:57:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=P1ygoWWcvDpON3+quPfXepBnoOPp6QN6ilpf6N9HsXc=;
- b=meSsM2bRckSaY5LJRgAWSNs2ENCzfVNlhZB6QrRj+NOHL9QAkzBp1gc711395+unZfSq
- RfX6A9nZ9UT16OLUAKQ4BQm1sCYwbvhJvI7REsojWfzHHrlccY2D/DOIHJAdiD+Mo5lB
- 3WqbJZYCPqXtR+Fd+wZq60OQYgtV/CN1L1wlAl9r1pnb1SN8/LfCVQfWCYAQEho4oa+a
- K3JNGIEs47QtKY5gvo+cF16kX8ifl/QOGNc6/rRNeHvDRT4zUYXy186IJGfzN6qdevlF
- w8iQLHvXxLNW3FTvP8xxo08Uk7vZGpw0wcDGMxcd9p8FqaDKG8yFCh5BqwV/a9pMuVNY /g== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkdeybpa4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 05:57:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3185vZHX019544
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 05:57:35 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 7 Feb 2023 21:57:31 -0800
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH 2/2] soc: qcom: socinfo: Add IDs for IPQ5332 and its variant
-Date:   Wed, 8 Feb 2023 11:27:09 +0530
-Message-ID: <20230208055709.13162-3-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230208055709.13162-1-quic_kathirav@quicinc.com>
-References: <20230208055709.13162-1-quic_kathirav@quicinc.com>
+        Wed, 8 Feb 2023 01:00:30 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B903B3F6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 22:00:28 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id h15so10769237plk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 22:00:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ztoiwGD6RJS6Txdk3XGI+dyccn5nnjrRCwGLAobyU6g=;
+        b=DURHjXktjxin8YsroWoKDMUZkiUP+scaYcgX5CL5hgDdsbuCjwjv9ZgAESOHiQPkk5
+         tJ66CP9ArzMUd9qvWhiGuUIf+bBdCBHmZCeku1Jh6gU7/Rh5abxAVvd7YzqXg/dPvqtk
+         6PzrDODh0rHlm+cO+S7sCXYF1CpmRt1UlOwgiO7JM8n+MgEdL71O+K19rkv/u37TebPK
+         /JWk69ZmEb074mOoGxY9nU2TWLVmHvMmqk78gLnUFrOoa6THczZwvHEjuv2juWbVRqaL
+         b3akRAChJ26PC8B5i0wlSfguhyFzNJ9sagBnH+zhuabFiahkgfZGcH15hUawWc9hCjVS
+         m+pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ztoiwGD6RJS6Txdk3XGI+dyccn5nnjrRCwGLAobyU6g=;
+        b=G9S6aJSolrhWZkC9V/XTpSx2OPuY2Wt+Rf/JGAjp/OYeb7An1bqgjy/hX89IiJ+cdZ
+         tS4MCT+JZndMcDGjp8y5aTKp45/AVfhm/K2Z655OiNbO6M3tgjGAEUOXLivpM8KXyplw
+         rUIP9yUa/FVouUhcdMTrrZbFLWPyVMPQalD7cyqbmz0v7YpP0ghIbgSxPusFcL6oWElb
+         xvz0GZwBInNlMeZL3gjBc4vR+FdeeGX6cD69/u2QkINV/m0T5oLLmLMYhQjuwvUwDgiv
+         Nc5Lof+TdNg/yj78723YlLLlG6S4CF49tPGyW8W03whxB1k8Pbz8qARGoOoxh4RJV8nu
+         4TPw==
+X-Gm-Message-State: AO0yUKWQblkBvHJ1jQ9zn9SDc8CcPir6tabuN/ys6ohJ0fLdKsHrkRqt
+        D0ckoKuri+x8tSs7uaz5IY6k0AtVFoLK/dT7+juotA==
+X-Google-Smtp-Source: AK7set/VRrgd4QCHyJolP6QjarOKPn0A5NKTSdaShXD/9PzEWWeMK6jDrOwzFwcpznRp3yrq4O6um7vjGUQaw4G/58M=
+X-Received: by 2002:a17:90a:5a0e:b0:22c:2f61:72b9 with SMTP id
+ b14-20020a17090a5a0e00b0022c2f6172b9mr400241pjd.105.1675836027417; Tue, 07
+ Feb 2023 22:00:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VUTefQg5TGl8qqYugUGyW_94CwrphoX-
-X-Proofpoint-GUID: VUTefQg5TGl8qqYugUGyW_94CwrphoX-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_02,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- mlxlogscore=795 lowpriorityscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 mlxscore=0 clxscore=1015 malwarescore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302080053
+References: <20230203060924.8257-1-semen.protsenko@linaro.org>
+ <20230203060924.8257-6-semen.protsenko@linaro.org> <03eeacfb-22ff-8224-30d7-6c187b179fd7@linaro.org>
+In-Reply-To: <03eeacfb-22ff-8224-30d7-6c187b179fd7@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Wed, 8 Feb 2023 00:00:36 -0600
+Message-ID: <CAPLW+4kqJP9LK3_i30QEzz9y2PiutbYDrwbOaRJ5wQnPRjDvNg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] clk: samsung: Extract parent clock enabling to common function
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SOC ID for Qualcomm IPQ5332 and IPQ5322 variants.
+On Fri, 3 Feb 2023 at 03:14, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 03/02/2023 07:09, Sam Protsenko wrote:
+> > Extract parent clock enabling from exynos_arm64_register_cmu() to
+> > dedicated function. No functional change.
+> >
+> > No functional change.
+> >
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> >  drivers/clk/samsung/clk-exynos-arm64.c | 53 +++++++++++++++++---------
+> >  1 file changed, 36 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/drivers/clk/samsung/clk-exynos-arm64.c b/drivers/clk/samsung/clk-exynos-arm64.c
+> > index b921b9a1134a..361663223a24 100644
+> > --- a/drivers/clk/samsung/clk-exynos-arm64.c
+> > +++ b/drivers/clk/samsung/clk-exynos-arm64.c
+> > @@ -56,6 +56,41 @@ static void __init exynos_arm64_init_clocks(struct device_node *np,
+> >       iounmap(reg_base);
+> >  }
+> >
+> > +/**
+> > + * exynos_arm64_enable_bus_clk - Enable parent clock of specified CMU
+> > + *
+> > + * @dev:     Device object; may be NULL if this function is not being
+> > + *           called from platform driver probe function
+> > + * @np:              CMU device tree node
+> > + * @cmu:     CMU data
+> > + *
+> > + * Keep CMU parent clock running (needed for CMU registers access).
+> > + *
+> > + * Return: 0 on success or negative error code on failure.
+> > + */
+> > +static int __init exynos_arm64_enable_bus_clk(struct device *dev,
+> > +             struct device_node *np, const struct samsung_cmu_info *cmu)
+>
+> Align the arguments.
+>
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
- drivers/soc/qcom/socinfo.c | 2 ++
- 1 file changed, 2 insertions(+)
+In this particular case, if I align arguments to match the open
+parentheses, the last argument declaration won't fit the 80 characters
+limit. I know it's not a strict requirement anymore, but the whole
+point of breaking the line is to kind of keep it short. So I suggest
+keeping this one as is, if you don't have a strong opinion about it.
 
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index 3b970a80f3aa..abe24e1b4022 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -439,6 +439,8 @@ static const struct soc_id soc_id[] = {
- 	{ qcom_board_id(QRU1032) },
- 	{ qcom_board_id(QRU1052) },
- 	{ qcom_board_id(QRU1062) },
-+	{ qcom_board_id(IPQ5332) },
-+	{ qcom_board_id(IPQ5322) },
- };
- 
- static const char *socinfo_machine(struct device *dev, unsigned int id)
--- 
-2.17.1
+> > +{
+> > +     struct clk *parent_clk;
+> > +
+> > +     if (!cmu->clk_name)
+> > +             return 0;
+> > +
+> > +     if (dev)
+> > +             parent_clk = clk_get(dev, cmu->clk_name);
+> > +     else
+> > +             parent_clk = of_clk_get_by_name(np, cmu->clk_name);
+> > +
+> > +     if (IS_ERR(parent_clk)) {
+> > +             pr_err("%s: could not find bus clock %s; err = %ld\n",
+> > +                    __func__, cmu->clk_name, PTR_ERR(parent_clk));
+> > +             return PTR_ERR(parent_clk);
+> > +     }
+> > +
+> > +     clk_prepare_enable(parent_clk);
+> > +     return 0;
+>
+> You do not check the return value in exynos_arm64_register_cmu() below,
+> so either make it a void or add the check.
+>
 
+Thanks, will add the check in v2.
+
+>
+> Best regards,
+> Krzysztof
+>
