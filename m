@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7467768F702
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9885368F705
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjBHSfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:35:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
+        id S231191AbjBHSg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjBHSf2 (ORCPT
+        with ESMTP id S230094AbjBHSgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:35:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B343956498;
-        Wed,  8 Feb 2023 10:35:11 -0800 (PST)
-Date:   Wed, 08 Feb 2023 18:35:09 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675881310;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=pcFjdWbs2XTopyqPClTl+dUkRc1UPDvqjqiKoje/Vj0=;
-        b=0k14qGeZfdPHaKnLiQkIzZywhiJOcfCacHEP3/Ouw2a0/nMtiOv2nKM7C6uHNHaOeEpS9N
-        heSuWH01fuNJWwJsvrfiWE/4MBk39yBB8GXJYtNELLjU0k1DwTFZ8ctwvEaO25h0+zDG5t
-        SW1a0PLaBQkGJLXwWOSBjOMc1pNrgNhWV4GkC3cmzWokGh7nKXOJ5IWkXWvVQvt4lAvO5p
-        Aj2e3r0iE3vvGeO/LqxiXzkvAlOOgvRi9QXgTQqUMLG+xjTUlaQLyY+9GJ8KQEwMZFHBI2
-        x9QlDkBP2PLJhVJtK23+z3F09wGPgSOVReoQL3sEmzMPSfgLDe/AyWTcAgOGQA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675881310;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=pcFjdWbs2XTopyqPClTl+dUkRc1UPDvqjqiKoje/Vj0=;
-        b=y0koWMrDq72sbcPZGIHF4ZqwVgbr8UQ5eAzfJz1dHj/xkirFyUQD+EGq5izg3AOSNFzfBn
-        F1RtiXBK+wvY7DDw==
-From:   "tip-bot2 for Nadav Amit" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/kprobes: Fix 1 byte conditional jump target
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Wed, 8 Feb 2023 13:36:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFC24F87E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:35:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43D9E6173C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C11C433D2;
+        Wed,  8 Feb 2023 18:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675881315;
+        bh=pHw45Bur1Eds9PkCMxJM+9DF+J/zCwBWK1Hzb+5N3pY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ib6GrJ8LUqeYE2u8AQSAxwkQRajb4TEym7/HxmGXGiRZWvJcaYhT6u9v9LvZLky8J
+         bo9OegYzItSkCLtyes/yOen4IywXOibVTHu2ERDm5+kcpgzceLf+ny998wY1HLVZ8q
+         frpktdhAIQ8yssliYkYCI1CydUreVJaMRY/6Nt3k78ii+BNhi2OwPNHKwUfmm3NaLy
+         Kmm5sQaLkA1QAe0Hzn1W3Ttl+KHsFqqNnLbqMTb1kEvLKseWJMKxNOH9W2n+78KH4L
+         s7PbYfdaB3TOI8t60KhcXFNa6U9rkSeWQnzf6BiaetUR/oOuP7vj0kw1z+glw8WMEC
+         813NZyo4npQLg==
+Date:   Wed, 8 Feb 2023 11:35:13 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, jpoimboe@redhat.com, linux@weissschuh.net,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] objtool: Honey, I shrunk the instruction
+Message-ID: <Y+PrYVKwXIyutFEl@dev-arch.thelio-3990X>
+References: <20230208171756.898991570@infradead.org>
 MIME-Version: 1.0
-Message-ID: <167588130939.4906.8140947496160437703.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208171756.898991570@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Wed, Feb 08, 2023 at 06:17:56PM +0100, Peter Zijlstra wrote:
+> Hi,
+> 
+> Boris complained he could no longer build allyesconfig on his 32G desktop
+> machine without having OOM terminate either objtool or chrome.
+> 
+> After talking about these patches on IRC, Nathan mentioned the linux-clang CI
+> was also having trouble of recent, and these patches appear to make it happy
+> again.
+> 
+> In total these patches shrink an allyesconfig run by about 6G:
+> 
+> pre:	5:58.22 real,   226.69 user,    131.22 sys,     26221520 mem
+> post:	5:03.34 real,   210.75 user,    88.80 sys,      20241232 mem
+> 
+> Also at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=objtool/core
 
-Commit-ID:     bd467ddd80ab3ecdd846ac148274603e1214ae73
-Gitweb:        https://git.kernel.org/tip/bd467ddd80ab3ecdd846ac148274603e1214ae73
-Author:        Nadav Amit <namit@vmware.com>
-AuthorDate:    Wed, 08 Feb 2023 07:17:08 
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 08 Feb 2023 08:26:21 -08:00
+For patches 1-9:
 
-x86/kprobes: Fix 1 byte conditional jump target
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build only
 
-Commit 3bc753c06dd0 ("kbuild: treat char as always unsigned") broke
-kprobes.  Setting a probe-point on 1 byte conditional jump can cause the
-kernel to crash when the (signed) relative jump offset gets treated as
-unsigned.
+Prior to this series:
 
-Fix by replacing the unsigned 'immediate.bytes' (plus a cast) with the
-signed 'immediate.value' when assigning to the relative jump offset.
+    [INFO] Memory used: 25.09GB
 
-[ dhansen: clarified changelog ]
+After this series:
 
-Fixes: 3bc753c06dd0 ("kbuild: treat char as always unsigned")
-Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Suggested-by: Dave Hansen <dave.hansen@intel.com>
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/all/20230208071708.4048-1-namit%40vmware.com
----
- arch/x86/kernel/kprobes/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    [INFO] Memory used: 19.27GB
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index b36f3c3..695873c 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -625,7 +625,7 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
- 		/* 1 byte conditional jump */
- 		p->ainsn.emulate_op = kprobe_emulate_jcc;
- 		p->ainsn.jcc.type = opcode & 0xf;
--		p->ainsn.rel32 = *(char *)insn->immediate.bytes;
-+		p->ainsn.rel32 = insn->immediate.value;
- 		break;
- 	case 0x0f:
- 		opcode = insn->opcode.bytes[1];
+Our builds on TuxSuite were consistenly timing out after four hours and
+they had no problem passing with this series (the worst time was 2.2h,
+which is line with the VM specs that they use I believe):
+
+https://tuxapi.tuxsuite.com/v1/groups/clangbuiltlinux/projects/nathan/plans/2LQbNuWRo3Xf62Yg3SINuA9d7cR
+
+Thanks a lot!
+
+Cheers,
+Nathan
