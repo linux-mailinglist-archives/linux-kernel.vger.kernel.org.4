@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2DD68F0A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C52CF68F0A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjBHOYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S230393AbjBHOYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjBHOY3 (ORCPT
+        with ESMTP id S229512AbjBHOYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:24:29 -0500
+        Wed, 8 Feb 2023 09:24:31 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A075B11E9B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:24:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E17E11E8A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:24:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675866268; x=1707402268;
+  t=1675866269; x=1707402269;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gx+h2J07uC09J4mp83Cnkr7HYdM2lGx3Da2TpLhDkc0=;
-  b=IC2uFgtiWbpAaZLyuFV5ze6y2Qo17g3BcfBWp/Q/K08M7Uxw4XuUb7zi
-   S5TjHMJi+4siBhhbaSlR2HWGKQ5g596S97ZoW004cPzDQ6I2b2dddcROc
-   mi9W+ZHsyz8owoD2LodjL7OhPgMWM6mW3zMiXzrS/IrVYTNIJR8vAtjp1
-   IaEiSrSl8MHYUWEcMMVybz8CFGU+mZIcvePfhx85J1sC2mg6g7ru/pIXG
-   RNPiU55XVef9Ksyo6IpdlUYd+IG22dAMZqVrn4KLBmm9pcik9JB5Q/plO
-   bJgmu57qs1YxA8Dxsegyf2ms0aUHCCZvUWmkLrjPyxA7xK6aRZ+BwRppB
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="392201360"
+  bh=7Ce/+0NXhcpo9W0yqjgWZEhDd3HzoOlwxcHLgWOWIIc=;
+  b=jrm2iW41ZqtVtU9LEEO+DuOOqw9dGMLXJ3zvbXEz5gzJysYakCUCCdv3
+   jcVyS7EoHqNxJvAlxfSYw6FciD6JeaVB+P+7/3uQZExXvK4E035KHx8y8
+   4s0um8SErU18aVUm74Vs3FwMdmpRu+aySnt7UfSiUbL04PZscvct0g8MW
+   YjqoJ/KssYYq8k/4glyedeq6qGa67Ua3hyUr4Qq6zjvkIFZd0aUYVgLn4
+   NEktoYdZid110f1+pvHJbBMit3ZF3CEOm+PS/0b5b+W+YP+YoXvz8BvQk
+   OykMtZe5qb0MvU133xgv30ZgDuDp10yKVX9ENWkOoYWOC5+YyAp6P7JRK
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="392201366"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="392201360"
+   d="scan'208";a="392201366"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791214076"
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:21 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791214084"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="791214076"
+   d="scan'208";a="791214084"
 Received: from twinkler-lnx.jer.intel.com ([10.12.87.42])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:16 -0800
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:18 -0800
 From:   Tomas Winkler <tomas.winkler@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
@@ -46,9 +46,9 @@ Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
         Alan Previn <alan.previn.teres.alexis@intel.com>,
         linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
         Tomas Winkler <tomas.winkler@intel.com>
-Subject: [char-misc-next v3 1/2] drm/i915/mtl: Define GSC Proxy component interface
-Date:   Wed,  8 Feb 2023 16:23:57 +0200
-Message-Id: <20230208142358.1401618-2-tomas.winkler@intel.com>
+Subject: [char-misc-next v3 2/2] mei: gsc_proxy: add gsc proxy driver
+Date:   Wed,  8 Feb 2023 16:23:58 +0200
+Message-Id: <20230208142358.1401618-3-tomas.winkler@intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230208142358.1401618-1-tomas.winkler@intel.com>
 References: <20230208142358.1401618-1-tomas.winkler@intel.com>
@@ -65,79 +65,295 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-GSC Proxy component is used for communication between the
-Intel graphics driver and MEI driver.
+Add GSC proxy driver. It to allows messaging between GSC component
+on Intel on board graphics card and CSE device.
 
 Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
 Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 ---
-V2: This patch was missing in the first series
-V3: Don't maintain the interface header under mei
-    but under drm
+V2: refactor match function
+    use device information instead of driver name
+    to identify the aggregate device.
+V3: Resend
 
- include/drm/i915_component.h               |  3 +-
- include/drm/i915_gsc_proxy_mei_interface.h | 36 ++++++++++++++++++++++
- 2 files changed, 38 insertions(+), 1 deletion(-)
- create mode 100644 include/drm/i915_gsc_proxy_mei_interface.h
+ drivers/misc/mei/Kconfig                   |   2 +-
+ drivers/misc/mei/Makefile                  |   1 +
+ drivers/misc/mei/gsc_proxy/Kconfig         |  14 ++
+ drivers/misc/mei/gsc_proxy/Makefile        |   7 +
+ drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c | 208 +++++++++++++++++++++
+ 5 files changed, 231 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/misc/mei/gsc_proxy/Kconfig
+ create mode 100644 drivers/misc/mei/gsc_proxy/Makefile
+ create mode 100644 drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
 
-diff --git a/include/drm/i915_component.h b/include/drm/i915_component.h
-index c1e2a43d2d1e..56a84ee1c64c 100644
---- a/include/drm/i915_component.h
-+++ b/include/drm/i915_component.h
-@@ -29,7 +29,8 @@
- enum i915_component_type {
- 	I915_COMPONENT_AUDIO = 1,
- 	I915_COMPONENT_HDCP,
--	I915_COMPONENT_PXP
-+	I915_COMPONENT_PXP,
-+	I915_COMPONENT_GSC_PROXY,
- };
+diff --git a/drivers/misc/mei/Kconfig b/drivers/misc/mei/Kconfig
+index d21486d69df2..37db142de413 100644
+--- a/drivers/misc/mei/Kconfig
++++ b/drivers/misc/mei/Kconfig
+@@ -62,4 +62,4 @@ config INTEL_MEI_GSC
  
- /* MAX_PORT is the number of port
-diff --git a/include/drm/i915_gsc_proxy_mei_interface.h b/include/drm/i915_gsc_proxy_mei_interface.h
+ source "drivers/misc/mei/hdcp/Kconfig"
+ source "drivers/misc/mei/pxp/Kconfig"
+-
++source "drivers/misc/mei/gsc_proxy/Kconfig"
+diff --git a/drivers/misc/mei/Makefile b/drivers/misc/mei/Makefile
+index fb740d754900..14aee253ae48 100644
+--- a/drivers/misc/mei/Makefile
++++ b/drivers/misc/mei/Makefile
+@@ -30,3 +30,4 @@ CFLAGS_mei-trace.o = -I$(src)
+ 
+ obj-$(CONFIG_INTEL_MEI_HDCP) += hdcp/
+ obj-$(CONFIG_INTEL_MEI_PXP) += pxp/
++obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += gsc_proxy/
+diff --git a/drivers/misc/mei/gsc_proxy/Kconfig b/drivers/misc/mei/gsc_proxy/Kconfig
 new file mode 100644
-index 000000000000..e817bb316d5c
+index 000000000000..fd45ce8c1df4
 --- /dev/null
-+++ b/include/drm/i915_gsc_proxy_mei_interface.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: MIT */
++++ b/drivers/misc/mei/gsc_proxy/Kconfig
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (c) 2022-2023, Intel Corporation. All rights reserved.
++#
++config INTEL_MEI_GSC_PROXY
++	tristate "Intel GSC Proxy services of ME Interface"
++	select INTEL_MEI_ME
++	depends on DRM_I915
++	help
++         MEI Support for GSC Proxy Services on Intel platforms.
++
++         MEI GSC proxy enables messaging between GSC service on
++         Intel graphics on-board card and services on CSE (MEI)
++         firmware residing SoC or PCH.
++
+diff --git a/drivers/misc/mei/gsc_proxy/Makefile b/drivers/misc/mei/gsc_proxy/Makefile
+new file mode 100644
+index 000000000000..358847e9aaa9
+--- /dev/null
++++ b/drivers/misc/mei/gsc_proxy/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2022-2023, Intel Corporation. All rights reserved.
++#
++# Makefile - GSC Proxy client driver for Intel MEI Bus Driver.
++
++obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += mei_gsc_proxy.o
+diff --git a/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
+new file mode 100644
+index 000000000000..953eda1a16fb
+--- /dev/null
++++ b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
+@@ -0,0 +1,208 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (c) 2022-2023 Intel Corporation
 + */
 +
-+#ifndef _I915_GSC_PROXY_MEI_INTERFACE_H_
-+#define _I915_GSC_PROXY_MEI_INTERFACE_H_
++/**
++ * DOC: MEI_GSC_PROXY Client Driver
++ *
++ * The mei_gsc_proxy driver acts as a translation layer between
++ * proxy user (I915) and ME FW by proxying messages to ME FW
++ */
 +
-+#include <linux/mutex.h>
-+#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/pci.h>
++#include <linux/slab.h>
++#include <linux/uuid.h>
++#include <linux/mei_cl_bus.h>
++#include <linux/component.h>
++#include <drm/drm_connector.h>
++#include <drm/i915_component.h>
++#include <drm/i915_gsc_proxy_mei_interface.h>
 +
 +/**
-+ * struct i915_gsc_proxy_component_ops - ops for GSC Proxy services.
-+ * @owner: Module providing the ops
-+ * @send: sends data through GSC proxy
-+ * @recv: receives data through GSC proxy
++ * mei_gsc_proxy_send - Sends a proxy message to ME FW.
++ * @dev: device corresponding to the mei_cl_device
++ * @buf: a message buffer to send
++ * @size: size of the message
++ * Return: bytes sent on Success, <0 on Failure
 + */
-+struct i915_gsc_proxy_component_ops {
-+	struct module *owner;
++static int mei_gsc_proxy_send(struct device *dev, const void *buf, size_t size)
++{
++	ssize_t ret;
 +
-+	int (*send)(struct device *dev, const void *buf, size_t size);
-+	int (*recv)(struct device *dev, void *buf, size_t size);
++	if (!dev || !buf)
++		return -EINVAL;
++
++	ret = mei_cldev_send(to_mei_cl_device(dev), buf, size);
++	if (ret < 0)
++		dev_dbg(dev, "mei_cldev_send failed. %zd\n", ret);
++
++	return ret;
++}
++
++/**
++ * mei_gsc_proxy_recv - Receives a proxy message from ME FW.
++ * @dev: device corresponding to the mei_cl_device
++ * @buf: a message buffer to contain the received message
++ * @size: size of the buffer
++ * Return: bytes received on Success, <0 on Failure
++ */
++static int mei_gsc_proxy_recv(struct device *dev, void *buf, size_t size)
++{
++	ssize_t ret;
++
++	if (!dev || !buf)
++		return -EINVAL;
++
++	ret = mei_cldev_recv(to_mei_cl_device(dev), buf, size);
++	if (ret < 0)
++		dev_dbg(dev, "mei_cldev_recv failed. %zd\n", ret);
++
++	return ret;
++}
++
++static const struct i915_gsc_proxy_component_ops mei_gsc_proxy_ops = {
++	.owner = THIS_MODULE,
++	.send = mei_gsc_proxy_send,
++	.recv = mei_gsc_proxy_recv,
++};
++
++static int mei_component_master_bind(struct device *dev)
++{
++	struct mei_cl_device *cldev = to_mei_cl_device(dev);
++	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
++
++	comp_master->ops = &mei_gsc_proxy_ops;
++	comp_master->mei_dev = dev;
++	return component_bind_all(dev, comp_master);
++}
++
++static void mei_component_master_unbind(struct device *dev)
++{
++	struct mei_cl_device *cldev = to_mei_cl_device(dev);
++	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
++
++	component_unbind_all(dev, comp_master);
++}
++
++static const struct component_master_ops mei_component_master_ops = {
++	.bind = mei_component_master_bind,
++	.unbind = mei_component_master_unbind,
 +};
 +
 +/**
-+ * struct i915_gsc_proxy_component - Used for communication between i915 and
-+ * MEI drivers for GSC proxy services
-+ * @mei_dev: device that provide the GSC proxy service.
-+ * @ops: Ops implemented by GSC proxy driver, used by i915 driver.
++ * mei_gsc_proxy_component_match - compare function for matching mei.
++ *
++ *    The function checks if the device is pci device and
++ *    Intel VGA adapter, the subcomponent is SW Proxy
++ *    and the parent of MEI PCI and the parent of VGA are the same PCH device.
++ *
++ * @dev: master device
++ * @subcomponent: subcomponent to match (I915_COMPONENT_SWPROXY)
++ * @data: compare data (mei pci parent)
++ *
++ * Return:
++ * * 1 - if components match
++ * * 0 - otherwise
 + */
-+struct i915_gsc_proxy_component {
-+	struct device *mei_dev;
-+	const struct i915_gsc_proxy_component_ops *ops;
++static int mei_gsc_proxy_component_match(struct device *dev, int subcomponent,
++					 void *data)
++{
++	struct pci_dev *pdev;
++
++	if (!dev_is_pci(dev))
++		return 0;
++
++	pdev = to_pci_dev(dev);
++
++	if (pdev->class != (PCI_CLASS_DISPLAY_VGA << 8) ||
++	    pdev->vendor != PCI_VENDOR_ID_INTEL)
++		return 0;
++
++	if (subcomponent != I915_COMPONENT_GSC_PROXY)
++		return 0;
++
++	return component_compare_dev(dev->parent, ((struct device *)data)->parent);
++}
++
++static int mei_gsc_proxy_probe(struct mei_cl_device *cldev,
++			       const struct mei_cl_device_id *id)
++{
++	struct i915_gsc_proxy_component *comp_master;
++	struct component_match *master_match = NULL;
++	int ret;
++
++	ret = mei_cldev_enable(cldev);
++	if (ret < 0) {
++		dev_err(&cldev->dev, "mei_cldev_enable Failed. %d\n", ret);
++		goto enable_err_exit;
++	}
++
++	comp_master = kzalloc(sizeof(*comp_master), GFP_KERNEL);
++	if (!comp_master) {
++		ret = -ENOMEM;
++		goto err_exit;
++	}
++
++	component_match_add_typed(&cldev->dev, &master_match,
++				  mei_gsc_proxy_component_match, cldev->dev.parent);
++	if (IS_ERR_OR_NULL(master_match)) {
++		ret = -ENOMEM;
++		goto err_exit;
++	}
++
++	mei_cldev_set_drvdata(cldev, comp_master);
++	ret = component_master_add_with_match(&cldev->dev,
++					      &mei_component_master_ops,
++					      master_match);
++	if (ret < 0) {
++		dev_err(&cldev->dev, "Master comp add failed %d\n", ret);
++		goto err_exit;
++	}
++
++	return 0;
++
++err_exit:
++	mei_cldev_set_drvdata(cldev, NULL);
++	kfree(comp_master);
++	mei_cldev_disable(cldev);
++enable_err_exit:
++	return ret;
++}
++
++static void mei_gsc_proxy_remove(struct mei_cl_device *cldev)
++{
++	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
++	int ret;
++
++	component_master_del(&cldev->dev, &mei_component_master_ops);
++	kfree(comp_master);
++	mei_cldev_set_drvdata(cldev, NULL);
++
++	ret = mei_cldev_disable(cldev);
++	if (ret)
++		dev_warn(&cldev->dev, "mei_cldev_disable() failed %d\n", ret);
++}
++
++#define MEI_UUID_GSC_PROXY UUID_LE(0xf73db04, 0x97ab, 0x4125, \
++				   0xb8, 0x93, 0xe9, 0x4, 0xad, 0xd, 0x54, 0x64)
++
++static struct mei_cl_device_id mei_gsc_proxy_tbl[] = {
++	{ .uuid = MEI_UUID_GSC_PROXY, .version = MEI_CL_VERSION_ANY },
++	{ }
++};
++MODULE_DEVICE_TABLE(mei, mei_gsc_proxy_tbl);
++
++static struct mei_cl_driver mei_gsc_proxy_driver = {
++	.id_table = mei_gsc_proxy_tbl,
++	.name = KBUILD_MODNAME,
++	.probe = mei_gsc_proxy_probe,
++	.remove	= mei_gsc_proxy_remove,
 +};
 +
-+#endif /* _I915_GSC_PROXY_MEI_INTERFACE_H_ */
++module_mei_cl_driver(mei_gsc_proxy_driver);
++
++MODULE_AUTHOR("Intel Corporation");
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("MEI GSC PROXY");
 -- 
 2.39.1
 
