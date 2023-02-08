@@ -2,237 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DCA68ED7A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C74968ED83
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjBHLEn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Feb 2023 06:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S229807AbjBHLIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBHLEl (ORCPT
+        with ESMTP id S229457AbjBHLIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:04:41 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2E66183
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 03:04:36 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PBcV738t6z67j7Z;
-        Wed,  8 Feb 2023 19:00:31 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Wed, 8 Feb
- 2023 11:04:33 +0000
-Date:   Wed, 8 Feb 2023 11:04:32 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     haoxin <xhao@linux.alibaba.com>
-CC:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Oscar Salvador" <osalvador@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, <yangyicong@huawei.com>
-Subject: Re: [PATCH -v4 0/9] migrate_pages(): batch TLB flushing
-Message-ID: <20230208110432.000011b5@Huawei.com>
-In-Reply-To: <2b15a6c8-67a4-8d93-09a4-cdc9f09e6b78@linux.alibaba.com>
-References: <20230206063313.635011-1-ying.huang@intel.com>
-        <b01e8657-76bd-71e6-929a-4b1131d1aebd@linux.alibaba.com>
-        <2b15a6c8-67a4-8d93-09a4-cdc9f09e6b78@linux.alibaba.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 8 Feb 2023 06:08:07 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B584483;
+        Wed,  8 Feb 2023 03:08:06 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318Aax8E021576;
+        Wed, 8 Feb 2023 11:07:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=Sb7zAkRR2CPMYF37C7epY1KD9UDtT1p3N6QhMn2OlVk=;
+ b=L8/Y3JLaXR+To0L6ufS/o63EjQFoejIQ0gH5P93mTV4vSwC8ez3l1n7/14ThpKd/BZWU
+ xfYZ8pSUJmkFqeEhAVVo8iIaWRm4FxBNnWGWHxl2dQid5tBzNEG5Za5ix/rWxWUHMClb
+ KmQqlVL+3ADN2L0N5X0MEOrsQaYzAFmu9ipggXEe21hTbzShEe/Aq9oLx2sCFl8mE+dV
+ e7oacoxZnTw45TqRd5SIo1QSkA2cJfmeLS3l2g6YjSF1A1M/V5/ZZKMp7YsXmKYwAoT9
+ Zw/mW0XMPWdOagzY4yvurTBjhls0QbAVtTIh90SXfWpz2lFYTAXspH9h252Seh4i/1O7 yw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkgafkvy9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 11:07:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318B7Xvv015324
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 11:07:33 GMT
+Received: from hu-jinlmao-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 8 Feb 2023 03:07:32 -0800
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+Subject: [PATCH] coresight: core: Add coresight name support
+Date:   Wed, 8 Feb 2023 03:07:16 -0800
+Message-ID: <20230208110716.18321-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zCGaZ7m6sdCM-TRSKtyx8TUcQk_y6Jkw
+X-Proofpoint-ORIG-GUID: zCGaZ7m6sdCM-TRSKtyx8TUcQk_y6Jkw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_04,2023-02-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 clxscore=1011 bulkscore=0 spamscore=0
+ mlxlogscore=801 mlxscore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302080101
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 14:27:32 +0800
-haoxin <xhao@linux.alibaba.com> wrote:
+Apart from STM and ETM sources, there will be more sources added to
+coresight components. For example, there are over 10 TPDM sources.
+Add coresight name support for custom names which will be
+easy to identify the source.
 
-> 在 2023/2/8 下午2:21, haoxin 写道:
-> >
-> > On my arm64 server with 128 cores, 2 numa nodes.
-> >
-> > I used memhog as benchmark :
-> >
-> >     numactl -m -C 5 memhog -r100000 1G
-> >  
->      Do a fix, numactl -m 0 -C 5 memhog -r100000 1G
+Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+---
+ drivers/hwtracing/coresight/coresight-core.c | 34 +++++++++++---------
+ 1 file changed, 19 insertions(+), 15 deletions(-)
 
-Nice results - thanks for sharing.
-
-Just to confirm, is this with this tlb batching on arm64 patch set?
-https://lore.kernel.org/linux-arm-kernel/20221117082648.47526-1-yangyicong@huawei.com/
-
-I think that still hasn't been applied upstream.
-
-Jonathan
-
-> 
-> > The test result as below:
-> >
-> >  With this patch:
-> >
-> >     #time migratepages 8490 0 1
-> >
-> >     real 0m1.161s
-> >
-> >     user 0m0.000s
-> >
-> >     sys 0m1.161s
-> >
-> > without this patch:
-> >
-> >     #time migratepages 8460 0 1
-> >
-> >     real 0m2.068s
-> >
-> >     user 0m0.001s
-> >
-> >     sys 0m2.068s
-> >
-> > So you can see the migration performance improvement about *+78%*
-> >
-> > This is the perf record info.
-> >
-> > w/o
-> > +   51.07%     0.09%  migratepages  [kernel.kallsyms]  [k] 
-> > migrate_folio_extra
-> > +   42.43%     0.04%  migratepages  [kernel.kallsyms]  [k] folio_copy
-> > +   42.34%    42.34%  migratepages  [kernel.kallsyms]  [k] __pi_copy_page
-> > +   33.99%     0.09%  migratepages  [kernel.kallsyms]  [k] rmap_walk_anon
-> > +   32.35%     0.04%  migratepages  [kernel.kallsyms]  [k] try_to_migrate
-> > *+   27.78%    27.78%  migratepages  [kernel.kallsyms]  [k] 
-> > ptep_clear_flush *
-> > +    8.19%     6.64%  migratepages  [kernel.kallsyms]  [k] 
-> > folio_migrate_flagsmigrati_tlb_flush
-> >
-> > w/ this patch
-> > +   18.57%     0.13%  migratepages     [kernel.kallsyms]   [k] 
-> > migrate_pages
-> > +   18.23%     0.07%  migratepages     [kernel.kallsyms]   [k] 
-> > migrate_pages_batch
-> > +   16.29%     0.13%  migratepages     [kernel.kallsyms]   [k] 
-> > migrate_folio_move
-> > +   12.73%     0.10%  migratepages     [kernel.kallsyms]   [k] 
-> > move_to_new_folio
-> > +   12.52%     0.06%  migratepages     [kernel.kallsyms]   [k] 
-> > migrate_folio_extra
-> >
-> > Therefore, this patch helps improve performance in page migration
-> >
-> >
-> > So,  you can add Tested-by: Xin Hao <xhao@linux.alibaba.com>
-> >
-> >
-> > 在 2023/2/6 下午2:33, Huang Ying 写道:  
-> >> From: "Huang, Ying"<ying.huang@intel.com>
-> >>
-> >> Now, migrate_pages() migrate folios one by one, like the fake code as
-> >> follows,
-> >>
-> >>    for each folio
-> >>      unmap
-> >>      flush TLB
-> >>      copy
-> >>      restore map
-> >>
-> >> If multiple folios are passed to migrate_pages(), there are
-> >> opportunities to batch the TLB flushing and copying.  That is, we can
-> >> change the code to something as follows,
-> >>
-> >>    for each folio
-> >>      unmap
-> >>    for each folio
-> >>      flush TLB
-> >>    for each folio
-> >>      copy
-> >>    for each folio
-> >>      restore map
-> >>
-> >> The total number of TLB flushing IPI can be reduced considerably.  And
-> >> we may use some hardware accelerator such as DSA to accelerate the
-> >> folio copying.
-> >>
-> >> So in this patch, we refactor the migrate_pages() implementation and
-> >> implement the TLB flushing batching.  Base on this, hardware
-> >> accelerated folio copying can be implemented.
-> >>
-> >> If too many folios are passed to migrate_pages(), in the naive batched
-> >> implementation, we may unmap too many folios at the same time.  The
-> >> possibility for a task to wait for the migrated folios to be mapped
-> >> again increases.  So the latency may be hurt.  To deal with this
-> >> issue, the max number of folios be unmapped in batch is restricted to
-> >> no more than HPAGE_PMD_NR in the unit of page.  That is, the influence
-> >> is at the same level of THP migration.
-> >>
-> >> We use the following test to measure the performance impact of the
-> >> patchset,
-> >>
-> >> On a 2-socket Intel server,
-> >>
-> >>   - Run pmbench memory accessing benchmark
-> >>
-> >>   - Run `migratepages` to migrate pages of pmbench between node 0 and
-> >>     node 1 back and forth.
-> >>
-> >> With the patch, the TLB flushing IPI reduces 99.1% during the test and
-> >> the number of pages migrated successfully per second increases 291.7%.
-> >>
-> >> This patchset is based on v6.2-rc4.
-> >>
-> >> Changes:
-> >>
-> >> v4:
-> >>
-> >> - Fixed another bug about non-LRU folio migration.  Thanks Hyeonggon!
-> >>
-> >> v3:
-> >>
-> >> - Rebased on v6.2-rc4
-> >>
-> >> - Fixed a bug about non-LRU folio migration.  Thanks Mike!
-> >>
-> >> - Fixed some comments.  Thanks Baolin!
-> >>
-> >> - Collected reviewed-by.
-> >>
-> >> v2:
-> >>
-> >> - Rebased on v6.2-rc3
-> >>
-> >> - Fixed type force cast warning.  Thanks Kees!
-> >>
-> >> - Added more comments and cleaned up the code.  Thanks Andrew, Zi, Alistair, Dan!
-> >>
-> >> - Collected reviewed-by.
-> >>
-> >> from rfc to v1:
-> >>
-> >> - Rebased on v6.2-rc1
-> >>
-> >> - Fix the deadlock issue caused by locking multiple pages synchronously
-> >>    per Alistair's comments.  Thanks!
-> >>
-> >> - Fix the autonumabench panic per Rao's comments and fix.  Thanks!
-> >>
-> >> - Other minor fixes per comments. Thanks!
-> >>
-> >> Best Regards,
-> >> Huang, Ying  
+diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+index d3bf82c0de1d..5e95d9c7f256 100644
+--- a/drivers/hwtracing/coresight/coresight-core.c
++++ b/drivers/hwtracing/coresight/coresight-core.c
+@@ -1733,28 +1733,32 @@ char *coresight_alloc_device_name(struct coresight_dev_list *dict,
+ {
+ 	int idx;
+ 	char *name = NULL;
++	const char *coresight_name = NULL;
+ 	struct fwnode_handle **list;
++	struct device_node *node = dev->of_node;
+ 
+ 	mutex_lock(&coresight_mutex);
+ 
+-	idx = coresight_search_device_idx(dict, dev_fwnode(dev));
+-	if (idx < 0) {
+-		/* Make space for the new entry */
+-		idx = dict->nr_idx;
+-		list = krealloc_array(dict->fwnode_list,
+-				      idx + 1, sizeof(*dict->fwnode_list),
+-				      GFP_KERNEL);
+-		if (ZERO_OR_NULL_PTR(list)) {
+-			idx = -ENOMEM;
+-			goto done;
++	if (!of_property_read_string(node, "coresight-name", &coresight_name))
++		name = devm_kasprintf(dev, GFP_KERNEL, "%s", coresight_name);
++	else {
++		idx = coresight_search_device_idx(dict, dev_fwnode(dev));
++		if (idx < 0) {
++			/* Make space for the new entry */
++			idx = dict->nr_idx;
++			list = krealloc_array(dict->fwnode_list,
++					      idx + 1, sizeof(*dict->fwnode_list),
++					      GFP_KERNEL);
++			if (ZERO_OR_NULL_PTR(list))
++				goto done;
++
++			list[idx] = dev_fwnode(dev);
++			dict->fwnode_list = list;
++			dict->nr_idx = idx + 1;
+ 		}
+ 
+-		list[idx] = dev_fwnode(dev);
+-		dict->fwnode_list = list;
+-		dict->nr_idx = idx + 1;
++		name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
+ 	}
+-
+-	name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
+ done:
+ 	mutex_unlock(&coresight_mutex);
+ 	return name;
+-- 
+2.39.0
 
