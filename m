@@ -2,266 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAF368EFA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1001368EF7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjBHNRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:17:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S230390AbjBHNEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjBHNRP (ORCPT
+        with ESMTP id S229851AbjBHNEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:17:15 -0500
-X-Greylist: delayed 1589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Feb 2023 05:17:07 PST
-Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC877D98;
-        Wed,  8 Feb 2023 05:17:07 -0800 (PST)
-Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
-        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <andreas@feldner-bv.de>)
-        id 1pPjtp-002BgJ-EI; Wed, 08 Feb 2023 13:50:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=/yDnLpZT7axdNeq6mVTzNC/zbjG2jenE6smkcCw0zAE=; b=n85tM6HuohF6nDWC8PXqfLPS4J
-        qYSDH74RbZhBNEyROpJ7K8XgiXBBXTRuMkp9t5cTqkmfOnwOO7Yr6VdQ3LgqLCWY8bLq9iohJgjWa
-        ZIJv0SdWbQJp+ZUc/3okp+KU94+eExofJ3A0xdTcAh1nIKG0w86ORpZeMzOhChOfGesGYnaidKTNd
-        MPXkFMo+3HKrF6P8IU/u0y9C2DF1E1TDxEzfGzSizpRNM1QjZ3a0TFnqyO1pSfiVP/amLR7YFPX9V
-        tYZIwT8Q0M3N5YlAVutxXzjtWX6LF5hTU3y/t8ZDi2MINPxYq7Rp3Zyqn5WyEvo8tMvfUt1y/E/QR
-        ZCX2ptGQ==;
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To
-        :From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=/yDnLpZT7axdNeq6mVTzNC/zbjG2jenE6smkcCw0zAE=; b=q4DG6sv/JEUdtmV13KalBww4Ve
-        cL7+6cBHdfMjpgaNNdluk+P7Lmz4PHdEGZCPBc0RMfPItQ+yQRHo1tGzvnfjEgrsWdrq87jXDn9gt
-        ukmLrc9ToDlLLPMpRLejxCdIS/2uUaQamEcPc8unH51fC02eVTwzrRmh2wIS1Dx+MUFIfRafYsjVQ
-        22VANNKGHzoqvnx1xhH0mQ74iubveKj3vyI9Rc77DlPg/toUoPQVwnX1/9kjMm5exFhzC/Y3TzWw9
-        zCPKRj4DjXsKX8qPIwihSOEoKAIH8IdEVUb59dk9z5GIQEzaOnw3OTTB4YW7oYg2hRhh9NrvvIcU6
-        vHNI80hQ==;
-Received: from [2a02:908:1b0:8800:99b0:f082:b591:5921]
-        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <andreas@feldner-bv.de>)
-        id 1pPjtl-000HS2-EE; Wed, 08 Feb 2023 13:50:08 +0100
-Message-ID: <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
-Date:   Wed, 8 Feb 2023 13:50:04 +0100
+        Wed, 8 Feb 2023 08:04:23 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2124.outbound.protection.outlook.com [40.107.92.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BEA46179;
+        Wed,  8 Feb 2023 05:04:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GxETobLHU688hREXFucYVohZ+u/CimJdhueWTB8jxZEZ5dNP7fPJt3Kid9TJPPpOTiurd07duuHLqBRyNgr8lJacmjYnBLkpiC5GdM9GsBgdzbTqNWZQByctKB9v8dYTwYswRn/grTAxVPOayvL/V96+gmSqVWR+I7K4Tr3165B5KnEDNP1QWBHdEzyS4JaebtV63k4cmR+rHq9lSRShkk+k3AO+61qDetGBie/LfC0q8W5I6ntnWvupiJl1a9sny14i1qTa7rRAATdHIV6SAok8rD1GAzvfITHG+244AaLRi5oVl95nWolrRCQIKT8nI4/VmKP+xPkZSJDnYwFLvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GJDGOrESqVw7O/6115CebnbOEq+KHWZ2tAT8wWIZs98=;
+ b=hZGx6BByRhLIKpMVXQY856LAABnb89gyGCMlB+2IuOqLnN8xnNEBOOBO4JIQV1ATOuHN+LRfPOAKQxg/3FoWVWE/D0cRbWWqT9jD0RsKijE/Yqlk/IsuZ3Wm7c0jcxkdHuFi3hrrTErcgTAwb8HVutZV7BGY9FBR6WMDUGn8EDExJUEy4D9ZQFOGGKm4nkyQMc7bv6wrUmiSW3kZqFWLrxUU52qU5zOgTtglNkO5cMQ+HZ9X05i8lpX9XmKDsJknYAylFOoJ8oJblPWg7YjkentBj06iBsae2icqM0ADJVUsCP/NtR0b3o6Jn0P8+A68PHpuV3KaUuH9yZja72zJwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GJDGOrESqVw7O/6115CebnbOEq+KHWZ2tAT8wWIZs98=;
+ b=MUnl4PP0gqu/BA3PB29P88G+CZcVmSWMUn2mt7Flzn83LslcVhpCS8J/kTOUvWKu/scVvgn1OMNIX7IVOEPQTbM7NFstW4oOitZGxxYzmF/ddC0Hd9gTse/NwLfGZgvqMURS5Y3VkxviM4IG8kFfBYuhL1h4c3VoATO2JgsiUNg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB5699.namprd13.prod.outlook.com (2603:10b6:510:116::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Wed, 8 Feb
+ 2023 13:04:16 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%7]) with mapi id 15.20.6086.017; Wed, 8 Feb 2023
+ 13:04:16 +0000
+Date:   Wed, 8 Feb 2023 14:04:10 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        razor@blackwall.org, roopa@nvidia.com, pabeni@redhat.com,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] net: bridge: clean up one inconsistent indenting
+Message-ID: <Y+OdyiQpz7lIBfh3@corigine.com>
+References: <20230208005626.56847-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208005626.56847-1-yang.lee@linux.alibaba.com>
+X-ClientProxiedBy: AM8P191CA0005.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21a::10) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
- default
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Andreas Feldner <pelzi@flying-snail.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
- <20230207011608.2ce24d17@slackpad.lan>
-From:   Andreas Feldner <andreas@feldner-bv.de>
-In-Reply-To: <20230207011608.2ce24d17@slackpad.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5699:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8f1b531b-4a0d-4f67-9dfe-08db09d4fb4a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FkoMkAwgUkYrRcpYEryELrT1EaGQw9LeUDkeotqUv2C4MCQ0YjXYhz8zHLjXDXPGHTdTIIUF8GRrLHNmZX6besDM688s0nl1Yhq6msTzvuiZGAZr9z1Hsm9RIfi1LdVH3TujkSV3xwG4dHGUz2o52dDXY+JkZUpD7/U/H/gDmNX+8iFQkW8n+BUeIQcYpeSBAfgrcIcEhWI6PLWgQJRrENkDKFU7g2hv0BrczyUHENV/5E/+3I0B0SeDQ/M2OkUcs01KvZ4GejNT7rF1M+PnvjRpUzRQt9EtQF5/J5Ul7PlJtH3G7FrbQEvLdUW4qJgIRtBSZ8xVEmrQH0LeE430aqWIDhpwqVipyP7Obd03SgQQ0RWFjCJ3MOO4wltBgThGZKKoAJ7rXftIAkGcwfdidzzDrMLpTFxfe0YZKHmxNadprcVjo9teo1YrpzOADA0XP1q0WEMaWUYGt/6y/RXqtmP3lKwNLWVdlSKR35cYsCoYIzJc7L6HRuAWH3Cqliqz4viBengB+Fh/9+u5GgfyoWxz9vvdk2lp8vlPqAvaSOrFBnjExxSCu6xDGV9Rtb2Wu0QWwalMUZD/m/rpJo3VNoy4ZVSiSUXK+ctmK8cQYbS10JVCI9wxRBmAhXa3sWaOPFUOi/haUMNTSIg0NzDG18Jmp05EyHLUBb3iMRZU5WQxDzGee/5fG3nfyPwy8dWbqUxwuR6SwctFNayJjD6/p3HyIH2z9K+UtXYSbRimOps=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(136003)(396003)(39840400004)(346002)(451199018)(44832011)(6512007)(186003)(6506007)(2906002)(6666004)(36756003)(966005)(7416002)(5660300002)(478600001)(6486002)(41300700001)(8936002)(2616005)(8676002)(66946007)(66476007)(4326008)(6916009)(83380400001)(66556008)(86362001)(316002)(38100700002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8bL1kISOqAMEpPcZbd/ckGAY1AK77Wf0Q5wK5YKFrhRH6uXF4MIWaSfqBpBm?=
+ =?us-ascii?Q?LST5QoPUXGtfaexHMzE5SnGyc9vYD65vTHLHdpn2nJltH3YpdktHPkjdnMO+?=
+ =?us-ascii?Q?73qxiikDGpOwik9kzbQ0Keul9PpHD1ulS5nI2Q7SmzV1jE9qh3smS4GhiPPO?=
+ =?us-ascii?Q?PpwnJcaUWrmfI46oNImcUN61HKF+e3TyCITgTkuoVyH7XfLON6Rcxh+xv81v?=
+ =?us-ascii?Q?LEapPYgAp7pYhcM4zMNJ7NfGsE3rYjO2Iu9IXNesppsnfYTUHYwgIdOoBvQX?=
+ =?us-ascii?Q?+4a69MMknhgRZnPkoYO7n6CrxQUe6fXmpzRacdAFKa0dgPNUdXInrfW4imsu?=
+ =?us-ascii?Q?PAgBtNxs1owiMa/YaUg5r0KmxMRIEqQe2IBkbsAWpJXE9Vnfvt6Rp0XBT+gy?=
+ =?us-ascii?Q?gqdxyzxuVIClF8vu8M/OiP+Vt6LftMGb/pb65XBf3/kJ1e2OzewW6PZSoyym?=
+ =?us-ascii?Q?RAG7FakQA/NHdhXE/JMqaH8Lv46OsSRzut5NnSpbpJgKmY7Lxq6brqo2fx33?=
+ =?us-ascii?Q?mJvKl/CKwFisb7hARED6kD9RDnw9fn82BSREPHJ+SMjRQnIsdxg9I032mBhw?=
+ =?us-ascii?Q?FZ3Q8OIVB8Fet4Q0lUyyBrTFM7JLRZEUsERplwzH9Oo72fVVFPASVhV/tSM0?=
+ =?us-ascii?Q?FaMh56eMfeZTlvDH/UuIfi/wUVn0R2RaQ57J6cIsIUmi/0Fgoh/In4FGX2ma?=
+ =?us-ascii?Q?+VuaxX7/+tgldOQgn5/FSUSvGJGcEw0HJ+69i4xBF2nxZOL1dLI4tmB76wFD?=
+ =?us-ascii?Q?i6BuMgdpme7p9PBK313RlghCRSdaB8WStxvIVXKBBIeB8fau72juOT4EEGwX?=
+ =?us-ascii?Q?DcQ91F5+s5IIbKjB5jrxWiOi6jGXKLYWECq5ecshAgo/1XrXPc5fWydh7cRK?=
+ =?us-ascii?Q?MxLq6dOgBgVeYEbaUDzzMN+9l5o/pejq+CRxEa2jgmiEDcirJ0kE71QRaKN4?=
+ =?us-ascii?Q?MxfOqKcX3PQVvFu9ZZBOQ3ZfgUmKtaQ1VYZw5f72ftswtnO/gWcZEoY9T1lS?=
+ =?us-ascii?Q?KnrxO2FSvgO27EjDGw6Nn996qWB9SXUG5PbBU+3GH+jt11yQLqdHXq3NtPCZ?=
+ =?us-ascii?Q?KG1VgzfSo7nzA3p/bZ/Nr3ZLY1wUYMvnEnEaWpuQZtbk5nxhEsZEqMxVnpNQ?=
+ =?us-ascii?Q?GqffT8Nl3BKToPqaIUsAAL//tT/rDbfguQBj8lxg25p29juRzeZwM6zWjHTC?=
+ =?us-ascii?Q?b+8nOImanjmk9r1nGJC0ltOJZ1s2jFuEH02MB1cbQrKicWILOsxFwwFNIhbL?=
+ =?us-ascii?Q?BFeVFwhNJEPj8LpjZ8xn5Notr8XI7g3ADoFZxcT1gwHbbwHM76NDNCfrny1c?=
+ =?us-ascii?Q?8R/6Ucyq+v+iPUQXum0wMwjzMGO301Nj8rVtCt4qtIqT9IUeV079ujUH7x0t?=
+ =?us-ascii?Q?5ZdTP3pBxDmMfR1AlEQV9jOE1DC61wwscme4Sa3NUBRQHZ6AbcINZeVS8ezd?=
+ =?us-ascii?Q?1PDHid6f6vOZ36xlMcMndQ3VVLuX4rwO6h3xLUgtjSY00M9Dymg/dbqyUM+e?=
+ =?us-ascii?Q?TW/y86q/G7Z9SlFRXl5B5NAASrdx3rSB2H5IIRT1O3RQ4Pf7JJkscDuUqHmG?=
+ =?us-ascii?Q?bvQVTTwtu9tpirqkZV7/wcSTbsLjuu3vurR7VIDudnGC1+FxMFwxm8cuZD+H?=
+ =?us-ascii?Q?K8uLcgQhylX5Ko1IB+ZacSsvkqmBbWAUqF3TblQau3QVtqDtuPXY9DMLG/Cu?=
+ =?us-ascii?Q?9OVuhw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f1b531b-4a0d-4f67-9dfe-08db09d4fb4a
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 13:04:15.9100
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4mLuzE/dprq6LKDgNXamXpOMw14UeBuZ6eHPaMq2gZBeYD+PHSwO69n2H08M5WC0EJbMxtEnErS799ZhDFf/fc9z8gC4b4gLR26Tp09f4NM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5699
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andre,
+On Wed, Feb 08, 2023 at 08:56:26AM +0800, Yang Li wrote:
+> ./net/bridge/br_netlink_tunnel.c:317:4-27: code aligned with following code on line 318
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3977
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Am 07.02.23 um 02:16 schrieb Andre Przywara:
-> On Mon, 6 Feb 2023 20:51:50 +0100
-> Andreas Feldner <pelzi@flying-snail.de> wrote:
->
-> Hi Andreas,
->
-> thanks for taking care about this board and sending patches!
-Thank YOU for maintaining it!
->> The SoC features debounce logic for external interrupts. Per default,
->> this is based on a 32kHz oscillator, in effect filtering away multiple
->> interrupts separated by less than roughly 100ï¿½s.
->>
->> This patch sets different defaults for this filter for this board:
->> PG is connected to non-mechanical components, without any risk for
->> showing bounces. PA is mostly exposed to GPIO pins, however the
->> existence of a debounce filter is undesirable as well if electronic
->> components are connected.
-> So how do you know if that's the case? It seems to be quite normal to
-> just connect mechanical switches to GPIO pins.
->
-> If you are trying to fix a particular issue you encountered, please
-> describe that here, and say how (or at least that) the patch fixes it.
->
-> And I would suggest to treat port G and port A differently. If you
-> need a lower debounce threshold for port A, you can apply a DT overlay
-> in U-Boot, just for your board.
+As you may need to respin this:
 
-Fair enough. You run into problems when you connect (electronic)
-devices to bank A (typically by the 40pin CON2 connector), where
-the driver requires fast IRQs to work. In my case this has been a
-DHT22 sensor, and the default debounce breaking the dht11.ko
-driver.
+Assuming this is targeting net-next, which seems likely to me,
+the subject should denote that. Something like this:
 
-Now, what kind of problem is this - I'm no way sure:
+[PATCH net-next] net: bridge: clean up one inconsistent indenting
 
-a) is it an unlucky default, because whoever connects a mechanical
-switch will know about the problem of bouncing and be taking
-care to deal with it (whereas at least I was complete unsuspecting
-when connecting an electronic device that a debounce function
-might be in place), or
+> ---
+>  net/bridge/br_netlink_tunnel.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/bridge/br_netlink_tunnel.c b/net/bridge/br_netlink_tunnel.c
+> index 17abf092f7ca..eff949bfdd83 100644
+> --- a/net/bridge/br_netlink_tunnel.c
+> +++ b/net/bridge/br_netlink_tunnel.c
+> @@ -315,7 +315,7 @@ int br_process_vlan_tunnel_info(const struct net_bridge *br,
+>  
+>  			if (curr_change)
+>  				*changed = curr_change;
+> -			 __vlan_tunnel_handle_range(p, &v_start, &v_end, v,
+> +			__vlan_tunnel_handle_range(p, &v_start, &v_end, v,
+>  						    curr_change);
 
-b) is it a bug in the devicetree for (at least) the BananaPi M2 Zero,
-because the IRQ bank G is hard wired to electronic devices that
-should not be fenced by a debouncing function, or
+I think you also need to adjust the line immediately above.
 
-c) is it missing dt binding documentation of the input-debounce
-attribute?
-
-Anyway, the combination of these is quite irritating. To me it
-seems a sufficiently elegant solution to explicitly include the
-setting in the devicetree and leave it to whoever is unhappy
-with it, to create a better suited device tree overlay.
-
->> Additionally, the clock-frequency attribute is added for each of
->> the 4 cores to eliminate the kernel error message on boot, that
->> the attribute is missing.
->>
->> Signed-off-by: Andreas Feldner <pelzi@flying-snail.de>
->> ---
->>   .../dts/sun8i-h2-plus-bananapi-m2-zero.dts     | 18 ++++++++++++++++++
->>   1 file changed, 18 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
->> index d729b7c705db..1fc0d5d1e51a 100644
->> --- a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
->> +++ b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
->> @@ -113,6 +113,22 @@ wifi_pwrseq: wifi_pwrseq {
->>   
->>   &cpu0 {
->>   	cpu-supply = <&reg_vdd_cpux>;
->> +	clock-frequency = <1296000000>;
-> I see where you are coming from, this is really an unnecessary warning
-> message. However this message should be really removed from the kernel
-> instead of adding some rather meaningless value here.
-> The current DT spec marks this property as required, though, so I added
-> a PR there to get this fixed:
-> https://github.com/devicetree-org/devicetree-specification/pull/61
-> Once this is through, we can try to remove the kernel message.
-
-OK, so I'll take care to have this change removed from my patch.
-I thought so, but then it was the configuration I'd been testing with...
-
->> +};
->> +
->> +&cpu1 {
->> +	cpu-supply = <&reg_vdd_cpux>;
-> I don't think we need this for every core?
-
-I came across a discussion that this was marked required on the
-cpu@... level whereas it would make sense on the cpus level. I did
-not check if this suggestion was implemented in the meantime,
-sorry!
-
->> +	clock-frequency = <1296000000>;
->> +};
->> +
->> +&cpu2 {
->> +	cpu-supply = <&reg_vdd_cpux>;
->> +	clock-frequency = <1296000000>;
->> +};
->> +
->> +&cpu3 {
->> +	cpu-supply = <&reg_vdd_cpux>;
->> +	clock-frequency = <1296000000>;
->>   };
->>   
->>   &de {
->> @@ -193,6 +209,8 @@ bluetooth {
->>   };
->>   
->>   &pio {
->> +	/* 1ï¿½s debounce filter on both IRQ banks */
-> Is that supposed to be <micro> in UTF-8? It seems to have got lost in
-> translation, or is that just me?
-O yes, the Greek character slipped into the comment.
->> +	input-debounce = <1 1>;
-> As mentioned above, I am not so sure this is generic enough to put it
-> here for PA. And what is the significance of "1 us", in particular? Is
-> that just the smallest value?
-
-Yes indeed it's a bit more complicated than I feel it needs to be. The
-configuration is taken as microseconds and translated into the best
-matching clock and divider by the driver. However, 0 is not translated
-to the lowest divider of the high speed clock as would be logical if
-you ask for zero microseconds, but to "leave at default". The default
-of the board is 0 in the register, translating to lowest divider on the
-_low_ speed clock.
-
-To me this is mindboggling.
-
-If you want to keep IRQ bank A as it is today and switch off the
-definitely unnecessary (and _potentially_ IRQ eating) debounce off
-for bank G only, I'd suggest the following setting:
-
-     input-debounce = <31 1>;
-
-This is because 31 Microseconds is exactly the time that is best
-matched by the low speed clock with low divider and translated
-to a 0 in the config register by the driver.
-
-The absolutely equivalent setting, with the only drawback that it
-would have confused me to death is:
-
-     input-debounce = <0 1>;
-
-(because it skips setting IRQ bank A debouncing, leaving it at 31.25 us)
-
-Or, and that was my suggestion, you set both correctly for
-electronic devices and leave the task of switching on debouncing
-to the implementors of applications with mechanical switches:
-
-     input-debounce = <1 1>;
-
-To me, any of these being present in the devicetree would have been
-of great help, because I would have seen that there is something
-to set.
-
-
-One final question: how would you like this change:
-
---- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-+++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
-@@ -1467,6 +1467,10 @@ static int sunxi_pinctrl_setup_debounce(struct 
-sunxi_pinctrl *pctl,
-                 writel(src | div << 4,
-                        pctl->membase +
-sunxi_irq_debounce_reg_from_bank(pctl->desc, i));
-+
-+               pr_info("Debounce filter for IRQ bank %d configured to "
-+                       "%d us (reg %x)\n",
-+                       i, debounce, src | div << 4);
-         }
-
-         return 0;
-
-It helped me to cross-check what the driver is really doing, and it
-again would have helped me with me DHT problem to learn about
-the existence of a debouncing filter.
-
-Yours,
-
-Andreas.
-
-
+>  		}
+>  		if (v_start && v_end)
+> -- 
+> 2.20.1.7.g153144c
+> 
