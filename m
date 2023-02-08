@@ -2,130 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850B468E610
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D2A68E611
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjBHCaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S229557AbjBHCbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 21:31:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBHCay (ORCPT
+        with ESMTP id S230062AbjBHCbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:30:54 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 990E725E33;
-        Tue,  7 Feb 2023 18:30:53 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 0429420C7E3C; Tue,  7 Feb 2023 18:30:53 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0429420C7E3C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675823453;
-        bh=FTw6lbYJqScdQtkwSa5qMiwA99Ksn8O5FYC3z9/HlBg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n9I7YUxBxXbpcmAN709MdMZ83oYMxkJIk1il7cLnpaUFmZ65MiYNaBdw/KLGFr/Ob
-         NBiMbgHwQ3Ev11xQq3TwsfmtnNABIUYXoHNCADRs7dRQXQytlVxdRMqLifytSzrrLX
-         3h5rJrb35hrV8mRUjiy65dlx5BPw+AcWRp81M+oA=
-Date:   Tue, 7 Feb 2023 18:30:52 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: Re: [PATCH v2 6/6] Driver: VMBus: Add device tree support
-Message-ID: <20230208023052.GA29547@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
- <1675188609-20913-7-git-send-email-ssengar@linux.microsoft.com>
- <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
- <20230201165133.GA24116@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <20230201174638.GA3872117-robh@kernel.org>
- <20230203173616.GA8582@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <CAL_JsqKWWg=nL5C1Hz7GQ6YCbc0ssUP71Be6kcn57v5240GQew@mail.gmail.com>
+        Tue, 7 Feb 2023 21:31:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C60028850
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 18:31:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1D31B816D4
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60E15C433A7
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:31:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675823470;
+        bh=Y9lMRyPRRn0yFFMzq2pvuKeR6CIJGocopkbfjKdoa0g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jNvpEVB+RpzOyUUdX1+61R/BjJBqkn1PEiY+WY/dA5KwqvJtFwtoWPiNvqxQn6+QL
+         vKofiVxpBFvnVybRvOfnMBCX7cwBmYqkNiX38aynaRFN7xrrUFHMC0KAKnqB1Js3VB
+         4kXwGhHaOhd+2/gtYF3/zGBVylp8I9ONEbUTHeWjVS4HIQrPvU9+WzExy+ObWwTW15
+         BD1FKB/jb89IpmgmzIJrX1qTFrgxzC5Iil9jid2ZGSfa383+RAxOW0c6xWNElIpGNP
+         nUsNhC7++zl0g6DD5Yh+3++ZVlb138lUzRa2V/t4elc4oPhyyFOgD7p425nrhuV8zi
+         jgTlT2HwyVFUQ==
+Received: by mail-ed1-f49.google.com with SMTP id fi26so18646465edb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 18:31:10 -0800 (PST)
+X-Gm-Message-State: AO0yUKVY2AGErm6j9F1xq4ODOMigcT59rJv5/lyllt9h+50DrzzGG+rs
+        wPvTeZPISQT61Gpre587i1ImGR+ZwmCP8NWjHVQ=
+X-Google-Smtp-Source: AK7set+0Uuwjsj9H7TlSVMbcni/4dDE2LXzJ3LO3cNA43R+ImOKYW52fzKXYZ7THWYaEIZeMjemrrfxl2ulPwMDBEsQ=
+X-Received: by 2002:a50:935a:0:b0:4aa:a4d9:5ab3 with SMTP id
+ n26-20020a50935a000000b004aaa4d95ab3mr1457470eda.65.1675823468486; Tue, 07
+ Feb 2023 18:31:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqKWWg=nL5C1Hz7GQ6YCbc0ssUP71Be6kcn57v5240GQew@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230112090603.1295340-1-guoren@kernel.org> <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
+ <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
+ <Y+DOyqehZvBJlb8N@FVFF77S0Q05N> <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
+ <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N>
+In-Reply-To: <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 8 Feb 2023 10:30:56 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
+Message-ID: <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
+Subject: Re: [PATCH -next V7 0/7] riscv: Optimize function trace
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Evgenii Shatokhin <e.shatokhin@yadro.com>, suagrfillet@gmail.com,
+        andy.chiu@sifive.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, linux@yadro.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 11:38:55AM -0600, Rob Herring wrote:
-> On Fri, Feb 3, 2023 at 11:36 AM Saurabh Singh Sengar
-> <ssengar@linux.microsoft.com> wrote:
+Hi Mark,
+
+Thx for the thoughtful reply.
+
+On Tue, Feb 7, 2023 at 5:17 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Tue, Feb 07, 2023 at 11:57:06AM +0800, Guo Ren wrote:
+> > On Mon, Feb 6, 2023 at 5:56 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > > The DYNAMIC_FTRACE_WITH_CALL_OPS patches should be in v6.3. They're currently
+> > > queued in the arm64 tree in the for-next/ftrace branch:
+> > >
+> > >   git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/ftrace
+> > >   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/
+> > >
+> > > ... and those *should* be in v6.3.
+> > Glade to hear that. Great!
 > >
-> > On Wed, Feb 01, 2023 at 11:46:38AM -0600, Rob Herring wrote:
-> > > On Wed, Feb 01, 2023 at 08:51:33AM -0800, Saurabh Singh Sengar wrote:
-> > > > On Tue, Jan 31, 2023 at 02:12:53PM -0600, Rob Herring wrote:
-> > > > > On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
-> > > > > <ssengar@linux.microsoft.com> wrote:
-> > > > I wanted to have separate function for ACPI and device tree flow, which
-(...)
-> > > > can be easily maintained with #ifdef. Please let me know if its fine.
 > > >
-> > > Yes, you can have separate functions:
+> > > Patches to imeplement DIRECT_CALLS atop that are in review at the moment:
 > > >
-> > > static int vmbus_acpi_add(struct platform_device *pdev)
-> > > {
-> > >       if (!IS_ENABLED(CONFIG_ACPI))
-> > >               return -ENODEV;
-> > >
-> > >       ...
-> > > }
-> > >
-> > > The compiler will throw away the function in the end if CONFIG_ACPI is
-> > > not enabled.
-> > >
-> > > That is easier for us to maintain because it reduces the combinations to
-> > > build.
-> > >
+> > >   https://lore.kernel.org/linux-arm-kernel/20230201163420.1579014-1-revest@chromium.org/
+> > Good reference. Thx for sharing.
 > >
-> > I tried removing #ifdef CONFIG_ACPI and use C's if(!IS_ENABLED(CONFIG_ACPI)) but looks
-> > compiler is not optimizing out the rest of function, it still throwing errors
-> > for acpi functions. This doesn't look 1:1 replacement to me.
-> > Please let me know if I have missunderstood any of your suggestion.
+> > >
+> > > ... and if riscv uses the CALL_OPS approach, I believe it can do much the same
+> > > there.
+> > >
+> > > If riscv wants to do a single atomic patch to each patch-site (to avoid
+> > > stop_machine()), then direct calls would always needs to bounce through the
+> > > ftrace_caller trampoline (and acquire the direct call from the ftrace_ops), but
+> > > that might not be as bad as it sounds -- from benchmarking on arm64, the bulk
+> > > of the overhead seen with direct calls is when using the list_ops or having to
+> > > do a hash lookup, and both of those are avoided with the CALL_OPS approach.
+> > > Calling directly from the patch-site is a minor optimization relative to
+> > > skipping that work.
+> > Yes, CALL_OPS could solve the PREEMPTION & stop_machine problems. I
+> > would follow up.
 > >
-> > drivers/hv/vmbus_drv.c:2175:8: error: implicit declaration of function ‘acpi_dev_resource_interrupt’ [-Werror=implicit-function-
-> 
-> That's a failure of the ACPI headers not having empty function
-> declarations. The DT functions do...
-> 
-> Also, this is just a broken assumption:
-> 
-> #ifdef CONFIG_ACPI
-> 
-> #else
-> // Assume DT
-> #endif
-> 
-> Both ACPI and DT can be enabled at the same time. They may be mutually
-> exclusive for a platform, but not the kernel. For distro kernels, both
-> will be enabled typically if the arch supports both. On arm64, DT is
-> never disabled because the boot interface is always DT.
-> 
-> Furthermore, this makes compile testing your code difficult. The arm64
-> defconfig, allmodconfig and allyesconfig all will not build the DT
-> code. The same for x86. This means all the CI builds that happen can't
-> build test this.
+> > The difference from arm64 is that RISC-V is 16bit/32bit mixed
+> > instruction ISA, so we must keep ftrace_caller & ftrace_regs_caller in
+> > 2048 aligned. Then:
+>
+> Where does the 2048-bit alignment requirement come from?
+Sorry for the typo. It's one 2048 bytes for keeping two trampolines
+(ftrace_caller & ftrace_regs_caller) in one aligned part.
+Because the jalr has only +-2048 bytes offset range.
 
-Thanks for letting me know the challanges with testing. My intention was to give
-ACPI higher priority, in case ACPI is enabled system should go ACPI flow, OF flow
-should be used only when ACPI is disabled.
+Then the "auipc   t1, ftrace(_regs)_caller" is fixed.
 
-I can replace #else part with #ifdef CONFIG_OF if that helps.
+>
+> Note that I'm assuming you will *always* go through a common ftrace_caller
+> trampoline (even for direct calls), with the trampoline responsible for
+> recovering the direct trampoline (or ops->func) from the ops pointer.
+>
+> That would only require 64-bit alignment on 64-bit (or 32-bit alignment on
+> 32-bit) to keep the literal naturally-aligned; the rest of the instructions
+> wouldn't require additional alignment.
+>
+> For example, I would expect that (for 64-bit) you'd use:
+>
+>   # place 2 NOPs *immediately before* the function, and 3 NOPs at the start
+>   -fpatchable-function-entry=5,2
+>
+>   # Align the function to 8-bytes
+>   -falign=functions=8
+>
+> ... and your trampoline in each function could be initialized to:
+>
+>   # Note: aligned to 8 bytes
+>   addr-08               // Literal (first 32-bits)      // set to ftrace_nop_ops
+>   addr-04               // Literal (last 32-bits)       // set to ftrace_nop_ops
+>   addr+00       func:   mv      t0, ra
+>   addr+04               auipc   t1, ftrace_caller
+>   addr+08               nop
+>
+> ... and when enabled can be set to:
+>
+>   # Note: aligned to 8 bytes
+>   addr-08               // Literal (first 32-bits)      // patched to ops ptr
+>   addr-04               // Literal (last 32-bits)       // patched to ops ptr
+>   addr+00       func:   mv      t0, ra
+We needn't "mv t0, ra" here because our "jalr" could work with t0 and
+won't affect ra. Let's do it in the trampoline code, and then we can
+save another word here.
+>   addr+04               auipc   t1, ftrace_caller
+>   addr+08               jalr    ftrace_caller(t1)
 
-Regards,
-Saurabh
+Here is the call-site:
+   # Note: aligned to 8 bytes
+   addr-08               // Literal (first 32-bits)      // patched to ops ptr
+   addr-04               // Literal (last 32-bits)       // patched to ops ptr
+   addr+00               auipc   t0, ftrace_caller
+   addr+04               jalr    ftrace_caller(t0)
 
-> 
-> Rob
+>
+> Note: this *only* requires patching the literal and NOP<->JALR; the MV and
+> AUIPC aren't harmful and can always be there. This way, you won't need to use
+> stop_machine().
+Yes, simplest nop is better than c.j. I confused.
+
+>
+> With that, the ftrace_caller trampoline can recover the `ops` pointer at a
+> negative offset from `ra`, and can recover the instrumented function's return
+> address in `t0`. Using the `ops` pointer, it can figure out whether to branch
+> to a direct trampoline or whether to save/restore the regs around invoking
+> ops->func.
+>
+> For 32-bit it would be exactly the same, except you'd only need a single nop
+> before the function, and the offset would be -0x10.
+Yes, we reduced another 4 bytes & a smaller alignment for better code
+size when 32-bit.
+   # Note: aligned to 4 bytes
+   addr-04               // Literal (last 32-bits)       // patched to ops ptr
+   addr+00               auipc   t0, ftrace_caller
+   addr+04               jalr    ftrace_caller(t0)
+>
+> That's what arm64 does; the only difference is that riscv would *always* need
+> to go via the trampoline in order to make direct calls.
+We need one more trampoline here beside ftrace_caller &
+ftrace_regs_caller: It's "direct_caller".
+
+addr+04         nop -> direct_caller/ftrace_caller/ftrace_regs_caller
+
+>
+> Thanks,
+> Mark.
+
+
+
+-- 
+Best Regards
+ Guo Ren
