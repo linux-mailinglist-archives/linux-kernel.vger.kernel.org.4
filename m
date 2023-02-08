@@ -2,143 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AFF68EE35
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8266468EE3A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjBHLpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 06:45:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S230140AbjBHLrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:47:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjBHLpu (ORCPT
+        with ESMTP id S231161AbjBHLrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:45:50 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2043.outbound.protection.outlook.com [40.107.212.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDA54901C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 03:45:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XD1lEV2jAGllwC29fSm4d5142s7rvi6Y4HKMi6DTjHsb7t1rCdzzugV7i76MNJ8zTxqFhiCLhPWd+a9L4eAJIRzg0j4sxmN5pGo9S9fhwOJs7/yfS5asRAkOxTMChCwdiEuGL90bVMaeCOANb2pwAEIDUqfNwFAfDGErOnjxNWZIDiQi6dLSAmsxTN3NNhaXVH232gqHHOmxe5b6Pbiq7UirJGCGMDYvfMjsk/gOgEx6cDjReUzQGBZykqdbgn9Vev4mspZ5w0WBKbJYYxTvDeTPOGTNmMmDFuvt7qJy8yfRDd466VDGAcetQYg9eqxotTpI5ZeYKglBvq1SqQT4Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XBwnBKJO+SIzVEor+gcJ1P9BvVjgkKK/1Tdu1RHrpto=;
- b=OWpDF2zJkaQITxsx13OjzWbhEHh6SyZXv50jz7KCN4McErs3ZxYO9JJaUYiX6iYwwZNl1eE7WX3EApUtGwrPkh1gG1FXjpfuvCeZ8xESnjVuffsc2wnhUL8rYd035ngp2RqDLC3+NsOCnM0NEOFGYN4Pdjo0V2LWLrFk3Pu9Cnwa0C+9Zop+PTdDeJZ86+nWWIDfF4o2Xd7HPKWouT3Cz1AUgdt6gYJ8omgi/+bsYAvaLdVmAadISvz//WzWA8uL4PQ48MhA5xDiXdqTdXKt97LWR1u8ombC+KRLqbTvJ118ivmxAxELMwzlfeIKYBCtRBVZt+NSCuXT6NnKKWGAhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XBwnBKJO+SIzVEor+gcJ1P9BvVjgkKK/1Tdu1RHrpto=;
- b=BVNGjBgOchzm6qsVtKnwslLCJNRy6jk8ScjIbFuZ2PqGyF5+bCES0OozoQ6T2/MvwJqhOj795F2HDif1OmeMpaEPgu1J3svTgbBI4GHynHyqM7rxig+w/MKA1cNjPOwDb2WHTQjUPgKSfKze3RlhJOUqlByRGZV5MPFICr7HgAVLpwPK8RAUoYeHj8QrvOwF87OnS16F5VI5HGjYM0m8nIbkfytXNH76VEo6IaNacuR09/QJ7P/iAXrE8sgyYY5ppW81QBszCruTcJIvn0bzyZ+UjRu3L0nfrBJ+Z3Z8t5JuYOXjHggL5er2c63aaP0fznleSWfW+tdazh2ubF2XHQ==
-Received: from DM6PR05CA0063.namprd05.prod.outlook.com (2603:10b6:5:335::32)
- by IA1PR12MB6018.namprd12.prod.outlook.com (2603:10b6:208:3d6::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Wed, 8 Feb
- 2023 11:45:45 +0000
-Received: from DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:335:cafe::6) by DM6PR05CA0063.outlook.office365.com
- (2603:10b6:5:335::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17 via Frontend
- Transport; Wed, 8 Feb 2023 11:45:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT037.mail.protection.outlook.com (10.13.172.122) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.17 via Frontend Transport; Wed, 8 Feb 2023 11:45:45 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 03:45:35 -0800
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 03:45:35 -0800
-Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Wed, 8 Feb
- 2023 03:45:34 -0800
-From:   Eli Cohen <elic@nvidia.com>
-To:     <linux-kernel@vger.kernel.org>, <bhutchings@solarflare.com>
-CC:     Eli Cohen <elic@nvidia.com>
-Subject: [PATCH] lib: cpu_rmap: Avoid use after free on rmap->obj array entries
-Date:   Wed, 8 Feb 2023 13:45:15 +0200
-Message-ID: <20230208114515.1216208-1-elic@nvidia.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 8 Feb 2023 06:47:09 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B3EA5D9;
+        Wed,  8 Feb 2023 03:47:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675856828; x=1707392828;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5kU3wqaJ20/VwYQpQyjHZef6M022HHqkQEXk+jgj9l4=;
+  b=n/fqQQPGKg2BiJ94J3T3MAMRB6yCpmtesh7Xj0q66NHSVtmMgbJAhn/D
+   DMggALyw5T6J6UTnQcLXxpxQspA3Z9nWJ2MWcdOMRA4yZGqTxxylOw9e9
+   RZsbQ7YgQ5rzDs87HYjDAS+VBtLMAyArrVbCszdvhTMLidBG/9x+csOkY
+   0x/4GdFxnXvmNiRNcGvDl00/by3u+SwN/w+LRTTrriMOYREYU1+lHYdID
+   /9FeaWwpWlfJP2X+pTTQdlxPW6lVqVY2CdesTHbINEzFeDElhWm3wKTZi
+   i+d0Tkja2Swoyk3dUuDWttG/LaMso4JmzHccz3rbpZ2PlC/uMfqn4cTSl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328431596"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="328431596"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 03:47:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="756016285"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="756016285"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Feb 2023 03:47:03 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPiuk-0004QQ-2K;
+        Wed, 08 Feb 2023 11:47:02 +0000
+Date:   Wed, 8 Feb 2023 19:46:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Lucas Tanure <lucas.tanure@collabora.com>
+Subject: Re: [PATCH 1/2] ALSA: cs35l41: Add shared boost feature
+Message-ID: <202302081911.MDwfUTfx-lkp@intel.com>
+References: <20230207104021.2842-2-lucas.tanure@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT037:EE_|IA1PR12MB6018:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f6ceb8b-e5ad-48cc-4636-08db09ca03a2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1yqlJJUv98/3U66dI+bKQOgzcMY9uquqxs9OEaS8S1CybGnq2ZEO0f8es+OAgnOlRPpcBhK71zmRiCF2ovpniuz2596+2IIZwX7l9TAml6syGv6eQNgVm5Zgnb3xQf/9joMQFVOq3prbz7OHMeSmhAzaGf6RkfzxzIdD/CyJwoeGwaoz4c/F8UcJJ7QnAs/wYl7iWu/DQ8jnemFLLsQv6erlS6eiVDOdMB5gx2FPq84QdYQKBMUjMMm4iwi8cigRUU7Qrgd6PLH92vjlRTkPA908x2ekHhCRPI2hVEK8m950WXZfV4l8dmh+ROjAyRZSvKG2kaRpSqHy5bvGC4A5w9PjQ6Nu0HEMHEV1fwxtX4ndwu2P19nNapww15BsG75KEs5FxcSOyd9YBmJPae2Mw5jjDBtmRoIfr8y1DYSThby5EZFV3KmiOR02Xuq48+suzsdczhjUm6FU3GBHVH9RWC2DGRkv+/Q0g7mVuqHvUg3gWODNmYobsPVJCnRTRRLmQ1DC+JumhdVazgr2uqV3BUxvPvN3erqtYhPts46lnSJ4BEbi7ntzVK7B6SF3k6b+poUdBrJglcaakNegr5lj9ZsM3/TfmVvtnN4u+wrLO97Zu6bvAbMMZOhwOd6McSUDnG2jmKsz1t1nT8o+leVpxrYIDN4eaje6xTFbp3OBzfQD1P+sBBx8COodOe3QOivl1SXCZ3tsKzhyVyGSMgnGYQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199018)(46966006)(36840700001)(40470700004)(316002)(2616005)(336012)(110136005)(6666004)(107886003)(47076005)(83380400001)(426003)(82740400003)(36756003)(40460700003)(186003)(26005)(4326008)(36860700001)(5660300002)(82310400005)(8936002)(8676002)(70586007)(1076003)(7696005)(40480700001)(70206006)(41300700001)(7636003)(86362001)(2906002)(356005)(478600001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 11:45:45.0505
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f6ceb8b-e5ad-48cc-4636-08db09ca03a2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6018
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207104021.2842-2-lucas.tanure@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calling irq_set_affinity_notifier() with NULL at the notify
-argument, it will cause freeing of the glue pointer in the
-corresponding array entry but will leave the pointer in the array. A
-subsequent call to free_irq_cpu_rmap() will try to free this entry again
-leading to possible use after free.
+Hi Lucas,
 
-Fix that by setting NULL to the array entry and checking that we have
-non-zero at the array entry when iterating over the array in
-free_irq_cpu_rmap().
+I love your patch! Perhaps something to improve:
 
-Fixes: c39649c331c7 ("lib: cpu_rmap: CPU affinity reverse-mapping")
-Signed-off-by: Eli Cohen <elic@nvidia.com>
----
- lib/cpu_rmap.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.2-rc7 next-20230208]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/lib/cpu_rmap.c b/lib/cpu_rmap.c
-index f08d9c56f712..c2ce2200a202 100644
---- a/lib/cpu_rmap.c
-+++ b/lib/cpu_rmap.c
-@@ -232,7 +232,8 @@ void free_irq_cpu_rmap(struct cpu_rmap *rmap)
- 
- 	for (index = 0; index < rmap->used; index++) {
- 		glue = rmap->obj[index];
--		irq_set_affinity_notifier(glue->notify.irq, NULL);
-+		if (glue)
-+			irq_set_affinity_notifier(glue->notify.irq, NULL);
- 	}
- 
- 	cpu_rmap_put(rmap);
-@@ -268,6 +269,7 @@ static void irq_cpu_rmap_release(struct kref *ref)
- 		container_of(ref, struct irq_glue, notify.kref);
- 
- 	cpu_rmap_put(glue->rmap);
-+	glue->rmap->obj[glue->index] = NULL;
- 	kfree(glue);
- }
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Tanure/ALSA-cs35l41-Add-shared-boost-feature/20230207-184238
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230207104021.2842-2-lucas.tanure%40collabora.com
+patch subject: [PATCH 1/2] ALSA: cs35l41: Add shared boost feature
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20230208/202302081911.MDwfUTfx-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c1726800667180cd46986c3578e635bafa8bf01a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lucas-Tanure/ALSA-cs35l41-Add-shared-boost-feature/20230207-184238
+        git checkout c1726800667180cd46986c3578e635bafa8bf01a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/codecs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/cs35l41-lib.c:1160:7: warning: variable 'ret' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+           case CS35L41_SHD_BOOST_PASS:
+                ^~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/cs35l41-lib.c:1169:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   sound/soc/codecs/cs35l41-lib.c:1136:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
+
+
+vim +/ret +1160 sound/soc/codecs/cs35l41-lib.c
+
+  1132	
+  1133	int cs35l41_init_boost(struct device *dev, struct regmap *regmap,
+  1134			       struct cs35l41_hw_cfg *hw_cfg)
+  1135	{
+  1136		int ret;
+  1137	
+  1138		switch (hw_cfg->bst_type) {
+  1139		case CS35L41_SHD_BOOST_ACTV:
+  1140			regmap_multi_reg_write(regmap, cs35l41_actv_seq, ARRAY_SIZE(cs35l41_actv_seq));
+  1141			fallthrough;
+  1142		case CS35L41_INT_BOOST:
+  1143			ret = cs35l41_boost_config(dev, regmap, hw_cfg->bst_ind,
+  1144						   hw_cfg->bst_cap, hw_cfg->bst_ipk);
+  1145			if (ret)
+  1146				dev_err(dev, "Error in Boost DT config: %d\n", ret);
+  1147			break;
+  1148		case CS35L41_EXT_BOOST:
+  1149		case CS35L41_EXT_BOOST_NO_VSPK_SWITCH:
+  1150			/* Only CLSA0100 doesn't use GPIO as VSPK switch, but even on that laptop we can
+  1151			 * toggle GPIO1 as is not connected to anything.
+  1152			 * There will be no other device without VSPK switch.
+  1153			 */
+  1154			regmap_write(regmap, CS35L41_GPIO1_CTRL1, 0x00000001);
+  1155			regmap_multi_reg_write(regmap, cs35l41_reset_to_safe,
+  1156					       ARRAY_SIZE(cs35l41_reset_to_safe));
+  1157			ret = regmap_update_bits(regmap, CS35L41_PWR_CTRL2, CS35L41_BST_EN_MASK,
+  1158						 CS35L41_BST_DIS_FET_OFF << CS35L41_BST_EN_SHIFT);
+  1159			break;
+> 1160		case CS35L41_SHD_BOOST_PASS:
+  1161			regmap_multi_reg_write(regmap, cs35l41_pass_seq, ARRAY_SIZE(cs35l41_pass_seq));
+  1162			break;
+  1163		default:
+  1164			dev_err(dev, "Boost type %d not supported\n", hw_cfg->bst_type);
+  1165			ret = -EINVAL;
+  1166			break;
+  1167		}
+  1168	
+  1169		return ret;
+  1170	}
+  1171	EXPORT_SYMBOL_GPL(cs35l41_init_boost);
+  1172	
+
 -- 
-2.38.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
