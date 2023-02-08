@@ -2,195 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E195D68F04B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D81D68F04F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjBHODM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S231429AbjBHODa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbjBHODG (ORCPT
+        with ESMTP id S231441AbjBHODW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:03:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066C53C3E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:01:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675864908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6/nsobX2ruZfUuZDf5t48MOb356vKr1L1ibFdLfAXYU=;
-        b=RnAqGrjz0rgy0RAL5sDEB48qhdLkudV6vUB7v6Ft5sUm+1u0otZfThWrrK6df/v7aAZ3oa
-        dJkoPZY1/h0VZ0mObYmMdoeakG8P46E7yhcxsGH/98KuguI6t1lxvZXc3akHV7hBnyknsv
-        6/5avGGvl+3Pjwo/nQ2wa+p/tpMODKI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-PFqbRkqyPz6WJTX1JMymZg-1; Wed, 08 Feb 2023 09:01:44 -0500
-X-MC-Unique: PFqbRkqyPz6WJTX1JMymZg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 8 Feb 2023 09:03:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCE1DBE0;
+        Wed,  8 Feb 2023 06:02:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2281E885622;
-        Wed,  8 Feb 2023 14:01:42 +0000 (UTC)
-Received: from thuth.com (unknown [10.39.193.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A6398140EBF4;
-        Wed,  8 Feb 2023 14:01:38 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Steven Price <steven.price@arm.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Subject: [PATCH v2 6/6] KVM: Change return type of kvm_arch_vm_ioctl() to "int"
-Date:   Wed,  8 Feb 2023 15:01:05 +0100
-Message-Id: <20230208140105.655814-7-thuth@redhat.com>
-In-Reply-To: <20230208140105.655814-1-thuth@redhat.com>
-References: <20230208140105.655814-1-thuth@redhat.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A5D82220C9;
+        Wed,  8 Feb 2023 14:02:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675864968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GJY4tobiL5T+hGLI3mpeXEghVbKcnK1CLc9b6AsnAIE=;
+        b=rXSyxZZLPX10gFtRNtdMZ5VB11Ux+a3Aad5TXaFduBSkC1Soad9UfFaLUerV/pCsQYbq1W
+        3VHDNEd88upLMDKd9Jqm4ad6bpXyROgidCPT1CH1O78kImbTOfQIVJpOcQkMY0zP+hXJNT
+        +Jgzlj4MilZYzZShzCCiCL7MQTBhDwM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675864968;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GJY4tobiL5T+hGLI3mpeXEghVbKcnK1CLc9b6AsnAIE=;
+        b=0XSGdXY0tBUgbrNM50it1AaRp/DSZG/oTXp/+76sad6bmd/qbAUUvHhHxFfTCrOCUCs5mG
+        55wlk7pu1Pr0tUCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 921AA1358A;
+        Wed,  8 Feb 2023 14:02:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eLmhI4ir42OEGAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 08 Feb 2023 14:02:48 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 07AA3A06D5; Wed,  8 Feb 2023 15:02:48 +0100 (CET)
+Date:   Wed, 8 Feb 2023 15:02:47 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "Bhatnagar, Rishabh" <risbhat@amazon.com>
+Cc:     Jan Kara <jack@suse.cz>, tytso@mit.edu, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, abuehaze@amazon.com
+Subject: Re: EXT4 IOPS degradation between 4.14 and 5.10
+Message-ID: <20230208140247.rt62xdtriopfdb4o@quack3>
+References: <053b60a6-133e-5d59-0732-464d5160772a@amazon.com>
+ <20230126093231.ujn6yaxhexwzizp5@quack3>
+ <b948ed49-1bdf-b17e-d03a-7ec8dfdb1afc@amazon.com>
+ <20230127121721.lerrb36nhj7gdiwm@quack3>
+ <6a0fcca5-b869-ffb7-426b-b49a6782c1c0@amazon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a0fcca5-b869-ffb7-426b-b49a6782c1c0@amazon.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All kvm_arch_vm_ioctl() implementations now only deal with "int"
-types as return values, so we can change the return type of these
-functions to use "int" instead of "long".
+On Mon 30-01-23 09:45:32, Bhatnagar, Rishabh wrote:
+> 
+> On 1/27/23 4:17 AM, Jan Kara wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > 
+> > 
+> > 
+> > On Thu 26-01-23 10:23:07, Bhatnagar, Rishabh wrote:
+> > > On 1/26/23 1:32 AM, Jan Kara wrote:
+> > > > On Wed 25-01-23 16:33:54, Bhatnagar, Rishabh wrote:
+> > > > > Fio with buffered io/fsync=1/randwrite
+> > > > So I'm curious. Do you have any workload that actually does these
+> > > > synchronous random buffered IOs? Or is it just a benchmarking exercise?
+> > > > 
+> > > So database team was a running benchmark called hammerdb with 16 connections
+> > > where they started noticing dropped
+> > > performance for 5.10. We traced it back to filesystem with this benchmark.
+> > > Although the database workload would be something similar
+> > >   I guess.
+> > HammerDB is a TPC-C and TPC-H benchmark but details of the IO depend more
+> > on the database it is hammering. Do you know which one? Anyway the most
+> > important fact for me is that it is visible in a real world workload (well,
+> > as much as DB benchmarking is real-world ;)).
+> I believe its the MySQL database though not so sure.
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- arch/arm64/kvm/arm.c       | 3 +--
- arch/mips/kvm/mips.c       | 4 ++--
- arch/powerpc/kvm/powerpc.c | 5 ++---
- arch/riscv/kvm/vm.c        | 3 +--
- arch/s390/kvm/kvm-s390.c   | 3 +--
- arch/x86/kvm/x86.c         | 3 +--
- include/linux/kvm_host.h   | 3 +--
- 7 files changed, 9 insertions(+), 15 deletions(-)
+Well, in that case I think your MySQL DB is somewhat misconfigured. At
+least as far as we have been consulting MySQL / MariaDB developers
+regarding benchmarking, they suggested we should configure the database to
+use direct IO and increase DB internal buffers instead of relying on
+buffered IO and pagecache behavior. And if your fio job is representative
+of the IO load the DB really creates, I'd agree that that would be a saner
+and likely more performant configuration ;)
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 9c5573bc4614..e791ad6137b8 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -1449,8 +1449,7 @@ static int kvm_vm_ioctl_set_device_addr(struct kvm *kvm,
- 	}
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm = filp->private_data;
- 	void __user *argp = (void __user *)arg;
-diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
-index a25e0b73ee70..84cadaa2c2d3 100644
---- a/arch/mips/kvm/mips.c
-+++ b/arch/mips/kvm/mips.c
-@@ -1003,9 +1003,9 @@ void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
- 	kvm_flush_remote_tlbs(kvm);
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
--	long r;
-+	int r;
- 
- 	switch (ioctl) {
- 	default:
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 04494a4fb37a..6f6ba55c224f 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -2386,12 +2386,11 @@ static int kvmppc_get_cpu_char(struct kvm_ppc_cpu_char *cp)
- }
- #endif
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--                       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm __maybe_unused = filp->private_data;
- 	void __user *argp = (void __user *)arg;
--	long r;
-+	int r;
- 
- 	switch (ioctl) {
- 	case KVM_PPC_GET_PVINFO: {
-diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-index 65a964d7e70d..c13130ab459a 100644
---- a/arch/riscv/kvm/vm.c
-+++ b/arch/riscv/kvm/vm.c
-@@ -87,8 +87,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	return r;
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	return -EINVAL;
- }
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 8ad1972b8a73..86ca49814983 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -2850,8 +2850,7 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
- 	return r;
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm = filp->private_data;
- 	void __user *argp = (void __user *)arg;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 2d210ab47e21..52a8c993cd55 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -6645,8 +6645,7 @@ static int kvm_vm_ioctl_set_clock(struct kvm *kvm, void __user *argp)
- 	return 0;
- }
- 
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg)
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
- 	struct kvm *kvm = filp->private_data;
- 	void __user *argp = (void __user *)arg;
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 4f26b244f6d0..ed2f1f02976b 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -1398,8 +1398,7 @@ int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_level,
- 			bool line_status);
- int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
- 			    struct kvm_enable_cap *cap);
--long kvm_arch_vm_ioctl(struct file *filp,
--		       unsigned int ioctl, unsigned long arg);
-+int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg);
- long kvm_arch_vm_compat_ioctl(struct file *filp, unsigned int ioctl,
- 			      unsigned long arg);
- 
+> > > > > + /*
+> > > > > + * We come here when we got at @end. We take care to not overflow the
+> > > > > + * index @index as it confuses some of the callers. This breaks the
+> > > > > + * iteration when there is page at index -1 but that is already broken
+> > > > > + * anyway.
+> > > > > + */
+> > > > > + if (end == (pgoff_t)-1)
+> > > > > + *index = (pgoff_t)-1;
+> > > > > + else
+> > > > > + *index = end + 1;
+> > > > > +out:
+> > > > > rcu_read_unlock();
+> > > > > 
+> > > > > - if (ret)
+> > > > > - *index = pages[ret - 1]->index + 1;
+> > > > > -
+> > > > > 
+> > > > >   From the description of the patch i didn't see any mention of this
+> > > > > functional change.
+> > > > > Was this change intentional and did help some usecase or general performance
+> > > > > improvement?
+> > > > So the change was intentional. When I was working on the series, I was
+> > > > somewhat concerned that the old code could end up in a pathological
+> > > > situation like:
+> > > >     We scan range 0-1000000, find the only dirty page at index 0, return it.
+> > > >     We scan range 1-1000000, find the only dirty page at index 1, return it.
+> > > >     ...
+> > > > 
+> > > > This way we end up with rather inefficient scanning and in theory malicious
+> > > > user could livelock writeback like this. That being said this was/is mostly
+> > > > a theoretical concern.
+> > > Ok so its more of a security concern. But do you think this has a latency
+> > > impact? I didn't see
+> > > much latency impact between the two sets and throughput is higher.
+> > Yes, I expect there will be latency impact but for this workload probably
+> > relatively small. I expect the expensive part on your workload is the
+> > fsync(2) call, in particular the committing of the transaction and the
+> > flushing of the disk caches as a result of that. Data writes themselves are
+> > relatively cheap. If you had say 1MB blocks instead of 16k ones, I'd expect
+> > the numbers to start looking differently as the cost of IO and of cache
+> > flushing becomes for comparable - obviously it all depends on the details
+> > of the backing storage as well. Perhaps could you measure how much time we
+> > spend in file_write_and_wait_range() calls vs in the whole ext4_sync_file()
+> > call to confirm that?
+> > 
+> > Overall your tests show we could gain some throughput without sacrificing
+> > too much latency if we somehow batch tiny fsync requests more. The trick is
+> > how to do this without regressing other workloads and also across various
+> > storage types which are going to have very different properties.
+> 
+> Yeah i agree fsync is much more expensive operation than just dirtying
+> buffers in page cache.  I did use the ext4dist tool from bcc to get the
+> distribution of write vs fsync.  Overall fsync is much more expensive
+> operation so yeah if we can get higher throughput here with batching it
+> shouldn't impact fsync latency that much.
+
+Well, I was more interested in file_write_and_wait_range() vs
+ext4_sync_file() latency comparison. write(2) calls are indeed very fast
+because they just copy into the page cache so that is not very interesting.
+But file_write_and_wait_range() is more interesting because that measures
+the cost of writing file data to the disk while whole ext4_sync_file()
+measures the cost of writing file data to the disk + the cost of flushing
+the journal and I'm interested in how much is the flushing of the journal
+costly compared to the data writeback.
+
+								Honza
 -- 
-2.31.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
