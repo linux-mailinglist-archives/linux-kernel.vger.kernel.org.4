@@ -2,88 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574FD68F2D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308A468F2D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjBHQGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
+        id S230365AbjBHQHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:07:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBHQGW (ORCPT
+        with ESMTP id S229539AbjBHQHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:06:22 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3AB2BF25
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:06:17 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id be8so19795131plb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 08:06:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1RtT+tmNqFzYW9HFGM8EiaI8TKYfazSEO+jRCB5fHBM=;
-        b=HxRg9Dpekes1pQDkH4qCpvH0JGYHdkE0cK2Ln4fi0Xg66hKQdwXMVWA0ChixwzsopN
-         VdQEdaTi13WOEMP7OqMqPyIoBCfm8451w0S3WT1f5mp4GeWkX/2dgJq91ceXRdo3f/7J
-         sJHVmswLBla7N36r8/I5jd4y21mZs16uXbbdhfdemYyrzhKzZRmmAaYxChIjSDogHDuF
-         U2gKiMWVBYNVh6IUN/Q/1iDLcJsyjv2DWABywNLP0kIYGTkdbJyugKvkZXGd0saQFoGh
-         EyKYgXwhXaafZvbYkAO7BgYM7eMAY2otiCkiHF/pQQGWg7zzddlNROwBA3JTQIbJLSgT
-         7O5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1RtT+tmNqFzYW9HFGM8EiaI8TKYfazSEO+jRCB5fHBM=;
-        b=VPUIIymH9Ism1Le6SUOcdKfJsPdjb6pHGuwp+J5nfc4rLnkSq1qMtu/S0kja/I/qdN
-         0GZDnXM3VeDbnRSj1fDRfgInKLvI4vZe1SJQVfo9vLtNrKh2Zkf5rt+25PUZDUCGM8kW
-         olyTI1c/pXdExZO0xd2N752gZOT9Sz39O5wKNKyRmHlttVgOsiBB8KnUt009pwS1ubuE
-         Ihat/Seo/bP/jXX14/v1Yf1WSKaugkfKr0Z1QNRHOJ/vBl0cBTMiODljMFUyX8PtUj4J
-         7PTVnJ6ueiV40tdhUD3CHHVg5z0GsR8xKMIZoQ37o9hK9HxLas9YuU/wzP6i5uSZ4s+S
-         OC4w==
-X-Gm-Message-State: AO0yUKX/RcotTvLCc7FDTmlZnodwGin5LjT+mt4YNzlSQesSaWZ6YPeJ
-        gGWzp5B76DybjH/Fnk82MkNzeA==
-X-Google-Smtp-Source: AK7set8pMqKg9DFJGTafjS3G2UGl2pR8NOlAITtC9bO6vN7fe7/inI2GQVMA092aFj5i5vHLH+lqKw==
-X-Received: by 2002:a17:903:2446:b0:198:af50:e4ea with SMTP id l6-20020a170903244600b00198af50e4eamr266926pls.16.1675872376690;
-        Wed, 08 Feb 2023 08:06:16 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u206-20020a6279d7000000b0059085684b54sm11875051pfc.140.2023.02.08.08.06.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 08:06:16 -0800 (PST)
-Date:   Wed, 8 Feb 2023 16:06:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Santosh Shukla <santosh.shukla@amd.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
+        Wed, 8 Feb 2023 11:07:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB7B460BB;
+        Wed,  8 Feb 2023 08:07:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=I+8/zUoQiK+vQy80qJDNf+yWTBzPHdJgShoFpq1p2MA=; b=SoJIEnEY/Cemy5seqHZ9JFmTMd
+        a06i0nD26pTQDw/xDS5VYYD4VB5/YEA534bCu0v3imj+4+yu8Q98hf06hGLZ7rBCDv3N45I6TFWiN
+        arYFsB7TZ6IlE+CpG++ifMttPiyqx2wZilomoPoGFWjliol1lVl0nf8l+qk9KmQu4wH85R2MStxLx
+        IDR7+yQ2uBY0S81kINNTtEN9vnxJuyk+iYJCrsOAZA4uWQtEDsC+sSc4eFLTxLlM9Fc0hFmicAz1z
+        /ezAS+1NDGAcCEhnKsigJh7cPV3oxqu6cvVga0wHNAslyuI9o4u8aOPDvaYs4DnGEC2ZEsxViLCBI
+        vnDNxmsA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPmyI-00GChE-QD; Wed, 08 Feb 2023 16:06:58 +0000
+Date:   Wed, 8 Feb 2023 08:06:58 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Song Liu <song@kernel.org>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hch@lst.de, kernel-team@meta.com,
         Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection
- interface
-Message-ID: <Y+PIdJZtCsGH2Sw3@google.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-8-mlevitsk@redhat.com>
- <Y9mWFlGdzoa8ZDW7@google.com>
- <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v10] module: replace module_layout with module_memory
+Message-ID: <Y+PIohsycXjJpdr5@bombadil.infradead.org>
+References: <20230207002802.2514802-1-song@kernel.org>
+ <87357gv9ha.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <87357gv9ha.ffs@tglx>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,128 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023, Santosh Shukla wrote:
-> On 2/1/2023 3:58 AM, Sean Christopherson wrote:
-> > On Tue, Nov 29, 2022, Maxim Levitsky wrote:
-> >> @@ -5191,9 +5191,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
-> >>  
-> >>  	vcpu->arch.nmi_injected = events->nmi.injected;
-> >>  	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING)
-> >> -		vcpu->arch.nmi_pending = events->nmi.pending;
-> >> +		atomic_add(events->nmi.pending, &vcpu->arch.nmi_queued);
-> >> +
-> >>  	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
-> >>  
-> >> +	process_nmi(vcpu);
-> > 
-> > Argh, having two process_nmi() calls is ugly (not blaming your code, it's KVM's
-> > ABI that's ugly).  E.g. if we collapse this down, it becomes:
-> > 
-> > 	process_nmi(vcpu);
-> > 
-> > 	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
-> > 		<blah blah blah>
-> > 	}
-> > 	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
-> > 
-> > 	process_nmi(vcpu);
-> > 
-> > And the second mess is that V_NMI needs to be cleared.
-> > 
+On Wed, Feb 08, 2023 at 09:37:21AM +0100, Thomas Gleixner wrote:
+> On Mon, Feb 06 2023 at 16:28, Song Liu wrote:
+> > module_layout manages different types of memory (text, data, rodata, etc.)
+> > in one allocation, which is problematic for some reasons:
+> >
+> > 1. It is hard to enable CONFIG_STRICT_MODULE_RWX.
+> > 2. It is hard to use huge pages in modules (and not break strict rwx).
+> > 3. Many archs uses module_layout for arch-specific data, but it is not
+> >    obvious how these data are used (are they RO, RX, or RW?)
+> >
+> > Improve the scenario by replacing 2 (or 3) module_layout per module with
+> > up to 7 module_memory per module:
+> >
+> >         MOD_TEXT,
+> >         MOD_DATA,
+> >         MOD_RODATA,
+> >         MOD_RO_AFTER_INIT,
+> >         MOD_INIT_TEXT,
+> >         MOD_INIT_DATA,
+> >         MOD_INIT_RODATA,
+> >
+> > and allocating them separately. This adds slightly more entries to
+> > mod_tree (from up to 3 entries per module, to up to 7 entries per
+> > module). However, this at most adds a small constant overhead to
+> > __module_address(), which is expected to be fast.
+> >
+> > Various archs use module_layout for different data. These data are put
+> > into different module_memory based on their location in module_layout.
+> > IOW, data that used to go with text is allocated with MOD_MEM_TYPE_TEXT;
+> > data that used to go with data is allocated with MOD_MEM_TYPE_DATA, etc.
+> >
+> > module_memory simplifies quite some of the module code. For example,
+> > ARCH_WANTS_MODULES_DATA_IN_VMALLOC is a lot cleaner, as it just uses a
+> > different allocator for the data. kernel/module/strict_rwx.c is also
+> > much cleaner with module_memory.
+> >
+> > Signed-off-by: Song Liu <song@kernel.org>
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
 > 
-> Can you please elaborate on "V_NMI cleared" scenario? Are you mentioning
-> about V_NMI_MASK or svm->nmi_masked?
+> With the comment update folded in:
+> 
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
-V_NMI_MASK.  KVM needs to purge any pending virtual NMIs when userspace sets
-vCPU event state and KVM_VCPUEVENT_VALID_NMI_PENDING is set.
+Thanks! I've merged this onto modules-next for winder testing.
+It is too late for v6.2 as we're on rc7 but this just means we'll
+get testing on linux-next for a good while for v6.3.
 
-> > The first process_nmi() effectively exists to (a) purge nmi_queued and (b) keep
-> > nmi_pending if KVM_VCPUEVENT_VALID_NMI_PENDING is not set.  I think we can just
-> > replace that with an set of nmi_queued, i.e.
-> > 
-> > 	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
-> > 		vcpu->arch-nmi_pending = 0;	
-> > 		atomic_set(&vcpu->arch.nmi_queued, events->nmi.pending);
-> > 		process_nmi();
-> > 
-> You mean replace above process_nmi() with kvm_make_request(KVM_REQ_NMI, vcpu), right?
-> I'll try with above proposal.
+If other folks do complete review please send your Reviewed-by
+annotation so I can ammend the commit log as we go.
 
-Yep, if that works.  Actually, that might be a requirement.  There's a
-
-  static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
-
-lurking below this.  Invoking process_nmi() before NMI blocking is updated could
-result in KVM incorrectly dropping/keeping NMIs.  I don't think it would be a
-problem in practice since KVM save only one NMI, but userspace could stuff NMIs.
-
-Huh.  The the existing code is buggy.  events->nmi.pending is a u8, and
-arch.nmi_pending is an unsigned int.  KVM doesn't cap the incoming value, so
-userspace could set up to 255 pending NMIs.  The extra weird part is that the extra
-NMIs will get dropped the next time KVM stumbles through process_nmi().
-
-Amusingly, KVM only saves one pending NMI, i.e. in a true migration scenario KVM
-may drop an NMI.
-
-  events->nmi.pending = vcpu->arch.nmi_pending != 0;
-
-The really amusing part is that that code was added by 7460fb4a3400 ("KVM: Fix
-simultaneous NMIs").  The only thing I can figure is that KVM_GET_VCPU_EVENTS was
-somewhat blindly updated without much thought about what should actually happen.
-
-So, can you slide the below in early in the series?  Then in this series, convert
-to the above suggested flow (zero nmi_pending, stuff nmi_queued) in another patch?
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Wed, 8 Feb 2023 07:44:16 -0800
-Subject: [PATCH] KVM: x86: Save/restore all NMIs when multiple NMIs are
- pending
-
-Save all pending NMIs in KVM_GET_VCPU_EVENTS, and queue KVM_REQ_NMI if one
-or more NMIs are pending after KVM_SET_VCPU_EVENTS in order to re-evaluate
-pending NMIs with respect to NMI blocking.
-
-KVM allows multiple NMIs to be pending in order to faithfully emulate bare
-metal handling of simultaneous NMIs (on bare metal, truly simultaneous
-NMIs are impossible, i.e. one will always arrive first and be consumed).
-Support for simultaneous NMIs botched the save/restore though.  KVM only
-saves one pending NMI, but allows userspace to restore 255 pending NMIs
-as kvm_vcpu_events.nmi.pending is a u8, and KVM's internal state is stored
-in an unsigned int.
-
-7460fb4a3400 ("KVM: Fix simultaneous NMIs")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 508074e47bc0..e9339acbf82a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -5115,7 +5115,7 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
- 	events->interrupt.shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
- 
- 	events->nmi.injected = vcpu->arch.nmi_injected;
--	events->nmi.pending = vcpu->arch.nmi_pending != 0;
-+	events->nmi.pending = vcpu->arch.nmi_pending;
- 	events->nmi.masked = static_call(kvm_x86_get_nmi_mask)(vcpu);
- 
- 	/* events->sipi_vector is never valid when reporting to user space */
-@@ -5202,8 +5202,11 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
- 						events->interrupt.shadow);
- 
- 	vcpu->arch.nmi_injected = events->nmi.injected;
--	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING)
-+	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
- 		vcpu->arch.nmi_pending = events->nmi.pending;
-+		if (vcpu->arch.nmi_pending)
-+			kvm_make_request(KVM_REQ_NMI, vcpu);
-+	}
- 	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
- 
- 	if (events->flags & KVM_VCPUEVENT_VALID_SIPI_VECTOR &&
-
-base-commit: 6c77ae716d546d71b21f0c9ee7d405314a3f3f9e
--- 
-
+  Luis
