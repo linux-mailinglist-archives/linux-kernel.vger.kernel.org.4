@@ -2,73 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4607368E77B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C08668E77E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjBHF0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 00:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S229834AbjBHF0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 00:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBHF0a (ORCPT
+        with ESMTP id S229559AbjBHF0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 00:26:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6635AE;
-        Tue,  7 Feb 2023 21:26:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0BEE8B81C0D;
-        Wed,  8 Feb 2023 05:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0454AC433EF;
-        Wed,  8 Feb 2023 05:25:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675833956;
-        bh=dVPtYgDR8H752PdO0OfEoeUEtay31tVR8DSjLTPBMZE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CJNPlivDL0az7Jq96Hkv/RLiazKmkb9GdnFLKN7UzCBeB8I+WU+XusTI4cLDWPLjj
-         CB1p+wRPEBTqqh3HjyIe5aqo7WuDR9oSn4JVs2enFChzhjLUyXKbhxr4jCcLaIy5+E
-         P1IsjgIi8CWpMaDH3MxsApj+5GDCkyVzdwlQaxhatRkHJX3irh3aOuF9Pu6L3X/zj0
-         Kl8Lmlj2swiZAQ4B/ArnO95ZxcJUZ/FGI2yaEwWbQCm0DkyE23Kp8dzqoeQnPfxt7j
-         BxmBAJcoaM/y+uN+fBulquXZ20SltnMYPOmH6EFb5N1j0mTIQipNwxbKYvjUobiVUm
-         zpCFHbxkHhNPw==
-Date:   Tue, 7 Feb 2023 21:25:55 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v5 00/23] net: add EEE support for KSZ9477 and
- AR8035 with i.MX6
-Message-ID: <20230207212555.79ffbc26@kernel.org>
-In-Reply-To: <20230206135050.3237952-1-o.rempel@pengutronix.de>
-References: <20230206135050.3237952-1-o.rempel@pengutronix.de>
+        Wed, 8 Feb 2023 00:26:43 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB9019F31;
+        Tue,  7 Feb 2023 21:26:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ARUk2d+sCZWHwDfzIfVXqPEuRg8EkLiwolIcbG+SXl8=; b=dGBxZ03m2u5KOBfx4zSZmaWzCu
+        QnYmO5ClWXP9xHv1kOW0PfgPS08zK9C2Mn2bDiYwzV6CxcVPImWxf0QGCxmUFoPTmGZi2Tp6kyQCF
+        I0qaDRpYccC/RTV8kgZyTmRsfA2bA8XyNibSBOIEG5YqSLlTitmjCQU/rajwpGNSlyHCkEjhIjHLJ
+        j6wHZuzTx+DkFrfO5cSuSrG+WRvpnlmOAYhu2kl+nFTter83HvV0jGP8B0DOlV7NWcrhUIIfQBY6N
+        gpUpImp5sAyneCLq3jYTLKNq42YiMiMZKYaNXe0A/gOpX4CyoUCZDnRQYuDjCB+dvwjIqWHxUSK5P
+        +CCciz5g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPcyC-00E6v3-2u; Wed, 08 Feb 2023 05:26:12 +0000
+Date:   Tue, 7 Feb 2023 21:26:12 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v12 01/10] vfs, iomap: Fix generic_file_splice_read() to
+ avoid reversion of ITER_PIPE
+Message-ID: <Y+MydH2HZ7ihITli@infradead.org>
+References: <20230207171305.3716974-1-dhowells@redhat.com>
+ <20230207171305.3716974-2-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207171305.3716974-2-dhowells@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Feb 2023 14:50:27 +0100 Oleksij Rempel wrote:
-> With this patch series we provide EEE control for KSZ9477 family of switches and
-> AR8035 with i.MX6 configuration.
-> According to my tests, on a system with KSZ8563 switch and 100Mbit idle link,
-> we consume 0,192W less power per port if EEE is enabled.
+Subject nitpick:  this does not ouch iomap at all.
 
-Can we carve this series up a little bit to avoid large reposts?
-Perhaps you can hold off on reposting the cleanup patches starting
-at patch 17 - repost those separately after the first 16 go in?
+> Fix this by replacing the use of an ITER_PIPE iterator with an ITER_BVEC
+> iterator for which reversion won't free the buffers.  Bulk allocate all the
+> buffers we think we're going to use in advance, do the read synchronously
+> and only then trim the buffer down.  The pages we did use get pushed into
+> the pipe.
+> 
+> This is more efficient by virtue of doing a bulk page allocation, but
+> slightly less efficient by ignoring any partial page in the pipe.
+
+For the usual case of a buffered read into the iter, this completely
+changes the semantics:
+
+ - before the pagecache pages just grew a new reference and were
+   added to the pipe buffer, and I/O was done without an extra
+   copy
+ - with this patch you always allocate an extra set of pages for
+   the pipe and copy to it
+
+So I very much doubt this makes anything more efficient, and I don't
+think we can just do it.
+
+We'll have to fix reverting of pipe buffers, just as I already pointed
+out in your cifs series that tries to play the same game.
