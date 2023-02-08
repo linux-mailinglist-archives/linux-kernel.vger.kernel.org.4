@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CA468E5DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:09:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C371668E5DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:10:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjBHCJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S229781AbjBHCKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 21:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBHCJu (ORCPT
+        with ESMTP id S230171AbjBHCKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:09:50 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28E5367E8;
-        Tue,  7 Feb 2023 18:09:46 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id a10so11541717edu.9;
-        Tue, 07 Feb 2023 18:09:46 -0800 (PST)
+        Tue, 7 Feb 2023 21:10:12 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B83831E1C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 18:10:04 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id u12so25154862lfq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 18:10:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SpgS7vzqoUvjQY9Jf7h1UeSDSMCNGIGVVJBydDqIcdo=;
-        b=mO/tqcWEQCm9hB0QmsatDqD6dE1M+15ufD/mZhTiJZH9Sfgsz9M9tt9XbiIS6RVRzF
-         Eqv1EeRwOBVZmHJkF/AqGEB4A+jT5wwyvyDRIz1Le/Fgm7+phnWppwfm1oU+ykO1UzRt
-         wX8KvkRiZJiyvLnVC+kuy+wHo/kBvrZpqyVlKSFBdFDUNY42dT7w/GTIqgzkDWhXRTSG
-         DbrVe3V80Or9F8lsTtQ1iohICvclSIwAvzAN6Q7wAomWPsc5Hs9OrlgPgUM5CKQRCvRA
-         4btD88X89lbAbRROWCTWYxAOSpRQcu2NPoVNXUPVCa+Vz0AGT6hjQjxHde/PSbFOG36u
-         Te1g==
+        bh=bZ6NoWzJpDakiHcogI6scQ8ESAgcqrMD04j+O8pqNzk=;
+        b=UEAfx2BSvPPcHMDrAR5sjatHfl/nTvivvrky/LNkDVB33PlZbL92I1siXTEs1W11t8
+         vYiu/6g5Z7esCEiWXAtfeLrmdL+YVnWMHdv4z3xTKcB7116TClxvvMvbPicEuLMfrePw
+         RsvTkQ2F8+HXPKmq4iieEeDNswvqJ6NIJvK0OgPIPQN3KLwVWV3T7qxshaxIOWqYDm5J
+         eb5x1PLH6AG3uT0ij5zhsD9e4iO2EKmiEhEfBQdtDRngBXb+Eou54bq1lZ5scfNDKHuZ
+         cToW8aj62c7cJMGrnlHEYbRclo2Ead9etynJqggpiCvKewyDLii8YHke4QmhOyhb3pJY
+         ueKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SpgS7vzqoUvjQY9Jf7h1UeSDSMCNGIGVVJBydDqIcdo=;
-        b=uFREO1bjvBEHYGhHxmaUtzFa8AMUcRBXig/mjL0b4DpE9qtD7DfvBgJbDkJi7Fp34O
-         SLRIxxdppBy9lPNDRfJPI/VmAq4g73/X1/G1BKVZHcg/88kcKfRAz4RFWTOsGEyjfOyC
-         8xZsN1tqc5TXHliuq0bi4ZHCQILT2bNpI5Nc+gNdIK99NyWzZV3MEl6K3FCYKamm7P2i
-         i9wOJ14rBDFpR5WTsy2tGxZst64+f+/FB4sBTIYVGeBSnzRv5RDgv3IcR3u33W01PcBK
-         +uTzeHx0RMPB8r45JJq3sABCtE0xLQ4dh/PtmBCOqWQIDArwTMhgAwt7qKTJkbj6BxzG
-         KB2g==
-X-Gm-Message-State: AO0yUKV6bcF2uXX/zTNilInIIZqXoE9dUHnRxkMQ2czIki1MgiAd3ta1
-        CTM71aNObqJ/OkH0+8SdSoejM48VvzJEdMOo99k=
-X-Google-Smtp-Source: AK7set9t8xvkYsqVc61Bps7bR6RXA1/dv8gBL704YBC5h/c6B/SI52m96vZJbR0FtaE4LydM3TgqvsV7yXxSPoB1t0Y=
-X-Received: by 2002:a50:8e1a:0:b0:4aa:b408:7dc1 with SMTP id
- 26-20020a508e1a000000b004aab4087dc1mr1471827edw.43.1675822185146; Tue, 07 Feb
- 2023 18:09:45 -0800 (PST)
+        bh=bZ6NoWzJpDakiHcogI6scQ8ESAgcqrMD04j+O8pqNzk=;
+        b=AQpM2BVMopLrOsYKdkxWN8hy3GXtDmfQfGeL7bkAmqGwMbiCEQXzKtDu9KDnehlrqS
+         Jix4PhLXIdL9x579l8d19oAdR2RxZpKFGtexVZZgB/+jK3kiSkHeYYgvNTNoQkaFP6Bd
+         fsNLkLBEqklp42vJxqS+hm39bQlx78SOlQRNFFKQjT4u+wsu4b1jfP13EBBJCeOVZ+nI
+         mSAXbGfBCqvV47qhNG7BU6niaL6lKoxwc/BGtK5Gcay9VppCZrVCE2tlx06SZqDQ5xzo
+         u5roNJK7BC+pxaOftNCSZh5fU5SQVbAuStvlYWdQJ+XxPYmjN3mh3KX3L6GMhHmgl4kU
+         jTaA==
+X-Gm-Message-State: AO0yUKU+yZFIOj+YCW3FIx9tFVluCdVWQ5LgNbT55DmxYQIYcYNBtLf4
+        IplBlHR8OSb8LXwy4rECuE/J9i3UxDu6xTwyVnSgmp1uLO2/UgrK
+X-Google-Smtp-Source: AK7set92dwlpY4y5jslgDXCD/rZ1nC5QmxGOuitbQxwdvVHuTBWXe1tHOk6ECb9cs7XXmQc+gRWjbL4mv+PV0OGlNaA=
+X-Received: by 2002:ac2:4a73:0:b0:4db:d97:224e with SMTP id
+ q19-20020ac24a73000000b004db0d97224emr465975lfp.84.1675822202479; Tue, 07 Feb
+ 2023 18:10:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20230204133535.99921-1-kerneljasonxing@gmail.com>
- <20230204133535.99921-2-kerneljasonxing@gmail.com> <8d2ec49e-9023-5180-54c4-c09db24d2225@intel.com>
-In-Reply-To: <8d2ec49e-9023-5180-54c4-c09db24d2225@intel.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Wed, 8 Feb 2023 10:09:09 +0800
-Message-ID: <CAL+tcoBnwC7=Z-jNv69R2baQyDgYKsvS8SQtRqLePn6ac_+A6A@mail.gmail.com>
-Subject: Re: [PATCH net v3 1/3] ixgbe: allow to increase MTU to 3K with XDP enabled
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     jesse.brandeburg@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        richardcochran@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        alexandr.lobakin@intel.com, maciej.fijalkowski@intel.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
+References: <cover.1675734681.git.chenfeiyang@loongson.cn> <1af05c1441e9f96870be1cc20b1162e3f5043b2e.1675734681.git.chenfeiyang@loongson.cn>
+ <1e7da4e7-392d-4a9e-aa95-0599a0c84419@app.fastmail.com>
+In-Reply-To: <1e7da4e7-392d-4a9e-aa95-0599a0c84419@app.fastmail.com>
+From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
+Date:   Wed, 8 Feb 2023 10:09:48 +0800
+Message-ID: <CACWXhK==yVZGZbY+3DUAuxL34=gKwQv20Cw3y1+QKir0D2F3EQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] nolibc: Add statx() support to implement sys_stat()
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     w@1wt.eu, "Paul E. McKenney" <paulmck@kernel.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -74,46 +71,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 3:03 AM Tony Nguyen <anthony.l.nguyen@intel.com> wrote:
+On Tue, 7 Feb 2023 at 22:31, Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On 2/4/2023 5:35 AM, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
->
-> ...
->
-> > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> > index ab8370c413f3..2c1b6eb60436 100644
-> > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> > @@ -6777,6 +6777,18 @@ static void ixgbe_free_all_rx_resources(struct ixgbe_adapter *adapter)
-> >                       ixgbe_free_rx_resources(adapter->rx_ring[i]);
-> >   }
+> On Tue, Feb 7, 2023, at 03:09, chris.chenfeiyang@gmail.com wrote:
+> > From: Feiyang Chen <chenfeiyang@loongson.cn>
 > >
-> > +/**
-> > + * ixgbe_max_xdp_frame_size - returns the maximum allowed frame size for XDP
-> > + * @adapter - device handle, pointer to adapter
-> > + */
+> > Neither __NR_newfstatat nor __NR_stat is defined on new architecture
+> > like LoongArch, but we can use statx() to implement sys_stat().
+> >
+> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
 >
-> Please use ':' instead of '-' for kdoc
+> This looks nice, it should also help on 32-bit architectures that
+> only have stat64 but not newfstatat or stat.
 >
-> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:6785: warning: Function
-> parameter or member 'adapter' not described in 'ixgbe_max_xdp_frame_size'
+> > +#if defined(__NR_newfstatat) || defined(__NR_stat)
+> >  static __attribute__((unused))
+> >  int sys_stat(const char *path, struct stat *buf)
+> ...
+> > +#else
+> > +#error None of __NR_newfstatat, __NR_stat, nor __NR_statx defined,
+> > cannot implement sys_stat()
+> > +#endif
 >
-> i.e.
+> Given that all architectures implement statx the same way, I wonder
+> if we can't just kill off the old function here and always use statx.
 >
-> @adapter: device handle, pointer to adapter
+> That would also allow removing the architecture specific
+> sys_stat_struct definitions in all arch-*.h files.
+>
 
-Thanks for correcting the format. Now I understand.
+Hi, Arnd,
+
+I'd really like to make all architectures use sys_statx() instead
+of sys_stat(). I just fear we might get dragged into a long discussion.
+Can I send a patch series to do this later?
+
+> > +struct statx_timestamp {
+> > +     __s64   tv_sec;
+> > +     __u32   tv_nsec;
+> > +     __s32   __reserved;
+> > +};
+> > +
+> > +struct statx {
+> > +     /* 0x00 */
+> > +     __u32   stx_mask;       /* What results were written [uncond] */
+> > +     __u32   stx_blksize;    /* Preferred general I/O size [uncond] */
+> > +     __u64   stx_attributes; /* Flags conveying information about the file
+> > [uncond] */
+> > +     /* 0x10 */
+> > +     __u32   stx_nlink;      /* Number of hard links */
+> > +     __u32   stx_uid;        /* User ID of owner */
+> > +     __u32   stx_gid;        /* Group ID of owner */
+> > +     __u16   stx_mode;       /* File mode */
+> > +     __u16   __spare0[1];
+> > +     /* 0x20 */
+> > +     __u64   stx_ino;        /* Inode number */
+> > +     __u64   stx_size;       /* File size */
+> > +     __u64   stx_blocks;     /* Number of 512-byte blocks allocated */
+> > +     __u64   stx_attributes_mask; /* Mask to show what's supported in
+> > stx_attributes */
+> > +     /* 0x40 */
+> > +     struct statx_timestamp  stx_atime;      /* Last access time */
+> > +     struct statx_timestamp  stx_btime;      /* File creation time */
+> > +     struct statx_timestamp  stx_ctime;      /* Last attribute change time */
+> > +     struct statx_timestamp  stx_mtime;      /* Last data modification time */
+> > +     /* 0x80 */
+> > +     __u32   stx_rdev_major; /* Device ID of special file [if bdev/cdev] */
+> > +     __u32   stx_rdev_minor;
+> > +     __u32   stx_dev_major;  /* ID of device containing file [uncond] */
+> > +     __u32   stx_dev_minor;
+> > +     /* 0x90 */
+> > +     __u64   stx_mnt_id;
+> > +     __u32   stx_dio_mem_align;      /* Memory buffer alignment for direct I/O */
+> > +     __u32   stx_dio_offset_align;   /* File offset alignment for direct I/O */
+> > +     /* 0xa0 */
+> > +     __u64   __spare3[12];   /* Spare space for future expansion */
+> > +     /* 0x100 */
+> > +};
+>
+> Can't we just #include <linux/stat.h> here to avoid having to maintain
+> a duplicate copy?
+>
+
+Yes, I will #include <linux/stat.h> here.
 
 Thanks,
-Jason
+Feiyang
 
->
-> > +static int ixgbe_max_xdp_frame_size(struct ixgbe_adapter *adapter)
-> > +{
-> > +     if (PAGE_SIZE >= 8192 || adapter->flags2 & IXGBE_FLAG2_RX_LEGACY)
-> > +             return IXGBE_RXBUFFER_2K;
-> > +     else
-> > +             return IXGBE_RXBUFFER_3K;
-> > +}
-> > +
+>     Arnd
