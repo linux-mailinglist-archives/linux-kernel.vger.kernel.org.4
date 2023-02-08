@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BB468E942
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD32C68E944
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjBHHqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
+        id S229895AbjBHHq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjBHHqO (ORCPT
+        with ESMTP id S229712AbjBHHqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:46:14 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8114510427;
-        Tue,  7 Feb 2023 23:46:13 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PBX9v5GLDz6FK2T;
-        Wed,  8 Feb 2023 15:46:11 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl2.zte.com.cn with SMTP id 3187k4X9045439;
-        Wed, 8 Feb 2023 15:46:04 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 8 Feb 2023 15:46:06 +0800 (CST)
-Date:   Wed, 8 Feb 2023 15:46:06 +0800 (CST)
-X-Zmail-TransId: 2af963e3533e52462747
-X-Mailer: Zmail v1.0
-Message-ID: <202302081546067270324@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <nick.hawkins@hpe.com>
-Cc:     <verdun@hpe.com>, <linux@roeck-us.net>, <jdelvare@suse.com>,
-        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBod21vbjogZ3hwLWZhbi1jdHJsOiB1c2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 3187k4X9045439
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63E35343.001 by FangMail milter!
-X-FangMail-Envelope: 1675842371/4PBX9v5GLDz6FK2T/63E35343.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63E35343.001/4PBX9v5GLDz6FK2T
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 8 Feb 2023 02:46:53 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7913C652;
+        Tue,  7 Feb 2023 23:46:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1675842373;
+        bh=lJZsJu6FE/m8RkUXLIqO4+l2gX1b3XV9offgkGavorA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Z1XqmXIrzpSMAkZ+Q0XE5W/aaZ0b3GDmOv9Uu1iprRwYmrXmGDDIA1nxIBDjyuzI3
+         cdoIt1KRcWqN7baNK4TcI+yi7ZVr+Teprx2VIpIqXlpCYm34Dm3ZfxcIZePlDfRTdV
+         Uj602Lf1KZsQpKmk2+jDr6+YSk9YQRlxeqOh6jiCIBJZSLpJi8cB0fEV+zaS+fxbNu
+         DoGYCbY7bHbDPw2a5OGDNDARN+lqF+CysamJq1PyTQBcAofPV2fpdQPXOXcS1DZPYL
+         Ft6tsaS789xJmM2kE1qv7Bsps/jp2oCXDIDKXuHCtO5vtc9hLjx4ML52OzYKPiDcAI
+         FpAA/GVACFpRg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [157.180.227.18] ([157.180.227.18]) by web-mail.gmx.net
+ (3c-app-gmx-bap61.server.lan [172.19.172.131]) (via HTTP); Wed, 8 Feb 2023
+ 08:46:13 +0100
+MIME-Version: 1.0
+Message-ID: <trinity-e1125c6e-9b6c-4e34-82fd-d99d34661cb6-1675842373343@3c-app-gmx-bap61>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
+Cc:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com
+Subject: Aw: Re: [PATCH net v3 4/5] net: ethernet: mtk_eth_soc: drop generic
+ vlan rx offload, only use DSA untagging
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 8 Feb 2023 08:46:13 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <79506b27-d71a-c341-48fd-0e6d3a973f2e@arinc9.com>
+References: <20221230073145.53386-1-nbd@nbd.name>
+ <20221230073145.53386-4-nbd@nbd.name>
+ <79506b27-d71a-c341-48fd-0e6d3a973f2e@arinc9.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:be3w77Hl6YYRLG2Pfygnosn9NFEWYnMi66wjxQ4iLMaU706Pu0SKotAM8rWVzb05/cgeb
+ UjMHM1GFVDZ82M7mSaTRl8PWr2yByQuuDJvFP/rhSniukSrojFgxOG/DSCdxcOW8Q1qU3IpOE7MC
+ ASw5EGGWNjhysiJsZNs34RM8wO2/8Vh7o/8kUNsdH0eAz0Eoa7/Edvtv4WRkmatEVRwZDPa2p45u
+ JB1CYxMlOSgZlQZpEIAhakF5W4XFdKu/hr66QUq22PfeJ1M3LdZTZPV3NiaaFZYpBXqzKPQGpwpe
+ Kg=
+UI-OutboundReport: notjunk:1;M01:P0:yDiaRCpQi1g=;6amzwCNFap286wCSTAXysO5Rhpp
+ O+UUFM2v/aTS8UCc0eVw8RHuIwGelQ76CmlCScX5w/kULvrbwzqdV6HfM8aX2HaLSJB8PVgOy
+ V6QcEFHKSbhTK6PUxFDNTj34PNgNkS7I8acI40s2ppYdCpNWvQc1Em7rF2OBnpTtOSAo8VJPD
+ ypNQeFMkP8JKKYBFnU3m8VIYq3dUzejVljBgnwcbe8NUgLZF1gzpYbtLUmIHgY2CwNmEGYGMF
+ /1opsI8tiz5liYMHa8mvThM7yN3bVl/A4wqjQBUwYdZzk/BvAt/buJYqj2YjZdDiebTYaxLhF
+ iWVrZLVzepCgUjz+eqcwta37aeMirJacjU/UogMkR5J/AqMXEY3HtCU3V8cL0uoGfGlUaiMYd
+ kRAr+NyTfuxCuVUJjxxYHwGDXAvaMsR5BX1gqjTpdLly6zin+B0xxG6mnkoyp6/GZcdtn4UjN
+ YALJ47I9/nf097nYqxAGQXiFPgnK+uLi167IyZ4YruTTNDuoaMdy+DfIvPrEsIUfJtxxCQYba
+ i1oMbvEjg78akZJmkMOUnXPZY3B1jGZN3GzHyrlW68Z7yLqe1li3hb1CKh9L/28YhBA/w3RC2
+ tR+J6IMcgssUzO94Ru2lehxVwaHBAkQdGzHqsJhEpjjOHQ9ZijgQxuuCcxs0RiSC4M3Tsf07I
+ jFzDgHqgJ0lE0iFApc6YXXqsyeAewIAHT7B3UsqV3sJnZjhuel1Tqq4ZBcsIwyKrHeRvjc/YE
+ Z1zw8RSUeEPuq9ZVqOllCtEeXRjZnf7zPJvfP5UmnRpfgLpStnlRux1bmpuav0Nhs4JFLBz0F
+ d5PXOnVpwE0jW0gNT9iPTSqQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+Hi,
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+just to confirm, my issues were not caused by this series, it was there before and now fixed with [1]
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/hwmon/gxp-fan-ctrl.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+at least one issue arinc is mention is fixed with [2]
 
-diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
-index 0e9225a8b805..0014b8b0fd41 100644
---- a/drivers/hwmon/gxp-fan-ctrl.c
-+++ b/drivers/hwmon/gxp-fan-ctrl.c
-@@ -199,7 +199,6 @@ static const struct hwmon_chip_info gxp_fan_ctrl_chip_info = {
- static int gxp_fan_ctrl_probe(struct platform_device *pdev)
- {
- 	struct gxp_fan_ctrl_drvdata *drvdata;
--	struct resource *res;
- 	struct device *dev = &pdev->dev;
- 	struct device *hwmon_dev;
+so please apply
 
-@@ -208,8 +207,7 @@ static int gxp_fan_ctrl_probe(struct platform_device *pdev)
- 	if (!drvdata)
- 		return -ENOMEM;
+regards Frank
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	drvdata->base = devm_ioremap_resource(&pdev->dev, res);
-+	drvdata->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(drvdata->base))
- 		return dev_err_probe(dev, PTR_ERR(drvdata->base),
- 				     "failed to map base\n");
--- 
-2.25.1
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20230205140713.1609281-1-vladimir.oltean@nxp.com/
+[2] https://patchwork.kernel.org/project/linux-mediatek/patch/20230207103027.1203344-1-vladimir.oltean@nxp.com/
