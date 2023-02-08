@@ -2,135 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CC468EF61
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5460568EF62
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjBHM4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 07:56:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S231202AbjBHM4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 07:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBHM4h (ORCPT
+        with ESMTP id S230498AbjBHM4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:56:37 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA5630EB6;
-        Wed,  8 Feb 2023 04:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5oTXr0EPcDd/e3wIuQRZ5u10MSlrlS9A+107BrjVmHs=; b=lZXrR+cpLuZWFm1TV1kwOBAI8X
-        3orKSsD9snMKmhpFBtZ2MknaMyc6+SXMyBUch2d47V7zsB7267Y3jphpG0NH5u1HSgxXsgUtg7JXd
-        sKM1ffrc3/sDrSfUlDxW/5wVK3gKYtCgGo/8QX7RMPNu2WwRBAbx058NOymLLOcQIlF8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pPjzn-004Oze-F9; Wed, 08 Feb 2023 13:56:19 +0100
-Date:   Wed, 8 Feb 2023 13:56:19 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Md Danish Anwar <a0501179@ti.com>
-Cc:     Roger Quadros <rogerq@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
-        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/2] net: ti:
- icssg-prueth: Add ICSSG ethernet driver
-Message-ID: <Y+Ob8++GWciL127K@lunn.ch>
-References: <20230206060708.3574472-1-danishanwar@ti.com>
- <20230206060708.3574472-3-danishanwar@ti.com>
- <Y+ELeSQX+GWS5N2p@lunn.ch>
- <42503a0d-b434-bbcc-553d-a326af5b4918@ti.com>
- <e8158969-08d0-1edc-24be-8c300a71adbd@kernel.org>
- <4438fb71-7e20-6532-a858-b688bc64e826@ti.com>
+        Wed, 8 Feb 2023 07:56:46 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05EBB4A20B;
+        Wed,  8 Feb 2023 04:56:44 -0800 (PST)
+Received: from [192.168.2.24] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 6229E203B41F;
+        Wed,  8 Feb 2023 04:56:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6229E203B41F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675861004;
+        bh=hIyrhydIQJAz1+mLJZ3NXAMgFDv6A+5TbDZt8dN6ZOs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=c//rjRFlXiWMZ6M0aRgFTWQVzTmG0m08gqCv6XzF7OREw+jjMjwQX8Zwt+OTKgg98
+         Z9cin/nOMvo8fHHfnmZmI2WpPUiNaGpdoxvDeKOpN9+Rqp9RhCXqVQP2ZVYRlOVtm0
+         3fYSdhAw0d8v2v73+1ICjCjyU+sGN8AvgC9dIGK4=
+Message-ID: <13d4b5cb-247f-817a-5699-9cdcc4c46713@linux.microsoft.com>
+Date:   Wed, 8 Feb 2023 13:56:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4438fb71-7e20-6532-a858-b688bc64e826@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 7/8] crypto: ccp - Skip DMA coherency check for
+ platform psp
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Brijesh Singh <brijesh.singh@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        linux-crypto@vger.kernel.org
+References: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
+ <20230123152250.26413-8-jpiotrowski@linux.microsoft.com>
+ <9a6a152e-1c60-6300-88ce-85b835d3d198@amd.com>
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <9a6a152e-1c60-6300-88ce-85b835d3d198@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-20.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >>>> +static int prueth_config_rgmiidelay(struct prueth *prueth,
-> >>>> +				    struct device_node *eth_np,
-> >>>> +				    phy_interface_t phy_if)
-> >>>> +{
-> >>>
-> >>> ...
-> >>>
-> >>>> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
-> >>>> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
-> >>>> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
-> >>>> +
-> >>>> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
-> > 
-> > This is only applicable to some devices so you need to restrict this only
-> > to those devices.
-> > 
+On 31/01/2023 21:42, Tom Lendacky wrote:
+> On 1/23/23 09:22, Jeremi Piotrowski wrote:
+>> The value of device_get_dma_attr() is only relevenat for ARM64 and CCP
+>> devices to configure the value of the axcache attribute used to access
+>> memory by the coprocessor. None of this applies to the platform psp so
+>> skip it.
+>>
+>> Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+>> ---
+>>   drivers/crypto/ccp/sp-platform.c | 7 +++++--
+>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/crypto/ccp/sp-platform.c b/drivers/crypto/ccp/sp-platform.c
+>> index 281dbf6b150c..b74f16e0e963 100644
+>> --- a/drivers/crypto/ccp/sp-platform.c
+>> +++ b/drivers/crypto/ccp/sp-platform.c
+>> @@ -29,6 +29,7 @@
+>>   struct sp_platform {
+>>       int coherent;
+>>       unsigned int irq_count;
+>> +    bool is_platform;
 > 
-> Currently ICSSG driver is getting upstreamed for AM65 SR2.0 device, so I don't
-> think there is any need for any device related restriction. Once support for
-> other devices are enabled for upstream, we can modify this accordingly.
-
-The problem is, this is a board property, not a SoC property. What if
-somebody designs a board with extra long clock lines in order to add
-the delay?
-
-> I checked the latest Technical Reference Manual [1] (Section 5.1.3.4.49, Table
-> 5-624) for AM65 Silicon Revision 2.0.
+> s/is_platform/is_platform_device/
 > 
-> Below is the description in Table 5-624
+
+ok
+
+>>   };
+>>     #ifdef CONFIG_CRYPTO_DEV_SP_PSP
+>> @@ -190,8 +191,10 @@ static int sp_platform_probe(struct platform_device *pdev)
+>>       sp->dev_specific = sp_platform;
+>>       sp->dev_vdata = pdev->dev.of_node ? sp_get_of_version(pdev)
+>>                        : sp_get_acpi_version(pdev);
+>> -    if (!sp->dev_vdata && pdev->id_entry)
+>> +    if (!sp->dev_vdata && pdev->id_entry) {
+>> +        sp_platform->is_platform = true;
 > 
-> BIT	    : 24
-> Field	    : RGMII0_ID_MODE
-> Type	    : R/W
-> Reset	    : 0h
-> Description : Controls the PRU_ICSSG0 RGMII0 port internal transmit delay
-> 	      0h - Internal transmit delay is enabled
-> 	      1h - Reserved
+> Move this into the sp_get_plat_version() function.
 > 
-> The TX internal delay is always enabled and couldn't be disabled as 1h is
-> reserved. So hardware support for disabling TX internal delay is not there.
-
-So if somebody passes a phy-mode which requires it disabled, you need
-to return -EINVAL, to indicate the hardware cannot actually do it.
-
-> As, TX internal delay is always there, there is no need to enable it in MAC or
-> PHY. So no need of API prueth_config_rgmiidelay().
+>>           sp->dev_vdata = sp_get_plat_version(pdev);
 > 
-> My approach to handle delay would be as below.
+> And I probably should have made this comment in the previous patch, but you should probably spell out platform here.
+>
+
+ok (i had done that before i got to this comment for consistency)
+
+>> +    }
+>>       if (!sp->dev_vdata) {
+>>           ret = -ENODEV;
+>>           dev_err(dev, "missing driver data\n");
+>> @@ -205,7 +208,7 @@ static int sp_platform_probe(struct platform_device *pdev)
+>>       }
+>>         attr = device_get_dma_attr(dev);
+>> -    if (attr == DEV_DMA_NOT_SUPPORTED) {
+>> +    if (!sp_platform->is_platform && attr == DEV_DMA_NOT_SUPPORTED) {
 > 
-> *) Keep phy-mode = "rgmii-id" in DT as asked by Andrew.
-
-As i said this depends on the board, not the SoC. In theory, you could
-design a board with an extra long RX clock line, and then use phy-mode
-rgmii-txid, meaning the MAC/PHY combination needs to add the TX delay.
-
-> *) Let TX internal delay enabled in Hardware.
-> *) Let PHY configure RX internal delay.
-> *) Remove prueth_config_rgmiidelay() API is there is no use of this. TX
-> Internal delay is always enabled.
-> *) Instead of calling prueth_config_rgmiidelay() API in prueth_netdev_init()
-> API, add below if condition.
+> Just a nit but I'd prefer to see this as:
 > 
-> 	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
-> 		emac->phy_if == PHY_INTERFACE_MODE_RGMII_RXID
+>     if (attr == DEV_DMA_NOT_SUPPORTED && !sp_platform->is_platform) {
+> 
+> The diff is easier to see that way.
 
-You should handle all cases where a TX delay is requested, not just
-ID.
+makes sense
 
-	Andrew
+> 
+> Thanks,
+> Tom
+> 
+>>           dev_err(dev, "DMA is not supported");
+>>           goto e_err;
+>>       }
