@@ -2,108 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B98068F6A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2631168F6AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:12:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjBHSLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S231388AbjBHSMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:12:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjBHSLF (ORCPT
+        with ESMTP id S229462AbjBHSMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:11:05 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9DD17160
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:10:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6ckI3WTqph30NpxWFPDE4cvDOQBvbkyW3uZldKIaVSY=; b=JMPfVqhJbVn/kncnVS1BMxmG6J
-        7sJHcR2ZcAolixI6M2MPAPnXWiuciSLsUMPrQleNPoAP5IvNhrdaZQfFVV8ePo6qqEP75miGAirfZ
-        vk/ymwQJTYe7EUO26Xli+xTMEZLhLbJ8+6rsxLiBn93PmLcqbg+TMe16aAx815GFkG5NruFfsbTFN
-        HWDKlIv91/hNuJXwL812aDfO1jQ3bIhdcrC4v8UMyi7ggxcqOoN5kk71Ft3U5xl1gdlCgy9vmWKxn
-        Pq+bl2/gZjdJ0ZtW8pDASUNLM+nn1LBJp22WegAbq3DTWtgR6z2nKEbC+Fp0VY5fCiZ/7X9HdMVBk
-        H69h1HXg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPotn-001RIT-AH; Wed, 08 Feb 2023 18:10:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 228CB300129;
-        Wed,  8 Feb 2023 19:10:27 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 128FE20F05D4E; Wed,  8 Feb 2023 19:10:27 +0100 (CET)
-Date:   Wed, 8 Feb 2023 19:10:26 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] kasan: mark addr_has_metadata __always_inline
-Message-ID: <Y+Plku4Cf5Xkzq10@hirez.programming.kicks-ass.net>
-References: <20230208164011.2287122-1-arnd@kernel.org>
+        Wed, 8 Feb 2023 13:12:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDE3113EF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675879858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w9/f/MOvQp5IAgOQDRaxUjgUOW0JDTw4EI3n537Ih6U=;
+        b=M+04iltVJhj8O4YuwP4rBPvxAqPg3Vz5QrsbrdZMHBj5aujYryY4NYEqcx18i7y0gYgsP7
+        nf8SM56AQoy2t6I2aIozWvuZFs2h0/fw2qFYWskKxLS7pbvBzJEfKvrqVsQ39TZVzAqI/g
+        XNasoeZnK09WG2iWYTC2COHZK+21bM8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-605-8c8owj2KPeWKJbbGZZcmLA-1; Wed, 08 Feb 2023 13:10:56 -0500
+X-MC-Unique: 8c8owj2KPeWKJbbGZZcmLA-1
+Received: by mail-ed1-f72.google.com with SMTP id z19-20020a05640235d300b004aaca83cd87so4504227edc.20
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:10:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w9/f/MOvQp5IAgOQDRaxUjgUOW0JDTw4EI3n537Ih6U=;
+        b=uMhuBe+HTHYppjfG8rsWpVaVHgP0AJ77clJIKoSNDsd4wbH7uDRTDWMy9IWda5k7Bb
+         WbI/5l005i1EWK/TScLS9nssKsflVnm5PgC6V3tURP3/dTE62zmu5ZjUkB7/nkvpCi0T
+         G7+mu80pc4QbMa9vTTIXFvUYgOoKSa9StJrki1YxC+uUwoRPzgPj0IEDQnTrTcf0Ie6j
+         rqLmdpfvYxtwr7tVYFjAhcnkJqpgkjZd2ztHtdPruJs4iK1US/A/rINCFusJS1n9SiP8
+         DveXDdwqwzQyIkW7wzdxz12vUsiXnTZsb60bKTrRAl3gt8UjwfUL1x0QlT5jHmqDcqz+
+         jETg==
+X-Gm-Message-State: AO0yUKUVIiuDKFLW2yjOa0kbTH/8f45J0qqO8bkkAWPcAESS+BAfqduT
+        rh1NLS4p+S16A5XyMWNLJPtkMY1QLRojl5aE/MO06rY8zeVky/mlLgH19iknNlHtYjmallFVJp1
+        nikLR4h7nIH9eaQbN1rBcV0pUOuPtYhxn
+X-Received: by 2002:a50:8746:0:b0:4a0:e234:5351 with SMTP id 6-20020a508746000000b004a0e2345351mr9582151edv.15.1675879855058;
+        Wed, 08 Feb 2023 10:10:55 -0800 (PST)
+X-Google-Smtp-Source: AK7set8KbCd/jX0TGW03RDuhZNYyg1q2LUeQ1QMJZ7jKfoCOrGy4UjA3Z4M5GoaTHaEqDrf7ZXxdew==
+X-Received: by 2002:a50:8746:0:b0:4a0:e234:5351 with SMTP id 6-20020a508746000000b004a0e2345351mr9582140edv.15.1675879854844;
+        Wed, 08 Feb 2023 10:10:54 -0800 (PST)
+Received: from redhat.com ([2.52.132.212])
+        by smtp.gmail.com with ESMTPSA id v21-20020a50d595000000b004aaa09d50adsm6415207edi.94.2023.02.08.10.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 10:10:54 -0800 (PST)
+Date:   Wed, 8 Feb 2023 13:10:50 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>, pbonzini@redhat.com,
+        ebiggers@kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        qemu-devel@nongnu.org, ardb@kernel.org, kraxel@redhat.com,
+        hpa@zytor.com, bp@alien8.de, philmd@linaro.org
+Subject: Re: [PATCH qemu v3] x86: don't let decompressed kernel image clobber
+ setup_data
+Message-ID: <20230208130835-mutt-send-email-mst@kernel.org>
+References: <Y69fUstLKNv/RLd7@zx2c4.com>
+ <20221230220725.618763-1-Jason@zx2c4.com>
+ <Y+Pf0q6LmQKN+FHo@dev-arch.thelio-3990X>
+ <CAHmME9pQ6yvRQzzT_k0vmDFi4QioCfgryCebhvfNCWNP_tkddQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230208164011.2287122-1-arnd@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHmME9pQ6yvRQzzT_k0vmDFi4QioCfgryCebhvfNCWNP_tkddQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 05:39:55PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, Feb 08, 2023 at 02:54:41PM -0300, Jason A. Donenfeld wrote:
+> Hi Nathan (and MST),
 > 
-> When the compiler decides not to inline this function, objdump
-> complains about incorrect UACCESS state:
+> On Wed, Feb 8, 2023 at 2:45 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Hi Jason,
+> >
+> > On Fri, Dec 30, 2022 at 11:07:25PM +0100, Jason A. Donenfeld wrote:
+> > > The setup_data links are appended to the compressed kernel image. Since
+> > > the kernel image is typically loaded at 0x100000, setup_data lives at
+> > > `0x100000 + compressed_size`, which does not get relocated during the
+> > > kernel's boot process.
+> > >
+> > > The kernel typically decompresses the image starting at address
+> > > 0x1000000 (note: there's one more zero there than the compressed image
+> > > above). This usually is fine for most kernels.
+> > >
+> > > However, if the compressed image is actually quite large, then
+> > > setup_data will live at a `0x100000 + compressed_size` that extends into
+> > > the decompressed zone at 0x1000000. In other words, if compressed_size
+> > > is larger than `0x1000000 - 0x100000`, then the decompression step will
+> > > clobber setup_data, resulting in crashes.
+> > >
+> > > Visually, what happens now is that QEMU appends setup_data to the kernel
+> > > image:
+> > >
+> > >           kernel image            setup_data
+> > >    |--------------------------||----------------|
+> > > 0x100000                  0x100000+l1     0x100000+l1+l2
+> > >
+> > > The problem is that this decompresses to 0x1000000 (one more zero). So
+> > > if l1 is > (0x1000000-0x100000), then this winds up looking like:
+> > >
+> > >           kernel image            setup_data
+> > >    |--------------------------||----------------|
+> > > 0x100000                  0x100000+l1     0x100000+l1+l2
+> > >
+> > >                                  d e c o m p r e s s e d   k e r n e l
+> > >                      |-------------------------------------------------------------|
+> > >                 0x1000000                                                     0x1000000+l3
+> > >
+> > > The decompressed kernel seemingly overwriting the compressed kernel
+> > > image isn't a problem, because that gets relocated to a higher address
+> > > early on in the boot process, at the end of startup_64. setup_data,
+> > > however, stays in the same place, since those links are self referential
+> > > and nothing fixes them up.  So the decompressed kernel clobbers it.
+> > >
+> > > Fix this by appending setup_data to the cmdline blob rather than the
+> > > kernel image blob, which remains at a lower address that won't get
+> > > clobbered.
+> > >
+> > > This could have been done by overwriting the initrd blob instead, but
+> > > that poses big difficulties, such as no longer being able to use memory
+> > > mapped files for initrd, hurting performance, and, more importantly, the
+> > > initrd address calculation is hard coded in qboot, and it always grows
+> > > down rather than up, which means lots of brittle semantics would have to
+> > > be changed around, incurring more complexity. In contrast, using cmdline
+> > > is simple and doesn't interfere with anything.
+> > >
+> > > The microvm machine has a gross hack where it fiddles with fw_cfg data
+> > > after the fact. So this hack is updated to account for this appending,
+> > > by reserving some bytes.
+> > >
+> > > Cc: x86@kernel.org
+> > > Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
+> > > Cc: H. Peter Anvin <hpa@zytor.com>
+> > > Cc: Borislav Petkov <bp@alien8.de>
+> > > Cc: Eric Biggers <ebiggers@kernel.org>
+> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> >
+> > I apologize if this has already been reported/fixed already (I did a
+> > brief search on lore.kernel.org) or if my terminology is not as precise
+> > as it could be, I am a little out of my element here :)
+> >
+> > After this change as commit eac7a7791b ("x86: don't let decompressed
+> > kernel image clobber setup_data") in QEMU master, I am no longer able to
+> > boot a kernel directly through OVMF using '-append' + '-initrd' +
+> > '-kernel'. Instead, systemd-boot tries to start the distribution's
+> > kernel, which fails with:
+> >
+> >   Error registering initrd: Already started
+> >
+> > This can be reproduced with just a defconfig Linux kernel (I used
+> > 6.2-rc7), the simple buildroot images that ClangBuiltLinux uses for
+> > boot testing [1], and OVMF. Prior to this change, the kernel would start
+> > up but after, I am dumped into the UEFI shell (as there is no
+> > bootloader).
+> >
+> > The QEMU command I used was:
+> >
+> > $ qemu-system-x86_64 \
+> >     -kernel arch/x86_64/boot/bzImage \
+> >     -append "console=ttyS0 earlycon=uart8250,io,0x3f8" \
+> >     -drive if=pflash,format=raw,file=/usr/share/edk2/x64/OVMF_CODE.fd,readonly=on
+> >     -drive if=pflash,format=raw,file=../boot-utils/images/x86_64/OVMF_VARS.fd \
 > 
-> mm/kasan/generic.o: warning: objtool: __asan_load2+0x11: call to addr_has_metadata() with UACCESS enabled
+> Oh no... Without jumping into it, at first glance, I have absolutely
+> no idea. I suppose I could start debugging it and probably come up
+> with a solution, but...
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> @mst - I'm beginning to think that this whole setup_data route is
+> cursed. This is accumulating hacks within hacks within hacks. What
+> would you think if I just send a patch *removing* all use of
+> setup_data (the rng seed and the dtb thing), and then we can gradually
+> add that back with an actual overarching design. For example, it'd
+> probably make sense to have a separate fwcfg file for setup_data
+> rather than trying to mangle and existing one, etc. This way, we
+> unbreak the tree, and let the new approach be reviewed more
+> reasonably.
+> 
+> Jason
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Yea basically this is close to what I proposed. I can't off-hand figure
+out whether just dropping all of this is fine or we need some compat
+hacks to enable this in some way for 7.2, and it's pretty late here.
+Suggestions welcome.
 
-> ---
->  mm/kasan/kasan.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index 3231314e071f..9377b0789edc 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -297,7 +297,7 @@ static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
->  		<< KASAN_SHADOW_SCALE_SHIFT);
->  }
->  
-> -static inline bool addr_has_metadata(const void *addr)
-> +static __always_inline bool addr_has_metadata(const void *addr)
->  {
->  	return (kasan_reset_tag(addr) >=
->  		kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
-> @@ -316,7 +316,7 @@ bool kasan_check_range(unsigned long addr, size_t size, bool write,
->  
->  #else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
->  
-> -static inline bool addr_has_metadata(const void *addr)
-> +static __always_inline bool addr_has_metadata(const void *addr)
->  {
->  	return (is_vmalloc_addr(addr) || virt_addr_valid(addr));
->  }
-> -- 
-> 2.39.1
-> 
+-- 
+MST
+
