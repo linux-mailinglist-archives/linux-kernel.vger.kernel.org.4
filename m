@@ -2,452 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388C368EFD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C0F68EFC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjBHNcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:32:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S230377AbjBHNbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjBHNcF (ORCPT
+        with ESMTP id S230010AbjBHNba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:32:05 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FCECC34;
-        Wed,  8 Feb 2023 05:31:56 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id w5so9219058plg.8;
-        Wed, 08 Feb 2023 05:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FrvfwK6Li1OWjx1b8GzWQx8K77xDp8ENwfyOeSPd9eE=;
-        b=EM/WtZyy7zF0pIYe4L99sunsP8XxZM/eO8poIB7i3sHk3ST0tgKLmhLI7jStQKKYmV
-         7kES7ZGgDg2hKoTZHO3GhBvjKRw0M4IecBt0tAGUJlf5qehtYIx8ic6nA6h835tI5ciK
-         lLHW1h0SKwUdcaztW0X/Tkb2BowdVj1rgPXcRfd4aijmFE+WmjCYHncgGCWSKreqNTaK
-         mFUGUGDbGrunZCHjDRg8HVyWcswfmWn23REVDlyAjfdOaXXsP8LJWSdQrYWBeOb4JY/V
-         JrGlXjWIRynlRTYfXOxDr1Ptrmicg5nFtQtyQ0Qnc+WDrfqBlwH1Qzz9tg+/RnAcuPoV
-         Hmfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FrvfwK6Li1OWjx1b8GzWQx8K77xDp8ENwfyOeSPd9eE=;
-        b=HLGUjbA4tGcf9Pj/gRoRY2IrFYr0A2aHHVXCjCZdbZPLbvhsfiwjvuRSYy3M4PaZuQ
-         WeRxNW0ROwzniPIAkuonmsm81NYxf5WATDrvXHJupDNHZnQsZB5w7qXCWfRzhJso3Su/
-         SX+FF7xho/R3BBUScX7g2YvKQL5Qgctwrj+Zqrs3mA0LUn7MsBFfARVjwSPiNPflQ4km
-         NWW4YN61+154dhmvae+YtrFQE4GeQcp3H9JxrKnFSKAjmhknof+XQPD3AZAbFoBW9g0Q
-         VYEEzNcCB9/4jhiAcoAnvDb+Eeh8BSubzYqRmHJHkwcUGDa1YmhSxjpsYbjTfVIXESC0
-         TSJg==
-X-Gm-Message-State: AO0yUKWjyvRXfI3jsQh/a5JUMfTjNhtE8bEmUIJKzzXDfmrqtQrXlaR0
-        w8fOO9ThVQEsJGWlnsvRXCE=
-X-Google-Smtp-Source: AK7set/UB2qWM4G8zM/I+P0mGi9JRaNyfns6YOWg+uoNSSdSGLCy3SU1veAnml0rqFU7wPROKhBsgg==
-X-Received: by 2002:a17:902:f548:b0:199:2f53:4d95 with SMTP id h8-20020a170902f54800b001992f534d95mr7725526plf.50.1675863115434;
-        Wed, 08 Feb 2023 05:31:55 -0800 (PST)
-Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c24600b00189c62eac37sm3576960plg.32.2023.02.08.05.31.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 05:31:53 -0800 (PST)
-Date:   Wed, 8 Feb 2023 13:31:39 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 08/10] slub: Replace cmpxchg_double()
-Message-ID: <Y+OkOxpOnRYcI3DS@localhost>
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.684926740@infradead.org>
+        Wed, 8 Feb 2023 08:31:30 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1F142DF9;
+        Wed,  8 Feb 2023 05:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675863083; x=1707399083;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iRdp3KV5xmAJg0zcHWue1GbSneGTwjsPjdu/wNNtJlw=;
+  b=QD16U+qI0sKd0YjgmPneiUn62GNFOBjJet5IgQndHdonwt4oWCla4NUL
+   /oI9XeEF+UrXToeC/6kqg6+rG7lms/wB07bA5gQ307i5wFFVLrfG+bDYw
+   keiXTBHgxZQyhttGYFlDxM0qSmtmYEqTB4dqk5x6rfzt7H9GZp5uagVSE
+   t9tW05PfvpNTeeJSk29LBl+jiaODikCZ3gf0juMNmuXz73gi3uyfIZSrx
+   P7pSahC4oTdNrIAAwyjdVHt7v9VsKcIMr2Gpew0BxVIo+WbeVDlbbNNk5
+   oq5J/mWmFVISOzJHaitvzuMzOMFWV8rTrz25DQJrcrUlP+1cWtN88il3z
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="357188514"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="357188514"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 05:31:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669197631"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="669197631"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 05:31:20 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id ADDFF1F8; Wed,  8 Feb 2023 15:31:58 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dev@openvswitch.org,
+        tipc-discussion@lists.sourceforge.net
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net-next v3 1/3] string_helpers: Move string_is_valid() to the header
+Date:   Wed,  8 Feb 2023 15:31:51 +0200
+Message-Id: <20230208133153.22528-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202152655.684926740@infradead.org>
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 03:50:38PM +0100, Peter Zijlstra wrote:
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  include/linux/slub_def.h |   12 ++-
->  mm/slab.h                |   45 +++++++++++++-
->  mm/slub.c                |  142 ++++++++++++++++++++++++++++-------------------
->  3 files changed, 135 insertions(+), 64 deletions(-)
-> 
-> --- a/include/linux/slub_def.h
-> +++ b/include/linux/slub_def.h
-> @@ -39,7 +39,8 @@ enum stat_item {
->  	CPU_PARTIAL_FREE,	/* Refill cpu partial on free */
->  	CPU_PARTIAL_NODE,	/* Refill cpu partial from node partial */
->  	CPU_PARTIAL_DRAIN,	/* Drain cpu partial to node partial */
-> -	NR_SLUB_STAT_ITEMS };
-> +	NR_SLUB_STAT_ITEMS
-> +};
->  
->  #ifndef CONFIG_SLUB_TINY
->  /*
-> @@ -47,8 +48,13 @@ enum stat_item {
->   * with this_cpu_cmpxchg_double() alignment requirements.
->   */
->  struct kmem_cache_cpu {
-> -	void **freelist;	/* Pointer to next available object */
-> -	unsigned long tid;	/* Globally unique transaction id */
-> +	union {
-> +		struct {
-> +			void **freelist;	/* Pointer to next available object */
-> +			unsigned long tid;	/* Globally unique transaction id */
-> +		};
-> +		freelist_aba_t freelist_tid;
-> +	};
->  	struct slab *slab;	/* The slab from which we are allocating */
->  #ifdef CONFIG_SLUB_CPU_PARTIAL
->  	struct slab *partial;	/* Partially allocated frozen slabs */
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -5,6 +5,34 @@
->   * Internal slab definitions
->   */
->  
-> +/*
-> + * Freelist pointer and counter to cmpxchg together, avoids the typical ABA
-> + * problems with cmpxchg of just a pointer.
-> + */
-> +typedef union {
-> +	struct {
-> +		void *freelist;
-> +		unsigned long counter;
-> +	};
-> +#ifdef CONFIG_64BIT
-> +	u128 full;
-> +#else
-> +	u64 full;
-> +#endif
-> +} freelist_aba_t;
-> +
-> +#ifdef CONFIG_64BIT
-> +# ifdef system_has_cmpxchg128
-> +# define system_has_freelist_aba()	system_has_cmpxchg128()
-> +# define try_cmpxchg_freelist		try_cmpxchg128
-> +# endif
-> +#else /* CONFIG_64BIT */
-> +# ifdef system_has_cmpxchg64
-> +# define system_has_freelist_aba()	system_has_cmpxchg64()
-> +# define try_cmpxchg_freelist		try_cmpxchg64
-> +# endif
-> +#endif /* CONFIG_64BIT */
-> +
->  /* Reuses the bits in struct page */
->  struct slab {
->  	unsigned long __page_flags;
-> @@ -37,14 +65,21 @@ struct slab {
->  #endif
->  			};
->  			/* Double-word boundary */
-> -			void *freelist;		/* first free object */
->  			union {
-> -				unsigned long counters;
->  				struct {
-> -					unsigned inuse:16;
-> -					unsigned objects:15;
-> -					unsigned frozen:1;
-> +					void *freelist;		/* first free object */
-> +					union {
-> +						unsigned long counters;
-> +						struct {
-> +							unsigned inuse:16;
-> +							unsigned objects:15;
-> +							unsigned frozen:1;
-> +						};
-> +					};
->  				};
-> +#ifdef system_has_freelist_aba
-> +				freelist_aba_t freelist_counter;
-> +#endif
->  			};
->  		};
->  		struct rcu_head rcu_head;
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -292,7 +292,13 @@ static inline bool kmem_cache_has_cpu_pa
->  /* Poison object */
->  #define __OBJECT_POISON		((slab_flags_t __force)0x80000000U)
->  /* Use cmpxchg_double */
-> +
-> +#if defined(system_has_freelist_aba) && \
-> +    defined(CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
->  #define __CMPXCHG_DOUBLE	((slab_flags_t __force)0x40000000U)
-> +#else
-> +#define __CMPXCHG_DOUBLE	((slab_flags_t __force)0U)
-> +#endif
->  
->  /*
->   * Tracking user of a slab.
-> @@ -512,6 +518,43 @@ static __always_inline void slab_unlock(
->  	__bit_spin_unlock(PG_locked, &page->flags);
->  }
->  
-> +static inline bool
-> +__update_freelist_fast(struct slab *slab,
-> +		      void *freelist_old, unsigned long counters_old,
-> +		      void *freelist_new, unsigned long counters_new)
-> +{
-> +
-> +	bool ret = false;
-> +
-> +#ifdef system_has_freelist_aba
-> +	freelist_aba_t old = { .freelist = freelist_old, .counter = counters_old };
-> +	freelist_aba_t new = { .freelist = freelist_new, .counter = counters_new };
-> +
-> +	ret = try_cmpxchg_freelist(&slab->freelist_counter.full, &old.full, new.full);
-> +#endif /* system_has_freelist_aba */
-> +
-> +	return ret;
-> +}
-> +
-> +static inline bool
-> +__update_freelist_slow(struct slab *slab,
-> +		      void *freelist_old, unsigned long counters_old,
-> +		      void *freelist_new, unsigned long counters_new)
-> +{
-> +	bool ret = false;
-> +
-> +	slab_lock(slab);
-> +	if (slab->freelist == freelist_old &&
-> +	    slab->counters == counters_old) {
-> +		slab->freelist = freelist_new;
-> +		slab->counters = counters_new;
-> +		ret = true;
-> +	}
-> +	slab_unlock(slab);
-> +
-> +	return ret;
-> +}
-> +
->  /*
->   * Interrupts must be disabled (for the fallback code to work right), typically
->   * by an _irqsave() lock variant. On PREEMPT_RT the preempt_disable(), which is
-> @@ -519,33 +562,25 @@ static __always_inline void slab_unlock(
->   * allocation/ free operation in hardirq context. Therefore nothing can
->   * interrupt the operation.
->   */
-> -static inline bool __cmpxchg_double_slab(struct kmem_cache *s, struct slab *slab,
-> +static inline bool __slab_update_freelist(struct kmem_cache *s, struct slab *slab,
->  		void *freelist_old, unsigned long counters_old,
->  		void *freelist_new, unsigned long counters_new,
->  		const char *n)
->  {
-> +	bool ret;
-> +
->  	if (USE_LOCKLESS_FAST_PATH())
->  		lockdep_assert_irqs_disabled();
-> -#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE) && \
-> -    defined(CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
-> +
->  	if (s->flags & __CMPXCHG_DOUBLE) {
-> -		if (cmpxchg_double(&slab->freelist, &slab->counters,
-> -				   freelist_old, counters_old,
-> -				   freelist_new, counters_new))
-> -			return true;
-> -	} else
-> -#endif
-> -	{
-> -		slab_lock(slab);
-> -		if (slab->freelist == freelist_old &&
-> -					slab->counters == counters_old) {
-> -			slab->freelist = freelist_new;
-> -			slab->counters = counters_new;
-> -			slab_unlock(slab);
-> -			return true;
-> -		}
-> -		slab_unlock(slab);
-> +		ret = __update_freelist_fast(slab, freelist_old, counters_old,
-> +				            freelist_new, counters_new);
-> +	} else {
-> +		ret = __update_freelist_slow(slab, freelist_old, counters_old,
-> +				            freelist_new, counters_new);
->  	}
-> +	if (likely(ret))
-> +		return true;
->  
->  	cpu_relax();
->  	stat(s, CMPXCHG_DOUBLE_FAIL);
-> @@ -557,36 +592,26 @@ static inline bool __cmpxchg_double_slab
->  	return false;
->  }
->  
-> -static inline bool cmpxchg_double_slab(struct kmem_cache *s, struct slab *slab,
-> +static inline bool slab_update_freelist(struct kmem_cache *s, struct slab *slab,
->  		void *freelist_old, unsigned long counters_old,
->  		void *freelist_new, unsigned long counters_new,
->  		const char *n)
->  {
-> -#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE) && \
-> -    defined(CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
-> +	bool ret;
-> +
->  	if (s->flags & __CMPXCHG_DOUBLE) {
-> -		if (cmpxchg_double(&slab->freelist, &slab->counters,
-> -				   freelist_old, counters_old,
-> -				   freelist_new, counters_new))
-> -			return true;
-> -	} else
-> -#endif
-> -	{
-> +		ret = __update_freelist_fast(slab, freelist_old, counters_old,
-> +				            freelist_new, counters_new);
-> +	} else {
->  		unsigned long flags;
->  
->  		local_irq_save(flags);
-> -		slab_lock(slab);
-> -		if (slab->freelist == freelist_old &&
-> -					slab->counters == counters_old) {
-> -			slab->freelist = freelist_new;
-> -			slab->counters = counters_new;
-> -			slab_unlock(slab);
-> -			local_irq_restore(flags);
-> -			return true;
-> -		}
-> -		slab_unlock(slab);
-> +		ret = __update_freelist_slow(slab, freelist_old, counters_old,
-> +				            freelist_new, counters_new);
->  		local_irq_restore(flags);
->  	}
-> +	if (likely(ret))
-> +		return true;
->  
->  	cpu_relax();
->  	stat(s, CMPXCHG_DOUBLE_FAIL);
-> @@ -2229,7 +2254,7 @@ static inline void *acquire_slab(struct
->  	VM_BUG_ON(new.frozen);
->  	new.frozen = 1;
->  
-> -	if (!__cmpxchg_double_slab(s, slab,
-> +	if (!__slab_update_freelist(s, slab,
->  			freelist, counters,
->  			new.freelist, new.counters,
->  			"acquire_slab"))
-> @@ -2555,7 +2580,7 @@ static void deactivate_slab(struct kmem_
->  	}
->  
->  
-> -	if (!cmpxchg_double_slab(s, slab,
-> +	if (!slab_update_freelist(s, slab,
->  				old.freelist, old.counters,
->  				new.freelist, new.counters,
->  				"unfreezing slab")) {
-> @@ -2612,7 +2637,7 @@ static void __unfreeze_partials(struct k
->  
->  			new.frozen = 0;
->  
-> -		} while (!__cmpxchg_double_slab(s, slab,
-> +		} while (!__slab_update_freelist(s, slab,
->  				old.freelist, old.counters,
->  				new.freelist, new.counters,
->  				"unfreezing slab"));
-> @@ -3009,6 +3034,18 @@ static inline bool pfmemalloc_match(stru
->  }
->  
->  #ifndef CONFIG_SLUB_TINY
-> +static inline bool
-> +__update_cpu_freelist_fast(struct kmem_cache *s,
-> +			   void *freelist_old, void *freelist_new,
-> +			   unsigned long tid)
-> +{
-> +	freelist_aba_t old = { .freelist = freelist_old, .counter = tid };
-> +	freelist_aba_t new = { .freelist = freelist_new, .counter = next_tid(tid) };
-> +
-> +	return this_cpu_cmpxchg(s->cpu_slab->freelist_tid.full,
-> +				old.full, new.full) == old.full;
-> +}
-> +
->  /*
->   * Check the slab->freelist and either transfer the freelist to the
->   * per cpu freelist or deactivate the slab.
-> @@ -3035,7 +3072,7 @@ static inline void *get_freelist(struct
->  		new.inuse = slab->objects;
->  		new.frozen = freelist != NULL;
->  
-> -	} while (!__cmpxchg_double_slab(s, slab,
-> +	} while (!__slab_update_freelist(s, slab,
->  		freelist, counters,
->  		NULL, new.counters,
->  		"get_freelist"));
-> @@ -3360,11 +3397,7 @@ static __always_inline void *__slab_allo
->  		 * against code executing on this cpu *not* from access by
->  		 * other cpus.
->  		 */
-> -		if (unlikely(!this_cpu_cmpxchg_double(
-> -				s->cpu_slab->freelist, s->cpu_slab->tid,
-> -				object, tid,
-> -				next_object, next_tid(tid)))) {
-> -
-> +		if (unlikely(!__update_cpu_freelist_fast(s, object, next_object, tid))) {
->  			note_cmpxchg_failure("slab_alloc", s, tid);
->  			goto redo;
->  		}
-> @@ -3632,7 +3665,7 @@ static void __slab_free(struct kmem_cach
->  			}
->  		}
->  
-> -	} while (!cmpxchg_double_slab(s, slab,
-> +	} while (!slab_update_freelist(s, slab,
->  		prior, counters,
->  		head, new.counters,
->  		"__slab_free"));
-> @@ -3737,11 +3770,7 @@ static __always_inline void do_slab_free
->  
->  		set_freepointer(s, tail_obj, freelist);
->  
-> -		if (unlikely(!this_cpu_cmpxchg_double(
-> -				s->cpu_slab->freelist, s->cpu_slab->tid,
-> -				freelist, tid,
-> -				head, next_tid(tid)))) {
-> -
-> +		if (unlikely(!__update_cpu_freelist_fast(s, freelist, head, tid))) {
->  			note_cmpxchg_failure("slab_free", s, tid);
->  			goto redo;
->  		}
-> @@ -4505,11 +4534,12 @@ static int kmem_cache_open(struct kmem_c
->  		}
->  	}
->  
-> -#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE) && \
-> +#if defined(system_has_freelist_aba) && \
->      defined(CONFIG_HAVE_ALIGNED_STRUCT_PAGE)
-> -	if (system_has_cmpxchg_double() && (s->flags & SLAB_NO_CMPXCHG) == 0)
-> +	if (system_has_freelist_aba() && !(s->flags & SLAB_NO_CMPXCHG)) {
->  		/* Enable fast mode */
->  		s->flags |= __CMPXCHG_DOUBLE;
-> +	}
->  #endif
->  
->  	/*
+Move string_is_valid() to the header for wider use.
 
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+While at it, rename to string_is_terminated() to be
+precise about its semantics.
 
-Thanks!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+---
+v3: renamed to string_is_terminated (Jakub)
+v2: added tag and updated subject (Simon)
+ include/linux/string_helpers.h |  5 +++++
+ net/tipc/netlink_compat.c      | 16 ++++++----------
+ 2 files changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.h
+index 8530c7328269..fae6beaaa217 100644
+--- a/include/linux/string_helpers.h
++++ b/include/linux/string_helpers.h
+@@ -11,6 +11,11 @@ struct device;
+ struct file;
+ struct task_struct;
+ 
++static inline bool string_is_terminated(const char *s, int len)
++{
++	return memchr(s, '\0', len) ? true : false;
++}
++
+ /* Descriptions of the types of units to
+  * print in */
+ enum string_size_units {
+diff --git a/net/tipc/netlink_compat.c b/net/tipc/netlink_compat.c
+index dfea27a906f2..9b47c8409231 100644
+--- a/net/tipc/netlink_compat.c
++++ b/net/tipc/netlink_compat.c
+@@ -39,6 +39,7 @@
+ #include "node.h"
+ #include "net.h"
+ #include <net/genetlink.h>
++#include <linux/string_helpers.h>
+ #include <linux/tipc_config.h>
+ 
+ /* The legacy API had an artificial message length limit called
+@@ -173,11 +174,6 @@ static struct sk_buff *tipc_get_err_tlv(char *str)
+ 	return buf;
+ }
+ 
+-static inline bool string_is_valid(char *s, int len)
+-{
+-	return memchr(s, '\0', len) ? true : false;
+-}
+-
+ static int __tipc_nl_compat_dumpit(struct tipc_nl_compat_cmd_dump *cmd,
+ 				   struct tipc_nl_compat_msg *msg,
+ 				   struct sk_buff *arg)
+@@ -445,7 +441,7 @@ static int tipc_nl_compat_bearer_enable(struct tipc_nl_compat_cmd_doit *cmd,
+ 		return -EINVAL;
+ 
+ 	len = min_t(int, len, TIPC_MAX_BEARER_NAME);
+-	if (!string_is_valid(b->name, len))
++	if (!string_is_terminated(b->name, len))
+ 		return -EINVAL;
+ 
+ 	if (nla_put_string(skb, TIPC_NLA_BEARER_NAME, b->name))
+@@ -486,7 +482,7 @@ static int tipc_nl_compat_bearer_disable(struct tipc_nl_compat_cmd_doit *cmd,
+ 		return -EINVAL;
+ 
+ 	len = min_t(int, len, TIPC_MAX_BEARER_NAME);
+-	if (!string_is_valid(name, len))
++	if (!string_is_terminated(name, len))
+ 		return -EINVAL;
+ 
+ 	if (nla_put_string(skb, TIPC_NLA_BEARER_NAME, name))
+@@ -584,7 +580,7 @@ static int tipc_nl_compat_link_stat_dump(struct tipc_nl_compat_msg *msg,
+ 		return -EINVAL;
+ 
+ 	len = min_t(int, len, TIPC_MAX_LINK_NAME);
+-	if (!string_is_valid(name, len))
++	if (!string_is_terminated(name, len))
+ 		return -EINVAL;
+ 
+ 	if (strcmp(name, nla_data(link[TIPC_NLA_LINK_NAME])) != 0)
+@@ -819,7 +815,7 @@ static int tipc_nl_compat_link_set(struct tipc_nl_compat_cmd_doit *cmd,
+ 		return -EINVAL;
+ 
+ 	len = min_t(int, len, TIPC_MAX_LINK_NAME);
+-	if (!string_is_valid(lc->name, len))
++	if (!string_is_terminated(lc->name, len))
+ 		return -EINVAL;
+ 
+ 	media = tipc_media_find(lc->name);
+@@ -856,7 +852,7 @@ static int tipc_nl_compat_link_reset_stats(struct tipc_nl_compat_cmd_doit *cmd,
+ 		return -EINVAL;
+ 
+ 	len = min_t(int, len, TIPC_MAX_LINK_NAME);
+-	if (!string_is_valid(name, len))
++	if (!string_is_terminated(name, len))
+ 		return -EINVAL;
+ 
+ 	if (nla_put_string(skb, TIPC_NLA_LINK_NAME, name))
+-- 
+2.39.1
+
