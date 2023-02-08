@@ -2,81 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB5668FB7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 00:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CE668FB84
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 00:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjBHXrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 18:47:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S229966AbjBHXsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 18:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjBHXrD (ORCPT
+        with ESMTP id S229675AbjBHXsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 18:47:03 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CED0C640;
-        Wed,  8 Feb 2023 15:46:53 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id dt8so314067oib.0;
-        Wed, 08 Feb 2023 15:46:53 -0800 (PST)
+        Wed, 8 Feb 2023 18:48:13 -0500
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213A22110;
+        Wed,  8 Feb 2023 15:48:13 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id r34-20020a05683044a200b0068d4a8a8d2dso63945otv.12;
+        Wed, 08 Feb 2023 15:48:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C+icIdKslGvMFTYoNpZsRusMzcE34hYdnJpALIQzixk=;
-        b=ROjFRIJL6KDIXXNHUt2UatbEWXpYnBE380bxPLtEDC68ymYYO5GnvV9QskdkDxptzb
-         uQeOZqBokSx16wCzRJoOy6pvlyJPFRnC155CQpq51GCxcE7cbM5ktlpqg6EnEQFzgaMG
-         rzzqzxhyxcM/Da/BCQHeb+p0epzYhN0hpD2er3FizbbiUCXhg8oKjNxfcpTkClzAN/Nf
-         0qZPN24uUgWmIxcVN2SlyvMPqz1uja6tW4OniMTXh1itfxHETf03Y0KZYiHRIJJn4JJ2
-         G8hI6873vlxAsqiUrz2B2fkVGyJU6XJnA7t5/I1viuD7dluQQnEDsMtUq7gZauJr2XfS
-         p8YQ==
-X-Gm-Message-State: AO0yUKUq3/mdZ8xSgGiwz/+HMjBz+7VZz8VIw4ZYowPFgPyT57w8qWLf
-        NrnJG2toqrs72VyDg0mDsw==
-X-Google-Smtp-Source: AK7set+t4lw5gVcug+Sb9ZM+igBFEHDv4+leQDcKVRz+QrmI0qjbrl7Y7T8tHpaaJA9Cfjk7F+5V3w==
-X-Received: by 2002:aca:1015:0:b0:36d:ea30:7bdf with SMTP id 21-20020aca1015000000b0036dea307bdfmr3728234oiq.49.1675900012280;
-        Wed, 08 Feb 2023 15:46:52 -0800 (PST)
+        bh=50e1Whr1p5O5BfXr1b5aKvoRaix0X3o5rBbjLfH/hl0=;
+        b=UBnrTj8PzT2s+pFjfM3tsstgyxxzRijs6Rwe4ZJejP/Gqx/ZkRJZ1VBtDWa+C4CVSQ
+         az9GBUtZ2icLOIZZK7Kw5QxOVMvxH4SUX0G/6iCECfWmvHriod04y5lsZk6dts+eZZ4j
+         gjbd+zxjy6/7k7wlM6Vsw2NZNGAV4AGQNV+TtX9WG5dtQEvRRWslAu6d1dOGZ1pD1R6c
+         Y49gzCKoDL9uOuvKNPfBk8XrFbspWrw0UKkes5G7uSrRrk23nrW/k/6a7THYenLQXf5i
+         QZd50sPisQK4NPG8Oyhw23X6MGVDasBSo+E7MQ4PseBuYo3jdtSMUm1uQ6c3t4AU3eIc
+         zTzg==
+X-Gm-Message-State: AO0yUKVV4TgKg5Cu95PpI8YfRmPK7TTD1MA/A8X6cwmgFfHib7CGl3mA
+        I++Y3g75/2X/0cGGZo+1KA==
+X-Google-Smtp-Source: AK7set/MAs5BubHgfwo8YE/1H72/fOatEqJB6vH4FwLOvCDTyVaWJ99UtL9xSLK4cD2uvjP9j1qy6Q==
+X-Received: by 2002:a05:6830:2008:b0:68b:d347:2457 with SMTP id e8-20020a056830200800b0068bd3472457mr4177424otp.21.1675900092263;
+        Wed, 08 Feb 2023 15:48:12 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s83-20020acac256000000b003785a948b27sm47788oif.16.2023.02.08.15.46.51
+        by smtp.gmail.com with ESMTPSA id z3-20020a05683010c300b0068d542f630fsm8717770oto.76.2023.02.08.15.48.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 15:46:51 -0800 (PST)
-Received: (nullmailer pid 2935262 invoked by uid 1000);
-        Wed, 08 Feb 2023 23:46:51 -0000
-Date:   Wed, 8 Feb 2023 17:46:51 -0600
+        Wed, 08 Feb 2023 15:48:11 -0800 (PST)
+Received: (nullmailer pid 2936796 invoked by uid 1000);
+        Wed, 08 Feb 2023 23:48:10 -0000
+Date:   Wed, 8 Feb 2023 17:48:10 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: phy: amlogic,g12a-usb3-pcie-phy: add
- missing optional phy-supply property
-Message-ID: <167590001058.2935209.9991726555575605805.robh@kernel.org>
-References: <20230207-b4-amlogic-amlogic-g12a-usb3-pcie-phy-fix-v1-1-3e437b759549@linaro.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mt76: allow up to 4 interrupts for mt7986
+Message-ID: <20230208234810.GA2935682-robh@kernel.org>
+References: <20230207171512.35425-1-linux@fw-web.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230207-b4-amlogic-amlogic-g12a-usb3-pcie-phy-fix-v1-1-3e437b759549@linaro.org>
+In-Reply-To: <20230207171512.35425-1-linux@fw-web.de>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 07 Feb 2023 16:03:53 +0100, Neil Armstrong wrote:
-> Add missing optional phy-supply property used to power up PHY regulators.
+On Tue, Feb 07, 2023 at 06:15:12PM +0100, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Fixes: 87a55485f2fc ("dt-bindings: phy: meson-g12a-usb3-pcie-phy: convert to yaml")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Mt7986 needs 4 interrupts which are already defined in mt7986a.dtsi.
+> Update binding to reflect it
+> 
+> This fixes this error in dtbs_check (here only bpi-r3 example):
+> 
+> arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtb: wifi@18000000:
+> interrupts: [[0, 213, 4], [0, 214, 4], [0, 215, 4], [0, 216, 4]] is too long
+> 	From schema: Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+> arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtb: wifi@18000000:
+> Unevaluated properties are not allowed ('interrupts' was unexpected)
+> 	From schema: Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->  .../devicetree/bindings/phy/amlogic,g12a-usb3-pcie-phy.yaml          | 5 +++++
->  1 file changed, 5 insertions(+)
+>  .../devicetree/bindings/net/wireless/mediatek,mt76.yaml      | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+> index 212508672979..222b657fe4ea 100644
+> --- a/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+> +++ b/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml
+> @@ -38,7 +38,10 @@ properties:
+>        MT7986 should contain 3 regions consys, dcm, and sku, in this order.
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    minItems: 1
+> +    maxItems: 4
+> +    description:
+> +      MT7986 should contain 4 items.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The schema and the description don't match.
 
+You need to define what each interrupt is.
+
+Rob
