@@ -2,134 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B3768F8A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C42B68F8B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjBHUPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
+        id S232046AbjBHURM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:17:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbjBHUPi (ORCPT
+        with ESMTP id S231742AbjBHURJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:15:38 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2063.outbound.protection.outlook.com [40.107.93.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03CEBB91
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:15:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aPpUjNPp3ZqvhTsduulDLeqFjFp5fdUy/xc3BbSWZvuBbpQwNJxzqHC3DQK78tc5X+XhNNV8XNyJpbe3pNdXEjE7ID5XcRfzrf+3hvhbRiWOni4SJsSbDVdswTGemhMcHdIR7JcUxzNupibv/wXO5k+0UxiSC4a0HrSFraTRQl9DcB6Y5lx9Q5eQAZqfIyQKot3raZsgitH5RyyfCGrYk+8mpAc2J+JXFfQnNCJuMiIFs+1op+s4timNbGWbIdjvLU0rgGhwd1PmYMRHFww46j//WKlR2dejPyT2Q3AHB+gcjcEKV55QQZh6i6Q6jpXzwWu7o9w4ycwVzTwHMTirAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GMsCqC5+85bQpeCOv+rUZYFL4rnl7CUgho59BJPalWo=;
- b=mn0ZgmtJloDWMrX0qQzjrm/mX9G4q7SjmPXWRNKW6IdcgHJK1qaOAMpnVuKrumiyArGG3bsfZ4zNfsGbFmYQioypsGDT4IaA76eXFjjmMnIicuz0lCy5RmyfxKbG73FpDL/qjOUJWzG5QfspxRlb6bNLgTkpoI8uLbUug/i1RZ5GS+knLn86NeeLSuxSsluFHQDCQk8rezhhi44XOE93oEBto0TsByUNwLUW+dTj4Z/8EhSGCOuzS/F0vpNZhoHYlgH1q1v0kbQZ7dCqLpZ5kcGSr8rKqkhg5/WvGf9Rof3fWiSS4CAPdn+vhF860A2rvZ9rRwYvfz3zBoqZ9o/HeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GMsCqC5+85bQpeCOv+rUZYFL4rnl7CUgho59BJPalWo=;
- b=0tXMNrKIsF4FwNHb3DgYksgIrebJXj/3/MOzv/a/VKfijlSGQU2PT0mnzTY5ujpeTQMBZH1XPQhSeLYa9I6bKlh5aTzhF5OvcnPtRI/z0Fw1Qj8Qis4ct4zHVCMqu2y3/G02TwobBII7ZCveYxGY3eSqj5MeOe0TZet41IjZKHY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by PH7PR12MB6419.namprd12.prod.outlook.com (2603:10b6:510:1fd::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.31; Wed, 8 Feb
- 2023 20:15:32 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::aa28:9378:593:868a%9]) with mapi id 15.20.6064.034; Wed, 8 Feb 2023
- 20:15:32 +0000
-Message-ID: <52f84169-b50f-3ac3-a4df-45e20b349fa2@amd.com>
-Date:   Wed, 8 Feb 2023 15:15:27 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/amd/display: don't call dc_interrupt_set() for
- disabled crtcs
-To:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        amd-gfx@lists.freedesktop.org
-Cc:     Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alan Liu <HaoPing.Liu@amd.com>, Alex Hung <alex.hung@amd.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Melissa Wen <mwen@igalia.com>, Tony Cheng <Tony.Cheng@amd.com>,
-        Mario Kleiner <mario.kleiner.de@gmail.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230208200150.155684-1-hamza.mahfooz@amd.com>
-Content-Language: en-US
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20230208200150.155684-1-hamza.mahfooz@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT1PR01CA0130.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2f::9) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Wed, 8 Feb 2023 15:17:09 -0500
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951765247
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:17:03 -0800 (PST)
+Received: (wp-smtpd smtp.wp.pl 40124 invoked from network); 8 Feb 2023 21:16:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1675887419; bh=TiixG+XfCI+6ARDvvHxIncEYUlRRdPVqZbEughK+Ino=;
+          h=From:To:Cc:Subject;
+          b=jxRVuMvbWnPjxbRPB1z1TBZ0XJBJHGXuI5Rg5pvbB5qIo5lqdxtqbSuwO6W5jWoMK
+           zWDt0cYHYKk6RWlHMMoZLlbLx9/i0kHEvOYxI8jru6WozzOCVPd+DFQydwxXd3yPLE
+           8ruxKYZNGJw6DmX8Qs2g+kkwkFeq/NULEsczk4cM=
+Received: from 89-64-15-40.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.15.40])
+          (envelope-sender <stf_xl@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <jiasheng@iscas.ac.cn>; 8 Feb 2023 21:16:59 +0100
+Date:   Wed, 8 Feb 2023 21:16:58 +0100
+From:   Stanislaw Gruszka <stf_xl@wp.pl>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] iwl4965: Add missing check for
+ create_singlethread_workqueue
+Message-ID: <20230208201658.GA1435569@wp.pl>
+References: <20230208063032.42763-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|PH7PR12MB6419:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65093a7e-60cc-48c8-fd44-08db0a113a8c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GYeHb+qzPz5+6d7xOegjVGdl936+gTj0v6d4PxU7mu+2u7TYdGr/cHTH1oVLZq+AAEBBuFTMyFbkwND4S5hDqEdgYZOO409sB/KafXeIJQHf9vvxtUwGSIp+YYk3nawrSXlPfWCNrH/aITdw9nM4CgqyO9OtDZ1ZasXiyKFkFUeQ2WRv4JkmwL8zH4UrbLirudDUHXrr0U4WRdkAvVGE8D5sohK4yeRqCcZUL0ei79T2auqe0PA/wA22wJJBA4ypR6Cq78B4kzmX+CjNm84K3L+TXW13vGoZwAI52laeU+RDEH8QR+UgNjFLYRMUGhuYA271UdjOVbGqNfcOBNm4Y67vIQFNVEo7dGyN2Jd+TjwmtPbYRAGdrdjVsJ63NtOoLCT903vx05iFE9yY62ebaXUm1/qBjzK3zBT7SdslC0h08xeikdL1fFo3fkGUdXHsm8fQL4VLU787Xur2E6nF5V+IGopCWyYUA/2DfXXAeCLYCSS+1xFFbjG3yOZ+o55rfLqvwurghmE4WHaQkcuKq571drhLxltXyD5x6hU6BK98BrjcrqdkPnYMyQoLm0AYObx/PnIMQpK2Fe+mBBJIW3N3BJPVfVsaex8r4TlMKzjOgx/S+5smXqf3zmEaXgCW8aoCmYm+6yemcH1nu2PfwodasA0yL13oxT3TfgUgQPZO/h2/bu8WDNLd8JAIr64jWmMjvk1JoDZ49syFRVDZ1Q3az3zxm8/dyamx43JnyhEKLYtS5td0cHFSfV5B5oK0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(396003)(136003)(39860400002)(376002)(451199018)(26005)(6512007)(186003)(38100700002)(31686004)(2906002)(316002)(53546011)(8936002)(5660300002)(6506007)(54906003)(31696002)(83380400001)(6666004)(2616005)(86362001)(66476007)(36756003)(478600001)(4326008)(6486002)(66946007)(44832011)(66556008)(8676002)(41300700001)(17423001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGh1Ny9zUlAxejZna0RUUXNVcmtHaitCVXZKTklMbWptOWNveEY4b1RNN0VM?=
- =?utf-8?B?VHQ1VzRWd2xpeXh5ejllVnpMVkVKelpyTlVMcUVHTFNjaE80V05WSU5MbXp4?=
- =?utf-8?B?WDBlOWlpTGpxTTFaZ0JlME9HVXF0b3VJU0FYa1hGM3o2YlVrVGZJSkJ5ZkNX?=
- =?utf-8?B?bDI5YmIrL0x1UmFvdm9Bbml4SGI0aXk3V1dMVlYzdDNHa3V4RXRoOWFza2s2?=
- =?utf-8?B?OG1LcGFSYk9ab0xYTGh3eERwTWlzYjhYaytsV29yZVNsUTNLK3ROdWU3OWJx?=
- =?utf-8?B?b2poK1BySklSc2swTTZTaHdUVUpZemM0TXJVK1oySVB2WHkxdjZZZkRVTDNY?=
- =?utf-8?B?Z1dFZEE4bUpBbVJXdjlySDJLdjRDN29ROGk3cm9ibUE5allYZ2REUUdXZE5p?=
- =?utf-8?B?U1ltZHU1S00ybms4UDZBeVBMZ1RldndkSmZ1MUxaelhZclpQd2hSbnFWL3lh?=
- =?utf-8?B?TXNhaGlsalBGWGFXcjdGRTd3NTVHRUhpT3J6RzBxNDY0YUw2clM1cUZWcTFj?=
- =?utf-8?B?bmdUaW1GNzI1bmV4c3R1Yk9HQ3c0dkhEUDZ2Z0FSZWI0NEpwZlBDY3NVYWIv?=
- =?utf-8?B?bXFHY0p0MzBVeS9UWENhWmFoNmhBZUR2TTRYZFJUQjEzUTl3bzNVL1FCY1Fn?=
- =?utf-8?B?WHFhbGpFLytuZTZsSjl6MnFHZEJxU3lhc2s4NVhJWEMxaGpmYmZNUm8vL3lF?=
- =?utf-8?B?N2R1TmV6bHJZTUpvVFM0TEpWSUhYandVNmhlQUF3TVp2OUZ3ZVhsQi9aOEwx?=
- =?utf-8?B?MmJVVFRqSUw0THVoOW9tZ0RKYSt6TkRmc0ZXMERRdG16RC9wa3FORWdpc0tl?=
- =?utf-8?B?MzFDaHR4dTBrSlNaVGNKdmszZWRJdnc5ajIycm9YYWh1V2I1aXg1NnFDczRY?=
- =?utf-8?B?Tk10bFVVekQrZDF3d3pIdmxzR2pKeUtoNUxVMG8xRmhtMUludzZRbFN2VHg3?=
- =?utf-8?B?VzdiS0pPMjNUQlZjUTZRVHhKMzYxRTlHRE9QRVFvZUtSQ2RXNTJaTG1rL0kx?=
- =?utf-8?B?Ym0rcjlBcXZvd21pdWFSdS9TeFA1dkM4WldyQTM3cXNjM2JLUTZBODhIWkFs?=
- =?utf-8?B?MGs3NnBKUEFMdTRwM1pac0tQek5vSW9BM2lMYnNIaTJ6M0E3aW9QVktRZU9I?=
- =?utf-8?B?c3l3MnVNMmlBdlhNQmFIRlZNL09zMDJVNzBNby8vTWVxaUtDSk9yMi9EQzlt?=
- =?utf-8?B?Mk5hVW9Hb0R6eS9ZUytTWTRyV29xUERFZUpKSWhFLzFzNHFtWXpvL0lPQmUw?=
- =?utf-8?B?RnZFTTZoc254bStuTVJhL1B5djZTN21ZMmxLNHpSZ3pZRXhaUVhBZGpMZzhl?=
- =?utf-8?B?OVQ0OW03cE00dm5ENTRaN2FFWUo3dFdDS0ZmMlFKYlZBa2dxUWVVMGd2bE1w?=
- =?utf-8?B?Z2hScTJndzlBa24rQTIrcGU5dEJMQ1J0V2F4aFVZNDFFcGQzK2VWUDdqS1dN?=
- =?utf-8?B?R2tjclZ1d1VBbHczV3ppTFdnakhVZTd5MkR6cDJJWkxManA4WFliWEdGeDJm?=
- =?utf-8?B?Z21vQy9BdTJLU0tDakVNbTN6MUl2OTdqdnluM2Q5aU1mWWRIYjZwR2tNcHJh?=
- =?utf-8?B?bHFNTEkvZWw3NXp4SjJuUThJRDFQRTU1L2hLVE8vVks4QXoyVTRVNWxOWWgz?=
- =?utf-8?B?L1dHOXh1c2NiTnN6bmFwRmJsMVJuSVkyWHYxYUx4dkQwTzhrTWhpZGVYK1di?=
- =?utf-8?B?dnRkSENpRU0reWIxZ1VxN2JmUVZkdFJFenVFN2tJNTRXVWxvcGxWK2FWNjAy?=
- =?utf-8?B?NWVoZ0dhUmdGQXMyOHE3Sk5MR3VBbGpDRTZJZmhlMEhFaXRlRWpHenBueVpo?=
- =?utf-8?B?SnVTbXNoT3dMQ1ZQTmhNWE05K3IxYmlOSFNEUjNPOUpPbzdMRmE2WmFXOVla?=
- =?utf-8?B?bkFMTVdaeHFMSU1YRDVIYUI2OTE2R0lNRFhnOVhqdnpKRVc4ME9IdXRNZWhV?=
- =?utf-8?B?MEJQTVBtM2tJbnFtSmZnSjJqVGJsdzdHZjVISEp2aEZkc2pob09FNzdCTk50?=
- =?utf-8?B?OUR5UE9YOTE2RVFsbGhkc01lZjg3NmMwY1J0NnF2UStCZ1VNWEVkazI4YzdV?=
- =?utf-8?B?RFNHK2VxNFlPM29GMEQyY1l2bHoyNDdYeVRJRzZhMlVqOStxOFlEblZsWk9U?=
- =?utf-8?Q?ZeZycDZfPNrxI8jW1GOCJwu4X?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65093a7e-60cc-48c8-fd44-08db0a113a8c
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 20:15:31.8440
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s98JGYuYQ2K6xjckg5bycvulUgkXbn14mBKFFm2ScjI0GGnHAIai+tzjE/5LLLeFAIPjn+tO0hUAGi32ev3J/w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6419
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208063032.42763-1-jiasheng@iscas.ac.cn>
+X-WP-MailID: 7eca2eb9216ec3b4e515e2e46af58c62
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [wdNV]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,54 +53,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/23 15:01, Hamza Mahfooz wrote:
-> As made mention of in commit 4ea7fc09539b ("drm/amd/display: Do not
-> program interrupt status on disabled crtc"), we shouldn't program
-> disabled crtcs. So, filter out disabled crtcs in dm_set_vupdate_irq()
-> and dm_set_vblank().
+On Wed, Feb 08, 2023 at 02:30:31PM +0800, Jiasheng Jiang wrote:
+> Add the check for the return value of the create_singlethread_workqueue
+> in order to avoid NULL pointer dereference.
 > 
-> Fixes: 589d2739332d ("drm/amd/display: Use crtc enable/disable_vblank hooks")
-> Fixes: d2574c33bb71 ("drm/amd/display: In VRR mode, do DRM core vblank handling at end of vblank. (v2)")
-> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+> Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+>  static void
+> @@ -6618,7 +6622,11 @@ il4965_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>  		goto out_disable_msi;
+>  	}
+>  
+> -	il4965_setup_deferred_work(il);
+> +	err = il4965_setup_deferred_work(il);
+> +	if (err) {
+> +		goto out_free_irq;
+> +	}
 
-Harry
-
-> ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> index 1e39d0939700..dc4f37240beb 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> @@ -77,6 +77,9 @@ int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enable)
->  	struct amdgpu_device *adev = drm_to_adev(crtc->dev);
->  	int rc;
->  
-> +	if (acrtc->otg_inst == -1)
-> +		return 0;
-> +
->  	irq_source = IRQ_TYPE_VUPDATE + acrtc->otg_inst;
->  
->  	rc = dc_interrupt_set(adev->dm.dc, irq_source, enable) ? 0 : -EBUSY;
-> @@ -151,6 +154,9 @@ static inline int dm_set_vblank(struct drm_crtc *crtc, bool enable)
->  	struct vblank_control_work *work;
->  	int rc = 0;
->  
-> +	if (acrtc->otg_inst == -1)
-> +		goto skip;
-> +
->  	if (enable) {
->  		/* vblank irq on -> Only need vupdate irq in vrr mode */
->  		if (amdgpu_dm_vrr_active(acrtc_state))
-> @@ -168,6 +174,7 @@ static inline int dm_set_vblank(struct drm_crtc *crtc, bool enable)
->  	if (!dc_interrupt_set(adev->dm.dc, irq_source, enable))
->  		return -EBUSY;
->  
-> +skip:
->  	if (amdgpu_in_reset(adev))
->  		return 0;
->  
+{} not needded.
 
