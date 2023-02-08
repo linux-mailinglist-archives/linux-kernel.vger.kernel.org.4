@@ -2,129 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F30A68E651
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE8B68E650
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjBHCv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjBHCvz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230286AbjBHCvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 7 Feb 2023 21:51:55 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC1B8684
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 18:51:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675824713; x=1707360713;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Mwr3qNzGCEl1ilH3eggGBCQcHoceTEn3i6eC1KZclvU=;
-  b=K+U5qdUqqMVaGYb63CrKF7cQ3o4JwzoaebDGaYYv99B8dEq+/hhhhwyP
-   P3hxz4p2sWa+EzM6/A+YXgTXqtM5+VJ4b5MPbr+uXclI7+jB9DeJYSwxt
-   w++fuYgsHCfca8qEIsCfk6rwCm86n7CR2IgovEshWJuObGlq6tZS19mKZ
-   O9N8IsK0jF3D2n9CAWJu35aQPxTfU3+tvaJ1iP1fw0qsS1U9QfNJ0pgVF
-   jrFrNPG9gXiktOORdYlwG0z159oNvNFjL12NYcHZ3SoXPGtKNQvBdDxAF
-   X7GSJO+S9FrH6yS4yQxlJdFjjl1w/RIaTadywa950yJAlPDe22SYBticO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="330984866"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="330984866"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 18:51:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="809777118"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="809777118"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2023 18:51:51 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPaYj-00046e-2I;
-        Wed, 08 Feb 2023 02:51:45 +0000
-Date:   Wed, 8 Feb 2023 10:51:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning:
- "THREAD_SHIFT" is not defined, evaluates to 0
-Message-ID: <202302081034.IDWxXcwG-lkp@intel.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230190AbjBHCvv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 7 Feb 2023 21:51:51 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25B18E3B0;
+        Tue,  7 Feb 2023 18:51:50 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 7A8C420C7E3E; Tue,  7 Feb 2023 18:51:49 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A8C420C7E3E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675824709;
+        bh=/8sypdsBFJ9BayyXPQW3tsqVwQ5HKWArPlSI9nkM8R4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F+vpjfvj+umQjEGJfek92nTkeB45CtCxc+Z3ILKuBI7JjSXK9DWTc67imS/3UTG8y
+         WLGgMSURm2yLoqYte2jWNPq11PDNG5fCoEeEGZ6wsKeO8shYivV6MXx6NDgSa/YjeL
+         hYYMw2eF4mykznZGLZlCtoHhJtDlRDxZ4X3QAMAw=
+Date:   Tue, 7 Feb 2023 18:51:49 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com, dphadke@linux.microsoft.com
+Subject: Re: [PATCH v4 4/6] dt-bindings: hypervisor: Rename virtio to
+ hypervisor
+Message-ID: <20230208025149.GC838@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675756199-5917-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675756199-5917-5-git-send-email-ssengar@linux.microsoft.com>
+ <20230207183931.GB3753062-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230207183931.GB3753062-robh@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On Tue, Feb 07, 2023 at 12:39:31PM -0600, Rob Herring wrote:
+> On Mon, Feb 06, 2023 at 11:49:57PM -0800, Saurabh Sengar wrote:
+> > Rename virtio folder to more generic hypervisor, so that this can
+> > accommodate more devices of similar type.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  Documentation/devicetree/bindings/gpio/gpio-virtio.yaml               | 4 ++--
+> >  Documentation/devicetree/bindings/{virtio => hypervisor}/mmio.yaml    | 2 +-
+> >  .../devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml         | 2 +-
+> >  .../devicetree/bindings/{virtio => hypervisor}/virtio-device.yaml     | 2 +-
+> >  Documentation/devicetree/bindings/i2c/i2c-virtio.yaml                 | 4 ++--
+> >  MAINTAINERS                                                           | 2 +-
+> >  6 files changed, 8 insertions(+), 8 deletions(-)
+> >  rename Documentation/devicetree/bindings/{virtio => hypervisor}/mmio.yaml (95%)
+> >  rename Documentation/devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml (98%)
+> >  rename Documentation/devicetree/bindings/{virtio => hypervisor}/virtio-device.yaml (93%)
+> 
+> virtio is used for more than just an interface to hypervisors. I think 
+> this should remain. Instead, I'd put vmbus under bindings/bus/.
 
-FYI, the error/warning still remains.
+Agree, will move to bus in v5
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: 80b6093b55e31c2c40ff082fb32523d4e852954f kbuild: add -Wundef to KBUILD_CPPFLAGS for W=1 builds
-date:   8 weeks ago
-config: powerpc-randconfig-r015-20230208 (https://download.01.org/0day-ci/archive/20230208/202302081034.IDWxXcwG-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=80b6093b55e31c2c40ff082fb32523d4e852954f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 80b6093b55e31c2c40ff082fb32523d4e852954f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/ arch/powerpc/kvm/ arch/powerpc/platforms/85xx/ arch/powerpc/sysdev/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/powerpc/kvm/bookehv_interrupts.S:26:
->> arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning: "THREAD_SHIFT" is not defined, evaluates to 0 [-Wundef]
-      20 | #if (THREAD_SHIFT < 15)
-         |      ^~~~~~~~~~~~
-
-
-vim +/THREAD_SHIFT +20 arch/powerpc/kvm/../kernel/head_booke.h
-
-1a4b739bbb4f885 Christophe Leroy 2019-04-30  10  
-63dafe5728e7354 Becky Bruce      2006-01-14  11  /*
-63dafe5728e7354 Becky Bruce      2006-01-14  12   * Macros used for common Book-e exception handling
-63dafe5728e7354 Becky Bruce      2006-01-14  13   */
-63dafe5728e7354 Becky Bruce      2006-01-14  14  
-63dafe5728e7354 Becky Bruce      2006-01-14  15  #define SET_IVOR(vector_number, vector_label)		\
-63dafe5728e7354 Becky Bruce      2006-01-14  16  		li	r26,vector_label@l; 		\
-63dafe5728e7354 Becky Bruce      2006-01-14  17  		mtspr	SPRN_IVOR##vector_number,r26;	\
-63dafe5728e7354 Becky Bruce      2006-01-14  18  		sync
-63dafe5728e7354 Becky Bruce      2006-01-14  19  
-e12401222f749c3 Yuri Tikhonov    2009-01-29 @20  #if (THREAD_SHIFT < 15)
-e12401222f749c3 Yuri Tikhonov    2009-01-29  21  #define ALLOC_STACK_FRAME(reg, val)			\
-e12401222f749c3 Yuri Tikhonov    2009-01-29  22  	addi reg,reg,val
-e12401222f749c3 Yuri Tikhonov    2009-01-29  23  #else
-e12401222f749c3 Yuri Tikhonov    2009-01-29  24  #define ALLOC_STACK_FRAME(reg, val)			\
-e12401222f749c3 Yuri Tikhonov    2009-01-29  25  	addis	reg,reg,val@ha;				\
-e12401222f749c3 Yuri Tikhonov    2009-01-29  26  	addi	reg,reg,val@l
-e12401222f749c3 Yuri Tikhonov    2009-01-29  27  #endif
-e12401222f749c3 Yuri Tikhonov    2009-01-29  28  
-
-:::::: The code at line 20 was first introduced by commit
-:::::: e12401222f749c37277a313d631dc024bbfd3b00 powerpc/44x: Support for 256KB PAGE_SIZE
-
-:::::: TO: Yuri Tikhonov <yur@emcraft.com>
-:::::: CC: Josh Boyer <jwboyer@linux.vnet.ibm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> Rob
