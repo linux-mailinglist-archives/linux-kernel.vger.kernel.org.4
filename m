@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C08668E77E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951C468E787
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjBHF0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 00:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
+        id S229517AbjBHFaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 00:30:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjBHF0n (ORCPT
+        with ESMTP id S229712AbjBHFaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 00:26:43 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB9019F31;
-        Tue,  7 Feb 2023 21:26:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ARUk2d+sCZWHwDfzIfVXqPEuRg8EkLiwolIcbG+SXl8=; b=dGBxZ03m2u5KOBfx4zSZmaWzCu
-        QnYmO5ClWXP9xHv1kOW0PfgPS08zK9C2Mn2bDiYwzV6CxcVPImWxf0QGCxmUFoPTmGZi2Tp6kyQCF
-        I0qaDRpYccC/RTV8kgZyTmRsfA2bA8XyNibSBOIEG5YqSLlTitmjCQU/rajwpGNSlyHCkEjhIjHLJ
-        j6wHZuzTx+DkFrfO5cSuSrG+WRvpnlmOAYhu2kl+nFTter83HvV0jGP8B0DOlV7NWcrhUIIfQBY6N
-        gpUpImp5sAyneCLq3jYTLKNq42YiMiMZKYaNXe0A/gOpX4CyoUCZDnRQYuDjCB+dvwjIqWHxUSK5P
-        +CCciz5g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPcyC-00E6v3-2u; Wed, 08 Feb 2023 05:26:12 +0000
-Date:   Tue, 7 Feb 2023 21:26:12 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org,
-        syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v12 01/10] vfs, iomap: Fix generic_file_splice_read() to
- avoid reversion of ITER_PIPE
-Message-ID: <Y+MydH2HZ7ihITli@infradead.org>
-References: <20230207171305.3716974-1-dhowells@redhat.com>
- <20230207171305.3716974-2-dhowells@redhat.com>
+        Wed, 8 Feb 2023 00:30:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE89819F31;
+        Tue,  7 Feb 2023 21:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86590614B4;
+        Wed,  8 Feb 2023 05:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CD9D8C4339B;
+        Wed,  8 Feb 2023 05:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675834217;
+        bh=X869hs5QRmL6Keo1c4rmIMNoGGataqLDrebSA37ZfzE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RWQQeklVXIvgsc2dqb8x/LrEXLz6Dih1DxeV4zzflkQaLhGnODvmcfD6IpHlqY7sc
+         EJWLCwIZUKU4Ll25ECaBSy8Qx7cfY4SKAWRlpIEgujTWMM3RcmVlaqg7VQ5W+AcZF8
+         SkN2KDciS67irgKBjQPTk3dO7vQZedyFoWXP31suLFL6xTAktCUXVyL1Kib9X5BKgy
+         zWnaWGx/x3k2+RfMjr/6sLl+Ex/ojSY/Cp5s/WOxKc033M/lqRabyubYNDDiVNDq46
+         U9bU/VC6tjl8yl8nt6IWtFlUNORHgGMlA93igm3KtfJvByD9fglhqCShJJ7ZH7cCrG
+         jE7P/U0X7vmmg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD83EE50D62;
+        Wed,  8 Feb 2023 05:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207171305.3716974-2-dhowells@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/1] hv_netvsc: Allocate memory in netvsc_dma_map() with
+ GFP_ATOMIC
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167583421770.16532.4468711541508652547.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Feb 2023 05:30:17 +0000
+References: <1675714317-48577-1-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1675714317-48577-1-git-send-email-mikelley@microsoft.com>
+To:     Michael Kelley (LINUX) <mikelley@microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Subject nitpick:  this does not ouch iomap at all.
+Hello:
 
-> Fix this by replacing the use of an ITER_PIPE iterator with an ITER_BVEC
-> iterator for which reversion won't free the buffers.  Bulk allocate all the
-> buffers we think we're going to use in advance, do the read synchronously
-> and only then trim the buffer down.  The pages we did use get pushed into
-> the pipe.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon,  6 Feb 2023 12:11:57 -0800 you wrote:
+> Memory allocations in the network transmit path must use GFP_ATOMIC
+> so they won't sleep.
 > 
-> This is more efficient by virtue of doing a bulk page allocation, but
-> slightly less efficient by ignoring any partial page in the pipe.
+> Reported-by: Paolo Abeni <pabeni@redhat.com>
+> Link: https://lore.kernel.org/lkml/8a4d08f94d3e6fe8b6da68440eaa89a088ad84f9.camel@redhat.com/
+> Fixes: 846da38de0e8 ("net: netvsc: Add Isolation VM support for netvsc driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> 
+> [...]
 
-For the usual case of a buffered read into the iter, this completely
-changes the semantics:
+Here is the summary with links:
+  - [net,1/1] hv_netvsc: Allocate memory in netvsc_dma_map() with GFP_ATOMIC
+    https://git.kernel.org/netdev/net/c/c6aa9d3b43cd
 
- - before the pagecache pages just grew a new reference and were
-   added to the pipe buffer, and I/O was done without an extra
-   copy
- - with this patch you always allocate an extra set of pages for
-   the pipe and copy to it
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-So I very much doubt this makes anything more efficient, and I don't
-think we can just do it.
 
-We'll have to fix reverting of pipe buffers, just as I already pointed
-out in your cifs series that tries to play the same game.
