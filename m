@@ -2,345 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E0968F26A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BD468F276
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjBHPwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S230421AbjBHPxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjBHPwi (ORCPT
+        with ESMTP id S231436AbjBHPxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:52:38 -0500
-Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FF924CAE;
-        Wed,  8 Feb 2023 07:52:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
-        :References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=TXtVC9FSETTEppi/lHGmn52ijdpDYipRFbZHE1qjxM4=; b=j2Di+IUhbbPtDO+8DDXyNJGVZL
-        T+UEUrwu8TMoKZKE7rjNPgJX9a4eecMDuRNytE6GubKDh1SuVFdIB0yxTw8NrevSR6b9ttFZh//sM
-        7HiH5N6/KJnd7ueKOMve/1XPdY7VWz3SfdT2pPYYf3/P92SVu5dLobepQ/V0i/qF1sRSUo7D9BNwP
-        tJ+br/hRZZApKZj/MD/88iwP8Q3ZcVodJakY7vdyksPh8ARgFiF1fZGMW6GOE1L395w0fddihgEJI
-        ocx1MrRCV0vCW4kCb4soP0prUOpL+by1LK7ry55L+GlSchPvY10raDu7vqGTQVIMg/igcW3DqrNVz
-        WpqvQhCQ==;
-Received: from authenticated user
-        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <bage@debian.org>)
-        id 1pPmkD-00DxsN-SD; Wed, 08 Feb 2023 15:52:25 +0000
-From:   Bastian Germann <bage@debian.org>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Bastian Germann <bage@debian.org>
-Subject: [PATCH v4 2/2] Bluetooth: btrtl: add support for the RTL8723CS
-Date:   Wed,  8 Feb 2023 16:52:19 +0100
-Message-Id: <20230208155220.1640-3-bage@debian.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230208155220.1640-1-bage@debian.org>
-References: <20230208155220.1640-1-bage@debian.org>
+        Wed, 8 Feb 2023 10:53:44 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5025D43456;
+        Wed,  8 Feb 2023 07:53:26 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318DXRYn031833;
+        Wed, 8 Feb 2023 15:52:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=pumL16d0b3IvwGPgVrXomt/UmIqsf+OGpZ1aW56oCIw=;
+ b=OLzHh9jjBPj2FZQceHGoZpXI8m6/NqYKav3v5Q1tgWLApC79XUWMB20cxl7/gqem7deG
+ 8CnXn6tS+v/v/INqZjAyBPWlTujFhbiTfgOC+j2QSfuaY00M8imDhYXE4Y/M61El5RtP
+ 2lZsJvznTB5MXhzTKl9kt2dHr9om9DRLlVM80dIh0T0vGLvH8UJ74pAw5KY7qpVcF7tO
+ 1Cc9EGo6ZlaYkGZsWSqUoFUHIDEE9N7G9gRybKwhY5BKb0q4ugf8SkXxuCTczUy9vkNY
+ 1zBCq7FHv5AqHh8LJF5TwF0HOo/xPTkOwtx1x5EXK7Kb62O/hqPxsDRCgUME6qtB2le4 uA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm7g1s6j4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 15:52:58 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318Fqv1q021963
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 15:52:57 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 8 Feb 2023 07:52:49 -0800
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <krzysztof.kozlowski@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <dmitry.baryshkov@linaro.org>, <marcel.ziswiler@toradex.com>,
+        <nfraprado@collabora.com>, <robimarko@gmail.com>,
+        <quic_gurus@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
+        Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V4 0/7] Add minimal boot support for IPQ5332
+Date:   Wed, 8 Feb 2023 21:22:25 +0530
+Message-ID: <20230208155232.11500-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Debian-User: bage
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DOB8c0xdYm0WRsOqLmAGJrxEOcrgdduB
+X-Proofpoint-ORIG-GUID: DOB8c0xdYm0WRsOqLmAGJrxEOcrgdduB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_06,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxlogscore=571 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302080141
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Khoruzhick <anarsoul@gmail.com>
+The IPQ5332 is Qualcomm's 802.11ax SoC for Routers, Gateways and
+Access Points.
 
-The Realtek RTL8723CS is a SDIO WiFi chip. It also contains a Bluetooth
-module which is connected via UART to the host.
+This series adds minimal board boot support for ipq5332-mi01.2 board.
 
-It shares lmp subversion with 8703B, so Realtek's userspace
-initialization tool (rtk_hciattach) differentiates varieties of RTL8723CS
-(CG, VF, XX) with RTL8703B using vendor's command to read the chip type.
+Also, this series depends on the below patch
+https://lore.kernel.org/linux-arm-msm/20230120082631.22053-1-quic_kathirav@quicinc.com/
 
-Also this chip declares support for some features it doesn't support
-so add a quirk to indicate that these features are broken.
+Changes in V4:
+	- Dropped the pinctrl driver and its binding, since it is
+	  already part of linux-next/master
+	- Detailed change log is present in respective patches
+	- V3 can be found at
+	  https://lore.kernel.org/linux-arm-msm/20230206071217.29313-1-quic_kathirav@quicinc.com/
 
-Signed-off-by: Vasily Khoruzhick <anarsoul@gmail.com>
-Signed-off-by: Bastian Germann <bage@debian.org>
----
- drivers/bluetooth/btrtl.c  | 120 +++++++++++++++++++++++++++++++++++--
- drivers/bluetooth/btrtl.h  |   5 ++
- drivers/bluetooth/hci_h5.c |   4 ++
- 3 files changed, 125 insertions(+), 4 deletions(-)
+Changes in V3:
+	- Detailed change log is present in respective patches
+	- V2 can be found at
+	  https://lore.kernel.org/linux-arm-msm/20230130114702.20606-1-quic_kathirav@quicinc.com/
 
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index 69c3fe649ca7..272ea1e99637 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -17,7 +17,11 @@
- 
- #define VERSION "0.1"
- 
-+#define RTL_CHIP_8723CS_CG	3
-+#define RTL_CHIP_8723CS_VF	4
-+#define RTL_CHIP_8723CS_XX	5
- #define RTL_EPATCH_SIGNATURE	"Realtech"
-+#define RTL_ROM_LMP_8703B	0x8703
- #define RTL_ROM_LMP_8723A	0x1200
- #define RTL_ROM_LMP_8723B	0x8723
- #define RTL_ROM_LMP_8821A	0x8821
-@@ -30,6 +34,7 @@
- #define IC_MATCH_FL_HCIREV	(1 << 1)
- #define IC_MATCH_FL_HCIVER	(1 << 2)
- #define IC_MATCH_FL_HCIBUS	(1 << 3)
-+#define IC_MATCH_FL_CHIP_TYPE	(1 << 4)
- #define IC_INFO(lmps, hcir, hciv, bus) \
- 	.match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_HCIREV | \
- 		       IC_MATCH_FL_HCIVER | IC_MATCH_FL_HCIBUS, \
-@@ -59,6 +64,7 @@ struct id_table {
- 	__u16 hci_rev;
- 	__u8 hci_ver;
- 	__u8 hci_bus;
-+	__u8 chip_type;
- 	bool config_needed;
- 	bool has_rom_version;
- 	bool has_msft_ext;
-@@ -99,6 +105,39 @@ static const struct id_table ic_id_table[] = {
- 	  .fw_name  = "rtl_bt/rtl8723b_fw.bin",
- 	  .cfg_name = "rtl_bt/rtl8723b_config" },
- 
-+	/* 8723CS-CG */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_CG,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_cg_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_cg_config" },
-+
-+	/* 8723CS-VF */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_VF,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_vf_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_vf_config" },
-+
-+	/* 8723CS-XX */
-+	{ .match_flags = IC_MATCH_FL_LMPSUBV | IC_MATCH_FL_CHIP_TYPE |
-+			 IC_MATCH_FL_HCIBUS,
-+	  .lmp_subver = RTL_ROM_LMP_8703B,
-+	  .chip_type = RTL_CHIP_8723CS_XX,
-+	  .hci_bus = HCI_UART,
-+	  .config_needed = true,
-+	  .has_rom_version = true,
-+	  .fw_name  = "rtl_bt/rtl8723cs_xx_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8723cs_xx_config" },
-+
- 	/* 8723D */
- 	{ IC_INFO(RTL_ROM_LMP_8723B, 0xd, 0x8, HCI_USB),
- 	  .config_needed = true,
-@@ -208,7 +247,8 @@ static const struct id_table ic_id_table[] = {
- 	};
- 
- static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
--					     u8 hci_ver, u8 hci_bus)
-+					     u8 hci_ver, u8 hci_bus,
-+					     u8 chip_type)
- {
- 	int i;
- 
-@@ -225,6 +265,9 @@ static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
- 		if ((ic_id_table[i].match_flags & IC_MATCH_FL_HCIBUS) &&
- 		    (ic_id_table[i].hci_bus != hci_bus))
- 			continue;
-+		if ((ic_id_table[i].match_flags & IC_MATCH_FL_CHIP_TYPE) &&
-+		    (ic_id_table[i].chip_type != chip_type))
-+			continue;
- 
- 		break;
- 	}
-@@ -307,6 +350,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
- 		{ RTL_ROM_LMP_8723B, 1 },
- 		{ RTL_ROM_LMP_8821A, 2 },
- 		{ RTL_ROM_LMP_8761A, 3 },
-+		{ RTL_ROM_LMP_8703B, 7 },
- 		{ RTL_ROM_LMP_8822B, 8 },
- 		{ RTL_ROM_LMP_8723B, 9 },	/* 8723D */
- 		{ RTL_ROM_LMP_8821A, 10 },	/* 8821C */
-@@ -587,6 +631,48 @@ static int btrtl_setup_rtl8723b(struct hci_dev *hdev,
- 	return ret;
- }
- 
-+static bool rtl_has_chip_type(u16 lmp_subver)
-+{
-+	switch (lmp_subver) {
-+	case RTL_ROM_LMP_8703B:
-+		return true;
-+	default:
-+		break;
-+	}
-+
-+	return  false;
-+}
-+
-+static int rtl_read_chip_type(struct hci_dev *hdev, u8 *type)
-+{
-+	struct rtl_chip_type_evt *chip_type;
-+	struct sk_buff *skb;
-+	const unsigned char cmd_buf[] = {0x00, 0x94, 0xa0, 0x00, 0xb0};
-+
-+	/* Read RTL chip type command */
-+	skb = __hci_cmd_sync(hdev, 0xfc61, 5, cmd_buf, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		rtl_dev_err(hdev, "Read chip type failed (%ld)",
-+			    PTR_ERR(skb));
-+		return PTR_ERR(skb);
-+	}
-+
-+	if (skb->len != sizeof(*chip_type)) {
-+		rtl_dev_err(hdev, "RTL chip type event length mismatch");
-+		kfree_skb(skb);
-+		return -EIO;
-+	}
-+
-+	chip_type = skb_pull_data(skb, sizeof(*chip_type));
-+	rtl_dev_info(hdev, "chip_type status=%x type=%x",
-+		     chip_type->status, chip_type->type);
-+
-+	*type = chip_type->type & 0x0f;
-+
-+	kfree_skb(skb);
-+	return 0;
-+}
-+
- void btrtl_free(struct btrtl_device_info *btrtl_dev)
- {
- 	kvfree(btrtl_dev->fw_data);
-@@ -603,7 +689,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 	struct hci_rp_read_local_version *resp;
- 	char cfg_name[40];
- 	u16 hci_rev, lmp_subver;
--	u8 hci_ver;
-+	u8 hci_ver, chip_type = 0;
- 	int ret;
- 	u16 opcode;
- 	u8 cmd[2];
-@@ -629,8 +715,14 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 	hci_rev = le16_to_cpu(resp->hci_rev);
- 	lmp_subver = le16_to_cpu(resp->lmp_subver);
- 
-+	if (rtl_has_chip_type(lmp_subver)) {
-+		ret = rtl_read_chip_type(hdev, &chip_type);
-+		if (ret)
-+			goto err_free;
-+	}
-+
- 	btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
--					    hdev->bus);
-+					    hdev->bus, chip_type);
- 
- 	if (!btrtl_dev->ic_info)
- 		btrtl_dev->drop_fw = true;
-@@ -673,7 +765,7 @@ struct btrtl_device_info *btrtl_initialize(struct hci_dev *hdev,
- 		lmp_subver = le16_to_cpu(resp->lmp_subver);
- 
- 		btrtl_dev->ic_info = btrtl_match_ic(lmp_subver, hci_rev, hci_ver,
--						    hdev->bus);
-+						    hdev->bus, chip_type);
- 	}
- out_free:
- 	kfree_skb(skb);
-@@ -755,6 +847,7 @@ int btrtl_download_firmware(struct hci_dev *hdev,
- 	case RTL_ROM_LMP_8761A:
- 	case RTL_ROM_LMP_8822B:
- 	case RTL_ROM_LMP_8852A:
-+	case RTL_ROM_LMP_8703B:
- 		return btrtl_setup_rtl8723b(hdev, btrtl_dev);
- 	default:
- 		rtl_dev_info(hdev, "assuming no firmware upload needed");
-@@ -795,6 +888,19 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
- 		rtl_dev_dbg(hdev, "WBS supported not enabled.");
- 		break;
- 	}
-+
-+	switch (btrtl_dev->ic_info->lmp_subver) {
-+	case RTL_ROM_LMP_8703B:
-+		/* 8723CS reports two pages for local ext features,
-+		 * but it doesn't support any features from page 2 -
-+		 * it either responds with garbage or with error status
-+		 */
-+		set_bit(HCI_QUIRK_BROKEN_LOCAL_EXT_FEATURES_PAGE_2,
-+			&hdev->quirks);
-+		break;
-+	default:
-+		break;
-+	}
- }
- EXPORT_SYMBOL_GPL(btrtl_set_quirks);
- 
-@@ -953,6 +1059,12 @@ MODULE_FIRMWARE("rtl_bt/rtl8723b_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723b_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723bs_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723bs_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_cg_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_vf_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8723cs_xx_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8723ds_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8761a_fw.bin");
-diff --git a/drivers/bluetooth/btrtl.h b/drivers/bluetooth/btrtl.h
-index ebf0101c959b..349d72ee571b 100644
---- a/drivers/bluetooth/btrtl.h
-+++ b/drivers/bluetooth/btrtl.h
-@@ -14,6 +14,11 @@
- 
- struct btrtl_device_info;
- 
-+struct rtl_chip_type_evt {
-+	__u8 status;
-+	__u8 type;
-+} __packed;
-+
- struct rtl_download_cmd {
- 	__u8 index;
- 	__u8 data[RTL_FRAG_LEN];
-diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
-index 6455bc4fb5bb..e90670955df2 100644
---- a/drivers/bluetooth/hci_h5.c
-+++ b/drivers/bluetooth/hci_h5.c
-@@ -936,6 +936,8 @@ static int h5_btrtl_setup(struct h5 *h5)
- 	err = btrtl_download_firmware(h5->hu->hdev, btrtl_dev);
- 	/* Give the device some time before the hci-core sends it a reset */
- 	usleep_range(10000, 20000);
-+	if (err)
-+		goto out_free;
- 
- 	btrtl_set_quirks(h5->hu->hdev, btrtl_dev);
- 
-@@ -1100,6 +1102,8 @@ static const struct of_device_id rtl_bluetooth_of_match[] = {
- 	  .data = (const void *)&h5_data_rtl8822cs },
- 	{ .compatible = "realtek,rtl8723bs-bt",
- 	  .data = (const void *)&h5_data_rtl8723bs },
-+	{ .compatible = "realtek,rtl8723cs-bt",
-+	  .data = (const void *)&h5_data_rtl8723bs },
- 	{ .compatible = "realtek,rtl8723ds-bt",
- 	  .data = (const void *)&h5_data_rtl8723bs },
- #endif
+Changes in V2:
+	- Rebased on linux-next/master
+	- Dropped the 'dt-bindings: mmc: sdhci-msm: add IPQ5332 compatible',
+	  since it is already part of linux-next/master
+	- Added a new patch 'clk: qcom: ipq5332: mark GPLL4 as critical temporarily'
+	- Detailed change log is present in respective patches
+	- V1 can be found at
+	  https://lore.kernel.org/linux-arm-msm/20230125104520.89684-1-quic_kathirav@quicinc.com/
+
+
+Kathiravan T (7):
+  clk: qcom: Add STROMER PLUS PLL type for IPQ5332
+  dt-bindings: clock: Add Qualcomm IPQ5332 GCC
+  clk: qcom: add Global Clock controller (GCC) driver for IPQ5332 SoC
+  dt-bindings: qcom: add ipq5332 boards
+  dt-bindings: firmware: qcom,scm: document IPQ5332 SCM
+  arm64: dts: qcom: add IPQ5332 SoC and MI01.2 board support
+  arm64: defconfig: Enable IPQ5332 SoC base configs
+
+ .../devicetree/bindings/arm/qcom.yaml         |    7 +
+ .../bindings/clock/qcom,ipq5332-gcc.yaml      |   61 +
+ .../bindings/firmware/qcom,scm.yaml           |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts   |   75 +
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         |  268 ++
+ arch/arm64/configs/defconfig                  |    2 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c              |   11 +
+ drivers/clk/qcom/clk-alpha-pll.h              |    1 +
+ drivers/clk/qcom/gcc-ipq5332.c                | 3813 +++++++++++++++++
+ include/dt-bindings/clock/qcom,ipq5332-gcc.h  |  356 ++
+ 13 files changed, 4605 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5332.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-ipq5332.c
+ create mode 100644 include/dt-bindings/clock/qcom,ipq5332-gcc.h
+
 -- 
-2.39.1
+2.17.1
 
