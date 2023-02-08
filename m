@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B6068E8AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BA468E8B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjBHHDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S229854AbjBHHGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbjBHHCe (ORCPT
+        with ESMTP id S229450AbjBHHGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:02:34 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139A5457DC;
-        Tue,  7 Feb 2023 23:00:46 -0800 (PST)
-Received: from toolbox.int.toradex.com ([213.55.227.109]) by
- mrelay.perfora.net (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 1MxVGn-1ofG2r0JVB-00xvE0; Wed, 08 Feb 2023 08:00:00 +0100
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Richard Zhu <hongxing.zhu@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] arm64: dts: imx8mp-verdin-yavia: trivial minor updates
-Date:   Wed,  8 Feb 2023 07:59:47 +0100
-Message-Id: <20230208065947.24195-2-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230208065947.24195-1-marcel@ziswiler.com>
-References: <20230208065947.24195-1-marcel@ziswiler.com>
+        Wed, 8 Feb 2023 02:06:22 -0500
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D24AA1BC0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:06:20 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowADX3vLgSeNj3KslBA--.38623S2;
+        Wed, 08 Feb 2023 15:06:09 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     ogabbay@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+        ttayar@habana.ai, dliberman@habana.ai, obitton@habana.ai,
+        osharabi@habana.ai, dhirschfeld@habana.ai
+Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] habanalabs: Fix freeing uninitialized pointers
+Date:   Wed,  8 Feb 2023 15:05:59 +0800
+Message-Id: <20230208070559.19589-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:cTJ6kJnf8XRJsOhc1jXKDGl7QFr8mISdwaay4+fQqDXl/YtriX+
- gFMH4hQyw/FpfgpVwML6D4XPqtG1UD4rjymQ1wrqAMKinMhfuqwGtUBJid0L9nCUE46o6ps
- 2rYFVctLK7E2bwwsfoYXSaSHrioJNM16Xyf1A4r5MdgSMJbpGddGj2UQG9ImMOGubz1Nfx6
- 5Y7KCGfDMLQT+FJxMmKoA==
-UI-OutboundReport: notjunk:1;M01:P0:YI1IeALrQZM=;qnQeqodD42/1s4fPIHO97+LV7Dc
- qlhpKMcp86+JJwHWnZa+bUbyX4RQEOmfIRQnTsmH6YmIUMLCTygu/hc9a7ju8pMgoQ8bl7RkX
- JvkaKTXuSSADU4lV23TkDy64N/sGMey1H7ZsLJVsLwG2hlJN8YHKUAM1lruzbax8110BWaRpB
- lEmko4eGXn+SmO/+Y1ez6kmXWjCw7VZg7nNoWJ+bKfTaLMY5MQmracdEqHKuHLo4WjGKgLXVd
- mlZ3cCLC6s3yFv48109/ZshUnoAiJD4tXVNFDSBW8iSY/4GVAa2GfXqdq5ac/i50N27gwaDff
- bwWTPixQhdQCqqMy0ku2pIBzwdBl5eGZm5r0m9H7uU3bQkswQSIu26WLyHRQOtXNlNJd/0Lkz
- IoPmCMxmT6EZN5/Fnzti0IzNW/9svBf/o03BFftT1woe/kbr9jlo96UXmrZfY1aJCMrrbKmNf
- ytgcAejLY0hAXA/TXf88g+/VeBa26Q5P8xkR/q+tv52rHs2zqVNz574yxpJ69n7X/cXH3be5+
- T1mWA3BFkkASwcqOGSEn/3jClYZGF+a7Z1R6nRj4/nxBfnu9CXMx+W3soxd5izIWK66zmQpK4
- ZTEgkJQaiWT7uOtYWHwwlnkwDujlztz13bSQcCKRZOXiZK8cHPn1iZ1qz0M5UMOxLZyfXpr4Q
- pQFpzXQqocnle7J0W96RqD1wUm+i+kOb15TVi1JWPA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: zQCowADX3vLgSeNj3KslBA--.38623S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GrWrXw18tFWxKw4Dtr1kZrb_yoWDKrb_Wr
+        WrZr12qry8GFnY9wnIyr45Zryjk3yDGr4kZFnagFZ5tryavw4SqryvvrnYg3Wfua1Yywnr
+        Zr1jg3yS9348KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoO
+        J5UUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+As the memory allocated by kcalloc has not been set to zero, it may
+contain uninitialized pointers.
+Therefore, free the non-NULL pointers may cause undefined behaviour.
 
-Capitalise Yavia in comment and add missing whitespace.
-
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-
+Fixes: 5574cb2194b1 ("habanalabs: Assign each CQ with its own work queue")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
+ drivers/misc/habanalabs/common/device.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Changes in v2:
-- New commit with trivial minor updates.
-
- arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
-index bd7b31cc3760..de5489c2b3e8 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
-@@ -87,7 +87,7 @@ &eeprom_display_adapter {
- 	status = "okay";
- };
- 
--/* EEPROM on Verdin yavia board */
-+/* EEPROM on Verdin Yavia board */
- &eeprom_carrier_board {
- 	status = "okay";
- };
-@@ -122,7 +122,7 @@ &pcie {
- 	status = "okay";
- };
- 
--&pcie_phy{
-+&pcie_phy {
- 	status = "okay";
- };
- 
+diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
+index 87ab329e65d4..dc6fcb9cca7a 100644
+--- a/drivers/misc/habanalabs/common/device.c
++++ b/drivers/misc/habanalabs/common/device.c
+@@ -901,9 +901,8 @@ static int device_early_init(struct hl_device *hdev)
+ free_eq_wq:
+ 	destroy_workqueue(hdev->eq_wq);
+ free_cq_wq:
+-	for (i = 0 ; i < hdev->asic_prop.completion_queues_count ; i++)
+-		if (hdev->cq_wq[i])
+-			destroy_workqueue(hdev->cq_wq[i]);
++	while (i--)
++		destroy_workqueue(hdev->cq_wq[i]);
+ 	kfree(hdev->cq_wq);
+ asid_fini:
+ 	hl_asid_fini(hdev);
 -- 
-2.36.1
+2.25.1
 
