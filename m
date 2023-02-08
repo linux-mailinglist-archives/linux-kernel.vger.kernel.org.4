@@ -2,91 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBFB68EB9E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C52568EBCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjBHJhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
+        id S230356AbjBHJkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjBHJhL (ORCPT
+        with ESMTP id S229457AbjBHJkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:37:11 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D84C23C42
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:36:58 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Wed, 8 Feb 2023 04:40:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33E510F3;
+        Wed,  8 Feb 2023 01:40:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PBZdh6Drnz4xVnD;
-        Wed,  8 Feb 2023 17:36:56 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl2.zte.com.cn with SMTP id 3189alMZ098566;
-        Wed, 8 Feb 2023 17:36:47 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 8 Feb 2023 17:36:50 +0800 (CST)
-Date:   Wed, 8 Feb 2023 17:36:50 +0800 (CST)
-X-Zmail-TransId: 2af963e36d32ffffffff83573948
-X-Mailer: Zmail v1.0
-Message-ID: <202302081736500534579@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <lee@kernel.org>
-Cc:     <wens@csie.org>, <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBtZmQ6IHN1bjRpLWdwYWRjOiB1c2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 3189alMZ098566
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63E36D38.003 by FangMail milter!
-X-FangMail-Envelope: 1675849016/4PBZdh6Drnz4xVnD/63E36D38.003/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63E36D38.003/4PBZdh6Drnz4xVnD
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 787CFB81C68;
+        Wed,  8 Feb 2023 09:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F0B6FC433EF;
+        Wed,  8 Feb 2023 09:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675849219;
+        bh=ElasMeDokDNZfOfG/B6ALSY5xiD21dxk0E3Ku7VBZ6w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EtdNjztdGpJ/f681qbphxR6KchUxxbdUjfHxniMpNEXnLeKn0I4bK8hotVirtPevO
+         eV/NNqMkjSYVlcU8dOIVA0ileX78ouqvfk4rn/odoR1cgjTM2yNREYVPJGwWPUi98n
+         eOdNTczVFDprbHzluGdViNh8i4YoQjufomj6Cs8cgPZ8IlJGQIJiypvHYk1yOJn2Py
+         ELGyjKQ85EA86Feo6CLxbRudEcYwsJy7aENzT5NA1Xvs2Ezvr+ckiZ/39Vo9zLQYWy
+         m3IQtTphfU1qj4HISAWrFO/IZN8ZU11T0Qa/glzjvPUeA22mztjAtvI0h8lYwSN0mh
+         IcEIvsM1a6+mQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D52DCE4D032;
+        Wed,  8 Feb 2023 09:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/6] mptcp: fixes for v6.2
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167584921886.28651.15884792835750696627.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Feb 2023 09:40:18 +0000
+References: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
+In-Reply-To: <20230207-upstream-net-20230207-various-fix-6-2-v1-0-2031b495c7cc@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mptcp@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, dcaratti@redhat.com,
+        mathew.j.martineau@linux.intel.com, benjamin.hesmans@tessares.net,
+        geliangtang@gmail.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+Hello:
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- drivers/mfd/sun4i-gpadc.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Tue, 07 Feb 2023 14:04:12 +0100 you wrote:
+> Patch 1 clears resources earlier if there is no more reasons to keep
+> MPTCP sockets alive.
+> 
+> Patches 2 and 3 fix some locking issues visible in some rare corner
+> cases: the linked issues should be quite hard to reproduce.
+> 
+> Patch 4 makes sure subflows are correctly cleaned after the end of a
+> connection.
+> 
+> [...]
 
-diff --git a/drivers/mfd/sun4i-gpadc.c b/drivers/mfd/sun4i-gpadc.c
-index edc180d83a4b..d1cbea27b136 100644
---- a/drivers/mfd/sun4i-gpadc.c
-+++ b/drivers/mfd/sun4i-gpadc.c
-@@ -93,7 +93,6 @@ MODULE_DEVICE_TABLE(of, sun4i_gpadc_of_match);
- static int sun4i_gpadc_probe(struct platform_device *pdev)
- {
- 	struct sun4i_gpadc_dev *dev;
--	struct resource *mem;
- 	const struct of_device_id *of_id;
- 	const struct mfd_cell *cells;
- 	unsigned int irq, size;
-@@ -124,8 +123,7 @@ static int sun4i_gpadc_probe(struct platform_device *pdev)
- 	if (!dev)
- 		return -ENOMEM;
+Here is the summary with links:
+  - [net,1/6] mptcp: do not wait for bare sockets' timeout
+    https://git.kernel.org/netdev/net/c/d4e85922e3e7
+  - [net,2/6] mptcp: fix locking for setsockopt corner-case
+    https://git.kernel.org/netdev/net/c/21e43569685d
+  - [net,3/6] mptcp: fix locking for in-kernel listener creation
+    https://git.kernel.org/netdev/net/c/ad2171009d96
+  - [net,4/6] mptcp: be careful on subflow status propagation on errors
+    https://git.kernel.org/netdev/net/c/1249db44a102
+  - [net,5/6] selftests: mptcp: allow more slack for slow test-case
+    https://git.kernel.org/netdev/net/c/a635a8c3df66
+  - [net,6/6] selftests: mptcp: stop tests earlier
+    https://git.kernel.org/netdev/net/c/070d6dafacba
 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dev->base = devm_ioremap_resource(&pdev->dev, mem);
-+	dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(dev->base))
- 		return PTR_ERR(dev->base);
-
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
