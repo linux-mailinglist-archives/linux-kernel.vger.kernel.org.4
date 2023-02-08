@@ -2,187 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D2F68FA38
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A782768FA3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbjBHWW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 17:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S232441AbjBHWX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 17:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjBHWW5 (ORCPT
+        with ESMTP id S232437AbjBHWXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 17:22:57 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F760252BD;
-        Wed,  8 Feb 2023 14:22:55 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id v13so419399eda.11;
-        Wed, 08 Feb 2023 14:22:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fZrGQmCx7M8I538/uxkEeAKM0AP+vFbaSYYa4WZn5LM=;
-        b=jwcQd+Vd/ZFK6qS29TU7c4K8ejZri73UlkOSeuG6KyaG3cdzdEPLRd5imadkMptaSL
-         rA9J36JisG+j6S+lEgm+E73JrjikgizJ45abOgdNHePGCGIO+OnRn4ttUDHjHG7SrA9W
-         BMx1ov5OnhkWaTlZBcbkCWICOj5KjSlaJethEd5nsR4huThx8+lzltQC+isnCKsdZtkc
-         Sv2UOXCuKaRrqGCHuEnfGFKckVxu8lz8VqjPzLnzGEdWVzNQBWK2QlzEgIZYN0yEpjKJ
-         T/HsCi9BF8Zft1NjnGmRW0DltXi+iZTEUrqciIT/IlaYozivvetbuZLJbzc2NooMKXAT
-         hNKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fZrGQmCx7M8I538/uxkEeAKM0AP+vFbaSYYa4WZn5LM=;
-        b=o8FaXZQ8E0A8yHxmGQEieE3VTdyMHjEhRm/NtFYS0bxkKCOtltAQa8kwD9Mu3mWiae
-         uuLNvGu2pqIrnCs1h4NMZt2POl1GJH+412AL8BMEgx7VH0ZjUzm7DOCLpNfddvt0Ts2+
-         RK+rE0ZybIMkE+b+a2wtzA+6F461Ye7zyAo2YdbFL36WCsUAPVt5c9nHk9aY4+KJCsil
-         uRVO5psgjbq2c53s5kFpow6C4zjY5UoBzrdRMHDk6fAIV2KA9WLOdGYeLHxU3VGqSJyf
-         FNYnJGcXWi22AOxaKcxA4wkmmir9ILqdR8kq1sRRhF1XV5gzPKij6x9Hw3+4/0yWjK3C
-         /Dug==
-X-Gm-Message-State: AO0yUKWLGueUv4L1LnQXWVgJcy04eMJUi1A+dWnMqwuqNljEmly2X12v
-        5taVPQuSKN//C/2smAkC5mc=
-X-Google-Smtp-Source: AK7set9vfHaHysr9sj0VdzcRm6rskIqHOWhgkmctn4yaV1/jw9WLwRZnOAhGCD+UsYzR3gbXLFuLJA==
-X-Received: by 2002:a50:8a95:0:b0:4ab:1031:b60a with SMTP id j21-20020a508a95000000b004ab1031b60amr3492611edj.24.1675894973662;
-        Wed, 08 Feb 2023 14:22:53 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id y12-20020a056402270c00b0049668426aa6sm8426236edd.24.2023.02.08.14.22.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 14:22:46 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 551D35A0020; Thu,  9 Feb 2023 01:22:45 +0300 (MSK)
-Date:   Thu, 9 Feb 2023 01:22:45 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 3/6] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y+QgtVSEl4w2NgtJ@grain>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-4-usama.anjum@collabora.com>
+        Wed, 8 Feb 2023 17:23:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B017C298DB;
+        Wed,  8 Feb 2023 14:23:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF92AB81F37;
+        Wed,  8 Feb 2023 22:23:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A47AC433EF;
+        Wed,  8 Feb 2023 22:23:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675894993;
+        bh=OTzvcsJ+7/dblWvZKx0OO7rGkqobHrEhsSkHSFYQUeU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CMTCSn9NLVq9SnuioEIW7nld5dGU6EYQNsWBNgVqAcaZUyloxU9EVuP/Qa0o13pkd
+         B0XADOrQhPnRuX4Z//DGHrmcFUi/vVP7jaYx8B955g5Msag8gEW4BHWadctTjX/hjm
+         WHvbflnndg9xNZ5rdvGPA8/ASkuUaHeSCg1e0vtBgxD6flaqaFsRo9MUlP+beKnBWh
+         5c0wAxIqskNsY5dG/JDG2403gwPoYcxEE0Q9c+KFfioJoKd9L6taQI/B/D6WUJQfrH
+         Gu1FQucseaD95r4B9oV7zzaSk4YWesnlDDw8jtBsMH/EGnANaC5b6GqN9Tze/BhVsl
+         ZPuoGRGsF9QNQ==
+Date:   Wed, 8 Feb 2023 16:23:11 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     ALOK TIWARI <alok.a.tiwari@oracle.com>,
+        "M.H. Lian" <minghuan.lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-pci@vger.kernel.org>,
+        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: [External] : RE: [EXT] [PATCH v2 1/1] PCI: layerscape: Add EP
+ mode support for ls1028a
+Message-ID: <20230208222311.GA2490083@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230202112915.867409-4-usama.anjum@collabora.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <HE1PR0401MB2331634B29ED9EDAB032B73888DB9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 04:29:12PM +0500, Muhammad Usama Anjum wrote:
-...
-Hi Muhammad! I'm really sorry for not commenting this code, just out of time and i
-fear cant look with precise care at least for some time, hopefully other CRIU guys
-pick it up. Anyway, here a few comment from a glance.
+On Tue, Feb 07, 2023 at 04:20:21PM +0000, Frank Li wrote:
+> > Subject: Re: [External] : RE: [EXT] [PATCH v2 1/1] PCI: layerscape: Add EP
+> > mode support for ls1028a
+> > 
+> >          { .compatible = "fsl,ls1046a-pcie-ep", .data = &ls1_ep_drvdata },
+> > +       { .compatible = "fsl,ls1028a-pcie-ep", .data = &ls1_ep_drvdata },
+> >         { .compatible = "fsl,ls1088a-pcie-ep", .data = &ls2_ep_drvdata },
+> > 
+> > can it be like this for better readability. ?
+> 
+> It is just chip name and follow name conversion, which already
+> upstreamed and documented. 
+>
+> Why do you think it not is good readability? 
 
-> +
-> +static inline int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
-> +				      struct pagemap_scan_private *p, unsigned long addr,
-> +				      unsigned int len)
-> +{
+I thought maybe ALOK's point was to sort the list, which does make a
+lot of sense.  But if you want to sort by the .data member, I would
+think you would make .compatible a secondary sort key, which means
+ls1028a would come before ls1046a, so you would end up with this
+instead:
 
-This is a big function and usually it's a flag to not declare it as "inline" until
-there very serious reson to.
+ static const struct of_device_id ls_pcie_ep_of_match[] = {
++       { .compatible = "fsl,ls1028a-pcie-ep", .data = &ls1_ep_drvdata },
+        { .compatible = "fsl,ls1046a-pcie-ep", .data = &ls1_ep_drvdata },
+        { .compatible = "fsl,ls1088a-pcie-ep", .data = &ls2_ep_drvdata },
+        { .compatible = "fsl,ls2088a-pcie-ep", .data = &ls2_ep_drvdata },
+        { .compatible = "fsl,lx2160ar2-pcie-ep", .data = &lx2_ep_drvdata },
+        { },
+ };
 
-> +	unsigned long bitmap, cur = PAGEMAP_SCAN_BITMAP(wt, file, pres, swap);
-> +	bool cpy = true;
-> +	struct page_region *prev = &p->prev;
-> +
-> +	if (HAS_NO_SPACE(p))
-> +		return -ENOSPC;
-> +
-> +	if (p->max_pages && p->found_pages + len >= p->max_pages)
-> +		len = p->max_pages - p->found_pages;
-> +	if (!len)
-> +		return -EINVAL;
-> +
-> +	if (p->required_mask)
-> +		cpy = ((p->required_mask & cur) == p->required_mask);
-> +	if (cpy && p->anyof_mask)
-> +		cpy = (p->anyof_mask & cur);
-> +	if (cpy && p->excluded_mask)
-> +		cpy = !(p->excluded_mask & cur);
-> +	bitmap = cur & p->return_mask;
-> +	if (cpy && bitmap) {
-
-You can exit early here simply
-
-	if (!cpy || !bitmap)
-		return 0;
-
-saving one tab for the code below.
-
-> +		if ((prev->len) && (prev->bitmap == bitmap) &&
-> +		    (prev->start + prev->len * PAGE_SIZE == addr)) {
-> +			prev->len += len;
-> +			p->found_pages += len;
-> +		} else if (p->vec_index < p->vec_len) {
-> +			if (prev->len) {
-> +				memcpy(&p->vec[p->vec_index], prev, sizeof(struct page_region));
-> +				p->vec_index++;
-> +			}
-> +			prev->start = addr;
-> +			prev->len = len;
-> +			prev->bitmap = bitmap;
-> +			p->found_pages += len;
-> +		} else {
-> +			return -ENOSPC;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
-> +static inline int export_prev_to_out(struct pagemap_scan_private *p, struct page_region __user *vec,
-> +				     unsigned long *vec_index)
-> +{
-
-No need for inline either.
-
-> +	struct page_region *prev = &p->prev;
-> +
-> +	if (prev->len) {
-> +		if (copy_to_user(&vec[*vec_index], prev, sizeof(struct page_region)))
-> +			return -EFAULT;
-> +		p->vec_index++;
-> +		(*vec_index)++;
-> +		prev->len = 0;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static inline int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-> +					 unsigned long end, struct mm_walk *walk)
-> +{
-
-Same, no need for inline. I've a few comments more in my mind will try to
-collect them tomorrow.
