@@ -2,134 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A57F68F240
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 298F768F22B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjBHPl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:41:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S231336AbjBHPjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbjBHPlW (ORCPT
+        with ESMTP id S231588AbjBHPjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:41:22 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B075049001;
-        Wed,  8 Feb 2023 07:41:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675870880; x=1707406880;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CMviFYN8WaZJ3J3sp7VBjtnbhJB9FGlUbTZgSmraYhs=;
-  b=ehqv4EnTYE3HGq6ttBryt5Lkig5eNPTJhmH/cImvi12Kr5z30wGTHBNN
-   66g9F0b9lXZJ4JEgBSznIl2BTL4bondRfBzQ565oAQr5zaLbaiTpRYrNl
-   G1TilVjeGC9ON2HX+E+9YIAN4CxgoxkVzGS8Ms19Queaayj6wii3ja6b6
-   qaLANf7dElBIC+0smSG9X4aTfD1B36H87j4RDKSo7RU9Vwz15FkBMKn83
-   5dOwUTfS7NGEQA6HTa9TF1mpjGnkw5N7a5l/C2GOaO4wf1T0GEo0kr2jt
-   oL+7eRNZyOuwFxFGFvZkF/Ep5psgVk6/OtTe5NZyfZq7sAmfBT5GjwSUs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="317834817"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="317834817"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:41:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669227604"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="669227604"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 07:41:12 -0800
-Received: from baltimore.igk.intel.com (baltimore.igk.intel.com [10.102.21.1])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 673E133EB8;
-        Wed,  8 Feb 2023 15:41:10 +0000 (GMT)
-From:   Pawel Chmielewski <pawel.chmielewski@intel.com>
-To:     yury.norov@gmail.com
-Cc:     Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
-        baohua@kernel.org, bristot@redhat.com, bsegall@google.com,
-        davem@davemloft.net, dietmar.eggemann@arm.com, gal@nvidia.com,
-        gregkh@linuxfoundation.org, hca@linux.ibm.com,
-        jacob.e.keller@intel.com, jesse.brandeburg@intel.com,
-        jgg@nvidia.com, juri.lelli@redhat.com, kuba@kernel.org,
-        leonro@nvidia.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux@rasmusvillemoes.dk, mgorman@suse.de, mingo@redhat.com,
-        netdev@vger.kernel.org, peter@n8pjl.ca, peterz@infradead.org,
-        rostedt@goodmis.org, saeedm@nvidia.com, tariqt@nvidia.com,
-        tony.luck@intel.com, torvalds@linux-foundation.org,
-        ttoukan.linux@gmail.com, vincent.guittot@linaro.org,
-        vschneid@redhat.com,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>
-Subject: [PATCH 1/1] ice: Change assigning method of the CPU affinity masks
-Date:   Wed,  8 Feb 2023 16:39:05 +0100
-Message-Id: <20230208153905.109912-1-pawel.chmielewski@intel.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230121042436.2661843-1-yury.norov@gmail.com>
-References: <20230121042436.2661843-1-yury.norov@gmail.com>
+        Wed, 8 Feb 2023 10:39:39 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8449A4615D;
+        Wed,  8 Feb 2023 07:39:36 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso1759396wmp.3;
+        Wed, 08 Feb 2023 07:39:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZ2CaI/V2FdeNF+FZ2q8IFjrwh7v5x9Z6pVcuoKOE+s=;
+        b=EscWcKO9aDv4lw1VYLc1R8eMRNuuaUZo7ShY+3T4Pw+6EbHsYJoiZdLEYBkMThqH/Q
+         mbfGF/T6Ma9vy9y2YQBmr1M0xAvjXJSW/pk/04o4TChh1j03LFrPGivnrdD31dJ4T+9M
+         em+V5VZNSe4i/opFx/oHCRoIpQkXX4PHQkRe17STrC+p3OpHd7vfFvK0lAv70Mbgh3E1
+         7nvOEO7UB0+JCDpvIuLh91gPvZ0Syr36mFo3WUqsLpRnR92fsafTgC/Ffk7YgX5iai2b
+         cclnEBdJtIQWwGAP+kict8qT+xTarUVs8f96Lp98lRkouoTjmjRiIEFKKPqHuhfraSTQ
+         +5nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IZ2CaI/V2FdeNF+FZ2q8IFjrwh7v5x9Z6pVcuoKOE+s=;
+        b=1bLyam4jALhfVhuZkHMxZxXgHtLt+ciGQERyJB6bvk09YudOUcNsMRZ1aqPPG7IWGj
+         ICE0gnpwIkSqTaaAsv1+X9brO9UbwOVvDBJUbPZHGJShv7Wawzm9L8ZsvEBMmrCWDzwd
+         vazBlgY9FVPuhb4YcEHOGQtOcwUxDP3FTEtG3SZr/3XJZI93YlsW40kTk7N/TinRFpEA
+         xnY9L8kuF9nd554mYNlxjzhSF961Ev/oMfoIvQpNGEJTDuj/s093J14oif+N3H0KJo85
+         8bIg0KtvS+ZFf5ld1GVTK3Ya/rkzLU0vtgrBD2pRLfSoY7QUOBYO7SacNcfZ8NKnvm3m
+         vbxg==
+X-Gm-Message-State: AO0yUKUP9oGRey+5mPskPEMppj6i8bzhMOJsbMVFXA+MkSys4y0taZR7
+        xyPKbEfeLmV6ieJ9Eul1lME=
+X-Google-Smtp-Source: AK7set8qO09YDtSj6g/rsPEetfbuIk6UE1JE0R+tTm2JERmPloHu6672cbPQGMrfz8eZQp1HeBLKZw==
+X-Received: by 2002:a05:600c:920:b0:3dc:5390:6499 with SMTP id m32-20020a05600c092000b003dc53906499mr6992838wmp.1.1675870774900;
+        Wed, 08 Feb 2023 07:39:34 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
+        by smtp.googlemail.com with ESMTPSA id n2-20020a05600c3b8200b003dfe659f9b1sm6755596wms.3.2023.02.08.07.39.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 07:39:34 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v6 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify supported opp tables
+Date:   Wed,  8 Feb 2023 16:39:11 +0100
+Message-Id: <20230208153913.24436-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the introduction of sched_numa_hop_mask() and
-for_each_numa_hop_mask(), the affinity masks for queue vectors can be
-conveniently set by preferring the CPUs that are closest to the NUMA node
-of the parent PCI device.
+Add additional info on what opp tables the defined devices in this schema
+supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+and reference them.
 
-Signed-off-by: Pawel Chmielewski <pawel.chmielewski@intel.com>
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/net/ethernet/intel/ice/ice_base.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Changes v6:
+- No change
+Changes v5:
+- Swap patch 1 and patch 2 to fix dt_check_warning on single
+  patch bisecting 
+Changes v4:
+- Add patch split from patch 1
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
-index e864634d66bc..fd3550d15c9e 100644
---- a/drivers/net/ethernet/intel/ice/ice_base.c
-+++ b/drivers/net/ethernet/intel/ice/ice_base.c
-@@ -122,8 +122,6 @@ static int ice_vsi_alloc_q_vector(struct ice_vsi *vsi, u16 v_idx)
- 	if (vsi->type == ICE_VSI_VF)
- 		goto out;
- 	/* only set affinity_mask if the CPU is online */
--	if (cpu_online(v_idx))
--		cpumask_set_cpu(v_idx, &q_vector->affinity_mask);
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 35 ++++++++++++++-----
+ 1 file changed, 26 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..7c42d9439abd 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -55,15 +55,32 @@ properties:
  
- 	/* This will not be called in the driver load path because the netdev
- 	 * will not be created yet. All other cases with register the NAPI
-@@ -659,8 +657,10 @@ int ice_vsi_wait_one_rx_ring(struct ice_vsi *vsi, bool ena, u16 rxq_idx)
-  */
- int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
- {
-+	cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
- 	struct device *dev = ice_pf_to_dev(vsi->back);
--	u16 v_idx;
-+	int numa_node = dev->numa_node;
-+	u16 v_idx, cpu = 0;
- 	int err;
- 
- 	if (vsi->q_vectors[0]) {
-@@ -674,6 +674,17 @@ int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
- 			goto err_out;
- 	}
- 
-+	v_idx = 0;
-+	for_each_numa_hop_mask(aff_mask, numa_node) {
-+		for_each_cpu_andnot(cpu, aff_mask, last_aff_mask)
-+			if (v_idx < vsi->num_q_vectors) {
-+				if (cpu_online(cpu))
-+					cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
-+				v_idx++;
-+			}
-+		last_aff_mask = aff_mask;
-+	}
+ patternProperties:
+   '^opp-table(-[a-z0-9]+)?$':
+-    if:
+-      properties:
+-        compatible:
+-          const: operating-points-v2-kryo-cpu
+-    then:
+-      patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++    allOf:
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
 +
- 	return 0;
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          patternProperties:
++            '^opp-?[0-9]+$':
++              required:
++                - required-opps
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-qcom-level
++        then:
++          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
++
++    unevaluatedProperties: false
  
- err_out:
+ additionalProperties: true
+ 
 -- 
-2.37.3
+2.38.1
 
