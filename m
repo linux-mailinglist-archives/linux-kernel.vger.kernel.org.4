@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288E468E653
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B40B568E659
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjBHCwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:52:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S230012AbjBHDAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjBHCwM (ORCPT
+        with ESMTP id S229718AbjBHDAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:52:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA6D3BD94;
-        Tue,  7 Feb 2023 18:52:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1182DB81B9F;
-        Wed,  8 Feb 2023 02:52:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1CDC433EF;
-        Wed,  8 Feb 2023 02:52:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675824727;
-        bh=b/rkymYs8+pjheRuYyegq/Om1XooZkZ/LI4pZoJDRVo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IaDVTGhkKI4ZBPjAlHb+gUIHgeBKmxo0U2I2yRvZB4o8li5UpeKZxMQDVwKZyMxlt
-         Ufp8DeaHUML/fopNaEwYMhBvqvRnMs3L3D5fUhAjaVfoViLCeDqrlOaiLDBMNMJQb+
-         javTqb2h8S4BgtHWDphOip3EWRCzvkgEUXm2BWkoAomtOavGdD/L4gG+2CP/VfNfxh
-         nLTbwBf36NZNOdDir7tmEfJ/9ltqeOqls0Y/7H6XIy00wqMlnGIE2n43S1pD0KjNgF
-         qQq4s0rDMVNCxNP0SiNHT3sNcoEGn2d2fJ77WQ5HtJs4bxiOuRXq/7o6kh44eswyfK
-         zjmJn3zepZU6A==
-Date:   Wed, 8 Feb 2023 04:52:02 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, reach622@mailcuk.com,
-        1138267643@qq.com
-Subject: Re: [regression] Bug 216989 - since 6.1 systems with AMD Ryzen
- stutter when fTPM is enabled
-Message-ID: <Y+MOUsLIniYS/mw8@kernel.org>
-References: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
- <8a7775912f31394944b43db12adc78efd84b1fad.camel@HansenPartnership.com>
- <Y+MFNvr2deX7+Mxa@kernel.org>
- <Y+MFUZ7WD0rX2rU9@kernel.org>
- <CAHmME9pwT52maXyQMNutv6svgDxAaz3L4MDeq_KVDutOAe8uPw@mail.gmail.com>
+        Tue, 7 Feb 2023 22:00:14 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 884433D0A4;
+        Tue,  7 Feb 2023 19:00:11 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.108.204])
+        by gateway (Coremail) with SMTP id _____8BxKuo6EONj1c8PAA--.31184S3;
+        Wed, 08 Feb 2023 11:00:10 +0800 (CST)
+Received: from [0.0.0.0] (unknown [112.20.108.204])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxc+U4EONj2pYsAA--.50954S3;
+        Wed, 08 Feb 2023 11:00:09 +0800 (CST)
+Message-ID: <0bb33ba8-00af-777b-fb97-a086b91865b0@loongson.cn>
+Date:   Wed, 8 Feb 2023 11:00:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9pwT52maXyQMNutv6svgDxAaz3L4MDeq_KVDutOAe8uPw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH V6] PCI: loongson: Skip scanning disabled child devices
+To:     Liu Peibao <liupeibao@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        wanghongliang <wanghongliang@loongson.cn>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chenhuacai@kernel.org
+References: <20221117020935.32086-1-liupeibao@loongson.cn>
+From:   Binbin Zhou <zhoubinbin@loongson.cn>
+In-Reply-To: <20221117020935.32086-1-liupeibao@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxc+U4EONj2pYsAA--.50954S3
+X-CM-SenderInfo: p2kr3uplqex0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uF4fXrWUurWxWFWUAFyUGFg_yoW8ZF1kpF
+        Z8AayakrWrtF1IkanIv34UuF1S9w4kG397GFs7CrnF93ZxG34YgryxGFyYq3s0qr4kX3Wa
+        va4kKr1xCF4UJr7anT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 11:31:37PM -0300, Jason A. Donenfeld wrote:
-> On Tue, Feb 7, 2023 at 11:13 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Wed, Feb 08, 2023 at 04:13:16AM +0200, Jarkko Sakkinen wrote:
-> > > On Thu, Feb 02, 2023 at 07:57:37AM -0500, James Bottomley wrote:
-> > > > On Thu, 2023-02-02 at 11:28 +0100, Linux kernel regression tracking
-> > > > (Thorsten Leemhuis) wrote:
-> > > > [...]
-> > > > > So it's a firmware problem, but apparently one that Linux only
-> > > > > triggers since 6.1.
-> > > > >
-> > > > > Jason, could the hwrng changes have anything to do with this?
-> > > > >
-> > > > > A bisection really would be helpful, but I guess that is not easy as
-> > > > > the problem apparently only shows up after some time...
-> > > >
-> > > > the problem description says the fTPM causes system stutter when it
-> > > > writes to NVRAM.  Since an fTPM is a proprietary implementation, we
-> > > > don't know what it does.  The ms TPM implementation definitely doesn't
-> > > > trigger NV writes on rng requests, but it is plausible this fTPM does
-> > > > ... particularly if they have a time based input to the DRNG.  Even if
-> > > > this speculation is true, there's not much we can do about it, since
-> > > > it's a firmware bug and AMD should have delivered the BIOS update that
-> > > > fixes it.
-> > > >
-> > > > The way to test this would be to set the config option
-> > > >
-> > > > CONFIG_HW_RANDOM_TPM=n
-> > > >
-> > > > and see if the stutter goes away.  I suppose if someone could quantify
-> > > > the bad bioses, we could warn, but that's about it.
-> > > >
-> > > > James
-> > > >
-> > >
-> > > And e.g. I do not have a Ryzen CPU so pretty hard to answer such question.
-> >
-> > ... about hwrng
-> 
-> Well, the options here are basically:
-> 
-> a) Do nothing, and just expect people to update their BIOSes, since an
-> update is available.
-> b) Do nothing, and expect people with broken BIOSes to `echo blacklist
-> tpm >> /etc/modprobesomethingsomething`.
-> c) Figure out how to identify the buggy BIOS and disable the TPM's rng
-> with a quirk in this case.
-> d) Figure out how to dynamically detect TPM rng latency, and warn about it.
-> e) Figure out how to dynamically detect TPM rng latency, and disable it.
-> 
-> I think given that a firmware update *is* available, (a) is fine. And
-> the generic workaround remains (b). But if you want to be really nice,
-> (c) would be fine too. Somebody with the affected hardware would
-> probably have to send in some DMI logs or whatever else. (d) and (e)
-> sound possible in theory but I dunno really... seems finicky.
-> 
-> Jason
 
-For now (a), but if someone with capable hardware can make up something
-I'm happy to go that through, if it makes sense.
+在 2022/11/17 10:09, Liu Peibao 写道:
+> Add a mechanism to disable on chip PCI devices by DT. Typically, when there
+> are pins shareable between the platform device and the on chip PCI device,
+> if the PCI device is not preferred, add `status = "disabled"` property to
+> this PCI device DT node.
+>
+> For example, on LS2K1000, GMAC1 (on chip PCI device) and GPIO (platform
+> device, not PCI device) 14 share the same pin. If GMAC1 is not preferred,
+> add `status = "disabled"` property in GMAC1 DT node.
+>
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+Tested-by: Binbin Zhou <zhoubinbin@loongson.cn>
+> ---
+> V5 -> V6: 1. rewrite the commit log to make things clear.
+> 	  2. replace "unavailable" as "disabled" in patch subject.
+> V4 -> V5: clear the issue we are facing in commit log.
+> V3 -> V4: 1. get rid of the masklist and search the status property
+> 	  directly.
+>            2. check the status property only when accessing the vendor ID.
+> V2 -> V3: 1. use list_for_each_entry() for more clearly.
+>            2. fix wrong use of sizeof().
+> V1 -> V2: use existing property "status" instead of adding new property.
+>
+>   drivers/pci/controller/pci-loongson.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+>
+> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> index 05c50408f13b..efca0b3b5a29 100644
+> --- a/drivers/pci/controller/pci-loongson.c
+> +++ b/drivers/pci/controller/pci-loongson.c
+> @@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+>   			return NULL;
+>   	}
+>   
+> +#ifdef CONFIG_OF
+> +	/* Don't access disabled devices. */
+> +	if (pci_is_root_bus(bus) && where == PCI_VENDOR_ID) {
+> +		struct device_node *dn;
+> +
+> +		dn = of_pci_find_child_device(bus->dev.of_node, devfn);
+> +		if (dn && !of_device_is_available(dn))
+> +			return NULL;
+> +	}
+> +#endif
+> +
+>   	/* CFG0 can only access standard space */
+>   	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
+>   		return cfg0_map(priv, bus, devfn, where);
 
-BR, Jarkko
