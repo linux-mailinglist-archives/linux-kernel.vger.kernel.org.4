@@ -2,102 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB41A68F81A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF85768F81E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjBHTcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S231859AbjBHTca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjBHTcQ (ORCPT
+        with ESMTP id S231838AbjBHTc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:32:16 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8535128233
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:32:15 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 2FFDC32004AE;
-        Wed,  8 Feb 2023 14:32:14 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 08 Feb 2023 14:32:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675884733; x=1675971133; bh=0Ww7YIi+8S
-        zE/Xk29Ed4NjK6FpaU8TbVKXVoUGQbitM=; b=gKMIAaKc4tk4nyOq7kE0n0Gc1L
-        4gZIXkHjjKaa4h6ilQICZfLA2+NXc6ojZd5aXOZxGUKOpMgvWw7QdCSuJKfa5kvr
-        LMMFVhFv7kcqtRcO66SvMf1+s4c+hn6RBnDhJZYt//G6moMpBeeTIYuur/P5ESOU
-        XrVBheU+cQStxtO7CTX7JVNr62LMuRZ/t+ahwFtD9OH8mtbZ8O0txm9DFdppwUXW
-        2fHT/9ReWItbr4iT7ryLdGsC35S4RVEVxYgmg7H1TtdGDjZmaqsMYmWHdDgTBrJm
-        wpYKl2AhUiVa+AEriM90GfNXuNataQ++A8ccPOW6CwfZ2DUvSrs1u6LQe/iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1675884733; x=1675971133; bh=0Ww7YIi+8SzE/Xk29Ed4NjK6FpaU
-        8TbVKXVoUGQbitM=; b=XLiYR35H5CjMRFsF4oJGhylpImRA90muskLE5Ic8X5vZ
-        32t0JiwD3dvDeVg4eGvoc11wVAmt8TtrHV9t0sl7y+8V3pyMP2qFqd88iGB/QJ+c
-        kpaS6gfPKvm7nnI8zP+92eC1JkvPDLIpKEef8Vc9k/cqQY+4lAmyVfvxfyLBEdtp
-        F3+tlp/yWe9StiARLgQdRKq/WGGe9vEri46VZPks8twx6YuF8SKg7qjUlIHINZ6O
-        JVvot0hV1E8Z8XxrHBTdcQRKsl4U2IQNsxyITYOC/1g4q4kCn75TckTc7LN4vAcq
-        e+mF6V2ksztIdBCHr/48ml2/3vN2V3rjNqaaBF/pXg==
-X-ME-Sender: <xms:vfjjY5Eg1hdqVcmvOVVeGWlCVY8z2Q53HC_owr8EGqh8tzMtK3Y1YA>
-    <xme:vfjjY-U_EJPYwu6baP2Cnso94SV8adNDuNvpEqWDeK3dTTIA47vMQ8GXNEhG6GLcA
-    _N6yYVSxDTB8EohZNg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehuddgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:vfjjY7JKz6uULfTO4hAbSXHDHiGB_sE9l7NEKpuC6F1p4KV0_qd7MA>
-    <xmx:vfjjY_ElWuERIAJPPWJxfCS0qvE-RJx23SEdrUuCWrfc-XOYyr2TSg>
-    <xmx:vfjjY_Vx6CW4igWk2c6vconYp9IobXIF27hn52FaeXxswCF9blsZWA>
-    <xmx:vfjjY4NrU4T61TPaCOAyigKl_HZdKvyhX_JSmlOG4XEeDT4iLL0F4g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8B860B60086; Wed,  8 Feb 2023 14:32:13 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <7a62bc92-e062-4d33-9c3f-894b49452f1c@app.fastmail.com>
-In-Reply-To: <CANpmjNNYcVJxeuJPFknf=wCaapgYSn0+as4+iseJGpeBZdi4tw@mail.gmail.com>
-References: <20230208164011.2287122-1-arnd@kernel.org>
- <20230208164011.2287122-2-arnd@kernel.org>
- <CANpmjNNYcVJxeuJPFknf=wCaapgYSn0+as4+iseJGpeBZdi4tw@mail.gmail.com>
-Date:   Wed, 08 Feb 2023 20:31:54 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Marco Elver" <elver@google.com>, "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Alexander Potapenko" <glider@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, "Dmitry Vyukov" <dvyukov@google.com>,
-        "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
-        "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] kmsan: disable ftrace in kmsan core code
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 14:32:26 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9804672E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:32:25 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id t17so13879430pfj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 11:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ulrUQLJUP9RxcM6ZD9CxmoB1+p/LmgjBqM64v5ROwNg=;
+        b=Y/wZleiJgYDPwrKFBcrlT6u/1xcORwHwg87WEGQkc0RtFFNVVqtz+yNTJEUllPEFc0
+         +bXL1ZBGllwAn5k5jAHnZzdVPjsI3nfCU7FOGg7doqM90u8cZwVlNEiKkD/oLtjyRAas
+         xcclPYcRcRNy0VMcz8uuQEFaJ9CREVxPaU9zg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:subject:cc:to:from:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ulrUQLJUP9RxcM6ZD9CxmoB1+p/LmgjBqM64v5ROwNg=;
+        b=r4lW2htdCTRRnwOBruEEkupzmgFA9wstzsDtOtHKJpbz5eoGMhlNxfNO7SJ578fzNT
+         Cfu1fNN4sagjMo53L0DPuK9t5Ip+ucjyOmDNSL/Fl/SpV5mZeHHgaCTcOaWlALFuNCrb
+         AlvKiAuvCNWZHkH7Kp9i9GEMSWqWQRmswMQUhfHdndu43AbFFrOLNF/f+v5jv/CK1DWZ
+         wNZERrYmFjD/fEnlgNxYPimZ0xwOXzyScg2EyX3EePbwbb8HsSNvsWy+z3RWdjD4pxyj
+         lM8JP5TGyeCm63qmdBR28Ca6WKL5eJFbZx0RQuEhY4J3zcKq3z/S+kQUTgGLMXtKwqr4
+         m6KA==
+X-Gm-Message-State: AO0yUKWYFq8Vlyemp4IAqRLjEPbjZsgyAzWLZgzPdpbWioHsdYQ2J+ys
+        HKGdl/w6VOIb3WKKOkzu01oExg==
+X-Google-Smtp-Source: AK7set+P7rm+dGDTETrU2yzMMvUtrqjrfbTlBVXOCaBnQQFdsubS7A0XGoLGi5keRbMZOiZCbhxF5Q==
+X-Received: by 2002:a62:1b8a:0:b0:592:de72:4750 with SMTP id b132-20020a621b8a000000b00592de724750mr6518043pfb.23.1675884744778;
+        Wed, 08 Feb 2023 11:32:24 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id t2-20020a056a0021c200b0058173c4b3d1sm11604471pfj.80.2023.02.08.11.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 11:32:24 -0800 (PST)
+Message-ID: <63e3f8c8.050a0220.c0b3f.434b@mx.google.com>
+X-Google-Original-Message-ID: <202302081129.@keescook>
+Date:   Wed, 8 Feb 2023 11:32:23 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     concord@gentoo.org, linux-hardening@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+ <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+ <202204041451.CC4F6BF@keescook>
+ <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
+ <7e8d9f8a-f119-6d1a-7861-0493dc513aa7@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7e8d9f8a-f119-6d1a-7861-0493dc513aa7@digikod.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023, at 18:00, Marco Elver wrote:
+*thread necromancy*
 
->>  CFLAGS_REMOVE.o = $(CC_FLAGS_FTRACE)
->
-> That means this CFLAGS_REMOVE.o didn't work, right? Can it be removed?
->
+On Tue, Apr 05, 2022 at 06:09:03PM +0200, Mickaël Salaün wrote:
+> 
+> On 05/04/2022 01:26, Linus Torvalds wrote:
+> > On Mon, Apr 4, 2022 at 3:25 PM Kees Cook <keescook@chromium.org> wrote:
+> 
+> [...]
+> 
+> > 
+> > > I think this already exists as AT_EACCESS? It was added with
+> > > faccessat2() itself, if I'm reading the history correctly.
+> > 
+> > Yeah, I noticed myself, I just hadn't looked (and I don't do enough
+> > user-space programming to be aware of if that way).
+> 
+> I think AT_EACCESS should be usable with the new EXECVE_OK too.
+> 
+> 
+> > 
+> > > >      (a) "what about suid bits that user space cannot react to"
+> > > 
+> > > What do you mean here? Do you mean setid bits on the file itself?
+> > 
+> > Right.
+> > 
+> > Maybe we don't care.
+> 
+> I think we don't. I think the only corner case that could be different is
+> for files that are executable, SUID and non-readable. In this case it
+> wouldn't matter because userspace could not read the file, which is required
+> for interpretation/execution. Anyway, S[GU]ID bits in scripts are just
+> ignored by execve and we want to follow the same semantic.
 
-Ah, I missed this. Adjusted the patch and description accordingly.
+Hi Mickaël,
 
-    Arnd
+Is there a new version of this being worked on? It would be really nice
+to have the O_MAYEXEC/faccessat2() visibility for script execution control
+in userspace. It seems like it would be mainly a respin of an earlier
+version of this series before trusted_for() was proposed.
+
+-Kees
+
+-- 
+Kees Cook
