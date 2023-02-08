@@ -2,103 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BC368ECC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEB168ECCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjBHK0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S231181AbjBHK13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:27:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjBHK0G (ORCPT
+        with ESMTP id S229648AbjBHK10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:26:06 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A5C46713
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:26:01 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id r2so16230866wrv.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:26:01 -0800 (PST)
+        Wed, 8 Feb 2023 05:27:26 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DEC46084
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:27:25 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so1090614wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:27:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2vBRxdK4AYNAIN8xzgOiscHELLsk42uD/uHH62t4p4=;
-        b=vOROfMvBVQUgrGeyXGyUeffueIr97W6RjcIkK+MYIbMJ6JNOyOnqkGZfVGO8gZ6aoz
-         9k5Fu8LGDq6RW+AtqbYXNg5+6lqk7fblSpB9wc7XHUkXz1GYroi2LuM9s/a1HxFhHJke
-         UrIOQr8QaTC5R1WUi+m3z6P1ioebAlVweRv/MPYQ3Crx7lodeQWX7MQjgJermHKGFjfV
-         Bwwdmi5OCYApcfovBDqHj8oR5tHRSe4iMz4xgV9g7EA3YwFvswcpAiBSVZqkZ8dihNG1
-         8O2i+V/b1+AG00gmvX/2+vFjy7I3ic5y0X/icVlzGWuCM85kAmziqPJasnvDj8k9uGjb
-         1kmw==
+        bh=qNlwtYEZjLANMp/AP7c3hByeovMdMuVM3EFC+uWhNo4=;
+        b=y25OptXtltvh6MB4sqwW9x1mc3nKSfDjytjnTyqQno0VuI8wq4t3VafZ4xPhLLbU5m
+         Am83uM3NAbFbil1fiCUKtIXR/Sz4jgH6maPn2yp0k02VxemxIF2xDEhbKNWmWYzpe6tU
+         Vlg3tpvEyhgFGR1pgu8NiBGrGUykScOKVZwxIv2jTJXZEhSFoNWOvLt9Szg2JmU+V7Jm
+         zoZhdMQfSPRFvwPfkoWSyp5U0Mob504FwdojuNfSPT+rdm3f8ysj0hLhTeJ2Zagk5SDS
+         PFKwfeluD/nLAnyBbG/viwLb1ldCFZqeWAuXtMuBKAJQJUb3k4/gPUbXkCGG/287CYzO
+         BzIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q2vBRxdK4AYNAIN8xzgOiscHELLsk42uD/uHH62t4p4=;
-        b=toEPGIeMeQgUJuwa5nagxuhAOi3+EQPjOC9n9zk1ZoHo9/i+qumggfOKG0aDesEHjw
-         cnVV3fiMxctWD3itg98z+J5OqW+okDyYrTaoK4SNSvXRYU71XT91QQSb8LMdnjklRV8r
-         l+sBgRxJ8b2sQ+OsXrkf6aQ+AHxKsvvWcyVwnjSKeo5tdERGD5kyucGbNalHdL4XnivR
-         Unrm96mJehEM7FVEkqN3rH3tKNT07/Sph4ZyC1ozf5jtpA51DfqwXIh8FYkw/8LEWrPE
-         R7bB8tC6+xU0yPnPpzT+WYlB2stqyX1Adic41KLdctRyxEXOo9tDmpypupEGUg6rP6C3
-         8+wg==
-X-Gm-Message-State: AO0yUKVULDXr/zZuJknIg5ROllX7ULw7AmZYBO1TX4oRCvA/rFp/KvAR
-        JnIEqsWq5EAyHR33uaVs6v5xrg==
-X-Google-Smtp-Source: AK7set+rGmjIfvS3baxKVbA0bxotZKgIUCw5HvLE3AnsK14SnALoXFJXe76PRDqzgumVmQzFWq+1CA==
-X-Received: by 2002:a05:6000:110e:b0:2bf:95fb:e5b3 with SMTP id z14-20020a056000110e00b002bf95fbe5b3mr5948875wrw.33.1675851959784;
-        Wed, 08 Feb 2023 02:25:59 -0800 (PST)
+        bh=qNlwtYEZjLANMp/AP7c3hByeovMdMuVM3EFC+uWhNo4=;
+        b=ZLqlW3QdhrOKkLLfc5p+U+y0gr+ZvEA6FRcE4RRbahjTULmABQJT4SIgANRveUrm1e
+         vcHj2aQWj9ujd107gKehil4Yn38fLInfuRcq3QVWMEdhQnPVKtTqgJ15sVjTNwUqtEiB
+         FEbgNZP8rRyT2/RfxfGnXum7upCgCBggErtbIYIak18gJyFnJnEZteeezwdSC5VjfKAE
+         8Rg2YRLyxbJ9epHWmBDI6FesaIRgzblhxQ05o+QDRk+3gx5Dbf/R6BSEBa4RvaZgjtJ5
+         nrKLD+quDiEAvxl43BLM9i9vIufKIdJPshfW8ztELtYAQL4zMcCOXR7XqYdOQulF5cul
+         o7Gw==
+X-Gm-Message-State: AO0yUKU89Kx+TFgUGzXDJQRpI1scxyRljbl5QGu7hvT9GjwGUZ3t6HRr
+        4fq2RD5l1pEGlT3wY5WbA14s2g==
+X-Google-Smtp-Source: AK7set+/7ikTlR7eB0N9rz7Gn66qLVFhWVzYy3+NRSQ9K4SSEaJnnT9MI7w2Lllxd1gAOm/3ryO3vw==
+X-Received: by 2002:a05:600c:16d6:b0:3e1:541:2b55 with SMTP id l22-20020a05600c16d600b003e105412b55mr1761902wmn.16.1675852043773;
+        Wed, 08 Feb 2023 02:27:23 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h1-20020a5d4301000000b002c3b2afae00sm13064383wrq.41.2023.02.08.02.25.58
+        by smtp.gmail.com with ESMTPSA id bd6-20020a05600c1f0600b003e0015c8618sm1545407wmb.6.2023.02.08.02.27.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 02:25:59 -0800 (PST)
-Message-ID: <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
-Date:   Wed, 8 Feb 2023 11:25:57 +0100
+        Wed, 08 Feb 2023 02:27:23 -0800 (PST)
+Message-ID: <8b41827a-605a-3a65-5384-130fb0555b33@linaro.org>
+Date:   Wed, 8 Feb 2023 11:27:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
+Subject: Re: [PATCH 07/15] dt-bindings: clock: Add Ambarella clock bindings
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com, dphadke@linux.microsoft.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
- <202302081621.odizDzHG-lkp@intel.com>
+To:     Li Chen <me@linux.beauty>
+Cc:     li chen <lchen@ambarella.com>,
+        michael turquette <mturquette@baylibre.com>,
+        stephen boyd <sboyd@kernel.org>,
+        rob herring <robh+dt@kernel.org>,
+        krzysztof kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:arm/ambarella soc support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:common clk framework" <linux-clk@vger.kernel.org>,
+        "open list:open firmware and flattened device tree bindings" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        arnd bergmann <arnd@arndb.de>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+ <20230123073305.149940-8-lchen@ambarella.com>
+ <0c19efb4-3bca-f500-ca24-14b9d24369ef@linaro.org>
+ <87y1prgdyu.wl-me@linux.beauty>
+ <b26a52ff-6b8a-8a64-7189-346cd2b0d705@linaro.org>
+ <87tu0ehl88.wl-me@linux.beauty>
+ <ec9fc589-2612-3315-3550-83b68bead926@linaro.org>
+ <87sffyhgvw.wl-me@linux.beauty>
+ <f70def8e-b148-616f-a93e-c2a8fb85be03@linaro.org>
+ <185f3b3a330.11c135c37327076.6300919877819761183@linux.beauty>
+ <33c2038b-5e06-4eb2-82b8-007bb735bfb1@linaro.org>
+ <186267bd495.c0d336602542450.72693939722996463@linux.beauty>
+ <8b164c2f-b7b9-c5df-3b9c-ea39bd3eb424@linaro.org>
+ <186273b85d1.e6e326dd2609909.4901324458297607618@linux.beauty>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <202302081621.odizDzHG-lkp@intel.com>
+In-Reply-To: <186273b85d1.e6e326dd2609909.4901324458297607618@linux.beauty>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 09:22, kernel test robot wrote:
-> Hi Saurabh,
+On 06/02/2023 15:57, Li Chen wrote:
+> Hi Krzysztof,
+>  ---- On Mon, 06 Feb 2023 21:41:44 +0800  Krzysztof Kozlowski  wrote --- 
+>  > On 06/02/2023 12:28, Li Chen wrote:
+>  > > Hi Krzysztof ,
+>  > > 
+>  > >  ---- On Fri, 27 Jan 2023 23:08:09 +0800  Krzysztof Kozlowski  wrote --- 
+>  > >  > On 27/01/2023 15:48, Li Chen wrote:
+>  > >  > >  > 
+>  > >  > >  > but what you are saying is that there is no separate clock controller
+>  > >  > >  > device with its own IO address but these clocks are part of rct_syscon.
+>  > >  > >  > Then model it that way in DTS. The rct_syscon is then your clock
+>  > >  > >  > controller and all these fake gclk-core and gclk-ddr nodes should be gone.
+>  > >  > > 
+>  > >  > > Ok, I will remove these fake nodes, and model the hardware as:
+>  > >  > > 
+>  > >  > > rct_syscon node
+>  > >  > > | clock node(pll, div, mux, composite  clocks live in the same driver)
+>  > >  > > | other periphal nodes
+>  > >  > 
+>  > >  > You need clock node if it takes any resources. If it doesn't, you do not
+>  > >  > need it.
+>  > > 
+>  > > If the only hardware resource the clock node can take is its parent clock(clocks = &osc;),
+>  > > then can I have this clock node?
+>  > 
+>  > I am not sure if I understand. osc does not look like parent device, so
+>  > this part of comment confuses me.
 > 
-> Thank you for the patch! Perhaps something to improve:
+> Sorry for the confusion. I mean osc is the root of clock tree:
 > 
-> [auto build test WARNING on next-20230207]
-> [cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> osc
+>   | pll A
+>   | pll B
+>   | ...
 > 
+> So if I have a clock node under rct_syscon node, I think it should take osc as the parent(node) clock:
+> rct_syscon {
+>     ......
+>     clock_controller {
+>           clocks = <&osc>;
+>           ......
+> 
+> You have said "You need clock node if it takes any resources. ", do you think osc here can be counted as a used resource?
 
-All of your recent patches have build errors. Can you at least build
-test them before sending? It's a unnecessary noise in our mailboxes to
-get non-buildable patches, just to trigger compilation which you can
-easily do by your own. GCC is a free software...
+Yes, in that matter osc should be the input to this clock controller.
 
 Best regards,
 Krzysztof
