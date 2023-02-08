@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3914A68F428
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 769B568F429
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjBHRRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:17:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
+        id S230377AbjBHRRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:17:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjBHRRC (ORCPT
+        with ESMTP id S230516AbjBHRRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:17:02 -0500
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E68049421
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:16:49 -0800 (PST)
+        Wed, 8 Feb 2023 12:17:07 -0500
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63359EEC
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:16:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1675876607;
-        bh=sYO9Eb5bFjdOGiuca613wuxLe3kLk565FA8I9/Mll+s=;
+        s=default; t=1675876612;
+        bh=uc+/2NQViYQRzOBEKp2Pmt1zBZRq+boXO32ftDdN+ZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PGcbUbIXGNH7OgrUI02nWRGUucyb+FkY0yzQ4eBwIoGBg3seYqs0Bho7f5N1UyTgV
-         b7lO+PWEwv/sMdUX6kCTar8vHBJPKiCfKJ8otiyIFH5GFu1PVzyVyIZvTtVfbPp4lF
-         bKzkYezoRTps59bVRpZ1sYXdgXnB3GnKNRdXu+rU=
+        b=Q/t03KGyTJcfNXXG+B8HT3W1NVOajpdtNpfk/XppJkwDKDkFJtss6rO+nNQfIVGUa
+         irHhfrgBj0HB63eIq8Y5jpsraNcFz2UQkGzhksaVOnzyMkvIj7vZuae77RrP/UU4va
+         5ICoxGZteD3q0O6yUjrFJMPLNZ5ljQ84Ffct+9nI=
 Received: from xry111-x57s1.. (unknown [IPv6:240e:358:1174:d100:dc73:854d:832e:3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
         (Client did not present a certificate)
         (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 7F8AA65C52;
-        Wed,  8 Feb 2023 12:16:40 -0500 (EST)
+        by xry111.site (Postfix) with ESMTPSA id D1F6665C4F;
+        Wed,  8 Feb 2023 12:16:47 -0500 (EST)
 From:   Xi Ruoyao <xry111@xry111.site>
 To:     Youling Tang <tangyouling@loongson.cn>,
         Huacai Chen <chenhuacai@kernel.org>,
         Jinyang He <hejinyang@loongson.cn>
 Cc:     Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
         linux-kernel@vger.kernel.org, Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v3 4/5] LoongArch: Add support for kernel relocation
-Date:   Thu,  9 Feb 2023 01:16:06 +0800
-Message-Id: <20230208171607.391107-5-xry111@xry111.site>
+Subject: [PATCH v3 5/5] LoongArch: Add support for kernel address space layout randomization (KASLR)
+Date:   Thu,  9 Feb 2023 01:16:07 +0800
+Message-Id: <20230208171607.391107-6-xry111@xry111.site>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230208171607.391107-1-xry111@xry111.site>
 References: <20230208171607.391107-1-xry111@xry111.site>
@@ -54,272 +54,256 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Youling Tang <tangyouling@loongson.cn>
 
-arch/loongarch/kernel/relocate.c contains the functions necessary to
-relocate the kernel elsewhere in memory.
+This patch adds support for relocating the kernel to a random address.
 
-The kernel makes a copy of itself at the new address. It uses the
-relocation table inserted by the relocs tool to fix symbol references
-within the new image.
+Entropy is derived from the banner, which will change every build and
+random_get_entropy() which should provide additional runtime entropy.
 
-If copy/relocation is successful then the entry point of the new kernel
-is returned, otherwise fall back to starting the kernel in place.
+The kernel is relocated by up to RANDOMIZE_BASE_MAX_OFFSET bytes from
+its link address. Because relocation happens so early in the kernel boot,
+the amount of physical memory has not yet been determined. This means
+the only way to limit relocation within the available memory is via
+Kconfig. Limit the maximum value of RANDOMIZE_BASE_MAX_OFFSET to
+256M(0x10000000) because our memory layout has many holes.
+
+KERNELOFFSET (kaslr_offset) is added to vmcoreinfo in the future, for
+crash --kaslr support.
 
 Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-Signed-off-by: Xi Ruoyao <xry111@xry111.site> # Fix compiler warnings
+Signed-off-by: Xi Ruoyao <xry111@xry111.site> # Use arch_initcall
 ---
- arch/loongarch/Kconfig              | 15 +++++
- arch/loongarch/Makefile             |  5 ++
- arch/loongarch/kernel/Makefile      |  2 +
- arch/loongarch/kernel/head.S        | 18 ++++++
- arch/loongarch/kernel/relocate.c    | 96 +++++++++++++++++++++++++++++
- arch/loongarch/kernel/vmlinux.lds.S | 11 +++-
- 6 files changed, 145 insertions(+), 2 deletions(-)
- create mode 100644 arch/loongarch/kernel/relocate.c
+ arch/loongarch/Kconfig            |  22 ++++++
+ arch/loongarch/include/asm/page.h |   6 ++
+ arch/loongarch/kernel/relocate.c  | 115 ++++++++++++++++++++++++++++++
+ arch/loongarch/kernel/setup.c     |   3 +
+ 4 files changed, 146 insertions(+)
 
 diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 9cc8b84f7eb0..089a4695b1b3 100644
+index 089a4695b1b3..cdf0535764ae 100644
 --- a/arch/loongarch/Kconfig
 +++ b/arch/loongarch/Kconfig
-@@ -48,6 +48,7 @@ config LOONGARCH
- 	select ARCH_SUPPORTS_ATOMIC_RMW
- 	select ARCH_SUPPORTS_HUGETLBFS
- 	select ARCH_SUPPORTS_NUMA_BALANCING
-+	select SYS_SUPPORTS_RELOCATABLE
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_QUEUED_RWLOCKS
-@@ -229,6 +230,11 @@ config SCHED_OMIT_FRAME_POINTER
- config AS_HAS_EXPLICIT_RELOCS
- 	def_bool $(as-instr,x:pcalau12i \$t0$(comma)%pc_hi20(x))
+@@ -489,6 +489,28 @@ config RELOCATABLE
+ 	  kernel binary at runtime to a different virtual address than the
+ 	  address it was linked at.
  
-+config SYS_SUPPORTS_RELOCATABLE
-+	bool
++config RANDOMIZE_BASE
++	bool "Randomize the address of the kernel image (KASLR)"
++	depends on RELOCATABLE
 +	help
-+	  Selected if the platform supports relocating the kernel.
++	   Randomizes the physical and virtual address at which the
++	   kernel image is loaded, as a security feature that
++	   deters exploit attempts relying on knowledge of the location
++	   of kernel internals.
 +
- menu "Kernel type and options"
- 
- source "kernel/Kconfig.hz"
-@@ -474,6 +480,15 @@ config PHYSICAL_START
- 	  specified in the "crashkernel=YM@XM" command line boot parameter
- 	  passed to the panic-ed kernel).
- 
-+config RELOCATABLE
-+	bool "Relocatable kernel"
-+	depends on SYS_SUPPORTS_RELOCATABLE
++	   The kernel will be offset by up to RANDOMIZE_BASE_MAX_OFFSET.
++
++	   If unsure, say N.
++
++config RANDOMIZE_BASE_MAX_OFFSET
++	hex "Maximum KASLR offset" if EXPERT
++	depends on RANDOMIZE_BASE
++	range 0x0 0x10000000 if 64BIT
++	default "0x01000000"
 +	help
-+	  This builds the kernel as a Position Independent Executable (PIE),
-+	  which retains all relocation metadata required to relocate the
-+	  kernel binary at runtime to a different virtual address than the
-+	  address it was linked at.
++	  When KASLR is active, this provides the maximum offset that will
++	  be applied to the kernel image.
 +
  config SECCOMP
  	bool "Enable seccomp to safely compute untrusted bytecode"
  	depends on PROC_FS
-diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-index 4402387d2755..27b5a70ff31c 100644
---- a/arch/loongarch/Makefile
-+++ b/arch/loongarch/Makefile
-@@ -71,6 +71,11 @@ KBUILD_AFLAGS_MODULE		+= -Wa,-mla-global-with-abs
- KBUILD_CFLAGS_MODULE		+= -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
- endif
+diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/asm/page.h
+index 53f284a96182..6dda0d6271ca 100644
+--- a/arch/loongarch/include/asm/page.h
++++ b/arch/loongarch/include/asm/page.h
+@@ -106,6 +106,12 @@ extern int __virt_addr_valid(volatile void *kaddr);
+ 	 ((current->personality & READ_IMPLIES_EXEC) ? VM_EXEC : 0) | \
+ 	 VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC)
  
-+ifeq ($(CONFIG_RELOCATABLE),y)
-+LDFLAGS_vmlinux			+= -static -pie --no-dynamic-linker -z notext
-+KBUILD_CFLAGS_KERNEL		+= -fPIE
-+endif
++extern unsigned long __kaslr_offset;
++static inline unsigned long kaslr_offset(void)
++{
++	return __kaslr_offset;
++}
 +
- cflags-y += -ffreestanding
- cflags-y += $(call cc-option, -mno-check-zero-division)
+ #include <asm-generic/memory_model.h>
+ #include <asm-generic/getorder.h>
  
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index c8cfbd562921..3341dd5f0926 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -31,6 +31,8 @@ endif
- obj-$(CONFIG_MODULES)		+= module.o module-sections.o
- obj-$(CONFIG_STACKTRACE)	+= stacktrace.o
- 
-+obj-$(CONFIG_RELOCATABLE)	+= relocate.o
-+
- obj-$(CONFIG_PROC_FS)		+= proc.o
- 
- obj-$(CONFIG_SMP)		+= smp.o
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index e8a4bf9d7599..6db1549177ad 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -88,7 +88,25 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 	PTR_ADD		sp, sp, tp
- 	set_saved_sp	sp, t0, t1
- 
-+#ifdef CONFIG_RELOCATABLE
-+	/* Copy kernel and apply the relocations */
-+	bl		relocate_kernel
-+
-+	/* Repoint the sp into the new kernel image */
-+	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
-+	PTR_ADD		sp, sp, tp
-+	set_saved_sp	sp, t0, t1
-+	PTR_ADDI	sp, sp, -4 * SZREG      # init stack pointer
-+
-+	/*
-+	 * relocate_kernel returns the entry point either
-+	 * in the relocated kernel or the original if for
-+	 * some reason relocation failed.
-+	*/
-+	jr		a0
-+#else
- 	bl		start_kernel
-+#endif
- 	ASM_BUG()
- 
- SYM_CODE_END(kernel_entry)
 diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-new file mode 100644
-index 000000000000..9c61e03d3e91
---- /dev/null
+index 9c61e03d3e91..351168b70b7a 100644
+--- a/arch/loongarch/kernel/relocate.c
 +++ b/arch/loongarch/kernel/relocate.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Support for Kernel relocation at boot time
-+ *
-+ * Copyright (C) 2023 Loongson Technology Corporation Limited
-+ */
+@@ -11,6 +11,7 @@
+ #include <linux/printk.h>
+ #include <linux/panic_notifier.h>
+ #include <asm/bootinfo.h>
++#include <asm/early_ioremap.h>
+ #include <asm/inst.h>
+ #include <asm/sections.h>
+ 
+@@ -19,6 +20,70 @@
+ extern long __rela_dyn_start;
+ extern long __rela_dyn_end;
+ 
++#ifdef CONFIG_RANDOMIZE_BASE
 +
-+#include <linux/elf.h>
-+#include <linux/kernel.h>
-+#include <linux/start_kernel.h>
-+#include <linux/printk.h>
-+#include <linux/panic_notifier.h>
-+#include <asm/bootinfo.h>
-+#include <asm/inst.h>
-+#include <asm/sections.h>
++static inline __init unsigned long rotate_xor(unsigned long hash,
++					      const void *area, size_t size)
++{
++	size_t i;
++	unsigned long *ptr = (unsigned long *)area;
 +
-+#define RELOCATED(x) ((void *)((long)x + offset))
++	for (i = 0; i < size / sizeof(hash); i++) {
++		/* Rotate by odd number of bits and XOR. */
++		hash = (hash << ((sizeof(hash) * 8) - 7)) | (hash >> 7);
++		hash ^= ptr[i];
++	}
 +
-+extern long __rela_dyn_start;
-+extern long __rela_dyn_end;
++	return hash;
++}
 +
-+/*
-+ * Choose a new address for the kernel, for now we'll hard
-+ * code the destination.
-+ */
++static inline __init unsigned long get_random_boot(void)
++{
++	unsigned long entropy = random_get_entropy();
++	unsigned long hash = 0;
++
++	/* Attempt to create a simple but unpredictable starting entropy. */
++	hash = rotate_xor(hash, linux_banner, strlen(linux_banner));
++
++	/* Add in any runtime entropy we can get */
++	hash = rotate_xor(hash, &entropy, sizeof(entropy));
++
++	return hash;
++}
++
++static inline __init bool kaslr_disabled(void)
++{
++	char *str;
++
++	str = strstr(boot_command_line, "nokaslr");
++	if (str == boot_command_line || (str > boot_command_line && *(str - 1) == ' '))
++		return true;
++
++	return false;
++}
++
++/* Choose a new address for the kernel */
 +static inline void __init *determine_relocation_address(void)
 +{
-+	return (void *)(CACHE_BASE + 0x02000000);
-+}
-+
-+static inline int __init relocation_addr_valid(void *loc_new)
-+{
-+	if ((unsigned long)loc_new & 0x0000ffff) {
-+		/* Inappropriately aligned new location */
-+		return 0;
-+	}
-+	if ((unsigned long)loc_new < (unsigned long)_end) {
-+		/* New location overlaps original kernel */
-+		return 0;
-+	}
-+	return 1;
-+}
-+
-+void *__init relocate_kernel(void)
-+{
-+	Elf64_Rela *rela, *rela_end;
-+	void *loc_new;
 +	unsigned long kernel_length;
-+	long offset = 0;
-+	/* Default to original kernel entry point */
-+	void *kernel_entry = start_kernel;
++	void *dest = _text;
++	unsigned long offset;
 +
-+	kernel_length = (long)(_end) - (long)(_text);
++	if (kaslr_disabled())
++		return dest;
 +
-+	loc_new = determine_relocation_address();
++	kernel_length = (long)_end - (long)_text;
 +
-+	/* Sanity check relocation address */
-+	if (relocation_addr_valid(loc_new))
-+		offset = (unsigned long)loc_new - (unsigned long)(_text);
++	offset = get_random_boot() << 16;
++	offset &= (CONFIG_RANDOMIZE_BASE_MAX_OFFSET - 1);
++	if (offset < kernel_length)
++		offset += ALIGN(kernel_length, 0xffff);
 +
-+	if (offset) {
-+		/* Copy the kernel to it's new location */
-+		memcpy(loc_new, _text, kernel_length);
-+
-+		/* Sync the caches ready for execution of new kernel */
-+		__asm__ __volatile__ (
-+			"ibar 0 \t\n"
-+			"dbar 0 \t\n");
-+
-+		rela = (Elf64_Rela *)RELOCATED(&__rela_dyn_start);
-+		rela_end = (Elf64_Rela *)RELOCATED(&__rela_dyn_end);
-+
-+		for ( ; rela < rela_end; rela++) {
-+			Elf64_Addr addr = rela->r_offset;
-+			Elf64_Addr relocated_addr = rela->r_addend;
-+
-+			if (rela->r_info != R_LARCH_RELATIVE)
-+				continue;
-+
-+			if (relocated_addr >= VMLINUX_LOAD_ADDRESS)
-+				relocated_addr =
-+					(Elf64_Addr)RELOCATED(relocated_addr);
-+
-+			*(Elf64_Addr *)RELOCATED(addr) = relocated_addr;
-+
-+		}
-+
-+		/* The current thread is now within the relocated image */
-+		__current_thread_info = RELOCATED(__current_thread_info);
-+
-+		/* Return the new kernel's entry point */
-+		kernel_entry = RELOCATED(start_kernel);
-+	}
-+
-+	return kernel_entry;
++	return RELOCATED(dest);
 +}
-diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-index 733b16e8d55d..aec0b6567d24 100644
---- a/arch/loongarch/kernel/vmlinux.lds.S
-+++ b/arch/loongarch/kernel/vmlinux.lds.S
-@@ -70,6 +70,8 @@ SECTIONS
- 	.plt : ALIGN(16) { *(.plt) }
- 	.got.plt : ALIGN(16) { *(.got.plt) }
- 
-+	.data.rel : { *(.data.rel*) }
 +
- 	. = ALIGN(PECOFF_SEGMENT_ALIGN);
- 	__init_begin = .;
- 	__inittext_begin = .;
-@@ -93,8 +95,6 @@ SECTIONS
- 	PERCPU_SECTION(1 << CONFIG_L1_CACHE_SHIFT)
- #endif
++#else
++
+ /*
+  * Choose a new address for the kernel, for now we'll hard
+  * code the destination.
+@@ -28,6 +93,8 @@ static inline void __init *determine_relocation_address(void)
+ 	return (void *)(CACHE_BASE + 0x02000000);
+ }
  
--	.rela.dyn : ALIGN(8) { *(.rela.dyn) *(.rela*) }
--
- 	.init.bss : {
- 		*(.init.bss)
++#endif
++
+ static inline int __init relocation_addr_valid(void *loc_new)
+ {
+ 	if ((unsigned long)loc_new & 0x0000ffff) {
+@@ -41,6 +108,13 @@ static inline int __init relocation_addr_valid(void *loc_new)
+ 	return 1;
+ }
+ 
++static inline void __init update_kaslr_offset(unsigned long *addr, long offset)
++{
++	unsigned long *new_addr = (unsigned long *)RELOCATED(addr);
++
++	*new_addr = (unsigned long)offset;
++}
++
+ void *__init relocate_kernel(void)
+ {
+ 	Elf64_Rela *rela, *rela_end;
+@@ -49,6 +123,10 @@ void *__init relocate_kernel(void)
+ 	long offset = 0;
+ 	/* Default to original kernel entry point */
+ 	void *kernel_entry = start_kernel;
++	char *cmdline = early_ioremap(fw_arg1, COMMAND_LINE_SIZE);
++
++	/* Boot command line was passed in fw_arg1 */
++	strscpy(boot_command_line, cmdline, COMMAND_LINE_SIZE);
+ 
+ 	kernel_length = (long)(_end) - (long)(_text);
+ 
+@@ -90,7 +168,44 @@ void *__init relocate_kernel(void)
+ 
+ 		/* Return the new kernel's entry point */
+ 		kernel_entry = RELOCATED(start_kernel);
++
++		/* Error may occur before, so keep it at last */
++		update_kaslr_offset(&__kaslr_offset, offset);
  	}
-@@ -107,6 +107,12 @@ SECTIONS
- 	RO_DATA(4096)
- 	RW_DATA(1 << CONFIG_L1_CACHE_SHIFT, PAGE_SIZE, THREAD_SIZE)
  
-+	.rela.dyn : ALIGN(8) {
-+		__rela_dyn_start = .;
-+		 *(.rela.dyn) *(.rela*)
-+		__rela_dyn_end = .;
+ 	return kernel_entry;
+ }
++
++/*
++ * Show relocation information on panic.
++ */
++static void show_kernel_relocation(const char *level)
++{
++	if (__kaslr_offset > 0) {
++		printk(level);
++		pr_cont("Kernel relocated offset @ 0x%lx\n", __kaslr_offset);
++		pr_cont(" .text @ 0x%lx\n", (unsigned long)&_text);
++		pr_cont(" .data @ 0x%lx\n", (unsigned long)&_sdata);
++		pr_cont(" .bss  @ 0x%lx\n", (unsigned long)&__bss_start);
 +	}
++}
 +
- 	.sdata : {
- 		*(.sdata)
- 	}
-@@ -133,6 +139,7 @@ SECTIONS
++static int kernel_location_notifier_fn(struct notifier_block *self,
++				       unsigned long v, void *p)
++{
++	show_kernel_relocation(KERN_EMERG);
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block kernel_location_notifier = {
++	.notifier_call = kernel_location_notifier_fn
++};
++
++static int __init register_kernel_offset_dumper(void)
++{
++	atomic_notifier_chain_register(&panic_notifier_list,
++				       &kernel_location_notifier);
++	return 0;
++}
++
++arch_initcall(register_kernel_offset_dumper);
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index 4344502c0b31..b2ba2741945c 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -82,6 +82,9 @@ static struct resource code_resource = { .name = "Kernel code", };
+ static struct resource data_resource = { .name = "Kernel data", };
+ static struct resource bss_resource  = { .name = "Kernel bss", };
  
- 	DISCARDS
- 	/DISCARD/ : {
-+		*(.dynamic .dynsym .dynstr .hash .gnu.hash)
- 		*(.gnu.attributes)
- 		*(.options)
- 		*(.eh_frame)
++unsigned long __kaslr_offset __ro_after_init;
++EXPORT_SYMBOL(__kaslr_offset);
++
+ const char *get_system_type(void)
+ {
+ 	return "generic-loongson-machine";
 -- 
 2.39.1
 
