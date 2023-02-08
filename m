@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FDE68ECAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9F668ECAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjBHKTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S229517AbjBHKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjBHKS5 (ORCPT
+        with ESMTP id S231341AbjBHKS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Feb 2023 05:18:57 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7C62107
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:18:22 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id e19so10802759plc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:18:22 -0800 (PST)
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5AB25294
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:18:25 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id d2so14264697pjd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:18:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xibiFF/V1JSfx4FVu1IvjMxukDbBPo1ygOI1aB6E6KY=;
-        b=gSoxX+30ZSN6YSvyVhGHh5k8oyw3bzp6LoGsX2Gs0fsCxXs7o9uIjw3O7BwfunuWld
-         7htP47QFQiNfIpYKhmmtSCUj1sW3a/NQjfobHI6APZIR/CRB7qWSKn8zLOGdheQtIBsv
-         D4YaMgo/0ojsU/zNsukIQQZ7BzAJQvS5LRgZ5CU1ltglIU+Ob8Z4kqvmNAqzFTNI8v7r
-         zhUU+2afbl3kpUrttpvT2rizWdZuPstYYpWUe996ca/QkPGVyDBb5ednsy7Nfic9+9Fw
-         siuxdVuV6LdK1eDQ5zuZai+/O8eMXIaF2vD0r6/Rm8RWvyT/hrJjBLxYlu77UIEjZQsi
-         WrJg==
+        bh=fq3h6NGHFAxHZ5DLcg6qPLA20/eRYQpYkN3wnk0IEiI=;
+        b=aI8k4UFkjpEuClZ/YCcgimxe4z73Kt9OcHFahkgUnhnMecQ9PNdRGPS2gYQ6MHm+po
+         Bq2plDHND7AlLt3dfoyXb5RJdn4Zz1Z+B4wTnhE7xRRp921JaeXpek5VoDxOTDIFswpm
+         P3hsPa6R4dVHAbICYJkwAuFwf3p0swhdlHIfo98uS/nH/G1JcZTMTC9CUCk2OcpDpLC0
+         0AyS6tCqLHsYC37tn/pT3M8R7KvhVZuJsLOJGlF45wK5eXC6aNvbJo4R5O3o0PzascYP
+         5LUY4F0FdRCzDnnWCJMhVtAn3rYbBKcQGUFK8wFgDlVnhv8+rYJ4gWSFMQ88pBZnNfyU
+         SYIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xibiFF/V1JSfx4FVu1IvjMxukDbBPo1ygOI1aB6E6KY=;
-        b=7Hk63kpYGfY13TRZzSYxsL4byWOeMHH5yeR0DciJzOCmpIBIr9+aG9ldmY0X6StZhm
-         /oa1pudPE5nOgh8shRGHVG1wZ3qeDNL3rHxds5iHr1AZ6uUPOQcG9m07Pr8BpdgZw3oe
-         ziRvDYz7MTSWe7EtmtLiWktf+7mioLW6mlMyPY9jAe2SFpppGY0SuVWlw4Nw0cvdSCcS
-         K07SKY05BAmeYNWyvlRlVea5xJwm4qzbTOEGwUXAFuNOFVjW1aN6KZ2TqPYn56ITupjG
-         S0Ectz+bd/si6H5PTvl8sCZdeb0RgWcPqDZPJHJ6/jFzTIwcgCzH07z+nJLvkRPxGkLo
-         v9Yw==
-X-Gm-Message-State: AO0yUKVr/YpSJgHs6qZeEZ9Om4XS3dx6bdPJSYbjO7K1mZtqXEUoOFmv
-        08gznZkw3Vjc5Qj1DpLUaTibPKrNkaUNoNkW
-X-Google-Smtp-Source: AK7set9Ks3yZd0yyC/474w5+TGEaOf1SO3vfQ8OWO36WLq/w13+2yLtao/mvB4dpPeIrlwfB6EtHYQ==
-X-Received: by 2002:a17:902:aa93:b0:197:35fc:6a4a with SMTP id d19-20020a170902aa9300b0019735fc6a4amr5950062plr.22.1675851499764;
-        Wed, 08 Feb 2023 02:18:19 -0800 (PST)
+        bh=fq3h6NGHFAxHZ5DLcg6qPLA20/eRYQpYkN3wnk0IEiI=;
+        b=pv/X/vfgnNrdKtrlnlAzIeCoHRbGS8jS0I40C4mm/HumllBgC0Cf0ExLtptlVJKH4d
+         yPRkgLrG9hAJgnychvDzPWNmEuXLy1IGRrIADIZKuDIg8VEoh0olAgkevAoXSv7rghHG
+         f5dU71GSKAgnQBhsGTIwhCa6j2NEEQQmDu8zVT5ayVE6gignoga1M8kTHDTxxU0tzS5N
+         9ijJ13j0DZE/Jxec/Uz8PMBeGLPbRe0PKL33qlDIMDaI+6nKEfQ/gaqwMIgJUk8gdUtC
+         rp17zRdBVecJ5u4NrpkT+ocLJneXK20YFYKsVurMzv0rQ7/az+1scgcaj33AqxNIbQdV
+         LpjA==
+X-Gm-Message-State: AO0yUKXCt+7r822AlCkn5t4s0uGHkq9tCnxULyfOd1h5wjUCf+U5YLll
+        CVkGsbxrH9az2B20L33BWRY=
+X-Google-Smtp-Source: AK7set/FfeYbxbkOAj+M5ndUKEczPf+wcyYb9OC9Vx/qSjjYchGNqTfzPraz2U4R3e1to9J6qd5CRg==
+X-Received: by 2002:a17:902:e285:b0:199:109e:829 with SMTP id o5-20020a170902e28500b00199109e0829mr5454679plc.30.1675851504549;
+        Wed, 08 Feb 2023 02:18:24 -0800 (PST)
 Received: from localhost.localdomain ([112.20.108.204])
-        by smtp.gmail.com with ESMTPSA id v23-20020a1709028d9700b0019926c7757asm3991058plo.289.2023.02.08.02.18.15
+        by smtp.gmail.com with ESMTPSA id v23-20020a1709028d9700b0019926c7757asm3991058plo.289.2023.02.08.02.18.20
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 08 Feb 2023 02:18:19 -0800 (PST)
+        Wed, 08 Feb 2023 02:18:24 -0800 (PST)
 From:   chris.chenfeiyang@gmail.com
 X-Google-Original-From: chenfeiyang@loongson.cn
 To:     w@1wt.eu, paulmck@kernel.org
@@ -57,9 +57,9 @@ Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, arnd@arndb.de,
         chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
         chris.chenfeiyang@gmail.com, loongarch@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/5] tools/nolibc: Add support for LoongArch
-Date:   Wed,  8 Feb 2023 18:17:52 +0800
-Message-Id: <26f03f1be0cd687f0d5099060362b2c8bc06c855.1675851111.git.chenfeiyang@loongson.cn>
+Subject: [PATCH v2 4/5] selftests/nolibc: Add support for LoongArch
+Date:   Wed,  8 Feb 2023 18:17:53 +0800
+Message-Id: <d3fd493792cd7fa432843691d86221f5ad2ef32c.1675851111.git.chenfeiyang@loongson.cn>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1675851111.git.chenfeiyang@loongson.cn>
 References: <cover.1675851111.git.chenfeiyang@loongson.cn>
@@ -77,234 +77,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Feiyang Chen <chenfeiyang@loongson.cn>
 
-Add support for LoongArch (32 and 64 bit) to nolibc.
+Add support for LoongArch (64 bit) to nolibc selftest.
 
 Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
 ---
- tools/include/nolibc/arch-loongarch.h | 200 ++++++++++++++++++++++++++
- tools/include/nolibc/arch.h           |   2 +
- 2 files changed, 202 insertions(+)
- create mode 100644 tools/include/nolibc/arch-loongarch.h
+ tools/testing/selftests/nolibc/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
-new file mode 100644
-index 000000000000..029ee3cd6baf
---- /dev/null
-+++ b/tools/include/nolibc/arch-loongarch.h
-@@ -0,0 +1,200 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * LoongArch specific definitions for NOLIBC
-+ * Copyright (C) 2023 Loongson Technology Corporation Limited
-+ */
-+
-+#ifndef _NOLIBC_ARCH_LOONGARCH_H
-+#define _NOLIBC_ARCH_LOONGARCH_H
-+
-+/* Syscalls for LoongArch :
-+ *   - stack is 16-byte aligned
-+ *   - syscall number is passed in a7
-+ *   - arguments are in a0, a1, a2, a3, a4, a5
-+ *   - the system call is performed by calling "syscall 0"
-+ *   - syscall return comes in a0
-+ *   - the arguments are cast to long and assigned into the target
-+ *     registers which are then simply passed as registers to the asm code,
-+ *     so that we don't have to experience issues with register constraints.
-+ *
-+ * On LoongArch, select() is not implemented so we have to use pselect6().
-+ */
-+#define __ARCH_WANT_SYS_PSELECT6
-+
-+#define my_syscall0(num)                                                      \
-+({                                                                            \
-+	register long _num  __asm__ ("a7") = (num);                           \
-+	register long _arg1 __asm__ ("a0");                                   \
-+									      \
-+	__asm__  volatile (                                                   \
-+		"syscall 0\n"                                                 \
-+		: "=r"(_arg1)                                                 \
-+		: "r"(_num)                                                   \
-+		: "memory", "$t0", "$t1", "$t2", "$t3",                       \
-+		  "$t4", "$t5", "$t6", "$t7", "$t8"                           \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+#define my_syscall1(num, arg1)                                                \
-+({                                                                            \
-+	register long _num  __asm__ ("a7") = (num);                           \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);		      \
-+									      \
-+	__asm__  volatile (                                                   \
-+		"syscall 0\n"                                                 \
-+		: "+r"(_arg1)                                                 \
-+		: "r"(_num)                                                   \
-+		: "memory", "$t0", "$t1", "$t2", "$t3",                       \
-+		  "$t4", "$t5", "$t6", "$t7", "$t8"                           \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+#define my_syscall2(num, arg1, arg2)                                          \
-+({                                                                            \
-+	register long _num  __asm__ ("a7") = (num);                           \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);                    \
-+									      \
-+	__asm__  volatile (                                                   \
-+		"syscall 0\n"                                                 \
-+		: "+r"(_arg1)                                                 \
-+		: "r"(_arg2),                                                 \
-+		  "r"(_num)                                                   \
-+		: "memory", "$t0", "$t1", "$t2", "$t3",                       \
-+		  "$t4", "$t5", "$t6", "$t7", "$t8"                           \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+#define my_syscall3(num, arg1, arg2, arg3)                                    \
-+({                                                                            \
-+	register long _num  __asm__ ("a7") = (num);                           \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);                    \
-+									      \
-+	__asm__  volatile (                                                   \
-+		"syscall 0\n"                                                 \
-+		: "+r"(_arg1)                                                 \
-+		: "r"(_arg2), "r"(_arg3),                                     \
-+		  "r"(_num)                                                   \
-+		: "memory", "$t0", "$t1", "$t2", "$t3",                       \
-+		  "$t4", "$t5", "$t6", "$t7", "$t8"                           \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+#define my_syscall4(num, arg1, arg2, arg3, arg4)                              \
-+({                                                                            \
-+	register long _num  __asm__ ("a7") = (num);                           \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("a3") = (long)(arg4);                    \
-+									      \
-+	__asm__  volatile (                                                   \
-+		"syscall 0\n"                                                 \
-+		: "+r"(_arg1)                                                 \
-+		: "r"(_arg2), "r"(_arg3), "r"(_arg4),                         \
-+		  "r"(_num)                                                   \
-+		: "memory", "$t0", "$t1", "$t2", "$t3",                       \
-+		  "$t4", "$t5", "$t6", "$t7", "$t8"                           \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+({                                                                            \
-+	register long _num  __asm__ ("a7") = (num);                           \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("a3") = (long)(arg4);                    \
-+	register long _arg5 __asm__ ("a4") = (long)(arg5);                    \
-+									      \
-+	__asm__  volatile (                                                   \
-+		"syscall 0\n"                                                 \
-+		: "+r"(_arg1)                                                 \
-+		: "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5),             \
-+		  "r"(_num)                                                   \
-+		: "memory", "$t0", "$t1", "$t2", "$t3",                       \
-+		  "$t4", "$t5", "$t6", "$t7", "$t8"                           \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+({                                                                            \
-+	register long _num  __asm__ ("a7") = (num);                           \
-+	register long _arg1 __asm__ ("a0") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("a1") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("a2") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("a3") = (long)(arg4);                    \
-+	register long _arg5 __asm__ ("a4") = (long)(arg5);                    \
-+	register long _arg6 __asm__ ("a5") = (long)(arg6);                    \
-+									      \
-+	__asm__  volatile (                                                   \
-+		"syscall 0\n"                                                 \
-+		: "+r"(_arg1)                                                 \
-+		: "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), "r"(_arg6), \
-+		  "r"(_num)                                                   \
-+		: "memory", "$t0", "$t1", "$t2", "$t3",                       \
-+		  "$t4", "$t5", "$t6", "$t7", "$t8"                           \
-+	);                                                                    \
-+	_arg1;                                                                \
-+})
-+
-+char **environ __attribute__((weak));
-+const unsigned long *_auxv __attribute__((weak));
-+
-+#if __loongarch_grlen == 32
-+#define LONGLOG      "2"
-+#define SZREG        "4"
-+#define REG_L        "ld.w"
-+#define LONG_S       "st.w"
-+#define LONG_ADD     "add.w"
-+#define LONG_ADDI    "addi.w"
-+#define LONG_SLL     "slli.w"
-+#define LONG_BSTRINS "bstrins.w"
-+#else // __loongarch_grlen == 64
-+#define LONGLOG      "3"
-+#define SZREG        "8"
-+#define REG_L        "ld.d"
-+#define LONG_S       "st.d"
-+#define LONG_ADD     "add.d"
-+#define LONG_ADDI    "addi.d"
-+#define LONG_SLL     "slli.d"
-+#define LONG_BSTRINS "bstrins.d"
-+#endif
-+
-+/* startup code */
-+void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-+{
-+	__asm__ volatile (
-+		REG_L        " $a0, $sp, 0\n"         // argc (a0) was in the stack
-+		LONG_ADDI    " $a1, $sp, "SZREG"\n"   // argv (a1) = sp + SZREG
-+		LONG_SLL     " $a2, $a0, "LONGLOG"\n" // envp (a2) = SZREG*argc ...
-+		LONG_ADDI    " $a2, $a2, "SZREG"\n"   //             + SZREG (skip null)
-+		LONG_ADD     " $a2, $a2, $a1\n"       //             + argv
-+
-+		"move          $a3, $a2\n"            // iterate a3 over envp to find auxv (after NULL)
-+		"0:\n"                                // do {
-+		REG_L        " $a4, $a3, 0\n"         //   a4 = *a3;
-+		LONG_ADDI    " $a3, $a3, "SZREG"\n"   //   a3 += sizeof(void*);
-+		"bne           $a4, $zero, 0b\n"      // } while (a4);
-+		"la.pcrel      $a4, _auxv\n"          // a4 = &_auxv
-+		LONG_S       " $a3, $a4, 0\n"         // store a3 into _auxv
-+
-+		"la.pcrel      $a3, environ\n"        // a3 = &environ
-+		LONG_S       " $a2, $a3, 0\n"         // store envp(a2) into environ
-+		LONG_BSTRINS " $sp, $zero, 3, 0\n"    // sp must be 16-byte aligned
-+		"bl            main\n"                // main() returns the status code, we'll exit with it.
-+		"li.w          $a7, 93\n"             // NR_exit == 93
-+		"syscall       0\n"
-+	);
-+	__builtin_unreachable();
-+}
-+
-+#endif // _NOLIBC_ARCH_LOONGARCH_H
-diff --git a/tools/include/nolibc/arch.h b/tools/include/nolibc/arch.h
-index 78b067a4fa47..2d5386a8d6aa 100644
---- a/tools/include/nolibc/arch.h
-+++ b/tools/include/nolibc/arch.h
-@@ -29,6 +29,8 @@
- #include "arch-riscv.h"
- #elif defined(__s390x__)
- #include "arch-s390.h"
-+#elif defined(__loongarch__)
-+#include "arch-loongarch.h"
- #endif
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 8fe61d3e3cce..e9c4a9d011a0 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -21,6 +21,7 @@ IMAGE_arm     = arch/arm/boot/zImage
+ IMAGE_mips    = vmlinuz
+ IMAGE_riscv   = arch/riscv/boot/Image
+ IMAGE_s390    = arch/s390/boot/bzImage
++IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
+ IMAGE         = $(IMAGE_$(ARCH))
+ IMAGE_NAME    = $(notdir $(IMAGE))
  
- #endif /* _NOLIBC_ARCH_H */
+@@ -33,6 +34,7 @@ DEFCONFIG_arm     = multi_v7_defconfig
+ DEFCONFIG_mips    = malta_defconfig
+ DEFCONFIG_riscv   = defconfig
+ DEFCONFIG_s390    = defconfig
++DEFCONFIG_loongarch  = defconfig
+ DEFCONFIG         = $(DEFCONFIG_$(ARCH))
+ 
+ # optional tests to run (default = all)
+@@ -47,6 +49,7 @@ QEMU_ARCH_arm     = arm
+ QEMU_ARCH_mips    = mipsel  # works with malta_defconfig
+ QEMU_ARCH_riscv   = riscv64
+ QEMU_ARCH_s390    = s390x
++QEMU_ARCH_loongarch  = loongarch64
+ QEMU_ARCH         = $(QEMU_ARCH_$(ARCH))
+ 
+ # QEMU_ARGS : some arch-specific args to pass to qemu
+@@ -58,6 +61,7 @@ QEMU_ARGS_arm     = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_mips    = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_riscv   = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_s390    = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS         = $(QEMU_ARGS_$(ARCH))
+ 
+ # OUTPUT is only set when run from the main makefile, otherwise
 -- 
 2.39.0
 
