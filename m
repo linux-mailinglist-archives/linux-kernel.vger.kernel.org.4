@@ -2,228 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F349E68ED5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BBF68ED6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbjBHKuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:50:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S230064AbjBHK6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjBHKtw (ORCPT
+        with ESMTP id S229462AbjBHK6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:49:52 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5260E4C1D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:49:25 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h3so8454431wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:49:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qNlDFjphkPPgSlyW73HkZzxJj0LeeYigCKsl5DJQD2k=;
-        b=V/wcfAJ+B3ejXiP/uSfD0f3mlhtX/1eKti4YQCnFCRmy5WGaPxZsz0OgkhDFgCY66U
-         aQX6i8F+uZYSeV0e+XsjV3WlV/FCr+ni1kkqGXJQof9zQBMk/oISjjw/ivyMzHqgyQF5
-         GG+xw05IL+S1/ZCVXb4nmZ5+tII/YatsZ5EJp7cTqP4KKdffKSibJBfGz9j112dbv+9+
-         J23e806jFvx0v2YOhyCIUHj4ti1J/gdjQVtGXWqW6hJ8bZMghCH24KmRRNi8yuYQdoGe
-         SbQBGYVMt+eM4ENgjZZINBQBsQjLRt92JeGcPAFsKFhM1NqYoxw/ENqIYifvf7NdfzgO
-         LWNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qNlDFjphkPPgSlyW73HkZzxJj0LeeYigCKsl5DJQD2k=;
-        b=D9GLD/vc09EPtAGIt0VAfWss9PjQxyNjp1PYiqTonu34GAWuZJRGXXqxuX7v+ePXGs
-         qjNNJ2QqnYFyfGaP1VnciCQG3yQOMEzP7EO7JUyOPLHBdI9E3/h5ZYub2njUd4YNZX77
-         hM6KKFlRou/RTFKWR8zkpmOGEf1P/q7NuTLWujVJU1XfsD3MGRXFvIEin1Vk43jvkCYa
-         ztachjIn/9XQyuN7ElmREfKGiuP6HHZVlzRin1wbvPSdx3pEiXjADGMOXpDqaPKFFyu/
-         Y9KnvnQ3tGHc5Z2MnGrriynTD1nlIbNXZiAuu250zSu56Gm/QuMS/vbc8UHrl3L0I0dV
-         qa2Q==
-X-Gm-Message-State: AO0yUKW+qsoeMoeGDFa+XEe118CCPLBvN21leGtoOY0fZwrJkVKz/VrF
-        b9RrtujL4DtOSOdtisk2+qjDlCb2AcWY8luB
-X-Google-Smtp-Source: AK7set/92t5jngcZwgoLslgQdhy/znaaDjZlMsjVjgmpK0+lz/ifvwse2ofVCpN5DNO/mxKPv0asxA==
-X-Received: by 2002:adf:e7ca:0:b0:2c4:489:fe93 with SMTP id e10-20020adfe7ca000000b002c40489fe93mr879939wrn.21.1675853362185;
-        Wed, 08 Feb 2023 02:49:22 -0800 (PST)
-Received: from linaro.org (wifi-eduroam-trans.univ-tlse3.fr. [195.220.58.237])
-        by smtp.gmail.com with ESMTPSA id p10-20020adff20a000000b002c4064f087esm23273wro.48.2023.02.08.02.49.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 02:49:21 -0800 (PST)
-Date:   Wed, 8 Feb 2023 11:49:19 +0100
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, lvjianmin@loongson.cn,
-        wanghongliang@loongson.cn
-Subject: Re: [PATCH v12 1/2] thermal: loongson-2: add thermal management
- support
-Message-ID: <20230208104919.GA120053@linaro.org>
-References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
- <20230206135921.GA15176@linaro.org>
- <64d9782c-cafd-cdc3-3602-719c386d98cc@loongson.cn>
+        Wed, 8 Feb 2023 05:58:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DB61BD0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:58:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2221361616
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:58:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB92C4339B;
+        Wed,  8 Feb 2023 10:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675853928;
+        bh=1R6/GTmUFjHYLF6JxWCemPeZqa3OwU2ptAZJy7wanZU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PJqSs3MHgzZT+ABPPlw50AKhAcRN7n78voKk+Sev/UdXhhQOjmAKX3okDGt0gQTYu
+         6izrl3WzC+0VxCZ+KUzumRRKmeF900jQpLZl7vpGk1KiCC73iKExCV+YZm3w2o9BEn
+         iqOIs2zsIVEldC1JApd5GEVEHQ3Ofo2Vl7TDKf7s=
+Date:   Wed, 8 Feb 2023 11:58:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Carlos Bilbao <carlos.bilbao@amd.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y+OAZTljX1I6ZvR/@kroah.com>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <658272b5-9547-a69f-b6c9-a7ff2dd2d468@amd.com>
+ <Y+HpmIesY96cYcWQ@kroah.com>
+ <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
+ <Y+MAPHZNLeBY13Pj@mit.edu>
+ <20230208041913-mutt-send-email-mst@kernel.org>
+ <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <64d9782c-cafd-cdc3-3602-719c386d98cc@loongson.cn>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 11:13:33AM +0800, zhuyinbo wrote:
-
-[ ... ]
-
-> > > +struct loongson2_thermal_data {
-> > > +	struct thermal_zone_device *tzd;
-> > 'tzd' won't be needed after taking into account the comments
+On Wed, Feb 08, 2023 at 10:44:25AM +0000, Reshetova, Elena wrote:
 > 
-> The 'tzd' element is needed,  because the thermal_zone_device_update need
-> pass a data->tzd element.
 > 
-> static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
-> {
->         struct loongson2_thermal_data *data = dev;
+> > On Tue, Feb 07, 2023 at 08:51:56PM -0500, Theodore Ts'o wrote:
+> > > Why not just simply compile a special CoCo kernel that doesn't have
+> > > any drivers that you don't trust.
 > 
->         thermal_zone_device_update(data->tzd,
->                                    THERMAL_EVENT_UNSPECIFIED);
->         enable_irq(data->irq);
+> Aside from complexity and scalability management of such a config that has
+> to change with every kernel release, what about the build-in platform drivers?
+
+What do you mean by "built in platform drivers"?  You are creating a
+.config for a specific cloud platform, just only select the drivers for
+that exact configuration and you should be fine.
+
+And as for the management of such a config, distros do this just fine,
+why can't you?  It's not that hard to manage properly.
+
+> I am not a driver expert here but as far as I understand they cannot be disabled
+> via config. Please correct if this statement is wrong. 
+
+Again, which specific drivers are you referring to?  And why are they a
+problem?
+
+> > In order to make $$$$$, you need to push the costs onto various
+> > different players in the ecosystem.  This is cleverly disguised as
+> > taking current perfectly acceptable design paradigm when the trust
+> > boundary is in the traditional location, and causing all of the
+> > assumptions which you have broken as "bugs" that must be fixed by
+> > upstream developers.
 > 
->         return IRQ_HANDLED;
-> }
+> The CC threat model does change the traditional linux trust boundary regardless of
+> what mitigations are used (kernel config vs. runtime filtering). Because for the
+> drivers that CoCo guest happens to need, there is no way to fix this problem by 
+> either of these mechanisms (we cannot disable the code that we need), unless somebody
+> writes a totally new set of coco specific drivers (who needs another set of 
+> CoCo specific virtio drivers in the kernel?). 
 
-After taking into account all the comments, enabled_irq() won't be
-called, so 'data' won't be needed. 'tzd' will be passed to
-devm_request_threaded_irq() instead of 'data'.
+It sounds like you want such a set of drivers, why not just write them?
+We have zillions of drivers already, it's not hard to write new ones, as
+it really sounds like that's exactly what you want to have happen here
+in the end as you don't trust the existing set of drivers you are using
+for some reason.
 
-As loongson2_thermal_irq_thread() is the only place where 'tzd' is
-needed and 'tzd' being local to the call site of
-thermal_zone_device_register() and devm_request_threaded_irq(), there
-is no need to store the pointer in the 'data' structure.
+> So, if the path is to be able to use existing driver kernel code, then we need:
 
-> > 
-> > > +	int irq;
-> > 'irq' won't be needed after taking into account the comments
-> I will drop it.
-> > > +	int id;
-> > > +	void __iomem *regs;
-> > > +	struct platform_device *pdev;
-> > 'pdev' is not needed
-> I will drop it.
-> > 
-> > > +	u16 ctrl_low_val;
-> > > +	u16 ctrl_hi_val;
-> > Those fields won't be needed after taking into account the comments
-> I will drop it.
-> > > +};
-> > > +
-> > > +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-> > > +					int low, int high, bool enable)
-> > > +{
-> > > +	u64 reg_ctrl = 0;
-> > > +	int reg_off = data->id * 2;
-> > > +
-> > > +	if (low > high)
-> > > +		return -EINVAL;
-> > > +
-> > > +	low = max(low, -100);
-> > > +	high = min(high, 155);
+Wait, again, why?  Why not just have your own?  That should be the
+simplest thing overall.  What's wrong with that?
 
-Documentation says -40, 125
+> 1. these selective CoCo guest required drivers (small set) needs to be hardened 
+>  (or whatever word people prefer to use here), which only means that in
+> the presence of malicious host/hypervisor that can manipulate pci config space,
+> port IO and MMIO, these drivers should not expose CC guest memory 
+> confidentiality or integrity (including via privilege escalation into CC guest). 
 
-> > > +	low += 100;
-> > > +	high += 100;
-> > Why are those values added to the low and high ? Did you mean low += 0x100 ?
-> > 
-> > Mind to describe a bit the register layout?
-> 
-> node(cpu) temp = Thens0_out -100,
-> 
-> low and high is record node temp, so low and high need add '100' as
-> Thens0_out.
+Again, stop it please with the "hardened" nonsense, that means nothing.
+Either the driver has bugs, or it doesn't.  I welcome you to prove it
+doesn't :)
 
-If I refer to the documentation it is a raw value converted from
-centigrade. The function has degree.
+> Please note that this only applies to a small set (in tdx virtio setup we have less
+> than 10 of them) of drivers and does not present invasive changes to the kernel
+> code. There is also an additional core pci/msi code that is involved with discovery
+> and configuration of these drivers, this code also falls into the category we need to
+> make robust. 
 
-So it should be:
+Again, why wouldn't we all want "robust" drivers?  This is not anything
+new here, all you are somehow saying is that you are changing the thread
+model that the kernel "must" support.  And for that, you need to then
+change the driver code to support that.
 
-temp_deci = temp_milli / 10
+So again, why not just have your own drivers and driver subsystem that
+meets your new requirements?  Let's see what that looks like and if
+there even is any overlap between that and the existing kernel driver
+subsystems.
 
-raw = temp_to_raw(temp_deci);
+> 2. rest of non-needed drivers must be disabled. Here we can argue about what 
+> is the correct method of doing this and who should bare the costs of enforcing it. 
 
--> temp_to_raw to be determined from temp = (raw * 731) / 0x4000 - 273
+You bare that cost.  Or you get a distro to do that.  That's not up to
+us in the kernel community, sorry, we give you the option to do that if
+you want to, that's all that we can do.
 
-[ ... ]
+> But from pure security point of view: the method that is simple and clear, that
+> requires as little maintenance as possible usually has the biggest chance of
+> enforcing security. 
 
-> > > +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-> > > +{
-> > > +	u32 reg_val;
-> > > +	struct loongson2_thermal_data *data = tz->devdata;
-> > > +
-> > > +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
-> > > +	*temp = ((reg_val & 0xff) - 100) * 1000;
-> > Why '-100' ?
-> > 
-> > Is the unit returned 'degrees' ?
-> 
-> node(cpu) temp = Thens0_out -100,
-> 
-> Here we need to get a node temp.
+Again, that's up to your configuration management.  Please do it, tell
+us what doesn't work and send changes if you find better ways to do it.
+Again, this is all there for you to do today, nothing for us to have to
+do for you.
 
-If I refer to the Loongson-3A5000 manual and assuming it is the right
-one, the documentation says:
+> And given that we already have the concept of authorized devices in Linux,
+> does this method really brings so much additional complexity to the kernel? 
 
-Temperature = Thens0_out * 731 / 0x4000 - 273
+No idea, you tell us!  :)
 
-The unit is centigrade.
+Again, I recommend you just having your own drivers, that will allow you
+to show us all exactly what you mean by the terms you keep using.  Why
+not just submit that for review instead?
 
-[ ... ]
+good luck!
 
-> > > +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
-> > > +
-> > > +	loongson2_thermal_set(data, 0, 0, false);
-> > It would be nicer to use a reset line if it is available
-> sorry, I don't get your meaning. Please describe more details about 'reset
-> line'.
-
-After a reset, the thermal controller should be in default state and the interrupt
-flag cleared.
-
-One example:
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/arch/arm64/boot/dts/nvidia/tegra210.dtsi#n1560
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c#n2169
-
-Then search in the driver for:
-     reset_control_assert(reset);
-     reset_control_deassert(reset);
-
-
-[ ... ]
-
-Thanks
-
-  -- Daniel
-
--- 
-
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+greg k-h
