@@ -2,172 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1E068E683
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5929E68E686
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjBHDOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 22:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S230347AbjBHDPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:15:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjBHDOj (ORCPT
+        with ESMTP id S230324AbjBHDPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 22:14:39 -0500
-Received: from out-148.mta1.migadu.com (out-148.mta1.migadu.com [95.215.58.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E6723C44
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 19:14:37 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675826074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lmNO8ZvQKaTkdERQULbnyw6Hc5sWsKOu9F+mkxB4iyU=;
-        b=Aiw/ac0SUC76R/WA2m5zye0hdVkKUE2enoRhvpDMTiAuEcUhh0hcZEjCEqVsP4mrnpJnt1
-        wrB0he6cE/eKYkfZ5VUGCUthYd+oEntruOS9ApoXQ53xp8ZprgSGmXSj5XBBrgkBWOReEd
-        Mb+X0H6VHocflkuE9xciHbKDAck1xBE=
+        Tue, 7 Feb 2023 22:15:14 -0500
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6895143449;
+        Tue,  7 Feb 2023 19:15:11 -0800 (PST)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(17204:0:AUTH_RELAY)
+        (envelope-from <chiaen_wu@richtek.com>); Wed, 08 Feb 2023 11:15:00 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Wed, 8 Feb
+ 2023 11:15:00 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.20 via Frontend
+ Transport; Wed, 8 Feb 2023 11:15:00 +0800
+From:   ChiaEn Wu <chiaen_wu@richtek.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <sre@kernel.org>
+CC:     <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <peterwu.pub@gmail.com>, ChiaEn Wu <chiaen_wu@richtek.com>
+Subject: [Patch][next] dt-bindings: power: supply: Revise Richtek RT9467 compatible name
+Date:   Wed, 8 Feb 2023 11:14:24 +0800
+Message-ID: <dc8873c3125f7aa6f84dc7b33a44bf00907e0814.1675853673.git.chiaen_wu@richtek.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Subject: Re: [PATCH V2] arm64/mm: Intercept pfn changes in set_pte_at()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20230207143131.GA12475@willie-the-truck>
-Date:   Wed, 8 Feb 2023 11:13:46 +0800
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <FB3AE2F1-2EF8-4960-884E-DABA7E64CE59@linux.dev>
-References: <e924c1aa-5f04-fd7f-52d4-7cf22c476016@arm.com>
- <20230126133321.GB29148@willie-the-truck>
- <d454c9a2-5300-b600-a2ae-21d82d338470@arm.com>
- <20230131154950.GB2646@willie-the-truck> <Y9pZALdn3pKiJUeQ@arm.com>
- <A8DF7D56-C145-4B49-A034-022917B87C89@linux.dev> <Y9uUO9AadE+8ik/0@arm.com>
- <F10F1618-7153-41C7-A475-522D833C41D4@linux.dev>
- <20230203101023.GA5597@willie-the-truck>
- <93461768-791A-45BE-BEF2-344CC5228C92@linux.dev>
- <20230207143131.GA12475@willie-the-truck>
-To:     Will Deacon <will@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Revise RT9467 compatible name from "richtek,rt9467-charger" to
+"richtek,rt9467"
 
+Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+---
+ .../devicetree/bindings/power/supply/richtek,rt9467-charger.yaml      | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> On Feb 7, 2023, at 22:31, Will Deacon <will@kernel.org> wrote:
->=20
-> On Mon, Feb 06, 2023 at 11:28:12AM +0800, Muchun Song wrote:
->>=20
->>=20
->>> On Feb 3, 2023, at 18:10, Will Deacon <will@kernel.org> wrote:
->>>=20
->>> On Fri, Feb 03, 2023 at 10:40:18AM +0800, Muchun Song wrote:
->>>>=20
->>>>=20
->>>>> On Feb 2, 2023, at 18:45, Catalin Marinas =
-<catalin.marinas@arm.com> wrote:
->>>>>=20
->>>>> On Thu, Feb 02, 2023 at 05:51:39PM +0800, Muchun Song wrote:
->>>>>>> On Feb 1, 2023, at 20:20, Catalin Marinas =
-<catalin.marinas@arm.com> wrote:
->>>>>>>> Bah, sorry! Catalin reckons it may have been him talking about =
-the vmemmap.
->>>>>>>=20
->>>>>>> Indeed. The discussion with Anshuman started from this thread:
->>>>>>>=20
->>>>>>> =
-https://lore.kernel.org/all/20221025014215.3466904-1-mawupeng1@huawei.com/=
-
->>>>>>>=20
->>>>>>> We already trip over the existing checks even without Anshuman's =
-patch,
->>>>>>> though only by chance. We are not setting the software PTE_DIRTY =
-on the
->>>>>>> new pte (we don't bother with this bit for kernel mappings).
->>>>>>>=20
->>>>>>> Given that the vmemmap ptes are still live when such change =
-happens and
->>>>>>> no-one came with a solution to the break-before-make problem, I =
-propose
->>>>>>> we revert the arm64 part of commit 47010c040dec ("mm: =
-hugetlb_vmemmap:
->>>>>>> cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*"). We just need this =
-hunk:
->>>>>>>=20
->>>>>>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->>>>>>> index 27b2592698b0..5263454a5794 100644
->>>>>>> --- a/arch/arm64/Kconfig
->>>>>>> +++ b/arch/arm64/Kconfig
->>>>>>> @@ -100,7 +100,6 @@ config ARM64
->>>>>>> select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
->>>>>>> select ARCH_WANT_FRAME_POINTERS
->>>>>>> select ARCH_WANT_HUGE_PMD_SHARE if ARM64_4K_PAGES || =
-(ARM64_16K_PAGES && !ARM64_VA_BITS_36)
->>>>>>> - select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->>>>>>=20
->>>>>> Maybe it is a little overkill for HVO as it can significantly =
-minimize the
->>>>>> overhead of vmemmap on ARM64 servers for some workloads (like =
-qemu, DPDK).
->>>>>> So I don't think disabling it is a good approach. Indeed, HVO =
-broke BBM,
->>>>>> but the waring does not affect anything since the tail vmemmap =
-pages are
->>>>>> supposed to be read-only. So, I suggest skipping warnings if it =
-is the
->>>>>> vmemmap address in set_pte_at(). What do you think of?
->>>>>=20
->>>>> IIUC, vmemmap_remap_pte() not only makes the pte read-only but =
-also
->>>>> changes the output address. Architecturally, this needs a BBM =
-sequence.
->>>>> We can avoid going through an invalid pte if we first make the pte
->>>>> read-only, TLBI but keeping the same pfn, followed by a change of =
-the
->>>>> pfn while keeping the pte readonly. This also assumes that the =
-content
->>>>> of the page pointed at by the pte is the same at both old and new =
-pfn.
->>>>=20
->>>> Right. I think using BBM is to avoid possibly creating multiple TLB =
-entries
->>>> for the same address for a extremely short period. But accessing =
-either the
->>>> old page or the new page is fine in this case. Is it acceptable for =
-this
->>>> special case without using BBM?
->>>=20
->>> Sadly, the architecture allows the CPU to conjure up a mapping based =
-on a
->>> combination of the old and the new descriptor (a process known as
->>> "amalgamation") so we _really_ need the BBM sequence.
->>=20
->> I am not familiar with ARM64, what's the user-visible effect if this
->> "amalgamation" occurs?
->=20
-> The user-visible effects would probably be data corruption and =
-instability,
-> since the amalgamated TLB entry could result in a bogus physical =
-address and
-> bogus permissions.
-
-You mean the output address of amalgamated TLB entry is neither the old
-address (before updated) nor the new address (after updated)? So it is
-a bogus physical address? Is there any specifications to describe the
-rules of how to create a amalgamated TLB entry? Thanks.
-
-Muchun
-
->=20
-> Will
+diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+index 92c5706..9176808 100644
+--- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
++++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467-charger.yaml
+@@ -25,7 +25,7 @@ description: |
+ 
+ properties:
+   compatible:
+-    const: richtek,rt9467-charger
++    const: richtek,rt9467
+ 
+   reg:
+     maxItems: 1
+@@ -65,7 +65,7 @@ examples:
+       #size-cells = <0>;
+ 
+       charger@5b {
+-        compatible = "richtek,rt9467-charger";
++        compatible = "richtek,rt9467";
+         reg = <0x5b>;
+         wakeup-source;
+         interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
+-- 
+2.7.4
 
