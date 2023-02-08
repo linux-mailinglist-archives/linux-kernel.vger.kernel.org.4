@@ -2,60 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C08F68EFE7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2A768EFEE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjBHNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S231326AbjBHNhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjBHNg2 (ORCPT
+        with ESMTP id S230377AbjBHNh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:36:28 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C2D35AB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:36:26 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 1C55F41;
-        Wed,  8 Feb 2023 14:36:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1675863383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZJ6nbZ7ZjxSMQlV2nrrI20Zzn6ZzSpDBwtS6grJkjEA=;
-        b=U2jM433oONjJ6hcCWtUJG9pQ0/DRAAkH5rJTdUF4yC23saM0CWe40dt+kqvSb9Y75XaSU9
-        3Mf9s9HKanvONOGqHDmN7oHCAmEn2EGq/z8+JDqK/RsythsR9pwwwANn7pujqq9fVnm5PT
-        cGYV7Uo6KslEaRJTubl4+ho9GXutTME+LA/a2VjypmIdZ0/d91X7G8//n8YWOJ38R1Fqrn
-        376Vg/XhxKlR0O04z3w18qymiCXftnzTI2pZ6NvfobMdWfEgfuQKbmoYXqrAM9qdt33yDo
-        rfhpvC1ywoIjwvPjsDnOrm3+H6BaI/LiNdPzQLPWP7HOGOFW9BhdNMTIRc0YtA==
-MIME-Version: 1.0
-Date:   Wed, 08 Feb 2023 14:36:23 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
+        Wed, 8 Feb 2023 08:37:29 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF0828213;
+        Wed,  8 Feb 2023 05:37:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675863449; x=1707399449;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mvzxSsipozkOczStJxxLS2JmQaRIUgdUKmAgwtMA4Cg=;
+  b=XMhIbX3hMjj3Vvi+7z+EybXp+lg5P5jLCYa16LrRRNwREgd1GSa4ITjr
+   rOOEnq2Pb+41o/ZPKux9DfImuCxf2KMBuwpWoZ2zNycZN2ZTL4FMcdNA0
+   hlm7iohjoOx8LleIRxXpPlg2pYdxLr1qHsm0h0u7OpPZgAfI4ktM01WBf
+   292rx18yyiifyO0SNqHdOSQ6asPa/A8AlyylNM9M2optzQhR8jPBNG9PR
+   Emefn14Y9gXGJTZ5kumqpWqBAsTmgf74lPr+4yFhHdIBZz/NzClx8+O+T
+   6S2/8IKIMsrNrguQt1Hwt74OtINeJyAuuke9VnB0sqCSEOIy0DY8yt9Ro
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="313436570"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="313436570"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 05:37:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776020864"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="776020864"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Feb 2023 05:37:17 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pPkdN-00485l-0I;
+        Wed, 08 Feb 2023 15:37:13 +0200
+Date:   Wed, 8 Feb 2023 15:37:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, stable <stable@kernel.org>
-Subject: Re: [PATCH v2] mtd: spi-nor: fix memory leak when using
- debugfs_lookup()
-In-Reply-To: <20230208125758.1515806-1-gregkh@linuxfoundation.org>
-References: <20230208125758.1515806-1-gregkh@linuxfoundation.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Tony Lindgren <tony@atomide.com>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v3 09/12] of: property: Simplify of_link_to_phandle()
+Message-ID: <Y+OliBAHiUPzbBPG@smile.fi.intel.com>
+References: <20230207014207.1678715-1-saravanak@google.com>
+ <20230207014207.1678715-10-saravanak@google.com>
+ <CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com>
+ <CAGETcx8DaZqS7+47PhX4hQOfSk7AzPcTu=2i+4gAgXr6wyDNgg@mail.gmail.com>
+ <CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=9e881qmK=vx3hBMyg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=9e881qmK=vx3hBMyg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,40 +109,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-02-08 13:57, schrieb Greg Kroah-Hartman:
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.
-> 
-> Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-> Cc: Pratyush Yadav <pratyush@kernel.org>
-> Cc: Michael Walle <michael@walle.cc>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: linux-mtd@lists.infradead.org
-> Cc: stable <stable@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> v2: fix up to work when module is removed and added, making the fix
->     much simpler.
-> 
->  drivers/mtd/spi-nor/debugfs.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/debugfs.c 
-> b/drivers/mtd/spi-nor/debugfs.c
-> index ff895f6758ea..af41fbc09a97 100644
-> --- a/drivers/mtd/spi-nor/debugfs.c
-> +++ b/drivers/mtd/spi-nor/debugfs.c
-> @@ -242,6 +242,7 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
-> 
->  	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
->  	nor->debugfs_root = d;
-> +	dput(rootdir);
+On Tue, Feb 07, 2023 at 11:31:57PM -0800, Saravana Kannan wrote:
+> On Tue, Feb 7, 2023 at 6:08 PM Saravana Kannan <saravanak@google.com> wrote:
 
-rootdir might either be the return value of debugfs_lookup() or
-debugfs_create_dir(). dput() is probably wrong for the latter,
-right? Also there is an early return, where the dput() is missing,
-too.
+...
 
--michael
+> Another way to get this to work is to:
+> 1) unload pinctrl driver, unload spi driver.
+> 2) apply overlay
+> 3) reload pinctrl driver, reload spi driver.
+> 
+> This is assuming unloading those 2 drivers doesn't crash your system.
+
+Just a side note.
+
+For ACPI case the ACPICA prevents appearing of the same device in the
+namespace, so the above is kinda enforced, that's why overlays work better
+there (but have a lot of limitations).
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
