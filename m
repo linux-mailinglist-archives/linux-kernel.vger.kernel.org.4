@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB83868F636
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA3E68F63C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjBHR4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:56:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S231478AbjBHR5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjBHR4J (ORCPT
+        with ESMTP id S231490AbjBHR5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:56:09 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCD886A4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:56:08 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id m2so20215427plg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:56:08 -0800 (PST)
+        Wed, 8 Feb 2023 12:57:16 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8524FC33
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:57:11 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id o36so13913352wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:57:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gG/WkXZTAUlwvzHLZNVpvm8mQ39tyKfuQBX/kYBdkgw=;
-        b=iiBzhEUvmFJRwoF+qVJzvzPb7b8rRGARPABcPQV9sI4+/QVnESZ4GsLPIO36w7l2wg
-         wT1eHSfgxM/KFitaFrhB2cISovXV6b9GKnrJDBM8UkJbgBhS4/GgZ5MZhfkAaY/SLINf
-         rTdStWKVdAwm7Xeo4+MdmGhI10NXBzeLoZUKbGaU9owSnrCg3IIyIHWXtwlQj9RKlf2l
-         PKF/mhpK5uuqZlzvp810QvLvlglRPeDw6LT/0uyh+PsIOPiLTFSIzpM8qHn09C+72xcm
-         ZwGEo0hdy3opgPTtQBn6+zyTSJj2gM3z9r5zm9Smzl+b5MGGVthl9/lHp1C3X03wrYNT
-         KLCA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bIbh91yDi3hjRSK7EFgWT8DXPfU5NF3sKbYrP5BUi94=;
+        b=dCopafmxD7OpCvsat1jY+V1MqgKO1ql0h/53QmoG71/cdD946DJ9co+DwFNWTOJR9U
+         FWNaGvHCnYkCLTWEPRqQUMPlOWXl2b0PnyQiJnyYwc9H5EYOErZrd7vKBGgNNIAfGl0+
+         rmZnvz1zUXttPEYTRahBL0uvBqus+vZ96RkiE5erVsdxVoMWG/1CWUxvkmaix1NkMs54
+         7Njd2GKZckFjlrjDen4MQUmvO+q8m7q05LXkRAd0a69LVibnsw4Q8+4SdLig8G6NWaCl
+         ZeL9ogJ/GnSZjn2bvQiZdIGGdtB/XFclNiH/JRgCPuL+G3zDZuG60oqZok4spnNT+Hnm
+         Ghwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gG/WkXZTAUlwvzHLZNVpvm8mQ39tyKfuQBX/kYBdkgw=;
-        b=c1u2cEz/K4lGsQMS6zbLpUv410i/LQSuPgBhY2S8do0gWmoKlxXWBX4FLas2x3dlfC
-         SuZNiPpWSrtLpVbG2gKu5616XjLiZuccG7+apxUdQXNi1NA94ZkDLAU/3eGmcKyEYva1
-         ra3va6q6pVKA9mc9o3EAK57TzGOWt1syO7a5EQr3cpsImIp/4L39s9EVgYbbmIpl0lM0
-         ZyeQOw0TJBJJOlkT9YRr92p2Qc1kKbzbQjldELirzsyfA9NWURPNJa9IeCDcAz00Qdua
-         zLRb0Gn5WyBz0tOUSi4XM8MAUDjOI/YIw2N760g1ZZn+bGCJsk/E7/b6I5+/eP2voKdH
-         rcPw==
-X-Gm-Message-State: AO0yUKUvN9CrYwr5ia0OxTz3pBJKGnwv71B0XtLIs4WXX/TvS1BK1jwR
-        QB7GIf3YRN1NqS9kIM16aPRbQg==
-X-Google-Smtp-Source: AK7set+IvKf9JG8iTJHj7qXU2eE80ms2QI7mR9bDPaVSOxfo071drYvo75zvCNHaOlO+nG1YOZKYdw==
-X-Received: by 2002:a17:902:e545:b0:199:60:b9c8 with SMTP id n5-20020a170902e54500b001990060b9c8mr10269320plf.45.1675878968150;
-        Wed, 08 Feb 2023 09:56:08 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170902b18c00b001949f21e1d2sm11208714plr.308.2023.02.08.09.56.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 09:56:06 -0800 (PST)
-Date:   Wed, 08 Feb 2023 09:56:06 -0800 (PST)
-X-Google-Original-Date: Wed, 08 Feb 2023 09:56:04 PST (-0800)
-Subject:     Re: [PATCH] riscv: avoid enabling vectorized code generation
-In-Reply-To: <20221216185012.2342675-1-abdulras@google.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        abdulras@google.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     abdulras@google.com
-Message-ID: <mhng-4c71ada6-003c-414f-9a74-efa3ccd2856b@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bIbh91yDi3hjRSK7EFgWT8DXPfU5NF3sKbYrP5BUi94=;
+        b=zDDnasTo+eNGubx7YuocqQ36blM6sY5/gWzxxmsHDgVlUOoUn+pbiI/jrGDwNAzhqL
+         Kry/ZeR1SdMRs5cTTTHp4b6lxWFt0iTZ5yGOXyFaz1xGMy2wgdd4QP/L5X9HYoY+Qg4e
+         1gNrtGgs/Zh6YDjXQNh3T9dmwMBg4mbGbcnFG61gne/fA5plcqXKlgDlP+f56uvwwc7q
+         HH2JT8qWQJJp983Y457EezvGROWNTp0N/4MT08hJZmytRe1eKJNVLb5jPK5XhLFltXGB
+         D8WpayilBKJqxLudpLpjEt5K96srT7rSIQfEUkb/+ZkQf92KTudg18xCl7p/sfx0ZFAk
+         zLoA==
+X-Gm-Message-State: AO0yUKVN1RUfIcO6daL2Kbo/Et8Bzkz2BhspKqZUslmOj1+MHVkOf+4I
+        3OtDR4n3kZQpFounknKA2IOYiw==
+X-Google-Smtp-Source: AK7set/agXvUr8o1RIcasdIWPQxgRIVGIS6wQ4uZ6pkHa3ZW0neyWPF4V2VmwO8dkPy+UxxjygeJ4A==
+X-Received: by 2002:a05:600c:491c:b0:3dc:1687:9ba2 with SMTP id f28-20020a05600c491c00b003dc16879ba2mr7082656wmp.35.1675879029806;
+        Wed, 08 Feb 2023 09:57:09 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003dc1d668866sm2519023wmc.10.2023.02.08.09.57.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 09:57:09 -0800 (PST)
+Message-ID: <313a6c91-e4d1-98da-9c77-fdafa66c0744@linaro.org>
+Date:   Wed, 8 Feb 2023 18:57:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ASoC: dt-bindings: wlf,wm8994: Convert to dtschema
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230208172552.404324-1-krzysztof.kozlowski@linaro.org>
+ <Y+PeR4EFfcVDbUfV@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y+PeR4EFfcVDbUfV@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Dec 2022 10:50:12 PST (-0800), abdulras@google.com wrote:
-> The compiler is free to generate vectorized operations for zero'ing
-> memory.  The kernel does not use the vector unit on RISCV, similar to
-> architectures such as x86 where we use `-mno-mmx` et al to prevent the
-> implicit vectorization.  Perform a similar check for
-> `-mno-implicit-float` to avoid this on RISC-V targets.
->
-> Signed-off-by: Saleem Abdulrasool <abdulras@google.com>
-> ---
->  arch/riscv/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 0d13b597cb55..68433476a96e 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -89,6 +89,10 @@ KBUILD_AFLAGS_MODULE += $(call as-option,-Wa$(comma)-mno-relax)
->  # architectures.  It's faster to have GCC emit only aligned accesses.
->  KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
->
-> +# Ensure that we do not vectorize the kernel code when the `v` extension is
-> +# enabled.  This mirrors the `-mno-mmx` et al on x86.
-> +KBUILD_CFLAGS += $(call cc-option,-mno-implicit-float)
-> +
->  ifeq ($(CONFIG_STACKPROTECTOR_PER_TASK),y)
->  prepare: stack_protector_prepare
->  stack_protector_prepare: prepare0
+On 08/02/2023 18:39, Mark Brown wrote:
+> On Wed, Feb 08, 2023 at 06:25:52PM +0100, Krzysztof Kozlowski wrote:
+>> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
+>> schema.
+> 
+>> Changes against original binding:
+>> 1. Add missing LDO1VDD-supply for WM1811.
+> 
+> Both LDOs are present on all variants.
 
-Sorry to just restart the thread, but there's been discussions on this 
-in a bunch of places.  From my understanding, we don't actually need 
-this: we have this tricky line in the Makefile
+I see LDO2VDD on WM8994 but not on WM1811 and WM8958.
 
-    KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+Best regards,
+Krzysztof
 
-that removes the floating-point extenions from what the kernel is built 
-with, so adding `-mno-implicit-float` doesn't actually do anything (and 
-we'd end up with essentially the same thing for V when it gets added).
-
-So unless I'm missing something, we don't need this.
