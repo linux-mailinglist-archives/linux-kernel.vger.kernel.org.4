@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D6C68E8DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AFE68E8DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjBHHWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
+        id S230416AbjBHHWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjBHHWd (ORCPT
+        with ESMTP id S230223AbjBHHWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:22:33 -0500
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE620CDDE;
-        Tue,  7 Feb 2023 23:22:31 -0800 (PST)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 435493FD97;
-        Wed,  8 Feb 2023 07:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675840949;
-        bh=Mavv5hLg9uxOVvBkQuQSXrZ8rXvqW5vmj4h9iT5B1Rw=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=Ygy8MBwuMZe59ty5RLOVYAdUmy6DZ4dzwkFqJwTxI93lqEiE6YAvp9oEE99fplhwl
-         jmnW/QJRAO2Es41Y8QGpGNPxZ8J9wd0T1ihgh9iORijDvZwofLD6yNkOVTVE+fwZxk
-         KlDTOPkgoBrs/6q/RDHE6W1/7MHYkx8QlvJGEFFGVSENpTtPNAlrT4k7sXZrXdk9fY
-         nY0ONXd7lMbbT9poLJUHiNXeP+n12GtNZcapLQi6o1ydWjECv1Gud77CgIJPAUsczG
-         IZMqrii5XWunOqUJzQCnS8NI84pcSXVLmco+h/Q6y1YisBmmC1bCBmXx1sA3A2tIfS
-         aTKH7oMrXzMiw==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
-Cc:     hdegoede@redhat.com, Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] iio: light: cm32181: Unregister second I2C client if present
-Date:   Wed,  8 Feb 2023 15:21:41 +0800
-Message-Id: <20230208072141.1103738-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 02:22:23 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6EE8A70
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:22:22 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id B31EE3200904;
+        Wed,  8 Feb 2023 02:22:17 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 08 Feb 2023 02:22:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675840937; x=1675927337; bh=nGo5PwpZwS
+        KOtQGCgUwGUupaP5O/PMh+8I0vq8PnmXg=; b=iy0yM7X0CGOwst4PTZOPXmP1kh
+        6z2iVfdSYhWs8J73KqdJ70VHIX5A83OT92hBuDZlkfgxL4zDPBIboofIKfewThlb
+        snpk726BNU7MMDxujtzLa4PgBb+utSwrhZXsDQheLKCuoLlMsc3I7L3s9nHyM4iO
+        fF7FPLaLtKZZePLk/R15aIl57DNIX2QNsPOkIugIzwHR09lYuAZdR0hMM/oIKj/+
+        odCCbr6kdOLkDf23UPDD3XcbBIwyj8fSbIIuxd1eDShSTeHVIodVoRn7Jlm8PfrP
+        AvYN/rC39/mU9ROtyAHOn/eqFw6vG2YWmwgOzh5p33a4lZ08834rsboNJaig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1675840937; x=1675927337; bh=nGo5PwpZwSKOtQGCgUwGUupaP5O/
+        PMh+8I0vq8PnmXg=; b=fsFsjzKN1oOTkg2k3crEgXP3I7riBWfpIAJxZFuVyL1A
+        k5vENfNLKNQgYo93eLQB2d3fixYMiESKcDoX8YfJsTT2/oogQ4B863IxXJhsW+8D
+        pOFFg8l1Dkc7YMz7w9hcQzaL+jD1THv0X4c/ALe00/ccTX2o49HPJb+lYEmfF4FY
+        1M2YUoHju1Z8zUS8m+3QxqHq2fPVr+rYxt7YMwBhrQ2sGhDS7vspSFv5jllHwrsy
+        s2ENFRFyEvs4TisRoV67qAULD4AxmnpCMvdponE5A3QhgO4Xf31M9EZ7Ze+Gyt62
+        g+J1+Ecg98eV9TAhaXuRk3z1eoMoTq34+aqEnh/4Yw==
+X-ME-Sender: <xms:qU3jY7a0Td4lOn_XuFx_IXyXbQUC3qNlC3EqyH8M3S6uCWXxiWRpCA>
+    <xme:qU3jY6aRLysMQG6MvOecWsDENWg37xIDd0PoOk8eE0QwUXW7fSW9WtEKRLxEYGuoD
+    KjdHNp9f3vR8LGsd6o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegledguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:qU3jY99_hFBMVKl3huG3o4yOjfaj9XSXc6brAEXWZqWiuD6Me-Ypzg>
+    <xmx:qU3jYxo4xNsd-_awHkOi_J1j5qpXfqIDPzL98rwWUA-CcjpBYo4kGA>
+    <xmx:qU3jY2oDL13-7Dy7m8HAmwL4t17jgYtCnD3L-iJ5HggGMTxUXEU2hQ>
+    <xmx:qU3jY3ezCdvcNN0q-_vlvDoAZU-tglt1bExHLttuZXI7GGH9iR-8MA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0170DB60086; Wed,  8 Feb 2023 02:22:16 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <ce2301d2-2bdc-423a-9501-bc45951bb52a@app.fastmail.com>
+In-Reply-To: <20230208070559.19589-1-jiasheng@iscas.ac.cn>
+References: <20230208070559.19589-1-jiasheng@iscas.ac.cn>
+Date:   Wed, 08 Feb 2023 08:21:58 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jiasheng Jiang" <jiasheng@iscas.ac.cn>,
+        "Oded Gabbay" <ogabbay@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        ttayar@habana.ai, dliberman@habana.ai, obitton@habana.ai,
+        osharabi@habana.ai, dhirschfeld@habana.ai
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] habanalabs: Fix freeing uninitialized pointers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a second client that talks to the actual I2C address was created in
-probe(), there should be a corresponding cleanup in remove() to avoid
-leakage.
+On Wed, Feb 8, 2023, at 08:05, Jiasheng Jiang wrote:
+> As the memory allocated by kcalloc has not been set to zero, it may
+> contain uninitialized pointers.
+> Therefore, free the non-NULL pointers may cause undefined behaviour.
+>
+> Fixes: 5574cb2194b1 ("habanalabs: Assign each CQ with its own work queue")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-So if the "client" is not the same one used by I2C core, unregister it
-accordingly.
+Did you run into a bug here or find that by inspection?
 
-Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
-Fixes: c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices with 2 I2C resources")
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v2:
- - Use devm_add_action_or_reset() instead of remove() callback to avoid
-   race.
+kcalloc() is definitely meant to return zeroed memory, so I don't see
+a bug here:
 
- drivers/iio/light/cm32181.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
-index b1674a5bfa368..a3e5f56101c9f 100644
---- a/drivers/iio/light/cm32181.c
-+++ b/drivers/iio/light/cm32181.c
-@@ -429,6 +429,16 @@ static const struct iio_info cm32181_info = {
- 	.attrs			= &cm32181_attribute_group,
- };
- 
-+static void cm32181_disable(void *data)
-+{
-+	struct i2c_client *client = data;
-+	struct cm32181_chip *cm32181 = iio_priv(i2c_get_clientdata(client));
-+
-+	/* Unregister the dummy client */
-+	if (cm32181->client != client)
-+		i2c_unregister_device(cm32181->client);
-+}
-+
- static int cm32181_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
-@@ -479,6 +489,12 @@ static int cm32181_probe(struct i2c_client *client)
- 		return ret;
- 	}
- 
-+	ret = devm_add_action_or_reset(dev, cm32181_disable, client);
-+	if (ret) {
-+		dev_err(dev, "%s: add devres action failed\n", __func__);
-+		return ret;
-+	}
-+
- 	ret = devm_iio_device_register(dev, indio_dev);
- 	if (ret) {
- 		dev_err(dev, "%s: regist device failed\n", __func__);
--- 
-2.34.1
+static inline __alloc_size(1, 2) void *kcalloc(size_t n, size_t size, gfp_t flags)
+{
+        return kmalloc_array(n, size, flags | __GFP_ZERO);
+}
 
+
+       Arnd
