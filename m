@@ -2,193 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2251568F00B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC3268F00E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjBHNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S230464AbjBHNoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjBHNmV (ORCPT
+        with ESMTP id S231436AbjBHNnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:42:21 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0546301BD;
-        Wed,  8 Feb 2023 05:42:20 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318ArmJV026311;
-        Wed, 8 Feb 2023 13:42:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=bazFhze46inAQct00eKWJ0u0iAV7QURaooeXwJixmjg=;
- b=J6i5w7IsxDe5Hz7vIxmVLfTEg2zqSA60gMxtj2W8WQOiOzqsv/GYDiRjIofrmbeIm3Vj
- SS/8ZV1ID1G90/kAAl92NEqzTHf/XwXPe7WcDZaprhggViF3wdnR2ZlTKAepGZurM1EV
- GZ5v1FpXTIxkp1fIb0tYiYquCZbSYkyqKy9BtwmLOM0uv7iW4pNYHwB3srOJVw+cfr8x
- wJbEThVYHtK55o4x2EBfLPUufmpYHiZOb/ifuC4ijRO7izNgZD6d5z4vfiXuyRQHAsfV
- a6S/wnXyW2euAjmf9gw3tcObHvDcLXFWyfne86L0QkLR/B2KoFpAP60CWa15vN0k7dT9 rg== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkgafm82e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 13:42:14 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 318DgBRb025409;
-        Wed, 8 Feb 2023 13:42:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgekjera-1;
-        Wed, 08 Feb 2023 13:42:11 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318DgBCS025404;
-        Wed, 8 Feb 2023 13:42:11 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 318DgAG0025357;
-        Wed, 08 Feb 2023 13:42:11 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id E97D54BE6; Wed,  8 Feb 2023 05:42:09 -0800 (PST)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com, marijn.suijten@somainline.org
-Subject: [PATCH v3 4/4] drm/msm/dpu: reserve the resources on topology change
-Date:   Wed,  8 Feb 2023 05:42:04 -0800
-Message-Id: <1675863724-28412-5-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1675863724-28412-1-git-send-email-quic_kalyant@quicinc.com>
-References: <1675863724-28412-1-git-send-email-quic_kalyant@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: S8I0oNbYEoGEVE2Tdnd01IgG576FCIC1
-X-Proofpoint-ORIG-GUID: S8I0oNbYEoGEVE2Tdnd01IgG576FCIC1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_05,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 priorityscore=1501 suspectscore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302080120
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 08:43:51 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140764942C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:43:21 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 318DgZaj013022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 08:42:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1675863760; bh=xyb6v65nXuHP/xG5TcxP1ne6MztEMsgn/VqCrtkrf9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=HJGrzMDtNqQUvEs34B3TQmwiLMRpnmdRZpR1xMITfSZH5tk/6ZRko4EfF7OKOhx1y
+         CRxNyCkhyDZyyVt6OIIKvX4fS4KCA/VyCNM1lkOh4LFxmKtTyWfD/ySX0j3YZwa8Ti
+         g4/S23TNi1ldNDMrkqWMxMHdgxajG7koDrN0yBEF/MCCNqiMkZFymjtzjYVcDGsSSq
+         rBTqR7ZlYlDEs3ffpZey4lKf+nYs3/Dkt/j69PNO09MnStayU3twnlcUUaJLFIC2p4
+         9NBO3x5p0r27mi7Q1pMo3JT6T3jxPlq80HMtJ0lnllBU+XpA+2cPLsxKcG+0hiYZlY
+         UjoSRMcr1NgXA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id E6DF015C35A2; Wed,  8 Feb 2023 08:42:34 -0500 (EST)
+Date:   Wed, 8 Feb 2023 08:42:34 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <Y+OmytFP2ASNXil5@mit.edu>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <658272b5-9547-a69f-b6c9-a7ff2dd2d468@amd.com>
+ <Y+HpmIesY96cYcWQ@kroah.com>
+ <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
+ <Y+MAPHZNLeBY13Pj@mit.edu>
+ <20230208041913-mutt-send-email-mst@kernel.org>
+ <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some features like CTM can be enabled dynamically. Release
-and reserve the DPU resources whenever a topology change
-occurs such that required hw blocks are allocated appropriately.
+On Wed, Feb 08, 2023 at 10:44:25AM +0000, Reshetova, Elena wrote:
+> 2. rest of non-needed drivers must be disabled. Here we can argue about what 
+> is the correct method of doing this and who should bare the costs of enforcing it. 
+> But from pure security point of view: the method that is simple and clear, that
+> requires as little maintenance as possible usually has the biggest chance of
+> enforcing security. 
+> And given that we already have the concept of authorized devices in Linux,
+> does this method really brings so much additional complexity to the kernel? 
+> But hard to argue here without the code: we need to submit the filter proposal first
+> (under internal review still).
 
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
----
-Changes in v1:
-- Avoid mode_set call directly (Dmitry)
+I think the problem here is that we've had a lot of painful experience
+where fuzzing produces a lot of false positives which then
+security-types then insist that all kernel developers must fix so that
+we can see the "important" security issues from the false positives.
 
-Changes in v2:
-- Minor nits (Dmitry)
+So "as little maintenance as possible" and fuzzing have not
+necessarily gone together.  It might be less maintenance costs for
+*you*, but it's not necessarily less maintenance work for *us*.  I've
+seen Red Hat principal engineers take completely bogus issues and
+raise them to CVE "high" priority levels, when it was nothing like
+that, thus forcing distro and data center people to be forced to do
+global pushes to production because it's easier than trying to explain
+to FEDramp auditors why the CVE SS is bogus --- and every single
+unnecessary push to production has its own costs and risks.
 
-Changes in v3:
-- avoid unnecessary modeset check call (Dmitry)
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  2 ++
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 24 +++++++++++++++++++-----
- 2 files changed, 21 insertions(+), 5 deletions(-)
+I've seen the constant load of syzbot false positives that generate
+noise in my inbox and in bug tracking issues assigned to me at $WORK.
+I've seen the false positives generated by DEPT, which is why I've
+pushed back on it.  So if you are going to insist on fuzzing all of
+the PCI config space, and treat them all as "bugs", there is going to
+be huge pushback.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-index 539b68b..85bd5645 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
-@@ -204,6 +204,7 @@ struct dpu_crtc {
-  * @hw_ctls       : List of active ctl paths
-  * @crc_source    : CRC source
-  * @crc_frame_skip_count: Number of frames skipped before getting CRC
-+ * @ctm_enabled   : Cached color management enablement state
-  */
- struct dpu_crtc_state {
- 	struct drm_crtc_state base;
-@@ -225,6 +226,7 @@ struct dpu_crtc_state {
- 
- 	enum dpu_crtc_crc_source crc_source;
- 	int crc_frame_skip_count;
-+	bool ctm_enabled;
- };
- 
- #define to_dpu_crtc_state(x) \
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 3920efd..038e077 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -217,6 +217,19 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
- 	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
- };
- 
-+static bool _dpu_enc_is_dspp_changed(struct drm_crtc_state *crtc_state,
-+	struct msm_display_topology topology)
-+{
-+	struct dpu_crtc_state *cstate = to_dpu_crtc_state(crtc_state);
-+
-+	if ((cstate->ctm_enabled && !topology.num_dspp) ||
-+	    (!cstate->ctm_enabled && topology.num_dspp)) {
-+		crtc_state->mode_changed = true;
-+		return true;
-+	}
-+
-+	return false;
-+}
- 
- bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
- {
-@@ -642,14 +655,15 @@ static int dpu_encoder_virt_atomic_check(
- 
- 	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, crtc_state);
- 
-+	_dpu_enc_is_dspp_changed(crtc_state, topology);
-+
- 	/*
- 	 * Release and Allocate resources on every modeset
--	 * Dont allocate when active is false.
- 	 */
- 	if (drm_atomic_crtc_needs_modeset(crtc_state)) {
- 		dpu_rm_release(global_state, drm_enc);
- 
--		if (!crtc_state->active_changed || crtc_state->active)
-+		if (crtc_state->enable)
- 			ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
- 					drm_enc, crtc_state, topology);
- 	}
-@@ -1022,7 +1036,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 	struct dpu_hw_blk *hw_lm[MAX_CHANNELS_PER_ENC];
- 	struct dpu_hw_blk *hw_dspp[MAX_CHANNELS_PER_ENC] = { NULL };
- 	struct dpu_hw_blk *hw_dsc[MAX_CHANNELS_PER_ENC];
--	int num_lm, num_ctl, num_pp, num_dsc;
-+	int num_lm, num_ctl, num_pp, num_dsc, num_dspp;
- 	unsigned int dsc_mask = 0;
- 	int i;
- 
-@@ -1053,7 +1067,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 		drm_enc->base.id, DPU_HW_BLK_CTL, hw_ctl, ARRAY_SIZE(hw_ctl));
- 	num_lm = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
- 		drm_enc->base.id, DPU_HW_BLK_LM, hw_lm, ARRAY_SIZE(hw_lm));
--	dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
-+	num_dspp = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
- 		drm_enc->base.id, DPU_HW_BLK_DSPP, hw_dspp,
- 		ARRAY_SIZE(hw_dspp));
- 
-@@ -1084,7 +1098,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
- 	}
- 
- 	cstate->num_mixers = num_lm;
--
-+	cstate->ctm_enabled = !!num_dspp;
- 	dpu_enc->connector = conn_state->connector;
- 
- 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
--- 
-2.7.4
+Even if the "fixes" are minor, and don't have any massive impact on
+memory used or cache line misses or code/maintainability bloat, the
+fact that we treat them as P3 quality of implementation issues, and
+*you* treat them as P1 security bugs that must be fixed Now!  Now!
+Now! is going to cause friction.  (This is especially true since CVE
+SS scores are unidimentional, and what might be high security --- or
+at least embarassing --- for CoCo, might be completely innocuous QOI
+bugs for the rest of the world.)
 
+So it might be that a simple, separate, kerenl config is going to be
+the massively simpler way to go, instead of insisting that all PCI
+device drivers must be fuzzed and be made CoCo safe, even if they will
+never be used in a CoCo context.  Again, please be cognizant about the
+costs that CoCo may be imposing and pushing onto the rest of the
+ecosystem.
+
+Cheers,
+
+					- Ted
