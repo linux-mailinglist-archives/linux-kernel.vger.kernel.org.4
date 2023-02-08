@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B1668F663
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B32A68F664
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:01:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjBHSBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S231858AbjBHSBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjBHSA7 (ORCPT
+        with ESMTP id S231721AbjBHSBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:00:59 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B77651C58
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:00:57 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso2110938wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:00:57 -0800 (PST)
+        Wed, 8 Feb 2023 13:01:01 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110C1521D5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:00:58 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id bg26so13933892wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:00:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cb47t2l6ksd+bCu6DOmZphj7wo/mr6EIlF/5BcCuaE4=;
-        b=AZ99FsUvQ0+Pb9OlXvWZr/Nan0omCCHOaI/tIER8CEH79h29VMVKCqmwGrYpEHXh6n
-         /iCAMCzWN/iNQGtcr+gEY12mqT0f6tU5k30k29xSyhWDyjpo57wkVUEGZRRqqyBdbW5z
-         vLXKdezNh8RsbUVZETb2yq3YVHzPb/CPMmmN/PKAhEV/Hezxagn/hcm/7n6uklJtnxja
-         ZIjlXzYY2xCh2PfVlnsLZKwaxZVhAS2i+Q+vOVVBhKA3Ossrj9RQFtKC7wg6XavLMKFx
-         sPdVBOT01NPOjRxarfcS4jQkMwObqKStuhTuGYqQFHMlrHqBzKoCYlDUgcfOWQAKXM5w
-         3jKQ==
+        bh=hOfyfk7Q5d8ZuEReqcuZAbA5feFof3LHf7PR/qaCNGw=;
+        b=snxiqbD2t0eIQqzcB/zOrs8/m7MUstDCuKWn56QYMLhnYrPORnUhAZCJCQeuazcDd8
+         h6er5kso1tORG85oyMm9J+/fcKJZXXO+gtOz6EKuf3iydFTAmi2IBVUnqvcXNLFNHcUc
+         G3j/GEt8ozBuozH+RUUzekKcKSL0mArGlHhu86b+eccP0sOwZb2TrEzGPb//HHpYN26I
+         xNJI9JuC45dntIlh3xs+Iatcpdt0Eb9Anhc9eZGbFzps5ICWuLn/ZV06BxyWwHKg/o/r
+         t4M/CTnQbLoFtuXUPYpfF9KXdUkQYjKhULsCwJCtKPaGNAV5zlM6vdnB+jAzz/UdIvyi
+         KK/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cb47t2l6ksd+bCu6DOmZphj7wo/mr6EIlF/5BcCuaE4=;
-        b=Yv3k57pYWYppH2trpNlzuP+jfl6RlK1HrUDkVQVEOM4qhY87xGnL8fHR4hjtzDE+FX
-         Ae9Od8XBy8qH4eAvGbbHz4thtdV5lipFDos2LzQOKUqXiJ7AYmQnfiAUPK7pikG9w6lH
-         891nNKab4k4WFTTIDHmFOBmrXOFdv+ojnKpPaHCdvW3vBvQ/Ran9ASC8scwcdlcimWqF
-         +womhnd10FWAM3GuLToSoZEaDblY6+XqWaJ3wOAGc8+9wuM6OHtGa30t+bNhoU2zYWGT
-         zOGNbX8sj7aAOSS1V6B2Uorl4XBZZcxuey6Ahl49j2SuTMlXKJe79ljIKFa+wAxx7xEx
-         AYOg==
-X-Gm-Message-State: AO0yUKVD23FCoAMUQWFEg273Ig7TFXq6dpkaSdjXBDrrv74YY1NA6Fnf
-        IDfRi7Sfy5udP7YftZVk5pggUA==
-X-Google-Smtp-Source: AK7set/yTlx2HJiDa0+9pbzNMpDY827dwcNmDwOw93SrLk+ubba+YP7GKpkXg90XEkBf5nUOkbiJCg==
-X-Received: by 2002:a05:600c:3423:b0:3dd:b0b3:811b with SMTP id y35-20020a05600c342300b003ddb0b3811bmr7384281wmp.31.1675879256874;
-        Wed, 08 Feb 2023 10:00:56 -0800 (PST)
+        bh=hOfyfk7Q5d8ZuEReqcuZAbA5feFof3LHf7PR/qaCNGw=;
+        b=2FB1qXWsl8rGV/0mKExd4yAItd5+WAWX6z2XwaOwKGU+606g2hQxAZ04QEABpUufWb
+         sNxsvFYCcuDRWGhLfIzD80RJtLkgW7/40+JBV85N2nwbOcEKBqOx8K+3KKV3+Wg+NAVs
+         DU4pPUYGXKveG24BoK43fPVziVtnNk6tpzlTLjWwrZIhSG9EbN4O73VvvlJ9MVTfI0We
+         BbXzc+96DdQYsncWeAhgs+AZbUEMJX7nSVD0l5DVnFh/q0azE/wvo6Q4KkunxrKNf2+q
+         913Cwtg0C/fENQhi6fydSnmWjMhGSMrYYVr8yHcL0CP+JAMNMjvZXOLZIw5MfWgoC/27
+         vkVQ==
+X-Gm-Message-State: AO0yUKUSR2CKRlTKl3W/vNyva27ezCH+LeDVWjEkGKk8Kr2Yhf42aXER
+        ArBPKrU6ECIgvYinvzTRPQbTtg==
+X-Google-Smtp-Source: AK7set/hcDLTQlcyzvVtt++cAAZnC7FIrcoMBPsXzzIJhtny3cZPsVg4IerdSaXXrgRq2/qQdCRMgg==
+X-Received: by 2002:a05:600c:a68f:b0:3da:db4:6105 with SMTP id ip15-20020a05600ca68f00b003da0db46105mr7353259wmb.37.1675879258579;
+        Wed, 08 Feb 2023 10:00:58 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id k20-20020a05600c169400b003dc54eef495sm2370286wmn.24.2023.02.08.10.00.55
+        by smtp.gmail.com with ESMTPSA id k20-20020a05600c169400b003dc54eef495sm2370286wmn.24.2023.02.08.10.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 10:00:56 -0800 (PST)
+        Wed, 08 Feb 2023 10:00:58 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -65,11 +65,10 @@ To:     Andy Gross <agross@kernel.org>,
         Johan Hovold <johan+linaro@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v9 06/11] phy: qcom-qmp: qserdes-txrx: Add v6.20 register offsets
-Date:   Wed,  8 Feb 2023 20:00:15 +0200
-Message-Id: <20230208180020.2761766-7-abel.vesa@linaro.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 07/11] phy: qcom-qmp: qserdes-lane-shared: Add v6 register offsets
+Date:   Wed,  8 Feb 2023 20:00:16 +0200
+Message-Id: <20230208180020.2761766-8-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230208180020.2761766-1-abel.vesa@linaro.org>
 References: <20230208180020.2761766-1-abel.vesa@linaro.org>
@@ -85,15 +84,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The new SM8550 SoC bumps up the HW version of QMP phy to v6.20 for
-PCIE g4x2. Add the new qserdes TX RX PCIE specific offsets in a
-dedicated header file.
+PCIE g4x2. Add the new lane shared PCIE specific offsets in a dedicated
+header file.
 
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
 
 The v8 of this patch is:
-https://lore.kernel.org/all/20230206212619.3218741-7-abel.vesa@linaro.org/
+https://lore.kernel.org/all/20230206212619.3218741-8-abel.vesa@linaro.org/
 
 Changes since v8:
  * none
@@ -111,7 +109,7 @@ Changes since v4:
  * none
 
 Changes since v3:
- * added Dmitry's R-b tag
+ * none
 
 Changes since v2:
  * none
@@ -119,71 +117,59 @@ Changes since v2:
 Changes since v1:
  * split all the offsets into separate patches, like Vinod suggested
 
- .../phy-qcom-qmp-qserdes-txrx-v6_20.h         | 45 +++++++++++++++++++
- drivers/phy/qualcomm/phy-qcom-qmp.h           |  1 +
- 2 files changed, 46 insertions(+)
- create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h
+ .../phy-qcom-qmp-qserdes-ln-shrd-v6.h         | 32 +++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp.h           |  1 +
+ 2 files changed, 33 insertions(+)
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h
 new file mode 100644
-index 000000000000..5385a8b60970
+index 000000000000..86d7d796d5d7
 --- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-txrx-v6_20.h
-@@ -0,0 +1,45 @@
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-qserdes-ln-shrd-v6.h
+@@ -0,0 +1,32 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (c) 2023, Linaro Limited
 + */
 +
-+#ifndef QCOM_PHY_QMP_QSERDES_TXRX_PCIE_V6_20_H_
-+#define QCOM_PHY_QMP_QSERDES_TXRX_PCIE_V6_20_H_
++#ifndef QCOM_PHY_QMP_QSERDES_LN_SHRD_V6_H_
++#define QCOM_PHY_QMP_QSERDES_LN_SHRD_V6_H_
 +
-+#define QSERDES_V6_20_TX_RES_CODE_LANE_OFFSET_TX		0x30
-+#define QSERDES_V6_20_TX_RES_CODE_LANE_OFFSET_RX		0x34
-+#define QSERDES_V6_20_TX_TRAN_DRVR_EMP_EN			0xac
-+#define QSERDES_V6_20_TX_LANE_MODE_1				0x78
-+#define QSERDES_V6_20_TX_LANE_MODE_2				0x7c
-+#define QSERDES_V6_20_TX_LANE_MODE_3				0x80
-+
-+#define QSERDES_V6_20_RX_UCDR_FO_GAIN_RATE_2			0x08
-+#define QSERDES_V6_20_RX_UCDR_FO_GAIN_RATE_3			0x0c
-+#define QSERDES_V6_20_RX_UCDR_PI_CONTROLS			0x20
-+#define QSERDES_V6_20_RX_UCDR_SO_ACC_DEFAULT_VAL_RATE3		0x34
-+#define QSERDES_V6_20_RX_IVCM_CAL_CTRL2				0x9c
-+#define QSERDES_V6_20_RX_IVCM_POSTCAL_OFFSET			0xa0
-+#define QSERDES_V6_20_RX_DFE_3					0xb4
-+#define QSERDES_V6_20_RX_VGA_CAL_MAN_VAL			0xe8
-+#define QSERDES_V6_20_RX_GM_CAL					0x10c
-+#define QSERDES_V6_20_RX_EQU_ADAPTOR_CNTRL4			0x120
-+#define QSERDES_V6_20_RX_SIGDET_ENABLES				0x148
-+#define QSERDES_V6_20_RX_PHPRE_CTRL				0x188
-+#define QSERDES_V6_20_RX_DFE_CTLE_POST_CAL_OFFSET		0x194
-+#define QSERDES_V6_20_RX_Q_PI_INTRINSIC_BIAS_RATE32		0x1dc
-+#define QSERDES_V6_20_RX_MODE_RATE2_B0				0x1f4
-+#define QSERDES_V6_20_RX_MODE_RATE2_B1				0x1f8
-+#define QSERDES_V6_20_RX_MODE_RATE2_B2				0x1fc
-+#define QSERDES_V6_20_RX_MODE_RATE2_B3				0x200
-+#define QSERDES_V6_20_RX_MODE_RATE2_B4				0x204
-+#define QSERDES_V6_20_RX_MODE_RATE2_B5				0x208
-+#define QSERDES_V6_20_RX_MODE_RATE2_B6				0x20c
-+#define QSERDES_V6_20_RX_MODE_RATE3_B0				0x210
-+#define QSERDES_V6_20_RX_MODE_RATE3_B1				0x214
-+#define QSERDES_V6_20_RX_MODE_RATE3_B2				0x218
-+#define QSERDES_V6_20_RX_MODE_RATE3_B3				0x21c
-+#define QSERDES_V6_20_RX_MODE_RATE3_B4				0x220
-+#define QSERDES_V6_20_RX_MODE_RATE3_B5				0x224
-+#define QSERDES_V6_20_RX_MODE_RATE3_B6				0x228
++#define QSERDES_V6_LN_SHRD_RXCLK_DIV2_CTRL			0xa0
++#define QSERDES_V6_LN_SHRD_RX_Q_EN_RATES			0xb0
++#define QSERDES_V6_LN_SHRD_DFE_DAC_ENABLE1			0xb4
++#define QSERDES_V6_LN_SHRD_TX_ADAPT_POST_THRESH1		0xc4
++#define QSERDES_V6_LN_SHRD_TX_ADAPT_POST_THRESH2		0xc8
++#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B0			0xd4
++#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B1			0xd8
++#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B2			0xdc
++#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B3			0xe0
++#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B4			0xe4
++#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B5			0xe8
++#define QSERDES_V6_LN_SHRD_RX_MODE_RATE_0_1_B6			0xec
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH1_RATE210	0xf0
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH1_RATE3		0xf4
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH2_RATE210	0xf8
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH2_RATE3		0xfc
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH3_RATE210	0x100
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH3_RATE3		0x104
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH4_RATE3		0x10c
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH5_RATE3		0x114
++#define QSERDES_V6_LN_SHRD_RX_MARG_COARSE_THRESH6_RATE3		0x11c
++#define QSERDES_V6_LN_SHRD_RX_SUMMER_CAL_SPD_MODE		0x128
 +
 +#endif
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.h b/drivers/phy/qualcomm/phy-qcom-qmp.h
-index 760de4c76e5b..e5974e6caf51 100644
+index e5974e6caf51..148663ee713a 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp.h
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp.h
-@@ -23,6 +23,7 @@
- 
+@@ -24,6 +24,7 @@
  #include "phy-qcom-qmp-qserdes-com-v6.h"
  #include "phy-qcom-qmp-qserdes-txrx-v6.h"
-+#include "phy-qcom-qmp-qserdes-txrx-v6_20.h"
+ #include "phy-qcom-qmp-qserdes-txrx-v6_20.h"
++#include "phy-qcom-qmp-qserdes-ln-shrd-v6.h"
  
  #include "phy-qcom-qmp-qserdes-pll.h"
  
