@@ -2,183 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EB368EEA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5942868EEB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjBHMN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 07:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S231330AbjBHMOM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Feb 2023 07:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBHMNz (ORCPT
+        with ESMTP id S231186AbjBHMOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:13:55 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8751E5F9;
-        Wed,  8 Feb 2023 04:13:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fZXwCHI/Wr6ZTcReJqd4l/GIehfnlTL+aFC6+Tx0lF2XEG7v87O2CBxS/zVeduMArUYv/1rxEDkY2RhpLSh18gbagptS8eSTNvUrcw87oAIlmqdVkcXColMsXg+tjapoZhRe/GeEsqyHiVaxA7Hxw7stx3tuY3Ji8vINCC7NB9fN3Tg8Hnrx9CslBraMcXbz7lQeB9Q11fy/1b2PAfjt7ORhDql1Sy20iojuBVlT1++DOsROrjmlvMhMSWktcXsTAvsUQzk7rGQe8dW3nYaWzvMxdxH2o6X2CGaeX+iVXtoteMHeYWNz00GHAs1d8tYWTD0MT9PddcbM0zKt93p6zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fHA8uxWQKr2OrZ4bjHgyM4htrvQSVjfM+6eQYcQFXRU=;
- b=E6ArfcnoL6lOYfFOXpWX/ZffPSQDATXvlFnwmV3Ib2M0ViLuWGWFv4Xpr31MOP/k/Nh3DNkicew7rlyzuVTfLkHe9a4B42WW/XAx7VzGALf0G6thVmOA2+AY6fd55YDNEA6ZohOkxG7aNdlIvNx4LssK2RA+A1GVz7GJ4sTpeYZ7JNFAU5x1KxqMj/MKu4ImT6JAUAWFXgu/QAIhBJA4wzuy6HaOvZ2GWdXrQ7lX7l3+qtmQ1vQbagGxXAF4N8EmyQoJyj3W+XrVvWCmfETiAKnlkCmJyNr7n/SdTwCjh1ZMXcubEcuT/0a9pGIGdAD5DBqRUIVGgpnAT74vxAlrcg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fHA8uxWQKr2OrZ4bjHgyM4htrvQSVjfM+6eQYcQFXRU=;
- b=JukBozX4+fJWletmVFSqeRxif7Xmb5vW5YZE0OHJc6zxhmthHHyofGdDOZjB+WWL+XDp/hbznM/GSP1Cpoe56j70mCoGGsrCubT3enS/WeeGq4C+XcIi/n1WiHKbNNMgNw1/OB/SHiOg5JGhj0jSPb3gtMmaJTCl//4XLmPXq+Y9m9QRMBiEX68CXY88iLgORznLzWaZbhRplhyPJ7dFH3uDfjsSrx5hU7aL5jNjYFJy0hxam+fHzMikvFSOIR2Od1/TpLcb9SuJrRlc6bKGRlqnmYCIFwexiehcQbJsz4fF+oSJ9Ux3eWPDKmqBKkC6OyLc92rUL4JX1b++mCEENg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB3356.namprd12.prod.outlook.com (2603:10b6:5:38::11) by
- SN7PR12MB7298.namprd12.prod.outlook.com (2603:10b6:806:2ae::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Wed, 8 Feb
- 2023 12:13:51 +0000
-Received: from DM6PR12MB3356.namprd12.prod.outlook.com
- ([fe80::2654:3212:6fa4:ec1d]) by DM6PR12MB3356.namprd12.prod.outlook.com
- ([fe80::2654:3212:6fa4:ec1d%6]) with mapi id 15.20.6043.028; Wed, 8 Feb 2023
- 12:13:51 +0000
-Message-ID: <1b24e9f5-539a-dd0f-6485-5dbf3757ef27@nvidia.com>
-Date:   Wed, 8 Feb 2023 17:43:35 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC,v14 4/5] arm64: tegra: Add PCIe port node with PCIe WAKE#
- for C1 controller
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     bhelgaas@google.com, petlozup@nvidia.com,
-        rafael.j.wysocki@intel.com, lpieralisi@kernel.org, robh@kernel.org,
-        jeffy.chen@rock-chips.com, krzysztof.kozlowski+dt@linaro.org,
-        jonathanh@nvidia.com, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
-        steven.price@arm.com, kw@linux.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        vidyas@nvidia.com
-References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
- <20230208111645.3863534-5-mmaddireddy@nvidia.com> <Y+OJaGY6mcxM0JOF@orome>
-From:   Manikanta Maddireddy <mmaddireddy@nvidia.com>
-X-Nvconfidentiality: public
-In-Reply-To: <Y+OJaGY6mcxM0JOF@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA0PR01CA0034.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:81::8) To DM6PR12MB3356.namprd12.prod.outlook.com
- (2603:10b6:5:38::11)
+        Wed, 8 Feb 2023 07:14:09 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C543C212A4;
+        Wed,  8 Feb 2023 04:14:04 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pPjKb-0028L0-7w; Wed, 08 Feb 2023 13:13:45 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pPjKa-000FU0-W6; Wed, 08 Feb 2023 13:13:45 +0100
+Message-ID: <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Wed, 08 Feb 2023 13:13:43 +0100
+In-Reply-To: <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
+         <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+         <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3356:EE_|SN7PR12MB7298:EE_
-X-MS-Office365-Filtering-Correlation-Id: d11609d4-5319-43db-0e94-08db09cdf0ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Yd9LdJsfHYTuCVJYBzyUYmVRXbVo7/p3fIYRKB/3PcLH3jN65/Xd2yuTWEJ8vbOukHQB2Zfi26P0lP987q7y6q5Xelv69JyJ2A3Q5oxm/0vsgkoAlptDWfZgvMxDw3jmwEd4mGLs30sGvSKyZh2WMNiSArRV1IAcFf7q2tVxAHA3EckOtjhP10hlv3TQ84oRdnT71PbsRTCJ3UdUOsNNgGlxDYtSGafx1DquA5FHphjFuzVOvi1I9lWlWGTNsIqoP/PqJDaUtzxUfAhnSxRiM9YX1/1Hz4v3CVq/ZX8cweVvzclQwIz3gin75/KV37IFHWyAydYcuwvokLbPMWyZIe1p1lcijFniHypel/fYeT7AGypyFql0b+454c+RbiZvZ16xDqtMD7mLQgWBJtlO7TNkkE89L7i/wckOdT3nLyJKOrVljU2dHu9OVzB6lvSdlQMublORtq1bYW3wuX5ZBVmuMWgz7LwiydBm0aridOx39MAB9yBHPOroAsSpohXx+qGkdVOweJMqmhh+s+WY325k7z/C2CzcZi+55IF7dnT3oc7fUeiuadzdnqChlAzkx7Us+FXKGwNtjcUfW0LN3dPZmr01g5L6cRGoiHg6A9yqhL0UHJK1VQP/SQ/EYMaUcRJxv1XX+d22WOgmsKFgnZcUs20F19Oxp/NQpcgT9EPnUH9SKneCw5KBGZXOcHzjvv2tNdNwGXZcJfLu1KAqvwvQaqwAJXjI3zfl0pWJhRQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3356.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(376002)(366004)(346002)(396003)(451199018)(6486002)(186003)(26005)(6512007)(5660300002)(7416002)(31696002)(8936002)(107886003)(6666004)(4326008)(316002)(66946007)(66556008)(8676002)(6916009)(41300700001)(6506007)(53546011)(66476007)(2906002)(83380400001)(478600001)(86362001)(36756003)(2616005)(31686004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3N1WUVwMGNjcWcyZVdMUDhxblFxdzZsTUN4VnRGWkdEWEdWVm9weTA4eDND?=
- =?utf-8?B?UEdpcjJFbjZUOWZtKzBrak94QStWdVpOYlE0ajhiSUtrWjBJOHM2RG8wbWhJ?=
- =?utf-8?B?MitiVXJ3K0NVZVRyQXA5dmNtdjlBTDJxTFBVdTFpQVZTZmNZV3J1ckFUVWpT?=
- =?utf-8?B?SEtUWkxETUlHYklHTzdJT1ZuNWVsTlJMYi9YSnI1dE1HZ1Nkc29uRDZ3bkYx?=
- =?utf-8?B?NXpsRHlUd3diK2VDY0tHVEJPeDFOUjArOG43V1dNQlFDN2dSbzNrRy93bG9l?=
- =?utf-8?B?L2pJQVNsYzdhQktGZk1GQk42U2Fwclp0WjJmQ2NldjVWRVFtMHNlY05DT25p?=
- =?utf-8?B?QzFneVFwVEc2NVhydlE1NGdkaExmOVFlb1Izb3RPalFyRXVOUVNoMkY0Nm1h?=
- =?utf-8?B?VWdRcituUEVVakUxY2FKa0V6NUVFcUlDUVo3WCtTWWo2SkphS1F2dTdlVEVl?=
- =?utf-8?B?RHJVZ1BEeHRWUHR5MmUxajlCeU5iYXRGT2srV1R2alFvSTdITWJvYjg5SXNP?=
- =?utf-8?B?MFRFWXg0Y2VPOTNRV0NOaStycVh1allpaVhoOUZTZ3ZXTmEweXZ3MlhiVlNZ?=
- =?utf-8?B?T3NIdEhySktoSjkyUm5HUHBWdW9KZlBiL1M0aCtOWXkrRDEwekxQQXdqNVFm?=
- =?utf-8?B?QmYyM3lRNWFMeHNicHdpN2k5b1dOTmprRVd2T25QZElsd2pydlptcWJlU2gy?=
- =?utf-8?B?dFRMK2grUC9Lckt0MS9MSWRjL3FTaWRFSWpnbFdUeElvL0RpZ2dDeG54ODI0?=
- =?utf-8?B?a2NiV0NTWnFjbkRJdHJibkNnZnlycDFGZkRFOUF4MndEcytmaEFQYlVaclFo?=
- =?utf-8?B?RmVLWGZZczVpM2pyblZmNE84QWVZeWU2S3dHM3RJZDFwZnBwc3RXME5lNllR?=
- =?utf-8?B?RVJRZWJHTGV5TGN0UGVtYXJHZ0lvTVhWbkVXRGZaaTVmTWdUVGh2LzQ3M3Fl?=
- =?utf-8?B?MElpbnZUMHNReGJoWDNtZU5vYkovYWZBbUs5dU5saElHdFBKTWRDRG1MM2Fv?=
- =?utf-8?B?RDRPd2Ria3RyazdpQU9GZFNSSFd1NDNaSVg0a2czQlVwbXZqNS9kY0wxcjRl?=
- =?utf-8?B?MUVMcmpHeDZsUUN1cCtZSFc0SzcrcWNIeVZra1RzYXA0WDBBQUxyZU1Pd0Zr?=
- =?utf-8?B?dWZOM3hoTlBVZVF4a1llZHIyaUsyMUJuUTdWQUUrMlV4L3Z4dUhBS1ZsYTBZ?=
- =?utf-8?B?bEUzU0NlYVUzWFA2am5XQjE2TEUrNjVMS3dmZTkyYVN5TUQxOTMwbjVldWFO?=
- =?utf-8?B?WU1sK3pLbmNuZWo5VWxwaUl2VjJsSTBFeW9kZXlWU0dxN0Uyb3VMak4xL3FX?=
- =?utf-8?B?R214WkhZVVZRbzNSWU9Za1AyeDV4Z1FQMGRsVEFLSHhEWjlqUSt3bjQrbytL?=
- =?utf-8?B?L1BUcWpOUWhYV0hpTmgwb3AyU2doTzJ1NWtUcm1vUm5NVnlhdVI3SXlnZmds?=
- =?utf-8?B?cTVubjUySkFSYy9EVkI1bEsrSlk3QTI5Wkp5WEFZVlVTMG5mQXpSTnNZM1Vp?=
- =?utf-8?B?Z3Evd3hMMTQ1M3ZKZ05vd2ZnTjE0MlBVaVZtTUExVVR5QndGVlRDT1gvNVhn?=
- =?utf-8?B?WVlFR2tYaytMTHZnTWxFeklFVTF2KzNOZzlFYXAyVnZuTVU2ODY2K0QrWUFZ?=
- =?utf-8?B?SUsyV2hObGJ1dUJEQW5Bb3ZtVjM1TkJaUTUxaitMb080ZWREdHJ6bUZFaktL?=
- =?utf-8?B?eDZPcXVtQnpWQlFwWk5Hd1duekI5U29ocG9La0pIREhlUFR6anEzMFNvNkVW?=
- =?utf-8?B?TnYzNkIwVi81QWNOenpDQ3h0QjNTenVoTkFHZjZvZDA0d2dJZzZKaDkrcElY?=
- =?utf-8?B?UG9rVlh3a1ZkaVFxalhaMWpPT0g0cnBKOGd0eWdWZUNzN095d0xPL25UdmZL?=
- =?utf-8?B?SzBTTnVmV1Z6eS9DakRmdG5XUWg4a0lod0FkQlUzY2J4UGpjMnVENnlLNGdW?=
- =?utf-8?B?TGlHVVNwSlNuYktocTQrc0NtNGFRYS8zSXZkMDJOWjU2bGR3dzBXYXBEdVNS?=
- =?utf-8?B?TklYekluSUU5b1hSWDJ2N3VvQURwWlhOcTJFc0R2bllYZWpmcGZJU3cwaVB1?=
- =?utf-8?B?OXQrbkxLK0c4ZDdPZnZPZ21qNzl4Q1MvS3orRWhJSnQveTlidnowZVhJd0pK?=
- =?utf-8?B?NEFNOWFuNkREZDBnODN5NTE3bUVWSnU1cTF5VTlnam9ydzlMWXQvZWRQaHNm?=
- =?utf-8?B?alE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d11609d4-5319-43db-0e94-08db09cdf0ad
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3356.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 12:13:51.7625
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +CRwJ4WvOeAxbEIzKg9NxNVrI5d8kM3dsk1iE+12Iki6x11Z7ySGSJ0ZViCXu5LiWEjdXFl3nYLc6qPZyHYMig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7298
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Randy!
 
-On 2/8/2023 5:07 PM, Thierry Reding wrote:
-> On Wed, Feb 08, 2023 at 04:46:44PM +0530, Manikanta Maddireddy wrote:
->> Add PCIe port node under the PCIe controller-1 device tree node to support
->> PCIe WAKE# interrupt for WiFi.
->>
->> Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
->> ---
->>
->> Changes in v14:
->> New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX Orin.
->>
->>   .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts     | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
->> index 8a9747855d6b..9c89be263141 100644
->> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
->> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
->> @@ -2147,6 +2147,17 @@ pcie@14100000 {
->>   
->>   			phys = <&p2u_hsio_3>;
->>   			phy-names = "p2u-0";
->> +
->> +			pci@0,0 {
->> +				reg = <0x0000 0 0 0 0>;
->> +				#address-cells = <3>;
->> +				#size-cells = <2>;
->> +				ranges;
->> +
->> +				interrupt-parent = <&gpio>;
->> +				interrupts = <TEGRA234_MAIN_GPIO(L, 2) IRQ_TYPE_LEVEL_LOW>;
->> +				interrupt-names = "wakeup";
->> +			};
-> Don't we need to wire this to the PMC interrupt controller and the wake
-> event corresponding to the L2 GPIO? Otherwise none of the wake logic in
-> PMC will get invoked.
->
-> Thierry
-PCIe wake is gpio based not pmc, only wake support is provided by PMC 
-controller.
-I verified this patch and able to wake up Tegra from suspend.
-Petlozu, correct me if my understanding is wrong.
+On Tue, 2023-02-07 at 17:31 -0800, Randy Dunlap wrote:
+> 
+> On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
+> > Hello Christoph!
+> > 
+> > On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+> > > On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+> > > > We have had a discussion between multiple people invested in the SuperH port and
+> > > > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+> > > > when he isn't available.
+> > > 
+> > > So, this still isn't reflected in MAINTAINERS in linux-next.  When
+> > > do you plan to take over?  What platforms will remain supported and
+> > > what can we start dropping due to being unused and unmaintained?
+> > 
+> > I'm getting everything ready now with Geert's help and I have a probably dumb
+> > question regarding the MAINTAINERS file change: Shall I just add myself as an
+> > additional maintainer first or shall I also drop Yoshinori Sato?
+> > 
+> > Also, is it desirable to add a "T:" entry for the kernel tree?
+> 
+> Yes, definitely.
 
+Geert has suggested to wait with adding a tree source to the entry until I get my
+own kernel.org account. I have enough GPG signatures from multiple kernel developers
+on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
 
-Manikanta
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
