@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFB468EC6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7264A68EC6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjBHKKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
+        id S230450AbjBHKLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjBHKKe (ORCPT
+        with ESMTP id S230443AbjBHKLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:10:34 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D679B3E0AF;
-        Wed,  8 Feb 2023 02:09:52 -0800 (PST)
-Received: from beast.luon.net (unknown [IPv6:2a10:3781:2531::8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D3D446602090;
-        Wed,  8 Feb 2023 10:09:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675850990;
-        bh=/5ijapG9vCBrHU1aJI7Ikdb7hJ0FdiJFM02ACUiAJNs=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Evld1j8rXIZ/3mLNgeHlLCLNJs/4d3VSbkvX1sZ7PeOdemUeAql00HUkS/Bbi7ytH
-         Tg7MD2xyML8kblK7EeYpTlMI00rBCLUbZl/rp9BbFKG+ksjyhYXpcTpiNelWvmamr9
-         MZZ+0FFBnxgNdsC+96gv9aC5XvOP9SkAfFJhiyMvijj8KUgJRwiNxruNN52fxiUIar
-         SrL1bMWYvDu16n+wp5taWPC6LsNURyXmOAzpHOV7RSAlrSg0wlGckBsdPK55u1t7Ky
-         EbY/hYGP2rRCGoJNfhVRo3xMRd54DvRQZBFJE6Qtl+fnC86sHCsNhUV48F4YYVmzsq
-         Jo3ciTtCkTC1w==
-Received: by beast.luon.net (Postfix, from userid 1000)
-        id 508F669D0985; Wed,  8 Feb 2023 11:09:48 +0100 (CET)
-Message-ID: <7aceaa7d85b629e0c135eb3eb6199eea445b65e5.camel@collabora.com>
-Subject: Re: [PATCH] ARM: dts: rockchip: fix a typo error for rk3288 spdif
- node
-From:   Sjoerd Simons <sjoerd@collabora.com>
-To:     Jianqun Xu <jay.xu@rock-chips.com>, heiko@sntech.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 08 Feb 2023 11:09:48 +0100
-In-Reply-To: <20230208091411.1603142-1-jay.xu@rock-chips.com>
-References: <20230208091411.1603142-1-jay.xu@rock-chips.com>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3-1 
+        Wed, 8 Feb 2023 05:11:11 -0500
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3B842CFFB;
+        Wed,  8 Feb 2023 02:11:03 -0800 (PST)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id AA2422055F9C;
+        Wed,  8 Feb 2023 19:11:02 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-2) with ESMTPS id 318AB0tG072967
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 19:11:01 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Debian-2) with ESMTPS id 318AB0ol317789
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 19:11:00 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.17.1.9/8.17.1.9/Submit) id 318AAvG8317788;
+        Wed, 8 Feb 2023 19:10:57 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, linux-cifs@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jan Kara <jack@suse.cz>, "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Luis de Bethencourt <luisbg@kernel.org>,
+        Salah Triki <salah.triki@gmail.com>,
+        Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>, Dave Kleikamp <shaggy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kari Argillander <kari.argillander@gmail.com>,
+        Viacheslav Dubeyko <slava@dubeyko.com>
+Subject: Re: [RFC PATCH v2 01/18] fat: Fix iocharset=utf8 mount option
+In-Reply-To: <20230204105703.pnc6vcy4hvmvvm3b@pali> ("Pali
+ =?iso-8859-1?Q?Roh=E1r=22's?= message of
+        "Sat, 4 Feb 2023 11:57:03 +0100")
+References: <20221226142150.13324-1-pali@kernel.org>
+        <20221226142150.13324-2-pali@kernel.org>
+        <874jsyvje6.fsf@mail.parknet.co.jp>
+        <20230204105703.pnc6vcy4hvmvvm3b@pali>
+Date:   Wed, 08 Feb 2023 19:10:57 +0900
+Message-ID: <874jrwfowe.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+Pali Rohár <pali@kernel.org> writes:
 
-On Wed, 2023-02-08 at 17:14 +0800, Jianqun Xu wrote:
-> Fixes: 874e568e500a ("ARM: dts: rockchip: Add SPDIF transceiver for
-> RK3288")
->=20
-> Signed-off-by: Jianqun Xu <jay.xu@rock-chips.com>
-> Change-Id: I13940ae543ba6ca597663aa5f209b1f5b0090b19
+>> This patch fixes the issue of utf-8 partially only. I think we can't
+>> still recommend only partially working one.
+>
+> With this patch FAT_DEFAULT_IOCHARSET=utf8 is same what was
+> FAT_DEFAULT_UTF8=y without this patch. And option FAT_DEFAULT_UTF8 was
+> recommended in description before "select the next option instead if you
+> would like to use UTF-8 encoded file names by default."
 
-Nice catch;
+It is not recommending to use UTF-8 as default, right? I wanted to say
+no warning and recommend has big difference, and I can't recommend the
+incompatible behavior that creates the case sensitive filename.
 
-Reviewed-by: Sjoerd Simons <sjoerd@collabora.com>
+>> Still broken, so I think we still need the warning here (would be
+>> tweaked warning).
+>
+> There was no warning before for utf8=1. And with this patch
+> iocharset=utf8 should have same behavior as what was utf8=1 before this
+> patch.
+>
+> So if we should show some warning for utf8=1 then it is somehow not
+> related to this patch and it should be done separately, possible also to
+> the current codebase and before this patch.
 
-> ---
-> =C2=A0arch/arm/boot/dts/rk3288.dtsi | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/arm/boot/dts/rk3288.dtsi
-> b/arch/arm/boot/dts/rk3288.dtsi
-> index 487b0e03d4b4..648fa6223351 100644
-> --- a/arch/arm/boot/dts/rk3288.dtsi
-> +++ b/arch/arm/boot/dts/rk3288.dtsi
-> @@ -942,7 +942,7 @@ wdt: watchdog@ff800000 {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0status =3D "disabled";
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> =C2=A0
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spdif: sound@ff88b0000 {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spdif: sound@ff8b0000 {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "rockchip,rk3288-spdif",
-> "rockchip,rk3066-spdif";
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0reg =3D <0x0 0xff8b0000 0x0 0x10000>;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0#sound-dai-cells =3D <0>;
+Sure, you are right.
 
---=20
-Sjoerd Simons
-Collabora Ltd.
+Thanks.
+-- 
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
