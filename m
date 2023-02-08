@@ -2,245 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4327268EF2F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:40:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08FC68EF37
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjBHMk4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Feb 2023 07:40:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S230428AbjBHMll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 07:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjBHMkw (ORCPT
+        with ESMTP id S230351AbjBHMlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:40:52 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A28F41095;
-        Wed,  8 Feb 2023 04:40:48 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DB5A124E2F8;
-        Wed,  8 Feb 2023 20:40:44 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Feb
- 2023 20:40:44 +0800
-Received: from [192.168.125.110] (183.27.96.33) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Feb
- 2023 20:40:43 +0800
-Message-ID: <629e070a-5138-8754-e86c-3458ae5d7a16@starfivetech.com>
-Date:   Wed, 8 Feb 2023 20:40:43 +0800
+        Wed, 8 Feb 2023 07:41:39 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49B748A25;
+        Wed,  8 Feb 2023 04:41:36 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318Bhm9K022985;
+        Wed, 8 Feb 2023 12:41:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=RnyquygMV6RL9lpIAcJihukRnFxLLlbA1AaqdIttOSI=;
+ b=HK7lodvHQQMdqmnJ6U0m/WiAJqzaNePDT9sb3xmx6vmyjggclMyQUbC4V7G8C6pm84jC
+ 78tuSdpmaZPluJ55KDCGrtMeS5eMpIxZC+4LDTTrAE8GXuz0f+09LRxbqotcjReMoT6X
+ uokODdObbYkgb0sbhNRulT6KPwaa96ctVq586l4RqTviItS5cyyeJE+102xKLgGmN/8r
+ b5PFSQ1xL0fF+jgV1t1WOeRYeb7aQWAI6ak5Gaqpt3qN38EHokOX7YiqTk4CFxJHfCSV
+ EPvA7mNhRw+bb7Qpvs3lE05G+GRjz/OnNrL1TU37BmI5kZNghKxIetxHM9dLhQcT7U3W pg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkga2v33t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 12:41:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318Cf7ZQ031847
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 12:41:07 GMT
+Received: from hu-jinlmao-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 8 Feb 2023 04:41:07 -0800
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        "Tao Zhang" <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+Subject: [PATCH] stm: class: Add MIPI OST protocol support
+Date:   Wed, 8 Feb 2023 04:40:53 -0800
+Message-ID: <20230208124053.18533-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 2/4] hwmon: (sfctemp) Add StarFive JH71x0 temperature
- sensor
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <linux-hwmon@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230103013145.9570-1-hal.feng@starfivetech.com>
- <20230103013145.9570-3-hal.feng@starfivetech.com>
- <20230103221017.GA217155@roeck-us.net>
- <ddb197c3-9c77-c8c2-1d41-1691de05847e@starfivetech.com>
- <7580df6b-e97f-0036-8f7f-63acde8cd42a@roeck-us.net>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <7580df6b-e97f-0036-8f7f-63acde8cd42a@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.96.33]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ztnzml8Ig5I07g2-QZzIhZvS9kKwdp-5
+X-Proofpoint-ORIG-GUID: ztnzml8Ig5I07g2-QZzIhZvS9kKwdp-5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_04,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=999 clxscore=1011 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302080113
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Feb 2023 11:21:38 -0800, Guenter Roeck wrote:
-> On 2/6/23 09:12, Hal Feng wrote:
->> On Tue, 3 Jan 2023 14:10:17 -0800, Guenter Roeck wrote:
->>> On Tue, Jan 03, 2023 at 09:31:43AM +0800, Hal Feng wrote:
-[...]
->>>> diff --git a/drivers/hwmon/sfctemp.c b/drivers/hwmon/sfctemp.c
->>>> new file mode 100644
->>>> index 000000000000..e56716ad9587
->>>> --- /dev/null
->>>> +++ b/drivers/hwmon/sfctemp.c
->>>> @@ -0,0 +1,350 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
->>>> + * Copyright (C) 2021 Samin Guo <samin.guo@starfivetech.com>
->>>> + */
->>>> +#include <linux/clk.h>
->>>> +#include <linux/completion.h>
->>>> +#include <linux/delay.h>
->>>> +#include <linux/hwmon.h>
->>>> +#include <linux/interrupt.h>
->>>> +#include <linux/io.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/mutex.h>
->>>> +#include <linux/of.h>
->>>> +#include <linux/platform_device.h>
->>>> +#include <linux/reset.h>
->>>> +
->>>> +/*
->>>> + * TempSensor reset. The RSTN can be de-asserted once the analog core has
->>>> + * powered up. Trst(min 100ns)
->>>> + * 0:reset  1:de-assert
->>>> + */
->>>> +#define SFCTEMP_RSTN    BIT(0)
->>>
->>> Missing include of linux/bits.h
->>
->> Will add it. Thanks.
->>
->>>
->>>> +
->>>> +/*
->>>> + * TempSensor analog core power down. The analog core will be powered up
->>>> + * Tpu(min 50us) after PD is de-asserted. RSTN should be held low until the
->>>> + * analog core is powered up.
->>>> + * 0:power up  1:power down
->>>> + */
->>>> +#define SFCTEMP_PD    BIT(1)
->>>> +
->>>> +/*
->>>> + * TempSensor start conversion enable.
->>>> + * 0:disable  1:enable
->>>> + */
->>>> +#define SFCTEMP_RUN    BIT(2)
->>>> +
->>>> +/*
->>>> + * TempSensor conversion value output.
->>>> + * Temp(C)=DOUT*Y/4094 - K
->>>> + */
->>>> +#define SFCTEMP_DOUT_POS    16
->>>> +#define SFCTEMP_DOUT_MSK    GENMASK(27, 16)
->>>> +
->>>> +/* DOUT to Celcius conversion constants */
->>>> +#define SFCTEMP_Y1000    237500L
->>>> +#define SFCTEMP_Z    4094L
->>>> +#define SFCTEMP_K1000    81100L
->>>> +
->>>> +struct sfctemp {
->>>> +    /* serialize access to hardware register and enabled below */
->>>> +    struct mutex lock;
->>>> +    struct completion conversion_done;
->>>> +    void __iomem *regs;
->>>> +    struct clk *clk_sense;
->>>> +    struct clk *clk_bus;
->>>> +    struct reset_control *rst_sense;
->>>> +    struct reset_control *rst_bus;
->>>> +    bool enabled;
->>>> +};
->>>> +
->>>> +static irqreturn_t sfctemp_isr(int irq, void *data)
->>>> +{
->>>> +    struct sfctemp *sfctemp = data;
->>>> +
->>>> +    complete(&sfctemp->conversion_done);
->>>> +    return IRQ_HANDLED;
->>>> +}
->>>> +
->>>> +static void sfctemp_power_up(struct sfctemp *sfctemp)
->>>> +{
->>>> +    /* make sure we're powered down first */
->>>> +    writel(SFCTEMP_PD, sfctemp->regs);
->>>> +    udelay(1);
->>>> +
->>>> +    writel(0, sfctemp->regs);
->>>> +    /* wait t_pu(50us) + t_rst(100ns) */
->>>> +    usleep_range(60, 200);
->>>> +
->>>> +    /* de-assert reset */
->>>> +    writel(SFCTEMP_RSTN, sfctemp->regs);
->>>> +    udelay(1); /* wait t_su(500ps) */
->>>> +}
->>>> +
->>>> +static void sfctemp_power_down(struct sfctemp *sfctemp)
->>>> +{
->>>> +    writel(SFCTEMP_PD, sfctemp->regs);
->>>> +}
->>>> +
->>>> +static void sfctemp_run_single(struct sfctemp *sfctemp)
->>>> +{
->>>> +    writel(SFCTEMP_RSTN | SFCTEMP_RUN, sfctemp->regs);
->>>> +    udelay(1);
->>>> +    writel(SFCTEMP_RSTN, sfctemp->regs);
->>>
->>> The datasheet (or, rather, programming manual) does not appear
->>> to be public, so I have to guess here.
->>>
->>> The code suggests that running a single conversion may be a choice,
->>> not a requirement. If it is indeed a choice, the reasoning needs to be
->>> explained since it adds a lot of complexity and dependencies to the
->>> driver (for example, interrupt support is only mandatory or even needed
->>> due to this choice). It also adds a significant delay to temperature
->>> read operations, which may have practical impact on thermal control
->>> software.
->>>
->>> If the chip only supports single temperature readings, that needs to be
->>> explained as well (and why SFCTEMP_RUN has to be reset in that case).
->>
->> The chip supports continuous conversion. When you set SFCTEMP_RUN, the
->> temperature raw data will be generated all the time. However, it will
->> also generate interrupts all the time when the conversion is finished,
->> because of the hardware limitation. So in this driver, we just support
->> the single conversion.
->>
-> 
-> Sorry, I don't follow the logic. The interrupt is, for all practical
-> purposes, useless because there are no limits and exceeding any such
-> limits is therefore not supported. The only reason to have and enable
-> to interrupt is because continuous mode is disabled.
-> 
-> The code could be simplified a lot if interrupt support would be
-> dropped and continuous mode would be enabled.
+Add MIPI OST protocol support for stm to format the traces.
+Framework copied from drivers/hwtracing/stm.p-sys-t.c as of
+commit d69d5e83110f ("stm class: Add MIPI SyS-T protocol
+support").
 
-If we enable continuous mode, which means SFCTEMP_RUN remains asserted,
-the conversion finished interrupt will be raised after each sample
-time (8.192 ms). Within a few minutes, a lot of interrupts are raised,
-as showed below.
+Signed-off-by: Tingwei Zhang <quic_tingweiz@quicinc.com>
+Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+---
+ drivers/hwtracing/stm/Kconfig  | 14 +++++
+ drivers/hwtracing/stm/Makefile |  2 +
+ drivers/hwtracing/stm/p_ost.c  | 95 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 111 insertions(+)
+ create mode 100644 drivers/hwtracing/stm/p_ost.c
 
-# cat /proc/interrupts
-           CPU0       CPU1       CPU2       CPU3       
-  1:          0          0          0          0  SiFive PLIC   1 Edge      ccache_ecc
-  2:          1          0          0          0  SiFive PLIC   3 Edge      ccache_ecc
-  3:          1          0          0          0  SiFive PLIC   4 Edge      ccache_ecc
-  4:          0          0          0          0  SiFive PLIC   2 Edge      ccache_ecc
-  5:       1116       1670        411       1466  RISC-V INTC   5 Edge      riscv-timer
-  6:      32093          0          0          0  SiFive PLIC  81 Edge      120e0000.temperature-sensor
- 10:       1233          0          0          0  SiFive PLIC  32 Edge      ttyS0
-IPI0:       117         62        123        117  Rescheduling interrupts
-IPI1:       278        353        105        273  Function call interrupts
-IPI2:         0          0          0          0  CPU stop interrupts
-IPI3:         0          0          0          0  CPU stop (for crash dump) interrupts
-IPI4:         0          0          0          0  IRQ work interrupts
-IPI5:         0          0          0          0  Timer broadcast interrupts
+diff --git a/drivers/hwtracing/stm/Kconfig b/drivers/hwtracing/stm/Kconfig
+index aad594fe79cc..0b52901125f7 100644
+--- a/drivers/hwtracing/stm/Kconfig
++++ b/drivers/hwtracing/stm/Kconfig
+@@ -41,6 +41,20 @@ config STM_PROTO_SYS_T
+ 
+ 	  If you don't know what this is, say N.
+ 
++config STM_PROTO_OST
++	tristate "MIPI OST STM framing protocol driver"
++	default CONFIG_STM
++	help
++	  This is an implementation of MIPI OST protocol to be used
++	  over the STP transport. In addition to the data payload, it
++	  also carries additional metadata for entity, better
++	  means of trace source identification, etc.
++
++	  The receiving side must be able to decode this protocol in
++	  addition to the MIPI STP, in order to extract the data.
++
++	  If you don't know what this is, say N.
++
+ config STM_DUMMY
+ 	tristate "Dummy STM driver"
+ 	help
+diff --git a/drivers/hwtracing/stm/Makefile b/drivers/hwtracing/stm/Makefile
+index 1692fcd29277..715fc721891e 100644
+--- a/drivers/hwtracing/stm/Makefile
++++ b/drivers/hwtracing/stm/Makefile
+@@ -5,9 +5,11 @@ stm_core-y		:= core.o policy.o
+ 
+ obj-$(CONFIG_STM_PROTO_BASIC) += stm_p_basic.o
+ obj-$(CONFIG_STM_PROTO_SYS_T) += stm_p_sys-t.o
++obj-$(CONFIG_STM_PROTO_OST) += stm_p_ost.o
+ 
+ stm_p_basic-y		:= p_basic.o
+ stm_p_sys-t-y		:= p_sys-t.o
++stm_p_ost-y		:= p_ost.o
+ 
+ obj-$(CONFIG_STM_DUMMY)	+= dummy_stm.o
+ 
+diff --git a/drivers/hwtracing/stm/p_ost.c b/drivers/hwtracing/stm/p_ost.c
+new file mode 100644
+index 000000000000..2ca1a3fda57f
+--- /dev/null
++++ b/drivers/hwtracing/stm/p_ost.c
+@@ -0,0 +1,95 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copied from drivers/hwtracing/stm.p-sys-t.c as of commit d69d5e83110f
++ * ("stm class: Add MIPI SyS-T protocol support").
++ *
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ * Copyright (c) 2020 The Linux Foundation. All rights reserved.
++ * Copyright (c) 2018, Intel Corporation.
++ *
++ * MIPI OST framing protocol for STM devices.
++ */
++
++#include <linux/configfs.h>
++#include <linux/module.h>
++#include <linux/device.h>
++#include <linux/slab.h>
++#include <linux/stm.h>
++#include <linux/sched/clock.h>
++#include "stm.h"
++
++#define OST_TOKEN_STARTSIMPLE		(0x10)
++#define OST_VERSION_MIPI1		(0x10 << 8)
++#define OST_ENTITY_FTRACE		(0x01 << 16)
++#define OST_CONTROL_PROTOCOL		(0x0 << 24)
++
++#define DATA_HEADER (OST_TOKEN_STARTSIMPLE | OST_VERSION_MIPI1 | \
++			OST_ENTITY_FTRACE | OST_CONTROL_PROTOCOL)
++
++#define STM_MAKE_VERSION(ma, mi)	((ma << 8) | mi)
++#define STM_HEADER_MAGIC		(0x5953)
++
++static ssize_t notrace ost_write(struct stm_data *data,
++		struct stm_output *output, unsigned int chan,
++		const char *buf, size_t count)
++{
++	unsigned int c = output->channel + chan;
++	unsigned int m = output->master;
++	const unsigned char nil = 0;
++	u32 header = DATA_HEADER;
++	u8 trc_hdr[24];
++	ssize_t sz;
++
++	/*
++	 * STP framing rules for OST frames:
++	 *   * the first packet of the OST frame is marked;
++	 *   * the last packet is a FLAG.
++	 */
++	/* Message layout: HEADER / DATA / TAIL */
++	/* HEADER */
++
++	sz = data->packet(data, m, c, STP_PACKET_DATA, STP_PACKET_MARKED,
++			  4, (u8 *)&header);
++	if (sz <= 0)
++		return sz;
++	*(uint16_t *)(trc_hdr) = STM_MAKE_VERSION(0, 3);
++	*(uint16_t *)(trc_hdr + 2) = STM_HEADER_MAGIC;
++	*(uint32_t *)(trc_hdr + 4) = raw_smp_processor_id();
++	*(uint64_t *)(trc_hdr + 8) = sched_clock();
++	*(uint64_t *)(trc_hdr + 16) = task_tgid_nr(get_current());
++	sz = stm_data_write(data, m, c, false, trc_hdr, sizeof(trc_hdr));
++	if (sz <= 0)
++		return sz;
++
++	/* DATA */
++	sz = stm_data_write(data, m, c, false, buf, count);
++
++	/* TAIL */
++	if (sz > 0)
++		data->packet(data, m, c, STP_PACKET_FLAG,
++			STP_PACKET_TIMESTAMPED, 0, &nil);
++
++	return sz;
++}
++
++static const struct stm_protocol_driver ost_pdrv = {
++	.owner			= THIS_MODULE,
++	.name			= "p_ost",
++	.write			= ost_write,
++};
++
++static int ost_stm_init(void)
++{
++	return stm_register_protocol(&ost_pdrv);
++}
++
++static void ost_stm_exit(void)
++{
++	stm_unregister_protocol(&ost_pdrv);
++}
++
++module_init(ost_stm_init);
++module_exit(ost_stm_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("MIPI Open System Trace STM framing protocol driver");
+-- 
+2.39.0
 
-If we enable continuous mode and drop the interrupt support in the
-driver, the kernel will not know the interrupts but a lot of interrupts
-are still raised in hardware. Can we do such like that?
-Without the interrupt support, the temperature we read may be the value
-generated in the last cycle.
-
-I think the temperature has its value only when we read it, so we start
-conversion only when we read the temperature. Further more, it will
-consume more power if we enable continuous mode.
-
-Best regards,
-Hal
