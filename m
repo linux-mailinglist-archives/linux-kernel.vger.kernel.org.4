@@ -2,73 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A469268E551
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE4568E554
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbjBHBRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 20:17:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S230141AbjBHBRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 20:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBHBRd (ORCPT
+        with ESMTP id S229598AbjBHBRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 20:17:33 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9643929E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 17:17:32 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id w5so7564241plg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 17:17:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xB13fF1PmyLmoTaKAw3VOcBhmK5OeazECIG9zVrIq7Y=;
-        b=TWbGHdgroF8gB44kgjoIqnZo0WmWKS2hV8bq/6MDOqbD4ag6ODZjQl5J7JUSYNdbSh
-         fRpTIGiSE5mEcyrGza4OjljrO1AhNs9WKIQkaoiQ1MJ//WmjF74MGmX8WbVH/3eeaQRI
-         e6fN7Uu12anaCc4Ip30OLdg2iFHidIVgCi1X/wBE4CpGbCFSsgJPXcv0EFttCuaWvNM3
-         7yeLp4vSFDex/NHKD4aiyT8pmzBYILmvH4T8vQ4iePK3go0tcyTtunf7WvVHGxx52SKa
-         tHR8QzEbzA2ce26qdE3anHhOc4w5nGzH9Wbgv1rSvnVv6hS2/9GVNOaRmSiOTxEZek5r
-         nSXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xB13fF1PmyLmoTaKAw3VOcBhmK5OeazECIG9zVrIq7Y=;
-        b=C6B7pV5SE5O2oXR7wLjrAP5YjWcUpxxs5lygOLkinnylvJVgOjnVo7zrLmTRdVZLPp
-         xLqMRKCOCfxYclo14htD1ukM9OFvdJg0hz/DtK+iMiTAxyWU+SUqr1v+kfPMO3RYygF+
-         dsTKdl/tsxxucNn8UiGdD4/E1kCayMDaO+eyM+jx6FLxNeRYGxD9sOHGb/g5JSeh+5Z/
-         rEpJFCfdoDEn58Q9ZOp8cZ3naPoyAjsTrRsjp/4ZDrNWaa1Z/1AJvU8DW0a8P+SQAK0v
-         iqIxxtZMiVrTiI2ud2xeefRsf+nMKKKZm6RvTtFCrC9o7XZnlEV0Ju8pw+ul3uWHg0rI
-         XHWA==
-X-Gm-Message-State: AO0yUKVvmLZ8rFZyRJ4tPCrdhDoKZeMXsDF4E8ld6IukJVIpQ3m32cwR
-        FhBTz2+k9M5OJAyMGW8jmt6r8g==
-X-Google-Smtp-Source: AK7set9e+0OSXRRK2C2oN9BODtXLAEl/rsuryLY+ttHMJegyR+WJUjWxZVaVgVdW2AlptngYWcnWbA==
-X-Received: by 2002:a17:902:d902:b0:199:3909:eaee with SMTP id c2-20020a170902d90200b001993909eaeemr110736plz.6.1675819051383;
-        Tue, 07 Feb 2023 17:17:31 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p22-20020aa78616000000b0058d9b68042fsm309103pfn.14.2023.02.07.17.17.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 17:17:30 -0800 (PST)
-Date:   Wed, 8 Feb 2023 01:17:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Venkatesh Srinivas <venkateshs@google.com>,
-        Aaron Lewis <aaronlewis@google.com>
-Subject: Re: [PATCH 2/4] KVM: selftests: x86: Add check of IA32_XFD in
- amx_test
-Message-ID: <Y+L4J4djWImiRvej@google.com>
-References: <20230110185823.1856951-1-mizhang@google.com>
- <20230110185823.1856951-3-mizhang@google.com>
+        Tue, 7 Feb 2023 20:17:46 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4143BDB6;
+        Tue,  7 Feb 2023 17:17:41 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PBMYW5drMz4xFv;
+        Wed,  8 Feb 2023 12:17:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675819057;
+        bh=dYHL607qD4Y5hhqCuRcTxAaY1QabKYCouRtj+G4BJcQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jQyuQKv3TIqT2dHcrNWk7k1XLDsxZqeXao7Enx0n4N9vIMJrHiu2LvfEpsZ2noy/n
+         IrEEkBYplxquBGJH3M9XHkqFFa+qa51kTkQli7U3wUHS6Kg3P8Urexr146yuXusjf/
+         putet2Zrog4WPotv5DaEZThXRhjK5luxH2LsBniHaAPXk/vbNlHqpJANlm9tE7kCep
+         tjd9A+SVcTLNiLDL+ppAz8LgBGswAxmgSaETfL4SPzWFKyNJ14CaUyKV8myaesErHF
+         2qX3n5xtUMdhX9EBmIYxmNt1OuLzy3fMAIyGyfruFd6WOqyNgQx5wW5/NjWBYO++b/
+         Mn7MhxxhSQ3Og==
+Date:   Wed, 8 Feb 2023 12:17:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the usb tree
+Message-ID: <20230208121734.37e45034@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230110185823.1856951-3-mizhang@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; boundary="Sig_/96l9e7VU5fn9z7SYWpimaAy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,66 +53,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 10, 2023, Mingwei Zhang wrote:
-> When #NM is triggered, the handler needs to ensure the exception is
+--Sig_/96l9e7VU5fn9z7SYWpimaAy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-State what the patch does (and explain why), don't say ABC needs/should do XYZ.
-The #NM handler doesn't _need_ to ensure the #NM wasn't due to CR0.TS
+Hi all,
 
-> triggered by AMX by checking IA32_XFD_ERR and not because of CR0.TS[bit 3]
+The following commit is also in the net tree tree as a different commit
+(but the same patch):
 
-CR0.TS is a single bit, using square braces makes it look like an index into CR0.TS.
-I would drop the "bit 3" part altogether, it's not relevant
+  93fd565919cf ("net: USB: Fix wrong-direction WARNING in plusb.c")
 
-> is 1. Note that the value of IA32_XFD_ERR comes from "the logical AND of
-> the IA32_XFD MSR and the bitmap corresponding to the state components
-> required by the faulting instruction." (Intel SDM vol 1. Section 13.14)
-> 
-> Add the missing check of CR0.TS before checking the value of IA32_XFD_ERR.
-> In addition, add an extra check to IA32_XFD to ensure the behavior is
-> consistent with the AMX archtecture. In addition, repeat the checks across
-> context switch to ensure the values of IA32_XFD and IA32_XFD_ERR are well
-> preserved.
+This is commit
 
-Split the MSR_IA32_XFD checks to a separate patch.  Or I guess given the shortlog
-is about IA32_XFD, split the CR0.TS check to a separate patch.
+  811d581194f7 ("net: USB: Fix wrong-direction WARNING in plusb.c")
 
-> 
-> Signed-off-by: Mingwei Zhang <mizhang@google.com>
-> ---
->  tools/testing/selftests/kvm/x86_64/amx_test.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
-> index 16533949a189..b2369f956fea 100644
-> --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
-> @@ -226,9 +226,12 @@ void guest_nm_handler(struct ex_regs *regs)
->  {
->  	/* Check if #NM is triggered by XFEATURE_MASK_XTILEDATA */
->  	GUEST_SYNC(7);
-> +	GUEST_ASSERT((get_cr0() & X86_CR0_TS) == 0);
+in the net tree.
 
-	GUEST_ASSERT(!(get_cr0() & X86_CR0_TS));
+--=20
+Cheers,
+Stephen Rothwell
 
->  	GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
-> +	GUEST_ASSERT((rdmsr(MSR_IA32_XFD) & XFEATURE_MASK_XTILEDATA) == XFEATURE_MASK_XTILEDATA);
+--Sig_/96l9e7VU5fn9z7SYWpimaAy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Isn't this just
+-----BEGIN PGP SIGNATURE-----
 
-	GUEST_ASSERT(rdmsr(MSR_IA32_XFD) & XFEATURE_MASK_XTILEDATA);
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPi+C4ACgkQAVBC80lX
+0GyMZQf/adhYa01yhGLVE7G+Jn0y35VTeInHYuMXnh69qCmjwBFIoxOSRRVMf1W6
+CgWAKNNez4ECbcStsWx2MdHapIEdHUDjsWBqY3t4UJKwWgMoSley9mu/0u9Gu2ku
+zJSq3JeV/Qrt1Kwd0CrbrnLY/Bmh2VT98KBI8PL0tz+j9FRWvKdagm5tJaLMDqna
+7g8443YNNdWTfl+G/bUugbu2VOpZSqgVZTgF+iktfW1/BftPkADXzwF0c2C4J+sQ
+rgLbSEKQVnY70z8q0ZHULl7pAfQ5WnSc6nu0N5ubFpapc8pNXfEds6Z6gEP5fHDd
+FZAr5v7FdKxfnCl5w/NBXILDzsVMBg==
+=umPI
+-----END PGP SIGNATURE-----
 
-or am I horribly misreading the code?
-
->  	GUEST_SYNC(8);
->  	GUEST_ASSERT(rdmsr(MSR_IA32_XFD_ERR) == XFEATURE_MASK_XTILEDATA);
-> +	GUEST_ASSERT((rdmsr(MSR_IA32_XFD) & XFEATURE_MASK_XTILEDATA) == XFEATURE_MASK_XTILEDATA);
-
-Same here.
-
->  	/* Clear xfd_err */
->  	wrmsr(MSR_IA32_XFD_ERR, 0);
->  	/* xfd=0, enable amx */
-> -- 
-> 2.39.0.314.g84b9a713c41-goog
-> 
+--Sig_/96l9e7VU5fn9z7SYWpimaAy--
