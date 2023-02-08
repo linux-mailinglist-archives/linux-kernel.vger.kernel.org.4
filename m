@@ -2,172 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA00468E562
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD4568E577
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjBHB2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 20:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S229756AbjBHBcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 20:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjBHB2V (ORCPT
+        with ESMTP id S229457AbjBHBcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 20:28:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E25367F2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 17:28:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E8561474
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:28:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6F6C433A4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675819699;
-        bh=ySOBWABXHobqC6tRnhtPa2KHrAeWgESayYbL45Pftjs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bO4Irx193cWTyRgLU16dP06P29JBDU7XtDRJO5KCZr4nuqa6xVELJ2DelkyIIQwiI
-         6WOkydpJaljuEaWkN7XolXNHmC3wU9wqn7gFEF0InDiYAG6k0h9zfDLdroaLeBFrN3
-         sL3Bfk6Bq69cNzZxDMqZ8gsTtRu7KX+ksjfQWrAh7Fsnrszt3bloPBZUxg2Yb4R0Hb
-         cVMNXwqVeE9FBCkp/nPt5HH26vXN25MKPOH2aZYOdz9kDYEGuH/GmEhIOdxdctQCqb
-         gIAuXt22qhjhaknH+0YVkJJHLO4b+MezMlH1m+ary3CRv4xbHnjOWZGqgcuPldLupn
-         S1+u9AmU9MGJw==
-Received: by mail-ot1-f48.google.com with SMTP id p24-20020a056830131800b0068d4b30536aso4797614otq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 17:28:19 -0800 (PST)
-X-Gm-Message-State: AO0yUKW8KCn3+BR86cFKDDSrF9ocM2+7DWP01FqjyA1+O4BTOjvCppIQ
-        loU+MuNwuyoU1WKUxap2TpN8wIoyx0dW3Lc+BIg=
-X-Google-Smtp-Source: AK7set+QF1X+RgxWIMYVqSbWqb9Yl3uMNAx1fT31Ze7wwtZIwth9r6SG/KtQC/lax+jfsFuQdKlLlEvUkss4Ya2dVPs=
-X-Received: by 2002:a9d:4e91:0:b0:686:6392:ed38 with SMTP id
- v17-20020a9d4e91000000b006866392ed38mr515879otk.22.1675819698888; Tue, 07 Feb
- 2023 17:28:18 -0800 (PST)
+        Tue, 7 Feb 2023 20:32:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697E618B2C;
+        Tue,  7 Feb 2023 17:32:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=jo71tlA2eEZPdxKjgTvLhMtzKyjxK2QlLMd+t0w/e3Q=; b=ay2mX2FLZ3Pvx6L5UJcyeffPih
+        Z2FzC7RnqKsgae3U/fJ+2MREDfNnYcX+7/DIUMs8G3h8JY9UkvYd4HWnOOk7Is6BNTJaTYAZxe1vf
+        l8LfWY1qS4pm/xpZ6w6Q4zuQ/rSlOUnCWslbQWOSRIy7DLC8xbsQgRlz+/9U8gmSYKYFTGHng3Won
+        9zYe4KLDgG2h5xOK/JslAPD/TMcDxUIDr8Uh+bYJm6gP5/ICWPz84oG5SIr1LjuTibzDMj3s3eZNT
+        vAuQJO05IAMM1Vxg5h6AY1cFu3fy6HRqxOeCQZZ0SMxWcVxafZAqAdGTnLRRAF2dInznQN6ckvsDV
+        zMkQoO9Q==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPZJD-00Dmp1-1J; Wed, 08 Feb 2023 01:31:39 +0000
+Message-ID: <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+Date:   Tue, 7 Feb 2023 17:31:37 -0800
 MIME-Version: 1.0
-References: <20230123182732.188863-1-sj@kernel.org> <20230206225652.89873-1-sj@kernel.org>
-In-Reply-To: <20230206225652.89873-1-sj@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 8 Feb 2023 10:27:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQf=9NJWRAFkcA=GXHh2bmh8N22iTJHqL1wDbyiB2Kfow@mail.gmail.com>
-Message-ID: <CAK7LNAQf=9NJWRAFkcA=GXHh2bmh8N22iTJHqL1wDbyiB2Kfow@mail.gmail.com>
-Subject: Re: Linux 6.2-rc2
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: remove arch/sh
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+ <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+ <20230203071423.GA24833@lst.de>
+ <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 7:56 AM SeongJae Park <sj@kernel.org> wrote:
->
-> On Mon, 23 Jan 2023 18:27:32 +0000 SeongJae Park <sj@kernel.org> wrote:
->
-> > On Mon, 23 Jan 2023 18:09:27 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > > On Wed, Jan 11, 2023 at 4:14 AM SeongJae Park <sj@kernel.org> wrote:
-> > > >
-> > > > Hi Masahiro,
-> > > >
-> > > > On Wed, 11 Jan 2023 03:39:58 +0900 Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > > >
-> > > > > On Tue, Jan 10, 2023 at 9:32 AM SeongJae Park <sj@kernel.org> wrote:
-> > > > > >
-> > > > > > On Tue, 3 Jan 2023 11:58:48 +0100 Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > > >
-> > > > > > > On Tue, 3 Jan 2023 at 03:13, Linus Torvalds
-> > > > > > > <torvalds@linux-foundation.org> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, Jan 2, 2023 at 5:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > > > > > >
-> > > > > > [...]
-> > > > > > > --- a/include/asm-generic/vmlinux.lds.h
-> > > > > > > +++ b/include/asm-generic/vmlinux.lds.h
-> > > > > > > @@ -896,7 +896,7 @@
-> > > > > > >   * Otherwise, the type of .notes section would become PROGBITS
-> > > > > > > instead of NOTES.
-> > > > > > >   */
-> > > > > > >  #define NOTES                                                          \
-> > > > > > > -       /DISCARD/ : { *(.note.GNU-stack) }                              \
-> > > > > > > +       .note.GNU-stack : { *(.note.GNU-stack) }                        \
-> > > > > > >         .notes : AT(ADDR(.notes) - LOAD_OFFSET) {                       \
-> > > > > > >                 BOUNDED_SECTION_BY(.note.*, _notes)                     \
-> > > > > > >         } NOTES_HEADERS                                                 \
-> > > > > > >
-> > > > > > > The .note.GNU-stack has zero size, so the result should be the same.
-> > > > > > >
-> > > > > >
-> > > > > > This also fixes ARCH=um build error on my system.
-> > > > > >
-> > > > > > Tested-by: SeongJae Park <sj@kernel.org>
-> > > > >
-> > > > >
-> > > > >
-> > > > > I am able to build ARCH=um defconfig at least.
-> > > > >
-> > > > > Can you provide the steps to reproduce the build error?
-> > > >
-> > > > I do the build for kunit test, like below.
-> > > >
-> > > >     mkdir ../kunit.out
-> > > >     echo "
-> > > >         CONFIG_KUNIT=y
-> > > >
-> > > >         CONFIG_DAMON=y
-> > > >         CONFIG_DAMON_KUNIT_TEST=y
-> > > >
-> > > >         CONFIG_DAMON_VADDR=y
-> > > >         CONFIG_DAMON_VADDR_KUNIT_TEST=y
-> > > >
-> > > >         CONFIG_DEBUG_FS=y
-> > > >         CONFIG_DAMON_DBGFS=y
-> > > >         CONFIG_DAMON_DBGFS_KUNIT_TEST=y
-> > > >     CONFIG_DAMON_PADDR=y" > ../kunit.out/.kunitconfig
-> > > >     ./tools/testsing/kunit/kunit.py run --build_dir ../kunit.out
-> > > >     [19:12:37] Configuring KUnit Kernel ...
-> > > >     [19:12:37] Building KUnit Kernel ...
-> > > >     Populating config with:
-> > > >     $ make ARCH=um O=../kunit.out/ olddefconfig
-> > > >     Building with:
-> > > >     $ make ARCH=um O=../kunit.out/ --jobs=36
-> > > >     ERROR:root:`.exit.text' referenced in section `.uml.exitcall.exit' of arch/um/drivers/virtio_uml.o: defined in discarded section `.exit.text' of arch/um/drivers/virtio_uml.o
-> > > >     collect2: error: ld returned 1 exit status
-> > > >     make[2]: *** [/home/sjpark/linux/scripts/Makefile.vmlinux:34: vmlinux] Error 1
-> > > >     make[1]: *** [/home/sjpark/linux/Makefile:1252: vmlinux] Error 2
-> > > >     make: *** [Makefile:242: __sub-make] Error 2
-> > > >
-> [...]
-> >
-> > Thank you for sharing your results.  I think it may depend on the compiler
-> > version, because I use a quite old compiler.
-> >
-> >     $ gcc --version
-> >     gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
->
-> I'm still getting the failure on my setup with latest mainline.  Could we merge
-> the fix for now?  Or, was there some updates that I was missing?
->
->
-> Thanks,
-> SJ
->
-> [...]
 
 
+On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
+> Hello Christoph!
+> 
+> On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+>> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+>>> We have had a discussion between multiple people invested in the SuperH port and
+>>> I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+>>> when he isn't available.
+>>
+>> So, this still isn't reflected in MAINTAINERS in linux-next.  When
+>> do you plan to take over?  What platforms will remain supported and
+>> what can we start dropping due to being unused and unmaintained?
+> 
+> I'm getting everything ready now with Geert's help and I have a probably dumb
+> question regarding the MAINTAINERS file change: Shall I just add myself as an
+> additional maintainer first or shall I also drop Yoshinori Sato?
+> 
+> Also, is it desirable to add a "T:" entry for the kernel tree?
 
-Sorry for delay. I submitted a patch.
+Yes, definitely.
 
-https://lore.kernel.org/all/20230207164156.537378-1-masahiroy@kernel.org/
-
-
+thanks.
 -- 
-Best Regards
-Masahiro Yamada
+~Randy
