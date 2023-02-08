@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F90768EE2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1197E68EE32
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjBHLon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 06:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S230402AbjBHLov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjBHLom (ORCPT
+        with ESMTP id S229851AbjBHLot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:44:42 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6124615B;
-        Wed,  8 Feb 2023 03:44:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675856680; x=1707392680;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z1IbDELn3EAaZaLU4TNEjPVAR6fEvO0fS+Iyr7LDl2c=;
-  b=SFt5HzB+FmU7qZ+BgYVxYliJzgtwKzOqJ70LO7pyEQDHph9A2qcZ0S19
-   eg2vgE2U5A++nuXjVZDcCP8vSiMxjig2ez9XF0D3iDCcw5jNlZ5LAi7Ct
-   gA14KU3gNSwtZ1M+Ps+/dQiQMlA+0eb3aXSJT32qy8mUKzvI+NWXJXxKg
-   dRG5qtkpDnZj5Ef/V8m/1CZ8GwqVvLiyiNIUNrwJACQs/daNN0jpQ7OVf
-   dUYEpXqy4zmEMCAEgOYVBziB+Xdil86p/6ztWlkevIU9heNoUZAw1gSlU
-   b6tOi3day0/nceBEGKHkqVv7pxY/EFLMNyUJ0JQSj/C6RCGvHcQrVnQdn
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,280,1669100400"; 
-   d="scan'208";a="211079237"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Feb 2023 04:44:39 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 04:44:38 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Wed, 8 Feb 2023 04:44:36 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next] net: micrel: Cable Diagnostics feature for lan8841 PHY
-Date:   Wed, 8 Feb 2023 12:44:06 +0100
-Message-ID: <20230208114406.1666671-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Wed, 8 Feb 2023 06:44:49 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5599B442F1;
+        Wed,  8 Feb 2023 03:44:48 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qw12so50553132ejc.2;
+        Wed, 08 Feb 2023 03:44:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pqBkYIBK1hoc+q0fmTaYVvMN7XPCuKZqqpnhWJ7rdH8=;
+        b=cyZc3HzsVQsKEzq7oFQGbWktkPeTpE8zfRKrl+jjhgB1IIVGRKJlachTAAswT/104d
+         vW0i+kclRr5iOsWeUAo+ZBAkxT55Z6hU6F/pxjbrC3+pnaNQ1si8+goMTY/XpjoUrgql
+         o+SkTs9Z5PGp0M2kMIRHErxn0p5NnPHiO1ZwzqPvlbZdAh74YxJo5lJ2AyPjJPjdlNLn
+         5Hx7u5K/RCntYtnd2fMQdUHjayTpLIeWNezITpUcmaYmXmKee3mNNSZVhkl8r+M+dolJ
+         ripc071jh1lBXdEcNn7oaSTwIRdneO1h3fiRTCxQ2Jir7ocVKzsVaPZoVre8ZATtIpZw
+         HJAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pqBkYIBK1hoc+q0fmTaYVvMN7XPCuKZqqpnhWJ7rdH8=;
+        b=T+agEDWHxhOGPo42mYTB5UGgCjghuWgd0q4fPlCyE4FNSGn74SLX4cO5CVKWm7jlsm
+         iAZvKqs/ClGs8yBcOQogpoBoEDNH1kKM/rTe16tVRTzW/pRbA3YSt9OVZPZwEyKvbOIZ
+         LUADrm+OPZkA9/d1xFaCvhbnZn5ncoikTFw0geFP6eXgCdLYve7tcAUjqquobZujC3eT
+         MDFWCZZxd3iRvukGssNJanSRIY8k6XZdT8TYx4gWApykCTBLMVDwYpf5EzV1T5W6alYB
+         MHUizbVghyfNBlhAWVKS4ydztugKg2ZOM8vwCl7Hgivo8/8VHC8B4z2I73lgoeCKMH4F
+         OCPQ==
+X-Gm-Message-State: AO0yUKUC9fjzqhlu/DV4YfdFOoMRj4VBwmMil3QIN2H0pPaGCNQJsQb7
+        cRQjHBKT+6mx1tSZN/tfdws=
+X-Google-Smtp-Source: AK7set/Fj+mCU2u4KpkhWtzcdvqobaDl8+gyFyBgNpzfIpZ6MLCkfdwxMdPlPtLuO5Me2NOmhTxAlA==
+X-Received: by 2002:a17:907:1c83:b0:884:c45f:1c04 with SMTP id nb3-20020a1709071c8300b00884c45f1c04mr10573906ejc.2.1675856686825;
+        Wed, 08 Feb 2023 03:44:46 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id ke28-20020a17090798fc00b0088991314edesm8123593ejc.7.2023.02.08.03.44.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 03:44:46 -0800 (PST)
+Date:   Wed, 8 Feb 2023 12:44:44 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Manikanta Maddireddy <mmaddireddy@nvidia.com>
+Cc:     bhelgaas@google.com, petlozup@nvidia.com,
+        rafael.j.wysocki@intel.com, lpieralisi@kernel.org, robh@kernel.org,
+        jeffy.chen@rock-chips.com, krzysztof.kozlowski+dt@linaro.org,
+        jonathanh@nvidia.com, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
+        steven.price@arm.com, kw@linux.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        vidyas@nvidia.com
+Subject: Re: [RFC,v14 2/5] of/irq: Adjust of_pci_irq parsing for multiple
+ interrupts
+Message-ID: <Y+OLLMrHqMCrHxLB@orome>
+References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
+ <20230208111645.3863534-3-mmaddireddy@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="v95VmpPpGmMBEVze"
+Content-Disposition: inline
+In-Reply-To: <20230208111645.3863534-3-mmaddireddy@nvidia.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,44 +83,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for cable diagnostics in lan8841 PHY. It has the same
-registers layout as lan8814 PHY, therefore reuse the functionality.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/phy/micrel.c | 5 +++++
- 1 file changed, 5 insertions(+)
+--v95VmpPpGmMBEVze
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 01677c28e4079..727de4f4a14db 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -378,6 +378,8 @@ static const struct kszphy_type lan8841_type = {
- 	.disable_dll_tx_bit	= BIT(14),
- 	.disable_dll_rx_bit	= BIT(14),
- 	.disable_dll_mask	= BIT_MASK(14),
-+	.cable_diag_reg		= LAN8814_CABLE_DIAG,
-+	.pair_mask		= LAN8814_WIRE_PAIR_MASK,
- };
- 
- static int kszphy_extended_write(struct phy_device *phydev,
-@@ -3520,6 +3522,7 @@ static struct phy_driver ksphy_driver[] = {
- 	.phy_id		= PHY_ID_LAN8841,
- 	.phy_id_mask	= MICREL_PHY_ID_MASK,
- 	.name		= "Microchip LAN8841 Gigabit PHY",
-+	.flags		= PHY_POLL_CABLE_TEST,
- 	.driver_data	= &lan8841_type,
- 	.config_init	= lan8841_config_init,
- 	.probe		= lan8841_probe,
-@@ -3531,6 +3534,8 @@ static struct phy_driver ksphy_driver[] = {
- 	.get_stats	= kszphy_get_stats,
- 	.suspend	= genphy_suspend,
- 	.resume		= genphy_resume,
-+	.cable_test_start	= lan8814_cable_test_start,
-+	.cable_test_get_status	= ksz886x_cable_test_get_status,
- }, {
- 	.phy_id		= PHY_ID_KSZ9131,
- 	.phy_id_mask	= MICREL_PHY_ID_MASK,
--- 
-2.38.0
+On Wed, Feb 08, 2023 at 04:46:42PM +0530, Manikanta Maddireddy wrote:
+> From: Jeffy Chen <jeffy.chen@rock-chips.com>
+>=20
+> Currently we are considering the first irq as the PCI interrupt pin,
+> but a PCI device may have multiple interrupts(e.g. PCIe WAKE# pin).
+>=20
+> Only parse the PCI interrupt pin when the irq is unnamed or named as
+> "pci".
+>=20
+> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+> Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> ---
+>=20
+> Changes in v14:
+> Address Rob's comment on using of_property_match_string().
+>=20
+> Changes in v13: None
+> Changes in v12: None
+> Changes in v11:
+> Address Brian's comments.
+>=20
+> Changes in v10: None
+> Changes in v9: None
+> Changes in v8: None
+> Changes in v7: None
+> Changes in v6: None
+> Changes in v5: None
+> Changes in v3: None
+> Changes in v2: None
+>=20
+>  drivers/pci/of.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index 196834ed44fe..ff897c40ed71 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -429,9 +429,17 @@ static int of_irq_parse_pci(const struct pci_dev *pd=
+ev, struct of_phandle_args *
+>  	 */
+>  	dn =3D pci_device_to_OF_node(pdev);
+>  	if (dn) {
+> -		rc =3D of_irq_parse_one(dn, 0, out_irq);
+> -		if (!rc)
+> -			return rc;
+> +		int index =3D 0;
 
+No need to initialize to 0 here since you're assigning to it immediately
+below.
+
+Otherwise, looks good, so with that initialization dropped, this is:
+
+Reviewed-by: Thierry Reding <treding@nvidia.com>
+
+--v95VmpPpGmMBEVze
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjiywACgkQ3SOs138+
+s6FFWBAAjd2UbNIacqzrXJOtdU+WBjvCkgGerX8q/xOzDljt+WqdwHORW+tt9gCq
+vglBKd9huBKGPu+CiVuRmTxfczpIc1QFORetj7N8oJUlgi9upg6OwXCOBftU0ywa
+cU96BM9XqENm+00xCO70qZu893pE1805QHLpeMb2ydYSFORoxKSZQb4TgQLe6Sbp
+nmp4bndWeBjfeiWTn+3Ot04N3VBInz9+Lby+WrFs7s/Gr1wrrCAQTMbnIDB+O448
+NDZBsSe6DJ2ONPTGiO65dJ1NAZJXcdlxPqSEwXKA3gp3BbUB4MJHvZ6AeED0EVVd
+UUziz1tTCxoxsNmbN5Pw2AxX7gmt6hDRF4MlEL9nk9v3rY2sb7kOv3fFYp44b+F2
+ebtxH9fZOsmm9VbPqGelqKx7sJy+7BBEZpKFldo59p3ENiSl5Tt3v6rM9hw51QuF
+v/6/wzfkxarm2aXUoGjuXGPBNyIbkmGxrZPSEb1tMCx6JBKRVYxrOH+cA/T4FuLt
+T6Gf67tjzYUyWZyRnUAnHq0awcOg2jIsYK5n0HhTJiB8iFHUXkuaMqCikxkAdL4p
+QUbksIk5s0ai8T6G8yvXNdGMBjl7W8kv6y8Z/Dok8+wMRAMEIVfCt0CWEp1r9Ji0
+Ly8iZHMYmoxHjAG1JtzBaI6NN/Y8RcSOaBosEmFv9euM/MmiYHY=
+=7+YZ
+-----END PGP SIGNATURE-----
+
+--v95VmpPpGmMBEVze--
