@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D8268E95B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:54:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D5468E961
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjBHHya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S230296AbjBHH4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBHHy3 (ORCPT
+        with ESMTP id S230134AbjBHH4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:54:29 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD7D25294;
-        Tue,  7 Feb 2023 23:54:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675842867; x=1707378867;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=yc5gczRuyEW9BjeTEqBRpxEHpjo6TawCP6phTo9XQlQ=;
-  b=mgSXXkfUbsL0LgC+qt9+9gzBwxNp1UO2YRFliVzalDRgRQaG7sZdaVNx
-   alxb1pPdVxPzqucQyg61l72ptWan6J9YPJdArxjOB8Q1NQWBtEnd3daWi
-   g8ffUYpXLXFLjWlt5vs7kslbHrEz0zwAfH4Ig9jyuLArYeI2KYKSklQAM
-   RvHNHO2w4AZZV0yz0NBzGGrOpl6YutsvRu//ISKlOyZztIudNbkUVxw1V
-   RH+os5waCsMqlxySvxx/pANcFq/pWoaYicikadBCUT15DqHdxaPDL2+GS
-   db2K55yso7lnWndpkkjDTDopp1y1Yno+i/poYvPM7eVwE6dnrAUm2W/4k
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="392132886"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="392132886"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 23:54:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="669094442"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="669094442"
-Received: from jstelter-mobl.ger.corp.intel.com ([10.252.38.39])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 23:54:24 -0800
-Date:   Wed, 8 Feb 2023 09:54:19 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
- occurs in CAT test
-In-Reply-To: <OSZPR01MB6328AE8F77449F7D6C7DE8958BD89@OSZPR01MB6328.jpnprd01.prod.outlook.com>
-Message-ID: <c3acfc41-44f8-263e-379e-f8825194a6e@linux.intel.com>
-References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com> <83e1de31-b448-1a51-ba39-faec794694f@linux.intel.com> <OSZPR01MB6328AE8F77449F7D6C7DE8958BD89@OSZPR01MB6328.jpnprd01.prod.outlook.com>
+        Wed, 8 Feb 2023 02:56:22 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7131E1F4AD
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:56:21 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id q8so12700113wmo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ETxDvVj98k7PU9AtIH67/6OJT7NKyjfCHV6l1l+MNQQ=;
+        b=JYXVjCxpNpr225kycoOKCpYUv9d7TUOsBrEU89nBfVKya6Dua1U16VPiPJ+uJfN4en
+         AWSKutDat+UFJUxzYXSE8VwBtHCFQB4TTMYKrLFcfpluBgJmKU+RFFJ7UpvgtzC+iajr
+         JIvfz50BvS4N8o3NNxc4LZ3Ml6IWlJqgxTn9GfkuL8Rpvz+OarEcBGjAtGa7hPh3lrit
+         3Cv+S2ov7vm80nv+NmAjxTaUJ+u/lv1h5az4msh01dBrx6HDpPtavEXy9jod1UgboOdK
+         LSdREKHCZFuacyIbvWoUOHSJwpvioc1k2jFMC5f/d+53erhNUTHyiAA1uZ5X2YM6tE/X
+         oeXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ETxDvVj98k7PU9AtIH67/6OJT7NKyjfCHV6l1l+MNQQ=;
+        b=40bp+nnrEmDbUlhX92TSLNo+th2zHdhxaN/s3NJ+g7k9OUoJiidey2zLXA5bZ2SaQc
+         0XTtiMgzgWsPTjT/GvpTWSFPJhej57S3apxzxhY2MX5ME+etB6qV42wE9kjCZL28bTxy
+         IgVFKpuk4DwLoa8JrR0lcoVrHiKgq5KqKaSJH0RzsGnkbmibe+If0bCUQOt5byHako7A
+         Elc+uFcrrx0aRSqxy6AU0PJE52NdCtue+qfCCZx4XQRBkXwR0hjbe6BcP/2x78Oyrztg
+         Jx8KWpDO5LIDRvmACXX9ue1Q+d5rb6g15nhabnn6o/+PHN3PEtiBiyV61YBR9FM2HRBH
+         nXBg==
+X-Gm-Message-State: AO0yUKV5jBW1luSLdrsW7MHltZtTj0AnOJRFp9mc433dLKNOn58LGeBp
+        Mf59rtvB3EreKfmC8lvsEsxkow==
+X-Google-Smtp-Source: AK7set/nmPCad66nOdzB/ATnH2t6UekYKNilUC2JCRegAFqTQjcMwBcwNJH1PAkPH6wxUnVbqd+KHg==
+X-Received: by 2002:a05:600c:2e96:b0:3df:7948:886b with SMTP id p22-20020a05600c2e9600b003df7948886bmr5383344wmn.31.1675842980005;
+        Tue, 07 Feb 2023 23:56:20 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b003dc521f336esm1062428wmo.14.2023.02.07.23.56.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 23:56:19 -0800 (PST)
+Message-ID: <f80c617c-f595-bdc3-44d0-d29b3fff989e@linaro.org>
+Date:   Wed, 8 Feb 2023 08:56:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 2/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr
+ bindings optional
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230131151819.16612-1-ansuelsmth@gmail.com>
+ <20230131151819.16612-2-ansuelsmth@gmail.com>
+ <1670489b-e4f0-7328-3dbb-d849d1d6bd7e@linaro.org>
+ <63e2e854.df0a0220.52915.56aa@mx.google.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <63e2e854.df0a0220.52915.56aa@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023, Shaopeng Tan (Fujitsu) wrote:
-> > On Tue, 31 Jan 2023, Shaopeng Tan wrote:
-> > 
-> > > After creating a child process with fork() in CAT test, if an error
-> > > occurs or a signal such as SIGINT is received, the parent process will
-> > > be terminated immediately, and therefor the child process will not be
-> > > killed and also resctrlfs is not unmounted.
-> > >
-> > > There is a signal handler registered in CMT/MBM/MBA tests, which kills
-> > > child process, unmount resctrlfs, cleanups result files, etc., if a
-> > > signal such as SIGINT is received.
-> > >
-> > > Commonize the signal handler registered for CMT/MBM/MBA tests and
-> > > reuse it in CAT too.
-> > >
-> > > To reuse the signal handler, make the child process in CAT wait to be
-> > > killed by parent process in any case (an error occurred or a signal
-> > > was received), and when killing child process use global bm_pid
-> > > instead of local bm_pid.
-> > >
-> > > Also, since the MBA/MBA/CMT/CAT are run in order, unregister the
-> > > signal handler at the end of each test so that the signal handler
-> > > cannot be inherited by other tests.
-> > >
-> > > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> > > ---
-> > 
-> > >  	if (bm_pid == 0) {
-> > >  		/* Tell parent that child is ready */
-> > >  		close(pipefd[0]);
-> > >  		pipe_message = 1;
-> > >  		if (write(pipefd[1], &pipe_message, sizeof(pipe_message)) <
-> > > -		    sizeof(pipe_message)) {
-> > > -			close(pipefd[1]);
-> > > +		    sizeof(pipe_message))
-> > > +			/*
-> > > +			 * Just print the error message.
-> > > +			 * Let while(1) run and wait for itself to be killed.
-> > > +			 */
-> > >  			perror("# failed signaling parent process");
-> > 
-> > If the write error is ignored here, won't it just lead to parent hanging forever
-> > waiting for the child to send the message through the pipe which will never
-> > come?
+On 08/02/2023 01:09, Christian Marangi wrote:
+> On Wed, Feb 01, 2023 at 09:20:39AM +0100, Krzysztof Kozlowski wrote:
+>> On 31/01/2023 16:18, Christian Marangi wrote:
+>>> The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+>>> - pre-cpr that doesn't have power-domains and base everything on nvmem
+>>>   cells and multiple named microvolt bindings.
+>>>   Doesn't need required-opp binding in the opp nodes as they are only
+>>>   used for genpd based devices.
+>>> - cpr-based that require power-domain in the cpu nodes and use various
+>>>   source to decide the correct voltage and freq
+>>>   Require required-opp binding since they need to be linked to the
+>>>   related opp-level.
+>>>
+>>> When the schema was introduced, it was wrongly set to always require these
+>>> binding but this is not the case for pre-cpr devices.
+>>>
+>>> Make the power-domain and the required-opp optional and set them required
+>>> only for qcs404 based devices.
+>>>
+>>> Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+>>
+>> Fixes go as first patches in the series.
+>>
 > 
-> If the write error is ignored here, the pipe will be closed by "close(pipefd[1]);" and child process will wait to be killed by "while(1)".
-> ---
-> -			return errno;
-> -		}
+> Hi,
+> this is problematic. This documentation is a bit special.
 > 
->  		close(pipefd[1]);
->  		while (1)
-> ---
+> v4 had this patch as first but this cause error with make
+> dt_binding_check as the schema will be effectively empty (as it will
+> have only if condition)
 > 
-> If all file descriptors referring to the write end of a pipe have been closed, 
-> then an attempt to read(2) from the pipe will see end-of-file (read(2) will return 0).
-> Then, "perror("# failed reading from child process");" occurs.
-> ---
->         } else {
->                 /* Parent waits for child to be ready. */
->                 close(pipefd[1]);
->                 pipe_message = 0;
->                 while (pipe_message != 1) {
->                         if (read(pipefd[0], &pipe_message,
->                                  sizeof(pipe_message)) < sizeof(pipe_message)) {
->                                 perror("# failed reading from child process");
->                                 break;
->                         }
->                 }
->                 close(pipefd[0]);
->                 kill(bm_pid, SIGKILL);
->                 signal_handler_unregister();
->         }
+> This is why I pushed v5 that swap this with the second patch and first
+> add non conditional stuff to the schema and only with the second patch
+> makes them conditional.
+> 
+> Any hint to handle this corner case? I'm having some diffiulties due to
+> how special this is but we really need this fix since it's blocking the
+> introduction of opp table for ipq806x and ipq807x (as the schema is
+> currently flawed)
 
-Ah, indeed read() will pick up the close event. So your code seem fine 
-after all.
+Let's then drop fixes tag, because it will only confuse any backporters.
 
--- 
- i.
+Best regards,
+Krzysztof
 
