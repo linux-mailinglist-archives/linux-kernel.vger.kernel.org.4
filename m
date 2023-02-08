@@ -2,307 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454D968E4B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6359F68E4BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjBHAEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 19:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S229803AbjBHAGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 19:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjBHAEt (ORCPT
+        with ESMTP id S229649AbjBHAGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 19:04:49 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4702331C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:04:47 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o16-20020a17090ad25000b00230759a8c06so506966pjw.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 16:04:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dfEPQhR9+nvRYFuut3HlmHRlPkp8cAR6z45/icvtvuw=;
-        b=bY80V9xOPF3ktFiiVHSWnzAiW7EJ+dEDiCHGs3IiSfFYGRXEEuUKNi+EsMjFtPWZ6v
-         6ER4zszQSi4bzyZ31Q8wKhOv8RmhRopyjRvd5Q6KwjPUGj13I96N7ZNYSqnIJgcn2n9Y
-         WsJA4YpowQfpU6KDhEdlxhItrUUBVdcMfE3Ak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dfEPQhR9+nvRYFuut3HlmHRlPkp8cAR6z45/icvtvuw=;
-        b=Jlmeu3LmmY9uJJqSwlcOuKp1PC37NXgHNwChKIcogxFizj/shB2CiY1uCOrZEECZW/
-         DznEnvo6c6avYngyw96pS1COha/eNsQ77ScXt9FLVT+zc0v59lLBDTom865zJTeQq6T8
-         KqYnayeolLMyYyJYSHUko9yNoNJ7UQF2t+NVMZepkxVqzon8avIMcu5NPInsn4nLU8dc
-         ZVqXV7ACslFdFU0ETE8paOWUUen7M52Hjb5ewA0J8mEcwdiSOrty8L9keC0xIHVAh/Ap
-         xrfcdJgr9luArWhhd0EyWfDEHd8lvkkxHQkli+76n6yryOFBRTZASXURXlOab/Nz7SOD
-         6/aw==
-X-Gm-Message-State: AO0yUKXcsZP09zjMKo1mqWq7cF3VuVGyjCNzmotH0b5PoiRdh7aJpHo5
-        kCKvq8PDrDV46b12SLuzkA1pxWqN2dUptoVRwZS/
-X-Google-Smtp-Source: AK7set+x2RMP9jPOWJjqB5AuZaFMEzKB81CZ5V6vAu5s3Oc0iy8TPASMirZbhn0c2Wzd3Tp69FACa6p/DaneNwBZ4Mk=
-X-Received: by 2002:a17:902:8348:b0:193:794:ba9 with SMTP id
- z8-20020a170902834800b0019307940ba9mr1322433pln.22.1675814687080; Tue, 07 Feb
- 2023 16:04:47 -0800 (PST)
+        Tue, 7 Feb 2023 19:06:10 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B51722DF5;
+        Tue,  7 Feb 2023 16:06:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675814768; x=1707350768;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uSdHRfD6AiZHMGzCoEYInID5tWtuf+3f7a2uyKj5dL4=;
+  b=H4GpKNk3umklU1aqTgV+/p23/Y3WazbFmyAsTG5z4UQNaGLkYhqeOZVZ
+   wb7s3Yco6sfXYUBSMrC+mXN+/0jvAq5GS4VdLFDcVm7V6CqhOcF0QEbGp
+   xFOpr+OH6kYDZctyEJ8ItqvpZjCJ8AGLHbPovN4i8EQI8Zxl0dr1hlgdH
+   o+7454deTXfyfLRet27HbSOwyzGOvOHOT0vp+GMB7nTVLnml4VtsBk8Nm
+   b6dtP+CQsyMr7Uuno0oJnmncM0DHLqxkU6SkvpITaftLV6cOOhgIcn5Y0
+   q5f0sUC65ChkHNcf+OFpuU9e2ahH/a8e9AZUZSxN1y6tsVh9hcGLUEs0c
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="331794383"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="331794383"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 16:06:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="697462684"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="697462684"
+Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
+  by orsmga008.jf.intel.com with ESMTP; 07 Feb 2023 16:06:02 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     "Robin Murphy" <robin.murphy@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        stable@vger.kernel.org, Sukumar Ghorai <sukumar.ghorai@intel.com>
+Subject: [PATCH v2] iommu/vt-d: Fix PASID directory pointer coherency
+Date:   Tue,  7 Feb 2023 16:09:37 -0800
+Message-Id: <20230208000938.1527079-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230128072737.2995881-1-apatel@ventanamicro.com> <20230128072737.2995881-6-apatel@ventanamicro.com>
-In-Reply-To: <20230128072737.2995881-6-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 7 Feb 2023 16:04:35 -0800
-Message-ID: <CAOnJCUKh6s6v0TK=4KRZk9GXN23ebvPuy2OHtWBtTOpnN4g9dg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:28 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> We extend the CSR ONE_REG interface to access both general CSRs and
-> AIA CSRs. To achieve this, we introduce "subtype" field in the ONE_REG
-> id which can be used for grouping registers within a particular "type"
-> of ONE_REG registers.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/uapi/asm/kvm.h | 15 ++++-
->  arch/riscv/kvm/vcpu.c             | 96 ++++++++++++++++++++++++-------
->  2 files changed, 89 insertions(+), 22 deletions(-)
->
-> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-> index 71992ff1f9dd..d0704eff0121 100644
-> --- a/arch/riscv/include/uapi/asm/kvm.h
-> +++ b/arch/riscv/include/uapi/asm/kvm.h
-> @@ -64,7 +64,7 @@ struct kvm_riscv_core {
->  #define KVM_RISCV_MODE_S       1
->  #define KVM_RISCV_MODE_U       0
->
-> -/* CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> +/* General CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
->  struct kvm_riscv_csr {
->         unsigned long sstatus;
->         unsigned long sie;
-> @@ -78,6 +78,10 @@ struct kvm_riscv_csr {
->         unsigned long scounteren;
->  };
->
-> +/* AIA CSR registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
-> +struct kvm_riscv_aia_csr {
-> +};
-> +
->  /* TIMER registers for KVM_GET_ONE_REG and KVM_SET_ONE_REG */
->  struct kvm_riscv_timer {
->         __u64 frequency;
-> @@ -105,6 +109,7 @@ enum KVM_RISCV_ISA_EXT_ID {
->         KVM_RISCV_ISA_EXT_SVINVAL,
->         KVM_RISCV_ISA_EXT_ZIHINTPAUSE,
->         KVM_RISCV_ISA_EXT_ZICBOM,
-> +       KVM_RISCV_ISA_EXT_SSAIA,
->         KVM_RISCV_ISA_EXT_MAX,
->  };
->
-> @@ -134,6 +139,8 @@ enum KVM_RISCV_SBI_EXT_ID {
->  /* If you need to interpret the index values, here is the key: */
->  #define KVM_REG_RISCV_TYPE_MASK                0x00000000FF000000
->  #define KVM_REG_RISCV_TYPE_SHIFT       24
-> +#define KVM_REG_RISCV_SUBTYPE_MASK     0x0000000000FF0000
-> +#define KVM_REG_RISCV_SUBTYPE_SHIFT    16
->
->  /* Config registers are mapped as type 1 */
->  #define KVM_REG_RISCV_CONFIG           (0x01 << KVM_REG_RISCV_TYPE_SHIFT)
-> @@ -147,8 +154,12 @@ enum KVM_RISCV_SBI_EXT_ID {
->
->  /* Control and status registers are mapped as type 3 */
->  #define KVM_REG_RISCV_CSR              (0x03 << KVM_REG_RISCV_TYPE_SHIFT)
-> +#define KVM_REG_RISCV_CSR_GENERAL      0x0
-> +#define KVM_REG_RISCV_CSR_AIA          0x1
->  #define KVM_REG_RISCV_CSR_REG(name)    \
-> -               (offsetof(struct kvm_riscv_csr, name) / sizeof(unsigned long))
-> +       (offsetof(struct kvm_riscv_csr, name) / sizeof(unsigned long))
-> +#define KVM_REG_RISCV_CSR_AIA_REG(name)        \
-> +       (offsetof(struct kvm_riscv_aia_csr, name) / sizeof(unsigned long))
->
->  /* Timer registers are mapped as type 4 */
->  #define KVM_REG_RISCV_TIMER            (0x04 << KVM_REG_RISCV_TYPE_SHIFT)
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 3cf50eadc8ce..37933ea20274 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -58,6 +58,7 @@ static const unsigned long kvm_isa_ext_arr[] = {
->         [KVM_RISCV_ISA_EXT_I] = RISCV_ISA_EXT_i,
->         [KVM_RISCV_ISA_EXT_M] = RISCV_ISA_EXT_m,
->
-> +       KVM_ISA_EXT_ARR(SSAIA),
->         KVM_ISA_EXT_ARR(SSTC),
->         KVM_ISA_EXT_ARR(SVINVAL),
->         KVM_ISA_EXT_ARR(SVPBMT),
-> @@ -96,6 +97,7 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsigned long ext)
->         case KVM_RISCV_ISA_EXT_C:
->         case KVM_RISCV_ISA_EXT_I:
->         case KVM_RISCV_ISA_EXT_M:
-> +       case KVM_RISCV_ISA_EXT_SSAIA:
->         case KVM_RISCV_ISA_EXT_SSTC:
->         case KVM_RISCV_ISA_EXT_SVINVAL:
->         case KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
-> @@ -451,30 +453,79 @@ static int kvm_riscv_vcpu_set_reg_core(struct kvm_vcpu *vcpu,
->         return 0;
->  }
->
-> +static int kvm_riscv_vcpu_general_get_csr(struct kvm_vcpu *vcpu,
-> +                                         unsigned long reg_num,
-> +                                         unsigned long *out_val)
-> +{
-> +       struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
-> +
-> +       if (reg_num >= sizeof(struct kvm_riscv_csr) / sizeof(unsigned long))
-> +               return -EINVAL;
-> +
-> +       if (reg_num == KVM_REG_RISCV_CSR_REG(sip)) {
-> +               kvm_riscv_vcpu_flush_interrupts(vcpu);
-> +               *out_val = (csr->hvip >> VSIP_TO_HVIP_SHIFT) & VSIP_VALID_MASK;
-> +       } else
-> +               *out_val = ((unsigned long *)csr)[reg_num];
-> +
-> +       return 0;
-> +}
-> +
->  static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
->                                       const struct kvm_one_reg *reg)
->  {
-> -       struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
-> +       int rc;
->         unsigned long __user *uaddr =
->                         (unsigned long __user *)(unsigned long)reg->addr;
->         unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
->                                             KVM_REG_SIZE_MASK |
->                                             KVM_REG_RISCV_CSR);
-> -       unsigned long reg_val;
-> +       unsigned long reg_val, reg_subtype;
->
->         if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
->                 return -EINVAL;
-> +
-> +       reg_subtype = (reg_num & KVM_REG_RISCV_SUBTYPE_MASK)
-> +                       >> KVM_REG_RISCV_SUBTYPE_SHIFT;
-> +       reg_num &= ~KVM_REG_RISCV_SUBTYPE_MASK;
-> +       switch (reg_subtype) {
-> +       case KVM_REG_RISCV_CSR_GENERAL:
-> +               rc = kvm_riscv_vcpu_general_get_csr(vcpu, reg_num, &reg_val);
-> +               break;
-> +       case KVM_REG_RISCV_CSR_AIA:
-> +               rc = kvm_riscv_vcpu_aia_get_csr(vcpu, reg_num, &reg_val);
-> +               break;
-> +       default:
-> +               rc = -EINVAL;
-> +               break;
-> +       }
-> +       if (rc)
-> +               return rc;
-> +
-> +       if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
-> +               return -EFAULT;
-> +
-> +       return 0;
-> +}
-> +
-> +static inline int kvm_riscv_vcpu_general_set_csr(struct kvm_vcpu *vcpu,
-> +                                                unsigned long reg_num,
-> +                                                unsigned long reg_val)
-> +{
-> +       struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
-> +
->         if (reg_num >= sizeof(struct kvm_riscv_csr) / sizeof(unsigned long))
->                 return -EINVAL;
->
->         if (reg_num == KVM_REG_RISCV_CSR_REG(sip)) {
-> -               kvm_riscv_vcpu_flush_interrupts(vcpu);
-> -               reg_val = (csr->hvip >> VSIP_TO_HVIP_SHIFT) & VSIP_VALID_MASK;
-> -       } else
-> -               reg_val = ((unsigned long *)csr)[reg_num];
-> +               reg_val &= VSIP_VALID_MASK;
-> +               reg_val <<= VSIP_TO_HVIP_SHIFT;
-> +       }
->
-> -       if (copy_to_user(uaddr, &reg_val, KVM_REG_SIZE(reg->id)))
-> -               return -EFAULT;
-> +       ((unsigned long *)csr)[reg_num] = reg_val;
-> +
-> +       if (reg_num == KVM_REG_RISCV_CSR_REG(sip))
-> +               WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
->
->         return 0;
->  }
-> @@ -482,31 +533,36 @@ static int kvm_riscv_vcpu_get_reg_csr(struct kvm_vcpu *vcpu,
->  static int kvm_riscv_vcpu_set_reg_csr(struct kvm_vcpu *vcpu,
->                                       const struct kvm_one_reg *reg)
->  {
-> -       struct kvm_vcpu_csr *csr = &vcpu->arch.guest_csr;
-> +       int rc;
->         unsigned long __user *uaddr =
->                         (unsigned long __user *)(unsigned long)reg->addr;
->         unsigned long reg_num = reg->id & ~(KVM_REG_ARCH_MASK |
->                                             KVM_REG_SIZE_MASK |
->                                             KVM_REG_RISCV_CSR);
-> -       unsigned long reg_val;
-> +       unsigned long reg_val, reg_subtype;
->
->         if (KVM_REG_SIZE(reg->id) != sizeof(unsigned long))
->                 return -EINVAL;
-> -       if (reg_num >= sizeof(struct kvm_riscv_csr) / sizeof(unsigned long))
-> -               return -EINVAL;
->
->         if (copy_from_user(&reg_val, uaddr, KVM_REG_SIZE(reg->id)))
->                 return -EFAULT;
->
-> -       if (reg_num == KVM_REG_RISCV_CSR_REG(sip)) {
-> -               reg_val &= VSIP_VALID_MASK;
-> -               reg_val <<= VSIP_TO_HVIP_SHIFT;
-> +       reg_subtype = (reg_num & KVM_REG_RISCV_SUBTYPE_MASK)
-> +                       >> KVM_REG_RISCV_SUBTYPE_SHIFT;
-> +       reg_num &= ~KVM_REG_RISCV_SUBTYPE_MASK;
-> +       switch (reg_subtype) {
-> +       case KVM_REG_RISCV_CSR_GENERAL:
-> +               rc = kvm_riscv_vcpu_general_set_csr(vcpu, reg_num, reg_val);
-> +               break;
-> +       case KVM_REG_RISCV_CSR_AIA:
-> +               rc = kvm_riscv_vcpu_aia_set_csr(vcpu, reg_num, reg_val);
-> +               break;
-> +       default:
-> +               rc = -EINVAL;
-> +               break;
->         }
-> -
-> -       ((unsigned long *)csr)[reg_num] = reg_val;
-> -
-> -       if (reg_num == KVM_REG_RISCV_CSR_REG(sip))
-> -               WRITE_ONCE(vcpu->arch.irqs_pending_mask, 0);
-> +       if (rc)
-> +               return rc;
->
->         return 0;
->  }
-> --
-> 2.34.1
->
+On platforms that do not support IOMMU Extended capability bit 0
+Page-walk Coherency, CPU caches are not snooped when IOMMU is accessing
+any translation structures. IOMMU access goes only directly to
+memory. Intel IOMMU code was missing a flush for the PASID table
+directory that resulted in the unrecoverable fault as shown below.
 
-This can be split into two patches. The first patch can just modify
-the existing implementation
-to parse subtypes for general CSRs. AIA support can be added in the next one.
+This patch adds clflush calls whenever activating and updating
+a PASID table directory to ensure cache coherency.
 
+On the reverse direction, there's no need to clflush the PASID directory
+pointer when we deactivate a context entry in that IOMMU hardware will
+not see the old PASID directory pointer after we clear the context entry.
+PASID directory entries are also never freed once allocated.
 
+[    0.555386] DMAR: DRHD: handling fault status reg 3
+[    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry is clear
+[    0.556348] DMAR: Dump dmar1 table entries for IOVA 0x1026a4000
+[    0.556348] DMAR: scalable mode root entry: hi 0x0000000102448001, low 0x0000000101b3e001
+[    0.556348] DMAR: context entry: hi 0x0000000000000000, low 0x0000000101b4d401
+[    0.556348] DMAR: pasid dir entry: 0x0000000101b4e001
+[    0.556348] DMAR: pasid table entry[0]: 0x0000000000000109
+[    0.556348] DMAR: pasid table entry[1]: 0x0000000000000001
+[    0.556348] DMAR: pasid table entry[2]: 0x0000000000000000
+[    0.556348] DMAR: pasid table entry[3]: 0x0000000000000000
+[    0.556348] DMAR: pasid table entry[4]: 0x0000000000000000
+[    0.556348] DMAR: pasid table entry[5]: 0x0000000000000000
+[    0.556348] DMAR: pasid table entry[6]: 0x0000000000000000
+[    0.556348] DMAR: pasid table entry[7]: 0x0000000000000000
+[    0.556348] DMAR: PTE not present at level 4
+
+Cc: <stable@vger.kernel.org>
+Fixes: 0bbeb01a4faf ("iommu/vt-d: Manage scalalble mode PASID tables")
+Reported-by: Sukumar Ghorai <sukumar.ghorai@intel.com>
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+---
+v2: Add clflush to PASID directory update case (Baolu, Kevin review)
+---
+ drivers/iommu/intel/iommu.c | 2 ++
+ drivers/iommu/intel/pasid.c | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 59df7e42fd53..161342e7149d 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -1976,6 +1976,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
+ 		pds = context_get_sm_pds(table);
+ 		context->lo = (u64)virt_to_phys(table->table) |
+ 				context_pdts(pds);
++		if (!ecap_coherent(iommu->ecap))
++			clflush_cache_range(table->table, sizeof(u64));
+ 
+ 		/* Setup the RID_PASID field: */
+ 		context_set_sm_rid2pasid(context, PASID_RID2PASID);
+diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
+index fb3c7020028d..bcb2e6f23742 100644
+--- a/drivers/iommu/intel/pasid.c
++++ b/drivers/iommu/intel/pasid.c
+@@ -216,6 +216,8 @@ static struct pasid_entry *intel_pasid_get_entry(struct device *dev, u32 pasid)
+ 			goto retry;
+ 		}
+ 	}
++	if (!ecap_coherent(info->iommu->ecap))
++		clflush_cache_range(&dir[dir_index], sizeof(u64));
+ 
+ 	return &entries[index];
+ }
 -- 
-Regards,
-Atish
+2.25.1
+
