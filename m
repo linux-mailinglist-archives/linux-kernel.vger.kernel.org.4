@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB4868E9DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D2068E9DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjBHI1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 03:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S230388AbjBHI1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 03:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjBHI1b (ORCPT
+        with ESMTP id S230373AbjBHI1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 03:27:31 -0500
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A327442D6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 00:27:28 -0800 (PST)
-X-ASG-Debug-ID: 1675844843-086e23137e022e0001-xx1T2L
-Received: from ZXSHMBX3.zhaoxin.com (ZXSHMBX3.zhaoxin.com [10.28.252.165]) by mx1.zhaoxin.com with ESMTP id 3J9LMXbM7YTxfFn4 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 08 Feb 2023 16:27:23 +0800 (CST)
-X-Barracuda-Envelope-From: SilviaZhao-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-Received: from ZXBJMBX02.zhaoxin.com (10.29.252.6) by ZXSHMBX3.zhaoxin.com
- (10.28.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Wed, 8 Feb
- 2023 16:27:22 +0800
-Received: from silvia-OptiPlex-3010.zhaoxin.com (10.29.8.47) by
- ZXBJMBX02.zhaoxin.com (10.29.252.6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 16:27:22 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.165
-From:   silviazhao <silviazhao-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.6
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <tglx@linutronix.de>,
-        <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <cobechen@zhaoxin.com>, <louisqi@zhaoxin.com>,
-        <silviazhao@zhaoxin.com>, <tonywwang@zhaoxin.com>,
-        <kevinbrace@gmx.com>, <7vvbbqzo567a@nospam.xutrox.com>
-Subject: [PATCH V2] x86/perf/zhaoxin: Add stepping check for ZXC
-Date:   Wed, 8 Feb 2023 16:27:22 +0800
-X-ASG-Orig-Subj: [PATCH V2] x86/perf/zhaoxin: Add stepping check for ZXC
-Message-ID: <20230208082722.14219-1-silviazhao-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 8 Feb 2023 03:27:39 -0500
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A47457C2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 00:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1675844855;
+        bh=+2J469dohyjlak5iPQx/w6sbyFoadZoRv4g88y0JLtU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=NfoA4oqLm7u/obUTCasF6heQxMdccUAAggvyoTcNpCEA9dpkhxCZuwbF5Z11NvoGO
+         eg0BOhj8+XHkE4sg7jqprxkaq/inLgghXjLkCy41QdnhK73C86yhUFR0rCrv6vJHFn
+         smzcs/Cu13P3huiqLqaRY+PQAWkcki7sA72igqag=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 556EA667AF;
+        Wed,  8 Feb 2023 03:27:34 -0500 (EST)
+Message-ID: <87b9f23ba8b123a765c4139c2112aa365546c1e5.camel@xry111.site>
+Subject: Re: [PATCH v2 0/5] LoongArch: Add kernel relocation and KASLR
+ support
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 08 Feb 2023 16:27:31 +0800
+In-Reply-To: <70278d23-aa0e-19d9-796f-78c0fd06fee0@loongson.cn>
+References: <20230207142822.52172-1-xry111@xry111.site>
+         <70278d23-aa0e-19d9-796f-78c0fd06fee0@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.29.8.47]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- ZXBJMBX02.zhaoxin.com (10.29.252.6)
-X-Barracuda-Connect: ZXSHMBX3.zhaoxin.com[10.28.252.165]
-X-Barracuda-Start-Time: 1675844843
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 1768
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.104486
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some of Nano series processors will lead GP when accessing
-PMC fixed counter. Meanwhile, their hardware support for PMC
-has not announced externally. So exclude Nano CPUs from ZXC
-by checking stepping information. This is an unambiguous way
-to differentiate between ZXC and Nano CPUs.
+On Wed, 2023-02-08 at 12:37 +0800, Youling Tang wrote:
+> In the case of "[Patch v2 2/5] LoongArch: use la.pcrel instenad of
+> la.abs for exception handlerS", the above failure will occur.
+>=20
+> Patch2 may have certain problems when using the old toolchains.
+>=20
+> Youling.
 
-Following are Nano and ZXC FMS information:
-Nano FMS: Family=6, Model=F, Stepping=[0-A][C-D]
-ZXC FMS:  Family=6, Model=F, Stepping=E-F OR
-          Family=6, Model=0x19, Stepping=0-3
+Thanks for the test...
 
-Fixes: 3a4ac121c2ca ("x86/perf: Add hardware performance events support for Zhaoxin CPU.")
-Reported-by: Arjan <8vvbbqzo567a@nospam.xutrox.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=212389
-Reported-by: Kevin Brace <kevinbrace@gmx.com>
+The problem is: old toolchain uses pcaddu12i/ori/lu32i.d/lu52i.d/add.d
+for a 3-operand la.pcrel, while the new toolchain uses
+pcalau12i/addi.d/lu32i/lu52i/add.d.  (I've somehow forgotten all the
+difference!)
 
-Signed-off-by: silviazhao <silviazhao-oc@zhaoxin.com>
----
-v1 -> v2: Add some statements for Nano and ZXC FMS information.
----
- arch/x86/events/zhaoxin/core.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+We can fix it with something like...
 
-diff --git a/arch/x86/events/zhaoxin/core.c b/arch/x86/events/zhaoxin/core.c
-index 949d845c922b..3e9acdaeed1e 100644
---- a/arch/x86/events/zhaoxin/core.c
-+++ b/arch/x86/events/zhaoxin/core.c
-@@ -541,7 +541,13 @@ __init int zhaoxin_pmu_init(void)
- 
- 	switch (boot_cpu_data.x86) {
- 	case 0x06:
--		if (boot_cpu_data.x86_model == 0x0f || boot_cpu_data.x86_model == 0x19) {
-+		/*
-+		 * Support Zhaoxin CPU from ZXC series, exclude Nano series through FMS.
-+		 * Nano FMS: Family=6, Model=F, Stepping=[0-A][C-D]
-+		 * ZXC FMS: Family=6, Model=F, Stepping=E-F OR Family=6, Model=0x19, Stepping=0-3
-+		 */
-+		if ((boot_cpu_data.x86_model == 0x0f && boot_cpu_data.x86_stepping >= 0x0e) ||
-+			boot_cpu_data.x86_model == 0x19) {
- 
- 			x86_pmu.max_period = x86_pmu.cntval_mask >> 1;
- 
--- 
-2.17.1
+> +void reloc_handler(unsigned long handler, struct handler_reloc *rel)
+> +{
+> +	if (!rel)
+> +		return;
+> +
+> +	for (unsigned long i =3D 0; i < rel->cnt; i++) {
+> +		unsigned long pc =3D handler + rel->entries[i].offset;
+> +		unsigned long v =3D rel->entries[i].sym;
 
+                /* anchor etc. moved into do_reloc_pcalau12i */
+
+> +		union loongarch_instruction *insn =3D
+> +			(union loongarch_instruction *)pc;
+
+                switch insn[0]->reg1i20_format->reg1i20_format {
+                case pcaddu12i_op:
+                        do_reloc_pcaddu12i(insn, pc, v);
+                        break;
+                case pcalau12i_op: /* TODO: add it for asm/inst.h */
+                        do_reloc_pcalau12i(insn, pc, v);
+                        break;
+                default:
+                        panic("what the f**k");
+                }
+
+Alternatively, we can also emit the pcalau12i/addi.d/lu32i/lu52i
+sequence and overwrite the pcaddu12i/ori sequence generated by the old
+toolchain.
+
+Which way do you like?
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
