@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5441668E7D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A863668E7DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjBHFqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 00:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S230302AbjBHFsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 00:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjBHFqN (ORCPT
+        with ESMTP id S229490AbjBHFsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 00:46:13 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1899CDF1
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 21:46:11 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso3235178pju.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 21:46:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gGlOEIPzV+FTI/GF62gic89emIZoIYryIf9WL0MuhjI=;
-        b=cQmLD187qGYvCE95MDfRyufr4leKm51MnluIeCu1mwvtokMHZKgE9e6RJ8OIsqQPMi
-         ewo6oAXyGxCRbEjKCgm4EeLHmc7c1UiRoK0i3HL4F1a36+75ZRjyF8O3SOmfmpJ7ytt0
-         dQg2rz8F2L7Ui9fsllAshRSkZVoeQVeI9aoXCVMh1Y1Q1Tvn2mv5tjOBLCXCS1Ny1+GA
-         MvaRH6AvLYEw4coHFQ991tFAM6de03LOhkoEkeZZQ6Hoh7iD4gLL0JjaVYDwD6eoWIfU
-         iplJ7Y7j89AMoh7SbAVtaUpa5WXzb2ilRqD6Ra8tHg7cjviJFyNZfbHaJff8klqkWaWv
-         nDeQ==
+        Wed, 8 Feb 2023 00:48:15 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35F511EAF;
+        Tue,  7 Feb 2023 21:48:14 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id lu11so48546997ejb.3;
+        Tue, 07 Feb 2023 21:48:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gGlOEIPzV+FTI/GF62gic89emIZoIYryIf9WL0MuhjI=;
-        b=UHKPdoc6V68RnegJ9ozFXKYFp2zxCQgR+2Y8ZoQP7adLuB+SEjhTNSdVymjURjc41L
-         DYehkzPCP3rYrjorysBdLqK7dpORnn1PCIXWxXYKaA90OhB5g6Giu/3W20rbLdKsYQH9
-         rNrtuSTe3iZtapMoKK4R3BldBLYCCTfSd7HkUNSdL7r5lCpntVe/9t4RCyWBKBZZxqnk
-         qivHpoTLNV0FAsEUTkKM8p2nEw+3lHfSJzNp97rk5CjExsKc6nWaYKidtwUGv6VR1G6H
-         DIFrrycW+RRFvKxaKm/DHiW3yB58wvHXz1EwURs5p04YunzZhQKGTd8EpTCmEc2udcK2
-         p1XA==
-X-Gm-Message-State: AO0yUKWSYt8iN9wtbbW+bnGo6DJ2g/lxzWqJ/L9iIsiLfa/t9J0l06LI
-        X33LJSpPjUoCuPyyjYRDGvm/0w==
-X-Google-Smtp-Source: AK7set94skn6M5M9CT0xtS0+tEYXm95sJCOLMhuwaiyK3S9cl/nNQN5VoK2Af4LK20Th3wzFVP00fw==
-X-Received: by 2002:a05:6a20:8403:b0:bb:b945:4865 with SMTP id c3-20020a056a20840300b000bbb9454865mr7962364pzd.8.1675835171325;
-        Tue, 07 Feb 2023 21:46:11 -0800 (PST)
-Received: from [10.16.128.218] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001898ee9f723sm5008429plb.2.2023.02.07.21.46.08
+        bh=OYe6aqMu2x9+vN3yhcrZtZHWGal5Z5H51jOu9lqDUVU=;
+        b=e+SKcUC8SeP4FEi2kVPT6is6VGew+DGNvXL+BEFIzRqkCb9loj23DYuczkt+UERuhU
+         8ErJoFs/4ZpejYECX1MGpTfm2Rf2mwbZVcW+ah1mSCdD+6XggRsBLAojgZYcrDQ6PF1L
+         Dvgk59kKA7l+wAR8uEsxHM0Bbds8DQIBzeQoJjubnFuNRBm9HdqKzdPU8HygCMhiMXIW
+         ucCqb3d2WJxXyQYSSjw5KgOKL3db3qKM/ZMtqyWlhZHfyhHAgvQ+tbtg3LBVjp52TFWA
+         W3pQpMpX1Ple95zHk3NiWn4hVSMrE+fJtvrQbFtU/GL/tdgLDwp2L6yfyqaKfWyb/oNC
+         GGzw==
+X-Gm-Message-State: AO0yUKVOHAeuScJE69bJC3fvcdKu+w6EuMMrJqtix9Vpzt/knvMxhYXI
+        qohVU79qQMKITGVUPSktYYnO4powCMc=
+X-Google-Smtp-Source: AK7set+cVv7jF6uzVc/ZvERg4iwXP/HeLZJ/9NGLwUoVvhZz4KwIR8Avr3Yb5rdYLPJ16Yni/J+dNw==
+X-Received: by 2002:a17:906:1252:b0:889:7781:f62e with SMTP id u18-20020a170906125200b008897781f62emr6344857eja.22.1675835292979;
+        Tue, 07 Feb 2023 21:48:12 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id s24-20020a1709060c1800b0088a0d645a5asm7906972ejf.99.2023.02.07.21.48.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 21:46:10 -0800 (PST)
-Message-ID: <b86a549a-5c8e-55dc-d6f4-edc5ca75ac05@igel.co.jp>
-Date:   Wed, 8 Feb 2023 14:46:06 +0900
+        Tue, 07 Feb 2023 21:48:12 -0800 (PST)
+Message-ID: <8dffe187-240d-746e-ed84-885ffd2785f6@kernel.org>
+Date:   Wed, 8 Feb 2023 06:48:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [EXT] Re: [RFC PATCH 4/4] PCI: endpoint: function: Add EP
- function driver to provide virtio net device
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] vc_screen: break from vcs_read() while loop if
+ vcs_vc() returns NULL
 Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-References: <20230203100418.2981144-1-mie@igel.co.jp>
- <20230203100418.2981144-5-mie@igel.co.jp>
- <20230203052114-mutt-send-email-mst@kernel.org>
- <HE1PR0401MB23313FC60955EADE8A00133088D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <CANXvt5qjgVKccRcsARSkDF+boVkVi7h=AMHC+iWyOfp4dJ-_tQ@mail.gmail.com>
- <HE1PR0401MB2331D1335BFACBD23B7676EF88DB9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-In-Reply-To: <HE1PR0401MB2331D1335BFACBD23B7676EF88DB9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+To:     George Kennedy <george.kennedy@oracle.com>,
+        gregkh@linuxfoundation.org, torvalds@linux-foundation.org
+Cc:     sfr@canb.auug.org.au, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+References: <1675774098-17722-1-git-send-email-george.kennedy@oracle.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <1675774098-17722-1-git-send-email-george.kennedy@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07. 02. 23, 13:48, George Kennedy wrote:
+> If vcs_vc() returns NULL in vcs_read(), break from while loop if partial
+> read, else if no reads have been done, go to unlock_out and return -ENXIO.
+> In addition, change the goto unlock_out after vcs_size() to a break
+> to conform to the break handling after vcs_vc().
+> 
+> Fixes: ac751efa6a0d ("console: rename acquire/release_console_sem() to console_lock/unlock()")
+> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+> ---
+>   drivers/tty/vt/vc_screen.c | 14 ++++++--------
+>   1 file changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
+> index f566eb1839dc..c599b452969f 100644
+> --- a/drivers/tty/vt/vc_screen.c
+> +++ b/drivers/tty/vt/vc_screen.c
+> @@ -406,19 +406,17 @@ vcs_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+>   		ret = -ENXIO;
+>   		vc = vcs_vc(inode, &viewed);
+>   		if (!vc)
+> -			goto unlock_out;
+> +			break;
+>   
+>   		/* Check whether we are above size each round,
+>   		 * as copy_to_user at the end of this loop
+>   		 * could sleep.
+>   		 */
+> -		size = vcs_size(vc, attr, uni_mode);
+> -		if (size < 0) {
+> -			if (read)
+> -				break;
+> -			ret = size;
+> -			goto unlock_out;
+> -		}
+> +		ret = vcs_size(vc, attr, uni_mode);
+> +		if (ret < 0)
+> +			break;
+> +		size = ret;
+> +		ret = 0;
 
-On 2023/02/08 0:37, Frank Li wrote:
->>> but it may need update host side pci virtio driver.
->> Thanks, is it possible to use  MSI-X as well? The virtio spec
->> indicates to use legacy irq or
->> MSI-X only.
-> I supposed yes. It is depend MSI controller type in EP side.
-> But not like standard PCI MSI-X, it is platform MSI-X irq.
->
-> If use GIC-its, it should support MSI-X.
->
-> Thomas Gleixner is working on pre-device msi irq domain.
-> https://lore.kernel.org/all/20221121135653.208611233@linutronix.de
->
-> I hope Thomas can finish their work soon.
-> so I can continue my patch upstream work.
-> https://lore.kernel.org/imx/87wn7evql7.ffs@tglx/T/#u
+I think the previous "size = vcs_size()" and "ret = size" in the error 
+path looked better than this "size = ret" and "ret = 0" here. I mean why 
+not to preserve:
 
-Thank for sharing this those information. I'll see the details to embed.
+	size = vcs_size(vc, attr, uni_mode);
+	if (size < 0) {
+		ret = size;
+		break;
+	}
 
->> Best,
->> Shunsuke.
+?
 
-Best,
-
-Shunsuke.
+thanks,
+-- 
+js
+suse labs
 
