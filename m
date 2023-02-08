@@ -2,119 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AA1698406
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9467569849A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Feb 2023 20:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjBOTA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Feb 2023 14:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
+        id S229637AbjBOTjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Feb 2023 14:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBOTAZ (ORCPT
+        with ESMTP id S229520AbjBOTjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Feb 2023 14:00:25 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B9710D1;
-        Wed, 15 Feb 2023 11:00:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7E2D3339F6;
-        Wed, 15 Feb 2023 19:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1676487623; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=q9MXy991oBVRpb6GnqmhHyO0/qmV1r3htDajWMoxvQ8=;
-        b=N4xQTAbnLwRgwCQBjoPceaeSqtRnnWbW+5RsHtICTCIb1hI+QHki5lvmgTmg7pCPj9dIQR
-        iaSN8ZLQoHVJe4/wyfQ08g9RxB6WNH5UbkgmeTpMVKfK+xzG0RJivvxNMqOLX4xQp40mg6
-        UrDutjEC4USYLM7FKMmUs5cGyW1fPbs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5ABF013483;
-        Wed, 15 Feb 2023 19:00:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hwvgE8cr7WPffQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 15 Feb 2023 19:00:23 +0000
-Date:   Wed, 15 Feb 2023 20:00:22 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
-        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch,
-        "Daniel P . Berrange" <berrange@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 14/19] mm: Introduce a cgroup for pinned memory
-Message-ID: <Y+0rxoM4w9nilUMZ@dhcp22.suse.cz>
-References: <cover.c238416f0e82377b449846dbb2459ae9d7030c8e.1675669136.git-series.apopple@nvidia.com>
- <c7b5e502d1a3b9b8f6e96cbf9ca553b143c327e0.1675669136.git-series.apopple@nvidia.com>
- <Y+Fttp1ozejoSQzl@slm.duckdns.org>
- <CAJD7tkb_Cr7rTTpKc1VBpS8h=n3Hu+nGiV8dkLH-NdC1bSG9mg@mail.gmail.com>
- <Y+GA6Y7SVhAW5Xm9@slm.duckdns.org>
- <CAJD7tka6SC1ho-dffV0bK_acoZd-5DQzBOy0xg3TkOFG1zAPMg@mail.gmail.com>
- <Y+GMbWWP/YhtJQqe@slm.duckdns.org>
- <Y+GQB9I6MFN6BOFw@nvidia.com>
- <Y+GcJQRhvjqFaaSp@mtj.duckdns.org>
+        Wed, 15 Feb 2023 14:39:35 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE4D3E632
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:39:32 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id dt8so16817587oib.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Feb 2023 11:39:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+gy9nLNyoIQUK6iwX/Y0FCLjl3H31hI6ury00skryq4=;
+        b=MWcU3QEll9pf0YdfxZEo6BIrtfcqPJnmHeyxMxC4JCaieJXorrJ9DXlOoYGQ4N9TE6
+         fdFJFUujY6GchLIliA05LdROnfWKVPJa0qCilaja0BnyyIuSE3dcD/EenGs0oJqlNL9A
+         I2EhTjajUMYLKFYe7y31BrkHCIs3M/qu5/HXmaaLO80xWsYjWLBGOI7N0JJdCyfIipKQ
+         /MIX9qrw1mEHzg06zJ2a3UBSCU8L+I0yEsa+pBo2gAmUjURM8nwOQS3VzKIA6btRczVO
+         NZDrdsAoKIWb67LZcDvjNHTaXY7PcwCCF3ThzcKCjUU9D5fPUPxQJ0ztwX3ZPYRundRz
+         1lJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+gy9nLNyoIQUK6iwX/Y0FCLjl3H31hI6ury00skryq4=;
+        b=ZWH/6ZUe5f1F8zGe0svoQ0TGQLZcU7NGJ+zPoNXzNpdgjQFxbd2TTKkKmc2fYuYm66
+         jAod/Xk+vD7xMjpGcjMQzoqCxhUdt506ETXWv8iINoNGZOFQSqOtFK5IErQPk9R4JiyT
+         0zgCncD6HrKgabawxSFtx/xrBCVA1DNsl5rZP8tjc6yerdC+gQn/d8A9iDY5IfkfES5t
+         rmMMMH2s+dQZ5hFgeUnn+ewfwlyBff8WUYPuaHxPl/ul0mn+kUn6lCzh5MgCgfKBbtyv
+         5YdFJZj25+aeO0Cgp3atNeswHvJDy3EGD3AVVLJ0QzT9CSAhrfI8L2J0htQiKIpsyXwd
+         WesQ==
+X-Gm-Message-State: AO0yUKXrbSNjNX2uzM7p8OoL1qD+bqcHUn+2ODicLNCWXUojNyq4npQ7
+        IsVunxkTzKaJEpfeaycuqQIs1Q==
+X-Google-Smtp-Source: AK7set/RbYIbriNGlWV+8yhX2eMc6Wc3l4GJWkr3tSVWhf+ljWb4Dz7LcZQx8qoF9ZF8mqjqg0rqiQ==
+X-Received: by 2002:a05:6808:219:b0:364:fc2c:687a with SMTP id l25-20020a056808021900b00364fc2c687amr1248492oie.57.1676489971741;
+        Wed, 15 Feb 2023 11:39:31 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id o4-20020acad704000000b003785996ef36sm3024980oig.19.2023.02.15.11.39.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Feb 2023 11:39:31 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     brgl@bgdev.pl
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linus.walleij@linaro.org,
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [PATCH] gpio: 104-dio-48e: Utilize mask_buf_def in handle_mask_sync() callback
+Date:   Wed,  8 Feb 2023 05:55:42 -0500
+Message-Id: <20230208105542.9459-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+GcJQRhvjqFaaSp@mtj.duckdns.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 06-02-23 14:32:37, Tejun Heo wrote:
-> Hello,
-> 
-> On Mon, Feb 06, 2023 at 07:40:55PM -0400, Jason Gunthorpe wrote:
-> > (a) kind of destroys the point of this as a sandboxing tool
-> > 
-> > It is not so harmful to use memory that someone else has been charged
-> > with allocating.
-> > 
-> > But it is harmful to pin memory if someone else is charged for the
-> > pin. It means it is unpredictable how much memory a sandbox can
-> > actually lock down.
-> > 
-> > Plus we have the double accounting problem, if 1000 processes in
-> > different cgroups open the tmpfs and all pin the memory then cgroup A
-> > will be charged 1000x for the memory and hit its limit, possibly
-> > creating a DOS from less priv to more priv
-> 
-> Let's hear what memcg people think about it. I'm not a fan of disassociating
-> the ownership and locker of the same page but it is true that actively
-> increasing locked consumption on a remote cgroup is awkward too.
+The mask_buf_def argument provides a mask of all the maskable lines.
+Utilize mask_buf_def rather than hardcode an "all_masked" mask.
 
-One thing that is not really clear to me is whether those pins do
-actually have any "ownership". The interface itself doesn't talk about
-anything like that and so it seems perfectly fine to unpin from a
-completely different context then pinning. If there is no enforcement
-then Tejun is right and relying on memcg ownership is likely the only
-reliable way to use for tracking. The downside is sharing obviously but
-this is the same problem we already do deal with with shared pages.
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+ drivers/gpio/gpio-104-dio-48e.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Another thing that is not really clear to me is how the limit is
-actually going to be used in practice. As there is no concept of a
-reclaim for pins then I can imagine that it would be quite easy to
-reach the hard limit and essentially DoS any further use of pins. Cross
-cgroup pinning would make it even worse because it could become a DoS
-vector very easily. Practically speaking what tends to be a corner case
-in the memcg limit world would be norm for pin based limit.
+diff --git a/drivers/gpio/gpio-104-dio-48e.c b/drivers/gpio/gpio-104-dio-48e.c
+index a3846faf3780..74e2721f2613 100644
+--- a/drivers/gpio/gpio-104-dio-48e.c
++++ b/drivers/gpio/gpio-104-dio-48e.c
+@@ -106,7 +106,6 @@ static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
+ {
+ 	unsigned int *const irq_mask = irq_drv_data;
+ 	const unsigned int prev_mask = *irq_mask;
+-	const unsigned int all_masked = GENMASK(1, 0);
+ 	int err;
+ 	unsigned int val;
+ 
+@@ -118,7 +117,7 @@ static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
+ 	*irq_mask = mask_buf;
+ 
+ 	/* if all previously masked, enable interrupts when unmasking */
+-	if (prev_mask == all_masked) {
++	if (prev_mask == mask_buf_def) {
+ 		err = regmap_write(map, DIO48E_CLEAR_INTERRUPT, 0x00);
+ 		if (err)
+ 			return err;
+@@ -126,7 +125,7 @@ static int dio48e_handle_mask_sync(struct regmap *const map, const int index,
+ 	}
+ 
+ 	/* if all are currently masked, disable interrupts */
+-	if (mask_buf == all_masked)
++	if (mask_buf == mask_buf_def)
+ 		return regmap_read(map, DIO48E_DISABLE_INTERRUPT, &val);
+ 
+ 	return 0;
 
-Or am I misunderstanding something here?
+base-commit: 4827aae061337251bb91801b316157a78b845ec7
 -- 
-Michal Hocko
-SUSE Labs
+2.39.1
+
