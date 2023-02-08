@@ -2,225 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61EC68E69A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7DB68E6A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjBHD3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 22:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
+        id S229490AbjBHDik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjBHD3I (ORCPT
+        with ESMTP id S229530AbjBHDig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 22:29:08 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C1E11670;
-        Tue,  7 Feb 2023 19:29:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675826946; x=1707362946;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ufRhdl8/azvaiz+dPp7YwCq28sBNdS8ODzww2em55rI=;
-  b=U5B+qPslz04n5hCJraREk0++MkmT6Rmd+ZKAMwkPohA6SXyZJjjwiFYc
-   J6SiesVp4oCvAMGAcdU372NlsHA52ShMAS0dYLoaDLz45PSp5XAM8XMLs
-   wH7heIbhndvGUMS6QumR6I90usdhGJGly6bGDSvwW1/AK8dZP6of7/CMs
-   xCxKAUQcpy1KIGS6ri8dPhThb+ttY113Yhiax8vd0jMuHaVSMZ+vz4koV
-   IDJficzb5ilMY7MvTFzjIBI3kwDfrlKQByBEIrocSLBpaD7gQRNHwLlDr
-   5pR4wMxf1rfoZpn40KkBNxH3XxOfoGN92HdMgI7HV8E+Xr6uuMLWeK5a1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="329723669"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="329723669"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 19:29:06 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="809787210"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="809787210"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 19:29:04 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org, joel@joelfernandes.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Fix bind rcu related kthreads to housekeeping CPUs
-Date:   Wed,  8 Feb 2023 11:34:08 +0800
-Message-Id: <20230208033408.3997610-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 7 Feb 2023 22:38:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A8F252B1;
+        Tue,  7 Feb 2023 19:38:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D27861473;
+        Wed,  8 Feb 2023 03:38:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 700B2C433D2;
+        Wed,  8 Feb 2023 03:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675827513;
+        bh=c9lUrSDIq49yjtyRlepsWp4tlv/aSoe1gAPSMO8DfLY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IxlYvhGZDul0LzQTryXITZY4nTSZgyecUCobzxckMss7Ckr3YgQqgAZJf2P6kp5xx
+         eUQp1FoxWJvgE+ShkgbmSO7qXyey6NlqPGqo390tzDDI50Y8vCMW83OXmRKsoGrQVZ
+         rLo028CQVxYxWqA/36ubFyq1b/7nmTPLYKVWdx/em/h8NAkQsIkq40kL3lUzAwrnG+
+         9TIZAd0UaBOpkTyB/762LqHfY7NUdI7c4Jpr02MsgHBil9cggSuogGuwddgmW5EOJ5
+         1ygMMmrUcd13i1GHgk8S/LBD4HRDOtumfWeKnDQgvNQlSYNZIjwTpY/JDXAYqT2XAe
+         Zc2dWgFrw2pig==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id ABE325C08F3; Tue,  7 Feb 2023 19:38:31 -0800 (PST)
+Date:   Tue, 7 Feb 2023 19:38:31 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>, akiyks@gmail.com
+Subject: Re: [PATCH v4] srcu: Clarify comments on memory barrier "E"
+Message-ID: <20230208033831.GA3160511@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230128035902.1758726-1-joel@joelfernandes.org>
+ <20230128182440.GA2948950@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YTK1ejOcuNyAqJ3ibKKyfR21UYHRNa7jpWS_H71xpnTpg@mail.gmail.com>
+ <20230129050904.GD2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230129050904.GD2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For kernels built with CONFIG_NO_HZ_FULL=y and CONFIG_RCU_NOCB_CPU=y,
-run the following tests:
+On Sat, Jan 28, 2023 at 09:09:04PM -0800, Paul E. McKenney wrote:
+> On Sat, Jan 28, 2023 at 04:16:34PM -0500, Joel Fernandes wrote:
+> > On Sat, Jan 28, 2023 at 1:24 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > On Sat, Jan 28, 2023 at 03:59:01AM +0000, Joel Fernandes (Google) wrote:
+> > > > During a flip, we have a full memory barrier before srcu_idx is incremented.
+> > > >
+> > > > The idea is we intend to order the first phase scan's read of lock
+> > > > counters with the flipping of the index.
+> > > >
+> > > > However, such ordering is already enforced because of the
+> > > > control-dependency between the 2 scans. We would be flipping the index
+> > > > only if lock and unlock counts matched.
+> > > >
+> > > > But such match will not happen if there was a pending reader before the flip
+> > > > in the first place (observation courtesy Mathieu Desnoyers).
+> > > >
+> > > > The litmus test below shows this:
+> > > > (test courtesy Frederic Weisbecker, Changes for ctrldep by Boqun/me):
+> > >
+> > > Much better, thank you!
+> > >
+> > > I of course did the usual wordsmithing, as shown below.  Does this
+> > > version capture your intent and understanding?
+> > >
+> > 
+> > It looks good to me.
+> > According to [1] , the architecture at least should not be reordering
+> > read-write control dependency. Only read-read is problematic. But I am
+> > not 100% sure, is that not true?
+> 
+> Agreed, READ_ONCE() or stronger through condition to WRITE_ONCE()
+> or stronger is ordered.  Replace that WRITE_ONCE() with any type of
+> unordered read and all bets are off.
+> 
+> And now that the ARM folks chimed in, this is a solid guarantee at
+> the hardware level.
+> 
+> Not so much at the compiler level.  Oddly enough, compilers do provide
+> ordering for plain C-language stores, but that is helpful only if no
+> other CPU or thread is concurrently accessing that variable.
+> 
+> > For the compiler, you are saying that read-write control dependency
+> > can be reordered even with *ONCE() accesses? In other words, the
+> > flipping of idx can happen in ->po order before the locks and unlock
+> > counts match? That sounds sort of like a broken compiler.
+> 
+> One case where a sane compiler can reasonably enable the hardware to
+> do the reordering is where you have the same WRITE_ONCE() in both the
+> then-clause and else-clause of an "if" statement.  Another is if it can
+> somehow prove something about the value returned from that READ_ONCE(),
+> for example, if that value is used to index a singleton array, then the
+> compiler has to do the READ_ONCE(), but it can then assume that the
+> value returned was zero, throwing away the real value returned.
+> 
+> Fun with undefined behavior!
+> 
+> > [1] https://lpc.events/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > 
+> > More comments below:
 
-runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4"
-bootparams="console=ttyS0 isolcpus=0,1 nohz_full=0,1 rcu_nocbs=0,1"
+Except that it was pointed out to me that the Co-developed-by tags also
+need Signed-off-by tags.  If there are no objections to the update shown
+below, I will fix this on my next rebase.
 
-root@qemux86-64:~# ps -ef | grep "rcu_preempt" | grep -v grep | awk '{print $2}'
-15
-root@qemux86-64:~# ps -ef | grep "rcuop/0" | grep -v grep | awk '{print $2}'
-17
-root@qemux86-64:~# taskset -p 15
-pid 15's current affinity mask: 1
-root@qemux86-64:~# taskset -p 17
-pid 17's current affinity mask: 1
+							Thanx, Paul
 
-The affinity of these rcu related kthreads is not set to housekeeping
-cpumask, even if called rcu_bind_gp_kthread() when the rcu related
-kthread starts.
+------------------------------------------------------------------------
 
-set_cpus_allowed_ptr()
- ->__set_cpus_allowed_ptr()
-   ->__set_cpus_allowed_ptr_locked
-     {
-		bool kthread = p->flags & PF_KTHREAD;
-		....
-		if (kthread || is_migration_disabled(p))
-			cpu_valid_mask = cpu_online_mask;
-		....
-		dest_cpu = cpumask_any_and_distribute(cpu_valid_mask, ctx->new_mask);
-		if (dest_cpu >= nr_cpu_ids) {
-			ret = -EINVAL;
-			goto out;
-		}
-		....
-     }
+commit 6c135bb38c55d354527a6659cbf2f4e7e20b4360
+Author: Joel Fernandes (Google) <joel@joelfernandes.org>
+Date:   Sat Jan 28 03:59:01 2023 +0000
 
-Due to these rcu related kthreads be created before bringup other CPUS,
-so when they running and set hosekeeping cpus affinity, found that only CPU0
-is online at this time and CPU0 is set to no_hz_full CPU, the ctx->new_mask
-not contain CPU0 and this will cause dest_cpu in the above code snippet to be
-an illegal value and return directly, ultimately, these rcu related kthreads
-failed to bind housekeeping CPUS.
+    srcu: Clarify comments on memory barrier "E"
+    
+    There is an smp_mb() named "E" in srcu_flip() immediately before the
+    increment (flip) of the srcu_struct structure's ->srcu_idx.
+    
+    The purpose of E is to order the preceding scan's read of lock counters
+    against the flipping of the ->srcu_idx, in order to prevent new readers
+    from continuing to use the old ->srcu_idx value, which might needlessly
+    extend the grace period.
+    
+    However, this ordering is already enforced because of the control
+    dependency between the preceding scan and the ->srcu_idx flip.
+    This control dependency exists because atomic_long_read() is used
+    to scan the counts, because WRITE_ONCE() is used to flip ->srcu_idx,
+    and because ->srcu_idx is not flipped until the ->srcu_lock_count[] and
+    ->srcu_unlock_count[] counts match.  And such a match cannot happen when
+    there is an in-flight reader that started before the flip (observation
+    courtesy Mathieu Desnoyers).
+    
+    The litmus test below (courtesy of Frederic Weisbecker, with changes
+    for ctrldep by Boqun and Joel) shows this:
+    
+    C srcu
+    (*
+     * bad condition: P0's first scan (SCAN1) saw P1's idx=0 LOCK count inc, though P1 saw flip.
+     *
+     * So basically, the ->po ordering on both P0 and P1 is enforced via ->ppo
+     * (control deps) on both sides, and both P0 and P1 are interconnected by ->rf
+     * relations. Combining the ->ppo with ->rf, a cycle is impossible.
+     *)
+    
+    {}
+    
+    // updater
+    P0(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+    {
+            int lock1;
+            int unlock1;
+            int lock0;
+            int unlock0;
+    
+            // SCAN1
+            unlock1 = READ_ONCE(*UNLOCK1);
+            smp_mb(); // A
+            lock1 = READ_ONCE(*LOCK1);
+    
+            // FLIP
+            if (lock1 == unlock1) {   // Control dep
+                    smp_mb(); // E    // Remove E and still passes.
+                    WRITE_ONCE(*IDX, 1);
+                    smp_mb(); // D
+    
+                    // SCAN2
+                    unlock0 = READ_ONCE(*UNLOCK0);
+                    smp_mb(); // A
+                    lock0 = READ_ONCE(*LOCK0);
+            }
+    }
+    
+    // reader
+    P1(int *IDX, int *LOCK0, int *UNLOCK0, int *LOCK1, int *UNLOCK1)
+    {
+            int tmp;
+            int idx1;
+            int idx2;
+    
+            // 1st reader
+            idx1 = READ_ONCE(*IDX);
+            if (idx1 == 0) {         // Control dep
+                    tmp = READ_ONCE(*LOCK0);
+                    WRITE_ONCE(*LOCK0, tmp + 1);
+                    smp_mb(); /* B and C */
+                    tmp = READ_ONCE(*UNLOCK0);
+                    WRITE_ONCE(*UNLOCK0, tmp + 1);
+            } else {
+                    tmp = READ_ONCE(*LOCK1);
+                    WRITE_ONCE(*LOCK1, tmp + 1);
+                    smp_mb(); /* B and C */
+                    tmp = READ_ONCE(*UNLOCK1);
+                    WRITE_ONCE(*UNLOCK1, tmp + 1);
+            }
+    }
+    
+    exists (0:lock1=1 /\ 1:idx1=1)
+    
+    More complicated litmus tests with multiple SRCU readers also show that
+    memory barrier E is not needed.
+    
+    This commit therefore clarifies the comment on memory barrier E.
+    
+    Why not also remove that redundant smp_mb()?
+    
+    Because control dependencies are quite fragile due to their not being
+    recognized by most compilers and tools.  Control dependencies therefore
+    exact an ongoing maintenance burden, and such a burden cannot be justified
+    in this slowpath.  Therefore, that smp_mb() stays until such time as
+    its overhead becomes a measurable problem in a real workload running on
+    a real production system, or until such time as compilers start paying
+    attention to this sort of control dependency.
+    
+    Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
+    Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+    Co-developed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+    Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+    Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-This commit therefore rebind these rcu related kthreads to housekeeping CPUs
-after the kernel boot sequence ends, at this point all CPUs are online.
-
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/rcu/tasks.h       |  7 +++++--
- kernel/rcu/tree.c        |  7 ++++++-
- kernel/rcu/tree.h        |  1 -
- kernel/rcu/tree_nocb.h   | 13 ++++++++++++-
- kernel/rcu/tree_plugin.h |  9 ---------
- 5 files changed, 23 insertions(+), 14 deletions(-)
-
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index baf7ec178155..8b3530cca291 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -544,9 +544,8 @@ static void rcu_tasks_one_gp(struct rcu_tasks *rtp, bool midboot)
- static int __noreturn rcu_tasks_kthread(void *arg)
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index c541b82646b63..cd46fe063e50f 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -1085,16 +1085,36 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
+ static void srcu_flip(struct srcu_struct *ssp)
  {
- 	struct rcu_tasks *rtp = arg;
-+	bool rcu_setaffinity_setup = false;
+ 	/*
+-	 * Ensure that if this updater saw a given reader's increment
+-	 * from __srcu_read_lock(), that reader was using an old value
+-	 * of ->srcu_idx.  Also ensure that if a given reader sees the
+-	 * new value of ->srcu_idx, this updater's earlier scans cannot
+-	 * have seen that reader's increments (which is OK, because this
+-	 * grace period need not wait on that reader).
++	 * Because the flip of ->srcu_idx is executed only if the
++	 * preceding call to srcu_readers_active_idx_check() found that
++	 * the ->srcu_unlock_count[] and ->srcu_lock_count[] sums matched
++	 * and because that summing uses atomic_long_read(), there is
++	 * ordering due to a control dependency between that summing and
++	 * the WRITE_ONCE() in this call to srcu_flip().  This ordering
++	 * ensures that if this updater saw a given reader's increment from
++	 * __srcu_read_lock(), that reader was using a value of ->srcu_idx
++	 * from before the previous call to srcu_flip(), which should be
++	 * quite rare.  This ordering thus helps forward progress because
++	 * the grace period could otherwise be delayed by additional
++	 * calls to __srcu_read_lock() using that old (soon to be new)
++	 * value of ->srcu_idx.
++	 *
++	 * This sum-equality check and ordering also ensures that if
++	 * a given call to __srcu_read_lock() uses the new value of
++	 * ->srcu_idx, this updater's earlier scans cannot have seen
++	 * that reader's increments, which is all to the good, because
++	 * this grace period need not wait on that reader.  After all,
++	 * if those earlier scans had seen that reader, there would have
++	 * been a sum mismatch and this code would not be reached.
++	 *
++	 * This means that the following smp_mb() is redundant, but
++	 * it stays until either (1) Compilers learn about this sort of
++	 * control dependency or (2) Some production workload running on
++	 * a production system is unduly delayed by this slowpath smp_mb().
+ 	 */
+ 	smp_mb(); /* E */  /* Pairs with B and C. */
  
--	/* Run on housekeeping CPUs by default.  Sysadm can move if desired. */
--	housekeeping_affine(current, HK_TYPE_RCU);
- 	WRITE_ONCE(rtp->kthread_ptr, current); // Let GPs start!
+-	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1);
++	WRITE_ONCE(ssp->srcu_idx, ssp->srcu_idx + 1); // Flip the counter.
  
  	/*
-@@ -556,6 +555,10 @@ static int __noreturn rcu_tasks_kthread(void *arg)
- 	 * This loop is terminated by the system going down.  ;-)
- 	 */
- 	for (;;) {
-+		if (!rcu_setaffinity_setup && rcu_inkernel_boot_has_ended()) {
-+			set_cpus_allowed_ptr(current, housekeeping_cpumask(HK_TYPE_RCU));
-+			rcu_setaffinity_setup = true;
-+		}
- 		// Wait for one grace period and invoke any callbacks
- 		// that are ready.
- 		rcu_tasks_one_gp(rtp, false);
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index ee27a03d7576..0ac47a773e13 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -1781,8 +1781,13 @@ static noinline void rcu_gp_cleanup(void)
-  */
- static int __noreturn rcu_gp_kthread(void *unused)
- {
--	rcu_bind_gp_kthread();
-+	bool rcu_setaffinity_setup = false;
-+
- 	for (;;) {
-+		if (!rcu_setaffinity_setup && rcu_inkernel_boot_has_ended()) {
-+			set_cpus_allowed_ptr(current, housekeeping_cpumask(HK_TYPE_RCU));
-+			rcu_setaffinity_setup = true;
-+		}
- 
- 		/* Handle grace-period start. */
- 		for (;;) {
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 192536916f9a..391e3fae4ff5 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -495,7 +495,6 @@ do {								\
- #define rcu_nocb_lock_irqsave(rdp, flags) local_irq_save(flags)
- #endif /* #else #ifdef CONFIG_RCU_NOCB_CPU */
- 
--static void rcu_bind_gp_kthread(void);
- static bool rcu_nohz_full_cpu(void);
- 
- /* Forward declarations for tree_stall.h */
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index f2280616f9d5..254d0f631d57 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -894,8 +894,14 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
- static int rcu_nocb_gp_kthread(void *arg)
- {
- 	struct rcu_data *rdp = arg;
-+	bool rcu_setaffinity_setup = false;
- 
- 	for (;;) {
-+		if (!rcu_setaffinity_setup && rcu_inkernel_boot_has_ended()) {
-+			set_cpus_allowed_ptr(current, housekeeping_cpumask(HK_TYPE_RCU));
-+			rcu_setaffinity_setup = true;
-+		}
-+
- 		WRITE_ONCE(rdp->nocb_gp_loops, rdp->nocb_gp_loops + 1);
- 		nocb_gp_wait(rdp);
- 		cond_resched_tasks_rcu_qs();
-@@ -1002,10 +1008,15 @@ static void nocb_cb_wait(struct rcu_data *rdp)
- static int rcu_nocb_cb_kthread(void *arg)
- {
- 	struct rcu_data *rdp = arg;
--
-+	bool rcu_setaffinity_setup = false;
- 	// Each pass through this loop does one callback batch, and,
- 	// if there are no more ready callbacks, waits for them.
- 	for (;;) {
-+		if (!rcu_setaffinity_setup && rcu_inkernel_boot_has_ended()) {
-+			set_cpus_allowed_ptr(current, housekeeping_cpumask(HK_TYPE_RCU));
-+			rcu_setaffinity_setup = true;
-+		}
-+
- 		nocb_cb_wait(rdp);
- 		cond_resched_tasks_rcu_qs();
- 	}
-diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 7b0fe741a088..fdde71ebb83e 100644
---- a/kernel/rcu/tree_plugin.h
-+++ b/kernel/rcu/tree_plugin.h
-@@ -1294,12 +1294,3 @@ static bool rcu_nohz_full_cpu(void)
- 	return false;
- }
- 
--/*
-- * Bind the RCU grace-period kthreads to the housekeeping CPU.
-- */
--static void rcu_bind_gp_kthread(void)
--{
--	if (!tick_nohz_full_enabled())
--		return;
--	housekeeping_affine(current, HK_TYPE_RCU);
--}
--- 
-2.25.1
-
+ 	 * Ensure that if the updater misses an __srcu_read_unlock()
