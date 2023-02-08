@@ -2,79 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5BA68EE1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F90768EE2E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjBHLiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 06:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35024 "EHLO
+        id S230223AbjBHLon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjBHLiI (ORCPT
+        with ESMTP id S229923AbjBHLom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:38:08 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C4845BCC;
-        Wed,  8 Feb 2023 03:38:07 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id u22so5880495ejj.10;
-        Wed, 08 Feb 2023 03:38:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ci8JTMReAjFCcT3SLQC5hr52c0hQKJY/NV1yhOMx0uY=;
-        b=J6O6AOjwv+pmFs0XpFc/Co4+WJWT3sLJgcMISQAw/FGJ9l0rkz/FyHLEU2RAjwEwGQ
-         b2wdbD7ysoanIonxJ+8JUDIHzAPNnI9CaI7KOkt3mDeuKcOpfRW8bZEpDEWNvsERSLUK
-         p8WoCJMAaV57/5/IrqcvIreu29rxy80vFNpKAYfZzEtZ/OduHXSiClLxtgECdk/6HWP8
-         SPbGcUYbNOP1N79TwJjj4yDlKwmtZlRGkTXL5KCmzTUIBjLXBCLCekZVBmvan7QBumCw
-         UjIRNoA0TyeFWA/TFN1Bp1dyEVmKLnyEnRHw8F8vdguqv3sQBLekDp6OehjIPmJzQn/h
-         kTFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ci8JTMReAjFCcT3SLQC5hr52c0hQKJY/NV1yhOMx0uY=;
-        b=EsCyE/CAbEWjNJqudyhZbkY9Lzb2IsKmXPWVpX4nsSMTVORvJzhIkHfnDYuW8ZO6+v
-         CRi+/3kklN69PKTPnUipL+9sSINW52rk+SZ7KDcIpK41wx/NqSceo3Lbt9XDvLBbtYGe
-         oasBfl762dBi5As3mRnJ66aCo2BY+lbzO033+4LPx5Ne5z830Y+0AQsEFB+V8+VZKo1+
-         sHrA3hWmd9KmY0uQLYNLAHt86CULDbKFctn+a5BtgeCkSEUIT4WfPDM/wC4UMzzxPFvi
-         GQGx66x2cKD3umAvEB3ABD0coGOsvdO8n/UgoP5rU7LuhSuAhym8tK8WRHPEpree+xs8
-         gK7A==
-X-Gm-Message-State: AO0yUKUGZTwsRI3WEzsCu0DTAX2PShQuiGgHB3EUOykK4QKt4nalCyEg
-        T55YdPsTO1RhAPm20AQ7foU=
-X-Google-Smtp-Source: AK7set/2DuGVCbWmyUhoiKZ7djYyr51e9CYLQws4bUQYBy6Nr0m0bw6bOssSy2xKA3/A3Qb/cK9m2A==
-X-Received: by 2002:a17:907:75f2:b0:7c1:5248:4f3a with SMTP id jz18-20020a17090775f200b007c152484f3amr7629392ejc.56.1675856285666;
-        Wed, 08 Feb 2023 03:38:05 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id uz12-20020a170907118c00b0084cb4d37b8csm8257469ejb.141.2023.02.08.03.38.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 03:38:05 -0800 (PST)
-Date:   Wed, 8 Feb 2023 12:38:03 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Manikanta Maddireddy <mmaddireddy@nvidia.com>
-Cc:     bhelgaas@google.com, petlozup@nvidia.com,
-        rafael.j.wysocki@intel.com, lpieralisi@kernel.org, robh@kernel.org,
-        jeffy.chen@rock-chips.com, krzysztof.kozlowski+dt@linaro.org,
-        jonathanh@nvidia.com, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
-        steven.price@arm.com, kw@linux.com, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        vidyas@nvidia.com
-Subject: Re: [RFC,v14 5/5] soc/tegra: pmc: Add Tegra234 PCIe wake event
-Message-ID: <Y+OJmwo9rnM8Pf7C@orome>
-References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
- <20230208111645.3863534-6-mmaddireddy@nvidia.com>
+        Wed, 8 Feb 2023 06:44:42 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6124615B;
+        Wed,  8 Feb 2023 03:44:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675856680; x=1707392680;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z1IbDELn3EAaZaLU4TNEjPVAR6fEvO0fS+Iyr7LDl2c=;
+  b=SFt5HzB+FmU7qZ+BgYVxYliJzgtwKzOqJ70LO7pyEQDHph9A2qcZ0S19
+   eg2vgE2U5A++nuXjVZDcCP8vSiMxjig2ez9XF0D3iDCcw5jNlZ5LAi7Ct
+   gA14KU3gNSwtZ1M+Ps+/dQiQMlA+0eb3aXSJT32qy8mUKzvI+NWXJXxKg
+   dRG5qtkpDnZj5Ef/V8m/1CZ8GwqVvLiyiNIUNrwJACQs/daNN0jpQ7OVf
+   dUYEpXqy4zmEMCAEgOYVBziB+Xdil86p/6ztWlkevIU9heNoUZAw1gSlU
+   b6tOi3day0/nceBEGKHkqVv7pxY/EFLMNyUJ0JQSj/C6RCGvHcQrVnQdn
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,280,1669100400"; 
+   d="scan'208";a="211079237"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Feb 2023 04:44:39 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 8 Feb 2023 04:44:38 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Wed, 8 Feb 2023 04:44:36 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: micrel: Cable Diagnostics feature for lan8841 PHY
+Date:   Wed, 8 Feb 2023 12:44:06 +0100
+Message-ID: <20230208114406.1666671-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dnbnZrtOx6z+VY5P"
-Content-Disposition: inline
-In-Reply-To: <20230208111645.3863534-6-mmaddireddy@nvidia.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,58 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for cable diagnostics in lan8841 PHY. It has the same
+registers layout as lan8814 PHY, therefore reuse the functionality.
 
---dnbnZrtOx6z+VY5P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/phy/micrel.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-On Wed, Feb 08, 2023 at 04:46:45PM +0530, Manikanta Maddireddy wrote:
-> Enable PCIe wake event for the Tegra234 SoC.
->=20
-> Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-> ---
->=20
-> Changes in v14:
-> New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX Orin.
->=20
->  drivers/soc/tegra/pmc.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-> index cf4cfbf9f7c5..139ee853c32b 100644
-> --- a/drivers/soc/tegra/pmc.c
-> +++ b/drivers/soc/tegra/pmc.c
-> @@ -4225,6 +4225,7 @@ static const char * const tegra234_reset_sources[] =
-=3D {
->  };
-> =20
->  static const struct tegra_wake_event tegra234_wake_events[] =3D {
-> +	TEGRA_WAKE_GPIO("pcie", 1, 0, TEGRA234_MAIN_GPIO(L, 2)),
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 01677c28e4079..727de4f4a14db 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -378,6 +378,8 @@ static const struct kszphy_type lan8841_type = {
+ 	.disable_dll_tx_bit	= BIT(14),
+ 	.disable_dll_rx_bit	= BIT(14),
+ 	.disable_dll_mask	= BIT_MASK(14),
++	.cable_diag_reg		= LAN8814_CABLE_DIAG,
++	.pair_mask		= LAN8814_WIRE_PAIR_MASK,
+ };
+ 
+ static int kszphy_extended_write(struct phy_device *phydev,
+@@ -3520,6 +3522,7 @@ static struct phy_driver ksphy_driver[] = {
+ 	.phy_id		= PHY_ID_LAN8841,
+ 	.phy_id_mask	= MICREL_PHY_ID_MASK,
+ 	.name		= "Microchip LAN8841 Gigabit PHY",
++	.flags		= PHY_POLL_CABLE_TEST,
+ 	.driver_data	= &lan8841_type,
+ 	.config_init	= lan8841_config_init,
+ 	.probe		= lan8841_probe,
+@@ -3531,6 +3534,8 @@ static struct phy_driver ksphy_driver[] = {
+ 	.get_stats	= kszphy_get_stats,
+ 	.suspend	= genphy_suspend,
+ 	.resume		= genphy_resume,
++	.cable_test_start	= lan8814_cable_test_start,
++	.cable_test_get_status	= ksz886x_cable_test_get_status,
+ }, {
+ 	.phy_id		= PHY_ID_KSZ9131,
+ 	.phy_id_mask	= MICREL_PHY_ID_MASK,
+-- 
+2.38.0
 
-What about wake events for other PCIe controllers? Do we need/want to
-distinguish by name for those?
-
-Thierry
-
---dnbnZrtOx6z+VY5P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjiZsACgkQ3SOs138+
-s6FTQQ//bp+B9n3mYGVuvDzX9NWcWCHqc2XpUYQR18NCUHsooWsDWcMThpRyIuTE
-WPb0w2m6Su1pSl00uBf/be6yRX5kf/VFpxwRvQNBEx7pYtKVKHfVBHobRFMrODd2
-baY2qAKGEFKGM0bKjnYLP46NsNGCthYv8xE5iuMKORZt6Vl6oWJ4ijNF62xiPRya
-VfCIBQ30rHdgYZv6Zewg7u1g8mSsDnGi7tXj4PmXoX9BBtLCuA0J5a4oFEMOSrNL
-lfw+cyKNFj4jBLFvzA9rshYCNs1W52FTUPGB+Voz3OsKv9oaaQl0GVhSH6w/32gD
-GoYIPYymI60cKh2Epy5fz6xtM4DOTZ7a6AEuy5DSilKv4Fgc19ZCJskAe/4LkZKG
-BDpCEbCB2ZUkw7xVO+2l14KO2rGnbofvLnbozoGwQOO3LBKr2sQ9YDfc8VQP5nVq
-fzKXMYGN+8i375PkifKpK3QjoKBfFVCAvlHQG/nT298i+IAWdo3MieLfqhWnmmYW
-rmydUuIi0ZWsAJd6FF0G8s8biuo87NQQa4xOu78GBZCz2NQPYuE6YWupnyl07Hpv
-AQj9EwsdKh9WXKyOQoL/zCWkHh3D74MUPyfZKcFV3aH6ij95bnsOysu5P5/u/6Cc
-Xmu/QjgFo3oxMaPNzWdNMwR5iN0okECXxwzvRf7eTrK7KNOUEHU=
-=LtGa
------END PGP SIGNATURE-----
-
---dnbnZrtOx6z+VY5P--
