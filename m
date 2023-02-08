@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0EA68E755
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8379568E763
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjBHFJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 00:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
+        id S229548AbjBHFMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 00:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjBHFJm (ORCPT
+        with ESMTP id S229457AbjBHFMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 00:09:42 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0053842DD6;
-        Tue,  7 Feb 2023 21:09:38 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id q13so1248556qtx.2;
-        Tue, 07 Feb 2023 21:09:38 -0800 (PST)
+        Wed, 8 Feb 2023 00:12:31 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA840C1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 21:12:30 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id i2so4656457ple.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 21:12:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wO7tEZofTjlP43exJot2Y++Vw18gZ4gFovpf48PsQGc=;
-        b=n0rBCYJwLAViHC0vKZG1IWX/zXQN//VStmp/Ze5evE6U/wLfbVERCRFw/PGa5oYY0s
-         Dw4ygJUzzhjNZjK+DylXSI9qD94ITbOMtqAaaRLWRGHLtinkU9ZNludb0soYt2gcIO3W
-         54tBCjGe0fTho99uur5+eN3F4VVV/9uaWfWLhuYU/RlsYjIaScexO32P5IoxBUFZmEQS
-         q/4FlyUve+sfy9R8v9x+zEJ+FfeqzbUKW3+ctWxO8fU2L5f7AMPvHOeB4EZKEqrTm1lC
-         +f+nUp3mx9R8WLLlmGTaUZLqqYazrFGgHkxMRf+Nv3F8spjE4zhc0FiLoDcTfSeDJlsY
-         MLew==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ynQKtPREQJX8aXcg8wQwLkU6v0zuOPN0C8VlE9gcTUE=;
+        b=KpIPffhcmH9yMYB9yKh+S880iANL1KEZ0VMvMtBnf1BLEb/Z7E2/aa4vK6MoOLSigI
+         OUydFCpa7/LkAf4VdZayur5uLSmAMhJ6G7953F6JQnUFYDyFgnQhhBUfTcKQ1CR+ljr5
+         YOOyAhs8U+H0LGbixw7NkJR16ZUhvb9CNG23oVYrMrpefTX9bGFsrIy30oyCzLCJp1ij
+         r62lWGlhoTMF0rvON3EgNtjvvzh9tQ42Ez/91mY0+5gLBpOTIyWdWprE+Eu+JZ/1xXdc
+         7MFTRL4njGxOEnykzRvoVMCFrr5qA9imjzJ5pPo01G+uv4UiGFS66KjUGJV/bLpNf5TS
+         G2VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wO7tEZofTjlP43exJot2Y++Vw18gZ4gFovpf48PsQGc=;
-        b=Gdv1DZacpCA912J8xrUIY95HWk0RkwPpZpyb4caYkcQaVJtLUFa215Qv56293C5mwE
-         Aks8I3rGzoeOVRtYK1WtK3FspQu4RiEVxdmQNs0hfDSqDvYZTQKQXWMXKWmbv4Fz2F8Z
-         eFo+sa1r4pZ9rgvJcxxkR7/kbIMeq9o8+3CcZVr67TiESHeEzmn8ffgAhsvgyeOCtCiD
-         xvFAX3lND6fjAg2+h/H6k0GevYNZ3tJF3QayjVIz48JPgSxM/Nu2sC9LG5wKoEMczvZU
-         l+XKlGWHC6tlzkARm5qSRzPkz/9d1+KEecF6zXZUP52btOzY5ST25M0p3I5IzHZIFNWa
-         eLPQ==
-X-Gm-Message-State: AO0yUKVvifLEyKam+amERFsExnexbUsmtzaItEnxz8mb61aBfM1yHXba
-        TDFv1AhQ1J43GWHB/rbm1wsPgbfWQQoivDHDRQ==
-X-Google-Smtp-Source: AK7set8rGj9BgfiWua/E8g1e53NYzhyhzDDRkJGMBLvVV7nsupdngWNOwx6yKZSnXUq1THVSEZMsowW8/gXcOz7QEp4=
-X-Received: by 2002:ac8:7f4b:0:b0:3ba:2794:e468 with SMTP id
- g11-20020ac87f4b000000b003ba2794e468mr900989qtk.412.1675832976846; Tue, 07
- Feb 2023 21:09:36 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ynQKtPREQJX8aXcg8wQwLkU6v0zuOPN0C8VlE9gcTUE=;
+        b=5fxmR4TqajplWoIfrqxZl2f1rOFvvSRi6Hv8byclBHrgD2idyOdHElRwcFME9c7ca6
+         vVdr0nFG2gBj7ZTYRdXpTRlA37vGjEs4qhCcVnM4dJJWx8CGsdqEou+FHs+3wDJ+eqvX
+         YR5EO6vz3McWBNY9GL5GekQER7vGgedpuZoAqSh21iJh09rZrERqqSCctKqVQduVWoNH
+         5dprGb+yyLzQjJtOG8UUp81jo0dYDHvzx6r275yK2U+NWOCEI9R5gDA03fWelBxOf8Nl
+         xOBiptZXxyRnZXWAgDi85l96UgH8HqjpZA8vd2vIZylv44t+WJwe870VfQuvpKtZOW42
+         GFGA==
+X-Gm-Message-State: AO0yUKVPiv+W6YTraFYOcPJrJRd+MkdgZDp/dbFXhfYpg7WLhpBC9XUw
+        Sbc7cTMM980SGpYIy+aoyaSB0DFaJVSSZU8z
+X-Google-Smtp-Source: AK7set+9KEkWwJa8xzGCAGXhFRxnb3x48Rg0TiPn2cYSFGv0Cgczz4t0se49tq1Sl8p54cAeBcOwGw==
+X-Received: by 2002:a17:90a:11:b0:230:fac8:d7e7 with SMTP id 17-20020a17090a001100b00230fac8d7e7mr3960827pja.2.1675833149229;
+        Tue, 07 Feb 2023 21:12:29 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id s4-20020a17090a764400b0022941908b80sm465351pjl.47.2023.02.07.21.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 21:12:28 -0800 (PST)
+Date:   Wed, 8 Feb 2023 10:42:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Qi Zheng <zhengqi.arch@bytedance.com>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] PM/OPP: fix error checking in opp_migrate_dentry()
+Message-ID: <20230208051226.2lp736c67fem35ex@vireshk-i7>
+References: <20230208040037.60305-1-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
-References: <20230207230436.2690891-1-usama.arif@bytedance.com> <20230207230436.2690891-7-usama.arif@bytedance.com>
-In-Reply-To: <20230207230436.2690891-7-usama.arif@bytedance.com>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Wed, 8 Feb 2023 00:09:25 -0500
-Message-ID: <CAMzpN2iejCnBeBdC6+92fUL2k8ZdAq_jEgXX+RSoGMhRZ0UBSA@mail.gmail.com>
-Subject: Re: [PATCH v7 6/9] x86/smpboot: Support parallel startup of secondary CPUs
-To:     Usama Arif <usama.arif@bytedance.com>
-Cc:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208040037.60305-1-zhengqi.arch@bytedance.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 6:10 PM Usama Arif <usama.arif@bytedance.com> wrote:
->
-> From: Thomas Gleixner <tglx@linutronix.de>
->
-> Rework the real-mode startup code to allow for APs to be brought up in
-> parallel. This is in two parts:
->
-> 1. Introduce a bit-spinlock to prevent them from all using the real
->    mode stack at the same time.
->
-> 2. Avoid the use of global variables for passing per-CPU information to
->    the APs.
->
-> To achieve the latter, export the cpuid_to_apicid[] array so that each
-> AP can find its own per_cpu data (and thus initial_gs, initial_stack and
-> early_gdt_descr) by searching therein based on its APIC ID.
->
-> Introduce a global variable 'smpboot_control' indicating to the AP how
-> it should find its APIC ID. For a serialized bringup, the APIC ID is
-> explicitly passed in the low bits of smpboot_control, while for parallel
-> mode there are flags directing the AP to find its APIC ID in CPUID leaf
-> 0x0b (for X2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+On 08-02-23, 12:00, Qi Zheng wrote:
+> Since commit ff9fb72bc077 ("debugfs: return error values,
+> not NULL") changed return value of debugfs_rename() in
+> error cases from %NULL to %ERR_PTR(-ERROR), we should
+> also check error values instead of NULL.
+> 
+> Fixes: ff9fb72bc077 ("debugfs: return error values, not NULL")
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> ---
+> Resend as a separate patch.
+> 
+>  drivers/opp/debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+> index 96a30a032c5f..2c7fb683441e 100644
+> --- a/drivers/opp/debugfs.c
+> +++ b/drivers/opp/debugfs.c
+> @@ -235,7 +235,7 @@ static void opp_migrate_dentry(struct opp_device *opp_dev,
+>  
+>  	dentry = debugfs_rename(rootdir, opp_dev->dentry, rootdir,
+>  				opp_table->dentry_name);
+> -	if (!dentry) {
+> +	if (IS_ERR(dentry)) {
+>  		dev_err(dev, "%s: Failed to rename link from: %s to %s\n",
+>  			__func__, dev_name(opp_dev->dev), dev_name(dev));
+>  		return;
 
-For the serialized bringup case, it would be simpler to just put the
-cpu number in the lower bits instead of the APIC id, skipping the
-lookup.
+Applied. Thanks.
 
---
-Brian Gerst
+-- 
+viresh
