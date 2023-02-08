@@ -2,106 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A1D68F9D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 22:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAC568F9E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 22:48:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjBHVku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 16:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S231954AbjBHVs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 16:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjBHVkr (ORCPT
+        with ESMTP id S230167AbjBHVsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 16:40:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C072A24CA1;
-        Wed,  8 Feb 2023 13:40:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F02617EB;
-        Wed,  8 Feb 2023 21:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93802C433D2;
-        Wed,  8 Feb 2023 21:40:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675892443;
-        bh=vGjgAzSDM+kGykXXRO7m7rBzi73B3auHxgdl5bgfbnM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aqjZrxxMYKIiSPQm9f7FJmtV0jqkueYWuBV+K/zYJRSK0FdcxAxBW0pBFnOiW+zgc
-         OzLxBrI3PcBxj8zwX4Fm5pmzHVJQJTYk0m/sJNx6SeRk5mS7KBJIiHGwGa4QAxTKEf
-         6UASXCJBAuhQ3DjmKccYJlEcGDiv2uUnxXcRA9ElyDMYMzM1SXXHHOz0ItjxKvGZMl
-         3wsnKrb4S2VmbJhXMr4CUERAg7JN6/oAHv08Q0dXZ9Dybw1OGlqEnxprZbMQaOh3EZ
-         Q2fozt4xDea8XL/KduLQV8N5tXSyNNfl+QMULYAUc6C71VUN5qMayd+B0OF2zX2p+J
-         fOyr9b9JP4Rtw==
-Date:   Wed, 8 Feb 2023 13:42:54 -0800
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        robimarko@gmail.com, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org,
-        quic_gurus@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_devipriy@quicinc.com
-Subject: Re: [PATCH V3] arm64: defconfig: Enable scm download mode config for
- IPQ Targets
-Message-ID: <20230208214254.nabavfpj5ymdgr3a@ripper>
-References: <20230208053332.16537-1-quic_poovendh@quicinc.com>
- <20230208053332.16537-5-quic_poovendh@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208053332.16537-5-quic_poovendh@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 16:48:53 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720681E5D6;
+        Wed,  8 Feb 2023 13:48:52 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318LHv8P014603;
+        Wed, 8 Feb 2023 21:48:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=P3F//S2WmagtKbNpt0cp03T9qmqZyNd1ebxOd2KomBw=;
+ b=W32b0R3ArQHxnwSaULPgt8vS7kR1EV9oaIHNg7acXkuDjkaUoEVwOvisay7wcft7B2jh
+ CX7W1c+8KqBDY7ku/JXQrCAbPiMiaXlbd7NUMcJa8aoXFl1DrSy3Dt2sudJkUYqiWqfI
+ tOXRnhQN70+eey7q2xTc+5a20D4/uaKsjJRrdWsHdLI7wviyPag8oA9ixRJp4mWRcwkR
+ 3qjyc6lhpNC+DivP2u642wyfd1ExHTqI1GUj/azkR/Xc1NYLeDjA0wrpVaB3If9PUSl0
+ gEQPCwSh1Lbyz64wLz+ktve/ln0A7tqEs7O6XS08S6oBnrgOrRnRzSpaZiQBV7HpMezE rA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmkhb8r32-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 21:48:35 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318LWioR009974;
+        Wed, 8 Feb 2023 21:48:35 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmkhb8r2h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 21:48:35 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 318JfoIr027767;
+        Wed, 8 Feb 2023 21:48:33 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3nhf07ybvq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 21:48:33 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 318LmW8F40239706
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Feb 2023 21:48:32 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F7E558054;
+        Wed,  8 Feb 2023 21:48:32 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8DD6E5805A;
+        Wed,  8 Feb 2023 21:48:29 +0000 (GMT)
+Received: from sig-9-65-211-196.ibm.com (unknown [9.65.211.196])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Feb 2023 21:48:29 +0000 (GMT)
+Message-ID: <ea1974af48bfd0e6dfbaa63e59d38a46847c74e6.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 2/6] KEYS: Add missing function documentation
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org,
+        dhowells@redhat.com, dwmw2@infradead.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, pvorel@suse.cz, tadeusz.struk@intel.com,
+        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
+        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Wed, 08 Feb 2023 16:48:29 -0500
+In-Reply-To: <20230207025958.974056-3-eric.snowberg@oracle.com>
+References: <20230207025958.974056-1-eric.snowberg@oracle.com>
+         <20230207025958.974056-3-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: K9xz-VKM3Avtnpy35KzXf2Vz1E7AgjyY
+X-Proofpoint-ORIG-GUID: X67xvf_kL7wCZGtWmONxP9LVe3xONopZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_09,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999 adultscore=0
+ mlxscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302080183
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 11:03:31AM +0530, Poovendhan Selvaraj wrote:
-> Enabling the download mode config by default as the IPQ Targets use
-> crashdump feature extensively to debug crashes.
+On Mon, 2023-02-06 at 21:59 -0500, Eric Snowberg wrote:
+> Compiling with 'W=1' results in warnings that 'Function parameter or member
+> not described'
 > 
-
-No thanks.
-
-You can pass qcom_scm.download_mode=1 on the kernel command line to turn
-this on dynamically when you want it. There's no reason to attempt
-enabling download mode on every Qualcomm board running the upstream
-kernel.
-
-Regards,
-Bjorn
-
-> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+> Add the missing parameters for
+> restrict_link_by_builtin_and_secondary_trusted and
+> restrict_link_to_builtin_trusted.
+> 
+> Use /* instead of /** for get_builtin_and_secondary_restriction, since
+> it is a static function.
+> 
+> Fix wrong function name restrict_link_to_builtin_trusted.
+> 
+> Fixes: d3bfe84129f6 ("certs: Add a secondary system keyring that can be added to dynamically")
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Reviewed-by: Petr Vorel <pvorel@suse.cz>
 > ---
->  Changes in V3:
-> 	- Updated the commit message
+>  certs/system_keyring.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 37a60df14e1d..42c9ccdbf0dc 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -258,6 +258,7 @@ CONFIG_ARM_SCPI_PROTOCOL=y
->  CONFIG_RASPBERRYPI_FIRMWARE=y
->  CONFIG_INTEL_STRATIX10_SERVICE=y
->  CONFIG_INTEL_STRATIX10_RSU=m
-> +CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT=y
->  CONFIG_EFI_CAPSULE_LOADER=y
->  CONFIG_IMX_SCU=y
->  CONFIG_IMX_SCU_PD=y
-> -- 
-> 2.17.1
-> 
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index 5042cc54fa5e..e531b88bc570 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -33,7 +33,11 @@ extern __initconst const unsigned long system_certificate_list_size;
+>  extern __initconst const unsigned long module_cert_size;
+>  
+>  /**
+> - * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
+> + * restrict_link_by_builtin_trusted - Restrict keyring addition by built in CA
+
+While fixing the kernel doc, might as well update "built in" to be
+consistent.
+
+> + * @dest_keyring: Keyring being linked to.
+> + * @type: The type of key being added.
+> + * @payload: The payload of the new key.
+> + * @restriction_key: A ring of keys that can be used to vouch for the new cert.
+>   *
+>   * Restrict the addition of keys into a keyring based on the key-to-be-added
+>   * being vouched for by a key in the built in system keyring.
+> @@ -50,7 +54,11 @@ int restrict_link_by_builtin_trusted(struct key *dest_keyring,
+>  #ifdef CONFIG_SECONDARY_TRUSTED_KEYRING
+>  /**
+>   * restrict_link_by_builtin_and_secondary_trusted - Restrict keyring
+> - *   addition by both builtin and secondary keyrings
+> + *   addition by both builtin and secondary keyrings.
+
+and here 
+
+> + * @dest_keyring: Keyring being linked to.
+> + * @type: The type of key being added.
+> + * @payload: The payload of the new key.
+> + * @restrict_key: A ring of keys that can be used to vouch for the new cert.
+>   *
+>   * Restrict the addition of keys into a keyring based on the key-to-be-added
+>   * being vouched for by a key in either the built-in or the secondary system
+
+and here
+
+> @@ -75,7 +83,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
+>  					  secondary_trusted_keys);
+>  }
+>  
+> -/**
+> +/*
+>   * Allocate a struct key_restriction for the "builtin and secondary trust"
+>   * keyring. Only for use in system_trusted_keyring_init().
+>   */
+
+Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
+
