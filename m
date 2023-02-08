@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E3D68F0F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A34B068F103
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjBHOj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S231176AbjBHOk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjBHOjy (ORCPT
+        with ESMTP id S231451AbjBHOky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:39:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B6621955;
-        Wed,  8 Feb 2023 06:39:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA872B81D48;
-        Wed,  8 Feb 2023 14:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E0AC433EF;
-        Wed,  8 Feb 2023 14:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675867161;
-        bh=JbqZpU27yOcLHEwpGp6fv33iNCb+DQaQiTJ1X82Qbmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kPNbuKtUJFMMlfuXdjq+EPrr1zHnytdlhDoURKxFoe3usu/H33TaJHVYuP+bzDT2W
-         IFI7gndkhhJoBy3R17pruPbOJqwLcHUltoUAi9Ivz8cPr3MI8j4S8Y6qPKcebvoReQ
-         nzCq6LbupdWsWIIQxVVFVx0GOPH8LH/bcwtZaMt+25Xnd/2ATiAb78TdgcXOiC3Irn
-         UrSeWFsLr5neFZExoZ1MF5lx6vQ0G65LfeH8eeizvHhh8lFGPKTJc2G8k59FyL9xa7
-         CSLDmcwoItgkq6vMHNapTCjfQGpByXKMbTN6Uc54x4lDLnWWFmbBYC4GYmeDpN+RRM
-         pv/ty4pbn/EOg==
-Date:   Wed, 8 Feb 2023 07:39:18 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com, dphadke@linux.microsoft.com,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
-Message-ID: <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
-References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
- <202302081621.odizDzHG-lkp@intel.com>
- <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
+        Wed, 8 Feb 2023 09:40:54 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B58E25E32
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:40:53 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id be8so19467015plb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/bxiE2oJ3WnqWoU2J6SBw1NhqrXEZjoU30zxpvXlfoY=;
+        b=PD+sjg31omWK6nugbu6srR6lhXG2hugxiw4POwIQV3HMr9rwwpd4Mh5TQTKVkQxQdN
+         yYK1lC5mf5HnPQkGNXhZ+Bdt+Hz7GkE7nRennD5gJzqqrEHIIK82e45Ca23ippyhVnLv
+         jHJTbx+JoDj/T+V6oJXaBwh06DBVov7TKwo+D6vOUkBXcnYoSxF1ioxWgiLiQeN1tW95
+         UPB9kVmw+OgOsL5xlot13IbwMgX+ox6FWO7L090uws91g7ySnJ6ZXzKGM05bUZWf+D+U
+         HlRQ3GFI/szrIENIGlDVBbLSmbHA+LEXApxjXITtzX62+Z/3xiiOPoTrgZAofsDY5t3J
+         MTVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/bxiE2oJ3WnqWoU2J6SBw1NhqrXEZjoU30zxpvXlfoY=;
+        b=fy4//ohiaCLZLTlSqn8n+o42434Gcs6yjHWg8hMkI1edVqFWAOvX9oFSiBI+K8bVQx
+         SCQCbCRTQoc8DuqFXWzQUgUCWrl7QuyW6c9PIEQfDeXs7p2EK6VKLKo/ugMbzbkdjcAQ
+         4YKDhp/L+P9NiqCKj94KSCzTaaRB5G4hf4bPg7nG16ShQPY1MPbBoBtqmutatw7t7GdP
+         xLOkbqRqC19ULUE+1kG7fea55piTrTU2XgiPvdI1UFDWCMkBceoDoRMJpaMWBIlF/49l
+         ditY0EbXl0sVKHXLH+fcEG1tgcAZ5n/1e9aBcW05jzAzsANcxC3/fr6HV912Z96VJbm4
+         3LtQ==
+X-Gm-Message-State: AO0yUKVjFRSSOZnLUkoVzQ0FjaIfQ9XF3lYv7C7lkyMP8K1qSgpwTC4d
+        hRRedZSFUYp72iEl4pbGMZZKXe7IFX+AB+yOr5s=
+X-Google-Smtp-Source: AK7set9cnI7ijCR0Pe/LRnHhQyiJoqhpZaqODCYVMDTdmfraExS5wzHGiHkduxKKVSYx4BSModBUCg==
+X-Received: by 2002:a17:902:788b:b0:194:6d3c:38a5 with SMTP id q11-20020a170902788b00b001946d3c38a5mr204703pll.1.1675867252646;
+        Wed, 08 Feb 2023 06:40:52 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id r9-20020a63a009000000b004db2b310f95sm9689139pge.16.2023.02.08.06.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 06:40:52 -0800 (PST)
+Date:   Wed, 8 Feb 2023 14:40:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, bgardon@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2] KVM: selftests: Make reclaim_period_ms input always
+ be positive
+Message-ID: <Y+O0cGu0lgg+mDJr@google.com>
+References: <20230111183408.104491-1-vipinsh@google.com>
+ <167582135970.455074.533102478332510041.b4-ty@google.com>
+ <CAHVum0e0ZL-Q7DwZ-SYSuqX1n_9EU85mYhyvUA=75zpJ6a29ow@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHVum0e0ZL-Q7DwZ-SYSuqX1n_9EU85mYhyvUA=75zpJ6a29ow@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 11:25:57AM +0100, Krzysztof Kozlowski wrote:
-> On 08/02/2023 09:22, kernel test robot wrote:
-> > Hi Saurabh,
-> > 
-> > Thank you for the patch! Perhaps something to improve:
-> > 
-> > [auto build test WARNING on next-20230207]
-> > [cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
+On Tue, Feb 07, 2023, Vipin Sharma wrote:
+> On Tue, Feb 7, 2023 at 6:10 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Wed, 11 Jan 2023 10:34:08 -0800, Vipin Sharma wrote:
+> > > reclaim_period_ms use to be positive only but the commit 0001725d0f9b
+> > > ("KVM: selftests: Add atoi_positive() and atoi_non_negative() for input
+> > > validation") incorrectly changed it to non-negative validation.
+> > >
+> > > Change validation to allow only positive input.
+> > >
+> > >
+> > > [...]
+> >
+> > Applied to kvm-x86 selftests, thanks!
 > 
-> All of your recent patches have build errors. Can you at least build
-> test them before sending? It's a unnecessary noise in our mailboxes to
-> get non-buildable patches, just to trigger compilation which you can
-> easily do by your own. GCC is a free software...
+> Just FYI, this patch has already been applied to kvm/master branch.
+> https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?id=c2c46b10d52624376322b01654095a84611c7e09
 
-For what it's worth, GCC does not have a warning like this, it just
-accepts the incorrect location of the attribute, which has gotten others
-in trouble before:
-
-https://lore.kernel.org/CAHk-=wgf+kHeSZbpkZumWcTXUD7ordqTMvPRNL6aQVG1DSBDnQ@mail.gmail.com/
-
-So the patch probably did build clean with GCC but that is one of the
-reasons that there is no longer a compiler monopoly for the kernel ;)
-
-Cheers,
-Nathan
+Now I know why I was getting deja vu...  Dropped, thanks Vipin!
