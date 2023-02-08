@@ -2,108 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BB568F1AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 860B768F1BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjBHPLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:11:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S231753AbjBHPPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbjBHPKn (ORCPT
+        with ESMTP id S230255AbjBHPO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:10:43 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B39438E95;
-        Wed,  8 Feb 2023 07:10:39 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-16aa71c1600so1636455fac.11;
-        Wed, 08 Feb 2023 07:10:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rMOh+YWDoT20q0bU4h7O0uaMSnzV9l0gaPz7VD0hjmg=;
-        b=N6T/xM1nlVfGtGs71rjZQEgiZQqzArFXPD/VIVvWYLf2GmnmRRj7h0H0qfzLr7KWWv
-         Fy1N/0e2ua24zuT6QvppM/D0ixY5y8WQ0AFWGWSWQ5iVTHyzQVEh9CUrJFId93eIS4m0
-         hfQs2IBYhT+48RV9fP5F5lBed7iDCCrdY4QQagI2tuBzWA75UW5XhZ5CbKCr4Qv53dUH
-         9A6ReNKAV+Val/OM5gY7YnOl/2egJPAK1r9UIn470LdXUW6Gql/Ru9SV8eXVQqZSrIKX
-         ELb1JrrZWMvMqELVENPg+OA/+Y+WuG94LBZMddvQ9/upsjoBtGsQueM5n1ikaxHgfl2/
-         iVyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rMOh+YWDoT20q0bU4h7O0uaMSnzV9l0gaPz7VD0hjmg=;
-        b=g9Umt26rHYJYhFLY8V9Vn1N2b9rSuE4Op+6wh3YfYpuQV0Z0XRG9+H6Pw70/1vv+qJ
-         L0Nagvjc9Z1w/vfQVn1hRqOplAuICVO1XX+zfDzQyC3p79XT6NUMseaJinFxNZJldAYe
-         b++YSdZ0Lbfbxfg9XZcelHF4Hb6bhECZbp+CH98uPt1zd6GzK9tbLvjbR0mrYor5821A
-         Lq6J9PgcpqGBoY2IJMMkcwgqiOcdzlZRBRbHrXjPPsm1RNp38KjS+x5KdjFYvSEZaErm
-         6YPi/Su0JhEz9MOdn99ZeOaz7n9OnRnFAENn4lfRRPyxsS4gmyjtaA0djHUryNiqpT+6
-         xp3w==
-X-Gm-Message-State: AO0yUKUvjdRWBdg/mY1X+C0/GeBzHYJ4bEJvbnatqA/mpJulEX4cilsd
-        YDju6ye4PgVMG3NDg2A7NGs8SFMf2Wc=
-X-Google-Smtp-Source: AK7set8g6X8ya1YyHzAHzThnVsGac9b1O1Rt71iMRSbGd/7Y2f1fG0XZzjJv6emprULtB+eFs2EpSQ==
-X-Received: by 2002:a05:6871:8e:b0:16a:af93:9ae6 with SMTP id u14-20020a056871008e00b0016aaf939ae6mr134955oaa.9.1675869038204;
-        Wed, 08 Feb 2023 07:10:38 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w1-20020a9d70c1000000b006863c59f685sm8229834otj.28.2023.02.08.07.10.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 07:10:37 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2f2dcb7c-e5bc-7e97-71e0-eebdc72fbd03@roeck-us.net>
-Date:   Wed, 8 Feb 2023 07:10:35 -0800
+        Wed, 8 Feb 2023 10:14:56 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF21FCC25;
+        Wed,  8 Feb 2023 07:14:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675869295; x=1707405295;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4lZOumIf897gikgiSSe/yOHSYio/WTFflUsJ9z+Lexk=;
+  b=JH1hTxDkbfK3A3k4dJ8XGai3/NoP3AZbSjsDx/FWg8ifLNalbq9DRkki
+   Js/1iVUYl75L7D7eN1kDGREShZgSmr3dX0q/0Af2GKQlhPdav9rPP+NT2
+   kop3a3fewIJKZZ5R9N6lBoJAryjtAzEDy/KRJB+OWgqQG6kWo/GvCMTSu
+   ajPeX3/bYFT7oF+eqDUNyBnH4y0v7DiRI0GONYrguGUrybzF95pj/WXQ/
+   2MW6oeE+hWrYZrvdPmbxgYr84wo5i9KDLs1jcbY4QIDRPGjgIJhjgy42x
+   XsNr5dimnHhVOLspjPVcCQLAdityqQOK135dU5rVOa6YSdiAtUvjpYsN2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="357218213"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="357218213"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 07:10:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="730898817"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="730898817"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Feb 2023 07:10:52 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C92651C5; Wed,  8 Feb 2023 17:11:30 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 0/7] xhci: mem: Short cleanup series
+Date:   Wed,  8 Feb 2023 17:11:22 +0200
+Message-Id: <20230208151129.28987-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] watchdog: sbsa_wdog: Make sure the timeout programming
- is within the limits
-Content-Language: en-US
-To:     George Cherian <george.cherian@marvell.com>,
-        wim@linux-watchdog.org, zhangshaokun@hisilicon.com
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230208083736.1237256-1-george.cherian@marvell.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230208083736.1237256-1-george.cherian@marvell.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/23 00:37, George Cherian wrote:
-> Make sure to honour the max_hw_heartbeat_ms while programming the timeout
-> value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
-> make sure the programmed value is within the permissible range.
-> 
-> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
-> 
-> Signed-off-by: George Cherian <george.cherian@marvell.com>
-> ---
->   drivers/watchdog/sbsa_gwdt.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index 9791c74aebd4..ee1039a652f1 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -149,6 +149,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
->   {
->   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
->   
-> +	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
->   	wdd->timeout = timeout;
->   
+Clean up xhci-mem.c a bit using latest and greatest Linux kernel
+features.
 
-Wrong order. wdd->timeout should still contain the requested timeout.
+Changelog v2:
+- used dma_pool_zalloc() instead of open coding it (Mathias)
 
-Guenter
+Andy Shevchenko (7):
+  xhci: mem: Carefully calculate size for memory allocations
+  xhci: mem: Use dma_poll_zalloc() instead of explicit memset()
+  xhci: mem: Get rid of redundant 'else'
+  xhci: mem: Drop useless return:s
+  xhci: mem: Use while (i--) pattern to clean up
+  xhci: mem: Replace explicit castings with appropriate specifiers
+  xhci: mem: Join string literals back
+
+ drivers/usb/host/xhci-mem.c | 83 +++++++++++++++----------------------
+ 1 file changed, 33 insertions(+), 50 deletions(-)
+
+-- 
+2.39.1
 
