@@ -2,119 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B4C68F0A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5622C68F0AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjBHOYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S229537AbjBHOZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:25:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjBHOYf (ORCPT
+        with ESMTP id S229879AbjBHOZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:24:35 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DBC3B0EB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:24:34 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 950FC41;
-        Wed,  8 Feb 2023 15:24:31 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1675866271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=drL93NXnDDD64IhXZUmZIWPeKMBa8824+z2G2QnTmD0=;
-        b=MyAQ6ZVbAhn2BRsrnLu3YgakBYpoziFb8zMRyaVIt0++NAeEFE+2WdlnPw3iENBkrXTmLP
-        02zF9gTRY0+oghhu10N062ZSUyAlx6ExGnFpIUiY8rTvILzXGiA6nbc6mf56hJFzO+owCr
-        /CO1ATLJ2wbq4R5QdkGEWPg263WMohdXfEyo7m3fqtJjhPz2o+6soUk6duyAw+uCC3VqSX
-        imIqKZiMJ4ZikNlFQuG4gqnbtmBisz0t+Kj59QwbZXGNYWjsaCPFWSM+c9M/qIEUUdhQYc
-        i1EfBeX2Ra/H/0dfX06di+kcq6ByWfMAFNeysFUMkG8IhKC71Sv1XeS6w5gNZg==
+        Wed, 8 Feb 2023 09:25:15 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623164A223
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:25:03 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1603274wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2CtqUutiexK1fE8rvThH+wZLHHl6K4XsD4uDvkh7n1Y=;
+        b=GnDIdcwIDW2t6wPFamBykqJGiJ4n5Zz094w5Bovgac5OrpK0bl1pH9AG+xFbtp6qTP
+         Z7HDOBjm1CfPXUOfYND42vjWMbm4Pfku9fqjEYrC/4cyB9YafE9moGWQHRCsgFMVsl/g
+         H8er034sSndNUBClfg392ziWuqe27ItqjfydBLlu5Ruj/S5Z3I7HhHOpSGlAEmM+t840
+         yJFLFnDQj8EaMimFWUTmClBCcR5A26b+y8i0HFK8ZIeTxMHyrV0om5q5fp0oB6o7Lgk6
+         96GOIHBIYDSmGqMiKDn6sETcPmJyhutOX+3rIjjWjX+dNbYJKlPcDXNm0yV4w9MJheC1
+         6UHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2CtqUutiexK1fE8rvThH+wZLHHl6K4XsD4uDvkh7n1Y=;
+        b=MStO63hxWlmDpxqjLPs7riO/iGknMhDX9Fwze2QpNYkHOKFpHCXttXURK2pzPPuQyG
+         1s1wXWEBRS8Fm5lGOoG+8OuBR8tMCezayT2YvJ/yXi4CZiA2+7xpao4A3wyPAH+1y1g7
+         xPHxuCx/uirSBB7S83Dua5o/pQei8BRYamKDaX21+U7byVBATcSqPDhnVgFuP0s+gXy+
+         smmDupMD7aswBU2BnVTh9RkzI1DcK5MRXRPlwvyIP5pDdR6vyT6+2EYLRkn64/JeDUng
+         DbSQPzurejtMeqk31ddjvp9vNc02SmR5uUhwlyGygxMHM0uJmNIogYsxF45zdpsfGVTT
+         ZYlw==
+X-Gm-Message-State: AO0yUKX07jLj0KUdq8ZLpcQhSstkWz5PFjndncw1cTO7+y1a1FyYMdbe
+        ciZfgHcjYw2ahl7D1q5G1nzXe0UDsuADYPzv
+X-Google-Smtp-Source: AK7set8oQQPSSCVq3i/XNX+CokxHBvSTn4BCLWVR+YPp+jCeWNWC5WKvAcN55g7PhhSrYlvIBwBPAQ==
+X-Received: by 2002:a05:600c:4d21:b0:3de:e447:8025 with SMTP id u33-20020a05600c4d2100b003dee4478025mr6617024wmp.21.1675866301950;
+        Wed, 08 Feb 2023 06:25:01 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c63-20020a1c3542000000b003df14531724sm2181890wma.21.2023.02.08.06.25.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 06:25:01 -0800 (PST)
+Message-ID: <e1a89a4e-8a0d-47e1-a8fd-75ea152ef816@linaro.org>
+Date:   Wed, 8 Feb 2023 15:24:59 +0100
 MIME-Version: 1.0
-Date:   Wed, 08 Feb 2023 15:24:31 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, stable <stable@kernel.org>
-Subject: Re: [PATCH v2] mtd: spi-nor: fix memory leak when using
- debugfs_lookup()
-In-Reply-To: <Y+Ot0FXLgrSoLy7Q@kroah.com>
-References: <20230208125758.1515806-1-gregkh@linuxfoundation.org>
- <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc> <Y+Ot0FXLgrSoLy7Q@kroah.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e9c24836696de76959bbf808b2a90863@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/3] time/sched_clock: Export sched_clock_register()
+Content-Language: en-US
+To:     walter.chang@mediatek.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230208094813.20874-1-walter.chang@mediatek.com>
+ <20230208094813.20874-2-walter.chang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230208094813.20874-2-walter.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-02-08 15:12, schrieb Greg Kroah-Hartman:
-> On Wed, Feb 08, 2023 at 02:36:23PM +0100, Michael Walle wrote:
->> Am 2023-02-08 13:57, schrieb Greg Kroah-Hartman:
->> > When calling debugfs_lookup() the result must have dput() called on it,
->> > otherwise the memory will leak over time.
->> >
->> > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
->> > Cc: Pratyush Yadav <pratyush@kernel.org>
->> > Cc: Michael Walle <michael@walle.cc>
->> > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
->> > Cc: Richard Weinberger <richard@nod.at>
->> > Cc: Vignesh Raghavendra <vigneshr@ti.com>
->> > Cc: linux-mtd@lists.infradead.org
->> > Cc: stable <stable@kernel.org>
->> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> > ---
->> > v2: fix up to work when module is removed and added, making the fix
->> >     much simpler.
->> >
->> >  drivers/mtd/spi-nor/debugfs.c | 1 +
->> >  1 file changed, 1 insertion(+)
->> >
->> > diff --git a/drivers/mtd/spi-nor/debugfs.c
->> > b/drivers/mtd/spi-nor/debugfs.c
->> > index ff895f6758ea..af41fbc09a97 100644
->> > --- a/drivers/mtd/spi-nor/debugfs.c
->> > +++ b/drivers/mtd/spi-nor/debugfs.c
->> > @@ -242,6 +242,7 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
->> >
->> >  	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
->> >  	nor->debugfs_root = d;
->> > +	dput(rootdir);
->> 
->> rootdir might either be the return value of debugfs_lookup() or
->> debugfs_create_dir(). dput() is probably wrong for the latter,
->> right? Also there is an early return, where the dput() is missing,
->> too.
+On 08/02/2023 10:48, walter.chang@mediatek.com wrote:
+> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
 > 
-> {sigh}
+> clocksource driver may use sched_clock_register()
+> to resigter itself as a sched_clock source.
+> Export it to support building such driver
+> as module, like timer-mediatek.c
 > 
-> Yeah, this is all wrong, sorry.  Let me fix this up again, properly.
-> And to do it properly, let's have the module remove the directory if it
-> is unloaded, like a good module should :)
+> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+> ---
+>  kernel/time/sched_clock.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/time/sched_clock.c b/kernel/time/sched_clock.c
+> index 8464c5acc913..8e49e87d1221 100644
+> --- a/kernel/time/sched_clock.c
+> +++ b/kernel/time/sched_clock.c
+> @@ -150,8 +150,7 @@ static enum hrtimer_restart sched_clock_poll(struct hrtimer *hrt)
+>  	return HRTIMER_RESTART;
+>  }
+>  
+> -void __init
+> -sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
+> +void sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
 
-There were some complications. IIRC you'd need to do reference counting,
-to determine whether you are the last user of the rootdir. Other subsys
-create an empty rootdir in their .init(). But that was hard to do in 
-MTD.
-Again memory is hazy.. Therefore, I resorted to create it on the fly if
-there isn't already one.
+Is there a non-init caller?
 
-Maybe you got some better/simpler idea :)
+>  {
+>  	u64 res, wrap, new_mask, new_epoch, cyc, ns;
+>  	u32 new_mult, new_shift;
+> @@ -223,6 +222,7 @@ sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
+>  
+>  	pr_debug("Registered %pS as sched_clock source\n", read);
+>  }
+> +EXPORT_SYMBOL_GPL(sched_clock_register);
 
--michael
+Where is the module using it?
+
+You need to bring users of these two changes, not just prepare something
+for your out of tree patches.
+
+
+Best regards,
+Krzysztof
+
