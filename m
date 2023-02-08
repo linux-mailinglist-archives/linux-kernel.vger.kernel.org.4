@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F5268E895
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCDB68E897
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjBHG53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 01:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S229962AbjBHG5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 01:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjBHG5U (ORCPT
+        with ESMTP id S230061AbjBHG5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 01:57:20 -0500
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68069113D4;
-        Tue,  7 Feb 2023 22:57:18 -0800 (PST)
+        Wed, 8 Feb 2023 01:57:24 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEE4241E8;
+        Tue,  7 Feb 2023 22:57:23 -0800 (PST)
 Received: from toolbox.int.toradex.com ([213.55.227.109]) by
  mrelay.perfora.net (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 0LijEJ-1otcLy2abN-00cy4C; Wed, 08 Feb 2023 07:57:04 +0100
+ 0LhPuw-1omF2x2xaS-00mXvd; Wed, 08 Feb 2023 07:57:08 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     devicetree@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Liu Ying <victor.liu@nxp.com>,
         linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        Frank Li <Frank.Li@nxp.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ming Qian <ming.qian@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: [PATCH v7 03/10] arm64: dts: freescale: imx8-ss-dma: set lpspi0 max frequency to 60mhz
-Date:   Wed,  8 Feb 2023 07:56:34 +0100
-Message-Id: <20230208065641.23544-4-marcel@ziswiler.com>
+        Shawn Guo <shawnguo@kernel.org>,
+        Shijie Qin <shijie.qin@nxp.com>
+Subject: [PATCH v7 04/10] firmware: imx: scu-pd: add missed lvds lpi2c and pwm power domains
+Date:   Wed,  8 Feb 2023 07:56:35 +0100
+Message-Id: <20230208065641.23544-5-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230208065641.23544-1-marcel@ziswiler.com>
 References: <20230208065641.23544-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:xE8izTO0sxLPo5V9m6+AOLPY0T64Gw5oqyClAQIClR/9MSFaZuz
- xoICTvn/9tsBO6JlzDNcQq3FRo+kmgVnrCZR+vLuazlzVSBdCYPIJEC5fj65xEO9seL5fcd
- khFwBFQwMlWlfJ5zbyn3w09yayc41lcY2aPX6+CvX7drIQnTSTFYG9g69L2SwNXBoTuU0XT
- nAdEACrOmpMALWpSXjL1A==
-UI-OutboundReport: notjunk:1;M01:P0:GGoPvCIvcq0=;RqZG8lhrrR/+CYpgiKTrLO5mBIZ
- KryUFaL3atY6BY3NxxDWZZg5ImbzJgBTcnv/dy6/Hh3PWgEmxjRgrKeody+4fNfPV3fiJLD9T
- 9klh0r154Yk35FCuzNzanu1NExIoK69/0KEpKjkKRAF7nUpxSraRcrpJGPseRbP/4Lj4VzUgm
- 1UC/nb0NKE7XtWGTLqM/VB8Rsy6JvLXoKPIWhgeo8Uv7BGopSyllHGFs8V/jBUa0xVh8CrtnD
- n0eoZ9xlzLEXa/g8WmiogQn66GcRYwGbOn7JO++kWSpxBDiprG0lMOxzdWT8/WrlSgVHaMslD
- suEvhOLX4QJzamLVVJFqrxD4tbLNlMTKsRv9W4HwsJn1F9LmFSTQ5beKnvVJ931lfAieDMbJ9
- Sr9gyekcI0jCj8liSnpHc0T71wk7NOZTrbUHosUYEF3RUFfeUEq1A14pcYQJp/lAU23PLH9e8
- 5UsHJaSSPQnrm9xMIWf4P5GAUwboUSCMUkbhswK+9ej8J/VJy61CFar0jsthS7Cpr96QrMflh
- v53CWCnA2VpqZxt+vEWpqM1LmpvFPQf9RpdQ2Dx3N0icyWDEnwLSXYRW0ZKBpMHlNrzC0dTOL
- PpOWCPxoAl9ZKBtd7rb6UGOvNicHkVYsglZEASdtmHVXhR17dfD7c+R52fybTckAJGcNAqbLn
- TeKO6tU5p/T1z22g5e4GmPjTp5xwReooLUI3kvbeeQ==
+X-Provags-ID: V03:K1:8z/dM6R4fOkz3siVjLs2DNqPqf9ERzK24v6zMkgYrSf9p6CMkUt
+ /5Tmd0flfqaNkSx/gM2sqjeFmzXmgQ+qoU/IrOJuVkGsKiNgv6ByjCj7oeSPkQDmm5kaPRc
+ sd9XurSU9Xg4Ee/Ev2AljUOhrA/pZkolTDEwHfI5bU6taZM6rW0vAAwN9cGz0jMpGciDxt4
+ ucLZJ5TzmQwBSzTlqK8Uw==
+UI-OutboundReport: notjunk:1;M01:P0:jPh6HV837kc=;YPd23tpIRcktikbBEAHIuLeDpQ6
+ G6YuvW50MSXBPsPKq14YEWAUKK/XdEE0bfk4hRMbpM+8Z4duiXYLkVsS3Af8FsKIJahknAyZj
+ hwFGm0JcnzE5eTcJnSSaAW4h7UAL4nuZLQoBWxB6vPGp1A0IgZD5n3Mp+QIQzJ7oJtKUlJMvj
+ kIT7P+vOyRjQNpy1faikyCWNnv2NqTHGDVgxzOODCRrbcEpmLo3qgWHsDFfkosrSuVmeU0cLW
+ 8cuez14nFcFHedOfA6BUc9qsRfMMQN98bd887Lu5HGcaNPhCo9Tk8uza3Sp7oK2d9wyVi3OEM
+ mAHbb6EAZ2WLasQQxg+Rma2BdRV1KVTlv0zzGnDN+GtaZx8UyIGBcCDCsGAl3r0NF5VGtGDFf
+ IPeK8OKzhjmuwdYvJRNn9sdNbA3KEdMa+qFLrWYtEr/Q4BVsVfVVlFEWOXVYgzlCV+5P+DsYr
+ 8997fTnOygMgk0DCYy4nj5M9FbEDhTafwIFvdtJgQ7tAZD8+3VxSaQv3IiTTn5Ff6nxA3MwgZ
+ baCPQe0Gsc9ipF69RAZRQoiDPeVF4e73kNHOqfnTIR/mzA6PVj4FfKzRGokJhdjbKfroxYlZB
+ ZLiqeUhMYaB9iblR5wBZnHehrQmz9J03/zDnjUeAlLEPhFLF/G+dmkNRLimJ/gFRngPrKE4Pt
+ hqZBmbqWPYdwXpJq0ez8ncgUu0LgpiwL8DTx3/bLKg==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+From: Clark Wang <xiaoning.wang@nxp.com>
 
-60MHz is the maximum frequency mentioned in the datasheet for
-master mode. Set that to 60MHz to match lpspi2.
+LVDS' lpi2c and pwm power domains definitions are missed.
+Add them here.
 
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
 ---
 
-(no changes since v1)
+(no changes since v4)
 
- arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v4:
+- New patch inspired by the following downstream patch:
+  commit 0c36c5b63c1e ("LF-3569-1 firmware: imx: scu-pd: add missed lvds lpi2c and pwm power domains")
+  Avoiding the following being reported upon boot:
+  [    1.309776] lvds0_pwm0_clk: failed to attached the power domain -2
+  [    1.334097] lvds1_pwm0_clk: failed to attached the power domain -2
+  ...
+  [   15.281767] platform 57244000.pwm: deferred probe pending
+  ...
+  [   15.292630] platform backlight: deferred probe pending
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-index 6e5ef8b69bf8..6ccf926b77a5 100644
---- a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-@@ -31,7 +31,7 @@ lpspi0: spi@5a000000 {
- 			 <&spi0_lpcg 1>;
- 		clock-names = "per", "ipg";
- 		assigned-clocks = <&clk IMX_SC_R_SPI_0 IMX_SC_PM_CLK_PER>;
--		assigned-clock-rates = <20000000>;
-+		assigned-clock-rates = <60000000>;
- 		power-domains = <&pd IMX_SC_R_SPI_0>;
- 		status = "disabled";
- 	};
+ drivers/firmware/imx/scu-pd.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/firmware/imx/scu-pd.c b/drivers/firmware/imx/scu-pd.c
+index 2a4f07423365..84b673427073 100644
+--- a/drivers/firmware/imx/scu-pd.c
++++ b/drivers/firmware/imx/scu-pd.c
+@@ -180,7 +180,11 @@ static const struct imx_sc_pd_range imx8qxp_scu_pd_ranges[] = {
+ 
+ 	/* LVDS SS */
+ 	{ "lvds0", IMX_SC_R_LVDS_0, 1, false, 0 },
++	{ "lvds0-pwm", IMX_SC_R_LVDS_0_PWM_0, 1, false, 0 },
++	{ "lvds0-lpi2c", IMX_SC_R_LVDS_0_I2C_0, 2, true, 0 },
+ 	{ "lvds1", IMX_SC_R_LVDS_1, 1, false, 0 },
++	{ "lvds1-pwm", IMX_SC_R_LVDS_1_PWM_0, 1, false, 0 },
++	{ "lvds1-lpi2c", IMX_SC_R_LVDS_1_I2C_0, 2, true, 0 },
+ 
+ 	/* DC SS */
+ 	{ "dc0", IMX_SC_R_DC_0, 1, false, 0 },
 -- 
 2.36.1
 
