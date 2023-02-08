@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F6968EAD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C7868EACE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjBHJPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S231388AbjBHJPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjBHJPN (ORCPT
+        with ESMTP id S231589AbjBHJPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:15:13 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D774609D
+        Wed, 8 Feb 2023 04:15:12 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12D0460AD
         for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:13:52 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id sa10so19163351ejc.9
+Received: by mail-ej1-x633.google.com with SMTP id dr8so49495805ejc.12
         for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 01:13:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mTdx2dHITQV8+kA5/WdkyW36pw2cffdM7pRJVj161AE=;
-        b=i9BwVLLxEYfhVLyfIsJbZ2f4Lr7Ad8D8Nuv1j3FMdcPPvprsat3CNcwwzsVQtUZnS6
-         /L93kwaplEDymkqEbUSjCMtxAoJf4zWjW1X45zN0omBFgrbM970kypYmcca6bg6dZO9T
-         u9L0W0bq3xfb1LjnTfrN1OqHjPEkgZ2d4yjuwY7Qq/MxE4Ck9FTdlHTD2lf2i59B1k5V
-         jky6LmB4SsdOuIE0Xr5wi2FM/djikHrCbMgJzKyphgCwxawd34EZIT1hs0Tg0w+EOFGp
-         qc+/xPhQYIixKNATSp0aGrv9uAv5Z7sah4TjKehXEWNcUuyQKVLosrbWcqgX+2ua7vZt
-         Z1CA==
+        bh=0zFpsL7Z7sroK9EcjaH6WVngQRH67YREWwOinR3i/iU=;
+        b=RqDXqnw5pvtRcM5XElKb00KsFBrwzoOzMIA97rdTFtO5qrCf2/knc+ABbtCoplcAy/
+         vI9EYkSRzKEj2j8NuKEm3l6ETcUMmfO+oLnKpYBk5JycdA9D3TRKEs83ztFJ2qHNRKY+
+         da/ikvzMVGN3fASdYaDLuce5ZXfIZavLV46M3wOHFab/2QIAsxCEjBxMvSTCfcMW/Y/b
+         OaNESr3o5lH1XwQX0KsoANrXXn8FO+L1Oh3Q2u9BvJKVW59Mz8wwlyCj8ftzDhq/Z3Ta
+         hytsCqOGcFXLVAGKoWe+UOvX9SQZCBqdcOo8rs3wrJc4Q1J1ELSho3NTDw1CoSQaUNPR
+         360A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mTdx2dHITQV8+kA5/WdkyW36pw2cffdM7pRJVj161AE=;
-        b=4NW93fRVI0vWPciYjpcDcfiQUn+QxECVVoP3izKpq/lNwO2qB6/4iIqMueMPTttd3t
-         +q3BcexTIr+5rVoxUft+lRZ337EBkN8FGjb+kDreMzbtWLw5azD9aM5KB7d1aTlmBT9L
-         HlvCCtdtvKtEL+bGKScg3fvgsuaFggKAZbH7Vt07TM7NIFi3Dm9676vmL7hDYLPEk4Bi
-         qSULhbH8NmLdOHq0lv4rAakuqBRFxXjzH5XwUkd5egqwHngfb8H0TQm/mSinc6LUbIQq
-         IEroVMjbXQhf/UtlPL9Td/qQ9/c7F4u9uhWKPEe3rI3/li1Trzz+Z/86iWDquxls2aea
-         Se+A==
-X-Gm-Message-State: AO0yUKVwTWEE8XHYZBQaNABAurv3nGdX8P0VtnLJrIYLjpH6rn0R4DaJ
-        bS8np9uGiSABVDENQWZOpJsE3Q==
-X-Google-Smtp-Source: AK7set8cYKfY1jOTs0IzfGLi0MhS7aIjaoYiPCkXJeZQdSUvAuobOhlo4dc2WQY1Is0HLtt3dTil3A==
-X-Received: by 2002:a17:906:f6cd:b0:8a9:8047:a5c with SMTP id jo13-20020a170906f6cd00b008a980470a5cmr6281123ejb.7.1675847628975;
-        Wed, 08 Feb 2023 01:13:48 -0800 (PST)
+        bh=0zFpsL7Z7sroK9EcjaH6WVngQRH67YREWwOinR3i/iU=;
+        b=doJ2nxlYaj9cIj7qm4xsz6LCNYMOuLcPzai66kyFuPt5cAjuEe7J7Dw82KhRJvk4gR
+         aPfDvl9hrFSzJiaBc6+9wMPQkKw4L54KaO8nz9JJJ0zScR9HGqIME8bWR1eDbDtQ99dn
+         JuFXUXTMNjNAsmDaHzuRMz+fWcq6dvecH5/JGdMsDvjGf0a2Wkyn/E8eIA/SkLEfiNcl
+         rFnI0lrr+aEoeyMTvvfj7Pxl0lbOLidhqICC1wL61p7GO/js2nTDkQ355MfPEJEcvhSN
+         r68TE202Wtf1g8d07JK8weQwlu4VZU8e1Y5mG+0Whqf10t6hcFNx944L0uFkYamGmvIJ
+         IzYQ==
+X-Gm-Message-State: AO0yUKWNl+MEmb/XoCQS4IDHqzbLkji+eelP4Hgmce+bqz2d02GWVOzY
+        fbUJbzc2hIJCeToDhT+EeTvsGg==
+X-Google-Smtp-Source: AK7set+TMOVDnZJ1a7bu738npcfjumWRSe6WOwanwY7gaup9cykx/1dqODjq8dwsLIGcObFFBeKe6A==
+X-Received: by 2002:a17:907:204c:b0:7c4:fa17:7203 with SMTP id pg12-20020a170907204c00b007c4fa177203mr6786812ejb.63.1675847630675;
+        Wed, 08 Feb 2023 01:13:50 -0800 (PST)
 Received: from localhost.localdomain (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id z2-20020a1709064e0200b00887a23bab85sm7987279eju.220.2023.02.08.01.13.47
+        by smtp.gmail.com with ESMTPSA id z2-20020a1709064e0200b00887a23bab85sm7987279eju.220.2023.02.08.01.13.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 01:13:48 -0800 (PST)
+        Wed, 08 Feb 2023 01:13:50 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -58,9 +58,9 @@ Cc:     marijn.suijten@somainline.org,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 03/10] clk: qcom: branch: Move CBCR bits definitions to the header file
-Date:   Wed,  8 Feb 2023 10:13:33 +0100
-Message-Id: <20230208091340.124641-4-konrad.dybcio@linaro.org>
+Subject: [PATCH v6 04/10] clk: qcom: branch: Clean up branch enable registers
+Date:   Wed,  8 Feb 2023 10:13:34 +0100
+Message-Id: <20230208091340.124641-5-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230208091340.124641-1-konrad.dybcio@linaro.org>
 References: <20230208091340.124641-1-konrad.dybcio@linaro.org>
@@ -75,42 +75,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the definitions of CBCR bits to the branch header file.
+Prefix the "branch enable" registers with CBCR_ to be closer to what
+they are actually called in Qualcomm terms, use GENMASK instead of
+shifting values around and adjust their usage accordingly.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/qcom/clk-branch.c | 5 -----
- drivers/clk/qcom/clk-branch.h | 4 ++++
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ drivers/clk/qcom/clk-branch.c | 10 +++++-----
+ drivers/clk/qcom/clk-branch.h |  7 +++----
+ 2 files changed, 8 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/clk/qcom/clk-branch.c b/drivers/clk/qcom/clk-branch.c
-index f869fc6aaed6..f2b577b07b7e 100644
+index f2b577b07b7e..ca896ebf7e1b 100644
 --- a/drivers/clk/qcom/clk-branch.c
 +++ b/drivers/clk/qcom/clk-branch.c
-@@ -39,11 +39,6 @@ static bool clk_branch_check_halt(const struct clk_branch *br, bool enabling)
- 	return !!val == !enabling;
+@@ -44,17 +44,17 @@ static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
+ 	u32 val;
+ 	u32 mask;
+ 
+-	mask = BRANCH_NOC_FSM_STATUS_MASK << BRANCH_NOC_FSM_STATUS_SHIFT;
+-	mask |= BRANCH_CLK_OFF;
++	mask = CBCR_NOC_FSM_STATUS;
++	mask |= CBCR_CLK_OFF;
+ 
+ 	regmap_read(br->clkr.regmap, br->halt_reg, &val);
+ 
+ 	if (enabling) {
+ 		val &= mask;
+-		return (val & BRANCH_CLK_OFF) == 0 ||
+-			val == BRANCH_NOC_FSM_STATUS_ON;
++		return (val & CBCR_CLK_OFF) == 0 ||
++			FIELD_GET(CBCR_NOC_FSM_STATUS, val) == FSM_STATUS_ON;
+ 	} else {
+-		return val & BRANCH_CLK_OFF;
++		return val & CBCR_CLK_OFF;
+ 	}
  }
  
+diff --git a/drivers/clk/qcom/clk-branch.h b/drivers/clk/qcom/clk-branch.h
+index 9bec563ab4ee..0cf800b9d08d 100644
+--- a/drivers/clk/qcom/clk-branch.h
++++ b/drivers/clk/qcom/clk-branch.h
+@@ -39,10 +39,9 @@ struct clk_branch {
+ };
+ 
+ /* Branch clock common bits for HLOS-owned clocks */
 -#define BRANCH_CLK_OFF			BIT(31)
 -#define BRANCH_NOC_FSM_STATUS_SHIFT	28
 -#define BRANCH_NOC_FSM_STATUS_MASK	0x7
 -#define BRANCH_NOC_FSM_STATUS_ON	(0x2 << BRANCH_NOC_FSM_STATUS_SHIFT)
--
- static bool clk_branch2_check_halt(const struct clk_branch *br, bool enabling)
- {
- 	u32 val;
-diff --git a/drivers/clk/qcom/clk-branch.h b/drivers/clk/qcom/clk-branch.h
-index b325f943c3e0..9bec563ab4ee 100644
---- a/drivers/clk/qcom/clk-branch.h
-+++ b/drivers/clk/qcom/clk-branch.h
-@@ -39,6 +39,10 @@ struct clk_branch {
- };
- 
- /* Branch clock common bits for HLOS-owned clocks */
-+#define BRANCH_CLK_OFF			BIT(31)
-+#define BRANCH_NOC_FSM_STATUS_SHIFT	28
-+#define BRANCH_NOC_FSM_STATUS_MASK	0x7
-+#define BRANCH_NOC_FSM_STATUS_ON	(0x2 << BRANCH_NOC_FSM_STATUS_SHIFT)
++#define CBCR_CLK_OFF			BIT(31)
++#define CBCR_NOC_FSM_STATUS		GENMASK(30, 28)
++ #define FSM_STATUS_ON			BIT(1)
  #define CBCR_FORCE_MEM_CORE_ON		BIT(14)
  #define CBCR_FORCE_MEM_PERIPH_ON	BIT(13)
  #define CBCR_FORCE_MEM_PERIPH_OFF	BIT(12)
