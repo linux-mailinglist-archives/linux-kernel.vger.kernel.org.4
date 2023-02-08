@@ -2,71 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6F368E886
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2141268E888
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjBHGyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 01:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S230312AbjBHGzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 01:55:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBHGyC (ORCPT
+        with ESMTP id S229490AbjBHGzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 01:54:02 -0500
+        Wed, 8 Feb 2023 01:55:05 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894C2442E5;
-        Tue,  7 Feb 2023 22:54:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9DA442E5;
+        Tue,  7 Feb 2023 22:55:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A823B81C3A;
-        Wed,  8 Feb 2023 06:53:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51395C433EF;
-        Wed,  8 Feb 2023 06:53:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3DF53B81AC8;
+        Wed,  8 Feb 2023 06:55:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CE1C433EF;
+        Wed,  8 Feb 2023 06:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675839237;
-        bh=j2RvOdUWlkVdm5KzuZffm+jK0TPD5jlPTX53boVgvQ0=;
+        s=k20201202; t=1675839301;
+        bh=a4B+YQizzgDC8DXHAt6Dn68H073j/R65LXUWrw/mnN4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G0QvCMxjOILwJAETzf/YHrrhsa0Cm5OrmEIcdozmfoQrXMbEFqBAb+RHNbvV0Ltix
-         +82ghijaXVk2mrmJvx+eygrOEhK1OVRKUxyGCTRhYbP+wZG7RYD+DEK+R7KXBrCd/i
-         H8Ooo300eTbNzYhCmuWkp4QntINfggfaEP2L3cXA4lR/K8/lTwG6TDNRCPTrp0e8O8
-         OtCuR9NCEqnAgYkXUntuOsEAo5PNExyH3p5e2gu0FOsRgeOjnV5TDkgW3NeqZqjZLa
-         uon5m0wrhy9Id6zQlVBUe+S+XKSKnZ44N/fA8p/tM2LRzjYdg3uoUEuVxRepDlUzfH
-         y+fhfnWBj+7bQ==
-Date:   Tue, 7 Feb 2023 22:53:55 -0800
+        b=bCdbBqPNxyun/OrzZym2xp1aFRk04ycqTlzzYXtalpV1P3lBGfqzsLeWnON+m144Y
+         KQzUy6KGGWFGuV8ui+3zHAIb5T19uy8BEMOO9cAgFioWb6legHXLN5+SAxB1DYbOX9
+         NxUgBy8mxlIbLUgnuZw8Oh/in33wOVSD6c6lBDoF0QZVTYI4wMcUYPAcKqKIBWkpdf
+         YB7x9v1yKzS1SzoZ910vPHWlh9mAhXnctLSO5GKMSfhUfBKf3iD1/721Rvr9sE6/zz
+         hjpLK2MUuAfpR7OeLbeJTV1NyeVJv1o3LGtk9SqSV8stIE0tMUCCMwn59u0SKm/awA
+         LL4XlW1D18JdQ==
+Date:   Tue, 7 Feb 2023 22:55:00 -0800
 From:   Eric Biggers <ebiggers@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dan Carpenter <error27@gmail.com>, linux-block@vger.kernel.org,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maobibo <maobibo@loongson.cn>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: block: sleeping in atomic warnings
-Message-ID: <Y+NHA9kOw0eFlUQp@sol.localdomain>
-References: <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
- <Y+EjmnRqpLuBFPX1@bombadil.infradead.org>
- <4ffbb0c8-c5d0-73b3-7a4e-2da9a7b03669@inria.fr>
- <Y+Ja5SRs886CEz7a@kadam>
- <CAHk-=wg6ohuyrmLJYTfEpDbp2Jwnef54gkcpZ3-BYgy4C6UxRQ@mail.gmail.com>
- <Y+KP/fAQjawSofL1@gmail.com>
- <CAHk-=wgmZDqCOynfiH4NFoL50f4+yUjxjp0sCaWS=xUmy731CQ@mail.gmail.com>
- <Y+KaGenaX0lwSy9G@gmail.com>
- <CAHk-=whL+9An7TP-4vCyZUKP_2bZSLe-ZFR1pGA1DbkrTRLyeQ@mail.gmail.com>
- <Y+KoGikLhfhDoMWv@gmail.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Bill Wendling <morbo@google.com>
+Subject: Re: [PATCH] randstruct: temporarily disable clang support
+Message-ID: <Y+NHRHsp9u4ooOdf@sol.localdomain>
+References: <20230203194201.92015-1-ebiggers@kernel.org>
+ <63deacb1.170a0220.f078.6779@mx.google.com>
+ <CAFP8O3Kwa2V7GvJPEbr87o6hMi8i2JquWniFOaiFR3nv9pGc_g@mail.gmail.com>
+ <CAKwvOdm8F_VcdegPGw3vPu+-H1Gyh0rqQWpf=+Yh9YAowVuWSA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y+KoGikLhfhDoMWv@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdm8F_VcdegPGw3vPu+-H1Gyh0rqQWpf=+Yh9YAowVuWSA@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -76,16 +58,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 07:35:54PM +0000, Eric Biggers wrote:
-> Now, it's possible that "the kernel automatically adds the key for
-> test_dummy_encryption" could be implemented a bit differently.  It maybe could
-> be done at the last minute, when the key is being looked for due to a user
-> filesystem operation, instead of during the mount itself.  That would eliminate
-> the need to call fscrypt_destroy_keyring() from __put_super(), which would avoid
-> the issue being discussed here.  I'll see if there's a good way to do that.
+On Tue, Feb 07, 2023 at 10:01:21AM -0800, Nick Desaulniers wrote:
+> On Mon, Feb 6, 2023 at 3:41 PM Fangrui Song <maskray@google.com> wrote:
+> >
+> > On Sat, Feb 4, 2023 at 11:06 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Fri, Feb 03, 2023 at 11:42:01AM -0800, Eric Biggers wrote:
+> > > > From: Eric Biggers <ebiggers@google.com>
+> > > >
+> > > > Randstruct with clang is currently unsafe to use in any clang release
+> > > > that supports it, due to a clang bug that is causing miscompilations:
+> > > > "-frandomize-layout-seed inconsistently randomizes all-function-pointers
+> > > > structs" (https://github.com/llvm/llvm-project/issues/60349).  Disable
+> > > > it temporarily until the bug is fixed and the fix is released in a clang
+> > > > version that can be checked for.
+> > > >
+> > > > Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: Eric Biggers <ebiggers@google.com>
+> > > > ---
+> > > >  security/Kconfig.hardening | 3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+> > > > index 53baa95cb644..aad16187148c 100644
+> > > > --- a/security/Kconfig.hardening
+> > > > +++ b/security/Kconfig.hardening
+> > > > @@ -280,7 +280,8 @@ config ZERO_CALL_USED_REGS
+> > > >  endmenu
+> > > >
+> > > >  config CC_HAS_RANDSTRUCT
+> > > > -     def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
+> > > > +     # Temporarily disabled due to https://github.com/llvm/llvm-project/issues/60349
+> > > > +     def_bool n
+> > > >
+> > > >  choice
+> > > >       prompt "Randomize layout of sensitive kernel structures"
+> > > >
+> > > > base-commit: 7b753a909f426f2789d9db6f357c3d59180a9354
+> > > > --
+> > > > 2.39.1
+> > >
+> > > This should be fixed with greater precision -- i.e. this is nearly fixed
+> > > in Clang now, and is likely to be backported. So I think we'll need
+> > > versioned checks here.
+> > >
+> > > --
+> > > Kees Cook
+> > >
+> >
+> > Bill has requested cherry-pick the llvm-project fix into the
+> > release/16.x branch [1].
+> > https://github.com/llvm/llvm-project-release-prs/pull/276
+> > It may take one day to land.
+> >
+> > [1]: https://github.com/llvm/llvm-project/tree/release/16.x
+> >
+> > --
+> > 宋方睿
+> >
+> 
+> All landed; the version check should be for 16+. (And the link to the
+> issue report would be nice to retain).
 
-"[PATCH 0/5] Add the test_dummy_encryption key on-demand"
-(https://lore.kernel.org/linux-fscrypt/20230208062107.199831-1-ebiggers@kernel.org/T/#u)
-implements this.
+Thanks!  Done in "[PATCH] randstruct: disable Clang 15 support"
+(https://lore.kernel.org/linux-hardening/20230208065133.220589-1-ebiggers@kernel.org).
 
 - Eric
