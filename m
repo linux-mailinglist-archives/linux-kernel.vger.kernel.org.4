@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0057668EEF3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DC468EEF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjBHM1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 07:27:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33730 "EHLO
+        id S230444AbjBHM1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 07:27:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjBHM1H (ORCPT
+        with ESMTP id S230345AbjBHM1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:27:07 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3076A2B2A4;
-        Wed,  8 Feb 2023 04:27:06 -0800 (PST)
-Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4F900660035A;
-        Wed,  8 Feb 2023 12:27:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675859224;
-        bh=iV+AM+Qjlq6gPk6voNgE7TgfODcmLF9iwWU3tk0to9M=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=bH45ycggeKNoWexvNDCxbui6Q4EaRmM0KdDBmXGYoiSZQjDxRvRSfwlVre6BLSado
-         vGt8IuvLBbd8YVgKQvjv9234pZMvHSlXTUHRKhOvQPybW89bvNzxmWcVfkETYjYBAZ
-         qvTIicaOUB+fTDYfM2lNtegpeQYuNj6MZvlwilHDO87K0TDvgaV+H7T+AEpBpCY3U0
-         unkqctBUAX8HOoon2BU9onW+EhlRSlijM01rMrDAU5ynyuLx9BxwEwKWWRvtdOFK8L
-         kMQW6Dvj3rv+ZWOn6w7lXiGbx8oyS9/22mnBW9ntoa3KREZg5YS3mEDil/8V6H9mbm
-         wmJpzuzFN2QNQ==
-Message-ID: <9d3181ff-5c08-697d-43fa-65bdc9544a26@collabora.com>
-Date:   Wed, 8 Feb 2023 12:27:02 +0000
+        Wed, 8 Feb 2023 07:27:36 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D54AD2D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:27:34 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id b5so19061968plz.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 04:27:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b3pZYKYfkdSQT68SJNCftLQUT8dA3bIPuHLgF4x+0BQ=;
+        b=eq7qxSBzge3b5OUiBBoHYkNnBBuhl1834PkVvMDIKLtdfoKGbdd2ABIFHVDNbdM6P1
+         V4+jZV7yalvVafWmhYJiwYEym70qSx5kSseejBwBkoISzOzgPbosW9+jXXtYApQVd8fT
+         +IAJ2nm4ALaSV7k9KDd2moyrybb5VbRC1ig61kwmrAhhnd2ZgZVPwMD42xIR+l5Nh/wH
+         upHICVogu/Kj8t2Fvuv2+kgiRdHh5GrTHkDALZ1BpR0IpfdfiW28C41QEL0tx9vzu4HR
+         2JsltAWvcXvhOjqx8p2ywxr+hyo+dMdLB/E4RDxN57/RnseiN7Yy2Gm/veOgUA++c8rR
+         YN6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b3pZYKYfkdSQT68SJNCftLQUT8dA3bIPuHLgF4x+0BQ=;
+        b=xWm6Hhrni8SRw/W0Nm7JciQATRZDu0+PtSAT8HQa4PrXXL6EiptphtM+WcBRykHx2Z
+         IzWMtc6IFJ5IjCsAaZQbEHYtT2wQIyC+ffmGyer8iseTrv6d3u522iLzt2chqJ7J8B3b
+         EUmeQvm8/vfftDkClA9hMdS3IfE+Yhm/zwZF7mK43csEjmeSJRXPixu8iNiOOiOoFaGm
+         RD8WJRZJTtRdxL+QNKLMYdZI9pAKUSDB1riu2qi3L3g5wTjY6azOOaoIgO+818QWnrQ/
+         xCJBuTih11gKamB4ODZb6LqshEw40lTLs92CqAHf/si+544/BjIRuGLD9wiKl94uLXDQ
+         p7lQ==
+X-Gm-Message-State: AO0yUKU3LjWggUvXNfmShIOx71X95t8bnsOFtbszHZur7AVbZSLfNgP/
+        fqfmwe5ZvYGUqcsv574O+Yu5wA==
+X-Google-Smtp-Source: AK7set/kTlTLW1jcI345R/bAzrSsgmJj8RuFZzJ86G7lKYbVI+rX1YXb68COYhPoZs5wpxzDuntA8g==
+X-Received: by 2002:a17:90b:4a0f:b0:230:d387:8bbb with SMTP id kk15-20020a17090b4a0f00b00230d3878bbbmr8999731pjb.5.1675859254139;
+        Wed, 08 Feb 2023 04:27:34 -0800 (PST)
+Received: from localhost.localdomain ([2402:3a80:4214:7b1c:f777:96cb:1db4:73e6])
+        by smtp.gmail.com with ESMTPSA id r16-20020a638f50000000b004eca54eab50sm9664468pgn.28.2023.02.08.04.27.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 04:27:33 -0800 (PST)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2] arm64: dts: qcom: sm6115: Add geni debug uart node for qup0
+Date:   Wed,  8 Feb 2023 17:57:18 +0530
+Message-Id: <20230208122718.338545-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   lucas.tanure@collabora.com
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v2 3/5] ALSA: cs35l41: Add shared boost feature
-References: <20230207162526.1024286-1-lucas.tanure@collabora.com>
- <20230207162526.1024286-4-lucas.tanure@collabora.com>
- <20230208100927.GF36097@ediswmail.ad.cirrus.com>
-In-Reply-To: <20230208100927.GF36097@ediswmail.ad.cirrus.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/23 10:09 AM, Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> On Tue, Feb 07, 2023 at 04:25:24PM +0000, Lucas Tanure wrote:
-> > Shared boost allows two amplifiers to share a single boost
-> > circuit by communicating on the MDSYNC bus.
-> > The passive amplifier does not control the boost and receives
-> > data from the active amplifier.
-> >
-> > Shared Boost is not supported in HDA Systems.
-> > Based on David Rhodes shared boost patches.
-> >
-> > Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
-> > ---
-> > -int cs35l41_global_enable(struct regmap *regmap, enum cs35l41_boost_type b_type, int enable)
-> > +int cs35l41_global_enable(struct regmap *regmap, enum cs35l41_boost_type b_type, int enable,
-> > +			  struct completion *pll_lock)
-> >   {
-> >   	int ret;
-> > +	unsigned int gpio1;
-> >   
-> >   	switch (b_type) {
-> > +	case CS35L41_SHD_BOOST_ACTV:
-> > +	case CS35L41_SHD_BOOST_PASS:
-> > +		regmap_update_bits(regmap, CS35L41_PWR_CTRL3, CS35L41_SYNC_EN_MASK, 0);
-> > +
-> > +		gpio1 = enable ? CS35L41_GPIO1_MDSYNC : CS35L41_GPIO1_HIZ;
-> > +		regmap_update_bits(regmap, CS35L41_GPIO_PAD_CONTROL, CS35L41_GPIO1_CTRL_MASK,
-> > +				   gpio1 << CS35L41_GPIO1_CTRL_SHIFT);
-> > +
-> > +		ret = regmap_update_bits(regmap, CS35L41_PWR_CTRL1, CS35L41_GLOBAL_EN_MASK,
-> > +					 enable << CS35L41_GLOBAL_EN_SHIFT);
-> > +		usleep_range(3000, 3100);
-> > +		if (!enable)
-> > +			break;
-> > +
-> > +		if (!pll_lock)
-> > +			return -EINVAL;
-> > +
-> > +		ret = wait_for_completion_timeout(pll_lock, msecs_to_jiffies(1000));
-> > +		if (ret == 0) {
-> > +			ret = -ETIMEDOUT;
-> > +		} else {
-> > +			regmap_update_bits(regmap, CS35L41_PWR_CTRL3, CS35L41_SYNC_EN_MASK, 0);
-Its wrong here. Should be enabling it not disable.
-I will send v3. 
+qup0 on sm6115 / sm4250 has 6 SEs, with SE4 as debug uart.
+Add the debug uart node in sm6115 dtsi file.
 
-> > +			regmap_update_bits(regmap, CS35L41_PWR_CTRL1, CS35L41_GLOBAL_EN_MASK,
-> > +								 0 << CS35L41_GLOBAL_EN_SHIFT);
-> > +			usleep_range(3000, 3100);
-> > +			regmap_update_bits(regmap, CS35L41_PWR_CTRL1, CS35L41_GLOBAL_EN_MASK,
-> > +								 1 << CS35L41_GLOBAL_EN_SHIFT);
-> > +			usleep_range(3000, 3100);
-> > +		}
-> 
-> This approach also makes me nervous, I was somewhat imagining the
-> usage of regmap_multi_reg_write for this sequence was because it
-> was very important that no other register writes could interleave
-> in between these writes. But I don't know, so it could also have
-> just been a random design choice. So we probably need David to
-> confirm if that was the reason for the original code here.
-> 
-> Thanks,
-> Charles
-> 
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ Changes since v1:
+  - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20221128171215.1768745-1-bhupesh.sharma@linaro.org/
+  - Addressed Konrad's review comments on v1.
+  - Rebased againt latest linux-next/master which now has the 'qupv3_id_0' node
+    already in the dtsi file, so just add the debug uart node in v2.
+
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+index 50cb8a82ecd5..3eccfb8c16ce 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+@@ -963,6 +963,15 @@ spi4: spi@4a90000 {
+ 				status = "disabled";
+ 			};
+ 
++			uart4: serial@4a90000 {
++				compatible = "qcom,geni-debug-uart";
++				reg = <0x04a90000 0x4000>;
++				clock-names = "se";
++				clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>;
++				interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
++				status = "disabled";
++			};
++
+ 			i2c5: i2c@4a94000 {
+ 				compatible = "qcom,geni-i2c";
+ 				reg = <0x04a94000 0x4000>;
+@@ -992,7 +1001,6 @@ spi5: spi@4a94000 {
+ 				dma-names = "tx", "rx";
+ 				#address-cells = <1>;
+ 				#size-cells = <0>;
+-				status = "disabled";
+ 			};
+ 		};
+ 
+-- 
+2.38.1
 
