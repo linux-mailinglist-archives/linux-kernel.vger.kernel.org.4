@@ -2,100 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E09468F073
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09AD68F06D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjBHONJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S231351AbjBHONF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:13:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjBHONB (ORCPT
+        with ESMTP id S230434AbjBHONB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Feb 2023 09:13:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC5437F1E;
-        Wed,  8 Feb 2023 06:12:21 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F164617B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:12:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99DC5B81C76;
-        Wed,  8 Feb 2023 14:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6EF7C4339C;
-        Wed,  8 Feb 2023 14:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675865539;
-        bh=CM9X2AuKUJbsYimacCNPKUAK4TpbgQFBIKIrx7h4lJw=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27DAEB81C76
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:12:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B8AEC433D2;
+        Wed,  8 Feb 2023 14:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675865560;
+        bh=F3zZlNf5kXbKMWpgXrzQW6DGmA4bi8DUoSB2yopbhx0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LVucjxu+REx2vxJaU73V9LeqN0VfNlpVqOVjlgapAR7+Js6CJh2wUlBGjryat06Mx
-         D9i30JRbIJdOspvFUtAoFUTSjc7q9zKrJAeQbeBiwFIiiX8euIEbk0Ty1Tz6V657+T
-         FLA5gRRVsKUOtlkaWGYAvOyX2NIaQlgKRJiFZbCRwtUw7qjRf/eGTg/jPYZv/0q1tt
-         FcUOC2BCeTia4s8YYIZRIs5mKBJvajFbiu7xD8C4mv+0OOcBl6e5vyuvgWOBBh+MUZ
-         xz5q4YEAPB/J4RrPpxV69F8ll/mVwhh9Od/sV4/BiL8f+TOBF8F2/I8j5Fv6bLISdE
-         LVYCGEEzxvGgw==
-Date:   Wed, 8 Feb 2023 15:12:16 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <Y+OtwCqt26UjCwkZ@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
- <CAAhV-H57bV855SMr6iBqoQzdak5QSnaRLjQ9oAbOtYZnik5SoQ@mail.gmail.com>
- <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
+        b=QosyLxcPoq9hTssY+9afykwNt80UKmkh5DQvvey5c7cL7Sc9raGCbhvvk26VicMOF
+         mmS+AQqEkieNOAQ8wYaPAu4Ijts2IpCbk8S6Y/HBFl7D/E8kCiQHSwRZdyijx7ETl2
+         q48+OiWp26ZMWS2GGWnqjOnP2orwbcND03JorTCs=
+Date:   Wed, 8 Feb 2023 15:12:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, stable <stable@kernel.org>
+Subject: Re: [PATCH v2] mtd: spi-nor: fix memory leak when using
+ debugfs_lookup()
+Message-ID: <Y+Ot0FXLgrSoLy7Q@kroah.com>
+References: <20230208125758.1515806-1-gregkh@linuxfoundation.org>
+ <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H/y3lZ2MEalioY2m"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,43 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 08, 2023 at 02:36:23PM +0100, Michael Walle wrote:
+> Am 2023-02-08 13:57, schrieb Greg Kroah-Hartman:
+> > When calling debugfs_lookup() the result must have dput() called on it,
+> > otherwise the memory will leak over time.
+> > 
+> > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+> > Cc: Pratyush Yadav <pratyush@kernel.org>
+> > Cc: Michael Walle <michael@walle.cc>
+> > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> > Cc: linux-mtd@lists.infradead.org
+> > Cc: stable <stable@kernel.org>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > v2: fix up to work when module is removed and added, making the fix
+> >     much simpler.
+> > 
+> >  drivers/mtd/spi-nor/debugfs.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/mtd/spi-nor/debugfs.c
+> > b/drivers/mtd/spi-nor/debugfs.c
+> > index ff895f6758ea..af41fbc09a97 100644
+> > --- a/drivers/mtd/spi-nor/debugfs.c
+> > +++ b/drivers/mtd/spi-nor/debugfs.c
+> > @@ -242,6 +242,7 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
+> > 
+> >  	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
+> >  	nor->debugfs_root = d;
+> > +	dput(rootdir);
+> 
+> rootdir might either be the return value of debugfs_lookup() or
+> debugfs_create_dir(). dput() is probably wrong for the latter,
+> right? Also there is an early return, where the dput() is missing,
+> too.
 
---H/y3lZ2MEalioY2m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+{sigh}
 
+Yeah, this is all wrong, sorry.  Let me fix this up again, properly.
+And to do it properly, let's have the module remove the directory if it
+is unloaded, like a good module should :)
 
-> Yes, that's the plan. We're collecting the various patches people have se=
-nt
-> in for arch/sh, review and test them and apply them.
->=20
-> My test board is running the latest kernel now, so I can test new patches=
-, too.
-
-I am just witnessing this development, but I want to say thanks for your
-effort and congrats on your progress. Looks like you do the right things
-correctly, cool! Kudos also to Geert and others for their assistance.
-
-
---H/y3lZ2MEalioY2m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPjrbwACgkQFA3kzBSg
-KbYHCw//YV/RG0PWJ1txmpgpA0mLX7EfhxqJS6vwNlqziCSd910A+/ZNL7p2Q5Hx
-wVdeRoLHd9OcZFYXr0HLH0VCIJUYpr57DCy0AoIKL9q9CWET1hAMZjsIv5Kx2uVa
-1obdyCX46XEMqpSBhcsq8Vsq0TMQ4sCLdpVq/wPqBEDGUBGAIhkWX1UMQv2kiS1T
-uuYPKgsFmI2kl52owcOU2yZ42SVZNTEWiO2A8/4BXFfhhzKLWVcZQpEV9OInJ30n
-iXm6abMFAsFavgI90NZl1H4UKKLOzD5Jgr9Rv6DfYuyeADsKe2oQN1NvioHHVqvm
-qWG2b2UnZ7oS+dXxhS7YsQeiiTyZP/mpUprmrCrm0HMsl6iKCgCU8ceuRzy80Obt
-7u9CpA+ceRJ05Gfgo18YElk42l4Qhwk4zSWDQdOwtOlk1FpX9TBxOtOVngYEprMM
-UDRSSXFIJZTEyUAbqWqsMDuGRVcq3S9XAPYINbzig3H+Iy7an/wpxWBnYrRm+eCz
-/eb7eQ/iQYmBd7Zn8XO74E6vvH+pG8f9nqr2sRPpk89ZDPsZEk0wFCHpJQShIYJt
-iSeMDaLVGP+e+YlW7qvKavsdPISxlLhNFA1kj66ccHNZVbNQ5xyGhps/8qefpitG
-nN9N+KCLmNvyC8QCuMiMRDD9RVq8OSQ3VcL2zT8pj3XuJo2po4s=
-=9hIS
------END PGP SIGNATURE-----
-
---H/y3lZ2MEalioY2m--
+greg k-h
