@@ -2,144 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5116068E933
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3137868E937
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbjBHHnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S230205AbjBHHng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjBHHnK (ORCPT
+        with ESMTP id S229830AbjBHHnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:43:10 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F3610411
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:43:09 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id bi36so25896609lfb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mVCtFK5+Mzt3hAp57nZ3RLtIxxaSOtloZUtvAg8w8Z8=;
-        b=VC+DuNOOj82IU4SduBxcLaGSrM4ddq1tKPseKrkGHxrCuw6C/zChYL0qfklZdF3P+R
-         D8iSXjulGePVAobJZom/AbyDrYjYoyTEXpmBoVlf8bfLTTa58LNTnVU9IluL9SnnYy4+
-         Xhteo6NM0gniCGjlZ9LVNHdnI+ch8r40Pr+V9w6Pn5fT/DWby3Wiy0apGsjIoE4MD87F
-         PAUlSSgzqdIaRPULhcl/SOkLvQG2vUG94lwmIYS6Zvq8WqNntjWA2DeZOzAGaJag5KHN
-         M6eAl5fpOnIncJ/PIO101Fnr6nQTWSLxJ2Bsu4d4iXAGLGDnEN7cfPow6lg01i9FIeqc
-         viQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mVCtFK5+Mzt3hAp57nZ3RLtIxxaSOtloZUtvAg8w8Z8=;
-        b=jRWmAa1JlIN201iRCQdUpLj60iQLcSdfRO7qQSRKEar/2m3tHtAI0MN3VfjNW7SdeS
-         7j3uzN3893D7NSLimCvFqfiqIn57sLwvtcVKHAhtrQ8jCUZGSwdyLS8Y5amXxHJzbahK
-         9OxT5evbmTRTXgqsIzWe1u3Z8bPeZBwopWoGwlPZMqS/RgAoI49OkRe7hBh6Hgjt8MHY
-         Vu3kw3iacpYKx5AqoW+cj0qzz0bZLGTtouQAJxiUpJFlkFKySqr3nWgi3QP9FKLSRbp7
-         mE9XUL67Ew34I9VdtWQCPYBsMmCq+gJS9nkbZqkjycEngCn4evSTB8ZYDFMRMIRloh+l
-         /f1g==
-X-Gm-Message-State: AO0yUKUZFHzieCVBdFQ2k26B4ZkF+MmQqEtz8lR41EQ0RHkwcVsFmfTh
-        3n8bqqGWQVKrZ9SyBfDWfQiFWIrC0MaTtenJOlgO/VCiiQ2ARti/
-X-Google-Smtp-Source: AK7set8sYvuy7Swp4ow4tiyiX80IrlkMkxfPBMo7vkP9t44dgWIjcaX3D9lMBrZqlgJspQF9whRYX1nMJFdMt/TWUR0=
-X-Received: by 2002:a19:f60e:0:b0:4b5:5f2d:1458 with SMTP id
- x14-20020a19f60e000000b004b55f2d1458mr1153724lfe.253.1675842187514; Tue, 07
- Feb 2023 23:43:07 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1675734681.git.chenfeiyang@loongson.cn> <1af05c1441e9f96870be1cc20b1162e3f5043b2e.1675734681.git.chenfeiyang@loongson.cn>
- <1e7da4e7-392d-4a9e-aa95-0599a0c84419@app.fastmail.com> <CACWXhK==yVZGZbY+3DUAuxL34=gKwQv20Cw3y1+QKir0D2F3EQ@mail.gmail.com>
- <Y+MXk9A+gB1W6T/n@1wt.eu>
-In-Reply-To: <Y+MXk9A+gB1W6T/n@1wt.eu>
-From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
-Date:   Wed, 8 Feb 2023 15:42:56 +0800
-Message-ID: <CACWXhKn1N6f7XvtrbDno4UyAhMZbV_htQoRbm0ws9gjF08wnBw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] nolibc: Add statx() support to implement sys_stat()
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 02:43:35 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E316A1041E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:43:33 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PBX6r0kY6z6FK2W;
+        Wed,  8 Feb 2023 15:43:32 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl1.zte.com.cn with SMTP id 3187hOVO031519;
+        Wed, 8 Feb 2023 15:43:24 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 8 Feb 2023 15:43:27 +0800 (CST)
+Date:   Wed, 8 Feb 2023 15:43:27 +0800 (CST)
+X-Zmail-TransId: 2af963e3529f31d5c546
+X-Mailer: Zmail v1.0
+Message-ID: <202302081543271680228@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <p.zabel@pengutronix.de>
+Cc:     <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBncHU6IGlwdS12MzogcHJlOiB1c2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 3187hOVO031519
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63E352A4.001 by FangMail milter!
+X-FangMail-Envelope: 1675842212/4PBX6r0kY6z6FK2W/63E352A4.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63E352A4.001/4PBX6r0kY6z6FK2W
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 at 11:31, Willy Tarreau <w@1wt.eu> wrote:
->
-> Hi Feiyang,
->
-> Sorry for the delay.
->
-> On Wed, Feb 08, 2023 at 10:09:48AM +0800, Feiyang Chen wrote:
-> > On Tue, 7 Feb 2023 at 22:31, Arnd Bergmann <arnd@arndb.de> wrote:
-> (...)
-> > > Given that all architectures implement statx the same way, I wonder
-> > > if we can't just kill off the old function here and always use statx.
-> > >
-> > > That would also allow removing the architecture specific
-> > > sys_stat_struct definitions in all arch-*.h files.
-> > >
-> >
-> > Hi, Arnd,
-> >
-> > I'd really like to make all architectures use sys_statx() instead
-> > of sys_stat(). I just fear we might get dragged into a long discussion.
-> > Can I send a patch series to do this later?
->
-> I generally agree with the Arnd's points overall and I'm fine with the
-> rest of your series. On this specific point, I'm fine with your proposal,
-> let's just start with sys_statx() only on this arch, please add a comment
-> about this possibility in the commit message that brings statx(),
-> indicating that other archs are likely to benefit from it as well, and
-> let's see after this if we can migrate all archs to statx.
->
+From: Ye Xingchen <ye.xingchen@zte.com.cn>
 
-Hi, Arnd, Willy,
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-We have a problem if we just start with sys_statx() only on this arch.
-When struct stat is not defined, what should we do with stat() in the
-nolibc selftest?
+Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/gpu/ipu-v3/ipu-pre.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> I'm having another comment below however:
->
-> > > > +struct statx_timestamp {
-> > > > +     __s64   tv_sec;
-> > > > +     __u32   tv_nsec;
-> > > > +     __s32   __reserved;
-> > > > +};
-> > > > +
-> > > > +struct statx {
-> > > > +     /* 0x00 */
-> > > > +     __u32   stx_mask;       /* What results were written [uncond] */
-> > > > +     __u32   stx_blksize;    /* Preferred general I/O size [uncond] */
-> > > > +     __u64   stx_attributes; /* Flags conveying information about the file
-> (...)
->
-> For all these types exposed to userland that you have to define, I'd
-> prefer if we would avoid using kernel-inherited types like __u32, __u64
-> etc given that all other archs for now only use regular types. It's not
-> critical at all but I'd prefer that we stay consistent between all archs.
-> Also, based on the comments on the fields it seems to me that this file
-> was just copy-pasted from some uapi header which is not under the same
-> license, so that's another reason for just defining what is needed here
-> if you need to define it here. And of course, if including linux/stat.h
-> also works, that's by far the preferred solution which will also save
-> us from having to maintain a copy!
->
+diff --git a/drivers/gpu/ipu-v3/ipu-pre.c b/drivers/gpu/ipu-v3/ipu-pre.c
+index ad82c9e0252f..04229c7852a5 100644
+--- a/drivers/gpu/ipu-v3/ipu-pre.c
++++ b/drivers/gpu/ipu-v3/ipu-pre.c
+@@ -271,15 +271,13 @@ u32 ipu_pre_get_baddr(struct ipu_pre *pre)
+ static int ipu_pre_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct resource *res;
+ 	struct ipu_pre *pre;
 
-I try to include linux/stat.h and it works.
+ 	pre = devm_kzalloc(dev, sizeof(*pre), GFP_KERNEL);
+ 	if (!pre)
+ 		return -ENOMEM;
 
-Thanks,
-Feiyang
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	pre->regs = devm_ioremap_resource(&pdev->dev, res);
++	pre->regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(pre->regs))
+ 		return PTR_ERR(pre->regs);
 
-> Thanks!
-> Willy
+-- 
+2.25.1
