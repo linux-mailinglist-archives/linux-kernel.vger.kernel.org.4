@@ -2,109 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C614468FA42
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5755668FA44
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjBHW3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 17:29:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S231777AbjBHWb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 17:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjBHW3r (ORCPT
+        with ESMTP id S230289AbjBHWb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 17:29:47 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2057F2106
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:29:45 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-62-7A3AGomqMleUYNu3luwyAg-1; Wed, 08 Feb 2023 22:29:43 +0000
-X-MC-Unique: 7A3AGomqMleUYNu3luwyAg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 8 Feb
- 2023 22:29:41 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Wed, 8 Feb 2023 22:29:41 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guo Ren' <guoren@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-CC:     Evgenii Shatokhin <e.shatokhin@yadro.com>,
-        "suagrfillet@gmail.com" <suagrfillet@gmail.com>,
-        "andy.chiu@sifive.com" <andy.chiu@sifive.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "jolsa@redhat.com" <jolsa@redhat.com>, "bp@suse.de" <bp@suse.de>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "linux@yadro.com" <linux@yadro.com>
-Subject: RE: [PATCH -next V7 0/7] riscv: Optimize function trace
-Thread-Topic: [PATCH -next V7 0/7] riscv: Optimize function trace
-Thread-Index: AQHZO2Vv8FsBcndYrkieV7dCV5LmRa7FoF6g
-Date:   Wed, 8 Feb 2023 22:29:41 +0000
-Message-ID: <8154e7e618d84e298bad1dc95f26c000@AcuMS.aculab.com>
-References: <20230112090603.1295340-1-guoren@kernel.org>
- <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
- <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
- <Y+DOyqehZvBJlb8N@FVFF77S0Q05N>
- <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
- <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N>
- <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
-In-Reply-To: <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 8 Feb 2023 17:31:27 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4790325BA5;
+        Wed,  8 Feb 2023 14:31:23 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pPsyA-0007y7-1W;
+        Wed, 08 Feb 2023 23:31:14 +0100
+Date:   Wed, 8 Feb 2023 22:30:52 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH v2 03/11] dt-bindings: arm: mediatek: add
+ 'mediatek,pn_swap' property
+Message-ID: <Y+QinJ9W8hIIF9Ni@makrotopia.org>
+References: <cover.1675779094.git.daniel@makrotopia.org>
+ <a8c567cf8c3ec6fef426b64fb1ab7f6e63a0cc07.1675779094.git.daniel@makrotopia.org>
+ <ad09a065-c10d-3061-adbe-c58724cdfde0@kernel.org>
+ <Y+KR26aepqlfsjYG@makrotopia.org>
+ <b6d782ef-b375-1e73-a384-1ff37c1548a7@kernel.org>
+ <Y+Oo9HaqPeNVUANR@makrotopia.org>
+ <514ec4b8-ef78-35c1-2215-22884fca87d4@kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <514ec4b8-ef78-35c1-2215-22884fca87d4@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ICAgIyBOb3RlOiBhbGlnbmVkIHRvIDggYnl0ZXMNCj4gPiAgIGFkZHItMDggICAgICAgICAg
-ICAgICAvLyBMaXRlcmFsIChmaXJzdCAzMi1iaXRzKSAgICAgIC8vIHBhdGNoZWQgdG8gb3BzIHB0
-cg0KPiA+ICAgYWRkci0wNCAgICAgICAgICAgICAgIC8vIExpdGVyYWwgKGxhc3QgMzItYml0cykg
-ICAgICAgLy8gcGF0Y2hlZCB0byBvcHMgcHRyDQo+ID4gICBhZGRyKzAwICAgICAgIGZ1bmM6ICAg
-bXYgICAgICB0MCwgcmENCj4gV2UgbmVlZG4ndCAibXYgdDAsIHJhIiBoZXJlIGJlY2F1c2Ugb3Vy
-ICJqYWxyIiBjb3VsZCB3b3JrIHdpdGggdDAgYW5kDQo+IHdvbid0IGFmZmVjdCByYS4gTGV0J3Mg
-ZG8gaXQgaW4gdGhlIHRyYW1wb2xpbmUgY29kZSwgYW5kIHRoZW4gd2UgY2FuDQo+IHNhdmUgYW5v
-dGhlciB3b3JkIGhlcmUuDQo+ID4gICBhZGRyKzA0ICAgICAgICAgICAgICAgYXVpcGMgICB0MSwg
-ZnRyYWNlX2NhbGxlcg0KPiA+ICAgYWRkciswOCAgICAgICAgICAgICAgIGphbHIgICAgZnRyYWNl
-X2NhbGxlcih0MSkNCg0KSXMgdGhhdCBzb21lIGtpbmQgb2YgJ2xvYWQgaGlnaCcgYW5kICdhZGQg
-b2Zmc2V0JyBwYWlyPw0KSSBndWVzcyA2NGJpdCBrZXJuZWxzIGd1YXJhbnRlZSB0byBwdXQgYWxs
-IG1vZHVsZSBjb2RlDQp3aXRoaW4gKy0yRyBvZiB0aGUgbWFpbiBrZXJuZWw/IA0KDQo+IEhlcmUg
-aXMgdGhlIGNhbGwtc2l0ZToNCj4gICAgIyBOb3RlOiBhbGlnbmVkIHRvIDggYnl0ZXMNCj4gICAg
-YWRkci0wOCAgICAgICAgICAgICAgIC8vIExpdGVyYWwgKGZpcnN0IDMyLWJpdHMpICAgICAgLy8g
-cGF0Y2hlZCB0byBvcHMgcHRyDQo+ICAgIGFkZHItMDQgICAgICAgICAgICAgICAvLyBMaXRlcmFs
-IChsYXN0IDMyLWJpdHMpICAgICAgIC8vIHBhdGNoZWQgdG8gb3BzIHB0cg0KPiAgICBhZGRyKzAw
-ICAgICAgICAgICAgICAgYXVpcGMgICB0MCwgZnRyYWNlX2NhbGxlcg0KPiAgICBhZGRyKzA0ICAg
-ICAgICAgICAgICAgamFsciAgICBmdHJhY2VfY2FsbGVyKHQwKQ0KDQpDb3VsZCB5b3UgZXZlbiBk
-byBzb21ldGhpbmcgbGlrZToNCglhZGRyLW4JY2FsbCBmdHJhY2UtZnVuY3Rpb24NCglhZGRyLW4r
-eAlsaXRlcmFscw0KCWFkZHIrMAlub3Agb3Igam1wIGFkZHItbg0KCWFkZHIrNAlmdW5jdGlvbl9j
-b2RlDQpTbyB0aGF0IGFsbCB0aGUgY29kZSBleGVjdXRlZCB3aGVuIHRyYWNpbmcgaXMgZW5hYmxl
-ZA0KaXMgYmVmb3JlIHRoZSBsYWJlbCBhbmQgb25seSBvbmUgJ25vcCcgaXMgaW4gdGhlIGJvZHku
-DQpUaGUgY2FsbGVkIGNvZGUgY2FuIHVzZSB0aGUgcmV0dXJuIGFkZHJlc3MgdG8gZmluZCB0aGUN
-CmxpdGVyYWxzIGFuZCB0aGVuIG1vZGlmeSBpdCB0byByZXR1cm4gdG8gYWRkcis0Lg0KVGhlIGNv
-ZGUgY29zdCB3aGVuIHRyYWNlIGlzIGVuYWJsZWQgaXMgcHJvYmFibHkgaXJyZWxldmFudA0KaGVy
-ZSAtIGRvbWluYXRlZCBieSB3aGF0IGhhcHBlbnMgbGF0ZXIuDQpJdCBwcm9iYWJseSBpc24ndCBl
-dmVuIHdvcnRoIGFsaWduaW5nIGEgNjRiaXQgY29uc3RhbnQuDQpEb2luZyB0d28gcmVhZHMgcHJv
-YmFibHkgd29uJ3QgYmUgbm90aWNhYmxlLg0KDQpXaGF0IHlvdSBkbyB3YW50IHRvIGVuc3VyZSBp
-cyB0aGF0IHRoZSBpbml0aWFsIHBhdGNoIGlzDQpvdmVyd3JpdGluZyBub3AgLSBqdXN0IGluIGNh
-c2UgdGhlIGdhcCBpc24ndCB0aGVyZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
-cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
-MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Hi Krzysztof,
 
+thank you for taking the time to review and explain.
+
+On Wed, Feb 08, 2023 at 09:08:40PM +0100, Krzysztof Kozlowski wrote:
+> On 08/02/2023 14:51, Daniel Golle wrote:
+> > On Wed, Feb 08, 2023 at 10:32:53AM +0100, Krzysztof Kozlowski wrote:
+> >> On 07/02/2023 19:00, Daniel Golle wrote:
+> >>> ...
+> >>>> 3. Does not look like property of this node. This is a clock controller
+> >>>> or system controller, not SGMII/phy etc.
+> >>>
+> >>> The register range referred to by this node *does* represent also an
+> >>> SGMII phy. These sgmiisys nodes also carry the 'syscon' compatible, and
+> >>> are referenced in the node of the Ethernet core, and then used by
+> >>> drivers/net/ethernet/mediatek/mtk_sgmii.c using syscon_node_to_regmap.
+> >>> (This is the current situation already, and not related to the patchset
+> >>> now adding only a new property to support hardware which needs that)
+> >>
+> >> Just because a register is located in syscon block, does not mean that
+> >> SGMII configuration is a property of this device.
+> > 
+> > It's not just one register, the whole SGMII PCS is located in those
+> > mediatek,sgmiisys syscon nodes.
+> 
+> Then maybe this should be a PCS PHY device instead of adding properties
+> unrelated to clock/system controller? I don't know, currently this
+> binding says it is a provider of clocks...
+
+As in reality it is really a clock provider and also SGMII PCS at the
+same time, maybe we should just update the description of the binding
+to match that:
+
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+index d2c24c2775141..db6f75df200ba 100644
+--- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+@@ -2,6 +2,7 @@ MediaTek SGMIISYS controller
+ ============================
+ 
+ The MediaTek SGMIISYS controller provides various clocks to the system.
++It also represents the SGMII PCS used by the Ethernet core.
+ 
+ Required Properties:
+ 
+
+See
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/mediatek/mtk_sgmii.c#n179
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/mediatek/mt7986a.dtsi#n409
+
+
+> 
+> > 
+> >>
+> >>>
+> >>> So: Should I introduce a new binding for the same compatible strings
+> >>> related to the SGMII PHY features? Or is it fine in this case to add
+> >>> this property to the existing binding?
+> >>
+> >> The user of syscon should configure it. I don't think you need new
+> >> binding. You just have to update the user of this syscon.
+> > 
+> > Excuse my confusion, but it's still not entirely clear to me.
+> > So in this case I should add the description of the added propterty of
+> > the individual SGMII units (there can be more than one) to
+> > Documentation/devicetree/bindings/net/mediatek,net.yaml
+> > eventhough the properties are in the sgmiisys syscon nodes?
+> 
+> I guess the property should be in the node representing the SGMII. You
+> add it now to the clock (or system) controller, so it does not look
+> right. It's not a property of a clock controller.
+
+Well maybe this node needs to be split then into one node representing
+only the clock controller and another node representing the SGMII PCS?
+I'm not sure if this is even possible, some registers in this range
+represent clocks, other registers are accessed using regmap API in
+mtk_sgmii.c.
+
+And (see the rest of this series) the exact same SGMII PCS can also be
+found in MT7531 switch IC which has it's own (a bit odd) way to access
+32-bit registers over MDIO, also in this case it is simply not easily
+possible to represent the SGMII PCS in device tree.
+
+> 
+> Now which node should have this property depends on your devices - which
+> I have no clue about, I read what is in the bindings.
+
+There isn't any other node exclusively representing the SGMII PCS.
+I guess the only other option would be to move the property to the
+Ethernet controller node, which imho complicates things as it is
+really a property of an individual SGMII PHY (of which there can be
+more than one).
+
+> 
+> > 
+> > If so I will have to figure out how to describe properties of other
+> > nodes in the binding of the node referencing them. Are there any
+> > good examples for that?
+> 
+> phys and pcs'es?
+
+Hm, none of the current PCS (or PHY) drivers are represented by a
+syscon node... (and maybe that's the mistake in first place?)
+
+> 
+> > 
+> > Or should the property itself be moved into yet another array of
+> > booleans which should be added in the node describing the ethernet
+> > controller and referencing these sgmiisys syscons using phandles?
+> 
+> Best regards,
+> Krzysztof
+> 
