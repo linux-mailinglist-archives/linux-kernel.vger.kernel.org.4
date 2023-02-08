@@ -2,265 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2EA68E948
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C466A68E94A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjBHHq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:46:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S230217AbjBHHsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjBHHqz (ORCPT
+        with ESMTP id S229500AbjBHHsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:46:55 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AEFCC37;
-        Tue,  7 Feb 2023 23:46:52 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3187kLhI110308;
-        Wed, 8 Feb 2023 01:46:21 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675842381;
-        bh=l3sDaWLrxFOhs3q+eL4hlccIhI/l0WNUeqiWmr85ktQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=iBzDbk5wjcoMsf99jcUZ6WQvz8rk84eiIKyGG+j6vVi9aCkP54LmMCSYQnxv72xuo
-         Y8KfpIcCNHwGBgIuI9vM55Ox109aursQb7/7wOgIa/JwzCP0+ag1j+eHLaztzpFnhx
-         rkt+H/Vhwkf7PQy4VoFQpVj7tBf35vwxx5i3qJ0k=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3187kLSj023348
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Feb 2023 01:46:21 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
- Feb 2023 01:46:20 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 8 Feb 2023 01:46:21 -0600
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3187kFgZ114602;
-        Wed, 8 Feb 2023 01:46:15 -0600
-Message-ID: <4438fb71-7e20-6532-a858-b688bc64e826@ti.com>
-Date:   Wed, 8 Feb 2023 13:16:14 +0530
+        Wed, 8 Feb 2023 02:48:18 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56860CC1B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:48:17 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o16-20020a17090ad25000b00230759a8c06so1454603pjw.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:48:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YDb46wbs7Oglszax+zQd4w6i8ViSPc6VOYFdKzRkn4I=;
+        b=q6mv6ckiyC7uZBYepeGxsYYHY35eFge4JvWX7ajc76F79EtwCT70FH171xtZqGxICR
+         RRoxkElfhXhStfnBLTet5lStDKk2exsBQ4ucY7i+JCL07RqDneLaf5ZQhmHwxJBQt9eY
+         //BcpiVOIIr51T0Ggp2qQCjN09feYP64ROMyJkvcGX5hxBJiuz+QA61TdS7uCyGi1nAh
+         g8/2tLNTWgh4f7sPDh2FqUxQD8oHgVyU6TUb47m3IBTM2Ef8vYKzsx6HICRJ0SewRBuH
+         WVFAdRIp2Z/KJv+8Qoa0bWD5Gd8Q5gtKmjns2byyH+cjV41g0Q6ZiosACzGOC0D1+63q
+         egLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YDb46wbs7Oglszax+zQd4w6i8ViSPc6VOYFdKzRkn4I=;
+        b=PBOz+/whQ2nI0u5oeFy/73qy7vP0lkc0NUChj+1M1SlXjySeeegTX1yATb550URUd/
+         8cIAPAQbg2smbRp14o9d7LtPwhsOKsWG9BTJroZIxTUAjxly/g1iA+R+4wf1SBm4Kzjh
+         08Xb8aqusK7/WD7fCIzEdjte3h5x/DcIa4Lw8b3ctmk1RqKC7HIaNxGEklZjHGlwxPHC
+         lshGy8ws9iM1+wjMM4gGWb8ANcbvGyiGIBLzZW/I+yyxstJFtUkzjk3XwvJrlWPV16sB
+         q6Z5vF6mPTFcsEbDFOx1I/KXzWEI7/jhvParOehpahQxiM94z+r/4o0fxeLmC7RTFmpb
+         yI5g==
+X-Gm-Message-State: AO0yUKX90hY8e4aaZGFljLyu5K3jBva3FjyGFiGm03ELvklsZJMWxl68
+        T9REcdAVY4ZKftRvlSrJznS2mln4Sgc9i65iVKMo9g==
+X-Google-Smtp-Source: AK7set/2+IuJ9Z1nS2sqc8bZXh3HxZ610puL926atkTwcL4wxNrZFAaRLdeBihZ3YI4gZJQ90w08M3qmShm3YZ43Yy8=
+X-Received: by 2002:a17:902:c950:b0:196:6c8c:288f with SMTP id
+ i16-20020a170902c95000b001966c8c288fmr1623141pla.32.1675842496761; Tue, 07
+ Feb 2023 23:48:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/2] net: ti:
- icssg-prueth: Add ICSSG ethernet driver
-To:     Roger Quadros <rogerq@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        MD Danish Anwar <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, <nm@ti.com>,
-        <ssantosh@kernel.org>, <srk@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230206060708.3574472-1-danishanwar@ti.com>
- <20230206060708.3574472-3-danishanwar@ti.com> <Y+ELeSQX+GWS5N2p@lunn.ch>
- <42503a0d-b434-bbcc-553d-a326af5b4918@ti.com>
- <e8158969-08d0-1edc-24be-8c300a71adbd@kernel.org>
-Content-Language: en-US
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <e8158969-08d0-1edc-24be-8c300a71adbd@kernel.org>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com> <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207045838.11243-7-ricardo.neri-calderon@linux.intel.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 8 Feb 2023 08:48:05 +0100
+Message-ID: <CAKfTPtAZ8sfDi1GbKSioJkszkRT6f+am5OSjKKKKv2q_4FKQFQ@mail.gmail.com>
+Subject: Re: [PATCH v3 06/10] sched/fair: Use the prefer_sibling flag of the
+ current sched domain
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger and Andrew,
+On Tue, 7 Feb 2023 at 05:50, Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> SD_PREFER_SIBLING is set from the SMT scheduling domain up to the first
+> non-NUMA domain (the exception is systems with SD_ASYM_CPUCAPACITY).
+>
+> Above the SMT sched domain, all domains have a child. The SD_PREFER_
+> SIBLING is honored always regardless of the scheduling domain at which the
+> load balance takes place.
+>
+> There are cases, however, in which the busiest CPU's sched domain has
+> child but the destination CPU's does not. Consider, for instance a non-SMT
+> core (or an SMT core with only one online sibling) doing load balance with
+> an SMT core at the MC level. SD_PREFER_SIBLING will not be honored. We are
+> left with a fully busy SMT core and an idle non-SMT core.
+>
+> Avoid inconsistent behavior. Use the prefer_sibling behavior at the current
+> scheduling domain, not its child.
+>
+> The NUMA sched domain does not have the SD_PREFER_SIBLING flag. Thus, we
+> will not spread load among NUMA sched groups, as desired.
 
-On 08/02/23 01:26, Roger Quadros wrote:
-> Danish,
-> 
-> On 07/02/2023 17:29, Md Danish Anwar wrote:
->> Hi Andrew,
->>
->> On 06/02/23 19:45, Andrew Lunn wrote:
->>>> +enum mii_mode {
->>>> +	MII_MODE_MII = 0,
->>>> +	MII_MODE_RGMII,
->>>> +	MII_MODE_SGMII
->>>
->>> There is no mention of SGMII anywhere else. And in a couple of places,
->>> the code makes the assumption that if it is not RGMII it is MII.
->>>
->>> Does the hardware really support SGMII?
->>>
->>
->> As far as I know, the hardware does support SGMII but it's not yet supported by
->> the driver. I will drop the SGMII because it's not needed as of now. If in
->> future support for SGMII is there, I'll add it.
->>
->>>> +static int prueth_config_rgmiidelay(struct prueth *prueth,
->>>> +				    struct device_node *eth_np,
->>>> +				    phy_interface_t phy_if)
->>>> +{
->>>
->>> ...
->>>
->>>> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
->>>> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
->>>> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
->>>> +
->>>> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
-> 
-> This is only applicable to some devices so you need to restrict this only
-> to those devices.
-> 
+This is a significant change in the behavior of the numa system. It
+would be good to get figures or confirmation that demonstrate that
+it's ok to remove prefer_sibling behavior at the 1st numa level.
 
-Currently ICSSG driver is getting upstreamed for AM65 SR2.0 device, so I don't
-think there is any need for any device related restriction. Once support for
-other devices are enabled for upstream, we can modify this accordingly.
-
-> And only when you enable MAC TX delay you need to change emac->phy_if to PHY_INTERFACE_MODE_RGMII_RXID
-> if it was PHY_INTERFACE_MODE_RGMII_ID.
-> 
->>>
->>> Here you are adding the TX delay if the phy-mode indicates it should
->>> be added.
->>>
->>>> +static int prueth_netdev_init(struct prueth *prueth,
->>>> +			      struct device_node *eth_node)
->>>> +{
->>>
->>>> +	ret = of_get_phy_mode(eth_node, &emac->phy_if);
->>>> +	if (ret) {
->>>> +		dev_err(prueth->dev, "could not get phy-mode property\n");
->>>> +		goto free;
->>>> +	}
->>>
->>>> +	ret = prueth_config_rgmiidelay(prueth, eth_node, emac->phy_if);
->>>> +	if (ret)
->>>> +		goto free;
->>>> +
->>>
->>> Reading it from DT and calling the delay function.
->>>
->>>> +static int prueth_probe(struct platform_device *pdev)
->>>> +{
->>>
->>>
->>>> +	/* register the network devices */
->>>> +	if (eth0_node) {
->>>> +		ret = register_netdev(prueth->emac[PRUETH_MAC0]->ndev);
->>>> +		if (ret) {
->>>> +			dev_err(dev, "can't register netdev for port MII0");
->>>> +			goto netdev_exit;
->>>> +		}
->>>> +
->>>> +		prueth->registered_netdevs[PRUETH_MAC0] = prueth->emac[PRUETH_MAC0]->ndev;
->>>> +
->>>> +		emac_phy_connect(prueth->emac[PRUETH_MAC0]);
->>>
->>> And this is connecting the MAC and the PHY, where emac_phy_connect()
->>> passes emac->phy_if to phylib.
->>>
->>> What i don't see anywhere is you changing emac->phy_if to indicate the
->>> MAC has inserted the TX delay, and so the PHY should not.
->>>
->>
->> Yes, there is no indication whether MAC has enabled TX delay or not. I have
->> changed the phy-mode in DT from "rgmii-rxid" to "rgmii-id" as per your
->> suggestion in previous revision. I will keep Tx Internal delay as it is(getting
->> configured in MAC) and inside emac_phy_connect() API, while calling
->> of_phy_connect() instead of passing emac->phy_if (which is rgmii-id as per DT),
->> I will pass PHY_INTERFACE_MODE_RGMII_RXID. This will make sure that phy only
->> enables Rx delay and keep the existing approach of keepping Tx delay in MAC.
->>
->> Currently, in emac_phy_connect() API,
->>
->> 	/* connect PHY */
->> 	ndev->phydev = of_phy_connect(emac->ndev, emac->phy_node,
->> 				      &emac_adjust_link, 0,
->> 				      emac->phy_if);
->> I will change it to,
->>
->> 	/* connect PHY */
->> 	ndev->phydev = of_phy_connect(emac->ndev, emac->phy_node,
->> 				      &emac_adjust_link, 0,
->> 				      PHY_INTERFACE_MODE_RGMII_RXID);
->>
->> Let me know if this looks OK.
-> 
-> No, this is not OK.
-> 
-> Please keep this as emac->phy_if.
-> 
-> In prueth_config_rgmiidelay(), you can change emac->phy_if to
-> PHY_INTERFACE_MODE_RGMII_RXID only if it was RGMII mode
-> *and* MAC TX delay was enabled.
-> 
-
-I checked the latest Technical Reference Manual [1] (Section 5.1.3.4.49, Table
-5-624) for AM65 Silicon Revision 2.0.
-
-Below is the description in Table 5-624
-
-BIT	    : 24
-Field	    : RGMII0_ID_MODE
-Type	    : R/W
-Reset	    : 0h
-Description : Controls the PRU_ICSSG0 RGMII0 port internal transmit delay
-	      0h - Internal transmit delay is enabled
-	      1h - Reserved
-
-The TX internal delay is always enabled and couldn't be disabled as 1h is
-reserved. So hardware support for disabling TX internal delay is not there.
-
-As, TX internal delay is always there, there is no need to enable it in MAC or
-PHY. So no need of API prueth_config_rgmiidelay().
-
-My approach to handle delay would be as below.
-
-*) Keep phy-mode = "rgmii-id" in DT as asked by Andrew.
-*) Let TX internal delay enabled in Hardware.
-*) Let PHY configure RX internal delay.
-*) Remove prueth_config_rgmiidelay() API is there is no use of this. TX
-Internal delay is always enabled.
-*) Instead of calling prueth_config_rgmiidelay() API in prueth_netdev_init()
-API, add below if condition.
-
-	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
-		emac->phy_if == PHY_INTERFACE_MODE_RGMII_RXID
-
-This will check if phy-mode is "rgmii-id", then change the phy-mode to
-"rgmii-rxid". The same emac->phy_if is passed to emac_phy_connect which passes
-emac->phy_if to phylib. So that PHY will only enable RX internal delay and TX
-internal delay is always enabled by default(in Hardware)
-
-As of now ICSSG driver is getting upstreamed with support for only AM65 SR2.0,
-In future when ICSSG driver starts supporting other devices, we can modify this
-condition to something like below
-
-	if(device_is_AM65 && emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
-		emac->phy_if == PHY_INTERFACE_MODE_RGMII_RXID
-
-So that, for other devices, phy-mode should remain as it is, as other devices
-don't have hardware restriction.
-
-Please let me know if this is the right approach.
-
-[1]
-https://www.ti.com/lit/ug/spruid7e/spruid7e.pdf?ts=1675841023830&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FAM6548#%5B%7B%22num%22%3A1706%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22XYZ%22%7D%2C0%2C717.9%2C0%5D
-
-> cheers,
-> -roger
--- 
-Thanks and Regards,
-Danish.
+>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Suggested-by: Valentin Schneider <vschneid@redhat.com>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v2:
+>  * Introduced this patch.
+>
+> Changes since v1:
+>  * N/A
+> ---
+>  kernel/sched/fair.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index df7bcbf634a8..a37ad59f20ea 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -10004,7 +10004,6 @@ static void update_idle_cpu_scan(struct lb_env *env,
+>
+>  static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sds)
+>  {
+> -       struct sched_domain *child = env->sd->child;
+>         struct sched_group *sg = env->sd->groups;
+>         struct sg_lb_stats *local = &sds->local_stat;
+>         struct sg_lb_stats tmp_sgs;
+> @@ -10045,9 +10044,11 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>                 sg = sg->next;
+>         } while (sg != env->sd->groups);
+>
+> -       /* Tag domain that child domain prefers tasks go to siblings first */
+> -       sds->prefer_sibling = child && child->flags & SD_PREFER_SIBLING;
+> -
+> +       /*
+> +        * Tag domain that @env::sd prefers to spread excess tasks among
+> +        * sibling sched groups.
+> +        */
+> +       sds->prefer_sibling = env->sd->flags & SD_PREFER_SIBLING;
+>
+>         if (env->sd->flags & SD_NUMA)
+>                 env->fbq_type = fbq_classify_group(&sds->busiest_stat);
+> @@ -10346,7 +10347,6 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+>                         goto out_balanced;
+>         }
+>
+> -       /* Try to move all excess tasks to child's sibling domain */
+>         if (sds.prefer_sibling && local->group_type == group_has_spare &&
+>             busiest->sum_nr_running > local->sum_nr_running + 1)
+>                 goto force_balance;
+> --
+> 2.25.1
+>
