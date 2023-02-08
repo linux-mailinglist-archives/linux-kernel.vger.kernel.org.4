@@ -2,114 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9630068F0E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0236768F0EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjBHOeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S231405AbjBHOeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbjBHOd6 (ORCPT
+        with ESMTP id S231522AbjBHOeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:33:58 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1BE901A;
-        Wed,  8 Feb 2023 06:33:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PBj2p2jCBz9v7gn;
-        Wed,  8 Feb 2023 22:25:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwC3PQmssuNjUbIEAQ--.46196S2;
-        Wed, 08 Feb 2023 15:33:27 +0100 (CET)
-Message-ID: <dc973294e5ad2d05705954b433bb550b04a86325.camel@huaweicloud.com>
-Subject: Re: [PATCH v7 2/6] ocfs2: Switch to security_inode_init_security()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        ocfs2-devel@oss.oracle.com, reiserfs-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Feb 2023 15:33:12 +0100
-In-Reply-To: <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
-References: <20221201104125.919483-1-roberto.sassu@huaweicloud.com>
-         <20221201104125.919483-3-roberto.sassu@huaweicloud.com>
-         <6905166125130c22c244ebf234723d1587a01ae8.camel@huaweicloud.com>
-         <CAHC9VhRu_pdEur4XDkwMETAQEd-8=13k+qvpMEgW=hiYMCKw2A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 8 Feb 2023 09:34:12 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41381D91E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:34:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675866849; x=1707402849;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=a3xSiu+L7n1t4IHrjTIOzsEHVBodRy5X5hwp7mB1tW0=;
+  b=Nu9Mf6+BBzHUFxROLaveIBiiWPQ2ZdgMDWUYJbBY1iuy3rmJpQssOJ1O
+   7cuOR4syl9d1YzkGeqYPB1vcY/GIY7j3LejUYYVOgcPRCP+AntfTD+mQa
+   Bk64Ar9NAh+x/ngoDIGX2CEQY8E/zvUUNl3o7Q5LL2AyzRYaE5r2QBZhd
+   TFAe7/EOxni7GovZ/AsclJo2Y9WpruKGt2tJG9FMqFYOkFFRuMiITz9eU
+   feJGK+eCwjGiHfp6e5PDt15BTr71Zhw/V783wSmFprc8qGyhKFDIMcDci
+   Jfuxc9pOo5TCG++32AkVSRT3LD5Qq24G3zEEppcYLxK+PkEesy+tU8hFA
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394401072"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="394401072"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:34:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="730873919"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="730873919"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 08 Feb 2023 06:34:07 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPlWQ-0004V0-19;
+        Wed, 08 Feb 2023 14:34:06 +0000
+Date:   Wed, 8 Feb 2023 22:33:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: drivers/remoteproc/ti_k3_r5_remoteproc.c:711:17: sparse: sparse:
+ cast removes address space '__iomem' of expression
+Message-ID: <202302082215.2IJlM8yY-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwC3PQmssuNjUbIEAQ--.46196S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4fJF43Kr4fAr43Jr4fKrg_yoW8Wr45pF
-        W3t3WakFsxJF18Kr1fKwsxWayIk3yxGws8Xws8GryUZwn8WFy3Kr4xtr409343WrZ7CFWS
-        vw4fJFZ3X3WDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18PUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4i4pgAAsg
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-12 at 12:21 -0500, Paul Moore wrote:
-> On Tue, Jan 10, 2023 at 3:56 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Thu, 2022-12-01 at 11:41 +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > 
-> > > In preparation for removing security_old_inode_init_security(), switch to
-> > > security_inode_init_security().
-> > > 
-> > > Extend the existing ocfs2_initxattrs() to take the
-> > > ocfs2_security_xattr_info structure from fs_info, and populate the
-> > > name/value/len triple with the first xattr provided by LSMs.
-> > 
-> > Hi Mark, Joel, Joseph
-> > 
-> > some time ago I sent this patch set to switch to the newer
-> > function security_inode_init_security(). Almost all the other parts of
-> > this patch set have been reviewed, and the patch set itself should be
-> > ready to be merged.
-> > 
-> > I kindly ask if you could have a look at this patch and give your
-> > Reviewed-by, so that Paul could take the patch set.
-> 
-> I've been pushing to clean up some of the LSM interfaces to try and
-> simplify things and remove as many special cases as possible,
-> Roberto's work in this patchset is part of that.  I would really
-> appreciate it if the vfs/ocfs2 folks could give patch 2/6 a quick look
-> to make sure you are okay with the changes.
-> 
-> I realize that the various end-of-year holidays tend to slow things
-> down a bit, but this patchset has been on the lists for over a month
-> now; if I don't hear anything in the next week or two I'll assume you
-> folks are okay with these patches ...
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: 1168af40b1ad8cb2e78f4a70869fa4a076320e4f remoteproc: k3-r5: Add support for IPC-only mode for all R5Fs
+date:   11 months ago
+config: arm64-randconfig-s043-20230208 (https://download.01.org/0day-ci/archive/20230208/202302082215.2IJlM8yY-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1168af40b1ad8cb2e78f4a70869fa4a076320e4f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1168af40b1ad8cb2e78f4a70869fa4a076320e4f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/infiniband/hw/hns/ drivers/remoteproc/
 
-Hi Paul
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-is this patch set going to land in 6.3?
+sparse warnings: (new ones prefixed by >>)
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse:     expected void *
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:476:28: sparse:     got void [noderef] __iomem *cpu_addr
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *cpu_addr @@
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse:     expected void *
+   drivers/remoteproc/ti_k3_r5_remoteproc.c:479:28: sparse:     got void [noderef] __iomem *cpu_addr
+>> drivers/remoteproc/ti_k3_r5_remoteproc.c:711:17: sparse: sparse: cast removes address space '__iomem' of expression
 
-Thanks
+vim +/__iomem +711 drivers/remoteproc/ti_k3_r5_remoteproc.c
 
-Roberto
+   681	
+   682	/*
+   683	 * This function implements the .get_loaded_rsc_table() callback and is used
+   684	 * to provide the resource table for the booted R5F in IPC-only mode. The K3 R5F
+   685	 * firmwares follow a design-by-contract approach and are expected to have the
+   686	 * resource table at the base of the DDR region reserved for firmware usage.
+   687	 * This provides flexibility for the remote processor to be booted by different
+   688	 * bootloaders that may or may not have the ability to publish the resource table
+   689	 * address and size through a DT property. This callback is invoked only in
+   690	 * IPC-only mode.
+   691	 */
+   692	static struct resource_table *k3_r5_get_loaded_rsc_table(struct rproc *rproc,
+   693								 size_t *rsc_table_sz)
+   694	{
+   695		struct k3_r5_rproc *kproc = rproc->priv;
+   696		struct device *dev = kproc->dev;
+   697	
+   698		if (!kproc->rmem[0].cpu_addr) {
+   699			dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
+   700			return ERR_PTR(-ENOMEM);
+   701		}
+   702	
+   703		/*
+   704		 * NOTE: The resource table size is currently hard-coded to a maximum
+   705		 * of 256 bytes. The most common resource table usage for K3 firmwares
+   706		 * is to only have the vdev resource entry and an optional trace entry.
+   707		 * The exact size could be computed based on resource table address, but
+   708		 * the hard-coded value suffices to support the IPC-only mode.
+   709		 */
+   710		*rsc_table_sz = 256;
+ > 711		return (struct resource_table *)kproc->rmem[0].cpu_addr;
+   712	}
+   713	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
