@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D6E68EC50
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:04:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E8668EC55
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbjBHKE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S229679AbjBHKIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBHKEC (ORCPT
+        with ESMTP id S229483AbjBHKIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:04:02 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C643C28
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:04:00 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id fi26so19675198edb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:04:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=b+MKsAgNDECJNr7eMNpaLeacOaefQQKTyy5x3zYKwJc=;
-        b=L5/YqM2y4zXvNIHu8hHVmDZHKwSASI9vFWwQM0eJTMhL1WAAP6ppPH6EMEQ9E8HJur
-         6v7MRZ3Gu0aHxW3UB81WjirBFpSZKe3CxKWaoSSTRJP5eK5za9Na4uEa4mBTDVPGw83U
-         LjprxgObBiZoHfJ2LHtNnBbwCbV9sclsQNKSucwMOMhOhtL5Xc+1mZzDUgk7CClA1v/5
-         KnPn0Ug88rWl1W/mfJYV5ttYq/FGTrGhf/t6uiXM+MzF1uB7pGTIFIWXrZB8ls4g9k3q
-         zQ3Ul3DPo7+kAlvzAyTxevtPfa1pDiT8GtHLsXdVbNNi2crNLuZgn47Q19hDxTt9mbcg
-         x0OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b+MKsAgNDECJNr7eMNpaLeacOaefQQKTyy5x3zYKwJc=;
-        b=ES1dJsvYrI32wp/umN4P3JRLa0NNAyZD/UpKsPPhulUTUo0Qvw3MegqqKxBwqCJ+T3
-         Y3+0lkhsvxvpo+OfPGtS59ycPxkTIa2vDOuUv/Oe64xp8HwPZuL0Ewza2JiElMF/RLrh
-         iKo/uzpCJS5iLoxooJngotGITR/jBCCp78jLv4+EWPlAvRx6P4gQWtQUV+rMrjs1zRHT
-         Mx6QirCCY43T41Q4xP9OGsP4d96fRcsMpEVHYFWVceJwGtsullZgmdNqvSxXDhlAXETd
-         Hry/PJwYscUPN0on5YVdN3G+YcxoaMgfSEmYllv2fK4WzBBOrhPCf61uuyc8boZF9ABK
-         tYQw==
-X-Gm-Message-State: AO0yUKUb9Lgh77YF5WKp2BETbZmEf5ReOJPDVZjbESqw8lKLCIHYh64u
-        JJ8gfwUvLF6gLHZD5c4ObNdMnA==
-X-Google-Smtp-Source: AK7set8UVI3GFjjZ9+gVal+0sRv8IrpfJOpwhuo8tSLoaO04fElwyDBtqDiB8DKCXs9a0oiE1Rux8A==
-X-Received: by 2002:a50:99c5:0:b0:4aa:b63f:a0e with SMTP id n5-20020a5099c5000000b004aab63f0a0emr7361416edb.17.1675850639600;
-        Wed, 08 Feb 2023 02:03:59 -0800 (PST)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id k10-20020aa7c04a000000b0049e09105705sm7546541edo.62.2023.02.08.02.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 02:03:59 -0800 (PST)
-Date:   Wed, 8 Feb 2023 11:03:58 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     ye.xingchen@zte.com.cn
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: =?iso-8859-1?Q?platform?=
- =?iso-8859-1?Q?=3A_renesas=3A_use=A0devm=5Fplatform=5Fget=5Fand=5Fioremap?=
- =?iso-8859-1?B?X3Jlc291cmNlKCk=?=
-Message-ID: <Y+NzjmNHaZFA5dxf@oden.dyn.berto.se>
-References: <202302081659401393135@zte.com.cn>
+        Wed, 8 Feb 2023 05:08:42 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05DE9125A8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:08:39 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8AxGuqmdONjwOwPAA--.31469S3;
+        Wed, 08 Feb 2023 18:08:38 +0800 (CST)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtOWldONjv1gtAA--.52925S2;
+        Wed, 08 Feb 2023 18:08:37 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] LoongArch: Add hardware breakpoints/watchpoints support
+Date:   Wed,  8 Feb 2023 18:08:35 +0800
+Message-Id: <20230208100837.2451-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <202302081659401393135@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxtOWldONjv1gtAA--.52925S2
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uF4DWw1DKr45tFyxGFWfZrb_yoW8try3pF
+        ZI9rn5Kr4DKrZ3Xwsrt3y8uryrGFn7C3yaq3W7t342ywnFqF1FvrsakryDXa45J3yfJ340
+        qr1rWw4Fga1UAaUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b3xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s02
+        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF
+        0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvE
+        c7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+        v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7I
+        U8hiSPUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ye,
+Use perf framework to manage hardware instruction and data breakpoints.
+LoongArch defines hardware watchpoint functions for instruction fetch
+and load/store operations, after the software configures hardware watchpoints
+for instruction fetch and load/store operations. The processor hardware will
+monitor the access address of the instruction fetch and load/store operation,
+and will trigger the exception of the watchpoint when it meets the conditions
+set by the watchpoint.
 
-Thanks for your work.
+The hardware monitoring points for instruction fetching and load/store operations
+each have a register for the overall configuration of all monitoring points,
+a register for recording the status of all monitoring points, and four registers
+required for configuration of each watchpoint individually.
 
-On 2023-02-08 16:59:40 +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+Watchpoint related control status register chapters:
+https://github.com/loongson/LoongArch-Documentation/releases/download/2022.08.12/
+LoongArch-Vol1-v1.02-CN.pdf
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Initial version has the following limitations:
+- userspace debug is not yet enabled: work on ptrace/gdb is in progress
+- no support for virtualization
 
-> ---
->  drivers/media/platform/renesas/rcar-isp.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/media/platform/renesas/rcar-isp.c b/drivers/media/platform/renesas/rcar-isp.c
-> index 10b3474f93a4..a3cfd21f8aae 100644
-> --- a/drivers/media/platform/renesas/rcar-isp.c
-> +++ b/drivers/media/platform/renesas/rcar-isp.c
-> @@ -419,10 +419,7 @@ static const struct media_entity_operations risp_entity_ops = {
->  static int risp_probe_resources(struct rcar_isp *isp,
->  				struct platform_device *pdev)
->  {
-> -	struct resource *res;
-> -
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	isp->base = devm_ioremap_resource(&pdev->dev, res);
-> +	isp->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->  	if (IS_ERR(isp->base))
->  		return PTR_ERR(isp->base);
-> 
-> -- 
-> 2.25.1
+Can be tested: e.g.
+1. see samples/hw_breakpoint and register_wide_hw_breakpoint.
+2. ptrace(PTRACE_SINGLESTEP/..., pid, NULL, NULL)
+
+TODO:
+- Add hardware breakpoints/watchpoints for gdb, kgdb
+
+Qing Zhang (2):
+  LoongArch: Add hardware breakpoints/watchpoints support
+  LoongArch: Add ptrace single step support
+
+ arch/loongarch/Kconfig                     |   1 +
+ arch/loongarch/include/asm/hw_breakpoint.h | 145 ++++++
+ arch/loongarch/include/asm/loongarch.h     |  32 +-
+ arch/loongarch/include/asm/processor.h     |  11 +-
+ arch/loongarch/include/asm/ptrace.h        |   2 +
+ arch/loongarch/include/asm/switch_to.h     |   1 +
+ arch/loongarch/kernel/Makefile             |   1 +
+ arch/loongarch/kernel/hw_breakpoint.c      | 525 +++++++++++++++++++++
+ arch/loongarch/kernel/process.c            |   7 +
+ arch/loongarch/kernel/ptrace.c             |  68 +++
+ arch/loongarch/kernel/traps.c              |  31 +-
+ 11 files changed, 803 insertions(+), 21 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/hw_breakpoint.h
+ create mode 100644 arch/loongarch/kernel/hw_breakpoint.c
 
 -- 
-Kind Regards,
-Niklas Söderlund
+2.36.0
+
