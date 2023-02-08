@@ -2,147 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBF468F1A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BB568F1AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjBHPKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S230255AbjBHPLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjBHPKN (ORCPT
+        with ESMTP id S231749AbjBHPKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:10:13 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B24138002;
-        Wed,  8 Feb 2023 07:10:12 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0F3B3E79;
-        Wed,  8 Feb 2023 16:10:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1675869010;
-        bh=IWtkdqIfEEk36yRhhEcGs7EgU7XpOj/TaOe55N3zkxk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eQajGGZbZvC3oF7ceoVnj/XCh5b5xmvygo1qNucYVXTX5l4pv9mEy7TvOs63a7/mn
-         9AzUaDE/mCGX8Hvj9q+3OhuRxA4FC1UCAMD0UuMOzWtiQLKPzA+oT8d0hagfp7dWSH
-         pc8q4kVgQcQVvrUQimGtNBKgrkxCa72ilJlub3oA=
-Message-ID: <2501ffcc-82ff-c0bc-366a-33b62bf28e76@ideasonboard.com>
-Date:   Wed, 8 Feb 2023 17:10:05 +0200
+        Wed, 8 Feb 2023 10:10:43 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B39438E95;
+        Wed,  8 Feb 2023 07:10:39 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-16aa71c1600so1636455fac.11;
+        Wed, 08 Feb 2023 07:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMOh+YWDoT20q0bU4h7O0uaMSnzV9l0gaPz7VD0hjmg=;
+        b=N6T/xM1nlVfGtGs71rjZQEgiZQqzArFXPD/VIVvWYLf2GmnmRRj7h0H0qfzLr7KWWv
+         Fy1N/0e2ua24zuT6QvppM/D0ixY5y8WQ0AFWGWSWQ5iVTHyzQVEh9CUrJFId93eIS4m0
+         hfQs2IBYhT+48RV9fP5F5lBed7iDCCrdY4QQagI2tuBzWA75UW5XhZ5CbKCr4Qv53dUH
+         9A6ReNKAV+Val/OM5gY7YnOl/2egJPAK1r9UIn470LdXUW6Gql/Ru9SV8eXVQqZSrIKX
+         ELb1JrrZWMvMqELVENPg+OA/+Y+WuG94LBZMddvQ9/upsjoBtGsQueM5n1ikaxHgfl2/
+         iVyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rMOh+YWDoT20q0bU4h7O0uaMSnzV9l0gaPz7VD0hjmg=;
+        b=g9Umt26rHYJYhFLY8V9Vn1N2b9rSuE4Op+6wh3YfYpuQV0Z0XRG9+H6Pw70/1vv+qJ
+         L0Nagvjc9Z1w/vfQVn1hRqOplAuICVO1XX+zfDzQyC3p79XT6NUMseaJinFxNZJldAYe
+         b++YSdZ0Lbfbxfg9XZcelHF4Hb6bhECZbp+CH98uPt1zd6GzK9tbLvjbR0mrYor5821A
+         Lq6J9PgcpqGBoY2IJMMkcwgqiOcdzlZRBRbHrXjPPsm1RNp38KjS+x5KdjFYvSEZaErm
+         6YPi/Su0JhEz9MOdn99ZeOaz7n9OnRnFAENn4lfRRPyxsS4gmyjtaA0djHUryNiqpT+6
+         xp3w==
+X-Gm-Message-State: AO0yUKUvjdRWBdg/mY1X+C0/GeBzHYJ4bEJvbnatqA/mpJulEX4cilsd
+        YDju6ye4PgVMG3NDg2A7NGs8SFMf2Wc=
+X-Google-Smtp-Source: AK7set8g6X8ya1YyHzAHzThnVsGac9b1O1Rt71iMRSbGd/7Y2f1fG0XZzjJv6emprULtB+eFs2EpSQ==
+X-Received: by 2002:a05:6871:8e:b0:16a:af93:9ae6 with SMTP id u14-20020a056871008e00b0016aaf939ae6mr134955oaa.9.1675869038204;
+        Wed, 08 Feb 2023 07:10:38 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w1-20020a9d70c1000000b006863c59f685sm8229834otj.28.2023.02.08.07.10.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 07:10:37 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2f2dcb7c-e5bc-7e97-71e0-eebdc72fbd03@roeck-us.net>
+Date:   Wed, 8 Feb 2023 07:10:35 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 5/7] media: i2c: add DS90UB960 driver
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] watchdog: sbsa_wdog: Make sure the timeout programming
+ is within the limits
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <4286abe2-f23f-d4c9-ef18-f351af7a3a8b@ideasonboard.com>
- <Y9EcRlooHwIjOqiZ@smile.fi.intel.com>
- <cad92dbb-43ef-fa8c-1962-13c4a8578899@ideasonboard.com>
- <Y9FBlMl4b3l1zVck@smile.fi.intel.com>
- <5d208710-f284-e6e9-18dc-f5ef63a9ea44@ideasonboard.com>
- <Y9FKcoVlgUWR4rhn@smile.fi.intel.com>
- <04a82b08-524f-8d03-ac47-73d826907fc3@ideasonboard.com>
- <Y9JUEv66Gze8FjMZ@smile.fi.intel.com>
- <Y9JbMjPM3Ea3RVzH@pendragon.ideasonboard.com>
- <0c13eac3-cadb-b923-d475-7851dbef0c4e@ideasonboard.com>
- <Y9OWFSxs9ev9hfp2@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y9OWFSxs9ev9hfp2@smile.fi.intel.com>
+To:     George Cherian <george.cherian@marvell.com>,
+        wim@linux-watchdog.org, zhangshaokun@hisilicon.com
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230208083736.1237256-1-george.cherian@marvell.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230208083736.1237256-1-george.cherian@marvell.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/01/2023 11:15, Andy Shevchenko wrote:
-> On Fri, Jan 27, 2023 at 10:24:04AM +0200, Tomi Valkeinen wrote:
->> On 26/01/2023 12:51, Laurent Pinchart wrote:
->>> On Thu, Jan 26, 2023 at 12:21:06PM +0200, Andy Shevchenko wrote:
->>>> On Thu, Jan 26, 2023 at 10:41:47AM +0200, Tomi Valkeinen wrote:
->>>>> On 25/01/2023 17:27, Andy Shevchenko wrote:
+On 2/8/23 00:37, George Cherian wrote:
+> Make sure to honour the max_hw_heartbeat_ms while programming the timeout
+> value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
+> make sure the programmed value is within the permissible range.
 > 
-> ...
+> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
 > 
->>>>>> But I probably don't understand the ATR structure and what exactly we need to
->>>>>> pass to it, perhaps it also can be replaced with properties (note, that we have
->>>>>> some interesting ones that called references, which is an alternative to DT
->>>>>> phandle).
->>>>>
->>>>> Well, maybe this needs a Linux bus implementation. I'm not that familiar
->>>>> with implementing a bus, but I think that would make it easier to share data
->>>>> between the deserializer and the serializer. A bus sounds a bit like an
->>>>> overkill for a 1-to-1 connection, used by a few drivers, but maybe it
->>>>> wouldn't be too much code.
->>>>
->>>> Have you looked at auxiliary bus (appeared a few releases ago in kernel)?
->>>
->>> As far as I understand, the auxiliary bus infrastructure is meant for
->>> use cases where a single hardware device needs to be split into multiple
->>> logical devices (as in struct device). Platform devices were
->>> historically (ab)used for this, and the auxiliary bus is meant as a
->>> cleaner solution. I'm not sure if it would be a good match here, or if
->>> it would be considered an abuse of the auxiliary bus API.
->>
->> The aux bus docs say "A key requirement for utilizing the auxiliary bus is
->> that there is no dependency on a physical bus, device, register accesses or
->> regmap support. These individual devices split from the core cannot live on
->> the platform bus as they are not physical devices that are controlled by
->> DT/ACPI.", which doesn't sound like a good fit.
+> Signed-off-by: George Cherian <george.cherian@marvell.com>
+> ---
+>   drivers/watchdog/sbsa_gwdt.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> Thanks for checking!
-> 
->> The deserializer and serializers are currently independent devices and
->> drivers (the pdata is the only shared thing), but I think we may need
->> something better here. The devices are more tightly tied together than
->> "normal" video devices, in my opinion, as the serializer is fully controlled
->> by the deserializer (including power).
->>
->> And if we ever want to implement something like power management, we
->> probably need something more than what we have now. Although I don't know
->> how that would be done, as all the peripherals behind the serializer would
->> also lose power...
-> 
-> I believe you have to create a power domain for them and when such device
-> is added, the power domain of it should belong to the serialized.
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index 9791c74aebd4..ee1039a652f1 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -149,6 +149,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+>   {
+>   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+>   
+> +	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
+>   	wdd->timeout = timeout;
+>   
 
-I was testing this, and got something working.
+Wrong order. wdd->timeout should still contain the requested timeout.
 
-I have the deserializer introducing a separate power-domain for each RX 
-port, and the serializer and the sensor both refer to their port's 
-domain. I can see that the deserializer gets power on/off callbacks 
-correctly when either serializer or sensor resumes.
-
-The problem I have now is that while the power comes from the 
-deserializer and is thus covered with the power domain, the sensor uses 
-services from the serializer (gpios, clocks, i2c bus), and the 
-serializer is not woken up when the sensor does runtime-pm resume (the 
-power domain is powered up correctly when the sensor resumes).
-
-The serializer creates the i2c adapter to which the sensor is added, so, 
-afaics, there should be a child-parent relationship there. But maybe I 
-have something wrong there, or it just doesn't work as I imagine it 
-would work.
-
-  Tomi
+Guenter
 
