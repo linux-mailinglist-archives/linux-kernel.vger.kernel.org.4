@@ -2,108 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FC068E59C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7118268E5A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBHBwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 20:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        id S229709AbjBHBzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 20:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBHBwO (ORCPT
+        with ESMTP id S229527AbjBHBzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 20:52:14 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCFD24489;
-        Tue,  7 Feb 2023 17:52:13 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id be8so17659052plb.7;
-        Tue, 07 Feb 2023 17:52:13 -0800 (PST)
+        Tue, 7 Feb 2023 20:55:04 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA7313DEC
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 17:55:02 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id j1so11039292pjd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 17:55:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aPilZBrvyzgqjsmqEP8Qm1Zad9diYGZYlfH9HP2RVME=;
-        b=MQKhOHJts6z//UPEl+WhIfzfwHlZU1MQJynwBlxINA6DXfbAYZsUyjQyKjMrhJsudh
-         P82X4M9ssJAOFwHETUUn8pyMebXnTTRrR3bG1qV60hNilJaHNdcPq4MSiURbedW3jEz/
-         eVhqmQYFwC+gOf8lMs5HtsGqpF4VOIJG6ScjHfwd2gzAT/9PS7mHHCd/sFIsKe+mQe1W
-         J4kQ5c6LAI4wwCEDr9p6pX7ZbIQ/HbyCD1LKOTHy/spJKT0QQwANX47Wbd9mbuHpzNkq
-         /o7yxEY1yTO1v1O/RbY9T0Ly3vM2Oi631BVaLK6aRJkPdkmkHc894AHlx0b9iqtlQO2E
-         VBQQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yFAeINwYtb2cLRVJgVtc+kWYFXCI8f2NbANQERXXFd0=;
+        b=JkO4G2i5cU/E6yafLtwtlFjL7+8wulry7a3Ey9V3mhwaVhE5SCUWQDoZVhZPaJxlGI
+         W7d/w1XtEKV7IhqrixH+q71lyrUCd8HJl3B1ld0dIhUjEdwxgt3fFM20XarQ1VkKO68i
+         9i/rKN56pXvZLCaBQyFAMpCf+59UHwOB4r0b/+K3XrymyynR9/FfXqj9Yjbx7MwmAcFH
+         lUmt0Te8AJSpvDmDxzZmo5tvAucslU2O8+4fKnourd8kcCtO//6Yj6ESjtdIMXQUhd37
+         j5cJnwVsAZWJJbRYLXcDvSWPhMMUSTPCa/Vje6uZyqu6YN5P5QfJQgrNvgX53OlNUlZW
+         gMQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aPilZBrvyzgqjsmqEP8Qm1Zad9diYGZYlfH9HP2RVME=;
-        b=zZWbQFv4fiLyVr6cvyBwQD5YHf3irXOuhzz1SNq1O0zq3dLm/13tGP9fsI0B7S348+
-         RZ6LWwNxNcDe98OOThP8zVvUWA2UgAQhuY4n2WkbcajGj3Ugt5VioRPOUw0VpD4NMwu4
-         LEvMLKWydyma922kK8JCCYGEgQeZCUkMdSuiH1MlN78X9P8nbRLiZ9nxE8URMr3UHFi+
-         gv85kCz9nERnScfKeY7/wUx3iv8AmCxBTefCrQe9XZ7Y9pbs5iG/npQwkrMceFlVrf9Q
-         RW4I36aUMusY4RfL20pMei0Q8bH54YNccI5EHrvcV+Il7Tm+JupW3sxMRkyfcj/DAdUb
-         2wdQ==
-X-Gm-Message-State: AO0yUKUy+CaQF/0OE7/wZet/STRugUpQfr8uYrvTzlQgZKGQj+MVh2RA
-        t0c7eJbGv0hKt/PiKYRdyFU=
-X-Google-Smtp-Source: AK7set+9+THITSv0u/2MrM0c5aqwptCz230WHuS/r54mf5+W8GrlqVJOGl/cdgs1q5bio5YyJqu08g==
-X-Received: by 2002:a17:902:f392:b0:199:48fc:3dcb with SMTP id f18-20020a170902f39200b0019948fc3dcbmr183954ple.68.1675821133051;
-        Tue, 07 Feb 2023 17:52:13 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id u1-20020a170903124100b00172b87d9770sm9641676plh.81.2023.02.07.17.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 17:52:12 -0800 (PST)
-Message-ID: <a8b73e1a-8909-b316-48f9-b83fff322fc7@gmail.com>
-Date:   Tue, 7 Feb 2023 17:52:10 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yFAeINwYtb2cLRVJgVtc+kWYFXCI8f2NbANQERXXFd0=;
+        b=pPxJDDJO1dUeCkWkchP4fvKmxW3NMNopeE2hHFZwciHgnm+qUsI+zCP8Hd0XdzFDqT
+         5p+WEPG0rf/ghgBfeUQzNGnCc+mBUEATp98ecVFqR/ZvDrpdqaSP5C8RCl8g+CUkuTJl
+         P5eUJXsu41Xx9zDGojFRtmB26MqFTWtv7JnXyNyJ+KzxkQwhKlfVa5nB/0PzYUFQ2gmx
+         TYLvVx43w3vR73Sm8q241YCh6jNuu9Gr1nGsBtYI7KrHEKKsiToy49oey2p2XyvwO+T2
+         yBwlzN1v1quQce3uDRlgL3K9DLeDOjMeKNclTBtw2kxKxilfztd/pblqioIxRILHIsLD
+         hiaw==
+X-Gm-Message-State: AO0yUKXBceQWO9WANSS4qmJ5UjYdfAtdjz41Wwb4AJt9KNvcpPS6rbSR
+        pY8ERoEfGN4AUEkMwwZyGKE=
+X-Google-Smtp-Source: AK7set9mvmEYqv3hl2OrC0zKo+qq3fUo4V5nX2RfOnU0+7cYrKdJNxD+cYH5ETHUyGXyK29itm5v/w==
+X-Received: by 2002:a05:6a20:8e08:b0:be:abb2:66ff with SMTP id y8-20020a056a208e0800b000beabb266ffmr6740582pzj.60.1675821302133;
+        Tue, 07 Feb 2023 17:55:02 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id q20-20020a638c54000000b004eecc3080f8sm8635372pgn.29.2023.02.07.17.54.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 17:54:59 -0800 (PST)
+Date:   Wed, 8 Feb 2023 01:54:47 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 5/7] mm: replace vma->vm_flags indirect modification
+ in ksm_madvise
+Message-ID: <Y+MA5wUYgtq6Ll++@localhost>
+References: <20230126193752.297968-1-surenb@google.com>
+ <20230126193752.297968-6-surenb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230207125634.292109991@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230207125634.292109991@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126193752.297968-6-surenb@google.com>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/7/2023 4:54 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.11 release.
-> There are 208 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Jan 26, 2023 at 11:37:50AM -0800, Suren Baghdasaryan wrote:
+> Replace indirect modifications to vma->vm_flags with calls to modifier
+> functions to be able to track flag changes and to keep vma locking
+> correctness.
 > 
-> Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Acked-by: Mel Gorman <mgorman@techsingularity.net>
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>  arch/powerpc/kvm/book3s_hv_uvmem.c | 6 +++++-
+>  arch/s390/mm/gmap.c                | 6 +++++-
+>  2 files changed, 10 insertions(+), 2 deletions(-)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
+> diff --git a/arch/powerpc/kvm/book3s_hv_uvmem.c b/arch/powerpc/kvm/book3s_hv_uvmem.c
+> index 1d67baa5557a..709ebd578394 100644
+> --- a/arch/powerpc/kvm/book3s_hv_uvmem.c
+> +++ b/arch/powerpc/kvm/book3s_hv_uvmem.c
+> @@ -393,6 +393,7 @@ static int kvmppc_memslot_page_merge(struct kvm *kvm,
+>  {
+>  	unsigned long gfn = memslot->base_gfn;
+>  	unsigned long end, start = gfn_to_hva(kvm, gfn);
+> +	unsigned long vm_flags;
+>  	int ret = 0;
+>  	struct vm_area_struct *vma;
+>  	int merge_flag = (merge) ? MADV_MERGEABLE : MADV_UNMERGEABLE;
+> @@ -409,12 +410,15 @@ static int kvmppc_memslot_page_merge(struct kvm *kvm,
+>  			ret = H_STATE;
+>  			break;
+>  		}
+> +		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
+> +		vm_flags = vma->vm_flags;
+>  		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
+> -			  merge_flag, &vma->vm_flags);
+> +			  merge_flag, &vm_flags);
+>  		if (ret) {
+>  			ret = H_STATE;
+>  			break;
+>  		}
+> +		vm_flags_reset(vma, vm_flags);
+>  		start = vma->vm_end;
+>  	} while (end > vma->vm_end);
+>  
+> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
+> index ab836597419d..5a716bdcba05 100644
+> --- a/arch/s390/mm/gmap.c
+> +++ b/arch/s390/mm/gmap.c
+> @@ -2587,14 +2587,18 @@ int gmap_mark_unmergeable(void)
+>  {
+>  	struct mm_struct *mm = current->mm;
+>  	struct vm_area_struct *vma;
+> +	unsigned long vm_flags;
+>  	int ret;
+>  	VMA_ITERATOR(vmi, mm, 0);
+>  
+>  	for_each_vma(vmi, vma) {
+> +		/* Copy vm_flags to avoid partial modifications in ksm_madvise */
+> +		vm_flags = vma->vm_flags;
+>  		ret = ksm_madvise(vma, vma->vm_start, vma->vm_end,
+> -				  MADV_UNMERGEABLE, &vma->vm_flags);
+> +				  MADV_UNMERGEABLE, &vm_flags);
+>  		if (ret)
+>  			return ret;
+> +		vm_flags_reset(vma, vm_flags);
+>  	}
+>  	mm->def_flags &= ~VM_MERGEABLE;
+>  	return 0;
+> -- 
+
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+
+> 2.39.1
 > 
-> thanks,
 > 
-> greg k-h
-
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
