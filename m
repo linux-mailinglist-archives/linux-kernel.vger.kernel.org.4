@@ -2,123 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356C868F44A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC38068F452
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjBHRVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S231288AbjBHRWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbjBHRVH (ORCPT
+        with ESMTP id S231844AbjBHRV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:21:07 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3F8900C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:21:05 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id r8so20087093pls.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:21:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SevCBdyXjXvSH4omRiXD/fDq6ifdvqidYsrVMN1iQlw=;
-        b=DC8QtD2YeXVbofL1K3rriL4INGSEPrOdo5/LyTggPWJecHfKLNO2cbXvqTZcYICYrw
-         Yp2J3Sn9GgPgr6pNSnRFbQxSctJ3Ef45hs0Pt3t7byi6cW//9dv8G9ZfDza2POogaen4
-         GabQQGBKfFP/oKhORM4XJCAmHYuI7GNu2svUiCa618/OMPP7GM4jkwd/QyMA4DF1vwxJ
-         +BqnfMSMOiG4d+5MOsvTdDH2AXICwcNCXKplinbkmHGLZr5U4xavxdBheUCoQV94kl1V
-         kGoK6btiuaS8T3dzFH2BLyHgqwttiODVoeOLegb74SUJkEuOM303rPiV1EW8b9MRuS/i
-         Ialw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SevCBdyXjXvSH4omRiXD/fDq6ifdvqidYsrVMN1iQlw=;
-        b=InsXA+RguG9WJGEF806uxDmE5GSmGEeKkXmIKDQEC3t7AJPQQr+J2JF+DKSKj57wjy
-         xPQ3lM5ef/h+77E3TeAr6Zv4AGHbVj1nYoGv/xfpq83tlS1JObucek5ZyuEMhQEed0cc
-         gSUCDoMnPX4tlT250O0lpDkkHIOSCCZgvaefsH6bgJ0JjYRcOR8hARrE+tV9sNWknGlq
-         fQdtJ+ub+D3ELQP98SG7n+Hl7j4F/iJ5s8+HoPXrAeOBbADY3i0gU9hM+2YuAsuHDIkW
-         Rm9YWd+x/8glMnrR+LNRnW4bLkvthoe8jHkQ8cncob32lpzaRbqkp8Q/4bV0EifkEJs1
-         FPpg==
-X-Gm-Message-State: AO0yUKWcHxdpfqa8hhBqj4Op8R06yXvU8uOMUX8LDb8PzBGAAuJdnhWF
-        5L1zepf3O04N5VBitvU67j8jBYoWhSJ3sdSC968=
-X-Google-Smtp-Source: AK7set96+zJFQcJ6GKkd7AtudNHL9Hq/NXwLqLQqeOJ2xGUtA3yeXDV/yCXAW7bbSZe4ZAoACokjmA==
-X-Received: by 2002:a17:903:330f:b0:198:af4f:de12 with SMTP id jk15-20020a170903330f00b00198af4fde12mr283390plb.18.1675876865274;
-        Wed, 08 Feb 2023 09:21:05 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h38-20020a631226000000b004fb10399da2sm3447480pgl.56.2023.02.08.09.21.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 09:21:04 -0800 (PST)
-Date:   Wed, 8 Feb 2023 17:21:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kevin Cheng <chengkev@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] KVM: selftests: Added eBPF program and selftest to
- collect vmx exit stat
-Message-ID: <Y+PZ/a9O7KgXdRf1@google.com>
-References: <20230126004346.4101944-1-chengkev@google.com>
+        Wed, 8 Feb 2023 12:21:56 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C442AD3D;
+        Wed,  8 Feb 2023 09:21:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=hW5i73pe8pnUfUYDL1bt63KL1qTJ5SbNKkdlGg3uo4g=; b=tSIp+M+Dh97ieUihW36Xe3Tg1N
+        czULo45mLjiF0C6oMWsgo7vv2TYg6wM7AtlLz3Y8XwQRHFzA2AIPQXD5NniJDOYcPWmDHyzVxuFQo
+        Ux0ioFgtU7MetMymkrkZ7y9pXX3vb2wXN+QZlAcy1a4ybiaOZfQsqSKj5/2K077o/Wx4j8Q06alP2
+        UWsNMf6LWKGpw/esuaGwaOx69uVMTn6CNA6WbXTY2wYLw2HjTIpDuoqqr0hBqlwnTmZz266TRcPak
+        sEML8oQe5uhLP2bymeBTf776sY4Ev/QyK3Y/r0g4Wt0+ByW1qjuaxYjSQCsoJy6/hNo/sX3RWbzeU
+        nm4gXSJw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPo8O-001PQr-0w; Wed, 08 Feb 2023 17:21:28 +0000
+Date:   Wed, 8 Feb 2023 17:21:27 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v12 01/10] vfs, iomap: Fix generic_file_splice_read() to
+ avoid reversion of ITER_PIPE
+Message-ID: <Y+PaF7q10xSoqynj@casper.infradead.org>
+References: <Y+MydH2HZ7ihITli@infradead.org>
+ <20230207171305.3716974-1-dhowells@redhat.com>
+ <20230207171305.3716974-2-dhowells@redhat.com>
+ <176199.1675872591@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126004346.4101944-1-chengkev@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <176199.1675872591@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023, Kevin Cheng wrote:
-> diff --git a/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf_kern.c b/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf_kern.c
-> new file mode 100644
-> index 000000000000..b9c076f93171
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/kvm_vmx_exit_ebpf_kern.c
-> @@ -0,0 +1,73 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <linux/bpf.h>
-> +#include <stdint.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <bpf/bpf_core_read.h>
-> +
-> +struct kvm_vcpu {
-> +	int vcpu_id;
-> +};
-> +
-> +struct vmx_args {
-> +	__u64 pad;
-> +	unsigned int exit_reason;
-> +	__u32 isa;
-> +	struct kvm_vcpu *vcpu;
-> +};
-> +
-> +struct stats_map_key {
-> +	__u32 pid;
-> +	__u32 vcpu_id;
-> +	__u32 exit_reason;
-> +};
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_HASH);
-> +	__uint(max_entries, 1024);
-> +	__type(key, struct stats_map_key);
-> +	__type(value, int);
-> +} vmx_exit_map SEC(".maps");
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_HASH);
-> +	__uint(max_entries, 1);
-> +	__type(key, __u32);
-> +	__type(value, __u32);
-> +} pid_map SEC(".maps");
+On Wed, Feb 08, 2023 at 04:09:51PM +0000, David Howells wrote:
+> @@ -2688,7 +2689,7 @@ ssize_t filemap_read(struct kiocb *iocb, struct iov_iter *iter,
+>  		if (unlikely(iocb->ki_pos >= i_size_read(inode)))
+>  			break;
+>  
+> -		error = filemap_get_pages(iocb, iter, &fbatch);
+> +		error = filemap_get_pages(iocb, iov_iter_count(iter), &fbatch);
 
-Can you add comments to explain why maps are used?  From our internal discussions,
-I think I know the answer, but it would be super helpful for others (and me) to
-explain exactly what this code is doing, and more importantly, why.
+What's the point in iov_iter_count() anyway?  It's more characters
+than iter->count, so why not use it directly?
