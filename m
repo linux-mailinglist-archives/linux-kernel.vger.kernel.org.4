@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63EE68EECE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4B068EED0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjBHMVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 07:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S230365AbjBHMWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 07:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjBHMVJ (ORCPT
+        with ESMTP id S229515AbjBHMWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:21:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0A426CE7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:21:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F80B616A7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:21:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A47C433D2;
-        Wed,  8 Feb 2023 12:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675858863;
-        bh=ZE61/gpGaZcbujb/9CQDWc8EVfZYAwbH+E5VhghTX34=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nZIZHzHHIgebCH6fBk7tv0OpgGe3KUPB00UMv4y4x0nuOypsGhWWyjfXl6b/JyQW3
-         xU4B1lztaHRwkpZrXmTnpBG2LjONnsRxw59VhSgdYdpmeWZWxC/XfXSWp2jd4K7MUb
-         Os/yVK547Sjpjkk6JqXftylEwW6ZjOplQFblmt1Q=
-Date:   Wed, 8 Feb 2023 13:21:00 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org, Chris Down <chris@chrisdown.name>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH] kernel/printk/index.c: fix memory leak with using
- debugfs_lookup()
-Message-ID: <Y+OTrA6E3ld+awa7@kroah.com>
-References: <20230202151411.2308576-1-gregkh@linuxfoundation.org>
- <Y9ze8RERj/E1BF8A@alley>
+        Wed, 8 Feb 2023 07:22:10 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003F96196
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:22:08 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so26851549lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 04:22:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fp0NKuoTqeKieMuPExLXzrxdvpIWXw/nMcx/ZYXWt9c=;
+        b=Dir2pRfjcShrZh0W+NFMPpG+77UihZ4gmj7YSB8S0eMT2YliBO0yeAiTvIfaCkiLS4
+         9LZMddi19LMAxD9w4YMulQLzmOxPLKX6GjPLGRk94IxnBxqzZ2C9g0cIFcrCiG/LC8KI
+         sX7NaYI1JVOjgsIdSR3JYE7dm1exKBOOCdunpceqRt/KNZfXIoYup8zWiIzWRPh6VOK4
+         jyzOlT8e75n+go7rgVysoxICpu9ALko3pkLKF4d7IVwwZDNWmR0vl1s+UaaOzoGYT3cF
+         mkTuqUBKZsVM++9+5Y5FIJATWJqbs2arhjocDwOtOV5HLkTbAp3jgP+Wo/9LAwnHGtEu
+         KAfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fp0NKuoTqeKieMuPExLXzrxdvpIWXw/nMcx/ZYXWt9c=;
+        b=Ex+mnFfM9UFAwk8G6Slw2LH2OZK3xDRA1TMm6nci180wN+Al4X1yEaAPiraUc430Vx
+         w9jVYxJ3tA2GY4pjCdNk8D7YQkLE8VwLNPGXszXz4mojTXNluoTW8FKRq3sk7vpouClN
+         wPjw7zEoeEjekWZ3n0YUF6FHzM/CNpbREkDaou5lRH8aXHZIEf4RFhyUfL3zAL3bLMIV
+         /SOS0mYABWzfnMNNv7v//pg605Z5WI6SD2IR5WII/xC2hNtztlyCh24xxd4v0gyG4e6v
+         NjYgBbcuffo5s9vuhtpfz8UFIVizROoKRIuiAxSUIuDy/NQ1yyjWBI7kSgwZxzIKu9HO
+         Q2vA==
+X-Gm-Message-State: AO0yUKWvxIjeknjFll35jw0zNVNIjvd/Lp3j4r96hQK7h9/RwQznWu6u
+        KG/3RwRJeu/Va+hYPZxztEk12q9ojrkbcQVSZS8=
+X-Google-Smtp-Source: AK7set8NRlF5tZeSRZJzglJ0LkS8wAP4fh0O1B6YuHSYNcx+WXLgLPBBMFOB+416bHk7fBTjTIqWkU5xRsgrJ5gh/0k=
+X-Received: by 2002:ac2:41cb:0:b0:4d3:d4e4:9b85 with SMTP id
+ d11-20020ac241cb000000b004d3d4e49b85mr1250037lfi.46.1675858927239; Wed, 08
+ Feb 2023 04:22:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9ze8RERj/E1BF8A@alley>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender: leighannhester285@gmail.com
+Received: by 2002:a05:6022:730b:b0:37:1684:426d with HTTP; Wed, 8 Feb 2023
+ 04:22:06 -0800 (PST)
+From:   Fiona Hill <fionahill.usa@gmail.com>
+Date:   Wed, 8 Feb 2023 12:22:06 +0000
+X-Google-Sender-Auth: iTzs8NB-qEYYfJM0Vw7ePNXUdpc
+Message-ID: <CAD3H0r-yqbVm_wVxuLN6VHmb1nsBMmj0o8g7CSXw28_Ni+zLaw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 11:16:17AM +0100, Petr Mladek wrote:
-> On Thu 2023-02-02 16:14:11, Greg Kroah-Hartman wrote:
-> > When calling debugfs_lookup() the result must have dput() called on it,
-> > otherwise the memory will leak over time.  To make things simpler, just
-> > call debugfs_lookup_and_remove() instead which handles all of the logic
-> > at once.
-> > 
-> > Cc: Chris Down <chris@chrisdown.name>
-> > Cc: Petr Mladek <pmladek@suse.com>
-> > Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: John Ogness <john.ogness@linutronix.de>
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> JFYI, the patch has been committed into printk/linux.git, branch for-6.3.
-
-Wonderful, thank you!
-
-greg k-h
+-- 
+HI, did you get my two previous emails? please check and reply back to me
