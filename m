@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3DF68F18D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C0268F193
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjBHPDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S231237AbjBHPEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:04:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbjBHPDM (ORCPT
+        with ESMTP id S231661AbjBHPE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:03:12 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6DB732506;
-        Wed,  8 Feb 2023 07:03:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 102221477;
-        Wed,  8 Feb 2023 07:03:54 -0800 (PST)
-Received: from bogus (unknown [10.57.10.143])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EB9C3F8C6;
-        Wed,  8 Feb 2023 07:03:09 -0800 (PST)
-Date:   Wed, 8 Feb 2023 15:03:06 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Kazuki <kazukih0205@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: s2idle breaks on machines without cpuidle support
-Message-ID: <20230208150306.ve2pnt3pvlmf5wbu@bogus>
-References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
- <20230206101239.dret3fv65cnzpken@bogus>
- <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
- <20230208103511.w7jzxw6spy6humdn@bogus>
- <20230208112031.sdfuluajjerf4wwp@kazuki-mac>
- <20230208141658.kede5ylqk4zqvrnj@bogus>
- <20230208144327.3ftjxnquwhsdykfc@kazuki-mac>
+        Wed, 8 Feb 2023 10:04:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DD531E2F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:03:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675868623;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qepYHdACOgrn8tjYC+j2h5SwH4vLNyWaHzF3y6ezPbI=;
+        b=NpX14BzZKaJdPyjrZQ6ur7KcFx+I1h+2pibiYr3lH0J+Wi7Tn3cGfncu5EV8Qr9m3kpJ0b
+        iyrSvriHBrJqSfM96+hOgIvR7Dnfh4hLxc5vQfsLBu/Eph4jJ/qAb0CdkTFAGEYTdi5ssj
+        yyV45FK1JPfJHNn2EYI4hSCnZUx9qz4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-454-B2jhMCXXOR6CPl3I80re8g-1; Wed, 08 Feb 2023 10:03:38 -0500
+X-MC-Unique: B2jhMCXXOR6CPl3I80re8g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F19EC299E755;
+        Wed,  8 Feb 2023 15:03:23 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.252])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C519C15BAD;
+        Wed,  8 Feb 2023 15:03:23 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Steven Price <steven.price@arm.com>
+Subject: Re: [PATCH v2 4/6] KVM: arm64: Limit length in
+ kvm_vm_ioctl_mte_copy_tags() to INT_MAX
+In-Reply-To: <20230208140105.655814-5-thuth@redhat.com>
+Organization: Red Hat GmbH
+References: <20230208140105.655814-1-thuth@redhat.com>
+ <20230208140105.655814-5-thuth@redhat.com>
+User-Agent: Notmuch/0.37 (https://notmuchmail.org)
+Date:   Wed, 08 Feb 2023 16:03:22 +0100
+Message-ID: <87pmakmc79.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208144327.3ftjxnquwhsdykfc@kazuki-mac>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 11:43:27PM +0900, Kazuki wrote:
-> On Wed, Feb 08, 2023 at 02:16:58PM +0000, Sudeep Holla wrote:
+On Wed, Feb 08 2023, Thomas Huth <thuth@redhat.com> wrote:
 
-[...]
-
-> > I was about ask you earlier as why can't you implement just system
-> > suspend in PSCI where the last cpu just calls WFI if you are interested
-> > in system sleep state. Or you can implement CPU_SUSPEND with an additional
-> > retention state which enters PSCI implementation just to make sure there is
-> > an active cpuidle driver and the s2idle state machinery works as expected.
+> In case of success, this function returns the amount of handled bytes.
+> However, this does not work for large values: The function is called
+> from kvm_arch_vm_ioctl() (which still returns a long), which in turn
+> is called from kvm_vm_ioctl() in virt/kvm/kvm_main.c. And that function
+> stores the return value in an "int r" variable. So the upper 32-bits
+> of the "long" return value are lost there.
 >
-> The machine I have (Macbook with Apple M1) doesn't have PSCI.
-
-Well, if we are allowing to boot on such a system, then we must allow
-adding a platform specific idle driver. It may be useful once we info
-to add deeper than WFI states.
-
-> I guess we should ensure that systems without a cpuidle driver
-> will not suspend maybe around here then.
+> KVM ioctl functions should only return "int" values, so let's limit
+> the amount of bytes that can be requested here to INT_MAX to avoid
+> the problem with the truncated return value. We can then also change
+> the return type of the function to "int" to make it clearer that it
+> is not possible to return a "long" here.
 >
+> Fixes: f0376edb1ddc ("KVM: arm64: Add ioctl to fetch/store tags in a guest")
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  Documentation/virt/kvm/api.rst    | 3 ++-
+>  arch/arm64/include/asm/kvm_host.h | 4 ++--
+>  arch/arm64/kvm/guest.c            | 8 ++++++--
+>  3 files changed, 10 insertions(+), 5 deletions(-)
 
-Are we ? I thought were making changes to enable it. Or are you saying
-we allow to enter into such a state and render the system unusable, if
-so we need to fix it.
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 
---
-Regards,
-Sudeep
