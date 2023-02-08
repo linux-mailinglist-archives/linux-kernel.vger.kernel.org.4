@@ -2,94 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F1368E993
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E294A68E99A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbjBHIJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 03:09:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S231307AbjBHINE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 03:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjBHIJS (ORCPT
+        with ESMTP id S229674AbjBHINC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 03:09:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7993BD84;
-        Wed,  8 Feb 2023 00:09:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2455AB81C3B;
-        Wed,  8 Feb 2023 08:09:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B9D5C433EF;
-        Wed,  8 Feb 2023 08:09:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675843754;
-        bh=p/cu2EE0PL6kcAI9w+0dhQ76KmczGXbJVrX84SjEBjY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UCKyo3UJB5WGldndIGZuxRlj/sDgCZ+TK6zcCRwZIAuFyjAFOw2PhylYgcjgPIicA
-         JWXNMyQmVRe17RMuKsVGM2HIhmyg4TqT5YjNPFSe/hI01pyyR7gWRYcrkR6cwaaGY4
-         pVvy1q89Wq1DlIYz15ehQfGVy0kYOfB75HtmeWl4MPtG7POBL2tMmdoT+7OBi2c07j
-         i8Ilj+gm8mwAjaDLbmXMT8s27OnE21Im3l1jHIr2tzaiIdKI+z1EaiuXi18VFmlOH8
-         +pQXKSjdAZV8DX0T2rZHa7zeRY9cQUK/ZPZwAsBIpJQdufcVR3YBn0U0uhMA/yA56N
-         mgPsHfH1q6TGw==
-Date:   Wed, 8 Feb 2023 10:09:10 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Seunggyun Lee <sglee97@dankook.ac.kr>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pci/mmap: add pci device EBUSY check
-Message-ID: <Y+NYphb8hmzlVFaV@unreal>
-References: <20230207113949.17943-1-sglee97@dankook.ac.kr>
+        Wed, 8 Feb 2023 03:13:02 -0500
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F85366BA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 00:12:59 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VbBAcXR_1675843974;
+Received: from 30.97.49.7(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VbBAcXR_1675843974)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Feb 2023 16:12:56 +0800
+Message-ID: <d6976454-6921-b94e-4da8-44e613816d5b@linux.alibaba.com>
+Date:   Wed, 8 Feb 2023 16:12:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207113949.17943-1-sglee97@dankook.ac.kr>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v4] erofs: replace erofs_unzipd workqueue with per-cpu
+ threads
+To:     Sandeep Dhavale <dhavale@google.com>
+Cc:     Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Yue Hu <huyue2@coolpad.com>, kernel-team@android.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230106073502.4017276-1-dhavale@google.com>
+ <Y+DP6V9fZG7XPPGy@debian>
+ <CAB=BE-Ttt6mO6x+xNv+VSWnoRgzXd_VyQuYiuz55uR3zqxWMFA@mail.gmail.com>
+ <126ddd77-edae-d942-6fec-fe6bcc3c54ff@linux.alibaba.com>
+ <CAB=BE-QAqEnK8fQGoWE4dBagF=EPHwS7oL-DnLeooA3RUL4TXw@mail.gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <CAB=BE-QAqEnK8fQGoWE4dBagF=EPHwS7oL-DnLeooA3RUL4TXw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 08:39:49PM +0900, Seunggyun Lee wrote:
-> When using a pci device through the vfio-pci driver, other software was
-> also able to access the pci device memory through sysfs.
 
-And why is it wrong?
 
+On 2023/2/8 14:58, Sandeep Dhavale wrote:
+> On Mon, Feb 6, 2023 at 6:55 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+>>
+>>
+>>
+>> On 2023/2/7 03:41, Sandeep Dhavale wrote:
+>>> On Mon, Feb 6, 2023 at 2:01 AM Gao Xiang <xiang@kernel.org> wrote:
+>>>>
+>>>> Hi Sandeep,
+>>>>
+>>>> On Fri, Jan 06, 2023 at 07:35:01AM +0000, Sandeep Dhavale wrote:
+>>>>> Using per-cpu thread pool we can reduce the scheduling latency compared
+>>>>> to workqueue implementation. With this patch scheduling latency and
+>>>>> variation is reduced as per-cpu threads are high priority kthread_workers.
+>>>>>
+>>>>> The results were evaluated on arm64 Android devices running 5.10 kernel.
+>>>>>
+>>>>> The table below shows resulting improvements of total scheduling latency
+>>>>> for the same app launch benchmark runs with 50 iterations. Scheduling
+>>>>> latency is the latency between when the task (workqueue kworker vs
+>>>>> kthread_worker) became eligible to run to when it actually started
+>>>>> running.
+>>>>> +-------------------------+-----------+----------------+---------+
+>>>>> |                         | workqueue | kthread_worker |  diff   |
+>>>>> +-------------------------+-----------+----------------+---------+
+>>>>> | Average (us)            |     15253 |           2914 | -80.89% |
+>>>>> | Median (us)             |     14001 |           2912 | -79.20% |
+>>>>> | Minimum (us)            |      3117 |           1027 | -67.05% |
+>>>>> | Maximum (us)            |     30170 |           3805 | -87.39% |
+>>>>> | Standard deviation (us) |      7166 |            359 |         |
+>>>>> +-------------------------+-----------+----------------+---------+
+>>>>>
+>>>>> Background: Boot times and cold app launch benchmarks are very
+>>>>> important to the android ecosystem as they directly translate to
+>>>>> responsiveness from user point of view. While erofs provides
+>>>>> a lot of important features like space savings, we saw some
+>>>>> performance penalty in cold app launch benchmarks in few scenarios.
+>>>>> Analysis showed that the significant variance was coming from the
+>>>>> scheduling cost while decompression cost was more or less the same.
+>>>>>
+>>>>> Having per-cpu thread pool we can see from the above table that this
+>>>>> variation is reduced by ~80% on average. This problem was discussed
+>>>>> at LPC 2022. Link to LPC 2022 slides and
+>>>>> talk at [1]
+>>>>>
+>>>>> [1] https://lpc.events/event/16/contributions/1338/
+>>>>>
+>>>>> Signed-off-by: Sandeep Dhavale <dhavale@google.com>
+>>>>> ---
+>>>>> V3 -> V4
+>>>>> * Updated commit message with background information
+>>>>> V2 -> V3
+>>>>> * Fix a warning Reported-by: kernel test robot <lkp@intel.com>
+>>>>> V1 -> V2
+>>>>> * Changed name of kthread_workers from z_erofs to erofs_worker
+>>>>> * Added kernel configuration to run kthread_workers at normal or
+>>>>>     high priority
+>>>>> * Added cpu hotplug support
+>>>>> * Added wrapped kthread_workers under worker_pool
+>>>>> * Added one unbound thread in a pool to handle a context where
+>>>>>     we already stopped per-cpu kthread worker
+>>>>> * Updated commit message
+>>>>
+>>>> I've just modified your v4 patch based on erofs -dev branch with
+>>>> my previous suggestion [1], but I haven't tested it.
+>>>>
+>>>> Could you help check if the updated patch looks good to you and
+>>>> test it on your side?  If there are unexpected behaviors, please
+>>>> help update as well, thanks!
+>>> Thanks Xiang, I was working on the same. I see that you have cleaned it up.
+>>> I will test it and report/fix any problems.
+>>>
+>>> Thanks,
+>>> Sandeep.
+>>
+>> Thanks! Look forward to your test. BTW, we have < 2 weeks for 6.3, so I'd
+>> like to fix it this week so that we could catch 6.3 merge window.
+>>
+>>
+>> I've fixed some cpu hotplug errors as below and added to a branch for 0day CI
+>> testing.
+>>
+> Hi Xiang,
+> With this version of the patch I have tested
+> - Multiple device reboot test
+> - Cold App launch tests
+> - Cold App launch tests with cpu offline/online
 > 
-> To prevent this, when mmap is performed through sysfs, a process of
-> checking whether the device is in use is added.
-> 
-> Signed-off-by: Seunggyun Lee <sglee97@dankook.ac.kr>
-> ---
->  drivers/pci/mmap.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/pci/mmap.c b/drivers/pci/mmap.c
-> index 4504039056d1..4c9df2e23e03 100644
-> --- a/drivers/pci/mmap.c
-> +++ b/drivers/pci/mmap.c
-> @@ -25,6 +25,8 @@ int pci_mmap_resource_range(struct pci_dev *pdev, int bar,
->  {
->  	unsigned long size;
->  	int ret;
-> +	if (pdev->driver)
-> +		return -1;
+> All tests ran successfully and no issue was observed.
 
-I doubt that it is correct/needed as every call to
-pci_mmap_resource_range() is guarded by iomem_is_exclusive() check.
+Okay, thanks! I will resend & submit this version for -next now
+and test on my side if no other concerns.
 
-Also I'm not sure that pdev->driver can be accessed without any lock in
-this flow.
-
-Thanks
-
->  
->  	size = ((pci_resource_len(pdev, bar) - 1) >> PAGE_SHIFT) + 1;
->  	if (vma->vm_pgoff + vma_pages(vma) > size)
-> -- 
-> 2.25.1
-> 
+Thanks,
+Gao XIang
