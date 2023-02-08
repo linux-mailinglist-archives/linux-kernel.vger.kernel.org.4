@@ -2,84 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C46E68F88C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFB468F888
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbjBHUBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:01:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        id S231438AbjBHUBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:01:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjBHUBi (ORCPT
+        with ESMTP id S231685AbjBHUBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:01:38 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0757E30E9D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:01:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jZpjgI7oR1GmkqaZBmQz0lN2Ldys8lYvjTRh92ABKU0=; b=u+esxRDShQXZp58IG3NZFhEt6Y
-        GVCLEz0HOB/QRSbgbbJPKdKhboEKqtS2ILrXUX4mr/F5gttfbRBCCejui1Y67aMktsUSVOMtOOrya
-        J6/LaCwOkKowpJQ8TBCCHC9qBwtoZlbW2TNq3iKC/G8nFNbSTrBVWE5s7EwV7AaSOIg5A6O/BWHsl
-        JHDrod4TCg229iuZVycCn7CD2rdwt0OQEnBS1VWDcj98NDJBOLid8aelJdz2ytkLZnVh2bZMNhleW
-        XtcefAsHBPE172P/Bwd4wYnpdXwGCOLvSwHNtTsCfMBlxycdVcv9ghmzanrYG1KQBcyke5bDB/69k
-        sx5anZtg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPqd6-001VZo-Pk; Wed, 08 Feb 2023 20:01:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 65DDA3001CB;
-        Wed,  8 Feb 2023 21:01:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 522C920F194A5; Wed,  8 Feb 2023 21:01:19 +0100 (CET)
-Date:   Wed, 8 Feb 2023 21:01:19 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v2] x86/kprobes: Fix 1 byte conditional jump target
-Message-ID: <Y+P/j0FiocmavHTL@hirez.programming.kicks-ass.net>
-References: <20230208071708.4048-1-namit@vmware.com>
+        Wed, 8 Feb 2023 15:01:07 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2502CC76
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:01:03 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aNNAD7QCripbzdoP247wYb+zvS2aebKkhgPTw/E/d2JvSwUAXPQU3Poem3W1R85cGiaI6uzN3z9B2S0GqkiP4Q+9pT6Eb9ZWgb69sv4nIiYHC7KBdlTOLCm4uTRfxFlnmHgRJ1/svX02wEgxaKq8xtdwS+KOl8VFAx3roh4SZjt2ISY7Cdqg9ZIa3alDgjJ5pfRt8ywaiFgMVz+9boxpPyCY9WWRb87QsL5zVMWUyAl01wg4QWtDsBkbHH5ubCKnNZj4gOIOP9Nb8uLEFt1l6nJH8N3LZdW3H500eQVogmZaYosKss8QvKd9mC6bvGlMFznxwTGlT0Ve5uPnTe7uwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vtvdjedlPMkCGqZ7pVJflhxoojAupnrLjVubVvcvJCg=;
+ b=imsWXfWSW/tcwHxU8sEO43AeeCQ4ZIuquHZmeumOn7TB3Qoc31XxVEHHfw+wd6/XQWLbSpOOy9HAx/jFy2yOOOMV3EJH7Hm3ejFaXxSi/rPQPxcYTtlBG5F2cXkKjkSyyMd2bOXvinhJPwUyWLY6e1qxAWWnwa7Jdkw2lh7iOtkKt+W1mVBjf3+92ABXBzhysu3ddnww9YXm4VAVappbDhrFkANqBpZldueMwrrV2XM7W0xmBfhrJktHEkvuNWCr1Y9CaWdzgAmHkfi3ZBLbtPBaqMWmVkbNJg0hvR+wuC1OY/QXoZZ/oPZbU6JR84YmYhMpipsqw8u0+tD53ihezg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vtvdjedlPMkCGqZ7pVJflhxoojAupnrLjVubVvcvJCg=;
+ b=jWXgt3WBi8Ki6P5xL6R9HjI5RjdEG0tq74bLlZDvbe/uQ6tF9gP9foPk6XI/KgVAC+xYKQTxPUsgxOUiHu4qX3l+VGLdEvZpKijQUd1jbDXzUjCFbuj1eQhqZYWPe5OWDHhlmfz9+O5TDZNe7iut+HyYP3GKtd1IMZhT0FCQXOs=
+Received: from MN2PR19CA0045.namprd19.prod.outlook.com (2603:10b6:208:19b::22)
+ by IA0PR12MB8253.namprd12.prod.outlook.com (2603:10b6:208:402::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Wed, 8 Feb
+ 2023 20:01:00 +0000
+Received: from BL02EPF00010206.namprd05.prod.outlook.com
+ (2603:10b6:208:19b:cafe::c2) by MN2PR19CA0045.outlook.office365.com
+ (2603:10b6:208:19b::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36 via Frontend
+ Transport; Wed, 8 Feb 2023 20:01:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF00010206.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6086.16 via Frontend Transport; Wed, 8 Feb 2023 20:01:00 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 8 Feb
+ 2023 14:00:58 -0600
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alan Liu <HaoPing.Liu@amd.com>, Alex Hung <alex.hung@amd.com>,
+        Deepak R Varma <drv@mailo.com>,
+        Melissa Wen <mwen@igalia.com>, Tony Cheng <Tony.Cheng@amd.com>,
+        Mario Kleiner <mario.kleiner.de@gmail.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amd/display: don't call dc_interrupt_set() for disabled crtcs
+Date:   Wed, 8 Feb 2023 15:01:47 -0500
+Message-ID: <20230208200150.155684-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208071708.4048-1-namit@vmware.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00010206:EE_|IA0PR12MB8253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2bc9d203-dce0-4a2a-3e0c-08db0a0f331c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iLPsA+YtaZSl+pbkYc8UHU2aeYyXTkerXaiXXW9Sb0jbHF+FRlET3ogk1z2fpLN/PEJn+zGm6ulZv4phV6MpjTgdEQAJLC1sywL9Qfeyz0p6Yubz0o3Km2PqXMl9fZz1HKoa09wu6K/gHeA/7ZNFvtudN2yKoVqbP86PAKnvzsNzZzZPFdSLQ26aqsEZbfSEAEe3qnkuXdxsZ4vuaaygyhXzYo2XQ9lLaoaQRRQpMOs7r/PU0ZR9WhfgaplJYgfcYQZKP8zT7OcL6dP8YcQNSMpiGErH7AJhz7jHhwKnvvbCELCQGX3TjHQ/nYGksNRe6ZUFCbk40OE+Xy7JAz5uTQjuCu/KiVK4+FjTkyyyly8b7ey5gg23nPEYas1sDP8Wl7fL5maL8PcMAxldFJqFyoyT5PkeFw5cjp2muTmBHa7JwZhfTiKDtOpBw+cXjsTfCWHtCW1tvN/CRgcvIlG+iw/cJTa/6j/awme9/X0oYm70WiduSAaZg9r4CXClSIE64OtCLI3qgIpv30gVuCnz+Ix5738k0LON9woaWS8xp2cMqjBZNf4OSfIyPg7yYZiM+q+zdZqsCC6Iy1rvUytDmM1YxOnRpN1oXrZAWTeRqEMYTr97bwkI+Y2iU3sv+oNkF/OjlJ48mG5BjxLYGXIlsMJjafU59IrLlTHq3ijiDPAiEYzyskCumoRR9SJs/YFoANT1MXeCJBTf059kGNvDS2Ut5ulYxs51wvEVm/OZCuYt5UIzqQ/zvihBQzt2jLFZL2MMe99xdJRHPZi97fFdrRX8L8MUrD2Z/VBK26FQqN0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199018)(36840700001)(40470700004)(46966006)(82740400003)(41300700001)(356005)(81166007)(2906002)(36860700001)(47076005)(82310400005)(6916009)(70586007)(4326008)(8676002)(70206006)(83380400001)(8936002)(426003)(316002)(26005)(5660300002)(40480700001)(186003)(54906003)(336012)(2616005)(86362001)(1076003)(44832011)(40460700003)(16526019)(478600001)(36756003)(6666004)(17423001)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 20:01:00.1020
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bc9d203-dce0-4a2a-3e0c-08db0a0f331c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF00010206.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8253
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 07:17:08AM +0000, Nadav Amit wrote:
-> From: Nadav Amit <namit@vmware.com>
-> 
-> Commit 3bc753c06dd0 ("kbuild: treat char as always unsigned") broke
-> kprobes.  Setting a probe-point on 1 byte conditional jump can cause the
-> kernel to crash, as the branch target is not sign-extended and instead
-> zero-extended.
-> 
-> In fact, there is no need for any casting of immediate.value since sign
-> extension is already done during its decoding in insn_get_immediate().
-> 
-> Fix by removing the casting of the 1 byte conditional jump target.
-> Future patches can also remove the casting (and sign extension) in other
-> cases in which immediate.value is being used.
-> 
-> Fixes: 3bc753c06dd0 ("kbuild: treat char as always unsigned")
-> Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Suggested-by: Dave Hansen <dave.hansen@intel.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Nadav Amit <namit@vmware.com>
+As made mention of in commit 4ea7fc09539b ("drm/amd/display: Do not
+program interrupt status on disabled crtc"), we shouldn't program
+disabled crtcs. So, filter out disabled crtcs in dm_set_vupdate_irq()
+and dm_set_vblank().
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Fixes: 589d2739332d ("drm/amd/display: Use crtc enable/disable_vblank hooks")
+Fixes: d2574c33bb71 ("drm/amd/display: In VRR mode, do DRM core vblank handling at end of vblank. (v2)")
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+index 1e39d0939700..dc4f37240beb 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
+@@ -77,6 +77,9 @@ int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enable)
+ 	struct amdgpu_device *adev = drm_to_adev(crtc->dev);
+ 	int rc;
+ 
++	if (acrtc->otg_inst == -1)
++		return 0;
++
+ 	irq_source = IRQ_TYPE_VUPDATE + acrtc->otg_inst;
+ 
+ 	rc = dc_interrupt_set(adev->dm.dc, irq_source, enable) ? 0 : -EBUSY;
+@@ -151,6 +154,9 @@ static inline int dm_set_vblank(struct drm_crtc *crtc, bool enable)
+ 	struct vblank_control_work *work;
+ 	int rc = 0;
+ 
++	if (acrtc->otg_inst == -1)
++		goto skip;
++
+ 	if (enable) {
+ 		/* vblank irq on -> Only need vupdate irq in vrr mode */
+ 		if (amdgpu_dm_vrr_active(acrtc_state))
+@@ -168,6 +174,7 @@ static inline int dm_set_vblank(struct drm_crtc *crtc, bool enable)
+ 	if (!dc_interrupt_set(adev->dm.dc, irq_source, enable))
+ 		return -EBUSY;
+ 
++skip:
+ 	if (amdgpu_in_reset(adev))
+ 		return 0;
+ 
+-- 
+2.39.1
+
