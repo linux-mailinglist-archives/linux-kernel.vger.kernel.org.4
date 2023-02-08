@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B44F68F62F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68EC68F634
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjBHRzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S231387AbjBHRzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjBHRzO (ORCPT
+        with ESMTP id S230103AbjBHRzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:55:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFE94FC33
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:55:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24CF861777
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:55:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A28CC433D2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:55:11 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gF45GKbE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1675878908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NX9PPmf+UtKBiMc3Pr/UMujDXNlvFeRU34FW2V7wq6I=;
-        b=gF45GKbEv6ZbWqxPeiHLMoSQ0koS1/PGV52YmqX2tzqerzYlpj5he+/YL3r+yBFN6c2lC4
-        t4dtav52gRboJWQGSXsv/ZNWL5spo1XYeYTKPjAfgv5HtEHaUgygrgWOrZaISlB6RWLPmY
-        wju/kmo2kKYs93vCZya150FmU+wXKMI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 64bfa816 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Wed, 8 Feb 2023 17:55:08 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id q9so2022248ybk.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:55:08 -0800 (PST)
-X-Gm-Message-State: AO0yUKWW0zqFQ8dmDXmnnyNREMNVpRy3zswgrVNbmPiz5vsGuARGDpBB
-        icXGcVGOnm8TsomXXzOKF8me9XFVeIDHQFR1jZc=
-X-Google-Smtp-Source: AK7set8WhMTDtwuneLf6Ea9rnPzajeUh0PcK6xC4f6mhoGkI2eEn/DGqu0qN6G8FPBWZUUh6dpohxbiwV1LwZ0pcNBg=
-X-Received: by 2002:a5b:6c5:0:b0:88f:946:bd98 with SMTP id r5-20020a5b06c5000000b0088f0946bd98mr1067931ybq.24.1675878906349;
- Wed, 08 Feb 2023 09:55:06 -0800 (PST)
+        Wed, 8 Feb 2023 12:55:51 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5831759E2;
+        Wed,  8 Feb 2023 09:55:50 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id p24-20020a056830131800b0068d4b30536aso5424173otq.9;
+        Wed, 08 Feb 2023 09:55:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38PTeztQrL9qtAxD4sqn35R+raT1OYxHt79zEk4qHls=;
+        b=aIdstLHyJNveusptl7Pc6MxMQKCVoL0h+ochJ+fpBM/uyfSaS0F6n0EDvBvf9q+0CI
+         3nKwtXNf6Llb1ZexkbWVdOEP71IhXTww09PTzXM3gwtP88UdB7q+lUHSrQpZbrXfHxue
+         vroyErXP66c86uh9DT/TxQFTZ48pC9BX87/plAL856ZJw6NsNwi+2kAWnhnOB1DU4M4m
+         imfPDsMECUs+pM+2T5hwoTwaqvOtPygRNW3svT0Lkth3X3JaL7hpsmgNSZn3hpXDSlpE
+         AM4V3pogxq64JK/LklaNrnCZuL31wdfrhfpL+c6YexUxP3OGLhsQ0uqsvjrQL3cV13fU
+         JvpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=38PTeztQrL9qtAxD4sqn35R+raT1OYxHt79zEk4qHls=;
+        b=6hhGodRoGdcjFFlhyUQklNE/+l+1HbWkZNNFld2rWAkMuuAab29IxPw/vVFdbUpDt0
+         LayO9Vhozc88ZxO6DwHIuqQ1ELyDWDUITpZQki5aVvg3SPNNpcEcUe80Pc3xP3PT7+an
+         VnmtdSUpAvPuRuzO+YxKh+nZ+ycJi9x5IXUyORV5a1Twf7TjhLVM2cMYnZ6fkCU7nJOw
+         eJCCYpDmyoQJuy7FyYJZBGfz3jRuTG7c5OcmIC1Q3xsJlkf6xbqhkYm3Nru4ezwNOcds
+         b3BWDls/H5XKhvGLcgaftigHLz3tAGyxQPbd4XFFH12GpSax9BoGsvS24C2N/yVZ3qlk
+         xyew==
+X-Gm-Message-State: AO0yUKUveFFMH+EGT+DPYnPeA9fF9uAvk4kCLg6UwS4dO8m16snwuRiM
+        0qOqiGxyJkj9cO/EuiQpn8eIlEhavc8=
+X-Google-Smtp-Source: AK7set97gGges1jnkKiBdN4ewY/AP5dNBC9M1zVXjJOW9Vqf5a1e0Rwoyj2jB5ganwS4hmZ5BrH5Gg==
+X-Received: by 2002:a05:6830:2713:b0:68b:e01b:2508 with SMTP id j19-20020a056830271300b0068be01b2508mr5633386otu.15.1675878949586;
+        Wed, 08 Feb 2023 09:55:49 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c15-20020a9d75cf000000b0068bbaf7a1b0sm8347477otl.34.2023.02.08.09.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 09:55:48 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 8 Feb 2023 09:55:47 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     George Cherian <gcherian@marvell.com>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "zhangshaokun@hisilicon.com" <zhangshaokun@hisilicon.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] watchdog: sbsa_wdog: Make sure the timeout
+ programming is within the limits
+Message-ID: <20230208175547.GA3065515@roeck-us.net>
+References: <20230208083736.1237256-1-george.cherian@marvell.com>
+ <2f2dcb7c-e5bc-7e97-71e0-eebdc72fbd03@roeck-us.net>
+ <BYAPR18MB267995FB55301778894B3334C5D89@BYAPR18MB2679.namprd18.prod.outlook.com>
 MIME-Version: 1.0
-References: <Y69fUstLKNv/RLd7@zx2c4.com> <20221230220725.618763-1-Jason@zx2c4.com>
- <Y+Pf0q6LmQKN+FHo@dev-arch.thelio-3990X>
-In-Reply-To: <Y+Pf0q6LmQKN+FHo@dev-arch.thelio-3990X>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 8 Feb 2023 14:54:41 -0300
-X-Gmail-Original-Message-ID: <CAHmME9pQ6yvRQzzT_k0vmDFi4QioCfgryCebhvfNCWNP_tkddQ@mail.gmail.com>
-Message-ID: <CAHmME9pQ6yvRQzzT_k0vmDFi4QioCfgryCebhvfNCWNP_tkddQ@mail.gmail.com>
-Subject: Re: [PATCH qemu v3] x86: don't let decompressed kernel image clobber setup_data
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        ardb@kernel.org, kraxel@redhat.com, hpa@zytor.com, bp@alien8.de,
-        philmd@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR18MB267995FB55301778894B3334C5D89@BYAPR18MB2679.namprd18.prod.outlook.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,123 +79,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan (and MST),
+On Wed, Feb 08, 2023 at 05:20:34PM +0000, George Cherian wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > Sent: Wednesday, February 8, 2023 8:41 PM
+> > To: George Cherian <gcherian@marvell.com>; wim@linux-watchdog.org;
+> > zhangshaokun@hisilicon.com
+> > Cc: linux-watchdog@vger.kernel.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH v2] watchdog: sbsa_wdog: Make sure the timeout
+> > programming is within the limits
+> > 
+> > 
+> > ----------------------------------------------------------------------
+> > On 2/8/23 00:37, George Cherian wrote:
+> > > Make sure to honour the max_hw_heartbeat_ms while programming the
+> > > timeout value to WOR. Clamp the timeout passed to
+> > > sbsa_gwdt_set_timeout() to make sure the programmed value is within
+> > the permissible range.
+> > >
+> > > Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+> > >
+> > > Signed-off-by: George Cherian <george.cherian@marvell.com>
+> > > ---
+> > >   drivers/watchdog/sbsa_gwdt.c | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/watchdog/sbsa_gwdt.c
+> > > b/drivers/watchdog/sbsa_gwdt.c index 9791c74aebd4..ee1039a652f1
+> > 100644
+> > > --- a/drivers/watchdog/sbsa_gwdt.c
+> > > +++ b/drivers/watchdog/sbsa_gwdt.c
+> > > @@ -149,6 +149,7 @@ static int sbsa_gwdt_set_timeout(struct
+> > watchdog_device *wdd,
+> > >   {
+> > >   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+> > >
+> > > +	timeout = clamp_t(unsigned int, timeout, 1, wdd-
+> > >max_hw_heartbeat_ms
+> > > +/ 1000);
+> > >   	wdd->timeout = timeout;
+> > >
+> > 
+> > Wrong order. wdd->timeout should still contain the requested timeout.
+> But then the requested timeout is not being set in HW.
+> Isn't that a disconnect?
 
-On Wed, Feb 8, 2023 at 2:45 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Hi Jason,
->
-> On Fri, Dec 30, 2022 at 11:07:25PM +0100, Jason A. Donenfeld wrote:
-> > The setup_data links are appended to the compressed kernel image. Since
-> > the kernel image is typically loaded at 0x100000, setup_data lives at
-> > `0x100000 + compressed_size`, which does not get relocated during the
-> > kernel's boot process.
-> >
-> > The kernel typically decompresses the image starting at address
-> > 0x1000000 (note: there's one more zero there than the compressed image
-> > above). This usually is fine for most kernels.
-> >
-> > However, if the compressed image is actually quite large, then
-> > setup_data will live at a `0x100000 + compressed_size` that extends int=
-o
-> > the decompressed zone at 0x1000000. In other words, if compressed_size
-> > is larger than `0x1000000 - 0x100000`, then the decompression step will
-> > clobber setup_data, resulting in crashes.
-> >
-> > Visually, what happens now is that QEMU appends setup_data to the kerne=
-l
-> > image:
-> >
-> >           kernel image            setup_data
-> >    |--------------------------||----------------|
-> > 0x100000                  0x100000+l1     0x100000+l1+l2
-> >
-> > The problem is that this decompresses to 0x1000000 (one more zero). So
-> > if l1 is > (0x1000000-0x100000), then this winds up looking like:
-> >
-> >           kernel image            setup_data
-> >    |--------------------------||----------------|
-> > 0x100000                  0x100000+l1     0x100000+l1+l2
-> >
-> >                                  d e c o m p r e s s e d   k e r n e l
-> >                      |-------------------------------------------------=
-------------|
-> >                 0x1000000                                              =
-       0x1000000+l3
-> >
-> > The decompressed kernel seemingly overwriting the compressed kernel
-> > image isn't a problem, because that gets relocated to a higher address
-> > early on in the boot process, at the end of startup_64. setup_data,
-> > however, stays in the same place, since those links are self referentia=
-l
-> > and nothing fixes them up.  So the decompressed kernel clobbers it.
-> >
-> > Fix this by appending setup_data to the cmdline blob rather than the
-> > kernel image blob, which remains at a lower address that won't get
-> > clobbered.
-> >
-> > This could have been done by overwriting the initrd blob instead, but
-> > that poses big difficulties, such as no longer being able to use memory
-> > mapped files for initrd, hurting performance, and, more importantly, th=
-e
-> > initrd address calculation is hard coded in qboot, and it always grows
-> > down rather than up, which means lots of brittle semantics would have t=
-o
-> > be changed around, incurring more complexity. In contrast, using cmdlin=
-e
-> > is simple and doesn't interfere with anything.
-> >
-> > The microvm machine has a gross hack where it fiddles with fw_cfg data
-> > after the fact. So this hack is updated to account for this appending,
-> > by reserving some bytes.
-> >
-> > Cc: x86@kernel.org
-> > Cc: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-> > Cc: H. Peter Anvin <hpa@zytor.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Eric Biggers <ebiggers@kernel.org>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->
-> I apologize if this has already been reported/fixed already (I did a
-> brief search on lore.kernel.org) or if my terminology is not as precise
-> as it could be, I am a little out of my element here :)
->
-> After this change as commit eac7a7791b ("x86: don't let decompressed
-> kernel image clobber setup_data") in QEMU master, I am no longer able to
-> boot a kernel directly through OVMF using '-append' + '-initrd' +
-> '-kernel'. Instead, systemd-boot tries to start the distribution's
-> kernel, which fails with:
->
->   Error registering initrd: Already started
->
-> This can be reproduced with just a defconfig Linux kernel (I used
-> 6.2-rc7), the simple buildroot images that ClangBuiltLinux uses for
-> boot testing [1], and OVMF. Prior to this change, the kernel would start
-> up but after, I am dumped into the UEFI shell (as there is no
-> bootloader).
->
-> The QEMU command I used was:
->
-> $ qemu-system-x86_64 \
->     -kernel arch/x86_64/boot/bzImage \
->     -append "console=3DttyS0 earlycon=3Duart8250,io,0x3f8" \
->     -drive if=3Dpflash,format=3Draw,file=3D/usr/share/edk2/x64/OVMF_CODE.=
-fd,readonly=3Don
->     -drive if=3Dpflash,format=3Draw,file=3D../boot-utils/images/x86_64/OV=
-MF_VARS.fd \
+No. The driver is supposed to set a timeout no larger than
+max_hw_heartbeat_ms. The watchdog core then takes care of
+differences between ->timeout (as seen by the user) and
+max_hw_heartbeat_ms and pings the watchdog as needed.
 
-Oh no... Without jumping into it, at first glance, I have absolutely
-no idea. I suppose I could start debugging it and probably come up
-with a solution, but...
-
-@mst - I'm beginning to think that this whole setup_data route is
-cursed. This is accumulating hacks within hacks within hacks. What
-would you think if I just send a patch *removing* all use of
-setup_data (the rng seed and the dtb thing), and then we can gradually
-add that back with an actual overarching design. For example, it'd
-probably make sense to have a separate fwcfg file for setup_data
-rather than trying to mangle and existing one, etc. This way, we
-unbreak the tree, and let the new approach be reviewed more
-reasonably.
-
-Jason
+Guenter
