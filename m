@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0BB68F21C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8C268F236
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbjBHPg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:36:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S230503AbjBHPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjBHPgY (ORCPT
+        with ESMTP id S230196AbjBHPkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:36:24 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A295343910
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:36:21 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1782120wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:36:21 -0800 (PST)
+        Wed, 8 Feb 2023 10:40:10 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4294B1AE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:39:58 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id f23-20020a05600c491700b003dff4480a17so2586543wmp.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FKePDO+31IJoF0FsJfvZs9DXqYakl2KGMty92CUWxZs=;
-        b=lDp/yheLhCJ14mwi5JBbSR5uvR8nLzGG2T2sjS6t2m0ytjQq9ZGUFLYlagTEssKD6T
-         MGqhy+s3OC3RZUi8kOaE+kVadJ4FwdA58rbaDYPOEZor3ALf/C5ZzArNJ9mBtorSCuWL
-         QYL+GvvCNqQXt4IVlpy7027J045UU/qqB8tyKYG1RU5Kr533K/dWShfQzdV89wWEUll8
-         oGb0Cysx+ENxAvIJPI7ByaLXC3JFA8K6I9Pu0dLT5CNJrgW8hc1oU5XNnPxnhf+GGT9O
-         OLWtJFCAWlzLVkfMltuQq3V8rD5PePxe2RG7hBwCXbIf90WRJzdIoqbisb4hKzjP8iH1
-         uEkA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oGWuGjSyAolvIuh2gpF30/sfRfWcmW0ukeqiTc1FZg4=;
+        b=oJLgmWwOA/fWnsZRLlXi0D7IB41vvMVwDk7qIp/hPO/I0Cu28Q2i4d0DPXkgCMMGW7
+         SdzZx2e3lqC+DVRz/VlUF+Pk6ZB+kB9aSgjpLPKWsIw6CQBDEbkGyHNWz4UyfDWYca53
+         K34F4fo3Rdk5I9CATRq9b+kuSOPothxpM0z/dhRzc7xKpmGW2aUP7qLS5v26HcIzsXml
+         uRi3XbYZNSXIYEpwwPGuh8OTovAuQ7No2yybmDgLJaO+R3upLfKBHWlDm2zvJPPCTQlz
+         8uTHL68LY/yG++GRdkvszu7ZgdscE3xE0++V0ywwduDPIPSfpmd/Xpn8oL10Dt/+8xS3
+         XurQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKePDO+31IJoF0FsJfvZs9DXqYakl2KGMty92CUWxZs=;
-        b=dg09lEKUH5H9Uyg0MliMU/epNTR15WCvsc5TqvYL2UqaWqYiDv2XdtHahF3ICl3lrq
-         4y2/5VQEnYG02hu0HerjZC67FeHyTvZRuT+Su3XvFDcEOlPnv83yEf1gxTaF8xtE/RAy
-         46CnBTQy0Z0PazIKraANWkiGul4r53BoVyDNCD7TRcn1VMhWzPSTnBEYtzrzJX2VLatD
-         oo+KabtX1Lwhu5L6fDRdHbkXS3yDzMu2frJSPo9aHmJHU3a0ew1oVcCKYauUug1Bme9h
-         T6PpXuzEpEtpBqJrbFwNovkrM9BRW9t9OqHTJUyTrh8SVWIIzik78ascOCgL4pAAFd9V
-         zQng==
-X-Gm-Message-State: AO0yUKXse47fNtBwpTZGFUVB0w5fR+pGUyK5/nfwS4v2xwcQjwpAG7sX
-        HoV15lnNwO/NhHu0jXvUwdbnBg==
-X-Google-Smtp-Source: AK7set/jWb3OUhPaWjMNeoBplH44S4cuJjQOgCubl22jNIytV6Ym7ExQyw2dq1UJvSvr5xZQTqqhTw==
-X-Received: by 2002:a05:600c:4d09:b0:3df:e549:bd27 with SMTP id u9-20020a05600c4d0900b003dfe549bd27mr7766617wmp.6.1675870580177;
-        Wed, 08 Feb 2023 07:36:20 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id l16-20020a05600c2cd000b003daffc2ecdesm2459945wmc.13.2023.02.08.07.36.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 07:36:19 -0800 (PST)
-Message-ID: <2b45b511-33d5-c6b0-ad4d-78e8c15392d0@linaro.org>
-Date:   Wed, 8 Feb 2023 16:36:17 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oGWuGjSyAolvIuh2gpF30/sfRfWcmW0ukeqiTc1FZg4=;
+        b=Az/Vz3mBfDvsnLAIhJN3Be+ha3MuPmMm6isn6NSveugBC9NeEEytJ/yClKCuiT9dNz
+         iWZBN0TYPTeSl+v07aTED6aGUYBbR8xFz3j4YoEDHqX1Xv/ol4v3gVlBUOr9EHzNmfxz
+         lrAqnhZV2ypyGGjBq2FGXqgJAzoLyu1gjxsG0B8aGII6RYj3PfJ48MRBiyrXYdGSM8yo
+         zi1NLVBuZ5ustpMLu3/dfyV7196KNZq/TgCs/CxwkgdITbfSTYP7Nt6S2UdrjDa+BkhV
+         Qib/DWBUQl5IX3CbOUvcErOlwkQ6iXAIrzbX+B/RH4VYfgmUsb5hRrQNJWDZf48hE0qW
+         XoKg==
+X-Gm-Message-State: AO0yUKUEJ/lIvRyUgXNdyp7Yt4hJ/jC7ZJrGMLIQnJmW2OoDMweyMf53
+        8m0CW5D0lJnwVnE4Lw4aRUSQirfMDjM=
+X-Google-Smtp-Source: AK7set/9TBqIZGKiBgGkbYehMHhv5R4xqumCMXaSzOW6dO7LsQm45M+8qsR9emWP/44RWI8GFW0KSA==
+X-Received: by 2002:a05:600c:1613:b0:3df:b5ae:5289 with SMTP id m19-20020a05600c161300b003dfb5ae5289mr6782149wmn.8.1675870796500;
+        Wed, 08 Feb 2023 07:39:56 -0800 (PST)
+Received: from work-hp.. ([91.123.148.245])
+        by smtp.gmail.com with ESMTPSA id d8-20020adfe2c8000000b002bfe08c566fsm13958034wrj.106.2023.02.08.07.39.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 07:39:55 -0800 (PST)
+From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH] xen/grant-dma-iommu: Implement a dummy probe_device() callback
+Date:   Wed,  8 Feb 2023 17:36:49 +0200
+Message-Id: <20230208153649.3604857-1-olekstysh@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com, dphadke@linux.microsoft.com,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
- <202302081621.odizDzHG-lkp@intel.com>
- <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
- <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 15:39, Nathan Chancellor wrote:
-> On Wed, Feb 08, 2023 at 11:25:57AM +0100, Krzysztof Kozlowski wrote:
->> On 08/02/2023 09:22, kernel test robot wrote:
->>> Hi Saurabh,
->>>
->>> Thank you for the patch! Perhaps something to improve:
->>>
->>> [auto build test WARNING on next-20230207]
->>> [cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
->>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>> And when submitting patch, we suggest to use '--base' as documented in
->>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>
->>
->> All of your recent patches have build errors. Can you at least build
->> test them before sending? It's a unnecessary noise in our mailboxes to
->> get non-buildable patches, just to trigger compilation which you can
->> easily do by your own. GCC is a free software...
-> 
-> For what it's worth, GCC does not have a warning like this, it just
-> accepts the incorrect location of the attribute, which has gotten others
-> in trouble before:
-> 
-> https://lore.kernel.org/CAHk-=wgf+kHeSZbpkZumWcTXUD7ordqTMvPRNL6aQVG1DSBDnQ@mail.gmail.com/
-> 
-> So the patch probably did build clean with GCC but that is one of the
-> reasons that there is no longer a compiler monopoly for the kernel ;)
+From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-OK then the patchset is reasonable/built enough.
+Update stub IOMMU driver (which main purpose is to reuse generic
+IOMMU device-tree bindings by Xen grant DMA-mapping layer on Arm)
+according to the recent changes done in the following
+commit 57365a04c921 ("iommu: Move bus setup to IOMMU device registration").
 
-Best regards,
-Krzysztof
+With probe_device() callback being called during IOMMU device registration,
+the uninitialized callback just leads to the "kernel NULL pointer
+dereference" issue during boot. Fix that by adding a dummy callback.
+
+Looks like the release_device() callback is not mandatory to be
+implemented as IOMMU framework makes sure that callback is initialized
+before dereferencing.
+
+Reported-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+---
+ drivers/xen/grant-dma-iommu.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/xen/grant-dma-iommu.c b/drivers/xen/grant-dma-iommu.c
+index 16b8bc0c0b33..6a9fe02c6bfc 100644
+--- a/drivers/xen/grant-dma-iommu.c
++++ b/drivers/xen/grant-dma-iommu.c
+@@ -16,8 +16,15 @@ struct grant_dma_iommu_device {
+ 	struct iommu_device iommu;
+ };
+ 
+-/* Nothing is really needed here */
+-static const struct iommu_ops grant_dma_iommu_ops;
++static struct iommu_device *grant_dma_iommu_probe_device(struct device *dev)
++{
++	return ERR_PTR(-ENODEV);
++}
++
++/* Nothing is really needed here except a dummy probe_device callback */
++static const struct iommu_ops grant_dma_iommu_ops = {
++	.probe_device = grant_dma_iommu_probe_device,
++};
+ 
+ static const struct of_device_id grant_dma_iommu_of_match[] = {
+ 	{ .compatible = "xen,grant-dma" },
+-- 
+2.34.1
 
