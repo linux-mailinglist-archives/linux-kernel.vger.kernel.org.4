@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 498D868F69E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B98068F6A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjBHSKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:10:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
+        id S231143AbjBHSLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjBHSJv (ORCPT
+        with ESMTP id S229718AbjBHSLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:09:51 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC048FF05
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:09:49 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id y7so7268697iob.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:09:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcOk9A3uTdyHp1L6rc14oZDeRDwX27bnymxLOXmwfSY=;
-        b=heYrv9H5hssWCGaJvgEmDDln0GaFtcLuterSOqkQFZCBjpBeXEQy3YIfyhvqi949+l
-         /jDbqwZeEAyoDXSXyeesTBP9R+abUss0E+KHd4q+BNeSv2dGosLNE+h2C1LSwb1eMK0E
-         sjJ9WBwbtm06KhKSHFoSFcT6EN2JzDBSacYew=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wcOk9A3uTdyHp1L6rc14oZDeRDwX27bnymxLOXmwfSY=;
-        b=RPjIAuaMKIfLM7z98UhMH+zQ9jdVCHcG9xW6HTh2iKr/4EvchrLfwAa/a43SQoBKiH
-         ZFVsojJBnipgMyBn1SmjL4Q0oJUQJWKAEF+2H2ac4i9JmU/OXa+Ya7IwpuOhtL44Yok+
-         n5peVoVCIV+FPEe2HiUr3MhV9+ymJ5q30H8s1tXNJ7QW1+xGFvM5Xos8LUJQ59nnhOuT
-         ySH2bbYxMT4AAAgWsyE21m2JH4Or1RIqJv3mDIWJ8ktmaddUXi7w7ZZKZOQXHza7uNwk
-         gc0cDOJZnnlRLNNC8Wckz2yAdRIJkjJdwwAmvGPnnwFn4SU3oN2HASxrcYtblz9x+h5Z
-         tZbw==
-X-Gm-Message-State: AO0yUKVDVVqqlhF36LimzInH30a1HUGJF23oyDFXBKoXmaiK0t7776HV
-        HUafBhXrpXCyG8H8l7N0gcJgVw==
-X-Google-Smtp-Source: AK7set+pT9VTS51XdyHe4VGCcxeCwRNUF9W9NQ4gfUa57VRxzTTW0du58Vpq72oXlyG8Z1CUN3qNwA==
-X-Received: by 2002:a5e:a605:0:b0:71b:cc7b:db4f with SMTP id q5-20020a5ea605000000b0071bcc7bdb4fmr5887098ioi.12.1675879789035;
-        Wed, 08 Feb 2023 10:09:49 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id e4-20020a6b5004000000b006884b050a0asm4750223iob.18.2023.02.08.10.09.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 10:09:48 -0800 (PST)
-Date:   Wed, 8 Feb 2023 18:09:48 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Power herobrine's 3.3 eDP/TS
- rail more properly
-Message-ID: <Y+PlbAVDLoSUKJ7U@google.com>
-References: <20230207163550.1.I5ff72b7746d5fca8f10ea61351bde4150ed1a7f8@changeid>
+        Wed, 8 Feb 2023 13:11:05 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9DD17160
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:10:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6ckI3WTqph30NpxWFPDE4cvDOQBvbkyW3uZldKIaVSY=; b=JMPfVqhJbVn/kncnVS1BMxmG6J
+        7sJHcR2ZcAolixI6M2MPAPnXWiuciSLsUMPrQleNPoAP5IvNhrdaZQfFVV8ePo6qqEP75miGAirfZ
+        vk/ymwQJTYe7EUO26Xli+xTMEZLhLbJ8+6rsxLiBn93PmLcqbg+TMe16aAx815GFkG5NruFfsbTFN
+        HWDKlIv91/hNuJXwL812aDfO1jQ3bIhdcrC4v8UMyi7ggxcqOoN5kk71Ft3U5xl1gdlCgy9vmWKxn
+        Pq+bl2/gZjdJ0ZtW8pDASUNLM+nn1LBJp22WegAbq3DTWtgR6z2nKEbC+Fp0VY5fCiZ/7X9HdMVBk
+        H69h1HXg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPotn-001RIT-AH; Wed, 08 Feb 2023 18:10:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 228CB300129;
+        Wed,  8 Feb 2023 19:10:27 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 128FE20F05D4E; Wed,  8 Feb 2023 19:10:27 +0100 (CET)
+Date:   Wed, 8 Feb 2023 19:10:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] kasan: mark addr_has_metadata __always_inline
+Message-ID: <Y+Plku4Cf5Xkzq10@hirez.programming.kicks-ass.net>
+References: <20230208164011.2287122-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230207163550.1.I5ff72b7746d5fca8f10ea61351bde4150ed1a7f8@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230208164011.2287122-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 04:36:10PM -0800, Douglas Anderson wrote:
-> This is the equivalent of commit f5b4811e8758 ("arm64: dts: qcom:
-> sc7180: Add trogdor eDP/touchscreen regulator off-on-time") and commit
-> 23ff866987de ("arm64: dts: qcom: sc7180: Start the trogdor
-> eDP/touchscreen regulator on"), but for herobrine instead of trogdor.
+On Wed, Feb 08, 2023 at 05:39:55PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The motivations for herobrine are the same as for trogdor.
+> When the compiler decides not to inline this function, objdump
+> complains about incorrect UACCESS state:
 > 
-> NOTES:
-> * Currently for herobrine all boards are eDP, not MIPI. If/when we
->   have herobrine derivatives that are MIPI they we can evaluate
->   whether the same off-on-delay makes sense for them. For trogdor we
->   didn't add the delay to MIPI panels because the problem was found
->   late and nobody had complained about it. For herobrine defaulting to
->   assuming the same 500ms makes sense and if we find we need to
->   optimize later we can.
-> * Currently there are no oddball herobrine boards like homestar where
->   the panel really likes to be power cycled. If we have an oddball
->   board it will need to split the eDP and touchscreen rail anyway
->   (like homestar did) and we'll have to delete the "regulator-boot-on"
->   from that board.
+> mm/kasan/generic.o: warning: objtool: __asan_load2+0x11: call to addr_has_metadata() with UACCESS enabled
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
 > ---
-> This patch should be applied atop my recent series adjusting the
-> herobrine touchscreen rails [1]. If I need to send a v2 of that series
-> I will add this at the end of it as patch #8.
+>  mm/kasan/kasan.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> [1] https://lore.kernel.org/all/20230207024816.525938-1-dianders@chromium.org/
-> 
->  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> index ded36b5d28c7..312cc0e1cbc7 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> @@ -110,6 +110,22 @@ pp3300_left_in_mlb: pp3300-left-in-mlb-regulator {
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index 3231314e071f..9377b0789edc 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -297,7 +297,7 @@ static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
+>  		<< KASAN_SHADOW_SCALE_SHIFT);
+>  }
 >  
->  		regulator-enable-ramp-delay = <3000>;
+> -static inline bool addr_has_metadata(const void *addr)
+> +static __always_inline bool addr_has_metadata(const void *addr)
+>  {
+>  	return (kasan_reset_tag(addr) >=
+>  		kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
+> @@ -316,7 +316,7 @@ bool kasan_check_range(unsigned long addr, size_t size, bool write,
 >  
-> +		/*
-> +		 * eDP panel specs nearly always have a spec that says you
-
-uber-nit: you could replace the second 'spec' with 'requirement' to avoid
-the repetition.
-
-> +		 * shouldn't turn them off an on again without waiting 500ms.
-> +		 * Add this as a board constraint since this rail is shared
-> +		 * between the panel and touchscreen.
-> +		 */
-> +		off-on-delay-us = <500000>;
-> +
-> +		/*
-> +		 * Stat the regulator on. This has the advantage of starting
-
-s/Stat/Start/ ?
-
-> +		 * the slow process of powering the panel on as soon as we
-> +		 * probe the regulator. It also avoids tripping the
-> +		 * off-on-delay immediately on every bootup.
-> +		 */
-> +		regulator-boot-on;
-> +
->  		vin-supply = <&pp3300_z1>;
->  	};
-
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>  #else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
+>  
+> -static inline bool addr_has_metadata(const void *addr)
+> +static __always_inline bool addr_has_metadata(const void *addr)
+>  {
+>  	return (is_vmalloc_addr(addr) || virt_addr_valid(addr));
+>  }
+> -- 
+> 2.39.1
+> 
