@@ -2,263 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1C668CE0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 05:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4778968CD11
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Feb 2023 04:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjBGEN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Feb 2023 23:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        id S230106AbjBGDEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Feb 2023 22:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjBGENo (ORCPT
+        with ESMTP id S230207AbjBGDDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Feb 2023 23:13:44 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864C336081;
-        Mon,  6 Feb 2023 20:13:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675743208; x=1707279208;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Wfk0z91V1QzB0Mm2cJU13HkVlqPJ6e1CuUfX3D6hVMM=;
-  b=MVD93JHHyeXjfSQRvJqFuc0cCjgHgUm85mkQnNfDlj4gt90zTuyuI9fK
-   TrKWWqiGodsYgobgl5IwlFAmxKIqikGphdwMHfx4ayC93axe1Cn1VmKwi
-   wcOBEaHX/byyj6xOqUCO7XgcclQYmd+MaA6Pm0suEO93hSkCsdOVszagp
-   ki8wsRvU86LNgDBpS3OzDhUmKNSZp81mdOXZPDqvCF4rrEa/JKBnY9IHI
-   6FCETzUt46VWwXyy6r1RnOdMBXEWCVvnijmNJWfX0XY1/hJ+sPB2IDGKk
-   GRGUaqKne5u1keMfC7hkL1wX9cLN7Rulxz5Sqa2/vikhQ6JDLWg3cuJlw
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,278,1669100400"; 
-   d="scan'208";a="199598368"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Feb 2023 21:13:27 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 6 Feb 2023 21:13:27 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Mon, 6 Feb 2023 21:13:20 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <ilpo.jarvinen@linux.intel.com>,
-        <macro@orcam.me.uk>, <andriy.shevchenko@linux.intel.com>,
-        <lukas@wunner.de>, <cang1@live.co.uk>,
-        <matthew.gerlach@linux.intel.com>, <deller@gmx.de>,
-        <phil.edworthy@renesas.com>, <geert+renesas@glider.be>,
-        <marpagan@redhat.com>, <u.kleine-koenig@pengutronix.de>,
-        <etremblay@distech-controls.com>, <wander@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v13 tty-next 4/4] serial: 8250_pci1xxxx: Add power management functions to quad-uart driver
-Date:   Tue, 7 Feb 2023 22:18:14 +0530
-Message-ID: <20230207164814.3104605-5-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230207164814.3104605-1-kumaravel.thiagarajan@microchip.com>
-References: <20230207164814.3104605-1-kumaravel.thiagarajan@microchip.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Feb 2023 22:03:46 -0500
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4BA2D58;
+        Mon,  6 Feb 2023 19:03:25 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 1235E1A00A1C;
+        Tue,  7 Feb 2023 11:03:54 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZXB-Qq9GzveJ; Tue,  7 Feb 2023 11:03:53 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 3B6951A0087E;
+        Tue,  7 Feb 2023 11:03:53 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] ext4: extents: Modify the return value variable type and initialize the assignment
+Date:   Thu,  9 Feb 2023 03:34:43 +0800
+Message-Id: <20230208193443.3055-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx's quad-uart function has the capability to wake up UART
-from suspend state. Enable wakeup before entering into suspend and
-disable wakeup on resume.
+Modify the return value variable to be consistent with the return value
+type of the function, and modify the initialization assignment. Under
+certain circumstances, the constant return value is not required.
 
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
 ---
-Changes in v13:
-- No Change
+ fs/ext4/extents.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Changes in v12:
-- No Change
-
-Changes in v11:
-- No Change
-
-Changes in v10:
-- No Change
-
-Changes in v9:
-- No Change
-
-Changes in v8:
-- No Change
-
-Changes in v7:
-- No Change
-
-Changes in v6:
-- No Change
-
-Changes in v5:
-- Corrected commit message
-
-Changes in v4:
-- No Change
-
-Changes in v3:
-- Handled race condition in suspend and resume callbacks
-
-Changes in v2:
-- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
-- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
-- Change the return data type of pci1xxxx_port_suspend to bool from int.
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 115 ++++++++++++++++++++++++
- 1 file changed, 115 insertions(+)
-
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index 58f47d18f7d8..a3b25779d921 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -212,6 +212,116 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
- 	/* Delay RTS before send is not supported */
- };
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index 9de1c9d1a13d..debeb2e7a162 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -4676,7 +4676,7 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
+ 	struct inode *inode = file_inode(file);
+ 	loff_t new_size = 0;
+ 	unsigned int max_blocks;
+-	int ret = 0;
++	long ret = -EOPNOTSUPP;
+ 	int flags;
+ 	ext4_lblk_t lblk;
+ 	unsigned int blkbits = inode->i_blkbits;
+@@ -4689,13 +4689,13 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
+ 	 */
+ 	if (IS_ENCRYPTED(inode) &&
+ 	    (mode & (FALLOC_FL_COLLAPSE_RANGE | FALLOC_FL_INSERT_RANGE)))
+-		return -EOPNOTSUPP;
++		return ret;
  
-+static bool pci1xxxx_port_suspend(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+	bool ret = false;
-+	u8 wakeup_mask;
-+
-+	mutex_lock(&tport->mutex);
-+	if (port->suspended == 0 && port->dev) {
-+		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
-+
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl &= ~TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+
-+		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
-+	}
-+
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+	mutex_unlock(&tport->mutex);
-+
-+	return ret;
-+}
-+
-+static void pci1xxxx_port_resume(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+
-+	mutex_lock(&tport->mutex);
-+	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+
-+	if (port->suspended == 0) {
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl |= TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+	}
-+	mutex_unlock(&tport->mutex);
-+}
-+
-+static int pci1xxxx_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	bool wakeup = false;
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			serial8250_suspend_port(priv->line[i]);
-+			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
-+		}
-+	}
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+
-+	if (wakeup)
-+		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
-+
-+	iounmap(p);
-+	device_set_wakeup_enable(dev, true);
-+	pci_wake_from_d3(pcidev, true);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_resume(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+	iounmap(p);
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			pci1xxxx_port_resume(priv->line[i]);
-+			serial8250_resume_port(priv->line[i]);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int pci1xxxx_setup(struct pci_dev *pdev,
- 			  struct uart_8250_port *port, int port_idx)
- {
-@@ -352,6 +462,8 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
- 	pci_iounmap(dev, priv->membase);
- }
+ 	/* Return error if mode is not supported */
+ 	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |
+ 		     FALLOC_FL_COLLAPSE_RANGE | FALLOC_FL_ZERO_RANGE |
+ 		     FALLOC_FL_INSERT_RANGE))
+-		return -EOPNOTSUPP;
++		return ret;
  
-+static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend, pci1xxxx_resume);
-+
- static const struct pci_device_id pci1xxxx_pci_tbl[] = {
- 	{ PCI_VDEVICE(EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
- 	{ PCI_VDEVICE(EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
-@@ -366,6 +478,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
- 	.name = "pci1xxxx serial",
- 	.probe = pci1xxxx_serial_probe,
- 	.remove = pci1xxxx_serial_remove,
-+	.driver = {
-+		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
-+	},
- 	.id_table = pci1xxxx_pci_tbl,
- };
- module_pci_driver(pci1xxxx_pci_driver);
+ 	inode_lock(inode);
+ 	ret = ext4_convert_inline_data(inode);
 -- 
-2.25.1
+2.18.2
 
