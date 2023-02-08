@@ -2,81 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9285E68EF5B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CC468EF61
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjBHMyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 07:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S229598AbjBHM4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 07:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjBHMy3 (ORCPT
+        with ESMTP id S229630AbjBHM4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:54:29 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1B830EB6
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:54:03 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso1397573wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 04:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sbu+Qp3H391Eb/1v8euZ4W7qurN5ceJRB7UVV/W0fqk=;
-        b=rNQTXy6D0WTaHNnOLcl/CztjI3TVlJqBotvL8w6lYKQnoryfNvaxAuuLGfps6gitnn
-         3VFicmNEa02LXy0xc3frf+IWHfcZ0douH6rHUHj4BtEYTeRjHLVJ3HDQD0xSK5MjhR3t
-         8EXcmN/bThR9Y9IuSNjyEGBejYe/O1eyBpky9G1Fq9tOCH2QHElj7ZBKcFOq2rtHjiPx
-         HMwOvtEaturf3nuUT3aFp+IyOTdeYpaNB+aR1frA2AbrMozLqYhdmhE4oIlQbmq0+3pE
-         oxFm20WP21Jvkm5SfneedMCwfn9dLzme2DPEsVHoKKo4+LxdAYJD7Nko3u5UlkQW+QEH
-         RATg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sbu+Qp3H391Eb/1v8euZ4W7qurN5ceJRB7UVV/W0fqk=;
-        b=W9HGMIO/x4QA6hYkITUYuWlYy9Py8UUH38TiasGCgn0cDH3sgt9OAnkVZ7HeBjmC4U
-         l60jJBWx9yA/95Bl4MWXKQtWl3gmCITxBoPURTkNXjxb7sbrkOmefoMhPdHhoQ5qLq4y
-         i0kip8ilWflQcM3RpP/QFyOE+OY4H323S8XWJnqEe/SJBokAQBdHVH9R667PvJZFeL4X
-         gJr+jCeaeIChve4a8fMDl8HrvYVCHgVdjG8UFBryftvt05xG6ZoxFt14KCLXuDIV7Alt
-         6VgHfja80t1apwekD+tH+GofU/KUK1pZIv7H5oEsQ7zMlyp+y9y2VBuOwe/MBFCTG99D
-         mBqA==
-X-Gm-Message-State: AO0yUKXHrWCUw7Bv0k+hS20OBHd+VJHWoNVhTHXHaxuOTFhAvqzkPl40
-        9qgJgT75DNnjmz+8A7QqX0UF3g==
-X-Google-Smtp-Source: AK7set8xdIQQgwZvX1OR7eNm518Bawsc3t4csucPiGSGyRqXvuHdJjpBwLcQq4XLpD5I+V5lw9cHEQ==
-X-Received: by 2002:a05:600c:44d3:b0:3e0:481:c896 with SMTP id f19-20020a05600c44d300b003e00481c896mr6370172wmo.35.1675860841996;
-        Wed, 08 Feb 2023 04:54:01 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:b2b3:5502:81b7:d4ad? ([2a02:6b6a:b566:0:b2b3:5502:81b7:d4ad])
-        by smtp.gmail.com with ESMTPSA id d3-20020a056000114300b002c3f9404c45sm2412841wrx.7.2023.02.08.04.54.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 04:54:01 -0800 (PST)
-Message-ID: <86df2c79-3626-d476-54b4-82c225a6dbd9@bytedance.com>
-Date:   Wed, 8 Feb 2023 12:54:00 +0000
+        Wed, 8 Feb 2023 07:56:37 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA5630EB6;
+        Wed,  8 Feb 2023 04:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=5oTXr0EPcDd/e3wIuQRZ5u10MSlrlS9A+107BrjVmHs=; b=lZXrR+cpLuZWFm1TV1kwOBAI8X
+        3orKSsD9snMKmhpFBtZ2MknaMyc6+SXMyBUch2d47V7zsB7267Y3jphpG0NH5u1HSgxXsgUtg7JXd
+        sKM1ffrc3/sDrSfUlDxW/5wVK3gKYtCgGo/8QX7RMPNu2WwRBAbx058NOymLLOcQIlF8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pPjzn-004Oze-F9; Wed, 08 Feb 2023 13:56:19 +0100
+Date:   Wed, 8 Feb 2023 13:56:19 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/2] net: ti:
+ icssg-prueth: Add ICSSG ethernet driver
+Message-ID: <Y+Ob8++GWciL127K@lunn.ch>
+References: <20230206060708.3574472-1-danishanwar@ti.com>
+ <20230206060708.3574472-3-danishanwar@ti.com>
+ <Y+ELeSQX+GWS5N2p@lunn.ch>
+ <42503a0d-b434-bbcc-553d-a326af5b4918@ti.com>
+ <e8158969-08d0-1edc-24be-8c300a71adbd@kernel.org>
+ <4438fb71-7e20-6532-a858-b688bc64e826@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v7 6/9] x86/smpboot: Support parallel
- startup of secondary CPUs
-Content-Language: en-US
-To:     Brian Gerst <brgerst@gmail.com>, dwmw2@infradead.org
-Cc:     tglx@linutronix.de, kim.phillips@amd.com, arjan@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
-        paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230207230436.2690891-1-usama.arif@bytedance.com>
- <20230207230436.2690891-7-usama.arif@bytedance.com>
- <CAMzpN2iejCnBeBdC6+92fUL2k8ZdAq_jEgXX+RSoGMhRZ0UBSA@mail.gmail.com>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <CAMzpN2iejCnBeBdC6+92fUL2k8ZdAq_jEgXX+RSoGMhRZ0UBSA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4438fb71-7e20-6532-a858-b688bc64e826@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,73 +65,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/02/2023 05:09, Brian Gerst wrote:
-> On Tue, Feb 7, 2023 at 6:10 PM Usama Arif <usama.arif@bytedance.com> wrote:
->>
->> From: Thomas Gleixner <tglx@linutronix.de>
->>
->> Rework the real-mode startup code to allow for APs to be brought up in
->> parallel. This is in two parts:
->>
->> 1. Introduce a bit-spinlock to prevent them from all using the real
->>     mode stack at the same time.
->>
->> 2. Avoid the use of global variables for passing per-CPU information to
->>     the APs.
->>
->> To achieve the latter, export the cpuid_to_apicid[] array so that each
->> AP can find its own per_cpu data (and thus initial_gs, initial_stack and
->> early_gdt_descr) by searching therein based on its APIC ID.
->>
->> Introduce a global variable 'smpboot_control' indicating to the AP how
->> it should find its APIC ID. For a serialized bringup, the APIC ID is
->> explicitly passed in the low bits of smpboot_control, while for parallel
->> mode there are flags directing the AP to find its APIC ID in CPUID leaf
->> 0x0b (for X2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+> >>>> +static int prueth_config_rgmiidelay(struct prueth *prueth,
+> >>>> +				    struct device_node *eth_np,
+> >>>> +				    phy_interface_t phy_if)
+> >>>> +{
+> >>>
+> >>> ...
+> >>>
+> >>>> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
+> >>>> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
+> >>>> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
+> >>>> +
+> >>>> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
+> > 
+> > This is only applicable to some devices so you need to restrict this only
+> > to those devices.
+> > 
 > 
-> For the serialized bringup case, it would be simpler to just put the
-> cpu number in the lower bits instead of the APIC id, skipping the
-> lookup.
+> Currently ICSSG driver is getting upstreamed for AM65 SR2.0 device, so I don't
+> think there is any need for any device related restriction. Once support for
+> other devices are enabled for upstream, we can modify this accordingly.
+
+The problem is, this is a board property, not a SoC property. What if
+somebody designs a board with extra long clock lines in order to add
+the delay?
+
+> I checked the latest Technical Reference Manual [1] (Section 5.1.3.4.49, Table
+> 5-624) for AM65 Silicon Revision 2.0.
 > 
-> --
-> Brian Gerst
+> Below is the description in Table 5-624
+> 
+> BIT	    : 24
+> Field	    : RGMII0_ID_MODE
+> Type	    : R/W
+> Reset	    : 0h
+> Description : Controls the PRU_ICSSG0 RGMII0 port internal transmit delay
+> 	      0h - Internal transmit delay is enabled
+> 	      1h - Reserved
+> 
+> The TX internal delay is always enabled and couldn't be disabled as 1h is
+> reserved. So hardware support for disabling TX internal delay is not there.
 
-I guess we could do something like below, it would save a few loops 
-through find_cpunr in serial case, but probably is as simple as just 
-using setup_AP and find_cpunr for all cases? Happy with either but if 
-there is a strong preference for below, can change in next revision?
+So if somebody passes a phy-mode which requires it disabled, you need
+to return -EINVAL, to indicate the hardware cannot actually do it.
 
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index 656e6018b9d4..30aa543a0114 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -265,7 +265,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, 
-SYM_L_GLOBAL)
-         testl   $STARTUP_APICID_CPUID_01, %edx
-         jnz     .Luse_cpuid_01
-         andl    $0x0FFFFFFF, %edx
--       jmp     .Lsetup_AP
-+       mov     $8, %eax
-+       mul     %edx
-+       movq    %rax, %rcx
-+       jmp     .Linit_cpu_data
+> As, TX internal delay is always there, there is no need to enable it in MAC or
+> PHY. So no need of API prueth_config_rgmiidelay().
+> 
+> My approach to handle delay would be as below.
+> 
+> *) Keep phy-mode = "rgmii-id" in DT as asked by Andrew.
 
-  .Luse_cpuid_01:
-         mov     $0x01, %eax
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 8ffec5de2e2e..73dd87bf2f29 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1141,7 +1141,7 @@ static int do_boot_cpu(int apicid, int cpu, struct 
-task_struct *idle,
-                 early_gdt_descr.address = (unsigned 
-long)get_cpu_gdt_rw(cpu);
-                 initial_stack  = idle->thread.sp;
-         } else if (!do_parallel_bringup) {
--               smpboot_control = STARTUP_SECONDARY | apicid;
-+               smpboot_control = STARTUP_SECONDARY | cpu;
-         }
+As i said this depends on the board, not the SoC. In theory, you could
+design a board with an extra long RX clock line, and then use phy-mode
+rgmii-txid, meaning the MAC/PHY combination needs to add the TX delay.
 
-         /* Enable the espfix hack for this CPU */
+> *) Let TX internal delay enabled in Hardware.
+> *) Let PHY configure RX internal delay.
+> *) Remove prueth_config_rgmiidelay() API is there is no use of this. TX
+> Internal delay is always enabled.
+> *) Instead of calling prueth_config_rgmiidelay() API in prueth_netdev_init()
+> API, add below if condition.
+> 
+> 	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
+> 		emac->phy_if == PHY_INTERFACE_MODE_RGMII_RXID
+
+You should handle all cases where a TX delay is requested, not just
+ID.
+
+	Andrew
