@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5467E68F3E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4786668F3DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjBHQ7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
+        id S231744AbjBHQ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjBHQ7P (ORCPT
+        with ESMTP id S230135AbjBHQ7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:59:15 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E2C1CAD4;
-        Wed,  8 Feb 2023 08:59:12 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id h24so21530591qtr.0;
-        Wed, 08 Feb 2023 08:59:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7H+/GICwV/V05esZScE/Prqpiew2ARhgCCv2xN08dwc=;
-        b=W65/Gc7k7weum+eWfL3oTk0xiJPKfK+2PWgOz5E068twmIHpxcXc/Te37gb/vAdn+F
-         PI8aYEQuH3TpiarlmzIRFL7ysSqhbICs4GDxKidpCiI2ubos6VCjdptbiAnHSOMALcnT
-         WDT/c9jc8Yspy/xTkXqXZp9+nJtniMMqs/uI0neC48XxnpDSbsGwECT4u2fcnFXoOd2k
-         MU0C6APCZHxd3ucx0/z2f49zeFqyJ5B6CnqYpxrrfbIn3fHB6S1uFCTzLE2DUBUyu5Cw
-         vs75LFcF7lAMJPdQSHEgUkFfwQDGqjYCMvACUQsHuvLmX61uwipblfLghUWKVaX5m0z1
-         6oTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7H+/GICwV/V05esZScE/Prqpiew2ARhgCCv2xN08dwc=;
-        b=3Dq1DTsKtM5Ld62GcUXpV9G6SVX5qy8PxLbrH+Zy0Sy29CWPfqukqULhCQieK6cE0N
-         uTlrhnhn7nsB3S+F+E8u3/yYlxCY2cfcHspUMxCC2AfqWA3XK2mzUURqReHfGc6MyZaM
-         zqGc2PxDrKTE0grQGnHDltetkt4h/ALCGzSvEqOfNHqgeObLkc8eVpxOG4sPxEyMTri1
-         RrGIwxOJfFSh+rVWNqqyEI4fOdNgxggdzQvHxWqGiNf6ULnjG8+CVUFSNhF2XzO7A5g4
-         WERt+K9X+Hn9eCLhgGeUrNqCOVyVu+e/5bGJORN102BOkg1rJfF/Lj8Xnce/gmVz75Dd
-         wlgw==
-X-Gm-Message-State: AO0yUKVyypv9LV500UC3Kz4uj39wklS0XzI0TbfCMNMel6eD34VvGo+g
-        LI6Fp+Nyf0jmPl2FkG3Y+Yc=
-X-Google-Smtp-Source: AK7set94/fD1lnodVmXxavvz8GXyFjHf0dpF7dsGIYaeBY4WR4izTfuU8z39cPTPsr3HaW0fxy6tCg==
-X-Received: by 2002:a05:622a:1aa0:b0:3b8:6a9f:9144 with SMTP id s32-20020a05622a1aa000b003b86a9f9144mr14010379qtc.46.1675875551182;
-        Wed, 08 Feb 2023 08:59:11 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id s20-20020a05620a16b400b0071f40a59fe5sm11970713qkj.127.2023.02.08.08.59.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 08:59:10 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 2BDB527C0054;
-        Wed,  8 Feb 2023 11:59:10 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 08 Feb 2023 11:59:10 -0500
-X-ME-Sender: <xms:3dTjY73nCjXNPvqJoJWGC6kxu2rM5t12e0JCHKM_CuqKAnCftLC9zA>
-    <xme:3dTjY6GVCjKc0yY8qfEk1uaqFaHXsbVSmOoKQv1_Qe8fk6aKz2erl_K8ftC7TkcaT
-    maCaG2Wsfm6tcKmyw>
-X-ME-Received: <xmr:3dTjY76zvFYog0J0D8nEkj0WUhY-KEc1SbEv8KWenyzGpq9z7M8E-g9EfH4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehuddgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
-    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:3dTjYw2o4DPSUk8FGBYze5nKny_BfPF6YzqlnRQH9-WFS607HwjmjQ>
-    <xmx:3dTjY-H_4lvQKiDQPDm4rfwQ6mlV9poPrvg9s0BT_4H9rzAKMo5VyQ>
-    <xmx:3dTjYx-13ZPLg2x7UbJFT-LUgoRHIMGpIlgrEY9-yGBfst33tuLb9A>
-    <xmx:3tTjY7fndWKmJNNTILs9tKxOPuhWF0bweFWWJfPSweTPN3yIKM565w>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Feb 2023 11:59:09 -0500 (EST)
-Date:   Wed, 8 Feb 2023 08:58:44 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergio =?iso-8859-1?Q?Gonz=E1lez?= Collado 
-        <sergio.collado@gmail.com>, Finn Behrens <fin@nyantec.com>
-Subject: Re: [PATCH v2 2/2] sample: rust: print: Add sampe code for Arc
- printing
-Message-ID: <Y+PUxC0ilJTpmA1+@boqun-archlinux>
-References: <20230207185216.1314638-1-boqun.feng@gmail.com>
- <20230207185216.1314638-3-boqun.feng@gmail.com>
- <CANiq72kyrz4efU5=MexgGNth1XxkU1z-GP6xVa7WxApB+PMdFQ@mail.gmail.com>
- <Y+PO9SXyQaWgbQlK@boqun-archlinux>
- <CANiq72kghG4i35Jt2cY0-2CJkzKe-jEfSyU2pJFFqKgfkV7CZg@mail.gmail.com>
+        Wed, 8 Feb 2023 11:59:01 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728F31C317;
+        Wed,  8 Feb 2023 08:59:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675875540; x=1707411540;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c53B/yNcCsESxMoBF6QG2HTSGIloM209wckUOgRNIKg=;
+  b=Uxy6PXqXvf9wNzBS5Tt83JEPunuFVEuN02tG+mDy+AzSwiuKx4BiCzX3
+   hq/pc5E87h5+LZs2wCuMH88TgPLfUk9aNFnXRzUluJ+GqaerdJAnuK8NM
+   wIgYmmBjh+CevLW2CwcnhemcOu6EiPqy3B5YR6/ebq68ZEqaLbw3UvrBP
+   sZ8oFxSIaH6vcobdbkVcHYv1pjRozyqaToD700TK/OrlG36j2KJEAhjmm
+   nJdMa4NrIWkOIfJnss8KR+ei5naS7l5tc0g0/v4DgKclmyMgy63h34GeR
+   LKalgXZ6tQivXY6kee02eMUHb99grmPKzNVfX9TcQ0f+8HIEbhW/SsLi0
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="317861121"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="317861121"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 08:58:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="841256000"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="841256000"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 08 Feb 2023 08:58:51 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pPnmR-004DaH-1g;
+        Wed, 08 Feb 2023 18:58:47 +0200
+Date:   Wed, 8 Feb 2023 18:58:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Jonathan.Cameron@huawei.com, baohua@kernel.org, bristot@redhat.com,
+        bsegall@google.com, davem@davemloft.net, dietmar.eggemann@arm.com,
+        gal@nvidia.com, gregkh@linuxfoundation.org, hca@linux.ibm.com,
+        jacob.e.keller@intel.com, jesse.brandeburg@intel.com,
+        jgg@nvidia.com, juri.lelli@redhat.com, kuba@kernel.org,
+        leonro@nvidia.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux@rasmusvillemoes.dk, mgorman@suse.de, mingo@redhat.com,
+        netdev@vger.kernel.org, peter@n8pjl.ca, peterz@infradead.org,
+        rostedt@goodmis.org, saeedm@nvidia.com, tariqt@nvidia.com,
+        tony.luck@intel.com, torvalds@linux-foundation.org,
+        ttoukan.linux@gmail.com, vincent.guittot@linaro.org,
+        vschneid@redhat.com
+Subject: Re: [PATCH 1/1] ice: Change assigning method of the CPU affinity
+ masks
+Message-ID: <Y+PUx8M6mrsMilZg@smile.fi.intel.com>
+References: <20230121042436.2661843-1-yury.norov@gmail.com>
+ <20230208153905.109912-1-pawel.chmielewski@intel.com>
+ <Y+PQOCHCh78aAcAm@yury-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72kghG4i35Jt2cY0-2CJkzKe-jEfSyU2pJFFqKgfkV7CZg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y+PQOCHCh78aAcAm@yury-laptop>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 05:56:43PM +0100, Miguel Ojeda wrote:
-> On Wed, Feb 8, 2023 at 5:34 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Hmm.. I'm OK with this change, but it's not a typo ;-)
-> 
-> By typo I meant the "sampe", not the other changes -- sorry, I should
-> have been more clear.
+On Wed, Feb 08, 2023 at 08:39:20AM -0800, Yury Norov wrote:
+> On Wed, Feb 08, 2023 at 04:39:05PM +0100, Pawel Chmielewski wrote:
 
-Ah, good eyes! Sorry I missed that twice: one when submitting and one
-you mention it's a typo ;-(
+...
+
+> > +	v_idx = 0;
+> > +	for_each_numa_hop_mask(aff_mask, numa_node) {
+> > +		for_each_cpu_andnot(cpu, aff_mask, last_aff_mask)
+> > +			if (v_idx < vsi->num_q_vectors) {
+> > +				if (cpu_online(cpu))
+> > +					cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
+> > +				v_idx++;
+> > +			}
+
+>                         else
+>                                 goto out;
+
+In this case the inverted conditional makes more sense:
+
+			if (v_idx >= vsi->num_q_vectors)
+				goto out;
+
+			if (cpu_online(cpu))
+				cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
+			v_idx++;
+
+(indentation level will be decreased).
+
+> > +		last_aff_mask = aff_mask;
+> > +	}
+> > +
+>         out:
+> 
+> >  	return 0;
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Regards,
-Boqun
-
-> 
-> > 1)      capitalize the first letter after subsystem tags in the title
-> >         since that's kinda the rule for a few subsystems I usually work
-> >         on, I don't have my own preference, just something I'm used to
-> >         ;-)
-> 
-> Yeah, I don't mind one way or the other (in fact, personally I prefer
-> uppercase slightly because it is a bit easier to "scan" visually to
-> see where it starts after the prefixes). The lowercase one is just the
-> one we have used so far for Rust (which I picked looking at what Linus
-> et al. usually do).
-> 
-> > 2)      avoid using "`" in the title to save space because title space
-> >         is precious.
-> 
-> I see, makes sense, thanks!
-> 
-> Cheers,
-> Miguel
