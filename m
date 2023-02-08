@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3389268F0D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AE168F0DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjBHO3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
+        id S231451AbjBHObc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjBHO3F (ORCPT
+        with ESMTP id S231280AbjBHOba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:29:05 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDE87692
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:29:00 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id d7so6417990qvz.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:29:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WE/gPMaBx/EpR5LKoE9r3aKinik7P+lmgz6oMIYx50w=;
-        b=EOFxZlwAB1StI8zpJndrYVj7J0psxYy6yegyPIg3C2TulkuZGJm3VP14lay3pEE112
-         V2Y8foL64OZMz3sW5kbvVrAXGZvu3op1WNS70VYOSURfuMNcSGNtCmjFX9rwcDk+mAsJ
-         x49xaDCjBfZgcsTKG4P5z/xzm7p5cNhTyfscbCXaL/gPhEaHn90Q3Vjd0yJMbGZqWTzU
-         SG/4xcDh8WVYfxBJutnljGxbV22nBKwhc0lX9cUOSakhTtljgbjP6sezHfJbHG+YHezo
-         TkCAsZQZPHSI9hFpJIWipUA+SwyYLpVT+FBSFubUTfMCBahGNiFxMowfyuv60sGVL7QV
-         ji9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WE/gPMaBx/EpR5LKoE9r3aKinik7P+lmgz6oMIYx50w=;
-        b=shz7Fr1yb9JJMch0ahxdnsTPfLtowu7aHs1pnGSYNyP/UsKJZAHcgeUb8wt7lNRwtW
-         kkxufo/Zf7e6R5+NcAlh8RIQYhC3Uq1YGPBaODL1jDK05n42hR83LmmxA4WED9cZvyMI
-         f97aWqVqZ1UsUQxVTCzeP2YxE+2MWLama81vCGyq7FQMEnrpZYrDJ62W1+S+aYyfh3/I
-         q3X/rFmQVHl8OI77O7XvzKD+vjy1LGvqlgmu46bukrMbL0GufMvAIGbuUaWcZOFJRZ1a
-         218NZIRgRidoiogQBIk3SJqVH+cQ8BupRqV+DjLTCI2arhhlrTUzzpmaNkVf4CDEcoJz
-         bJXw==
-X-Gm-Message-State: AO0yUKUKZZCRcOdqmXd09yDjPpAmaSkI54zGNgHJf7YAtj0TkQC5BwQJ
-        rQvgVBHWvNC91FUdYXv4z2mfBAjQ+b4=
-X-Google-Smtp-Source: AK7set9kjct65w5o2q9gAXAEsn6yKOcJGveWGLTdVDRJXy4Qo289gjhNhlft6R4OLwmPx1rF0VjF2g==
-X-Received: by 2002:ad4:5ba7:0:b0:568:9110:d359 with SMTP id 7-20020ad45ba7000000b005689110d359mr10123799qvq.1.1675866539320;
-        Wed, 08 Feb 2023 06:28:59 -0800 (PST)
-Received: from localhost.localdomain (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id dw27-20020a05620a601b00b00706c1f7a608sm11762098qkb.89.2023.02.08.06.28.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 06:28:58 -0800 (PST)
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org
-Subject: [PATCH] MAINTAINERS: update Allwinner sunXi SoC support entry
-Date:   Wed,  8 Feb 2023 09:28:41 -0500
-Message-Id: <20230208142841.19597-1-twoerner@gmail.com>
-X-Mailer: git-send-email 2.36.0.rc2.17.g4027e30c53
+        Wed, 8 Feb 2023 09:31:30 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9005C95;
+        Wed,  8 Feb 2023 06:31:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1675866653;
+        bh=23X5TX+ESt6P/v6NFPb3Xe184rfenm6WbYS+JlMi6jE=;
+        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
+         References;
+        b=hdYqMIiBNAf/HN7Pxx3BF4z56sGOwZ+HAkIGgRreOLjSYd3KBjc2T2vrqeAqVcj6A
+         LX5q3AiAHGK82XxIqsCf+km7HnQOzdWvLnd7/0dfIbkUWRcbj4rul9OY16pe8my/K8
+         mWBDXr9NPdzEDNo1xpTBMgMOFkZhuOMFRGVNRglSMPqZsJXuoV1p/QBy191E425Nho
+         NWVXQCXUWMRBLGjANm9A3UtXe1mwEMho0b0lKU7VgU7rxNyp7bgeeCa38oEu1Gh9tg
+         R62W8zrSsiy78mzGCOxff1288Yp4R3uroMmgMMjMUVB8Dp5IpaupAIHHLSTT8lUhNU
+         as+e/D9UowduA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [127.0.0.1] ([157.180.227.18]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mnpns-1ondR84BFC-00pP73; Wed, 08
+ Feb 2023 15:30:53 +0100
+Date:   Wed, 08 Feb 2023 15:30:49 +0100
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+CC:     arinc9.unal@gmail.com, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_net=5D_net=3A_ethernet=3A_mtk=5Feth=5Fsoc?= =?US-ASCII?Q?=3A_enable_special_tag_when_any_MAC_uses_DSA?=
+User-Agent: K-9 Mail for Android
+Reply-to: frank-w@public-files.de
+In-Reply-To: <20230207155801.3e6295b0@kernel.org>
+References: <20230205175331.511332-1-arinc.unal@arinc9.com> <20230207105613.4f56b445@kernel.org> <5d025125-77e4-cbfb-8caa-b71dd4adfc40@arinc9.com> <52f8fc7f-9578-6873-61ae-b4bf85151c0f@arinc9.com> <20230207155801.3e6295b0@kernel.org>
+Message-ID: <EAD9D5DE-571F-4D59-9F09-1B3C8F23ABCF@public-files.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:EqlMNzwFUzUkFtQzw+PYkXe8Z7nZzAYLh3DyUnjXSbMS4TG9Q2B
+ GpTBMhn+nciUSrAlKoUpi0W7L0ejEnQuf6mx9U6hcuyYrls/+ZcPObMLSZ1RKbc7rEben6B
+ t98cuSi6LRkvFN/zLnCIvaPbVvbH5JEUzJjm86LWP4BURAIkPrcl8vTsmqe4z+SoPfvkXgc
+ F+IXFV1e6yA1aWrrVtHRw==
+UI-OutboundReport: notjunk:1;M01:P0:leBRI6KhA0A=;SLewI2BJYjFVUaec1eIR4K21TPa
+ CXaWujmp4/MCq15RQ6fElwypLw0s8OXmycTfj8oIcRcb131rwubDTlaat/3z8g3oBA8Cnui9r
+ 5eeCx4R+PHOSG8qFv8QoYcjNR9iNezWvZrvAgp7kpE//fVCMWc00XY1PwcmnIv//6fNMMQEmV
+ aOoWRwCGGI64BHI4tcSUyuV2/cqkWAd7VUtEPjG7nmBPeAGEzVnuyGxUnN5TWIAKhbMZPqtol
+ GlBEzFrkpuZH0WiO+0lg/gM7QzmawwxzsnFBJqDUUwpjWjyV40/WeHX9NbOPWOiIQmy2sdD1w
+ 7hRVKCi0ybpCxcj8+j9aVRKOGNvzUQ/OmSZTjuDb/wOmowwImmoSLLaCVdb7lkuc+KlXOT2bb
+ Y4lUwPmRVel/nWnzo+DNrA3AGj+j9auf7H7MHuLnbfFsr7XxZTe0FKhgt4Yse2dMudySCTzLu
+ nT2AW+9GLWDbtCuRTMfEBPkAYmVfmA+GzDjKwdr9FpSOYFp1dYoSWIzDlrl8QRYbDWE1g4Oi0
+ wwgI5FLP6aBGSC0WTA6SG3hkNAZ1jBnfjYTwqcR+C9OnMi9tyQm9nUOMyRBHdnTnzw2ui1Ora
+ euI9DOGdZg17YD0nPDATkFwnUIXo6c64S0DUeMlodDi1KB5B97E+8GhrdLx/UqNLAHfQ+ToDy
+ eA+h+EZU+u/37wjDZ3GzUmvav0n5Q7hDxvrb2HAYnAHVUWrJ1PE15GYW5zWvo0R41BzufoJTO
+ BkJ2FGBc26uQc4ZFqsyqmJNAtyd3hY/2/Oke9QwPrUrbrIrDXVoxA/7fFD8u1wdmLXHzwCab/
+ Wj7EHDXhagxNd8b4ntzgLVFZgkSJ/efDpRt6HeFiVzk6BgfhPOOzmEt0gt4kZwNAmLZo5J7DH
+ LaefLCP0EPSK4hsUNV4hcJXpqtEjmtq5V/v5Zw2GaY8zFPVUvvmez7fVb9bJyOEvIKxrTQ54d
+ WdZDH4wd9rXHewKMlyBuFs9K6Hs=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,70 +88,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the information in the "Allwinner sunXi SoC support" block:
-- include more RISC-V information
-- move the block to keep it in alphabetical order
-- "L" before "T" (as reported by checkpatch.pl)
+Am 8=2E Februar 2023 00:58:01 MEZ schrieb Jakub Kicinski <kuba@kernel=2Eorg=
+>:
+>
+>No strong preference, TBH=2E
+>
+>The motivation for my question was to try to figure out how long we
+>should wait with applying this patch=2E I applied the commit under Fixes
+>without waiting for a test from Frank, which made me feel a bit guilty
+>:)
 
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
----
- MAINTAINERS | 36 +++++++++++++++++++-----------------
- 1 file changed, 19 insertions(+), 17 deletions(-)
+No worry=2E You don't have to feel guilty for it=2E
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b8ad844bca77..ff39d34cb4ca 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1856,23 +1856,6 @@ M:	Emilio López <emilio@elopez.com.ar>
- S:	Maintained
- F:	drivers/clk/sunxi/
- 
--ARM/Allwinner sunXi SoC support
--M:	Chen-Yu Tsai <wens@csie.org>
--M:	Jernej Skrabec <jernej.skrabec@gmail.com>
--M:	Samuel Holland <samuel@sholland.org>
--L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--S:	Maintained
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
--L:	linux-sunxi@lists.linux.dev
--F:	arch/arm/mach-sunxi/
--F:	arch/arm64/boot/dts/allwinner/
--F:	drivers/clk/sunxi-ng/
--F:	drivers/pinctrl/sunxi/
--F:	drivers/soc/sunxi/
--N:	allwinner
--N:	sun[x456789]i
--N:	sun[25]0i
--
- ARM/Amlogic Meson SoC CLOCK FRAMEWORK
- M:	Neil Armstrong <neil.armstrong@linaro.org>
- M:	Jerome Brunet <jbrunet@baylibre.com>
-@@ -2620,6 +2603,25 @@ F:	arch/arm/boot/dts/rtd*
- F:	arch/arm/mach-realtek/
- F:	arch/arm64/boot/dts/realtek/
- 
-+ARM/RISC-V/Allwinner sunXi SoC support
-+M:	Chen-Yu Tsai <wens@csie.org>
-+M:	Jernej Skrabec <jernej.skrabec@gmail.com>
-+M:	Samuel Holland <samuel@sholland.org>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-riscv@lists.infradead.org
-+L:	linux-sunxi@lists.linux.dev
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
-+F:	arch/arm/mach-sunxi/
-+F:	arch/arm64/boot/dts/allwinner/
-+F:	arch/riscv/boot/dts/allwinner/
-+F:	drivers/clk/sunxi-ng/
-+F:	drivers/pinctrl/sunxi/
-+F:	drivers/soc/sunxi/
-+N:	allwinner
-+N:	sun[x456789]i
-+N:	sun[25]0i
-+
- ARM/RISC-V/RENESAS ARCHITECTURE
- M:	Geert Uytterhoeven <geert+renesas@glider.be>
- M:	Magnus Damm <magnus.damm@gmail.com>
--- 
-2.36.0.rc2.17.g4027e30c53
+My limited time currently does not allow test all patches in all circumsta=
+nces=2E=2E=2Ei trust arinc to make it better than before=2E=2E=2Ethere are =
+many patches floating around which fixing some corner cases in mtk eth driv=
+er=2E I hope these are applied i had tested and for the others i report a b=
+ug when i notice any problem :)
 
+Would be nice if felix' series can be merged for fixing sw vlan on non-dsa=
+ mac and the one from vladimir fixing the vlan_aware bridge without breakin=
+g dsa port outside the bridge on same gmac=2E
+regards Frank
