@@ -2,215 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839E668E708
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD53868E70E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjBHE0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 23:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S230249AbjBHE3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 23:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBHE0F (ORCPT
+        with ESMTP id S229460AbjBHE3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 23:26:05 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD30830EB3;
-        Tue,  7 Feb 2023 20:26:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675830363; x=1707366363;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=5j6yrf18OvFs/g2OXumc1kp/h1pDxURiDKoEyKVvGwg=;
-  b=BoflH2HkHW5b/i9vQ9pqy1rappG9GszyxuedM59PDOdCL2bV7NSZc233
-   pov8VVA+R3kvzVgXsEVKCkeMQziMGzke2K3k12A+6rLpR3mX6G2HkgNL/
-   8m0iMwvcNzXmNkNM+beiJNcdcDEgRlExf7GqeyAkJP4QH8HEC7M00Shdz
-   OIDNJCCE9Ky41LYvtJBSwjdZb9FgW/SdxQLGhuR38XSZAj9oGeebsLrVQ
-   Ph/Ub/tH5BCpeij34cW156NBuOtpDhlhkU0K/dQIavkdiY5imQFmw8P9q
-   xV9wGK6W9LfczSg277NdfTD9Mm0OV9CHV+KzEQloC2qfloEysavjL0jiA
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="328360478"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="328360478"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 20:26:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="735792252"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="735792252"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Feb 2023 20:26:03 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 20:26:02 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Feb 2023 20:26:02 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Feb 2023 20:26:02 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+        Tue, 7 Feb 2023 23:29:14 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532CD3B677;
+        Tue,  7 Feb 2023 20:29:13 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31841FVq019455;
+        Wed, 8 Feb 2023 04:29:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=AZBtbN86MnL3/WzWM8oN+UDB8m7i7HmzJmiVNUxVVfE=;
+ b=mJydNIyY5x5Z06lxEe/ctbS0rlCb/50L+rSmFe3tSGy6cpH17cR8LtfpocdtEvJk7H+p
+ +JI9KgKqsGecwIMjsvFituWsVrDSyObtE4JrFp0jjfq5oDty/ezgOpxAHWCmXcopb466
+ ofQfleSrLfsgQ3C8GFcLyNHryE6mLHUXuMII7hDUEOWL+ISmfMdhDzOLcp0mOSJ0lqu+
+ zSREGiE0kAPMJfr5muBztUkC4VpDH+8qEfFUu2jllLOIzAr1svPvAZ63gII3JMdREdwE
+ rLAar7e75ljnhXTYNOU4YRoVjgjHGzLVTdsx7EJ4+ix7wTlW+hGGG5Fcq275I2Y6Ddm5 7A== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nke4h3cw0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 04:29:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3184T7ZR005858
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 04:29:07 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Tue, 7 Feb 2023 20:26:01 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WLRoUhWLVvGbEnEt4A7kVumOGOFZGXXel18BCk3Q6dbJcjYBEFcN/eQlQOk+wxUxmV58zaRPws625644WT+m+N7uBs2VOG09qXg/HSWLUw3JQGgQRYePjLMyR8rN/g6dCMisSP0lD/CZTSpiLPsjGubi0kEect/yBH7l9g07aBgdZAqZ/T1shtzXAF1W7IuA2yxcMYhGikDU69TR/QkXoDUpY2ShxtpIJjUkbHNV4Y4v5+KkYmy1AsK5desIRqcc6OyiQBYAksolPBUQCmoCqqJVj/z0N8dZ3nCb3nN5mvN+JaSojD+TDjfHPeOJaNx82P7EPtbbpdErXjv1svROLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5j6yrf18OvFs/g2OXumc1kp/h1pDxURiDKoEyKVvGwg=;
- b=Uvzq7jbWYkhlknA2sreqYTA/sXsBuyADflgeXshJfah09cz4b27Bjl1DFqkDM61/34KHeILd2i8uxdwk4UB5yodeOq7M9tyJrED+/ONHY+JBZtlrvkkRUXYqwUWuNShI2/EeemfBGFsPJtmbtG9giNPzuFdJ01TWdb7LwASJ+xFtiFdkY6hePFEg+9zWc1Vo5viWyRuJS/9+iix9I2sPQexaUkhUe2jA3WaOkI8e19tYK4Q3Qyb79N02LcOBg+bnYluQonbrESJExW8MyDMBgyWYfZzxANxTuWlBQ0SxV8yi6rXenHqsS5i5n+bd+UelS3tFg0c0/i/rzFB3C1LY6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN9PR11MB5275.namprd11.prod.outlook.com (2603:10b6:408:134::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Wed, 8 Feb
- 2023 04:25:59 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Wed, 8 Feb 2023
- 04:25:59 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Nicolin Chen <nicolinc@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: RE: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Thread-Topic: [PATCH v1 2/8] iommu: Introduce a new
- iommu_group_replace_domain() API
-Thread-Index: AQHZNtTMfIuYSgtAgESqEIXUquWnsq684BXwgABzjwCABCqQ8IAAcQqAgAC4POCAAMiWgIABDJdQ
-Date:   Wed, 8 Feb 2023 04:25:58 +0000
-Message-ID: <BN9PR11MB5276CD7FAA1BF85CD8F94C908CD89@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1675320212.git.nicolinc@nvidia.com>
- <a98e622f41d76b64f5a7d0c758d8bda5e8043013.1675320212.git.nicolinc@nvidia.com>
- <BN9PR11MB5276BB497D32073A1F4CBE238CD79@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y90iOAmnBtqQtmiA@ziepe.ca>
- <BN9PR11MB527689447DD190FECE4FDA158CDA9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y+D/vWwRLD27slQz@nvidia.com>
- <BN9PR11MB52769E24B07CA7296D8BEAF28CDB9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y+JCjazMAMzNrc+e@nvidia.com>
-In-Reply-To: <Y+JCjazMAMzNrc+e@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BN9PR11MB5275:EE_
-x-ms-office365-filtering-correlation-id: 9618a1e0-751e-484b-0408-08db098c942d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: R6bWnFSZK3dp8gbGY0dSDOaL2yF4oMr4Bd1rw5DWm/ocHeYsves16Dio5eMsAhCoHgH1addx66uqzRpEpf4dYw7TRQ5C218YxEYzTzLuDdp9bUJP9cV3f4hJWJZHeI+nuIg+xgARpLBAaP9yO5NOf2lAxs4RFZ/SWqsGdFt7mVBB0bbd7Hqd+Dy1/WcCAINbamgoHMrI/Tghr7ppUX5Y+fr/bh3a8d+HHCTIXs7KppoI6NbYCbI1oexLTwSSQDh/pMEcmyUZcWQ1B/u6JtsObHusWCjQs7Q9cSaWLoFPmRJRi519q0bq58dFJ2ZFZP+Nbf3/o1RlLu3IJntLcuLBh9WOLjOmpkf46zGTHO4hqaoOV9tjTAg/a5psOp7ybpgriES0OeX+IxAZ8S9jn+I47Qx6fxA1kU4uuECOI/D5YtkFbZ2+qKZq7PLY1BvxkmAgTJJl7MIVnZCkt+oeTYglkH0OzSToiRxZ8dZEcPoX7eeVTqHlQFSWFTM1BdsJ1mnmtdGP4ssjlCHkRw6xC39VrVg40nrK2In78EVUtM4t0SDQil8Q6xcWfc89x09OUJThJVnErpddWi4Nj6qy0h9JJBhRXHnVdzPx4h1YYB9290C/tOBx0nS+4lk7BffCbIcOoUITrpRUQuq7Hz0/C0EESWYnHaOMpKVYQvi+enQS7LnVYoBNP/s3q6OVBueEEWNG2TnHFCs/Rj0suJeOt8Wm1g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(396003)(366004)(136003)(39860400002)(451199018)(83380400001)(2906002)(7416002)(82960400001)(8936002)(4326008)(54906003)(5660300002)(52536014)(33656002)(41300700001)(66946007)(76116006)(64756008)(66556008)(66476007)(6916009)(8676002)(86362001)(55016003)(316002)(66446008)(38070700005)(9686003)(26005)(186003)(38100700002)(71200400001)(7696005)(478600001)(6506007)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XgQzdj+CZtcBuAYwMTeAQyh5Gv860uouwgAWUKXZwXoFVrihtK0ESVCnPcH1?=
- =?us-ascii?Q?LYXE16A6nfdjq80LRU0N91CaFpnBt1lQUsse734IFMdhziziQLUXnnSMtyjy?=
- =?us-ascii?Q?BzVacddEOcLckZH4/WRtPqmiRzaG8Ym9G8+sR9O9TJHforeA2nkeJaXxGj4H?=
- =?us-ascii?Q?8cEb0IZoqOwZ75rFCG0/AVhBx0FnzIoW2xWeJ5H8JBi/iqjUGAQO5xxVDOai?=
- =?us-ascii?Q?BdPU9EupH6wgOBoiGniQwV8Kog2ymYSstZ24d7hnJi9+5F541/UE5XTPJsVB?=
- =?us-ascii?Q?thY9LUfZzewf7RLAu7Vyqo4CEvVU6MBtIhedVlvS6s/cp42dyEA+PSZakpor?=
- =?us-ascii?Q?njqvkeW1eR8icY/r6byWcM9DQ67IbE/QwdMF4yeL3FeblbMAKVRts96n9JEA?=
- =?us-ascii?Q?H4imQrqZ29flpf3xtW0poPv5VKnqYmumgFlZzdzuARmIOktnxE+rjr2ihGKr?=
- =?us-ascii?Q?/Qtefmd7eghwwYACo7c5Bw4xCkovvb1ufENqRBvKxjCnZcr+Gge7j4X6tmka?=
- =?us-ascii?Q?8m+yx1MU0OMF7hHp578KCmwQrJ3XSwdpDXk5AYI3/hOfkLOT1H/9FGcCmqvP?=
- =?us-ascii?Q?L9MmdbPkRvcq013V8wv6FkJDdaLby9A22OKMn4IiIyBGB5PIoEXlHBDQUn2D?=
- =?us-ascii?Q?oYuB6PyQ1uiMyZuMnfrR6BdNw0ft3mjQIS7qYQN/4A6RCuPIeHcRQzneL0Yv?=
- =?us-ascii?Q?b1JdONG3+YULahaaIwI48PB9zNOQvxDw4+jW4NAeVdkdYt+TdRIRsByCmvG4?=
- =?us-ascii?Q?l/LGz/SDVYo1ust9pV/QACDsqoLmLyfDdIIlzzCyMpjaurCGpMbx0oDXAwZ7?=
- =?us-ascii?Q?htaWD6GEtUd1+wmE5D+h4DgUIE9bjfC+KIvyM+C2Jq0zcq9GkdbyLjZM/rs7?=
- =?us-ascii?Q?bmdNuQ5c6RDE0jiusuXU4khPLuz1L5iKG/QJA2RMjuqYnMU9se9PZqP8kiaE?=
- =?us-ascii?Q?EtI9v0elCEzN57DidxthirIZuAnpQv+3+Uhpn6RSBnrrSC4jazb/lg/9DPOG?=
- =?us-ascii?Q?4pmZ4Vkx06MlEyOdMnQvYBO+tgoYFG5dvUgzmoQVHMEW6PXwycM3MiiaIH66?=
- =?us-ascii?Q?8Gyg5K4pGw75KOoOM1tnGtcZNbfR+uQDOxIrgy2ZQGIv+3QTNmf0zNeXkFWh?=
- =?us-ascii?Q?09OD5EMndTFL+QP4paJtM7K7Nbqi/oO+EHg5mDhE/+eunkLYDFtDjyAhmGQN?=
- =?us-ascii?Q?UN7erJBwm1141M1PuHDeos36q7FqT1klIVfgD3UYMJuV0/fFSWEfV69ql7M1?=
- =?us-ascii?Q?FOJMzXw8J6C4iGEr+sCy8m/fr+8VwtLIDWDvegLbGuHnMWyEcKqGGG/PswdY?=
- =?us-ascii?Q?Qq8ciPFfZ6ScPdO/RZcyCZMkaSC7OGBWnomfkE5/aQDi0g4aWclTyzg+EpZN?=
- =?us-ascii?Q?xTBgsP7FUpTrSCWSzFhUlEzeKxH35Qhfs9m4d/10wi724yNM7/hWLkuyDUvM?=
- =?us-ascii?Q?O+Md+3O6MY/T0Tk1wUsJtL3c53pw/4th0pVu8Yo373/SJpfjZfOouhSZjqGL?=
- =?us-ascii?Q?107v739Y05HhbnUoG1x/pa5FnYVeuhHeTRalMMY9j6bPxMqwBkadRtlnIMH2?=
- =?us-ascii?Q?u7f9o3C3iLP3jfxFqBGoUHf5YryFd4xKb3hTn+X3?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 15.2.986.36; Tue, 7 Feb 2023 20:29:02 -0800
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>,
+        Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V2 0/6] Add APSS clock driver support for IPQ5332
+Date:   Wed, 8 Feb 2023 09:58:45 +0530
+Message-ID: <20230208042850.1687-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9618a1e0-751e-484b-0408-08db098c942d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2023 04:25:58.8794
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: st21CvnZT1dd+4uKOLnE4BykhWtomLCYSdcKhHVIAOf8Z0oBqV83CSmRxdyeCsk1x79290dWcyvI26mWP2cWPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5275
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IGjU3gBrJYHoOiffZ6GpZleuKUTJ6J6t
+X-Proofpoint-ORIG-GUID: IGjU3gBrJYHoOiffZ6GpZleuKUTJ6J6t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_15,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ bulkscore=0 phishscore=0 adultscore=0 clxscore=1015 impostorscore=0
+ mlxlogscore=775 spamscore=0 lowpriorityscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302080039
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Tuesday, February 7, 2023 8:23 PM
->=20
-> On Tue, Feb 07, 2023 at 12:32:50AM +0000, Tian, Kevin wrote:
-> > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > Sent: Monday, February 6, 2023 9:25 PM
-> > >
-> > > On Mon, Feb 06, 2023 at 06:57:35AM +0000, Tian, Kevin wrote:
-> > > > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > > > Sent: Friday, February 3, 2023 11:03 PM
-> > > > >
-> > > > > On Fri, Feb 03, 2023 at 08:26:44AM +0000, Tian, Kevin wrote:
-> > > > > > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > > > > > Sent: Thursday, February 2, 2023 3:05 PM
-> > > > > > >
-> > > > > > > All drivers are already required to support changing between
-> active
-> > > > > > > UNMANAGED domains when using their attach_dev ops.
-> > > > > >
-> > > > > > All drivers which don't have *broken* UNMANAGED domain?
-> > > > >
-> > > > > No, all drivers.. It has always been used by VFIO.
-> > > >
-> > > > existing iommu_attach_group() doesn't support changing between
-> > > > two UNMANAGED domains. only from default->unmanaged or
-> > > > blocking->unmanaged.
-> > >
-> > > Yes, but before we added the blocking domains VFIO was changing
-> > > between unmanaged domains. Blocking domains are so new that no
-> driver
-> > > could have suddenly started to depend on this.
-> >
-> > In legacy VFIO unmanaged domain was 1:1 associated with vfio
-> > container. I didn't say how a group can switch between two
-> > containers w/o going through transition to/from the default
-> > domain, i.e. detach from 1st container and then attach to the 2nd.
->=20
-> Yes, in the past we went through the default domain which is basically
-> another unmanaged domain type. So unmanaged -> unmanaged is OK.
->=20
+This series adds support for the APSS clock to bump the CPU frequency
+above 800MHz.
 
-it's right in concept but confusing in current context whether DMA
-domain still has its own type. That's why I replied earlier the statement
-makes more sense after your patch which cleans up the domain type
-is merged.
+APSS PLL found in the IPQ5332 is of type Stromer Plus. However the
+existing IPQ targets uses the Huayra PLL. So the driver has to
+refactored to accommodate the different PLL types. The first patch in
+the series does the refactoring, which can be independenty merged.
+
+For the Stromer PLL separate function clk_stromer_pll_configure is
+introduced, so the 3rd patch in the series depends on the below patch
+https://lore.kernel.org/linux-arm-msm/20230120082631.22053-1-quic_kathirav@quicinc.com/
+
+DTS patch depends on the IPQ5332 baseport series
+https://lore.kernel.org/linux-arm-msm/20230130114702.20606-1-quic_kathirav@quicinc.com/
+
+Changes since V1:
+	- Dropped the patch 5/6, since the fallback mechanism for compatible
+	  is introduced to avoid bloating the of_device_id table
+	- V1 can be found at
+	  https://lore.kernel.org/linux-arm-msm/20230202145208.2328032-1-quic_kathirav@quicinc.com/
+
+Kathiravan T (5):
+  clk: qcom: apss-ipq-pll: refactor the driver to accommodate different
+    PLL types
+  dt-bindings: clock: qcom,a53pll: add IPQ5332 compatible
+  clk: qcom: apss-ipq-pll: add support for IPQ5332
+  dt-bindings: mailbox: qcom: add compatible for the IPQ5332 SoC
+  arm64: dts: qcom: ipq5332: enable the CPUFreq support
+
+ .../bindings/clock/qcom,a53pll.yaml           |   1 +
+ .../mailbox/qcom,apcs-kpss-global.yaml        |  18 ++-
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         |  37 ++++++
+ drivers/clk/qcom/apss-ipq-pll.c               | 116 +++++++++++++++---
+ 4 files changed, 147 insertions(+), 25 deletions(-)
+
+-- 
+2.17.1
+
