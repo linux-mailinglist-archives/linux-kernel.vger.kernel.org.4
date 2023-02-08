@@ -2,110 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B5168F629
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B44F68F62F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjBHRxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:53:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S231346AbjBHRzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:55:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbjBHRxp (ORCPT
+        with ESMTP id S231280AbjBHRzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:53:45 -0500
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BAB59E2;
-        Wed,  8 Feb 2023 09:53:44 -0800 (PST)
-Received: by mail-pl1-f182.google.com with SMTP id k13so20227761plg.0;
-        Wed, 08 Feb 2023 09:53:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UHYPrSiTkVKIlfo8HfMdMKbV5juD4qgKqM8oSnLweE8=;
-        b=sQwEsm+G5eaUbb7aY1mSz7DJb8FYCFum2/YVoB4IJIWjliqWRFDlUam0z9NiKPYfl8
-         1tx0ZjD+WdqUjwWbtzjxx7ER0S2E5GXcsunYeS4CrkWjR9XYMWLqDJ4nEvPJCSNqIvKb
-         gfN6bySy569/MsWsXFEAkVF4qIQST4IGSFtaJH+fsb9We1LUyqwXmJ3fpzv1DjUV6AIa
-         PSgDdeytsXpAHk5wZ2tP94Rpr4UZo8amFj1z7QqvKjnOUKQEtRiAwf74C3i1O99Tgher
-         6dsKD1+ZmRXMW33Qm45LSgQRcu6PLgAZi8GhupiKbkeyVEY76bLEapaRwoODq13AOYgW
-         mzMw==
-X-Gm-Message-State: AO0yUKVCqbh/42wON6JxA3liBwlzgya8lCkqcJMjXdGNC+g/UpnwRqxD
-        1plw+3ptQzc+rGEA/FGB//Y=
-X-Google-Smtp-Source: AK7set/GrvVfRVcZ26t5iBnwWqMEPtJBrPM9dsurSPWoOG+E6492+ASW9DmosYVxi30oZtwSF3UQFQ==
-X-Received: by 2002:a17:902:e1c4:b0:195:e92e:c4d3 with SMTP id t4-20020a170902e1c400b00195e92ec4d3mr5589893pla.46.1675878824157;
-        Wed, 08 Feb 2023 09:53:44 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:869f:66a2:40c:445d? ([2620:15c:211:201:869f:66a2:40c:445d])
-        by smtp.gmail.com with ESMTPSA id u2-20020a170902a60200b001962858f990sm11370358plq.164.2023.02.08.09.53.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 09:53:43 -0800 (PST)
-Message-ID: <7fcd4c38-ccbe-6411-e424-a57595ad9c0b@acm.org>
-Date:   Wed, 8 Feb 2023 09:53:41 -0800
+        Wed, 8 Feb 2023 12:55:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFE94FC33
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:55:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24CF861777
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:55:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A28CC433D2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:55:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="gF45GKbE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1675878908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NX9PPmf+UtKBiMc3Pr/UMujDXNlvFeRU34FW2V7wq6I=;
+        b=gF45GKbEv6ZbWqxPeiHLMoSQ0koS1/PGV52YmqX2tzqerzYlpj5he+/YL3r+yBFN6c2lC4
+        t4dtav52gRboJWQGSXsv/ZNWL5spo1XYeYTKPjAfgv5HtEHaUgygrgWOrZaISlB6RWLPmY
+        wju/kmo2kKYs93vCZya150FmU+wXKMI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 64bfa816 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 8 Feb 2023 17:55:08 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id q9so2022248ybk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:55:08 -0800 (PST)
+X-Gm-Message-State: AO0yUKWW0zqFQ8dmDXmnnyNREMNVpRy3zswgrVNbmPiz5vsGuARGDpBB
+        icXGcVGOnm8TsomXXzOKF8me9XFVeIDHQFR1jZc=
+X-Google-Smtp-Source: AK7set8WhMTDtwuneLf6Ea9rnPzajeUh0PcK6xC4f6mhoGkI2eEn/DGqu0qN6G8FPBWZUUh6dpohxbiwV1LwZ0pcNBg=
+X-Received: by 2002:a5b:6c5:0:b0:88f:946:bd98 with SMTP id r5-20020a5b06c5000000b0088f0946bd98mr1067931ybq.24.1675878906349;
+ Wed, 08 Feb 2023 09:55:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] blk-ioprio: Introduce promote-to-rt policy
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-Cc:     Hou Tao <houtao@huaweicloud.com>, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, houtao1@huawei.com
-References: <20230201045227.2203123-1-houtao@huaweicloud.com>
- <8c068af3-7199-11cf-5c69-a523c7c22d9a@acm.org>
- <4f7dcb3e-2d5a-cae3-0e1c-a82bcc3d2217@huaweicloud.com>
- <b6b3c498-e90b-7d1f-6ad5-a31334e433ae@acm.org>
- <beb7782e-72a4-c350-3750-23a767c88753@huaweicloud.com>
- <aedc240d-7c9e-248a-52d2-c9775f3e8ca1@acm.org>
- <20230208134345.77bdep3kzp52haxu@quack3>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230208134345.77bdep3kzp52haxu@quack3>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <Y69fUstLKNv/RLd7@zx2c4.com> <20221230220725.618763-1-Jason@zx2c4.com>
+ <Y+Pf0q6LmQKN+FHo@dev-arch.thelio-3990X>
+In-Reply-To: <Y+Pf0q6LmQKN+FHo@dev-arch.thelio-3990X>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 8 Feb 2023 14:54:41 -0300
+X-Gmail-Original-Message-ID: <CAHmME9pQ6yvRQzzT_k0vmDFi4QioCfgryCebhvfNCWNP_tkddQ@mail.gmail.com>
+Message-ID: <CAHmME9pQ6yvRQzzT_k0vmDFi4QioCfgryCebhvfNCWNP_tkddQ@mail.gmail.com>
+Subject: Re: [PATCH qemu v3] x86: don't let decompressed kernel image clobber setup_data
+To:     Nathan Chancellor <nathan@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     pbonzini@redhat.com, ebiggers@kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        ardb@kernel.org, kraxel@redhat.com, hpa@zytor.com, bp@alien8.de,
+        philmd@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/23 05:43, Jan Kara wrote:
-> On Fri 03-02-23 11:45:32, Bart Van Assche wrote:
->> On 2/2/23 17:48, Hou Tao wrote:
->>> I don't get it on how to remove IOPRIO_POL_PROMOTION when calculating the final
->>> ioprio for bio. IOPRIO_POL_PROMOTION is not used for IOPRIO_CLASS values but
->>> used to determinate on how to calculate the final ioprio for bio: choosing the
->>> maximum or minimum between blkcg ioprio and original bio bi_ioprio.
->>
->> Do the block layer code changes shown below implement the functionality
->> that you need?
-> 
-> Just one question guys: So with my a78418e6a04c ("block: Always initialize
-> bio IO priority on submit") none-to-rt policy became effectively a noop as
-> Hou properly noticed. Are we aware of any users that were broken by this?
-> Shouldn't we rather fix the code so that none-to-rt starts to operate
-> correctly again? Or maybe change the none-to-rt meaning to be actually
-> promote-to-rt?
-> 
-> I have to admit I'm wondering a bit what was the intended usecase behind
-> the introduction of none-to-rt policy. Can someone elaborate? promote-to-rt
-> makes some sense to me - we have a priviledged cgroup we want to provide
-> low latency access to IO but none-to-rt just does not make much sense to
-> me...
+Hi Nathan (and MST),
 
-Hi Jan,
+On Wed, Feb 8, 2023 at 2:45 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Jason,
+>
+> On Fri, Dec 30, 2022 at 11:07:25PM +0100, Jason A. Donenfeld wrote:
+> > The setup_data links are appended to the compressed kernel image. Since
+> > the kernel image is typically loaded at 0x100000, setup_data lives at
+> > `0x100000 + compressed_size`, which does not get relocated during the
+> > kernel's boot process.
+> >
+> > The kernel typically decompresses the image starting at address
+> > 0x1000000 (note: there's one more zero there than the compressed image
+> > above). This usually is fine for most kernels.
+> >
+> > However, if the compressed image is actually quite large, then
+> > setup_data will live at a `0x100000 + compressed_size` that extends int=
+o
+> > the decompressed zone at 0x1000000. In other words, if compressed_size
+> > is larger than `0x1000000 - 0x100000`, then the decompression step will
+> > clobber setup_data, resulting in crashes.
+> >
+> > Visually, what happens now is that QEMU appends setup_data to the kerne=
+l
+> > image:
+> >
+> >           kernel image            setup_data
+> >    |--------------------------||----------------|
+> > 0x100000                  0x100000+l1     0x100000+l1+l2
+> >
+> > The problem is that this decompresses to 0x1000000 (one more zero). So
+> > if l1 is > (0x1000000-0x100000), then this winds up looking like:
+> >
+> >           kernel image            setup_data
+> >    |--------------------------||----------------|
+> > 0x100000                  0x100000+l1     0x100000+l1+l2
+> >
+> >                                  d e c o m p r e s s e d   k e r n e l
+> >                      |-------------------------------------------------=
+------------|
+> >                 0x1000000                                              =
+       0x1000000+l3
+> >
+> > The decompressed kernel seemingly overwriting the compressed kernel
+> > image isn't a problem, because that gets relocated to a higher address
+> > early on in the boot process, at the end of startup_64. setup_data,
+> > however, stays in the same place, since those links are self referentia=
+l
+> > and nothing fixes them up.  So the decompressed kernel clobbers it.
+> >
+> > Fix this by appending setup_data to the cmdline blob rather than the
+> > kernel image blob, which remains at a lower address that won't get
+> > clobbered.
+> >
+> > This could have been done by overwriting the initrd blob instead, but
+> > that poses big difficulties, such as no longer being able to use memory
+> > mapped files for initrd, hurting performance, and, more importantly, th=
+e
+> > initrd address calculation is hard coded in qboot, and it always grows
+> > down rather than up, which means lots of brittle semantics would have t=
+o
+> > be changed around, incurring more complexity. In contrast, using cmdlin=
+e
+> > is simple and doesn't interfere with anything.
+> >
+> > The microvm machine has a gross hack where it fiddles with fw_cfg data
+> > after the fact. So this hack is updated to account for this appending,
+> > by reserving some bytes.
+> >
+> > Cc: x86@kernel.org
+> > Cc: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> > Cc: H. Peter Anvin <hpa@zytor.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Eric Biggers <ebiggers@kernel.org>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>
+> I apologize if this has already been reported/fixed already (I did a
+> brief search on lore.kernel.org) or if my terminology is not as precise
+> as it could be, I am a little out of my element here :)
+>
+> After this change as commit eac7a7791b ("x86: don't let decompressed
+> kernel image clobber setup_data") in QEMU master, I am no longer able to
+> boot a kernel directly through OVMF using '-append' + '-initrd' +
+> '-kernel'. Instead, systemd-boot tries to start the distribution's
+> kernel, which fails with:
+>
+>   Error registering initrd: Already started
+>
+> This can be reproduced with just a defconfig Linux kernel (I used
+> 6.2-rc7), the simple buildroot images that ClangBuiltLinux uses for
+> boot testing [1], and OVMF. Prior to this change, the kernel would start
+> up but after, I am dumped into the UEFI shell (as there is no
+> bootloader).
+>
+> The QEMU command I used was:
+>
+> $ qemu-system-x86_64 \
+>     -kernel arch/x86_64/boot/bzImage \
+>     -append "console=3DttyS0 earlycon=3Duart8250,io,0x3f8" \
+>     -drive if=3Dpflash,format=3Draw,file=3D/usr/share/edk2/x64/OVMF_CODE.=
+fd,readonly=3Don
+>     -drive if=3Dpflash,format=3Draw,file=3D../boot-utils/images/x86_64/OV=
+MF_VARS.fd \
 
-The test results I shared some time ago show that IOPRIO_CLASS_NONE was 
-the default I/O priority two years ago (see also 
-https://lore.kernel.org/linux-block/20210927220328.1410161-5-bvanassche@acm.org/). 
-The none-to-rt policy increases the priority of bio's that have not been 
-assigned an I/O priority to RT. Does this answer your question?
+Oh no... Without jumping into it, at first glance, I have absolutely
+no idea. I suppose I could start debugging it and probably come up
+with a solution, but...
 
-Thanks,
+@mst - I'm beginning to think that this whole setup_data route is
+cursed. This is accumulating hacks within hacks within hacks. What
+would you think if I just send a patch *removing* all use of
+setup_data (the rng seed and the dtb thing), and then we can gradually
+add that back with an actual overarching design. For example, it'd
+probably make sense to have a separate fwcfg file for setup_data
+rather than trying to mangle and existing one, etc. This way, we
+unbreak the tree, and let the new approach be reviewed more
+reasonably.
 
-Bart.
-
+Jason
