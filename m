@@ -2,82 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE8B68E650
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288E468E653
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjBHCvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S230300AbjBHCwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 21:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjBHCvv (ORCPT
+        with ESMTP id S229803AbjBHCwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:51:51 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25B18E3B0;
-        Tue,  7 Feb 2023 18:51:50 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 7A8C420C7E3E; Tue,  7 Feb 2023 18:51:49 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A8C420C7E3E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675824709;
-        bh=/8sypdsBFJ9BayyXPQW3tsqVwQ5HKWArPlSI9nkM8R4=;
+        Tue, 7 Feb 2023 21:52:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA6D3BD94;
+        Tue,  7 Feb 2023 18:52:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1182DB81B9F;
+        Wed,  8 Feb 2023 02:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1CDC433EF;
+        Wed,  8 Feb 2023 02:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675824727;
+        bh=b/rkymYs8+pjheRuYyegq/Om1XooZkZ/LI4pZoJDRVo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F+vpjfvj+umQjEGJfek92nTkeB45CtCxc+Z3ILKuBI7JjSXK9DWTc67imS/3UTG8y
-         WLGgMSURm2yLoqYte2jWNPq11PDNG5fCoEeEGZ6wsKeO8shYivV6MXx6NDgSa/YjeL
-         hYYMw2eF4mykznZGLZlCtoHhJtDlRDxZ4X3QAMAw=
-Date:   Tue, 7 Feb 2023 18:51:49 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com, dphadke@linux.microsoft.com
-Subject: Re: [PATCH v4 4/6] dt-bindings: hypervisor: Rename virtio to
- hypervisor
-Message-ID: <20230208025149.GC838@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675756199-5917-1-git-send-email-ssengar@linux.microsoft.com>
- <1675756199-5917-5-git-send-email-ssengar@linux.microsoft.com>
- <20230207183931.GB3753062-robh@kernel.org>
+        b=IaDVTGhkKI4ZBPjAlHb+gUIHgeBKmxo0U2I2yRvZB4o8li5UpeKZxMQDVwKZyMxlt
+         Ufp8DeaHUML/fopNaEwYMhBvqvRnMs3L3D5fUhAjaVfoViLCeDqrlOaiLDBMNMJQb+
+         javTqb2h8S4BgtHWDphOip3EWRCzvkgEUXm2BWkoAomtOavGdD/L4gG+2CP/VfNfxh
+         nLTbwBf36NZNOdDir7tmEfJ/9ltqeOqls0Y/7H6XIy00wqMlnGIE2n43S1pD0KjNgF
+         qQq4s0rDMVNCxNP0SiNHT3sNcoEGn2d2fJ77WQ5HtJs4bxiOuRXq/7o6kh44eswyfK
+         zjmJn3zepZU6A==
+Date:   Wed, 8 Feb 2023 04:52:02 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, reach622@mailcuk.com,
+        1138267643@qq.com
+Subject: Re: [regression] Bug 216989 - since 6.1 systems with AMD Ryzen
+ stutter when fTPM is enabled
+Message-ID: <Y+MOUsLIniYS/mw8@kernel.org>
+References: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
+ <8a7775912f31394944b43db12adc78efd84b1fad.camel@HansenPartnership.com>
+ <Y+MFNvr2deX7+Mxa@kernel.org>
+ <Y+MFUZ7WD0rX2rU9@kernel.org>
+ <CAHmME9pwT52maXyQMNutv6svgDxAaz3L4MDeq_KVDutOAe8uPw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230207183931.GB3753062-robh@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9pwT52maXyQMNutv6svgDxAaz3L4MDeq_KVDutOAe8uPw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 12:39:31PM -0600, Rob Herring wrote:
-> On Mon, Feb 06, 2023 at 11:49:57PM -0800, Saurabh Sengar wrote:
-> > Rename virtio folder to more generic hypervisor, so that this can
-> > accommodate more devices of similar type.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  Documentation/devicetree/bindings/gpio/gpio-virtio.yaml               | 4 ++--
-> >  Documentation/devicetree/bindings/{virtio => hypervisor}/mmio.yaml    | 2 +-
-> >  .../devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml         | 2 +-
-> >  .../devicetree/bindings/{virtio => hypervisor}/virtio-device.yaml     | 2 +-
-> >  Documentation/devicetree/bindings/i2c/i2c-virtio.yaml                 | 4 ++--
-> >  MAINTAINERS                                                           | 2 +-
-> >  6 files changed, 8 insertions(+), 8 deletions(-)
-> >  rename Documentation/devicetree/bindings/{virtio => hypervisor}/mmio.yaml (95%)
-> >  rename Documentation/devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml (98%)
-> >  rename Documentation/devicetree/bindings/{virtio => hypervisor}/virtio-device.yaml (93%)
+On Tue, Feb 07, 2023 at 11:31:37PM -0300, Jason A. Donenfeld wrote:
+> On Tue, Feb 7, 2023 at 11:13 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Wed, Feb 08, 2023 at 04:13:16AM +0200, Jarkko Sakkinen wrote:
+> > > On Thu, Feb 02, 2023 at 07:57:37AM -0500, James Bottomley wrote:
+> > > > On Thu, 2023-02-02 at 11:28 +0100, Linux kernel regression tracking
+> > > > (Thorsten Leemhuis) wrote:
+> > > > [...]
+> > > > > So it's a firmware problem, but apparently one that Linux only
+> > > > > triggers since 6.1.
+> > > > >
+> > > > > Jason, could the hwrng changes have anything to do with this?
+> > > > >
+> > > > > A bisection really would be helpful, but I guess that is not easy as
+> > > > > the problem apparently only shows up after some time...
+> > > >
+> > > > the problem description says the fTPM causes system stutter when it
+> > > > writes to NVRAM.  Since an fTPM is a proprietary implementation, we
+> > > > don't know what it does.  The ms TPM implementation definitely doesn't
+> > > > trigger NV writes on rng requests, but it is plausible this fTPM does
+> > > > ... particularly if they have a time based input to the DRNG.  Even if
+> > > > this speculation is true, there's not much we can do about it, since
+> > > > it's a firmware bug and AMD should have delivered the BIOS update that
+> > > > fixes it.
+> > > >
+> > > > The way to test this would be to set the config option
+> > > >
+> > > > CONFIG_HW_RANDOM_TPM=n
+> > > >
+> > > > and see if the stutter goes away.  I suppose if someone could quantify
+> > > > the bad bioses, we could warn, but that's about it.
+> > > >
+> > > > James
+> > > >
+> > >
+> > > And e.g. I do not have a Ryzen CPU so pretty hard to answer such question.
+> >
+> > ... about hwrng
 > 
-> virtio is used for more than just an interface to hypervisors. I think 
-> this should remain. Instead, I'd put vmbus under bindings/bus/.
-
-Agree, will move to bus in v5
-
+> Well, the options here are basically:
 > 
-> Rob
+> a) Do nothing, and just expect people to update their BIOSes, since an
+> update is available.
+> b) Do nothing, and expect people with broken BIOSes to `echo blacklist
+> tpm >> /etc/modprobesomethingsomething`.
+> c) Figure out how to identify the buggy BIOS and disable the TPM's rng
+> with a quirk in this case.
+> d) Figure out how to dynamically detect TPM rng latency, and warn about it.
+> e) Figure out how to dynamically detect TPM rng latency, and disable it.
+> 
+> I think given that a firmware update *is* available, (a) is fine. And
+> the generic workaround remains (b). But if you want to be really nice,
+> (c) would be fine too. Somebody with the affected hardware would
+> probably have to send in some DMI logs or whatever else. (d) and (e)
+> sound possible in theory but I dunno really... seems finicky.
+> 
+> Jason
+
+For now (a), but if someone with capable hardware can make up something
+I'm happy to go that through, if it makes sense.
+
+BR, Jarkko
