@@ -2,150 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C74968ED83
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B7D68ED86
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjBHLIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 06:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
+        id S230255AbjBHLIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBHLIH (ORCPT
+        with ESMTP id S230185AbjBHLIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:08:07 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B584483;
-        Wed,  8 Feb 2023 03:08:06 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318Aax8E021576;
-        Wed, 8 Feb 2023 11:07:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=Sb7zAkRR2CPMYF37C7epY1KD9UDtT1p3N6QhMn2OlVk=;
- b=L8/Y3JLaXR+To0L6ufS/o63EjQFoejIQ0gH5P93mTV4vSwC8ez3l1n7/14ThpKd/BZWU
- xfYZ8pSUJmkFqeEhAVVo8iIaWRm4FxBNnWGWHxl2dQid5tBzNEG5Za5ix/rWxWUHMClb
- KmQqlVL+3ADN2L0N5X0MEOrsQaYzAFmu9ipggXEe21hTbzShEe/Aq9oLx2sCFl8mE+dV
- e7oacoxZnTw45TqRd5SIo1QSkA2cJfmeLS3l2g6YjSF1A1M/V5/ZZKMp7YsXmKYwAoT9
- Zw/mW0XMPWdOagzY4yvurTBjhls0QbAVtTIh90SXfWpz2lFYTAXspH9h252Seh4i/1O7 yw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkgafkvy9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 11:07:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318B7Xvv015324
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 11:07:33 GMT
-Received: from hu-jinlmao-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 8 Feb 2023 03:07:32 -0800
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-Subject: [PATCH] coresight: core: Add coresight name support
-Date:   Wed, 8 Feb 2023 03:07:16 -0800
-Message-ID: <20230208110716.18321-1-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.39.0
+        Wed, 8 Feb 2023 06:08:23 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC61241F9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 03:08:20 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id 184so56068ybw.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 03:08:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3UlESeBgDciAANYrbDYeDSe/nLTXzJWVU7vv0QvjTQ=;
+        b=FpTH+5SNG50VekrvfskE3miwhfUFl+CWP4tBydhtVNcsbNGeVvYDyBR45eJn3DiqC+
+         RQApd/xtzL6xrDBazYsmciFcRnbB+A+8EVTN8uOr7YbtjfTyCkvhpbSYs9PYUQzNPSQ+
+         IfAjUFG3UrAWy7KH515p6NiHKTERG1xLCsjZitWwrn4hpUHG5myGgFUyqkjcNszyelPE
+         4XgiaA3YlvBsYmYmJDOhzWb/jXN3mRFaOwqmiLTMVWotEINHmsZT4XlDLf7+pEaAhLRX
+         zUmDirZkeX7gifq04Zt9YgA443YIJ8UBXd7fFsMj2naruVfbTHXO0x/comBGG06fqMed
+         fMqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H3UlESeBgDciAANYrbDYeDSe/nLTXzJWVU7vv0QvjTQ=;
+        b=1tf4PDbyctv4QBV6Ak6s3D3zMUhwkNafoJZyJBfpjqypZYB0FdBLb/bg+i79BHk3YN
+         +Od5RBU+ICezydRsg/Fk5MvtXmlTlixMX505gHJ4dNhM+Aeu9Fud9D1aDjK9UelsbyGx
+         jwcgFjJkH1DcaHt/DxulGxnLZ+B7poghA0TNrGJ1S6ht2Wbzz2H6pFD5AtisZYUUpIOJ
+         hf1eol/56+N848ksrw5j6kuyrHGG9mWBED6LO+7huankcU8xjqEzXh/Wxdvh10QRZ6ot
+         +vRGQHBIDYftPJl1yY28YICePozWAo9NSNRV7YSC04+xeMQWN+oK9nbeh2wHaR/yHx6T
+         aLQQ==
+X-Gm-Message-State: AO0yUKV8eZDtj2dilyupUgxcrDTyTQKMzeqW4kJmrNNBbNK00xSGcI7C
+        SjoR009Fx7mQM9mAAv0lY8lAaJPzH7vMPc+KN3lw7Q==
+X-Google-Smtp-Source: AK7set8xHbCP+Q2iJNCuxgj4D+UrE9o+1uWIfbVQJLQpwO5h1x/YO2XK51m0DHdQHHPEJpJ0k7HEhsu/xE2qaEsRvws=
+X-Received: by 2002:a5b:85:0:b0:8c0:638c:74c6 with SMTP id b5-20020a5b0085000000b008c0638c74c6mr252977ybp.341.1675854499608;
+ Wed, 08 Feb 2023 03:08:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zCGaZ7m6sdCM-TRSKtyx8TUcQk_y6Jkw
-X-Proofpoint-ORIG-GUID: zCGaZ7m6sdCM-TRSKtyx8TUcQk_y6Jkw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_04,2023-02-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1011 bulkscore=0 spamscore=0
- mlxlogscore=801 mlxscore=0 priorityscore=1501 suspectscore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302080101
+References: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com>
+In-Reply-To: <03627216-54b5-5d9b-f91d-adcd637819e3@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 8 Feb 2023 12:08:07 +0100
+Message-ID: <CACRpkdbmXri1vtRShm7a3N0sRA7Qg_ni5FpAtiEv+72a6g9Wng@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] dt-bindings: gpio: rockchip,gpio-bank: add
+ compatible string per SoC
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kever.yang@rock-chips.com, sjg@chromium.org,
+        philipp.tomsich@vrull.eu, john@metanate.com,
+        quentin.schulz@theobroma-systems.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apart from STM and ETM sources, there will be more sources added to
-coresight components. For example, there are over 10 TPDM sources.
-Add coresight name support for custom names which will be
-easy to identify the source.
+On Sat, Jan 21, 2023 at 12:06 PM Johan Jonker <jbx6244@gmail.com> wrote:
 
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
----
- drivers/hwtracing/coresight/coresight-core.c | 34 +++++++++++---------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+> Currently all Rockchip gpio nodes have the same compatible.
+> Compatible strings should be SoC related.
+>
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 
-diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-index d3bf82c0de1d..5e95d9c7f256 100644
---- a/drivers/hwtracing/coresight/coresight-core.c
-+++ b/drivers/hwtracing/coresight/coresight-core.c
-@@ -1733,28 +1733,32 @@ char *coresight_alloc_device_name(struct coresight_dev_list *dict,
- {
- 	int idx;
- 	char *name = NULL;
-+	const char *coresight_name = NULL;
- 	struct fwnode_handle **list;
-+	struct device_node *node = dev->of_node;
- 
- 	mutex_lock(&coresight_mutex);
- 
--	idx = coresight_search_device_idx(dict, dev_fwnode(dev));
--	if (idx < 0) {
--		/* Make space for the new entry */
--		idx = dict->nr_idx;
--		list = krealloc_array(dict->fwnode_list,
--				      idx + 1, sizeof(*dict->fwnode_list),
--				      GFP_KERNEL);
--		if (ZERO_OR_NULL_PTR(list)) {
--			idx = -ENOMEM;
--			goto done;
-+	if (!of_property_read_string(node, "coresight-name", &coresight_name))
-+		name = devm_kasprintf(dev, GFP_KERNEL, "%s", coresight_name);
-+	else {
-+		idx = coresight_search_device_idx(dict, dev_fwnode(dev));
-+		if (idx < 0) {
-+			/* Make space for the new entry */
-+			idx = dict->nr_idx;
-+			list = krealloc_array(dict->fwnode_list,
-+					      idx + 1, sizeof(*dict->fwnode_list),
-+					      GFP_KERNEL);
-+			if (ZERO_OR_NULL_PTR(list))
-+				goto done;
-+
-+			list[idx] = dev_fwnode(dev);
-+			dict->fwnode_list = list;
-+			dict->nr_idx = idx + 1;
- 		}
- 
--		list[idx] = dev_fwnode(dev);
--		dict->fwnode_list = list;
--		dict->nr_idx = idx + 1;
-+		name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
- 	}
--
--	name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
- done:
- 	mutex_unlock(&coresight_mutex);
- 	return name;
--- 
-2.39.0
+Bartosz can you merge this one patch and keep the rest back
+so we get a more defined DT binding baseline?
 
+Yours,
+Linus Walleij
