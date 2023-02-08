@@ -2,99 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC65468E86D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D679268E871
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjBHGkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 01:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
+        id S230207AbjBHGlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 01:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjBHGkM (ORCPT
+        with ESMTP id S229686AbjBHGl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 01:40:12 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7B516AD0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 22:40:11 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id x40so25679104lfu.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 22:40:11 -0800 (PST)
+        Wed, 8 Feb 2023 01:41:29 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B57138B67
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 22:41:26 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id d14so15693600wrr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 22:41:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rioQaHBJKgU5h2wt1ICSVdRiaXNLiRM7oRrhkkGAa5c=;
-        b=isCFkc5u2uP2ClQCHSVxO+0KSCLP+cRrVZ52mMTmEbBq20Ijdy+nFlkUtWzi8WnCCT
-         m0PyotMq0LIE7d9S1ePfQpOzGMQhEBLiWu1NIyq+GdbVF2xXwO7FRWkJcbnIV8mE2EQ2
-         ebyK3MvjgII3onh9IHYOEUj4JBla6YzV3A/YB+P7bK6W2l5ar71HcPevB1NbAVlKvZCX
-         jfFvrFygrMqIbxwaJ6TnpeMgDJQrYxWwvrTdF/taQgwy74UqwOfW1dstAJJ02PsbqszU
-         tOMhn7vpAqrBvp5NKL0tM/MiqR0lKZYu7j6e0vrOBWbS76UlATnUw3DGi0p1QS5ZP01y
-         g0Ag==
+        d=broadcom.com; s=google;
+        h=mime-version:subject:user-agent:references:in-reply-to:message-id
+         :date:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mMVL/7soPahuU1xHv5zYsOIR7bXThvpTxpFETf4O8Qg=;
+        b=XnGohengU2DExzxeVuUAU0//jkoWFPQaeaybuq+LqKju8XCC8jnRCHdJyzujyvx69h
+         3TM+bonPToqf3w6eUceFGk94LEf1u4MzAeOsmURMwt/KJj1oRNHJlUqRWtO/bPUQwitg
+         VxBX4zK3lGQtfift8a+Q9FeDaFI255n1kHnlY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rioQaHBJKgU5h2wt1ICSVdRiaXNLiRM7oRrhkkGAa5c=;
-        b=DDhYyAcLMXFz02ruAaau8W6KwzfYGS93u5XSc3uDjC16byuP6BtUdKE1K3Trq5fQ1u
-         Ab+gT2ruozD/NPx3YvAuqbYFED6gllWclqVUuxV0ukLG0nmBT8sss+b1fv4A+8qOS/SS
-         PAK9pQNhDuYYguXIg7jCYl4Ib6RGjN4c8Ojrnt2dPFecs5lN6R8QAA2BvvJi6ftF5EH3
-         cwpet6RkmbiFIPEW18omvr6gsrmyfARwBAYYtZQHvF5EwTETleb77utt6hM/hCFtpkiJ
-         aDg2prjagjFG2vIzk2/DDHkKKVIVcnx1NJ9Y9ZHllMHrMJmauOe+ykr12JRi1o3Mhg8S
-         0Kqg==
-X-Gm-Message-State: AO0yUKVDd2MCLa52bRMUrdhdOwvMmcu3StslpNAcaZrYG6CeQrtU5hRW
-        NFr+YHKze5c3FHRVfQIb6dl1HjuRCnjk8xNDah0mDqzhaTc8FhSG
-X-Google-Smtp-Source: AK7set/mqzkeoYr53Z7E6apC4zDRNLOyfSapa311XsyR+Gg5X+L4H2y1ooOKo08B740E4Ed6TWRdf9iF3s4MyaKiZgI=
-X-Received: by 2002:ac2:5504:0:b0:4d8:5895:a6fd with SMTP id
- j4-20020ac25504000000b004d85895a6fdmr727477lfk.273.1675838408910; Tue, 07 Feb
- 2023 22:40:08 -0800 (PST)
+        h=mime-version:subject:user-agent:references:in-reply-to:message-id
+         :date:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mMVL/7soPahuU1xHv5zYsOIR7bXThvpTxpFETf4O8Qg=;
+        b=ikO5SEl5NsYd7lufiVDYNGqT119Rd+rT5NpHlss9M0SUQNpz7lO1fGjxaBe9tO64cX
+         AK6v2pFcEbPmrm2Yu/Wud5LQ0osBERsGHPAgWCg0v8yn/wAlNRv7F3dvySCItK+jqr2h
+         N75YW2SAt2Gb90//qKpSJGlyJXFJLikLY4UlsJbJkl9WbNAbUnNqZK40BXEsIFG+0G//
+         BqEF4QOig79SXhvrTR8ttYPPSmNF4mgxKuji0FHKSvCeiMGYKczgDy2JiLcDQIpFjauA
+         kTir4Bm5jLxfKgU1yRpe0tmnQKrorcpq0l2TEACSiTUzvB3kVc+z2CVZuPH1YTgefzLq
+         kczA==
+X-Gm-Message-State: AO0yUKULVIX4G3I8eBcN4q10BUYe7PtlRK4tRWAORlu10LJkDFUlpASW
+        KaWPt1CNjVQ5rpNrUEcv+29CbA==
+X-Google-Smtp-Source: AK7set/Iu10vRMF2P4WT3Z34WnZfvpVZrSAER9sPzpiSgcrS4NYJ+5iw/4ZXqXP8EkkiJI/icZddaw==
+X-Received: by 2002:adf:e706:0:b0:2bf:b27f:c9b3 with SMTP id c6-20020adfe706000000b002bfb27fc9b3mr5411676wrm.32.1675838484959;
+        Tue, 07 Feb 2023 22:41:24 -0800 (PST)
+Received: from [10.230.43.52] ([192.19.152.250])
+        by smtp.gmail.com with ESMTPSA id e20-20020a5d5954000000b002bfd524255esm13091808wri.43.2023.02.07.22.41.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Feb 2023 22:41:24 -0800 (PST)
+From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
+To:     Hector Martin <marcan@marcan.st>,
+        Jonas Gorski <jonas.gorski@gmail.com>
+CC:     "'Hector Martin' via BRCM80211-DEV-LIST,PDL" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Prutskov <alep@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>, <asahi@lists.linux.dev>,
+        <linux-wireless@vger.kernel.org>,
+        <SHA-cyfmac-dev-list@infineon.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>
+Date:   Wed, 08 Feb 2023 07:41:23 +0100
+Message-ID: <1862fc1e650.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+In-Reply-To: <349fe17a-f754-a39a-d094-f07330618fcd@marcan.st>
+References: <20230131112840.14017-1-marcan@marcan.st>
+ <20230131112840.14017-2-marcan@marcan.st>
+ <CAOiHx=mYxFx0kr5s=4X_qywZBpPqCbrNjLnTXfigPOnqZSxjag@mail.gmail.com>
+ <4fb4af22-d115-de62-3bda-c1ae02e097ee@marcan.st>
+ <1861323f100.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+ <28ed8713-4243-7c67-b792-92d0dde82256@marcan.st>
+ <186205e1c60.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+ <CAOiHx=m2NFo2hbS4a3j67B4iFrkM7dGKGhwLkXuwOZAR=+C63Q@mail.gmail.com>
+ <d86f369d-a28c-bba3-a09b-31407acb4a25@marcan.st>
+ <349fe17a-f754-a39a-d094-f07330618fcd@marcan.st>
+User-Agent: AquaMail/1.42.0 (build: 104200255)
+Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
 MIME-Version: 1.0
-References: <cover.1675734681.git.chenfeiyang@loongson.cn> <2d77fe4e895847ae1ea09088dcfa411ce2f57f5f.1675734681.git.chenfeiyang@loongson.cn>
- <Y+Mc37ACt0PUBRAQ@1wt.eu> <20230208043440.GA3164268@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20230208043440.GA3164268@paulmck-ThinkPad-P17-Gen-1>
-From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
-Date:   Wed, 8 Feb 2023 14:39:57 +0800
-Message-ID: <CACWXhK=Jk+FsJ50mc2KFkFYMb9P1BXGv1D4dR=_M1gymqREpiA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] selftests/nolibc: Add support for LoongArch
-To:     paulmck@kernel.org
-Cc:     Willy Tarreau <w@1wt.eu>, Feiyang Chen <chenfeiyang@loongson.cn>,
-        chenhuacai@kernel.org, jiaxun.yang@flygoat.com, arnd@arndb.de,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000009dfe4c05f42a8de1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 at 12:34, Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Wed, Feb 08, 2023 at 04:54:07AM +0100, Willy Tarreau wrote:
-> > On Tue, Feb 07, 2023 at 10:09:42AM +0800, chris.chenfeiyang@gmail.com wrote:
-> > > From: Feiyang Chen <chenfeiyang@loongson.cn>
-> > >
-> > > Add support for LoongArch (64 bit) to nolibc selftest.
-> >
-> > Please also mention in this one that the makefile was reindented with
-> > no other change than adding entries for loongarch, this will save
-> > those reading this patch later from checking that the rest was not
-> > changed.
->
-> I like Willy's suggestion, but even better would be to put the whitespace
-> changes into one commit, and the code changes into another commit.
-> This makes it a lot easier for reviewers and future nolibc developers
-> to quickly and easily see exactly what changed.
->
+--0000000000009dfe4c05f42a8de1
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi, Willy, Paul,
+On February 8, 2023 5:02:32 AM Hector Martin <marcan@marcan.st> wrote:
 
-I get it now, thank you.
-
-> And one of those future nolibc maintainers just might be you!  ;-)
+> On 05/02/2023 22.02, Hector Martin wrote:
+>> On 05/02/2023 21.44, Jonas Gorski wrote:
+>>> On Sun, 5 Feb 2023 at 07:58, Arend Van Spriel
+>>> <arend.vanspriel@broadcom.com> wrote:
+>>>>
+>>>> - stale Cypress emails
+>>>>
+>>>> On February 5, 2023 3:50:41 AM Hector Martin <marcan@marcan.st> wrote:
+>>>>
+>>>>> On 03/02/2023 02.19, Arend Van Spriel wrote:
+>>>>>> On February 2, 2023 6:25:28 AM "'Hector Martin' via BRCM80211-DEV-LIST,PDL"
+>>>>>> <brcm80211-dev-list.pdl@broadcom.com> wrote:
+>>>>>>
+>>>>>>> On 31/01/2023 23.17, Jonas Gorski wrote:
+>>>>>>>> On Tue, 31 Jan 2023 at 12:36, Hector Martin <marcan@marcan.st> wrote:
+>>>>>>>>>
+>>>>>>>>> These device IDs are only supposed to be visible internally, in devices
+>>>>>>>>> without a proper OTP. They should never be seen in devices in the wild,
+>>>>>>>>> so drop them to avoid confusion.
+>>>>>>>>
+>>>>>>>> I think these can still show up in embedded platforms where the
+>>>>>>>> OTP/SPROM is provided on-flash.
+>>>>>>>>
+>>>>>>>> E.g. https://forum.archive.openwrt.org/viewtopic.php?id=55367&p=4
+>>>>>>>> shows this bootlog on an BCM4709A0 router with two BCM43602 wifis:
+>>>>>>>>
+>>>>>>>> [    3.237132] pci 0000:01:00.0: [14e4:aa52] type 00 class 0x028000
+>>>>>>>> [    3.237174] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
+>>>>>>>> [    3.237199] pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
+>>>>>>>> [    3.237302] pci 0000:01:00.0: supports D1 D2
+>>>>>>>> ...
+>>>>>>>> [    3.782384] pci 0001:03:00.0: [14e4:aa52] type 00 class 0x028000
+>>>>>>>> [    3.782440] pci 0001:03:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
+>>>>>>>> [    3.782474] pci 0001:03:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
+>>>>>>>> [    3.782649] pci 0001:03:00.0: supports D1 D2
+>>>>>>>>
+>>>>>>>> 0xaa52 == 43602 (BRCM_PCIE_43602_RAW_DEVICE_ID)
+>>>>>>>>
+>>>>>>>> Rafał can probably provide more info there.
+>>>>>>>>
+>>>>>>>> Regards
+>>>>>>>> Jonas
+>>>>>>>
+>>>>>>> Arend, any comments on these platforms?
+>>>>>>
+>>>>>> Huh? I already replied to that couple of days ago or did I only imagine
+>>>>>> doing that.
+>>>>>
+>>>>> I don't see any replies from you on the lists (or my inbox) to Jonas' email.
+>>>>
+>>>> Accidentally sent that reply to internal mailing list. So quoting myself here:
+>>>>
+>>>> """
+>>>> Shaking the tree helps ;-) What is meant by "OTP/SPROM is provided
+>>>> on-flash"? I assume you mean that it is on the host side and the wifi PCIe
+>>>> device can not access it when it gets powered up. Maybe for this scenario
+>>>> we should have a devicetree compatible to configure the device id, but that
+>>>> does not help any current users of these platforms. Thanks for providing
+>>>> this info.
+>>>
+>>> That's what I meant, the wifi chip itself does not have any (valid)
+>>> OTP/SPROM attached/populated, and requires the driver to setup the
+>>> values at runtime based on the host SoC's flash contents (most likely
+>>> NVRAM contents).
+>>>
+>>> This was the case in about 99% of embedded systems based on MIPS
+>>> bcm47xx/bcm63xx, where the wifi chips then always identified
+>>> themselves with their raw chip IDs as PCI device IDs (even leading to
+>>> one or two ID conflicts ...).
+>>>
+>>> I have to admit I don't know how much this is still an issue on
+>>> current (ARM) systems, but at least that one BCM4709A one suggests
+>>> this is still happening in "recent" designs. Probably because it saves
+>>> half a cent per board or so ;-)
+>>>
+>>> Regards
+>>> Jonas
+>>
+>> As far as I know the OTP is built into the chips themselves, and even
+>> Apple (who refuses to put per-device calibration data in OTP these days
+>> and loads it from DT) still manages to burn in the proper device ID and
+>> basic info at least... so I'm not sure how this saves any money. I
+>> thought chips weren't supposed to even leave Broadcom without at least
+>> an ID burned in?
+>>
+>> - Hector
 >
->                                                         Thanx, Paul
+> I'd like to move forward with this. Should I send a v3 without the RAW
+> ID removal?
 
-Thanks,
-Feiyang
+Yeah. Need to consider the options for solving this.
+
+Programming the OTP is a manufacturing step done by OEM so I think they 
+save having to implement that step in production and it is not so much chip 
+cost saving.
+
+Our proprietary driver is setup so it is probed for any PCI device with 
+network class and then it uses NVRAM to obtain the PCI devid.
+
+Regards,
+Arend
+
+
+
+--0000000000009dfe4c05f42a8de1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
+Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
+ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
+zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
+sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
+BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
+N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
+p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
+bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBlMFMQwGINDL1SKWBR
+r7J3lEHyVQsQZ2zloCyA4YdvaTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMzAyMDgwNjQxMjVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEA5Uc+tji4JCBmnvTIG2Np0GKJB4CExkZZuPyL
+lUTXNEridJKgwIZUbsJwe+z0Q81RbV7fk0gGXQYO64t+ThbN/M8lWjm8AfUnjNFMjpC3LZi9t5ML
+1q2TGUT6Xy7jib7pH98aGZh+j2qcfh2FvngxP7gIfiEZ3/mA5Y76uxROdbi7BTsgWBJSa1277Ard
+6BKgh5+xgY3xaG41ceIAeT0xfihnRqG7NZwza+LTwjKAthsgi4ndY23GSjkjngTdjkYsY6N3Fi5E
+BoDQ27S1QNL6hR9nXpauMCYac6nUyjQAum/Pp1p6Wl+ybgT/gzn7f9nytXe8dfEISzeV0gipl2bT
+UA==
+--0000000000009dfe4c05f42a8de1--
