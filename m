@@ -2,154 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AF868F357
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E77968F365
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjBHQjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S231625AbjBHQkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjBHQjc (ORCPT
+        with ESMTP id S231519AbjBHQkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:39:32 -0500
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699294DE1F;
-        Wed,  8 Feb 2023 08:39:23 -0800 (PST)
-Received: by mail-vk1-xa2c.google.com with SMTP id v189so4567127vkf.6;
-        Wed, 08 Feb 2023 08:39:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cXy361jf8SUUyGd/0xFQMxCwUMwyU0X9mQUrtvfWoSw=;
-        b=Z7MO/7p3I/IsqPS5Xl1/cLlvCaTV7UEMz0rVLO2ouAExTa0k/JTqau9WkO4kdSBK6E
-         dmNaCxtkSPCxWVQfNXAOL2QFFv8AckQIwqI546n5MVbI08kQ9ibH8dXmykYB1tNDSGHX
-         YqmXWNYmbpIxYOG65ZN9HvRThycr5YLv3cY3DvXY4i5BpdGH2jCWFuId1tJ1MKgh288b
-         fLLSntR09KdJL6IRK2fnY332QRPCqR0rthZb4ojFqpJVKdibJRSlxG/pHA1p2cN4sCYM
-         Woam8WZVL8NprXpCQDurWzaURORCbdSEexFd9vZH2SlOSrNUoEW9mECYNV0fI4bxJZOY
-         QSCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cXy361jf8SUUyGd/0xFQMxCwUMwyU0X9mQUrtvfWoSw=;
-        b=ILxXvM0PBChjjxbDbGhFxSYdoYTM0Nhem7pFZA6pENhEriQa4DN1lYuYm63dFVwYq/
-         Acg8djIvLF7E9LW72EvsdEPaRPzDzUuGM2LKG2p/j3FrONcHgH8Ev09EVRHXQHlu1Neq
-         Y8ylLbvvwaRtfNN0jbtdjaSBG3Sg4KVBEebYJKpBEcBvvzASi9/ggVZg9VppGu7eU4FK
-         NcWzTB5IOaPaSI460RgMTiN9v4yhrGjN/XeWBcjV44naSZKmEiv5D45d94MhGVmeNcI0
-         tFFBP9rnp4t+bIMMnHuzEDuw9k3DgCTJAydkXAGNeP8LJ3cCYA5hdym+KCZXdDD9hvZq
-         1hFA==
-X-Gm-Message-State: AO0yUKVvgM6QcJ8eTS+yb9bAKq2iuPI7dfwo9+xV1eVvhgK/zYqIjG3T
-        tKLgpQ7+00VERDeKkheuOsI=
-X-Google-Smtp-Source: AK7set8916InMJzQpNA6CjxV4GVlAwIK8Cq7j9ZzRo1McpHSEby9B5j5GUyfb+abdghS0yAdCkGUfw==
-X-Received: by 2002:a05:6122:912:b0:3e1:ae3a:1b82 with SMTP id j18-20020a056122091200b003e1ae3a1b82mr6428495vka.15.1675874362376;
-        Wed, 08 Feb 2023 08:39:22 -0800 (PST)
-Received: from localhost ([50.193.167.209])
-        by smtp.gmail.com with ESMTPSA id m19-20020ac5c213000000b003e89155ef67sm1276723vkk.24.2023.02.08.08.39.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 08:39:21 -0800 (PST)
-Date:   Wed, 8 Feb 2023 08:39:20 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Pawel Chmielewski <pawel.chmielewski@intel.com>
-Cc:     Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
-        baohua@kernel.org, bristot@redhat.com, bsegall@google.com,
-        davem@davemloft.net, dietmar.eggemann@arm.com, gal@nvidia.com,
-        gregkh@linuxfoundation.org, hca@linux.ibm.com,
-        jacob.e.keller@intel.com, jesse.brandeburg@intel.com,
-        jgg@nvidia.com, juri.lelli@redhat.com, kuba@kernel.org,
-        leonro@nvidia.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux@rasmusvillemoes.dk, mgorman@suse.de, mingo@redhat.com,
-        netdev@vger.kernel.org, peter@n8pjl.ca, peterz@infradead.org,
-        rostedt@goodmis.org, saeedm@nvidia.com, tariqt@nvidia.com,
-        tony.luck@intel.com, torvalds@linux-foundation.org,
-        ttoukan.linux@gmail.com, vincent.guittot@linaro.org,
-        vschneid@redhat.com
-Subject: Re: [PATCH 1/1] ice: Change assigning method of the CPU affinity
- masks
-Message-ID: <Y+PQOCHCh78aAcAm@yury-laptop>
-References: <20230121042436.2661843-1-yury.norov@gmail.com>
- <20230208153905.109912-1-pawel.chmielewski@intel.com>
+        Wed, 8 Feb 2023 11:40:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563514DE2C;
+        Wed,  8 Feb 2023 08:39:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D682261718;
+        Wed,  8 Feb 2023 16:39:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C217C433EF;
+        Wed,  8 Feb 2023 16:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675874394;
+        bh=k2WDmJefTVbmF4UtYjVTRVt38vEfq5VHOD9s78R7eyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rm1BIDwVjM+vtyitHjo1e7C/8O3osDSw3ddUWkl4Wx2bC5t9PAYPPNOMyPOnhDGBE
+         x0/ntl8Z+mYIwUFJ4SJYgRaphWg6Yt4w739Gu/lXfntdZ6JeZX0Y+rfAbGvNs2ZHt8
+         st0eJcGbt8o4IXvW5Pd80HgnuHqj+dz7ZtRrgPBzs0UpJBQvPfkACmHMCJmVksp2u1
+         7j+OBIBzFLzMDdGcGKQCjlEbr0xBVw1CpjWop+Te/iJBfsS4i7ncKglT5iTBbI8VBo
+         HOM9qBR39AlYqQf2ZmUflFWYvSQAKch5roLODmzzrvB8D8QMKelVKI/xJc21XFfhdD
+         dus+tchf6H0SA==
+Date:   Wed, 8 Feb 2023 16:39:44 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <namit@vmware.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH mm-unstable v1 04/26] arm/mm: support
+ __HAVE_ARCH_PTE_SWP_EXCLUSIVE
+Message-ID: <Y+PQUMwH4AZSVpjb@sirena.org.uk>
+References: <20230113171026.582290-1-david@redhat.com>
+ <20230113171026.582290-5-david@redhat.com>
+ <Y+GcDFMNHw2cdDN1@sirena.org.uk>
+ <39fd91e3-c93b-23c6-afc6-cbe473bb0ca9@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="W0tQR/5xWRekS1hu"
 Content-Disposition: inline
-In-Reply-To: <20230208153905.109912-1-pawel.chmielewski@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <39fd91e3-c93b-23c6-afc6-cbe473bb0ca9@redhat.com>
+X-Cookie: Walk softly and carry a megawatt laser.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 04:39:05PM +0100, Pawel Chmielewski wrote:
-> With the introduction of sched_numa_hop_mask() and
-> for_each_numa_hop_mask(), the affinity masks for queue vectors can be
-> conveniently set by preferring the CPUs that are closest to the NUMA node
-> of the parent PCI device.
-> 
-> Signed-off-by: Pawel Chmielewski <pawel.chmielewski@intel.com>
-> ---
->  drivers/net/ethernet/intel/ice/ice_base.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
-> index e864634d66bc..fd3550d15c9e 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_base.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_base.c
-> @@ -122,8 +122,6 @@ static int ice_vsi_alloc_q_vector(struct ice_vsi *vsi, u16 v_idx)
->  	if (vsi->type == ICE_VSI_VF)
->  		goto out;
->  	/* only set affinity_mask if the CPU is online */
-> -	if (cpu_online(v_idx))
-> -		cpumask_set_cpu(v_idx, &q_vector->affinity_mask);
->  
->  	/* This will not be called in the driver load path because the netdev
->  	 * will not be created yet. All other cases with register the NAPI
-> @@ -659,8 +657,10 @@ int ice_vsi_wait_one_rx_ring(struct ice_vsi *vsi, bool ena, u16 rxq_idx)
->   */
->  int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
->  {
-> +	cpumask_t *aff_mask, *last_aff_mask = cpu_none_mask;
->  	struct device *dev = ice_pf_to_dev(vsi->back);
-> -	u16 v_idx;
-> +	int numa_node = dev->numa_node;
-> +	u16 v_idx, cpu = 0;
->  	int err;
->  
->  	if (vsi->q_vectors[0]) {
-> @@ -674,6 +674,17 @@ int ice_vsi_alloc_q_vectors(struct ice_vsi *vsi)
->  			goto err_out;
->  	}
->  
-> +	v_idx = 0;
-> +	for_each_numa_hop_mask(aff_mask, numa_node) {
-> +		for_each_cpu_andnot(cpu, aff_mask, last_aff_mask)
-> +			if (v_idx < vsi->num_q_vectors) {
-> +				if (cpu_online(cpu))
-> +					cpumask_set_cpu(cpu, &vsi->q_vectors[v_idx]->affinity_mask);
-> +				v_idx++;
-> +			}
-                        
-                        else
-                                goto out;
 
-> +		last_aff_mask = aff_mask;
-> +	}
-> +
-        out:
+--W0tQR/5xWRekS1hu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  	return 0;
->  
->  err_out:
-> -- 
-> 2.37.3
+On Wed, Feb 08, 2023 at 03:12:06PM +0100, David Hildenbrand wrote:
+> On 07.02.23 01:32, Mark Brown wrote:
 
-Would it make sense to increment v_idx only if matched CPU is online?
-It will create a less sparse array of vectors...
+> > Today's -next (and at least back to Friday, older logs are unclear - I
+> > only noticed -next issues today) fails to NFS boot on an AT91SAM9G20-EK
+> > (an old ARMv5 platform) with multi_v5_defconfig, a bisect appears to
+> > point to this patch (20aae9eff5acd8f5 in today's -next) as the culprit.
 
-Thanks,
-Yury
+> It's been in -next for quite a while, thanks for the report!
+
+Yeah, there's been some other things obscuring the issue.
+
+> Could you give the following a test?
+>=20
+>=20
+> From 8c4bdbd9862f85782d5919d044c172b584063e83 Mon Sep 17 00:00:00 2001
+> From: David Hildenbrand <david@redhat.com>
+> Date: Wed, 8 Feb 2023 15:08:01 +0100
+> Subject: [PATCH] arm/mm: Fix swp type masking in __swp_entry()
+>=20
+> We're masking with the number of type bits instead of the type mask, which
+> is obviously wrong.
+
+Tested-by: Mark Brown <broonie@kernel.org>
+
+but note that I had to manually apply it, though it's pretty trivial so
+I probably applied the right thing.
+
+--W0tQR/5xWRekS1hu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPj0FAACgkQJNaLcl1U
+h9C7hQf/VKRwP16M1jInUqUdUtyzPdvalnHTpasxKVZ8Sy0U3jwXMqNUqmnpEOSO
+UB3Q8audVEzRc8pj92dk3jilZBDPHyP58UUKRsjkrZVz22Q2/R16FcjaLrdlwNlj
+GWMfEWv5OKYPHaxP4W/VX0sXzS0XMTuulvAF1BOQRlOAS3L3jYsYUtzI2pkzJm1G
+64ICND0ZQRerzQmdQd6oO2tVhymhv8Y1LPY4TT0HikINGVpwwCJoOiocmstgqqGW
+uE+M+XJ9Lp/p78SIjfccjF1rdCWlc5MJJLS/qZzYnm6OnkKMOlBAUX9bwqvyrvE9
+quDK6fshhrFo/uJ5YVAQnAEuDKLv9g==
+=rC9E
+-----END PGP SIGNATURE-----
+
+--W0tQR/5xWRekS1hu--
