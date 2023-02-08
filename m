@@ -2,102 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4DE68EFBD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B036568EFB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjBHNa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S230237AbjBHN1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:27:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBHNay (ORCPT
+        with ESMTP id S229515AbjBHN1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:30:54 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ABE49415
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:30:52 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so1448516wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 05:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=HpCaN7lG8XCYSDYTiFmo0cVwl51EDo9X6coy6Wp5QmY=;
-        b=MhfzlfU5sY+wGQQQMW/8ySS5pdzxzPH8iIv7OSSZT231doUM5Y6Z+M7u5cZYUTnHnn
-         Nwgh+CHswYjnoy3o7x1tfV/CchtnC6DLHjliRK0UiT1fiIu/eK0ZpKuKN/zYBS0W89mW
-         wzcipCsUFqyl24KpdhfQ7asj0yayRfi8CgmbZ7p8sMoh1y2AcxMkGdWRUdw5Vh5YV1AR
-         aV3sW8WHGpQxRjaTOLEEpIMQa5vvJOzWaRXUAuWiEY1EMXmjmLrqXqzlqcxhDtV4l1m5
-         UFafj6veS/za8W+FjVLmn8AgMj6iiavpbLYgM3jxhJzhSGEmeh99X+2wysIoM35ix9U3
-         SLaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HpCaN7lG8XCYSDYTiFmo0cVwl51EDo9X6coy6Wp5QmY=;
-        b=ubZIz4TNPXyjzfUPXjn0zsEDB9iXxZLR2DnXbE2ceD86qTJOQOVm21771ayCJjHK7L
-         SqUVvCffkGf+BA5n1H8gGfJHVCFlUBQLBaHrR9JVymjFtyMZfh4CJDJl8jH02BXWy+Zs
-         FPTgEacsB+NAPAguEQd6y6hquUYWGlSwh2su1RfN/lA9hR/tiYgn3hftmQTe5HorQKyx
-         UeJKSKbXVLyHUDeX1D3LkV2EaMDON8n5qVk9s+4zJadbq8QPE8HoYTONV6TJo9Th5EHi
-         XTb5VnRsZhu1ernD8SqMAb4AZiZNiVGncAIs0U52G9PA4p02+oJBqI+6xUwfCRnbwlSN
-         pyMA==
-X-Gm-Message-State: AO0yUKVDddq3D978+uD9O/lSMLlouPvE13LH+w8XfJJJyc6AQ+ZEReRE
-        /2BcCx94htpn4JO8AcpLhpKMOQ==
-X-Google-Smtp-Source: AK7set8gTMHZ1IftF10m4fVg8A2AOT5sLEQhWbPfE+atmk79589ys3Tl9ZLjMH61OGI0Otb++12oXQ==
-X-Received: by 2002:a05:600c:13c8:b0:3da:28a9:a900 with SMTP id e8-20020a05600c13c800b003da28a9a900mr6401021wmg.41.1675863051197;
-        Wed, 08 Feb 2023 05:30:51 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id be7-20020a05600c1e8700b003dff2b493c8sm2162895wmb.36.2023.02.08.05.30.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 05:30:50 -0800 (PST)
-References: <20230208093520.52843-1-jbrunet@baylibre.com>
- <Y+OJB7OPABnPfeq7@sirena.org.uk>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/1] ASoC: dt-bindings: meson: covert axg audio to
- schema
-Date:   Wed, 08 Feb 2023 14:25:58 +0100
-In-reply-to: <Y+OJB7OPABnPfeq7@sirena.org.uk>
-Message-ID: <1j4jrwmghi.fsf@starbuckisacylon.baylibre.com>
+        Wed, 8 Feb 2023 08:27:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E211EFF5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:26:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675862784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EP1cZEUK/y88KszI7bo4s/vXvn+pjBarfFL4ChRjJgI=;
+        b=TMASS1HXc+Bs/VXSC7+kVtSFmRHtqSvcMNb/BtDMY+gZ1+F67x4gq+Jdkm+bvAXxtXFARi
+        TcyM1g+w9CgsYjGl8C3acSG7WWU30H0DOejmOLOBQ2Wwp60QbSXVp+o4Os2ioTAB2zhDLU
+        2gSttgpzdkuja0YNtjYp4HqJHCOLnxE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-LgTz3dIvObSEZ9jXMPPg9Q-1; Wed, 08 Feb 2023 08:26:21 -0500
+X-MC-Unique: LgTz3dIvObSEZ9jXMPPg9Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB23080D0E0;
+        Wed,  8 Feb 2023 13:26:20 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.32.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7FAEBC15BAD;
+        Wed,  8 Feb 2023 13:26:20 +0000 (UTC)
+Date:   Wed, 8 Feb 2023 08:26:19 -0500
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, mingo@redhat.com, peterz@infradead.org,
+        ritesh.list@gmail.com, srikar@linux.vnet.ibm.com,
+        sshegde@linux.ibm.com, vincent.guittot@linaro.org,
+        vishalc@linux.vnet.ibm.com, vschneid@redhat.com
+Subject: Re: [PATCH v2] sched/debug: Put sched/domains files under the
+ verbose flag
+Message-ID: <Y+Oi+7fbqtyGh+ul@lorien.usersys.redhat.com>
+References: <20230119150758.880189-1-pauld@redhat.com>
+ <20230120163330.1334128-1-pauld@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230120163330.1334128-1-pauld@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ingo, Peter,
 
-On Wed 08 Feb 2023 at 11:35, Mark Brown <broonie@kernel.org> wrote:
+On Fri, Jan 20, 2023 at 11:33:30AM -0500 Phil Auld wrote:
+> The debug files under sched/domains can take a long time to regenerate,
+> especially when updates are done one at a time. Move these files under
+> the sched verbose debug flag. Allow changes to verbose to trigger
+> generation of the files. This lets a user batch the updates but still
+> have the information available.  The detailed topology printk messages
+> are also under verbose.
+> 
+> Discussion that lead to this approach can be found in the link below.
+> 
+> Simplified code to maintain use of debugfs bool routines suggested by
+> Michael Ellerman <mpe@ellerman.id.au>.
+> 
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Link: https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
+> ---
 
-> [[PGP Signed Part:Undecided]]
-> On Wed, Feb 08, 2023 at 10:35:18AM +0100, Jerome Brunet wrote:
->> Continue conversion of AXG audio dt-binding documentation to schema
->
-> Please don't send cover letters for single patches, if there is anything
-> that needs saying put it in the changelog of the patch or after the ---
-> if it's administrative stuff.  This reduces mail volume and ensures that 
-> any important information is recorded in the changelog rather than being
-> lost. 
+Thoughts on this one?
 
-I usually don't send cover-letter for single patches.
 
-This was originally a 9 patches series and it dropped to a single one as
-you applied them. I was wondering wether to keep the cover-letter or
-not. I thought keeping it might be better to keep track of the series.
+Thanks,
+Phil
 
-If the same case happen again, I'll skip the cover-letter.
 
->
-> [[End of PGP Signed Part]]
+> 
+>  v2: fix comment typo and use cpumask_empty()
+> 
+>  kernel/sched/debug.c | 52 +++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 49 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+> index 1637b65ba07a..0b2340a79b65 100644
+> --- a/kernel/sched/debug.c
+> +++ b/kernel/sched/debug.c
+> @@ -280,6 +280,45 @@ static const struct file_operations sched_dynamic_fops = {
+>  
+>  __read_mostly bool sched_debug_verbose;
+>  
+> +#ifdef CONFIG_SMP
+> +static struct dentry           *sd_dentry;
+> +
+> +
+> +static ssize_t sched_verbose_write(struct file *filp, const char __user *ubuf,
+> +				  size_t cnt, loff_t *ppos)
+> +{
+> +	ssize_t result;
+> +	bool orig;
+> +
+> +	cpus_read_lock();
+> +	mutex_lock(&sched_domains_mutex);
+> +
+> +	orig = sched_debug_verbose;
+> +	result = debugfs_write_file_bool(filp, ubuf, cnt, ppos);
+> +
+> +	if (sched_debug_verbose && !orig)
+> +		update_sched_domain_debugfs();
+> +	else if (!sched_debug_verbose && orig) {
+> +		debugfs_remove(sd_dentry);
+> +		sd_dentry = NULL;
+> +	}
+> +
+> +	mutex_unlock(&sched_domains_mutex);
+> +	cpus_read_unlock();
+> +
+> +	return result;
+> +}
+> +#else
+> +#define sched_verbose_write debugfs_write_file_bool
+> +#endif
+> +
+> +static const struct file_operations sched_verbose_fops = {
+> +	.read =         debugfs_read_file_bool,
+> +	.write =        sched_verbose_write,
+> +	.open =         simple_open,
+> +	.llseek =       default_llseek,
+> +};
+> +
+>  static const struct seq_operations sched_debug_sops;
+>  
+>  static int sched_debug_open(struct inode *inode, struct file *filp)
+> @@ -303,7 +342,7 @@ static __init int sched_init_debug(void)
+>  	debugfs_sched = debugfs_create_dir("sched", NULL);
+>  
+>  	debugfs_create_file("features", 0644, debugfs_sched, NULL, &sched_feat_fops);
+> -	debugfs_create_bool("verbose", 0644, debugfs_sched, &sched_debug_verbose);
+> +	debugfs_create_file_unsafe("verbose", 0644, debugfs_sched, &sched_debug_verbose, &sched_verbose_fops);
+>  #ifdef CONFIG_PREEMPT_DYNAMIC
+>  	debugfs_create_file("preempt", 0644, debugfs_sched, NULL, &sched_dynamic_fops);
+>  #endif
+> @@ -345,7 +384,6 @@ late_initcall(sched_init_debug);
+>  #ifdef CONFIG_SMP
+>  
+>  static cpumask_var_t		sd_sysctl_cpus;
+> -static struct dentry		*sd_dentry;
+>  
+>  static int sd_flags_show(struct seq_file *m, void *v)
+>  {
+> @@ -402,15 +440,23 @@ void update_sched_domain_debugfs(void)
+>  	if (!debugfs_sched)
+>  		return;
+>  
+> +	if (!sched_debug_verbose)
+> +		return;
+> +
+>  	if (!cpumask_available(sd_sysctl_cpus)) {
+>  		if (!alloc_cpumask_var(&sd_sysctl_cpus, GFP_KERNEL))
+>  			return;
+>  		cpumask_copy(sd_sysctl_cpus, cpu_possible_mask);
+>  	}
+>  
+> -	if (!sd_dentry)
+> +	if (!sd_dentry) {
+>  		sd_dentry = debugfs_create_dir("domains", debugfs_sched);
+>  
+> +		/* rebuild sd_sysctl_cpus if empty since it gets cleared below */
+> +		if (cpumask_empty(sd_sysctl_cpus))
+> +			cpumask_copy(sd_sysctl_cpus, cpu_online_mask);
+> +	}
+> +
+>  	for_each_cpu(cpu, sd_sysctl_cpus) {
+>  		struct sched_domain *sd;
+>  		struct dentry *d_cpu;
+> -- 
+> 2.31.1
+> 
+
+-- 
 
