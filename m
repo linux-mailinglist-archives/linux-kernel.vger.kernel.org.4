@@ -2,226 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C5968F7DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9204F68F7E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbjBHTPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34422 "EHLO
+        id S231292AbjBHTR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBHTPQ (ORCPT
+        with ESMTP id S229457AbjBHTR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:15:16 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED5253E7A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:15:14 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id d7so7063385qvz.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 11:15:14 -0800 (PST)
+        Wed, 8 Feb 2023 14:17:26 -0500
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063E3D506;
+        Wed,  8 Feb 2023 11:17:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lruqI717GEqwSqhIRWVJHYQvXYTXBA2SnOdHTnWZ0Hc=;
-        b=IA5Ku2U10160DCh0OY6jBF0v6JMjNFPl5SHCV2Gd8RxQK0iWl+/G70px3kmh/K5Kd0
-         vUlYWWHKGnQG4d2DrtJJYAur+MYTJLuj0NpnAntBKLuNo/pVBromJcAe5QL+yZSHIBvg
-         DewxvkaQNlcdyWXTPkFsLzDWotOFqaN4TADBCtGxp9TlxoZxWTTWO2W4fsrEqpVfRrsH
-         6euXxZuD3zSaRvIQz/3a3I7Dux/WrkpjlMCVroaKO4F5KbvIqrHtaTsmOJ7koysbnRQL
-         umlnq7KV3CC0w0dTKMsS8vmPENmTqy3nzNW2hFUo6+Pcz2Qo2EUbGuUE/tbvaYtmNLxA
-         62Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lruqI717GEqwSqhIRWVJHYQvXYTXBA2SnOdHTnWZ0Hc=;
-        b=VTKAXpkHHJDY/Ne7FI9ZAuCthI2W3iyIp+VQfW++COUH/yNprgvE6AKyje4AZshQX0
-         V3Yf5DMWVKqgHHWkwhierC4INyIacfDgdriK2hgfy7nGjYAjmYE5BMzFerBkuGHRPeBT
-         vwLvMdfjm+2jc6EKRH9n34LtAc+7Lm6Qz+1xSjSOTidB5i4hk++HYViL/e7HibdW7OkA
-         rpEdN6Os6BqndSg0sWmiE1Rb4+xmXQv7ZlfPmOyKpMyk+6u5Alj9bR2XenQtdvtUvYRx
-         V+IRkcveX8gugJ4r0oEm5xNJlTsJJzmUvCTe2c8qx5l3gE2DgWAI2ESiUBG+40ponFKH
-         5Viw==
-X-Gm-Message-State: AO0yUKVtW8+UoOm6+Sf8BP12zFlinrRFMkeGFtNh3n1bUw8WxKyKzA3y
-        FiQUkyEKTJLEG/W6FzlboMbMKA==
-X-Google-Smtp-Source: AK7set/ug93/lcMmFyKXX+hm1DeqdqpfPD8fu48O3VpIbU3k9PDD6/N7LwiYtjC2V501KXN1AgZYSw==
-X-Received: by 2002:a05:6214:29ec:b0:56c:183f:49bb with SMTP id jv12-20020a05621429ec00b0056c183f49bbmr6066780qvb.11.1675883713342;
-        Wed, 08 Feb 2023 11:15:13 -0800 (PST)
-Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
-        by smtp.gmail.com with ESMTPSA id d18-20020a05620a241200b007068b49b8absm12433314qkn.62.2023.02.08.11.15.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 11:15:12 -0800 (PST)
-Date:   Wed, 8 Feb 2023 14:15:12 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Kairui Song <ryncsn@gmail.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>
-Subject: Re: [PATCH 2/2] sched/psi: iterate through cgroups directly
-Message-ID: <Y+P0wLTdZcOPiKPZ@cmpxchg.org>
-References: <20230208161654.99556-1-ryncsn@gmail.com>
- <20230208161654.99556-3-ryncsn@gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1675883845; x=1707419845;
+  h=message-id:date:mime-version:from:to:cc:references:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=gRVyRdCqxd+YZHnVk5LjI+EiGSkpfor/I1aRASpX1w4=;
+  b=B3jPJ0bznXn45FVAxFWUiroHCvQscWgIkKfM07iw/faqCsC8W7/HBJc8
+   svI//39vNcKpvXnu5moKcdLC3oY3wJ9wfE8gNSI/P4omYduNqnQl5D6D6
+   OfoDRgWfHHX/EG8EZ3JuJLHsZBLz1LnwkKZF37UJq+nAOZa1o1NxMNSIr
+   E=;
+X-IronPort-AV: E=Sophos;i="5.97,281,1669075200"; 
+   d="scan'208";a="179831383"
+Subject: Re: EXT4 IOPS degradation between 4.14 and 5.10
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-3ef535ca.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 19:17:24 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-3ef535ca.us-west-2.amazon.com (Postfix) with ESMTPS id 35C2E60E75;
+        Wed,  8 Feb 2023 19:17:24 +0000 (UTC)
+Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Wed, 8 Feb 2023 19:17:23 +0000
+Received: from [192.168.29.35] (10.43.162.56) by EX19D002UWC004.ant.amazon.com
+ (10.13.138.186) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24; Wed, 8 Feb 2023
+ 19:17:22 +0000
+Message-ID: <1c134792-1763-8c92-6516-78a330d4756e@amazon.com>
+Date:   Wed, 8 Feb 2023 11:17:21 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208161654.99556-3-ryncsn@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.0
+From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
+To:     Jan Kara <jack@suse.cz>
+CC:     <tytso@mit.edu>, <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <abuehaze@amazon.com>
+References: <053b60a6-133e-5d59-0732-464d5160772a@amazon.com>
+ <20230126093231.ujn6yaxhexwzizp5@quack3>
+ <b948ed49-1bdf-b17e-d03a-7ec8dfdb1afc@amazon.com>
+ <20230127121721.lerrb36nhj7gdiwm@quack3>
+ <6a0fcca5-b869-ffb7-426b-b49a6782c1c0@amazon.com>
+ <20230208140247.rt62xdtriopfdb4o@quack3>
+Content-Language: en-US
+In-Reply-To: <20230208140247.rt62xdtriopfdb4o@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.43.162.56]
+X-ClientProxiedBy: EX13D41UWC002.ant.amazon.com (10.43.162.127) To
+ EX19D002UWC004.ant.amazon.com (10.13.138.186)
+X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 12:16:54AM +0800, Kairui Song wrote:
-> From: Kairui Song <kasong@tencent.com>
-> 
-> psi_group->parent has the same hierarchy as the cgroup it's in.
-> So just iterate through cgroup instead.
-> 
-> By adjusting the iteration logic, save some space in psi_group
-> struct, and the performance is actually better. I see a measurable
-> performance gain using mmtests/perfpipe:
-> 
-> (AVG of 100 test, ops/sec, the higher the better)
-> KVM guest on a i7-9700:
->         psi=0         root cgroup   5 levels of cgroup
-> Before: 59221         55352         47821
-> After:  60100         56036         50884
-> 
-> KVM guest on a Ryzen 9 5900HX:
->         psi=0         root cgroup   5 levels of cgroup
-> Before: 144566        138919        128888
-> After:  145812        139580        133514
-> 
-> Signed-off-by: Kairui Song <kasong@tencent.com>
-> Signed-off-by: Kairui Song <ryncsn@gmail.com>
 
-Awesome!
+On 2/8/23 6:02 AM, Jan Kara wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+>
+>
+>
+> On Mon 30-01-23 09:45:32, Bhatnagar, Rishabh wrote:
+>> On 1/27/23 4:17 AM, Jan Kara wrote:
+>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+>>>
+>>>
+>>>
+>>> On Thu 26-01-23 10:23:07, Bhatnagar, Rishabh wrote:
+>>>> On 1/26/23 1:32 AM, Jan Kara wrote:
+>>>>> On Wed 25-01-23 16:33:54, Bhatnagar, Rishabh wrote:
+>>>>>> Fio with buffered io/fsync=1/randwrite
+>>>>> So I'm curious. Do you have any workload that actually does these
+>>>>> synchronous random buffered IOs? Or is it just a benchmarking exercise?
+>>>>>
+>>>> So database team was a running benchmark called hammerdb with 16 connections
+>>>> where they started noticing dropped
+>>>> performance for 5.10. We traced it back to filesystem with this benchmark.
+>>>> Although the database workload would be something similar
+>>>>    I guess.
+>>> HammerDB is a TPC-C and TPC-H benchmark but details of the IO depend more
+>>> on the database it is hammering. Do you know which one? Anyway the most
+>>> important fact for me is that it is visible in a real world workload (well,
+>>> as much as DB benchmarking is real-world ;)).
+>> I believe its the MySQL database though not so sure.
+> Well, in that case I think your MySQL DB is somewhat misconfigured. At
+> least as far as we have been consulting MySQL / MariaDB developers
+> regarding benchmarking, they suggested we should configure the database to
+> use direct IO and increase DB internal buffers instead of relying on
+> buffered IO and pagecache behavior. And if your fio job is representative
+> of the IO load the DB really creates, I'd agree that that would be a saner
+> and likely more performant configuration ;)
+>
+>>>>>> + /*
+>>>>>> + * We come here when we got at @end. We take care to not overflow the
+>>>>>> + * index @index as it confuses some of the callers. This breaks the
+>>>>>> + * iteration when there is page at index -1 but that is already broken
+>>>>>> + * anyway.
+>>>>>> + */
+>>>>>> + if (end == (pgoff_t)-1)
+>>>>>> + *index = (pgoff_t)-1;
+>>>>>> + else
+>>>>>> + *index = end + 1;
+>>>>>> +out:
+>>>>>> rcu_read_unlock();
+>>>>>>
+>>>>>> - if (ret)
+>>>>>> - *index = pages[ret - 1]->index + 1;
+>>>>>> -
+>>>>>>
+>>>>>>    From the description of the patch i didn't see any mention of this
+>>>>>> functional change.
+>>>>>> Was this change intentional and did help some usecase or general performance
+>>>>>> improvement?
+>>>>> So the change was intentional. When I was working on the series, I was
+>>>>> somewhat concerned that the old code could end up in a pathological
+>>>>> situation like:
+>>>>>      We scan range 0-1000000, find the only dirty page at index 0, return it.
+>>>>>      We scan range 1-1000000, find the only dirty page at index 1, return it.
+>>>>>      ...
+>>>>>
+>>>>> This way we end up with rather inefficient scanning and in theory malicious
+>>>>> user could livelock writeback like this. That being said this was/is mostly
+>>>>> a theoretical concern.
+>>>> Ok so its more of a security concern. But do you think this has a latency
+>>>> impact? I didn't see
+>>>> much latency impact between the two sets and throughput is higher.
+>>> Yes, I expect there will be latency impact but for this workload probably
+>>> relatively small. I expect the expensive part on your workload is the
+>>> fsync(2) call, in particular the committing of the transaction and the
+>>> flushing of the disk caches as a result of that. Data writes themselves are
+>>> relatively cheap. If you had say 1MB blocks instead of 16k ones, I'd expect
+>>> the numbers to start looking differently as the cost of IO and of cache
+>>> flushing becomes for comparable - obviously it all depends on the details
+>>> of the backing storage as well. Perhaps could you measure how much time we
+>>> spend in file_write_and_wait_range() calls vs in the whole ext4_sync_file()
+>>> call to confirm that?
+>>>
+>>> Overall your tests show we could gain some throughput without sacrificing
+>>> too much latency if we somehow batch tiny fsync requests more. The trick is
+>>> how to do this without regressing other workloads and also across various
+>>> storage types which are going to have very different properties.
+>> Yeah i agree fsync is much more expensive operation than just dirtying
+>> buffers in page cache.  I did use the ext4dist tool from bcc to get the
+>> distribution of write vs fsync.  Overall fsync is much more expensive
+>> operation so yeah if we can get higher throughput here with batching it
+>> shouldn't impact fsync latency that much.
+> Well, I was more interested in file_write_and_wait_range() vs
+> ext4_sync_file() latency comparison. write(2) calls are indeed very fast
+> because they just copy into the page cache so that is not very interesting.
+> But file_write_and_wait_range() is more interesting because that measures
+> the cost of writing file data to the disk while whole ext4_sync_file()
+> measures the cost of writing file data to the disk + the cost of flushing
+> the journal and I'm interested in how much is the flushing of the journal
+> costly compared to the data writeback.
 
-A few comments below:
+Sorry i misunderstood your comment. Here is the revised data. Flushing 
+journal
+very heavy compared to flushing data.
 
-> @@ -858,15 +858,34 @@ static void psi_group_change(struct psi_group *group, int cpu,
->  		schedule_delayed_work(&group->avgs_work, PSI_FREQ);
->  }
->  
-> -static inline struct psi_group *task_psi_group(struct task_struct *task)
-> +static inline struct psi_group *psi_iter_first(struct task_struct *task, void **iter)
+ext4_sync_file:       ~18.6 msecs
+fdatawrite_range:   ~ 4usecs
+fdatawait_range:     ~ 83.6usecs
+fc_commit:             ~18.6 msecs
 
-Please name these psi_groups_first() and psi_groups_next().
+Tracing 1 functions for "ext4_sync_file"
 
->  #ifdef CONFIG_CGROUPS
-> -	if (static_branch_likely(&psi_cgroups_enabled))
-> -		return cgroup_psi(task_dfl_cgroup(task));
-> +	if (static_branch_likely(&psi_cgroups_enabled)) {
-> +		struct cgroup *cgroup = task_dfl_cgroup(task);
-> +
-> +		*iter = cgroup_parent(cgroup);
-> +		return cgroup_psi(cgroup);
-> +	}
->  #endif
->  	return &psi_system;
->  }
->  
-> +static inline struct psi_group *psi_iter_next(void **iter)
-> +{
-> +#ifdef CONFIG_CGROUPS
-> +	if (static_branch_likely(&psi_cgroups_enabled)) {
-> +		struct cgroup *cgroup = *iter;
-> +
-> +		if (cgroup) {
-> +			*iter = cgroup_parent(cgroup);
-> +			return cgroup_psi(cgroup);
-> +		}
-> +	}
-> +#endif
-> +	return NULL;
-> +}
 
-> @@ -886,6 +905,7 @@ void psi_task_change(struct task_struct *task, int clear, int set)
->  {
->  	int cpu = task_cpu(task);
->  	struct psi_group *group;
-> +	void *iter;
->  	u64 now;
->  
->  	if (!task->pid)
-> @@ -895,16 +915,17 @@ void psi_task_change(struct task_struct *task, int clear, int set)
->  
->  	now = cpu_clock(cpu);
->  
-> -	group = task_psi_group(task);
-> +	group = psi_iter_first(task, &iter);
->  	do {
->  		psi_group_change(group, cpu, clear, set, now, true);
-> -	} while ((group = group->parent));
-> +	} while ((group = psi_iter_next(&iter)));
->  }
->  
->  void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  		     bool sleep)
->  {
->  	struct psi_group *group, *common = NULL;
-> +	void *iter;
->  	int cpu = task_cpu(prev);
->  	u64 now = cpu_clock(cpu);
+      nsecs               : count     distribution
+    1048576 -> 2097151    : 75 |                                        |
+    2097152 -> 4194303    : 1496 |****                                    |
+    4194304 -> 8388607    : 3461 |**********                              |
+    8388608 -> 16777215   : 6693 |********************                    |
+   16777216 -> 33554431   : 13355 |****************************************|
+   33554432 -> 67108863   : 1631 |****                                    |
 
-Please add @iter at the end to keep line length sorting.
+avg = 18624922 nsecs, total: 505778389231 nsecs, count: 27156
 
-> @@ -915,7 +936,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  		 * ancestors with @prev, those will already have @prev's
->  		 * TSK_ONCPU bit set, and we can stop the iteration there.
->  		 */
-> -		group = task_psi_group(next);
-> +		group = psi_iter_first(prev, &iter);
->  		do {
->  			if (per_cpu_ptr(group->pcpu, cpu)->state_mask &
->  			    PSI_ONCPU) {
-> @@ -924,7 +945,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  			}
->  
->  			psi_group_change(group, cpu, 0, TSK_ONCPU, now, true);
-> -		} while ((group = group->parent));
-> +		} while ((group = psi_iter_next(&iter)));
->  	}
->  
->  	if (prev->pid) {
-> @@ -957,12 +978,12 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  
->  		psi_flags_change(prev, clear, set);
->  
-> -		group = task_psi_group(prev);
-> +		group = psi_iter_first(prev, &iter);
->  		do {
->  			if (group == common)
->  				break;
->  			psi_group_change(group, cpu, clear, set, now, wake_clock);
-> -		} while ((group = group->parent));
-> +		} while ((group = psi_iter_next(&iter)));
->  
->  		/*
->  		 * TSK_ONCPU is handled up to the common ancestor. If there are
-> @@ -972,7 +993,7 @@ void psi_task_switch(struct task_struct *prev, struct task_struct *next,
->  		 */
->  		if ((prev->psi_flags ^ next->psi_flags) & ~TSK_ONCPU) {
->  			clear &= ~TSK_ONCPU;
-> -			for (; group; group = group->parent)
-> +			for (; group; group = psi_iter_next(&iter))
->  				psi_group_change(group, cpu, clear, set, now, wake_clock);
->  		}
->  	}
-> @@ -983,6 +1004,7 @@ void psi_account_irqtime(struct task_struct *task, u32 delta)
->  {
->  	int cpu = task_cpu(task);
->  	struct psi_group *group;
-> +	void *iter;
->  	struct psi_group_cpu *groupc;
->  	u64 now;
 
-Ditto. You can move @groupc in the same patch.
+Tracing 1 functions for "__filemap_fdatawrite_range"
 
-Otherwise, this looks good to me. Please add:
+      nsecs               : count     distribution
+        512 -> 1023       : 0 |                                        |
+       1024 -> 2047       : 1 |**                                      |
+       2048 -> 4095       : 14 |****************************************|
+       4096 -> 8191       : 5 |**************                          |
+       8192 -> 16383      : 1 |**                                      |
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+avg = 3943 nsecs, total: 82809 nsecs, count: 21
+
+Tracing 1 functions for "__filemap_fdatawait_range
+
+      nsecs               : count     distribution
+        128 -> 255        : 0 |                                        |
+        256 -> 511        : 1 |********************                    |
+        512 -> 1023       : 2 |****************************************|
+       1024 -> 2047       : 2 |****************************************|
+       2048 -> 4095       : 0 |                                        |
+       4096 -> 8191       : 0 |                                        |
+       8192 -> 16383      : 0 |                                        |
+      16384 -> 32767      : 0 |                                        |
+      32768 -> 65535      : 0 |                                        |
+      65536 -> 131071     : 0 |                                        |
+     131072 -> 262143     : 0 |                                        |
+     262144 -> 524287     : 1 |********************                    |
+
+avg = 83644 nsecs, total: 501866 nsecs, count: 6
+
+Tracing 1 functions for "ext4_fc_commit
+
+      nsecs               : count     distribution
+    1048576 -> 2097151    : 70 |                                        |
+    2097152 -> 4194303    : 1512 |****                                    |
+    4194304 -> 8388607    : 3436 |**********                              |
+    8388608 -> 16777215   : 6699 |********************                    |
+   16777216 -> 33554431   : 13349 |****************************************|
+   33554432 -> 67108863   : 1641 |****                                    |
+
+avg = 18622010 nsecs, total: 505699318966 nsecs, count: 27156
+
+Thanks
+Rishabh
+
+>
+>                                                                  Honza
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
