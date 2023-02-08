@@ -2,115 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52FA68F191
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E77868F199
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjBHPEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S230203AbjBHPGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjBHPEN (ORCPT
+        with ESMTP id S229745AbjBHPGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:04:13 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA71934312
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:04:12 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id v23so19587570plo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=URD/oshFPOwr0qbJ4yDAwjjjTXrKyLyD0kda/kmQ/qY=;
-        b=K8MgyWD3MIU6ok+xTR3BhW+QKeqoZ8MtVD3Afe65IQwKxzaYbGmA9HwSx1GPX+/WAb
-         9HRtbUfGav2tnPu+YueWkutowxOvgB5W5lZvJsyX2SIcHcWRiOsjgge3zh1WGkkDr5AP
-         iIeVnLH4lBUWzAKVa3H2Sw4Oo2goPu4IH95yLcL4APzYQrKmmrD/zgQgl3HZwSSvyrBR
-         tXsz4AYUCSrCmT6OZY4UoTGKZmWsSNbsrlcizwdIrO+lAWVMF5CiVQnwdJlmWjNc9lcu
-         cq9flmAffLtOdE2fZks9k00losBRxTXI1HvvF7IaZGBz2hsip12REeNNh3rev8AKPAxp
-         RDFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=URD/oshFPOwr0qbJ4yDAwjjjTXrKyLyD0kda/kmQ/qY=;
-        b=6Sghvn4sUXO4jujB8T2tUuOqID1ZxxLuvJritO/bxSsQ7/yhdcftFwQ9blDG0eS9wI
-         jXzdZCk4Xjp6+CPTjxNG5d/s8ffHIi7jFBUBfZl/tDVWwmtZGZ713z50QWKGdaDxPYGk
-         amlXvWV5k5OQ2Y42kOwtvJLuQLddBlXeyYe/SDSjdIc9o45teLyI9i2TNuW+1TZ2j+QM
-         QQtomv20QrhYasqeJpWEoBf6a7jg7BkqUek95toQ6renhZK8ksrYms7Vt3Unk0QKcNPk
-         AjxHcUNEUfbv4PCq9cFva2g5UsA9P6YySEKfn2g1PVyTGdU/TOH1kmHvAMZ7D3SdL4mG
-         tynA==
-X-Gm-Message-State: AO0yUKUThsvEOaMkelSUIvtkSEFqRnzm0r2qgUOgdiTYT3x/1z7Jm7N2
-        d2gQy1TyAFAAVGAiVE31z8+z/g==
-X-Google-Smtp-Source: AK7set/cSc9giVDzrOn6jlQqCZW1Ic+uotyR57MWGDOOUieEi8LrPpYHOIq4+38jKE77ziWeDxqYtg==
-X-Received: by 2002:a17:902:d4c9:b0:198:af50:e4ec with SMTP id o9-20020a170902d4c900b00198af50e4ecmr246944plg.18.1675868652255;
-        Wed, 08 Feb 2023 07:04:12 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d3-20020a170902c18300b00196896d6d04sm11117262pld.258.2023.02.08.07.04.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 07:04:11 -0800 (PST)
-Date:   Wed, 8 Feb 2023 15:04:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "lirongqing@baidu.com" <lirongqing@baidu.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clockevents/drivers/i8253: Do not zero timer counter in
- shutdown
-Message-ID: <Y+O56OXIuARBhsg2@google.com>
-References: <1675732476-14401-1-git-send-email-lirongqing@baidu.com>
- <BYAPR21MB168840B3814336ED510845C0D7D89@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Wed, 8 Feb 2023 10:06:53 -0500
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F035A254
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:06:50 -0800 (PST)
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+ (mail-am6eur05lp2113.outbound.protection.outlook.com [104.47.18.113]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-26-2hW5sY44M6GCz5W-EOpzbA-2; Wed, 08 Feb 2023 16:06:41 +0100
+X-MC-Unique: 2hW5sY44M6GCz5W-EOpzbA-2
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:3b::9) by
+ GV0P278MB0782.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:54::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.36; Wed, 8 Feb 2023 15:06:28 +0000
+Received: from ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ee37:449a:ef93:fada]) by ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::ee37:449a:ef93:fada%5]) with mapi id 15.20.6086.017; Wed, 8 Feb 2023
+ 15:06:28 +0000
+From:   Marcel Ziswiler <marcel.ziswiler@toradex.com>
+To:     "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "a.zummo@towertech.it" <a.zummo@towertech.it>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>
+Subject: [REGRESSION] rtc: imx-sc: remove .read_alarm
+Thread-Topic: [REGRESSION] rtc: imx-sc: remove .read_alarm
+Thread-Index: AQHZO87r6JrHLUV5a0mkHf2nuLX1Pg==
+Date:   Wed, 8 Feb 2023 15:06:28 +0000
+Message-ID: <bbe470eaeeb17624444b37dbe35b0883193e475b.camel@toradex.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ZR0P278MB0683:EE_|GV0P278MB0782:EE_
+x-ms-office365-filtering-correlation-id: fc7a011d-62bd-4b14-4f0b-08db09e60dfa
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0
+x-microsoft-antispam-message-info: e/BTK+wAFJl7hyEIzWbQVaWuORSyYDkTVnqc1AgVwcnvHFEiCbcCQO+62JzcawR9Oulu82Tkg4xzJ0nndRLemLc7AaqWyER1D2Ueutql0t4pzstwG8pFLRVQnMx2h+n+Cc+eorWo52cQGFkFcrAORe5wOvDPdB64CveqCZKSmiW1WJFoVhexx1QdmvUO6H4jMjMFLxcwtKmKTq2RYIcLPzGvuBv8irBGVKwvHTa5JvqBAOzLnvmOJ4XzAtu1lUtWwtbKLXnOFBOqPEw1xwNg5uEJWtz8xuyL0HtrKFQW3UQVMnAdPM/lvO9kXVhiC7j9Yr5M5G3Gli+pimOZMSBjZROREY4+4Jewmqj9YAHU4qpoRWhm5TAj+MA/xWQysAWdxb28V/2IYEwIj1hqKsevrYysqimpnWBv8b3raB+1HNkPPOj/ltbf+CAlFcxF8/AkhGRrgB4gT/d2aX72ib+CSpR5ojbvSbWfj2QVOfmUogL+djxX9oaq7RytojapM6zjepBoQzQ8yXivoikmbVz0SWwsQMDv22GC+l563m0ca9VjA91JhA5FpOisORggylOPxZeDTe3VluEGbjsfrYgFYZglUtbto6TOPswXWuKPnv4hh3HYqEqn3OFWwXtS8YVGvPb9aLfxhxeRCo/RFhC96c4z0S5AXJaTJqLFfVsMHtR6MwvJTjVaLuG0o6gjqE9rdozSgIdDZ8TIsSAHX2I4vRfCjLb8CMQ3juCe+opQuRo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(366004)(39850400004)(451199018)(2906002)(38070700005)(4744005)(7416002)(44832011)(5660300002)(38100700002)(122000001)(66446008)(71200400001)(478600001)(36756003)(6486002)(2616005)(86362001)(6506007)(186003)(26005)(6512007)(6916009)(64756008)(8676002)(66476007)(66556008)(76116006)(66946007)(8936002)(41300700001)(4326008)(83380400001)(54906003)(316002)(142923001);DIR:OUT;SFP:1102
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y2NQcldLMk1OU2RyNU9aSHNmVTYrWHNKL3B1d2FQQ3hDTllEcTFMa3M5M2JD?=
+ =?utf-8?B?RXFiRmZzeCt0c0NGMy91Y0tJWDRXOTgvYkZBUTZWNDZhU3FDL0dkQUp3aytz?=
+ =?utf-8?B?cHlaQ0pBdTFubUk5ZHN4NEdBSWF4U1FMaEJmWHBtMGU1VVpSQWxWdjEwczhJ?=
+ =?utf-8?B?R1VZQVdVb1d1N3lKTDJGc09Lb3JlblpQUy9CTXZPaUptTU1Ib21LMmFJRDdu?=
+ =?utf-8?B?RkhScWlNd1VLWHJCaXRFbDFtQmlTR2pPa3QyV1k3VXRiczJHZjBiTVJsWkhI?=
+ =?utf-8?B?RTByeEpRdENBcVpINk5EVVUxUkJ5ZzVPcDFGcmxteXdJbFk3SWRyalRLNWpx?=
+ =?utf-8?B?RHMrbVlyYzVwVG9sZDZwTlNHL1A0cVFXR2ZPUUZMd01YTUdub201WFMwN1Qy?=
+ =?utf-8?B?ODJYNFI4M1h5ODUvYjk1d2dVTmNIdzVOcUpUdG83UEpXTzNYa0h6bnkraVVi?=
+ =?utf-8?B?eUhBYVdyamhib2VGbkE1dUhYM3A0TWg2bTlqWlVFN3pNRUdwMUpMSEpvdWFG?=
+ =?utf-8?B?MUU0YVMvaGt1dnRFdkJYTldHTmFaOWtFOWNDYitWaFZCM2NtY2VUUjdKbjkr?=
+ =?utf-8?B?VTd2bjJoNTZrVlNPNzdqZkg5WVRITlZ5RWp3Y3B5S0hzL3hJZHAvZzBaLzNB?=
+ =?utf-8?B?cWhudFFuNTFBaGp4K1dqVVpWT1NyMWJsUWVHSnBLUkx2bmU2LzNiQzdvaVN6?=
+ =?utf-8?B?Um9vUXV3ZFFlNkpaQ0xpTW9FditqYnQ2VnI3S2FTbmFURXp2RUJ1Q0lYVm1k?=
+ =?utf-8?B?M2Z0cVBidGxVZEFzeWZxT2tqZUovMXl2cW00YVNURFMrUFovN0hJZ2VwZURG?=
+ =?utf-8?B?c2lNUy82ZkNPbEZYSVQ1QktyTGdpRk9RbS9qN2lmTzlTcWVVUkxUd1lkZFJr?=
+ =?utf-8?B?MG90c2JPWFI2Q2UrZGF2VlRTd2hHN0JXTlZyOHdvcjFja1ZRbmdqb1VoTzkr?=
+ =?utf-8?B?VDYrdVZlYTR0YUdNcGw4MUQ0blZnODFpOUozY3pSQUdLeFh3UkhRMVFQLy9y?=
+ =?utf-8?B?Q3hZMExmMHY1bjFhY3hGNkxhb3pNNFlDVVk5VHR3NzVKVWFoYzNBYjl5WnU3?=
+ =?utf-8?B?a0tYZWpweWh2cEppZ2NVeEtVNzlncFQzU3liTXNjZDZ5OWpCTFhSREpDck9o?=
+ =?utf-8?B?eUlaRG9zVENhWFpMcENlYTNIRldHZnBqS2dsVExLYXdScVRLWVkxQjIxTXQ1?=
+ =?utf-8?B?WWpBc2txVHlrQS9JajRaQVR6ZWZ6MXNxN2o0bzlaSTRxRlU1SHo1MUZ4djB3?=
+ =?utf-8?B?OUthWTlrbjRXMm83Nko4YUREbzg3RVEvUkxuWUdnUFF0bmtLNWVmN1FmaEtM?=
+ =?utf-8?B?Vm53eG9WZXovdXlmYmlTZEUyNFFldURzL1RCSEdCWWRqK05rME5ZKzhRWFhm?=
+ =?utf-8?B?RjNJMVVKK0NETWhwWFZDYkFEdlNzWEI2amdsWjhTMEE4MTFGTytwOTJmZXVn?=
+ =?utf-8?B?bG5jT0RhWVdFL2lKRGNUVmw5OXE0c1FHRE9Id01abFd4bVRoZGhBZkx2S0pF?=
+ =?utf-8?B?Tk51aldzSkFIUkJVVHRvN29pelY2SDdkMXMyZjNYcEozUW00TDlJOHVzZWpU?=
+ =?utf-8?B?MmVHcDFuNTd5dmQzZEVjbFJtUEZiY2NHellLcFJ0NGE2Q3ppLzN3RTlsWGdi?=
+ =?utf-8?B?NEFGMGNxZ1lETDRWTnhDazVEYWUvVy8zMlFuNldybjVDUE1QeG14UHQ4TUY3?=
+ =?utf-8?B?cElJZmdBOWEydkZNT0d2RE1MT0tRN0M0TWwwTkUwQ1g4VHIrTHBoNlRwM21S?=
+ =?utf-8?B?cEx1SllqMXM5RWxibTdOb1Z6UFJoVEpoemFJQ3owYVQ0VDRUaVNLVlpxWFdM?=
+ =?utf-8?B?a0xLYmdGWjlRdEozaWR2K1ZvL3diR3NvcjY5NnZITUV2K1IxMzV2TkI1Z2Rv?=
+ =?utf-8?B?OC96M05EV3liVEpLVzNUMXNzR2pKSmpsd1BXZDJSa3libVR5K1U1bWp6YTRC?=
+ =?utf-8?B?TzhWcnhwNUN2ZjFLZ25qbER5QXZsWVVSZW5KWEZwS1NlREFDUTNFYVFZVzRH?=
+ =?utf-8?B?VWQxUFBVcE5TblE3Q1ZCMVNERDRjYkJIdXpsOE5pcjk1MFhLQVl1ZEhHaitP?=
+ =?utf-8?B?UmNlaEU2ei8vUkhVSEJFWU1sbGR4NWlPZ3FydzROOXBIUXYxMllPamlnRDRs?=
+ =?utf-8?B?bEJjc1hzellHMFJ1dU10Vk1XeVdFY0c2N3M0K0c5V05wZGl5YXoxaE5iUjBY?=
+ =?utf-8?Q?xgh65X778pp+5Jc56q2qXpc=3D?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB168840B3814336ED510845C0D7D89@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ZR0P278MB0683.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc7a011d-62bd-4b14-4f0b-08db09e60dfa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2023 15:06:28.4380
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +yIjmopvLPsN1jYlCvZM5sTORTq1ajFHthj6cbA1eGGVf1p0AZRkqa7r2KD6Hlk1znYIbJBL5qesPF0hnt65U0Kc0iZXYn339tab5NZjWFA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0782
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-ID: <C2FA59C21DB53E428E0EF67C231238D7@CHEP278.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023, Michael Kelley (LINUX) wrote:
-> From: lirongqing@baidu.com <lirongqing@baidu.com> Sent: Monday, February 6, 2023 5:15 PM
-> > 
-> > Zeroing the counter register in pit_shutdown() isn't actually supposed to
-> > stop it from counting,  will causes the PIT to start running again,
-> > From the spec:
-> > 
-> >   The largest possible initial count is 0; this is equivalent to 216 for
-> >   binary counting and 104 for BCD counting.
-> > 
-> >   The Counter does not stop when it reaches zero. In Modes 0, 1, 4, and 5 the
-> >   Counter "wraps around" to the highest count, either FFFF hex for binary
-> >   count- ing or 9999 for BCD counting, and continues counting.
-> > 
-> >   Mode 0 is typically used for event counting. After the Control Word is
-> >   written, OUT is initially low, and will remain low until the Counter
-> >   reaches zero. OUT then goes high and remains high until a new count or a
-> >   new Mode 0 Control Word is written into the Counter.
-> > 
-> > Hyper-V and KVM follow the spec, the issue that 35b69a42 "(clockevents/drivers/
-> > i8253: Add support for PIT shutdown quirk") fixed is in i8253 drivers, not Hyper-v,
-> > so delete the zero timer counter register in shutdown, and delete PIT shutdown
-> > quirk for Hyper-v
-> 
-> From the standpoint of Hyper-V, I'm good with this change.  But there's a
-> risk that old hardware might not be compliant with the spec, and needs the
-> zero'ing for some reason. The experts in the x86 space will be in the best
-> position to assess the risk.
+SGkgQWxleGFuZHJlDQoNCldlcmUgeW91IGF3YXJlIHRoYXQgdGhpcyBicmVha3MgdGhlIHN5c2Zz
+IHVzZSBjYXNlPyBFLmcuIGJlZm9yZSB3ZSB3ZXJlIGFibGUgdG8gc3VzcGVuZCBhbmQgcmVzdW1l
+IDEwIHNlY29uZHMNCmxhdGVyIGFzIGZvbGxvd3M6DQoNCmVjaG8gKzEwID4gL3N5cy9jbGFzcy9y
+dGMvcnRjMS93YWtlYWxhcm07IGVjaG8gbWVtID4gL3N5cy9wb3dlci9zdGF0ZQ0KDQpTaW5jZSB0
+aGUgcmVtb3ZhbCBvZiAucmVhZF9hbGFybSBpbiBjb21taXQgNzk0MjEyMWI4Y2EwICgicnRjOiBp
+bXgtc2M6IHJlbW92ZSAucmVhZF9hbGFybSIpIHRoaXMgbm8gbG9uZ2VyDQpzZWVtcyB0byB3b3Jr
+Lg0KDQpUaGlzIHNlZW1zIGxpa2UgYSByZWdyZXNzaW9uIG9yIGlzIHRoaXMgbm90IHN1cHBvc2Vk
+IHRvIHdvcms/DQoNClRoYW5rcyBmb3IgY2xhcmlmeWluZy4NCg0KQ2hlZXJzDQoNCk1hcmNlbA0K
 
-Yep, my feeling exactly.  My input is purely from reading those crusty old specs.
