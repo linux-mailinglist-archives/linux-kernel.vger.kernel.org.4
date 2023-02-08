@@ -2,199 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596BC68EDE3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2242368EDE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjBHLZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 06:25:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
+        id S230476AbjBHL25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:28:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjBHLZW (ORCPT
+        with ESMTP id S230236AbjBHL24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:25:22 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880EA1BD8;
-        Wed,  8 Feb 2023 03:25:20 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318ATgwH020179;
-        Wed, 8 Feb 2023 11:25:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=L+6Lr5mei1+6jAImNdi0HSc1OK4i6MHX0/U+3dqaMBk=;
- b=JVyNO6e4Km8Yvs/Tik6RqKl+1Vhq/ANOyJ5mRqhsXRS4UmXFlpiVQg2vBo3G9ep7PQ6z
- 70N0qYNVSKnbdBgFgNmZKjOZ67n03rtK8A2n//W1/i+7fsi/ahwJcA5i63ogSrKK0/Xc
- tiokr8m4+clh23u1dB644m3I0FwB25WdBjDrFwvym0UKxLvzo1UDr651EZuAiZTDYGGS
- DZKQocoDKnp1UzIseWmHSwLlCXDo7N+Fvsjj/leOzU31zthk4DbmIpxHgQnAcSd0GwkI
- nh4iSJ8X6nJNB0qFlmwEdSR9D2rWzjqPRalGp4JiXy5Oj3pNDSuQIrq6ZTLguKhlxpVC eA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nma1ksmev-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 11:25:15 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318AUFXS021155;
-        Wed, 8 Feb 2023 11:25:15 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nma1ksmec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 11:25:14 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3185ageT024247;
-        Wed, 8 Feb 2023 11:25:13 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3nhf06vu3s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 11:25:13 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 318BPADT47579456
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Feb 2023 11:25:10 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A6F1220043;
-        Wed,  8 Feb 2023 11:25:10 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 821EE20040;
-        Wed,  8 Feb 2023 11:25:08 +0000 (GMT)
-Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.109.253.169])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed,  8 Feb 2023 11:25:08 +0000 (GMT)
-Date:   Wed, 8 Feb 2023 16:55:05 +0530
-From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rookxu <brookxu.cn@gmail.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [PATCH v3 7/8] ext4: Use rbtrees to manage PAs instead of inode
- i_prealloc_list
-Message-ID: <Y+OGkVvzPN0RMv0O@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-References: <20230116080216.249195-1-ojaswin@linux.ibm.com>
- <20230116080216.249195-8-ojaswin@linux.ibm.com>
- <20230116122334.k2hlom22o2hlek3m@quack3>
- <Y8Z413XTPMr//bln@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230117110335.7dtlq4catefgjrm3@quack3>
- <Y8jizbGg6l2WxJPF@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
- <20230127144312.3m3hmcufcvxxp6f4@quack3>
- <Y9zHkMx7w4Io0TTv@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+        Wed, 8 Feb 2023 06:28:56 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869DD3CE33
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 03:28:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675855735; x=1707391735;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=OnZWGQ8za0qKBoTu5h8/4r6Ygll40Nkso+5HJAIcPPY=;
+  b=YYOSjpcjDT6Ihl6sKuDu5MSGYACPP1uMNtgueDDkEpmNfE/fKBBp7YWG
+   djls+VsYbSzD18XKFvRzDL2RqJwIfFksxaB/LzTLFjZeu9VGtD5I3EpG8
+   mVQweD6MRJkUyZQkHm+lDpNdXNObD4igJ3+g6hhF4nNb5M8wONFxNP8gz
+   FX3GfHrpa6GPdA3wsQAzQUzyOPcflkYdnr07D56Qoc+Uyk4So+sav7OvR
+   3xbXYSS3CM+sBm23pKBthUrR850mP00Lh/bsEbOEM0sq2fp4VO0ddDH2n
+   3N8WpcXhW/77y7n/+W/sXONY3xJzfa5Up8Nwzpi22Ay1ehh4qeVTF5SDp
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="327468228"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="327468228"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 03:28:45 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="791167966"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="791167966"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 03:28:42 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        Bharata B Rao <bharata@amd.com>,
+        "Alistair Popple" <apopple@nvidia.com>,
+        haoxin <xhao@linux.alibaba.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: Re: [PATCH -v4 8/9] migrate_pages: batch flushing TLB
+References: <20230206063313.635011-1-ying.huang@intel.com>
+        <20230206063313.635011-9-ying.huang@intel.com>
+        <E6CE5A79-E1B0-4FCB-94A5-EE268C160410@nvidia.com>
+Date:   Wed, 08 Feb 2023 19:27:53 +0800
+In-Reply-To: <E6CE5A79-E1B0-4FCB-94A5-EE268C160410@nvidia.com> (Zi Yan's
+        message of "Tue, 07 Feb 2023 09:52:28 -0500")
+Message-ID: <878rh8gzwm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9zHkMx7w4Io0TTv@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3ZbE-ERl6XHQopFhVehSSI88lNRJdVWK
-X-Proofpoint-ORIG-GUID: Y_lDQoHEuzwHFWxNA9VqSV2YqT6fbFH6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_03,2023-02-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 mlxscore=0 clxscore=1015 phishscore=0 suspectscore=0
- malwarescore=0 impostorscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302080100
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 02:06:56PM +0530, Ojaswin Mujoo wrote:
-> On Fri, Jan 27, 2023 at 03:43:12PM +0100, Jan Kara wrote:
-> > 
-> > Well, I think cond_resched() + goto retry would be OK here. We could also
-> > cycle the corresponding group lock which would wait for
-> > ext4_mb_discard_group_preallocations() to finish but that is going to burn
-> > the CPU even more than the cond_resched() + retry as we'll be just spinning
-> > on the spinlock. Sleeping is IMHO not warranted as the whole
-> > ext4_mb_discard_group_preallocations() is running under a spinlock anyway
-> > so it should better be a very short sleep.
-> > 
-> > Or actually I have one more possible solution: What the adjusting function
-> > is doing that it looks up PA before and after ac->ac_o_ex.fe_logical and
-> > trims start & end to not overlap these PAs. So we could just lookup these
-> > two PAs (ignoring the deleted state) and then just iterate from these with
-> > rb_prev() & rb_next() until we find not-deleted ones. What do you think? 
-> 
-> Hey Jan, 
-> 
-> Just thought I'd update you, I'm trying this solution out, and it looks
-> good but I'm hitting a few bugs in the implementation. Will update here
-> once I have it working correctly.
+Zi Yan <ziy@nvidia.com> writes:
 
-Alright, so after spending some time on these bugs I'm hitting I'm
-seeing some strange behavior. Basically, it seems like in scenarios
-where we are not able to allocate as many block as the normalized goal
-request, we can sometimes end up adding a PA that overlaps with existing
-PAs in the inode PA list/tree. This behavior exists even before this
-particular patchset. Due to presence of such overlapping PAs, the above
-logic was failing in some cases.
+> On 6 Feb 2023, at 1:33, Huang Ying wrote:
+>
+>> The TLB flushing will cost quite some CPU cycles during the folio
+>> migration in some situations.  For example, when migrate a folio of a
+>> process with multiple active threads that run on multiple CPUs.  After
+>> batching the _unmap and _move in migrate_pages(), the TLB flushing can
+>> be batched easily with the existing TLB flush batching mechanism.
+>> This patch implements that.
+>>
+>> We use the following test case to test the patch.
+>>
+>> On a 2-socket Intel server,
+>>
+>> - Run pmbench memory accessing benchmark
+>>
+>> - Run `migratepages` to migrate pages of pmbench between node 0 and
+>>   node 1 back and forth.
+>>
+>> With the patch, the TLB flushing IPI reduces 99.1% during the test and
+>> the number of pages migrated successfully per second increases 291.7%.
+>>
+>> NOTE: TLB flushing is batched only for normal folios, not for THP
+>> folios.  Because the overhead of TLB flushing for THP folios is much
+>> lower than that for normal folios (about 1/512 on x86 platform).
+>>
+>> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>> Cc: Zi Yan <ziy@nvidia.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> Cc: Oscar Salvador <osalvador@suse.de>
+>> Cc: Matthew Wilcox <willy@infradead.org>
+>> Cc: Bharata B Rao <bharata@amd.com>
+>> Cc: Alistair Popple <apopple@nvidia.com>
+>> Cc: haoxin <xhao@linux.alibaba.com>
+>> Cc: Minchan Kim <minchan@kernel.org>
+>> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+>> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>> ---
+>>  mm/migrate.c |  4 +++-
+>>  mm/rmap.c    | 20 +++++++++++++++++---
+>>  2 files changed, 20 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index 9378fa2ad4a5..ca6e2ff02a09 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1230,7 +1230,7 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+>>  		/* Establish migration ptes */
+>>  		VM_BUG_ON_FOLIO(folio_test_anon(src) &&
+>>  			       !folio_test_ksm(src) && !anon_vma, src);
+>> -		try_to_migrate(src, 0);
+>> +		try_to_migrate(src, TTU_BATCH_FLUSH);
+>>  		page_was_mapped = 1;
+>>  	}
+>>
+>> @@ -1781,6 +1781,8 @@ static int migrate_pages_batch(struct list_head *from, new_page_t get_new_page,
+>>  	stats->nr_thp_failed += thp_retry;
+>>  	stats->nr_failed_pages += nr_retry_pages;
+>>  move:
+>
+> Maybe a comment:
+> /* Flush TLBs for all the unmapped pages */
 
-From my understanding of the code, this seems to be a BUG. We should not
-be adding overlapping PA ranges as that causes us to preallocate
-multiple blocks for the same logical offset in a file, however I would
-also like to know if my understanding is incorrect and if this is an
-intended behavior.
+OK.  Will do that in the next version.
 
------ Analysis of the issue ------
+Best Regards,
+Huang, Ying
 
-Here's my analysis of the behavior, which I did by adding some BUG_ONs
-and running generic/269 (4k bs). It happens pretty often, like once
-every 5-10 runs. Testing was done without applying this patch series on
-the Ted's dev branch.
-
-1. So taking an example of a real scenario I hit. After we find the best
-len possible, we enter the ext4_mb_new_inode_pa() function with the
-following values for start and end of the extents:
-
-## format: <start>/<end>(<len>)
-orig_ex:503/510(7) goal_ex:0/512(512) best_ex:0/394(394)
-
-2. Since (best_ex len < goal_ex len) we enter the PA window adjustment
-if condition here:
-
-	if (ac->ac_b_ex.fe_len < ac->ac_g_ex.fe_len)
-		...
-	}
-
-3. Here, we calc wins, winl and off and adjust logical start and end of
-the best found extent. The idea is to make sure that the best extent
-atleast covers the original request. In this example, the values are:
-
-winl:503 wins:387 off:109
-
-and win = min(winl, wins, off) = 109
-
-4. We then adjust the logical start of the best ex as:
-
-		ac->ac_b_ex.fe_logical = ac->ac_o_ex.fe_logical - EXT4_NUM_B2C(sbi, win);
-
-which makes the new best extent as:
-
-best_ex: 394/788(394)
-
-As we can see, the best extent overflows outside the goal range, and
-hence we don't have any guarentee anymore that it will not overlap with
-another PA since we only check overlaps with the goal start and end.
-We then initialze the new PA with the logical start and end of the best
-extent and finaly add it to the inode PA list.
-
-In my testing I was able to actually see overlapping PAs being added to
-the inode list.
-
------------ END ---------------
-
-Again, I would like to know if this is a BUG or intended. If its a BUG,
-is it okay for us to make sure the adjusted best extent length doesn't 
-extend the goal length? 
-
-Also, another thing I noticed is that after ext4_mb_normalize_request(),
-sometimes the original range can also exceed the normalized goal range,
-which is again was a bit surprising to me since my understanding was
-that normalized range would always encompass the orignal range.
-
-Hoping to get some insights into the above points.
-
-Regards,
-ojaswin
+>> +	try_to_unmap_flush();
+>> +
+>>  	retry = 1;
+>>  	for (pass = 0;
+>>  	     pass < NR_MAX_MIGRATE_PAGES_RETRY && (retry || large_retry);
+>> diff --git a/mm/rmap.c b/mm/rmap.c
+>> index b616870a09be..2e125f3e462e 100644
+>> --- a/mm/rmap.c
+>> +++ b/mm/rmap.c
+>> @@ -1976,7 +1976,21 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+>>  		} else {
+>>  			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+>>  			/* Nuke the page table entry. */
+>> -			pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>> +			if (should_defer_flush(mm, flags)) {
+>> +				/*
+>> +				 * We clear the PTE but do not flush so potentially
+>> +				 * a remote CPU could still be writing to the folio.
+>> +				 * If the entry was previously clean then the
+>> +				 * architecture must guarantee that a clear->dirty
+>> +				 * transition on a cached TLB entry is written through
+>> +				 * and traps if the PTE is unmapped.
+>> +				 */
+>> +				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+>> +
+>> +				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
+>> +			} else {
+>> +				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>> +			}
+>>  		}
+>>
+>>  		/* Set the dirty flag on the folio now the pte is gone. */
+>> @@ -2148,10 +2162,10 @@ void try_to_migrate(struct folio *folio, enum ttu_flags flags)
+>>
+>>  	/*
+>>  	 * Migration always ignores mlock and only supports TTU_RMAP_LOCKED and
+>> -	 * TTU_SPLIT_HUGE_PMD and TTU_SYNC flags.
+>> +	 * TTU_SPLIT_HUGE_PMD, TTU_SYNC, and TTU_BATCH_FLUSH flags.
+>>  	 */
+>>  	if (WARN_ON_ONCE(flags & ~(TTU_RMAP_LOCKED | TTU_SPLIT_HUGE_PMD |
+>> -					TTU_SYNC)))
+>> +					TTU_SYNC | TTU_BATCH_FLUSH)))
+>>  		return;
+>>
+>>  	if (folio_is_zone_device(folio) &&
+>> -- 
+>> 2.35.1
+>
+> Everything else looks good to me. Reviewed-by: Zi Yan <ziy@nvidia.com>
+>
+> --
+> Best Regards,
+> Yan, Zi
