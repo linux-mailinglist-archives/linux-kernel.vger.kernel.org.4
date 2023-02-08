@@ -2,125 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D2168F6D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABA468F6DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjBHSVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
+        id S230498AbjBHS0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjBHSVa (ORCPT
+        with ESMTP id S229460AbjBHS0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:21:30 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E357D113C7;
-        Wed,  8 Feb 2023 10:21:22 -0800 (PST)
-Received: from [192.168.1.103] (178.176.77.28) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 8 Feb 2023
- 21:21:12 +0300
-Subject: Re: [PATCH net-next v2 3/6] net: stmmac: add support to provide pcs
- from platform data
-To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>
-CC:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?Q?Miqu=c3=a8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230208164203.378153-1-clement.leger@bootlin.com>
- <20230208164203.378153-4-clement.leger@bootlin.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <c61c3e56-6b4d-8be3-6163-f05c1bf3dafe@omp.ru>
-Date:   Wed, 8 Feb 2023 21:21:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Wed, 8 Feb 2023 13:26:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CB1270F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:26:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50421B81F37
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:26:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4528DC433EF;
+        Wed,  8 Feb 2023 18:26:11 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="K016IqpB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1675880768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iCSHh9btcXlPeIxqS7Vnjq7SvncmmzKeuueAf8BLbAM=;
+        b=K016IqpBZGA7LezMxCzNAa8KQu7tOeXAnvBayzcwxf1XKrOkTqt0p6OAen++ODnrawSB0B
+        HSc6oxzqkecWNJk3KYjgW2DNgcTuiMHWX65Ryb5DWIQQPrK2qqHcbupSnJeKuekANtyr3w
+        e16cxN0xX3noXJfdHwWnC1LBqH+nWVM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a8c39eaf (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 8 Feb 2023 18:26:08 +0000 (UTC)
+Date:   Wed, 8 Feb 2023 19:26:05 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     qemu-devel@nongnu.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel P =?utf-8?B?LiBCZXJyYW5nw6k=?= <berrange@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH] x86: temporarily remove all attempts to provide
+ setup_data
+Message-ID: <Y+PpPRvnlakC78Is@zx2c4.com>
+References: <20230208180835.234638-1-Jason@zx2c4.com>
+ <20230208131125-mutt-send-email-mst@kernel.org>
+ <CAHmME9rMnbGDZ+Rq8ao=gZd10kBp5ni=73HcPpFC58ChoKZObA@mail.gmail.com>
+ <20230208131805-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230208164203.378153-4-clement.leger@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [178.176.77.28]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/08/2023 17:56:27
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 175379 [Feb 08 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.28 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.28 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;178.176.77.28:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.77.28
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 02/08/2023 17:58:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 2/8/2023 4:32:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230208131805-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On 2/8/23 7:42 PM, Clément Léger wrote:
-
-> Add a pcs field in platform_data to allow providing platform data. This is
-> gonig to be used by the renesas,rzn1-gmac compatible driver which can make
-
-   s/gonig/going/ :-)
-
-> use of a PCS.
+On Wed, Feb 08, 2023 at 01:18:37PM -0500, Michael S. Tsirkin wrote:
+> On Wed, Feb 08, 2023 at 03:14:38PM -0300, Jason A. Donenfeld wrote:
+> > On Wed, Feb 8, 2023 at 3:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Wed, Feb 08, 2023 at 03:08:35PM -0300, Jason A. Donenfeld wrote:
+> > > > All attempts at providing setup_data have been made as an iteration on
+> > > > whatever was there before, stretching back to the original
+> > > > implementation used for DTBs that [mis]used the kernel image itself.
+> > > > We've now had a dozen rounds of bugs and hacks, and the result is
+> > > > turning into a pile of unmaintainable and increasingly brittle hacks.
+> > > >
+> > > > Let's just rip out all the madness and start over. We can re-architect
+> > > > this based on having a separate standalone setup_data file, which is how
+> > > > it should have been done in the first place. This is a larger project
+> > > > with a few things to coordinate, but we can't really begin thinking
+> > > > about that while trying to play whack-a-mole with the current buggy
+> > > > implementation.
+> > > >
+> > > > So this commit removes the setup_data setting from x86_load_linux(),
+> > > > while leaving intact the infrastructure we'll need in the future to try
+> > > > again.
+> > > >
+> > > > Cc: Michael S. Tsirkin <mst@redhat.com>
+> > > > Cc: Dov Murik <dovmurik@linux.ibm.com>
+> > > > Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> > > > Cc: Gerd Hoffmann <kraxel@redhat.com>
+> > > > Cc: Daniel P. Berrangé <berrange@redhat.com>
+> > > > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > > > Cc: Richard Henderson <richard.henderson@linaro.org>
+> > > > Cc: H. Peter Anvin <hpa@zytor.com>
+> > > > Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
+> > > > Cc: Nathan Chancellor <nathan@kernel.org>
+> > > > Cc: Borislav Petkov <bp@alien8.de>
+> > > > Cc: Eric Biggers <ebiggers@kernel.org>
+> > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > >
+> > > I think I'll be happier if this is just a revert of
+> > > the relevant commits in reverse order to make life easier
+> > > for backporters.
+> > > Unless that's too much work as we made other changes around
+> > > this code?
+> > 
+> > I think that's going to be messy. And it won't handle the dtb stuff
+> > either straightforwardly.
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-[...]
+> List of Fixes tags so people can at least figure out whether they
+> have a version that needs this fix then?
 
-MBR, Sergey
+7.2 is when the functionality started causing problems for most people.
+But the buggy code goes back to 3cbeb524 in 2016.
+
+Jason
