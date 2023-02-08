@@ -2,85 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D5468E961
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3AB68E965
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjBHH4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S230479AbjBHH4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:56:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjBHH4W (ORCPT
+        with ESMTP id S230134AbjBHH4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:56:22 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7131E1F4AD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:56:21 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id q8so12700113wmo.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:56:21 -0800 (PST)
+        Wed, 8 Feb 2023 02:56:46 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9A02B60C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:56:44 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id n2so12534541pfo.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:56:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ETxDvVj98k7PU9AtIH67/6OJT7NKyjfCHV6l1l+MNQQ=;
-        b=JYXVjCxpNpr225kycoOKCpYUv9d7TUOsBrEU89nBfVKya6Dua1U16VPiPJ+uJfN4en
-         AWSKutDat+UFJUxzYXSE8VwBtHCFQB4TTMYKrLFcfpluBgJmKU+RFFJ7UpvgtzC+iajr
-         JIvfz50BvS4N8o3NNxc4LZ3Ml6IWlJqgxTn9GfkuL8Rpvz+OarEcBGjAtGa7hPh3lrit
-         3Cv+S2ov7vm80nv+NmAjxTaUJ+u/lv1h5az4msh01dBrx6HDpPtavEXy9jod1UgboOdK
-         LSdREKHCZFuacyIbvWoUOHSJwpvioc1k2jFMC5f/d+53erhNUTHyiAA1uZ5X2YM6tE/X
-         oeXg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=crkO54afLAgsJgdC5GpCChR+pEjtVxO1bJbJ06Q0a9A=;
+        b=MUyFTQeKZHQfSOUJdukzCiukH4Ua+tMjRllnEcvbRibBH1Ydn9cPXuiLv0BiErmxKV
+         9ttRxFXha1O6tUQVhGfi5kgng19LedssfvarpgXzP84fBV1THPuUa7hx8LF8pHwmj1+E
+         OK8fkw/ncfFqqLr7CzmX0uTWCK5ON9JV6WcFiCWAXWUyN6m5R+2iHg+oARbqvdPhno6d
+         kU4fd/YAgh8syPB2+VW6inGhiQaG662c3eGklkLxcxNKU6PIFSifY+OEbeBjmqBQKFtU
+         BfAAuew90eC4uSi9FRjzv8Drjp28CCqk7YYMUPnWTpcumTFdOs7CgiwiAr5wFkmJrLNl
+         WIcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ETxDvVj98k7PU9AtIH67/6OJT7NKyjfCHV6l1l+MNQQ=;
-        b=40bp+nnrEmDbUlhX92TSLNo+th2zHdhxaN/s3NJ+g7k9OUoJiidey2zLXA5bZ2SaQc
-         0XTtiMgzgWsPTjT/GvpTWSFPJhej57S3apxzxhY2MX5ME+etB6qV42wE9kjCZL28bTxy
-         IgVFKpuk4DwLoa8JrR0lcoVrHiKgq5KqKaSJH0RzsGnkbmibe+If0bCUQOt5byHako7A
-         Elc+uFcrrx0aRSqxy6AU0PJE52NdCtue+qfCCZx4XQRBkXwR0hjbe6BcP/2x78Oyrztg
-         Jx8KWpDO5LIDRvmACXX9ue1Q+d5rb6g15nhabnn6o/+PHN3PEtiBiyV61YBR9FM2HRBH
-         nXBg==
-X-Gm-Message-State: AO0yUKV5jBW1luSLdrsW7MHltZtTj0AnOJRFp9mc433dLKNOn58LGeBp
-        Mf59rtvB3EreKfmC8lvsEsxkow==
-X-Google-Smtp-Source: AK7set/nmPCad66nOdzB/ATnH2t6UekYKNilUC2JCRegAFqTQjcMwBcwNJH1PAkPH6wxUnVbqd+KHg==
-X-Received: by 2002:a05:600c:2e96:b0:3df:7948:886b with SMTP id p22-20020a05600c2e9600b003df7948886bmr5383344wmn.31.1675842980005;
-        Tue, 07 Feb 2023 23:56:20 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b003dc521f336esm1062428wmo.14.2023.02.07.23.56.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 23:56:19 -0800 (PST)
-Message-ID: <f80c617c-f595-bdc3-44d0-d29b3fff989e@linaro.org>
-Date:   Wed, 8 Feb 2023 08:56:17 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=crkO54afLAgsJgdC5GpCChR+pEjtVxO1bJbJ06Q0a9A=;
+        b=JWgMj63vAeUJs2SNXRtd3HJ31N055pyxaw2Jz3FuC5zdS69myblFfA8YP2MoOhEbzX
+         IEvsBEvOv3k8+QBFSR0QdougonFV5vdGUBTBiU52BkzHV6hxdRlGiUIBajhtZa/i75om
+         6K/l9rAW7w+X/nNVeTfqVkN0pbpMHAHQ/w8E1jvZrecf3/DwxhSttTFAQ03e+JcuDc1G
+         V1CrSexkT9/YIB/RdLFm1V7FFJDVo7KXyX2itEthGTdCxBeLjvdpGvoEmYTrK2vvqGVj
+         hGDUUWRKsnuVXl42xiG0DKb4NnEYPkAwiov1oWlvXQnIi/ndnGBh3C4Jl/IepzaIAB0n
+         8AGw==
+X-Gm-Message-State: AO0yUKVs6TMd/J9s9nRUdNGdbUwa80zt6ioOD9zJ3Ml+9TSkAPFolchh
+        ipy+1gKlJoDU/+Oz8TRYJWuARm26VqRQVOoL0rw3sg==
+X-Google-Smtp-Source: AK7set8ATv7Jv51fWR/roo/jzNf7bMqH4w+qKf1lOVZ3pghRlN7fsOG+zMrvSvGgTOz2insHe8tHvHVMVJUlp9ff9hY=
+X-Received: by 2002:a62:31c6:0:b0:591:4b17:22b5 with SMTP id
+ x189-20020a6231c6000000b005914b1722b5mr645704pfx.14.1675843003468; Tue, 07
+ Feb 2023 23:56:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5 2/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr
- bindings optional
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230131151819.16612-1-ansuelsmth@gmail.com>
- <20230131151819.16612-2-ansuelsmth@gmail.com>
- <1670489b-e4f0-7328-3dbb-d849d1d6bd7e@linaro.org>
- <63e2e854.df0a0220.52915.56aa@mx.google.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <63e2e854.df0a0220.52915.56aa@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com> <20230207045838.11243-5-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230207045838.11243-5-ricardo.neri-calderon@linux.intel.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 8 Feb 2023 08:56:32 +0100
+Message-ID: <CAKfTPtB_YR8e6fcx3Un0vTeJR4EJS9sOXG=wLb8rZeM5Ub4yyA@mail.gmail.com>
+Subject: Re: [PATCH v3 04/10] sched/fair: Let low-priority cores help
+ high-priority busy SMT cores
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,48 +80,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 01:09, Christian Marangi wrote:
-> On Wed, Feb 01, 2023 at 09:20:39AM +0100, Krzysztof Kozlowski wrote:
->> On 31/01/2023 16:18, Christian Marangi wrote:
->>> The qcom-cpufreq-nvmem driver supports 2 kind of devices:
->>> - pre-cpr that doesn't have power-domains and base everything on nvmem
->>>   cells and multiple named microvolt bindings.
->>>   Doesn't need required-opp binding in the opp nodes as they are only
->>>   used for genpd based devices.
->>> - cpr-based that require power-domain in the cpu nodes and use various
->>>   source to decide the correct voltage and freq
->>>   Require required-opp binding since they need to be linked to the
->>>   related opp-level.
->>>
->>> When the schema was introduced, it was wrongly set to always require these
->>> binding but this is not the case for pre-cpr devices.
->>>
->>> Make the power-domain and the required-opp optional and set them required
->>> only for qcs404 based devices.
->>>
->>> Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
->>
->> Fixes go as first patches in the series.
->>
-> 
-> Hi,
-> this is problematic. This documentation is a bit special.
-> 
-> v4 had this patch as first but this cause error with make
-> dt_binding_check as the schema will be effectively empty (as it will
-> have only if condition)
-> 
-> This is why I pushed v5 that swap this with the second patch and first
-> add non conditional stuff to the schema and only with the second patch
-> makes them conditional.
-> 
-> Any hint to handle this corner case? I'm having some diffiulties due to
-> how special this is but we really need this fix since it's blocking the
-> introduction of opp table for ipq806x and ipq807x (as the schema is
-> currently flawed)
+On Tue, 7 Feb 2023 at 05:50, Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
+>
+> Using asym_packing priorities within an SMT core is straightforward. Just
+> follow the priorities that hardware indicates.
+>
+> When balancing load from an SMT core, also consider the idle of its
+> siblings. Priorities do not reflect that an SMT core divides its throughput
+> among all its busy siblings. They only makes sense when exactly one sibling
+> is busy.
+>
+> Indicate that active balance is needed if the destination CPU has lower
+> priority than the source CPU but the latter has busy SMT siblings.
+>
+> Make find_busiest_queue() not skip higher-priority SMT cores with more than
+> busy sibling.
+>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Suggested-by: Valentin Schneider <vschneid@redhat.com>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v2:
+>  * Introduced this patch.
+>
+> Changes since v1:
+>  * N/A
+> ---
+>  kernel/sched/fair.c | 31 ++++++++++++++++++++++++++-----
+>  1 file changed, 26 insertions(+), 5 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 80c86462c6f6..c9d0ddfd11f2 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -10436,11 +10436,20 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+>                     nr_running == 1)
+>                         continue;
+>
+> -               /* Make sure we only pull tasks from a CPU of lower priority */
+> +               /*
+> +                * Make sure we only pull tasks from a CPU of lower priority
+> +                * when balancing between SMT siblings.
+> +                *
+> +                * If balancing between cores, let lower priority CPUs help
+> +                * SMT cores with more than one busy sibling.
+> +                */
+>                 if ((env->sd->flags & SD_ASYM_PACKING) &&
+>                     sched_asym_prefer(i, env->dst_cpu) &&
+> -                   nr_running == 1)
+> -                       continue;
+> +                   nr_running == 1) {
+> +                       if (env->sd->flags & SD_SHARE_CPUCAPACITY ||
+> +                           (!(env->sd->flags & SD_SHARE_CPUCAPACITY) && is_core_idle(i)))
 
-Let's then drop fixes tag, because it will only confuse any backporters.
+This 2nd if could be merged with the upper one
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10518,11 +10518,10 @@ static struct rq *find_busiest_queue(struct
+lb_env *env,
+                 */
+                if ((env->sd->flags & SD_ASYM_PACKING) &&
+                    sched_asym_prefer(i, env->dst_cpu) &&
+-                   nr_running == 1) {
+-                       if (env->sd->flags & SD_SHARE_CPUCAPACITY ||
+-                           (!(env->sd->flags & SD_SHARE_CPUCAPACITY)
+&& is_core_idle(i)))
++                   (nr_running == 1) &&
++                   (env->sd->flags & SD_SHARE_CPUCAPACITY ||
++                           (!(env->sd->flags & SD_SHARE_CPUCAPACITY)
+&& is_core_idle(i))))
+                                continue;
+-               }
 
-Best regards,
-Krzysztof
+                switch (env->migration_type) {
+                case migrate_load:
+---
 
+AFAICT, you can even remove one env->sd->flags & SD_SHARE_CPUCAPACITY
+test with the below but this make the condition far less obvious
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index a6021af9de11..7dfa30c45327 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10518,11 +10518,10 @@ static struct rq *find_busiest_queue(struct
+lb_env *env,
+                 */
+                if ((env->sd->flags & SD_ASYM_PACKING) &&
+                    sched_asym_prefer(i, env->dst_cpu) &&
+-                   nr_running == 1) {
+-                       if (env->sd->flags & SD_SHARE_CPUCAPACITY ||
+-                           (!(env->sd->flags & SD_SHARE_CPUCAPACITY)
+&& is_core_idle(i)))
++                   (nr_running == 1) &&
++                   !(!(env->sd->flags & SD_SHARE_CPUCAPACITY) &&
++                       !is_core_idle(i)))
+                                continue;
+-               }
+
+> +                               continue;
+> +               }
+>
+>                 switch (env->migration_type) {
+>                 case migrate_load:
+> @@ -10530,8 +10539,20 @@ asym_active_balance(struct lb_env *env)
+>          * lower priority CPUs in order to pack all tasks in the
+>          * highest priority CPUs.
+>          */
+> -       return env->idle != CPU_NOT_IDLE && (env->sd->flags & SD_ASYM_PACKING) &&
+> -              sched_asym_prefer(env->dst_cpu, env->src_cpu);
+> +       if (env->idle != CPU_NOT_IDLE && (env->sd->flags & SD_ASYM_PACKING)) {
+> +               /* Always obey priorities between SMT siblings. */
+> +               if (env->sd->flags & SD_SHARE_CPUCAPACITY)
+> +                       return sched_asym_prefer(env->dst_cpu, env->src_cpu);
+> +
+> +               /*
+> +                * A lower priority CPU can help an SMT core with more than one
+> +                * busy sibling.
+> +                */
+> +               return sched_asym_prefer(env->dst_cpu, env->src_cpu) ||
+> +                      !is_core_idle(env->src_cpu);
+> +       }
+> +
+> +       return false;
+>  }
+>
+>  static inline bool
+> --
+> 2.25.1
+>
