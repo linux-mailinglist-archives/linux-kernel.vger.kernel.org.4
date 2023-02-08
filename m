@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5254E68F929
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218C168F931
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjBHU5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
+        id S232308AbjBHU5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjBHU5U (ORCPT
+        with ESMTP id S232303AbjBHU5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:57:20 -0500
+        Wed, 8 Feb 2023 15:57:23 -0500
 Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BB03D91E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:57:10 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id a5so27862ilk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 12:57:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDB04391A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:57:15 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id a5so27964ilk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 12:57:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iPfsCQfg7xuEhCC2eccAscY4Hh6knFHrvMv/YaXzBQI=;
-        b=hVNjiwzkqjLOD7wHeIJbnnvO/+VO0Xn8814lLg0ZVkD9RhoH2Fxve/+2G8t+krA583
-         xl0f0qLWCrrUnVVVKgZUQ3J0p4L46apoG6mjUnzFAmEcsEZeelZx7ibW03M6VWBv1BAM
-         VgYzNijjZnajlbC60VINfGPRFDTViepbGA1mfl7924jaLjzsmd22VPssHEhnxykx8mIF
-         0j8J97qa+8u3cp1ELosZHlG+GCUv1BNVoo/wKh55CXvEAYw9gydnHk9B+msQzMuosD+7
-         NwHoomUyXSgu18tjF9v1PD7Aa2t5rw46qW5fT7en+2tiFlfP/0xV1sQH0pWUEMKYGROv
-         BYrQ==
+        bh=hLamySAr1zUOG/dPPEeRuzX5hSRA9o9Azm7PHROMYBo=;
+        b=qHTKOSfOt0lAKtirhKtA9vpmWHAvSU3grHwxM89A/2+E2FbgvuQp6GaX58hXlh1Kam
+         RUHAmnLswF5wxEUwFd+Fsjb0Mq4RNmPhkH0rDpJE+P4uteVlWTRCFYxK9YuNh38P4c4k
+         F9zOkwR3nP1s3B9G3k30yI6uAnb1Aih/DP+u1Ck0ebF+qRu8a7AW8V4Jd52/SvAT9+KR
+         nLn9xnwMiJgFm6Lcej5qIageMt2kvOOt6vKKGk3zc12evikTt1d+Rr6t4VOrSux3G78d
+         LydLP0WdSHpfCnpZaftFOAC2KpMD/FRqeWqN7T7G34IMpFeKo3T/v4KrB0/QuCcGeYXd
+         y8+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iPfsCQfg7xuEhCC2eccAscY4Hh6knFHrvMv/YaXzBQI=;
-        b=aEvbEQ+t2vONTr+jtA29Jk88Atb/iF6Su7HhODpaV9awqT8aw4Wsk2uAba+BlLM+bg
-         /LxwslG1A/SEDp3KuSS3ohNL3xD1jiU7jHrYnezGU07Ij08EN4QGZeKRUGw3q/y+bhcY
-         RqBqcJy0YTWciecB6VGV+4p04rGt9BsqsMshor6a04dQ/6Tz9Tlz8RO6LGxuWlIi1rX5
-         MscmONjsNYv+VXkZc7Fr3jw1YzZj7Xf+dW4UW2dtYAw8X4Vx8qrmFohFHHSLNXbxSdMx
-         9kcX+AOx87LAKA68GegCCa6NNlmhiDzeCPlFLyj8yzTIiANk5i1DEBkH7qkhul2D+Ebo
-         1WjQ==
-X-Gm-Message-State: AO0yUKUpCkxtwRS3+UJRMASDHHFJ9fIvL/lOY+ugJjGiQZ5cDAElilx6
-        QuTgQbPG5kNgqBXzGiG+qOoFQg==
-X-Google-Smtp-Source: AK7set/OZmKV0Oc2zwR8ZgvKIFuLbOgd5A5Ee48HH4+3uI5L38z/Xw4Q7ua2v+i3b43vBSPvxTNmPg==
-X-Received: by 2002:a05:6e02:1b09:b0:310:f912:5a68 with SMTP id i9-20020a056e021b0900b00310f9125a68mr2926016ilv.3.1675889829551;
-        Wed, 08 Feb 2023 12:57:09 -0800 (PST)
+        bh=hLamySAr1zUOG/dPPEeRuzX5hSRA9o9Azm7PHROMYBo=;
+        b=Mh+Hmrapbw65Bs9Vo4YKVVU4+STkIhaQek/ld82xzRx8fhQODX1Y6ZQxNW2/9ckUoH
+         VTgralQ2yS1t8keEv+obrwTlh4UA7N9llBBwjSOKGbx3niiFcz5mV/O0Ce+2TQTwiE8d
+         8wLcIeQs1bbwRTyxs1peXcf/dQFxbYyTTZY+yssXjRzJdirs6Fuz7T6Iq/sf9XVxRS2W
+         aJBq4U4Z+xNmj8ESWeBzrP419JXUPc6tv3wfwFFLBmxwMh3gTRxuHQcOOGw0lH+qJ5FV
+         WDZvnLhkducM6P/BjsOfs7TV8XRcjMJghXEhtoK+dpto/9veRc84CDsVORR18XDBQs7w
+         olEw==
+X-Gm-Message-State: AO0yUKWW06F7Mw5rJ5ZKJrNfYP7HxxoEGCILRc4VfphuTDNnSVDfMXyR
+        b8WHBSSGRpIMPv1j9COxckgl7A==
+X-Google-Smtp-Source: AK7set9HzrjPXUf3mdPdNqdakAfcYUv9zsMZglDr9hf8cHLPiPcWu2HazlnJlw120SfPSXeoBM1sMg==
+X-Received: by 2002:a05:6e02:198a:b0:314:216:3a78 with SMTP id g10-20020a056e02198a00b0031402163a78mr825066ilf.15.1675889835377;
+        Wed, 08 Feb 2023 12:57:15 -0800 (PST)
 Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id r6-20020a922a06000000b0031093e9c7fasm5236704ile.85.2023.02.08.12.57.04
+        by smtp.gmail.com with ESMTPSA id r6-20020a922a06000000b0031093e9c7fasm5236704ile.85.2023.02.08.12.57.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 12:57:06 -0800 (PST)
+        Wed, 08 Feb 2023 12:57:13 -0800 (PST)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -59,9 +59,9 @@ Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
         quic_subashab@quicinc.com, elder@kernel.org,
         netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 1/9] net: ipa: generic command param fix
-Date:   Wed,  8 Feb 2023 14:56:45 -0600
-Message-Id: <20230208205653.177700-2-elder@linaro.org>
+Subject: [PATCH net-next 2/9] net: ipa: get rid of ipa->reg_addr
+Date:   Wed,  8 Feb 2023 14:56:46 -0600
+Message-Id: <20230208205653.177700-3-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230208205653.177700-1-elder@linaro.org>
 References: <20230208205653.177700-1-elder@linaro.org>
@@ -77,52 +77,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting at IPA v4.11, the GSI_GENERIC_COMMAND GSI register got a
-new PARAMS field.  The code that encodes a value into that field
-sets it unconditionally, which is wrong.
+The reg_addr field in the IPA structure is set but never used.
+Get rid of it.
 
-We currently only provide 0 as the field's value, so this error has
-no real effect.  Still, it's a bug, so let's fix it.
-
-Fix an (unrelated) incorrect comment as well.  Fields in the
-ERROR_LOG GSI register actually *are* defined for IPA versions
-prior to v3.5.1.
-
-Fixes: fe68c43ce388 ("net: ipa: support enhanced channel flow control")
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
-Note:  This is sort of a non-bug, so I submitted it to net-next.
+ drivers/net/ipa/ipa.h     | 2 --
+ drivers/net/ipa/ipa_reg.c | 1 -
+ 2 files changed, 3 deletions(-)
 
- drivers/net/ipa/gsi.c     | 3 ++-
- drivers/net/ipa/gsi_reg.h | 1 -
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
-index bea2da1c4c51d..f1a3938294866 100644
---- a/drivers/net/ipa/gsi.c
-+++ b/drivers/net/ipa/gsi.c
-@@ -1666,7 +1666,8 @@ static int gsi_generic_command(struct gsi *gsi, u32 channel_id,
- 	val = u32_encode_bits(opcode, GENERIC_OPCODE_FMASK);
- 	val |= u32_encode_bits(channel_id, GENERIC_CHID_FMASK);
- 	val |= u32_encode_bits(GSI_EE_MODEM, GENERIC_EE_FMASK);
--	val |= u32_encode_bits(params, GENERIC_PARAMS_FMASK);
-+	if (gsi->version >= IPA_VERSION_4_11)
-+		val |= u32_encode_bits(params, GENERIC_PARAMS_FMASK);
+diff --git a/drivers/net/ipa/ipa.h b/drivers/net/ipa/ipa.h
+index 5372db58b5bdc..fd54c328e8271 100644
+--- a/drivers/net/ipa/ipa.h
++++ b/drivers/net/ipa/ipa.h
+@@ -45,7 +45,6 @@ struct ipa_interrupt;
+  * @interrupt:		IPA Interrupt information
+  * @uc_powered:		true if power is active by proxy for microcontroller
+  * @uc_loaded:		true after microcontroller has reported it's ready
+- * @reg_addr:		DMA address used for IPA register access
+  * @reg_virt:		Virtual address used for IPA register access
+  * @regs:		IPA register definitions
+  * @mem_addr:		DMA address of IPA-local memory space
+@@ -97,7 +96,6 @@ struct ipa {
+ 	bool uc_powered;
+ 	bool uc_loaded;
  
- 	timeout = !gsi_command(gsi, GSI_GENERIC_CMD_OFFSET, val);
+-	dma_addr_t reg_addr;
+ 	void __iomem *reg_virt;
+ 	const struct ipa_regs *regs;
  
-diff --git a/drivers/net/ipa/gsi_reg.h b/drivers/net/ipa/gsi_reg.h
-index 3763359f208f7..e65f2f055cfff 100644
---- a/drivers/net/ipa/gsi_reg.h
-+++ b/drivers/net/ipa/gsi_reg.h
-@@ -372,7 +372,6 @@ enum gsi_general_id {
- #define GSI_ERROR_LOG_OFFSET \
- 			(0x0001f200 + 0x4000 * GSI_EE_AP)
+diff --git a/drivers/net/ipa/ipa_reg.c b/drivers/net/ipa/ipa_reg.c
+index ddd529153e15c..d3d05420c5e91 100644
+--- a/drivers/net/ipa/ipa_reg.c
++++ b/drivers/net/ipa/ipa_reg.c
+@@ -123,7 +123,6 @@ int ipa_reg_init(struct ipa *ipa)
+ 		dev_err(dev, "unable to remap \"ipa-reg\" memory\n");
+ 		return -ENOMEM;
+ 	}
+-	ipa->reg_addr = res->start;
+ 	ipa->regs = regs;
  
--/* Fields below are present for IPA v3.5.1 and above */
- #define ERR_ARG3_FMASK			GENMASK(3, 0)
- #define ERR_ARG2_FMASK			GENMASK(7, 4)
- #define ERR_ARG1_FMASK			GENMASK(11, 8)
+ 	return 0;
 -- 
 2.34.1
 
