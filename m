@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CB268EEF7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E8568EEFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbjBHM1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 07:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S230238AbjBHM3q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Feb 2023 07:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbjBHM1p (ORCPT
+        with ESMTP id S229598AbjBHM3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:27:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A5D2E0F7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:27:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BD66616C0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24A2AC433EF;
-        Wed,  8 Feb 2023 12:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675859263;
-        bh=tkK2+0BqblY+0MQ5VMV2fKZBuIay8ZTRxNcOWoK9jIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nMlU0WJpOCkzvnkjNR86j5fC98soB1Cu3lJPqQqE4kN8wDY3caeP5Q1MMLQOlLpK1
-         8jzflluPJtIRbJVJ4ufPcPmSImLQhpGJf3r6qWOSpy9VNFWx2K7UOPea3nKGlaO/lc
-         dGxwqbN9AGYy8W3L4PLqCN7uEHrpiDE0+qqoUuFA=
-Date:   Wed, 8 Feb 2023 13:27:40 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tomas Winkler <tomas.winkler@intel.com>
-Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [char-misc-next v2 2/2] mei: gsc_proxy: add gsc proxy driver
-Message-ID: <Y+OVPC+XLvXS4HIE@kroah.com>
-References: <20230205181132.191064-1-tomas.winkler@intel.com>
- <20230205181132.191064-3-tomas.winkler@intel.com>
+        Wed, 8 Feb 2023 07:29:44 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05AA2BF26
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:29:42 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-59-Hb1NbtNkMCGu2tgHQ7xvHQ-1; Wed, 08 Feb 2023 12:29:39 +0000
+X-MC-Unique: Hb1NbtNkMCGu2tgHQ7xvHQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 8 Feb
+ 2023 12:29:38 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Wed, 8 Feb 2023 12:29:38 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Peter Zijlstra' <peterz@infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>, Borislav Petkov <bp@alien8.de>
+CC:     Masami Hiramatsu <mhiramat@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] x86/alternative: Support relocations in alternatives
+Thread-Topic: [PATCH] x86/alternative: Support relocations in alternatives
+Thread-Index: AQHZOjyzxl+xf7lExkaNEfzZDwBgqa7E+/6A
+Date:   Wed, 8 Feb 2023 12:29:38 +0000
+Message-ID: <693ce771113d49da92235a0f6d2e395f@AcuMS.aculab.com>
+References: <Y+EXQlGSI9WUU8nn@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y+EXQlGSI9WUU8nn@hirez.programming.kicks-ass.net>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205181132.191064-3-tomas.winkler@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 05, 2023 at 08:11:32PM +0200, Tomas Winkler wrote:
-> From: Alexander Usyskin <alexander.usyskin@intel.com>
-> 
-> Add GSC proxy driver. It to allows messaging between GSC component
-> on Intel on board graphics card and CSE device.
-> 
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> ---
-> 
-> V2: refactor match function
->     use device information instead of driver name
->     to identify the aggregate device.
+From: Peter Zijlstra
+> Sent: 06 February 2023 15:06
+...
+> +#define apply_reloc_n(n_, p_, d_)				\
+> +	do {							\
+> +		s32 v = *(s##n_ *)(p_);				\
 
-Much much better, thank you!
+You've added '_' suffixes to the parameters.
+But these only refer to the body of the #define
+so are never a problem.
 
-If you can clear up the answers to patch 1, I'll be glad to take this
-through my tree.
+OTOH the local 'v' will cause confusion if one of the
+actual parameters is 'v'.
+Which is why it is common to prefix locals with '_'.
+(Which doesn't help with recursive expansions.)
 
-thanks,
+Since this is only actually expended in the one .c file
+it is unlikely to cause a problem.
 
-greg k-h
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
