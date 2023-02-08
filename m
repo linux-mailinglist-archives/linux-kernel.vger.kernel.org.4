@@ -2,158 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946DA68ECF3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE2F68ED04
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjBHKcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:32:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S231491AbjBHKgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjBHKcZ (ORCPT
+        with ESMTP id S229648AbjBHKgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:32:25 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9BE46728
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:32:24 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pPhkN-00047c-KL; Wed, 08 Feb 2023 11:32:15 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pPhkL-003Uhp-OH; Wed, 08 Feb 2023 11:32:14 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pPhkK-00Aa5b-VK; Wed, 08 Feb 2023 11:32:12 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: [PATCH net-next v6 9/9] net: phy: start using genphy_c45_ethtool_get/set_eee()
-Date:   Wed,  8 Feb 2023 11:32:11 +0100
-Message-Id: <20230208103211.2521836-10-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230208103211.2521836-1-o.rempel@pengutronix.de>
-References: <20230208103211.2521836-1-o.rempel@pengutronix.de>
+        Wed, 8 Feb 2023 05:36:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DB9D48A2F;
+        Wed,  8 Feb 2023 02:35:43 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 797611042;
+        Wed,  8 Feb 2023 02:35:57 -0800 (PST)
+Received: from bogus (unknown [10.57.10.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 835903F8C6;
+        Wed,  8 Feb 2023 02:35:13 -0800 (PST)
+Date:   Wed, 8 Feb 2023 10:35:11 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Kazuki <kazukih0205@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: s2idle breaks on machines without cpuidle support
+Message-ID: <20230208103511.w7jzxw6spy6humdn@bogus>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
+ <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All preparations are done. Now we can start using new functions and remove
-the old code.
+On Wed, Feb 08, 2023 at 04:48:18AM +0900, Kazuki wrote:
+> On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
+> >
+> > What do you mean by break ? More details on the observation would be helpful.
+> For example, CLOCK_MONOTONIC doesn't stop even after suspend since
+> these chain of commands don't get called.
+>
+> call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
+>
+> Which in turn causes programs like systemd to crash since it doesn't
+> expect this.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/phy/phy.c | 60 ++-----------------------------------------
- 1 file changed, 2 insertions(+), 58 deletions(-)
+Yes expected IIUC. The per-cpu timers and counters continue to tick in
+WFI and hence CLOCK_MONOTONIC can't stop.
 
-diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-index 36533746630e..2f1041a7211e 100644
---- a/drivers/net/phy/phy.c
-+++ b/drivers/net/phy/phy.c
-@@ -1517,33 +1517,10 @@ EXPORT_SYMBOL(phy_get_eee_err);
-  */
- int phy_ethtool_get_eee(struct phy_device *phydev, struct ethtool_eee *data)
- {
--	int val;
--
- 	if (!phydev->drv)
- 		return -EIO;
- 
--	/* Get Supported EEE */
--	val = phy_read_mmd(phydev, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
--	if (val < 0)
--		return val;
--	data->supported = mmd_eee_cap_to_ethtool_sup_t(val);
--
--	/* Get advertisement EEE */
--	val = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_ADV);
--	if (val < 0)
--		return val;
--	data->advertised = mmd_eee_adv_to_ethtool_adv_t(val);
--	data->eee_enabled = !!data->advertised;
--
--	/* Get LP advertisement EEE */
--	val = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_LPABLE);
--	if (val < 0)
--		return val;
--	data->lp_advertised = mmd_eee_adv_to_ethtool_adv_t(val);
--
--	data->eee_active = !!(data->advertised & data->lp_advertised);
--
--	return 0;
-+	return genphy_c45_ethtool_get_eee(phydev, data);
- }
- EXPORT_SYMBOL(phy_ethtool_get_eee);
- 
-@@ -1556,43 +1533,10 @@ EXPORT_SYMBOL(phy_ethtool_get_eee);
-  */
- int phy_ethtool_set_eee(struct phy_device *phydev, struct ethtool_eee *data)
- {
--	int cap, old_adv, adv = 0, ret;
--
- 	if (!phydev->drv)
- 		return -EIO;
- 
--	/* Get Supported EEE */
--	cap = phy_read_mmd(phydev, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
--	if (cap < 0)
--		return cap;
--
--	old_adv = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_ADV);
--	if (old_adv < 0)
--		return old_adv;
--
--	if (data->eee_enabled) {
--		adv = !data->advertised ? cap :
--		      ethtool_adv_to_mmd_eee_adv_t(data->advertised) & cap;
--		/* Mask prohibited EEE modes */
--		adv &= ~phydev->eee_broken_modes;
--	}
--
--	if (old_adv != adv) {
--		ret = phy_write_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_ADV, adv);
--		if (ret < 0)
--			return ret;
--
--		/* Restart autonegotiation so the new modes get sent to the
--		 * link partner.
--		 */
--		if (phydev->autoneg == AUTONEG_ENABLE) {
--			ret = phy_restart_aneg(phydev);
--			if (ret < 0)
--				return ret;
--		}
--	}
--
--	return 0;
-+	return genphy_c45_ethtool_set_eee(phydev, data);
- }
- EXPORT_SYMBOL(phy_ethtool_set_eee);
- 
--- 
-2.30.2
+> >
+> > > 2. Suspend actually works on ARM64 machines even without proper
+> > > cpuidle (PSCI cpuidle) since they support wfi, so the assumption here is wrong
+> > > on such machines
+> > >
+> >
+> > Sorry I am bit confused here. Your point (2) contradicts the $subject.
+> drivers/cpuidle/cpuidle.c:
+>
+> bool cpuidle_not_available(struct cpuidle_driver *drv,
+> 			   struct cpuidle_device *dev)
+> {
+> 	return off || !initialized || !drv || !dev || !dev->enabled;
+> }
+>
+> The cpuidle framework reports ARM64 devices without PSCI cpuidle as
+> "cpuidle not available" even when they support wfi, which causes suspend
+> to fail, which shouldn't be happening since they do support idling.
 
+Yes with just WFI, there will be no active cpuidle driver.
+
+[...]
+
+> > Again, since s2idle is userspace driven, I don't understand what do you
+> > mean by unbootable kernel in the context of s2idle.
+>
+> Sorry, I meant "attempts to fix this bug have all led to an unbootable
+> kernel."
+
+Again I assume you mean kernel hang or crash and nothing to do with boot.
+Once you enter s2i state with your changes/fix, it hangs or is unresponsive
+as it might have either failed to enter or resume from the state.
+
+--
+Regards,
+Sudeep
