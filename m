@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407ED68F2CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574FD68F2D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjBHQFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:05:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S230263AbjBHQGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjBHQFQ (ORCPT
+        with ESMTP id S229539AbjBHQGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:05:16 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271484B76F;
-        Wed,  8 Feb 2023 08:05:09 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id rp23so1256217ejb.7;
-        Wed, 08 Feb 2023 08:05:09 -0800 (PST)
+        Wed, 8 Feb 2023 11:06:22 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3AB2BF25
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:06:17 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id be8so19795131plb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 08:06:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tu8SJf3xEBufgW7POvLQ+bbbs+6bQN1vcLMAaGTCibI=;
-        b=lsANXjT4YYeLKPfekDxuxNvAVgTcR5Cwj2R2gobvoM8V6zflsPzTwdbHamN9j3c+Dp
-         qyufcdOKd4fsFzdyy1e4iQkrHkb0eRBB5wkbDuY6mwpcfSYIy9yPePUUQZRBPkXOoBPY
-         lX3i1gdqwzKVboFYOrI71POx64m6R5gtaYBDZdF8NBfA60b+NwlmN1BO8zuu1XdVJotJ
-         vifemm6G9DJLSHx638omaaoLmmd/ptuFJeFVpxbm/mJ2NCCN2Vxpg6K+20RE47CG9YvV
-         dWKn0W1dPeZ3t5rfZBpPkjHRYtdMkFIOocmdOdS0vkBoS6l2Iy1AslrUdstO9oiRQChS
-         mjCg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1RtT+tmNqFzYW9HFGM8EiaI8TKYfazSEO+jRCB5fHBM=;
+        b=HxRg9Dpekes1pQDkH4qCpvH0JGYHdkE0cK2Ln4fi0Xg66hKQdwXMVWA0ChixwzsopN
+         VdQEdaTi13WOEMP7OqMqPyIoBCfm8451w0S3WT1f5mp4GeWkX/2dgJq91ceXRdo3f/7J
+         sJHVmswLBla7N36r8/I5jd4y21mZs16uXbbdhfdemYyrzhKzZRmmAaYxChIjSDogHDuF
+         U2gKiMWVBYNVh6IUN/Q/1iDLcJsyjv2DWABywNLP0kIYGTkdbJyugKvkZXGd0saQFoGh
+         EyKYgXwhXaafZvbYkAO7BgYM7eMAY2otiCkiHF/pQQGWg7zzddlNROwBA3JTQIbJLSgT
+         7O5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tu8SJf3xEBufgW7POvLQ+bbbs+6bQN1vcLMAaGTCibI=;
-        b=hfZBREPXyMtP9BrB5z12hSLBU6KX8mVC5IqqviNHhOVCnAlAsQMliVxnjn/2m2XV48
-         ZQE8EIVBPSYjAplQz8mCdYL8448eUIO7CwW/404uXRnxwvfLTyp/p232MvNT/LdaOkq2
-         1UJR7lkJu5u9ikTQHsLXRQPwvrIHqS9hgsGQlCFW15ePMBqA9UPLfkoQ9E5f1/0f7RPd
-         zDLCjXRhL3vTcDdeWfkt/Yut5uDLSQYlF+oehg28Wf2/a+PHrq+G7Rnnl0R9ZZV3Vzua
-         DK0qa2ojULWuqqTBNpkW1J7aF9hWipTZzy4G72QsexGyqBV2dfxMCuBHlnUtg+PBIKxv
-         Q0Xw==
-X-Gm-Message-State: AO0yUKVN01FSwrpGSEpX+cC4D/Pbo0ZplIEij5SFIzYR9Mb12ns6z42y
-        jT7w3hnutCyxQNVWxop6xc0=
-X-Google-Smtp-Source: AK7set94qkjdx8w8XK88as/CszW9GjQxMgGq6dqR+wis4aVIcrwdmcJPcXzYWCtcwYo84H/Cr7EwYw==
-X-Received: by 2002:a17:906:7c07:b0:880:2870:7849 with SMTP id t7-20020a1709067c0700b0088028707849mr8704801ejo.74.1675872307593;
-        Wed, 08 Feb 2023 08:05:07 -0800 (PST)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b007ae32daf4b9sm8459666ejo.106.2023.02.08.08.05.06
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1RtT+tmNqFzYW9HFGM8EiaI8TKYfazSEO+jRCB5fHBM=;
+        b=VPUIIymH9Ism1Le6SUOcdKfJsPdjb6pHGuwp+J5nfc4rLnkSq1qMtu/S0kja/I/qdN
+         0GZDnXM3VeDbnRSj1fDRfgInKLvI4vZe1SJQVfo9vLtNrKh2Zkf5rt+25PUZDUCGM8kW
+         olyTI1c/pXdExZO0xd2N752gZOT9Sz39O5wKNKyRmHlttVgOsiBB8KnUt009pwS1ubuE
+         Ihat/Seo/bP/jXX14/v1Yf1WSKaugkfKr0Z1QNRHOJ/vBl0cBTMiODljMFUyX8PtUj4J
+         7PTVnJ6ueiV40tdhUD3CHHVg5z0GsR8xKMIZoQ37o9hK9HxLas9YuU/wzP6i5uSZ4s+S
+         OC4w==
+X-Gm-Message-State: AO0yUKX/RcotTvLCc7FDTmlZnodwGin5LjT+mt4YNzlSQesSaWZ6YPeJ
+        gGWzp5B76DybjH/Fnk82MkNzeA==
+X-Google-Smtp-Source: AK7set8pMqKg9DFJGTafjS3G2UGl2pR8NOlAITtC9bO6vN7fe7/inI2GQVMA092aFj5i5vHLH+lqKw==
+X-Received: by 2002:a17:903:2446:b0:198:af50:e4ea with SMTP id l6-20020a170903244600b00198af50e4eamr266926pls.16.1675872376690;
+        Wed, 08 Feb 2023 08:06:16 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u206-20020a6279d7000000b0059085684b54sm11875051pfc.140.2023.02.08.08.06.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 08:05:07 -0800 (PST)
-Date:   Wed, 8 Feb 2023 17:05:05 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srikar Srimath Tirumala <srikars@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: tegra-bpmp: Handle offline zones
-Message-ID: <Y+PIMc8PepsIPXN7@orome>
-References: <20230207135610.3100865-1-cyndis@kapsi.fi>
- <Y+N5+w8ePTVaZiIB@orome>
- <706b3e2d-7097-356b-b96e-dd917ce048ea@kapsi.fi>
+        Wed, 08 Feb 2023 08:06:16 -0800 (PST)
+Date:   Wed, 8 Feb 2023 16:06:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Santosh Shukla <santosh.shukla@amd.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection
+ interface
+Message-ID: <Y+PIdJZtCsGH2Sw3@google.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <20221129193717.513824-8-mlevitsk@redhat.com>
+ <Y9mWFlGdzoa8ZDW7@google.com>
+ <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3g8zk/YJd0AOEqHX"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <706b3e2d-7097-356b-b96e-dd917ce048ea@kapsi.fi>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <a59505b3-5405-0409-bbf1-34466932c2c1@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,57 +91,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 08, 2023, Santosh Shukla wrote:
+> On 2/1/2023 3:58 AM, Sean Christopherson wrote:
+> > On Tue, Nov 29, 2022, Maxim Levitsky wrote:
+> >> @@ -5191,9 +5191,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+> >>  
+> >>  	vcpu->arch.nmi_injected = events->nmi.injected;
+> >>  	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING)
+> >> -		vcpu->arch.nmi_pending = events->nmi.pending;
+> >> +		atomic_add(events->nmi.pending, &vcpu->arch.nmi_queued);
+> >> +
+> >>  	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
+> >>  
+> >> +	process_nmi(vcpu);
+> > 
+> > Argh, having two process_nmi() calls is ugly (not blaming your code, it's KVM's
+> > ABI that's ugly).  E.g. if we collapse this down, it becomes:
+> > 
+> > 	process_nmi(vcpu);
+> > 
+> > 	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
+> > 		<blah blah blah>
+> > 	}
+> > 	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
+> > 
+> > 	process_nmi(vcpu);
+> > 
+> > And the second mess is that V_NMI needs to be cleared.
+> > 
+> 
+> Can you please elaborate on "V_NMI cleared" scenario? Are you mentioning
+> about V_NMI_MASK or svm->nmi_masked?
 
---3g8zk/YJd0AOEqHX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+V_NMI_MASK.  KVM needs to purge any pending virtual NMIs when userspace sets
+vCPU event state and KVM_VCPUEVENT_VALID_NMI_PENDING is set.
 
-On Wed, Feb 08, 2023 at 05:35:48PM +0200, Mikko Perttunen wrote:
-> On 2/8/23 12:31, Thierry Reding wrote:
-> > On Tue, Feb 07, 2023 at 03:56:08PM +0200, Mikko Perttunen wrote:
-> > > From: Mikko Perttunen <mperttunen@nvidia.com>
-> > >=20
-> > > Thermal zones located in power domains may not be accessible when
-> > > the domain is powergated. In this situation, reading the temperature
-> > > will return -BPMP_EFAULT and the temperature is considered to be
-> > > -256C for calculating trips.
-> >=20
-> > Where's that -256C being set? I only see THERMAL_TEMP_INVALID being set
-> > as the default for a zone, but that's not -274C, not -256C. If that's
-> > the temperature that you're referring to, it might be better to state
-> > that we rely on the default temperature rather than any specific number.
-> >=20
-> > Thierry
->=20
-> It is based on BPMP's internal behavior.
+> > The first process_nmi() effectively exists to (a) purge nmi_queued and (b) keep
+> > nmi_pending if KVM_VCPUEVENT_VALID_NMI_PENDING is not set.  I think we can just
+> > replace that with an set of nmi_queued, i.e.
+> > 
+> > 	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
+> > 		vcpu->arch-nmi_pending = 0;	
+> > 		atomic_set(&vcpu->arch.nmi_queued, events->nmi.pending);
+> > 		process_nmi();
+> > 
+> You mean replace above process_nmi() with kvm_make_request(KVM_REQ_NMI, vcpu), right?
+> I'll try with above proposal.
 
-Okay, maybe clarify that part of the sentence then. Could be something
-like:
+Yep, if that works.  Actually, that might be a requirement.  There's a
 
-	... will return -BPMP_EFAULT. When evaluating trips, BPMP will
-	internally use -256C as the temperature for offline zones.
+  static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
 
-Thierry
+lurking below this.  Invoking process_nmi() before NMI blocking is updated could
+result in KVM incorrectly dropping/keeping NMIs.  I don't think it would be a
+problem in practice since KVM save only one NMI, but userspace could stuff NMIs.
 
---3g8zk/YJd0AOEqHX
-Content-Type: application/pgp-signature; name="signature.asc"
+Huh.  The the existing code is buggy.  events->nmi.pending is a u8, and
+arch.nmi_pending is an unsigned int.  KVM doesn't cap the incoming value, so
+userspace could set up to 255 pending NMIs.  The extra weird part is that the extra
+NMIs will get dropped the next time KVM stumbles through process_nmi().
 
------BEGIN PGP SIGNATURE-----
+Amusingly, KVM only saves one pending NMI, i.e. in a true migration scenario KVM
+may drop an NMI.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPjyDEACgkQ3SOs138+
-s6H5JA//TdfEDY64BG0y7A7/GvZveH2DOXG064mmwvhMJtAZ7Vp0v5ldgbi1lWOE
-TiKuNwOVj5QEqgmNo3cN/+E4rYSg74mB1pl4IPrcdUSPgaHo/uLOmi2VnJscUPac
-MKcBGWDw+AWkCCvOPZYfeakK5xKdgfH0Rtami3EP2PvzSEnulGMERlLr27C5s/rT
-yNgfbNf3WdHEUYY5wfhUq9SGd2VNphr+fCtSEyR1GoBvIJz/1KIBsSwbVFFLlvSq
-ecPnR60yhlZs9cSgb0h0L4xfkj6d225YkZU9AghDKyiYmNpzpwMXpDJDekrDIaNp
-yNOZYOBpU5niMfJ/p/EyebHN89DSEtrsewy3ecDEY8xbcNA5IyMcn6rjQyccvnv/
-Y7Awd98eg5ZPXwqSQTtso3oJPPbPVwsmjgCEsvJ2g/1ZgKZfJZ4aI7zNuky0vDFR
-X1wItyZ8TcM06DjBOuHl4XiAdb2h2oNIIuXe2fEcxGHmipvb/6lbrcXMZO9km5sH
-PP0uI3GZ0LHYexYsrpcXXhOicCWY+ld1EWVX29iHZC8T4XojzMNba2sDI7bPCSA7
-i53aIN7o6pd2zKuoxrVlSRQO76ORuuX/RiV6OxAVTUBplZRdO+nhXxnUox80Zqfb
-Mmc9P7aQSj2x+LHuRGasYr3l5EmvMKX07uJMbTRCMmVQy5YhttY=
-=9WHK
------END PGP SIGNATURE-----
+  events->nmi.pending = vcpu->arch.nmi_pending != 0;
 
---3g8zk/YJd0AOEqHX--
+The really amusing part is that that code was added by 7460fb4a3400 ("KVM: Fix
+simultaneous NMIs").  The only thing I can figure is that KVM_GET_VCPU_EVENTS was
+somewhat blindly updated without much thought about what should actually happen.
+
+So, can you slide the below in early in the series?  Then in this series, convert
+to the above suggested flow (zero nmi_pending, stuff nmi_queued) in another patch?
+
+From: Sean Christopherson <seanjc@google.com>
+Date: Wed, 8 Feb 2023 07:44:16 -0800
+Subject: [PATCH] KVM: x86: Save/restore all NMIs when multiple NMIs are
+ pending
+
+Save all pending NMIs in KVM_GET_VCPU_EVENTS, and queue KVM_REQ_NMI if one
+or more NMIs are pending after KVM_SET_VCPU_EVENTS in order to re-evaluate
+pending NMIs with respect to NMI blocking.
+
+KVM allows multiple NMIs to be pending in order to faithfully emulate bare
+metal handling of simultaneous NMIs (on bare metal, truly simultaneous
+NMIs are impossible, i.e. one will always arrive first and be consumed).
+Support for simultaneous NMIs botched the save/restore though.  KVM only
+saves one pending NMI, but allows userspace to restore 255 pending NMIs
+as kvm_vcpu_events.nmi.pending is a u8, and KVM's internal state is stored
+in an unsigned int.
+
+7460fb4a3400 ("KVM: Fix simultaneous NMIs")
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/x86.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 508074e47bc0..e9339acbf82a 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -5115,7 +5115,7 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+ 	events->interrupt.shadow = static_call(kvm_x86_get_interrupt_shadow)(vcpu);
+ 
+ 	events->nmi.injected = vcpu->arch.nmi_injected;
+-	events->nmi.pending = vcpu->arch.nmi_pending != 0;
++	events->nmi.pending = vcpu->arch.nmi_pending;
+ 	events->nmi.masked = static_call(kvm_x86_get_nmi_mask)(vcpu);
+ 
+ 	/* events->sipi_vector is never valid when reporting to user space */
+@@ -5202,8 +5202,11 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+ 						events->interrupt.shadow);
+ 
+ 	vcpu->arch.nmi_injected = events->nmi.injected;
+-	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING)
++	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
+ 		vcpu->arch.nmi_pending = events->nmi.pending;
++		if (vcpu->arch.nmi_pending)
++			kvm_make_request(KVM_REQ_NMI, vcpu);
++	}
+ 	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
+ 
+ 	if (events->flags & KVM_VCPUEVENT_VALID_SIPI_VECTOR &&
+
+base-commit: 6c77ae716d546d71b21f0c9ee7d405314a3f3f9e
+-- 
+
