@@ -2,107 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F16A68E776
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD7E68E76A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjBHFY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 00:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
+        id S229679AbjBHFT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 00:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBHFYZ (ORCPT
+        with ESMTP id S229589AbjBHFT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 00:24:25 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D9535AE
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 21:24:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675833864; x=1707369864;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dU7w0TBrSrIdIYJms8Qb9NuKI4fw5vUjPE8FdmU+g/s=;
-  b=NINetG02ERaPJ6nKF9xPTQuAHtja4E+baS+iCh0XsAVbNbK29omQqy23
-   st11CKcUACw22hllpTMfBikzk9LWbmsSVoBFSjAhJ4ibn5WNdCe7YvjLE
-   qsQ5dST3mjQEAlAHamwvVDm5MnMLxh5oJr6eJP4q0HpjPvJV/DLNuln6F
-   2QC5wVMFX3eka+eM5HyedG4ctn0U6OZNnaG7vdvKFr66K/E4H6zli2eYv
-   qZxPW7Pzud9Fyw+LQQ9qnKJqLaaAPbFuhw1Q8ZStTUngVdYap+VHYcB73
-   4EZNlx8wsO44AYlJrFHSsSq33fbnTbb3+a6QVdFM9HCztPcZwlw9/GuZx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="329741325"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="329741325"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 21:24:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="841045809"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="841045809"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga005.jf.intel.com with ESMTP; 07 Feb 2023 21:24:22 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH 1/1] iommu/vt-d: Fix error handling in sva enable/disable paths
-Date:   Wed,  8 Feb 2023 13:15:59 +0800
-Message-Id: <20230208051559.700109-1-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Feb 2023 00:19:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D69829E24;
+        Tue,  7 Feb 2023 21:19:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB8DD614B9;
+        Wed,  8 Feb 2023 05:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA15CC433EF;
+        Wed,  8 Feb 2023 05:19:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675833592;
+        bh=ppQX0phum8j/ZtlYSmQzrNm0nrrmlila/Ki/EiEn2ts=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XJ81Zr/f58c2/CUfED5JykJHvyvkjghGbRESxgOzC3aLdtpUX8NwAe7nyROcMFvSL
+         z1KD92LORGPR/hI4W8CSfmyP3sp3f6Utx2Dc2iF3NqtVCxp8+H2R4+zbEAypoodCq1
+         yyNtJuw//KLn8EoXrdXHMsh4c/K2cKCmXUGvRsJM49jEbojyzt4pqH2Yc2zxEG+fR2
+         8ZRIotOgfSKZctiKHnIASlA/KXH0ch3T4fewGvzSOPUMAfdVGZiCDTyIFfQYhQiR4d
+         4KTyT/sPJPP32AQXYqZP0IiRfFsL37N1KMWEljIijqPQouzmYZOGkEUF7O3uYZmCrj
+         WqLTWseAEv9/g==
+Date:   Tue, 7 Feb 2023 21:19:50 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net-next v5 02/23] net: phy: add
+ genphy_c45_read_eee_abilities() function
+Message-ID: <20230207211950.58352ede@kernel.org>
+In-Reply-To: <20230206135050.3237952-3-o.rempel@pengutronix.de>
+References: <20230206135050.3237952-1-o.rempel@pengutronix.de>
+        <20230206135050.3237952-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Roll back all previous actions in error paths of intel_iommu_enable_sva()
-and intel_iommu_disable_sva().
+On Mon,  6 Feb 2023 14:50:29 +0100 Oleksij Rempel wrote:
+> +/**
+> + * mii_eee_cap1_mod_linkmode_t
 
-Fixes: d5b9e4bfe0d8 ("iommu/vt-d: Report prq to io-pgfault framework")
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
----
- drivers/iommu/intel/iommu.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+A bit odd formatting - for a function it should have () at the end?
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index a049178cd9f8..36d1867159d7 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4650,8 +4650,12 @@ static int intel_iommu_enable_sva(struct device *dev)
- 		return -EINVAL;
- 
- 	ret = iopf_queue_add_device(iommu->iopf_queue, dev);
--	if (!ret)
--		ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
-+	if (ret)
-+		iopf_queue_remove_device(iommu->iopf_queue, dev);
- 
- 	return ret;
- }
-@@ -4663,8 +4667,12 @@ static int intel_iommu_disable_sva(struct device *dev)
- 	int ret;
- 
- 	ret = iommu_unregister_device_fault_handler(dev);
--	if (!ret)
--		ret = iopf_queue_remove_device(iommu->iopf_queue, dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = iopf_queue_remove_device(iommu->iopf_queue, dev);
-+	if (ret)
-+		iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
- 
- 	return ret;
- }
--- 
-2.34.1
+> + * @adv: target the linkmode advertisement settings
+> + * @val: register value
+> + *
+> + * A function that translates value of following registers to the linkmode:
+> + * IEEE 802.3-2018 45.2.3.10 "EEE control and capability 1" register (3.20)
+> + * IEEE 802.3-2018 45.2.7.13 "EEE advertisement 1" register (7.60)
+> + * IEEE 802.3-2018 45.2.7.14 "EEE "link partner ability 1 register (7.61)
+> + */
+> +static inline void mii_eee_cap1_mod_linkmode_t(unsigned long *adv, u32 val)
+> +{
 
+> @@ -676,6 +678,8 @@ struct phy_device {
+>  	__ETHTOOL_DECLARE_LINK_MODE_MASK(lp_advertising);
+>  	/* used with phy_speed_down */
+>  	__ETHTOOL_DECLARE_LINK_MODE_MASK(adv_old);
+> +	/* used for eee validation */
+> +	__ETHTOOL_DECLARE_LINK_MODE_MASK(supported_eee);
+
+missing kdoc for the new field
