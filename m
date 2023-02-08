@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DCF68F774
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B906C68F785
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjBHSxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S230340AbjBHSzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjBHSxn (ORCPT
+        with ESMTP id S229479AbjBHSzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:53:43 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C683D530CF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:53:41 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id g9so13766662pfo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:53:41 -0800 (PST)
+        Wed, 8 Feb 2023 13:55:04 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F311A54564
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:54:56 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id g18so19674871qtb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:54:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ARKAnyJbGCDixUf78i+l0G5zkCQxdhupYbkp6nMWaxY=;
-        b=GR+o7rQZRnnVhmV8DKpfe5rs/4FwgZ4XFtphgEXVIyvnOUrWvYWq+8ESj61NPNAwJ3
-         dwDUvoAgPU5ZnmGOSkt/w/3k1gynrD0KCQZa/uEl2Ep+xMfE8hg0eCu91ETY08mqyi/e
-         0gnt4W1ItvQoMk/ZHnutPdnFE5V4Q++7LHZzY5bxKyxElcU/p8zOyjyMJi0mpQ6ImO1C
-         6xar8VdeMfFd7NO8f/nu8KgeuHH9uat10q8VE27KqqqQpxm6B9rGY5RPI+mFyCTcdxSp
-         3D0uP99uNs82jdJtiQcMwAd4Vl5MlluR/yNHDyP9P+Tsu0o6wJG+R5ZMvgdLQv/gc/mg
-         N/9A==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h8wnkAyp+UT+1C4mbuuq7uAJNtmK6LABMEs9ejaKbmU=;
+        b=D6besAl+jnXs8HL2wgkgbCj2qj3xJ9fr/H/QmgZCQOBl/ILNdsAnYnJz5z/T00IMUS
+         0LjcTtS5QnJ0TqPgeMn3odKFuB1k7RURDlftGvJvo+M0cbC8W/TgfGGWUivhjQ02WfAL
+         hH75lKyYjyXVvWK2I9cGrN8jkuWCEJxrLFUCUo6h3+mPqU280HNWG2VzpHjmXqrErVPu
+         Dvuhm6cqJup7Slw5HCYXzdphjvFgXJpe5kkkWwrtB1WN9BwLThsX9bBAvaqbN9Rjn+Jw
+         f/6Y7vKq4zhEWwPwKJou0IwNH/fOmSvBArEMpJLpctVxM0xtJhSKz1GfOfQpL+/c/kB1
+         srYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ARKAnyJbGCDixUf78i+l0G5zkCQxdhupYbkp6nMWaxY=;
-        b=4t+EmZT1QShB2fS/G2gKga7B59dmm5otMlymNAkMvCI62i8GodjTt0Wyk9iECirkR5
-         cdwT8txq47SUidJz41ok3xSMR+2lFeyD5IgUt2Gwt21ZfwkkNc3inmwUuF14TucWgpJ/
-         hq0XcyW2TLKSfqC3es1iqtry6iLdv/lxhT/YhsiEeriKql5i+nikKmTEQVrlm4cbQUPW
-         028gMSSQ+iwXv5o5rYOjfj64WSG870No4xqg/6zDYmsK5sVL4C/QavdYCMaQcVH7/1ZQ
-         L9IKDX72fhztfGrcwTw3VxhVJPk9/g0BTZ0KN2bqzhSxv+VUqjbRKxWSQPLHixV+Q6zV
-         fbXg==
-X-Gm-Message-State: AO0yUKVN402tqBSKFFw7M/zt0z1rPq2o0LhO4kaJoE4JU/ImhYN0tB0A
-        6uIoi5xtl9haWzU/xaTFrhmWMwys+kFAVin12d42uQ==
-X-Google-Smtp-Source: AK7set+qg/4GJecRaFbLM82rNlur1zcDRisirla89w82/iIvTgqEVWcL7Bup47k6dMJQSzwaLNHJzj/tQ2m6ZDI8CZA=
-X-Received: by 2002:a62:5184:0:b0:5a8:4bf8:174e with SMTP id
- f126-20020a625184000000b005a84bf8174emr372120pfb.29.1675882420676; Wed, 08
- Feb 2023 10:53:40 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h8wnkAyp+UT+1C4mbuuq7uAJNtmK6LABMEs9ejaKbmU=;
+        b=WSwgTmuDjOLH/2i4fVkYierxLRbEKFL9Epn9J+rfJY3pP0T4th/MdvLW52B4ZtA3hf
+         bTomDO7sbb6cBBrB2yc5HxcTmWcv4EFFYZvGpgH/7YvflHRYpJziP2h2GYQkYzkF6A0d
+         0Tk+Cw23Y8o1oIpkYyZJZrOvcMkf9RXNjFxDBETWeaqhYm9eu7Q/Jw8jCU0h+eIg5Jxl
+         n/QqieOd654DGSXnN8V8E1sdEpOOTyMXvVZXbE7frNlJihbpk76up4+mpZ9gaoznmO1Z
+         zDzxuoinLBDv2iasDSppFrqkXYSYV4qNzXMJNYGk/wf0td1kVIxfUELhQWLduOXKwTBd
+         VLxg==
+X-Gm-Message-State: AO0yUKWGlKtPRecd7cz8B4rywjSuPg3Pnsp1OBqBpDakUq42E56kXyXl
+        CvVx1/Zn3JYts3AiSvGwxZ3jSw==
+X-Google-Smtp-Source: AK7set/3d3WjKLDEH63J39MH2EzXa4p4t7KNEr1YnbanF9W+SN2fvmo/W5CBEP2v8Cnt+LVKQ1ro2g==
+X-Received: by 2002:a05:622a:1044:b0:3ba:1696:87cf with SMTP id f4-20020a05622a104400b003ba169687cfmr15758385qte.44.1675882496039;
+        Wed, 08 Feb 2023 10:54:56 -0800 (PST)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id l23-20020ac84597000000b003b85ed59fa2sm11887320qtn.50.2023.02.08.10.54.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 10:54:55 -0800 (PST)
+Date:   Wed, 8 Feb 2023 13:54:54 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Kairui Song <ryncsn@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>
+Subject: Re: [PATCH 1/2] sched/psi: simplify cgroup psi retrieving
+Message-ID: <Y+Pv/kIkUz/YlvNi@cmpxchg.org>
+References: <20230208161654.99556-1-ryncsn@gmail.com>
+ <20230208161654.99556-2-ryncsn@gmail.com>
 MIME-Version: 1.0
-References: <20230208065133.220589-1-ebiggers@kernel.org>
-In-Reply-To: <20230208065133.220589-1-ebiggers@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 8 Feb 2023 10:53:29 -0800
-Message-ID: <CAKwvOdkYWXCYr75JkzHqMJ8j=UefW86Zq9tD_AyZQKzW__7TEA@mail.gmail.com>
-Subject: Re: [PATCH] randstruct: disable Clang 15 support
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Bill Wendling <morbo@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208161654.99556-2-ryncsn@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 10:52 PM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> From: Eric Biggers <ebiggers@google.com>
->
-> The randstruct support released in Clang 15 is unsafe to use due to a
-> bug that can cause miscompilations: "-frandomize-layout-seed
-> inconsistently randomizes all-function-pointers structs"
-> (https://github.com/llvm/llvm-project/issues/60349).  It has been fixed
-> on the Clang 16 release branch, so add a Clang version check.
->
-> Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
+Hello Kairui,
 
-Thanks for the patch and report. Guessing that wasn't fun to debug.
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+On Thu, Feb 09, 2023 at 12:16:53AM +0800, Kairui Song wrote:
+> From: Kairui Song <kasong@tencent.com>
+> 
+> Since the only case where cgroup_psi should return psi_system instead of
+> the cgroup's psi_group is the root cgroup, just set root cgroup's psi to
+> point to psi_system to remove the if branch.
+> 
+> Signed-off-by: Kairui Song <kasong@tencent.com>
 
-> ---
->  security/Kconfig.hardening | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index 53baa95cb644f..0f295961e7736 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -281,6 +281,9 @@ endmenu
->
->  config CC_HAS_RANDSTRUCT
->         def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
-> +       # Randstruct was first added in Clang 15, but it isn't safe to use until
-> +       # Clang 16 due to https://github.com/llvm/llvm-project/issues/60349
-> +       depends on !CC_IS_CLANG || CLANG_VERSION >= 160000
->
->  choice
->         prompt "Randomize layout of sensitive kernel structures"
->
-> base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
-> --
-> 2.39.1
->
->
+Thanks for the patches. They overall look good, and the numbers even
+better.
 
+>  include/linux/psi.h    | 2 +-
+>  kernel/cgroup/cgroup.c | 7 ++++++-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/psi.h b/include/linux/psi.h
+> index b029a847def1..9c3a1638b618 100644
+> --- a/include/linux/psi.h
+> +++ b/include/linux/psi.h
+> @@ -33,7 +33,7 @@ __poll_t psi_trigger_poll(void **trigger_ptr, struct file *file,
+>  #ifdef CONFIG_CGROUPS
+>  static inline struct psi_group *cgroup_psi(struct cgroup *cgrp)
+>  {
+> -	return cgroup_ino(cgrp) == 1 ? &psi_system : cgrp->psi;
+> +	return cgrp->psi;
+>  }
+>  
+>  int psi_cgroup_alloc(struct cgroup *cgrp);
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index c099cf3fa02d..1491d63b06b6 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -163,7 +163,12 @@ static struct static_key_true *cgroup_subsys_on_dfl_key[] = {
+>  static DEFINE_PER_CPU(struct cgroup_rstat_cpu, cgrp_dfl_root_rstat_cpu);
+>  
+>  /* the default hierarchy */
+> -struct cgroup_root cgrp_dfl_root = { .cgrp.rstat_cpu = &cgrp_dfl_root_rstat_cpu };
+> +struct cgroup_root cgrp_dfl_root = {
+> +	.cgrp.rstat_cpu = &cgrp_dfl_root_rstat_cpu,
+> +#ifdef CONFIG_PSI
+> +	.cgrp.psi = &psi_system
+> +#endif
 
--- 
-Thanks,
-~Nick Desaulniers
+Nitpick: customary coding style is to keep a comma even after the last
+entry in the struct. Somebody appending new things won't need to touch
+the previous last line, which adds diff noise.
+
+With that, please add:
+
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
