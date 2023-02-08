@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7909B68F745
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7179268F749
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjBHSla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S230429AbjBHSmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjBHSlB (ORCPT
+        with ESMTP id S229740AbjBHSmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:41:01 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADDF13D78
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:40:59 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id g13so15542317ple.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:40:59 -0800 (PST)
+        Wed, 8 Feb 2023 13:42:43 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE12944B6
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:42:41 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id k15-20020a5b0a0f000000b007eba3f8e3baso17974076ybq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:42:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vScWvp/d/ozadghDwSfm3Gk65WbH936w/mqDt9205Qg=;
-        b=mlm0snFmkK/mocn6K/lz9IRq8FtpwlhW6dqLlq+kstL00rWUBkse6deR80FKo7M2sI
-         EtTcbyfxm8XQRS78OevJvYIb8WadY62gDjKNr9Zx3obtxH3DWDi9omz4IQDPPWJowKPG
-         bzz5/QcSxiLG6SrKf9CtckVzfeSy2yPfLXPe/rutbCsL4Er/5tbYfkxS+eGyri+uA4yf
-         CATV386bbeQQZWKqnNYkgn28RZ1PeFKJZ4ceaI53YiQ2C4mDVWD3EkA1QIlCUG9JEV1s
-         VzuEN2RaL0laqkQV1GP6B0afJw5Ostx3XoOcnUHRJg1X4Zn7TxxHHX/OftnLMpq2BcgT
-         HV8A==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=muGKsBQpDMjO2rXBhVjlNe2+4h4S1u+JGQBqWajmnMY=;
+        b=HxBkYsCyEckUoHuvqVZ5uRlBgYs41lGpzh9bJv5RycbHZDeZvkaOSzuAVFVt1ocvW2
+         GUtHG6k3mrzIxEGxYLtddoREAd1jMYdlSfDEJ+H9rP1xQ3pUllwwQPEUZH1vYPa5ulra
+         2/+qrCz0H5FEJKh2E1cpdMySNo/1cFVZG7fO8PhEVzQPZ3sEBVYBhs0rgDlHIWhU0+kO
+         Yf9vVPbuo9u+AY1zPiE/WEBlftJL/MvXqqHw8ylsVXWkRAYZDDqRFx62tiV63uOOqLZe
+         kMWoCoa+EkILLVIvTVknwJXc+UnFkKSqYWNUe0meeh0pNPjtvUMwge+IQDK+CpWpGHW4
+         OFDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vScWvp/d/ozadghDwSfm3Gk65WbH936w/mqDt9205Qg=;
-        b=wRDYQH4hIgYKMjn5RU9FL850BvBnMJ/nAh3oLAx90xY3p+7odLse0tm/SW2uAgyLLl
-         /jtJzhoorA7/2KcSv/3nMSNNtOXG7xlfqbDAINKe4zrw8M4mllNLJ5z0sok0c2dpty1q
-         3vnyqofsAnksvgpZe/gCb1y6y6x1x/fKSxY3TsXFbCUssb+JezLXYnddePZ08WKhL6MO
-         TttYPlQS74J6Ux0tuD2YrpfwznJXUR15eL4VjJTSSIBVp7DVvXMN/UaVo9xK49m2k9aT
-         Z/j1sj3pqpuJFS2I2V/gbQ2q3duNqupfA0RYLs8IEWxbuXYL2VmuAMJbvJf37f2XTVch
-         bqmw==
-X-Gm-Message-State: AO0yUKVzTTc9M09/8bT5xOswK/yrK50l3NWw/hLuHQ4hQquMlqihMRMN
-        aIQIVRRCJzCFx3GIKkVD1kassP4YXrzvjQ==
-X-Google-Smtp-Source: AK7set9Di9u7lExJjp+4e48o30DuEVXmHUmhkVXNgT/jErcWaoOpUpbzfz2tBZ+ehDmVwnbfG3oiAw==
-X-Received: by 2002:a17:902:d04a:b0:199:482f:d4a1 with SMTP id l10-20020a170902d04a00b00199482fd4a1mr2189566pll.33.1675881659326;
-        Wed, 08 Feb 2023 10:40:59 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id t15-20020a63b24f000000b004fab2ba60adsm8016822pgo.81.2023.02.08.10.40.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 10:40:58 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com, ye.xingchen@zte.com.cn
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bus: brcmstb_gisb: =?iso-8859-1?Q?Use=A0devm=5Fplatform=5Fget=5Fand=5Fioremap=5Fresou?= =?us-ascii?Q?rce=28=29?=
-Date:   Wed,  8 Feb 2023 10:40:57 -0800
-Message-Id: <20230208184057.863743-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <202302081537158530029@zte.com.cn>
-References: <202302081537158530029@zte.com.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=muGKsBQpDMjO2rXBhVjlNe2+4h4S1u+JGQBqWajmnMY=;
+        b=SBCWr+hKE61NcKuSYgHh9eUA0ZtRuULwLuoxA/YEWvs5YAHybqvML/pEjdrolByOY7
+         fHw13F42yDH09rJrWQYaihRWHWUwBeDOC/Au8HLrjix4XYSNHQcztJ0/KdNEh7+iYtYa
+         iKTMrAI1lbjzxNbO2rxK7zjKCszHCBMAorVQVktdoTzSq91WFksXFLtuMcD1XhhVGoNv
+         YT39ucFv77KzYlZqCpxlOxyNLb3L2GfZo2Hs6s1lyJwP/HCg3+MOyEPXUV4rKuF+YIA8
+         VSzy+Fcyt1sWzClXicJzGRTdReGb4MGrgQ2Kxz4Cwjl43G/rjSZlBQxu7Xc2RTNW2ZwQ
+         DkDQ==
+X-Gm-Message-State: AO0yUKUVpRFiwqRLOpsHj8kAOqjhudGAVZRU2Ol2IylLU7bnH8EAUy8L
+        S4yYOCXmpDwNIl48tDMe9v/BUk5oJw==
+X-Google-Smtp-Source: AK7set+sdo20Ns8wgmN9XioMhWZZSNyxwANqkltuYnMXh+mc1E0tbFwUXNb6//5ZYyBNu7g9KmRAOxcLlw==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:a0ba:1bc4:8b19:5b22])
+ (user=elver job=sendgmr) by 2002:a81:1312:0:b0:528:37bd:c122 with SMTP id
+ 18-20020a811312000000b0052837bdc122mr10ywt.5.1675881760758; Wed, 08 Feb 2023
+ 10:42:40 -0800 (PST)
+Date:   Wed,  8 Feb 2023 19:42:03 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Message-ID: <20230208184203.2260394-1-elver@google.com>
+Subject: [PATCH -tip] kasan: Emit different calls for instrumentable memintrinsics
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kbuild@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,16 +78,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 15:37:15 +0800 (CST), <ye.xingchen@zte.com.cn> wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
+Clang 15 will provide an option to prefix calls to memcpy/memset/memmove
+with __asan_ in instrumented functions: https://reviews.llvm.org/D122724
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
---
-Florian
+GCC does not yet have similar support.
+
+Use it to regain KASAN instrumentation of memcpy/memset/memmove on
+architectures that require noinstr to be really free from instrumented
+mem*() functions (all GENERIC_ENTRY architectures).
+
+Fixes: 69d4c0d32186 ("entry, kasan, x86: Disallow overriding mem*() functions")
+Signed-off-by: Marco Elver <elver@google.com>
+---
+
+The Fixes tag is just there to show the dependency, and that people
+shouldn't apply this patch without 69d4c0d32186.
+
+---
+ scripts/Makefile.kasan | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+index b9e94c5e7097..78336b04c077 100644
+--- a/scripts/Makefile.kasan
++++ b/scripts/Makefile.kasan
+@@ -38,6 +38,13 @@ endif
+ 
+ CFLAGS_KASAN += $(call cc-param,asan-stack=$(stack_enable))
+ 
++ifdef CONFIG_GENERIC_ENTRY
++# Instrument memcpy/memset/memmove calls by using instrumented __asan_mem*()
++# instead. With compilers that don't support this option, compiler-inserted
++# memintrinsics won't be checked by KASAN.
++CFLAGS_KASAN += $(call cc-param,asan-kernel-mem-intrinsic-prefix)
++endif
++
+ endif # CONFIG_KASAN_GENERIC
+ 
+ ifdef CONFIG_KASAN_SW_TAGS
+-- 
+2.39.1.519.gcb327c4b5f-goog
+
