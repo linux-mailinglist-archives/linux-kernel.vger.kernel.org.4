@@ -2,85 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EC868EBFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:47:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BE868EC1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjBHJrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:47:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
+        id S229909AbjBHJua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjBHJrG (ORCPT
+        with ESMTP id S229539AbjBHJuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:47:06 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA07EB4A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:47:04 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so1005523wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 01:47:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sKWqqdCURAlapoO/zHZWEUEDu0sAlPmjm8qcDQuj3/o=;
-        b=AFNOTmmNdAi4x/iq0lW+2oa3/iowxBepitKje/bk2kk6yjnAWpmUgP0MxfcniCjMxL
-         cLVfAlnvmWE1JOFK+8cRNKB9+jnZPN/Sf1bAwNmd2DXnENBFmaxqXe89MujccTCkMjRX
-         IA9ExMtJqnxPKYjrRlhRKRu9d2T6d1TyhYDVvkBsnZKjCn16fglpcS8NgLgbqBs/MrBk
-         6Nn+1J85dwESa8fl0Wpw5IubPMiiJ80dniqqtFCMdOgeDFjUFU2cCnpyECRe2lAtbUzB
-         Q/+5V9F8RD666Uv4wNDwe5gSu8XLVXf+jVKFoZN/mHwN5GyHTvmMo++vW7ic6HPqKT6p
-         to2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKWqqdCURAlapoO/zHZWEUEDu0sAlPmjm8qcDQuj3/o=;
-        b=kgrJ6+FKVuTRQBOKxmFIyBTUb7tkV63Kf1e7+o/XDAsV2YBwHwKZ4oFP8Lk1DFHxqf
-         6jWL9Xr4BzswYb93yDLvVCfDPz+cqmDoaS7uo9gLUbau/46eikoDX06IgA2R+SDGFQZE
-         817criyWWhJ2gCk3HLJhqnvx8gjYaPz5wJ7BgcWnxQN+CxjTIDlpNI3ZKUdKDQzq91+p
-         vGTaqL0uTnngOzp8jqEpFX8J0gXtEccQ+Z4SocZvc/ohLHJ37g5sNs40VYxBr2AWwNhx
-         5w9pQZvx8LHjqA9sIR51416p3Dczd39Uo804ryrbYM1PuBagEAB571n8PAaXJ0h14eFd
-         HD4A==
-X-Gm-Message-State: AO0yUKXxCyHLiGYu0jRYcDYJ2vyHLZmeRNSk4ObxxBePAE2XgUusw6kA
-        /tIIWB3nclD5oLWDGr6XGQSfPw==
-X-Google-Smtp-Source: AK7set+ZZUFlxV399UI0n/SVY7Of+MZ69YbRTQXn/l8hvQlxCOmoVOKCL1/Tu0HKM2KpvYZ47j80mg==
-X-Received: by 2002:a05:600c:a291:b0:3e0:1a9:b1e0 with SMTP id hu17-20020a05600ca29100b003e001a9b1e0mr7956771wmb.25.1675849623242;
-        Wed, 08 Feb 2023 01:47:03 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003dd19baf45asm1434879wmo.40.2023.02.08.01.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 01:47:02 -0800 (PST)
-Message-ID: <045f1afa-f442-0f4c-7dd2-292ac472b12f@linaro.org>
-Date:   Wed, 8 Feb 2023 10:47:00 +0100
+        Wed, 8 Feb 2023 04:50:08 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C776193CB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:50:06 -0800 (PST)
+X-UUID: f35c5484a79511ed945fc101203acc17-20230208
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=5vAVo8s7+PXjhGPDooPf0JHAVPlVJ0y1JX0yuNnp80c=;
+        b=RmVi4rzzDRDeG5O1AKA3EoqPXr4E6Y/8VDM3A5yH28fTkAY2p4Ep8rQtRJZNK1Nh8iomlU/iXqHWQB6G3R8WUD9x8dEw6H0PMokm0Dl4wtfqpoGOc28r4yEnxwPP/1e3P7iVJrNrFGxEB5zjPOdQpp416gcUMkSVQ6HuVC240gA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:3184567d-63b6-4200-9513-04d70e1013ab,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:885ddb2,CLOUDID:049aab56-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: f35c5484a79511ed945fc101203acc17-20230208
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <walter.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1811119605; Wed, 08 Feb 2023 17:49:59 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Feb 2023 17:49:58 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 8 Feb 2023 17:49:58 +0800
+From:   <walter.chang@mediatek.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+CC:     <wsd_upstream@mediatek.com>, <stanley.chu@mediatek.com>,
+        <Chun-hung.Wu@mediatek.com>, <Freddy.Hsin@mediatek.com>,
+        Walter Chang <walter.chang@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 0/3] Support timer drivers as loadable modules
+Date:   Wed, 8 Feb 2023 17:48:01 +0800
+Message-ID: <20230208094813.20874-1-walter.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V7 4/7] pinctrl: qcom: Add IPQ9574 pinctrl driver
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230206103337.21000-1-quic_devipriy@quicinc.com>
- <20230206103337.21000-5-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230206103337.21000-5-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,27 +69,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/02/2023 11:33, Devi Priya wrote:
-> Add pinctrl definitions for the TLMM of IPQ9574
-> 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
->  Changes in V7:
-> 	- Corrected the indentation in the Makefile
-> 	- Unwrapped the lines in ipq9574_groups wherever applicable
-> 
->  drivers/pinctrl/qcom/Kconfig           |  11 +
->  drivers/pinctrl/qcom/Makefile          |   1 +
->  drivers/pinctrl/qcom/pinctrl-ipq9574.c | 828 +++++++++++++++++++++++++
->  3 files changed, 840 insertions(+)
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-ipq9574.c
-> 
+From: Walter Chang <walter.chang@mediatek.com>
 
+This patch exports functions in kernel so that timer drivers,
+such as timer-mediatek.c can become loadable modules in GKI.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Chun-Hung Wu (3):
+  time/sched_clock: Export sched_clock_register()
+  clocksource/drivers/mmio: Export clocksource_mmio_init()
+  clocksource/drivers/timer-of: Remove __init markings
 
-Best regards,
-Krzysztof
+ drivers/clocksource/mmio.c     |  8 +++++---
+ drivers/clocksource/timer-of.c | 23 ++++++++++++-----------
+ drivers/clocksource/timer-of.h |  6 +++---
+ kernel/time/sched_clock.c      |  4 ++--
+ 4 files changed, 22 insertions(+), 19 deletions(-)
+
+-- 
+2.18.0
 
