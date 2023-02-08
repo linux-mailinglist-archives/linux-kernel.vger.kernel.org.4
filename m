@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00FB68E997
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56F768E959
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:52:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjBHIMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 03:12:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        id S230440AbjBHHwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjBHIL7 (ORCPT
+        with ESMTP id S229500AbjBHHwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 03:11:59 -0500
-Received: from mail.vinus.com.co (mx2.vinus.com.co [179.50.91.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F79713515
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 00:11:57 -0800 (PST)
-Received: from localhost (localhost.vinus.com.co [127.0.0.1])
-        by mail.vinus.com.co (Postfix) with ESMTP id D7ED4A63091;
-        Wed,  8 Feb 2023 02:54:04 -0500 (-05)
-Received: from mail.vinus.com.co ([127.0.0.1])
-        by localhost (mail.vinus.com.co [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id BUL5PvX-Svce; Wed,  8 Feb 2023 02:54:04 -0500 (-05)
-Received: from localhost (localhost.vinus.com.co [127.0.0.1])
-        by mail.vinus.com.co (Postfix) with ESMTP id 562A1A641C4;
-        Wed,  8 Feb 2023 02:53:13 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.vinus.com.co 562A1A641C4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hatovial.com;
-        s=4990C9C8-D5A3-11EB-AF2C-B04E8B676B70; t=1675842793;
-        bh=mAhvhhVt0FojqIoI5vUL967LmtKhh/nKngvxnrO5ImE=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=gZSCOSsDYslSFqyDYX39yYb6ZwKiamzcmk6btTvqH9ELuN1j1VyVoXNeHdTiOa/Zc
-         FE8TmKZJJ8SfiDPkVWvNUJ+IWU4rrlhv8mgPUYa+dLaU68dt7R88kl3HhPY9/ZQRR3
-         bz82L/giT9PbSBoOTRvh4pnPHhTceQeXNI7OCOeBb17ly6M2bmqlB0HRWvIAnoZrZd
-         u9q2nVGnOUMrV4aYLwcqqoMdcr4cWdF7i5F3/LnOkE9CA9Fpzd1/u6JeaDa2Rk8oV+
-         pfDyZluyq3INmHAkFG2Z6rMoJs9h5hVWhvZISAyR4/fuoFHGWgWgDbfaoE/TYYlzPi
-         isC/9nA1ziP9Q==
-X-Virus-Scanned: amavisd-new at vinus.com.co
-Received: from mail.vinus.com.co ([127.0.0.1])
-        by localhost (mail.vinus.com.co [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NtPff8wevcsY; Wed,  8 Feb 2023 02:53:13 -0500 (-05)
-Received: from [23.146.243.45] (unknown [23.146.243.45])
-        by mail.vinus.com.co (Postfix) with ESMTPSA id E9EFFA64111;
-        Wed,  8 Feb 2023 02:52:30 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 8 Feb 2023 02:52:46 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92941F4AD
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:52:45 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id g13so13580101ple.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zhDJApKtBQcvwymZ5SCtHomIXxqcYYVtYxL3jD0nv8A=;
+        b=eqGrOQjEwqnci7sSQ7FMs3Ok0ATLFezDT3iEUXY6o7kh6Z2Ah3wdtWQk9ljBd2sXfX
+         7ay1T3MqcGgE8eiymGU4SGIrPRS2Elb5ALGjaZXq8n3K70j3/4yVN6LLZNfTK0c339Yh
+         RbNoAlQVxOKVyUcIsXM34bjv7F4KJa2E7uzGo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zhDJApKtBQcvwymZ5SCtHomIXxqcYYVtYxL3jD0nv8A=;
+        b=aOFpX9RWUruVv414Yy/F2C6O7b6J8S86KAui4YKgQ2lKR5sv+kfQ4q25bTNx0zJYAH
+         6w5v9cimrgtVcMr3hEIg1PWhTmnHfsQKGKqeFmgm7c0xRJHLTkztmzBWlTKOdUmorDqL
+         eh2Nbhg1DgcS8EoHYCmFXgHiDxZUiIKd8ygENmkPNX1luta+DBv3/fworbZ4xsJoOMX1
+         PBbbpiHjLmdEowuVah0lz3jVFWp4WhvqN8L28PNDhDrMow8w9gUmJwytKLLD7ECjyZyD
+         6Yqkj6Td1Ln18kd2JbiWbP6F2LGWsGMY8PGZFpyg6qN7H+HgmdhtNrlpp1GIuWcPph9+
+         q58g==
+X-Gm-Message-State: AO0yUKV/09bdMA2zgwHhWrr+Z9TSdu9M34Ts9UCYc0zFGYg0NogoCGJa
+        E0sJ2jb6XbVUqAwq0myTjCa7dONJH5S0ii0ijOX8XQ==
+X-Google-Smtp-Source: AK7set85cPdzxaY0rLNikp+E53fZOD5mAQhhWbvkPlDWSAtyKYtHs7ThVA1FO3XcwaBZAO9Qs/JSARXhC6J9eEVZWXE=
+X-Received: by 2002:a17:90a:7483:b0:231:eb7:ece4 with SMTP id
+ p3-20020a17090a748300b002310eb7ece4mr448656pjk.26.1675842765263; Tue, 07 Feb
+ 2023 23:52:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Se requiere respuesta urgente.
-To:     Recipients <orfeo384@hatovial.com>
-From:   "zimbra@" <orfeo384@hatovial.com>
-Date:   Tue, 07 Feb 2023 23:52:26 -0800
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230208075230.E9EFFA64111@mail.vinus.com.co>
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+References: <20230207091443.143995-1-colin.i.king@gmail.com> <Y+NQLOJ9IlbQJttd@google.com>
+In-Reply-To: <Y+NQLOJ9IlbQJttd@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 7 Feb 2023 23:52:33 -0800
+Message-ID: <CACeCKacOiJHMGTaT3J-B1_rYbU=yJQ2Xr7nFjX_1aMcya1xT_Q@mail.gmail.com>
+Subject: Re: [PATCH][next] platform/chrome: Fix spelling mistake "Attenetion"
+ -> "attention"
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Su cuenta no ha pasado por el proceso de verificaci=F3n / actualizaci=F3n. =
-Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 d=EDa=
-s h=E1biles posteriores a la recepci=F3n de este aviso. El incumplimiento d=
-e este aviso dentro de la fecha l=EDmite puede no ser capaz de enviar o rec=
-ibir todos los mensajes y el propietario correr=E1 el riesgo de perder su c=
-uenta.
+On Tue, Feb 7, 2023 at 11:33 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> Hi Prashant,
+>
+> On Tue, Feb 07, 2023 at 09:14:43AM +0000, Colin Ian King wrote:
+> > There is a spelling mistake in a dev_warn message, make it lower case
+> > and fix the spelling.
+> >
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>
+> It's about time to cut for the coming merge window.
 
-Confirme los detalles de la cuenta a continuaci=F3n.
-_____________________________________
-1. Nombre y apellido:
-2. Correo electr=F3nico completo en:
-3. Nombre de usuario:
-4. Contrase=F1a:
-5. Vuelva a escribir la contrase=F1a:
-_____________________________________
- =
+I thought there would be an rc8...
 
-NOTA !!! Si no actualiza su cuenta, su cuenta se eliminar=E1 autom=E1ticame=
-nte de nuestro sistema.
- =
+> I guess you would
+> like this simple patch to be included as a fixup for f54c013e7eef
+> ("platform/chrome: cros_typec_vdm: Add Attention support").  Please apply
+> the patch if it makes sense.
 
-Nos disculpamos por cualquier inconveniente causado.
- =
+Sure. I'll make the modification you suggest and apply this tomorrow.
+Thanks for signal boosting it.
 
-Sinceramente
-Atenci=F3n al cliente
-Equipo de soporte t=E9cnico de Zimbra.
- =
-
-Copyright =A9 2005-2023 Synacor, Inc. Todos los derechos reservados
+>
+> One minor suggestion for the commit title:
+> "platform/chrome: cros_ec_typec: Fix spelling mistake" looks more clear
+> to me.
+>
+> With that:
+> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
