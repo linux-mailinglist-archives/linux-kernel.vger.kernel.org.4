@@ -2,134 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB3F68E8DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D6C68E8DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:22:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbjBHHVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S230467AbjBHHWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:22:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjBHHVr (ORCPT
+        with ESMTP id S229755AbjBHHWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:21:47 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFFF3598
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:21:24 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id v23so18339863plo.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:21:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QnQlhoNYMIV2+tPGF0jfk+u/gLKVHE9+bmnI1kjJ9n8=;
-        b=7Coj5NK2+px3MdXfVaXjjriO6mBmLQj4BgF15WCpKicFq3eLsaL2MKmI36JutdzESZ
-         7gnG0bzZPj5M3xwBq1uDlsPRIGllENqNT/mI8ol8aVHYNfaKg3H9v1doGu0r8H+UO0Vh
-         lFS23Py4+jCFC80nahEE4pap+BbKOplsVj88gZLUP6AKdU0tr+ihCANq+nFWCYjaacFt
-         4LtRVwKNNBNTIsGSZj9krVFu713EDbZCbpAxJGQuK71SzzTT8VVhs76ybrVyq+atxWeO
-         Mcyvb+0UKSmHC/KZzgVg6VwsEXhYHxdA0bBlfiVmyoZR33yCKLgy6mzpVWclOL5DD87c
-         xCMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QnQlhoNYMIV2+tPGF0jfk+u/gLKVHE9+bmnI1kjJ9n8=;
-        b=F0Ug8Dlsr4GGk1H1FNE6K1HvO1kxkl3kLymREjgBYQY++Xx+wTLMxqwhUiB93J2iXV
-         8m8Mxx6nFBfMcX6vlvc/H+RRN2a/9KFrS2lvkwtfEf7Mo86VuXLBqtvCpxGQO03cMRZ5
-         aGUN0044XZOWRx++Lmhfmhzk31MGwfFAW0cXLn586ofR6fYmZqM/O8TGtzBXGnD5Ft0i
-         d+TqvGDKJJzT+4ZMHVyANR2slGVze4AKm6Gbc74Jk/HCkCQ0ZvIpPKKamSly/42gg5CM
-         CEjcFAnwdlRh2usJ+Wcygw8R6JnQFSCP758JHr6EXm5O3AaxQ+jtGcR1V90pKcrO4khf
-         qx/g==
-X-Gm-Message-State: AO0yUKVpCEZw+1aO7aXFI1UEyDbMWEpzTlUe1t8g2Ul5wS9HGTbKnk5Q
-        KYc217AVf+85Sv1nBLIUE3JKuw==
-X-Google-Smtp-Source: AK7set9wzjN75WoOlnhsYSX3I0lzKSyFktywX6IgtJNMFLJ7itZa+IX/jGYO653vXPTegzI8p8GaKQ==
-X-Received: by 2002:a17:902:e751:b0:198:e8f3:6a48 with SMTP id p17-20020a170902e75100b00198e8f36a48mr7733926plf.9.1675840884028;
-        Tue, 07 Feb 2023 23:21:24 -0800 (PST)
-Received: from [10.3.144.50] ([61.213.176.11])
-        by smtp.gmail.com with ESMTPSA id v13-20020a17090331cd00b00198f1de408csm8057070ple.268.2023.02.07.23.21.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 23:21:23 -0800 (PST)
-Message-ID: <c733fc59-ed5e-276d-35c0-1a45257654f0@bytedance.com>
-Date:   Wed, 8 Feb 2023 15:21:18 +0800
+        Wed, 8 Feb 2023 02:22:33 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE620CDDE;
+        Tue,  7 Feb 2023 23:22:31 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 435493FD97;
+        Wed,  8 Feb 2023 07:22:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675840949;
+        bh=Mavv5hLg9uxOVvBkQuQSXrZ8rXvqW5vmj4h9iT5B1Rw=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Ygy8MBwuMZe59ty5RLOVYAdUmy6DZ4dzwkFqJwTxI93lqEiE6YAvp9oEE99fplhwl
+         jmnW/QJRAO2Es41Y8QGpGNPxZ8J9wd0T1ihgh9iORijDvZwofLD6yNkOVTVE+fwZxk
+         KlDTOPkgoBrs/6q/RDHE6W1/7MHYkx8QlvJGEFFGVSENpTtPNAlrT4k7sXZrXdk9fY
+         nY0ONXd7lMbbT9poLJUHiNXeP+n12GtNZcapLQi6o1ydWjECv1Gud77CgIJPAUsczG
+         IZMqrii5XWunOqUJzQCnS8NI84pcSXVLmco+h/Q6y1YisBmmC1bCBmXx1sA3A2tIfS
+         aTKH7oMrXzMiw==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     ktsai@capellamicro.com, jic23@kernel.org, lars@metafoo.de
+Cc:     hdegoede@redhat.com, Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] iio: light: cm32181: Unregister second I2C client if present
+Date:   Wed,  8 Feb 2023 15:21:41 +0800
+Message-Id: <20230208072141.1103738-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [External] [PATCH 1/4] erofs: remove unused device mapping in
- meta routine
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     huyue2@coolpad.com, linux-kernel@vger.kernel.org
-References: <cover.1675840368.git.jefflexu@linux.alibaba.com>
- <404848a1e43ff2d585c91e222beae4de8b9fb5f3.1675840368.git.jefflexu@linux.alibaba.com>
-From:   Jia Zhu <zhujia.zj@bytedance.com>
-In-Reply-To: <404848a1e43ff2d585c91e222beae4de8b9fb5f3.1675840368.git.jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If a second client that talks to the actual I2C address was created in
+probe(), there should be a corresponding cleanup in remove() to avoid
+leakage.
 
+So if the "client" is not the same one used by I2C core, unregister it
+accordingly.
 
-在 2023/2/8 15:16, Jingbo Xu 写道:
-> Currently metadata is always on bootstrap, and thus device mapping is
-> not needed so far.  Remove the redundant device mapping in the meta
-> routine.
-> 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2152281
+Fixes: c1e62062ff54 ("iio: light: cm32181: Handle CM3218 ACPI devices with 2 I2C resources")
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ - Use devm_add_action_or_reset() instead of remove() callback to avoid
+   race.
 
-Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
+ drivers/iio/light/cm32181.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-> ---
->   fs/erofs/fscache.c | 17 ++++-------------
->   1 file changed, 4 insertions(+), 13 deletions(-)
-> 
-> diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-> index 014e20962376..03de4dc99302 100644
-> --- a/fs/erofs/fscache.c
-> +++ b/fs/erofs/fscache.c
-> @@ -164,18 +164,8 @@ static int erofs_fscache_read_folios_async(struct fscache_cookie *cookie,
->   static int erofs_fscache_meta_read_folio(struct file *data, struct folio *folio)
->   {
->   	int ret;
-> -	struct super_block *sb = folio_mapping(folio)->host->i_sb;
-> +	struct erofs_fscache *ctx = folio_mapping(folio)->host->i_private;
->   	struct erofs_fscache_request *req;
-> -	struct erofs_map_dev mdev = {
-> -		.m_deviceid = 0,
-> -		.m_pa = folio_pos(folio),
-> -	};
-> -
-> -	ret = erofs_map_dev(sb, &mdev);
-> -	if (ret) {
-> -		folio_unlock(folio);
-> -		return ret;
-> -	}
->   
->   	req = erofs_fscache_req_alloc(folio_mapping(folio),
->   				folio_pos(folio), folio_size(folio));
-> @@ -184,8 +174,8 @@ static int erofs_fscache_meta_read_folio(struct file *data, struct folio *folio)
->   		return PTR_ERR(req);
->   	}
->   
-> -	ret = erofs_fscache_read_folios_async(mdev.m_fscache->cookie,
-> -				req, mdev.m_pa, folio_size(folio));
-> +	ret = erofs_fscache_read_folios_async(ctx->cookie, req,
-> +				folio_pos(folio), folio_size(folio));
->   	if (ret)
->   		req->error = ret;
->   
-> @@ -469,6 +459,7 @@ struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
->   		inode->i_size = OFFSET_MAX;
->   		inode->i_mapping->a_ops = &erofs_fscache_meta_aops;
->   		mapping_set_gfp_mask(inode->i_mapping, GFP_NOFS);
-> +		inode->i_private = ctx;
->   
->   		ctx->inode = inode;
->   	}
+diff --git a/drivers/iio/light/cm32181.c b/drivers/iio/light/cm32181.c
+index b1674a5bfa368..a3e5f56101c9f 100644
+--- a/drivers/iio/light/cm32181.c
++++ b/drivers/iio/light/cm32181.c
+@@ -429,6 +429,16 @@ static const struct iio_info cm32181_info = {
+ 	.attrs			= &cm32181_attribute_group,
+ };
+ 
++static void cm32181_disable(void *data)
++{
++	struct i2c_client *client = data;
++	struct cm32181_chip *cm32181 = iio_priv(i2c_get_clientdata(client));
++
++	/* Unregister the dummy client */
++	if (cm32181->client != client)
++		i2c_unregister_device(cm32181->client);
++}
++
+ static int cm32181_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+@@ -479,6 +489,12 @@ static int cm32181_probe(struct i2c_client *client)
+ 		return ret;
+ 	}
+ 
++	ret = devm_add_action_or_reset(dev, cm32181_disable, client);
++	if (ret) {
++		dev_err(dev, "%s: add devres action failed\n", __func__);
++		return ret;
++	}
++
+ 	ret = devm_iio_device_register(dev, indio_dev);
+ 	if (ret) {
+ 		dev_err(dev, "%s: regist device failed\n", __func__);
+-- 
+2.34.1
+
