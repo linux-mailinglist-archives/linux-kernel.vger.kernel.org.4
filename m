@@ -2,334 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235A068FA40
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C614468FA42
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbjBHW3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 17:29:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S231637AbjBHW3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 17:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjBHW27 (ORCPT
+        with ESMTP id S230416AbjBHW3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 17:28:59 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C98B27496
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:28:57 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id rp23so1175703ejb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 14:28:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ib5c/bsJZ54uWK/+FTg2R7b7k0wvTx5UMSJ7W+JjDFE=;
-        b=YnIBbf4Leim+riPvjYbm3Bga9EgoSnEztXn3WdITtnvrLP+4OwVafCURO2llmIQdMW
-         a/p6VQWTvYv1sGq1xi9DUCoMZhAi3rsXdXbATv4tgqdLkqiBf/VHMT4YjYO9oUvBl4zy
-         /dWDhYvQFnaisKr9s0PmsJEx32aOVXfljukKabsB3fKKf3jAO29qLWa/2B2Gs5OK9oUo
-         WMS0HjJ1BUfgQF+Jbmp9Rgved8cwNqMMmFJswoFD5JWE58EJOGapfr/5+QI+i1gwdFJg
-         OAXiyFrUXHamt7qUwp83s/oKoaAse6CzfK/69BVVOrUYES2t19DCOT689QcKntMhWRHT
-         QiUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ib5c/bsJZ54uWK/+FTg2R7b7k0wvTx5UMSJ7W+JjDFE=;
-        b=BqgNpk7k/wDXbsrpvNmjJDHWbAYc2dRy+xrPGE5yTZ3Vi6n7dDZttjGg2gYanETmr2
-         yz94O7tj5Zeh1Ut0X/uLV75AeB+x4G03afEOx/qhumFBhv8cSMGYwwDTRsRCHyAnNEaM
-         EL8hdV6DzeCgbsSuAILrN/D4rBwBLBeZU9YkiGKooiZ9EW1sRSucQqy7/3+X2UfypPBR
-         xSArNq4YK7Khv5ELJc510ZFeYE2RvLev+5GTJ4cu6eJyTH05RxN2SKZWk5nsH+22L+41
-         i/pJ0BOeoMVfMykwUSaShIBwjo+yVy2i3rQMCt4pepbphpwSW87JNb9WXWPKo9CZxivD
-         wISA==
-X-Gm-Message-State: AO0yUKVCwdbLX+jdNqKcgVPFx9b3qN1KU9yr8rK4L/8vbjaDogNBqP7q
-        /C56pArZ9BEfUpuR0/XHYKwepsHt6tqfIy+AIJvIjg==
-X-Google-Smtp-Source: AK7set/klz+/+K+5uvcdwyOXyPe2jOmD3Ok/dY5y08NmZv/Ti/SqkeQdGPm1gOia1ol8RiSDbyLJ4hq9fKxrW7E4grc=
-X-Received: by 2002:a17:906:37c2:b0:878:7bc7:958a with SMTP id
- o2-20020a17090637c200b008787bc7958amr2132625ejc.220.1675895335302; Wed, 08
- Feb 2023 14:28:55 -0800 (PST)
+        Wed, 8 Feb 2023 17:29:47 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2057F2106
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:29:45 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-62-7A3AGomqMleUYNu3luwyAg-1; Wed, 08 Feb 2023 22:29:43 +0000
+X-MC-Unique: 7A3AGomqMleUYNu3luwyAg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 8 Feb
+ 2023 22:29:41 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Wed, 8 Feb 2023 22:29:41 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guo Ren' <guoren@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+CC:     Evgenii Shatokhin <e.shatokhin@yadro.com>,
+        "suagrfillet@gmail.com" <suagrfillet@gmail.com>,
+        "andy.chiu@sifive.com" <andy.chiu@sifive.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "jolsa@redhat.com" <jolsa@redhat.com>, "bp@suse.de" <bp@suse.de>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "linux@yadro.com" <linux@yadro.com>
+Subject: RE: [PATCH -next V7 0/7] riscv: Optimize function trace
+Thread-Topic: [PATCH -next V7 0/7] riscv: Optimize function trace
+Thread-Index: AQHZO2Vv8FsBcndYrkieV7dCV5LmRa7FoF6g
+Date:   Wed, 8 Feb 2023 22:29:41 +0000
+Message-ID: <8154e7e618d84e298bad1dc95f26c000@AcuMS.aculab.com>
+References: <20230112090603.1295340-1-guoren@kernel.org>
+ <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
+ <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
+ <Y+DOyqehZvBJlb8N@FVFF77S0Q05N>
+ <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
+ <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N>
+ <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
+In-Reply-To: <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230202233229.3895713-1-yosryahmed@google.com>
- <20230203000057.GS360264@dread.disaster.area> <CAJD7tkazLFO8sc1Ly7+2_SGTxDq2XuPnvxxTnpQyXQELmq+m4A@mail.gmail.com>
- <Y90kK5jnxBbE9tV4@cmpxchg.org> <CAJD7tkZ7H-fGa3x3kbbdKgvzDDRZrGGZ6oazTA-7aNUQ7X1Pmg@mail.gmail.com>
- <20230204002613.f3ao52cpqf6wwxar@google.com>
-In-Reply-To: <20230204002613.f3ao52cpqf6wwxar@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 8 Feb 2023 14:28:18 -0800
-Message-ID: <CAJD7tkaQokU0ATVNoYTTwBzfmkrXbM+kx4gP8VdX3ZfxqMnGtQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/2] Ignore non-LRU-based reclaim in memcg reclaim
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Michal Hocko <mhocko@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 4:26 PM Shakeel Butt <shakeelb@google.com> wrote:
->
-> On Fri, Feb 03, 2023 at 07:28:49AM -0800, Yosry Ahmed wrote:
-> > On Fri, Feb 3, 2023 at 7:11 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > >
-> > > On Thu, Feb 02, 2023 at 04:17:18PM -0800, Yosry Ahmed wrote:
-> > > > On Thu, Feb 2, 2023 at 4:01 PM Dave Chinner <david@fromorbit.com> wrote:
-> > > > > > Patch 1 is just refactoring updating reclaim_state into a helper
-> > > > > > function, and renames reclaimed_slab to just reclaimed, with a comment
-> > > > > > describing its true purpose.
-> > > > > >
-> > > > > > Patch 2 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
-> > > > > >
-> > > > > > The original draft was a little bit different. It also kept track of
-> > > > > > uncharged objcg pages, and reported them only in memcg reclaim and only
-> > > > > > if the uncharged memcg is in the subtree of the memcg under reclaim.
-> > > > > > This was an attempt to make reporting of memcg reclaim even more
-> > > > > > accurate, but was dropped due to questionable complexity vs benefit
-> > > > > > tradeoff. It can be revived if there is interest.
-> > > > > >
-> > > > > > Yosry Ahmed (2):
-> > > > > >   mm: vmscan: refactor updating reclaimed pages in reclaim_state
-> > > > > >   mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-> > > > > >
-> > > > > >  fs/inode.c           |  3 +--
-> > > > >
-> > > > > Inodes and inode mapping pages are directly charged to the memcg
-> > > > > that allocated them and the shrinker is correctly marked as
-> > > > > SHRINKER_MEMCG_AWARE. Freeing the pages attached to the inode will
-> > > > > account them correctly to the related memcg, regardless of which
-> > > > > memcg is triggering the reclaim.  Hence I'm not sure that skipping
-> > > > > the accounting of the reclaimed memory is even correct in this case;
-> > > >
-> > > > Please note that we are not skipping any accounting here. The pages
-> > > > are still uncharged from the memcgs they are charged to (the allocator
-> > > > memcgs as you pointed out). We just do not report them in the return
-> > > > value of try_to_free_mem_cgroup_pages(), to avoid over-reporting.
-> > >
-> > > I was wondering the same thing as Dave, reading through this. But
-> > > you're right, we'll catch the accounting during uncharge. Can you
-> > > please add a comment on the !cgroup_reclaim() explaining this?
-> >
-> > Sure! If we settle on this implementation I will send another version
-> > with a comment and fix the build problem in patch 2.
-> >
-> > >
-> > > There is one wrinkle with this, though. We have the following
-> > > (simplified) sequence during charging:
-> > >
-> > >         nr_reclaimed = try_to_free_mem_cgroup_pages(mem_over_limit, nr_pages,
-> > >                                                     gfp_mask, reclaim_options);
-> > >
-> > >         if (mem_cgroup_margin(mem_over_limit) >= nr_pages)
-> > >                 goto retry;
-> > >
-> > >         /*
-> > >          * Even though the limit is exceeded at this point, reclaim
-> > >          * may have been able to free some pages.  Retry the charge
-> > >          * before killing the task.
-> > >          *
-> > >          * Only for regular pages, though: huge pages are rather
-> > >          * unlikely to succeed so close to the limit, and we fall back
-> > >          * to regular pages anyway in case of failure.
-> > >          */
-> > >         if (nr_reclaimed && nr_pages <= (1 << PAGE_ALLOC_COSTLY_ORDER))
-> > >                 goto retry;
-> > >
-> > > So in the unlikely scenario where the first call doesn't make the
-> > > necessary headroom, and the shrinkers are the only thing that made
-> > > forward progress, we would OOM prematurely.
-> > >
-> > > Not that an OOM would seem that far away in that scenario, anyway. But I
-> > > remember long discussions with DavidR on probabilistic OOM regressions ;)
-> > >
-> >
-> > Above the if (nr_reclaimed...) check we have:
-> >
-> > if (gfp_mask & __GFP_NORETRY)
-> >     goto nomem;
-> >
-> > , and below it we have:
-> >
-> > if (nr_retries--)
-> >     goto retry;
-> >
-> > So IIUC we only prematurely OOM if we either have __GFP_NORETRY and
-> > cannot reclaim any LRU pages in the first try, or if the scenario
-> > where only shrinkers were successful to reclaim happens in the last
-> > retry. Right?
-> >
->
-> We don't call oom-killer for __GFP_NORETRY. Also note that the retry
-> (from nr_retries) after the reclaim includes page_counter_try_charge().
-> So, even if try_to_free_mem_cgroup_pages() have returned 0 after
-> reclaiming the slab memory of the memcg, the page_counter_try_charge()
-> should succeed if the reclaimed slab objects have created enough margin.
->
-> > > > > I think the code should still be accounting for all pages that
-> > > > > belong to the memcg being scanned that are reclaimed, not ignoring
-> > > > > them altogether...
-> > > >
-> > > > 100% agree. Ideally I would want to:
-> > > > - For pruned inodes: report all freed pages for global reclaim, and
-> > > > only report pages charged to the memcg under reclaim for memcg
-> > > > reclaim.
-> > >
-> > > This only happens on highmem systems at this point, as elsewhere
-> > > populated inodes aren't on the shrinker LRUs anymore. We'd probably be
-> > > ok with a comment noting the inaccuracy in the proactive reclaim stats
-> > > for the time being, until somebody actually cares about that combination.
-> >
-> > Interesting, I did not realize this. I guess in this case we may get
-> > away with just ignoring non-LRU reclaimed pages in memcg reclaim
-> > completely, or go an extra bit and report uncharged objcg pages in
-> > memcg reclaim. See below.
-> >
-> > >
-> > > > - For slab: report all freed pages for global reclaim, and only report
-> > > > uncharged objcg pages from the memcg under reclaim for memcg reclaim.
-> > > >
-> > > > The only problem is that I thought people would think this is too much
-> > > > complexity and not worth it. If people agree this should be the
-> > > > approach to follow, I can prepare patches for this. I originally
-> > > > implemented this for slab pages, but held off on sending it.
-> > >
-> > > I'd be curious to see the code!
-> >
-> > I think it is small enough to paste here. Basically instead of just
-> > ignoring reclaim_state->reclaimed completely in patch 2, I counted
-> > uncharged objcg pages only in memcg reclaim instead of freed slab
-> > pages, and ignored pruned inode pages in memcg reclaim. So I guess we
-> > can go with either:
-> > - Just ignore freed slab pages and pages from pruned inodes in memcg
-> > reclaim (current RFC).
-> > - Ignore pruned inodes in memcg reclaim (as you explain above), and
-> > use the following diff instead of patch 2 for slab.
-> > - Use the following diff for slab AND properly report freed pages from
-> > pruned inodes if they are relevant to the memcg under reclaim.
-> >
-> > Let me know what you think is best.
-> >
->
-> I would prefer the currect RFC instead of the other two options. Those
-> options are slowing down (and adding complexity) to the uncharge code
-> path for the accuracy which no one really need or should care about.
->
-> > diff --git a/include/linux/swap.h b/include/linux/swap.h
-> > index bc1d8b326453..37f799901dfb 100644
-> > --- a/include/linux/swap.h
-> > +++ b/include/linux/swap.h
-> > @@ -162,6 +162,7 @@ struct reclaim_state {
-> >  };
-> >
-> >  void report_freed_pages(unsigned long pages);
-> > +bool report_uncharged_pages(unsigned long pages, struct mem_cgroup *memcg);
-> >
-> >  #ifdef __KERNEL__
-> >
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index ab457f0394ab..a886ace70648 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -3080,6 +3080,13 @@ static void obj_cgroup_uncharge_pages(struct
-> > obj_cgroup *objcg,
-> >         memcg_account_kmem(memcg, -nr_pages);
-> >         refill_stock(memcg, nr_pages);
-> >
-> > +       /*
-> > +        * If undergoing memcg reclaim, report uncharged pages and drain local
-> > +        * stock to update the memcg usage.
-> > +        */
-> > +       if (report_uncharged_pages(nr_pages, memcg))
-> > +               drain_local_stock(NULL);
-> > +
-> >         css_put(&memcg->css);
-> >  }
-> >
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 207998b16e5f..d4eced2b884b 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -204,17 +204,54 @@ static void set_task_reclaim_state(struct
-> > task_struct *task,
-> >         task->reclaim_state = rs;
-> >  }
-> >
-> > +static bool cgroup_reclaim(struct scan_control *sc);
-> > +
-> >  /*
-> >   * reclaim_report_freed_pages: report pages freed outside of LRU-based reclaim
-> >   * @pages: number of pages freed
-> >   *
-> > - * If the current process is undergoing a reclaim operation,
-> > + * If the current process is undergoing a non-cgroup reclaim operation,
-> >   * increment the number of reclaimed pages by @pages.
-> >   */
-> >  void report_freed_pages(unsigned long pages)
-> >  {
-> > -       if (current->reclaim_state)
-> > -               current->reclaim_state->reclaimed += pages;
-> > +       struct reclaim_state *rs = current->reclaim_state;
-> > +       struct scan_control *sc;
-> > +
-> > +       if (!rs)
-> > +               return;
-> > +
-> > +       sc = container_of(rs, struct scan_control, reclaim_state);
-> > +       if (!cgroup_reclaim(sc))
-> > +               rs->reclaimed += pages;
-> > +}
-> > +
-> > +/*
-> > + * report_uncharged_pages: report pages uncharged outside of LRU-based reclaim
-> > + * @pages: number of pages uncharged
-> > + * @memcg: memcg pages were uncharged from
-> > + *
-> > + * If the current process is undergoing a cgroup reclaim operation, increment
-> > + * the number of reclaimed pages by @pages, if the memcg under
-> > reclaim is @memcg
-> > + * or an ancestor of it.
-> > + *
-> > + * Returns true if an update was made.
-> > + */
-> > +bool report_uncharged_pages(unsigned long pages, struct mem_cgroup *memcg)
-> > +{
-> > +       struct reclaim_state *rs = current->reclaim_state;
-> > +       struct scan_control *sc;
-> > +
-> > +       if (!rs)
-> > +               return false;
-> > +
-> > +       sc = container_of(rs, struct scan_control, reclaim_state);
-> > +       if (cgroup_reclaim(sc) &&
-> > +           mem_cgroup_is_descendant(memcg, sc->target_mem_cgroup)) {
-> > +               rs->reclaimed += pages;
-> > +               return true;
-> > +       }
-> > +       return false;
-> >  }
-> >
-> >  LIST_HEAD(shrinker_list);
+PiA+ICAgIyBOb3RlOiBhbGlnbmVkIHRvIDggYnl0ZXMNCj4gPiAgIGFkZHItMDggICAgICAgICAg
+ICAgICAvLyBMaXRlcmFsIChmaXJzdCAzMi1iaXRzKSAgICAgIC8vIHBhdGNoZWQgdG8gb3BzIHB0
+cg0KPiA+ICAgYWRkci0wNCAgICAgICAgICAgICAgIC8vIExpdGVyYWwgKGxhc3QgMzItYml0cykg
+ICAgICAgLy8gcGF0Y2hlZCB0byBvcHMgcHRyDQo+ID4gICBhZGRyKzAwICAgICAgIGZ1bmM6ICAg
+bXYgICAgICB0MCwgcmENCj4gV2UgbmVlZG4ndCAibXYgdDAsIHJhIiBoZXJlIGJlY2F1c2Ugb3Vy
+ICJqYWxyIiBjb3VsZCB3b3JrIHdpdGggdDAgYW5kDQo+IHdvbid0IGFmZmVjdCByYS4gTGV0J3Mg
+ZG8gaXQgaW4gdGhlIHRyYW1wb2xpbmUgY29kZSwgYW5kIHRoZW4gd2UgY2FuDQo+IHNhdmUgYW5v
+dGhlciB3b3JkIGhlcmUuDQo+ID4gICBhZGRyKzA0ICAgICAgICAgICAgICAgYXVpcGMgICB0MSwg
+ZnRyYWNlX2NhbGxlcg0KPiA+ICAgYWRkciswOCAgICAgICAgICAgICAgIGphbHIgICAgZnRyYWNl
+X2NhbGxlcih0MSkNCg0KSXMgdGhhdCBzb21lIGtpbmQgb2YgJ2xvYWQgaGlnaCcgYW5kICdhZGQg
+b2Zmc2V0JyBwYWlyPw0KSSBndWVzcyA2NGJpdCBrZXJuZWxzIGd1YXJhbnRlZSB0byBwdXQgYWxs
+IG1vZHVsZSBjb2RlDQp3aXRoaW4gKy0yRyBvZiB0aGUgbWFpbiBrZXJuZWw/IA0KDQo+IEhlcmUg
+aXMgdGhlIGNhbGwtc2l0ZToNCj4gICAgIyBOb3RlOiBhbGlnbmVkIHRvIDggYnl0ZXMNCj4gICAg
+YWRkci0wOCAgICAgICAgICAgICAgIC8vIExpdGVyYWwgKGZpcnN0IDMyLWJpdHMpICAgICAgLy8g
+cGF0Y2hlZCB0byBvcHMgcHRyDQo+ICAgIGFkZHItMDQgICAgICAgICAgICAgICAvLyBMaXRlcmFs
+IChsYXN0IDMyLWJpdHMpICAgICAgIC8vIHBhdGNoZWQgdG8gb3BzIHB0cg0KPiAgICBhZGRyKzAw
+ICAgICAgICAgICAgICAgYXVpcGMgICB0MCwgZnRyYWNlX2NhbGxlcg0KPiAgICBhZGRyKzA0ICAg
+ICAgICAgICAgICAgamFsciAgICBmdHJhY2VfY2FsbGVyKHQwKQ0KDQpDb3VsZCB5b3UgZXZlbiBk
+byBzb21ldGhpbmcgbGlrZToNCglhZGRyLW4JY2FsbCBmdHJhY2UtZnVuY3Rpb24NCglhZGRyLW4r
+eAlsaXRlcmFscw0KCWFkZHIrMAlub3Agb3Igam1wIGFkZHItbg0KCWFkZHIrNAlmdW5jdGlvbl9j
+b2RlDQpTbyB0aGF0IGFsbCB0aGUgY29kZSBleGVjdXRlZCB3aGVuIHRyYWNpbmcgaXMgZW5hYmxl
+ZA0KaXMgYmVmb3JlIHRoZSBsYWJlbCBhbmQgb25seSBvbmUgJ25vcCcgaXMgaW4gdGhlIGJvZHku
+DQpUaGUgY2FsbGVkIGNvZGUgY2FuIHVzZSB0aGUgcmV0dXJuIGFkZHJlc3MgdG8gZmluZCB0aGUN
+CmxpdGVyYWxzIGFuZCB0aGVuIG1vZGlmeSBpdCB0byByZXR1cm4gdG8gYWRkcis0Lg0KVGhlIGNv
+ZGUgY29zdCB3aGVuIHRyYWNlIGlzIGVuYWJsZWQgaXMgcHJvYmFibHkgaXJyZWxldmFudA0KaGVy
+ZSAtIGRvbWluYXRlZCBieSB3aGF0IGhhcHBlbnMgbGF0ZXIuDQpJdCBwcm9iYWJseSBpc24ndCBl
+dmVuIHdvcnRoIGFsaWduaW5nIGEgNjRiaXQgY29uc3RhbnQuDQpEb2luZyB0d28gcmVhZHMgcHJv
+YmFibHkgd29uJ3QgYmUgbm90aWNhYmxlLg0KDQpXaGF0IHlvdSBkbyB3YW50IHRvIGVuc3VyZSBp
+cyB0aGF0IHRoZSBpbml0aWFsIHBhdGNoIGlzDQpvdmVyd3JpdGluZyBub3AgLSBqdXN0IGluIGNh
+c2UgdGhlIGdhcCBpc24ndCB0aGVyZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
+cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
+MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Any further thoughts on this, whether to refresh the current RFC with
-added comments (based on Johannes's feedback) and exporting
-report_freed_pages() (based on Matthew's feedback), or to send a new
-version with the code above that accurately counts objcg uncharged
-pages in memcg reclaim?
