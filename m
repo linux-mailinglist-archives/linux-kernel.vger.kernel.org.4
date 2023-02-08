@@ -2,77 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DD168E6BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25EC68E6C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjBHDoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 22:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
+        id S229630AbjBHDql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:46:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjBHDol (ORCPT
+        with ESMTP id S229527AbjBHDqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 22:44:41 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E6140CA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 19:44:16 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id r2so15467880wrv.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 19:44:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/P34Ea6kcP/xz6Bqj95JLA29Age86Sx+MLI3/fM7his=;
-        b=pNNhcWsl+A6QzP8NqoomWh/b1CP0p8ie44Wt5FgtNQOJZpk2/fSPSdjGFjBfxXYu2z
-         dKBVMeF/XpsQko502YJnw68XC1HigBQKtJi4l6K4uHKDsRidjlpOHYCTTxBri9hO4wl5
-         Ha4PHyJYAP7WH2MBzLq0WlMZlHMShdYlbJtO9ELcVHR3yvchPeDbVkITwt5R6T2F21bp
-         G0Z+jmfaP4HXvRXLSoO6yAEM7MdFQaToA1cjYxAQIIPEiUf5nEwmpUHVCdIDqkDonlCj
-         8Y4b+4XrjCbTJX5SqQag+Z0YRB0exv/SnW/CkqnrL2iWf6eA8OeNxBFtmbftyIKDLzUv
-         LStA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/P34Ea6kcP/xz6Bqj95JLA29Age86Sx+MLI3/fM7his=;
-        b=vfhMsAFfhxyV5QYs1RjgmspyzTMuwdbLCowoC350yXnMxVxDfqvMPV4kp+9g1vv8BM
-         Uu8caMkKoxopT/SrxmydVdaS9KyqHFA2gxebsIbxC4i3BZHyQmYg6lU7KaYNVINsU7Lc
-         nZ8ZWzuOWYfXtR8ZNVOHtNtJw4pZ3yscgyw6Ys+aHYodH2T/A5FV5C5JN5q48S91Qoi/
-         /0S/GjYI3qo41yiIRNhwPgtVp8Wf3J+4Nm4+IR8/HHBei4PcDUDRShjTnmn/Xod2Sp9f
-         eoL/C9J71DP95/mHN2a/gKUlehqL3IF0iI5JrL6ncvtbW04LL208IdfbTsxeLxVpy8Gm
-         di+g==
-X-Gm-Message-State: AO0yUKVDbD8yLW71HOYXuRTlTHxBe9nrpL1sez2F0PAkZ54r5QuQFONA
-        l6ZYFXDtV2oYwVgfEezoAFyBJgDiULTxuRDIi9uKKA==
-X-Google-Smtp-Source: AK7set/bXWXj2OBbWZzNpv7zBuiK5jo84QLC6ck27qK+lC8O36jtpEyeKMH7wPdVj1wajuia84kyedW0h72D+r2uSn8=
-X-Received: by 2002:a5d:53c4:0:b0:2bf:c336:43ba with SMTP id
- a4-20020a5d53c4000000b002bfc33643bamr187280wrw.698.1675827854784; Tue, 07 Feb
- 2023 19:44:14 -0800 (PST)
+        Tue, 7 Feb 2023 22:46:39 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570A93C25;
+        Tue,  7 Feb 2023 19:46:38 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3181B7wq027054;
+        Wed, 8 Feb 2023 03:46:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=h8V+MS1HBo6xwgF5OKdG/5/JzZdkrKe8hs4S/NjMLN0=;
+ b=Z4pm/bLH2zllXwG+im7WcCvv9lKIulKSYRk7Si3ecI5StUP+/GB2/EbXH3ziHgXJbfTJ
+ tJz5m8uzMl0Ly3EGhzuv2ldhtpZmU7VntjWcW3zB2oEH2x0u3aZAS6mPneCveQ0KmBSI
+ rzgjNs1ofoRp9LS7sVbmYPtIRxZ3rhVysChZw3Mv8Dp8Rk0VxF1xx22WWG5kovwaII/2
+ /N3ZNGF9oVdODJQkgd+mXU7qHrHD4minE6XTMEO/kf3kKSfkf34Wfgsg2ZphnzoT9lqQ
+ p7ZPwxrfuiVcJK67+yLPvn225D7zzdUtd2FtG4upvQw7c1IKElYUI2E4fqwDcp1NFH/1 hA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkgafk1he-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 03:46:27 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3183kQ0v022209
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 03:46:26 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 7 Feb 2023 19:46:25 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH 0/4] arm64: dts: qcom: sc8280xp: Enable external display
+Date:   Tue, 7 Feb 2023 19:46:16 -0800
+Message-ID: <20230208034620.2048744-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230207114456.2304801-1-usama.arif@bytedance.com>
-In-Reply-To: <20230207114456.2304801-1-usama.arif@bytedance.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Wed, 8 Feb 2023 11:43:37 +0800
-Message-ID: <CAMZfGtWZbBmHgv9hKrYQGuUq9wQ76dwBn+ZuRnRBOvnKRXU=fg@mail.gmail.com>
-Subject: Re: [PATCH] docs: mm: Fix number of base pages for 1GB HugeTLB
-To:     Usama Arif <usama.arif@bytedance.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, fam.zheng@bytedance.com,
-        liangma@liangbit.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: F8RMydHrw9dJ2Sdt2EQuEw0B4QUjrETq
+X-Proofpoint-ORIG-GUID: F8RMydHrw9dJ2Sdt2EQuEw0B4QUjrETq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_15,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 clxscore=1011 bulkscore=0 spamscore=0
+ mlxlogscore=726 mlxscore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302080032
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 7:45 PM Usama Arif <usama.arif@bytedance.com> wrote:
->
-> 1GB HugeTLB page consists of 262144 base pages.
->
-> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+This introduces support for external display on the SC8280XP laptops.
 
-Thanks for your fix.
+Support for swapping orientation and changing the mode of the SuperSpeed
+lanes is being implemented in the QMP driver, so at this point in time
+this is not supported.
 
-Acked-by: Muchun Song <songmuchun@bytedance.com>
+Bjorn Andersson (4):
+  arm64: dts: qcom: sc8280xp: Add USB-C-related DP blocks
+  arm64: dts: qcom: sc8280xp-crd: Introduce pmic_glink
+  arm64: dts: qcom: sc8280xp-x13s: Enable external display
+  arm64: defconfig: Enable DisplayPort on SC8280XP laptops
+
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     | 191 +++++++++++++++++-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 191 +++++++++++++++++-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 170 +++++++++++++++-
+ arch/arm64/configs/defconfig                  |   2 +
+ 4 files changed, 546 insertions(+), 8 deletions(-)
+
+-- 
+2.39.1
+
