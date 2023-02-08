@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD9468ECBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FB968ECBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjBHKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S230401AbjBHKZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjBHKYB (ORCPT
+        with ESMTP id S231424AbjBHKZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:24:01 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2C93B3F7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:23:59 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id j23so1036224wra.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:23:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hu5nkFim1hAIF+aeToLOna/YVBi/v7t0xGguJL3RQ0M=;
-        b=mzkgQxJ3t5Ql9Y+Ng5kooyLTd2wve7vWgz05OygWNQEOf4E0RbbzeMXfzmlbS/UHuZ
-         jdX2wCj7dBzJpoek6e8SQMHq0zEpF+TxXBPRt/8rsBS1v/1lFrS2/4TzwoxoHXhGp/CV
-         coQjmu0YNN1LnPu+dt4i/463t8oQe1QDBzgohRM4DA98Yjxjx4xbTvEIuuUibl8xi0sJ
-         a0G2Hk1mslK/Ys1Q6V8uZgnDgFOIxCMIxDYHZHr/vUMQPevbCAjoyk6OxxcvUIJpUk46
-         ZsvwtQW4qZ7nEDB5IVS/JvBRXuMD9shmyYcflvMSFNqRXx0D9GYjURDlKGUT6Sur4adl
-         uUxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hu5nkFim1hAIF+aeToLOna/YVBi/v7t0xGguJL3RQ0M=;
-        b=ZYUEzH72kgOhtY+t7AM0fcQFKknBfsK/ExSPC6bvHXsReUA0hweooGZaHoOiDxRQ+6
-         Gb289pqZhNoPFLXu2TfGUxPQ/zOH2H/rdYVM4rjIyG/fc21WweRHgq72PlpntVe7g4Ng
-         pELTtmGxNfJHR244U9LkGaJR9zgrD9ZSHXqo3rdVHDes81+FjE4/72RSGiYCEjfQ3nbS
-         WSxLBnyKqJf8hokau1rv+p2rzVwHwTqVT8Tp+6LADuZbomypJMP/JqpisKDZ9MrTS2R5
-         5BA8k8hEeuuFOmMvHqCiHdHROueqhbxYUU3RpM53qQAUgNN/Ov2ogzDtpmq2QXIbUfAz
-         UCUg==
-X-Gm-Message-State: AO0yUKUMfIWf8e2YRDuomW5LzTxwoShnDuxKJiUT/nVSkgqLtma2fCTQ
-        7O7SEd1Gxr6RNC1qY2mL3GuzYg==
-X-Google-Smtp-Source: AK7set89QhkadYjIBmhhPsZgiHa8dL9PqiaGJhzXgvgfRZzRdqqx/tJ5HHLDKBAz+vb3Q+iYVfemQg==
-X-Received: by 2002:adf:f5c5:0:b0:2bf:cbf0:e021 with SMTP id k5-20020adff5c5000000b002bfcbf0e021mr5897238wrp.71.1675851838423;
-        Wed, 08 Feb 2023 02:23:58 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d17-20020a5d4f91000000b002c3ec85285bsm6125567wru.70.2023.02.08.02.23.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 02:23:57 -0800 (PST)
-Message-ID: <e7baedcb-0173-7603-9e51-99ead7001025@linaro.org>
-Date:   Wed, 8 Feb 2023 11:23:56 +0100
+        Wed, 8 Feb 2023 05:25:05 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF12442F6;
+        Wed,  8 Feb 2023 02:25:03 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1197A341CB;
+        Wed,  8 Feb 2023 10:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675851902; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y7dRR9WnRqpA4M6r3Znn+/2TFDS5J/sWCxNtqlP+T3I=;
+        b=OvR3w6/w4Gb0StpcBppEmsa335+rE+7geBgj5a+lmWm55T9jcA/ns8haCu5ucL8qhJsZ66
+        cgFRZRX+rpTlY/tt1kcW1akApu91JR00yD0yDFAM6wsPfHXn2l13t/QB8O9hPhzHLh3Exo
+        3c9wBYe+1tucQJsmpSx+nT9PeDnHz5Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675851902;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y7dRR9WnRqpA4M6r3Znn+/2TFDS5J/sWCxNtqlP+T3I=;
+        b=ZSuz4aLoDMI6rZe7+CxmVJ0VZ36l7T/YQSs544fJd/R0usJNEIvXlKLW6JYU7aH+/ng/yb
+        EDVmIggT7MuGiQCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E1F7B13425;
+        Wed,  8 Feb 2023 10:25:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Bv46Nn1442PNMgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 08 Feb 2023 10:25:01 +0000
+Message-ID: <7eee1f67-c429-a15d-807b-27f1d28c05c8@suse.de>
+Date:   Wed, 8 Feb 2023 11:25:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] Documentation: cs35l41: Shared boost properties
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] fbdev: Fix invalid page access after closing deferred
+ I/O devices
 Content-Language: en-US
-To:     lucas.tanure@collabora.com, David Rhodes <david.rhodes@cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20230207104021.2842-1-lucas.tanure@collabora.com>
- <20230207104021.2842-3-lucas.tanure@collabora.com>
- <44faeca1-94c9-4423-d87a-03d80e286812@linaro.org>
- <e7257f9a-86c5-74e8-c538-6f6d2ba13274@collabora.com>
- <44c7274f-8a5e-0235-413a-6c3260018601@linaro.org>
- <4efe9796-6d3e-09d1-d5f7-cfb25a439061@collabora.com>
- <56ce2617-4fd1-d597-a4dc-918654cdd3f6@linaro.org>
- <e8aa571a-2d96-47da-34f0-47cc048dc655@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e8aa571a-2d96-47da-34f0-47cc048dc655@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Takashi Iwai <tiwai@suse.de>, Helge Deller <deller@gmx.de>
+Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Patrik Jakobsson <pjakobsson@suse.de>
+References: <20230129082856.22113-1-tiwai@suse.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230129082856.22113-1-tiwai@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------v5CsBgs3eR0Zu6WZ0AO8wEy0"
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,67 +74,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 18:03, lucas.tanure@collabora.com wrote:
-> On 2/7/23 4:48 PM, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->> On 07/02/2023 17:34, Lucas Tanure wrote:
->>> On 07-02-2023 16:13, Krzysztof Kozlowski wrote:
->>>> On 07/02/2023 16:46, Lucas Tanure wrote:
->>>>>>> +      Shared boost allows two amplifiers to share a single boost circuit by
->>>>>>> +      communicating on the MDSYNC bus. The passive amplifier does not control
->>>>>>> +      the boost and receives data from the active amplifier. GPIO1 should be
->>>>>>> +      configured for Sync when shared boost is used. Shared boost is not
->>>>>>> +      compatible with External boost. Active amplifier requires
->>>>>>> +      boost-peak-milliamp, boost-ind-nanohenry and boost-cap-microfarad.
->>>>>>>           0 = Internal Boost
->>>>>>>           1 = External Boost
->>>>>>> +      2 = Reserved
->>>>>>
->>>>>> How binding can be reserved? For what and why? Drop. 2 is shared active,
->>>>>> 3 is shared passive.
->>>>> 2 Is shared boost without VSPK switch, a mode not supported for new
->>>>> system designs. But there is laptops using it, so we need to keep
->>>>> supporting in the driver.
->>>>
->>>> That's not the answer. 2 is nothing here, so it cannot be reserved.
->>>> Aren't you mixing now some register value with bindings?
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>>
->>>>
->>> I have added a new patch with propper documentation.
->>> And I would like to use 3 and 4 for shared boost as
->>> CS35L41_EXT_BOOST_NO_VSPK_SWITCH already exist as 2 and is used in the
->>> current driver.
->>
->> I don't see CS35L41_EXT_BOOST_NO_VSPK_SWITCH in the bindings.
->>
->>> The laptop that uses CS35L41_EXT_BOOST_NO_VSPK_SWITCH doesn't have the
->>> property "cirrus,boost-type", but to make everything consistent I would
->>> prefer to use 3 and 4 for the new boost types.
->>> Is that ok with you?
->>
->> I don't see how it is related. The value does not exist, so whether
->> laptop has that property or not, is not really related, right?
->>
->> Best regards,
->> Krzysztof
->>
->>
-> The value does exist in the code, but no device should have that in ACPI/DTB, so yes the value doesn't exist for ACPI/DTB purposes.
-> I can change CS35L41_EXT_BOOST_NO_VSPK_SWITCH to another value, like 99, and use 2 and 3 for shared boost.
-> I will re-submit that with v3.
-> Is that ok with you?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------v5CsBgs3eR0Zu6WZ0AO8wEy0
+Content-Type: multipart/mixed; boundary="------------S5p5pXkzr835fgB9JljMj1Bf";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Takashi Iwai <tiwai@suse.de>, Helge Deller <deller@gmx.de>
+Cc: linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Patrik Jakobsson <pjakobsson@suse.de>
+Message-ID: <7eee1f67-c429-a15d-807b-27f1d28c05c8@suse.de>
+Subject: Re: [PATCH v2] fbdev: Fix invalid page access after closing deferred
+ I/O devices
+References: <20230129082856.22113-1-tiwai@suse.de>
+In-Reply-To: <20230129082856.22113-1-tiwai@suse.de>
 
-I guess we still talk about different things. The code does not have a
-binding for the boost, therefore it does not use boost binding. Whatever
-it does with CS35L41_EXT_BOOST_NO_VSPK_SWITCH outside of DT, is not my
-topic and I don't care.
+--------------S5p5pXkzr835fgB9JljMj1Bf
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-That's why I asked folks to use strings for such enumerations, not
-register values - to avoid any confusion between the code and bindings
-(and also make it more readable for humans).
+SGksDQoNCnRoaXMgYnVnIGNvdWxkIGJlIGEgc3ltcHRvbSBvZiB0aGUgcHJvYmxlbSByZXBv
+cnRlZCBhdCBbMV0uDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNClsxXSANCmh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL2RyaS1kZXZlbC9DQU0walNIT2N2Wm95di15NmJudkZhVXliUlFz
+RHhfbWZPeWRMMXVhTk00VDRQZ2NBPUFAbWFpbC5nbWFpbC5jb20vVC8jbWZiZWY0ZGY5YjQ5
+ZmM1ZmRhOWJjZmEyNmRiNWNhMTNjZGFlZjZkN2UNCg0KQW0gMjkuMDEuMjMgdW0gMDk6Mjgg
+c2NocmllYiBUYWthc2hpIEl3YWk6DQo+IFdoZW4gYSBmYmRldiB3aXRoIGRlZmVycmVkIEkv
+TyBpcyBvbmNlIG9wZW5lZCBhbmQgY2xvc2VkLCB0aGUgZGlydHkNCj4gcGFnZXMgc3RpbGwg
+cmVtYWluIHF1ZXVlZCBpbiB0aGUgcGFnZXJlZiBsaXN0LCBhbmQgZXZlbnR1YWxseSBsYXRl
+cg0KPiB0aG9zZSBtYXkgYmUgcHJvY2Vzc2VkIGluIHRoZSBkZWxheWVkIHdvcmsuICBUaGlz
+IG1heSBsZWFkIHRvIGENCj4gY29ycnVwdGlvbiBvZiBwYWdlcywgaGl0dGluZyBhbiBPb3Bz
+Lg0KPiANCj4gVGhpcyBwYXRjaCBtYWtlcyBzdXJlIHRvIGNhbmNlbCB0aGUgZGVsYXllZCB3
+b3JrIGFuZCBjbGVhbiB1cCB0aGUNCj4gcGFnZXJlZiBsaXN0IGF0IGNsb3NpbmcgdGhlIGRl
+dmljZSBmb3IgYWRkcmVzc2luZyB0aGUgYnVnLiAgQSBwYXJ0IG9mDQo+IHRoZSBjbGVhbnVw
+IGNvZGUgaXMgZmFjdG9yZWQgb3V0IGFzIGEgbmV3IGhlbHBlciBmdW5jdGlvbiB0aGF0IGlz
+DQo+IGNhbGxlZCBmcm9tIHRoZSBjb21tb24gZmJfcmVsZWFzZSgpLg0KPiANCj4gUmV2aWV3
+ZWQtYnk6IFBhdHJpayBKYWtvYnNzb24gPHBhdHJpay5yLmpha29ic3NvbkBnbWFpbC5jb20+
+DQo+IENjOiA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4NCj4gU2lnbmVkLW9mZi1ieTogVGFr
+YXNoaSBJd2FpIDx0aXdhaUBzdXNlLmRlPg0KPiAtLS0NCj4gdjEtPnYyOiBGaXggYnVpbGQg
+ZXJyb3Igd2l0aG91dCBDT05GSUdfRkJfREVGRVJSRURfSU8NCj4gDQo+ICAgZHJpdmVycy92
+aWRlby9mYmRldi9jb3JlL2ZiX2RlZmlvLmMgfCAxMCArKysrKysrKystDQo+ICAgZHJpdmVy
+cy92aWRlby9mYmRldi9jb3JlL2ZibWVtLmMgICAgfCAgNCArKysrDQo+ICAgaW5jbHVkZS9s
+aW51eC9mYi5oICAgICAgICAgICAgICAgICAgfCAgMSArDQo+ICAgMyBmaWxlcyBjaGFuZ2Vk
+LCAxNCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2ZiX2RlZmlvLmMgYi9kcml2ZXJzL3ZpZGVvL2Zi
+ZGV2L2NvcmUvZmJfZGVmaW8uYw0KPiBpbmRleCBjNzMwMjUzYWI4NWMuLjU4M2NiY2YwOTQ0
+NiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2ZiX2RlZmlvLmMN
+Cj4gKysrIGIvZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2ZiX2RlZmlvLmMNCj4gQEAgLTMx
+Myw3ICszMTMsNyBAQCB2b2lkIGZiX2RlZmVycmVkX2lvX29wZW4oc3RydWN0IGZiX2luZm8g
+KmluZm8sDQo+ICAgfQ0KPiAgIEVYUE9SVF9TWU1CT0xfR1BMKGZiX2RlZmVycmVkX2lvX29w
+ZW4pOw0KPiAgIA0KPiAtdm9pZCBmYl9kZWZlcnJlZF9pb19jbGVhbnVwKHN0cnVjdCBmYl9p
+bmZvICppbmZvKQ0KPiArdm9pZCBmYl9kZWZlcnJlZF9pb19yZWxlYXNlKHN0cnVjdCBmYl9p
+bmZvICppbmZvKQ0KPiAgIHsNCj4gICAJc3RydWN0IGZiX2RlZmVycmVkX2lvICpmYmRlZmlv
+ID0gaW5mby0+ZmJkZWZpbzsNCj4gICAJc3RydWN0IHBhZ2UgKnBhZ2U7DQo+IEBAIC0zMjcs
+NiArMzI3LDE0IEBAIHZvaWQgZmJfZGVmZXJyZWRfaW9fY2xlYW51cChzdHJ1Y3QgZmJfaW5m
+byAqaW5mbykNCj4gICAJCXBhZ2UgPSBmYl9kZWZlcnJlZF9pb19wYWdlKGluZm8sIGkpOw0K
+PiAgIAkJcGFnZS0+bWFwcGluZyA9IE5VTEw7DQo+ICAgCX0NCj4gK30NCj4gK0VYUE9SVF9T
+WU1CT0xfR1BMKGZiX2RlZmVycmVkX2lvX3JlbGVhc2UpOw0KPiArDQo+ICt2b2lkIGZiX2Rl
+ZmVycmVkX2lvX2NsZWFudXAoc3RydWN0IGZiX2luZm8gKmluZm8pDQo+ICt7DQo+ICsJc3Ry
+dWN0IGZiX2RlZmVycmVkX2lvICpmYmRlZmlvID0gaW5mby0+ZmJkZWZpbzsNCj4gKw0KPiAr
+CWZiX2RlZmVycmVkX2lvX3JlbGVhc2UoaW5mbyk7DQo+ICAgDQo+ICAgCWt2ZnJlZShpbmZv
+LT5wYWdlcmVmcyk7DQo+ICAgCW11dGV4X2Rlc3Ryb3koJmZiZGVmaW8tPmxvY2spOw0KPiBk
+aWZmIC0tZ2l0IGEvZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2ZibWVtLmMgYi9kcml2ZXJz
+L3ZpZGVvL2ZiZGV2L2NvcmUvZmJtZW0uYw0KPiBpbmRleCAzYTZjODQ1OGViOGQuLmFiMzU0
+NWEwMGFiYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2ZibWVt
+LmMNCj4gKysrIGIvZHJpdmVycy92aWRlby9mYmRldi9jb3JlL2ZibWVtLmMNCj4gQEAgLTE0
+NTQsNiArMTQ1NCwxMCBAQCBfX3JlbGVhc2VzKCZpbmZvLT5sb2NrKQ0KPiAgIAlzdHJ1Y3Qg
+ZmJfaW5mbyAqIGNvbnN0IGluZm8gPSBmaWxlLT5wcml2YXRlX2RhdGE7DQo+ICAgDQo+ICAg
+CWxvY2tfZmJfaW5mbyhpbmZvKTsNCj4gKyNpZiBJU19FTkFCTEVEKENPTkZJR19GQl9ERUZF
+UlJFRF9JTykNCj4gKwlpZiAoaW5mby0+ZmJkZWZpbykNCj4gKwkJZmJfZGVmZXJyZWRfaW9f
+cmVsZWFzZShpbmZvKTsNCj4gKyNlbmRpZg0KPiAgIAlpZiAoaW5mby0+ZmJvcHMtPmZiX3Jl
+bGVhc2UpDQo+ICAgCQlpbmZvLT5mYm9wcy0+ZmJfcmVsZWFzZShpbmZvLDEpOw0KPiAgIAlt
+b2R1bGVfcHV0KGluZm8tPmZib3BzLT5vd25lcik7DQo+IGRpZmYgLS1naXQgYS9pbmNsdWRl
+L2xpbnV4L2ZiLmggYi9pbmNsdWRlL2xpbnV4L2ZiLmgNCj4gaW5kZXggOTZiOTYzMjNlOWNi
+Li43M2ViMWY4NWVhOGUgMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvbGludXgvZmIuaA0KPiAr
+KysgYi9pbmNsdWRlL2xpbnV4L2ZiLmgNCj4gQEAgLTY2Miw2ICs2NjIsNyBAQCBleHRlcm4g
+aW50ICBmYl9kZWZlcnJlZF9pb19pbml0KHN0cnVjdCBmYl9pbmZvICppbmZvKTsNCj4gICBl
+eHRlcm4gdm9pZCBmYl9kZWZlcnJlZF9pb19vcGVuKHN0cnVjdCBmYl9pbmZvICppbmZvLA0K
+PiAgIAkJCQlzdHJ1Y3QgaW5vZGUgKmlub2RlLA0KPiAgIAkJCQlzdHJ1Y3QgZmlsZSAqZmls
+ZSk7DQo+ICtleHRlcm4gdm9pZCBmYl9kZWZlcnJlZF9pb19yZWxlYXNlKHN0cnVjdCBmYl9p
+bmZvICppbmZvKTsNCj4gICBleHRlcm4gdm9pZCBmYl9kZWZlcnJlZF9pb19jbGVhbnVwKHN0
+cnVjdCBmYl9pbmZvICppbmZvKTsNCj4gICBleHRlcm4gaW50IGZiX2RlZmVycmVkX2lvX2Zz
+eW5jKHN0cnVjdCBmaWxlICpmaWxlLCBsb2ZmX3Qgc3RhcnQsDQo+ICAgCQkJCWxvZmZfdCBl
+bmQsIGludCBkYXRhc3luYyk7DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNz
+IERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21i
+SA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5
+LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-Best regards,
-Krzysztof
+--------------S5p5pXkzr835fgB9JljMj1Bf--
 
+--------------v5CsBgs3eR0Zu6WZ0AO8wEy0
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPjeH0FAwAAAAAACgkQlh/E3EQov+Ax
+oRAAgU7bhI5UC/lBlIpKhYe+KyV2VS6bOKXttffbkdjlBIhlZUE+XdBcAe2pGYvV9OOj+uhtJypl
+WDw/iqcfi3oNzHd78kgVTWaYQrtnA6SlO8YRfGBVsAQ/spjq1hzLFyLLL8x54uCzaxnjxcg5qJkl
+HgO0+dnqg1fofzZicEfz0w5Dia824IHlaawF/QrplpIAMmZ4w+2VPadA+5XVkyqlPAO2Bxi0Fv5g
+zG1HEHoeg1uubLiBevAD4vDsmAnf9w0vJ3gmKL6ao57LXPfP+kX1Br9IOq0+dEk17MEJNJb+pVO9
+IBh1uzqdnubWBKye/iarsdg+v/RhfiWKL0PKsMfx3CQmMLoE3jm8P3/clvCsjJPfKOUxk+PBCDJl
+3/eqPQ0PJUyAG3YNbmWYOVFPpJae+cFFlh9XNwn3a1Nv/JWWtWI2qVTYJLebdgIPMzrnXwA0thIO
+AtgjQMqFWeTwTYjECrhvJbUdsN6izzdNL0Y9ZWu9dV/sD8ppBiV/eK3ZIC6xxGiBOH29EZEVjVXl
+3S+vwmhF2LpnfuOQAZmnslrzpNCWaKYYhIgiU7Fk7Fpbpo1I2C6DqQ+IYbzpLh+Z0FSjMIojIQE/
+4rFXHtqph7xXgSa/FUU9uebgSTsd9NAJ+NRR13e/BKn7zKbLRyOMalkbeiox3vXhkys2vv1aCFNd
+u9A=
+=BLzs
+-----END PGP SIGNATURE-----
+
+--------------v5CsBgs3eR0Zu6WZ0AO8wEy0--
