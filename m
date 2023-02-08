@@ -2,161 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2793568F6B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9957668F6AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:13:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjBHSNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbjBHSNE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231292AbjBHSNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 8 Feb 2023 13:13:04 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C83B126E3
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229462AbjBHSND (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 8 Feb 2023 13:13:03 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA2E1BACB
         for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:13:02 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id ud5so53257978ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:13:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WG+17oAZUfaHQyeBN8o9yCxMkSId4LwLQoMJU6ajzzg=;
-        b=TQroIY7niUVOIh95dPmJQIQDR/7QZpaPf02EFS9BWDUhodtY2mjzoWr0N9F33k82GM
-         GyT5EyabkIrROYq8lfwag8Ox+AlXWBo1NhCal+VD78zV4KPZXp1QchDTILqgK6fc3tIy
-         g3fu8wYp31S9oPMGLdsa37CirLrbYgHaWS/e8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WG+17oAZUfaHQyeBN8o9yCxMkSId4LwLQoMJU6ajzzg=;
-        b=Lf1Qt9cp4YQA6KZ0pFfP+UyZbBXRzW60n4hLpvDVdHCLCMmC+tRdAnDErA6FARXYQ3
-         vQ83TP3Aa2zcrnjzE7zzqA2NSP7BsnOfBUSi9PBQ/10zjfOBNC1kTzOM4h4SqjkDb6Cw
-         MR48erguxwd1zE+QKF9w1+EPRA6VIgBTIG+irTIm7EjeiIN28S/8FydGQXpmcM3BWIhv
-         KilJoDkpGEF09t7jM68tDVCn9t5SZ7l53ybqgei0KnubanB1rGFDAMJ/dREgX+tzTWQg
-         X/GFxrhij2K6lZtj6axhj8JLH1BC7LCfBA6k2Yl5l2Sq9B7TtV3qpqVjTjOvoMFjGgQ2
-         /O9w==
-X-Gm-Message-State: AO0yUKVlXCeCBwZJD7ECbP6aGltOBfIgXy2atdr88rZfV4ylTZwwLEej
-        xapYBMtPOND63t4Fj6sBQCMNEw==
-X-Google-Smtp-Source: AK7set8muqG/n3xWtMoVLPSPCINAWbxHb3mFi6VGwibvl/xoBnOzwZHAVfDnGJTztVm0xT7h8osJ+g==
-X-Received: by 2002:a17:906:e218:b0:871:dd2:4af0 with SMTP id gf24-20020a170906e21800b008710dd24af0mr8146841ejb.26.1675879980995;
-        Wed, 08 Feb 2023 10:13:00 -0800 (PST)
-Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id sb1-20020a170906edc100b008888f4120d4sm8484483ejb.129.2023.02.08.10.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 10:13:00 -0800 (PST)
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Wed, 08 Feb 2023 18:12:22 +0000
-Subject: [PATCH net-next] sctp: check ep asocs list before access
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675879982; x=1707415982;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jbli7xfR68iVXzQ0pgj5/0O25sBe9dbuYE36QYk6OHk=;
+  b=njkRPl4KrN21JBRrZyBl8TSm9j2nxN2PHwa7CimYIuPXZq27LksIk4MX
+   X7Vn7oA5jZZAuW5FNeWSc4iLt8azRkyFWn5Zlzm223DnIPJ3MO8kbLiKZ
+   1bkLpXaWNOaqUdp8ZiU1XDQoGwV+ymGz7JFM78VlPVQFnW56oH/2qmxlY
+   C4V3PojTAgQiHOw7H+KWs7jkBF8gdzBhGBGW1I+XwldZNpttNDZfJ6GGs
+   0iuwhTeWyyoS46bRVGrZ6s5Ifx9aGHk2/1ay5q9AkqpQLrgyY0wsSIkk1
+   obGKtGvlblNBqtdJocPEMnTfRR0VR2ec6BLvxSHOwN8qU+J3B1etSojn3
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331165817"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="331165817"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 10:12:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="644958934"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="644958934"
+Received: from tbacklun-mobl.amr.corp.intel.com (HELO [10.209.14.225]) ([10.209.14.225])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 10:12:46 -0800
+Message-ID: <4808d3fa-bb68-d4c8-681f-0b2770d78041@intel.com>
+Date:   Wed, 8 Feb 2023 10:12:45 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Bharata B Rao <bharata@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, akpm@linux-foundation.org, luto@kernel.org,
+        tglx@linutronix.de, yue.li@memverge.com,
+        Ravikumar.Bangoria@amd.com, ying.huang@intel.com
+References: <20230208073533.715-1-bharata@amd.com>
+ <Y+Pj+9bbBbHpf6xM@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y+Pj+9bbBbHpf6xM@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230208-sctp-filter-v1-1-84ae70d90091@diag.uniroma1.it>
-X-B4-Tracking: v=1; b=H4sIAAXm42MC/x2NywrCMBBFf6XM2oGY2Pr4leIijbd2QGOZCVIo/
- XdTl4dzD3clgwqMbs1Kiq+YfHKF46GhNMX8BMujMnnng/PuwpbKzKO8CpTP4dQGdO01dI5qMUQ
- DDxpzmvbmHa2udjErRln+Nz1lFM5YCt237QcMTNUfgAAAAA==
-To:     Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675879980; l=2915;
- i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
- bh=37sFUIKlcdDaHzdEu0jQJw9diuGOvo8A584FuAvw2YU=;
- b=3JokCj8HzXH6jF4xRVw3O6R1m1SPZMyRDE/SmwvdpmaKZiEtnNkERE5ZCgJS87k8bAsDXk2g+qgr
- 56UdMMNOBKEw/e8YwV5nn2hsPSpnmSSAPE50HtZduHDziUSsSuxD
-X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
- pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add list_empty() check before accessing first entry of ep->asocs list
-in sctp_sock_filter(), which is not gauranteed to have an entry.
+On 2/8/23 10:03, Peter Zijlstra wrote:
+>> - Hardware provided access information could be very useful for driving
+>>   hot page promotion in tiered memory systems. Need to check if this
+>>   requires different tuning/heuristics apart from what NUMA balancing
+>>   already does.
+> I think Huang Ying looked at that from the Intel POV and I think the
+> conclusion was that it doesn't really work out. What you need is
+> frequency information, but the PMU doesn't really give you that. You
+> need to process a *ton* of PMU data in-kernel.
 
-Fixes: 8f840e47f190 ("sctp: add the sctp_diag.c file")
-Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
----
+Yeah, there were two big problems.
 
-The list_entry on an empty list creates a type confused pointer.
-While using it is undefined behavior, in this case it seems there
-is no big risk, as the `tsp->asoc != assoc` check will almost
-certainly fail on the type confused pointer.
-We report this bug also since it may hide further problems since
-the code seems to assume a non-empty `ep->asocs`.
+First, IIRC, Intel PEBS at the time only gave guest virtual addresses in
+the PEBS records.  They had to be translated back to host addresses to
+be usable.  That was extra expensive.
 
-We were able to trigger sctp_sock_filter() using syzkaller, and
-cause a panic inserting `BUG_ON(list_empty(&ep->asocs))`, so the
-list may actually be empty.
-But we were not able to minimize our testcase and understand how
-sctp_sock_filter may end up with an empty asocs list.
-We suspect a race condition between a connecting sctp socket
-and the diag query.
+Second, it *did* take a lot of processing to turn raw memory accesses
+into actionable frequency data.  That meant that we started in a hole
+performance-wise and had to make *REALLY* good decisions about page
+migration to make up for it.
 
-We attach the stacktrace when triggering the injected
-`BUG_ON(list_empty(&ep->asocs))`:
-
-```
-[  217.044169][T18237] kernel BUG at net/sctp/diag.c:364!
-[  217.044845][T18237] invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-[  217.045681][T18237] CPU: 0 PID: 18237 Comm: syz-executor Not
-tainted 6.1.0-00003-g190ee984c3e0-dirty #72
-[  217.046934][T18237] Hardware name: QEMU Standard PC (i440FX +
-PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[  217.048241][T18237] RIP: 0010:sctp_sock_filter+0x1ce/0x1d0
-[...]
-[  217.060554][T18237] Call Trace:
-[  217.061003][T18237]  <TASK>
-[  217.061409][T18237]  sctp_transport_traverse_process+0x17d/0x470
-[  217.062212][T18237]  ? sctp_ep_dump+0x620/0x620
-[  217.062835][T18237]  ? sctp_sock_filter+0x1d0/0x1d0
-[  217.063524][T18237]  ? sctp_transport_lookup_process+0x280/0x280
-[  217.064330][T18237]  ? sctp_diag_get_info+0x260/0x2c0
-[  217.065026][T18237]  ? sctp_for_each_endpoint+0x16f/0x200
-[  217.065762][T18237]  ? sctp_diag_get_info+0x2c0/0x2c0
-[  217.066435][T18237]  ? sctp_for_each_endpoint+0x1c0/0x200
-[  217.067155][T18237]  sctp_diag_dump+0x2ea/0x480
-[...]
-[  217.093117][T18237]  do_writev+0x22d/0x460
-```
----
- net/sctp/diag.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-index a557009e9832..02831497cc9b 100644
---- a/net/sctp/diag.c
-+++ b/net/sctp/diag.c
-@@ -346,6 +346,9 @@ static int sctp_sock_filter(struct sctp_endpoint *ep, struct sctp_transport *tsp
- 	struct sctp_association *assoc =
- 		list_entry(ep->asocs.next, struct sctp_association, asocs);
- 
-+	if (list_empty(&ep->asocs))
-+		return 0;
-+
- 	/* find the ep only once through the transports by this condition */
- 	if (tsp->asoc != assoc)
- 		return 0;
-
----
-base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
-change-id: 20230208-sctp-filter-73453e659360
-
-Best regards,
--- 
-Pietro Borrello <borrello@diag.uniroma1.it>
-
+The performance data here don't look awful, but they don't seem to add
+up to a clear win either.  I'm having a hard time imagining who would
+turn this on and how widely it would get used in practice.
