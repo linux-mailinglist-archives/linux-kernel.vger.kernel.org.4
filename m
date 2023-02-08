@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A352768EB82
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 061AF68EB87
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjBHJep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S229559AbjBHJfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:35:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjBHJe3 (ORCPT
+        with ESMTP id S229834AbjBHJfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:34:29 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065B15594
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:34:08 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        Wed, 8 Feb 2023 04:35:14 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF34FF05;
+        Wed,  8 Feb 2023 01:34:57 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PBZZM3ckwz4xq2B;
-        Wed,  8 Feb 2023 17:34:03 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl1.zte.com.cn with SMTP id 3189Xp9I077427;
-        Wed, 8 Feb 2023 17:33:51 +0800 (+08)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PBZbN2knBz6FK2Q;
+        Wed,  8 Feb 2023 17:34:56 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl2.zte.com.cn with SMTP id 3189YmNA096551;
+        Wed, 8 Feb 2023 17:34:48 +0800 (+08)
         (envelope-from ye.xingchen@zte.com.cn)
 Received: from mapi (xaxapp01[null])
         by mapi (Zmail) with MAPI id mid31;
-        Wed, 8 Feb 2023 17:33:54 +0800 (CST)
-Date:   Wed, 8 Feb 2023 17:33:54 +0800 (CST)
-X-Zmail-TransId: 2af963e36c821446d25d
+        Wed, 8 Feb 2023 17:34:51 +0800 (CST)
+Date:   Wed, 8 Feb 2023 17:34:51 +0800 (CST)
+X-Zmail-TransId: 2af963e36cbb2606f377
 X-Mailer: Zmail v1.0
-Message-ID: <202302081733542304522@zte.com.cn>
+Message-ID: <202302081734511884545@zte.com.cn>
 Mime-Version: 1.0
 From:   <ye.xingchen@zte.com.cn>
 To:     <lee@kernel.org>
-Cc:     <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBtZmQ6IGlwYXEtbWljcm86IHVzZSBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Cc:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBtZmQ6IHFjb21fcnBtOiB1c2UgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
 Content-Type: text/plain;
         charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 3189Xp9I077427
+X-MAIL: mse-fl2.zte.com.cn 3189YmNA096551
 X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63E36CC0.000 by FangMail milter!
+X-FangMail-Envelope: 1675848896/4PBZbN2knBz6FK2Q/63E36CC0.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
 X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63E36C8B.001/4PBZZM3ckwz4xq2B
+X-Fangmail-MID-QID: 63E36CC0.000/4PBZbN2knBz6FK2Q
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
@@ -59,30 +63,30 @@ what this function does.
 
 Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/mfd/ipaq-micro.c | 4 +---
+ drivers/mfd/qcom_rpm.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/ipaq-micro.c b/drivers/mfd/ipaq-micro.c
-index 4cd5ecc72211..6d3968458e81 100644
---- a/drivers/mfd/ipaq-micro.c
-+++ b/drivers/mfd/ipaq-micro.c
-@@ -381,7 +381,6 @@ static int __maybe_unused micro_resume(struct device *dev)
- static int __init micro_probe(struct platform_device *pdev)
+diff --git a/drivers/mfd/qcom_rpm.c b/drivers/mfd/qcom_rpm.c
+index 8fea0e511550..086611322874 100644
+--- a/drivers/mfd/qcom_rpm.c
++++ b/drivers/mfd/qcom_rpm.c
+@@ -530,7 +530,6 @@ static int qcom_rpm_probe(struct platform_device *pdev)
  {
- 	struct ipaq_micro *micro;
+ 	const struct of_device_id *match;
+ 	struct device_node *syscon_np;
 -	struct resource *res;
- 	int ret;
- 	int irq;
-
-@@ -391,8 +390,7 @@ static int __init micro_probe(struct platform_device *pdev)
-
- 	micro->dev = &pdev->dev;
+ 	struct qcom_rpm *rpm;
+ 	u32 fw_version[3];
+ 	int irq_wakeup;
+@@ -576,8 +575,7 @@ static int qcom_rpm_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	rpm->data = match->data;
 
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	micro->base = devm_ioremap_resource(&pdev->dev, res);
-+	micro->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(micro->base))
- 		return PTR_ERR(micro->base);
-
+-	rpm->status_regs = devm_ioremap_resource(&pdev->dev, res);
++	rpm->status_regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(rpm->status_regs))
+ 		return PTR_ERR(rpm->status_regs);
+ 	rpm->ctrl_regs = rpm->status_regs + 0x400;
 -- 
 2.25.1
