@@ -2,148 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEF068F7AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5C468F781
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbjBHTCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:02:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S230506AbjBHSyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbjBHTCN (ORCPT
+        with ESMTP id S229479AbjBHSyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:02:13 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA8F53562;
-        Wed,  8 Feb 2023 11:02:11 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1636eae256cso24592350fac.0;
-        Wed, 08 Feb 2023 11:02:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3CkjvttcJxIY0nazJWOz4KtDZYgxDBdSI58VEZSwud8=;
-        b=pxWHr3nG0KIfx1ogGNKONGdz9u/uUaUZYqlWVSPIdEbWa/ey1QrYiMoGh3q4GzdLrU
-         zQe3lI/4g432PEmyxRwODcBcA2xA5cxmd/FaBttmn6VgPwjiMojaF/PRpm3LgGzFjOCE
-         qSdf24qAd8xfmcvA8nO3KeFC+E2KVmLAmAI4ycxINZ8NICnJ0fQEP3S+3XsO3tPGnbqZ
-         LjYdYi8pvFMaQOmePncaMPsUw6v3pF0NE0n0Hxd0dWUUTefEHaP9Mra1yGGhc16XA5e6
-         GS18pTpdIP8JHvegTJ2VpJQk67hvkL3hBjkZx3XKsejZQxYSgPIEzr0qJ7N1ARl+jbj6
-         D2qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3CkjvttcJxIY0nazJWOz4KtDZYgxDBdSI58VEZSwud8=;
-        b=JyUTqSzqWy0kvmtRylKN4omENwqNWw5mNj0yQuvRjLt48mQB5LjODzx9z+Rf6o3Zb4
-         dBmd3g1x9dYfBCQXtH4l4o3n4foERhd81Drk4aV8DXJsjGQeNlVhI2spzpcfEFG/Ci3K
-         6PrQ3nkjdcT4PtWEcUW0dCz++oM9RZFXyo7Rsv3s9fHekyMI+8jpZhfcQaOndznN4qFK
-         svqg8kdykW6z+kdvcSNYlzOt6MD3e6QwMYkgW5L18Nyu1wmwhiLUG2OrWPgLewQj7pED
-         2bAvbSuDu70BAM7XWksBiLXjoEkhtMMmIu6U92TPon+nmBAD2lNj0F0VT0nQ3us3IyA/
-         3H9w==
-X-Gm-Message-State: AO0yUKUJsfFUoXQyKJU61I1A38z+htOq+qVh9pmg8gvoILl24qPX2xSP
-        HyTyaMHxgHm/bnaiVY5JK6U4pId6saw=
-X-Google-Smtp-Source: AK7set8tCGBAuoF9a2McwSjR8kxrioWJ+OpfXMniaX8Q3L7vkdXy2GZpw94uJr/RuxR4hPOUvCDSDw==
-X-Received: by 2002:a05:6870:9106:b0:16a:a68:b6a1 with SMTP id o6-20020a056870910600b0016a0a68b6a1mr4875697oae.50.1675882930451;
-        Wed, 08 Feb 2023 11:02:10 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f4-20020a056870d30400b001631c5f7404sm7152968oag.22.2023.02.08.11.02.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 11:02:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 8 Feb 2023 11:02:08 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Joshua Pius <joshuapius@google.com>
-Cc:     Joe Tessler <jrt@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: cec: i2c: ch7322: Drop of_match_ptr
-Message-ID: <20230208190208.GA3078349@roeck-us.net>
-References: <20230208184536.3078001-1-linux@roeck-us.net>
- <CAFs7P=hYUZY5Sx5SMF80e5M-+iH=dOG=ExFOgw+cjOWcGgpg=w@mail.gmail.com>
+        Wed, 8 Feb 2023 13:54:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7ED18A95;
+        Wed,  8 Feb 2023 10:54:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C5BEB81F4D;
+        Wed,  8 Feb 2023 18:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB21C433D2;
+        Wed,  8 Feb 2023 18:54:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675882473;
+        bh=xTtM9WlSf7bwExmahb6XOjPHbEjpNPb+C9ZLErT3mV8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kJN28UveNEt23ZFALxkKRAduymcXqKXXhl5ZE6krYfbalb6HMbzHo9qeVzvcHI7Wm
+         H7S6jcL16vD7PqCbUM676t6Ujn2JFJPW6F8SYQEY0t+JColJ5tdmzL8HnmWP59Mv+N
+         h1XG21jruiC7Pqu0lZhIHvhdf8KfE3r2XiOfPuEIw7UtbGW+1gt8cYhRh3sZd6iQB0
+         OKQT0joBdQfoYqU3AXs0x+0ro+BNaKQvYiFcCdFS93pX8FTqdLs62iSLZQceti8ikH
+         8vqlPouh7hbFMq94LAL+5Wj+RTZZwiFzYMUZ+IE2R0duumYDsHSZLH3uCg57RDgxC5
+         5i80rfFHy/R9Q==
+Date:   Wed, 8 Feb 2023 19:08:33 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Cc:     <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-crypto@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Loic PALLARDY <loic.pallardy@st.com>
+Subject: Re: [PATCH v3 4/6] bus: stm32_sys_bus: add support for STM32MP15
+ and STM32MP13 system bus
+Message-ID: <20230208190833.532cd60c@jic23-huawei>
+In-Reply-To: <d6c659d8-2e5c-cb60-d950-685c4ba319e2@foss.st.com>
+References: <20230127164040.1047583-1-gatien.chevallier@foss.st.com>
+        <20230127164040.1047583-5-gatien.chevallier@foss.st.com>
+        <20230128161217.0e79436e@jic23-huawei>
+        <d6c659d8-2e5c-cb60-d950-685c4ba319e2@foss.st.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFs7P=hYUZY5Sx5SMF80e5M-+iH=dOG=ExFOgw+cjOWcGgpg=w@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joshua,
+On Tue, 7 Feb 2023 15:12:23 +0100
+Gatien CHEVALLIER <gatien.chevallier@foss.st.com> wrote:
 
-On Wed, Feb 08, 2023 at 01:54:04PM -0500, Joshua Pius wrote:
-> Tested-by: stop cecservice, cec-ctl on endeavour
+> Hi Jonathan,
 > 
+> On 1/28/23 17:12, Jonathan Cameron wrote:
+> > On Fri, 27 Jan 2023 17:40:38 +0100
+> > Gatien Chevallier <gatien.chevallier@foss.st.com> wrote:
+> >   
+> >> This driver is checking the access rights of the different
+> >> peripherals connected to the system bus. If access is denied,
+> >> the associated device tree node is skipped so the platform bus
+> >> does not probe it.
+> >>
+> >> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> >> Signed-off-by: Loic PALLARDY <loic.pallardy@st.com>  
+> > 
+> > Hi Gatien,
+> > 
+> > A few comments inline,
+> > 
+> > Thanks,
+> > 
+> > Jonathan
+> >   
+> >> diff --git a/drivers/bus/stm32_sys_bus.c b/drivers/bus/stm32_sys_bus.c
+> >> new file mode 100644
+> >> index 000000000000..c12926466bae
+> >> --- /dev/null
+> >> +++ b/drivers/bus/stm32_sys_bus.c
+> >> @@ -0,0 +1,168 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * Copyright (C) 2023, STMicroelectronics - All Rights Reserved
+> >> + */
+> >> +
+> >> +#include <linux/bitfield.h>
+> >> +#include <linux/bits.h>
+> >> +#include <linux/device.h>
+> >> +#include <linux/err.h>
+> >> +#include <linux/io.h>
+> >> +#include <linux/init.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/module.h>
+> >> +#include <linux/of.h>
+> >> +#include <linux/of_platform.h>
+> >> +#include <linux/platform_device.h>
+> >> +
+> >> +/* ETZPC peripheral as firewall bus */
+> >> +/* ETZPC registers */
+> >> +#define ETZPC_DECPROT			0x10
+> >> +
+> >> +/* ETZPC miscellaneous */
+> >> +#define ETZPC_PROT_MASK			GENMASK(1, 0)
+> >> +#define ETZPC_PROT_A7NS			0x3
+> >> +#define ETZPC_DECPROT_SHIFT		1  
+> > 
+> > This define makes the code harder to read.  What we care about is
+> > the number of bits in the register divided by number of entries.
+> > (which is 2) hence the shift by 1. See below for more on this.
+> > 
+> >   
+> >> +
+> >> +#define IDS_PER_DECPROT_REGS		16  
+> >   
+> >> +#define STM32MP15_ETZPC_ENTRIES		96
+> >> +#define STM32MP13_ETZPC_ENTRIES		64  
+> > 
+> > These defines just make the code harder to check.
+> > They aren't magic numbers, but rather just telling us how many
+> > entries there are, so I would just put them in the structures directly.
+> > Their use make it clear what they are without needing to give them a name.
+> >   
 > 
+> Honestly, I'd rather read the hardware configuration registers to get 
+> this information instead of differentiating MP13/15. Would you agree on 
+> that?
 
-Ah, no, that should have been
+Sure, if they are discoverable even better.
 
-Tested-by: Joshua Pius <joshuapius@google.com>
 
-and please do it inline (after Signed-off-by: or Cc:).
-Top-posting is discouraged on kernel mailing lists.
-
-Thanks,
-Guenter
-
-> 
-> 
-> Joshua Pius
-> 
-> Software Developer
-> 
-> 
-> careers.google.com
-> 
-> <https://ca.linkedin.com/in/joshua-pius>
-> <https://www.youtube.com/user/lifeatgoogle>
-> <https://www.facebook.com/lifeatgoogle/> <https://twitter.com/lifeatgoogle>
-> <https://www.instagram.com/lifeatgoogle>
-> 
-> <https://news.engineering.utoronto.ca/grads-to-watch-2022/#row14>
-> 
-> |Learn more about our candidate privacy policy.|
-> <https://careers.google.com/privacy-policy/>
-> 
-> 
-> 
-> 
-> On Wed, Feb 8, 2023 at 1:45 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> 
-> > The driver does not instantiate on ACPI based systems if OF is disabled.
-> > Fix the problem by dropping of_match_ptr.
-> >
-> > Cc: Joshua Pius <joshuapius@google.com>
-> > Fixes: 21b9a47e0ec7 ("media: cec: i2c: ch7322: Add ch7322 CEC controller
-> > driver")
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/media/cec/i2c/ch7322.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/cec/i2c/ch7322.c
-> > b/drivers/media/cec/i2c/ch7322.c
-> > index 34fad7123704..3c6e6496a001 100644
-> > --- a/drivers/media/cec/i2c/ch7322.c
-> > +++ b/drivers/media/cec/i2c/ch7322.c
-> > @@ -589,7 +589,7 @@ MODULE_DEVICE_TABLE(of, ch7322_of_match);
-> >  static struct i2c_driver ch7322_i2c_driver = {
-> >         .driver = {
-> >                 .name = "ch7322",
-> > -               .of_match_table = of_match_ptr(ch7322_of_match),
-> > +               .of_match_table = ch7322_of_match,
-> >         },
-> >         .probe_new      = ch7322_probe,
-> >         .remove         = ch7322_remove,
-> > --
-> > 2.39.1
-> >
-> >
