@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705F768F021
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB96B68F022
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjBHNsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S231160AbjBHNtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbjBHNsP (ORCPT
+        with ESMTP id S230471AbjBHNtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:48:15 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A7A7ED7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:48:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1675864089; bh=V74iFXKF/omacLYhrYBZwlx5iN04Z6Zve9ftByeokoI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rDx88nTpiIImPV6haP/ykLRVMi1AlS9/izi5ZoPv2+IGq1Z9r4iGaVRDDL/Yo2Ahs
-         GigKvfnxFvtWphWPNRM1H2wTT0pJzd2PjBZyB2UIZatUYBy1y15GsaVExIoN41KOgH
-         hLTpM1HbajomtksE88dGJzz7LlAOXUgYXmwoIPfY=
-Received: from [100.100.35.204] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 8 Feb 2023 08:49:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC3FD52F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:49:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675864142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JbZ7LeeQIDp6jPae+Tix48tv2Fam/0AHZFSTOrUdCrw=;
+        b=ZN8iUJ/4CkUCxsjivW5jq/m/0ZVxhxnjfAbnQYH86n+GJmAkZZ8kuYNN8Wr/IxoPc+/tbQ
+        NEyRzw8bYLd3bJ+NIfIui+7D62QZfiibOvSeBbafoI5DWi4c+fVz1SWPPx8MoI0QV5k1/V
+        0SVm23Qto9ZXIIXx6po2gcW/nP+1knc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-9yjN5tT0O1yuDuyBvJhSgQ-1; Wed, 08 Feb 2023 08:49:00 -0500
+X-MC-Unique: 9yjN5tT0O1yuDuyBvJhSgQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 6311C6015B;
-        Wed,  8 Feb 2023 21:48:09 +0800 (CST)
-Message-ID: <5b3c9b61-7fd5-f50c-32ba-e857090b71bc@xen0n.name>
-Date:   Wed, 8 Feb 2023 21:48:08 +0800
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 243011C05AF0;
+        Wed,  8 Feb 2023 13:49:00 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.32.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9F6551121314;
+        Wed,  8 Feb 2023 13:48:59 +0000 (UTC)
+Date:   Wed, 8 Feb 2023 08:48:58 -0500
+From:   Phil Auld <pauld@redhat.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [RFC] sched: show cpu number when sched_show_task
+Message-ID: <Y+OoSsB27e2LDc3E@lorien.usersys.redhat.com>
+References: <20230208124655.2592560-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0)
- Gecko/20100101 Firefox/111.0 Thunderbird/111.0a1
-Subject: Re: [PATCH] LoongArch: add checksum optimization for 64-bit system
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Bibo Mao' <maobibo@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230207040148.1801169-1-maobibo@loongson.cn>
- <8fa91bca5e624861b190917933951c7e@AcuMS.aculab.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <8fa91bca5e624861b190917933951c7e@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208124655.2592560-1-peng.fan@oss.nxp.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/8 21:12, David Laight wrote:
-> From: Bibo Mao
->> Sent: 07 February 2023 04:02
->>
->> loongArch platform is 64-bit system, which supports 8 bytes memory
->> accessing, generic checksum function uses 4 byte memory access.
->> This patch adds 8-bytes memory access optimization for checksum
->> function on loongArch. And the code comes from arm64 system.
->>
->> When network hw checksum is disabled, iperf performance improves
->> about 10% with this patch.
->>
-> ...
->> +static inline __sum16 csum_fold(__wsum csum)
->> +{
->> +	u32 sum = (__force u32)csum;
->> +
->> +	sum += (sum >> 16) | (sum << 16);
->> +	return ~(__force __sum16)(sum >> 16);
->> +}
+On Wed, Feb 08, 2023 at 08:46:55PM +0800 Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Does LoongArch have a rotate instruction?
-> But for everything except arm (which has a rotate+add instruction)
-> the best is (probably):
-> 	(~sum - rol32(sum, 16)) >> 16
+> It would be helpful to show cpu number when dump task. Such as
+> when doing system suspend, we could know the failed freezing
+> process run on which cpu.
 > 
-> To the point where it is worth killing all the asm
-> versions and just using that one.
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  kernel/sched/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index daff72f00385..0c7a1b2f7baf 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -8876,7 +8876,7 @@ void sched_show_task(struct task_struct *p)
+>  	if (!try_get_task_stack(p))
+>  		return;
+>  
+> -	pr_info("task:%-15.15s state:%c", p->comm, task_state_to_char(p));
+> +	pr_info("task:%-15.15s state:%c cpu:0x%x", p->comm, task_state_to_char(p), task_cpu(p));
+>  
+>  	if (task_is_running(p))
+>  		pr_cont("  running task    ");
+> -- 
+> 2.37.1
+> 
 
-Yeah LoongArch can do rotates, and your suggestion can indeed reduce one 
-insn from every invocation of csum_fold.
+Looks useful, thanks.
 
- From this:
+Reviewed-by: Phil Auld <pauld@redhat.com>
 
-000000000000096c <csum_fold>:
-         sum += (sum >> 16) | (sum << 16);
-  96c:   004cc08c        rotri.w         $t0, $a0, 0x10
-  970:   00101184        add.w           $a0, $t0, $a0
-         return ~(__force __sum16)(sum >> 16);
-  974:   0044c084        srli.w          $a0, $a0, 0x10
-  978:   00141004        nor             $a0, $zero, $a0
-}
-  97c:   006f8084        bstrpick.w      $a0, $a0, 0xf, 0x0
-  980:   4c000020        jirl            $zero, $ra, 0
-
-To:
-
-0000000000000984 <csum_fold2>:
-         return (~sum - rol32(sum, 16)) >> 16;
-  984:   0014100c        nor             $t0, $zero, $a0
-         return (x << amt) | (x >> (32 - amt));
-  988:   004cc084        rotri.w         $a0, $a0, 0x10
-         return (~sum - rol32(sum, 16)) >> 16;
-  98c:   00111184        sub.w           $a0, $t0, $a0
-}
-  990:   00df4084        bstrpick.d      $a0, $a0, 0x1f, 0x10
-  994:   4c000020        jirl            $zero, $ra, 0
-
-I guess Bibo would take this suggestion and check the other arches 
-afterwards, okay? ;-)
 
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
