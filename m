@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6801C68F493
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAE968F49A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjBHRbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        id S230401AbjBHRcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:32:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbjBHRbD (ORCPT
+        with ESMTP id S230482AbjBHRca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:31:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038C56A56
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:30:59 -0800 (PST)
+        Wed, 8 Feb 2023 12:32:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F3A3251B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:32:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9154261746
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FD8C4339B;
-        Wed,  8 Feb 2023 17:30:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5CCE6173F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B93C433D2;
+        Wed,  8 Feb 2023 17:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675877459;
-        bh=m4LGLQRhAU4B3yaYdvrvkLt+fmM4L3nYicIMpXCMVeQ=;
+        s=korg; t=1675877548;
+        bh=pqfBKmMIe9Jov3y/NBY+FkieCEppKLBCyvo3Y8Fcthg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R+mYO5Bp4GkXoD5hHKtk/yK+fLsXYhaxdrXN3PGxqvmtdoJLn+IffzQHySZ+PDNTs
-         dgVFyIM8gDACZl2J+T8N9LuhebXwDCSzWZnKbbliSvuaigZAE66Jk9JG3HT1XOU55E
-         1GHy2l4cWDM5ZvzV+8mlQvmLsYUoVlWErXpe88/U=
-Date:   Wed, 8 Feb 2023 18:30:56 +0100
+        b=Spt+LJHWJbQhL/XlxxO6e1yLLNMngPvMHZqUwQlCe/7D1tG4dQm7zUlTyTz2QRRkO
+         SLY9RA3e2xIFoodSWawuZhYOZFbWpex1Sbf5+/MVo0g+GaUhVZTIPE7umxEM0VsTni
+         6KlHfiOVmMYlQEXn9OL4ZgPTWcJ6O6vUw/8cyfsw=
+Date:   Wed, 8 Feb 2023 18:32:25 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v4] mtd: spi-nor: fix memory leak when using
- debugfs_lookup()
-Message-ID: <Y+PcUN2DQx+J4MPJ@kroah.com>
-References: <20230208160230.2179905-1-gregkh@linuxfoundation.org>
- <f60870dee13900252e0b13fb2f5f05b5@walle.cc>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Vitaly Lubart <vitaly.lubart@intel.com>
+Subject: Re: [Intel-gfx] [char-misc-next v3 0/2] mei: gsc proxy component
+Message-ID: <Y+PcqXbUWewBqiJE@kroah.com>
+References: <20230208142358.1401618-1-tomas.winkler@intel.com>
+ <Y+PZI/mfxwSNmy8R@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f60870dee13900252e0b13fb2f5f05b5@walle.cc>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y+PZI/mfxwSNmy8R@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,44 +56,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 05:15:41PM +0100, Michael Walle wrote:
-> Am 2023-02-08 17:02, schrieb Greg Kroah-Hartman:
-> > When calling debugfs_lookup() the result must have dput() called on it,
-> > otherwise the memory will leak over time.  To solve this, remove the
-> > lookup and create the directory on the first device found, and then
-> > remove it when the module is unloaded.
+On Wed, Feb 08, 2023 at 12:17:23PM -0500, Rodrigo Vivi wrote:
+> On Wed, Feb 08, 2023 at 04:23:56PM +0200, Tomas Winkler wrote:
+> > GSC Proxy component is used for communication between the
+> > Intel graphics driver and MEI driver.
 > > 
-> > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-> > Cc: Pratyush Yadav <pratyush@kernel.org>
-> > Cc: Michael Walle <michael@walle.cc>
-> > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> > Cc: Richard Weinberger <richard@nod.at>
-> > Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> > Cc: linux-mtd@lists.infradead.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Daniele, please ack so that drm part can be merged via Greg's tree.
 > 
-> Reviewed-by: Michael Walle <michael@walle.cc>
+> Cc: Daniele, since he was missing on this submission.
 > 
-> one nit below I didn't notice earlier, no need to send a new
-> patch version just for that.
+> He raise concerns on getting this through another tree since he
+> has a pending series that uses this interface here. The propagation
+> at this point will take so long.
 > 
-> ..
-> 
-> > +void spi_nor_debugfs_shutdown(void)
-> > +{
-> > +	if (rootdir)
-> > +		debugfs_remove(rootdir);
-> 
-> debugfs_remove() already has a check for NULL.
-> 
+> Could we do the other way around and get Greg's and your, Thomas',
+> acks to merge this through our drm-intel trees?
 
-Argh, I knew that, for some reason I went back and added that check as I
-was thinking this would have been an issue if rootdir was never created.
-You are right, it isn't a problem, oh well.
-
-The simplest patches sometimes take the longest time to get right, I'll
-stop now :)
-
-thanks so much for the reviews,
-
-greg k-h
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
