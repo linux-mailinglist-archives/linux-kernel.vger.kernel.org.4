@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E13D68F219
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0BB68F21C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjBHPgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:36:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S231697AbjBHPg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjBHPgC (ORCPT
+        with ESMTP id S231698AbjBHPgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:36:02 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA3C402F3;
-        Wed,  8 Feb 2023 07:36:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-        s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Uh03leLsKgN2MDpFdcAW1yHdKgXLcqsQSRml3Fthvko=; b=AQ+4/DNw5QH5YEywk5DN7WMC70
-        Z+/rFYmcpAdxcVcP9vuK/7yW5CeaUOKWN6nMzjKijXyze6u5XRx/FwV8lzE74n3JH3pSG9Vgt9RtK
-        BldvnI8+uABeY5W9+bMYXb3azZjt+5iZhJBTA8GKuj3xveKpK7T0Qe3TH/0G0tD6etxzvnQE+nhdb
-        tz3OlVSmQhzTgtKrlRcOwuNQdC0f5fQtVgMqwNcCyb/0QreF9wwqJayzAmdo7d5wbltN1/V0f7mQB
-        qk2oH22Yx+yDD2Gseh2APhJbzfV64K0F51C9F39tZcFYDqkbdpxsNkIuaTbEfYwiGZo5U5iOL5M1b
-        P7C271tw==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1pPmU9-007ztn-4r; Wed, 08 Feb 2023 17:35:49 +0200
-Message-ID: <706b3e2d-7097-356b-b96e-dd917ce048ea@kapsi.fi>
-Date:   Wed, 8 Feb 2023 17:35:48 +0200
+        Wed, 8 Feb 2023 10:36:24 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A295343910
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:36:21 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1782120wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:36:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FKePDO+31IJoF0FsJfvZs9DXqYakl2KGMty92CUWxZs=;
+        b=lDp/yheLhCJ14mwi5JBbSR5uvR8nLzGG2T2sjS6t2m0ytjQq9ZGUFLYlagTEssKD6T
+         MGqhy+s3OC3RZUi8kOaE+kVadJ4FwdA58rbaDYPOEZor3ALf/C5ZzArNJ9mBtorSCuWL
+         QYL+GvvCNqQXt4IVlpy7027J045UU/qqB8tyKYG1RU5Kr533K/dWShfQzdV89wWEUll8
+         oGb0Cysx+ENxAvIJPI7ByaLXC3JFA8K6I9Pu0dLT5CNJrgW8hc1oU5XNnPxnhf+GGT9O
+         OLWtJFCAWlzLVkfMltuQq3V8rD5PePxe2RG7hBwCXbIf90WRJzdIoqbisb4hKzjP8iH1
+         uEkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKePDO+31IJoF0FsJfvZs9DXqYakl2KGMty92CUWxZs=;
+        b=dg09lEKUH5H9Uyg0MliMU/epNTR15WCvsc5TqvYL2UqaWqYiDv2XdtHahF3ICl3lrq
+         4y2/5VQEnYG02hu0HerjZC67FeHyTvZRuT+Su3XvFDcEOlPnv83yEf1gxTaF8xtE/RAy
+         46CnBTQy0Z0PazIKraANWkiGul4r53BoVyDNCD7TRcn1VMhWzPSTnBEYtzrzJX2VLatD
+         oo+KabtX1Lwhu5L6fDRdHbkXS3yDzMu2frJSPo9aHmJHU3a0ew1oVcCKYauUug1Bme9h
+         T6PpXuzEpEtpBqJrbFwNovkrM9BRW9t9OqHTJUyTrh8SVWIIzik78ascOCgL4pAAFd9V
+         zQng==
+X-Gm-Message-State: AO0yUKXse47fNtBwpTZGFUVB0w5fR+pGUyK5/nfwS4v2xwcQjwpAG7sX
+        HoV15lnNwO/NhHu0jXvUwdbnBg==
+X-Google-Smtp-Source: AK7set/jWb3OUhPaWjMNeoBplH44S4cuJjQOgCubl22jNIytV6Ym7ExQyw2dq1UJvSvr5xZQTqqhTw==
+X-Received: by 2002:a05:600c:4d09:b0:3df:e549:bd27 with SMTP id u9-20020a05600c4d0900b003dfe549bd27mr7766617wmp.6.1675870580177;
+        Wed, 08 Feb 2023 07:36:20 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id l16-20020a05600c2cd000b003daffc2ecdesm2459945wmc.13.2023.02.08.07.36.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 07:36:19 -0800 (PST)
+Message-ID: <2b45b511-33d5-c6b0-ad4d-78e8c15392d0@linaro.org>
+Date:   Wed, 8 Feb 2023 16:36:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/2] thermal: tegra-bpmp: Handle offline zones
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
 Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Srikar Srimath Tirumala <srikars@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Timo Alho <talho@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230207135610.3100865-1-cyndis@kapsi.fi>
- <Y+N5+w8ePTVaZiIB@orome>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <Y+N5+w8ePTVaZiIB@orome>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com, dphadke@linux.microsoft.com,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
+ <202302081621.odizDzHG-lkp@intel.com>
+ <39350ee9-c899-ba88-2e4e-103f93dcd722@linaro.org>
+ <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y+O0FtUkLyvJLSrR@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/23 12:31, Thierry Reding wrote:
-> On Tue, Feb 07, 2023 at 03:56:08PM +0200, Mikko Perttunen wrote:
->> From: Mikko Perttunen <mperttunen@nvidia.com>
+On 08/02/2023 15:39, Nathan Chancellor wrote:
+> On Wed, Feb 08, 2023 at 11:25:57AM +0100, Krzysztof Kozlowski wrote:
+>> On 08/02/2023 09:22, kernel test robot wrote:
+>>> Hi Saurabh,
+>>>
+>>> Thank you for the patch! Perhaps something to improve:
+>>>
+>>> [auto build test WARNING on next-20230207]
+>>> [cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
+>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>> And when submitting patch, we suggest to use '--base' as documented in
+>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>
 >>
->> Thermal zones located in power domains may not be accessible when
->> the domain is powergated. In this situation, reading the temperature
->> will return -BPMP_EFAULT and the temperature is considered to be
->> -256C for calculating trips.
+>> All of your recent patches have build errors. Can you at least build
+>> test them before sending? It's a unnecessary noise in our mailboxes to
+>> get non-buildable patches, just to trigger compilation which you can
+>> easily do by your own. GCC is a free software...
 > 
-> Where's that -256C being set? I only see THERMAL_TEMP_INVALID being set
-> as the default for a zone, but that's not -274C, not -256C. If that's
-> the temperature that you're referring to, it might be better to state
-> that we rely on the default temperature rather than any specific number.
+> For what it's worth, GCC does not have a warning like this, it just
+> accepts the incorrect location of the attribute, which has gotten others
+> in trouble before:
 > 
-> Thierry
-
-It is based on BPMP's internal behavior.
-
-Mikko
-
+> https://lore.kernel.org/CAHk-=wgf+kHeSZbpkZumWcTXUD7ordqTMvPRNL6aQVG1DSBDnQ@mail.gmail.com/
 > 
->>
->> For smooth operation, for offline zones, return -EAGAIN when reading
->> the temperature and allow registration of zones even if they are
->> offline during probe.
->>
->> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->> ---
->>   drivers/thermal/tegra/tegra-bpmp-thermal.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->> index c76e1ea62c8a..628b18818ae9 100644
->> --- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
->> +++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
->> @@ -52,6 +52,8 @@ static int __tegra_bpmp_thermal_get_temp(struct tegra_bpmp_thermal_zone *zone,
->>   	err = tegra_bpmp_transfer(zone->tegra->bpmp, &msg);
->>   	if (err)
->>   		return err;
->> +	if (msg.rx.ret == -BPMP_EFAULT)
->> +		return -EAGAIN;
->>   	if (msg.rx.ret)
->>   		return -EINVAL;
->>   
->> @@ -257,7 +259,12 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
->>   		zone->tegra = tegra;
->>   
->>   		err = __tegra_bpmp_thermal_get_temp(zone, &temp);
->> -		if (err < 0) {
->> +
->> +		/*
->> +		 * Sensors in powergated domains may temporarily fail to be read
->> +		 * (-EAGAIN), but will become accessible when the domain is powered on.
->> +		 */
->> +		if (err < 0 && err != -EAGAIN) {
->>   			devm_kfree(&pdev->dev, zone);
->>   			continue;
->>   		}
->> -- 
->> 2.39.0
->>
+> So the patch probably did build clean with GCC but that is one of the
+> reasons that there is no longer a compiler monopoly for the kernel ;)
+
+OK then the patchset is reasonable/built enough.
+
+Best regards,
+Krzysztof
 
