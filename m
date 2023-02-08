@@ -2,184 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB8568E6E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9AD68E6E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjBHEBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 23:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S230182AbjBHECj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 23:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjBHEBe (ORCPT
+        with ESMTP id S229910AbjBHECg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 23:01:34 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEE727D47;
-        Tue,  7 Feb 2023 20:01:33 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1675828891;
-        bh=z6gdQRd22b6rFVmZcQycIuiVt7AJMHofVc+WstYPDkY=;
-        h=From:Date:Subject:To:Cc:From;
-        b=SMVGqKkWvYKLqdYThJODx9Ce/DLrtV6ktdvSre1o7xD9bhKGqyWKFPTkAiN/afXd0
-         tbzWMrhC7kGMsX/klu+Qx9DVg+TPnHNxnM7S7lPvIoazKiAkuuOLI7Z17vJASoWihB
-         TFA/eJgCAkfQMB2iG6um5M5TQAuH+LKMcjLfwAxY=
-Date:   Wed, 08 Feb 2023 04:01:22 +0000
-Subject: [PATCH] block: make kobj_type structures constant
+        Tue, 7 Feb 2023 23:02:36 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4754EC2;
+        Tue,  7 Feb 2023 20:02:33 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 3F12141EA7;
+        Wed,  8 Feb 2023 04:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1675828951; bh=Y+4RaDpgqo/JxBk93/VRj6v0FZyB8tCYW1ubK5Fdg6o=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To;
+        b=mPvobY+NG+3e9FNTDLmEiATnRkCjLCJyMAtorHYZXHdoEUAo0AREc1c3ysrcpI+Ev
+         ZsJxSuI9JyL3oRIKMjFaSpApP9vjnUiH/BveR1KrQTRPzTzdSKbulqF5BQ20OzUjpZ
+         S/Zoit8wylws6KMdq4hsX0j+Vhl4kkbLbmG+aARuA8iG8akmVG6jiPTtJyc/EUkezu
+         mvyXwbK2H+hCere5/yQZzY81O6y32mJqB53eishTzFV9L1Exy6OCOjKtURtO+i9SYT
+         E2ONNBba/ik1K3PsHGXxVKnY81BKeCuf9q4XV05Nnh/W5UYaM7HQMJIV0zgcUjTpZm
+         q7H5klv/DzcFg==
+Message-ID: <349fe17a-f754-a39a-d094-f07330618fcd@marcan.st>
+Date:   Wed, 8 Feb 2023 13:02:22 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
+Content-Language: en-US
+From:   Hector Martin <marcan@marcan.st>
+To:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Arend Van Spriel <arend.vanspriel@broadcom.com>
+Cc:     "'Hector Martin' via BRCM80211-DEV-LIST,PDL" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Prutskov <alep@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>, asahi@lists.linux.dev,
+        linux-wireless@vger.kernel.org, SHA-cyfmac-dev-list@infineon.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Hauke Mehrtens <hauke@hauke-m.de>
+References: <20230131112840.14017-1-marcan@marcan.st>
+ <20230131112840.14017-2-marcan@marcan.st>
+ <CAOiHx=mYxFx0kr5s=4X_qywZBpPqCbrNjLnTXfigPOnqZSxjag@mail.gmail.com>
+ <4fb4af22-d115-de62-3bda-c1ae02e097ee@marcan.st>
+ <1861323f100.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+ <28ed8713-4243-7c67-b792-92d0dde82256@marcan.st>
+ <186205e1c60.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
+ <CAOiHx=m2NFo2hbS4a3j67B4iFrkM7dGKGhwLkXuwOZAR=+C63Q@mail.gmail.com>
+ <d86f369d-a28c-bba3-a09b-31407acb4a25@marcan.st>
+In-Reply-To: <d86f369d-a28c-bba3-a09b-31407acb4a25@marcan.st>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20230208-kobj_type-block-v1-1-0b3eafd7d983@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAJEe42MC/x2N2wqDMBAFf0X22UBcEUp/pYjksqlbQyKJLYr47
- y59nDkM54RKhanCszmh0I8r5yTQtQ242aQ3KfbCgBp7jfqhlmw/03aspGzMblEBnR96GwjRg1T
- WVJmKSW6WLn1jFLkWCrz/b17jdd3ntZ9wdgAAAA==
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675828885; l=4439;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=z6gdQRd22b6rFVmZcQycIuiVt7AJMHofVc+WstYPDkY=;
- b=OVn8wDUodWZsOG2PyBY402xLem4m3t9KJb6qTlDz0+R5mYqphg8I64SVMuj9ctspuU5cGhm44
- DJOqv01D7rmDtbNFTLJ/4wWHAqrtoZEDs+dZkmMRgFeVmx350hiDpZJ
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-the driver core allows the usage of const struct kobj_type.
+On 05/02/2023 22.02, Hector Martin wrote:
+> On 05/02/2023 21.44, Jonas Gorski wrote:
+>> On Sun, 5 Feb 2023 at 07:58, Arend Van Spriel
+>> <arend.vanspriel@broadcom.com> wrote:
+>>>
+>>> - stale Cypress emails
+>>>
+>>> On February 5, 2023 3:50:41 AM Hector Martin <marcan@marcan.st> wrote:
+>>>
+>>>> On 03/02/2023 02.19, Arend Van Spriel wrote:
+>>>>> On February 2, 2023 6:25:28 AM "'Hector Martin' via BRCM80211-DEV-LIST,PDL"
+>>>>> <brcm80211-dev-list.pdl@broadcom.com> wrote:
+>>>>>
+>>>>>> On 31/01/2023 23.17, Jonas Gorski wrote:
+>>>>>>> On Tue, 31 Jan 2023 at 12:36, Hector Martin <marcan@marcan.st> wrote:
+>>>>>>>>
+>>>>>>>> These device IDs are only supposed to be visible internally, in devices
+>>>>>>>> without a proper OTP. They should never be seen in devices in the wild,
+>>>>>>>> so drop them to avoid confusion.
+>>>>>>>
+>>>>>>> I think these can still show up in embedded platforms where the
+>>>>>>> OTP/SPROM is provided on-flash.
+>>>>>>>
+>>>>>>> E.g. https://forum.archive.openwrt.org/viewtopic.php?id=55367&p=4
+>>>>>>> shows this bootlog on an BCM4709A0 router with two BCM43602 wifis:
+>>>>>>>
+>>>>>>> [    3.237132] pci 0000:01:00.0: [14e4:aa52] type 00 class 0x028000
+>>>>>>> [    3.237174] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
+>>>>>>> [    3.237199] pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
+>>>>>>> [    3.237302] pci 0000:01:00.0: supports D1 D2
+>>>>>>> ...
+>>>>>>> [    3.782384] pci 0001:03:00.0: [14e4:aa52] type 00 class 0x028000
+>>>>>>> [    3.782440] pci 0001:03:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit]
+>>>>>>> [    3.782474] pci 0001:03:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit]
+>>>>>>> [    3.782649] pci 0001:03:00.0: supports D1 D2
+>>>>>>>
+>>>>>>> 0xaa52 == 43602 (BRCM_PCIE_43602_RAW_DEVICE_ID)
+>>>>>>>
+>>>>>>> Rafał can probably provide more info there.
+>>>>>>>
+>>>>>>> Regards
+>>>>>>> Jonas
+>>>>>>
+>>>>>> Arend, any comments on these platforms?
+>>>>>
+>>>>> Huh? I already replied to that couple of days ago or did I only imagine
+>>>>> doing that.
+>>>>
+>>>> I don't see any replies from you on the lists (or my inbox) to Jonas' email.
+>>>
+>>> Accidentally sent that reply to internal mailing list. So quoting myself here:
+>>>
+>>> """
+>>> Shaking the tree helps ;-) What is meant by "OTP/SPROM is provided
+>>> on-flash"? I assume you mean that it is on the host side and the wifi PCIe
+>>> device can not access it when it gets powered up. Maybe for this scenario
+>>> we should have a devicetree compatible to configure the device id, but that
+>>> does not help any current users of these platforms. Thanks for providing
+>>> this info.
+>>
+>> That's what I meant, the wifi chip itself does not have any (valid)
+>> OTP/SPROM attached/populated, and requires the driver to setup the
+>> values at runtime based on the host SoC's flash contents (most likely
+>> NVRAM contents).
+>>
+>> This was the case in about 99% of embedded systems based on MIPS
+>> bcm47xx/bcm63xx, where the wifi chips then always identified
+>> themselves with their raw chip IDs as PCI device IDs (even leading to
+>> one or two ID conflicts ...).
+>>
+>> I have to admit I don't know how much this is still an issue on
+>> current (ARM) systems, but at least that one BCM4709A one suggests
+>> this is still happening in "recent" designs. Probably because it saves
+>> half a cent per board or so ;-)
+>>
+>> Regards
+>> Jonas
+>>
+> 
+> As far as I know the OTP is built into the chips themselves, and even
+> Apple (who refuses to put per-device calibration data in OTP these days
+> and loads it from DT) still manages to burn in the proper device ID and
+> basic info at least... so I'm not sure how this saves any money. I
+> thought chips weren't supposed to even leave Broadcom without at least
+> an ID burned in?
+> 
+> - Hector
 
-Take advantage of this to constify the structure definitions to prevent
-modification at runtime.
+I'd like to move forward with this. Should I send a v3 without the RAW
+ID removal?
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- block/blk-crypto-sysfs.c | 2 +-
- block/blk-ia-ranges.c    | 4 ++--
- block/blk-integrity.c    | 2 +-
- block/blk-mq-sysfs.c     | 6 +++---
- block/blk-sysfs.c        | 2 +-
- block/elevator.c         | 4 ++--
- 6 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/block/blk-crypto-sysfs.c b/block/blk-crypto-sysfs.c
-index 55268edc0625..a304434489ba 100644
---- a/block/blk-crypto-sysfs.c
-+++ b/block/blk-crypto-sysfs.c
-@@ -116,7 +116,7 @@ static void blk_crypto_release(struct kobject *kobj)
- 	kfree(container_of(kobj, struct blk_crypto_kobj, kobj));
- }
- 
--static struct kobj_type blk_crypto_ktype = {
-+static const struct kobj_type blk_crypto_ktype = {
- 	.default_groups = blk_crypto_attr_groups,
- 	.sysfs_ops	= &blk_crypto_attr_ops,
- 	.release	= blk_crypto_release,
-diff --git a/block/blk-ia-ranges.c b/block/blk-ia-ranges.c
-index 2141931ddd37..c9eb4241e048 100644
---- a/block/blk-ia-ranges.c
-+++ b/block/blk-ia-ranges.c
-@@ -75,7 +75,7 @@ static void blk_ia_range_sysfs_nop_release(struct kobject *kobj)
- {
- }
- 
--static struct kobj_type blk_ia_range_ktype = {
-+static const struct kobj_type blk_ia_range_ktype = {
- 	.sysfs_ops	= &blk_ia_range_sysfs_ops,
- 	.default_groups	= blk_ia_range_groups,
- 	.release	= blk_ia_range_sysfs_nop_release,
-@@ -94,7 +94,7 @@ static void blk_ia_ranges_sysfs_release(struct kobject *kobj)
- 	kfree(iars);
- }
- 
--static struct kobj_type blk_ia_ranges_ktype = {
-+static const struct kobj_type blk_ia_ranges_ktype = {
- 	.release	= blk_ia_ranges_sysfs_release,
- };
- 
-diff --git a/block/blk-integrity.c b/block/blk-integrity.c
-index 69eed260a823..8f01d786f5cb 100644
---- a/block/blk-integrity.c
-+++ b/block/blk-integrity.c
-@@ -356,7 +356,7 @@ static const struct sysfs_ops integrity_ops = {
- 	.store	= &integrity_attr_store,
- };
- 
--static struct kobj_type integrity_ktype = {
-+static const struct kobj_type integrity_ktype = {
- 	.default_groups = integrity_groups,
- 	.sysfs_ops	= &integrity_ops,
- };
-diff --git a/block/blk-mq-sysfs.c b/block/blk-mq-sysfs.c
-index 4515288fbe35..a8f4accb6646 100644
---- a/block/blk-mq-sysfs.c
-+++ b/block/blk-mq-sysfs.c
-@@ -153,15 +153,15 @@ static const struct sysfs_ops blk_mq_hw_sysfs_ops = {
- 	.store	= blk_mq_hw_sysfs_store,
- };
- 
--static struct kobj_type blk_mq_ktype = {
-+static const struct kobj_type blk_mq_ktype = {
- 	.release	= blk_mq_sysfs_release,
- };
- 
--static struct kobj_type blk_mq_ctx_ktype = {
-+static const struct kobj_type blk_mq_ctx_ktype = {
- 	.release	= blk_mq_ctx_sysfs_release,
- };
- 
--static struct kobj_type blk_mq_hw_ktype = {
-+static const struct kobj_type blk_mq_hw_ktype = {
- 	.sysfs_ops	= &blk_mq_hw_sysfs_ops,
- 	.default_groups = default_hw_ctx_groups,
- 	.release	= blk_mq_hw_sysfs_release,
-diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index 93d9e9c9a6ea..0f5798883776 100644
---- a/block/blk-sysfs.c
-+++ b/block/blk-sysfs.c
-@@ -755,7 +755,7 @@ static void blk_queue_release(struct kobject *kobj)
- 	/* nothing to do here, all data is associated with the parent gendisk */
- }
- 
--static struct kobj_type blk_queue_ktype = {
-+static const struct kobj_type blk_queue_ktype = {
- 	.default_groups = blk_queue_attr_groups,
- 	.sysfs_ops	= &queue_sysfs_ops,
- 	.release	= blk_queue_release,
-diff --git a/block/elevator.c b/block/elevator.c
-index adee58e48e2d..24909069f872 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -126,7 +126,7 @@ static struct elevator_type *elevator_find_get(struct request_queue *q,
- 	return e;
- }
- 
--static struct kobj_type elv_ktype;
-+static const struct kobj_type elv_ktype;
- 
- struct elevator_queue *elevator_alloc(struct request_queue *q,
- 				  struct elevator_type *e)
-@@ -455,7 +455,7 @@ static const struct sysfs_ops elv_sysfs_ops = {
- 	.store	= elv_attr_store,
- };
- 
--static struct kobj_type elv_ktype = {
-+static const struct kobj_type elv_ktype = {
- 	.sysfs_ops	= &elv_sysfs_ops,
- 	.release	= elevator_release,
- };
-
----
-base-commit: 0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-change-id: 20230208-kobj_type-block-f2cd53bfe22d
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+- Hector
