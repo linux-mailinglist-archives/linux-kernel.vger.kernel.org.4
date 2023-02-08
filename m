@@ -2,89 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2550568F099
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:20:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1027168F0A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbjBHOT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:19:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S230263AbjBHOYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjBHOTd (ORCPT
+        with ESMTP id S229512AbjBHOY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:19:33 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14DD4671E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:19:31 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-262-H5cJoUZoPCauX5L41XFgjQ-1; Wed, 08 Feb 2023 14:19:28 +0000
-X-MC-Unique: H5cJoUZoPCauX5L41XFgjQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 8 Feb
- 2023 14:19:27 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Wed, 8 Feb 2023 14:19:27 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'WANG Xuerui' <kernel@xen0n.name>,
-        'Bibo Mao' <maobibo@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-CC:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] LoongArch: add checksum optimization for 64-bit system
-Thread-Topic: [PATCH] LoongArch: add checksum optimization for 64-bit system
-Thread-Index: AQHZOqjw3I588J9fP0akyPjC04Hova7FBpIAgAAMDwCAAAcXoA==
-Date:   Wed, 8 Feb 2023 14:19:27 +0000
-Message-ID: <7636a7bebfd44e378c5b16d6fd355232@AcuMS.aculab.com>
-References: <20230207040148.1801169-1-maobibo@loongson.cn>
- <8fa91bca5e624861b190917933951c7e@AcuMS.aculab.com>
- <5b3c9b61-7fd5-f50c-32ba-e857090b71bc@xen0n.name>
-In-Reply-To: <5b3c9b61-7fd5-f50c-32ba-e857090b71bc@xen0n.name>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 8 Feb 2023 09:24:28 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D191E11E8A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:24:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675866267; x=1707402267;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=l8OzFhxngZYX4NnqjOn64PeQL+wu2czbjPojmTNtOfQ=;
+  b=lp3IMl0YB8fPBq9+MzZ6hj1SjeZHWchHpxMoYl11GEiehYDoUkNLtnNs
+   2WzbIqpT/ZuyIz6dBD/6emwjtqMslzzeE71/AvhUQFfOmnIsADpZCBD3O
+   g1rycFNf+XS1MB0K9odKDBZITaiqYY+77AxQhpPDTE/7tphkhNrEOsp8C
+   wuPp9ashHpB1E9gyoM0GiUZmPnaiM1LXi1v9XrrhTV7KybtLCSRmDmmE9
+   oiapKqwImPSwKhDAkVrMLF55V5EkMHVqO93tntzL8QYrVBQrb5NKKTH7w
+   D4qtGYpwtljrAW9Spim3P11HaAnpMa8oh8WmotXU+16A85nyfXIrLT1IP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="392201352"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="392201352"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:15 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791214071"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="791214071"
+Received: from twinkler-lnx.jer.intel.com ([10.12.87.42])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:13 -0800
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        Ceraolo Spurio Daniele <daniele.ceraolospurio@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [char-misc-next v3 0/2] mei: gsc proxy component
+Date:   Wed,  8 Feb 2023 16:23:56 +0200
+Message-Id: <20230208142358.1401618-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogV0FORyBYdWVydWkNCj4gU2VudDogMDggRmVicnVhcnkgMjAyMyAxMzo0OA0KLi4uDQo+
-IFllYWggTG9vbmdBcmNoIGNhbiBkbyByb3RhdGVzLCBhbmQgeW91ciBzdWdnZXN0aW9uIGNhbiBp
-bmRlZWQgcmVkdWNlIG9uZQ0KPiBpbnNuIGZyb20gZXZlcnkgaW52b2NhdGlvbiBvZiBjc3VtX2Zv
-bGQuDQo+IA0KPiAgRnJvbSB0aGlzOg0KPiANCj4gMDAwMDAwMDAwMDAwMDk2YyA8Y3N1bV9mb2xk
-PjoNCj4gICAgICAgICAgc3VtICs9IChzdW0gPj4gMTYpIHwgKHN1bSA8PCAxNik7DQo+ICAgOTZj
-OiAgIDAwNGNjMDhjICAgICAgICByb3RyaS53ICAgICAgICAgJHQwLCAkYTAsIDB4MTANCj4gICA5
-NzA6ICAgMDAxMDExODQgICAgICAgIGFkZC53ICAgICAgICAgICAkYTAsICR0MCwgJGEwDQo+ICAg
-ICAgICAgIHJldHVybiB+KF9fZm9yY2UgX19zdW0xNikoc3VtID4+IDE2KTsNCj4gICA5NzQ6ICAg
-MDA0NGMwODQgICAgICAgIHNybGkudyAgICAgICAgICAkYTAsICRhMCwgMHgxMA0KPiAgIDk3ODog
-ICAwMDE0MTAwNCAgICAgICAgbm9yICAgICAgICAgICAgICRhMCwgJHplcm8sICRhMA0KPiB9DQo+
-ICAgOTdjOiAgIDAwNmY4MDg0ICAgICAgICBic3RycGljay53ICAgICAgJGEwLCAkYTAsIDB4Ziwg
-MHgwDQo+ICAgOTgwOiAgIDRjMDAwMDIwICAgICAgICBqaXJsICAgICAgICAgICAgJHplcm8sICRy
-YSwgMA0KPiANCj4gVG86DQo+IA0KPiAwMDAwMDAwMDAwMDAwOTg0IDxjc3VtX2ZvbGQyPjoNCj4g
-ICAgICAgICAgcmV0dXJuICh+c3VtIC0gcm9sMzIoc3VtLCAxNikpID4+IDE2Ow0KPiAgIDk4NDog
-ICAwMDE0MTAwYyAgICAgICAgbm9yICAgICAgICAgICAgICR0MCwgJHplcm8sICRhMA0KPiAgICAg
-ICAgICByZXR1cm4gKHggPDwgYW10KSB8ICh4ID4+ICgzMiAtIGFtdCkpOw0KPiAgIDk4ODogICAw
-MDRjYzA4NCAgICAgICAgcm90cmkudyAgICAgICAgICRhMCwgJGEwLCAweDEwDQo+ICAgICAgICAg
-IHJldHVybiAofnN1bSAtIHJvbDMyKHN1bSwgMTYpKSA+PiAxNjsNCj4gICA5OGM6ICAgMDAxMTEx
-ODQgICAgICAgIHN1Yi53ICAgICAgICAgICAkYTAsICR0MCwgJGEwDQo+IH0NCj4gICA5OTA6ICAg
-MDBkZjQwODQgICAgICAgIGJzdHJwaWNrLmQgICAgICAkYTAsICRhMCwgMHgxZiwgMHgxMA0KPiAg
-IDk5NDogICA0YzAwMDAyMCAgICAgICAgamlybCAgICAgICAgICAgICR6ZXJvLCAkcmEsIDANCg0K
-SXQgaXMgYWN0dWFsbHkgc2xpZ2h0bHkgYmV0dGVyIHRoYW4gdGhhdC4NCkluIHRoZSBjc3VtX2Zv
-bGQyIHZlcnNpb24gdGhlIGZpcnN0IHR3byBpbnN0cnVjdGlvbnMNCmFyZSBpbmRlcGVuZGVudCAt
-IHNvIGNhbiBleGVjdXRlIGluIHBhcmFsbGVsIG9uIHNvbWUgY3B1Lg0KDQoJRGF2aWQNCg0KLQ0K
-UmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1p
-bHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVz
-KQ0K
+GSC Proxy component is used for communication between the
+Intel graphics driver and MEI driver.
+
+Daniele, please ack so that drm part can be merged via Greg's tree.
+
+V2:
+1. Add missing patch from the series
+2. Use device information instead of driver name
+   to identify the aggregate device.
+V3:
+1. Drop MAINTAINERS update
+2. Add gfx mailing list and maintanier
+
+
+Alexander Usyskin (2):
+  drm/i915/mtl: Define GSC Proxy component interface
+  mei: gsc_proxy: add gsc proxy driver
+
+ drivers/misc/mei/Kconfig                   |   2 +-
+ drivers/misc/mei/Makefile                  |   1 +
+ drivers/misc/mei/gsc_proxy/Kconfig         |  14 ++
+ drivers/misc/mei/gsc_proxy/Makefile        |   7 +
+ drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c | 208 +++++++++++++++++++++
+ include/drm/i915_component.h               |   3 +-
+ include/drm/i915_gsc_proxy_mei_interface.h |  36 ++++
+ 7 files changed, 269 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/misc/mei/gsc_proxy/Kconfig
+ create mode 100644 drivers/misc/mei/gsc_proxy/Makefile
+ create mode 100644 drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
+ create mode 100644 include/drm/i915_gsc_proxy_mei_interface.h
+
+-- 
+2.39.1
 
