@@ -2,82 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCAC68F2A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA9568F2A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:02:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjBHQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        id S230312AbjBHQCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBHQBS (ORCPT
+        with ESMTP id S229807AbjBHQCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:01:18 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C21A6A58
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:01:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1DaopZDdlwao209mQiW1EFcILq+SNU2i7Dq7AU/IXvY=; b=ABZad9E2tqcSahpgS49GerIChy
-        TjdG6srT8y6qMko0eIT6HOKkSbHg7y/Hp3zKJukjgwfft387vsFtUmmOVrPcYuQZicTzOvgtxI177
-        Sop4U663UuT+HF0PnkUOP+hTmBOqkwy0EfnDkPGZZTW7UkVf7LKssjqgf6Mb6UFZRaTzqnnBlFTBp
-        To2hDXS6o4cbMjmnYMGC/6goKqTSxiWya6ak+TltW+c94IszKu5Pl89jlVM4FUpT9zs5EGtUp1GGQ
-        gVaLKdpV8R57Sm9MrTvxoEXNHdaumZUP09fSyefshk+IRBkHbcErRISnzb61wS0MlndIq9Su/XTLr
-        y1CNSgJw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPmsX-00GB4B-MP; Wed, 08 Feb 2023 16:01:06 +0000
-Date:   Wed, 8 Feb 2023 08:01:01 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     hughd@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
-        p.raghav@samsung.com, dave@stgolabs.net, a.manzanares@samsung.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 2/2] shmem: add support to ignore swap
-Message-ID: <Y+PHPfiVS6EiTVl1@bombadil.infradead.org>
-References: <20230207025259.2522793-1-mcgrof@kernel.org>
- <20230207025259.2522793-3-mcgrof@kernel.org>
- <Y+HNL9RoP48tquGd@casper.infradead.org>
+        Wed, 8 Feb 2023 11:02:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50432BEF0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:02:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D1D3B81CDC
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 16:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60543C433EF;
+        Wed,  8 Feb 2023 16:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675872155;
+        bh=o0Ba0J+K3TeR4IycI4k6APl8pW+pR0JuMkeNS8uka64=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AOTDEfp0F8PB7Arihfhk/am8NxmNxPm8qPiM0P2aFJK5XFxp3uBvCZRnZx57B3aKY
+         YY6giOt1ES0SmwTKjHQsYozA3YTjVrD3y68lnEsQclSpV8T2FKYv5kzDCPP5t4B5k5
+         ZzYMKQyZoTXG8zYmPz6Nls73ZsNV+fxpTZYPOUlQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Subject: [PATCH v4] mtd: spi-nor: fix memory leak when using debugfs_lookup()
+Date:   Wed,  8 Feb 2023 17:02:30 +0100
+Message-Id: <20230208160230.2179905-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+HNL9RoP48tquGd@casper.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3500; i=gregkh@linuxfoundation.org; h=from:subject; bh=o0Ba0J+K3TeR4IycI4k6APl8pW+pR0JuMkeNS8uka64=; b=owGbwMvMwCRo6H6F97bub03G02pJDMmPj0+pP/3H5uiihxF/WHTUZa9Kb9vwnNfa7LfruQM56mXK mdnHO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiet8Y5vAdl+ft+HrpQf/q3VutbR ZPXH1kkTvDgp4M7RrrtUzn44Q1mSKnnXmcs/JGNAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 04:01:51AM +0000, Matthew Wilcox wrote:
-> On Mon, Feb 06, 2023 at 06:52:59PM -0800, Luis Chamberlain wrote:
-> > @@ -1334,11 +1336,15 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
-> >  	struct shmem_inode_info *info;
-> >  	struct address_space *mapping = folio->mapping;
-> >  	struct inode *inode = mapping->host;
-> > +	struct shmem_sb_info *sbinfo = SHMEM_SB(inode->i_sb);
-> >  	swp_entry_t swap;
-> >  	pgoff_t index;
-> >  
-> >  	BUG_ON(!folio_test_locked(folio));
-> >  
-> > +	if (wbc->for_reclaim && unlikely(sbinfo->noswap))
-> > +		return AOP_WRITEPAGE_ACTIVATE;
-> 
-> Not sure this is the best way to handle this.  We'll still incur the
-> oevrhead of tracking shmem pages on the LRU, only to fail to write them
-> out when the VM thinks we should get rid of them.  We'd be better off
-> not putting them on the LRU in the first place.
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  To solve this, remove the
+lookup and create the directory on the first device found, and then
+remove it when the module is unloaded.
 
-Ah, makes sense, so in effect then if we do that then on reclaim
-we should be able to even WARN_ON(sbinfo->noswap) assuming we did
-everthing right.
+Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+Cc: Pratyush Yadav <pratyush@kernel.org>
+Cc: Michael Walle <michael@walle.cc>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: linux-mtd@lists.infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+v4: reverse the teardown order when the module is unloaded to ensure
+    that the debugfs directory is still around when the device directory
+    is removed.
+v3: create the directory the first time it is used, and then remove it
+    if it is present when the module is unloaded.  More complex than v2,
+    but correct.
+v2: fix up to work when module is removed and added, making the fix
+    much simpler.
+ drivers/mtd/spi-nor/core.c    | 14 +++++++++++++-
+ drivers/mtd/spi-nor/core.h    |  2 ++
+ drivers/mtd/spi-nor/debugfs.c | 12 +++++++++---
+ 3 files changed, 24 insertions(+), 4 deletions(-)
 
-Hrm, we have invalidate_mapping_pages(mapping, 0, -1) but that seems a bit
-too late how about d_mark_dontcache() on shmem_get_inode() instead?
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index d67c926bca8b..1452ed6fe5d1 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -3335,7 +3335,19 @@ static struct spi_mem_driver spi_nor_driver = {
+ 	.remove = spi_nor_remove,
+ 	.shutdown = spi_nor_shutdown,
+ };
+-module_spi_mem_driver(spi_nor_driver);
++
++static int __init spi_nor_module_init(void)
++{
++	return spi_mem_driver_register(&spi_nor_driver);
++}
++module_init(spi_nor_module_init);
++
++static void __exit spi_nor_module_exit(void)
++{
++	spi_mem_driver_unregister(&spi_nor_driver);
++	spi_nor_debugfs_shutdown();
++}
++module_exit(spi_nor_module_exit);
+ 
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Huang Shijie <shijie8@gmail.com>");
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index f03b55cf7e6f..e62cd9964456 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -713,8 +713,10 @@ static inline struct spi_nor *mtd_to_spi_nor(struct mtd_info *mtd)
+ 
+ #ifdef CONFIG_DEBUG_FS
+ void spi_nor_debugfs_register(struct spi_nor *nor);
++void spi_nor_debugfs_shutdown(void);
+ #else
+ static inline void spi_nor_debugfs_register(struct spi_nor *nor) {}
++static inline void spi_nor_debugfs_shutdown(void) {}
+ #endif
+ 
+ #endif /* __LINUX_MTD_SPI_NOR_INTERNAL_H */
+diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
+index ff895f6758ea..cd9c2dc07509 100644
+--- a/drivers/mtd/spi-nor/debugfs.c
++++ b/drivers/mtd/spi-nor/debugfs.c
+@@ -226,13 +226,13 @@ static void spi_nor_debugfs_unregister(void *data)
+ 	nor->debugfs_root = NULL;
+ }
+ 
++static struct dentry *rootdir;
++
+ void spi_nor_debugfs_register(struct spi_nor *nor)
+ {
+-	struct dentry *rootdir, *d;
++	struct dentry *d;
+ 	int ret;
+ 
+-	/* Create rootdir once. Will never be deleted again. */
+-	rootdir = debugfs_lookup(SPI_NOR_DEBUGFS_ROOT, NULL);
+ 	if (!rootdir)
+ 		rootdir = debugfs_create_dir(SPI_NOR_DEBUGFS_ROOT, NULL);
+ 
+@@ -247,3 +247,9 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
+ 	debugfs_create_file("capabilities", 0444, d, nor,
+ 			    &spi_nor_capabilities_fops);
+ }
++
++void spi_nor_debugfs_shutdown(void)
++{
++	if (rootdir)
++		debugfs_remove(rootdir);
++}
+-- 
+2.39.1
 
-  Luis
