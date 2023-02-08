@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C593A68EC20
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4403768EC2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjBHJuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S230305AbjBHJwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:52:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjBHJuX (ORCPT
+        with ESMTP id S231140AbjBHJvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:50:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9CC10A95;
-        Wed,  8 Feb 2023 01:50:20 -0800 (PST)
+        Wed, 8 Feb 2023 04:51:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225753CE3B;
+        Wed,  8 Feb 2023 01:51:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03868615EA;
-        Wed,  8 Feb 2023 09:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5CEF6C4339B;
-        Wed,  8 Feb 2023 09:50:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A97EDB81D1A;
+        Wed,  8 Feb 2023 09:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4833C433D2;
+        Wed,  8 Feb 2023 09:51:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675849819;
-        bh=cLiPbOJ8zntt3fSqPa689jgruBIOeqFLTn5rcFwFJJA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=m+5QnJSzY7JbT+QW/JcxM0+Lkfwu9rZOkcKacMD02O5xiOKp+7sk56E4ur+Xyl/hd
-         ureYbVa+mQYqpcrgu2hYiaQP0C13hETs9JkE6TbwSj89XQrtM/3svD2IVjiZPXSpv3
-         ITT+0rT2Y7NStsbpueGxRzx3IfajFiEgeLOq4t70kIMM0+nTAkfcxO4daX7+0tqR5S
-         430/cpfUlPBJKmi/YNMFS7CjiV+mdUCd5kCeSNKrLnToCdwXGQqerbjKW/IaPJEcb7
-         VHrQwEA+r+ktr5VjFD1MS0ikzi3nUz47eIluGKfwKiBP7/R7p7D+PHQ4MTCQAhIW/X
-         bZL3ILqueUaQA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3EF27E4D032;
-        Wed,  8 Feb 2023 09:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1675849885;
+        bh=xE2QtHnNlY4p46ZdnYaxlkn6amrvbqwlWSdnNmpJ+Pk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FZl+W5DSpv4oPiT7JEccqxA+H6j7G50xyqSyHDub/Z0dz7a5WZCtRz48lF2pjzB19
+         zS4YIqLJF+/zY1NYAeiD+TAprcmklnwUUF4mc/HotKIlYBoVezBJxI8a4Fd1GnOIis
+         2uouv7czkXv/fUfI9lOTJpgYal6iAs5IqVCYXK35zjismd0R+0o+R75JzkWPHVFjxu
+         x+2HFgCQxInj76sPUefS1+nuPx2+qd5O9lurQZxAIC+dla1SMcmKedawMZoE97viIn
+         8gpNO9vlKAT5cTIEEIEet3lLi1ue8yRZBcK5Vmt9B/o004sUCpbuK1WHcvnf7AriNp
+         X/PQab/8HT8Og==
+Date:   Wed, 8 Feb 2023 11:51:12 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     songmuchun@bytedance.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        fam.zheng@bytedance.com, liangma@liangbit.com
+Subject: Re: [PATCH] docs: mm: Fix number of base pages for 1GB HugeTLB
+Message-ID: <Y+NwkCsDnOBSCqVu@kernel.org>
+References: <20230207114456.2304801-1-usama.arif@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net-next 00/15] taprio automatic queueMaxSDU and new TXQ
- selection procedure
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167584981925.2615.15266963787745673788.git-patchwork-notify@kernel.org>
-Date:   Wed, 08 Feb 2023 09:50:19 +0000
-References: <20230207135440.1482856-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230207135440.1482856-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        vinicius.gomes@intel.com, kurt@linutronix.de,
-        jacob.e.keller@intel.com, gerhard@engleder-embedded.com,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207114456.2304801-1-usama.arif@bytedance.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,57 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Tue,  7 Feb 2023 15:54:25 +0200 you wrote:
-> This patch set addresses 2 design limitations in the taprio software scheduler:
+On Tue, Feb 07, 2023 at 11:44:56AM +0000, Usama Arif wrote:
+> 1GB HugeTLB page consists of 262144 base pages.
 > 
-> 1. Software scheduling fundamentally prioritizes traffic incorrectly,
->    in a way which was inspired from Intel igb/igc drivers and does not
->    follow the inputs user space gives (traffic classes and TC to TXQ
->    mapping). Patch 05/15 handles this, 01/15 - 04/15 are preparations
->    for this work.
+> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
+> ---
+>  Documentation/mm/vmemmap_dedup.rst | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> [...]
+> diff --git a/Documentation/mm/vmemmap_dedup.rst b/Documentation/mm/vmemmap_dedup.rst
+> index a4b12ff906c4..689a6907c70b 100644
+> --- a/Documentation/mm/vmemmap_dedup.rst
+> +++ b/Documentation/mm/vmemmap_dedup.rst
+> @@ -1,3 +1,4 @@
+> +
+>  .. SPDX-License-Identifier: GPL-2.0
+>  
+>  =========================================
+> @@ -17,7 +18,7 @@ HugeTLB pages consist of multiple base page size pages and is supported by many
+>  architectures. See Documentation/admin-guide/mm/hugetlbpage.rst for more
+>  details. On the x86-64 architecture, HugeTLB pages of size 2MB and 1GB are
+>  currently supported. Since the base page size on x86 is 4KB, a 2MB HugeTLB page
+> -consists of 512 base pages and a 1GB HugeTLB page consists of 4096 base pages.
+> +consists of 512 base pages and a 1GB HugeTLB page consists of 262144 base pages.
+>  For each base page, there is a corresponding ``struct page``.
+>  
+>  Within the HugeTLB subsystem, only the first 4 ``struct page`` are used to
+> -- 
+> 2.25.1
+> 
 
-Here is the summary with links:
-  - [v2,net-next,01/15] net/sched: taprio: delete peek() implementation
-    https://git.kernel.org/netdev/net-next/c/ecc0cc98632a
-  - [v2,net-next,02/15] net/sched: taprio: continue with other TXQs if one dequeue() failed
-    https://git.kernel.org/netdev/net-next/c/1638bbbe4ece
-  - [v2,net-next,03/15] net/sched: taprio: refactor one skb dequeue from TXQ to separate function
-    https://git.kernel.org/netdev/net-next/c/92f966674f6a
-  - [v2,net-next,04/15] net/sched: taprio: avoid calling child->ops->dequeue(child) twice
-    https://git.kernel.org/netdev/net-next/c/4c22942734f0
-  - [v2,net-next,05/15] net/sched: taprio: give higher priority to higher TCs in software dequeue mode
-    https://git.kernel.org/netdev/net-next/c/2f530df76c8c
-  - [v2,net-next,06/15] net/sched: taprio: calculate tc gate durations
-    https://git.kernel.org/netdev/net-next/c/a306a90c8ffe
-  - [v2,net-next,07/15] net/sched: taprio: rename close_time to end_time
-    https://git.kernel.org/netdev/net-next/c/e5517551112f
-  - [v2,net-next,08/15] net/sched: taprio: calculate budgets per traffic class
-    https://git.kernel.org/netdev/net-next/c/d2ad689dec10
-  - [v2,net-next,09/15] net/sched: taprio: calculate guard band against actual TC gate close time
-    https://git.kernel.org/netdev/net-next/c/a1e6ad30fa19
-  - [v2,net-next,10/15] net/sched: make stab available before ops->init() call
-    https://git.kernel.org/netdev/net-next/c/1f62879e3632
-  - [v2,net-next,11/15] net/sched: taprio: warn about missing size table
-    https://git.kernel.org/netdev/net-next/c/a3d91b2c6f6b
-  - [v2,net-next,12/15] net/sched: keep the max_frm_len information inside struct sched_gate_list
-    https://git.kernel.org/netdev/net-next/c/a878fd46fe43
-  - [v2,net-next,13/15] net/sched: taprio: automatically calculate queueMaxSDU based on TC gate durations
-    https://git.kernel.org/netdev/net-next/c/fed87cc6718a
-  - [v2,net-next,14/15] net/sched: taprio: split segmentation logic from qdisc_enqueue()
-    https://git.kernel.org/netdev/net-next/c/2d5e8071c47a
-  - [v2,net-next,15/15] net/sched: taprio: don't segment unnecessarily
-    https://git.kernel.org/netdev/net-next/c/39b02d6d104a
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sincerely yours,
+Mike.
