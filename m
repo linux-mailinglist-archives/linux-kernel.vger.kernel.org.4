@@ -2,91 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D84368F791
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000B968F792
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjBHS6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S231396AbjBHS6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbjBHS6c (ORCPT
+        with ESMTP id S231389AbjBHS6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:58:32 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9F853E6C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:58:31 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b5so20411358plz.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:58:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3dkVne6QOQuiWRjarawnc2yDR1hi271zLDnK3/8Voi0=;
-        b=UVbJ9xsLJiIJd2F3wQr18Dc6vf1t1u0vmP2LeaC8EAJTD0YwmMSpbp2WHw1gHsoG/g
-         QYPN0EFStY/TgncavC3gzVnLZ0j3eANngoaJgpPhsPwgsUrShOB2ys3OL70zo3NnZmXZ
-         3X/VdPwZ/EQXItjYA62Vk5s5T/8eTlUE9hKnk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3dkVne6QOQuiWRjarawnc2yDR1hi271zLDnK3/8Voi0=;
-        b=BbjQkh7WbRtWWcXmuhzZjXN0qvboAC6iN1zfxkvhGaSJhEuvCIdlWqQiJ6A+o7NeTN
-         wPAUDdPWj2zRMhzQv7jjo+vw/FkztLVEzDsHsWo45SOMIl4TYWkbp4aPPaDuvb+v9Cs2
-         B4gA04CJL1j3K9k7djBSNd9K/+X8t2f2JZlfkbEAsG5+h8yNIu5EpKHf+KLy6j4G/L4R
-         4ZVt77E1JL8OwBiKLueT3n8O7lAS10+mQqUbSwtdF1W6oAvIk0gIiGzq8TaYljiNeLJy
-         NBLbyTRRdZv5xk3MZi/gaWAgZFKIpWQgl8sijKYNtOADetxkIatvc515xvvs7O+0tw/Q
-         FnHA==
-X-Gm-Message-State: AO0yUKVOdbMLh0Cf5/hmGa3H6+Pr38c81WHQWihsvT2IWg+b6qyVXTHP
-        r8b0+KVdH6hJOjhvGCxEtdWtYw==
-X-Google-Smtp-Source: AK7set+W13zod//i71uQI6lj/ZQHRIZUB6Bc0TJ8c+Ig+pIur65SH1HtUzuX+65B2W8SuYAFLnoWGQ==
-X-Received: by 2002:a17:90b:384c:b0:22c:2d76:2713 with SMTP id nl12-20020a17090b384c00b0022c2d762713mr9884383pjb.32.1675882710714;
-        Wed, 08 Feb 2023 10:58:30 -0800 (PST)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x3-20020a17090a1f8300b00230e733599esm1850623pja.48.2023.02.08.10.58.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 10:58:30 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-hardening@vger.kernel.org, ebiggers@kernel.org
-Cc:     Kees Cook <keescook@chromium.org>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        morbo@google.com
-Subject: Re: [PATCH] randstruct: disable Clang 15 support
-Date:   Wed,  8 Feb 2023 10:58:21 -0800
-Message-Id: <167588270061.464935.14207013093507497315.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230208065133.220589-1-ebiggers@kernel.org>
-References: <20230208065133.220589-1-ebiggers@kernel.org>
+        Wed, 8 Feb 2023 13:58:49 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3111753E69
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:58:46 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675882724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2yKFS6Viy3139DIakekRtaZzazTkVRNSfEL5rzxk7wM=;
+        b=Y03ESYUTYTvqCIzspqG1sCHXCEzog2RlUmNTD95gAb3aiZd7mz55vyLlMIc0kJTdAvcbYN
+        qusK9RAkCEbFiqoL/N956d+1ih+j76bLBrnF1qHxdJexj6vu1p38ZITH8A9DtZaLEJTj01
+        Hw8c4lvuu+Kk8EQJGHSUSq6k7nZUtwUWltxcTH0910G113TwNMrCQx+VpngdhyFsXpTxOY
+        4gdFIcZ9YRU9FwM+E6WGX27ld4ARuQuMEjpGQJcFL3cTnf7YN/Hmb/yQzWjYywQddWy6cu
+        uC7Bevzzg5lOTeamiEaFwZ0mC+SGwaPULnYF40SntqWqiMsp5xHuw4GK8LQIMw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675882724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2yKFS6Viy3139DIakekRtaZzazTkVRNSfEL5rzxk7wM=;
+        b=0tJeQJ3ELSqqGR84rPFjtU9+1ryxiKFqPXF4Phr2uyWkczPPRe+RuaQrX3BHklfovaIP//
+        AqTL772knETftgCQ==
+To:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe de Dinechin <dinechin@redhat.com>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Carlos Bilbao <carlos.bilbao@amd.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+In-Reply-To: <Y+Pjv8CeDiLRxqP/@work-vm>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <658272b5-9547-a69f-b6c9-a7ff2dd2d468@amd.com>
+ <Y+HpmIesY96cYcWQ@kroah.com>
+ <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com> <Y+MAPHZNLeBY13Pj@mit.edu>
+ <20230208041913-mutt-send-email-mst@kernel.org>
+ <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y+OAZTljX1I6ZvR/@kroah.com> <m2edr03xh4.fsf@redhat.com>
+ <Y+Pb4Ood56Wxn4sj@kroah.com> <Y+Pjv8CeDiLRxqP/@work-vm>
+Date:   Wed, 08 Feb 2023 19:58:43 +0100
+Message-ID: <87bkm42dcs.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023 22:51:33 -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> The randstruct support released in Clang 15 is unsafe to use due to a
-> bug that can cause miscompilations: "-frandomize-layout-seed
-> inconsistently randomizes all-function-pointers structs"
-> (https://github.com/llvm/llvm-project/issues/60349).  It has been fixed
-> on the Clang 16 release branch, so add a Clang version check.
-> 
-> [...]
+On Wed, Feb 08 2023 at 18:02, David Alan Gilbert wrote:
+> * Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+>> Anyway, you all are just spinning in circles now.  I'll just mute this
+>> thread until I see an actual code change as it seems to be full of
+>> people not actually sending anything we can actually do anything with.
 
-Applied to for-next/hardening, thanks!
+There have been random patchs posted which finally caused this
+discussion to start. Wrong order obviously :)
 
-[1/1] randstruct: disable Clang 15 support
-      https://git.kernel.org/kees/c/7ee3819f2ba9
+> I think the challenge will be to come up with non-intrusive, minimal
+> changes;  obviously you don't want stuff shutgunned everywhere.
 
--- 
-Kees Cook
+That has been tried by doing random surgery, e.g. caching some
+particular PCI config value. While that might not look intrusive on the
+first glance, these kind of punctual changes are the begin of a whack a
+mole game and will end up in an uncoordinated maze of tiny mitigations
+which make the code harder to maintain.
+
+The real challenge is to come up with threat classes and mechanisms
+which squash the whole class. Done right, e.g. caching a range of config
+space values (or all of it) might give a benefit even for the bare metal
+or general virtualization case.
+
+That's quite some work, but its much more palatable than a trickle of
+"fixes" when yet another source of trouble has been detected by a tool
+or human inspection.
+
+It's also more future proof because with the current approach of
+scratching the itch of the day the probability that the just "mitigated"
+issue comes back due to unrelated changes is very close to 100%.
+
+It's not any different than any other threat class problem.
+
+Thanks,
+
+        tglx
+
 
