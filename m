@@ -2,154 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161D868F62C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BB568F5D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjBHRyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33346 "EHLO
+        id S231646AbjBHRnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:43:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjBHRyl (ORCPT
+        with ESMTP id S231706AbjBHRnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:54:41 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE3086AD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:54:40 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id b16so12498050ljr.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:54:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BpljMohL8GLL9JNNZm5TNh7NQliOwfqEEgvKA1M8vPA=;
-        b=iSJy452+yQNDkj/XRpSJtdvrqV4Nc9SHmDUlIPEMcI7FsTBkg180jQi1F8xp6YW1iB
-         x+n5zVe4ua33Iptv3+3hIXXVPzCDMsaE+aiY5ZioYXS2QK7YcFrDLdAp2jdyqNCNAiuB
-         jOEvyRlDxjvya+Oe6QZshDBs21k3QFl/D0kQ9C/WADLHUUR3m08hnMM5D5Fh2ivALyk/
-         MfyowyYvxCwIcJkZ8wjZ8+6pip+4HEgfvld60+W6Z8mMTEGB2wvoc+UcpG17rGgizxEB
-         3jdEH391M/2wSjYcYiPL4nNwuw3AUeWO4FlI+ZrKLIUg3rr1b9AQb/hWfziar7N1D7kJ
-         2C5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BpljMohL8GLL9JNNZm5TNh7NQliOwfqEEgvKA1M8vPA=;
-        b=2JOlJehuswqj0ZX79muy0/tJjnc2cFAvlx8SYEwLZt0MdFy+W84MUZnjwvFA3MnNie
-         zQvMVVhdPmhxC/2E0fylfS9wj92VaBljRgFSXbnqhsK9W/R5/kVKQ6VWKSbq6Fl6RRt2
-         M1r9yRFWIRBIf536R9t9KbiJUrPX7vW5mpZ41KCXEiN6PghKqSiYtO6Q+idugal+l41f
-         Gw0wycfJvqRf/p3TklqQWdAijcc3fanxHsmcGR1nHn2ewrLTyWJBByr3qt3hyi9Ob+mI
-         FYYp9Ao+pq4n/FAa1ea+DiJCOCduaBOZl1dlUdmgifGhfDWMjsm3MshtRgMZXNeR1HNv
-         mjVQ==
-X-Gm-Message-State: AO0yUKXKZNk9IC/sqw4f2dKu5ZBpHOPoaiWFs0a0z3/t5SgWu7og7inf
-        tIuPBlKNQr8+qul7RohmbUecVVu0kTxqZua6
-X-Google-Smtp-Source: AK7set/lK0dtz8rcHRt03yyNK2Vwc1Fz232Sf6dsRanegcNrGJ8x6yT7AAkYHUf260eQ8ib742Kj5Q==
-X-Received: by 2002:adf:f212:0:b0:2c3:dbe0:58ea with SMTP id p18-20020adff212000000b002c3dbe058eamr8107790wro.47.1675877957261;
-        Wed, 08 Feb 2023 09:39:17 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u10-20020adfdb8a000000b002bfb0c5527esm14273251wri.109.2023.02.08.09.39.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 09:39:16 -0800 (PST)
-Message-ID: <30234963-33e5-e2d7-a6ef-112e89efbdd0@linaro.org>
-Date:   Wed, 8 Feb 2023 18:39:12 +0100
+        Wed, 8 Feb 2023 12:43:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F67C53E6F;
+        Wed,  8 Feb 2023 09:40:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81143B81F1A;
+        Wed,  8 Feb 2023 17:39:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA14C433D2;
+        Wed,  8 Feb 2023 17:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675877964;
+        bh=x5D1v44TfkTZciEELrTCn8yNDssP2aPN4STf6+woJyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pv8mKkINDyj/chcSgHIZlUO4ObbGI4WTK246iYw9iK26fsgDNjM8h1maTrcJ9x5Yg
+         Lu55Uq5KROrkqnwn8ajpGyFnd3R2svQZ7XQ3bWP0p3CCnV5UHR5RZ8nbr3XP0Sc0ow
+         HO5bIdkJwNv+Jn0g8xtMztQ+vwciElnBklLJhESI29/5uO4akyVkJNUPkEDdUdyNcQ
+         1izDB6nqrZDiKgbX1bAIKFEvkK+6/2t7UpI65+GoRPyMFBH2mW42Dc/nN/Ajwu+N0J
+         0f5/4TmDaQcSOPCnbOKoXpWhvfYqvEdtlixy4IbjEXbTMysDimgu2nmjbJ7b7MxAD1
+         AHeEoPdbqn/DA==
+Date:   Wed, 8 Feb 2023 17:39:19 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <patches@opensource.cirrus.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: dt-bindings: wlf,wm8994: Convert to dtschema
+Message-ID: <Y+PeR4EFfcVDbUfV@sirena.org.uk>
+References: <20230208172552.404324-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 02/18] ARM: s3c24xx: Use the right include
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Michael Walle <michael@walle.cc>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-arch@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Russell King <linux@armlinux.org.uk>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-References: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com>
- <20230208173343.37582-3-andriy.shevchenko@linux.intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230208173343.37582-3-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="LbXOcrSJthApyg7e"
+Content-Disposition: inline
+In-Reply-To: <20230208172552.404324-1-krzysztof.kozlowski@linaro.org>
+X-Cookie: Walk softly and carry a megawatt laser.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 18:33, Andy Shevchenko wrote:
-> From: Linus Walleij <linus.walleij@linaro.org>
-> 
-> The file s3c64xx.c is including <linux/gpio.h> despite using no
-> symbols from the file, however it needs it to implicitly bring in
-> of_have_populated_dt() so include <linux/of.h> explicitly instead.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  arch/arm/mach-s3c/s3c64xx.c | 2 +-
 
-It's not s3c24xx anymore, so subject prefix:
-ARM: s3c64xx:
+--LbXOcrSJthApyg7e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Wed, Feb 08, 2023 at 06:25:52PM +0100, Krzysztof Kozlowski wrote:
+> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
+> schema.
 
-Best regards,
-Krzysztof
+> Changes against original binding:
+> 1. Add missing LDO1VDD-supply for WM1811.
 
+Both LDOs are present on all variants.
+
+> 2. Use "gpios" suffix for wlf,ldo1ena and wlf,ldo2ena (Linux kernel's
+>    gpiolib already looks for both variants).
+> 3. Do not require AVDD1-supply and DCVDD-supply, because at least on
+>    Arndale board with Exynos5250 these are grounded.
+
+Are you *sure* they are grounded and not supplied from the LDOs?
+
+--LbXOcrSJthApyg7e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPj3kYACgkQJNaLcl1U
+h9DxOwf+KNudxKFl1rIurGb3jgncHVqN9TlkDoZh7sfauE0He0PsMCtH07bpt28N
+Okf/Wf+7r/oY0OvigxxprrYGaVO4QlVZqTFocS5VSFse97Vl3vXIlFv7ZZ563qmB
+FK15zIm/k/I5XjzZMfQnkB4p/2qAVYTld+CA9/KW5zymhuw12sF3uv/N33YlejRD
+v10mWtG9k2oRTxCXmb+q3qZPcxNK5v19Tli9cykxjm4H9Da/QoJsSW2C2KFJjies
+3MJm9uu0mAheXuHBmftvsaEL0NRuWnvDE53PjNDPfxs1KrdBE0l8sJZYIPoNq+An
+5CfKLqo34KKLXEz7IRELHR7nX0OO2A==
+=gqSy
+-----END PGP SIGNATURE-----
+
+--LbXOcrSJthApyg7e--
