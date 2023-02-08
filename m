@@ -2,43 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2354668EA79
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:06:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F5668EA86
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjBHJG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:06:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S230451AbjBHJI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBHJGV (ORCPT
+        with ESMTP id S229632AbjBHJIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:06:21 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122031CAF9;
-        Wed,  8 Feb 2023 01:06:18 -0800 (PST)
-Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PBYs03BbRzJqyM;
-        Wed,  8 Feb 2023 17:01:40 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 8 Feb 2023 17:06:16 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>,
-        <wanghai38@huawei.com>
-Subject: [PATCH] tracing/ring-buffer: Remove integrity check at end of iter read
-Date:   Wed, 8 Feb 2023 17:08:14 +0800
-Message-ID: <20230208090814.869242-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Feb 2023 04:08:25 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF513AB0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:08:23 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so923527wma.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 01:08:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kg1370fRBchS4WrEOTujrg8ris+XQj/VhMGMuCTcwW8=;
+        b=pPQG+jDQYHZ95sDMn/BcNeoc1ETpv/ZRHt41VzKrZwWvI7hBAjuNkrDzXiVbLRKKbs
+         QXM8f4KBh/HZ3ORPNHXykrU7c/Jo3l6294t/5no1dy8N03B4KT/IS2HbstiPnx8fQbco
+         cT+KPaRIVbz1963QZz+ySyXNwiS2edQnbDe4WrL7RU5ryGTlYMVrzTt8qKOwnSOIOiJS
+         2Ui68DXdPUxstsPIxnvbMRq9vWJAA7cg66/tbuRs2qpQ0mJma5FCCtaD1gM8YvxyH1uX
+         k/hsjyeYowvvXbX613hBICmfcCU5ChtGkwOUV6ZaArv7AWzDBFpGMIL1W8ASg6MEuWdF
+         b+Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kg1370fRBchS4WrEOTujrg8ris+XQj/VhMGMuCTcwW8=;
+        b=JpZAM17rh7JjfROeKDn0G5otIr91sWCJMiI0bIAE3Y7KrdDfwuHvEt6OKD/abeng5I
+         ajUGPCbw2I1C1Bhz+QVOmoap7toMO+Tg5E18tZGhKtchRx0HRzYLwNvM1Funi4eO9hcA
+         69t2utUvKEOm9X4zlkoCFwPn3YslXgGKvIzt69hxWSs3TtUAiQuUFbEbj2r47OWlrdOY
+         wlZpLXMv3Qrg7lKHB+9kzb0GV+P12HZuYvykQQ9JZ5JaP01Rs97NNQI3njAYlnOMyDwK
+         hcApHHHRmhlvg6bRneN2WTGLu1UJpwQen+sU9wXAQRN5i4AU/7lCFhNf0pG2BReZkr5r
+         ur3g==
+X-Gm-Message-State: AO0yUKW/VBTELugEqpQQoF+E0mSs0D/tKyZ9Ve3+lmMcrmOy0Hc9U3mU
+        zDP98EshjnnhXNyhTuVFBGTZoA==
+X-Google-Smtp-Source: AK7set+AYnvRmL1dv14cgDGjUaKdaMYNStm6sTBm7TRXSEltSyQkAfWzIzwnarIGtooSsIpK3r9j1w==
+X-Received: by 2002:a05:600c:601a:b0:3dc:42e7:f626 with SMTP id az26-20020a05600c601a00b003dc42e7f626mr5851274wmb.26.1675847302371;
+        Wed, 08 Feb 2023 01:08:22 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:fea4:bc29:4ea9:97a? ([2a01:e0a:982:cbb0:fea4:bc29:4ea9:97a])
+        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b003dcc82ce53fsm1317774wmq.38.2023.02.08.01.08.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 01:08:21 -0800 (PST)
+Message-ID: <0f16d63f-3bb0-54aa-bcb4-4c666d4b2846@linaro.org>
+Date:   Wed, 8 Feb 2023 10:08:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] dt-bindings: dma: qcom,bam-dma: add optional memory
+ interconnect properties
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230207-topic-sm8550-upstream-bam-dma-bindings-fix-v1-1-57dba71e8727@linaro.org>
+ <a188a52e-6327-f0ea-a54e-a23b88bca82f@linaro.org>
+ <a8112f61-f8d3-c1e0-9549-a9036a7e7894@linaro.org>
+ <88c31e71-55b6-a20d-1fcf-07804eace54b@linaro.org>
+ <eda179e1-4cd1-0d1b-4e27-2fe92e959cf2@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <eda179e1-4cd1-0d1b-4e27-2fe92e959cf2@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,122 +89,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Concurrently closing "trace" file and writing into ring buffer [1] can
-cause WARNINGs [2]. It has been reported in
-Link: https://lore.kernel.org/all/20230203035608.2336906-1-zhengyejian1@huawei.com/
+On 08/02/2023 10:03, Krzysztof Kozlowski wrote:
+> On 07/02/2023 16:27, Dmitry Baryshkov wrote:
+>> On 07/02/2023 15:35, Neil Armstrong wrote:
+>>> On 07/02/2023 11:32, Dmitry Baryshkov wrote:
+>>>> On 07/02/2023 12:03, Neil Armstrong wrote:
+>>>>> Recents SoCs like the SM8450 or SM8550 requires memory interconnect
+>>>>> in order to have functional DMA.
+>>>>>
+>>>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>>>> ---
+>>>>>    Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 6 ++++++
+>>>>>    1 file changed, 6 insertions(+)
+>>>>
+>>>> I suspect this will not work without a change for a driver.
+>>>>
+>>>
+>>> I had the impression single interconnect entries would be taken in account
+>>> by the platform core, but it doesn't seem to be the case, anyway I can;t
+>>> find
+>>> any code doing that.
+>>
+>> Probably you mixed interconnects and power-domains here.
+>>
+> 
+> The driver change was submitted some time ago:
+> https://lore.kernel.org/all/20210505213731.538612-10-bhupesh.sharma@linaro.org/
+> 
+> There is already DTS user of it and we expect driver to be resubmitted
+> at some point.
+> 
+> What I don't really get is that crypto driver sets bandwidth for
+> interconnects, not the BAM. Why BAM needs interconnect? Usually you do
+> not need to initialize some middle paths. Getting the final interconnect
+> path (e.g. crypto-memory) is enough, because it includes everything in
+> between.
 
-It seems a data race between ring_buffer writing and integrity check.
-That is, RB_FLAG of head_page is been updating, while at same time RB_FLAG
-was cleared when doing integrity check:
-  rb_check_pages()            rb_handle_head_page():
-  --------                    --------
-  rb_head_page_deactivate()
-                              rb_head_page_set_normal()
-  rb_head_page_activate()
+Indeed the interconnect on BAM may be redundant since QCE sets the BW,
+I'll investigate to understand if it's also necessary on BAM.
 
-Integrity check at end of iter read was added since commit 659f451ff213
-("ring-buffer: Add integrity check at end of iter read"). As it's commit
-message said:
-  > As reading via an iterator requires disabling the ring buffer, it
-  > is a perfect place to have it.
-However, since commit 1039221cc278 ("ring-buffer: Do not disable recording
-when there is an iterator"), ring buffer was not disabled at that place,
-so that integrity check should be removed.
+Neil
 
-1:
-``` read_trace.sh
-  while true;
-  do
-    # the "trace" file is closed after read
-    head -1 /sys/kernel/tracing/trace > /dev/null
-  done
-```
-``` repro.sh
-  sysctl -w kernel.panic_on_warn=1
-  # function tracer will writing enough data into ring_buffer
-  echo function > /sys/kernel/tracing/current_tracer
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-  ./read_trace.sh &
-```
-
-2:
-------------[ cut here ]------------
-WARNING: CPU: 9 PID: 62 at kernel/trace/ring_buffer.c:2653
-rb_move_tail+0x450/0x470
-Modules linked in:
-CPU: 9 PID: 62 Comm: ksoftirqd/9 Tainted: G        W          6.2.0-rc6+
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-RIP: 0010:rb_move_tail+0x450/0x470
-Code: ff ff 4c 89 c8 f0 4d 0f b1 02 48 89 c2 48 83 e2 fc 49 39 d0 75 24
-83 e0 03 83 f8 02 0f 84 e1 fb ff ff 48 8b 57 10 f0 ff 42 08 <0f> 0b 83
-f8 02 0f 84 ce fb ff ff e9 db
-RSP: 0018:ffffb5564089bd00 EFLAGS: 00000203
-RAX: 0000000000000000 RBX: ffff9db385a2bf81 RCX: ffffb5564089bd18
-RDX: ffff9db281110100 RSI: 0000000000000fe4 RDI: ffff9db380145400
-RBP: ffff9db385a2bf80 R08: ffff9db385a2bfc0 R09: ffff9db385a2bfc2
-R10: ffff9db385a6c000 R11: ffff9db385a2bf80 R12: 0000000000000000
-R13: 00000000000003e8 R14: ffff9db281110100 R15: ffffffffbb006108
-FS:  0000000000000000(0000) GS:ffff9db3bdcc0000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005602323024c8 CR3: 0000000022e0c000 CR4: 00000000000006e0
-Call Trace:
- <TASK>
- ring_buffer_lock_reserve+0x136/0x360
- ? __do_softirq+0x287/0x2df
- ? __pfx_rcu_softirq_qs+0x10/0x10
- trace_function+0x21/0x110
- ? __pfx_rcu_softirq_qs+0x10/0x10
- ? __do_softirq+0x287/0x2df
- function_trace_call+0xf6/0x120
- 0xffffffffc038f097
- ? rcu_softirq_qs+0x5/0x140
- rcu_softirq_qs+0x5/0x140
- __do_softirq+0x287/0x2df
- run_ksoftirqd+0x2a/0x30
- smpboot_thread_fn+0x188/0x220
- ? __pfx_smpboot_thread_fn+0x10/0x10
- kthread+0xe7/0x110
- ? __pfx_kthread+0x10/0x10
- ret_from_fork+0x2c/0x50
- </TASK>
----[ end trace 0000000000000000 ]---
-
-Fixes: 1039221cc278 ("ring-buffer: Do not disable recording when there is an iterator")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- kernel/trace/ring_buffer.c | 11 -----------
- 1 file changed, 11 deletions(-)
-
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index c366a0a9ddba..34e955bd1e59 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -5203,17 +5203,6 @@ void
- ring_buffer_read_finish(struct ring_buffer_iter *iter)
- {
- 	struct ring_buffer_per_cpu *cpu_buffer = iter->cpu_buffer;
--	unsigned long flags;
--
--	/*
--	 * Ring buffer is disabled from recording, here's a good place
--	 * to check the integrity of the ring buffer.
--	 * Must prevent readers from trying to read, as the check
--	 * clears the HEAD page and readers require it.
--	 */
--	raw_spin_lock_irqsave(&cpu_buffer->reader_lock, flags);
--	rb_check_pages(cpu_buffer);
--	raw_spin_unlock_irqrestore(&cpu_buffer->reader_lock, flags);
- 
- 	atomic_dec(&cpu_buffer->resize_disabled);
- 	kfree(iter->event);
--- 
-2.25.1
+> 
+> Maybe my review tag was a bit premature...
+> 
+> Best regards,
+> Krzysztof
+> 
 
