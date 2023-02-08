@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6815F68F987
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 22:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E6E68F988
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 22:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231872AbjBHVNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 16:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S231874AbjBHVNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 16:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjBHVNY (ORCPT
+        with ESMTP id S231158AbjBHVNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 16:13:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9315630B04
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 13:12:41 -0800 (PST)
+        Wed, 8 Feb 2023 16:13:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DC630E9C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 13:12:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675890760;
+        s=mimecast20190719; t=1675890765;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=pyB2eX4BrxplsV/cU4fgKDTd3hh497IDhiUSXuPJBb8=;
-        b=Ugj6qnVLa+IipSd36ANBCW2XgNIORtB+n+0VfHI4197zdlI1Rg9rXgwssrfDjqPTT/YHvQ
-        vMpWnFeNnL0rKvfYBU35TVADVopwiEJ0MsWcQO3W7HvTwAZXyCCkbUOvbF7mmNVkBKmyrQ
-        oEdGKtdRUZHtAvXTf4TPruBLW3NG2CE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=NERecKdHLUqwMZWLwJADWmbTJLbslnFnPSfMbqlvP3U=;
+        b=UePe9jeuleEU13xO8pLyOB0TvKEjaZXL5FcaG2tL0PFzS6rDSowyuwcxnfTa0grFF2XX5A
+        PeckehzsxVQu9DHi3IUdvInkkLC4OJxhrADselCuXc6Ke4YN9OhjCUS7TcdTjaqmalwQcg
+        3sMPR9LJJfUUpH0XimlQhD/P7IJzt1A=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-460-UuMKYDssMVGdqKWtgVT25g-1; Wed, 08 Feb 2023 16:12:39 -0500
-X-MC-Unique: UuMKYDssMVGdqKWtgVT25g-1
-Received: by mail-wm1-f71.google.com with SMTP id n4-20020a05600c3b8400b003dfe223de49so1743231wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 13:12:39 -0800 (PST)
+ us-mta-201-8F-1UlcFMu6oaa2V0_A1LQ-1; Wed, 08 Feb 2023 16:12:43 -0500
+X-MC-Unique: 8F-1UlcFMu6oaa2V0_A1LQ-1
+Received: by mail-wr1-f70.google.com with SMTP id e9-20020a5d6d09000000b002c172f173a9so3268984wrq.17
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 13:12:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pyB2eX4BrxplsV/cU4fgKDTd3hh497IDhiUSXuPJBb8=;
-        b=FDY1sz/WRDvGck50seO46AsRqY7OBgxN2dEbNCFk+NTcQ84ppAPeSVyP5Pvg3g/R3u
-         UQ51YjTBwf48T2K42EGb2YlsmvrEHBcp9GdmyLWgV0efPiRyhTNmrwpFCh1IQJVbVfyy
-         z1oQZtPTAFFkzhgFdgIKxcwOVWQYkTPM7h/uSBR2Q1vMT+ozlGpNLRI5+WNyrAxS0KVg
-         yxpYMV5RCNP0FEh6SnSkr5pu2j/ecZ2NVG8WHDkXN+HuVXbUEWvB63PBs03WDB2noLYC
-         xnNpHZtHF0VbE2YNTnD6uA2KEH7LOtQmasKpKEODA3s8dG8rSvBSoPtP5w7mrX0dIaMG
-         T4Yg==
-X-Gm-Message-State: AO0yUKU3R8DPYA9hhp3z0u2hxgkABk4fE7ESTPKQe56A7hpUvdP0wBou
-        RxDYxVz4J1fQ+kQzrW27YhEOuYKlbxUdMkCyxV8v+0qgRrPe+ra78MZT625o7bXqDmNthLbo/rO
-        uU7PZhG8iR9RdHKJb9FovLot6
-X-Received: by 2002:adf:e607:0:b0:2c4:5de:2d3e with SMTP id p7-20020adfe607000000b002c405de2d3emr1747033wrm.41.1675890757388;
-        Wed, 08 Feb 2023 13:12:37 -0800 (PST)
-X-Google-Smtp-Source: AK7set838VaFDlxa9uadyGE5Hk1bmbh3K276tSM5JtsHQY0vUmJXrZ16/41fZCphaQYDSIClM32nOA==
-X-Received: by 2002:adf:e607:0:b0:2c4:5de:2d3e with SMTP id p7-20020adfe607000000b002c405de2d3emr1747022wrm.41.1675890757189;
-        Wed, 08 Feb 2023 13:12:37 -0800 (PST)
+        bh=NERecKdHLUqwMZWLwJADWmbTJLbslnFnPSfMbqlvP3U=;
+        b=x5+s/XiAImCOLkxReoumqV5hbMatTNz9KsmBzWfwMfsqNBVee+8SSgCpu9Pyzins7P
+         D09VWndXYDpsNxCJ/LxmZFpo8tPmymD8HjsD0uH83+DnAGoNRikSNVXvohoCY6WJ+Pev
+         D7v1kb5329vF6WClSfHaA4la3kl1S1ffJj8WY/IzdSBlLXjm92qZZVuSs9+tVn178bcB
+         zkqknH0r0vXpMN18GfT+CNMto8QOpxBbh/DsIERrUMZJi5GNmg8tkZBLi/L/NHzHsLbf
+         LU3FQmXj4bVfy0f9nQCjzcxgLJYrhZlUwdtto3Ar8uiF1CoScuKe3gRHSo5MI6c2DzKm
+         JsbQ==
+X-Gm-Message-State: AO0yUKXxK5deWuo1wi2zdKXFcSnGo21yw01XYv6m2UVSyZv/fRWprxLL
+        09LW4ZduCFuDmsGvsp9w5a+O1cRfFJd97Rp5X+eEwvYT1zyvbYbZ/PJe5JbCpmagwuGJZoU4XbV
+        Qx0mAtEGDnpPUc00xe4oaT6ru
+X-Received: by 2002:a05:6000:1d1:b0:2c3:ba99:44bc with SMTP id t17-20020a05600001d100b002c3ba9944bcmr8345841wrx.68.1675890762534;
+        Wed, 08 Feb 2023 13:12:42 -0800 (PST)
+X-Google-Smtp-Source: AK7set9hJ/RtQuMOQNR+s++VE21Jk7JmDAqkt+dsnQdLd0krrCQM6jyPXo7PC5NSAGcU94PVU+QKKw==
+X-Received: by 2002:a05:6000:1d1:b0:2c3:ba99:44bc with SMTP id t17-20020a05600001d100b002c3ba9944bcmr8345830wrx.68.1675890762340;
+        Wed, 08 Feb 2023 13:12:42 -0800 (PST)
 Received: from redhat.com ([2.52.132.212])
-        by smtp.gmail.com with ESMTPSA id y5-20020adfee05000000b002c3f6d7d5fesm4398119wrn.44.2023.02.08.13.12.32
+        by smtp.gmail.com with ESMTPSA id c12-20020a5d4ccc000000b002bddac15b3dsm14220412wrt.33.2023.02.08.13.12.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 13:12:36 -0800 (PST)
-Date:   Wed, 8 Feb 2023 16:12:31 -0500
+        Wed, 08 Feb 2023 13:12:41 -0800 (PST)
+Date:   Wed, 8 Feb 2023 16:12:37 -0500
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     qemu-devel@nongnu.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
@@ -70,11 +70,11 @@ Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
         Eric Biggers <ebiggers@kernel.org>,
-        Eduardo Habkost <eduardo@habkost.net>,
-        Marcel Apfelbaum <marcel.apfelbaum@gmail.com>
-Subject: [PATCH RFC 2/7] Revert "x86: do not re-randomize RNG seed on
- snapshot load"
-Message-ID: <20230208211212.41951-3-mst@redhat.com>
+        Marcel Apfelbaum <marcel.apfelbaum@gmail.com>,
+        Eduardo Habkost <eduardo@habkost.net>
+Subject: [PATCH RFC 3/7] Revert "x86: re-initialize RNG seed when selecting
+ kernel"
+Message-ID: <20230208211212.41951-4-mst@redhat.com>
 References: <20230208211212.41951-1-mst@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -92,27 +92,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 14b29fea742034186403914b4d013d0e83f19e78.
+This reverts commit cc63374a5a7c240b7d3be734ef589dabbefc7527.
 
+Fixes: cc63374a5a ("x86: re-initialize RNG seed when selecting kernel")
 Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Fixes: 14b29fea74 ("x86: do not re-randomize RNG seed on snapshot load")
 ---
- hw/i386/x86.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ hw/i386/x86.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/hw/i386/x86.c b/hw/i386/x86.c
-index 78cc131926..7984f65352 100644
+index 7984f65352..e1a5f244a9 100644
 --- a/hw/i386/x86.c
 +++ b/hw/i386/x86.c
-@@ -1115,7 +1115,7 @@ void x86_load_linux(X86MachineState *x86ms,
-         setup_data->type = cpu_to_le32(SETUP_RNG_SEED);
+@@ -1116,14 +1116,11 @@ void x86_load_linux(X86MachineState *x86ms,
          setup_data->len = cpu_to_le32(RNG_SEED_LENGTH);
          qemu_guest_getrandom_nofail(setup_data->data, RNG_SEED_LENGTH);
--        qemu_register_reset_nosnapshotload(reset_rng_seed, setup_data);
-+        qemu_register_reset(reset_rng_seed, setup_data);
-         fw_cfg_add_bytes_callback(fw_cfg, FW_CFG_KERNEL_DATA, reset_rng_seed, NULL,
-                                   setup_data, kernel, kernel_size, true);
-     } else {
+         qemu_register_reset(reset_rng_seed, setup_data);
+-        fw_cfg_add_bytes_callback(fw_cfg, FW_CFG_KERNEL_DATA, reset_rng_seed, NULL,
+-                                  setup_data, kernel, kernel_size, true);
+-    } else {
+-        fw_cfg_add_bytes(fw_cfg, FW_CFG_KERNEL_DATA, kernel, kernel_size);
+     }
+ 
+     fw_cfg_add_i32(fw_cfg, FW_CFG_KERNEL_ADDR, prot_addr);
+     fw_cfg_add_i32(fw_cfg, FW_CFG_KERNEL_SIZE, kernel_size);
++    fw_cfg_add_bytes(fw_cfg, FW_CFG_KERNEL_DATA, kernel, kernel_size);
+     sev_load_ctx.kernel_data = (char *)kernel;
+     sev_load_ctx.kernel_size = kernel_size;
+ 
 -- 
 MST
 
