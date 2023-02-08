@@ -2,97 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56F768E959
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D8268E95B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:54:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjBHHwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S230171AbjBHHya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:54:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBHHwq (ORCPT
+        with ESMTP id S229500AbjBHHy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:52:46 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92941F4AD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:52:45 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id g13so13580101ple.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 23:52:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zhDJApKtBQcvwymZ5SCtHomIXxqcYYVtYxL3jD0nv8A=;
-        b=eqGrOQjEwqnci7sSQ7FMs3Ok0ATLFezDT3iEUXY6o7kh6Z2Ah3wdtWQk9ljBd2sXfX
-         7ay1T3MqcGgE8eiymGU4SGIrPRS2Elb5ALGjaZXq8n3K70j3/4yVN6LLZNfTK0c339Yh
-         RbNoAlQVxOKVyUcIsXM34bjv7F4KJa2E7uzGo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zhDJApKtBQcvwymZ5SCtHomIXxqcYYVtYxL3jD0nv8A=;
-        b=aOFpX9RWUruVv414Yy/F2C6O7b6J8S86KAui4YKgQ2lKR5sv+kfQ4q25bTNx0zJYAH
-         6w5v9cimrgtVcMr3hEIg1PWhTmnHfsQKGKqeFmgm7c0xRJHLTkztmzBWlTKOdUmorDqL
-         eh2Nbhg1DgcS8EoHYCmFXgHiDxZUiIKd8ygENmkPNX1luta+DBv3/fworbZ4xsJoOMX1
-         PBbbpiHjLmdEowuVah0lz3jVFWp4WhvqN8L28PNDhDrMow8w9gUmJwytKLLD7ECjyZyD
-         6Yqkj6Td1Ln18kd2JbiWbP6F2LGWsGMY8PGZFpyg6qN7H+HgmdhtNrlpp1GIuWcPph9+
-         q58g==
-X-Gm-Message-State: AO0yUKV/09bdMA2zgwHhWrr+Z9TSdu9M34Ts9UCYc0zFGYg0NogoCGJa
-        E0sJ2jb6XbVUqAwq0myTjCa7dONJH5S0ii0ijOX8XQ==
-X-Google-Smtp-Source: AK7set85cPdzxaY0rLNikp+E53fZOD5mAQhhWbvkPlDWSAtyKYtHs7ThVA1FO3XcwaBZAO9Qs/JSARXhC6J9eEVZWXE=
-X-Received: by 2002:a17:90a:7483:b0:231:eb7:ece4 with SMTP id
- p3-20020a17090a748300b002310eb7ece4mr448656pjk.26.1675842765263; Tue, 07 Feb
- 2023 23:52:45 -0800 (PST)
+        Wed, 8 Feb 2023 02:54:29 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD7D25294;
+        Tue,  7 Feb 2023 23:54:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675842867; x=1707378867;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=yc5gczRuyEW9BjeTEqBRpxEHpjo6TawCP6phTo9XQlQ=;
+  b=mgSXXkfUbsL0LgC+qt9+9gzBwxNp1UO2YRFliVzalDRgRQaG7sZdaVNx
+   alxb1pPdVxPzqucQyg61l72ptWan6J9YPJdArxjOB8Q1NQWBtEnd3daWi
+   g8ffUYpXLXFLjWlt5vs7kslbHrEz0zwAfH4Ig9jyuLArYeI2KYKSklQAM
+   RvHNHO2w4AZZV0yz0NBzGGrOpl6YutsvRu//ISKlOyZztIudNbkUVxw1V
+   RH+os5waCsMqlxySvxx/pANcFq/pWoaYicikadBCUT15DqHdxaPDL2+GS
+   db2K55yso7lnWndpkkjDTDopp1y1Yno+i/poYvPM7eVwE6dnrAUm2W/4k
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="392132886"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="392132886"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 23:54:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="669094442"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="669094442"
+Received: from jstelter-mobl.ger.corp.intel.com ([10.252.38.39])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 23:54:24 -0800
+Date:   Wed, 8 Feb 2023 09:54:19 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
+cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH v6 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+In-Reply-To: <OSZPR01MB6328AE8F77449F7D6C7DE8958BD89@OSZPR01MB6328.jpnprd01.prod.outlook.com>
+Message-ID: <c3acfc41-44f8-263e-379e-f8825194a6e@linux.intel.com>
+References: <20230131054655.396270-1-tan.shaopeng@jp.fujitsu.com> <20230131054655.396270-5-tan.shaopeng@jp.fujitsu.com> <83e1de31-b448-1a51-ba39-faec794694f@linux.intel.com> <OSZPR01MB6328AE8F77449F7D6C7DE8958BD89@OSZPR01MB6328.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230207091443.143995-1-colin.i.king@gmail.com> <Y+NQLOJ9IlbQJttd@google.com>
-In-Reply-To: <Y+NQLOJ9IlbQJttd@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 7 Feb 2023 23:52:33 -0800
-Message-ID: <CACeCKacOiJHMGTaT3J-B1_rYbU=yJQ2Xr7nFjX_1aMcya1xT_Q@mail.gmail.com>
-Subject: Re: [PATCH][next] platform/chrome: Fix spelling mistake "Attenetion"
- -> "attention"
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Colin Ian King <colin.i.king@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 11:33 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> Hi Prashant,
->
-> On Tue, Feb 07, 2023 at 09:14:43AM +0000, Colin Ian King wrote:
-> > There is a spelling mistake in a dev_warn message, make it lower case
-> > and fix the spelling.
-> >
-> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->
-> It's about time to cut for the coming merge window.
+On Wed, 8 Feb 2023, Shaopeng Tan (Fujitsu) wrote:
+> > On Tue, 31 Jan 2023, Shaopeng Tan wrote:
+> > 
+> > > After creating a child process with fork() in CAT test, if an error
+> > > occurs or a signal such as SIGINT is received, the parent process will
+> > > be terminated immediately, and therefor the child process will not be
+> > > killed and also resctrlfs is not unmounted.
+> > >
+> > > There is a signal handler registered in CMT/MBM/MBA tests, which kills
+> > > child process, unmount resctrlfs, cleanups result files, etc., if a
+> > > signal such as SIGINT is received.
+> > >
+> > > Commonize the signal handler registered for CMT/MBM/MBA tests and
+> > > reuse it in CAT too.
+> > >
+> > > To reuse the signal handler, make the child process in CAT wait to be
+> > > killed by parent process in any case (an error occurred or a signal
+> > > was received), and when killing child process use global bm_pid
+> > > instead of local bm_pid.
+> > >
+> > > Also, since the MBA/MBA/CMT/CAT are run in order, unregister the
+> > > signal handler at the end of each test so that the signal handler
+> > > cannot be inherited by other tests.
+> > >
+> > > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> > > ---
+> > 
+> > >  	if (bm_pid == 0) {
+> > >  		/* Tell parent that child is ready */
+> > >  		close(pipefd[0]);
+> > >  		pipe_message = 1;
+> > >  		if (write(pipefd[1], &pipe_message, sizeof(pipe_message)) <
+> > > -		    sizeof(pipe_message)) {
+> > > -			close(pipefd[1]);
+> > > +		    sizeof(pipe_message))
+> > > +			/*
+> > > +			 * Just print the error message.
+> > > +			 * Let while(1) run and wait for itself to be killed.
+> > > +			 */
+> > >  			perror("# failed signaling parent process");
+> > 
+> > If the write error is ignored here, won't it just lead to parent hanging forever
+> > waiting for the child to send the message through the pipe which will never
+> > come?
+> 
+> If the write error is ignored here, the pipe will be closed by "close(pipefd[1]);" and child process will wait to be killed by "while(1)".
+> ---
+> -			return errno;
+> -		}
+> 
+>  		close(pipefd[1]);
+>  		while (1)
+> ---
+> 
+> If all file descriptors referring to the write end of a pipe have been closed, 
+> then an attempt to read(2) from the pipe will see end-of-file (read(2) will return 0).
+> Then, "perror("# failed reading from child process");" occurs.
+> ---
+>         } else {
+>                 /* Parent waits for child to be ready. */
+>                 close(pipefd[1]);
+>                 pipe_message = 0;
+>                 while (pipe_message != 1) {
+>                         if (read(pipefd[0], &pipe_message,
+>                                  sizeof(pipe_message)) < sizeof(pipe_message)) {
+>                                 perror("# failed reading from child process");
+>                                 break;
+>                         }
+>                 }
+>                 close(pipefd[0]);
+>                 kill(bm_pid, SIGKILL);
+>                 signal_handler_unregister();
+>         }
 
-I thought there would be an rc8...
+Ah, indeed read() will pick up the close event. So your code seem fine 
+after all.
 
-> I guess you would
-> like this simple patch to be included as a fixup for f54c013e7eef
-> ("platform/chrome: cros_typec_vdm: Add Attention support").  Please apply
-> the patch if it makes sense.
+-- 
+ i.
 
-Sure. I'll make the modification you suggest and apply this tomorrow.
-Thanks for signal boosting it.
-
->
-> One minor suggestion for the commit title:
-> "platform/chrome: cros_ec_typec: Fix spelling mistake" looks more clear
-> to me.
->
-> With that:
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
