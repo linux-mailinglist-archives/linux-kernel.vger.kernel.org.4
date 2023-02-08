@@ -2,88 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB7168E615
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5237268E617
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjBHCbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
+        id S230227AbjBHCcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 21:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjBHCbt (ORCPT
+        with ESMTP id S229527AbjBHCb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:31:49 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC9E27495;
-        Tue,  7 Feb 2023 18:31:44 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id EEF6B24E20C;
-        Wed,  8 Feb 2023 10:31:36 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Feb
- 2023 10:31:37 +0800
-Received: from [192.168.125.110] (183.27.96.33) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Feb
- 2023 10:31:36 +0800
-Message-ID: <87e31545-3107-1cc2-fc93-197f66712ccc@starfivetech.com>
-Date:   Wed, 8 Feb 2023 10:31:35 +0800
+        Tue, 7 Feb 2023 21:31:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D08422DE1;
+        Tue,  7 Feb 2023 18:31:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAD0D6142E;
+        Wed,  8 Feb 2023 02:31:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAC34C4339C;
+        Wed,  8 Feb 2023 02:31:56 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="f5+/J+WT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1675823513;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7hemVHJkzyEdMXCbMpFmzxQSbtTaU4nVB65VwzkWZIs=;
+        b=f5+/J+WTqAOpJIqSYmAO0xLPutOrafSfnGry2TVpb98OIjeP3/+8/mKuVT+CUdGKvP05Z/
+        WKqgKJSJn5ea/Ac9L6KMV+RCk8EZ7SveVkR6uZ2HuGXh1ZxIvdyoC2nPBxuiAqefJS4YNZ
+        4K92R8jxEuZBpJidrhu04J6aiISzL2k=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a2edc6ba (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 8 Feb 2023 02:31:52 +0000 (UTC)
+Received: by mail-ej1-f41.google.com with SMTP id gr7so47736786ejb.5;
+        Tue, 07 Feb 2023 18:31:52 -0800 (PST)
+X-Gm-Message-State: AO0yUKUrBX6LYDngtl5Ez1mqX8yny8zLlADWhWNft5/k6jnED7sHufvc
+        vvoYSFp86Ze+qeTn+98LKtD8iS8C7syEgEs4RrM=
+X-Google-Smtp-Source: AK7set8FqOcnj5YNRuRXgSkVmgG8iHzRDZ6CtsFJRJsR0dtMC7G7yD+8RwNIFtOT95Klvbkepy0hidZ4mGEMi6roTIE=
+X-Received: by 2002:a17:906:e24c:b0:89c:7298:2de4 with SMTP id
+ gq12-20020a170906e24c00b0089c72982de4mr1176679ejb.91.1675823510908; Tue, 07
+ Feb 2023 18:31:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v4 0/4] Basic pinctrl support for StarFive JH7110 RISC-V
- SoC
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas Schwab <schwab@suse.de>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230203141801.59083-1-hal.feng@starfivetech.com>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <20230203141801.59083-1-hal.feng@starfivetech.com>
+References: <3a196414-68d8-29c9-24cc-2b8cb4c9d358@leemhuis.info>
+ <8a7775912f31394944b43db12adc78efd84b1fad.camel@HansenPartnership.com>
+ <Y+MFNvr2deX7+Mxa@kernel.org> <Y+MFUZ7WD0rX2rU9@kernel.org>
+In-Reply-To: <Y+MFUZ7WD0rX2rU9@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 7 Feb 2023 23:31:37 -0300
+X-Gmail-Original-Message-ID: <CAHmME9pwT52maXyQMNutv6svgDxAaz3L4MDeq_KVDutOAe8uPw@mail.gmail.com>
+Message-ID: <CAHmME9pwT52maXyQMNutv6svgDxAaz3L4MDeq_KVDutOAe8uPw@mail.gmail.com>
+Subject: Re: [regression] Bug 216989 - since 6.1 systems with AMD Ryzen
+ stutter when fTPM is enabled
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, reach622@mailcuk.com,
+        1138267643@qq.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.33]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Feb 2023 22:17:57 +0800, Hal Feng wrote:
-> This patch series adds basic pinctrl support for StarFive JH7110 SoC.
-> 
-> Changes since v3:
-> - Rebased on Linus's "devel" branch of linux-pinctrl repo, which was based on
->   on tag v6.2-rc1.
-> - Dropped patch 1.
-> Patch 2 & 3:
-> - Added a reference for '-pins$' patternProperties.
-> - Put "additionalProperties: false" before properties section. (by Rob)
-> - Improved the description.
-> - Changed the node name in examples from "gpio" to "pinctrl".
-> Patch 4:
-> - Added some missing headers. (by Andreas)
-> 
->   v3: https://lore.kernel.org/all/20221220005529.34744-1-hal.feng@starfivetech.com/
+On Tue, Feb 7, 2023 at 11:13 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, Feb 08, 2023 at 04:13:16AM +0200, Jarkko Sakkinen wrote:
+> > On Thu, Feb 02, 2023 at 07:57:37AM -0500, James Bottomley wrote:
+> > > On Thu, 2023-02-02 at 11:28 +0100, Linux kernel regression tracking
+> > > (Thorsten Leemhuis) wrote:
+> > > [...]
+> > > > So it's a firmware problem, but apparently one that Linux only
+> > > > triggers since 6.1.
+> > > >
+> > > > Jason, could the hwrng changes have anything to do with this?
+> > > >
+> > > > A bisection really would be helpful, but I guess that is not easy as
+> > > > the problem apparently only shows up after some time...
+> > >
+> > > the problem description says the fTPM causes system stutter when it
+> > > writes to NVRAM.  Since an fTPM is a proprietary implementation, we
+> > > don't know what it does.  The ms TPM implementation definitely doesn't
+> > > trigger NV writes on rng requests, but it is plausible this fTPM does
+> > > ... particularly if they have a time based input to the DRNG.  Even if
+> > > this speculation is true, there's not much we can do about it, since
+> > > it's a firmware bug and AMD should have delivered the BIOS update that
+> > > fixes it.
+> > >
+> > > The way to test this would be to set the config option
+> > >
+> > > CONFIG_HW_RANDOM_TPM=n
+> > >
+> > > and see if the stutter goes away.  I suppose if someone could quantify
+> > > the bad bioses, we could warn, but that's about it.
+> > >
+> > > James
+> > >
+> >
+> > And e.g. I do not have a Ryzen CPU so pretty hard to answer such question.
+>
+> ... about hwrng
 
-Hi, Linus,
+Well, the options here are basically:
 
-I have resent the patches rebased on your "devel" branch. Rob has added
-Reviewed-by tags for DT bindings, but the DT binding patches still need
-to be modified a little bit. Could you apply this series if I modify the
-DT bindings patches and resend as v5? Or it need another round of review?
+a) Do nothing, and just expect people to update their BIOSes, since an
+update is available.
+b) Do nothing, and expect people with broken BIOSes to `echo blacklist
+tpm >> /etc/modprobesomethingsomething`.
+c) Figure out how to identify the buggy BIOS and disable the TPM's rng
+with a quirk in this case.
+d) Figure out how to dynamically detect TPM rng latency, and warn about it.
+e) Figure out how to dynamically detect TPM rng latency, and disable it.
 
-Best regards,
-Hal
+I think given that a firmware update *is* available, (a) is fine. And
+the generic workaround remains (b). But if you want to be really nice,
+(c) would be fine too. Somebody with the affected hardware would
+probably have to send in some DMI logs or whatever else. (d) and (e)
+sound possible in theory but I dunno really... seems finicky.
+
+Jason
