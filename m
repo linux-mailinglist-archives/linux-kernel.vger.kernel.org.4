@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD41868EC40
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB9568EC41
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjBHKCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S230472AbjBHKCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjBHKCE (ORCPT
+        with ESMTP id S231301AbjBHKCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:02:04 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24343423A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:02:04 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id jg8so10243668ejc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:02:03 -0800 (PST)
+        Wed, 8 Feb 2023 05:02:06 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90ED321945
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:02:05 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id gr7so49861549ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:02:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pENRh59ONNUBe4kG875eVyzOAMbjZDxrD9e9swaSORw=;
-        b=dzZ57QCEfIOIAlC9+jvgkXKzlyeHhn4pZyA01nHX3ZtrwWUdU8ybdEQr3kBn/Sll59
-         mqg7JNmSwnZAmLzXDcTxFTPEPNTlgXoX5hFnGV+Z9vQxJFvxJ2nIDgPvD8LN3Sx+lRCI
-         yDV+uOL1QCMrJ8K5bsNt/PRiaZJEzV4po2osXW0ABFRaY3LZ226UdSII+lxT7glhhh+a
-         zTVZY5sm1Zzn/9TW+zFJuh5dqLyolmSwxCEB1OIu7t8uq9P9RfHUf008+a6gKCfs/XV9
-         jagZC4Rr1Bip39FuMjQkCh7LFTgLseLUvQ3k5DwG86MVvk8hwFd1xg1gVvfj/8OG3+R9
-         PguA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6iRFBlMEYvn5uCQ8+IbFT1rdcbrh/NWARIU6RnFdQ5s=;
+        b=BSlroPySQeG7GYEfe3SCe0SLI7y48GoYASx9xINHtFhxUDhnZl+IT+5JlvLjCG+mnZ
+         YxJbj1t/Mpher2GxrNuFFIqE+Kksnp8UYbUbMxkbG1Dcw1Bgp4Edwq9Ix7RgTuCXUpOv
+         esetcY7aaExA3NI8CLZVaAiK8sYNtuJlVQ4WwaHPeas6N0RHWbwi+6qbr8YtnHsGDd/H
+         QTrAq5kBBTQl+TwDbR38gHmmT5qZ1hSwVD8SvcPdfgIWCfBoeFd8EIdvnVGUM+a7dXgf
+         wYR723k/97z0+CG9TD6sZRzxuXAhZh1PT4HLGEPlRbPrhHhD0lAlBeIQqoAasx0k3sHI
+         sEdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pENRh59ONNUBe4kG875eVyzOAMbjZDxrD9e9swaSORw=;
-        b=OtEDklwp4LPlbassejCY2fZRk8//iQwQTssYkDvADPYFPTkst8OaFPsIuQsVVCnuSv
-         kkTWBib9TbKWoGQ4//6TPq60oMKAiKJPECxl5CH6rLiN2sAZqPQ8oyWt2YZ9gcQA6Nv6
-         EUYCWteXooo/kMQOBZs9XcbAYphEXM4AJFY3Kl/kKWpNUnLptVCoNAVxqNLLotNi2qo9
-         Phc6MjO7hRdbsui0ZsATd6A8PUKQNMWX2YWfuTTZ4nDzb4Iy6DeyhsHGd3WCN4UZysvU
-         QzZCcRasFC7/nsfl5lwEXj2ctwTgCfP0lOvxzd4bZij2E+XCg8sXhj3BKxiKFGevVehc
-         9oAg==
-X-Gm-Message-State: AO0yUKVuqObzxGQjYqVwi1WXXcPtkMhQhYe55CUSxwsMRqEmPucQYTPa
-        XaykDXjyquoGcAjzuZo4SBxj+g==
-X-Google-Smtp-Source: AK7set87G8hDlBIhPstupcZ7boJjcZi2IXwcAef6+TKGnrQ+w45uCCfzuR9RsuZ8+DKwp+Wh/rpnxQ==
-X-Received: by 2002:a17:907:9c0a:b0:8a9:e031:c49b with SMTP id ld10-20020a1709079c0a00b008a9e031c49bmr6278044ejc.4.1675850522601;
-        Wed, 08 Feb 2023 02:02:02 -0800 (PST)
-Received: from localhost ([194.62.217.4])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170906408a00b008aabf7faa17sm1207367ejj.67.2023.02.08.02.02.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 02:02:02 -0800 (PST)
-References: <20230207185216.1314638-1-boqun.feng@gmail.com>
- <20230207185216.1314638-3-boqun.feng@gmail.com>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergio =?utf-8?Q?Gonz=C3=A1le?= =?utf-8?Q?z?= Collado 
-        <sergio.collado@gmail.com>, Finn Behrens <fin@nyantec.com>
-Subject: Re: [PATCH v2 2/2] sample: rust: print: Add sampe code for Arc
- printing
-Date:   Wed, 08 Feb 2023 11:01:36 +0100
-In-reply-to: <20230207185216.1314638-3-boqun.feng@gmail.com>
-Message-ID: <87y1p8h3vq.fsf@metaspace.dk>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6iRFBlMEYvn5uCQ8+IbFT1rdcbrh/NWARIU6RnFdQ5s=;
+        b=SMRDigUraESzPY/+Gq9LNgpvg+HpBKE2ZTpTd/9RoZc4kKMtfm+OQhgokcoEvPcgEW
+         bplGL5Kfu+XMMiJoXSGl4AFcTaObmeE9UhSdLVRAndlbZgHf4hmrWjS9cp+OX8+fPT66
+         NTFheh9qlceJJLGd8hIrjopcG/dqGn/QXXJXSiX3M8D76ZMVOiBBO/wK2se4oXwwbWEu
+         9n9fv7RLzpYJbaPpnVRS79pEWLaSeGQcD2oNhrKHGuAvqsrW1sdqUay0ZtWeyaC7Kcpd
+         XoH/jE6MZ7v4dsodPXd/nlr2jMF7Ocl2hEb3sUnA1dQXtRkiY3dZTFBCRGYozv1axJnt
+         GXlA==
+X-Gm-Message-State: AO0yUKV4mSuHlS6nxQ0tlDLm8PJds1yIB5IOb5wlP07XQX/QPy1CIgHL
+        rXb1Xtuv/+WvdoO18XEbIXUShQ==
+X-Google-Smtp-Source: AK7set8U8P6nxSEV42tswzNmkWxQyomyKQu0bmz1W7EOI0sNg/vcwnW8tQ+WE4j70GLHCfm4Rc8oAg==
+X-Received: by 2002:a17:906:ca0f:b0:8a6:93a4:c897 with SMTP id jt15-20020a170906ca0f00b008a693a4c897mr7376883ejb.33.1675850524242;
+        Wed, 08 Feb 2023 02:02:04 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id j21-20020a17090686d500b008a9e37ca37fsm1924423ejy.166.2023.02.08.02.02.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 02:02:03 -0800 (PST)
+Message-ID: <5d6c0f50-da59-8f4f-a04f-d24e3c0c2992@linaro.org>
+Date:   Wed, 8 Feb 2023 11:02:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] mfd: qcom_rpm: use
+ devm_platform_get_and_ioremap_resource()
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, lee@kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <202302081734511884545@zte.com.cn>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <202302081734511884545@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,66 +76,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Boqun Feng <boqun.feng@gmail.com> writes:
 
-> This both demonstrates the usage of different print format in Rust and
-> serves as a selftest for the `Display` and `Debug` implementation of
-> `Arc` and its friends.
->
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Reviewed-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-> Reviewed-by: Finn Behrens <fin@nyantec.com>
-> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+On 8.02.2023 10:34, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
+> 
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
 > ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-
-
->  samples/rust/rust_print.rs | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->
-> diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
-> index 8b39d9cef6d1..165a8d7b1c07 100644
-> --- a/samples/rust/rust_print.rs
-> +++ b/samples/rust/rust_print.rs
-> @@ -15,6 +15,30 @@ module! {
->=20=20
->  struct RustPrint;
->=20=20
-> +fn arc_print() -> Result {
-> +    use kernel::sync::*;
-> +
-> +    let a =3D Arc::try_new(1)?;
-> +    let b =3D UniqueArc::try_new("hello, world")?;
-> +
-> +    // Prints the value of data in `a`.
-> +    pr_info!("{}", a);
-> +
-> +    // Uses ":?" to print debug fmt of `b`.
-> +    pr_info!("{:?}", b);
-> +
-> +    let a: Arc<&str> =3D b.into();
-> +    let c =3D a.clone();
-> +
-> +    // Uses `dbg` to print, will move `c`.
-> +    dbg!(c);
-> +
-> +    // Prints debug fmt with pretty-print "#" and number-in-hex "x".
-> +    pr_info!("{:#x?}", a);
-> +
-> +    Ok(())
-> +}
-> +
->  impl kernel::Module for RustPrint {
->      fn init(_module: &'static ThisModule) -> Result<Self> {
->          pr_info!("Rust printing macros sample (init)\n");
-> @@ -43,6 +67,8 @@ impl kernel::Module for RustPrint {
->          pr_cont!(" is {}", "continued");
->          pr_cont!(" with {}\n", "args");
->=20=20
-> +        arc_print()?;
-> +
->          Ok(RustPrint)
->      }
->  }
-
+Konrad
+>  drivers/mfd/qcom_rpm.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/mfd/qcom_rpm.c b/drivers/mfd/qcom_rpm.c
+> index 8fea0e511550..086611322874 100644
+> --- a/drivers/mfd/qcom_rpm.c
+> +++ b/drivers/mfd/qcom_rpm.c
+> @@ -530,7 +530,6 @@ static int qcom_rpm_probe(struct platform_device *pdev)
+>  {
+>  	const struct of_device_id *match;
+>  	struct device_node *syscon_np;
+> -	struct resource *res;
+>  	struct qcom_rpm *rpm;
+>  	u32 fw_version[3];
+>  	int irq_wakeup;
+> @@ -576,8 +575,7 @@ static int qcom_rpm_probe(struct platform_device *pdev)
+>  		return -ENODEV;
+>  	rpm->data = match->data;
+> 
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	rpm->status_regs = devm_ioremap_resource(&pdev->dev, res);
+> +	rpm->status_regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+>  	if (IS_ERR(rpm->status_regs))
+>  		return PTR_ERR(rpm->status_regs);
+>  	rpm->ctrl_regs = rpm->status_regs + 0x400;
