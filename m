@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28C768F381
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CCF68F389
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjBHQkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
+        id S231678AbjBHQlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjBHQkf (ORCPT
+        with ESMTP id S231644AbjBHQkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:40:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE0839B9A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:40:28 -0800 (PST)
+        Wed, 8 Feb 2023 11:40:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D74DE00
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:40:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 06F60CE2247
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 16:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A29C433D2;
-        Wed,  8 Feb 2023 16:40:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D09D61734
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 16:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52B31C433EF;
+        Wed,  8 Feb 2023 16:40:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675874425;
-        bh=wo/uMi/XKqmv4ZfEoOSWzfRWU2jBLxW4mP+OJhOyZ2I=;
+        s=k20201202; t=1675874432;
+        bh=GGeAEaRt65it3PXlOo+5hSPcgSq11pcqA9eKquHfzZg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q1mVQCj5l1GVpNB7Kz/TXLUj/sGQvi8ZPMLHBFoMpbCI8ebfhNAivUbJywKe175rQ
-         bALfIw4nCofYgEs6piTnSGSdsEm8jDvdH4Fi7hUHrpwgz1jzJ0/qpiONTPMbdhMhfG
-         lZymSFQ4arYPRqfeu7IycuYSeZxd5AVofIMCzFs2filiBmYlRv7RALWgeFBCtIYVHx
-         q6H07blzaLAo2gzBWlOaCGXQyLNuh1ryaFSwEh1+bfuEGG2QMg3jE+KoeA4o8epStL
-         EdOwr6QVCbwTH9HyqS5q3EmXl/NeHZxL2V9Nbwftx+Xujj4z5x9hyEXVu+AQ+IoYb2
-         hyeGjbdlKaxsw==
+        b=ewkkWjBPkbuENbTspA2LMFcdZN6Zua6IVR1vYYB/KD3R8+7kCWOzWIfI2C/nmkE3G
+         zMm/o67vRk2/twf7DStLfKvMwqqsWuL0MN77JEipi6dwrltf0RiCyAWs5Wchgq0UjO
+         rbO3uDttgAqTQeVRyfLfxxrAmoSQk+4BJqwIrjQ2gFvPeqWPypeJRxy+5AxKYMbpOx
+         NDJMkTEda9UD98e1awEk2Hf054FJmvlaq83KvxIqVAUeYsOG52SOMXxSS3VXKE9YI5
+         iMzucZ84z3ZsxGPSIkYVCSmQug3Kh521Mo+qCZm1fRabb9tzLa7fOJvFKIwMUulRCE
+         TioEaRvHFnyCQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     kasan-dev@googlegroups.com, Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marco Elver <elver@google.com>
-Cc:     kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
         Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andrey Konovalov <andreyknvl@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-mm@kvack.org,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@suse.de>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] kmsan: disable ftrace in kmsan core code
-Date:   Wed,  8 Feb 2023 17:39:56 +0100
-Message-Id: <20230208164011.2287122-2-arnd@kernel.org>
+Subject: [PATCH 3/4] objdump: add UACCESS exception for more stringops
+Date:   Wed,  8 Feb 2023 17:39:57 +0100
+Message-Id: <20230208164011.2287122-3-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230208164011.2287122-1-arnd@kernel.org>
 References: <20230208164011.2287122-1-arnd@kernel.org>
@@ -63,56 +65,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-objtool warns about some suspicous code inside of kmsan:
+The memset/memmove/memcpy string functions are wrapped in different
+ways based on configuration. While the __asan_mem* functions already
+have exceptions, the ones called from those do not:
 
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_n+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_n+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_1+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_1+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_2+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_2+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_4+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_4+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_8+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_8+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_instrument_asm_store+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_chain_origin+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_poison_alloca+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_warning+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: __msan_get_context_state+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: kmsan_copy_to_user+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: kmsan_unpoison_memory+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: kmsan_unpoison_entry_regs+0x4: call to __fentry__() with UACCESS enabled
-vmlinux.o: warning: objtool: kmsan_report+0x4: call to __fentry__() with UACCESS enabled
+mm/kasan/shadow.o: warning: objtool: __asan_memset+0x30: call to __memset() with UACCESS enabled
+mm/kasan/shadow.o: warning: objtool: __asan_memmove+0x51: call to __memmove() with UACCESS enabled
+mm/kasan/shadow.o: warning: objtool: __asan_memcpy+0x51: call to __memcpy() with UACCESS enabled
+vmlinux.o: warning: objtool: .altinstr_replacement+0x1406: call to memcpy_erms() with UACCESS enabled
+vmlinux.o: warning: objtool: .altinstr_replacement+0xed0: call to memset_erms() with UACCESS enabled
+vmlinux.o: warning: objtool: memset+0x4: call to memset_orig() with UACCESS enabled
+vmlinux.o: warning: objtool: memset+0x4: call to memset_orig() with UACCESS enabled
 
-Similar code already exists in kasan, which avoids this by skipping
-ftrace annotations, so do the same thing here.
+Add these to the list as well.
 
-Fixes: f80be4571b19 ("kmsan: add KMSAN runtime core")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- mm/kmsan/Makefile | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/objtool/check.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/mm/kmsan/Makefile b/mm/kmsan/Makefile
-index 98eab2856626..389fd767a11f 100644
---- a/mm/kmsan/Makefile
-+++ b/mm/kmsan/Makefile
-@@ -16,6 +16,14 @@ CC_FLAGS_KMSAN_RUNTIME += -DDISABLE_BRANCH_PROFILING
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 0f67c6a8bc98..e8fb3bf7a2e3 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1248,6 +1248,13 @@ static const char *uaccess_safe_builtin[] = {
+ 	"clear_user_erms",
+ 	"clear_user_rep_good",
+ 	"clear_user_original",
++	"__memset",
++	"__memcpy",
++	"__memmove",
++	"memset_erms",
++	"memcpy_erms",
++	"memset_orig",
++	"memcpy_orig",
+ 	NULL
+ };
  
- CFLAGS_REMOVE.o = $(CC_FLAGS_FTRACE)
- 
-+# Disable ftrace to avoid recursion.
-+CFLAGS_REMOVE_core.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_hooks.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_init.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_instrumentation.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_shadow.o = $(CC_FLAGS_FTRACE)
-+
- CFLAGS_core.o := $(CC_FLAGS_KMSAN_RUNTIME)
- CFLAGS_hooks.o := $(CC_FLAGS_KMSAN_RUNTIME)
- CFLAGS_init.o := $(CC_FLAGS_KMSAN_RUNTIME)
 -- 
 2.39.1
 
