@@ -2,143 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB78068E9C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CAE68E9CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 09:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjBHIWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 03:22:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S230073AbjBHIXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 03:23:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjBHIWH (ORCPT
+        with ESMTP id S229539AbjBHIXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 03:22:07 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC65BB46A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 00:22:03 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id q19so19374707edd.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 00:22:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KhVDOtrjgfl3p3xmeZfZNTKzoX1bymO3mmsKmoRlJio=;
-        b=WmahEArlGNc6e+SBemlYqrp9e8xwTroRBeySeaKedbWu4MijhmfjVYJUEgErAQnWoc
-         Vt0QQCBcvPf80tZmgSS488A+2MDwN20saKS0bNRFi5zll5zOnHpKJHf0mlhZ4jYWmvez
-         TKD9Oasj0muKCDFFA6GmsZQEQX6QyAKnHHR/WfKVRrgYCtEu8PtWbXCLgXZnM0FYUg+2
-         E4iRXVMGJCYmBdm0YYIZgKuIH0PS675rA0gOKIMXb1eqigGHRJW+xJ+/TmeJNALeZXlX
-         ksAA4UzG8Urny0JIXQoqb+i3htcCKOWuMkihlyfc+vYpsaT7YREx+4G8MJn0nDrtFkgU
-         48WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KhVDOtrjgfl3p3xmeZfZNTKzoX1bymO3mmsKmoRlJio=;
-        b=7C5rXVGviq+nAQEaqnk6zKnKlAoGbWdzf3eMpx8d1dYrhXyU4RprwctBZPQ66gHkfm
-         sBS8L5h5tzViTozlR6u0Bs+hu8aGNJW6MW7PIl6n+Y83lXtWHSwCUQCHoNir1axGkhYz
-         DFM+CeVE73+MoJV67WDfOwQKLgSjj9gx7xu+yJc1VNyVGYpqqdWytGUHAzHDWMGDmlya
-         V1g4X9QpKBmx+Mux87/0WQBuU3DUbiAmXUJUfYk79OYCwFClXjTJpj2IQp/f9opo4NOu
-         Y9d4SRRJYQyZS8W/YWkXnAWOruB+NPCSsvYVves0hQJ9isbk2hLFZ8lhjKKpAzdqxGVG
-         cJrQ==
-X-Gm-Message-State: AO0yUKUUoJ4LbwuY3aJmGn8fPJw4/3fGiiEtISO7sD1CFr3C7choo4Qb
-        iHfqNeflRZUQI38TAyUla1IRJQ==
-X-Google-Smtp-Source: AK7set97fSbuXgBdSKrixsU3CdVuu2exe5iO5joNKUPY/9E7IjbBhzCdygzGeRrub0jKIcfBG5mtfg==
-X-Received: by 2002:a50:cdc8:0:b0:4aa:a4e8:8d5a with SMTP id h8-20020a50cdc8000000b004aaa4e88d5amr6885426edj.33.1675844522341;
-        Wed, 08 Feb 2023 00:22:02 -0800 (PST)
-Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
-        by smtp.gmail.com with ESMTPSA id p10-20020aa7cc8a000000b004a21c620266sm7513699edt.83.2023.02.08.00.22.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 00:22:02 -0800 (PST)
-Message-ID: <6802d77c-f135-ad92-1f28-84a104ca9438@linaro.org>
-Date:   Wed, 8 Feb 2023 09:21:59 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 3/4] arm64: dts: qcom: sc8280xp: Define uart2
-Content-Language: en-US
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        Wed, 8 Feb 2023 03:23:03 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AFEB746;
+        Wed,  8 Feb 2023 00:23:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675844582; x=1707380582;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eT7LyT1k1N1zT8h2h1TIVWuk3jB5eyl3BSlItLElxuw=;
+  b=gceGxfvgj/pRYd+OvN3pm45rr22v25Jc612QAJSOtzw5i9rKCdDhuhrN
+   P07YijBybzQ9MBFZrOa+zeNmwhQw8WdC4wE8Hj69qKtA2ICyD67iVuEyT
+   Bx08Q/Pc5haGm8znw1UskSiRT9By62+SbShEYwJHQDpvWZOKB9JOu34yb
+   5fFYYmBsfFIHKsshyxea7MNP9Nc3WyVZevIHiZ/Rojakitf9zviLJJpEG
+   8AB8fl6DyfImLTM8F8EbUm7bjbh8oFzVqvT4rXEV/+vJT9FAM7WNk2wyK
+   oU3y/FBmcV7oDjFAWPpSyNJ3RNvUOR00ZM5SF5AMj3q5SxPJ1nt+h+ysH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="331874274"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="331874274"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 00:23:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="996049097"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="996049097"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Feb 2023 00:22:57 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPfjE-0004JC-1f;
+        Wed, 08 Feb 2023 08:22:56 +0000
+Date:   Wed, 8 Feb 2023 16:22:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        Brian Masney <bmasney@redhat.com>
-References: <20230207052829.3996-1-steev@kali.org>
- <20230207052829.3996-4-steev@kali.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230207052829.3996-4-steev@kali.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com, dphadke@linux.microsoft.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 6/6] Driver: VMBus: Add device tree support
+Message-ID: <202302081621.odizDzHG-lkp@intel.com>
+References: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1675756199-5917-7-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Saurabh,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on next-20230207]
+[cannot apply to robh/for-next tip/timers/core brgl/gpio/for-next wsa/i2c/for-next linus/master v6.2-rc7 v6.2-rc6 v6.2-rc5 v6.2-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Saurabh-Sengar/drivers-clocksource-hyper-v-non-ACPI-support-in-hyperv-clock/20230207-155113
+patch link:    https://lore.kernel.org/r/1675756199-5917-7-git-send-email-ssengar%40linux.microsoft.com
+patch subject: [PATCH v4 6/6] Driver: VMBus: Add device tree support
+config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20230208/202302081621.odizDzHG-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b3cd029f78e9c1f5cd1633e1ffc7c5a09deae98f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Saurabh-Sengar/drivers-clocksource-hyper-v-non-ACPI-support-in-hyperv-clock/20230207-155113
+        git checkout b3cd029f78e9c1f5cd1633e1ffc7c5a09deae98f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/hv/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hv/vmbus_drv.c:2691:21: warning: attribute declaration must precede definition [-Wignored-attributes]
+   static const struct __maybe_unused of_device_id vmbus_of_match[] = {
+                       ^
+   include/linux/compiler_attributes.h:355:56: note: expanded from macro '__maybe_unused'
+   #define __maybe_unused                  __attribute__((__unused__))
+                                                          ^
+   include/linux/mod_devicetable.h:268:8: note: previous definition is here
+   struct of_device_id {
+          ^
+   1 warning generated.
 
 
-On 7.02.2023 06:28, Steev Klimaszewski wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> Reviewed-by: Brian Masney <bmasney@redhat.com>
-> 
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+vim +2691 drivers/hv/vmbus_drv.c
 
-Konrad
-> 
-> Changes since v3:
->  * Fix commit message changelog
-> 
-> Changes since v2:
->  * No changes since v2
-> 
-> Changes since v1:
->  * change subject line, move node, and add my s-o-b
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index fa2d0d7d1367..eab54aab3b76 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -1207,6 +1207,20 @@ spi2: spi@988000 {
->  				status = "disabled";
->  			};
->  
-> +			uart2: serial@988000 {
-> +				compatible = "qcom,geni-uart";
-> +				reg = <0 0x00988000 0 0x4000>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP0_S2_CLK>;
-> +				clock-names = "se";
-> +				interrupts = <GIC_SPI 603 IRQ_TYPE_LEVEL_HIGH>;
-> +				operating-points-v2 = <&qup_opp_table_100mhz>;
-> +				power-domains = <&rpmhpd SC8280XP_CX>;
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>;
-> +				interconnect-names = "qup-core", "qup-config";
-> +				status = "disabled";
-> +			};
-> +
->  			i2c3: i2c@98c000 {
->  				compatible = "qcom,geni-i2c";
->  				reg = <0 0x0098c000 0 0x4000>;
+  2690	
+> 2691	static const struct __maybe_unused of_device_id vmbus_of_match[] = {
+  2692		{
+  2693			.compatible = "microsoft,vmbus",
+  2694		},
+  2695		{
+  2696			/* sentinel */
+  2697		},
+  2698	};
+  2699	MODULE_DEVICE_TABLE(of, vmbus_of_match);
+  2700	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
