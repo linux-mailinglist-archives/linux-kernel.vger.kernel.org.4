@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5925868E6A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:39:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1352268E6A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjBHDjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 22:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S229559AbjBHDlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBHDjv (ORCPT
+        with ESMTP id S229573AbjBHDlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 22:39:51 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C5C25E31;
-        Tue,  7 Feb 2023 19:39:51 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id m2so17900576plg.4;
-        Tue, 07 Feb 2023 19:39:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3qoy2xyLaqsHrOi8xllBz13k08/6Kk2GsLxxK01cGUU=;
-        b=RNVZLjM0HwHxVDilEWHzDWIBZPH5fPee7+9/Y9yGiQBvxzQ0Q3g6oK+LiJCSJedw3r
-         TBGhwvmKNiaLHp6NebN5KL2WFGAO8KXYTj1MF2NEQ1lZgjK9lOXGjlHkBtiJcX4HngJ2
-         2MLmr8HdkFqwnzxnKRjrgo9E5hmrUj8VmekbBj9p05xo/k+Mc6PauOwLu+eFioJhIL/N
-         ehZQFchgNZ4rLa6UmLkf4iFxh14fWpfvdpYVfOTMuUj5ws8X7gHDfQ3KSIYmeOaoK3vF
-         bn+OW4ZsPaGksJo5ODXqQhoT26Cd88ERC4JFWMG3iwotLIrr+8/3Kh0X14ogoTeiBsF2
-         XjnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3qoy2xyLaqsHrOi8xllBz13k08/6Kk2GsLxxK01cGUU=;
-        b=XX5SvJxUeNZkOeOGsUHLh/VpCc1O6ERvBp8RIHjeHfxtQ6GOKB3OBiT3L46tDKMfXq
-         JmtAYZCDBhIGam5EaMTyZ5j1d4D1UekL7HLSLP81sLhNBsex/8sMvgftqyQNb4Ov/5l8
-         n/M37hG2V/DwRGFZ6jjhwoye4+4Z76tohEf0w2UsfpEJEA7jwm1H+5QQNotYyi7AF1le
-         llIq/qg+JufejAJzXBiHQrF4GVEExo6m+kS08lrGaFbcTu1rl/rBmTxxiYaTZkuDx0iL
-         XhHwDyVpBMHuzBwtDfeWRp8cZxeNCmhKArUNj5SLKlRTaAC9Jj6RO8t/L3kYSYu1CVfF
-         Ffkg==
-X-Gm-Message-State: AO0yUKWvkjCVqLg5c2cYxwlKzZu5H9KQE2738a1kzokYe/8Ox0481yDE
-        5etXdL/Rg0aprnrLU5G30x4CHCmZATY=
-X-Google-Smtp-Source: AK7set/NzwMs9/QJ6+wP8u0jhNtHwUltio6xYvWRwn8bT7dvJlP9brX5fgbW97Gt7Fbys1u+WOAUpg==
-X-Received: by 2002:a17:90b:33c7:b0:22c:aaaf:8de7 with SMTP id lk7-20020a17090b33c700b0022caaaf8de7mr6766680pjb.5.1675827590458;
-        Tue, 07 Feb 2023 19:39:50 -0800 (PST)
-Received: from debian.me (subs28-116-206-12-49.three.co.id. [116.206.12.49])
-        by smtp.gmail.com with ESMTPSA id n4-20020a17090a394400b0022c0622cc16sm282557pjf.54.2023.02.07.19.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 19:39:49 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 9F23810558B; Wed,  8 Feb 2023 10:39:46 +0700 (WIB)
-Date:   Wed, 8 Feb 2023 10:39:46 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
-Message-ID: <Y+MZgo5UGq8lK4E5@debian.me>
-References: <20230207125634.292109991@linuxfoundation.org>
+        Tue, 7 Feb 2023 22:41:11 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95288279B4;
+        Tue,  7 Feb 2023 19:41:05 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3183BAf8025099;
+        Wed, 8 Feb 2023 03:40:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=FAlupgPtYEREsKOhTYO1Yc7WAUH2hfOn5ObZq+1Jjok=;
+ b=Ss4v1QR1u8Am503pzMCsOgSqkjGN3JF8SDYLkIwQJuGBZYrAc2tdW9t6QjvpKO0TueC3
+ 2SrLYm+BRGT8C5lYk0ltnc0cx1AgEyr/7wcA8vwpbykJjocs58s4A2PSMkmuEC6Myecy
+ 3Lv4Y+ymoqitOyZ+6+3xXXnm0KdOSIDY3z8Vx2dqtUqa0EL/RCEFf2+wL9Yekv+CojfM
+ 8Z9+0PusG6JJ5XqkQOi1LqPS5OyBCuqlgfT9A5VhsI4v8qIkgpuRwXBDXj5JRwoM+RHc
+ 5/NzdKf3/sq9eSwtbU0Aa+Jtq2mLRRuHfpKuzxCib2sC2ItgASOetZCMZCzl5YOoQt+L 0A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm1yf0946-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Feb 2023 03:40:59 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3183ewNR020947
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 Feb 2023 03:40:58 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Tue, 7 Feb 2023 19:40:58 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <johan@kernel.org>,
+        <mani@kernel.org>
+Subject: [PATCH 0/3] drm/msm/adreno: GPU support on SC8280XP
+Date:   Tue, 7 Feb 2023 19:40:49 -0800
+Message-ID: <20230208034052.2047681-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qGnjtW81c0Yd9x5l"
-Content-Disposition: inline
-In-Reply-To: <20230207125634.292109991@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vQejRFqRvUO6SVpjx1FXyIm_1p1FWFf0
+X-Proofpoint-GUID: vQejRFqRvUO6SVpjx1FXyIm_1p1FWFf0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-07_15,2023-02-06_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015
+ mlxlogscore=779 suspectscore=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302080031
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series introduces support for A690 in the DRM/MSM driver and
+enables it for the two SC8280XP laptops.
 
---qGnjtW81c0Yd9x5l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Bjorn Andersson (3):
+  drm/msm/adreno: Add Adreno A690 support
+  arm64: dts: qcom: sc8280xp: Add GPU related nodes
+  arm64: dts: qcom: sc8280xp: Enable GPU related nodes
 
-On Tue, Feb 07, 2023 at 01:54:14PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.11 release.
-> There are 208 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     |  26 +++
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |  26 +++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 171 ++++++++++++++++++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c         | 120 +++++++++++-
+ drivers/gpu/drm/msm/adreno/a6xx_hfi.c         |  34 ++++
+ drivers/gpu/drm/msm/adreno/adreno_device.c    |  14 ++
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h       |  10 +-
+ 7 files changed, 396 insertions(+), 5 deletions(-)
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+-- 
+2.39.1
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---qGnjtW81c0Yd9x5l
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY+MZfgAKCRD2uYlJVVFO
-owCGAP9JYQpAdOsgFeiQ6IEDjeVfuTM2MJv9J2BWgALmNbBkAgEArem8HhAza5iq
-4uvEWlDVNhYyrDXUN8qhKEXwz304tg0=
-=wCdc
------END PGP SIGNATURE-----
-
---qGnjtW81c0Yd9x5l--
