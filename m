@@ -2,138 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE3E68EB14
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0290B68EB31
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjBHJXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:23:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
+        id S231185AbjBHJYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:24:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjBHJWh (ORCPT
+        with ESMTP id S231133AbjBHJX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:22:37 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCC1BEF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:20:32 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id v17so26191022lfd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 01:20:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6x/YLvjMdKqIyfSq9HWwMBVMm1r5pILgbR3br9aIWe4=;
-        b=eDNiEt5ahHb0Nak3ekxqptay2gOu7jeigadWsx/mo1bJoUDQCyLGcBDi6oFGt616wG
-         JvcD0uxBDJp6+N749kMGO8DJoYJaUbFP3IUcta47A91TCIBvHm30nWUX1+QgWQWtkFTj
-         bfUelsTHIovsAqwjj0IuNpH29JzXWSDKXsaWZ0JGLZw6QoBo5ou19t6Zw97hA1RfD1mz
-         sJN+sp756ZRHSHKWiN725SZxl/RkADyQhWFkhkDPFtb7o2o/levnXS9ZZ2OYb/p/sfIf
-         8yqfUCeIB6u1R8qpWtOYfcAEAoHZyZZH1frh8sg4j2madxhDfJ2MshoH+GbNTC9Dqnca
-         6qOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6x/YLvjMdKqIyfSq9HWwMBVMm1r5pILgbR3br9aIWe4=;
-        b=bnc/xj0ZZabedsg59KFJuQMGI113hcFZ9nVSUoPj9o+7mw1OeqPugvWnywqJ5mvWAJ
-         wFIKKamYz0YDlrp6HhBdcnVGNebZhc6UMoAGb/bQiYkcDLH8D0y/r8QIgZrF7LsztEAf
-         H5uDVemcNyHmojs/kVsngMSoP77Vgq7ghOMqXtbsTDKDcGZarlW4gHO3My0sxKNsywU6
-         8qHyB76BlGruFXfDt07oqPgF0QMBhvMFRjQKwxamL/cQH2fCDYO3m6+PA9G6sDqYxopk
-         cwZAr32d0eqLN/hajZBZ5t+1jjLQup80v0xPbwmozRuPBQMdSi636WmDUKC4se4Ctbcp
-         0crA==
-X-Gm-Message-State: AO0yUKXCKdWPklwystsDFXXwdpxoWCauHHZT8cfpvix+TREtOTp+7r9X
-        pPXXvfSxYuJDQxCnRotuEXbRzE+5dMoEawI9UFY=
-X-Google-Smtp-Source: AK7set+kypxFGR3xaFePIv6tbGa7nm2uXd/1Q8BtGmcGgbmFBf62BNVkuqZhLtzKe7MWYdoSW8CDnfKgnRuRHAYikO4=
-X-Received: by 2002:ac2:4350:0:b0:4ca:f757:6c91 with SMTP id
- o16-20020ac24350000000b004caf7576c91mr1005207lfl.92.1675848030486; Wed, 08
- Feb 2023 01:20:30 -0800 (PST)
+        Wed, 8 Feb 2023 04:23:58 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306584617B;
+        Wed,  8 Feb 2023 01:22:16 -0800 (PST)
+X-UUID: 10e767f4a79211ed945fc101203acc17-20230208
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=FYqXzbvZnEJ7V9EG4NvhVW6FTKkDUIDBVcNLiTOQlqc=;
+        b=duN6O+QozSICLC1O6Tyd+50Dx5Ttn0G2pq0gQRmjWkqQ5wIlq56MLzsEq/D+syP4hbHdrFxqiQflQWo/0w4UrAcgH1wxwMtOA6ex0eYTHY1a4cq/GvzMAXIbY+lS/bF66G6hzYprezRpl3N5HxMch36zbldcF4TEOj5Yu7U0oXc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:83fed0ea-ddaa-45d7-b5e6-e709888f37e6,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:885ddb2,CLOUDID:3d85458e-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: 10e767f4a79211ed945fc101203acc17-20230208
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1291526433; Wed, 08 Feb 2023 17:22:10 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Wed, 8 Feb 2023 17:22:10 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 8 Feb 2023 17:22:10 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Moudy Ho <moudy.ho@mediatek.com>
+Subject: [PATCH v4 00/16] add support MDP3 on MT8195 platform
+Date:   Wed, 8 Feb 2023 17:21:53 +0800
+Message-ID: <20230208092209.19472-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <cover.1675734681.git.chenfeiyang@loongson.cn> <1af05c1441e9f96870be1cc20b1162e3f5043b2e.1675734681.git.chenfeiyang@loongson.cn>
- <1e7da4e7-392d-4a9e-aa95-0599a0c84419@app.fastmail.com> <CACWXhK==yVZGZbY+3DUAuxL34=gKwQv20Cw3y1+QKir0D2F3EQ@mail.gmail.com>
- <Y+MXk9A+gB1W6T/n@1wt.eu> <CACWXhKn1N6f7XvtrbDno4UyAhMZbV_htQoRbm0ws9gjF08wnBw@mail.gmail.com>
- <7c98aac5-6b64-4f6b-b242-7ad3b8a334a8@app.fastmail.com> <Y+NbF6OrYu62OQCX@1wt.eu>
-In-Reply-To: <Y+NbF6OrYu62OQCX@1wt.eu>
-From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
-Date:   Wed, 8 Feb 2023 17:20:18 +0800
-Message-ID: <CACWXhKmWo0MX2mVE3O_xDDwNg7XxW_Yjm272K2nzRAiN13CQ9w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] nolibc: Add statx() support to implement sys_stat()
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 at 16:19, Willy Tarreau <w@1wt.eu> wrote:
->
-> On Wed, Feb 08, 2023 at 09:06:24AM +0100, Arnd Bergmann wrote:
-> > On Wed, Feb 8, 2023, at 08:42, Feiyang Chen wrote:
-> > > On Wed, 8 Feb 2023 at 11:31, Willy Tarreau <w@1wt.eu> wrote:
-> > >>
-> > >> I generally agree with the Arnd's points overall and I'm fine with the
-> > >> rest of your series. On this specific point, I'm fine with your proposal,
-> > >> let's just start with sys_statx() only on this arch, please add a comment
-> > >> about this possibility in the commit message that brings statx(),
-> > >> indicating that other archs are likely to benefit from it as well, and
-> > >> let's see after this if we can migrate all archs to statx.
-> > >>
-> > >
-> > > We have a problem if we just start with sys_statx() only on this arch.
-> > > When struct stat is not defined, what should we do with stat() in the
-> > > nolibc selftest?
-> >
-> > To clarify: your proposed implementation of the stat() function that
-> > fills the nolibc 'struct stat' based on information from 'struct statx'
-> > is fine here. Just remove the 'struct sys_stat_struct' definition
-> > loongarch but keep 'struct stat'.
->
-> Ah I think now I understand the problem Feiyang is facing. Since "struct
-> stat" is just between libc and userland, there's the "sys_stat_struct"
-> that we're using to abstract the syscalls in sys_stat() and that is
-> compatible with each variant of the stat() syscall on each arch. Here
-> there's simply no stat() syscall so it's best not to try to abstract
-> this function at all since types will not match between stat and statx,
-> so it will be better to just implement it like this:
->
-> #if defined(__NR_statx)
->     static __attribute__((unused))
->     int sys_stat(const char *path, struct stat *buf)
->     {
->        struct statx statx;
->        long ret;
->
->        ret = statx(...);
->        buf->xxx = statx.xxx;
->        ...
->        return ret;
->     }
-> #else ...
->    // keep the regular sys_stat() here
-> #endif
->
-> Also looking at the man page I see that statx() only appeared in 4.11,
-> and here we're targetting userland so I'd rather keep a bit of margin
-> when it comes to backwards compatibility, thus not dropping stat() and
-> friends too early when not necessary. However using statx() by default
-> when available sounds fine to me!
->
+Changes since v3:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-media/list/?series=719841
+- Suggested by Krzysztof, integrating all newly added bindings for
+  the mt8195 MDP3 into the file "mediatek,mt8195-mdp3.yaml".
+- Revise MDP3 nodes with generic names.
 
-Hi, Arnd, Willy,
+Changes since v2:
+- Depend on :
+  [1] MMSYS/MUTEX: https://patchwork.kernel.org/project/linux-mediatek/list/?series=711592
+  [2] MDP3: https://patchwork.kernel.org/project/linux-mediatek/list/?series=711618
+- Suggested by Rob to revise MDP3 bindings to pass dtbs check
+- Add parallel paths feature.
+- Add blended components settings.
 
-I think I get it now, thank you!
+Changes since v1:
+- Depend on :
+  [1] MDP3 : https://patchwork.kernel.org/project/linux-mediatek/list/?series=698872
+  [2] MMSYS/MUTEX: https://patchwork.kernel.org/project/linux-mediatek/list/?series=684959
+- Fix compilation failure due to use of undeclared identifier in file "mtk-mdp3-cmdq.c"
 
-Thanks,
-Feiyang
+Hello,
 
-> Cheers,
-> Willy
+This patch is used to add support for MDP3 on the MT8195 platform that
+contains more picture quality components, and can arrange more pipelines
+through two sets of MMSYS and MUTEX respectively.
+
+Moudy Ho (16):
+  dt-binding: mediatek: correct MDP3 node with generic names
+  arm64: dts: mediatek: mt8183: correct MDP3 DMA-related nodes
+  dt-binding: mediatek: add MediaTek mt8195 MDP3 components
+  arm64: dts: mediatek: mt8195: add MDP3 nodes
+  media: platform: mtk-mdp3: add support second sets of MMSYS
+  media: platform: mtk-mdp3: add support second sets of MUTEX
+  media: platform: mtk-mdp3: introduce more pipelines from MT8195
+  media: platform: mtk-mdp3: introduce more MDP3 components
+  media: platform: mtk-mdp3: add checks for dummy components
+  media: platform: mtk-mdp3: avoid multiple driver registrations
+  media: platform: mtk-mdp3: extend GCE event waiting in RDMA and WROT
+  media: platform: mtk-mdp3: add the blend of component in MUTEX MOD
+  media: platform: mtk-mdp3: add mt8195 platform configuration
+  media: platform: mtk-mdp3: add mt8195 shared memory configurations
+  media: platform: mtk-mdp3: add mt8195 MDP3 component settings
+  media: platform: mtk-mdp3: add support for parallel pipe to improve
+    FPS
+
+ .../bindings/media/mediatek,mdp3-rdma.yaml    |  59 +-
+ .../bindings/media/mediatek,mdp3-rsz.yaml     |   5 +-
+ .../bindings/media/mediatek,mdp3-wrot.yaml    |  23 +-
+ .../bindings/media/mediatek,mt8195-mdp3.yaml  | 174 ++++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 426 +++++++++
+ .../platform/mediatek/mdp3/mdp_cfg_data.c     | 729 ++++++++++++++-
+ .../platform/mediatek/mdp3/mdp_reg_aal.h      |  25 +
+ .../platform/mediatek/mdp3/mdp_reg_color.h    |  31 +
+ .../media/platform/mediatek/mdp3/mdp_reg_fg.h |  23 +
+ .../platform/mediatek/mdp3/mdp_reg_hdr.h      |  31 +
+ .../platform/mediatek/mdp3/mdp_reg_merge.h    |  25 +
+ .../platform/mediatek/mdp3/mdp_reg_ovl.h      |  25 +
+ .../platform/mediatek/mdp3/mdp_reg_pad.h      |  21 +
+ .../platform/mediatek/mdp3/mdp_reg_rdma.h     |  24 +
+ .../platform/mediatek/mdp3/mdp_reg_rsz.h      |   2 +
+ .../platform/mediatek/mdp3/mdp_reg_tdshp.h    |  34 +
+ .../platform/mediatek/mdp3/mdp_reg_wrot.h     |   8 +
+ .../platform/mediatek/mdp3/mdp_sm_mt8195.h    | 283 ++++++
+ .../platform/mediatek/mdp3/mtk-img-ipi.h      |   4 +
+ .../platform/mediatek/mdp3/mtk-mdp3-cfg.h     |   2 +
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    | 445 ++++++++--
+ .../platform/mediatek/mdp3/mtk-mdp3-cmdq.h    |   1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 840 +++++++++++++++++-
+ .../platform/mediatek/mdp3/mtk-mdp3-comp.h    |  92 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.c    |  98 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-core.h    |  33 +-
+ .../platform/mediatek/mdp3/mtk-mdp3-m2m.c     |  15 +
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.c    |  18 +
+ .../platform/mediatek/mdp3/mtk-mdp3-regs.h    |   1 +
+ .../platform/mediatek/mdp3/mtk-mdp3-vpu.c     |   3 +-
+ 31 files changed, 3301 insertions(+), 205 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-mdp3.yaml
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_aal.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_color.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_fg.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_hdr.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_merge.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_ovl.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_pad.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_reg_tdshp.h
+ create mode 100644 drivers/media/platform/mediatek/mdp3/mdp_sm_mt8195.h
+
+-- 
+2.18.0
+
