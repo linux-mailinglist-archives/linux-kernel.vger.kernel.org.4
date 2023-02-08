@@ -2,133 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6438C68F834
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F81468F837
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjBHTip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S231935AbjBHTlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:41:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbjBHTin (ORCPT
+        with ESMTP id S229632AbjBHTli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:38:43 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A8E4B779
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:38:42 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id m14so17881438wrg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 11:38:42 -0800 (PST)
+        Wed, 8 Feb 2023 14:41:38 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871424C0F3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:41:36 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id p26so53703252ejx.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 11:41:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BdAD5QrpEcQ0zzaMz4kMFeIBnTyIJbzpOOt7zHm3IRI=;
-        b=FkmfxtiPgxjuvvp4A+gPUuNqzf4PAY4/hh36cKhM/flGzlXiF9Zv4MydUlzd8fF/kQ
-         +LUEqLUIm/VeVFGaLnqhnTzrCMtqGCKJ061eSTxQYwnSt1VCKqXN9XdzT5YGh9Zbs15x
-         y79wRHq2HVwTCNYwUX68HNb2pikwg1qXjzpgvXbnPF810JZAtxVE2pLKDIv9/cDrzmJ5
-         Ga84vuFFML6iq3/dvb8y8QPrM7sOZ80Ml1Rv2aJ7UfcT5VpLifz7AWhnDG1bdhuNZcoO
-         4Drt5rZoGR5frOnpRnlBwWjx/X4D2P4PQnLe7hw8WqtDkwVBm1yjqznc+qyza4Nk09Cw
-         lCoA==
+        bh=c7z310ECkIF8ZIDTjgg46Q2v6BcKj9bWP+Nfq0LTJRc=;
+        b=Mroeh/8th/XwtYv26Sgqcd48ZPjIM1GUF974znlhRjfZMzt2NBOUrJhxf7RIgxdDkX
+         cjiQSKg89WtgJMu4Vw3siG+9stoukZwpl20r0BgqVAkXaP3j9SJFMxA45X/I8ve1J9uO
+         r1f3NcKfvVXNm8LkAJKQyDU3+DWG9+UFA6BLw6OGRADHQZAjHD57rUCDXjpTEGvdh/Zp
+         G7OW2rvcRBH72JEzh28dr9xS0wkAO4Q0ZrbY+XL7S3q/IRRud85UNkhtxnYuW0eD29GJ
+         7eqvbTm7IrMdSgHUB7g16F1Ij2ErtE6TFlkjgUSalGuQmVId08GzmKgR67kL386yhLoq
+         Q1jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BdAD5QrpEcQ0zzaMz4kMFeIBnTyIJbzpOOt7zHm3IRI=;
-        b=ooMHrRHZhaI1TG7Z+pkLAAw1FU8Nsvo4JfmW+hvhJpPZYCpvA22/qx3HPisPQ2w/6k
-         tLgnEIS26IoqXQBcJ4/j7Hsro8+1dys7phsusujhFMzc8rbZUhjreYMXgnjrJl39KXir
-         LiPbiXI7QFUpB+J2bu+g+JCy2KM9arJEcXci3LXt3kDkNYVOwsI8KXdHcfO8+D7mnOiH
-         i/Rcee4O2j9sJ/Z14nH3YoQQrfAJDms+9BYWb7wOTyNo4LQiYAMuScWmoCM7IR9oEcim
-         Q9DO10aveTOm0REhC415yVobQBZqWxK2m6idP6X1tIplhDh/vdXi1VRFsLFTCS16sIEf
-         PnRg==
-X-Gm-Message-State: AO0yUKVDwZpiCOJZ2qyNx8gq+TGvJuEBDKLLggsAKIcNJX4w2rrApP1M
-        Cjs8tpS9IbvRBWu1F0ztWenBVQ==
-X-Google-Smtp-Source: AK7set/Sk+mM5Gp0qTAl+sx2O3tRO1dQ1UUP0ecynbikcu/9D+jv85ph6CzBBq4we+evJn0ovJMdnA==
-X-Received: by 2002:a5d:62c8:0:b0:2c3:f250:f1ed with SMTP id o8-20020a5d62c8000000b002c3f250f1edmr10154258wrv.1.1675885121164;
-        Wed, 08 Feb 2023 11:38:41 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b002c3efca57e1sm6382181wrt.110.2023.02.08.11.38.39
+        bh=c7z310ECkIF8ZIDTjgg46Q2v6BcKj9bWP+Nfq0LTJRc=;
+        b=vEEsgw2f47VcZmgf3GRMwTKX3BfS5Nmg5VJXGqR3z6bOgSGgeA3XrFyb0I4xPLvXY6
+         HqwvmPvO0YhFK21iaM9BcV6MN9YajmtusPbCW792grLNkJZuGGjbaqD5kYg1/N65KGGo
+         9gZRLterjTd3aTubPK23NC7b9LCakMY746Fvi9g/n6d1xDde1bb9iPVnDWBWFvLShvPP
+         paSO8xv++QZfc01VfGA9Bee8GyPsXRy/0dwDk4Et+6rnWZt9gVU39I6YD0taPY8lkeMi
+         McQsnFYWbtOSTbsphhwWUx2wStikNZ+wt1JBbdXXFvUM1mKSYg1S5KrOOsRZe26X5Q7V
+         f5+A==
+X-Gm-Message-State: AO0yUKVBJfDlbDb8Ws6v9g3/NVInKxTNc4nefVof4mEVFgImUAzalunV
+        KGZQWKnRnOfBgKg1RTCka6Q=
+X-Google-Smtp-Source: AK7set83+61MVaW4S6ceQAaGahYCU3F+Hgxy4cs9xFCZi6NAZ1C3uFpcRZ2vZUKegoRj8a/2D9BL8A==
+X-Received: by 2002:a17:907:d19:b0:884:26ec:388b with SMTP id gn25-20020a1709070d1900b0088426ec388bmr11909072ejc.39.1675885294997;
+        Wed, 08 Feb 2023 11:41:34 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id g18-20020a170906595200b00878775876c5sm8759827ejr.73.2023.02.08.11.41.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 11:38:40 -0800 (PST)
-Message-ID: <f09a89e0-c93f-dacd-2270-379e43773b61@linaro.org>
-Date:   Wed, 8 Feb 2023 20:38:39 +0100
+        Wed, 08 Feb 2023 11:41:34 -0800 (PST)
+Message-ID: <ad3a5c30-5062-55ae-7908-c0a127bec5ee@gmail.com>
+Date:   Wed, 8 Feb 2023 20:41:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] ASoC: dt-bindings: wlf,wm8994: Convert to dtschema
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/3] time/sched_clock: Export sched_clock_register()
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        - <patches@opensource.cirrus.com>, devicetree@vger.kernel.org
-References: <20230208172552.404324-1-krzysztof.kozlowski@linaro.org>
- <167588125123.2283195.8694738903913228349.robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <167588125123.2283195.8694738903913228349.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        walter.chang@mediatek.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230208094813.20874-1-walter.chang@mediatek.com>
+ <20230208094813.20874-2-walter.chang@mediatek.com>
+ <e1a89a4e-8a0d-47e1-a8fd-75ea152ef816@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <e1a89a4e-8a0d-47e1-a8fd-75ea152ef816@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 19:46, Rob Herring wrote:
-> 
-> On Wed, 08 Feb 2023 18:25:52 +0100, Krzysztof Kozlowski wrote:
->> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
->> schema.
+
+
+On 08/02/2023 15:24, Krzysztof Kozlowski wrote:
+> On 08/02/2023 10:48, walter.chang@mediatek.com wrote:
+>> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
 >>
->> Changes against original binding:
->> 1. Add missing LDO1VDD-supply for WM1811.
->> 2. Use "gpios" suffix for wlf,ldo1ena and wlf,ldo2ena (Linux kernel's
->>    gpiolib already looks for both variants).
->> 3. Do not require AVDD1-supply and DCVDD-supply, because at least on
->>    Arndale board with Exynos5250 these are grounded.
+>> clocksource driver may use sched_clock_register()
+>> to resigter itself as a sched_clock source.
+>> Export it to support building such driver
+>> as module, like timer-mediatek.c
 >>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
 >> ---
->>  .../devicetree/bindings/sound/wlf,wm8994.yaml | 203 ++++++++++++++++++
->>  .../devicetree/bindings/sound/wm8994.txt      | 112 ----------
->>  2 files changed, 203 insertions(+), 112 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
->>  delete mode 100644 Documentation/devicetree/bindings/sound/wm8994.txt
+>>   kernel/time/sched_clock.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
 >>
+>> diff --git a/kernel/time/sched_clock.c b/kernel/time/sched_clock.c
+>> index 8464c5acc913..8e49e87d1221 100644
+>> --- a/kernel/time/sched_clock.c
+>> +++ b/kernel/time/sched_clock.c
+>> @@ -150,8 +150,7 @@ static enum hrtimer_restart sched_clock_poll(struct hrtimer *hrt)
+>>   	return HRTIMER_RESTART;
+>>   }
+>>   
+>> -void __init
+>> -sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
+>> +void sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
 > 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
+> Is there a non-init caller?
 > 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
+>>   {
+>>   	u64 res, wrap, new_mask, new_epoch, cyc, ns;
+>>   	u32 new_mult, new_shift;
+>> @@ -223,6 +222,7 @@ sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
+>>   
+>>   	pr_debug("Registered %pS as sched_clock source\n", read);
+>>   }
+>> +EXPORT_SYMBOL_GPL(sched_clock_register);
 > 
-> Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230208172552.404324-1-krzysztof.kozlowski@linaro.org
+> Where is the module using it?
 > 
+> You need to bring users of these two changes, not just prepare something
+> for your out of tree patches.
 > 
-> audio-codec@1a: 'AVDD1-supply' is a required property
-> 	arch/arm/boot/dts/exynos5250-smdk5250.dtb
-> 	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-> 	arch/arm/boot/dts/s5pv210-galaxys.dtb
-> 
-> audio-codec@1a: 'DCVDD-supply' is a required property
-> 	arch/arm/boot/dts/exynos5250-smdk5250.dtb
-> 	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
-> 	arch/arm/boot/dts/s5pv210-galaxys.dtb
 
-These two need corrections in the binding - next version of patch.
+I'd propose to add at least one driver that will need these changes, to make it 
+clear why you need that.
 
-> 
-> audio-codec@1a: Unevaluated properties are not allowed ('wlf,ldo1ena', 'wlf,ldo2ena' were unexpected)
-> 	arch/arm/boot/dts/exynos4412-i9300.dtb
-
-These are fixed here:
-https://lore.kernel.org/linux-samsung-soc/20230208172634.404452-1-krzysztof.kozlowski@linaro.org/T/#t
-
-Best regards,
-Krzysztof
-
+Regards,
+Matthias
