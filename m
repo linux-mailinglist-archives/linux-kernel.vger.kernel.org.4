@@ -2,358 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52CF68F0A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B4C68F0A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjBHOYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S231202AbjBHOYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:24:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBHOYb (ORCPT
+        with ESMTP id S230515AbjBHOYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:24:31 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E17E11E8A
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675866269; x=1707402269;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7Ce/+0NXhcpo9W0yqjgWZEhDd3HzoOlwxcHLgWOWIIc=;
-  b=jrm2iW41ZqtVtU9LEEO+DuOOqw9dGMLXJ3zvbXEz5gzJysYakCUCCdv3
-   jcVyS7EoHqNxJvAlxfSYw6FciD6JeaVB+P+7/3uQZExXvK4E035KHx8y8
-   4s0um8SErU18aVUm74Vs3FwMdmpRu+aySnt7UfSiUbL04PZscvct0g8MW
-   YjqoJ/KssYYq8k/4glyedeq6qGa67Ua3hyUr4Qq6zjvkIFZd0aUYVgLn4
-   NEktoYdZid110f1+pvHJbBMit3ZF3CEOm+PS/0b5b+W+YP+YoXvz8BvQk
-   OykMtZe5qb0MvU133xgv30ZgDuDp10yKVX9ENWkOoYWOC5+YyAp6P7JRK
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="392201366"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="392201366"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:21 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791214084"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="791214084"
-Received: from twinkler-lnx.jer.intel.com ([10.12.87.42])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:24:18 -0800
-From:   Tomas Winkler <tomas.winkler@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        Ceraolo Spurio Daniele <daniele.ceraolospurio@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: [char-misc-next v3 2/2] mei: gsc_proxy: add gsc proxy driver
-Date:   Wed,  8 Feb 2023 16:23:58 +0200
-Message-Id: <20230208142358.1401618-3-tomas.winkler@intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230208142358.1401618-1-tomas.winkler@intel.com>
-References: <20230208142358.1401618-1-tomas.winkler@intel.com>
+        Wed, 8 Feb 2023 09:24:35 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DBC3B0EB
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:24:34 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 950FC41;
+        Wed,  8 Feb 2023 15:24:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1675866271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=drL93NXnDDD64IhXZUmZIWPeKMBa8824+z2G2QnTmD0=;
+        b=MyAQ6ZVbAhn2BRsrnLu3YgakBYpoziFb8zMRyaVIt0++NAeEFE+2WdlnPw3iENBkrXTmLP
+        02zF9gTRY0+oghhu10N062ZSUyAlx6ExGnFpIUiY8rTvILzXGiA6nbc6mf56hJFzO+owCr
+        /CO1ATLJ2wbq4R5QdkGEWPg263WMohdXfEyo7m3fqtJjhPz2o+6soUk6duyAw+uCC3VqSX
+        imIqKZiMJ4ZikNlFQuG4gqnbtmBisz0t+Kj59QwbZXGNYWjsaCPFWSM+c9M/qIEUUdhQYc
+        i1EfBeX2Ra/H/0dfX06di+kcq6ByWfMAFNeysFUMkG8IhKC71Sv1XeS6w5gNZg==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Wed, 08 Feb 2023 15:24:31 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, stable <stable@kernel.org>
+Subject: Re: [PATCH v2] mtd: spi-nor: fix memory leak when using
+ debugfs_lookup()
+In-Reply-To: <Y+Ot0FXLgrSoLy7Q@kroah.com>
+References: <20230208125758.1515806-1-gregkh@linuxfoundation.org>
+ <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc> <Y+Ot0FXLgrSoLy7Q@kroah.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e9c24836696de76959bbf808b2a90863@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Usyskin <alexander.usyskin@intel.com>
+Am 2023-02-08 15:12, schrieb Greg Kroah-Hartman:
+> On Wed, Feb 08, 2023 at 02:36:23PM +0100, Michael Walle wrote:
+>> Am 2023-02-08 13:57, schrieb Greg Kroah-Hartman:
+>> > When calling debugfs_lookup() the result must have dput() called on it,
+>> > otherwise the memory will leak over time.
+>> >
+>> > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+>> > Cc: Pratyush Yadav <pratyush@kernel.org>
+>> > Cc: Michael Walle <michael@walle.cc>
+>> > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+>> > Cc: Richard Weinberger <richard@nod.at>
+>> > Cc: Vignesh Raghavendra <vigneshr@ti.com>
+>> > Cc: linux-mtd@lists.infradead.org
+>> > Cc: stable <stable@kernel.org>
+>> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> > ---
+>> > v2: fix up to work when module is removed and added, making the fix
+>> >     much simpler.
+>> >
+>> >  drivers/mtd/spi-nor/debugfs.c | 1 +
+>> >  1 file changed, 1 insertion(+)
+>> >
+>> > diff --git a/drivers/mtd/spi-nor/debugfs.c
+>> > b/drivers/mtd/spi-nor/debugfs.c
+>> > index ff895f6758ea..af41fbc09a97 100644
+>> > --- a/drivers/mtd/spi-nor/debugfs.c
+>> > +++ b/drivers/mtd/spi-nor/debugfs.c
+>> > @@ -242,6 +242,7 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
+>> >
+>> >  	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
+>> >  	nor->debugfs_root = d;
+>> > +	dput(rootdir);
+>> 
+>> rootdir might either be the return value of debugfs_lookup() or
+>> debugfs_create_dir(). dput() is probably wrong for the latter,
+>> right? Also there is an early return, where the dput() is missing,
+>> too.
+> 
+> {sigh}
+> 
+> Yeah, this is all wrong, sorry.  Let me fix this up again, properly.
+> And to do it properly, let's have the module remove the directory if it
+> is unloaded, like a good module should :)
 
-Add GSC proxy driver. It to allows messaging between GSC component
-on Intel on board graphics card and CSE device.
+There were some complications. IIRC you'd need to do reference counting,
+to determine whether you are the last user of the rootdir. Other subsys
+create an empty rootdir in their .init(). But that was hard to do in 
+MTD.
+Again memory is hazy.. Therefore, I resorted to create it on the fly if
+there isn't already one.
 
-Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
----
-V2: refactor match function
-    use device information instead of driver name
-    to identify the aggregate device.
-V3: Resend
+Maybe you got some better/simpler idea :)
 
- drivers/misc/mei/Kconfig                   |   2 +-
- drivers/misc/mei/Makefile                  |   1 +
- drivers/misc/mei/gsc_proxy/Kconfig         |  14 ++
- drivers/misc/mei/gsc_proxy/Makefile        |   7 +
- drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c | 208 +++++++++++++++++++++
- 5 files changed, 231 insertions(+), 1 deletion(-)
- create mode 100644 drivers/misc/mei/gsc_proxy/Kconfig
- create mode 100644 drivers/misc/mei/gsc_proxy/Makefile
- create mode 100644 drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
-
-diff --git a/drivers/misc/mei/Kconfig b/drivers/misc/mei/Kconfig
-index d21486d69df2..37db142de413 100644
---- a/drivers/misc/mei/Kconfig
-+++ b/drivers/misc/mei/Kconfig
-@@ -62,4 +62,4 @@ config INTEL_MEI_GSC
- 
- source "drivers/misc/mei/hdcp/Kconfig"
- source "drivers/misc/mei/pxp/Kconfig"
--
-+source "drivers/misc/mei/gsc_proxy/Kconfig"
-diff --git a/drivers/misc/mei/Makefile b/drivers/misc/mei/Makefile
-index fb740d754900..14aee253ae48 100644
---- a/drivers/misc/mei/Makefile
-+++ b/drivers/misc/mei/Makefile
-@@ -30,3 +30,4 @@ CFLAGS_mei-trace.o = -I$(src)
- 
- obj-$(CONFIG_INTEL_MEI_HDCP) += hdcp/
- obj-$(CONFIG_INTEL_MEI_PXP) += pxp/
-+obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += gsc_proxy/
-diff --git a/drivers/misc/mei/gsc_proxy/Kconfig b/drivers/misc/mei/gsc_proxy/Kconfig
-new file mode 100644
-index 000000000000..fd45ce8c1df4
---- /dev/null
-+++ b/drivers/misc/mei/gsc_proxy/Kconfig
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (c) 2022-2023, Intel Corporation. All rights reserved.
-+#
-+config INTEL_MEI_GSC_PROXY
-+	tristate "Intel GSC Proxy services of ME Interface"
-+	select INTEL_MEI_ME
-+	depends on DRM_I915
-+	help
-+         MEI Support for GSC Proxy Services on Intel platforms.
-+
-+         MEI GSC proxy enables messaging between GSC service on
-+         Intel graphics on-board card and services on CSE (MEI)
-+         firmware residing SoC or PCH.
-+
-diff --git a/drivers/misc/mei/gsc_proxy/Makefile b/drivers/misc/mei/gsc_proxy/Makefile
-new file mode 100644
-index 000000000000..358847e9aaa9
---- /dev/null
-+++ b/drivers/misc/mei/gsc_proxy/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2022-2023, Intel Corporation. All rights reserved.
-+#
-+# Makefile - GSC Proxy client driver for Intel MEI Bus Driver.
-+
-+obj-$(CONFIG_INTEL_MEI_GSC_PROXY) += mei_gsc_proxy.o
-diff --git a/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
-new file mode 100644
-index 000000000000..953eda1a16fb
---- /dev/null
-+++ b/drivers/misc/mei/gsc_proxy/mei_gsc_proxy.c
-@@ -0,0 +1,208 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2022-2023 Intel Corporation
-+ */
-+
-+/**
-+ * DOC: MEI_GSC_PROXY Client Driver
-+ *
-+ * The mei_gsc_proxy driver acts as a translation layer between
-+ * proxy user (I915) and ME FW by proxying messages to ME FW
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/pci.h>
-+#include <linux/slab.h>
-+#include <linux/uuid.h>
-+#include <linux/mei_cl_bus.h>
-+#include <linux/component.h>
-+#include <drm/drm_connector.h>
-+#include <drm/i915_component.h>
-+#include <drm/i915_gsc_proxy_mei_interface.h>
-+
-+/**
-+ * mei_gsc_proxy_send - Sends a proxy message to ME FW.
-+ * @dev: device corresponding to the mei_cl_device
-+ * @buf: a message buffer to send
-+ * @size: size of the message
-+ * Return: bytes sent on Success, <0 on Failure
-+ */
-+static int mei_gsc_proxy_send(struct device *dev, const void *buf, size_t size)
-+{
-+	ssize_t ret;
-+
-+	if (!dev || !buf)
-+		return -EINVAL;
-+
-+	ret = mei_cldev_send(to_mei_cl_device(dev), buf, size);
-+	if (ret < 0)
-+		dev_dbg(dev, "mei_cldev_send failed. %zd\n", ret);
-+
-+	return ret;
-+}
-+
-+/**
-+ * mei_gsc_proxy_recv - Receives a proxy message from ME FW.
-+ * @dev: device corresponding to the mei_cl_device
-+ * @buf: a message buffer to contain the received message
-+ * @size: size of the buffer
-+ * Return: bytes received on Success, <0 on Failure
-+ */
-+static int mei_gsc_proxy_recv(struct device *dev, void *buf, size_t size)
-+{
-+	ssize_t ret;
-+
-+	if (!dev || !buf)
-+		return -EINVAL;
-+
-+	ret = mei_cldev_recv(to_mei_cl_device(dev), buf, size);
-+	if (ret < 0)
-+		dev_dbg(dev, "mei_cldev_recv failed. %zd\n", ret);
-+
-+	return ret;
-+}
-+
-+static const struct i915_gsc_proxy_component_ops mei_gsc_proxy_ops = {
-+	.owner = THIS_MODULE,
-+	.send = mei_gsc_proxy_send,
-+	.recv = mei_gsc_proxy_recv,
-+};
-+
-+static int mei_component_master_bind(struct device *dev)
-+{
-+	struct mei_cl_device *cldev = to_mei_cl_device(dev);
-+	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
-+
-+	comp_master->ops = &mei_gsc_proxy_ops;
-+	comp_master->mei_dev = dev;
-+	return component_bind_all(dev, comp_master);
-+}
-+
-+static void mei_component_master_unbind(struct device *dev)
-+{
-+	struct mei_cl_device *cldev = to_mei_cl_device(dev);
-+	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
-+
-+	component_unbind_all(dev, comp_master);
-+}
-+
-+static const struct component_master_ops mei_component_master_ops = {
-+	.bind = mei_component_master_bind,
-+	.unbind = mei_component_master_unbind,
-+};
-+
-+/**
-+ * mei_gsc_proxy_component_match - compare function for matching mei.
-+ *
-+ *    The function checks if the device is pci device and
-+ *    Intel VGA adapter, the subcomponent is SW Proxy
-+ *    and the parent of MEI PCI and the parent of VGA are the same PCH device.
-+ *
-+ * @dev: master device
-+ * @subcomponent: subcomponent to match (I915_COMPONENT_SWPROXY)
-+ * @data: compare data (mei pci parent)
-+ *
-+ * Return:
-+ * * 1 - if components match
-+ * * 0 - otherwise
-+ */
-+static int mei_gsc_proxy_component_match(struct device *dev, int subcomponent,
-+					 void *data)
-+{
-+	struct pci_dev *pdev;
-+
-+	if (!dev_is_pci(dev))
-+		return 0;
-+
-+	pdev = to_pci_dev(dev);
-+
-+	if (pdev->class != (PCI_CLASS_DISPLAY_VGA << 8) ||
-+	    pdev->vendor != PCI_VENDOR_ID_INTEL)
-+		return 0;
-+
-+	if (subcomponent != I915_COMPONENT_GSC_PROXY)
-+		return 0;
-+
-+	return component_compare_dev(dev->parent, ((struct device *)data)->parent);
-+}
-+
-+static int mei_gsc_proxy_probe(struct mei_cl_device *cldev,
-+			       const struct mei_cl_device_id *id)
-+{
-+	struct i915_gsc_proxy_component *comp_master;
-+	struct component_match *master_match = NULL;
-+	int ret;
-+
-+	ret = mei_cldev_enable(cldev);
-+	if (ret < 0) {
-+		dev_err(&cldev->dev, "mei_cldev_enable Failed. %d\n", ret);
-+		goto enable_err_exit;
-+	}
-+
-+	comp_master = kzalloc(sizeof(*comp_master), GFP_KERNEL);
-+	if (!comp_master) {
-+		ret = -ENOMEM;
-+		goto err_exit;
-+	}
-+
-+	component_match_add_typed(&cldev->dev, &master_match,
-+				  mei_gsc_proxy_component_match, cldev->dev.parent);
-+	if (IS_ERR_OR_NULL(master_match)) {
-+		ret = -ENOMEM;
-+		goto err_exit;
-+	}
-+
-+	mei_cldev_set_drvdata(cldev, comp_master);
-+	ret = component_master_add_with_match(&cldev->dev,
-+					      &mei_component_master_ops,
-+					      master_match);
-+	if (ret < 0) {
-+		dev_err(&cldev->dev, "Master comp add failed %d\n", ret);
-+		goto err_exit;
-+	}
-+
-+	return 0;
-+
-+err_exit:
-+	mei_cldev_set_drvdata(cldev, NULL);
-+	kfree(comp_master);
-+	mei_cldev_disable(cldev);
-+enable_err_exit:
-+	return ret;
-+}
-+
-+static void mei_gsc_proxy_remove(struct mei_cl_device *cldev)
-+{
-+	struct i915_gsc_proxy_component *comp_master = mei_cldev_get_drvdata(cldev);
-+	int ret;
-+
-+	component_master_del(&cldev->dev, &mei_component_master_ops);
-+	kfree(comp_master);
-+	mei_cldev_set_drvdata(cldev, NULL);
-+
-+	ret = mei_cldev_disable(cldev);
-+	if (ret)
-+		dev_warn(&cldev->dev, "mei_cldev_disable() failed %d\n", ret);
-+}
-+
-+#define MEI_UUID_GSC_PROXY UUID_LE(0xf73db04, 0x97ab, 0x4125, \
-+				   0xb8, 0x93, 0xe9, 0x4, 0xad, 0xd, 0x54, 0x64)
-+
-+static struct mei_cl_device_id mei_gsc_proxy_tbl[] = {
-+	{ .uuid = MEI_UUID_GSC_PROXY, .version = MEI_CL_VERSION_ANY },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(mei, mei_gsc_proxy_tbl);
-+
-+static struct mei_cl_driver mei_gsc_proxy_driver = {
-+	.id_table = mei_gsc_proxy_tbl,
-+	.name = KBUILD_MODNAME,
-+	.probe = mei_gsc_proxy_probe,
-+	.remove	= mei_gsc_proxy_remove,
-+};
-+
-+module_mei_cl_driver(mei_gsc_proxy_driver);
-+
-+MODULE_AUTHOR("Intel Corporation");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MEI GSC PROXY");
--- 
-2.39.1
-
+-michael
