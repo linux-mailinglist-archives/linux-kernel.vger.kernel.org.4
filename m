@@ -2,148 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE8568EF71
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2845E68EF75
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBHM7U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Feb 2023 07:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S230263AbjBHNBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjBHM7R (ORCPT
+        with ESMTP id S229674AbjBHNBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:59:17 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8311FF08;
-        Wed,  8 Feb 2023 04:59:03 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pPk2F-002T4M-JL; Wed, 08 Feb 2023 13:58:51 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pPk2F-000LfL-Bn; Wed, 08 Feb 2023 13:58:51 +0100
-Message-ID: <3a5a4bee5c0739a3b988a328376a6eed3c385fda.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for
- CONFIG_CPUMASK_OFFSTACK
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Wed, 08 Feb 2023 13:58:50 +0100
-In-Reply-To: <20220714084136.570176-3-chenhuacai@loongson.cn>
-References: <20220714084136.570176-1-chenhuacai@loongson.cn>
-         <20220714084136.570176-3-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        Wed, 8 Feb 2023 08:01:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC22B7DB4
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:00:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675861215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GZD4eF51TgC9oueoQn3RvNXVi7q+IJ98lRzwYnyNJW8=;
+        b=GKGSFnsaoo6SBmXhk0afNU7oC26Dl05/QgnFPgX4boR5tN5KxrRVRkzns/nbq9Abbzagc/
+        Z9lCc/Z/d0GGpEnF9Vo1SUEVebTyI4DMVqSB0pKjKg2aGgEROZlPEy6xvTzNoJtvR+2IMI
+        wPpTCBGuVC5/3ECAgZbMfC+1iT2dHik=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-539-nyJJ4nuiMl6_FE5Eo2OeAg-1; Wed, 08 Feb 2023 08:00:13 -0500
+X-MC-Unique: nyJJ4nuiMl6_FE5Eo2OeAg-1
+Received: by mail-ej1-f69.google.com with SMTP id ge13-20020a170907908d00b008aac038968aso1946707ejb.21
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 05:00:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GZD4eF51TgC9oueoQn3RvNXVi7q+IJ98lRzwYnyNJW8=;
+        b=tE1eRYZ2yzukjYKK4W/37rgOmDukPWNa/CAAGDuW0tV5OFx9Ond1Cx/97StQkMOAyn
+         oLVvSG7W9YGsUNeEOt0AZiWv0zOZasR5DXzSTl29fNL+JIz9NxKcGsN8pmp8OtjETLAL
+         694Hc57VOSQ5KahmwHNaJz6DQvwcDexunKUuIrdyvBF1bqge+8yaFaQRQycNO2rjjKHm
+         f/lawgIgUNN8yIRtR62rRwcL9eAsgSH1SGjH7CabkiCXp0+7c2Ma/7VeEI2HtLlrd+WS
+         frFAXFcPeXmNcHtnwBzAi9MSb2hncX0nmzrkYHkw2Iwf9OD2HlejXE6L3SToFClJ69Jl
+         nWUw==
+X-Gm-Message-State: AO0yUKVz1kEQpff6Wte/9E/fmj0c938tISd5OLLO+rp2X3UAstZL3x7L
+        ISPzUr+rDj0ahyp/EGgPr6ajHkqIzEizGfDAoMh3g5n4NDh0Lm/tl8axl2ZleuCXOr+YwRlwyY9
+        TGV2k5gK7g2+cOcmEyUtBfIPN
+X-Received: by 2002:a17:907:160e:b0:8aa:c035:a651 with SMTP id hb14-20020a170907160e00b008aac035a651mr4776195ejc.37.1675861212230;
+        Wed, 08 Feb 2023 05:00:12 -0800 (PST)
+X-Google-Smtp-Source: AK7set+Y3v6ZDYs6fJVD6bZp4jFnLUDSB+F47FHl799qXTEy7dorD0nLqLTYAKPJs+2DVrLfitMtjQ==
+X-Received: by 2002:a17:907:160e:b0:8aa:c035:a651 with SMTP id hb14-20020a170907160e00b008aac035a651mr4776167ejc.37.1675861212053;
+        Wed, 08 Feb 2023 05:00:12 -0800 (PST)
+Received: from redhat.com ([2.52.132.212])
+        by smtp.gmail.com with ESMTPSA id de48-20020a1709069bf000b0088cf92eb0e1sm8267710ejc.150.2023.02.08.05.00.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 05:00:11 -0800 (PST)
+Date:   Wed, 8 Feb 2023 08:00:05 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Carlos Bilbao <carlos.bilbao@amd.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230208075747-mutt-send-email-mst@kernel.org>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <658272b5-9547-a69f-b6c9-a7ff2dd2d468@amd.com>
+ <Y+HpmIesY96cYcWQ@kroah.com>
+ <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
+ <Y+MAPHZNLeBY13Pj@mit.edu>
+ <20230208041913-mutt-send-email-mst@kernel.org>
+ <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-07-14 at 16:41 +0800, Huacai Chen wrote:
-> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> cpu_max_bits_warn() generates a runtime warning similar as below while
-> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> instead of NR_CPUS to iterate CPUs.
-> 
-> [    3.052463] ------------[ cut here ]------------
-> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-> [    3.070072] Modules linked in: efivarfs autofs4
-> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-> [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-> [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-> [    3.195868]         ...
-> [    3.199917] Call Trace:
-> [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
-> [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
-> [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
-> [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
-> [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
-> [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
-> [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
-> [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
-> [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
-> [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
-> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/sh/kernel/cpu/proc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-> index a306bcd6b341..5f6d0e827bae 100644
-> --- a/arch/sh/kernel/cpu/proc.c
-> +++ b/arch/sh/kernel/cpu/proc.c
-> @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->  
->  static void *c_start(struct seq_file *m, loff_t *pos)
->  {
-> -	return *pos < NR_CPUS ? cpu_data + *pos : NULL;
-> +	return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
->  }
->  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
->  {
+On Wed, Feb 08, 2023 at 10:44:25AM +0000, Reshetova, Elena wrote:
+> Because for the
+> drivers that CoCo guest happens to need, there is no way to fix this problem by 
+> either of these mechanisms (we cannot disable the code that we need), unless somebody
+> writes a totally new set of coco specific drivers (who needs another set of 
+> CoCo specific virtio drivers in the kernel?). 
 
-I build-tested the patch and also booted the patched kernel successfully
-on my SH-7785LCR board.
-
-Showing the contents of /proc/cpuinfo works fine, too:
-
-root@tirpitz:~> cat /proc/cpuinfo
-machine         : SH7785LCR
-processor       : 0
-cpu family      : sh4a
-cpu type        : SH7785
-cut             : 7.x
-cpu flags       : fpu perfctr llsc
-cache type      : split (harvard)
-icache size     : 32KiB (4-way)
-dcache size     : 32KiB (4-way)
-address sizes   : 32 bits physical
-bogomips        : 599.99
-root@tirpitz:~>
-
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-
-I am not sure yet whether the change is also correct as I don't know whether
-it's possible to change the number of CPUs at runtime on SuperH.
-
-Adrian
+I think it's more about pci and all that jazz, no?
+As a virtio maintainer I applied patches adding validation and intend to
+do so in the future simply because for virtio specifically people
+build all kind of weird setups out of software and so validating
+everything is a good idea.
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+MST
+
