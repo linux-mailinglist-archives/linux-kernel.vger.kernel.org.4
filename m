@@ -2,122 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0AE68E4FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9599C68E500
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjBHAbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 19:31:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S229684AbjBHAej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 19:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBHAbF (ORCPT
+        with ESMTP id S229457AbjBHAei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 19:31:05 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CFC93AAC;
-        Tue,  7 Feb 2023 16:31:04 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id 91E3120C7E38; Tue,  7 Feb 2023 16:31:03 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 91E3120C7E38
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675816263;
-        bh=LeJteH6AJ9Cbyv23AKIZT9Zr5jPTl5CR5NBjrB7jEH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bs+VMgppVphlNRwXazqjLvcderqyiIoxWf+J92+m0ALQDuvgh/o/nhk1BNWcBQsPh
-         gz0C3u2HuwTEnY5P1iqMjO1CzkD/+HiRK+CfRh+GX6szjyKALHkQS/5Vqjg1EHw7/2
-         kMQ7Bn9LNIzaQRwZ/K5EZ4sZYQKeFDqpGmC9IVrc=
-Date:   Tue, 7 Feb 2023 16:31:03 -0800
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v9 00/16] Integrity Policy Enforcement LSM (IPE)
-Message-ID: <20230208003103.GC5107@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
- <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <7dc9963c563d0b55bb35109be012e355eef13882.camel@huaweicloud.com>
+        Tue, 7 Feb 2023 19:34:38 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6B6B53B3C8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:34:36 -0800 (PST)
+Received: (qmail 717489 invoked by uid 1000); 7 Feb 2023 19:34:35 -0500
+Date:   Tue, 7 Feb 2023 19:34:35 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Converting dev->mutex into dev->spinlock ?
+Message-ID: <Y+LuG+mNwY46obat@rowland.harvard.edu>
+References: <Y96HiYcreb8jZIHi@rowland.harvard.edu>
+ <917e1e3b-094f-e594-c1a2-8b97fb5195fd@I-love.SAKURA.ne.jp>
+ <Y965qEg0Re2QoQ7Q@rowland.harvard.edu>
+ <CAHk-=wjoy=hObTmyRb9ttApjndt0LfqAfv71Cz+hEGrT0cLN+A@mail.gmail.com>
+ <Y98FLlr7jkiFlV0k@rowland.harvard.edu>
+ <827177aa-bb64-87a9-e1af-dfe070744045@I-love.SAKURA.ne.jp>
+ <Y+Egr4MmqlE6G+mr@rowland.harvard.edu>
+ <a7d0e143-1e68-5531-5c2e-1f853d794bc0@I-love.SAKURA.ne.jp>
+ <Y+KOeJlvQMYAaheZ@rowland.harvard.edu>
+ <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7dc9963c563d0b55bb35109be012e355eef13882.camel@huaweicloud.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a67e24eb-b68f-2abc-50af-ae4c2d4cdd95@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 11:48:18AM +0100, Roberto Sassu wrote:
-> On Tue, 2023-01-31 at 16:48 -0800, Fan Wu wrote:
-> > On Tue, Jan 31, 2023 at 03:22:05PM +0100, Roberto Sassu wrote:
-> > > On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
-> > > > IPE has two known gaps:
-> > > > 
-> > > > 1. IPE cannot verify the integrity of anonymous executable memory, such as
-> > > >   the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
-> > > >   Unfortunately, as this is dynamically generated code, there is no way
-> > > >   for IPE to ensure the integrity of this code to form a trust basis. In all
-> > > >   cases, the return result for these operations will be whatever the admin
-> > > >   configures the DEFAULT action for "EXECUTE".
-> > > 
-> > > I think it would be useful to handle special cases, for example you
-> > > could allow a process that created a file with memfd to use it, at the
-> > > condition that nobody else writes it.
-> > > 
-> > > This would be required during the boot, otherwise services could fail
-> > > to start (depending on the policy).
-> > > 
-> > Thanks for the suggestion. I agree with your opinion and I think supporting
-> > memfd is possible but restricting read/write needs more hooks. We would like
-> > to avoid adding more complexity to this initial posting as necessary. 
-> > We will consider this as a future work and will post follow-on patches
-> > in the future.
+On Wed, Feb 08, 2023 at 07:17:20AM +0900, Tetsuo Handa wrote:
+> On 2023/02/08 2:46, Alan Stern wrote:
+> > The real question is what will happen in your syzbot test scenarios.  
+> > Lockdep certainly ought to be able to detect a real deadlock when one 
+> > occurs.  It will be more interesting to find out if it can warn about 
+> > potential deadlocks _without_ them occurring.
 > 
-> Ok, maybe it is necessary to specify better the scope of IPE, why the
-> current implementation can be considered as complete.
-> 
-> If we say, IPE can only allow/deny operations on system components with
-> immutable security properties, clearly memfd as a component cannot
-> fullfill this goal due to the non-immutability. This would apply to any
-> component allowing modifications.
-> 
-> How to address this? What is the immutable property then?
-> 
-> In the case of memfd, intuitively, a useful property for integrity
-> could be for example that the content can be accessed/modified by only
-> one process. No other (possibly malicious) processes can tamper with
-> that file.
-> 
-> So, it is true, to make this property immutable more hooks are needed.
-> But should it be something that IPE does? Or it should be done by an
-> external component (another LSM) that does the enforcement and reports
-> to IPE that the property is true? Theoretically (with a proper policy),
-> existing LSMs could be used for that purpose too.
-> 
-> I would say more the second, it should not be IPE job, so that IPE can
-> exclusively focus on evaluating properties, not making sure that the
-> properties are immutable.
-> 
-> Roberto
-> 
-I think the issue here is not about the scope of IPE but the use cases
-of IPE. 
+> For example, https://syzkaller.appspot.com/x/repro.c?x=15556074480000 generates
+> below warning, but I don't have syzbot environment. Please propose an updated
+> patch (which won't hit WARN_ON_ONCE()) for allowing people to try it in syzbot
+> environment.
 
-We use IPE on fixed-function devices, which are completely locked down.
-In our system, IPE denies all anonymous memory execution so memfd will
-not work on our system.
+Here is a patch.  I haven't tried to compile it.
 
-Therefore, to make memfd useable with IPE we must add more properties.
+Alan Stern
 
--Fan
+
+
+Index: usb-devel/drivers/base/core.c
+===================================================================
+--- usb-devel.orig/drivers/base/core.c
++++ usb-devel/drivers/base/core.c
+@@ -2322,6 +2322,9 @@ static void device_release(struct kobjec
+ 	devres_release_all(dev);
+ 
+ 	kfree(dev->dma_range_map);
++	mutex_destroy(&dev->mutex);
++	if (!lockdep_static_obj(dev))
++		lockdep_unregister_key(&dev->mutex_key);
+ 
+ 	if (dev->release)
+ 		dev->release(dev);
+@@ -2941,7 +2944,10 @@ void device_initialize(struct device *de
+ 	kobject_init(&dev->kobj, &device_ktype);
+ 	INIT_LIST_HEAD(&dev->dma_pools);
+ 	mutex_init(&dev->mutex);
+-	lockdep_set_novalidate_class(&dev->mutex);
++	if (!lockdep_static_obj(dev)) {
++		lockdep_register_key(&dev->mutex_key);
++		lockdep_set_class(&dev->mutex, &dev->mutex_key);
++	}
+ 	spin_lock_init(&dev->devres_lock);
+ 	INIT_LIST_HEAD(&dev->devres_head);
+ 	device_pm_init(dev);
+Index: usb-devel/include/linux/device.h
+===================================================================
+--- usb-devel.orig/include/linux/device.h
++++ usb-devel/include/linux/device.h
+@@ -570,6 +570,7 @@ struct device {
+ 	struct mutex		mutex;	/* mutex to synchronize calls to
+ 					 * its driver.
+ 					 */
++	struct lock_class_key	mutex_key;	/* Unique key for each device */
+ 
+ 	struct dev_links_info	links;
+ 	struct dev_pm_info	power;
+Index: usb-devel/include/linux/lockdep.h
+===================================================================
+--- usb-devel.orig/include/linux/lockdep.h
++++ usb-devel/include/linux/lockdep.h
+@@ -172,6 +172,7 @@ do {							\
+ 	current->lockdep_recursion -= LOCKDEP_OFF;	\
+ } while (0)
+ 
++extern int lockdep_static_obj(const void *obj);
+ extern void lockdep_register_key(struct lock_class_key *key);
+ extern void lockdep_unregister_key(struct lock_class_key *key);
+ 
+Index: usb-devel/kernel/locking/lockdep.c
+===================================================================
+--- usb-devel.orig/kernel/locking/lockdep.c
++++ usb-devel/kernel/locking/lockdep.c
+@@ -831,7 +831,7 @@ static int arch_is_kernel_initmem_freed(
+ }
+ #endif
+ 
+-static int static_obj(const void *obj)
++int lockdep_static_obj(const void *obj)
+ {
+ 	unsigned long start = (unsigned long) &_stext,
+ 		      end   = (unsigned long) &_end,
+@@ -857,6 +857,7 @@ static int static_obj(const void *obj)
+ 	 */
+ 	return is_module_address(addr) || is_module_percpu_address(addr);
+ }
++EXPORT_SYMBOL_GPL(lockdep_static_obj);
+ #endif
+ 
+ /*
+@@ -969,7 +970,7 @@ static bool assign_lock_key(struct lockd
+ 		lock->key = (void *)can_addr;
+ 	else if (__is_module_percpu_address(addr, &can_addr))
+ 		lock->key = (void *)can_addr;
+-	else if (static_obj(lock))
++	else if (lockdep_static_obj(lock))
+ 		lock->key = (void *)lock;
+ 	else {
+ 		/* Debug-check: all keys must be persistent! */
+@@ -1220,7 +1221,7 @@ void lockdep_register_key(struct lock_cl
+ 	struct lock_class_key *k;
+ 	unsigned long flags;
+ 
+-	if (WARN_ON_ONCE(static_obj(key)))
++	if (WARN_ON_ONCE(lockdep_static_obj(key)))
+ 		return;
+ 	hash_head = keyhashentry(key);
+ 
+@@ -1246,7 +1247,7 @@ static bool is_dynamic_key(const struct
+ 	struct lock_class_key *k;
+ 	bool found = false;
+ 
+-	if (WARN_ON_ONCE(static_obj(key)))
++	if (WARN_ON_ONCE(lockdep_static_obj(key)))
+ 		return false;
+ 
+ 	/*
+@@ -1293,7 +1294,7 @@ register_lock_class(struct lockdep_map *
+ 	if (!lock->key) {
+ 		if (!assign_lock_key(lock))
+ 			return NULL;
+-	} else if (!static_obj(lock->key) && !is_dynamic_key(lock->key)) {
++	} else if (!lockdep_static_obj(lock->key) && !is_dynamic_key(lock->key)) {
+ 		return NULL;
+ 	}
+ 
+@@ -4836,7 +4837,7 @@ void lockdep_init_map_type(struct lockde
+ 	 * Sanity check, the lock-class key must either have been allocated
+ 	 * statically or must have been registered as a dynamic key.
+ 	 */
+-	if (!static_obj(key) && !is_dynamic_key(key)) {
++	if (!lockdep_static_obj(key) && !is_dynamic_key(key)) {
+ 		if (debug_locks)
+ 			printk(KERN_ERR "BUG: key %px has not been registered!\n", key);
+ 		DEBUG_LOCKS_WARN_ON(1);
+@@ -6335,7 +6336,7 @@ void lockdep_unregister_key(struct lock_
+ 
+ 	might_sleep();
+ 
+-	if (WARN_ON_ONCE(static_obj(key)))
++	if (WARN_ON_ONCE(lockdep_static_obj(key)))
+ 		return;
+ 
+ 	raw_local_irq_save(flags);
+
