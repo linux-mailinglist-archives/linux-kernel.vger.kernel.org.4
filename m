@@ -2,197 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAEA68EC0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0C068EC18
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjBHJtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
+        id S230451AbjBHJtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBHJtX (ORCPT
+        with ESMTP id S230194AbjBHJth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:49:23 -0500
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E449A13DDF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:49:21 -0800 (PST)
-HMM_SOURCE_IP: 172.18.0.188:58042.1886889107
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-36.111.64.85 (unknown [172.18.0.188])
-        by chinatelecom.cn (HERMES) with SMTP id D71532800AF;
-        Wed,  8 Feb 2023 17:49:12 +0800 (CST)
-X-189-SAVE-TO-SEND: +liuq131@chinatelecom.cn
-Received: from  ([36.111.64.85])
-        by app0023 with ESMTP id 445ad0df776c47cc8e5c8aff04e70ff5 for akpm@linux-foundation.org;
-        Wed, 08 Feb 2023 17:49:19 CST
-X-Transaction-ID: 445ad0df776c47cc8e5c8aff04e70ff5
-X-Real-From: liuq131@chinatelecom.cn
-X-Receive-IP: 36.111.64.85
-X-MEDUSA-Status: 0
-Sender: liuq131@chinatelecom.cn
-From:   liuq <liuq131@chinatelecom.cn>
-To:     akpm@linux-foundation.org
-Cc:     agruenba@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn,
-        liuq <liuq131@chinatelecom.cn>
-Subject: [PATCH] pid: add handling of too many zombie processes
-Date:   Wed,  8 Feb 2023 17:49:05 +0800
-Message-Id: <20230208094905.373-1-liuq131@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        Wed, 8 Feb 2023 04:49:37 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0834B166C5;
+        Wed,  8 Feb 2023 01:49:33 -0800 (PST)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 08 Feb 2023 18:49:32 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 8C54E2083D75;
+        Wed,  8 Feb 2023 18:49:32 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 8 Feb 2023 18:49:25 +0900
+Received: from [10.212.242.61] (unknown [10.212.242.61])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 414167361;
+        Wed,  8 Feb 2023 18:49:31 +0900 (JST)
+Message-ID: <e54ea691-f312-5a72-4ac6-defa6945c972@socionext.com>
+Date:   Wed, 8 Feb 2023 18:49:30 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] thermal: Remove core header inclusion from drivers
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        "open list:THERMAL DRIVER FOR AMLOGIC SOCS" 
+        <linux-amlogic@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "open list:SAMSUNG THERMAL DRIVER" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
+References: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+Content-Language: en-US
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <20230206153432.1017282-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a common situation that a parent process forks many child
-processes to execute tasks, but the parent process does not execute
-wait/waitpid when the child process exits, resulting in a large
-number of child processes becoming zombie processes.
+Hi Daniel,
 
-At this time, if the number of processes in the system out of
-kernel.pid_max, the new fork syscall will fail, and the system will
-not be able to execute any command at this time
-(unless an old process exits)
+On 2023/02/07 0:34, Daniel Lezcano wrote:
+> As the name states "thermal_core.h" is the header file for the core
+> components of the thermal framework.
+> 
+> Too many drivers are including it. Hopefully the recent cleanups
+> helped to self encapsulate the code a bit more and prevented the
+> drivers to need this header.
+> 
+> Remove this inclusion in every place where it is possible.
+> 
+> Some other drivers did a confusion with the core header and the one
+> exported in linux/thermal.h. They include the former instead of the
+> latter. The changes also fix this.
+> 
+> The tegra/soctherm driver still remains as it uses an internal
+> function which need to be replaced.
+> 
+> The Intel HFI driver uses the netlink internal framework core and
+> should be changed to prevent to deal with the internals.
+> 
+> No functional changes
+> 
+> [ Applies to thermal/linux-next or linux-pm/linux-next ]
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
 
-eg:
-[root@lq-workstation ~]# ls
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: Resource temporarily unavailable
-[root@lq-workstation ~]# reboot
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: retry: Resource temporarily unavailable
--bash: fork: Resource temporarily unavailable
+>   drivers/thermal/uniphier_thermal.c          | 2 --
 
-I dealt with this situation in the alloc_pid function,
-and found a process with the most zombie subprocesses,
-and more than 10(or other reasonable values?) zombie subprocesses,
-so I tried to kill this process to release the pid resources.
+For UniPhier:
 
-Signed-off-by: liuq <liuq131@chinatelecom.cn>
+Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+
+Thank you,
+
 ---
- include/linux/mm.h |  2 ++
- kernel/pid.c       |  6 +++-
- mm/oom_kill.c      | 70 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 77 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 8f857163ac89..afcff08a3878 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1940,6 +1940,8 @@ static inline void clear_page_pfmemalloc(struct page *page)
-  * Can be called by the pagefault handler when it gets a VM_FAULT_OOM.
-  */
- extern void pagefault_out_of_memory(void);
-+extern void pid_max_oom_check(struct pid_namespace *ns);
-+
- 
- #define offset_in_page(p)	((unsigned long)(p) & ~PAGE_MASK)
- #define offset_in_thp(page, p)	((unsigned long)(p) & (thp_size(page) - 1))
-diff --git a/kernel/pid.c b/kernel/pid.c
-index 3fbc5e46b721..1a9a60e19ab6 100644
---- a/kernel/pid.c
-+++ b/kernel/pid.c
-@@ -237,7 +237,11 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
- 		idr_preload_end();
- 
- 		if (nr < 0) {
--			retval = (nr == -ENOSPC) ? -EAGAIN : nr;
-+			retval = nr;
-+			if (nr == -ENOSPC) {
-+				retval = -EAGAIN;
-+				pid_max_oom_check(tmp);
-+			}
- 			goto out_free;
- 		}
- 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 1276e49b31b0..18d05d706f48 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -1260,3 +1260,73 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd, unsigned int, flags)
- 	return -ENOSYS;
- #endif /* CONFIG_MMU */
- }
-+
-+static void oom_pid_evaluate_task(struct task_struct *p,
-+	struct task_struct **max_zombie_task, int *max_zombie_num)
-+{
-+	struct task_struct *child;
-+	int zombie_num = 0;
-+
-+	list_for_each_entry(child, &p->children, sibling) {
-+		if (child->exit_state == EXIT_ZOMBIE)
-+			zombie_num++;
-+	}
-+	if (zombie_num > *max_zombie_num) {
-+		*max_zombie_num = zombie_num;
-+		*max_zombie_task = p;
-+	}
-+}
-+#define MAX_ZOMBIE_NUM 10
-+struct task_struct *pid_max_bad_process(struct pid_namespace *ns)
-+{
-+	int max_zombie_num = 0;
-+	struct task_struct *max_zombie_task = &init_task;
-+	struct task_struct *p;
-+
-+	rcu_read_lock();
-+	for_each_process(p)
-+		oom_pid_evaluate_task(p, &max_zombie_task, &max_zombie_num);
-+	rcu_read_unlock();
-+
-+	if (max_zombie_num > MAX_ZOMBIE_NUM) {
-+		pr_info("process %d has %d zombie child\n",
-+			task_pid_nr_ns(max_zombie_task, ns), max_zombie_num);
-+		return max_zombie_task;
-+	}
-+
-+	return NULL;
-+}
-+
-+void pid_max_oom_kill_process(struct task_struct *task)
-+{
-+	struct oom_control oc = {
-+		.zonelist = NULL,
-+		.nodemask = NULL,
-+		.memcg = NULL,
-+		.gfp_mask = 0,
-+		.order = 0,
-+	};
-+
-+	get_task_struct(task);
-+	oc.chosen = task;
-+
-+	if (mem_cgroup_oom_synchronize(true))
-+		return;
-+
-+	if (!mutex_trylock(&oom_lock))
-+		return;
-+
-+	oom_kill_process(&oc, "Out of pid max(oom_kill_allocating_task)");
-+	mutex_unlock(&oom_lock);
-+}
-+
-+void pid_max_oom_check(struct pid_namespace *ns)
-+{
-+	struct task_struct *p;
-+
-+	p = pid_max_bad_process(ns);
-+	if (p) {
-+		pr_info("oom_kill process %d\n", task_pid_nr_ns(p, ns));
-+		pid_max_oom_kill_process(p);
-+	}
-+}
--- 
-2.27.0
-
+Best Regards
+Kunihiko Hayashi
