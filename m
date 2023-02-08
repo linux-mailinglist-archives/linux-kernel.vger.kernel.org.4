@@ -2,62 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5298A68F8B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284A868F8BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjBHUSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
+        id S230352AbjBHUTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:19:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbjBHUSC (ORCPT
+        with ESMTP id S232060AbjBHUTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:18:02 -0500
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2477A35267
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:18:00 -0800 (PST)
-Received: (wp-smtpd smtp.wp.pl 1855 invoked from network); 8 Feb 2023 21:17:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1675887478; bh=PtURNfYEoKITRRbyvk3vAQH6aL3o5R7Jm4zlISWUBUM=;
-          h=From:To:Cc:Subject;
-          b=fqUDeB8a1xUM0pXzczkN9tCMadnMUY2uSXYk2R+avJsCdl+QST3+CMFb2jlmqPHwf
-           nncJnnX0CMB+M1CqBfTQ3g60i/so/U4eo1AmvMhoZZ0GvUKwgPNWui5hSeSM29kRn4
-           CKstOkGQosv44Ngaf1b1cVo9SMNlbelF97Yw3HYI=
-Received: from 89-64-15-40.dynamic.chello.pl (HELO localhost) (stf_xl@wp.pl@[89.64.15.40])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <jiasheng@iscas.ac.cn>; 8 Feb 2023 21:17:58 +0100
-Date:   Wed, 8 Feb 2023 21:17:57 +0100
-From:   Stanislaw Gruszka <stf_xl@wp.pl>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] iwl3945: Add missing check for
- create_singlethread_workqueue
-Message-ID: <20230208201757.GB1435569@wp.pl>
-References: <20230208063032.42763-1-jiasheng@iscas.ac.cn>
- <20230208063032.42763-2-jiasheng@iscas.ac.cn>
+        Wed, 8 Feb 2023 15:19:25 -0500
+Received: from outbound-smtp52.blacknight.com (outbound-smtp52.blacknight.com [46.22.136.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BA03251B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:19:20 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp52.blacknight.com (Postfix) with ESMTPS id 21BBEFA8FD
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 20:19:19 +0000 (GMT)
+Received: (qmail 14756 invoked from network); 8 Feb 2023 20:19:18 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 8 Feb 2023 20:19:18 -0000
+Date:   Wed, 8 Feb 2023 20:19:17 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Linux-RT <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4] locking/rwbase: Mitigate indefinite writer starvation
+Message-ID: <20230208201917.o57hd7ktzof6wkfi@techsingularity.net>
+References: <20230120140847.4pjqf3oinemokcyp@techsingularity.net>
+ <87ttzyyigk.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20230208063032.42763-2-jiasheng@iscas.ac.cn>
-X-WP-MailID: f397f3d1b287d936b978b5d9adf80467
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [obOV]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <87ttzyyigk.ffs@tglx>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 02:30:32PM +0800, Jiasheng Jiang wrote:
-> Add the check for the return value of the create_singlethread_workqueue
-> in order to avoid NULL pointer dereference.
+On Mon, Feb 06, 2023 at 03:30:35PM +0100, Thomas Gleixner wrote:
+> Mel!
+
+Hi :)
+
+I'm not really online for the next several weeks so further responses may
+take ages. It's co-incidence that I'm online at the moment for an unrelated
+matter and glancing through mail.
+
 > 
-> Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+> On Fri, Jan 20 2023 at 14:08, Mel Gorman wrote:
+> > dio_truncate is not a realtime application but indefinite writer starvation
+> > is undesirable. The test case has one writer appending and truncating files
+> > A and B while multiple readers read file A. The readers and writer are
+> > contending for one file's inode lock which never succeeds as the readers
+> > keep reading until the writer is done which never happens.
+> >
+> > This patch records a timestamp when the first writer is blocked. DL /
+> 
+> git grep 'This patch' Documentation/process/
+> 
+
+I'm aware of the rule but tend to forget at times as enforcement varies
+between subsystems. First sentence of the paragraph becomes;
+
+Record a timestamp when the first writer is blocked and force all new
+readers into the slow path upon expiration.
+
+> > RT tasks can continue to take the lock for read as long as readers exist
+> > indefinitely. Other readers can acquire the read lock unless a writer
+> > has been blocked for a minimum of 4ms. This is sufficient to allow the
+> > dio_truncate test case to complete within the 30 minutes timeout.
+> 
+> I'm not opposed to this, but what's the actual reason for this pulled
+> out of thin air timeout?
+> 
+
+No good reason, a value had to be picked. It happens to match the rwsem
+cutoff for optimistic spinning. That at least is some threshold for "a
+lock failed to be acquired within a reasonable time period". It's also
+arbitrary that it happened to be a value that allowed the dio_truncate
+LTP test to complete in a reasonable time.
+
+> What's the downside of actually forcing !RT readers into the slowpath
+> once there is a writer waiting?
+> 
+
+I actually don't know for sure because it's application dependant but at
+minimum, I believe it would be a deviation from how generic rwsems behave
+where a writer optimistically spins for the same duration before forcing
+the handoff. Whether that matters or not depends on the application,
+the ratio between readers/writers and the number of concurrent readers.
+
+-- 
+Mel Gorman
+SUSE Labs
