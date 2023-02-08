@@ -2,168 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38B968E4EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3E068E4F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbjBHAWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 19:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
+        id S229777AbjBHA0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 19:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjBHAWC (ORCPT
+        with ESMTP id S229483AbjBHA0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 19:22:02 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E182410404
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:21:58 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id v17-20020a92ab11000000b00310c6708243so12008127ilh.23
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 16:21:58 -0800 (PST)
+        Tue, 7 Feb 2023 19:26:41 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD7EAD3F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:26:40 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id p10so18198266vsu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 16:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1T7/74jCVAc+g57YAgAxUYhK4iJ3pnz2+ZFC3WYkFMg=;
+        b=thI4fmZgrbgW0nNxnPtfQEso6w5NRBtwUDXsvrWKp0mRhwHBx9FqpA5sO0TwhpcNrI
+         QiZzsEHqNSufX3dbjJpHi14VfSpDWb1mW2U2zWPm462OuwOfx3R0D0OlTvnU1smwhXu4
+         96m++oWifVnn7B62x3Die2uJQqZ0UtVHI/Z/gS8muN+AzukmvVxZ1tJ8d9NBU1KEN+gL
+         +FORO+C6CL7n5wD/ozJ9aKHS2XlppFNFbR7K4T4hG9w6z01BQVmrTDBQUzpBKQcEFWLw
+         uBEkCsfbrGvjnT6bsm5mFqRq+AM+HVW4w78+pM5smI/s4IqgkjiiHJ8HJcoMDnL0Xpya
+         3R4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OxLYic0BDZ9IraDnBU1xwnuc80rQL3cz5kVMZkz8uuE=;
-        b=kXCIiyl6yZhA3BEeMHkzIQshx9GNITuGJOksco/zQrf6/ivyyipOAKgRjX9DHQJ2+O
-         1+ccNXVFLuvTDQJ+22B3Clb4wJRqGHis/expNffK2Il/s8Qw1bvQnEILcVJYZ/Ciwy8c
-         +jd64f18fHneC3pif60xDTPZorf/2ma5GEHryMdzDDriPVGPSGnLAmAhA31Y2G0/+OhN
-         Ekp4Q3ZyHJHhxJaLuIj7O45ko9iCtjhK+aSpaXyotQqo72Wwp0yZh/PckwpDWAMZKRz3
-         M+37tfbyNjdUffZ15BXGeN/U6b01Sql/5mcmJMtCd1larmw8Nuq61E03aBR5Se6jp+YP
-         ZMfA==
-X-Gm-Message-State: AO0yUKVXPWG3LotD13YfjdT4EfnhJHz4VmWLOKNOVP34QbEx9ikHmtkd
-        rSuf2RI9cgGHwEsGWsRPRC1uf51v37fzPWVuM37Q6Xenv2wp
-X-Google-Smtp-Source: AK7set+oO5hy66du0UrS3qGtCPu4blh+Uqk1ZOoAh6DKIzsCMWUaVQ5eNLgTlht6TV5RMN2jzK7Uuxxm9JX3nHh3GUFxXr8n8iG9
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1T7/74jCVAc+g57YAgAxUYhK4iJ3pnz2+ZFC3WYkFMg=;
+        b=66bTPomx9a0nBrR6aDE/YwhiCW8J8R9RRkccjNZkB0Xtavqogve2SGSurdDLu5qcZ/
+         BGiqfj2J0HYXChvEqKsboXFH6A8R1VhNeNXztiiYiJzgUzjatSyOyBdWDoDJ4dKtJkhG
+         f1cW1Tge2fdGJURV5YMlWKlA01182TdbqaIQi8Iaik3YeG2Tft6vMT/WPuMHtOMqmFgl
+         BTzSSjeU/7P1LQu6580jm6+1J0i/oKNQyL4PDwTIcRHOSU5c4YG6eK06MHab6HYfY29Q
+         Qpf+llf0kCX9cAAhq/hqKTPl4x3o1uGuPu6GI7zKazzk+F4kIHfD8h92nEIlNYIkuqFp
+         SssA==
+X-Gm-Message-State: AO0yUKXCjjvlTUcIK6uWD4EZKhgSg2Gar+d9hQYM7vfgCUlU2RMgk0mU
+        aMMsJIGvHM9nek+TVZMCgIx4VSIAUsB6o3HjSOODEg==
+X-Google-Smtp-Source: AK7set/elwIdhkoBY9LPpQUGHPPZY/sW4DrUDovfAxLSzGuA2JGBEI7HfvMMbiI84rvHwqLB5FzHcQjcr0+TUIb/Glg=
+X-Received: by 2002:a05:6102:304e:b0:3fc:58d:f90f with SMTP id
+ w14-20020a056102304e00b003fc058df90fmr1378566vsa.60.1675815999311; Tue, 07
+ Feb 2023 16:26:39 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:bb12:0:b0:39d:234a:8f18 with SMTP id
- y18-20020a02bb12000000b0039d234a8f18mr3535423jan.123.1675815718138; Tue, 07
- Feb 2023 16:21:58 -0800 (PST)
-Date:   Tue, 07 Feb 2023 16:21:58 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000096b80c05f4254067@google.com>
-Subject: [syzbot] general protection fault in iomap_dio_bio_iter
-From:   syzbot <syzbot+a4f579527ea6394140a5@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, hch@infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <Y9gzOqwKcu7p/PEw@x1n> <CADrL8HXX9YDFUxmPPsm2s3Pno0XXgAyFB40fV1PdtP9eb-5D2A@mail.gmail.com>
+ <Y9m/VVRABt0Blfjh@x1n> <CADrL8HXpfTE1+eE3rNGQyOr1QRtDtG5mBp-b3xcNX22QJRvPaQ@mail.gmail.com>
+ <Y9qRta3bd4JqjUHx@x1n> <CADrL8HU809O0cPa9hXjf3k+ob139SQqvxOvpqm6UEv=zrPjHSg@mail.gmail.com>
+ <Y9re82gctIZf08cX@x1n> <CADrL8HVja_xJ9qczsd-fQfEPvEEXswhXQwoan=a_LSMyORvqww@mail.gmail.com>
+ <CADrL8HUSx6=K0QXQtTmv9ZJQmvhe6KEb+FiAviRfO3HjmRUeTw@mail.gmail.com>
+ <CADrL8HUm7g4pBLv9vjmB-LhJqxm4jyksGJQAdwRsweKKAnofDg@mail.gmail.com> <Y+LbEY62MT/3yo7I@x1n>
+In-Reply-To: <Y+LbEY62MT/3yo7I@x1n>
+From:   James Houghton <jthoughton@google.com>
+Date:   Tue, 7 Feb 2023 16:26:02 -0800
+Message-ID: <CADrL8HUVCXHsaWU7beYQsLw0C7J730PQm45caKE26V8mCFHjKQ@mail.gmail.com>
+Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        "Zach O'Keefe" <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Feb 7, 2023 at 3:13 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> James,
+>
+> On Tue, Feb 07, 2023 at 02:46:04PM -0800, James Houghton wrote:
+> > > Here is the result: [1] (sorry it took a little while heh). The
+>
+> Thanks.  From what I can tell, that number shows that it'll be great we
+> start with your rfcv1 mapcount approach, which mimics what's proposed by
+> Matthew for generic folio.
 
-syzbot found the following issue on:
+Do you think the RFC v1 way is better than doing the THP-like way
+*with the additional MMU notifier*?
 
-HEAD commit:    4fafd96910ad Add linux-next specific files for 20230203
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=148cef45480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d2fba7d42502ca4
-dashboard link: https://syzkaller.appspot.com/bug?extid=a4f579527ea6394140a5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1245a3c3480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132bfad9480000
+>
+> > > implementation of the "RFC v1" way is pretty horrible[2] (and this
+>
+> Any more information on why it's horrible? :)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/348cc2da441a/disk-4fafd969.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e2dedc500f12/vmlinux-4fafd969.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fae710d9ebd8/bzImage-4fafd969.xz
+I figured the code would speak for itself, heh. It's quite complicated.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a4f579527ea6394140a5@syzkaller.appspotmail.com
+I really didn't like:
+1. The 'inc' business in copy_hugetlb_page_range.
+2. How/where I call put_page()/folio_put() to keep the refcount and
+mapcount synced up.
+3. Having to check the page cache in UFFDIO_CONTINUE.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-CPU: 0 PID: 5141 Comm: syz-executor393 Not tainted 6.2.0-rc6-next-20230203-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-RIP: 0010:iov_iter_reexpand include/linux/uio.h:299 [inline]
-RIP: 0010:iomap_dio_bio_iter+0xa44/0x1440 fs/iomap/direct-io.c:373
-Code: 6c 24 38 48 c1 ea 03 80 3c 02 00 0f 85 5b 08 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 40 48 8d 7b 10 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 f9 07 00 00 4c 8b 7c 24 38 31 ff 48 89 6b 10 4c
-RSP: 0018:ffffc90003eaf638 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff820211f4 RDI: 0000000000000010
-RBP: 000000000000ee00 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801ccc0640
-R13: ffff888029cea000 R14: ffffc90003eaf828 R15: ffffc90003eaf828
-FS:  00007f0424eb1700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f0424e90718 CR3: 000000007ab39000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- iomap_dio_iter fs/iomap/direct-io.c:436 [inline]
- __iomap_dio_rw+0xd81/0x1d80 fs/iomap/direct-io.c:594
- iomap_dio_rw+0x40/0xa0 fs/iomap/direct-io.c:682
- ext4_dio_read_iter fs/ext4/file.c:94 [inline]
- ext4_file_read_iter+0x4be/0x690 fs/ext4/file.c:145
- call_read_iter include/linux/fs.h:1845 [inline]
- generic_file_splice_read+0x182/0x4b0 fs/splice.c:309
- do_splice_to+0x1b9/0x240 fs/splice.c:793
- splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:865
- do_splice_direct+0x1ab/0x280 fs/splice.c:974
- do_sendfile+0xb19/0x12c0 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0424f212a9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0424eb12f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f0424faa4d0 RCX: 00007f0424f212a9
-RDX: 0000000000000000 RSI: 0000000000000003 RDI: 0000000000000005
-RBP: 00007f0424f7727c R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffff04 R11: 0000000000000246 R12: 0030656c69662f2e
-R13: 00007f0424f77078 R14: 0000000020000600 R15: 00007f0424faa4d8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:iov_iter_reexpand include/linux/uio.h:299 [inline]
-RIP: 0010:iomap_dio_bio_iter+0xa44/0x1440 fs/iomap/direct-io.c:373
-Code: 6c 24 38 48 c1 ea 03 80 3c 02 00 0f 85 5b 08 00 00 48 b8 00 00 00 00 00 fc ff df 49 8b 5d 40 48 8d 7b 10 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 f9 07 00 00 4c 8b 7c 24 38 31 ff 48 89 6b 10 4c
-RSP: 0018:ffffc90003eaf638 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000002 RSI: ffffffff820211f4 RDI: 0000000000000010
-RBP: 000000000000ee00 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801ccc0640
-R13: ffff888029cea000 R14: ffffc90003eaf828 R15: ffffc90003eaf828
-FS:  00007f0424eb1700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f0424f46d30 CR3: 000000007ab39000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	6c                   	insb   (%dx),%es:(%rdi)
-   1:	24 38                	and    $0x38,%al
-   3:	48 c1 ea 03          	shr    $0x3,%rdx
-   7:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   b:	0f 85 5b 08 00 00    	jne    0x86c
-  11:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  18:	fc ff df
-  1b:	49 8b 5d 40          	mov    0x40(%r13),%rbx
-  1f:	48 8d 7b 10          	lea    0x10(%rbx),%rdi
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
-  2e:	0f 85 f9 07 00 00    	jne    0x82d
-  34:	4c 8b 7c 24 38       	mov    0x38(%rsp),%r15
-  39:	31 ff                	xor    %edi,%edi
-  3b:	48 89 6b 10          	mov    %rbp,0x10(%rbx)
-  3f:	4c                   	rex.WR
+>
+> A quick comment is I'm wondering whether that "whether we should boost the
+> mapcount" value can be hidden in hugetlb_pte* so you don't need to pass
+> over a lot of bool* deep into the hgm walk routines.
+
+Oh yeah, that's a great idea.
+
+>
+> > > implementation probably has bugs anyway; it doesn't account for the
+> > > folio_referenced() problem).
+>
+> I thought we reached a consensus on the resolution, by a proposal to remove
+> folio_referenced_arg.mapcount.  Is it not working for some reason?
+
+I think that works, I just didn't bother here. I just wanted to show
+you approximately what it would look like to implement the RFC v1
+approach.
+
+>
+> > >
+> > > Matthew is trying to solve the same problem with THPs right now: [3].
+> > > I haven't figured out how we can apply Matthews's approach to HGM
+> > > right now, but there probably is a way. (If we left the mapcount
+> > > increment bits in the same place, we couldn't just check the
+> > > hstate-level PTE; it would have already been made present.)
+>
+> I'm just worried that (1) this may add yet another dependency to your work
+> which is still during discussion phase, and (2) whether the folio approach
+> is easily applicable here, e.g., we may not want to populate all the ptes
+> for hugetlb HGMs by default.
+
+That's true. I definitely don't want to wait for this either. It seems
+like Matthew's approach won't work very well for us -- when doing a
+lot of high-granularity UFFDIO_CONTINUEs on a 1G page, checking all
+the PTEs to see if any of them are mapped would get really slow.
+
+>
+> > >
+> > > We could:
+> > > - use the THP-like way and tolerate ~1 second collapses
+> >
+> > Another thought here. We don't necessarily *need* to collapse the page
+> > table mappings in between mmu_notifier_invalidate_range_start() and
+> > mmu_notifier_invalidate_range_end(), as the pfns aren't changing,
+> > we aren't punching any holes, and we aren't changing permission bits.
+> > If we had an MMU notifier that simply informed KVM that we collapsed
+> > the page tables *after* we finished collapsing, then it would be ok
+> > for hugetlb_collapse() to be slow.
+>
+> That's a great point!  It'll definitely apply to either approach.
+>
+> >
+> > If this MMU notifier is something that makes sense, it probably
+> > applies to MADV_COLLAPSE for THPs as well.
+>
+> THPs are definitely different, mmu notifiers should be required there,
+> afaict.  Isn't that what the current code does?
+>
+> See collapse_and_free_pmd() for shmem and collapse_huge_page() for anon.
+
+Oh, yes, of course, MADV_COLLAPSE can actually move things around and
+properly make THPs. Thanks. But it would apply if we were only
+collapsing PTE-mapped THPs, I think?
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+- James
