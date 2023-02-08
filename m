@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E929268F025
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AE268F02C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjBHNwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S230427AbjBHNxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBHNwE (ORCPT
+        with ESMTP id S229460AbjBHNxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:52:04 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E176714238;
-        Wed,  8 Feb 2023 05:52:01 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pPkrX-0003uy-38;
-        Wed, 08 Feb 2023 14:51:52 +0100
-Date:   Wed, 8 Feb 2023 13:51:48 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v2 03/11] dt-bindings: arm: mediatek: add
- 'mediatek,pn_swap' property
-Message-ID: <Y+Oo9HaqPeNVUANR@makrotopia.org>
-References: <cover.1675779094.git.daniel@makrotopia.org>
- <a8c567cf8c3ec6fef426b64fb1ab7f6e63a0cc07.1675779094.git.daniel@makrotopia.org>
- <ad09a065-c10d-3061-adbe-c58724cdfde0@kernel.org>
- <Y+KR26aepqlfsjYG@makrotopia.org>
- <b6d782ef-b375-1e73-a384-1ff37c1548a7@kernel.org>
+        Wed, 8 Feb 2023 08:53:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AAA55BD;
+        Wed,  8 Feb 2023 05:53:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 631D9616DB;
+        Wed,  8 Feb 2023 13:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6159C4339C;
+        Wed,  8 Feb 2023 13:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675864418;
+        bh=WwZKQNxRYbqexgKDjQvTmVvAVguLZdCf+9wuce5cegc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hCQu46mSBp8RJz4vlxRncrYGHOuOyo2WGakUbKNAetsH6MdUfzqakBEa69HiezR6Z
+         00Ek36sVzAA2YtpP7QK+Y0mZMgnc1G1eEpxvlKBRev+8sXtYOR8B81ocKAH6Yv5ZtJ
+         NceLIecmQ8Eny/5Ea7Ka1IgYhH2Qm+hYGLMN2025cEBKvk1uVKUbhhV5x2tpZeYwkd
+         L/ynGBW33BV2ZfxQs+3OUWF7eZAVRlVMjpI3BxU0Ys+ec7yy2KQXd5cdldgfDDtjGt
+         H0v6PzTif9NlSdev+/t1HVsonh5kNx+ILTrOMVoPDwVY6/BvoyYVCKBfmHhGbKmQGw
+         1+RB2S4DuyP+A==
+Received: by mail-vs1-f43.google.com with SMTP id g3so8593889vsr.10;
+        Wed, 08 Feb 2023 05:53:38 -0800 (PST)
+X-Gm-Message-State: AO0yUKWvg4eJPUY+pQmpgTpAYJC7D3kn9ivmi3ZYqAPrEZrXCEDzEI56
+        20B/MZr6j4JQiJRyFCoNObCVlivpQzXBXbUVzg==
+X-Google-Smtp-Source: AK7set+ImJrDNogmqu8sQhEjSEmDyYaksK4p7FJ2BBdAAXBshp9GrzyjMw/MJkaeHGApQp62+gUCL3AP6J6XeAKbu2w=
+X-Received: by 2002:a67:cc1d:0:b0:3f3:5ce0:85ab with SMTP id
+ q29-20020a67cc1d000000b003f35ce085abmr2344443vsl.26.1675864417722; Wed, 08
+ Feb 2023 05:53:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6d782ef-b375-1e73-a384-1ff37c1548a7@kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230208111645.3863534-1-mmaddireddy@nvidia.com> <20230208111645.3863534-2-mmaddireddy@nvidia.com>
+In-Reply-To: <20230208111645.3863534-2-mmaddireddy@nvidia.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 8 Feb 2023 07:53:26 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJtx+AMFC6SRUEVEgLbiWqv=Ov2cN=oqofZhqvtd1c8vQ@mail.gmail.com>
+Message-ID: <CAL_JsqJtx+AMFC6SRUEVEgLbiWqv=Ov2cN=oqofZhqvtd1c8vQ@mail.gmail.com>
+Subject: Re: [RFC,v14 1/5] dt-bindings: PCI: Add definition of PCIe WAKE# irq
+ and PCI irq
+To:     Manikanta Maddireddy <mmaddireddy@nvidia.com>
+Cc:     bhelgaas@google.com, thierry.reding@gmail.com, petlozup@nvidia.com,
+        rafael.j.wysocki@intel.com, lpieralisi@kernel.org,
+        jeffy.chen@rock-chips.com, krzysztof.kozlowski+dt@linaro.org,
+        jonathanh@nvidia.com, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, gregkh@linuxfoundation.org,
+        steven.price@arm.com, kw@linux.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        vidyas@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 10:32:53AM +0100, Krzysztof Kozlowski wrote:
-> On 07/02/2023 19:00, Daniel Golle wrote:
-> > ...
-> >> 3. Does not look like property of this node. This is a clock controller
-> >> or system controller, not SGMII/phy etc.
-> > 
-> > The register range referred to by this node *does* represent also an
-> > SGMII phy. These sgmiisys nodes also carry the 'syscon' compatible, and
-> > are referenced in the node of the Ethernet core, and then used by
-> > drivers/net/ethernet/mediatek/mtk_sgmii.c using syscon_node_to_regmap.
-> > (This is the current situation already, and not related to the patchset
-> > now adding only a new property to support hardware which needs that)
-> 
-> Just because a register is located in syscon block, does not mean that
-> SGMII configuration is a property of this device.
+On Wed, Feb 8, 2023 at 5:17 AM Manikanta Maddireddy
+<mmaddireddy@nvidia.com> wrote:
+>
+> From: Jeffy Chen <jeffy.chen@rock-chips.com>
+>
+> Add device tree support to pass PCIe WAKE# pin information to PCI core
+> driver. To support PCIe WAKE# and PCI irqs, add definition of the optional
+> properties "interrupts" and "interrupt-names". These properties should be
+> defined by the PCIe port to which wake capable Endpoint is connected,
+> so the definition is added under "PCI-PCI Bridge properties" section.
+>
+> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+> Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-It's not just one register, the whole SGMII PCS is located in those
-mediatek,sgmiisys syscon nodes.
+I did? 5 years ago it seems. Times change and evolve. Don't add to
+pci.txt. This must be a schema now. PCI schema lives in dtschema.
 
-> 
-> > 
-> > So: Should I introduce a new binding for the same compatible strings
-> > related to the SGMII PHY features? Or is it fine in this case to add
-> > this property to the existing binding?
-> 
-> The user of syscon should configure it. I don't think you need new
-> binding. You just have to update the user of this syscon.
-
-Excuse my confusion, but it's still not entirely clear to me.
-So in this case I should add the description of the added propterty of
-the individual SGMII units (there can be more than one) to
-Documentation/devicetree/bindings/net/mediatek,net.yaml
-eventhough the properties are in the sgmiisys syscon nodes?
-
-If so I will have to figure out how to describe properties of other
-nodes in the binding of the node referencing them. Are there any
-good examples for that?
-
-Or should the property itself be moved into yet another array of
-booleans which should be added in the node describing the ethernet
-controller and referencing these sgmiisys syscons using phandles?
+Rob
