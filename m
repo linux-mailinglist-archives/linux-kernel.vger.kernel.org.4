@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E133768F392
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D4168F39A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjBHQlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S231608AbjBHQmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:42:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjBHQkn (ORCPT
+        with ESMTP id S231828AbjBHQlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:40:43 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C073803E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:40:38 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 42E3334280;
-        Wed,  8 Feb 2023 16:40:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675874437; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F1KlVZ9F3aIxHpgD6Jwxy+qwJV6X/hM6MXtY37o4YVE=;
-        b=vfT1tSdJK5Flqf27K9dNGf0xizCq/dyw/IQn8NX1aw2/Ju4kj/DKZj+lQHxtJ6BwoKrtsG
-        uJrVlUMjvtKBRfkvfEn/yS5wiAoYWjYNBwFe/Qc52rFQEw7m/zPmxuv0JYTv13+KqElcy4
-        0IsdGtkCKGmsMOdftLY8sOOqpRt8grg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675874437;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F1KlVZ9F3aIxHpgD6Jwxy+qwJV6X/hM6MXtY37o4YVE=;
-        b=A3dlU/OcbcrnL4yzs0EZyrQIV18Shu7xP90WVUNWkJtBOyxhmkeghRv6TVMInq6fp8waNw
-        ivF+kpXS3Iqpk3CQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D6211358A;
-        Wed,  8 Feb 2023 16:40:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Jc2CBoXQ42OvXwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 08 Feb 2023 16:40:37 +0000
-Message-ID: <e5a264d8-0e5a-176d-13d4-7d411a0d169f@suse.cz>
-Date:   Wed, 8 Feb 2023 17:40:36 +0100
+        Wed, 8 Feb 2023 11:41:39 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DB44F86C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:40:48 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id gr7so52583749ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 08:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LObr7gBxJJLuAm58cDH53OW5o2VqgZ2xVXFRFbYi3SI=;
+        b=wJ2jChJRBtL7dspuJpFA07C0AIH8fRDu3mXb2fBFWHnM7b6IXUyRmHQ7GAcc1rx49+
+         xG5jTAZmltiv+dTMFUsjqWAr6+CcUQo9skGoMMXW7nQS18OnixpfQj23SUYZiJVGIHyu
+         M7aHOGuWTe44oeQsEmwA6rLd9UDrcj9WujNCBfzetCrqJem4ltMI2V5ANoqk2wwKNLz6
+         IdtZk2IqkvP81w7wKoYMl3EyNuyYrlQskXMhc97GtSnitpdrHkyjc/f6P+vyWI3Mxj7M
+         SfeYYW5pIZPHq3hSR7/k12zlB9F0S3F2HGK1Cf5L5+WWNJZIbw3i07977gS5qCuSxbcx
+         Ylaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LObr7gBxJJLuAm58cDH53OW5o2VqgZ2xVXFRFbYi3SI=;
+        b=PDlzWdjtO28WThcTpyDv4GbVV5NgMnXwdIijOGFaiGwj1UIsaz8J+Ap/QEFZjpaU9W
+         dRHtXvCt3swKQFltNDSGgIBqTN2voGZZ0KE4xMb0JC5qumZZMQQzOc+XhyyCqyp4HJ9l
+         pb10iNd1xBiPpwLKe45cSGBDpaJsLOIVxx619YfglqqsSj3A00V0eftInz+7+bJgs6Eh
+         JjqGE4Y3wsji8hXNzgez3Y9ASPu+NThH62+pxUd0XZiwOG+KLfwpkL58haL3qVzSZVGT
+         APhl/tvnHeYnyJBfSQ2qDHkekNmDT48EuwpKzoQihMLLJmpUhc2cA9QWJ7xrmdoVzAec
+         pl3g==
+X-Gm-Message-State: AO0yUKXT/t9c5ncLWJTSq1pBpXJpf2DWuHhgKAmEdD1NmTthsLC56q6A
+        GugKyelBr0KiLQE8Hvy03zrkdZTdEZFaD4D3
+X-Google-Smtp-Source: AK7set/5VkiBitpPOdwM2VF8WFCyFN7BYkNRz3Lu6n0/nh3M/I2D+HEp6/OlYu+MrtHMczL/XG9BCA==
+X-Received: by 2002:a17:906:c44e:b0:87b:daf7:e03b with SMTP id ck14-20020a170906c44e00b0087bdaf7e03bmr3216246ejb.18.1675874447021;
+        Wed, 08 Feb 2023 08:40:47 -0800 (PST)
+Received: from [192.168.1.101] (abxh117.neoplus.adsl.tpnet.pl. [83.9.1.117])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170906498200b00878803d4049sm8547889eju.93.2023.02.08.08.40.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 08:40:46 -0800 (PST)
+Message-ID: <e9b6cdcc-079d-497a-6e8b-c2d69a393597@linaro.org>
+Date:   Wed, 8 Feb 2023 17:40:44 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 04/18] lib/stackdepot, mm: rename
- stack_depot_want_early_init
+Subject: Re: [PATCH 2/4] arm64: dts: qcom: sc8280xp-crd: Introduce pmic_glink
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230208034620.2048744-1-quic_bjorande@quicinc.com>
+ <20230208034620.2048744-3-quic_bjorande@quicinc.com>
+ <229edfec-736f-d94d-23ba-2a0649639556@linaro.org>
+ <20230208155720.GA2397622@hu-bjorande-lv.qualcomm.com>
 Content-Language: en-US
-To:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        kasan-dev@googlegroups.com, Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-References: <cover.1675111415.git.andreyknvl@google.com>
- <cb34925852c81be2ec6aac75766292e4e590523e.1675111415.git.andreyknvl@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <cb34925852c81be2ec6aac75766292e4e590523e.1675111415.git.andreyknvl@google.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230208155720.GA2397622@hu-bjorande-lv.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,137 +84,297 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 21:49, andrey.konovalov@linux.dev wrote:
-> From: Andrey Konovalov <andreyknvl@google.com>
-> 
-> Rename stack_depot_want_early_init to stack_depot_request_early_init.
-> 
-> The old name is confusing, as it hints at returning some kind of intention
-> of stack depot. The new name reflects that this function requests an action
-> from stack depot instead.
-> 
-> No functional changes.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-> ---
->  include/linux/stackdepot.h | 14 +++++++-------
->  lib/stackdepot.c           | 10 +++++-----
->  mm/page_owner.c            |  2 +-
->  mm/slub.c                  |  4 ++--
->  4 files changed, 15 insertions(+), 15 deletions(-)
+On 8.02.2023 16:57, Bjorn Andersson wrote:
+> On Wed, Feb 08, 2023 at 09:14:46AM +0100, Konrad Dybcio wrote:
+>>
+>>
+>> On 8.02.2023 04:46, Bjorn Andersson wrote:
+>>> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>>
+>>> The SC8280XP CRD control over battery management and its two USB Type-C
+>>> port using pmic_glink and two GPIO-based SBU muxes.
+>>>
+>>> Enable the two DisplayPort instances, GPIO SBU mux instance and
+>>> pmic_glink with the two connectors on the CRD.
+>>>
+>>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 191 +++++++++++++++++++++-
+>>>  1 file changed, 189 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+>>> index 3f116a879e22..35b63c3962f0 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+>>> @@ -36,6 +36,77 @@ chosen {
+>>>  		stdout-path = "serial0:115200n8";
+>>>  	};
+>>>  
+>>> +	pmic-glink {
+>>> +		compatible = "qcom,sc8280xp-pmic-glink", "qcom,pmic-glink";
+>>> +
+>>> +		#address-cells = <1>;
+>>> +		#size-cells = <0>;
+>>> +
+>>> +		connector@0 {
+>>> +			compatible = "usb-c-connector";
+>>> +			reg = <0>;
+>>> +			power-role = "dual";
+>>> +			data-role = "dual";
+>>> +
+>>> +			ports {
+>>> +				#address-cells = <1>;
+>>> +				#size-cells = <0>;
+>> Add a newline between the last propreties and first subnodes, please.
+>>
+>>> +				port@0 {
+>>> +					reg = <0>;
+>>> +					pmic_glink_con0_hs: endpoint {
+>>> +						remote-endpoint = <&usb_0_role_switch>;
+>>> +					};
+>>> +				};
+>>> +
+>>> +				port@1 {
+>>> +					reg = <1>;
+>>> +					pmic_glink_con0_ss: endpoint {
+>>> +						remote-endpoint = <&mdss0_dp0_out>;
+>>> +					};
+>>> +				};
+>>> +
+>>> +				port@2 {
+>>> +					reg = <2>;
+>>> +					pmic_glink_con0_sbu: endpoint {
+>>> +						remote-endpoint = <&usb0_sbu_mux>;
+>>> +					};
+>>> +				};
+>>> +			};
+>>> +		};
+>>> +
+>>> +		connector@1 {
+>>> +			compatible = "usb-c-connector";
+>>> +			reg = <1>;
+>>> +			power-role = "dual";
+>>> +			data-role = "dual";
+>>> +
+>>> +			ports {
+>>> +				#address-cells = <1>;
+>>> +				#size-cells = <0>;
+>>> +				port@0 {
+>>> +					reg = <0>;
+>>> +					pmic_glink_con1_hs: endpoint {
+>>> +						remote-endpoint = <&usb_1_role_switch>;
+>>> +					};
+>>> +				};
+>>> +
+>>> +				port@1 {
+>>> +					reg = <1>;
+>>> +					pmic_glink_con1_ss: endpoint {
+>>> +						remote-endpoint = <&mdss0_dp1_out>;
+>>> +					};
+>>> +				};
+>>> +
+>>> +				port@2 {
+>>> +					reg = <2>;
+>>> +					pmic_glink_con1_sbu: endpoint {
+>>> +						remote-endpoint = <&usb1_sbu_mux>;
+>>> +					};
+>>> +				};
+>>> +			};
+>>> +		};
+>>> +	};
+>>> +
+>>>  	vreg_edp_3p3: regulator-edp-3p3 {
+>>>  		compatible = "regulator-fixed";
+>>>  
+>>> @@ -139,6 +210,46 @@ linux,cma {
+>>>  			linux,cma-default;
+>>>  		};
+>>>  	};
+>>> +
+>>> +	usb0-sbu-mux {
+>>> +		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
+>>> +
+>>> +		enable-gpios = <&tlmm 101 GPIO_ACTIVE_LOW>;
+>>> +		select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
+>>> +
+>>> +		pinctrl-names = "default";
+>>> +		pinctrl-0 = <&usb0_sbu_default>;
+>>> +
+>>> +		mode-switch;
+>>> +		orientation-switch;
+>>> +		svid = /bits/ 16 <0xff01>;
+>>> +
+>>> +		port {
+>>> +			usb0_sbu_mux: endpoint {
+>>> +				remote-endpoint = <&pmic_glink_con0_sbu>;
+>>> +			};
+>>> +		};
+>>> +	};
+>>> +
+>>> +	usb1-sbu-mux {
+>>> +		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
+>>> +
+>>> +		enable-gpios = <&tlmm 48 GPIO_ACTIVE_LOW>;
+>>> +		select-gpios = <&tlmm 47 GPIO_ACTIVE_HIGH>;
+>>> +
+>>> +		pinctrl-names = "default";
+>>> +		pinctrl-0 = <&usb1_sbu_default>;
+>>> +
+>>> +		mode-switch;
+>>> +		orientation-switch;
+>>> +		svid = /bits/ 16 <0xff01>;
+>>> +
+>>> +		port {
+>>> +			usb1_sbu_mux: endpoint {
+>>> +				remote-endpoint = <&pmic_glink_con1_sbu>;
+>>> +			};
+>>> +		};
+>>> +	};
+>>>  };
+>>>  
+>>>  &apps_rsc {
+>>> @@ -262,6 +373,36 @@ &mdss0 {
+>>>  	status = "okay";
+>>>  };
+>>>  
+>>> +&mdss0_dp0 {
+>>> +	status = "okay";
+>>> +
+>>> +	data-lanes = <0 1>;
+>> Status last; is this really only 2 lanes?
+>>
+>>> +
+>>> +	ports {
+>>> +		port@1 {
+>>> +			reg = <1>;
+>>> +			mdss0_dp0_out: endpoint {
+>>> +				remote-endpoint = <&pmic_glink_con0_ss>;
+>>> +			};
+>>> +		};
+>>> +	};
+>>> +};
+>>> +
+>>> +&mdss0_dp1 {
+>>> +	status = "okay";
+>>> +
+>>> +	data-lanes = <0 1>;
+>> Ditto
+>>
+>>> +
+>>> +	ports {
+>>> +		port@1 {
+>>> +			reg = <1>;
+>>> +			mdss0_dp1_out: endpoint {
+>>> +				remote-endpoint = <&pmic_glink_con1_ss>;
+>>> +			};
+>>> +		};
+>>> +	};
+>>> +};
+>>> +
+>>>  &mdss0_dp3 {
+>>>  	compatible = "qcom,sc8280xp-edp";
+>>>  	/delete-property/ #sound-dai-cells;
+>>> @@ -480,8 +621,13 @@ &usb_0 {
+>>>  };
+>>>  
+>>>  &usb_0_dwc3 {
+>>> -	/* TODO: Define USB-C connector properly */
+>>>  	dr_mode = "host";
+>>> +
+>>> +	port {
+>>> +		usb_0_role_switch: endpoint {
+>>> +			remote-endpoint = <&pmic_glink_con0_hs>;
+>>> +		};
+>> This should be defined in the SoC DTSI, it's a standard dwc3 binding
+>> with usb HS / SS / SBU ports. Especially since we can feed the endpoint
+>> from any device now, as pmic-glink should work everywhere.
+>>
 > 
-> diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-> index 1296a6eeaec0..c4e3abc16b16 100644
-> --- a/include/linux/stackdepot.h
-> +++ b/include/linux/stackdepot.h
-> @@ -31,26 +31,26 @@ typedef u32 depot_stack_handle_t;
->   * enabled as part of mm_init(), for subsystems where it's known at compile time
->   * that stack depot will be used.
->   *
-> - * Another alternative is to call stack_depot_want_early_init(), when the
-> + * Another alternative is to call stack_depot_request_early_init(), when the
->   * decision to use stack depot is taken e.g. when evaluating kernel boot
->   * parameters, which precedes the enablement point in mm_init().
->   *
-> - * stack_depot_init() and stack_depot_want_early_init() can be called regardless
-> - * of CONFIG_STACKDEPOT and are no-op when disabled. The actual save/fetch/print
-> - * functions should only be called from code that makes sure CONFIG_STACKDEPOT
-> - * is enabled.
-> + * stack_depot_init() and stack_depot_request_early_init() can be called
-> + * regardless of CONFIG_STACKDEPOT and are no-op when disabled. The actual
-> + * save/fetch/print functions should only be called from code that makes sure
-> + * CONFIG_STACKDEPOT is enabled.
->   */
->  #ifdef CONFIG_STACKDEPOT
->  int stack_depot_init(void);
->  
-> -void __init stack_depot_want_early_init(void);
-> +void __init stack_depot_request_early_init(void);
->  
->  /* This is supposed to be called only from mm_init() */
->  int __init stack_depot_early_init(void);
->  #else
->  static inline int stack_depot_init(void) { return 0; }
->  
-> -static inline void stack_depot_want_early_init(void) { }
-> +static inline void stack_depot_request_early_init(void) { }
->  
->  static inline int stack_depot_early_init(void)	{ return 0; }
->  #endif
-> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> index 90c4dd48d75e..8743fad1485f 100644
-> --- a/lib/stackdepot.c
-> +++ b/lib/stackdepot.c
-> @@ -71,7 +71,7 @@ struct stack_record {
->  	unsigned long entries[];	/* Variable-sized array of entries. */
->  };
->  
-> -static bool __stack_depot_want_early_init __initdata = IS_ENABLED(CONFIG_STACKDEPOT_ALWAYS_INIT);
-> +static bool __stack_depot_early_init_requested __initdata = IS_ENABLED(CONFIG_STACKDEPOT_ALWAYS_INIT);
->  static bool __stack_depot_early_init_passed __initdata;
->  
->  static void *stack_slabs[STACK_ALLOC_MAX_SLABS];
-> @@ -107,12 +107,12 @@ static int __init is_stack_depot_disabled(char *str)
->  }
->  early_param("stack_depot_disable", is_stack_depot_disabled);
->  
-> -void __init stack_depot_want_early_init(void)
-> +void __init stack_depot_request_early_init(void)
->  {
-> -	/* Too late to request early init now */
-> +	/* Too late to request early init now. */
->  	WARN_ON(__stack_depot_early_init_passed);
->  
-> -	__stack_depot_want_early_init = true;
-> +	__stack_depot_early_init_requested = true;
->  }
->  
->  int __init stack_depot_early_init(void)
-> @@ -128,7 +128,7 @@ int __init stack_depot_early_init(void)
->  	if (kasan_enabled() && !stack_hash_order)
->  		stack_hash_order = STACK_HASH_ORDER_MAX;
->  
-> -	if (!__stack_depot_want_early_init || stack_depot_disable)
-> +	if (!__stack_depot_early_init_requested || stack_depot_disable)
->  		return 0;
->  
->  	if (stack_hash_order)
-> diff --git a/mm/page_owner.c b/mm/page_owner.c
-> index 2d27f532df4c..90a4a087e6c7 100644
-> --- a/mm/page_owner.c
-> +++ b/mm/page_owner.c
-> @@ -48,7 +48,7 @@ static int __init early_page_owner_param(char *buf)
->  	int ret = kstrtobool(buf, &page_owner_enabled);
->  
->  	if (page_owner_enabled)
-> -		stack_depot_want_early_init();
-> +		stack_depot_request_early_init();
->  
->  	return ret;
->  }
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 13459c69095a..f2c6c356bc36 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -1592,7 +1592,7 @@ static int __init setup_slub_debug(char *str)
->  		} else {
->  			slab_list_specified = true;
->  			if (flags & SLAB_STORE_USER)
-> -				stack_depot_want_early_init();
-> +				stack_depot_request_early_init();
->  		}
->  	}
->  
-> @@ -1611,7 +1611,7 @@ static int __init setup_slub_debug(char *str)
->  out:
->  	slub_debug = global_flags;
->  	if (slub_debug & SLAB_STORE_USER)
-> -		stack_depot_want_early_init();
-> +		stack_depot_request_early_init();
->  	if (slub_debug != 0 || slub_debug_string)
->  		static_branch_enable(&slub_debug_enabled);
->  	else
+> The sa8295p/sa8540p boards, derived from sc8280xp does not implement
+> pmic_glink, so it seems moving this to the soc.dtsi would be messy.
+> 
+>> Or /omit-if-no-ref/, I suppose.
+>>
+> 
+> Or you're saying I should put the skeleton of the port definition in the
+> soc.dtsi and then fill it out the remote-endpoint here; and mark it
+> omit-if-no-ref to avoid binding warnings?
+I thought omit-if-no-ref actually omits the node before resolving phandles
+that it references, but it seems to not be the case.. Still, we can define
+the ports in the SoC DTSI and assign endpoints per-device (like we do with
+DSI for example).
 
+Konrad
+> 
+>>> +	};
+>>>  };
+>>>  
+>>>  &usb_0_hsphy {
+>>> @@ -504,8 +650,13 @@ &usb_1 {
+>>>  };
+>>>  
+>>>  &usb_1_dwc3 {
+>>> -	/* TODO: Define USB-C connector properly */
+>>>  	dr_mode = "host";
+>>> +
+>>> +	port {
+>>> +		usb_1_role_switch: endpoint {
+>>> +			remote-endpoint = <&pmic_glink_con1_hs>;
+>>> +		};
+>>> +	};
+>>>  };
+>>>  
+>>>  &usb_1_hsphy {
+>>> @@ -709,4 +860,40 @@ reset-n-pins {
+>>>  			drive-strength = <16>;
+>>>  		};
+>>>  	};
+>>> +
+>>> +	usb0_sbu_default: usb0-sbu-state {
+>>> +		oe-n-pins {
+>>> +			pins = "gpio101";
+>>> +			function = "gpio";
+>> No drive-strength/bias/i/o?
+>>
+> 
+> Seems like a reasonable ask...
+> 
+> Thanks,
+> Bjorn
+> 
+>> Konrad
+>>> +		};
+>>> +
+>>> +		sel-pins {
+>>> +			pins = "gpio164";
+>>> +			function = "gpio";
+>>> +		};
+>>> +
+>>> +		mode-pins {
+>>> +			pins = "gpio167";
+>>> +			function = "gpio";
+>>> +			output-high;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	usb1_sbu_default: usb1-sbu-state {
+>>> +		oe-n-pins {
+>>> +			pins = "gpio48";
+>>> +			function = "gpio";
+>>> +		};
+>>> +
+>>> +		sel-pins {
+>>> +			pins = "gpio47";
+>>> +			function = "gpio";
+>>> +		};
+>>> +
+>>> +		mode-pins {
+>>> +			pins = "gpio50";
+>>> +			function = "gpio";
+>>> +			output-high;
+>>> +		};
+>>> +	};
+>>>  };
