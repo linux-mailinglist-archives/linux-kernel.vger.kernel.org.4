@@ -2,118 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2448668F053
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A2368F055
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjBHOFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
+        id S230447AbjBHOFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:05:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjBHOFX (ORCPT
+        with ESMTP id S230025AbjBHOFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:05:23 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AA145BDF;
-        Wed,  8 Feb 2023 06:05:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675865117; x=1707401117;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=XmGzZhXPepON125DcD74aqMImYN6xSf3KTV3TFcSd1c=;
-  b=K6Q9chhVkFKsXoHZItmN70cxQH5yvo6HYbn2ramnoSJf/+yokJ2+LVQV
-   d/doZmJWU2HQHi6VXYuLakWM5cz2sNrdVZJvAowrOjIMlf5xBx0ZCPg4d
-   N8Uvy+6GsXPYPPpiEksyXk4Mx/g5ucpHsknoJCMKjGakDzA2xi3XZjkFH
-   Wkixb1nw64acXXAMN1PXL3sUGxqMxXf1tai25syKQ8HSXUMUQ4YRR+d0H
-   8ukxw9UxbLHXzlDtmPmdhn3gQEH/5bkmCCz4di2lFmZtVPosXaFbR0Dzt
-   A9Um1b90LPrMrgE9nE4/p1KndxZ6U2rI8o5F7cxUp4EfQ+NDvbT59YV3S
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331930886"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="331930886"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:04:31 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="660657667"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="660657667"
-Received: from jstelter-mobl.ger.corp.intel.com ([10.252.38.39])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 06:04:29 -0800
-Date:   Wed, 8 Feb 2023 16:04:27 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 3/4] selftests/resctrl: Change name from CBM_MASK_PATH
- to INFO_PATH
-In-Reply-To: <20230208094026.22529-4-ilpo.jarvinen@linux.intel.com>
-Message-ID: <2078baac-27ea-096-3a13-b88fe10aa78@linux.intel.com>
-References: <20230208094026.22529-1-ilpo.jarvinen@linux.intel.com> <20230208094026.22529-4-ilpo.jarvinen@linux.intel.com>
+        Wed, 8 Feb 2023 09:05:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A11D234DA;
+        Wed,  8 Feb 2023 06:05:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C493A616BE;
+        Wed,  8 Feb 2023 14:05:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C6CC433EF;
+        Wed,  8 Feb 2023 14:05:34 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2] LoongArch: Make -mstrict-align configurable
+Date:   Wed,  8 Feb 2023 22:05:36 +0800
+Message-Id: <20230208140536.2911880-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1222304298-1675858401=:1843"
-Content-ID: <fe477438-ca74-4ef3-b1f8-6dd8b61b1fec@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
+configurable.
 
---8323329-1222304298-1675858401=:1843
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <82134ad4-63e-60d-eaf4-11a6338ef031@linux.intel.com>
+Not all LoongArch cores support h/w unaligned access, we can use the
+-mstrict-align build parameter to prevent unaligned accesses.
 
-On Wed, 8 Feb 2023, Ilpo Järvinen wrote:
+CPUs with h/w unaligned access support:
+Loongson-2K2000/2K3000/3A5000/3C5000/3D5000.
 
-> From: "Signed-off-by: Fenghua Yu" <fenghua.yu@intel.com>
+CPUs without h/w unaligned access support:
+Loongson-2K500/2K1000.
 
-I seem to have managed to do a little copy paste error there. I can 
-resubmit the series if needed.
+This option is enabled by default to make the kernel be able to run on
+all LoongArch systems. But you can disable it manually if you want to
+run kernel only on systems with h/w unaligned access support in order to
+optimise for performance.
 
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+V2:
+1, Enabled ARCH_STRICT_ALIGN by default;
+2, Keep consistency with HAVE_EFFICIENT_UNALIGNED_ACCESS;
+3, Build unaligned access emulation only if ARCH_STRICT_ALIGN enabled.
+
+ arch/loongarch/Kconfig         | 19 +++++++++++++++++++
+ arch/loongarch/Makefile        |  5 +++++
+ arch/loongarch/kernel/Makefile |  4 +++-
+ arch/loongarch/kernel/traps.c  |  9 +++++++--
+ 4 files changed, 34 insertions(+), 3 deletions(-)
+
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 9cc8b84f7eb0..0c1c6063cc66 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -94,6 +94,7 @@ config LOONGARCH
+ 	select HAVE_DYNAMIC_FTRACE_WITH_ARGS
+ 	select HAVE_DYNAMIC_FTRACE_WITH_REGS
+ 	select HAVE_EBPF_JIT
++	select HAVE_EFFICIENT_UNALIGNED_ACCESS if !ARCH_STRICT_ALIGN
+ 	select HAVE_EXIT_THREAD
+ 	select HAVE_FAST_GUP
+ 	select HAVE_FTRACE_MCOUNT_RECORD
+@@ -441,6 +442,24 @@ config ARCH_IOREMAP
+ 	  protection support. However, you can enable LoongArch DMW-based
+ 	  ioremap() for better performance.
+ 
++config ARCH_STRICT_ALIGN
++	bool "Enable -mstrict-align to prevent unaligned accesses" if EXPERT
++	default y
++	help
++	  Not all LoongArch cores support h/w unaligned access, we can use
++	  -mstrict-align build parameter to prevent unaligned accesses.
++
++	  CPUs with h/w unaligned access support:
++	  Loongson-2K2000/2K3000/3A5000/3C5000/3D5000.
++
++	  CPUs without h/w unaligned access support:
++	  Loongson-2K500/2K1000.
++
++	  This option is enabled by default to make the kernel be able to run
++	  on all LoongArch systems. But you can disable it manually if you want
++	  to run kernel only on systems with h/w unaligned access support in
++	  order to optimise for performance.
++
+ config KEXEC
+ 	bool "Kexec system call"
+ 	select KEXEC_CORE
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index 4402387d2755..6e1c931a8507 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -91,10 +91,15 @@ KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
+ # instead of .eh_frame so we don't discard them.
+ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+ 
++ifdef CONFIG_ARCH_STRICT_ALIGN
+ # Don't emit unaligned accesses.
+ # Not all LoongArch cores support unaligned access, and as kernel we can't
+ # rely on others to provide emulation for these accesses.
+ KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
++else
++# Optimise for performance on hardware supports unaligned access.
++KBUILD_CFLAGS += $(call cc-option,-mno-strict-align)
++endif
+ 
+ KBUILD_CFLAGS += -isystem $(shell $(CC) -print-file-name=include)
+ 
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index c8cfbd562921..df5dbabfe7a6 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -8,13 +8,15 @@ extra-y		:= vmlinux.lds
+ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+ 		   traps.o irq.o idle.o process.o dma.o mem.o io.o reset.o switch.o \
+ 		   elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o \
+-		   alternative.o unaligned.o unwind.o
++		   alternative.o unwind.o
+ 
+ obj-$(CONFIG_ACPI)		+= acpi.o
+ obj-$(CONFIG_EFI) 		+= efi.o
+ 
+ obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
+ 
++obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
++
+ ifdef CONFIG_FUNCTION_TRACER
+   ifndef CONFIG_DYNAMIC_FTRACE
+     obj-y += mcount.o ftrace.o
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index c38a146a973b..05511203732c 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -371,9 +371,14 @@ int no_unaligned_warning __read_mostly = 1;	/* Only 1 warning by default */
+ 
+ asmlinkage void noinstr do_ale(struct pt_regs *regs)
+ {
+-	unsigned int *pc;
+ 	irqentry_state_t state = irqentry_enter(regs);
+ 
++#ifndef CONFIG_ARCH_STRICT_ALIGN
++	die_if_kernel("Kernel ale access", regs);
++	force_sig_fault(SIGBUS, BUS_ADRALN, (void __user *)regs->csr_badvaddr);
++#else
++	unsigned int *pc;
++
+ 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, regs->csr_badvaddr);
+ 
+ 	/*
+@@ -397,8 +402,8 @@ asmlinkage void noinstr do_ale(struct pt_regs *regs)
+ sigbus:
+ 	die_if_kernel("Kernel ale access", regs);
+ 	force_sig_fault(SIGBUS, BUS_ADRALN, (void __user *)regs->csr_badvaddr);
+-
+ out:
++#endif
+ 	irqentry_exit(regs, state);
+ }
+ 
 -- 
- i.
+2.39.0
 
-> CBM_MASK_PATH is actually the path to resctrl/info, so change the macro
-> name to correctly indicate what it represents.
-> 
-> Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> ---
->  tools/testing/selftests/resctrl/resctrl.h   | 2 +-
->  tools/testing/selftests/resctrl/resctrlfs.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index f0ded31fb3c7..4f0976f12634 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -28,7 +28,7 @@
->  #define MB			(1024 * 1024)
->  #define RESCTRL_PATH		"/sys/fs/resctrl"
->  #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
-> -#define CBM_MASK_PATH		"/sys/fs/resctrl/info"
-> +#define INFO_PATH		"/sys/fs/resctrl/info"
->  #define L3_PATH			"/sys/fs/resctrl/info/L3"
->  #define MB_PATH			"/sys/fs/resctrl/info/MB"
->  #define L3_MON_PATH		"/sys/fs/resctrl/info/L3_MON"
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index 6f543e470ad4..cc6cf49e3129 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -210,7 +210,7 @@ int get_cbm_mask(char *cache_type, char *cbm_mask)
->  	if (!cbm_mask)
->  		return -1;
->  
-> -	sprintf(cbm_mask_path, "%s/%s/cbm_mask", CBM_MASK_PATH, cache_type);
-> +	sprintf(cbm_mask_path, "%s/%s/cbm_mask", INFO_PATH, cache_type);
->  
->  	fp = fopen(cbm_mask_path, "r");
->  	if (!fp) {
-> 
---8323329-1222304298-1675858401=:1843--
