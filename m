@@ -2,122 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2845E68EF75
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAF368EFA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjBHNBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
+        id S230506AbjBHNRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjBHNBA (ORCPT
+        with ESMTP id S229732AbjBHNRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:01:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC22B7DB4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675861215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GZD4eF51TgC9oueoQn3RvNXVi7q+IJ98lRzwYnyNJW8=;
-        b=GKGSFnsaoo6SBmXhk0afNU7oC26Dl05/QgnFPgX4boR5tN5KxrRVRkzns/nbq9Abbzagc/
-        Z9lCc/Z/d0GGpEnF9Vo1SUEVebTyI4DMVqSB0pKjKg2aGgEROZlPEy6xvTzNoJtvR+2IMI
-        wPpTCBGuVC5/3ECAgZbMfC+1iT2dHik=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-539-nyJJ4nuiMl6_FE5Eo2OeAg-1; Wed, 08 Feb 2023 08:00:13 -0500
-X-MC-Unique: nyJJ4nuiMl6_FE5Eo2OeAg-1
-Received: by mail-ej1-f69.google.com with SMTP id ge13-20020a170907908d00b008aac038968aso1946707ejb.21
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 05:00:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GZD4eF51TgC9oueoQn3RvNXVi7q+IJ98lRzwYnyNJW8=;
-        b=tE1eRYZ2yzukjYKK4W/37rgOmDukPWNa/CAAGDuW0tV5OFx9Ond1Cx/97StQkMOAyn
-         oLVvSG7W9YGsUNeEOt0AZiWv0zOZasR5DXzSTl29fNL+JIz9NxKcGsN8pmp8OtjETLAL
-         694Hc57VOSQ5KahmwHNaJz6DQvwcDexunKUuIrdyvBF1bqge+8yaFaQRQycNO2rjjKHm
-         f/lawgIgUNN8yIRtR62rRwcL9eAsgSH1SGjH7CabkiCXp0+7c2Ma/7VeEI2HtLlrd+WS
-         frFAXFcPeXmNcHtnwBzAi9MSb2hncX0nmzrkYHkw2Iwf9OD2HlejXE6L3SToFClJ69Jl
-         nWUw==
-X-Gm-Message-State: AO0yUKVz1kEQpff6Wte/9E/fmj0c938tISd5OLLO+rp2X3UAstZL3x7L
-        ISPzUr+rDj0ahyp/EGgPr6ajHkqIzEizGfDAoMh3g5n4NDh0Lm/tl8axl2ZleuCXOr+YwRlwyY9
-        TGV2k5gK7g2+cOcmEyUtBfIPN
-X-Received: by 2002:a17:907:160e:b0:8aa:c035:a651 with SMTP id hb14-20020a170907160e00b008aac035a651mr4776195ejc.37.1675861212230;
-        Wed, 08 Feb 2023 05:00:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set+Y3v6ZDYs6fJVD6bZp4jFnLUDSB+F47FHl799qXTEy7dorD0nLqLTYAKPJs+2DVrLfitMtjQ==
-X-Received: by 2002:a17:907:160e:b0:8aa:c035:a651 with SMTP id hb14-20020a170907160e00b008aac035a651mr4776167ejc.37.1675861212053;
-        Wed, 08 Feb 2023 05:00:12 -0800 (PST)
-Received: from redhat.com ([2.52.132.212])
-        by smtp.gmail.com with ESMTPSA id de48-20020a1709069bf000b0088cf92eb0e1sm8267710ejc.150.2023.02.08.05.00.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 05:00:11 -0800 (PST)
-Date:   Wed, 8 Feb 2023 08:00:05 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Reshetova, Elena" <elena.reshetova@intel.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <20230208075747-mutt-send-email-mst@kernel.org>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <658272b5-9547-a69f-b6c9-a7ff2dd2d468@amd.com>
- <Y+HpmIesY96cYcWQ@kroah.com>
- <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
- <Y+MAPHZNLeBY13Pj@mit.edu>
- <20230208041913-mutt-send-email-mst@kernel.org>
- <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
+        Wed, 8 Feb 2023 08:17:15 -0500
+X-Greylist: delayed 1589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Feb 2023 05:17:07 PST
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC877D98;
+        Wed,  8 Feb 2023 05:17:07 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <andreas@feldner-bv.de>)
+        id 1pPjtp-002BgJ-EI; Wed, 08 Feb 2023 13:50:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=/yDnLpZT7axdNeq6mVTzNC/zbjG2jenE6smkcCw0zAE=; b=n85tM6HuohF6nDWC8PXqfLPS4J
+        qYSDH74RbZhBNEyROpJ7K8XgiXBBXTRuMkp9t5cTqkmfOnwOO7Yr6VdQ3LgqLCWY8bLq9iohJgjWa
+        ZIJv0SdWbQJp+ZUc/3okp+KU94+eExofJ3A0xdTcAh1nIKG0w86ORpZeMzOhChOfGesGYnaidKTNd
+        MPXkFMo+3HKrF6P8IU/u0y9C2DF1E1TDxEzfGzSizpRNM1QjZ3a0TFnqyO1pSfiVP/amLR7YFPX9V
+        tYZIwT8Q0M3N5YlAVutxXzjtWX6LF5hTU3y/t8ZDi2MINPxYq7Rp3Zyqn5WyEvo8tMvfUt1y/E/QR
+        ZCX2ptGQ==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To
+        :From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=/yDnLpZT7axdNeq6mVTzNC/zbjG2jenE6smkcCw0zAE=; b=q4DG6sv/JEUdtmV13KalBww4Ve
+        cL7+6cBHdfMjpgaNNdluk+P7Lmz4PHdEGZCPBc0RMfPItQ+yQRHo1tGzvnfjEgrsWdrq87jXDn9gt
+        ukmLrc9ToDlLLPMpRLejxCdIS/2uUaQamEcPc8unH51fC02eVTwzrRmh2wIS1Dx+MUFIfRafYsjVQ
+        22VANNKGHzoqvnx1xhH0mQ74iubveKj3vyI9Rc77DlPg/toUoPQVwnX1/9kjMm5exFhzC/Y3TzWw9
+        zCPKRj4DjXsKX8qPIwihSOEoKAIH8IdEVUb59dk9z5GIQEzaOnw3OTTB4YW7oYg2hRhh9NrvvIcU6
+        vHNI80hQ==;
+Received: from [2a02:908:1b0:8800:99b0:f082:b591:5921]
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andreas@feldner-bv.de>)
+        id 1pPjtl-000HS2-EE; Wed, 08 Feb 2023 13:50:08 +0100
+Message-ID: <d0534762-3785-ec2d-8d1e-aba0e39f701b@feldner-bv.de>
+Date:   Wed, 8 Feb 2023 13:50:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] ARM: dts: allwinner: minimize irq debounce filter per
+ default
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Andreas Feldner <pelzi@flying-snail.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <Y+FaVorMl37F5Dve@debian-qemu.internal.flying-snail.de>
+ <20230207011608.2ce24d17@slackpad.lan>
+From:   Andreas Feldner <andreas@feldner-bv.de>
+In-Reply-To: <20230207011608.2ce24d17@slackpad.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 10:44:25AM +0000, Reshetova, Elena wrote:
-> Because for the
-> drivers that CoCo guest happens to need, there is no way to fix this problem by 
-> either of these mechanisms (we cannot disable the code that we need), unless somebody
-> writes a totally new set of coco specific drivers (who needs another set of 
-> CoCo specific virtio drivers in the kernel?). 
+Hi Andre,
 
-I think it's more about pci and all that jazz, no?
-As a virtio maintainer I applied patches adding validation and intend to
-do so in the future simply because for virtio specifically people
-build all kind of weird setups out of software and so validating
-everything is a good idea.
+Am 07.02.23 um 02:16 schrieb Andre Przywara:
+> On Mon, 6 Feb 2023 20:51:50 +0100
+> Andreas Feldner <pelzi@flying-snail.de> wrote:
+>
+> Hi Andreas,
+>
+> thanks for taking care about this board and sending patches!
+Thank YOU for maintaining it!
+>> The SoC features debounce logic for external interrupts. Per default,
+>> this is based on a 32kHz oscillator, in effect filtering away multiple
+>> interrupts separated by less than roughly 100ï¿½s.
+>>
+>> This patch sets different defaults for this filter for this board:
+>> PG is connected to non-mechanical components, without any risk for
+>> showing bounces. PA is mostly exposed to GPIO pins, however the
+>> existence of a debounce filter is undesirable as well if electronic
+>> components are connected.
+> So how do you know if that's the case? It seems to be quite normal to
+> just connect mechanical switches to GPIO pins.
+>
+> If you are trying to fix a particular issue you encountered, please
+> describe that here, and say how (or at least that) the patch fixes it.
+>
+> And I would suggest to treat port G and port A differently. If you
+> need a lower debounce threshold for port A, you can apply a DT overlay
+> in U-Boot, just for your board.
 
--- 
-MST
+Fair enough. You run into problems when you connect (electronic)
+devices to bank A (typically by the 40pin CON2 connector), where
+the driver requires fast IRQs to work. In my case this has been a
+DHT22 sensor, and the default debounce breaking the dht11.ko
+driver.
+
+Now, what kind of problem is this - I'm no way sure:
+
+a) is it an unlucky default, because whoever connects a mechanical
+switch will know about the problem of bouncing and be taking
+care to deal with it (whereas at least I was complete unsuspecting
+when connecting an electronic device that a debounce function
+might be in place), or
+
+b) is it a bug in the devicetree for (at least) the BananaPi M2 Zero,
+because the IRQ bank G is hard wired to electronic devices that
+should not be fenced by a debouncing function, or
+
+c) is it missing dt binding documentation of the input-debounce
+attribute?
+
+Anyway, the combination of these is quite irritating. To me it
+seems a sufficiently elegant solution to explicitly include the
+setting in the devicetree and leave it to whoever is unhappy
+with it, to create a better suited device tree overlay.
+
+>> Additionally, the clock-frequency attribute is added for each of
+>> the 4 cores to eliminate the kernel error message on boot, that
+>> the attribute is missing.
+>>
+>> Signed-off-by: Andreas Feldner <pelzi@flying-snail.de>
+>> ---
+>>   .../dts/sun8i-h2-plus-bananapi-m2-zero.dts     | 18 ++++++++++++++++++
+>>   1 file changed, 18 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+>> index d729b7c705db..1fc0d5d1e51a 100644
+>> --- a/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+>> +++ b/arch/arm/boot/dts/sun8i-h2-plus-bananapi-m2-zero.dts
+>> @@ -113,6 +113,22 @@ wifi_pwrseq: wifi_pwrseq {
+>>   
+>>   &cpu0 {
+>>   	cpu-supply = <&reg_vdd_cpux>;
+>> +	clock-frequency = <1296000000>;
+> I see where you are coming from, this is really an unnecessary warning
+> message. However this message should be really removed from the kernel
+> instead of adding some rather meaningless value here.
+> The current DT spec marks this property as required, though, so I added
+> a PR there to get this fixed:
+> https://github.com/devicetree-org/devicetree-specification/pull/61
+> Once this is through, we can try to remove the kernel message.
+
+OK, so I'll take care to have this change removed from my patch.
+I thought so, but then it was the configuration I'd been testing with...
+
+>> +};
+>> +
+>> +&cpu1 {
+>> +	cpu-supply = <&reg_vdd_cpux>;
+> I don't think we need this for every core?
+
+I came across a discussion that this was marked required on the
+cpu@... level whereas it would make sense on the cpus level. I did
+not check if this suggestion was implemented in the meantime,
+sorry!
+
+>> +	clock-frequency = <1296000000>;
+>> +};
+>> +
+>> +&cpu2 {
+>> +	cpu-supply = <&reg_vdd_cpux>;
+>> +	clock-frequency = <1296000000>;
+>> +};
+>> +
+>> +&cpu3 {
+>> +	cpu-supply = <&reg_vdd_cpux>;
+>> +	clock-frequency = <1296000000>;
+>>   };
+>>   
+>>   &de {
+>> @@ -193,6 +209,8 @@ bluetooth {
+>>   };
+>>   
+>>   &pio {
+>> +	/* 1ï¿½s debounce filter on both IRQ banks */
+> Is that supposed to be <micro> in UTF-8? It seems to have got lost in
+> translation, or is that just me?
+O yes, the Greek character slipped into the comment.
+>> +	input-debounce = <1 1>;
+> As mentioned above, I am not so sure this is generic enough to put it
+> here for PA. And what is the significance of "1 us", in particular? Is
+> that just the smallest value?
+
+Yes indeed it's a bit more complicated than I feel it needs to be. The
+configuration is taken as microseconds and translated into the best
+matching clock and divider by the driver. However, 0 is not translated
+to the lowest divider of the high speed clock as would be logical if
+you ask for zero microseconds, but to "leave at default". The default
+of the board is 0 in the register, translating to lowest divider on the
+_low_ speed clock.
+
+To me this is mindboggling.
+
+If you want to keep IRQ bank A as it is today and switch off the
+definitely unnecessary (and _potentially_ IRQ eating) debounce off
+for bank G only, I'd suggest the following setting:
+
+     input-debounce = <31 1>;
+
+This is because 31 Microseconds is exactly the time that is best
+matched by the low speed clock with low divider and translated
+to a 0 in the config register by the driver.
+
+The absolutely equivalent setting, with the only drawback that it
+would have confused me to death is:
+
+     input-debounce = <0 1>;
+
+(because it skips setting IRQ bank A debouncing, leaving it at 31.25 us)
+
+Or, and that was my suggestion, you set both correctly for
+electronic devices and leave the task of switching on debouncing
+to the implementors of applications with mechanical switches:
+
+     input-debounce = <1 1>;
+
+To me, any of these being present in the devicetree would have been
+of great help, because I would have seen that there is something
+to set.
+
+
+One final question: how would you like this change:
+
+--- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
++++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+@@ -1467,6 +1467,10 @@ static int sunxi_pinctrl_setup_debounce(struct 
+sunxi_pinctrl *pctl,
+                 writel(src | div << 4,
+                        pctl->membase +
+sunxi_irq_debounce_reg_from_bank(pctl->desc, i));
++
++               pr_info("Debounce filter for IRQ bank %d configured to "
++                       "%d us (reg %x)\n",
++                       i, debounce, src | div << 4);
+         }
+
+         return 0;
+
+It helped me to cross-check what the driver is really doing, and it
+again would have helped me with me DHT problem to learn about
+the existence of a debouncing filter.
+
+Yours,
+
+Andreas.
+
 
