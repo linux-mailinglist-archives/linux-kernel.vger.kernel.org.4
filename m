@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A488368F6E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0613E68F6E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjBHS20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:28:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S231668AbjBHSaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:30:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBHS2Z (ORCPT
+        with ESMTP id S229460AbjBHSaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:28:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8661F4B6;
-        Wed,  8 Feb 2023 10:28:24 -0800 (PST)
+        Wed, 8 Feb 2023 13:30:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129031F4B6;
+        Wed,  8 Feb 2023 10:30:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFD5CB81F39;
-        Wed,  8 Feb 2023 18:28:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48158C433D2;
-        Wed,  8 Feb 2023 18:28:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACBD26178B;
+        Wed,  8 Feb 2023 18:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 18144C433D2;
+        Wed,  8 Feb 2023 18:30:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675880901;
-        bh=h4Z1PtHljHwCVbgMyobf4aJQwDVtpHPPBTMUIZs29Gg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n3eRbsqzEtl0u4K+pBR/uh1MTytXhj7AZOwXNMUUOYm7UpSy4RuCOJdOrHI/HlxNx
-         +TH6fp1qcyG+a0tgA0HNILcVRxHV4yfFQB5woClSttKefRU0kTtrkhr/wWd/S8IcXk
-         rOA52rdu9fss65Fo3PF2lG5oNdJNa+yUKATyq875Kvaijqu12VL8wt3OZSxUympaQh
-         yT+W7N6ofw2unevGSzvVJKYgcwSC7/NVZYrCk/vuMUKYliKpgJ9U2miVbN7Ewkvjui
-         uESzBfK5yX/n37emQJk8dScQ30Vt/TM18Q/DBQZn//ttd66cuRSVEp3NNOAPQ6E3Lu
-         n5wACa15bgCbQ==
-Date:   Wed, 8 Feb 2023 18:28:15 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH 00/24] Add basic ACPI support for RISC-V
-Message-ID: <Y+Ppv6kB1iksf+TF@spud>
-References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
+        s=k20201202; t=1675881018;
+        bh=3YOFdKnAwzqh0eCNoXvPPLYHZOdMnpSXzcOAzCSwheY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=SdUIHnNswCvU6EWW/DqDwaGUFjDorjoJI7XuZ1yWPE/j64k/eQLyQ7LkzCYa78OUD
+         m+Rrne2+gcGKpeXj5dx2sL5WH6D2B2cT5CROAPeLGvuY4hH8+lAsozNYTI6HrvaoNC
+         /wg1/RhyYWA9vShiShfsNL2TqQqxBSiU0AkOuIMt6W536mbvcHeCji9uqyxyLYyiYN
+         un8rm8LFkhPl5KbT9Gbq1QQXoFfgyvZwpvL6FOFnipzNpCUljKCRiHZl6vkpuCJtq7
+         uh/755ooa4+kCy4mwBmLHz2VOZPN1O1BDkavwLkIMQqnlFzEunRITzxczbn7DR25/t
+         bdrKV7yQMa3UA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F23AFE4D032;
+        Wed,  8 Feb 2023 18:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3UvAYbWp1U8XT/He"
-Content-Disposition: inline
-In-Reply-To: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] platform/chrome: Fix spelling mistake "Attenetion" ->
+ "attention"
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167588101798.25749.5056097806112911445.git-patchwork-notify@kernel.org>
+Date:   Wed, 08 Feb 2023 18:30:17 +0000
+References: <20230207091443.143995-1-colin.i.king@gmail.com>
+In-Reply-To: <20230207091443.143995-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     pmalani@chromium.org, bleung@chromium.org, groeck@chromium.org,
+        chrome-platform@lists.linux.dev, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,51 +58,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---3UvAYbWp1U8XT/He
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch was applied to chrome-platform/linux.git (for-kernelci)
+by Prashant Malani <pmalani@chromium.org>:
 
-Hey Sunil,
+On Tue,  7 Feb 2023 09:14:43 +0000 you wrote:
+> There is a spelling mistake in a dev_warn message, make it lower case
+> and fix the spelling.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, Jan 30, 2023 at 11:52:01PM +0530, Sunil V L wrote:
-> This patch series enables the basic ACPI infrastructure for RISC-V.
-> Supporting external interrupt controllers is in progress and hence it is
-> tested using polling based HVC SBI console and RAM disk.
->=20
-> The series depends on Anup's IPI improvement series.
-> https://github.com/avpatel/linux/commits/riscv_ipi_imp_v17
+Here is the summary with links:
+  - [next] platform/chrome: Fix spelling mistake "Attenetion" -> "attention"
+    https://git.kernel.org/chrome-platform/c/b0d8a67715da
 
-In the future, please provide links to patchsets rather than "random"
-git trees.
-
-> Jisheng Zhang (1):
->   riscv: move sbi_init() earlier before jump_label_init()
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-What has this patch got to do with your series? Just something that was
-sitting in your tree?
-
-If you need this, it'd be ideal if you would submit *with* the R-b tags
-it appears to have had by v6 [1] & add the reason that you need to move
-it to the commit message.
-In Jisheng's series that was obvious, but this is a significantly larger
-series and it is hard to spot your reasoning for it.
-
-Cheers,
-Conor.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
---3UvAYbWp1U8XT/He
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+PpvwAKCRB4tDGHoIJi
-0vPuAP9v5J77SYw+hhwGsTWGrB7BFSWQB+FJSClGtSF9oLyAyQD/eikMzjv2mCEL
-dIFF92vSrmUAKvml2Nv8u8CbSJh1RwM=
-=oI2R
------END PGP SIGNATURE-----
-
---3UvAYbWp1U8XT/He--
