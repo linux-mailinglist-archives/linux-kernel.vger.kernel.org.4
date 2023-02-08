@@ -2,89 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CCF68F91F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA16B68F921
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjBHU4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S231781AbjBHU5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjBHU4r (ORCPT
+        with ESMTP id S231304AbjBHU5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:56:47 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977B9233EF;
-        Wed,  8 Feb 2023 12:56:43 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PBsjy1h1fz4wgv;
-        Thu,  9 Feb 2023 07:56:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675889798;
-        bh=XNTGNkowDJ6fVg5HNo3QXQ++ahxAzp+geEpR6OrIaRw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=edk52gA5uATabERRxe1VTVPATpBb7bcc5fWOtCPwJNlwl4wyWkicb8Uc5bGr9d1XM
-         sXcCOwLa0dX5v0Hs7KBFhjuszhL2p75516Y+Vlxt041uJ8wMsRRH87H2arsUj7l32a
-         /tlO+H8MJ0ask1b4E+c3SkE9kfypPxDI+4SlsKLsI3j9D7b82hqdc0cmVwxEojkHOo
-         jfZDKu21j/ccx9AVnkhQlIlTXdXqN7sRorxxW7Yfi6nPhqGXMM+4oDJ1bS/aEk/8gb
-         v0XAaKuiAGIzqBHMxHFyA1cGVdIEWx2O0bss1lDzrpsr6s55eR/lmQ9ldYZ+kO6Y/E
-         0g6J8meQ9xjMg==
-Date:   Thu, 9 Feb 2023 07:56:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
- tree
-Message-ID: <20230209075636.313e54e0@canb.auug.org.au>
+        Wed, 8 Feb 2023 15:57:08 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD7E36450
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:57:05 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id l7so54669ilf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 12:57:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X7DbHR2X4ikzGML+8RSgjSp5z9M8mOscrwv14ksuvbE=;
+        b=o7p1Nfn08Is1mnXiRABTzJCZmryeX2S81JDnh0V49J98QaEzONWLLYMf5XPtRFC0kd
+         IF9T2yssdc2vFpNHb2JsqRItppXhMz4YOkLwrCzH1TU8I7u0RpyZOhv2z2zs5MbStbWE
+         Z8p5ZdVvlZWcalenusDnsTRCSsv3+jIO7FW7D+UHYHe3gCTBkDmaDzLOOLN1o+at+HGn
+         gZC7SvkcoQA0aR9lPsGUSjbIFKhE6ZQOvKe1IKCPJBgeAduMiOtktYOU9hQ05wIdZsTG
+         dFFWSiKqYKQDXzmGlk99mA0d7s+ew722SNEK5P+motrbTGJoXnWXc6MLjLCxWEh+OFyt
+         XaUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X7DbHR2X4ikzGML+8RSgjSp5z9M8mOscrwv14ksuvbE=;
+        b=0UJ2NsWjkiGoMTVOU9bXIe/YNai90msu7D2KalUiRJRDwArFI/p157vmB9V5SoEV6+
+         u5BzhalQH68qBjH2CofTZoD5jltKXTKInz+cTJIWqPmzWtBg1AAuUoxfi26QcidGIMEc
+         1C3yEtdc9doV44gs/iZUQ1y15GadKisF0TrZQv9NNCe9LeiO1mSZAWOLiKr33EkY9Pym
+         Y5Fa2i+FMrZKJwlkVRhMqlYTpQ5H4xCJw4fgxon/XGKiA5joM2IcLpXlfN/bzofOikxn
+         UXbnqkj1N4GTLw8P7Tuizd3Pstvrj/bS4A/4t63O/3QzMn5CEfBNSoyDHt0HmOazyXMH
+         /GTw==
+X-Gm-Message-State: AO0yUKXcentCcJHBA5jffWL2It9b5DrfR7/rCJPoeKYzlqLa8DDrblC8
+        vPAYVrMLBiBe/MfO7VFahm9TVw==
+X-Google-Smtp-Source: AK7set8q4iB/9jh/+7RXot17Ayryd9mkrRNbCum2GTQHANayZ98srghoenzxtJ/3Nlp/VgrW+p/u0Q==
+X-Received: by 2002:a05:6e02:219e:b0:312:7ca2:fee6 with SMTP id j30-20020a056e02219e00b003127ca2fee6mr9075974ila.30.1675889824765;
+        Wed, 08 Feb 2023 12:57:04 -0800 (PST)
+Received: from presto.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id r6-20020a922a06000000b0031093e9c7fasm5236704ile.85.2023.02.08.12.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 12:56:59 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/9] net: ipa: prepare for GSI register updtaes
+Date:   Wed,  8 Feb 2023 14:56:44 -0600
+Message-Id: <20230208205653.177700-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/in_pKqgR7o+sxv5am=.=ZnA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/in_pKqgR7o+sxv5am=.=ZnA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+An upcoming series (or two) will convert the definitions of GSI
+registers used by IPA so they use the "IPA reg" mechanism to specify
+register offsets and their fields.  This will simplify implementing
+the fairly large number of changes required in GSI registers to
+support more than 32 GSI channels (introduced in IPA v5.0).
 
-Hi all,
+A few minor problems and inconsistencies were found, and they're
+fixed here.  The last three patches in this series change the
+"ipa_reg" code to separate the IPA-specific part (the base virtual
+address, basically) from the generic register part, and the now-
+generic code is renamed to use just "reg_" or "REG_" as a prefix
+rather than "ipa_reg" or "IPA_REG_".
 
-Commits
+					-Alex
 
-  fd24c6974a3a ("media: Revert "media: saa7146: deprecate hexium_gemini/ori=
-on, mxb and ttpci"")
-  a4ff09f5a690 ("media: Revert "media: av7110: move to staging/media/deprec=
-ated/saa7146"")
+Alex Elder (9):
+  net: ipa: generic command param fix
+  net: ipa: get rid of ipa->reg_addr
+  net: ipa: add some new IPA versions
+  net: ipa: tighten up IPA register validity checking
+  net: ipa: use bitmasks for GSI IRQ values
+  net: ipa: GSI register cleanup
+  net: ipa: start generalizing "ipa_reg"
+  net: ipa: generalize register offset functions
+  net: ipa: generalize register field functions
 
-are missing a Signed-off-by from their author.
+ drivers/net/ipa/gsi.c                |  82 +++++---
+ drivers/net/ipa/gsi_reg.h            | 109 +++++------
+ drivers/net/ipa/ipa.h                |   4 +-
+ drivers/net/ipa/ipa_cmd.c            |   6 +-
+ drivers/net/ipa/ipa_endpoint.c       | 205 ++++++++++---------
+ drivers/net/ipa/ipa_interrupt.c      |  29 ++-
+ drivers/net/ipa/ipa_main.c           | 114 +++++------
+ drivers/net/ipa/ipa_mem.c            |  14 +-
+ drivers/net/ipa/ipa_reg.c            |  90 +++++----
+ drivers/net/ipa/ipa_reg.h            | 139 ++-----------
+ drivers/net/ipa/ipa_resource.c       |  16 +-
+ drivers/net/ipa/ipa_table.c          |  35 ++--
+ drivers/net/ipa/ipa_uc.c             |   6 +-
+ drivers/net/ipa/ipa_version.h        |   6 +-
+ drivers/net/ipa/reg.h                | 133 +++++++++++++
+ drivers/net/ipa/reg/ipa_reg-v3.1.c   | 277 +++++++++++++-------------
+ drivers/net/ipa/reg/ipa_reg-v3.5.1.c | 263 +++++++++++++------------
+ drivers/net/ipa/reg/ipa_reg-v4.11.c  | 265 +++++++++++++------------
+ drivers/net/ipa/reg/ipa_reg-v4.2.c   | 249 ++++++++++++------------
+ drivers/net/ipa/reg/ipa_reg-v4.5.c   | 281 +++++++++++++--------------
+ drivers/net/ipa/reg/ipa_reg-v4.7.c   | 265 +++++++++++++------------
+ drivers/net/ipa/reg/ipa_reg-v4.9.c   | 265 +++++++++++++------------
+ 22 files changed, 1451 insertions(+), 1402 deletions(-)
+ create mode 100644 drivers/net/ipa/reg.h
 
---=20
-Cheers,
-Stephen Rothwell
+-- 
+2.34.1
 
---Sig_/in_pKqgR7o+sxv5am=.=ZnA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkDIQACgkQAVBC80lX
-0GyG5gf/SndsW0F/sscVJZEuMYuxKxDC5AOS3tbHepag2RGGIIudhxw9XISUbTVo
-L8zPm4qfxLUUrV36gOjLbnZyqlPX0mZbwkU8LIYUf+0sxIJU782Nbd+NSNtVd24v
-hlHCibpzP3g1ELvWrxQTnRPt4NomDoi6mFA6Mow15wkFN5srg2qXLL4NKHYtyKBV
-wgPcXkF1a/2NILZvIIW2A7VYScDVXqDq4dhxKNLA7O//TKXFYUdviyUXsggCU1Ji
-v5UUmJXLuPuOD+Pb286sfJSqDUkcY0GfqQuagM1Q1WYNmH9Sxs3xThQJ5B5DZYBg
-kv47xQUI7/TfQwvj/aji0VkozyRWTQ==
-=RWF1
------END PGP SIGNATURE-----
-
---Sig_/in_pKqgR7o+sxv5am=.=ZnA--
