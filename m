@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644D768F825
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7642068F828
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjBHTee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S231888AbjBHTfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjBHTea (ORCPT
+        with ESMTP id S229953AbjBHTfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:34:30 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C1848A37;
-        Wed,  8 Feb 2023 11:34:29 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318GxU3f014158;
-        Wed, 8 Feb 2023 19:34:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wLN3aqt4BsZmshWcM1qzuY4DzPsmH0ag0Wq1aFzyO9U=;
- b=RXjBwrCAB+EGPNGX+zXdyBGwijxm2bveTfrWyfz+wqFvdSodU7DO8kDLcMjYYK06kl07
- 72DZQUez0EipDxMEsu7W+/1hs0Q19IqZJlyZOWkfeA6W2usvFZVIlOQRQsIU6LlJZM3y
- zudBKNlamSvkshTPaIu3ndg5fQw3YQliy18R9zKrQY7y4Ei4KZ4g3sEd8XFeKErhp601
- zrtHExDWS9oGYN3iZZFxYsJyaOTXgLdzqdaL9Zz7EejnOpMdwVG1YG5yvi+Kl2VB7Zbd
- FAj3wU8XG8lwagRUA7dDjUh6JaJG6hAQT4oP1t1J6Aq6Kh1DnCnnSP6/Hy6EmYNzfTv7 4Q== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm7u89q9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 19:34:12 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318JYBrA026357
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 19:34:11 GMT
-Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 11:34:11 -0800
-Message-ID: <f48868a9-313d-b3ee-d8b2-98774f0d1cd8@quicinc.com>
-Date:   Wed, 8 Feb 2023 11:34:10 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v9 21/27] gunyah: vm_mgr: Add framework to add VM
- Functions
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Wed, 8 Feb 2023 14:35:39 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA31C4672E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:35:38 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id m2-20020a17090a414200b00231173c006fso2856225pjg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 11:35:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fAJlaNEf9h29bd8ZkCwxz0tgZ1g6+/vtKmnhDMYhw14=;
+        b=Z+ropjWaZw/qeE6gBW6+idTTpgNFbXec1UuKtNv+KwRvRqvYww0Qyw82gl8VdUjD1B
+         ACJF5dPWNYsUa7aR3pW85ooqgpccPNH1Dp+kQZnlxlvvSNCHRIPzJc8csModV1rzyDMD
+         0ekiiqa5qwsESerHQbxFrAQkqMUH4COBTL4XE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fAJlaNEf9h29bd8ZkCwxz0tgZ1g6+/vtKmnhDMYhw14=;
+        b=EKhu3W3Bk+pbVYH/zW+0BR0xJUxzNNrXZtrBv2M1vZkCwk1op8ixS2dI9pIWVwR+VH
+         dYUDEXrVF0n5Cw/6+JxqmutVRgL63jhfR3cRDz3WmlnTttBgrTtVQJQFemcl7qmUsCfY
+         FnPuF5YL6SuXzJSuuK8SAdzjxF3p8Didxr/oAtjFXPDnn53SFTVDWAT0U/BvrNnVKHtj
+         jzbbFsxdaeHdI7jBy1UbTXSZRGkqdb3YXL/WvzSnpY8leHRB6aqS9LQc6YEKxnXkxS0U
+         1au54x4/vQZHpEy+tLHF6TQdZOALsG10Lh05WkHvLtzWpxL1AiCAcXcP8BvMoyxV/EqU
+         z48g==
+X-Gm-Message-State: AO0yUKU3SfrgksZ/jHZPRPGMbUwQlQEvPBTIz5oasmeXAWHowegAKqDe
+        CpuILoff1NB/oJy0yArL9g8o1g==
+X-Google-Smtp-Source: AK7set8GfKiDufztTpkuEDYL1b8u28pgvoPHLFhPAmA2kCMFZHHpGOh1C22kzQkvkpANzp/CQdvA0w==
+X-Received: by 2002:a17:902:ced2:b0:199:fc6:9a9b with SMTP id d18-20020a170902ced200b001990fc69a9bmr10210092plg.17.1675884938273;
+        Wed, 08 Feb 2023 11:35:38 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id iz17-20020a170902ef9100b001990e1aeae4sm7268564plb.47.2023.02.08.11.35.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 11:35:37 -0800 (PST)
+Message-ID: <63e3f989.170a0220.60c91.c5ce@mx.google.com>
+X-Google-Original-Message-ID: <202302081133.@keescook>
+Date:   Wed, 8 Feb 2023 11:35:37 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Li <ashimida.1990@gmail.com>
+Cc:     concord@gentoo.org, linux-hardening@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-22-quic_eberman@quicinc.com>
- <c1564a80-d1be-f31d-2db3-1ec0b847e921@linaro.org>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <c1564a80-d1be-f31d-2db3-1ec0b847e921@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: U5KxnPAtgGMiTV34f4pL7tSGAJNn1neE
-X-Proofpoint-ORIG-GUID: U5KxnPAtgGMiTV34f4pL7tSGAJNn1neE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_09,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- mlxlogscore=999 bulkscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302080167
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        Will Deacon <will@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Qing Zhao <qing.zhao@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Song Liu <song@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Yuntao Wang <ytcoode@gmail.com>,
+        Changbin Du <changbin.du@intel.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [RFC/RFT] CFI: Add support for gcc CFI in aarch64
+References: <20221219061758.23321-1-ashimida.1990@gmail.com>
+ <Y6A/k7/KrCCDuux6@hirez.programming.kicks-ass.net>
+ <20221219132731.6ng4sz2nv6ujvu7i@ubuntu>
+ <202301061929.6881F6CD40@keescook>
+ <20230107154213.ocyghxd2k66gbvv6@ubuntu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230107154213.ocyghxd2k66gbvv6@ubuntu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,97 +102,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jan 07, 2023 at 07:42:13AM -0800, Dan Li wrote:
+> Hi Kees,
+> 
+> On 01/06, Kees Cook wrote:
+> > On Mon, Dec 19, 2022 at 05:32:04AM -0800, Dan Li wrote:
+> > > Hi Peter,
+> > Hi!
+> > 
+> > First of all, thank you thank you for working on this in GCC. This will
+> > make a big difference for folks that don't have the option to build with
+> > Clang to gain CFI coverage.
+> > 
+> > As for the implementation details, the core issue is really that this
+> > type of CFI is specifically designed for the Linux kernel, and it took a
+> > rather long time to figure out all the specifics needed (down to the
+> > byte counts and instruction layouts). GCC's version will ultimately need
+> > to exactly match the Clang output, or Linux is unlikely to support it.
+> > 
+> > We're already on our second CFI -- the original Clang CFI was just too
+> > clunky for long-term use in Linux, so unless we're going to improve on
+> > the latest Clang KCFI implementation in some way, it's better to stick
+> > to exactly byte-for-byte identical results. The KCFI support in Linux
+> > depends on the arm64 and x86_64 runtimes for catching the traps, and the
+> > post-processing done (on x86_64) with objtool that prepares the kernel
+> > for IBT use, and converts to the optional FineIBT CFI mechanism. With
+> > all those moving parts, there needs to be a very compelling reason to
+> > have GCC KCFI implementation differ from Clang's.
+> > 
+> > Hopefully that context helps a little. I'm excited to try out future
+> > versions!
+> 
+> Thanks for the context, it makes sense and helped me a lot. :)
+> 
+> In the next version I'll make the gcc implementation consistent with clang.
 
+Hi!
 
-On 2/7/2023 5:15 AM, Srinivas Kandagatla wrote:
-> 
-> 
-> On 20/01/2023 22:46, Elliot Berman wrote:
->> Introduce a framework for Gunyah userspace to install VM functions. VM
->> functions are optional interfaces to the virtual machine. vCPUs,
->> ioeventfs, and irqfds are examples of such VM functions and are
->> implemented in subsequent patches.
->>
->> A generic framework is implemented instead of individual ioctls to
->> create vCPUs, irqfds, etc., in order to simplify the VM manager core
->> implementation and allow dynamic loading of VM function modules.
->>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->> ---
-[snip]
->> +#define DECLARE_GUNYAH_VM_FUNCTION(_name, _bind, _release)        \
->> +    static struct gunyah_vm_function_driver _name = {        \
->> +        .name = __stringify(_name),                \
->> +        .mod = THIS_MODULE,                    \
->> +        .bind = _bind,                        \
->> +        .release = _release,                    \
->> +    };                                \
->> +    MODULE_ALIAS("ghfunc:"__stringify(_name))
-> 
-> lets not over kill this by having DECLARE_GUNYAH_VM_FUNCTION, this will 
-> make the drivers readable in a more familar way. let the driver define 
-> this static struct.
-> 
-> 
->> +
->> +#define DECLARE_GUNYAH_VM_FUNCTION_INIT(_name, _bind, _release)        \
->> +    DECLARE_GUNYAH_VM_FUNCTION(_name, _bind, _release);        \
->> +    static int __init _name##_mod_init(void)            \
->> +    {                                \
->> +        return gunyah_vm_function_register(&(_name));        \
->> +    }                                \
->> +    module_init(_name##_mod_init);                    \
->> +    static void __exit _name##_mod_exit(void)            \
->> +    {                                \
->> +        gunyah_vm_function_unregister(&(_name));        \
->> +    }                                \
->> +    module_exit(_name##_mod_exit)
->> +
-> 
-> How about:
-> 
-> #define module_gunyah_function_driver(__gf_driver)
->          module_driver(__gf_driver, gunyah_vm_function_register, \
->                          gunyah_vm_function_unregister)
-> 
-> Having relook at the patch, I think modeling the gunyah_vm_function as a 
-> proper device and driver model will scale, you could leverage most of 
-> this manual management to the existing driver model. May I suggest to 
-> you take a look at  include/linux/auxiliary_bus.h
-> with that you could model add_functions as
-> auxiliary_device_add and the respecitive drivers as 
-> module_auxiliary_driver.
-> 
+Just checking in on this, since there are a lot of interested folks. :)
+What's the status on the next version (and has anyone been found to
+tackle the x86 backend part)? Is there anything we can help with?
 
-I'm not sure if device model can fit well here. I wanted to make sure 
-that the VM function actually bound to a driver when user requests it 
-and the driver to be able to return some info about it to the user  -- 
-vCPUs return a file descriptor for instance. I could probably make it 
-work with a device/driver model, but I'm not sure if it should be done 
-like that.
+Thanks!
 
->> +#endif
->> diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
->> index 36359ad2175e..ec8da6fde045 100644
->> --- a/include/uapi/linux/gunyah.h
->> +++ b/include/uapi/linux/gunyah.h
->> @@ -50,4 +50,17 @@ struct gh_vm_dtb_config {
->>   #define GH_VM_START        _IO(GH_IOCTL_TYPE, 0x3)
->> +#define GUNYAH_FUNCTION_NAME_SIZE        32
->> +#define GUNYAH_FUNCTION_MAX_ARG_SIZE        1024
->> +
->> +struct gh_vm_function {
->> +    char name[GUNYAH_FUNCTION_NAME_SIZE];
->> +    union {
->> +        char data[GUNYAH_FUNCTION_MAX_ARG_SIZE];
-> 
-> Are we missing any thing here, its odd to see a single member union like 
-> this.
-> if other memembers are part of another patch please move them to this 
-> one as its confusing.
+-Kees
 
-I can add a comment that members will be added as new functions are 
-added. If I put it in this patch, it raises questions about where those 
-other members are being used.
-
-
+-- 
+Kees Cook
