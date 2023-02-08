@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2388468F245
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4252268F243
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjBHPmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S231365AbjBHPma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjBHPml (ORCPT
+        with ESMTP id S230352AbjBHPm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:42:41 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC6F1B313
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:42:37 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id fi26so21017751edb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:42:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gBpdGA6mtrbnlLXhrldNvYUwXI0WI+DySVv9XI8e+Vk=;
-        b=RyEecQn5YMAw7Ae8YRSta8sKtN6epFcC9vsjG+EygrSU60JiKWNCI5WadCowwvZKc+
-         f6Y9/prFa9Rfg6/JkjlrR1bn/3htTI3P+IjHKi9b9YMncsOQhDHY4NOAxHaxk/Wa3Hin
-         HSBMJ0EThB4SXjbXitRrTfLruxCAbFpbZ/W8I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gBpdGA6mtrbnlLXhrldNvYUwXI0WI+DySVv9XI8e+Vk=;
-        b=zLPbZAZPNAEY2AtFqtsLAU3SzhFg9AKE/xel6NIZ63/JU+ODWqYsbnSiPZd/cp9a2g
-         ofph0+7tZfrWb/TK2AykQXTWhMls2LVC43N3ZI+lc72yEGaH99OqZw1kVpJGePcZdwSn
-         TnknsvBwmViU4HT4VMk9oFQKDrEnv5UUXg30Oxb0gfHMWlfwV51Vo89srpPNFEb2fyrH
-         Z9+U+Y/BxGGhj4ud19XQNXCq+3AQSFt7oyVhoQ5rA62iqogl5ZoaY+EvBfljhzaiU3Np
-         dlQFuU9El6pjM4EdZrRVMvU/86WpvvPzM9NODSgCdBHFQgRybsBQJW5ap+DTu3P8tsm9
-         x+FQ==
-X-Gm-Message-State: AO0yUKUzK2GPtGVqJfPyiwwb1R9cokGB6U8/hNCZxRQSZDrbxE6sCLKC
-        wZDz02RAhEgZvylIaoPPz9ccYAuitdl3OF5YSglGlg==
-X-Google-Smtp-Source: AK7set+XI3UwwolKkrkk3BfkfAuRtmrLdVlxbEWLjTTh/i8yr2lHDs4Yk5A7YXvCv+sTfj8JVASRfw==
-X-Received: by 2002:a50:ccc6:0:b0:4aa:c4bb:2372 with SMTP id b6-20020a50ccc6000000b004aac4bb2372mr8430746edj.32.1675870955942;
-        Wed, 08 Feb 2023 07:42:35 -0800 (PST)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id es26-20020a056402381a00b00488117821ffsm8031006edb.31.2023.02.08.07.42.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 07:42:31 -0800 (PST)
-Received: by mail-ej1-f53.google.com with SMTP id hx15so52079324ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:42:30 -0800 (PST)
-X-Received: by 2002:a17:906:4e46:b0:87a:7098:ca09 with SMTP id
- g6-20020a1709064e4600b0087a7098ca09mr1655453ejw.78.1675870950517; Wed, 08 Feb
- 2023 07:42:30 -0800 (PST)
+        Wed, 8 Feb 2023 10:42:28 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6032AA;
+        Wed,  8 Feb 2023 07:42:26 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 56F4B41EA7;
+        Wed,  8 Feb 2023 15:42:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1675870944; bh=9EEEtXkSzKmNuZPuh2VHDQl9lpD/J0a/AFRac3FFtQo=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=w46pOOne4H8Ry9Vrf1BwQn6dgb11NEULDBl2gQpPNN4a114LEGt56yCxpufMp6k83
+         nBDdN2v647BIdcKSNnVKgU4o1/XxmVhQwjIjMTDsugegQ5e84MvcPAp/v8fZTz4I00
+         EH/Q3AwpWJ2r7X9lq8Jl7iXt/sc1ri8VQg5KZ0SsYu951K4QOQ5niFGyjU6bceEzSj
+         M/ZJv/UMtIHRN93qWkqDtPHfp7mopBRfHFh45Br/bwAn4ilaCePCwLZUtNi5IpYxKo
+         BGW/cqtjZvAV+ncFY8ac9wTf38H61oxQ+ZT22N2Ameqvrc7kuJFeYj2KJaiA2HWmC/
+         J6XsrhiUWPc7w==
+Message-ID: <5f741a4f-f37d-079b-d464-59045ebef1ce@marcan.st>
+Date:   Thu, 9 Feb 2023 00:42:17 +0900
 MIME-Version: 1.0
-References: <20230207072902.5528-1-jgross@suse.com> <20230207072902.5528-5-jgross@suse.com>
- <CAHk-=wi53OX86-yLBp4rCHOH67XhVbzV78qa63mh4-rOhxQSLw@mail.gmail.com> <59a24334-35c7-8afa-f35d-d654dd2823ba@suse.com>
-In-Reply-To: <59a24334-35c7-8afa-f35d-d654dd2823ba@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 8 Feb 2023 07:42:13 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiWAv7gQewr=i=oOD+89CFjAzaXiotUb2wS+oWGUP6z+g@mail.gmail.com>
-Message-ID: <CAHk-=wiWAv7gQewr=i=oOD+89CFjAzaXiotUb2wS+oWGUP6z+g@mail.gmail.com>
-Subject: Re: [PATCH 4/6] x86/mtrr: don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        lists@nerdbynature.de, mikelley@microsoft.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>, Kazuki <kazukih0205@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
+ <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
+ <20230208103511.w7jzxw6spy6humdn@bogus>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: s2idle breaks on machines without cpuidle support
+In-Reply-To: <20230208103511.w7jzxw6spy6humdn@bogus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 10:20 PM Juergen Gross <jgross@suse.com> wrote:
->
-> Are you sure? In the SDM I'm reading:
->
-> * E (MTRRs enabled) flag, bit 11 =E2=80=94 MTRRs are enabled when set; al=
-l MTRRs are
->    disabled when clear, and the UC memory type is applied to all of physi=
-cal
->    memory.
->
-> So UC it should be IMHO.
+On 08/02/2023 19.35, Sudeep Holla wrote:
+> On Wed, Feb 08, 2023 at 04:48:18AM +0900, Kazuki wrote:
+>> On Mon, Feb 06, 2023 at 10:12:39AM +0000, Sudeep Holla wrote:
+>>>
+>>> What do you mean by break ? More details on the observation would be helpful.
+>> For example, CLOCK_MONOTONIC doesn't stop even after suspend since
+>> these chain of commands don't get called.
+>>
+>> call_cpuidle_s2idle->cpuidle_enter_s2idle->enter_s2idle_proper->tick_freeze->sched_clock_suspend (Function that pauses CLOCK_MONOTONIC)
+>>
+>> Which in turn causes programs like systemd to crash since it doesn't
+>> expect this.
+> 
+> Yes expected IIUC. The per-cpu timers and counters continue to tick in
+> WFI and hence CLOCK_MONOTONIC can't stop.
 
-Right you are. I clearly misread that section when I did my original patch.
+The hardware counters would also keep ticking in "real" s2idle (with
+hypothetical PSCI idle support) and often in full suspend. There is a
+flag for this (CLOCK_SOURCE_SUSPEND_NONSTOP) that is set by default for
+ARM. So this isn't why CLOCK_MONOTONIC isn't stopping; there is
+machinery to make the kernel's view of time stop anyway, it's just not
+being invoked here.
 
-                Linus
+This is somewhat orthogonal to the issue of PSCI. These machines can't
+physically support PSCI and KVM at the same time (they do not have EL3),
+so PSCI is not an option. We will be starting a conversation about how
+to provide something "like" PSCI over some other sort of transport to
+solve this soon. So that will "fix" this issue once it's all implemented.
+
+However, these machines aren't the only ones without PSCI (search for
+"spin-table" in arch/arm64/boot/dts, this isn't new and these aren't the
+first). It seems broken that Linux currently implements s2idle in such a
+way that it violates the userspace clock behavior contract on systems
+without a cpuidle driver (and does so silently, to make it worse). So
+that should be fixed regardless of whether we end up coming up with a
+PSCI alternative or not for these platforms. There's no fundamental
+reason why s2idle can't work properly with plain WFI.
+
+- Hector
