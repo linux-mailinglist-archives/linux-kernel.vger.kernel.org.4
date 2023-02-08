@@ -2,116 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BBC68F185
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3DF68F18D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbjBHPBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
+        id S231623AbjBHPDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBHPA6 (ORCPT
+        with ESMTP id S231524AbjBHPDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:00:58 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E6028848
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:00:57 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id i2so6148766ple.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:00:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9oflZ6zNlZVw9EmQqtsymlsndLRnz7qdnW4kcU4XhjM=;
-        b=TyTWS/m7Pe2sYVsfIBwR88tdeTexgn+w18bj2jrQWwl0SQF29dkYshlSrsV/RQ8eOf
-         xOJ2oFUZxpUeJJGxZgJ86tMlRl4iHU9nCb0FPsYcQkABj007u2lqUSug07Yx4eXQKHdT
-         UDizQVJZy6FaeFNJCSOJH8vp8pB/shodMkYWrWIaopfsQp6zZsGYacJkWZqPILAeZNN9
-         gGciY+60JeeiSbkUnIX+LRKlxwQD4t3JOAhbe2TwwSgFjZFOG2BX7PJokbnTEOIDkRyE
-         bqIbo4Qn2FSkf+Cy1wc/VVk8TjwRhk6vGj9HgMzbjINIwLN+KXVU4cLJriEgaNAgcnpx
-         fX6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9oflZ6zNlZVw9EmQqtsymlsndLRnz7qdnW4kcU4XhjM=;
-        b=YE4V0DJbrjQMexUKQajkj0kQAAi3x0iIRU9cvKal67GMiqqA/Gvy8Al9Tm0FK7SjnJ
-         wdQ2LtFqgQ7SH2+WP1ojjamYNOyyIaXoHhtczGvx793IMGE9/UtJ6sBiZGTtIYRO8jqI
-         ZFzduVptrtgFF7S7NZDy4FBzBQIGjEbe7u2secZ9ac4TGsF3BSfJYmzcwEyZblK+srX/
-         RsVRQM4HYQpL77VF9CtMyMlvkyQplY71PHEvI1D6E6534mm75TYn6QVIn5oAizOF05It
-         NhhbLLUi4j1+jfbdfAP409Ypa86WET+IqQYXaDLPmW9MujHN6qTqWDEzxG7JdY9kYZxv
-         XpJg==
-X-Gm-Message-State: AO0yUKVZvvPsW/6D4vQQyEtqNnIdBXhQiZTWh/HmMDd3neQr/nJo9v9i
-        +7dRZmg4EuFWSnFTz5zfY4OLoQ==
-X-Google-Smtp-Source: AK7set/Sg1EKZpPnOVhuAt9KhQSjGh52j1FGM0jG+Z5akg4z80ux7gd3rmlDUGrfknhCAucbOTZxkg==
-X-Received: by 2002:a17:902:e80e:b0:198:af4f:de09 with SMTP id u14-20020a170902e80e00b00198af4fde09mr233575plg.9.1675868457315;
-        Wed, 08 Feb 2023 07:00:57 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p21-20020a056a000a1500b00593d7db7f29sm11340184pfh.216.2023.02.08.07.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 07:00:56 -0800 (PST)
-Date:   Wed, 8 Feb 2023 15:00:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     shahuang@redhat.com
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: selftests: Remove duplicate macro definition
-Message-ID: <Y+O5JW+Ro3i7iXV3@google.com>
-References: <20230208071801.68620-1-shahuang@redhat.com>
+        Wed, 8 Feb 2023 10:03:12 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6DB732506;
+        Wed,  8 Feb 2023 07:03:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 102221477;
+        Wed,  8 Feb 2023 07:03:54 -0800 (PST)
+Received: from bogus (unknown [10.57.10.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EB9C3F8C6;
+        Wed,  8 Feb 2023 07:03:09 -0800 (PST)
+Date:   Wed, 8 Feb 2023 15:03:06 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Kazuki <kazukih0205@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Subject: Re: s2idle breaks on machines without cpuidle support
+Message-ID: <20230208150306.ve2pnt3pvlmf5wbu@bogus>
+References: <20230204152747.drte4uitljzngdt6@kazuki-mac>
+ <20230206101239.dret3fv65cnzpken@bogus>
+ <20230207194818.exskn3dhyzqwr32v@kazuki-mac>
+ <20230208103511.w7jzxw6spy6humdn@bogus>
+ <20230208112031.sdfuluajjerf4wwp@kazuki-mac>
+ <20230208141658.kede5ylqk4zqvrnj@bogus>
+ <20230208144327.3ftjxnquwhsdykfc@kazuki-mac>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230208071801.68620-1-shahuang@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230208144327.3ftjxnquwhsdykfc@kazuki-mac>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023, shahuang@redhat.com wrote:
-> From: Shaoqin Huang <shahuang@redhat.com>
-> 
-> The KVM_GUEST_PAGE_TABLE_MIN_PADDR macro has been defined in
-> include/kvm_util_base.h. So remove the duplicate definition in
-> lib/kvm_util.c.
-> 
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
->  tools/testing/selftests/kvm/lib/kvm_util.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index f25b3e9b5a07..3ea24a5f4c43 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1942,9 +1942,6 @@ vm_paddr_t vm_phy_page_alloc(struct kvm_vm *vm, vm_paddr_t paddr_min,
->  	return vm_phy_pages_alloc(vm, 1, paddr_min, memslot);
->  }
->  
-> -/* Arbitrary minimum physical address used for virtual translation tables. */
-> -#define KVM_GUEST_PAGE_TABLE_MIN_PADDR 0x180000
+On Wed, Feb 08, 2023 at 11:43:27PM +0900, Kazuki wrote:
+> On Wed, Feb 08, 2023 at 02:16:58PM +0000, Sudeep Holla wrote:
 
-Huh.  There wasn't even a merge conflict or anything, I just added it twice in
-commit cce0c23dd944 ("KVM: selftests: Add wrapper to allocate page table page").
+[...]
 
-Anyways, applied to kvm-x86 selftests with a Fixes tag.  Thanks!
+> > I was about ask you earlier as why can't you implement just system
+> > suspend in PSCI where the last cpu just calls WFI if you are interested
+> > in system sleep state. Or you can implement CPU_SUSPEND with an additional
+> > retention state which enters PSCI implementation just to make sure there is
+> > an active cpuidle driver and the s2idle state machinery works as expected.
+>
+> The machine I have (Macbook with Apple M1) doesn't have PSCI.
 
-[1/1] KVM: selftests: Remove duplicate macro definition
-      https://github.com/kvm-x86/linux/commit/695fa5a64cf5
+Well, if we are allowing to boot on such a system, then we must allow
+adding a platform specific idle driver. It may be useful once we info
+to add deeper than WFI states.
+
+> I guess we should ensure that systems without a cpuidle driver
+> will not suspend maybe around here then.
+>
+
+Are we ? I thought were making changes to enable it. Or are you saying
+we allow to enter into such a state and render the system unusable, if
+so we need to fix it.
 
 --
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+Regards,
+Sudeep
