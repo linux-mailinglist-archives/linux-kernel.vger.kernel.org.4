@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D302F68F3E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F57A68F3EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjBHQ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S229954AbjBHRBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbjBHQ7u (ORCPT
+        with ESMTP id S229879AbjBHRBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:59:50 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D4A1EFD4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:59:43 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id x8so14444091ybt.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 08:59:43 -0800 (PST)
+        Wed, 8 Feb 2023 12:01:17 -0500
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4561C317
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:01:16 -0800 (PST)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4c24993965eso241721657b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:01:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mdP6aBj8Z0tyjtWe/gNi4Xtx2Z1yUcQKnx0+gFKe2qI=;
-        b=hdxm4WQn0wrThjAE1baXvx1yk2YQ1rt7KF5JK70eHNkgrWSh9H5Bue0qMnE+/6AuuV
-         j/WYiIBBWpvFgQM+UhZRZaVmIf5VMMtUDFlBi3y7IkmCW7htAVutoTiRC9kC524IgkUj
-         ZCerP/grZHzflHR6aWvtvMVbaWI/DyIrjkJpXen5WPkCICg3bVd9vCGBRSQ46xrjpib5
-         n75kkKD8d7aNxCijrZdHuKJjBELocLyMAiX0PLZwUS6cI/kcJlrO8iISbp4Gh5ujmtUF
-         zH6XrrjZ+t/yOJD0LwTlR14h4b7N4NfsnM42iuRvTHlNyB9AWudtYJaP7QOYKX2wgT+D
-         GBcA==
+        bh=xXdBKFQFjb45PJbE0WfevTYuOvd7Ed4TIGS1v3lQONw=;
+        b=IYDBhhuMNLvOxMUNieuhwuuF9uXlY3Q40X9spez9yj/kTGor601E2JU44ZjwWer7ei
+         CeWzoNfmFFnK2djRuZgotnT9X//bTMkS1g2gfcj6/jhIrR0Hzt3NeBwrQjz+AGNvZeLv
+         YoZsYffzCQi8itKIDcn4dTasqFfs57kAnrU6ikZsgOF7kCIKtFbInx3tElCxew6PfN1y
+         1EvjFBk8vCctHzYB3k3xkgfsCoOe4cQ/Wr6d9I50G9aiCWf2oSjDQc9nSiU7uK8aXI4s
+         IoaofrnXVS55YOGefRunieUPutdwkmW4EQRElQYvLag/FUXG51SOY/BFn0OcvmYgTSp6
+         5vCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mdP6aBj8Z0tyjtWe/gNi4Xtx2Z1yUcQKnx0+gFKe2qI=;
-        b=NmeO4tnjiEdfdTiV06Q+4q7uAyo/1A1Fv7nkd9PMUXxSHWLHV5rRXGjO2RShF9FH1k
-         vlyza3bCX0p+hPGOE5D+vls4Q4RYVdPCjUNFMKcY9XVM/jiWlvD9+OdTFlhOzgUlAz8s
-         nkik+CdAFieQTTZ8xHDtglBBIgPwheyjaM5dskmKl60BGdvp65btF9LsHzTSKCJiS6Or
-         tYcnC9r71moJGC1QhRvQdCFUPU7h3ZkkOfNGZ97YzOEM7vHLh/g2sT0DrTyKVFsA79qN
-         CYM72uIbdX4RKFtdrW/hpgwa0q054dcHgwqiIEIj/r+GQGLukBdHo6P06fp6KW61SEx5
-         ZJqQ==
-X-Gm-Message-State: AO0yUKX9NcwwuUiSvnv1eVgbL+v+RfUvRnPqfwuoGp9+8oMmrouO6mDq
-        cECpiFRoFlNeTuhDNzP9+RQ0FST0KNBGbUDKqcTu7w==
-X-Google-Smtp-Source: AK7set859Usjta/XDe4YTT6BVJSKNeiGZ7QEBs2OLEz+nymj0Rizfwi8Jz7uwV6iB1Pxn7LiG8RQOI1LMKXKbqisVVM=
-X-Received: by 2002:a5b:4cf:0:b0:87d:c01e:2205 with SMTP id
- u15-20020a5b04cf000000b0087dc01e2205mr1295357ybp.179.1675875582673; Wed, 08
- Feb 2023 08:59:42 -0800 (PST)
+        bh=xXdBKFQFjb45PJbE0WfevTYuOvd7Ed4TIGS1v3lQONw=;
+        b=pGW38h/GbN/yD7hEYTaDIFA5j8/KThKyLDRy6RkFaoEAL4rjf6LoEr1cc96PGuudlE
+         smaIP7oPtDJyJeOEEg7tjHjtCpBvaylehAMeglbaU1v9zGSIWInQ+uwi07kXwq0tayQ2
+         PtYLTi+nUkdbt72hQCGh2GqE81VtKJI7rDcRXpT6fSZU7FQElanrh0NV1YZtDRSOGhCI
+         T7pG2XpIvmgQ1LQ46hd5m5HdoDupOzuNQXuH/AcABF5umI+gZttNCdztxBjGu9AY2/S4
+         p6IzshU+hdJoIoX0MzXfgbzxutg0iY2Z0vc/HTr3U+4vbUcqypNK/yEVgxydCPADH38n
+         h8ww==
+X-Gm-Message-State: AO0yUKXG5minV/TuKfI1NcK6Ak5rhSHisFX2ziEb0V2Sh+F7DFDnR8V0
+        qcmtig6+Lp2hkGP4N9FVTnNkBClfDUsTPyssHOqoHOunR4p8F/Nw
+X-Google-Smtp-Source: AK7set+cXrZJrfRBDM8O463q/uWZDKhuEYG0A6IIhrhL+2YLEgmuhPgKCxOXMuOmKcmi1rOzXNkSd3J5BIJj/WAfcRE=
+X-Received: by 2002:a81:9e07:0:b0:527:b49f:b89 with SMTP id
+ m7-20020a819e07000000b00527b49f0b89mr937260ywj.176.1675875675180; Wed, 08 Feb
+ 2023 09:01:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20230208164011.2287122-1-arnd@kernel.org> <20230208164011.2287122-4-arnd@kernel.org>
-In-Reply-To: <20230208164011.2287122-4-arnd@kernel.org>
+References: <20230208164011.2287122-1-arnd@kernel.org> <20230208164011.2287122-2-arnd@kernel.org>
+In-Reply-To: <20230208164011.2287122-2-arnd@kernel.org>
 From:   Marco Elver <elver@google.com>
-Date:   Wed, 8 Feb 2023 17:59:05 +0100
-Message-ID: <CANpmjNN1nmjavBhj=xMMqAD1VScPySkdZbm2sTpWnKN1ZvmJcQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] objtool: add UACCESS exceptions for __tsan_volatile_read/write
+Date:   Wed, 8 Feb 2023 18:00:38 +0100
+Message-ID: <CANpmjNNYcVJxeuJPFknf=wCaapgYSn0+as4+iseJGpeBZdi4tw@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kmsan: disable ftrace in kmsan core code
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
         Alexander Potapenko <glider@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
         Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andrey Konovalov <andreyknvl@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Miroslav Benes <mbenes@suse.cz>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -83,46 +80,58 @@ On Wed, 8 Feb 2023 at 17:40, Arnd Bergmann <arnd@kernel.org> wrote:
 >
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> A lot of the tsan helpers are already excempt from the UACCESS warnings,
-> but some more functions were added that need the same thing:
+> objtool warns about some suspicous code inside of kmsan:
 >
-> kernel/kcsan/core.o: warning: objtool: __tsan_volatile_read16+0x0: call to __tsan_unaligned_read16() with UACCESS enabled
-> kernel/kcsan/core.o: warning: objtool: __tsan_volatile_write16+0x0: call to __tsan_unaligned_write16() with UACCESS enabled
-> vmlinux.o: warning: objtool: __tsan_unaligned_volatile_read16+0x4: call to __tsan_unaligned_read16() with UACCESS enabled
-> vmlinux.o: warning: objtool: __tsan_unaligned_volatile_write16+0x4: call to __tsan_unaligned_write16() with UACCESS enabled
-
-That's odd - this has never been needed, because all __tsan_unaligned
-are aliases for the non-unaligned functions. And all those are in the
-uaccess_safe_builtin list already.
-
-So if suddenly the alias name becomes the symbol that objtool sees, we
-might need to add all the other functions as well.
-
-Is this a special build with a new compiler?
-
-> Fixes: 75d75b7a4d54 ("kcsan: Support distinguishing volatile accesses")
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_n+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_n+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_1+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_1+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_2+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_2+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_4+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_4+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_8+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_8+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_instrument_asm_store+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_chain_origin+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_poison_alloca+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_warning+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: __msan_get_context_state+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: kmsan_copy_to_user+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: kmsan_unpoison_memory+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: kmsan_unpoison_entry_regs+0x4: call to __fentry__() with UACCESS enabled
+> vmlinux.o: warning: objtool: kmsan_report+0x4: call to __fentry__() with UACCESS enabled
+>
+> Similar code already exists in kasan, which avoids this by skipping
+> ftrace annotations, so do the same thing here.
+>
+> Fixes: f80be4571b19 ("kmsan: add KMSAN runtime core")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  tools/objtool/check.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  mm/kmsan/Makefile | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index e8fb3bf7a2e3..d89ef6957021 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -1200,6 +1200,8 @@ static const char *uaccess_safe_builtin[] = {
->         "__tsan_atomic64_compare_exchange_val",
->         "__tsan_atomic_thread_fence",
->         "__tsan_atomic_signal_fence",
-> +       "__tsan_unaligned_read16",
-> +       "__tsan_unaligned_write16",
->         /* KCOV */
->         "write_comp_data",
->         "check_kcov_mode",
+> diff --git a/mm/kmsan/Makefile b/mm/kmsan/Makefile
+> index 98eab2856626..389fd767a11f 100644
+> --- a/mm/kmsan/Makefile
+> +++ b/mm/kmsan/Makefile
+> @@ -16,6 +16,14 @@ CC_FLAGS_KMSAN_RUNTIME += -DDISABLE_BRANCH_PROFILING
+>
+>  CFLAGS_REMOVE.o = $(CC_FLAGS_FTRACE)
+
+That means this CFLAGS_REMOVE.o didn't work, right? Can it be removed?
+
+> +# Disable ftrace to avoid recursion.
+> +CFLAGS_REMOVE_core.o = $(CC_FLAGS_FTRACE)
+> +CFLAGS_REMOVE_hooks.o = $(CC_FLAGS_FTRACE)
+> +CFLAGS_REMOVE_init.o = $(CC_FLAGS_FTRACE)
+> +CFLAGS_REMOVE_instrumentation.o = $(CC_FLAGS_FTRACE)
+> +CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
+> +CFLAGS_REMOVE_shadow.o = $(CC_FLAGS_FTRACE)
+> +
+>  CFLAGS_core.o := $(CC_FLAGS_KMSAN_RUNTIME)
+>  CFLAGS_hooks.o := $(CC_FLAGS_KMSAN_RUNTIME)
+>  CFLAGS_init.o := $(CC_FLAGS_KMSAN_RUNTIME)
 > --
 > 2.39.1
 >
-> --
-> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20230208164011.2287122-4-arnd%40kernel.org.
