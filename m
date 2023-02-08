@@ -2,81 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6359A68F128
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305A868F12A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjBHOtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S231589AbjBHOtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:49:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjBHOtD (ORCPT
+        with ESMTP id S230378AbjBHOtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:49:03 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555014ABD2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:48:56 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id m2so19523910plg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:48:56 -0800 (PST)
+        Wed, 8 Feb 2023 09:49:31 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F03255B0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:49:24 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id n2so10221459pgb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:49:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FFBEpHVyO7uaEXohEkZMXZFRiWaMnYer0SJSyNE2OQo=;
-        b=hMOdPggyeGwA8nIQGyI3lk8r6madEiHE1tfQILTzxCiy1S7kUMUVaOhyHsVp06goap
-         xu3OTi4hYwWjZUQvyadbZEP3tCnJkNTADf3pcXG10U3Bg6jMDXlkGMHqGqVwwoskxqZD
-         tawgXU9UGZ0cqOWkVEH3kiqEmuD8kla7MXmbwv9628VLynYNqSAJDTBK375CkOiEJXju
-         sdjTjOye77/aoufgQyQHZ+ZVVxHUrUPnqxX8duSqU938FVPItqp/CwL5e/cVkwmZk/MT
-         owWkEI8ueZFmAdHcW1jyYhtr52ME/ScfkE4iQ6i34E9szGx+u+4lnFOthBjNQywWGZ1M
-         jM5g==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f51tcd2NdxaPHLUZNDwBySdZVDgdomB/5aEb1/nyTPA=;
+        b=4RScORAhUv9+TfjOHyZGQTW7TsmGTGHRd8bGZciqQlcgUysKj3iFQC7OYDkASdPXaw
+         BImEoQdlhKSNh9xClUzgqUUscF2xkOFYFlMaa69tcgKK9PmmR7PKY6uZ0dFv/AM6cVHK
+         xpIEjsYNKkHcq5G31Inx+u3uxsTcfFI4DzNAbOIGnlifNf167TXs2BeQ8dDAPMa1f9Gu
+         gcLMovOgdt2FoVRDhwEa7KqeYr/2Wf2n+8IIMuPIYhG76CqZ7LWlx97M+V2NmkOdnY1E
+         04GS6vY9rpid+svAe3Huf3cFju0rzMT7mrgY21sz1sFkBCyI0IgC7L+WdWeL3bhJNCoe
+         t+gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FFBEpHVyO7uaEXohEkZMXZFRiWaMnYer0SJSyNE2OQo=;
-        b=2vdj1xJap6NtjgH4Bz3tZ9LFtLHF++WmvIKAaoRPa/0s2E8lcS5pjVcK8GbvwBU+nl
-         RqkR+13RHsA/sWphZV14cvPH1ehqK5Dr3yYV0sbGOZyaNvIxkOQFvsw2vQWM8f59Ppbe
-         oRtwERv980ZugqBAEq8QIbv+G+KgpZuha1XDaPyEKdhed6HslDsH/y6cZohJk5p9JwI3
-         oRVwAAQdxAhND3qK870tYD5QVwvsbdcRoJDpxbjEo+qF5NLeItNSqeqJZzrtO7oPsmbm
-         EkmNQAHWd8PPyZjEF7s8ixbZPxsjN6Fmf9zJkomZGNB03BOqumlLSg1IgtFi2uFq0G6Y
-         n2Ig==
-X-Gm-Message-State: AO0yUKX1B8A573f7EfabssW5UWtpw12vzkCIhY+HE+2z5/YCx28OsAtv
-        J+rxP9hS4O0zysP5S43ISy6Yxy+wZ4Pv0lNuN70=
-X-Google-Smtp-Source: AK7set+p35lGTvN8xsFLL4fqhMTQyitTRsLEsTPZ+gHzxMmxq7tY2+fV/RaR4t2O3sr/KKtToUrGwQ==
-X-Received: by 2002:a17:902:e74e:b0:198:af50:e4e9 with SMTP id p14-20020a170902e74e00b00198af50e4e9mr240153plf.15.1675867735657;
-        Wed, 08 Feb 2023 06:48:55 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id l2-20020a170902ec0200b00199019e247csm7680677pld.207.2023.02.08.06.48.55
+        bh=f51tcd2NdxaPHLUZNDwBySdZVDgdomB/5aEb1/nyTPA=;
+        b=jmzoCsDzMsTvaPRIdpwc0P0hp1oOHtl1EqkkCAsvlyO4mi98vtTeRfniNoMmsCdmTA
+         qMrtBSM4CPq/c9Op+zdVJUujASs5mEj+q4e0gaWDFCCPuDkx5ibDCglH8a8GR6gOIpQr
+         dZUktvbDQSN3WfN7PQvBcMwNXSV8pixbk4IyrxEewXAqdTV+qZqXvXqO2hnYoLkc6frO
+         BRxR13zrrf+qnMyBuXqKNO/zN0meTDkemBgFvirzPGA9RtPpN6ztlPml+6eJkqiYOyDO
+         aUN1TJeNxk1jV+yoXEBTKgUiWl5IQN1cpxXtFmwr7y0N96ZkOaHB1VI3qFrtsq0K6H0f
+         M8ng==
+X-Gm-Message-State: AO0yUKU5JNJYx46XPti/wzXgpg6GeF8szTSyyYPjA9PND5HBMUgaztuP
+        +kkcZCtVNh6W7+V7TG//gKxht12+AjtfR9ZnBoQ=
+X-Google-Smtp-Source: AK7set+X0/zwt9ty5gvVm+4g+ZYuZ4WBObj3FCvOzeDRHSQ2YQ+LrApZiupBQ58AnUZRxeD6IaHGxQ==
+X-Received: by 2002:aa7:9533:0:b0:5a8:2b95:baea with SMTP id c19-20020aa79533000000b005a82b95baeamr2339524pfp.34.1675867763334;
+        Wed, 08 Feb 2023 06:49:23 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id x19-20020aa79193000000b005a84de20c24sm112368pfa.209.2023.02.08.06.49.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 06:48:55 -0800 (PST)
-Date:   Wed, 8 Feb 2023 14:48:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Steven Price <steven.price@arm.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Subject: Re: [PATCH v2 3/6] KVM: x86: Remove the KVM_GET_NR_MMU_PAGES ioctl
-Message-ID: <Y+O2U/x7zHzeVV6e@google.com>
-References: <20230208140105.655814-1-thuth@redhat.com>
- <20230208140105.655814-4-thuth@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208140105.655814-4-thuth@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Wed, 08 Feb 2023 06:49:22 -0800 (PST)
+Date:   Wed, 08 Feb 2023 06:49:22 -0800 (PST)
+X-Google-Original-Date: Wed, 08 Feb 2023 06:49:18 PST (-0800)
+Subject:     Re: [PATCH] MAINTAINERS: update Allwinner sunXi SoC support entry
+In-Reply-To: <20230208142841.19597-1-twoerner@gmail.com>
+CC:     linux-kernel@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     twoerner@gmail.com
+Message-ID: <mhng-62becd72-44ff-41be-a90f-5de97e44b857@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,18 +72,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023, Thomas Huth wrote:
-> The KVM_GET_NR_MMU_PAGES ioctl is quite questionable on 64-bit hosts
-> since it fails to return the full 64 bits of the value that can be
-> set with the corresponding KVM_SET_NR_MMU_PAGES call. Its "long" return
-> value is truncated into an "int" in the kvm_arch_vm_ioctl() function.
-> 
-> Since this ioctl also never has been used by userspace applications
-> (QEMU, Google's internal VMM, kvmtool and CrosVM have been checked),
-> it's likely the best if we remove this badly designed ioctl before
-> anybody really tries to use it.
-> 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
+On Wed, 08 Feb 2023 06:28:41 PST (-0800), twoerner@gmail.com wrote:
+> Update the information in the "Allwinner sunXi SoC support" block:
+> - include more RISC-V information
+> - move the block to keep it in alphabetical order
+> - "L" before "T" (as reported by checkpatch.pl)
+>
+> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
 > ---
+>  MAINTAINERS | 36 +++++++++++++++++++-----------------
+>  1 file changed, 19 insertions(+), 17 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index b8ad844bca77..ff39d34cb4ca 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1856,23 +1856,6 @@ M:	Emilio López <emilio@elopez.com.ar>
+>  S:	Maintained
+>  F:	drivers/clk/sunxi/
+>
+> -ARM/Allwinner sunXi SoC support
+> -M:	Chen-Yu Tsai <wens@csie.org>
+> -M:	Jernej Skrabec <jernej.skrabec@gmail.com>
+> -M:	Samuel Holland <samuel@sholland.org>
+> -L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> -S:	Maintained
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
+> -L:	linux-sunxi@lists.linux.dev
+> -F:	arch/arm/mach-sunxi/
+> -F:	arch/arm64/boot/dts/allwinner/
+> -F:	drivers/clk/sunxi-ng/
+> -F:	drivers/pinctrl/sunxi/
+> -F:	drivers/soc/sunxi/
+> -N:	allwinner
+> -N:	sun[x456789]i
+> -N:	sun[25]0i
+> -
+>  ARM/Amlogic Meson SoC CLOCK FRAMEWORK
+>  M:	Neil Armstrong <neil.armstrong@linaro.org>
+>  M:	Jerome Brunet <jbrunet@baylibre.com>
+> @@ -2620,6 +2603,25 @@ F:	arch/arm/boot/dts/rtd*
+>  F:	arch/arm/mach-realtek/
+>  F:	arch/arm64/boot/dts/realtek/
+>
+> +ARM/RISC-V/Allwinner sunXi SoC support
+> +M:	Chen-Yu Tsai <wens@csie.org>
+> +M:	Jernej Skrabec <jernej.skrabec@gmail.com>
+> +M:	Samuel Holland <samuel@sholland.org>
+> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> +L:	linux-riscv@lists.infradead.org
+> +L:	linux-sunxi@lists.linux.dev
+> +S:	Maintained
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
+> +F:	arch/arm/mach-sunxi/
+> +F:	arch/arm64/boot/dts/allwinner/
+> +F:	arch/riscv/boot/dts/allwinner/
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+
+Thanks!
+
+> +F:	drivers/clk/sunxi-ng/
+> +F:	drivers/pinctrl/sunxi/
+> +F:	drivers/soc/sunxi/
+> +N:	allwinner
+> +N:	sun[x456789]i
+> +N:	sun[25]0i
+> +
+>  ARM/RISC-V/RENESAS ARCHITECTURE
+>  M:	Geert Uytterhoeven <geert+renesas@glider.be>
+>  M:	Magnus Damm <magnus.damm@gmail.com>
