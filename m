@@ -2,166 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AF268EDEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103F168EDF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjBHL3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 06:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S231175AbjBHL3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjBHL3U (ORCPT
+        with ESMTP id S230305AbjBHL3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:29:20 -0500
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E6910F2
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 03:29:18 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VbBvrhq_1675855756;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VbBvrhq_1675855756)
-          by smtp.aliyun-inc.com;
-          Wed, 08 Feb 2023 19:29:16 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        huyue2@coolpad.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] erofs: remove unused EROFS_GET_BLOCKS_RAW flag
-Date:   Wed,  8 Feb 2023 19:29:15 +0800
-Message-Id: <20230208112915.6543-2-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230208112915.6543-1-jefflexu@linux.alibaba.com>
-References: <20230208112915.6543-1-jefflexu@linux.alibaba.com>
+        Wed, 8 Feb 2023 06:29:30 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D904458BB;
+        Wed,  8 Feb 2023 03:29:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675855768; x=1707391768;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YOp7/xwpRbM1HsVxkj/oLzcILyXmsT17xldYoQVlStc=;
+  b=kRt+Z2N+rjZe0ARRu5Nejljik/nGcBgG9gY9/ckKcc1MqHwZj8AvJZ60
+   9rdbLwxPZlybM5U0tSb/b4zPVYM8qKh7s/XfBUnX5T1QzsUoQsuSkzDwO
+   wJ0F91YOa5NFsHcprLcLYZegItvbxNv+nFlUXOA4fwy5IncrhF8OV+c8s
+   VE355WGJNSdJo7p3TbjvZBiAypGrEyiyJJPP1tEvjg/Pdo4xpP5p4AC0/
+   9V4kam4naacH0CTObwEFu3PG11S4huJzWfWucmBbX/DW5QdDcTbbfL06O
+   YRpfW3vdXdLbn7YpLZIzASkzctMCzQPTrZHIQJT1NqdusazrL7lQ0DuWk
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="394364469"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="394364469"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 03:29:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="735909089"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="735909089"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Feb 2023 03:29:21 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 3EE231A6; Wed,  8 Feb 2023 13:29:59 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] media: i2c: imx290: Make use of get_unaligned_le24(), put_unaligned_le24()
+Date:   Wed,  8 Feb 2023 13:29:57 +0200
+Message-Id: <20230208112957.15563-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For erofs_map_blocks() and erofs_map_blocks_flatmode(), the flags
-argument is always EROFS_GET_BLOCKS_RAW.  Thus remove the unused flags
-parameter for these two functions.
+Since we have a proper endianness converters for LE 24-bit data use
+them. While at it, format the code using switch-cases as it's done
+for the rest of the endianness handlers.
 
-Besides EROFS_GET_BLOCKS_RAW is originally introduced for reading
-compressed (raw) data for compressed files.  However it's never used
-actually and let's remove it now.
-
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- fs/erofs/data.c     | 14 ++++++--------
- fs/erofs/fscache.c  |  2 +-
- fs/erofs/internal.h | 10 ++++------
- 3 files changed, 11 insertions(+), 15 deletions(-)
+ drivers/media/i2c/imx290.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/fs/erofs/data.c b/fs/erofs/data.c
-index 2713257ee718..032e12dccb84 100644
---- a/fs/erofs/data.c
-+++ b/fs/erofs/data.c
-@@ -74,8 +74,7 @@ void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
- }
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index 49d6c8bdec41..330098a0772d 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -16,6 +16,9 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
++
++#include <asm/unaligned.h>
++
+ #include <media/media-entity.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+@@ -466,18 +469,20 @@ static int __always_unused imx290_read(struct imx290 *imx290, u32 addr, u32 *val
+ 		return ret;
+ 	}
  
- static int erofs_map_blocks_flatmode(struct inode *inode,
--				     struct erofs_map_blocks *map,
--				     int flags)
-+				     struct erofs_map_blocks *map)
- {
- 	erofs_blk_t nblocks, lastblk;
- 	u64 offset = map->m_la;
-@@ -114,8 +113,7 @@ static int erofs_map_blocks_flatmode(struct inode *inode,
+-	*value = (data[2] << 16) | (data[1] << 8) | data[0];
++	*value = get_unaligned_le24(data);
  	return 0;
  }
  
--int erofs_map_blocks(struct inode *inode,
--		     struct erofs_map_blocks *map, int flags)
-+int erofs_map_blocks(struct inode *inode, struct erofs_map_blocks *map)
+ static int imx290_write(struct imx290 *imx290, u32 addr, u32 value, int *err)
  {
- 	struct super_block *sb = inode->i_sb;
- 	struct erofs_inode *vi = EROFS_I(inode);
-@@ -127,7 +125,7 @@ int erofs_map_blocks(struct inode *inode,
- 	void *kaddr;
- 	int err = 0;
- 
--	trace_erofs_map_blocks_enter(inode, map, flags);
-+	trace_erofs_map_blocks_enter(inode, map, 0);
- 	map->m_deviceid = 0;
- 	if (map->m_la >= inode->i_size) {
- 		/* leave out-of-bound access unmapped */
-@@ -137,7 +135,7 @@ int erofs_map_blocks(struct inode *inode,
- 	}
- 
- 	if (vi->datalayout != EROFS_INODE_CHUNK_BASED) {
--		err = erofs_map_blocks_flatmode(inode, map, flags);
-+		err = erofs_map_blocks_flatmode(inode, map);
- 		goto out;
- 	}
- 
-@@ -189,7 +187,7 @@ int erofs_map_blocks(struct inode *inode,
- out:
- 	if (!err)
- 		map->m_llen = map->m_plen;
--	trace_erofs_map_blocks_exit(inode, map, flags, 0);
-+	trace_erofs_map_blocks_exit(inode, map, 0, err);
- 	return err;
- }
- 
-@@ -252,7 +250,7 @@ static int erofs_iomap_begin(struct inode *inode, loff_t offset, loff_t length,
- 	map.m_la = offset;
- 	map.m_llen = length;
- 
--	ret = erofs_map_blocks(inode, &map, EROFS_GET_BLOCKS_RAW);
-+	ret = erofs_map_blocks(inode, &map);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index 03de4dc99302..9658cf8689d9 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -197,7 +197,7 @@ static int erofs_fscache_data_read_slice(struct erofs_fscache_request *primary)
+-	u8 data[3] = { value & 0xff, (value >> 8) & 0xff, value >> 16 };
++	u8 data[3];
  	int ret;
  
- 	map.m_la = pos;
--	ret = erofs_map_blocks(inode, &map, EROFS_GET_BLOCKS_RAW);
-+	ret = erofs_map_blocks(inode, &map);
- 	if (ret)
- 		return ret;
+ 	if (err && *err)
+ 		return *err;
  
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 48a2f33de15a..8a6ae820cd6d 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -401,16 +401,15 @@ struct erofs_map_blocks {
- 	unsigned int m_flags;
- };
- 
--#define EROFS_GET_BLOCKS_RAW    0x0001
- /*
-  * Used to get the exact decompressed length, e.g. fiemap (consider lookback
-  * approach instead if possible since it's more metadata lightweight.)
-  */
--#define EROFS_GET_BLOCKS_FIEMAP	0x0002
-+#define EROFS_GET_BLOCKS_FIEMAP		0x0001
- /* Used to map the whole extent if non-negligible data is requested for LZMA */
--#define EROFS_GET_BLOCKS_READMORE	0x0004
-+#define EROFS_GET_BLOCKS_READMORE	0x0002
- /* Used to map tail extent for tailpacking inline or fragment pcluster */
--#define EROFS_GET_BLOCKS_FINDTAIL	0x0008
-+#define EROFS_GET_BLOCKS_FINDTAIL	0x0004
- 
- enum {
- 	Z_EROFS_COMPRESSION_SHIFTED = Z_EROFS_COMPRESSION_MAX,
-@@ -458,8 +457,7 @@ void *erofs_read_metabuf(struct erofs_buf *buf, struct super_block *sb,
- int erofs_map_dev(struct super_block *sb, struct erofs_map_dev *dev);
- int erofs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
- 		 u64 start, u64 len);
--int erofs_map_blocks(struct inode *inode,
--		     struct erofs_map_blocks *map, int flags);
-+int erofs_map_blocks(struct inode *inode, struct erofs_map_blocks *map);
- struct inode *erofs_iget(struct super_block *sb, erofs_nid_t nid);
- int erofs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 		  struct kstat *stat, u32 request_mask,
++	put_unaligned_le24(value, data);
++
+ 	ret = regmap_raw_write(imx290->regmap, addr & IMX290_REG_ADDR_MASK,
+ 			       data, (addr >> IMX290_REG_SIZE_SHIFT) & 3);
+ 	if (ret < 0) {
 -- 
-2.19.1.6.gb485710b
+2.39.1
 
