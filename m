@@ -2,106 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEF268FA4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA2468FA52
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 23:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjBHWg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 17:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S232465AbjBHWj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 17:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjBHWgy (ORCPT
+        with ESMTP id S230331AbjBHWj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 17:36:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52FB76BE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:36:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 589A9617EB
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 22:36:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72CAC433D2;
-        Wed,  8 Feb 2023 22:36:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675895811;
-        bh=kEidWQMWqf0uZA9KGuB36zUTXV7NSr0yKEb0HLUwNN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YqNI5SEXZC6Ho3CyCJa3yOiaQ/K+YMwGerP9K5RyBMtxoyXXS9rULREAuQvd+krcX
-         nSJcFA0qWFKlIGw21Rje3kcDXFs0zJKS8U9E8CKIzEIUrWSXhlN9WDgLNTNLahVQ43
-         wNRb7CL4KlZPu13Mfc/zAP2RxBdJ40qvnJJwkE8tn2W3OxgTi+Ct3xres+B6iWXToo
-         rFXaWqoWLUD/kfFUMSrJnaR7fqh8gon65cBiTuBam5BHK/zsD1JwrdxhY/LAFvKQ2R
-         ywpz3mfJEuWZgoOQH84n43ViyYXRJUUQyImMsh+wJ1JmMnuVYh/MpdWPBQCJHk9d0L
-         EzH2rRZetEdoA==
-Date:   Wed, 8 Feb 2023 15:36:49 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, jpoimboe@kernel.org,
-        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
-        linux-kernel@vger.kernel.org, erhard_f@mailbox.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, sandipan.das@amd.com,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 0/3] static_call/x86: Handle clang's conditional tail
- calls
-Message-ID: <Y+QkAXfhWfGevWz7@dev-arch.thelio-3990X>
-References: <20230123205915.751729592@infradead.org>
+        Wed, 8 Feb 2023 17:39:27 -0500
+Received: from EX-PRD-EDGE02.vmware.com (EX-PRD-EDGE02.vmware.com [208.91.3.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E13E252B8;
+        Wed,  8 Feb 2023 14:39:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+    s=s1024; d=vmware.com;
+    h=from:to:cc:subject:date:message-id:mime-version:content-type;
+    bh=e1HmfK/JiHvjn+oDuK3z3WPembSenG3/BCuinhbUzt0=;
+    b=UOOAeYQsZrqgVbOEJ6/Pbc2BoaeyBkbMVTn2qpStp9RHheY5dZFhg778L7sTkG
+      Z0aooN3K8quz/AA0yOqeofWZXH4hrTsaZ7LzCl0WOwEvDvEJAGuGDKKmeT1vv0
+      7sucBssz5qKITxJjTxEgwZEbXQF7UvSfpYbcP4cLNk5yO40=
+Received: from sc9-mailhost1.vmware.com (10.113.161.71) by
+ EX-PRD-EDGE02.vmware.com (10.188.245.7) with Microsoft SMTP Server id
+ 15.1.2375.34; Wed, 8 Feb 2023 14:38:49 -0800
+Received: from htb-1n-eng-dhcp122.eng.vmware.com (unknown [10.20.114.216])
+        by sc9-mailhost1.vmware.com (Postfix) with ESMTP id C646B20135;
+        Wed,  8 Feb 2023 14:39:01 -0800 (PST)
+Received: by htb-1n-eng-dhcp122.eng.vmware.com (Postfix, from userid 0)
+        id BE4E7AE43E; Wed,  8 Feb 2023 14:39:01 -0800 (PST)
+From:   Ronak Doshi <doshir@vmware.com>
+To:     <netdev@vger.kernel.org>
+CC:     <stable@vger.kernel.org>, Ronak Doshi <doshir@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Guolin Yang <gyang@vmware.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH net v3] vmxnet3: move rss code block under eop descriptor
+Date:   Wed, 8 Feb 2023 14:38:59 -0800
+Message-ID: <20230208223900.5794-1-doshir@vmware.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123205915.751729592@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Received-SPF: None (EX-PRD-EDGE02.vmware.com: doshir@vmware.com does not
+ designate permitted sender hosts)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter and Ingo,
+Commit b3973bb40041 ("vmxnet3: set correct hash type based on
+rss information") added hashType information into skb. However,
+rssType field is populated for eop descriptor. This can lead
+to incorrectly reporting of hashType for packets which use
+multiple rx descriptors. Multiple rx descriptors are used
+for Jumbo frame or LRO packets, which can hit this issue.
 
-On Mon, Jan 23, 2023 at 09:59:15PM +0100, Peter Zijlstra wrote:
-> Erhard reported boot fails on this AMD machine when using clang and bisected it
-> to a commit introducing a few static_call()s. Turns out that when using clang
-> with -Os it it very likely to generate conditional tail calls like:
-> 
->   0000000000000350 <amd_pmu_add_event>:
->   350:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1) 351: R_X86_64_NONE      __fentry__-0x4
->   355:       48 83 bf 20 01 00 00 00         cmpq   $0x0,0x120(%rdi)
->   35d:       0f 85 00 00 00 00       jne    363 <amd_pmu_add_event+0x13>     35f: R_X86_64_PLT32     __SCT__amd_pmu_branch_add-0x4
->   363:       e9 00 00 00 00          jmp    368 <amd_pmu_add_event+0x18>     364: R_X86_64_PLT32     __x86_return_thunk-0x4
-> 
-> And our inline static_call() patching code can't deal with those and BUG
-> happens -- really early.
-> 
-> These patches borrow the kprobe Jcc emulation to implement text_poke_bp() Jcc
-> support, which is then used to teach inline static_call() about this form.
-> 
-> ---
->  arch/x86/include/asm/text-patching.h | 31 ++++++++++++++++++
->  arch/x86/kernel/alternative.c        | 62 +++++++++++++++++++++++++++---------
->  arch/x86/kernel/kprobes/core.c       | 38 +++++-----------------
->  arch/x86/kernel/static_call.c        | 50 +++++++++++++++++++++++++++--
->  4 files changed, 133 insertions(+), 48 deletions(-)
+This patch moves the RSS codeblock under eop descritor.
 
-I noticed this series was applied to x86/alternatives versus
-x86/urgent, even though this appears to be a regression since 6.1, as
-Erhard hit this issue in that tree.
+Cc: stable@vger.kernel.org
+Fixes: b3973bb40041 ("vmxnet3: set correct hash type based on rss information")
+Signed-off-by: Ronak Doshi <doshir@vmware.com>
+Acked-by: Peng Li <lpeng@vmware.com>
+Acked-by: Guolin Yang <gyang@vmware.com>
+---
+v1->v2: added Fixes tag and CC stable
+v2->v3: update commit msg
+---
+ drivers/net/vmxnet3/vmxnet3_drv.c | 50 +++++++++++++++++++--------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
-Additionally, a new change in LLVM main [1] causes conditional tail
-calls to be emitted even at -O2, so this breakage will become more
-noticeable over time. Is it possible to expedite this to mainline so
-that it can be backported to 6.1? If not, no worries, but I figured I
-would ask :)
+diff --git a/drivers/net/vmxnet3/vmxnet3_drv.c b/drivers/net/vmxnet3/vmxnet3_drv.c
+index 56267c327f0b..682987040ea8 100644
+--- a/drivers/net/vmxnet3/vmxnet3_drv.c
++++ b/drivers/net/vmxnet3/vmxnet3_drv.c
+@@ -1546,31 +1546,6 @@ vmxnet3_rq_rx_complete(struct vmxnet3_rx_queue *rq,
+ 				rxd->len = rbi->len;
+ 			}
+ 
+-#ifdef VMXNET3_RSS
+-			if (rcd->rssType != VMXNET3_RCD_RSS_TYPE_NONE &&
+-			    (adapter->netdev->features & NETIF_F_RXHASH)) {
+-				enum pkt_hash_types hash_type;
+-
+-				switch (rcd->rssType) {
+-				case VMXNET3_RCD_RSS_TYPE_IPV4:
+-				case VMXNET3_RCD_RSS_TYPE_IPV6:
+-					hash_type = PKT_HASH_TYPE_L3;
+-					break;
+-				case VMXNET3_RCD_RSS_TYPE_TCPIPV4:
+-				case VMXNET3_RCD_RSS_TYPE_TCPIPV6:
+-				case VMXNET3_RCD_RSS_TYPE_UDPIPV4:
+-				case VMXNET3_RCD_RSS_TYPE_UDPIPV6:
+-					hash_type = PKT_HASH_TYPE_L4;
+-					break;
+-				default:
+-					hash_type = PKT_HASH_TYPE_L3;
+-					break;
+-				}
+-				skb_set_hash(ctx->skb,
+-					     le32_to_cpu(rcd->rssHash),
+-					     hash_type);
+-			}
+-#endif
+ 			skb_record_rx_queue(ctx->skb, rq->qid);
+ 			skb_put(ctx->skb, rcd->len);
+ 
+@@ -1653,6 +1628,31 @@ vmxnet3_rq_rx_complete(struct vmxnet3_rx_queue *rq,
+ 			u32 mtu = adapter->netdev->mtu;
+ 			skb->len += skb->data_len;
+ 
++#ifdef VMXNET3_RSS
++			if (rcd->rssType != VMXNET3_RCD_RSS_TYPE_NONE &&
++			    (adapter->netdev->features & NETIF_F_RXHASH)) {
++				enum pkt_hash_types hash_type;
++
++				switch (rcd->rssType) {
++				case VMXNET3_RCD_RSS_TYPE_IPV4:
++				case VMXNET3_RCD_RSS_TYPE_IPV6:
++					hash_type = PKT_HASH_TYPE_L3;
++					break;
++				case VMXNET3_RCD_RSS_TYPE_TCPIPV4:
++				case VMXNET3_RCD_RSS_TYPE_TCPIPV6:
++				case VMXNET3_RCD_RSS_TYPE_UDPIPV4:
++				case VMXNET3_RCD_RSS_TYPE_UDPIPV6:
++					hash_type = PKT_HASH_TYPE_L4;
++					break;
++				default:
++					hash_type = PKT_HASH_TYPE_L3;
++					break;
++				}
++				skb_set_hash(skb,
++					     le32_to_cpu(rcd->rssHash),
++					     hash_type);
++			}
++#endif
+ 			vmxnet3_rx_csum(adapter, skb,
+ 					(union Vmxnet3_GenericDesc *)rcd);
+ 			skb->protocol = eth_type_trans(skb, adapter->netdev);
+-- 
+2.11.0
 
-I have a backport of this series to 6.1 prepared already [2], where it
-appears to work for me but I will get wider testing before sending it
-after this is in Linus' tree (regardless of when that is). I figured it
-would not hurt to have other eyes on it ahead of time though.
-
-[1]: https://github.com/llvm/llvm-project/commit/ee5585ed09aff2e54cb540fad4c33f0c93626b1b
-[2]: https://git.kernel.org/nathan/l/cbl-1800-1774-6.1
-
-Cheers,
-Nathan
