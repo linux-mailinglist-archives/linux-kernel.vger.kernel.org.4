@@ -2,174 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E3D68E4CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFC368E4D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 01:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjBHAOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 19:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S229695AbjBHAPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 19:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjBHAOm (ORCPT
+        with ESMTP id S229490AbjBHAPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 19:14:42 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2079.outbound.protection.outlook.com [40.107.244.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A226B30281
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 16:14:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lGox9d3sF78MI3cWwW+ackODsRX6tLj3ueNY2uC8rz9PhjQ3ynnxufMhDRpbixnD6GfLdFxFN5tvW37/SXeHyp0LBhmATgejkbqUWeZ+fQXhYOfyPag0C1n2ajYzqcBRbRpjpuYdlwUAi4/DPZk4tcx7KtR9+0uSo2Ww3Wt3nwDhtn7OHThzKQ8QVYrmp9VvtbvLj7ol8RClzrrLyPvlla+B49hyuUB2UPfqiOsOblhiSG+9lRJwWCXKOG6lDLL131MI+16D87ao56EpmcRWQXzFuRrTAz5ZS4w4Ow31r3qssNg/12h6qex2bf7Hqg1oG4K07ENGMwoAlFqhJD6QfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qRYZFeD3LrQ+GobhjYEIOWgRmmAFtkqsmlu8zLleyAM=;
- b=aeQyGnZZF/wt7NAlj1zfJu1iPRAdk6966r7+cY+QG5OVclwj0KgYTYOmKK+gII8eEQc3ZdDxI6Uqmh6uLpWq9cmZhvrLWKHQXHPLjRRVDD5VjHPPXRgYzku3B4TT/Llps0ON3nEBNNUMbUtqEWZCnOc5LbA2mdKAEbw2jx/njZXCMIla4TNUIBgALK0D4gw2p5zlQVpArFrb4xssWy6quobCXWbxwXjLUls+qq5Vj6H4RE2p7LtSH2x6dwzeG+Ukx9Kc8L+bzPhrFGNmuam2YK7acf4GiHX8eFZP3OIAN4d6/AJ2EdpA1I/4VS0TJackotOa8Ge2zRvwrNrQhitwQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qRYZFeD3LrQ+GobhjYEIOWgRmmAFtkqsmlu8zLleyAM=;
- b=aahgcU22aWKfvMwY357HrTDI8rHElwqIFYAzYoX6XXa0TyReGrn8imvQRWGvOF/XJNVKTJ3P4qIFQ2cH9qYxSmZl0NJsF/Fb5++gv+0ZOUwuipY1NimXiFdlWycShf1qMHAyKLbOF4pLI1hG/F6342+oX21zzY0V7ZJlCFiMBd1p8kYGHHPUtVzZsidpyDNvmFt5pP8MAtGvhpgTG+1yd5CVc66yi8ZdZDS7U8zdScHPcy7xN2Ny5zsN7ovGb3gVQZUuAs9bmUjPHmrOrqh3QlsYwE2fN0d6sYt3CDVWK/uR9FAQh/AWNS0JzvPXfnUMbmNgtYzRFilDdGuxVZn0lA==
-Received: from MW4PR04CA0039.namprd04.prod.outlook.com (2603:10b6:303:6a::14)
- by MN0PR12MB5714.namprd12.prod.outlook.com (2603:10b6:208:371::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.34; Wed, 8 Feb
- 2023 00:14:37 +0000
-Received: from CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:6a:cafe::c6) by MW4PR04CA0039.outlook.office365.com
- (2603:10b6:303:6a::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36 via Frontend
- Transport; Wed, 8 Feb 2023 00:14:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CO1NAM11FT052.mail.protection.outlook.com (10.13.174.225) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.17 via Frontend Transport; Wed, 8 Feb 2023 00:14:36 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 7 Feb 2023
- 16:14:33 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 7 Feb 2023 16:14:33 -0800
-Received: from vdi.nvidia.com (10.127.8.9) by mail.nvidia.com (10.126.190.180)
- with Microsoft SMTP Server id 15.2.986.36 via Frontend Transport; Tue, 7 Feb
- 2023 16:14:32 -0800
-From:   Khalil Blaiech <kblaiech@nvidia.com>
-To:     <hdegoede@redhat.com>, <markgross@kernel.org>, <vadimp@nvidia.com>
-CC:     <davthompson@nvidia.com>, <kblaiech@nvidia.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 1/1] platform/mellanox: add firmware reset support
-Date:   Tue, 7 Feb 2023 19:14:14 -0500
-Message-ID: <10da04fa43e8acce5d4ec173e225c28b9e979e4b.1675790783.git.kblaiech@nvidia.com>
-X-Mailer: git-send-email 2.30.1
+        Tue, 7 Feb 2023 19:15:06 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEDE30B1B;
+        Tue,  7 Feb 2023 16:15:00 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso285539wms.4;
+        Tue, 07 Feb 2023 16:15:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=V+RaIQchGCjUg8WOksp5jBJckUUbTckJoGWe5pG0GSY=;
+        b=Waz6OqmEiKR5LaLEL73seaMZYDb3R+RIHxMX1QVtxmKviO3+QhuE892RvE37lHcV7k
+         d9nMa8MNVCqwZsku3FsPqi1DUMC5fKMylmfO93WDPLL80RUErx4CsdrEopCyFGVvPrSQ
+         mfEm18Nq60gVXCGwJykxUMe1Lq74MstkD6omCgh2r8U7qxHPspHvjYouTD76v5Dk7WxO
+         NDF4oiOxxfwZV4byhtxutwN3Fw3S9/C0ST/Fmx1qzBlWJV6zLlZKNSHQrnKkiP3qE5DK
+         ElODprlEOzwW9IiJG3MAGJIaJ/7tIWxszGvRxqMsru6kv2aEn7yYfc8NCzIUJUQBf4Lm
+         eNQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V+RaIQchGCjUg8WOksp5jBJckUUbTckJoGWe5pG0GSY=;
+        b=ZKwbQS0k5yyjJQ1MEKGC29MDbQMzlgtHnU1i2wAeO03ni469eWB/X7CR16gT5uGveU
+         vK0fp2d4wgodmt+aOxFcekpVrF9Uciw5UaNLKGXdMg0wfk1fyzk7ts5MhqZx0gyLB6Qs
+         13XrcyTo0h2q/dvEGgPRkFxX6PbDJ2h4wams9gL8yFF1MO8rvQ8oItAyiZjq3HOtND/X
+         3iQOL1CLav6OauA4ns54XgAPlALVp9Ld5bkjBXBqdvktToNskyDStY35CGOFu/pZefpU
+         qR1XTtGkL6y2DhWNCqNXIlYLmbz/LsVHnHfIz+iwefDdgTTDrUnzg9evMtWqO/GJfZku
+         K8tQ==
+X-Gm-Message-State: AO0yUKVD7wAfeIwp2vyZNoIEw2OA77QoFE+L6Xz6aAO7ChhtpOxNlLWj
+        QxrtqTc2bm9YIj13vnp/K8I=
+X-Google-Smtp-Source: AK7set+DvXgzYGfzr9DxS7yBBi4l5d+iWP8nM85ZN7MeY3yjIT7d8SO4oFjZnehOLLA51e6OgGRVkg==
+X-Received: by 2002:a05:600c:4d21:b0:3dc:3398:cf87 with SMTP id u33-20020a05600c4d2100b003dc3398cf87mr4660731wmp.11.1675815298358;
+        Tue, 07 Feb 2023 16:14:58 -0800 (PST)
+Received: from Ansuel-xps. (93-34-91-73.ip49.fastwebnet.it. [93.34.91.73])
+        by smtp.gmail.com with ESMTPSA id k12-20020a7bc40c000000b003dfe549da4fsm274023wmi.18.2023.02.07.16.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Feb 2023 16:14:58 -0800 (PST)
+Message-ID: <63e2e982.7b0a0220.ff24d.1315@mx.google.com>
+X-Google-Original-Message-ID: <Y+LpgLTT/buvJLJy@Ansuel-xps.>
+Date:   Wed, 8 Feb 2023 01:14:56 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify
+ supported opp tables
+References: <20230131151819.16612-1-ansuelsmth@gmail.com>
+ <44d94a1d-47d6-f93e-4a20-d9d83375398d@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT052:EE_|MN0PR12MB5714:EE_
-X-MS-Office365-Filtering-Correlation-Id: b9849eab-c420-4ead-0556-08db096976aa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KxHf9RyTi2H7CxSq4CC46urdeEjED1+m54qXoJMoRCMvcsSDALeV9IplmDCz7HuKE0y1LqIkWy338aIsoodml4Oqw+Zdzarr55E3F3O9NswV0mivv7C08KQ3JnQnQEmdOXGHP1VHaDbusdqGYnFvr1zybi7Man640nqGHXN/VJRvXxx4FwMuy6uSMdi+MkJ+CK1toyOAgvFUarmNdoBY1sytR5ZMEC0rXgXh3hSr4/udHgvKnJzJAjJ6Eb7vz2nlvwX76zJPIB5PwV4hgOy3p0PuIjyxY4ByilzygdLRoxRYX6T2x7hVaSkhQZr/6PYtZmb+YamqQ1U3HrW3cpzuKaAvK6R2bPLMGeLhH30YQF5IwMvx5yLHiZnRLy9tp5NQlN88NFOzGirqA9pOk0cCK2x3fJL80G3Zr5AFmglq9yyABKC6N6gWglWdtmTRTjIDtigzq76QLh00CpV9PRC9Yy71uLMDZm3o7bDdrtqcJv/+WsOrJK1r90X7NFKll7Xf/sjfMR7D/mtZ8b/iVZlGN8KGshMKbPAo/mim5yysD3EDFBBH1CS+srfzPYvLk1cWNI5Bp7T146p/ORhz4M0dzK66ty1i+8W32pnIFFarN0E0AEDSyH64kGbfMLQUoIMbEGMNa0LcdwwCqPqlonNsC5049t6dp2vhyr0CuZo/fBzvvYKL7FFQoLr6Ibg7sJsnRZW37eAOO9pS+IQVZQlPmg==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(396003)(376002)(451199018)(40470700004)(36840700001)(46966006)(478600001)(6636002)(54906003)(110136005)(6666004)(7696005)(2616005)(316002)(186003)(26005)(82310400005)(5660300002)(86362001)(36756003)(82740400003)(7636003)(426003)(40480700001)(336012)(40460700003)(47076005)(8676002)(4326008)(70206006)(2906002)(8936002)(70586007)(36860700001)(356005)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 00:14:36.9189
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9849eab-c420-4ead-0556-08db096976aa
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5714
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <44d94a1d-47d6-f93e-4a20-d9d83375398d@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new sysfs to initiate firmware reset in isolation mode.
+On Wed, Feb 01, 2023 at 09:19:42AM +0100, Krzysztof Kozlowski wrote:
+> On 31/01/2023 16:18, Christian Marangi wrote:
+> > Add additional info on what opp tables the defined devices in this schema
+> > supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+> > and reference them.
+> > 
+> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> > ---
+> > Changes v5:
+> > - Swap patch 1 and patch 2 to fix dt_check_warning on single
+> >   patch bisecting 
+> > Changes v4:
+> > - Add patch split from patch 1
+> > 
+> >  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 35 ++++++++++++++-----
+> 
+> This patch causes new warnings:
+> 
+> arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb: /: opp-table-cluster0:
+> Unevaluated properties are not allowed ('compatible', 'nvmem-cells',
+> 'opp-1036800000', 'opp-1113600000', 'opp-1190400000', 'opp-1228800000',
+> 'opp-1324800000', 'opp-1363200000', 'opp-1401600000', 'opp-1478400000',
+> 'opp-1497600000', 'opp-1593600000', 'opp-307200000', 'opp-422400000',
+> 'opp-480000000', 'opp-556800000', 'opp-652800000', 'opp-729600000',
+> 'opp-844800000', 'opp-960000000', 'opp-shared' were unexpected)
+> 
 
-Reviewed-by: David Thompson <davthompson@nvidia.com>
-Signed-off-by: Khalil Blaiech <kblaiech@nvidia.com>
----
- drivers/platform/mellanox/mlxbf-bootctl.c | 19 +++++++++++++++++++
- drivers/platform/mellanox/mlxbf-bootctl.h |  6 ++++++
- 2 files changed, 25 insertions(+)
+Hi, this is fixed by the third patch and caused by
 
-diff --git a/drivers/platform/mellanox/mlxbf-bootctl.c b/drivers/platform/mellanox/mlxbf-bootctl.c
-index 1c7a288b59a5..5e41c270195c 100644
---- a/drivers/platform/mellanox/mlxbf-bootctl.c
-+++ b/drivers/platform/mellanox/mlxbf-bootctl.c
-@@ -244,11 +244,29 @@ static ssize_t secure_boot_fuse_state_show(struct device *dev,
- 	return buf_len;
- }
- 
-+static ssize_t fw_reset_store(struct device *dev,
-+			      struct device_attribute *attr,
-+			      const char *buf, size_t count)
-+{
-+	unsigned long key;
-+	int err;
-+
-+	err = kstrtoul(buf, 16, &key);
-+	if (err)
-+		return err;
-+
-+	if (mlxbf_bootctl_smc(MLXBF_BOOTCTL_FW_RESET, key) < 0)
-+		return -EINVAL;
-+
-+	return count;
-+}
-+
- static DEVICE_ATTR_RW(post_reset_wdog);
- static DEVICE_ATTR_RW(reset_action);
- static DEVICE_ATTR_RW(second_reset_action);
- static DEVICE_ATTR_RO(lifecycle_state);
- static DEVICE_ATTR_RO(secure_boot_fuse_state);
-+static DEVICE_ATTR_WO(fw_reset);
- 
- static struct attribute *mlxbf_bootctl_attrs[] = {
- 	&dev_attr_post_reset_wdog.attr,
-@@ -256,6 +274,7 @@ static struct attribute *mlxbf_bootctl_attrs[] = {
- 	&dev_attr_second_reset_action.attr,
- 	&dev_attr_lifecycle_state.attr,
- 	&dev_attr_secure_boot_fuse_state.attr,
-+	&dev_attr_fw_reset.attr,
- 	NULL
- };
- 
-diff --git a/drivers/platform/mellanox/mlxbf-bootctl.h b/drivers/platform/mellanox/mlxbf-bootctl.h
-index 148fdb43b435..b48243f60a59 100644
---- a/drivers/platform/mellanox/mlxbf-bootctl.h
-+++ b/drivers/platform/mellanox/mlxbf-bootctl.h
-@@ -75,6 +75,12 @@
- 
- #define MLXBF_BOOTCTL_GET_DIMM_INFO		0x82000008
- 
-+/*
-+ * Initiate Firmware Reset via TYU. This might be invoked during the reset
-+ * flow in isolation mode.
-+ */
-+#define MLXBF_BOOTCTL_FW_RESET  0x8200000D
-+
- /* SMC function IDs for SiP Service queries */
- #define MLXBF_BOOTCTL_SIP_SVC_CALL_COUNT	0x8200ff00
- #define MLXBF_BOOTCTL_SIP_SVC_UID		0x8200ff01
+opp-supported-hw:0:0: 16 is greater than the maximum of 7
+
+that is fixed by documenting the new bits.
+
 -- 
-2.30.1
-
+	Ansuel
