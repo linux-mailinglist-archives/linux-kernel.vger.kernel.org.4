@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3628D68ECD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:29:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B4C68ECDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjBHK3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S231473AbjBHK3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjBHK2r (ORCPT
+        with ESMTP id S231341AbjBHK2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:28:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C246726
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:27:59 -0800 (PST)
+        Wed, 8 Feb 2023 05:28:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329454671F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:28:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675852079;
+        s=mimecast20190719; t=1675852081;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+0bdW2lu7gvPActE9FfmWhTe4s3T0qdSQp6cZIX9NGg=;
-        b=VuLI0VxCQNd1W6zSY9dbE6CGiF4CgHcisgFdNToUNPKFwImM70jixfAkNdYNSwu1sSFStT
-        H88EBPcdqT1dNPUJYpXj83Z4d6K4fPshH5iZ4eduejASLOWK2ure3Rtn8eWe57wUVFODIQ
-        uXkmRucJ9GPe0hZZ0XKmfTUxkeoriY4=
+        bh=8H/UOjisVXBilIHmQJZBTMReWmL632uxgSQLNraANrg=;
+        b=NrZCAawdgBxoweLqgfjjsWg5tWodAX8dzt06uVrswMEi4mt2ZIChyqLEaP+9bD3EGJwpnz
+        Ql7712Fu5vsgNTDjcqIkM42+UgC+meNP94aXENnA7lXTM/SDWtgPFV+6GtRGIy6dV86mZg
+        lRUO/ZmY9MRgu5GORwPQA1BIsDtjqC8=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-184-gxQTpNX-MGWQGk9aSn4jHg-1; Wed, 08 Feb 2023 05:27:56 -0500
-X-MC-Unique: gxQTpNX-MGWQGk9aSn4jHg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-331-89VE2ZaEMQWKDxwI5X3Y8Q-1; Wed, 08 Feb 2023 05:27:57 -0500
+X-MC-Unique: 89VE2ZaEMQWKDxwI5X3Y8Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90659800B23;
-        Wed,  8 Feb 2023 10:27:55 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D97085A588;
+        Wed,  8 Feb 2023 10:27:57 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 769EB492C3F;
-        Wed,  8 Feb 2023 10:27:54 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2D21B2026D4B;
+        Wed,  8 Feb 2023 10:27:56 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org
 Cc:     David Howells <dhowells@redhat.com>,
@@ -47,17 +47,17 @@ Cc:     David Howells <dhowells@redhat.com>,
         Paolo Abeni <pabeni@redhat.com>,
         Marc Dionne <marc.dionne@auristor.com>,
         linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 1/4] rxrpc: Use consume_skb() rather than kfree_skb_reason()
-Date:   Wed,  8 Feb 2023 10:27:47 +0000
-Message-Id: <20230208102750.18107-2-dhowells@redhat.com>
+Subject: [PATCH net-next 2/4] rxrpc: Fix overwaking on call poking
+Date:   Wed,  8 Feb 2023 10:27:48 +0000
+Message-Id: <20230208102750.18107-3-dhowells@redhat.com>
 In-Reply-To: <20230208102750.18107-1-dhowells@redhat.com>
 References: <20230208102750.18107-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +65,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use consume_skb() rather than kfree_skb_reason().
+If an rxrpc call is given a poke, it will get woken up unconditionally,
+even if there's already a poke pending (for which there will have been a
+wake) or if the call refcount has gone to 0.
 
-Reported-by: Paolo Abeni <pabeni@redhat.com>
+Fix this by only waking the call if it is still referenced and if it
+doesn't already have a poke pending.
+
+Fixes: 15f661dc95da ("rxrpc: Implement a mechanism to send an event notification to a call")
 Signed-off-by: David Howells <dhowells@redhat.com>
 cc: Marc Dionne <marc.dionne@auristor.com>
 cc: linux-afs@lists.infradead.org
 ---
- net/rxrpc/skbuff.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/rxrpc/call_object.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/rxrpc/skbuff.c b/net/rxrpc/skbuff.c
-index 944320e65ea8..3bcd6ee80396 100644
---- a/net/rxrpc/skbuff.c
-+++ b/net/rxrpc/skbuff.c
-@@ -63,7 +63,7 @@ void rxrpc_free_skb(struct sk_buff *skb, enum rxrpc_skb_trace why)
- 	if (skb) {
- 		int n = atomic_dec_return(select_skb_count(skb));
- 		trace_rxrpc_skb(skb, refcount_read(&skb->users), n, why);
--		kfree_skb_reason(skb, SKB_CONSUMED);
-+		consume_skb(skb);
+diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
+index 6eaffb0d8fdc..e9f1f49d18c2 100644
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -54,12 +54,14 @@ void rxrpc_poke_call(struct rxrpc_call *call, enum rxrpc_call_poke_trace what)
+ 		spin_lock_bh(&local->lock);
+ 		busy = !list_empty(&call->attend_link);
+ 		trace_rxrpc_poke_call(call, busy, what);
++		if (!busy && !rxrpc_try_get_call(call, rxrpc_call_get_poke))
++			busy = true;
+ 		if (!busy) {
+-			rxrpc_get_call(call, rxrpc_call_get_poke);
+ 			list_add_tail(&call->attend_link, &local->call_attend_q);
+ 		}
+ 		spin_unlock_bh(&local->lock);
+-		rxrpc_wake_up_io_thread(local);
++		if (!busy)
++			rxrpc_wake_up_io_thread(local);
  	}
  }
  
-@@ -78,6 +78,6 @@ void rxrpc_purge_queue(struct sk_buff_head *list)
- 		int n = atomic_dec_return(select_skb_count(skb));
- 		trace_rxrpc_skb(skb, refcount_read(&skb->users), n,
- 				rxrpc_skb_put_purge);
--		kfree_skb_reason(skb, SKB_CONSUMED);
-+		consume_skb(skb);
- 	}
- }
 
