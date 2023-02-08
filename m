@@ -2,132 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3441868E84B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B5D68E851
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjBHGau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 01:30:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S229982AbjBHGd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 01:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjBHGar (ORCPT
+        with ESMTP id S229509AbjBHGdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 01:30:47 -0500
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C13541BAC0;
-        Tue,  7 Feb 2023 22:30:45 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowAAXHSWKQeNjwYbxAw--.22488S3;
-        Wed, 08 Feb 2023 14:30:35 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     stf_xl@wp.pl, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH 2/2] iwl3945: Add missing check for create_singlethread_workqueue
-Date:   Wed,  8 Feb 2023 14:30:32 +0800
-Message-Id: <20230208063032.42763-2-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230208063032.42763-1-jiasheng@iscas.ac.cn>
-References: <20230208063032.42763-1-jiasheng@iscas.ac.cn>
+        Wed, 8 Feb 2023 01:33:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF0038B67
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 22:33:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UEggocAYhaG/5pIix0dPz0HoDLSOKs9I71rtFWBGYa0=; b=C2t7tI5UScFx41Y+EJFG/GT56Q
+        Xm/a/f18f4YdAtMw/RKIozICP2fUC5b+HKoNnjUnH3G9dTqVqBs/1Po1wLT7meHeGN7Qdl7P/3FI1
+        FG9kvtzv6mKRZW2kLXTEbMak7PLNJbtZY0VholxN6BaS2+N530WpbbtT4nVlJITS9dgAmNUyoF+3K
+        Ts0yCvRAYQuQ1LAUhht8Y6wUiFIewzK5uAQgEv3NJwRcZNUNYBPdkIe2qQ3AJyGn/hC2K+pTZ7d6A
+        uqqKC99BvogXSszzxTI5+qoSnaVNTV/gXTxeOA6trqfAQr84V8aVhIj1NwlheD9+RJMKuv9oHnSJF
+        LKjf9p7g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPe19-00EJMq-EB; Wed, 08 Feb 2023 06:33:19 +0000
+Date:   Tue, 7 Feb 2023 22:33:19 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+Cc:     broonie@kernel.org, alsa-devel@alsa-project.org,
+        Basavaraj.Hiregoudar@amd.com, Sunilkumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
+        arungopal.kondaveeti@amd.com, Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] soundwire: export sdw_compute_slave_ports() function
+Message-ID: <Y+NCL1MdgwcuLTLk@infradead.org>
+References: <20230201165944.3169125-1-Vijendar.Mukunda@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAAXHSWKQeNjwYbxAw--.22488S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1kKw1kurWrZw4fAryDAwb_yoW8Kr4UpF
-        s5ZrZI9w4rJr4UGayUJanrZ3WrWr4xX39rGFZagw13u3WqvwnYqw40qFy2yr1rJrWqgF13
-        AF4Ut3yruryUtrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPC14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
-        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWl
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI
-        43ZEXa7VUj9qXJUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201165944.3169125-1-Vijendar.Mukunda@amd.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the check for the return value of the create_singlethread_workqueue
-in order to avoid NULL pointer dereference.
+On Wed, Feb 01, 2023 at 10:29:44PM +0530, Vijendar Mukunda wrote:
+> Export sdw_compute_slave_ports() function to use it in another
+> soundwire manager module.
+> Move sdw_transport_data structure to bus header file to export
+> sdw_compute_slave_ports() function.
 
-Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/net/wireless/intel/iwlegacy/3945-mac.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlegacy/3945-mac.c b/drivers/net/wireless/intel/iwlegacy/3945-mac.c
-index d7e99d50b287..9eaf5ec133f9 100644
---- a/drivers/net/wireless/intel/iwlegacy/3945-mac.c
-+++ b/drivers/net/wireless/intel/iwlegacy/3945-mac.c
-@@ -3372,10 +3372,12 @@ static DEVICE_ATTR(dump_errors, 0200, NULL, il3945_dump_error_log);
-  *
-  *****************************************************************************/
- 
--static void
-+static int
- il3945_setup_deferred_work(struct il_priv *il)
- {
- 	il->workqueue = create_singlethread_workqueue(DRV_NAME);
-+	if (!il->workqueue)
-+		return -ENOMEM;
- 
- 	init_waitqueue_head(&il->wait_command_queue);
- 
-@@ -3392,6 +3394,8 @@ il3945_setup_deferred_work(struct il_priv *il)
- 	timer_setup(&il->watchdog, il_bg_watchdog, 0);
- 
- 	tasklet_setup(&il->irq_tasklet, il3945_irq_tasklet);
-+
-+	return 0;
- }
- 
- static void
-@@ -3712,7 +3716,10 @@ il3945_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	}
- 
- 	il_set_rxon_channel(il, &il->bands[NL80211_BAND_2GHZ].channels[5]);
--	il3945_setup_deferred_work(il);
-+	err = il3945_setup_deferred_work(il);
-+	if (err)
-+		goto out_remove_sysfs;
-+
- 	il3945_setup_handlers(il);
- 	il_power_initialize(il);
- 
-@@ -3724,7 +3731,7 @@ il3945_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	err = il3945_setup_mac(il);
- 	if (err)
--		goto out_remove_sysfs;
-+		goto out_destroy_workqueue;
- 
- 	il_dbgfs_register(il, DRV_NAME);
- 
-@@ -3733,9 +3740,10 @@ il3945_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	return 0;
- 
--out_remove_sysfs:
-+out_destroy_workqueue:
- 	destroy_workqueue(il->workqueue);
- 	il->workqueue = NULL;
-+out_remove_sysfs:
- 	sysfs_remove_group(&pdev->dev.kobj, &il3945_attribute_group);
- out_release_irq:
- 	free_irq(il->pci_dev->irq, il);
--- 
-2.25.1
-
+You might want to send this along with the actual user.
