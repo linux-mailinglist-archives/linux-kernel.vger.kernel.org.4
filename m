@@ -2,172 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37CF68EC78
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 169FD68EC7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjBHKMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S229732AbjBHKNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjBHKMR (ORCPT
+        with ESMTP id S229679AbjBHKNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:12:17 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2047.outbound.protection.outlook.com [40.107.8.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC4E31E02;
-        Wed,  8 Feb 2023 02:12:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AlhQB/5ESikmEBv/5DWc0CSq9AqXj+CoJPirsvKQ9hFrhFgkPb9N3iQFDzvffeFq6Pe3pYnKiG4Z+0WXAYxxbzMn0/Z5TPyyhdfaQ26h6rKgXO0p4w3rjnGXZj3dg0Sm84nzdvR6UM9DEne6xGdFk3LY78en1zO0Lf0rRgYJOssgBmEIeBy/Jv3YkACOM6q12rmT+nr6+Xvrh6QwztPO9U0kHp0l5Mtf2Sq2UMKGybikRcpGMIOjuzzBAeXoKoCaHt4kXpxIlj/0gklPr1MTS3pXVG/paE2VCfIaiCun0YPO7BDyiVmxtxhhTb7OCuFslR2SLADAOGZEeQmxhYJOeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zrbTE+iX2LaBOPGFz4155YxbeYn1wUCvThi6SAWb9w8=;
- b=ej0Er1TVietGKgW/Ftc1+m30KJroXGTZdR9Vq/OlogOOPp+Rt8lJ1bwwSoU6jamEQeJz9IdL8vIosHcvC8D91gDiwB9TKZe7jpGyoxDUBu5FOg786lwBq7aGJYHiEAFFT9ARv/xmiHJldc5b3RLsbpmdhaccZruOTI0YhFCvLY9mezx6SOBeGe2u38nf/FHDEjq4nUqdevpPlJv0C05A5VB6ht5Etq/9Ql6rn8/vmTkpiBIWGLeb1nYyPzq3shtzCEuW6P1USL3ty8myRbfXK/r+L1dfhiy/7JyaVMWEa81NI08jMSh54UgaYCzBzLKjBHJAb9QP0/qtvwx+2NbUkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zrbTE+iX2LaBOPGFz4155YxbeYn1wUCvThi6SAWb9w8=;
- b=ZhuSRT8cYnPLD2NCQThzyoakrU41C9W8nos5PMrLaEHDQaZSCpMKJgMXuwE7ySXWKdxrC605uuEtwlSfb7TFBkbXsWiiDkyiIlSVfK/dpuWHLlRzQJBJOfQTWaUJg/vWKCUDRlaKAojSS+Gb+85tJpyeYzzJKo35ezh0ENaG3gc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
- by DBAPR04MB7432.eurprd04.prod.outlook.com (2603:10a6:10:1a9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Wed, 8 Feb
- 2023 10:12:11 +0000
-Received: from PAXPR04MB8703.eurprd04.prod.outlook.com
- ([fe80::d15f:2b68:1967:91a7]) by PAXPR04MB8703.eurprd04.prod.outlook.com
- ([fe80::d15f:2b68:1967:91a7%9]) with mapi id 15.20.6086.017; Wed, 8 Feb 2023
- 10:12:11 +0000
-Message-ID: <a13acbeb-e545-9e8e-40f9-b02526b867b8@oss.nxp.com>
-Date:   Wed, 8 Feb 2023 11:12:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] media: dw100: use
- devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <202302081635445002151@zte.com.cn>
-From:   "Xavier Roumegue (OSS)" <xavier.roumegue@oss.nxp.com>
-In-Reply-To: <202302081635445002151@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR03CA0037.eurprd03.prod.outlook.com (2603:10a6:208::14)
- To PAXPR04MB8703.eurprd04.prod.outlook.com (2603:10a6:102:21e::22)
+        Wed, 8 Feb 2023 05:13:48 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2FD1E5CA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:13:47 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id u9so14434560plf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ajz+v5GmnsPCHa5otaVKjt3qtpfl0zcXYl9C/R/GQJs=;
+        b=HLjO2xZJQNT2iI4m7nCVGI/wJfQJVUD90ifPxXn2FQQSEMcOdnTQnwUuUiOQsAOnt/
+         trJ3uD7Fzwg6k7EAFeKxOG1UV6D/X3DhJkx98mJF5cT5D3U5xbMCtgFGp63c2n+5Qn3u
+         ppvPT4L6U0eAD4R8C7kg3bara1vAtbgVcEdTPELvINUWCKi3r1qEyj2JfjEpv4oSzTr0
+         h6fok+37GEtz31Y7N9rsuX94a5t+5wpOPfQBswJQdRJT80Q2tPDCUzvIykH9dK0XXEdD
+         RcYpvT+KElOnRrTBEdYL5uuOCK2Gyw0co2YqMHMvy9tQfI340YDhEjO8Y+EXqt7hQYlZ
+         HRhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ajz+v5GmnsPCHa5otaVKjt3qtpfl0zcXYl9C/R/GQJs=;
+        b=hFNUiAo6sAhXABA5Jt4Cd57ZNE6bWR86P2r3GSXfQV0gB04M3QMna5euLT9igiaLWi
+         vGEeNb686bvh2dz8nRpSaG/+6VbaHbc8lcQooB0XbOinW8sXNN905mKV4lAbtmno099R
+         VrQqAeC9LaceYCf6BqLnfH5f5icAHS3jfnHsfH8SwBpKeNu0NM0bWxlTZFIAiPRQTBew
+         jYaah/y9xCKUpLvSgn/gFXBbEd8OObCfCWColqhQlbIDAFXM/uaTqz/Wdfqbr5k6vnhZ
+         W5CBlgPrtJ8JgSRYMntZQn4rgxfPgl+ZqTswDjaxJZMysj5qRGU8x8czrZM4Y4gUiFHW
+         RUwQ==
+X-Gm-Message-State: AO0yUKWXyMzHUfLz4+yTsO3Htdo1KNcg/0U4+2Ej8UtjLGs80HBQ0JB/
+        KvNjQrWJEUIdsfNqNzeZ9eJxqjTjpN6Y/PLdILKkcA==
+X-Google-Smtp-Source: AK7set+wVb8AfqRiZi5GhvSicAJtAGdQsISIQi9R8FQK+948XD+A90Hif1HCCjeQxHUX+BMqWkj4qwcIHBGHhuSqi+I=
+X-Received: by 2002:a17:90a:6844:b0:230:a5d7:a479 with SMTP id
+ e4-20020a17090a684400b00230a5d7a479mr631342pjm.62.1675851226533; Wed, 08 Feb
+ 2023 02:13:46 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8703:EE_|DBAPR04MB7432:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8796475-cab9-41e5-40bd-08db09bcf107
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: du0i5HGUf2K77Mn72fZr7DOaZKY+XZFyDjVT8BBeAIN4xel+tX8oJK8r3Xyy+rO3X5JD485QMoycogbXm4Aa8L1PLXfd2q9gD03pAhwT2IB4KsbgBjNryv193ITrteRPMJDNqFp8xALmRT/3cF3XsawezkHdpoQab5tLuHmoZrXt22QYsU9BYWB4RvJD6l4d27XNIJ0kXzHTx5GkKhJmCO5LCeKKLasu84LjqDjEGzAFOmOdA+1vvUnFsA+s6p1/aU9OjsxbwziZK8BxlJgsJZ3D2jPRgr17AQCPrbT+GEoZAs/Ph0He2ZLaWtZzYSmnvsw4yOGWtlLy+GAzHndRt3DywlsifSwUuNhfZLzU90yY8+yrOhaH5tQRa7nyZZ6MORLPPAE/Olo3CKGoF9+to5qoK7Uoe/nvZ+NVMIxgeesiL63FC7Wa4087fi1WCea+IQG+a20Ae4zaSsFYembdJa3mgZ3l21jkn7B9ZE9qNQXO9xYKGiMhwDLfLGnv9xgwdAkslrZm1loo6A0AI0z/g9gl3UJAUSGRkR8MSPUocNSLfsG0ll99i7nFMvFg0WNZR5C0QKYjztSxb4XoUbBFx97d6ZssEvEXMohdIk+yG/uJg58RwDWP3n+4vN7oV9qmumIdOEsjaoeEMndHVkVXmqQkMSS1S+OQ+VqqhJNipjERvA2eeXEbntyhITqitu9/kxuGDxkZtEIlmL3p4sCbmlhaWKpOvfyCi1O1Ew2gbsSPYLTvLEQVeR+G0z8a23WcGEn/jS9GRWc7PUYEf+HNNA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8703.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(451199018)(31686004)(316002)(83380400001)(2616005)(2906002)(26005)(41300700001)(38350700002)(478600001)(38100700002)(6512007)(6486002)(186003)(86362001)(6506007)(6666004)(53546011)(8936002)(5660300002)(6916009)(8676002)(4326008)(66556008)(31696002)(66946007)(66476007)(52116002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cHhvdGZFQnFyYzJWWlRETEV3MFZkRlg0c2hRbkM3V0ZCL3B6ZDZ5cmEvYVVO?=
- =?utf-8?B?aHFvQTQvUXk3T1o5S20rYm81WndhNElSSUpXWm15aHNQOGZ5cE9OaHpLTnVm?=
- =?utf-8?B?NFpWYks2OVFWUWlpNVZaWTdXMlpScUVFM1FOQWhnWTVCd1MvUmZhVWt3UHhT?=
- =?utf-8?B?bzhaNDdRS1ZkYnRULzN4MzBFU3JCUEZhSjNjOTVzR0NWeGtYMlpMa2dlbitQ?=
- =?utf-8?B?L3VYVjR1dGV6RzJSZjY5UWttdlFzVTZjNi80TmJyVGh0L1RCSUJFdVZKRkxj?=
- =?utf-8?B?WE45bFRPditTa05zREUrZDFvYmlnVVU1WGFFSHM0elF4WWdmT1RTUE5kNmhE?=
- =?utf-8?B?TCtvaEUyUVIxdWhsZTh4emhVdU5HMHFiUVcyM3dFeUV4cFE3NVBPMTZBV2dt?=
- =?utf-8?B?SkNiNzRFalpHVEFXTTdwQlBUOURMWVRuTjZBVWlpdWRQNnk5RE1icW9WRWhE?=
- =?utf-8?B?dzJ0b1NGK21yZDVpRThORlgrY0Z2aGIxeWFKcVB6THZUcmhwcEQ3c2xUMzdJ?=
- =?utf-8?B?bllGMTI5T01LMEh3bEhrRVBFTlY1dTZ2Y2J4RVgzM3d6WGc5OEx1TXRNTHZj?=
- =?utf-8?B?Z0M0MThoZ2J4WkxaZXpZRkcwT0dTNk1PSHZhWjNvSWc1Mnp0aFo2WU4reHE3?=
- =?utf-8?B?VndpelNESG5QVS8rT0hoNm5BeXNEdWtQVlB0VTFZVWxETkpmTHhEakNqODJa?=
- =?utf-8?B?TGV0NU9yZ3pKalhlQ1YyQjBEZ2w2djZLK3RQRXZUNzgxK0FZTmhxMElsWWMr?=
- =?utf-8?B?WEU4UEhSaUFtTTlQWlFGTE1TNDE2VVdtdWtZelZxVVJnMmNQN1pVWHNkUUJU?=
- =?utf-8?B?cVJVMEJJN3o5WkJmWHN6NTI1UDRFYUlyZTA1Um1KNFJWcDBKQXpoQldXVHpH?=
- =?utf-8?B?OU9RVUppZkNiV1g3YUhuY3RQSllwa25xZnJOeFVyYzNpMFBLSzI4TTFNZWVN?=
- =?utf-8?B?QTJDV2syZk91bE04WnR3dUhFQnpRcGF1NlpDUEdhTURmdENlSkV0SVZ3d3BN?=
- =?utf-8?B?T0RVMEd0VEZ2dVRRd2NKeis0VkpzTW9PV3RJOHVvUmJxSXJPejc5Q29oV1pk?=
- =?utf-8?B?NkdYb2h5Y3NJUXpMc0o4ZjRjSitpdlRGRDJxTmR6ejhsa25qVjBNUk94MCtK?=
- =?utf-8?B?NXBaY0J4SEVjU1U0YkkxMVprb3FIdzVDZXhLcDI1dCtjeGZKY0E5Y014M29r?=
- =?utf-8?B?U1ZQU0hadWdkcWc4UlppbjNJd0lRUkd0VVJxZ0FwVDVpWlRhWlh6Wk9xbmE2?=
- =?utf-8?B?RnhDNG50NTRzcVN3WmFrNmJVOG5TUi9zTWcxWDBITC8yRWRhd3ByekMxRnRQ?=
- =?utf-8?B?SWJ1U3lSdUMydXBQVGFuWjRTRFY1M0ZOMXNObnJvb25FRjVVYklMUkdVbG1x?=
- =?utf-8?B?cEw1UHpyVXlVbkkvVExLOWhuVUNFQzhEc1JBZlZpelhqcmpMaVp0Nk5ocnNZ?=
- =?utf-8?B?dVY0dlhmUmhPbC9xdTU0c2ltYzRnL2FEZVRxNWZaUGxNekVLbHVTOFl3dmow?=
- =?utf-8?B?UTJ5VmNYVlRLemliOVdrYW5qbWxSQWpNWUFTeDVMYXhDVCswRk1CRlFPTGow?=
- =?utf-8?B?WC9zWjhNUkFzNFhuS1ZBQ2paME1tcWw5REZBbHl6VWhmUzBSekJua1NkbTZr?=
- =?utf-8?B?MGlPMWVRUWlpbzV0T1ZxWlVURVRIb09lYm84QnlaYkh6eWpEejFoeEtwZWhq?=
- =?utf-8?B?cWdzdldtUFNtVDh6cDk0Tmd6QTJUcUsrMlNpVWhtQityd1J3amJUallMV3h5?=
- =?utf-8?B?alh6R0l3aWl2NDdhMWw4cHhKamhNaHFZd1dhbC83b2JMcmZaWTZPMlBoRTFI?=
- =?utf-8?B?UVpHWWNBaEV2VHEveVhxNHF2ZVpXaWR6azNzYmc2TWl0cUM3Y2dJeE5oelN3?=
- =?utf-8?B?cDlnWDVBWld3MU9wOS9PUmROTm9DWUc4OXZNVnh1TEpWS29jb2NmM0pJVFF0?=
- =?utf-8?B?blkwVjRTdkt3NGl2Q2tkU000ZkdNRzc4Nkk4TnpNK3k1bkl4TFZoVE1Ubk52?=
- =?utf-8?B?dURsRjVlYXZxZWJWa1o2ZyszMExVa2hmSHByUFNYTFZmcFo2UE5uMVFwbU53?=
- =?utf-8?B?eXNBVHhublFFbEFNZ2JOc05Cakt4Z3JGREYrYUFsTFo2QkdpQ2U1Z2grNlJy?=
- =?utf-8?B?Q1NURGE4ZTJCdEpQeTNYdktaekt3NkVhd0dMaWR1MG9aeUJnTU5ZSEpSRGUy?=
- =?utf-8?B?SGc9PQ==?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8796475-cab9-41e5-40bd-08db09bcf107
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8703.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2023 10:12:11.2529
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /dzGrl5ZjV52PbApsm7rD7sp8CgYxI3GCex9dgAab2UpEojEzfoyLxcKshNc2SrzjSdeCaOEYYBBE8DjzZI/AA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7432
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <73e639d5-702b-0d03-16d9-a965b1963ef6@huawei.com>
+ <Y6RRfF5yRew7rdCp@hirez.programming.kicks-ass.net> <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
+ <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net> <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
+ <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net> <CAKfTPtBMSg2SDXq=sVt99TyM+tEXRFL74EQ57-t5uKYAXUUyLg@mail.gmail.com>
+ <Y9iJLQxyXp9+x2aF@chenyu5-mobl1> <Y9jmm5c5vT8WXsl6@u40bc5e070a0153.ant.amazon.com>
+ <CAKfTPtDUMph262w5OSiSQi-BVcNRf2gN=PdmxYCKEuk-8aYhgA@mail.gmail.com> <Y+Kob8kOUFa0FnJN@u40bc5e070a0153.ant.amazon.com>
+In-Reply-To: <Y+Kob8kOUFa0FnJN@u40bc5e070a0153.ant.amazon.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 8 Feb 2023 11:13:35 +0100
+Message-ID: <CAKfTPtC8hQ9JysoRNF0egsp+B9+9r4YFC_1-KBnu0GpXts27kw@mail.gmail.com>
+Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
+To:     Roman Kagan <rkagan@amazon.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ye Xingchen,
+On Tue, 7 Feb 2023 at 20:37, Roman Kagan <rkagan@amazon.de> wrote:
+>
+> On Tue, Jan 31, 2023 at 12:10:29PM +0100, Vincent Guittot wrote:
+> > On Tue, 31 Jan 2023 at 11:00, Roman Kagan <rkagan@amazon.de> wrote:
+> > > On Tue, Jan 31, 2023 at 11:21:17AM +0800, Chen Yu wrote:
+> > > > On 2023-01-27 at 17:18:56 +0100, Vincent Guittot wrote:
+> > > > > On Fri, 27 Jan 2023 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > > >
+> > > > > > On Thu, Jan 26, 2023 at 07:31:02PM +0100, Roman Kagan wrote:
+> > > > > >
+> > > > > > > > All that only matters for small sleeps anyway.
+> > > > > > > >
+> > > > > > > > Something like:
+> > > > > > > >
+> > > > > > > >         sleep_time = U64_MAX;
+> > > > > > > >         if (se->avg.last_update_time)
+> > > > > > > >           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
+> > > > > > >
+> > > > > > > Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
+> > > > > > > others were suggesting?  It appears to better match the notion of sleep
+> > > > > > > wall-time, no?
+> > > > > >
+> > > > > > Should also work I suppose. cfs_rq_clock takes throttling into account,
+> > > > > > but that should hopefully also not be *that* long, so either should
+> > > > > > work.
+> > > > >
+> > > > > yes rq_clock_task(rq_of(cfs_rq)) should be fine too
+> > > > >
+> > > > > Another thing to take into account is the sleeper credit that the
+> > > > > waking task deserves so the detection should be done once it has been
+> > > > > subtracted from vruntime.
+> > > > >
+> > > > > Last point, when a nice -20 task runs on a rq, it will take a bit more
+> > > > > than 2 seconds for the vruntime to be increased by more than 24ms (the
+> > > > > maximum credit that a waking task can get) so threshold must be
+> > > > > significantly higher than 2 sec. On the opposite side, the lowest
+> > > > > possible weight of a cfs rq is 2 which means that the problem appears
+> > > > > for a sleep longer or equal to 2^54 = 2^63*2/1024. We should use this
+> > > > > value instead of an arbitrary 200 days
+> > > > Does it mean any threshold between 2 sec and 2^54 nsec should be fine? Because
+> > > > 1. Any task sleeps longer than 2 sec will get at most 24 ms(sysctl_sched_latency)
+> > > >    'vruntime bonus' when enqueued.
+> >
+> > This means that if a task nice -20 runs on cfs rq while your task is
+> > sleeping 2seconds, the min vruntime of the cfs rq will increase by
+> > 24ms. If there are 2 nice -20 tasks then the min vruntime will
+> > increase by 24ms after 4 seconds and so on ...
+> >
+> > On the other side, a task nice 19 that runs 1ms will increase its
+> > vruntime by around 68ms.
+> >
+> > So if there is 1 task nice 19 with 11 tasks nice -20 on the same cfs
+> > rq, the nice -19 one should run 1ms every 65 seconds and this also
+> > means that the vruntime of task nice -19 should still be above
+> > min_vruntime after sleeping 60 seconds. Of course this is even worse
+> > with a child cgroup with the lowest weight (weight of 2 instead of 15)
+> >
+> > Just to say that 60 seconds is not so far away and 2^54 should be better IMHO
+>
+> If we go this route, what would be the proper way to infer this value?
+> Looks like
+>
+>   (1ull << 63) / NICE_0_LOAD * scale_load(MIN_SHARES)
 
-Thanks for your patch.
+(1ull << 63) / NICE_0_LOAD * MIN_SHARES
 
-On 2/8/23 09:35, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+>
+> Is there any other definition that stipulates the lowest weight to be 2?
 
-Reviewed-by: Xavier Roumegue <xavier.roumegue@oss.nxp.com>
+no, at task level the min weight is 3 for sched idle task.
 
-Regards,
-  Xavier
+> Besides, MIN_SHARES is under #ifdef CONFIG_FAIR_GROUP_SCHED, so the
+> above expression would require more #ifdef-s.
 
-> ---
->   drivers/media/platform/nxp/dw100/dw100.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/nxp/dw100/dw100.c b/drivers/media/platform/nxp/dw100/dw100.c
-> index 189d60cd5ed1..0771a88122c0 100644
-> --- a/drivers/media/platform/nxp/dw100/dw100.c
-> +++ b/drivers/media/platform/nxp/dw100/dw100.c
-> @@ -1532,7 +1532,6 @@ static int dw100_probe(struct platform_device *pdev)
->   {
->   	struct dw100_device *dw_dev;
->   	struct video_device *vfd;
-> -	struct resource *res;
->   	int ret, irq;
-> 
->   	dw_dev = devm_kzalloc(&pdev->dev, sizeof(*dw_dev), GFP_KERNEL);
-> @@ -1547,8 +1546,7 @@ static int dw100_probe(struct platform_device *pdev)
->   	}
->   	dw_dev->num_clks = ret;
-> 
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	dw_dev->mmio = devm_ioremap_resource(&pdev->dev, res);
-> +	dw_dev->mmio = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
->   	if (IS_ERR(dw_dev->mmio))
->   		return PTR_ERR(dw_dev->mmio);
-> 
+(1ull << 63) / NICE_0_LOAD
+could be a reasonable shortcut I think
+
+>
+> (That said, I'm still not convinced being math-precise here is
+> practical, and slightly violating fairness in such a skewed setup is
+> really something to be afraid of.)
+
+We regularly have people complaining that sched_idle tasks (with a
+weight of 3) wake up too often and steal time. The 60 seconds may just
+make the situation happen more frequently
+
+Vincent
+>
+> Thanks,
+> Roman.
+>
+>
+>
+> Amazon Development Center Germany GmbH
+> Krausenstr. 38
+> 10117 Berlin
+> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+> Sitz: Berlin
+> Ust-ID: DE 289 237 879
+>
+>
+>
