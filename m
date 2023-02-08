@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7633D68F23C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2388468F245
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbjBHPlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S231497AbjBHPmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 10:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjBHPlS (ORCPT
+        with ESMTP id S230347AbjBHPml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:41:18 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FEE48A08;
-        Wed,  8 Feb 2023 07:41:17 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id y4so943507pfe.4;
-        Wed, 08 Feb 2023 07:41:17 -0800 (PST)
+        Wed, 8 Feb 2023 10:42:41 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC6F1B313
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 07:42:37 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id fi26so21017751edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:42:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Ve+9b2Qi4QH55+IMknZLZqZvNPVOjzseuDH+jH0F2bw=;
-        b=nFZZf8nrA50gOQ72uyOrle9KCurosMmlUpiG0iNBwvVzo0CJNEqBsFR9mwYqo+vT5q
-         13SDT6AEY9ijHCTLwswiCL9N8iwESh/qNheiBTyDj9OTabF/UL5+kuoU2l9Obgg+Sbfk
-         dYoqKqou8dNgiEIlwQ8TrzQtZ2DJjPvotNTxyd/SfYwh/Xx9gEut7Gpc7jJ6KpEfNV68
-         zdtULC+NovJxCq8N287T9+kkTlZPElZcfsH9IRjMNBlDdn4+m1sHY35q4pSuxvQZO00m
-         T9lAlEpDRU9g7DpqpeEq0kKfNhI3kKW0qE/xFVa435Rxho/6JHg2/vUhs2bq91jecRdS
-         JamA==
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gBpdGA6mtrbnlLXhrldNvYUwXI0WI+DySVv9XI8e+Vk=;
+        b=RyEecQn5YMAw7Ae8YRSta8sKtN6epFcC9vsjG+EygrSU60JiKWNCI5WadCowwvZKc+
+         f6Y9/prFa9Rfg6/JkjlrR1bn/3htTI3P+IjHKi9b9YMncsOQhDHY4NOAxHaxk/Wa3Hin
+         HSBMJ0EThB4SXjbXitRrTfLruxCAbFpbZ/W8I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ve+9b2Qi4QH55+IMknZLZqZvNPVOjzseuDH+jH0F2bw=;
-        b=Uh6q2pE6KA+j2RVjKcMzoxsZ1TuNL0+5KXB4Ll08/nOOIU/vV6miUM5L3BZmf7OrhE
-         tLv1Nl1AnQWlsYbCxZp5uuTajDbECRzcb8NOGX+vF7JmKauImqsDgBwBc4ArBXX6zpmS
-         MoR8Xbmzbmw9ieBE4yv2ZlrxJmwMUcQs4KBvh3MqRIznY4qT2chScBfiv4lRjRSnq6i7
-         CP2+Nr1GdybNSoEonCIMdr4tyjeviF3rmhKMkHdzY/hv55qgr+Qu1/E4EWeJUAq7nn9F
-         jvGgsO9KV7OSoscC6C01DdHfQZPLPTWpVuQTJE6h7cRp0VgCoVRXStSPfdljvot1DBqV
-         gZVA==
-X-Gm-Message-State: AO0yUKWUzd8U+YAFrHViMrEjrfyBCKRqLBe/i0VpccqHtYuBbWnYXG4t
-        vuAmnx1zEiPb+8ZIFP+bOlk=
-X-Google-Smtp-Source: AK7set9UTWY6Rr3Hk/2ig1fM62OTMBVuuEEnv8lQWsr64vq7cs1K+rvyb9/y3awDxGi46NxWBdhMgQ==
-X-Received: by 2002:a62:4e48:0:b0:5a7:a688:cd8a with SMTP id c69-20020a624e48000000b005a7a688cd8amr5546379pfb.33.1675870877091;
-        Wed, 08 Feb 2023 07:41:17 -0800 (PST)
-Received: from [192.168.0.128] ([98.97.119.54])
-        by smtp.googlemail.com with ESMTPSA id 187-20020a6217c4000000b005825b8e0540sm11359357pfx.204.2023.02.08.07.41.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 07:41:16 -0800 (PST)
-Message-ID: <c33e26364b18039e3632218d8e2a76f3b6a08577.camel@gmail.com>
-Subject: Re: [PATCH net v2 2/3] i40e: add double of VLAN header when
- computing the max MTU
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Jason Xing <kerneljasonxing@gmail.com>, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        richardcochran@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        alexandr.lobakin@intel.com, maciej.fijalkowski@intel.com
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Date:   Wed, 08 Feb 2023 07:41:14 -0800
-In-Reply-To: <20230208024333.10465-2-kerneljasonxing@gmail.com>
-References: <20230208024333.10465-1-kerneljasonxing@gmail.com>
-         <20230208024333.10465-2-kerneljasonxing@gmail.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gBpdGA6mtrbnlLXhrldNvYUwXI0WI+DySVv9XI8e+Vk=;
+        b=zLPbZAZPNAEY2AtFqtsLAU3SzhFg9AKE/xel6NIZ63/JU+ODWqYsbnSiPZd/cp9a2g
+         ofph0+7tZfrWb/TK2AykQXTWhMls2LVC43N3ZI+lc72yEGaH99OqZw1kVpJGePcZdwSn
+         TnknsvBwmViU4HT4VMk9oFQKDrEnv5UUXg30Oxb0gfHMWlfwV51Vo89srpPNFEb2fyrH
+         Z9+U+Y/BxGGhj4ud19XQNXCq+3AQSFt7oyVhoQ5rA62iqogl5ZoaY+EvBfljhzaiU3Np
+         dlQFuU9El6pjM4EdZrRVMvU/86WpvvPzM9NODSgCdBHFQgRybsBQJW5ap+DTu3P8tsm9
+         x+FQ==
+X-Gm-Message-State: AO0yUKUzK2GPtGVqJfPyiwwb1R9cokGB6U8/hNCZxRQSZDrbxE6sCLKC
+        wZDz02RAhEgZvylIaoPPz9ccYAuitdl3OF5YSglGlg==
+X-Google-Smtp-Source: AK7set+XI3UwwolKkrkk3BfkfAuRtmrLdVlxbEWLjTTh/i8yr2lHDs4Yk5A7YXvCv+sTfj8JVASRfw==
+X-Received: by 2002:a50:ccc6:0:b0:4aa:c4bb:2372 with SMTP id b6-20020a50ccc6000000b004aac4bb2372mr8430746edj.32.1675870955942;
+        Wed, 08 Feb 2023 07:42:35 -0800 (PST)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id es26-20020a056402381a00b00488117821ffsm8031006edb.31.2023.02.08.07.42.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 07:42:31 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id hx15so52079324ejc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 07:42:30 -0800 (PST)
+X-Received: by 2002:a17:906:4e46:b0:87a:7098:ca09 with SMTP id
+ g6-20020a1709064e4600b0087a7098ca09mr1655453ejw.78.1675870950517; Wed, 08 Feb
+ 2023 07:42:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20230207072902.5528-1-jgross@suse.com> <20230207072902.5528-5-jgross@suse.com>
+ <CAHk-=wi53OX86-yLBp4rCHOH67XhVbzV78qa63mh4-rOhxQSLw@mail.gmail.com> <59a24334-35c7-8afa-f35d-d654dd2823ba@suse.com>
+In-Reply-To: <59a24334-35c7-8afa-f35d-d654dd2823ba@suse.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 8 Feb 2023 07:42:13 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiWAv7gQewr=i=oOD+89CFjAzaXiotUb2wS+oWGUP6z+g@mail.gmail.com>
+Message-ID: <CAHk-=wiWAv7gQewr=i=oOD+89CFjAzaXiotUb2wS+oWGUP6z+g@mail.gmail.com>
+Subject: Re: [PATCH 4/6] x86/mtrr: don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        lists@nerdbynature.de, mikelley@microsoft.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,36 +81,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-08 at 10:43 +0800, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
->=20
-> Include the second VLAN HLEN into account when computing the maximum
-> MTU size as other drivers do.
->=20
-> Fixes: 0c8493d90b6b ("i40e: add XDP support for pass and drop actions")
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
-> v2: drop the duplicate definition
-> ---
->  drivers/net/ethernet/intel/i40e/i40e_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/et=
-hernet/intel/i40e/i40e_main.c
-> index 53d0083e35da..d039928f3646 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-> @@ -2921,7 +2921,7 @@ static int i40e_change_mtu(struct net_device *netde=
-v, int new_mtu)
->  	struct i40e_pf *pf =3D vsi->back;
-> =20
->  	if (i40e_enabled_xdp_vsi(vsi)) {
-> -		int frame_size =3D new_mtu + ETH_HLEN + ETH_FCS_LEN + VLAN_HLEN;
-> +		int frame_size =3D new_mtu + I40E_PACKET_HDR_PAD;
-> =20
->  		if (frame_size > i40e_max_xdp_frame_size(vsi))
->  			return -EINVAL;
+On Tue, Feb 7, 2023 at 10:20 PM Juergen Gross <jgross@suse.com> wrote:
+>
+> Are you sure? In the SDM I'm reading:
+>
+> * E (MTRRs enabled) flag, bit 11 =E2=80=94 MTRRs are enabled when set; al=
+l MTRRs are
+>    disabled when clear, and the UC memory type is applied to all of physi=
+cal
+>    memory.
+>
+> So UC it should be IMHO.
 
-Looks good to me.
+Right you are. I clearly misread that section when I did my original patch.
 
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+                Linus
