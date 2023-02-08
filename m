@@ -2,133 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080A868F2D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F7D68F2DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjBHQHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 11:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S230244AbjBHQIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:08:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjBHQHP (ORCPT
+        with ESMTP id S229548AbjBHQIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 11:07:15 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2204B47ED8
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:07:13 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C74181F8B4;
-        Wed,  8 Feb 2023 16:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675872431; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3nHphhFdiAEYAVwsvl8jLLgqi2hdj2F6tFyWe+9CmgU=;
-        b=2xDsVBpLDExOGYrQZdLlxIxP0+Tcr8uReuPjEfpdDQPqXtKbhgatsIDnqZ9dwQBzLHfSH4
-        SaYeZ6trUO4uCwHXlbmoSYiLPGSzZAWLvtjzPbMj5OrdmTDAm0zENOih7PIfIBsWWhSVod
-        BkBLweFA4ysGnd1vLs+1D6xmcQg4v+g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675872431;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3nHphhFdiAEYAVwsvl8jLLgqi2hdj2F6tFyWe+9CmgU=;
-        b=sMxJUWpXW7eR5tYrqEHXOt20Ututw1n62Ydsoj03RNbE9JEnO33wS1Au296APxVtkd82LF
-        0RRIQGR9S10K61DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A2BC41358A;
-        Wed,  8 Feb 2023 16:07:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1jkgJ6/I42MhUQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 08 Feb 2023 16:07:11 +0000
-Message-ID: <b95505ab-8206-2a00-e199-e3defecd9d72@suse.cz>
-Date:   Wed, 8 Feb 2023 17:07:11 +0100
+        Wed, 8 Feb 2023 11:08:47 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BEE2E829;
+        Wed,  8 Feb 2023 08:08:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675872526; x=1707408526;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EcIKwJD+3hFwSJk94Pfa8H+WZsfhuUQLgievc2a55ks=;
+  b=SpEAm+tahXVoFJoJvYSfmXTLGNFmfUIjRPznY2LVqe2yAE53PWNbqgc+
+   /4YkCaUMzct2WPwH/dN9OL1d2AWK7e4NdIHrTntQe/2YWriz1atCQvD6V
+   oPJ/h+fmVgfTqKDMROUJ/Qe1M3LbdGnPkSVYY6EZVu7ELwYqvfFqAjCCE
+   TngEvY+X30Q7+HgdmSf6Hu9j2afcaBFAMZJG0fShiIHwgSulmBOjDcpkL
+   s0wrexshYJz56ijgVVewk5K8gYePbDcbuKw+8ml5A4xsD2rbB2kHbkVy0
+   fNSJdgqPNIEVIRNQaAaVRc2ap6td0NvHuxxQjlB15kMlKIGQgFqGyvk5y
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331126960"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="331126960"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 08:08:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="667301931"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="667301931"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 08 Feb 2023 08:08:36 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pPmzo-004CAx-37;
+        Wed, 08 Feb 2023 18:08:32 +0200
+Date:   Wed, 8 Feb 2023 18:08:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>
+Cc:     Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        yury.norov@gmail.com, Jonathan.Cameron@huawei.com,
+        baohua@kernel.org, bristot@redhat.com, bsegall@google.com,
+        davem@davemloft.net, dietmar.eggemann@arm.com, gal@nvidia.com,
+        gregkh@linuxfoundation.org, hca@linux.ibm.com,
+        jacob.e.keller@intel.com, jesse.brandeburg@intel.com,
+        jgg@nvidia.com, juri.lelli@redhat.com, kuba@kernel.org,
+        leonro@nvidia.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux@rasmusvillemoes.dk, mgorman@suse.de, mingo@redhat.com,
+        netdev@vger.kernel.org, peter@n8pjl.ca, peterz@infradead.org,
+        rostedt@goodmis.org, saeedm@nvidia.com, tariqt@nvidia.com,
+        tony.luck@intel.com, torvalds@linux-foundation.org,
+        ttoukan.linux@gmail.com, vincent.guittot@linaro.org,
+        vschneid@redhat.com
+Subject: Re: [PATCH 1/1] ice: Change assigning method of the CPU affinity
+ masks
+Message-ID: <Y+PJADTk88OTPCx1@smile.fi.intel.com>
+References: <20230121042436.2661843-1-yury.norov@gmail.com>
+ <20230208153905.109912-1-pawel.chmielewski@intel.com>
+ <CAH-L+nO+KyzPSX_F0fh+9i=0rW1hoBPFTGbXc1EX+4MGYOR1kA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] mm/page_alloc: reduce fallbacks to (MIGRATE_PCPTYPES - 1)
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Yajun Deng <yajun.deng@linux.dev>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Zi Yan <ziy@nvidia.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Oscar Salvador <osalvador@suse.de>
-References: <20230203100132.1627787-1-yajun.deng@linux.dev>
- <20230203142324.e5c0652990676ac69a4e5eb1@linux-foundation.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230203142324.e5c0652990676ac69a4e5eb1@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH-L+nO+KyzPSX_F0fh+9i=0rW1hoBPFTGbXc1EX+4MGYOR1kA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/3/23 23:23, Andrew Morton wrote:
-> On Fri,  3 Feb 2023 18:01:32 +0800 Yajun Deng <yajun.deng@linux.dev> wrote:
-> 
->> The commit 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
->> pageblocks with others") has removed MIGRATE_CMA and MIGRATE_ISOLATE from
->> fallbacks list. so there is no need to add an element at the end of every
->> type.
->> 
->> Reduce fallbacks to (MIGRATE_PCPTYPES - 1).
+On Wed, Feb 08, 2023 at 09:18:14PM +0530, Kalesh Anakkur Purayil wrote:
+> On Wed, Feb 8, 2023 at 9:11 PM Pawel Chmielewski <
+> pawel.chmielewski@intel.com> wrote:
 
+...
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> > +       u16 v_idx, cpu = 0;
+> >
+> [Kalesh]: if you initialize v_idx to 0 here, you can avoid the assignment
+> below
 
-> Thanks.  `git log' suggests who should be cc'ed when fixing things...
-> 
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -2603,10 +2603,10 @@ struct page *__rmqueue_smallest(struct zone *zone, unsigned int order,
->>   *
->>   * The other migratetypes do not have fallbacks.
->>   */
->> -static int fallbacks[MIGRATE_TYPES][3] = {
->> -	[MIGRATE_UNMOVABLE]   = { MIGRATE_RECLAIMABLE, MIGRATE_MOVABLE,   MIGRATE_TYPES },
->> -	[MIGRATE_MOVABLE]     = { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE, MIGRATE_TYPES },
->> -	[MIGRATE_RECLAIMABLE] = { MIGRATE_UNMOVABLE,   MIGRATE_MOVABLE,   MIGRATE_TYPES },
->> +static int fallbacks[MIGRATE_TYPES][MIGRATE_PCPTYPES - 1] = {
+I would avoid doing this.
 
-Why not also reduce the first index size from [MIGRATE_TYPES] to
-[MIGRATE_PCPTYPES] ?
+The problem is that it will become harder to maintain and more error prone
+during development.
 
->> +	[MIGRATE_UNMOVABLE]   = { MIGRATE_RECLAIMABLE, MIGRATE_MOVABLE   },
->> +	[MIGRATE_MOVABLE]     = { MIGRATE_RECLAIMABLE, MIGRATE_UNMOVABLE },
->> +	[MIGRATE_RECLAIMABLE] = { MIGRATE_UNMOVABLE,   MIGRATE_MOVABLE   },
->>  };
->>  
->>  #ifdef CONFIG_CMA
->> @@ -2865,11 +2865,8 @@ int find_suitable_fallback(struct free_area *area, unsigned int order,
->>  		return -1;
->>  
->>  	*can_steal = false;
->> -	for (i = 0;; i++) {
->> +	for (i = 0; i < MIGRATE_PCPTYPES - 1 ; i++) {
->>  		fallback_mt = fallbacks[migratetype][i];
->> -		if (fallback_mt == MIGRATE_TYPES)
->> -			break;
->> -
->>  		if (free_area_empty(area, fallback_mt))
->>  			continue;
->>  
->> -- 
->> 2.25.1
+So, please leave as is.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
