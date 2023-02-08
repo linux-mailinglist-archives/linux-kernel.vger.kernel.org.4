@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB9B68E8AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B6068E8AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjBHHDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
+        id S231152AbjBHHDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:03:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjBHHCb (ORCPT
+        with ESMTP id S230488AbjBHHCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:02:31 -0500
+        Wed, 8 Feb 2023 02:02:34 -0500
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA648458BB;
-        Tue,  7 Feb 2023 23:00:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139A5457DC;
+        Tue,  7 Feb 2023 23:00:46 -0800 (PST)
 Received: from toolbox.int.toradex.com ([213.55.227.109]) by
  mrelay.perfora.net (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id
- 1Mad3m-1osEcb4AEU-00c94t; Wed, 08 Feb 2023 07:59:56 +0100
+ 1MxVGn-1ofG2r0JVB-00xvE0; Wed, 08 Feb 2023 08:00:00 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Shawn Guo <shawnguo@kernel.org>,
@@ -31,27 +31,29 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] arm64: dts: verdin-imx8mp: add pcie support
-Date:   Wed,  8 Feb 2023 07:59:46 +0100
-Message-Id: <20230208065947.24195-1-marcel@ziswiler.com>
+Subject: [PATCH v2 2/2] arm64: dts: imx8mp-verdin-yavia: trivial minor updates
+Date:   Wed,  8 Feb 2023 07:59:47 +0100
+Message-Id: <20230208065947.24195-2-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20230208065947.24195-1-marcel@ziswiler.com>
+References: <20230208065947.24195-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:HJigRWDL2OS5MAv6RAlF+oEowXGoLwgkfFXYavZTyph8su2JqwK
- a7QJNjn/eObSGCwKxShLC9KHPg0Q7LNnVZHkMKsNigpwo7rAp+iRSoaZL4RHCo7t6Vh3qlE
- /zu6fO+9ooPcskXgUvKSYHZctuhrpkAmappCLoA9ro4ae74CFTxfKT53DYu+unDUKey6RhR
- 5X4Yn2Scaczv5Utnb923Q==
-UI-OutboundReport: notjunk:1;M01:P0:6CCdWPGsTms=;mPw0iu8rapF/2UmIKZoUd8qsOTJ
- IGLiGOjsPPioVWhzEDfav0E0NPttYelGYbbJRMmBHOqFfdNsT9brP5kx6ZDaxhcQ26tQpqlKF
- rkujUFicO1dyons6DOPkCPEWD69b84JNezzEUg/PZglALDjjH2N9UN4X7Iu/GMRAWCHba8tix
- 2CsYaTfgjIUIt2kD/dvbav/sEHsEZQMplGjlIrOP01Kahj4JNgMvabu3NR7AqOCr1/TcIv+JH
- b6riLFr/s4HytIQRnIUv9xJGEsECXpozGynKCLpAt7yKv3PrlSVgV0UF4pQLS2ZqxpBzNiyb2
- VQeZslPmCdHUNltT7IjKDNt+H3VGH5ILt2zBx9e82NUqBHNp/9ctPE4jMDajiiVDHD1ANlfVA
- /3izNX4oHlNWBjgAqV/18cwD31/5Ht0UcFN6szfNcL5+MRnZkkHdJ7+35nMouCtYsRy/5oAzM
- 9E9uhCAaf5WePxc/dlwEIKVoGu/89y9zDhN3hVTwbbi7bfKcJ6BLg5k4+PgGNpt9S4rzePdqd
- ija6rZjPkD0fiGCg3/BIlmM4aTQyHhvsx1urDkOl185l78lrKgnwcvE7Z3XuUxmgVJVnxqAsb
- D7aPJBsIdyKH06vUoYfxg0saVBF3xLm+Xemi+B+YjW+p8/tpqN2JFOJXoTB69KkXJXOCbqTjL
- pZ5r49FX6y9ZwULDBonaAyadXf05/Db2asXwVTMu5brvySRX2siwFiyrM2eO/9U=
+X-Provags-ID: V03:K1:cTJ6kJnf8XRJsOhc1jXKDGl7QFr8mISdwaay4+fQqDXl/YtriX+
+ gFMH4hQyw/FpfgpVwML6D4XPqtG1UD4rjymQ1wrqAMKinMhfuqwGtUBJid0L9nCUE46o6ps
+ 2rYFVctLK7E2bwwsfoYXSaSHrioJNM16Xyf1A4r5MdgSMJbpGddGj2UQG9ImMOGubz1Nfx6
+ 5Y7KCGfDMLQT+FJxMmKoA==
+UI-OutboundReport: notjunk:1;M01:P0:YI1IeALrQZM=;qnQeqodD42/1s4fPIHO97+LV7Dc
+ qlhpKMcp86+JJwHWnZa+bUbyX4RQEOmfIRQnTsmH6YmIUMLCTygu/hc9a7ju8pMgoQ8bl7RkX
+ JvkaKTXuSSADU4lV23TkDy64N/sGMey1H7ZsLJVsLwG2hlJN8YHKUAM1lruzbax8110BWaRpB
+ lEmko4eGXn+SmO/+Y1ez6kmXWjCw7VZg7nNoWJ+bKfTaLMY5MQmracdEqHKuHLo4WjGKgLXVd
+ mlZ3cCLC6s3yFv48109/ZshUnoAiJD4tXVNFDSBW8iSY/4GVAa2GfXqdq5ac/i50N27gwaDff
+ bwWTPixQhdQCqqMy0ku2pIBzwdBl5eGZm5r0m9H7uU3bQkswQSIu26WLyHRQOtXNlNJd/0Lkz
+ IoPmCMxmT6EZN5/Fnzti0IzNW/9svBf/o03BFftT1woe/kbr9jlo96UXmrZfY1aJCMrrbKmNf
+ ytgcAejLY0hAXA/TXf88g+/VeBa26Q5P8xkR/q+tv52rHs2zqVNz574yxpJ69n7X/cXH3be5+
+ T1mWA3BFkkASwcqOGSEn/3jClYZGF+a7Z1R6nRj4/nxBfnu9CXMx+W3soxd5izIWK66zmQpK4
+ ZTEgkJQaiWT7uOtYWHwwlnkwDujlztz13bSQcCKRZOXiZK8cHPn1iZ1qz0M5UMOxLZyfXpr4Q
+ pQFpzXQqocnle7J0W96RqD1wUm+i+kOb15TVi1JWPA==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,91 +65,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add PCIe support on the Verdin iMX8M Plus.
+Capitalise Yavia in comment and add missing whitespace.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 ---
-This has successfully been tested with Lucas' imx8mp-hsio-blk-ctrl high
-performance PLL clock exposure patch set which meanwhile has landet in
--next. Thanks!
 
 Changes in v2:
-- Removed clocks which thanks to Lucas are now in the SoC dtsi.
-- Follow recent change to not include dahlia dtsi requiring PCIe nodes
-  in dev board dts as well.
+- New commit with trivial minor updates.
 
- .../boot/dts/freescale/imx8mp-verdin-dahlia.dtsi  |  9 ++++++++-
- .../boot/dts/freescale/imx8mp-verdin-dev.dtsi     |  9 ++++++++-
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi  | 15 ++++++++++++++-
- 3 files changed, 30 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-index 80db1ad7c230..56b0e4b865c9 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
-@@ -67,7 +67,14 @@ &i2c4 {
- 	/* TODO: Audio Codec */
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
+index bd7b31cc3760..de5489c2b3e8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-yavia.dtsi
+@@ -87,7 +87,7 @@ &eeprom_display_adapter {
+ 	status = "okay";
  };
  
--/* TODO: Verdin PCIE_1 */
-+/* Verdin PCIE_1 */
-+&pcie {
-+	status = "okay";
-+};
-+
-+&pcie_phy {
-+	status = "okay";
-+};
- 
- /* Verdin PWM_1 */
- &pwm1 {
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
-index 361426c0da0a..096a6f2300f9 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dev.dtsi
-@@ -91,7 +91,14 @@ &i2c4 {
- 	/* TODO: Audio Codec */
+-/* EEPROM on Verdin yavia board */
++/* EEPROM on Verdin Yavia board */
+ &eeprom_carrier_board {
+ 	status = "okay";
+ };
+@@ -122,7 +122,7 @@ &pcie {
+ 	status = "okay";
  };
  
--/* TODO: Verdin PCIE_1 */
-+/* Verdin PCIE_1 */
-+&pcie {
-+	status = "okay";
-+};
-+
+-&pcie_phy{
 +&pcie_phy {
-+	status = "okay";
-+};
- 
- /* Verdin PWM_1 */
- &pwm1 {
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index 6a1890a4b5d8..f0e5838665b2 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -749,7 +749,20 @@ eeprom_carrier_board: eeprom@57 {
- 	};
+ 	status = "okay";
  };
  
--/* TODO: Verdin PCIE_1 */
-+/* Verdin PCIE_1 */
-+&pcie {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie>;
-+	/* PCIE_1_RESET# (SODIMM 244) */
-+	reset-gpio = <&gpio4 19 GPIO_ACTIVE_LOW>;
-+};
-+
-+&pcie_phy {
-+	clocks = <&hsio_blk_ctrl>;
-+	clock-names = "ref";
-+	fsl,clkreq-unsupported;
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_OUTPUT>;
-+};
- 
- /* Verdin PWM_1 */
- &pwm1 {
 -- 
 2.36.1
 
