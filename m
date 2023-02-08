@@ -2,162 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD2468E6CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F165A68E692
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjBHDrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 22:47:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S230359AbjBHDYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjBHDqt (ORCPT
+        with ESMTP id S229573AbjBHDYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 22:46:49 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B12D43922;
-        Tue,  7 Feb 2023 19:46:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675828007; x=1707364007;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EXcEy3+NTVqbXxmCTNcpox9WrJ2qnr4ZecV4ken6AWQ=;
-  b=jM1qCzvG0NT9rsZysCs0zq93irUrjWI2awY+ChWi9D2fGoLHgd3lFDUb
-   YPsKqBD6VWD18iU8rhjQ9z5wWUWcn2HRTVTcf6sW9nFJ7c9U7ZuekK7Qo
-   b3IUAbAssIC5nIjSTWJrChZcUhayn554uhHk8ifWHQMffgZF8o31vZ0Mo
-   j1/53PjHRjb7cfwy5onchsyg7oW1FAIdgy9PIAe13yHSLlYSYI837q7NB
-   CwBdnOLWexAr2zmXtW25toOWcOVYOC1a2zT42KjgynS7BT7YsZHWcHZV5
-   7MjsXoF/hxbB8QrQgyXo4CYWxP42xEKGclH8JdVnjC9vTDXFrf2pPATVr
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="310049800"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="310049800"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 19:46:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="735779962"
-X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
-   d="scan'208";a="735779962"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.28.52]) ([10.255.28.52])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 19:46:40 -0800
-Message-ID: <18bbd442-c892-1f17-bf6c-b6d797379deb@linux.intel.com>
-Date:   Wed, 8 Feb 2023 11:46:37 +0800
+        Tue, 7 Feb 2023 22:24:22 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29E43587;
+        Tue,  7 Feb 2023 19:24:20 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PBQMh1fySz4f3tpX;
+        Wed,  8 Feb 2023 11:24:16 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgDX0R_dFeNj8Tu4Cw--.19123S4;
+        Wed, 08 Feb 2023 11:24:14 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH -next] blk-iocost: fix sleeping in atomic warning for wbt_enable_default()
+Date:   Wed,  8 Feb 2023 11:48:03 +0800
+Message-Id: <20230208034803.2818155-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        stable@vger.kernel.org, Sukumar Ghorai <sukumar.ghorai@intel.com>
-Subject: Re: [PATCH v2] iommu/vt-d: Fix PASID directory pointer coherency
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>
-References: <20230208000938.1527079-1-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230208000938.1527079-1-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDX0R_dFeNj8Tu4Cw--.19123S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1fXr1xuw43ZFy5tFyDAwb_yoW8Cry5pF
+        W3GrnFya4IqFZ7Zr47JanFqw15GaykGryxCw1fG34aqw1ak3s2qa1vkry09F1kZFZ3AF45
+        XF48KF4UZa1vv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/2/8 8:09, Jacob Pan wrote:
-> On platforms that do not support IOMMU Extended capability bit 0
-> Page-walk Coherency, CPU caches are not snooped when IOMMU is accessing
-> any translation structures. IOMMU access goes only directly to
-> memory. Intel IOMMU code was missing a flush for the PASID table
-> directory that resulted in the unrecoverable fault as shown below.
-> 
-> This patch adds clflush calls whenever activating and updating
-> a PASID table directory to ensure cache coherency.
-> 
-> On the reverse direction, there's no need to clflush the PASID directory
-> pointer when we deactivate a context entry in that IOMMU hardware will
-> not see the old PASID directory pointer after we clear the context entry.
-> PASID directory entries are also never freed once allocated.
-> 
-> [    0.555386] DMAR: DRHD: handling fault status reg 3
-> [    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry is clear
-> [    0.556348] DMAR: Dump dmar1 table entries for IOVA 0x1026a4000
-> [    0.556348] DMAR: scalable mode root entry: hi 0x0000000102448001, low 0x0000000101b3e001
-> [    0.556348] DMAR: context entry: hi 0x0000000000000000, low 0x0000000101b4d401
-> [    0.556348] DMAR: pasid dir entry: 0x0000000101b4e001
-> [    0.556348] DMAR: pasid table entry[0]: 0x0000000000000109
-> [    0.556348] DMAR: pasid table entry[1]: 0x0000000000000001
-> [    0.556348] DMAR: pasid table entry[2]: 0x0000000000000000
-> [    0.556348] DMAR: pasid table entry[3]: 0x0000000000000000
-> [    0.556348] DMAR: pasid table entry[4]: 0x0000000000000000
-> [    0.556348] DMAR: pasid table entry[5]: 0x0000000000000000
-> [    0.556348] DMAR: pasid table entry[6]: 0x0000000000000000
-> [    0.556348] DMAR: pasid table entry[7]: 0x0000000000000000
-> [    0.556348] DMAR: PTE not present at level 4
-> 
-> Cc:<stable@vger.kernel.org>
-> Fixes: 0bbeb01a4faf ("iommu/vt-d: Manage scalalble mode PASID tables")
-> Reported-by: Sukumar Ghorai<sukumar.ghorai@intel.com>
-> Signed-off-by: Ashok Raj<ashok.raj@intel.com>
-> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
-> ---
-> v2: Add clflush to PASID directory update case (Baolu, Kevin review)
-> ---
->   drivers/iommu/intel/iommu.c | 2 ++
->   drivers/iommu/intel/pasid.c | 2 ++
->   2 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 59df7e42fd53..161342e7149d 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -1976,6 +1976,8 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
->   		pds = context_get_sm_pds(table);
->   		context->lo = (u64)virt_to_phys(table->table) |
->   				context_pdts(pds);
-> +		if (!ecap_coherent(iommu->ecap))
-> +			clflush_cache_range(table->table, sizeof(u64));
+From: Yu Kuai <yukuai3@huawei.com>
 
-This leaves other pasid dir entries not clflush'ed. It is possible that
-IOMMU hardware sees different value from what CPU has set. This may
-leave security holes for malicious devices. It's same to the pasid entry
-table.
+There are following smatch warning:
 
-How about below change? It does clflush whenever CPU changes the pasid
-dir/entry tables.
+block/blk-wbt.c:843 wbt_init() warn: sleeping in atomic context
+ioc_qos_write() <- disables preempt
+-> wbt_enable_default()
+   -> wbt_init()
 
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index fb3c7020028d..aeb0517826a2 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -128,6 +128,9 @@ int intel_pasid_alloc_table(struct device *dev)
-         pasid_table->max_pasid = 1 << (order + PAGE_SHIFT + 3);
-         info->pasid_table = pasid_table;
+wbt_init() will be called from wbt_enable_default() if wbt is not
+initialized, currently wbt is initialized in blk_register_queue(), hence
+wbt_init() will never be called from iocost and this warning is false
+positive.
 
-+       if (!ecap_coherent(info->iommu->ecap))
-+               clflush_cache_range(pasid_table->table, size);
-+
-         return 0;
-  }
+However, we might support rq_qos destruction dynamically in the future,
+and it's better to prevent that, hence move wbt_enable_default() outside
+'ioc->lock'. This is safe because queue is still freezed.
 
-@@ -215,6 +218,11 @@ static struct pasid_entry 
-*intel_pasid_get_entry(struct device *dev, u32 pasid)
-                         free_pgtable_page(entries);
-                         goto retry;
-                 }
-+
-+               if (!ecap_coherent(info->iommu->ecap)) {
-+                       clflush_cache_range(entries, VTD_PAGE_SIZE);
-+                       clflush_cache_range(&dir[dir_index].val, 
-sizeof(*dir));
-+               }
-         }
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/lkml/Y+Ja5SRs886CEz7a@kadam/
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/blk-iocost.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-         return &entries[index];
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index 7a2dc9dc8e3b..03bfe1dda07c 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -3279,11 +3279,9 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
+ 		blk_stat_enable_accounting(disk->queue);
+ 		blk_queue_flag_set(QUEUE_FLAG_RQ_ALLOC_TIME, disk->queue);
+ 		ioc->enabled = true;
+-		wbt_disable_default(disk);
+ 	} else {
+ 		blk_queue_flag_clear(QUEUE_FLAG_RQ_ALLOC_TIME, disk->queue);
+ 		ioc->enabled = false;
+-		wbt_enable_default(disk);
+ 	}
+ 
+ 	if (user) {
+@@ -3296,6 +3294,10 @@ static ssize_t ioc_qos_write(struct kernfs_open_file *of, char *input,
+ 	ioc_refresh_params(ioc, true);
+ 	spin_unlock_irq(&ioc->lock);
+ 
++	if (enable)
++		wbt_disable_default(disk);
++	else
++		wbt_enable_default(disk);
+ 	blk_mq_unquiesce_queue(disk->queue);
+ 	blk_mq_unfreeze_queue(disk->queue);
+ 
+-- 
+2.31.1
 
-Best regards,
-baolu
