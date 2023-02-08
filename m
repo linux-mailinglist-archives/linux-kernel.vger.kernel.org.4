@@ -2,143 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305A868F12A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F2268F12D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjBHOtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:49:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S231256AbjBHOu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjBHOtb (ORCPT
+        with ESMTP id S230185AbjBHOu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:49:31 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F03255B0
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:49:24 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id n2so10221459pgb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:49:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f51tcd2NdxaPHLUZNDwBySdZVDgdomB/5aEb1/nyTPA=;
-        b=4RScORAhUv9+TfjOHyZGQTW7TsmGTGHRd8bGZciqQlcgUysKj3iFQC7OYDkASdPXaw
-         BImEoQdlhKSNh9xClUzgqUUscF2xkOFYFlMaa69tcgKK9PmmR7PKY6uZ0dFv/AM6cVHK
-         xpIEjsYNKkHcq5G31Inx+u3uxsTcfFI4DzNAbOIGnlifNf167TXs2BeQ8dDAPMa1f9Gu
-         gcLMovOgdt2FoVRDhwEa7KqeYr/2Wf2n+8IIMuPIYhG76CqZ7LWlx97M+V2NmkOdnY1E
-         04GS6vY9rpid+svAe3Huf3cFju0rzMT7mrgY21sz1sFkBCyI0IgC7L+WdWeL3bhJNCoe
-         t+gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f51tcd2NdxaPHLUZNDwBySdZVDgdomB/5aEb1/nyTPA=;
-        b=jmzoCsDzMsTvaPRIdpwc0P0hp1oOHtl1EqkkCAsvlyO4mi98vtTeRfniNoMmsCdmTA
-         qMrtBSM4CPq/c9Op+zdVJUujASs5mEj+q4e0gaWDFCCPuDkx5ibDCglH8a8GR6gOIpQr
-         dZUktvbDQSN3WfN7PQvBcMwNXSV8pixbk4IyrxEewXAqdTV+qZqXvXqO2hnYoLkc6frO
-         BRxR13zrrf+qnMyBuXqKNO/zN0meTDkemBgFvirzPGA9RtPpN6ztlPml+6eJkqiYOyDO
-         aUN1TJeNxk1jV+yoXEBTKgUiWl5IQN1cpxXtFmwr7y0N96ZkOaHB1VI3qFrtsq0K6H0f
-         M8ng==
-X-Gm-Message-State: AO0yUKU5JNJYx46XPti/wzXgpg6GeF8szTSyyYPjA9PND5HBMUgaztuP
-        +kkcZCtVNh6W7+V7TG//gKxht12+AjtfR9ZnBoQ=
-X-Google-Smtp-Source: AK7set+X0/zwt9ty5gvVm+4g+ZYuZ4WBObj3FCvOzeDRHSQ2YQ+LrApZiupBQ58AnUZRxeD6IaHGxQ==
-X-Received: by 2002:aa7:9533:0:b0:5a8:2b95:baea with SMTP id c19-20020aa79533000000b005a82b95baeamr2339524pfp.34.1675867763334;
-        Wed, 08 Feb 2023 06:49:23 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id x19-20020aa79193000000b005a84de20c24sm112368pfa.209.2023.02.08.06.49.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 06:49:22 -0800 (PST)
-Date:   Wed, 08 Feb 2023 06:49:22 -0800 (PST)
-X-Google-Original-Date: Wed, 08 Feb 2023 06:49:18 PST (-0800)
-Subject:     Re: [PATCH] MAINTAINERS: update Allwinner sunXi SoC support entry
-In-Reply-To: <20230208142841.19597-1-twoerner@gmail.com>
-CC:     linux-kernel@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     twoerner@gmail.com
-Message-ID: <mhng-62becd72-44ff-41be-a90f-5de97e44b857@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 09:50:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE55267
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:50:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3CFFB81E3D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 026F9C433D2;
+        Wed,  8 Feb 2023 14:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675867822;
+        bh=m5QL9wztspwk9ruYxx8Ax1G0XbtJWwi/fFephgmEwvc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hdhpgef8oOvQVk0BGrBAo912jU76isaPpPLd3z3V7j6xpKJ2DWSFB+Vm0CoF/eFIf
+         NGFXMO5kSKjv0n9Sb0SHRuIg2IiazBbOIxTrUPmKVkF2vLIs6wKTT3irqo9lfDi4NW
+         g5OwWc4Ujq1N9zEv8NyPRvV63Hdqgw30MNOWdUD8=
+Date:   Wed, 8 Feb 2023 15:50:19 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, stable <stable@kernel.org>
+Subject: Re: [PATCH v2] mtd: spi-nor: fix memory leak when using
+ debugfs_lookup()
+Message-ID: <Y+O2q1BnuqCRNYeD@kroah.com>
+References: <20230208125758.1515806-1-gregkh@linuxfoundation.org>
+ <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc>
+ <Y+Ot0FXLgrSoLy7Q@kroah.com>
+ <e9c24836696de76959bbf808b2a90863@walle.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9c24836696de76959bbf808b2a90863@walle.cc>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Feb 2023 06:28:41 PST (-0800), twoerner@gmail.com wrote:
-> Update the information in the "Allwinner sunXi SoC support" block:
-> - include more RISC-V information
-> - move the block to keep it in alphabetical order
-> - "L" before "T" (as reported by checkpatch.pl)
->
-> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-> ---
->  MAINTAINERS | 36 +++++++++++++++++++-----------------
->  1 file changed, 19 insertions(+), 17 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b8ad844bca77..ff39d34cb4ca 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1856,23 +1856,6 @@ M:	Emilio López <emilio@elopez.com.ar>
->  S:	Maintained
->  F:	drivers/clk/sunxi/
->
-> -ARM/Allwinner sunXi SoC support
-> -M:	Chen-Yu Tsai <wens@csie.org>
-> -M:	Jernej Skrabec <jernej.skrabec@gmail.com>
-> -M:	Samuel Holland <samuel@sholland.org>
-> -L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> -S:	Maintained
-> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
-> -L:	linux-sunxi@lists.linux.dev
-> -F:	arch/arm/mach-sunxi/
-> -F:	arch/arm64/boot/dts/allwinner/
-> -F:	drivers/clk/sunxi-ng/
-> -F:	drivers/pinctrl/sunxi/
-> -F:	drivers/soc/sunxi/
-> -N:	allwinner
-> -N:	sun[x456789]i
-> -N:	sun[25]0i
-> -
->  ARM/Amlogic Meson SoC CLOCK FRAMEWORK
->  M:	Neil Armstrong <neil.armstrong@linaro.org>
->  M:	Jerome Brunet <jbrunet@baylibre.com>
-> @@ -2620,6 +2603,25 @@ F:	arch/arm/boot/dts/rtd*
->  F:	arch/arm/mach-realtek/
->  F:	arch/arm64/boot/dts/realtek/
->
-> +ARM/RISC-V/Allwinner sunXi SoC support
-> +M:	Chen-Yu Tsai <wens@csie.org>
-> +M:	Jernej Skrabec <jernej.skrabec@gmail.com>
-> +M:	Samuel Holland <samuel@sholland.org>
-> +L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> +L:	linux-riscv@lists.infradead.org
-> +L:	linux-sunxi@lists.linux.dev
-> +S:	Maintained
-> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
-> +F:	arch/arm/mach-sunxi/
-> +F:	arch/arm64/boot/dts/allwinner/
-> +F:	arch/riscv/boot/dts/allwinner/
+On Wed, Feb 08, 2023 at 03:24:31PM +0100, Michael Walle wrote:
+> Am 2023-02-08 15:12, schrieb Greg Kroah-Hartman:
+> > On Wed, Feb 08, 2023 at 02:36:23PM +0100, Michael Walle wrote:
+> > > Am 2023-02-08 13:57, schrieb Greg Kroah-Hartman:
+> > > > When calling debugfs_lookup() the result must have dput() called on it,
+> > > > otherwise the memory will leak over time.
+> > > >
+> > > > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+> > > > Cc: Pratyush Yadav <pratyush@kernel.org>
+> > > > Cc: Michael Walle <michael@walle.cc>
+> > > > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > > Cc: Richard Weinberger <richard@nod.at>
+> > > > Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> > > > Cc: linux-mtd@lists.infradead.org
+> > > > Cc: stable <stable@kernel.org>
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > ---
+> > > > v2: fix up to work when module is removed and added, making the fix
+> > > >     much simpler.
+> > > >
+> > > >  drivers/mtd/spi-nor/debugfs.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/drivers/mtd/spi-nor/debugfs.c
+> > > > b/drivers/mtd/spi-nor/debugfs.c
+> > > > index ff895f6758ea..af41fbc09a97 100644
+> > > > --- a/drivers/mtd/spi-nor/debugfs.c
+> > > > +++ b/drivers/mtd/spi-nor/debugfs.c
+> > > > @@ -242,6 +242,7 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
+> > > >
+> > > >  	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
+> > > >  	nor->debugfs_root = d;
+> > > > +	dput(rootdir);
+> > > 
+> > > rootdir might either be the return value of debugfs_lookup() or
+> > > debugfs_create_dir(). dput() is probably wrong for the latter,
+> > > right? Also there is an early return, where the dput() is missing,
+> > > too.
+> > 
+> > {sigh}
+> > 
+> > Yeah, this is all wrong, sorry.  Let me fix this up again, properly.
+> > And to do it properly, let's have the module remove the directory if it
+> > is unloaded, like a good module should :)
+> 
+> There were some complications. IIRC you'd need to do reference counting,
+> to determine whether you are the last user of the rootdir. Other subsys
+> create an empty rootdir in their .init(). But that was hard to do in MTD.
+> Again memory is hazy.. Therefore, I resorted to create it on the fly if
+> there isn't already one.
+> 
+> Maybe you got some better/simpler idea :)
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+Yup, just do it normally like other drivers, I'll send a v3 now.
 
-Thanks!
+thanks,
 
-> +F:	drivers/clk/sunxi-ng/
-> +F:	drivers/pinctrl/sunxi/
-> +F:	drivers/soc/sunxi/
-> +N:	allwinner
-> +N:	sun[x456789]i
-> +N:	sun[25]0i
-> +
->  ARM/RISC-V/RENESAS ARCHITECTURE
->  M:	Geert Uytterhoeven <geert+renesas@glider.be>
->  M:	Magnus Damm <magnus.damm@gmail.com>
+greg k-h
