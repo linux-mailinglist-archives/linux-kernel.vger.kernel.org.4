@@ -2,108 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5683C68F013
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E183E68F015
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjBHNoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
+        id S231365AbjBHNpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBHNoB (ORCPT
+        with ESMTP id S230482AbjBHNog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:44:01 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9CB3E0BC;
-        Wed,  8 Feb 2023 05:43:47 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 670021F8B4;
-        Wed,  8 Feb 2023 13:43:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675863826; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 8 Feb 2023 08:44:36 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805F636680
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:44:35 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675863873;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=WXjM/s4PhtaTVW4aiVsTAUAHDUvK2wieBkKbPD6AkWk=;
-        b=2D010aeo1gILwXKexBL/H6YeET0ts/vT4M7BCnWuKvynMFw5ep7OJ0Xa25MaH/hW5tWE1+
-        xa+9zp/k13p2fvffFznXRS+HNe8kUteOBo0xNsodoVXkiaeo4cU3FYezFAf/GWmkQtOF8Z
-        UIhQ36DDm0ysHsF12At4bZ6c/bpL/hI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675863826;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=i8F4anSaAXOgaD7d2SXNTwzuF6VCoNge2r+vc3EHUuw=;
+        b=jza22pT4f+uyQ+xvhLROf+nawi64DF8K4bQV/5xIE1VXfuRmBDEhtuaOsVKfdsUL83UhJF
+        LlMuQe26cozAAFD43T1MgHuaEfTgp8odHGJ2pXgCt6Lk+0xeWvZ6l0aqiiHSWUQWylmbVB
+        gFQ5kR9azZGf4DsWHaU8m1+VZqDpi+ehDzJoFz8Ap+LHverBvY5sHq0k/L7Z5bw2pWIMiV
+        2u6VBhqWAh6xeN12ERHy745IzOQo1AFYjFTjah24UjAjFqtMyOHpz+CCyJMbKHkO4Nex8C
+        CgnqJUjXLuT10ocz6JfVFxtWGnd0tBA1W2hDrvQ1ghwehA2FedgikW7j+8HRlQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675863873;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=WXjM/s4PhtaTVW4aiVsTAUAHDUvK2wieBkKbPD6AkWk=;
-        b=HYuwSpnsyaTUN5uRxgrezcT+Rs0EYLoKxKybHs0UMdQxjwcVFJPGjarxi1zBkQ9ciulsX7
-        2Ek8luOYzvi3URBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 56F441358A;
-        Wed,  8 Feb 2023 13:43:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Jq0bFRKn42OaDgAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 08 Feb 2023 13:43:46 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id A287EA06D5; Wed,  8 Feb 2023 14:43:45 +0100 (CET)
-Date:   Wed, 8 Feb 2023 14:43:45 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Hou Tao <houtao@huaweicloud.com>, linux-block@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, houtao1@huawei.com
-Subject: Re: [PATCH] blk-ioprio: Introduce promote-to-rt policy
-Message-ID: <20230208134345.77bdep3kzp52haxu@quack3>
-References: <20230201045227.2203123-1-houtao@huaweicloud.com>
- <8c068af3-7199-11cf-5c69-a523c7c22d9a@acm.org>
- <4f7dcb3e-2d5a-cae3-0e1c-a82bcc3d2217@huaweicloud.com>
- <b6b3c498-e90b-7d1f-6ad5-a31334e433ae@acm.org>
- <beb7782e-72a4-c350-3750-23a767c88753@huaweicloud.com>
- <aedc240d-7c9e-248a-52d2-c9775f3e8ca1@acm.org>
+        bh=i8F4anSaAXOgaD7d2SXNTwzuF6VCoNge2r+vc3EHUuw=;
+        b=vCi+2bWwXSLRxMWFjtnYZTiNH4pFrBS/pZXytPYxbX4+sRUdN1fSg6tCxzU+cE1091n3vl
+        /5nLMLIT1UmlB9Dw==
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v18 5/7] kexec: exclude hot remove cpu from elfcorehdr
+ notes
+In-Reply-To: <dd03f47a-0017-6239-04e9-e796dca03c0c@oracle.com>
+References: <20230131224236.122805-1-eric.devolder@oracle.com>
+ <20230131224236.122805-6-eric.devolder@oracle.com> <87sffpzkle.ffs@tglx>
+ <dd03f47a-0017-6239-04e9-e796dca03c0c@oracle.com>
+Date:   Wed, 08 Feb 2023 14:44:32 +0100
+Message-ID: <87h6vw2rwf.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aedc240d-7c9e-248a-52d2-c9775f3e8ca1@acm.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 03-02-23 11:45:32, Bart Van Assche wrote:
-> On 2/2/23 17:48, Hou Tao wrote:
-> > I don't get it on how to remove IOPRIO_POL_PROMOTION when calculating the final
-> > ioprio for bio. IOPRIO_POL_PROMOTION is not used for IOPRIO_CLASS values but
-> > used to determinate on how to calculate the final ioprio for bio: choosing the
-> > maximum or minimum between blkcg ioprio and original bio bi_ioprio.
-> 
-> Do the block layer code changes shown below implement the functionality
-> that you need?
+Eric!
 
-Just one question guys: So with my a78418e6a04c ("block: Always initialize
-bio IO priority on submit") none-to-rt policy became effectively a noop as
-Hou properly noticed. Are we aware of any users that were broken by this?
-Shouldn't we rather fix the code so that none-to-rt starts to operate
-correctly again? Or maybe change the none-to-rt meaning to be actually
-promote-to-rt?
+On Tue, Feb 07 2023 at 11:23, Eric DeVolder wrote:
+> On 2/1/23 05:33, Thomas Gleixner wrote:
+>
+> So my latest solution is introduce two new CPUHP states, CPUHP_AP_ELFCOREHDR_ONLINE
+> for onlining and CPUHP_BP_ELFCOREHDR_OFFLINE for offlining. I'm open to better names.
+>
+> The CPUHP_AP_ELFCOREHDR_ONLINE needs to be placed after CPUHP_BRINGUP_CPU. My
+> attempts at locating this state failed when inside the STARTING section, so I located
+> this just inside the ONLINE sectoin. The crash hotplug handler is registered on
+> this state as the callback for the .startup method.
+>
+> The CPUHP_BP_ELFCOREHDR_OFFLINE needs to be placed before CPUHP_TEARDOWN_CPU, and I
+> placed it at the end of the PREPARE section. This crash hotplug handler is also
+> registered on this state as the callback for the .teardown method.
 
-I have to admit I'm wondering a bit what was the intended usecase behind
-the introduction of none-to-rt policy. Can someone elaborate? promote-to-rt 
-makes some sense to me - we have a priviledged cgroup we want to provide
-low latency access to IO but none-to-rt just does not make much sense to
-me...
+TBH, that's still overengineered. Something like this:
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+bool cpu_is_alive(unsigned int cpu)
+{
+	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+
+	return data_race(st->state) <= CPUHP_AP_IDLE_DEAD;
+}
+
+and use this to query the actual state at crash time. That spares all
+those callback heuristics.
+
+> I'm making my way though percpu crash_notes, elfcorehdr, vmcoreinfo,
+> makedumpfile and (the consumer of it all) the userspace crash utility,
+> in order to understand the impact of moving from for_each_present_cpu()
+> to for_each_online_cpu().
+
+Is the packing actually worth the trouble? What's the actual win?
+
+Thanks,
+
+        tglx
+
+
