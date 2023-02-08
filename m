@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E183E68F015
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880FE68F01D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjBHNpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S231394AbjBHNpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjBHNog (ORCPT
+        with ESMTP id S231378AbjBHNpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:44:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805F636680
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:44:35 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675863873;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i8F4anSaAXOgaD7d2SXNTwzuF6VCoNge2r+vc3EHUuw=;
-        b=jza22pT4f+uyQ+xvhLROf+nawi64DF8K4bQV/5xIE1VXfuRmBDEhtuaOsVKfdsUL83UhJF
-        LlMuQe26cozAAFD43T1MgHuaEfTgp8odHGJ2pXgCt6Lk+0xeWvZ6l0aqiiHSWUQWylmbVB
-        gFQ5kR9azZGf4DsWHaU8m1+VZqDpi+ehDzJoFz8Ap+LHverBvY5sHq0k/L7Z5bw2pWIMiV
-        2u6VBhqWAh6xeN12ERHy745IzOQo1AFYjFTjah24UjAjFqtMyOHpz+CCyJMbKHkO4Nex8C
-        CgnqJUjXLuT10ocz6JfVFxtWGnd0tBA1W2hDrvQ1ghwehA2FedgikW7j+8HRlQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675863873;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i8F4anSaAXOgaD7d2SXNTwzuF6VCoNge2r+vc3EHUuw=;
-        b=vCi+2bWwXSLRxMWFjtnYZTiNH4pFrBS/pZXytPYxbX4+sRUdN1fSg6tCxzU+cE1091n3vl
-        /5nLMLIT1UmlB9Dw==
-To:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v18 5/7] kexec: exclude hot remove cpu from elfcorehdr
- notes
-In-Reply-To: <dd03f47a-0017-6239-04e9-e796dca03c0c@oracle.com>
-References: <20230131224236.122805-1-eric.devolder@oracle.com>
- <20230131224236.122805-6-eric.devolder@oracle.com> <87sffpzkle.ffs@tglx>
- <dd03f47a-0017-6239-04e9-e796dca03c0c@oracle.com>
-Date:   Wed, 08 Feb 2023 14:44:32 +0100
-Message-ID: <87h6vw2rwf.ffs@tglx>
+        Wed, 8 Feb 2023 08:45:10 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0A23B3F6;
+        Wed,  8 Feb 2023 05:45:05 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id j1so12548713pjd.0;
+        Wed, 08 Feb 2023 05:45:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=alfJUZBV+BrVmvoYfSmGRjxyktkbme4Dc/pX5IUBNAo=;
+        b=qOV7ysnAAE47VMzfW+KW7uRQ3waC/E8XmADC10hm4irUlpgyQ7W9iYPxZ4ELgAqlhT
+         LjIlmiu2gGIqass/jeVRMyvjNwUEv+WV5tdMSo2zQLMRN2vxuod8wxnC6nkM3y/R+I+h
+         K8aFy5z+AEHJZW5D7ypP7nruC1fDjCbfW2Ce/nkXTsnVFsJ86n5MCU4QSDWSSK+YQC1V
+         eR7xjDBpbTf+S+YnpbqpO3YFtt4f2FioYXoa7qazR595af1e5Vo1MyyVHSzK9M+3XQCB
+         tZ+YpRzE0Ktq/8lxY6zE8zSXlnjcecUsfEcPZIpiBBxPwscyLA9a8qvnWbtq6WFjvcKS
+         imlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=alfJUZBV+BrVmvoYfSmGRjxyktkbme4Dc/pX5IUBNAo=;
+        b=MnsJNTX4TAfzXIsKsS8jskLfOat+iq7B4ctpS7Y5HTVMmIsEwvUtwbAYCCcF4ULn49
+         Cxr02jSixQqdaLJA87mUEzMc1dn+hKyANKB5wV00IxH4UZsZ+hKSR4PELSN20Pmi+WdR
+         OKtwLdk3HWzoEtKkSkGgLJpLKjZ3iC7ADCu84etPwVQLs+lxNHg1LcB3ZfHWmVIQN4Z/
+         /fnZhS1UlaxkuiQZnW5RmbWohBjcWG6fiVFkRXTXAXXYEav4gK2ZKL5mGSAmpPFPdPTY
+         SCyp1u5gcdHo3p6UqD9ddiS70EIjEucAuWfJxqA7t5+fW2ReVTMBLDHoqkDG0WsR0DSj
+         Iftw==
+X-Gm-Message-State: AO0yUKUar6sEBP2fYdnzmHDa4OTNoshCZtlHsBw/6zc078ajSUEvke9S
+        scA/bnD/3e+uT9EHfInIb1o=
+X-Google-Smtp-Source: AK7set+sPEOSedwTYT2y4bNUQKcEXNgoZqhXS89DjZ61bh7BdhGz84e05koI5bATzWm0v/BjRJNztQ==
+X-Received: by 2002:a17:903:120b:b0:194:58c7:ab79 with SMTP id l11-20020a170903120b00b0019458c7ab79mr9146382plh.63.1675863904496;
+        Wed, 08 Feb 2023 05:45:04 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id jc10-20020a17090325ca00b00199190b00efsm6056928plb.97.2023.02.08.05.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 05:45:02 -0800 (PST)
+Date:   Wed, 8 Feb 2023 13:44:49 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 09/10] arch: Remove cmpxchg_double
+Message-ID: <Y+OnUXkKcT2Y7Yiq@localhost>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.746130134@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202152655.746130134@infradead.org>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric!
+On Thu, Feb 02, 2023 at 03:50:39PM +0100, Peter Zijlstra wrote:
+> No moar users, remove the monster.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  Documentation/core-api/this_cpu_ops.rst    |    2 -
+>  arch/arm64/include/asm/atomic_ll_sc.h      |   33 ----------------
+>  arch/arm64/include/asm/atomic_lse.h        |   36 ------------------
+>  arch/arm64/include/asm/cmpxchg.h           |   46 -----------------------
+>  arch/arm64/include/asm/percpu.h            |   10 -----
+>  arch/s390/include/asm/cmpxchg.h            |   34 -----------------
+>  arch/s390/include/asm/percpu.h             |   18 ---------
+>  arch/x86/include/asm/cmpxchg.h             |   25 ------------
+>  arch/x86/include/asm/cmpxchg_32.h          |    1 
+>  arch/x86/include/asm/cmpxchg_64.h          |    1 
+>  arch/x86/include/asm/percpu.h              |   41 --------------------
+>  include/asm-generic/percpu.h               |   58 -----------------------------
+>  include/linux/atomic/atomic-instrumented.h |   17 --------
+>  include/linux/percpu-defs.h                |   38 -------------------
+>  scripts/atomic/gen-atomic-instrumented.sh  |   17 ++------
+>  15 files changed, 6 insertions(+), 371 deletions(-)
+> 
+> --- a/arch/x86/include/asm/cmpxchg.h
+> +++ b/arch/x86/include/asm/cmpxchg.h
+> --- a/arch/x86/include/asm/percpu.h
+> +++ b/arch/x86/include/asm/percpu.h
+> @@ -385,30 +368,6 @@ do {									\
+>  #define this_cpu_add_return_8(pcp, val)		percpu_add_return_op(8, volatile, pcp, val)
+>  #define this_cpu_xchg_8(pcp, nval)		percpu_xchg_op(8, volatile, pcp, nval)
+>  #define this_cpu_cmpxchg_8(pcp, oval, nval)	percpu_cmpxchg_op(8, volatile, pcp, oval, nval)
+> -
+> -/*
+> - * Pretty complex macro to generate cmpxchg16 instruction.  The instruction
+> - * is not supported on early AMD64 processors so we must be able to emulate
+> - * it in software.  The address used in the cmpxchg16 instruction must be
+> - * aligned to a 16 byte boundary.
+> - */
+> -#define percpu_cmpxchg16b_double(pcp1, pcp2, o1, o2, n1, n2)		\
+> -({									\
+> -	bool __ret;							\
+> -	typeof(pcp1) __o1 = (o1), __n1 = (n1);				\
+> -	typeof(pcp2) __o2 = (o2), __n2 = (n2);				\
+> -	alternative_io("leaq %P1,%%rsi\n\tcall this_cpu_cmpxchg16b_emu\n\t", \
 
-On Tue, Feb 07 2023 at 11:23, Eric DeVolder wrote:
-> On 2/1/23 05:33, Thomas Gleixner wrote:
->
-> So my latest solution is introduce two new CPUHP states, CPUHP_AP_ELFCOREHDR_ONLINE
-> for onlining and CPUHP_BP_ELFCOREHDR_OFFLINE for offlining. I'm open to better names.
->
-> The CPUHP_AP_ELFCOREHDR_ONLINE needs to be placed after CPUHP_BRINGUP_CPU. My
-> attempts at locating this state failed when inside the STARTING section, so I located
-> this just inside the ONLINE sectoin. The crash hotplug handler is registered on
-> this state as the callback for the .startup method.
->
-> The CPUHP_BP_ELFCOREHDR_OFFLINE needs to be placed before CPUHP_TEARDOWN_CPU, and I
-> placed it at the end of the PREPARE section. This crash hotplug handler is also
-> registered on this state as the callback for the .teardown method.
+I guess now arch/x86/lib/cmpxchg*b_emu.S could be dropped too?
 
-TBH, that's still overengineered. Something like this:
-
-bool cpu_is_alive(unsigned int cpu)
-{
-	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
-
-	return data_race(st->state) <= CPUHP_AP_IDLE_DEAD;
-}
-
-and use this to query the actual state at crash time. That spares all
-those callback heuristics.
-
-> I'm making my way though percpu crash_notes, elfcorehdr, vmcoreinfo,
-> makedumpfile and (the consumer of it all) the userspace crash utility,
-> in order to understand the impact of moving from for_each_present_cpu()
-> to for_each_online_cpu().
-
-Is the packing actually worth the trouble? What's the actual win?
-
-Thanks,
-
-        tglx
-
-
+> -		       "cmpxchg16b " __percpu_arg(1) "\n\tsetz %0\n\t",	\
+> -		       X86_FEATURE_CX16,				\
+> -		       ASM_OUTPUT2("=a" (__ret), "+m" (pcp1),		\
+> -				   "+m" (pcp2), "+d" (__o2)),		\
+> -		       "b" (__n1), "c" (__n2), "a" (__o1) : "rsi");	\
+> -	__ret;								\
+> -})
+> -
+> -#define raw_cpu_cmpxchg_double_8	percpu_cmpxchg16b_double
+> -#define this_cpu_cmpxchg_double_8	percpu_cmpxchg16b_double
+> -
+>  #endif
