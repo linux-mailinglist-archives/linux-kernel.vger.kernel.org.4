@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4667F68EF93
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C8A68EF94
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjBHNMz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Feb 2023 08:12:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
+        id S231363AbjBHNNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjBHNMw (ORCPT
+        with ESMTP id S229548AbjBHNNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:12:52 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD42460AF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:12:51 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-270-BBR2dVL9Mgyb8fRo4ZZDyQ-1; Wed, 08 Feb 2023 13:12:48 +0000
-X-MC-Unique: BBR2dVL9Mgyb8fRo4ZZDyQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 8 Feb
- 2023 13:12:47 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Wed, 8 Feb 2023 13:12:47 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Bibo Mao' <maobibo@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-CC:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] LoongArch: add checksum optimization for 64-bit system
-Thread-Topic: [PATCH] LoongArch: add checksum optimization for 64-bit system
-Thread-Index: AQHZOqjw3I588J9fP0akyPjC04Hova7FBpIA
-Date:   Wed, 8 Feb 2023 13:12:47 +0000
-Message-ID: <8fa91bca5e624861b190917933951c7e@AcuMS.aculab.com>
-References: <20230207040148.1801169-1-maobibo@loongson.cn>
-In-Reply-To: <20230207040148.1801169-1-maobibo@loongson.cn>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 8 Feb 2023 08:13:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFC546710;
+        Wed,  8 Feb 2023 05:13:21 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675861999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n8XDCqDBnxgqPmGg/lqlpZYGC1zpGKtx29xTnJMow8U=;
+        b=s1H7S/WxZvhEYQg0DS2zT/NovcmfZ+SefxmaQqS50IjIodUN/PkKwaLv1lmAZRxSblJsNJ
+        lvleNGBD7fTduMGVgO3sSdMrSyCAO3JJkCjEL5mvDYQ3dll88et+1Krs/L5uFI6brqUpwy
+        FWEDrocKf9L3hkLfoCJFUGiybsFGJBTumr3Z/p2ppj4LCYJufxfMqdfERi/hbcJzeaeRvT
+        ti/IaTfRXNdX73Pn0/Lx+LGdlROawWYTQOjTV9G2zg20011Qse1nsx75RM+kY9sOqZe4Ix
+        wXqem1gO0gmawQYJNSVsHxckRsqqEW2DtAt1KUPkTNV1eogZEmsxUdSHKRqhcQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675861999;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n8XDCqDBnxgqPmGg/lqlpZYGC1zpGKtx29xTnJMow8U=;
+        b=G5Jq9/+RgI3iz9ej47lvj1DBdreMNX8yG77X3fKxJN8DztMrOyotqMCe7tcWYdnabR7THW
+        8Wq+cuY6aQ9mvRBg==
+To:     Brian Gerst <brgerst@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>
+Cc:     dwmw2@infradead.org, kim.phillips@amd.com, arjan@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, x86@kernel.org, pbonzini@redhat.com,
+        paulmck@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+Subject: Re: [PATCH v7 6/9] x86/smpboot: Support parallel startup of
+ secondary CPUs
+In-Reply-To: <CAMzpN2iejCnBeBdC6+92fUL2k8ZdAq_jEgXX+RSoGMhRZ0UBSA@mail.gmail.com>
+References: <20230207230436.2690891-1-usama.arif@bytedance.com>
+ <20230207230436.2690891-7-usama.arif@bytedance.com>
+ <CAMzpN2iejCnBeBdC6+92fUL2k8ZdAq_jEgXX+RSoGMhRZ0UBSA@mail.gmail.com>
+Date:   Wed, 08 Feb 2023 14:13:18 +0100
+Message-ID: <87k00s2tch.ffs@tglx>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bibo Mao
-> Sent: 07 February 2023 04:02
-> 
-> loongArch platform is 64-bit system, which supports 8 bytes memory
-> accessing, generic checksum function uses 4 byte memory access.
-> This patch adds 8-bytes memory access optimization for checksum
-> function on loongArch. And the code comes from arm64 system.
-> 
-> When network hw checksum is disabled, iperf performance improves
-> about 10% with this patch.
-> 
-...
-> +static inline __sum16 csum_fold(__wsum csum)
-> +{
-> +	u32 sum = (__force u32)csum;
-> +
-> +	sum += (sum >> 16) | (sum << 16);
-> +	return ~(__force __sum16)(sum >> 16);
-> +}
+On Wed, Feb 08 2023 at 00:09, Brian Gerst wrote:
+> On Tue, Feb 7, 2023 at 6:10 PM Usama Arif <usama.arif@bytedance.com> wrote:
+>> Introduce a global variable 'smpboot_control' indicating to the AP how
+>> it should find its APIC ID. For a serialized bringup, the APIC ID is
+>> explicitly passed in the low bits of smpboot_control, while for parallel
+>> mode there are flags directing the AP to find its APIC ID in CPUID leaf
+>> 0x0b (for X2APIC mode) or CPUID leaf 0x01 where 8 bits are sufficient.
+>
+> For the serialized bringup case, it would be simpler to just put the
+> cpu number in the lower bits instead of the APIC id, skipping the
+> lookup.
 
-Does LoongArch have a rotate instruction?
-But for everything except arm (which has a rotate+add instruction)
-the best is (probably):
-	(~sum - rol32(sum, 16)) >> 16
+Yes and no. It can be done, but I rather prefer the consistency of the
+data and the mechanism. The "overhead" or "win" is not even measurable.
 
-To the point where it is worth killing all the asm
-versions and just using that one.
+Thanks,
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+        tglx
