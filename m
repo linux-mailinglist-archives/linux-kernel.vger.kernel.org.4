@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193AC68F899
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8755468F89F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjBHUKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S232031AbjBHULs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjBHUJ6 (ORCPT
+        with ESMTP id S231771AbjBHULp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:09:58 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB79E38C;
-        Wed,  8 Feb 2023 12:09:57 -0800 (PST)
-Date:   Wed, 08 Feb 2023 20:09:54 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675886995;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=7nkBggcmalQyIVcJVJzEc/6t0NOZc5Dw4snR/EDYZs4=;
-        b=hvFfBHd5EGXj4RmObTGq3wkVU80wsJ57K0ukEaUITpb8STANTBvc++agklzwo/kP9no47e
-        KOV7jIOnLzG04Heyi8BZmkISGkXAulnhSULvDp9rLwlYsY0xa+OlTr4Y7p9XEYdFTWGGKI
-        CvvD/GU1tybLyG7ENTM/0/ggID0h1cfc7N6x0/X5pOV9N045vMXWI7y/dh3tUV5sPu2sju
-        kIssKYn18qFVoA+3fXjlkICKqetRjYk3xH/BsM2ytCC7j6Nl5nt43m+swELZq1cDg+DvQY
-        hvnSznkMQbWKHGtXtJwj6Nus9aWRqR46yWl5Kr3uSs8DA1x9EjcR/r8Cme5HmQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675886995;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=7nkBggcmalQyIVcJVJzEc/6t0NOZc5Dw4snR/EDYZs4=;
-        b=anc3FzAGinGbu5ik5FBLe/mSpbNIm12otmtZkAPPy/JriWjh8cg1LAyUY1huMxR7zYXZHJ
-        9ZTkbwkO1K0DEOCA==
-From:   "tip-bot2 for Nadav Amit" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/kprobes: Fix 1 byte conditional jump target
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Nadav Amit <namit@vmware.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 8 Feb 2023 15:11:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E703E301BD
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675887057;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pkpGIxstJz2N9eQc0UMJE5ogLSVhp75UoejwnhOmCxs=;
+        b=B1E+wFz9vzeZ8+peIwqPBQJONZujAQ+9pRyQeeMMWMzn7wqWVX4nDEKVQ+s+K9IwZUrF35
+        PPFU8yem/p05ON5XVslJkBFloMGKLSoD5tYwB2hc+NZrIqRYKWQjSAIt+LsFJSsCLyB3oD
+        rZ1Xg5aTB6smSkneDdOZXqK1An/sIic=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-22-kT6d-ytvNSaIgPYixMKvMA-1; Wed, 08 Feb 2023 15:10:54 -0500
+X-MC-Unique: kT6d-ytvNSaIgPYixMKvMA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F180038123A1;
+        Wed,  8 Feb 2023 20:10:53 +0000 (UTC)
+Received: from fedora-work.redhat.com (unknown [10.22.10.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9BAC1492C3F;
+        Wed,  8 Feb 2023 20:10:47 +0000 (UTC)
+From:   David Jeffery <djeffery@redhat.com>
+To:     target-devel@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Maurizio Lombardi <mlombard@redhat.com>,
+        Laurence Oberman <loberman@redhat.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Jeffery <djeffery@redhat.com>
+Subject: [PATCH] scsi: target: iscsi: set memalloc_noio with loopback network connections
+Date:   Wed,  8 Feb 2023 15:09:57 -0500
+Message-Id: <20230208200957.14073-1-djeffery@redhat.com>
 MIME-Version: 1.0
-Message-ID: <167588699468.4906.8001929680008508448.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+If an admin connects an iscsi initiator to an iscsi target on the same
+system, the iscsi connection is vulnerable to deadlocks during memory
+allocations. Memory allocations in the target task accepting the I/O from
+the initiator can wait on the initiator's I/O when the system is under
+memory pressure, causing a deadlock situation between the iscsi target and
+initiator.
 
-Commit-ID:     ae052e3ae09572194d7e574906db7272041577d3
-Gitweb:        https://git.kernel.org/tip/ae052e3ae09572194d7e574906db7272041577d3
-Author:        Nadav Amit <namit@vmware.com>
-AuthorDate:    Wed, 08 Feb 2023 07:17:08 
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 08 Feb 2023 12:03:27 -08:00
+When in this configuration, the deadlock scenario can be avoided by use of
+GFP_NOIO allocations. Rather than force all configurations to use NOIO,
+memalloc_noio_save/restore can be used to force GFP_NOIO allocations only
+when in this loopback configuration.
 
-x86/kprobes: Fix 1 byte conditional jump target
-
-Commit 3bc753c06dd0 ("kbuild: treat char as always unsigned") broke
-kprobes.  Setting a probe-point on 1 byte conditional jump can cause the
-kernel to crash when the (signed) relative jump offset gets treated as
-unsigned.
-
-Fix by replacing the unsigned 'immediate.bytes' (plus a cast) with the
-signed 'immediate.value' when assigning to the relative jump offset.
-
-[ dhansen: clarified changelog ]
-
-Fixes: 3bc753c06dd0 ("kbuild: treat char as always unsigned")
-Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Suggested-by: Dave Hansen <dave.hansen@intel.com>
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/all/20230208071708.4048-1-namit%40vmware.com
+Signed-off-by: David Jeffery <djeffery@redhat.com>
 ---
- arch/x86/kernel/kprobes/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/target/iscsi/iscsi_target.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index b36f3c3..695873c 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -625,7 +625,7 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
- 		/* 1 byte conditional jump */
- 		p->ainsn.emulate_op = kprobe_emulate_jcc;
- 		p->ainsn.jcc.type = opcode & 0xf;
--		p->ainsn.rel32 = *(char *)insn->immediate.bytes;
-+		p->ainsn.rel32 = insn->immediate.value;
- 		break;
- 	case 0x0f:
- 		opcode = insn->opcode.bytes[1];
+diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
+index baf4da7bb3b4..a68e47e2cdf9 100644
+--- a/drivers/target/iscsi/iscsi_target.c
++++ b/drivers/target/iscsi/iscsi_target.c
+@@ -16,6 +16,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/idr.h>
+ #include <linux/delay.h>
++#include <linux/sched/mm.h>
+ #include <linux/sched/signal.h>
+ #include <asm/unaligned.h>
+ #include <linux/inet.h>
+@@ -4168,7 +4169,10 @@ int iscsi_target_rx_thread(void *arg)
+ {
+ 	int rc;
+ 	struct iscsit_conn *conn = arg;
++	struct dst_entry *dst;
+ 	bool conn_freed = false;
++	bool loopback = false;
++	unsigned int flags;
+ 
+ 	/*
+ 	 * Allow ourselves to be interrupted by SIGINT so that a
+@@ -4186,8 +4190,25 @@ int iscsi_target_rx_thread(void *arg)
+ 	if (!conn->conn_transport->iscsit_get_rx_pdu)
+ 		return 0;
+ 
++	/*
++	 * If the iscsi connection is over a loopback device from using
++	 * iscsi and iscsit on the same system, we need to set memalloc_noio to
++	 * prevent memory allocation deadlocks between target and initiator.
++	 */
++	rcu_read_lock();
++	dst = rcu_dereference(conn->sock->sk->sk_dst_cache);
++	if (dst && dst->dev && dst->dev->flags & IFF_LOOPBACK)
++		loopback = true;
++	rcu_read_unlock();
++
++	if (loopback)
++		flags = memalloc_noio_save();
++
+ 	conn->conn_transport->iscsit_get_rx_pdu(conn);
+ 
++	if (loopback)
++		memalloc_noio_restore(flags);
++
+ 	if (!signal_pending(current))
+ 		atomic_set(&conn->transport_failed, 1);
+ 	iscsit_take_action_for_connection_exit(conn, &conn_freed);
+-- 
+2.39.1
+
