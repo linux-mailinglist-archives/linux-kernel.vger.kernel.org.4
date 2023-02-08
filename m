@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83DD68E689
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EDD68E69E
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 04:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjBHDPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 22:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S230048AbjBHDcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 22:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjBHDPd (ORCPT
+        with ESMTP id S229743AbjBHDcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 22:15:33 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C9843453;
-        Tue,  7 Feb 2023 19:15:30 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PBQ9T1Sfgz4f3pGD;
-        Wed,  8 Feb 2023 11:15:25 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgCnUyHNE+NjSOS3Cw--.37934S3;
-        Wed, 08 Feb 2023 11:15:27 +0800 (CST)
-Subject: Re: block: sleeping in atomic warnings
-To:     Jens Axboe <axboe@kernel.dk>, Dan Carpenter <error27@gmail.com>,
-        linux-block@vger.kernel.org
-Cc:     Julia Lawall <julia.lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maobibo <maobibo@loongson.cn>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
- <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
- <Y+EjmnRqpLuBFPX1@bombadil.infradead.org>
- <4ffbb0c8-c5d0-73b3-7a4e-2da9a7b03669@inria.fr> <Y+Ja5SRs886CEz7a@kadam>
- <4321724d-9a24-926c-5d2d-5d5d902bda72@kernel.dk>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <339bf113-3ac1-7e62-3cca-45bb8b53d291@huaweicloud.com>
-Date:   Wed, 8 Feb 2023 11:15:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 7 Feb 2023 22:32:01 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9283B1E5F7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 19:31:59 -0800 (PST)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 3183VVfp029045;
+        Wed, 8 Feb 2023 04:31:31 +0100
+Date:   Wed, 8 Feb 2023 04:31:31 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Feiyang Chen <chris.chenfeiyang@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] nolibc: Add statx() support to implement sys_stat()
+Message-ID: <Y+MXk9A+gB1W6T/n@1wt.eu>
+References: <cover.1675734681.git.chenfeiyang@loongson.cn>
+ <1af05c1441e9f96870be1cc20b1162e3f5043b2e.1675734681.git.chenfeiyang@loongson.cn>
+ <1e7da4e7-392d-4a9e-aa95-0599a0c84419@app.fastmail.com>
+ <CACWXhK==yVZGZbY+3DUAuxL34=gKwQv20Cw3y1+QKir0D2F3EQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <4321724d-9a24-926c-5d2d-5d5d902bda72@kernel.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCnUyHNE+NjSOS3Cw--.37934S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVW5JVWrJwAF
-        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjxUFDGOUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACWXhK==yVZGZbY+3DUAuxL34=gKwQv20Cw3y1+QKir0D2F3EQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Feiyang,
 
-在 2023/02/08 2:31, Jens Axboe 写道:
+Sorry for the delay.
 
->> block/blk-wbt.c:843 wbt_init() warn: sleeping in atomic context
->> ioc_qos_write() <- disables preempt
->> -> wbt_enable_default()
->>     -> wbt_init()
+On Wed, Feb 08, 2023 at 10:09:48AM +0800, Feiyang Chen wrote:
+> On Tue, 7 Feb 2023 at 22:31, Arnd Bergmann <arnd@arndb.de> wrote:
+(...)
+> > Given that all architectures implement statx the same way, I wonder
+> > if we can't just kill off the old function here and always use statx.
+> >
+> > That would also allow removing the architecture specific
+> > sys_stat_struct definitions in all arch-*.h files.
+> >
 > 
-> Also definitely a bug.
+> Hi, Arnd,
 > 
+> I'd really like to make all architectures use sys_statx() instead
+> of sys_stat(). I just fear we might get dragged into a long discussion.
+> Can I send a patch series to do this later?
 
-This won't happen currently, wbt_init() will be called while
-initializing device, and later wbt_enable_devault() from iocost won't
-call wbt_init().
+I generally agree with the Arnd's points overall and I'm fine with the
+rest of your series. On this specific point, I'm fine with your proposal,
+let's just start with sys_statx() only on this arch, please add a comment
+about this possibility in the commit message that brings statx(),
+indicating that other archs are likely to benefit from it as well, and
+let's see after this if we can migrate all archs to statx.
 
-However, we might support rq_qos destruction dynamically in the
-future, I'll fix this warning.
+I'm having another comment below however:
 
-Thanks,
-Kuai
+> > > +struct statx_timestamp {
+> > > +     __s64   tv_sec;
+> > > +     __u32   tv_nsec;
+> > > +     __s32   __reserved;
+> > > +};
+> > > +
+> > > +struct statx {
+> > > +     /* 0x00 */
+> > > +     __u32   stx_mask;       /* What results were written [uncond] */
+> > > +     __u32   stx_blksize;    /* Preferred general I/O size [uncond] */
+> > > +     __u64   stx_attributes; /* Flags conveying information about the file
+(...)
 
+For all these types exposed to userland that you have to define, I'd
+prefer if we would avoid using kernel-inherited types like __u32, __u64
+etc given that all other archs for now only use regular types. It's not
+critical at all but I'd prefer that we stay consistent between all archs.
+Also, based on the comments on the fields it seems to me that this file
+was just copy-pasted from some uapi header which is not under the same
+license, so that's another reason for just defining what is needed here
+if you need to define it here. And of course, if including linux/stat.h
+also works, that's by far the preferred solution which will also save
+us from having to maintain a copy!
+
+Thanks!
+Willy
