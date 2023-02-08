@@ -2,104 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7974368EE5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BCA68EE62
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 12:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjBHL5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 06:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S230392AbjBHL7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 06:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjBHL50 (ORCPT
+        with ESMTP id S229548AbjBHL7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 06:57:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CED54902E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 03:57:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FBE2B81D6C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:57:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A553C433A0;
-        Wed,  8 Feb 2023 11:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675857439;
-        bh=BVw1vZicbo8JZjKsL73PiviDBYA38VzaxFGG0j4KLWs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2W8MSLCjoLJOPmibeArKXJrIqneucO+kWp3WegNMESPXveLxYaERp82Q07D0+VFHM
-         blMM10Ll5rVzjV0LTTtAFoXP+xh7AH4O6pVoYjythvGvZ5iIR6UuV/RW9Yf4kztIPf
-         q1I8JhzllhsgRogDaXFKSICa7v94y1IItczVKG74=
-Date:   Wed, 8 Feb 2023 12:57:17 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Visweswara Tanuku <quic_vtanuku@quicinc.com>
-Cc:     konrad.dybcio@linaro.org, bartosz.golaszewski@linaro.org,
-        linux-kernel@vger.kernel.org, quic_vnivarth@quicinc.com,
-        nicolas.dechesne@linaro.org, srinivas.kandagatla@linaro.org,
-        vinod.koul@linaro.org, quic_eberman@quicinc.com,
-        quic_satyap@quicinc.com
-Subject: Re: [RESEND] soc: qcom-geni-se: Update Tx and Rx fifo depth based on
- QUP HW version
-Message-ID: <Y+OOHWBzL+GINcLW@kroah.com>
-References: <20230206122215.22090-1-quic_vtanuku@quicinc.com>
- <Y+D04FIti7yejya+@kroah.com>
- <ca31f247-0297-7582-c16f-a85453872ca4@quicinc.com>
- <Y+FCQg4c4XBYk+G6@kroah.com>
- <0afc0752-1a4e-be3a-e9bd-0f56243d5e41@quicinc.com>
+        Wed, 8 Feb 2023 06:59:41 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0AD146160
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 03:59:40 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B63CF1477;
+        Wed,  8 Feb 2023 04:00:22 -0800 (PST)
+Received: from bogus (unknown [10.57.10.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3E3703F703;
+        Wed,  8 Feb 2023 03:59:39 -0800 (PST)
+Date:   Wed, 8 Feb 2023 11:59:36 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     liviu.dudau@arm.com, lpieralisi@kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] bus: vexpress-config: =?utf-8?B?dXNlwqBkZXZtX3BsYXRm?=
+ =?utf-8?B?b3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Message-ID: <20230208115936.odlv7rvn6adziemv@bogus>
+References: <202302081538546730084@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0afc0752-1a4e-be3a-e9bd-0f56243d5e41@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202302081538546730084@zte.com.cn>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 04:54:13PM +0530, Visweswara Tanuku wrote:
+On Wed, Feb 08, 2023 at 03:38:54PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> On 2/6/2023 11:39 PM, Greg KH wrote:
-> > A:http://en.wikipedia.org/wiki/Top_post
-> > Q: Were do I find info about this thing called top-posting?
-> > A: Because it messes up the order in which people normally read text.
-> > Q: Why is top-posting such a bad thing?
-> > A: Top-posting.
-> > Q: What is the most annoying thing in e-mail?
-> > 
-> > A: No.
-> > Q: Should I include quotations after my reply?
-> 
-> Apologies will take care.
-> 
-> > http://daringfireball.net/2007/07/on_top
-> > 
-> > On Mon, Feb 06, 2023 at 07:36:49PM +0530, Visweswara Tanuku wrote:
-> > > Added RESEND for resubmission of first version which is not modified in any
-> > > way from the previous submission.
-> > 
-> > Then why was it resent?  What will cause this to be accepted when the
-> > previous submission was not?
-> > 
-> > confused,
-> > 
-> > greg k-h
-> 
-> https://lkml.org/lkml/2022/11/21/549
-> 
-> I had posted the same patch in November last year but did not receive any
-> response in spite of periodic reminders.
-> 
-> Suspecting that the patch did not reach all the required recipients
-> re-posted the same and hence RESEND.
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>
 
-When you resend, you need to say _why_ it was resent.  "adding more
-people" is a valid reason, don't make us guess.
+LGTM,
 
-Remember, some of us get hundreds of patches a day/week to review, we
-have no saved context.
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-thanks,
+Not sure if you plan to take all such changes together or you want individual
+patches to be picked up by respective maintainers, let me know.
 
-greg k-h
+-- 
+Regards,
+Sudeep
