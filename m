@@ -2,129 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F343C68F155
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D3668F15F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbjBHOz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:55:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S231634AbjBHOzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:55:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjBHOzY (ORCPT
+        with ESMTP id S230486AbjBHOzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:55:24 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7710DCDFD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:55:22 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318ElhlD028531;
-        Wed, 8 Feb 2023 14:55:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dht7AcD6/u8H0DoBeF9sWTQSYCKhK8JhR2msGTM2KU8=;
- b=VbYpEoKTsidOTaC299a0BIkUgeN9MeapnUvQLnAKqOFPk+376yud3RA8d+MYA1/VNU7d
- qST1jPt5BJ6AQrfUNiFns/InMkaQoUmwj6vccU5LFANoOLYpNvd+rsqbX0dFGSjgt4mg
- Uht46KQKRlLOF+Z6W/FC1HbC4Xck3uZUY90JOaL9hBQyAkUxCq7FxkxSPRbICKeeEPZ1
- mgJSyPk1gVjitoDXAUd5RXeUGtz3rHi/sXQ6rbssgrntH2LY9cF6QERn07I+hflfAf61
- hxOO6Uu1nZhnxvMf4OFSZAtNCDSVYZcXv1h1oYYpv6h+v8lSwpWu5/nUDfcWCtlDjK8L pw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm1yf1ptq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 14:55:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318Et2vU021538
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 14:55:02 GMT
-Received: from [10.216.17.83] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 06:54:57 -0800
-Message-ID: <8f40873d-8a9c-bcec-6742-885478365e4c@quicinc.com>
-Date:   Wed, 8 Feb 2023 20:24:54 +0530
+        Wed, 8 Feb 2023 09:55:36 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A464B770
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:55:31 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id u7so148211ybk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:55:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=C9FYaHZff0n04HIlu0pgHp/yoYQMAR6EN4kK+A76acU=;
+        b=IIUuXKjbtNG+brYJkm3mEz/Fq2Pb+VqZxm9M/D7mrcI0D62GgsPuJzrGVbt3bjOgAe
+         FKHgjDRBffBmgUhp+Zqa3GhW+SJYVkyXIOx4UZjGR/NTZwRH+8Ec9dhaymaPJYoDF/ul
+         uhZIWfEjC/tNp17EsrH4ckdmUbeyIs5G5o9m7zp+yGzEj3sRZGfW5ns8qaXo3UmiN25P
+         jXTHx/9TXUF8ZpeVstcTHKPqER+clJey1/KPBN1LViaw99zwQggNemG7kwAykjT9Ya89
+         TEAScCGhuWQAgdfnh+kSg3K5nsReT9OKxs5o5HSi74s3waAxRJs36+1uPauU5VDw9KHc
+         l0FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C9FYaHZff0n04HIlu0pgHp/yoYQMAR6EN4kK+A76acU=;
+        b=aaxIxeaOEFIJomDu0ZUw9ptOk1fGcd96kPHHHIUVOLfNSw9PkZnbeVBniVydSixiXR
+         BPPg6hhfiUydQJSKkFaVKbCOfwwvWD7daA+2q9ClgTN9G6ww31WBnBe4gsvBBJj/pWoP
+         cDuKD6Oxytv7GsXpRe0zQ2re9qwfdEsJNOLC2AN2anNK1CR+Q2qn6t7W/+d1GDRA5pYy
+         OSm4j/+0SwdnGDUVwdxR146eKOdfocnii+7O0wrniPaa+XrZ/s/bZYDtzNi0jlIx54w7
+         ZSaEflH7Ah35Dh55cqDjQ566PpWBwBq1T9liNS79EuZ8Z7VLppaXmkc+aoh9yW1jWXpH
+         QXYA==
+X-Gm-Message-State: AO0yUKW+51zHoaGhtkD71GnfBiHR9w3ZZU3EIM56tJLCFLMthb0mwxad
+        Wu5SrofU08InsJSbpl0QrUkZKew06+wY9WdGy558JGz9qlb8ww==
+X-Google-Smtp-Source: AK7set9QWN7XZu0/Jygke0mZWpl6dDT6sBRDV263lswVqW9oVhi8Kruq1x//EDsHd+Bda51X+66lj6ea/+9i3ige8Q4=
+X-Received: by 2002:a5b:6c5:0:b0:88f:946:bd98 with SMTP id r5-20020a5b06c5000000b0088f0946bd98mr1003903ybq.24.1675868130850;
+ Wed, 08 Feb 2023 06:55:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V6 2/2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
- for shmem
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>
-CC:     <akpm@linux-foundation.org>, <hughd@google.com>,
-        <willy@infradead.org>, <markhemm@googlemail.com>,
-        <rientjes@google.com>, <shakeelb@google.com>, <mhocko@suse.com>,
-        <vbabka@suse.cz>, <quic_pkondeti@quicinc.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <cover.1675690847.git.quic_charante@quicinc.com>
- <08e04b5d2fc7a2300a52fb7fff1bc6316a53927c.1675690847.git.quic_charante@quicinc.com>
- <CAJuCfpH7Jag9qEcKjGTx9Qv_oekM6qRVkGwzTrXShgYbLdLKtg@mail.gmail.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <CAJuCfpH7Jag9qEcKjGTx9Qv_oekM6qRVkGwzTrXShgYbLdLKtg@mail.gmail.com>
+References: <20230207142952.51844-1-andriy.shevchenko@linux.intel.com>
+ <20230207142952.51844-7-andriy.shevchenko@linux.intel.com>
+ <CACRpkdaPgjDijPjCdinWy5_Rd8g3idv-8K=YPTv5iTfJKFuJfw@mail.gmail.com>
+ <Y+LWyc4rqCVq5hEi@smile.fi.intel.com> <Y+O2/dVDcvnXByc+@smile.fi.intel.com>
+In-Reply-To: <Y+O2/dVDcvnXByc+@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 8 Feb 2023 15:55:19 +0100
+Message-ID: <CACRpkdacHyxPKg=Dw4xdpOPZUMMNsFAuVRuSo1093E_j4a+W-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 06/12] gpiolib: split linux/gpio/driver.h out of linux/gpio.h
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-wpan@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, linux-arch@vger.kernel.org,
+        devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 1oXqyltMsC9PZFzNhxog8zLNCz6aOlp-
-X-Proofpoint-GUID: 1oXqyltMsC9PZFzNhxog8zLNCz6aOlp-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_06,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015
- mlxlogscore=764 suspectscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302080131
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Suren!!
+On Wed, Feb 8, 2023 at 3:51 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Wed, Feb 08, 2023 at 12:55:06AM +0200, Andy Shevchenko wrote:
+> > On Tue, Feb 07, 2023 at 03:55:23PM +0100, Linus Walleij wrote:
+> > > On Tue, Feb 7, 2023 at 3:29 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > > From: Arnd Bergmann <arnd@arndb.de>
+> > > >
+> > > > Almost all gpio drivers include linux/gpio/driver.h, and other
+> > > > files should not rely on includes from this header.
+> > > >
+> > > > Remove the indirect include from here and include the correct
+> > > > headers directly from where they are used.
+> >
+> > ...
+> >
+> > > Make sure you push this to the kernel.org build servers (zeroday builds),
+> >
+> > Of course, that is the purpose of publishing this before the release (so we
+> > will have some TODO list that eventually this can be applied for v6.4-rc1).
+> >
+> > > I think this patch needs to hit some more files, in my tests with a similar
+> > > patch at least these:
+> >
+> > Right. I forgot to also incorporate your stuff into this series.
+> > Do you have anything that I can take as is?
+>
+> I'm going to incorporate the following:
+>
+>         gpio: Make the legacy <linux/gpio.h> consumer-only
+>         ARM: s3c24xx: Use the right include
+>         ARM: orion/gpio: Use the right include
+>         hte: tegra-194: Use proper includes
+>         pcmcia: pxa2xx_viper: Include dependency
 
-On 2/8/2023 4:18 AM, Suren Baghdasaryan wrote:
->> +static int shmem_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
->> +{
->> +       loff_t endbyte;
->> +       pgoff_t start_index;
->> +       pgoff_t end_index;
->> +       struct address_space *mapping;
->> +       struct inode *inode = file_inode(file);
->> +       int ret = 0;
->> +
->> +       if (S_ISFIFO(inode->i_mode))
->> +               return -ESPIPE;
->> +
->> +       mapping = file->f_mapping;
->> +       if (!mapping || len < 0 || !shmem_mapping(mapping))
->> +               return -EINVAL;
->> +
->> +       endbyte = fadvise_calc_endbyte(offset, len);
->> +
->> +       start_index = offset >> PAGE_SHIFT;
->> +       end_index   = endbyte >> PAGE_SHIFT;
->> +       switch (advice) {
->> +       case POSIX_FADV_DONTNEED:
-> Should (SHMEM_I(inode)->flags & VM_LOCKED) be checked here too?
-> 
-Is this w.r.t context from shmem_lock() perspective which does set this
-flag?  If so, Isn't the PageUnevictable check cover this part? And to
-avoid unnecessary Unevictable check later on the locked shmem file, How
-about just checking mapping_unevictable() before performing
-shmem_fadvise_dontneed)()? Please let me know If I failed to get your point.
+Excellent, thanks. I don't care about being credited, just want things
+to go smooth so you run into less snags.
 
->> +               ret = shmem_fadvise_dontneed(mapping, start_index, end_index);
->> +               break;
->> +       case POSIX_FADV_WILLNEED:
->> +               ret = shmem_fadvise_willneed(mapping, start_index, end_index);
->> +               break;
->> +       case POSIX_FADV_NORMAL:
->> +       case POSIX_FADV_RANDOM:
->> +       case POSIX_FADV_SEQUENTIAL:
->> +       case POSIX_FADV_NOREUSE:
-
---Charan
+Yours,
+Linus Walleij
