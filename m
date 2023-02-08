@@ -2,368 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC69F68F2A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 16:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4404668F2A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 17:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjBHP6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 10:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S229936AbjBHQAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 11:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjBHP5e (ORCPT
+        with ESMTP id S229843AbjBHQAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 10:57:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6177849550;
-        Wed,  8 Feb 2023 07:57:33 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318B1psh013972;
-        Wed, 8 Feb 2023 15:57:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=WvEYyYHrSEfqBPCDABOTYilBuhKZZTT/0HAS0zk+d2w=;
- b=kTFuQxNGNrh80GzITqkVPuNRbBDaq9nGihF3/3h02+nOrj5BAOW1lqgXAI3zrJPJYf07
- oI8mjIxnug3mNeK9u9cqjxhHK0OaDFViTkQVmgzAhfeYrwhRxZ7EKRBt/HSez53aGIq9
- ZuOsLSPH2fUsMMDOejUNgBwmj4/pAEmd4uqky4a4+VUHqIz3zjdV7K4GlFf4Zj5rJUeY
- 0WhMhiUTXeepvXI+prl7TwC/sy7dBQ8TMTjgnA1bYXg/QLfI0maoYkhyJOXyemiYh374
- ASrkGyd+KSl8eJUjC9liZIoLTO5/ORGf2f6K0a5QCIeCmKQWW3+aTYp+kg9Y7tAzdabB lg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkgafmmy1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 15:57:23 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318FvMxS026158
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 15:57:22 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 8 Feb 2023 07:57:21 -0800
-Date:   Wed, 8 Feb 2023 07:57:20 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/4] arm64: dts: qcom: sc8280xp-crd: Introduce pmic_glink
-Message-ID: <20230208155720.GA2397622@hu-bjorande-lv.qualcomm.com>
-References: <20230208034620.2048744-1-quic_bjorande@quicinc.com>
- <20230208034620.2048744-3-quic_bjorande@quicinc.com>
- <229edfec-736f-d94d-23ba-2a0649639556@linaro.org>
+        Wed, 8 Feb 2023 11:00:46 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0319A8A60
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 08:00:44 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id g6-20020a6b7606000000b007297c4996c7so10746868iom.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 08:00:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=owLCGfndvEnfANmDmt4Szh/S5ZYNgPvGNXOVcbfFK/4=;
+        b=yzYYRN3QFP6N8PGXZRS2Dj/py71gZQevi1SlnXrW5bJx/nvVkTLO4WNpkNu29u7cBh
+         kjZgX0pp6Yv7wPSRR0V/Ji71+ufZdZvCHW0fierqYcI2rvnoMqWwCsO7UugJfyTjHGOZ
+         KT9TZOU4w3cZhJgb5birtEfR3JFG2CDTBDUq/fbXTPZQk5qHbKIjj7Iewx1zdXQTveNW
+         fqIDsr0MH3lXEuVDT5ryo2WNZD6K5wqZClY/2sOYH8Tl0J5MmAiO7lalRh97T8raWC4L
+         a3Iwil2ILDMdEQ1BxGCqpaQRM4Xzubwq3Gvoy5MDzff0N1iIBrK+AawNg2S5Y2tvbioe
+         wnfw==
+X-Gm-Message-State: AO0yUKW5VF5yVWOcV2+AkWiJtT5oMqzTHqqhBoXvQUSNka0A+GYP7BRn
+        FeWaVPgY9YHYYoHshoO7KNvQeV48dNJ5/2QzhtCq35u6HcfD
+X-Google-Smtp-Source: AK7set8QDeVKVZSAVW5NeJBWPPMwxQ8OxU+TKZZwlFseudIegdhuOgP7yepTb1xsK3io05E+xkGjxCNjal1erZBTt3I1xFIotFSV
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <229edfec-736f-d94d-23ba-2a0649639556@linaro.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -LsD8rgZKXBCgeAPkSP5f1eTxTNQmrJ-
-X-Proofpoint-ORIG-GUID: -LsD8rgZKXBCgeAPkSP5f1eTxTNQmrJ-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_06,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 priorityscore=1501 suspectscore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302080141
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:81:b0:720:33b0:ae4c with SMTP id
+ h1-20020a056602008100b0072033b0ae4cmr4010367iob.51.1675872044302; Wed, 08 Feb
+ 2023 08:00:44 -0800 (PST)
+Date:   Wed, 08 Feb 2023 08:00:44 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e3c8b405f4325d5e@google.com>
+Subject: [syzbot] general protection fault in kernfs_link_sibling (3)
+From:   syzbot <syzbot+c26da44ece0427e40573@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 09:14:46AM +0100, Konrad Dybcio wrote:
-> 
-> 
-> On 8.02.2023 04:46, Bjorn Andersson wrote:
-> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > 
-> > The SC8280XP CRD control over battery management and its two USB Type-C
-> > port using pmic_glink and two GPIO-based SBU muxes.
-> > 
-> > Enable the two DisplayPort instances, GPIO SBU mux instance and
-> > pmic_glink with the two connectors on the CRD.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 191 +++++++++++++++++++++-
-> >  1 file changed, 189 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > index 3f116a879e22..35b63c3962f0 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > @@ -36,6 +36,77 @@ chosen {
-> >  		stdout-path = "serial0:115200n8";
-> >  	};
-> >  
-> > +	pmic-glink {
-> > +		compatible = "qcom,sc8280xp-pmic-glink", "qcom,pmic-glink";
-> > +
-> > +		#address-cells = <1>;
-> > +		#size-cells = <0>;
-> > +
-> > +		connector@0 {
-> > +			compatible = "usb-c-connector";
-> > +			reg = <0>;
-> > +			power-role = "dual";
-> > +			data-role = "dual";
-> > +
-> > +			ports {
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> Add a newline between the last propreties and first subnodes, please.
-> 
-> > +				port@0 {
-> > +					reg = <0>;
-> > +					pmic_glink_con0_hs: endpoint {
-> > +						remote-endpoint = <&usb_0_role_switch>;
-> > +					};
-> > +				};
-> > +
-> > +				port@1 {
-> > +					reg = <1>;
-> > +					pmic_glink_con0_ss: endpoint {
-> > +						remote-endpoint = <&mdss0_dp0_out>;
-> > +					};
-> > +				};
-> > +
-> > +				port@2 {
-> > +					reg = <2>;
-> > +					pmic_glink_con0_sbu: endpoint {
-> > +						remote-endpoint = <&usb0_sbu_mux>;
-> > +					};
-> > +				};
-> > +			};
-> > +		};
-> > +
-> > +		connector@1 {
-> > +			compatible = "usb-c-connector";
-> > +			reg = <1>;
-> > +			power-role = "dual";
-> > +			data-role = "dual";
-> > +
-> > +			ports {
-> > +				#address-cells = <1>;
-> > +				#size-cells = <0>;
-> > +				port@0 {
-> > +					reg = <0>;
-> > +					pmic_glink_con1_hs: endpoint {
-> > +						remote-endpoint = <&usb_1_role_switch>;
-> > +					};
-> > +				};
-> > +
-> > +				port@1 {
-> > +					reg = <1>;
-> > +					pmic_glink_con1_ss: endpoint {
-> > +						remote-endpoint = <&mdss0_dp1_out>;
-> > +					};
-> > +				};
-> > +
-> > +				port@2 {
-> > +					reg = <2>;
-> > +					pmic_glink_con1_sbu: endpoint {
-> > +						remote-endpoint = <&usb1_sbu_mux>;
-> > +					};
-> > +				};
-> > +			};
-> > +		};
-> > +	};
-> > +
-> >  	vreg_edp_3p3: regulator-edp-3p3 {
-> >  		compatible = "regulator-fixed";
-> >  
-> > @@ -139,6 +210,46 @@ linux,cma {
-> >  			linux,cma-default;
-> >  		};
-> >  	};
-> > +
-> > +	usb0-sbu-mux {
-> > +		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-> > +
-> > +		enable-gpios = <&tlmm 101 GPIO_ACTIVE_LOW>;
-> > +		select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-> > +
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&usb0_sbu_default>;
-> > +
-> > +		mode-switch;
-> > +		orientation-switch;
-> > +		svid = /bits/ 16 <0xff01>;
-> > +
-> > +		port {
-> > +			usb0_sbu_mux: endpoint {
-> > +				remote-endpoint = <&pmic_glink_con0_sbu>;
-> > +			};
-> > +		};
-> > +	};
-> > +
-> > +	usb1-sbu-mux {
-> > +		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-> > +
-> > +		enable-gpios = <&tlmm 48 GPIO_ACTIVE_LOW>;
-> > +		select-gpios = <&tlmm 47 GPIO_ACTIVE_HIGH>;
-> > +
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&usb1_sbu_default>;
-> > +
-> > +		mode-switch;
-> > +		orientation-switch;
-> > +		svid = /bits/ 16 <0xff01>;
-> > +
-> > +		port {
-> > +			usb1_sbu_mux: endpoint {
-> > +				remote-endpoint = <&pmic_glink_con1_sbu>;
-> > +			};
-> > +		};
-> > +	};
-> >  };
-> >  
-> >  &apps_rsc {
-> > @@ -262,6 +373,36 @@ &mdss0 {
-> >  	status = "okay";
-> >  };
-> >  
-> > +&mdss0_dp0 {
-> > +	status = "okay";
-> > +
-> > +	data-lanes = <0 1>;
-> Status last; is this really only 2 lanes?
-> 
-> > +
-> > +	ports {
-> > +		port@1 {
-> > +			reg = <1>;
-> > +			mdss0_dp0_out: endpoint {
-> > +				remote-endpoint = <&pmic_glink_con0_ss>;
-> > +			};
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&mdss0_dp1 {
-> > +	status = "okay";
-> > +
-> > +	data-lanes = <0 1>;
-> Ditto
-> 
-> > +
-> > +	ports {
-> > +		port@1 {
-> > +			reg = <1>;
-> > +			mdss0_dp1_out: endpoint {
-> > +				remote-endpoint = <&pmic_glink_con1_ss>;
-> > +			};
-> > +		};
-> > +	};
-> > +};
-> > +
-> >  &mdss0_dp3 {
-> >  	compatible = "qcom,sc8280xp-edp";
-> >  	/delete-property/ #sound-dai-cells;
-> > @@ -480,8 +621,13 @@ &usb_0 {
-> >  };
-> >  
-> >  &usb_0_dwc3 {
-> > -	/* TODO: Define USB-C connector properly */
-> >  	dr_mode = "host";
-> > +
-> > +	port {
-> > +		usb_0_role_switch: endpoint {
-> > +			remote-endpoint = <&pmic_glink_con0_hs>;
-> > +		};
-> This should be defined in the SoC DTSI, it's a standard dwc3 binding
-> with usb HS / SS / SBU ports. Especially since we can feed the endpoint
-> from any device now, as pmic-glink should work everywhere.
-> 
+Hello,
 
-The sa8295p/sa8540p boards, derived from sc8280xp does not implement
-pmic_glink, so it seems moving this to the soc.dtsi would be messy.
+syzbot found the following issue on:
 
-> Or /omit-if-no-ref/, I suppose.
-> 
+HEAD commit:    38d2b86a665b Add linux-next specific files for 20230208
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11293d87480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3691b32dd4410e01
+dashboard link: https://syzkaller.appspot.com/bug?extid=c26da44ece0427e40573
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Or you're saying I should put the skeleton of the port definition in the
-soc.dtsi and then fill it out the remote-endpoint here; and mark it
-omit-if-no-ref to avoid binding warnings?
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> > +	};
-> >  };
-> >  
-> >  &usb_0_hsphy {
-> > @@ -504,8 +650,13 @@ &usb_1 {
-> >  };
-> >  
-> >  &usb_1_dwc3 {
-> > -	/* TODO: Define USB-C connector properly */
-> >  	dr_mode = "host";
-> > +
-> > +	port {
-> > +		usb_1_role_switch: endpoint {
-> > +			remote-endpoint = <&pmic_glink_con1_hs>;
-> > +		};
-> > +	};
-> >  };
-> >  
-> >  &usb_1_hsphy {
-> > @@ -709,4 +860,40 @@ reset-n-pins {
-> >  			drive-strength = <16>;
-> >  		};
-> >  	};
-> > +
-> > +	usb0_sbu_default: usb0-sbu-state {
-> > +		oe-n-pins {
-> > +			pins = "gpio101";
-> > +			function = "gpio";
-> No drive-strength/bias/i/o?
-> 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0a9d60e90514/disk-38d2b86a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/71311be5f1a1/vmlinux-38d2b86a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a242870cc8eb/bzImage-38d2b86a.xz
 
-Seems like a reasonable ask...
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c26da44ece0427e40573@syzkaller.appspotmail.com
 
-Thanks,
-Bjorn
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 1 PID: 10023 Comm: syz-executor.4 Not tainted 6.2.0-rc7-next-20230208-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:__rb_insert lib/rbtree.c:115 [inline]
+RIP: 0010:rb_insert_color+0x71/0x7a0 lib/rbtree.c:436
+Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 0f 85 48 05 00 00 48 8b 2b 40 f6 c5 01 0f 85 81 01 00 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 01 05 00 00 4c 8b 75 08 49 39 de 0f 84 6d 01
+RSP: 0018:ffffc900064b7610 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: ffff8880228552f8 RCX: ffffc9000cdac000
+RDX: 1ffff1100450ab9e RSI: ffff88801c5f6070 RDI: 0000000000000008
+RBP: 0000000000000000 R08: 0000000000000004 R09: 000000000f8bd940
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888022855cf0
+R13: dffffc0000000000 R14: ffff888022855cb0 R15: 0000000000000000
+FS:  00007f35ebeae700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32830000 CR3: 000000001cf73000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kernfs_link_sibling+0x2a7/0x470 fs/kernfs/dir.c:383
+ kernfs_add_one+0x210/0x4f0 fs/kernfs/dir.c:768
+ __kernfs_create_file+0x2a0/0x350 fs/kernfs/file.c:1076
+ sysfs_add_file_mode_ns+0x213/0x3f0 fs/sysfs/file.c:294
+ create_files fs/sysfs/group.c:64 [inline]
+ internal_create_group+0x322/0xb80 fs/sysfs/group.c:148
+ internal_create_groups.part.0+0x90/0x140 fs/sysfs/group.c:188
+ internal_create_groups fs/sysfs/group.c:184 [inline]
+ sysfs_create_groups+0x29/0x50 fs/sysfs/group.c:214
+ device_add_groups drivers/base/core.c:2531 [inline]
+ device_add_attrs drivers/base/core.c:2640 [inline]
+ device_add+0x678/0x1e10 drivers/base/core.c:3388
+ netdev_register_kobject+0x185/0x400 net/core/net-sysfs.c:2015
+ register_netdevice+0xd77/0x1640 net/core/dev.c:10051
+ __ip_tunnel_create+0x398/0x5b0 net/ipv4/ip_tunnel.c:267
+ ip_tunnel_init_net+0x1f9/0x5d0 net/ipv4/ip_tunnel.c:1073
+ ops_init+0xb9/0x6b0 net/core/net_namespace.c:135
+ setup_net+0x793/0xe60 net/core/net_namespace.c:333
+ copy_net_ns+0x320/0x6b0 net/core/net_namespace.c:483
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xc1/0x1f0 kernel/nsproxy.c:228
+ ksys_unshare+0x449/0x920 kernel/fork.c:3205
+ __do_sys_unshare kernel/fork.c:3276 [inline]
+ __se_sys_unshare kernel/fork.c:3274 [inline]
+ __x64_sys_unshare+0x31/0x40 kernel/fork.c:3274
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f35eb08c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f35ebeae168 EFLAGS: 00000246 ORIG_RAX: 0000000000000110
+RAX: ffffffffffffffda RBX: 00007f35eb1abf80 RCX: 00007f35eb08c0f9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000040000200
+RBP: 00007f35eb0e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffdbc64066f R14: 00007f35ebeae300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__rb_insert lib/rbtree.c:115 [inline]
+RIP: 0010:rb_insert_color+0x71/0x7a0 lib/rbtree.c:436
+Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 0f 85 48 05 00 00 48 8b 2b 40 f6 c5 01 0f 85 81 01 00 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 <42> 80 3c 28 00 0f 85 01 05 00 00 4c 8b 75 08 49 39 de 0f 84 6d 01
+RSP: 0018:ffffc900064b7610 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: ffff8880228552f8 RCX: ffffc9000cdac000
+RDX: 1ffff1100450ab9e RSI: ffff88801c5f6070 RDI: 0000000000000008
+RBP: 0000000000000000 R08: 0000000000000004 R09: 000000000f8bd940
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888022855cf0
+R13: dffffc0000000000 R14: ffff888022855cb0 R15: 0000000000000000
+FS:  00007f35ebeae700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32d36000 CR3: 000000001cf73000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 89 d8             	mov    %rbx,%rax
+   3:	48 c1 e8 03          	shr    $0x3,%rax
+   7:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1)
+   c:	0f 85 48 05 00 00    	jne    0x55a
+  12:	48 8b 2b             	mov    (%rbx),%rbp
+  15:	40 f6 c5 01          	test   $0x1,%bpl
+  19:	0f 85 81 01 00 00    	jne    0x1a0
+  1f:	48 8d 7d 08          	lea    0x8(%rbp),%rdi
+  23:	48 89 f8             	mov    %rdi,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1) <-- trapping instruction
+  2f:	0f 85 01 05 00 00    	jne    0x536
+  35:	4c 8b 75 08          	mov    0x8(%rbp),%r14
+  39:	49 39 de             	cmp    %rbx,%r14
+  3c:	0f                   	.byte 0xf
+  3d:	84 6d 01             	test   %ch,0x1(%rbp)
 
-> Konrad
-> > +		};
-> > +
-> > +		sel-pins {
-> > +			pins = "gpio164";
-> > +			function = "gpio";
-> > +		};
-> > +
-> > +		mode-pins {
-> > +			pins = "gpio167";
-> > +			function = "gpio";
-> > +			output-high;
-> > +		};
-> > +	};
-> > +
-> > +	usb1_sbu_default: usb1-sbu-state {
-> > +		oe-n-pins {
-> > +			pins = "gpio48";
-> > +			function = "gpio";
-> > +		};
-> > +
-> > +		sel-pins {
-> > +			pins = "gpio47";
-> > +			function = "gpio";
-> > +		};
-> > +
-> > +		mode-pins {
-> > +			pins = "gpio50";
-> > +			function = "gpio";
-> > +			output-high;
-> > +		};
-> > +	};
-> >  };
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
