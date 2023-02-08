@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B868C68F00A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2251568F00B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjBHNmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S231407AbjBHNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjBHNmV (ORCPT
+        with ESMTP id S230246AbjBHNmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Feb 2023 08:42:21 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9955F2F7B1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0546301BD;
         Wed,  8 Feb 2023 05:42:20 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318CwiOr019691;
-        Wed, 8 Feb 2023 13:42:14 GMT
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318ArmJV026311;
+        Wed, 8 Feb 2023 13:42:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=QhhDhHLPtQlrKQ/0w7Ad6DBmj1X9Ylr1RZKpwCxkEM0=;
- b=kEQ/7x59rUDPu7hy2JVkKYppQSIP41bTYAE7LMYY4VLiOogaUUGClEpBnrloQJpsYYAS
- GZX/mfpCvx9iMYPjilWQ1UtUXFVn4CPmS7TWfCRGTtio5yxyRioKT0XUh3TsidWIM6Pt
- kMRjRI5Mnb8hd75vMkSvx0/96R/W7js4mX/f5L7YjoelpyyRfv8jBWidIsxQtNUOD/1x
- I837fsH8T2ih/frNJ2ZVrMwcZixt4MC1xVajatjrNY2cbIq85umn+X6rKNQI1ltUGink
- 9jDIOhjuIHtwRSIYQXGX2WBXuvP0tKC5wC28FQfkz+6wHK6mOthc/yOaQF9Y87jLnNa0 tw== 
+ bh=bazFhze46inAQct00eKWJ0u0iAV7QURaooeXwJixmjg=;
+ b=J6i5w7IsxDe5Hz7vIxmVLfTEg2zqSA60gMxtj2W8WQOiOzqsv/GYDiRjIofrmbeIm3Vj
+ SS/8ZV1ID1G90/kAAl92NEqzTHf/XwXPe7WcDZaprhggViF3wdnR2ZlTKAepGZurM1EV
+ GZ5v1FpXTIxkp1fIb0tYiYquCZbSYkyqKy9BtwmLOM0uv7iW4pNYHwB3srOJVw+cfr8x
+ wJbEThVYHtK55o4x2EBfLPUufmpYHiZOb/ifuC4ijRO7izNgZD6d5z4vfiXuyRQHAsfV
+ a6S/wnXyW2euAjmf9gw3tcObHvDcLXFWyfne86L0QkLR/B2KoFpAP60CWa15vN0k7dT9 rg== 
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm8x1rjwh-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkgafm82e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 08 Feb 2023 13:42:14 +0000
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 318DgAru025358;
-        Wed, 8 Feb 2023 13:42:10 GMT
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 318DgBRb025409;
+        Wed, 8 Feb 2023 13:42:11 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgekjer4-1;
-        Wed, 08 Feb 2023 13:42:10 +0000
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3nhgekjera-1;
+        Wed, 08 Feb 2023 13:42:11 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318DgAdL025367;
-        Wed, 8 Feb 2023 13:42:10 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318DgBCS025404;
+        Wed, 8 Feb 2023 13:42:11 GMT
 Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 318DgA0T025349;
-        Wed, 08 Feb 2023 13:42:10 +0000
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 318DgAG0025357;
+        Wed, 08 Feb 2023 13:42:11 +0000
 Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id BCFB7D97; Wed,  8 Feb 2023 05:42:09 -0800 (PST)
+        id E97D54BE6; Wed,  8 Feb 2023 05:42:09 -0800 (PST)
 From:   Kalyan Thota <quic_kalyant@quicinc.com>
 To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
@@ -52,9 +52,9 @@ Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
         dianders@chromium.org, swboyd@chromium.org,
         quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
         quic_abhinavk@quicinc.com, marijn.suijten@somainline.org
-Subject: [PATCH v3 3/4] drm/msm/dpu: avoid unnecessary check in DPU reservations
-Date:   Wed,  8 Feb 2023 05:42:03 -0800
-Message-Id: <1675863724-28412-4-git-send-email-quic_kalyant@quicinc.com>
+Subject: [PATCH v3 4/4] drm/msm/dpu: reserve the resources on topology change
+Date:   Wed,  8 Feb 2023 05:42:04 -0800
+Message-Id: <1675863724-28412-5-git-send-email-quic_kalyant@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1675863724-28412-1-git-send-email-quic_kalyant@quicinc.com>
 References: <1675863724-28412-1-git-send-email-quic_kalyant@quicinc.com>
@@ -62,15 +62,15 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rAvMRB28RJoGc1etAsSUKAz6TAmSm5Ql
-X-Proofpoint-ORIG-GUID: rAvMRB28RJoGc1etAsSUKAz6TAmSm5Ql
+X-Proofpoint-GUID: S8I0oNbYEoGEVE2Tdnd01IgG576FCIC1
+X-Proofpoint-ORIG-GUID: S8I0oNbYEoGEVE2Tdnd01IgG576FCIC1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-02-08_05,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=856
- lowpriorityscore=0 spamscore=0 impostorscore=0 adultscore=0
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0 spamscore=0
+ mlxlogscore=999 mlxscore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2212070000 definitions=main-2302080120
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
@@ -81,55 +81,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return immediately on failure, this will make dpu reservations
-part look cleaner.
+Some features like CTM can be enabled dynamically. Release
+and reserve the DPU resources whenever a topology change
+occurs such that required hw blocks are allocated appropriately.
 
 Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+Changes in v1:
+- Avoid mode_set call directly (Dmitry)
 
+Changes in v2:
+- Minor nits (Dmitry)
+
+Changes in v3:
+- avoid unnecessary modeset check call (Dmitry)
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  2 ++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 24 +++++++++++++++++++-----
+ 2 files changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+index 539b68b..85bd5645 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h
+@@ -204,6 +204,7 @@ struct dpu_crtc {
+  * @hw_ctls       : List of active ctl paths
+  * @crc_source    : CRC source
+  * @crc_frame_skip_count: Number of frames skipped before getting CRC
++ * @ctm_enabled   : Cached color management enablement state
+  */
+ struct dpu_crtc_state {
+ 	struct drm_crtc_state base;
+@@ -225,6 +226,7 @@ struct dpu_crtc_state {
+ 
+ 	enum dpu_crtc_crc_source crc_source;
+ 	int crc_frame_skip_count;
++	bool ctm_enabled;
+ };
+ 
+ #define to_dpu_crtc_state(x) \
 diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 46d2a5c..3920efd 100644
+index 3920efd..038e077 100644
 --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
 +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -636,25 +636,22 @@ static int dpu_encoder_virt_atomic_check(
- 		if (ret) {
- 			DPU_ERROR_ENC(dpu_enc,
- 					"mode unsupported, phys idx %d\n", i);
--			break;
-+			return ret;
- 		}
- 	}
+@@ -217,6 +217,19 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+ 	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
+ };
+ 
++static bool _dpu_enc_is_dspp_changed(struct drm_crtc_state *crtc_state,
++	struct msm_display_topology topology)
++{
++	struct dpu_crtc_state *cstate = to_dpu_crtc_state(crtc_state);
++
++	if ((cstate->ctm_enabled && !topology.num_dspp) ||
++	    (!cstate->ctm_enabled && topology.num_dspp)) {
++		crtc_state->mode_changed = true;
++		return true;
++	}
++
++	return false;
++}
+ 
+ bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
+ {
+@@ -642,14 +655,15 @@ static int dpu_encoder_virt_atomic_check(
  
  	topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, crtc_state);
  
--	/* Reserve dynamic resources now. */
--	if (!ret) {
--		/*
--		 * Release and Allocate resources on every modeset
--		 * Dont allocate when active is false.
--		 */
--		if (drm_atomic_crtc_needs_modeset(crtc_state)) {
--			dpu_rm_release(global_state, drm_enc);
-+	/*
-+	 * Release and Allocate resources on every modeset
-+	 * Dont allocate when active is false.
-+	 */
-+	if (drm_atomic_crtc_needs_modeset(crtc_state)) {
-+		dpu_rm_release(global_state, drm_enc);
++	_dpu_enc_is_dspp_changed(crtc_state, topology);
++
+ 	/*
+ 	 * Release and Allocate resources on every modeset
+-	 * Dont allocate when active is false.
+ 	 */
+ 	if (drm_atomic_crtc_needs_modeset(crtc_state)) {
+ 		dpu_rm_release(global_state, drm_enc);
  
--			if (!crtc_state->active_changed || crtc_state->active)
--				ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
--						drm_enc, crtc_state, topology);
--		}
-+		if (!crtc_state->active_changed || crtc_state->active)
-+			ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
-+					drm_enc, crtc_state, topology);
+-		if (!crtc_state->active_changed || crtc_state->active)
++		if (crtc_state->enable)
+ 			ret = dpu_rm_reserve(&dpu_kms->rm, global_state,
+ 					drm_enc, crtc_state, topology);
+ 	}
+@@ -1022,7 +1036,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
+ 	struct dpu_hw_blk *hw_lm[MAX_CHANNELS_PER_ENC];
+ 	struct dpu_hw_blk *hw_dspp[MAX_CHANNELS_PER_ENC] = { NULL };
+ 	struct dpu_hw_blk *hw_dsc[MAX_CHANNELS_PER_ENC];
+-	int num_lm, num_ctl, num_pp, num_dsc;
++	int num_lm, num_ctl, num_pp, num_dsc, num_dspp;
+ 	unsigned int dsc_mask = 0;
+ 	int i;
+ 
+@@ -1053,7 +1067,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
+ 		drm_enc->base.id, DPU_HW_BLK_CTL, hw_ctl, ARRAY_SIZE(hw_ctl));
+ 	num_lm = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+ 		drm_enc->base.id, DPU_HW_BLK_LM, hw_lm, ARRAY_SIZE(hw_lm));
+-	dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
++	num_dspp = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
+ 		drm_enc->base.id, DPU_HW_BLK_DSPP, hw_dspp,
+ 		ARRAY_SIZE(hw_dspp));
+ 
+@@ -1084,7 +1098,7 @@ static void dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
  	}
  
- 	trace_dpu_enc_atomic_check_flags(DRMID(drm_enc), adj_mode->flags);
+ 	cstate->num_mixers = num_lm;
+-
++	cstate->ctm_enabled = !!num_dspp;
+ 	dpu_enc->connector = conn_state->connector;
+ 
+ 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
 -- 
 2.7.4
 
