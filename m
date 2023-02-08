@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F57A68F3EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F075568F3F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjBHRBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
+        id S231312AbjBHRCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjBHRBR (ORCPT
+        with ESMTP id S231220AbjBHRCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:01:17 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4561C317
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:01:16 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-4c24993965eso241721657b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:01:16 -0800 (PST)
+        Wed, 8 Feb 2023 12:02:20 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50614E537
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:02:16 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id q4so18162444ybu.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 09:02:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xXdBKFQFjb45PJbE0WfevTYuOvd7Ed4TIGS1v3lQONw=;
-        b=IYDBhhuMNLvOxMUNieuhwuuF9uXlY3Q40X9spez9yj/kTGor601E2JU44ZjwWer7ei
-         CeWzoNfmFFnK2djRuZgotnT9X//bTMkS1g2gfcj6/jhIrR0Hzt3NeBwrQjz+AGNvZeLv
-         YoZsYffzCQi8itKIDcn4dTasqFfs57kAnrU6ikZsgOF7kCIKtFbInx3tElCxew6PfN1y
-         1EvjFBk8vCctHzYB3k3xkgfsCoOe4cQ/Wr6d9I50G9aiCWf2oSjDQc9nSiU7uK8aXI4s
-         IoaofrnXVS55YOGefRunieUPutdwkmW4EQRElQYvLag/FUXG51SOY/BFn0OcvmYgTSp6
-         5vCw==
+        bh=J6GQ6k0SpXRf+NY/XuyN7DEx4advOeWO/TlcuNhkMx0=;
+        b=qkdR5pkq6sV8hNH3YDKJ8++iTClWqw++RrBXApfqLOYQgMe4S7SF6Q5gm6WlcUFqAy
+         EcDtnNS2/nJgxMlDyNNCpWyL4L3Y7dyQVuQycGPcFZk3C8t3IlY7aaV9uHzszL9FOrlS
+         YVhdSnXGCHv3enJtHbWv6Hs5JMeWL4q2vi/c62FadmqIvBF+s6uDOs1h6ypjgyUks0yH
+         dxiM7QbyvZdmqyphgiW8HEdHkt0+yTgSWPnjIIeT+4UTHy2iwuqQTQ2upvprvgDXufCh
+         AgR72rVEXTs3X/7jqSTKT2qB1px+ihMQa7Izpe1ISycqiE4TCFxq+smYn5Ifli5ibYcv
+         10mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xXdBKFQFjb45PJbE0WfevTYuOvd7Ed4TIGS1v3lQONw=;
-        b=pGW38h/GbN/yD7hEYTaDIFA5j8/KThKyLDRy6RkFaoEAL4rjf6LoEr1cc96PGuudlE
-         smaIP7oPtDJyJeOEEg7tjHjtCpBvaylehAMeglbaU1v9zGSIWInQ+uwi07kXwq0tayQ2
-         PtYLTi+nUkdbt72hQCGh2GqE81VtKJI7rDcRXpT6fSZU7FQElanrh0NV1YZtDRSOGhCI
-         T7pG2XpIvmgQ1LQ46hd5m5HdoDupOzuNQXuH/AcABF5umI+gZttNCdztxBjGu9AY2/S4
-         p6IzshU+hdJoIoX0MzXfgbzxutg0iY2Z0vc/HTr3U+4vbUcqypNK/yEVgxydCPADH38n
-         h8ww==
-X-Gm-Message-State: AO0yUKXG5minV/TuKfI1NcK6Ak5rhSHisFX2ziEb0V2Sh+F7DFDnR8V0
-        qcmtig6+Lp2hkGP4N9FVTnNkBClfDUsTPyssHOqoHOunR4p8F/Nw
-X-Google-Smtp-Source: AK7set+cXrZJrfRBDM8O463q/uWZDKhuEYG0A6IIhrhL+2YLEgmuhPgKCxOXMuOmKcmi1rOzXNkSd3J5BIJj/WAfcRE=
-X-Received: by 2002:a81:9e07:0:b0:527:b49f:b89 with SMTP id
- m7-20020a819e07000000b00527b49f0b89mr937260ywj.176.1675875675180; Wed, 08 Feb
- 2023 09:01:15 -0800 (PST)
+        bh=J6GQ6k0SpXRf+NY/XuyN7DEx4advOeWO/TlcuNhkMx0=;
+        b=OflIo3tw8+OImEUJCH3Hsn6BSlqyLIWN7sS5if9fDYi2KcDqE3qONv870VeIJlYcoj
+         gIhiaM4v8UvEFscT/nB/eaW7zHFOrXGz21u1sYo3B/l9UXly9zq9tZV06VlRWZ4izQ7D
+         E6oV5uj1RrNeEOfekC4AK8kkmRnvy04Bueq7GXNXQWqaiVd88t6hYPMQb1+6knuP7XhK
+         ebFM5RhERhhiQBhcjHhgWMciQPyzOfIAcJQMTL3ZbkG9UC9sBiV5TXQIjmT6TmsdAzfm
+         2f8hgSRKmPJh7K6b+/KpqrHfhZfcDmbLAOeJf1xmQ3Ze7YaZQVTxQjuscyzku0B8KoDQ
+         WsYA==
+X-Gm-Message-State: AO0yUKVCL7jgCxQ61Az7lc6zsbozraPUquiXhuJzdKJz7/ZwaUn0dd5R
+        Py6oCtWV6v9wEsJxu6lIzVl2qjHaRVpOxO7xI3NRXw==
+X-Google-Smtp-Source: AK7set8Afj6wAQvyLOzq7FCZwVWe6hcVYmC9OxxsiADkYMOvQvPBxVg623zz/LBUOZi51jIrZeS2oVdFwi8z8nOy5/g=
+X-Received: by 2002:a05:6902:6:b0:82b:1e20:3ae6 with SMTP id
+ l6-20020a056902000600b0082b1e203ae6mr599159ybh.364.1675875735798; Wed, 08 Feb
+ 2023 09:02:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20230208164011.2287122-1-arnd@kernel.org> <20230208164011.2287122-2-arnd@kernel.org>
-In-Reply-To: <20230208164011.2287122-2-arnd@kernel.org>
+References: <20230208164011.2287122-1-arnd@kernel.org>
+In-Reply-To: <20230208164011.2287122-1-arnd@kernel.org>
 From:   Marco Elver <elver@google.com>
-Date:   Wed, 8 Feb 2023 18:00:38 +0100
-Message-ID: <CANpmjNNYcVJxeuJPFknf=wCaapgYSn0+as4+iseJGpeBZdi4tw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kmsan: disable ftrace in kmsan core code
+Date:   Wed, 8 Feb 2023 18:01:39 +0100
+Message-ID: <CANpmjNP5fem=aueS1_--gxzFFOOqYTEOREMDZEhn0TMKwUP4qw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] kasan: mark addr_has_metadata __always_inline
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Alexander Potapenko <glider@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Andrey Konovalov <andreyknvl@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-mm@kvack.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -80,58 +81,41 @@ On Wed, 8 Feb 2023 at 17:40, Arnd Bergmann <arnd@kernel.org> wrote:
 >
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> objtool warns about some suspicous code inside of kmsan:
+> When the compiler decides not to inline this function, objdump
+> complains about incorrect UACCESS state:
 >
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_n+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_n+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_1+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_1+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_2+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_2+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_4+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_4+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_load_8+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_metadata_ptr_for_store_8+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_instrument_asm_store+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_chain_origin+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_poison_alloca+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_warning+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: __msan_get_context_state+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: kmsan_copy_to_user+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: kmsan_unpoison_memory+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: kmsan_unpoison_entry_regs+0x4: call to __fentry__() with UACCESS enabled
-> vmlinux.o: warning: objtool: kmsan_report+0x4: call to __fentry__() with UACCESS enabled
+> mm/kasan/generic.o: warning: objtool: __asan_load2+0x11: call to addr_has_metadata() with UACCESS enabled
 >
-> Similar code already exists in kasan, which avoids this by skipping
-> ftrace annotations, so do the same thing here.
->
-> Fixes: f80be4571b19 ("kmsan: add KMSAN runtime core")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Marco Elver <elver@google.com>
+
 > ---
->  mm/kmsan/Makefile | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  mm/kasan/kasan.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/mm/kmsan/Makefile b/mm/kmsan/Makefile
-> index 98eab2856626..389fd767a11f 100644
-> --- a/mm/kmsan/Makefile
-> +++ b/mm/kmsan/Makefile
-> @@ -16,6 +16,14 @@ CC_FLAGS_KMSAN_RUNTIME += -DDISABLE_BRANCH_PROFILING
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index 3231314e071f..9377b0789edc 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -297,7 +297,7 @@ static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
+>                 << KASAN_SHADOW_SCALE_SHIFT);
+>  }
 >
->  CFLAGS_REMOVE.o = $(CC_FLAGS_FTRACE)
-
-That means this CFLAGS_REMOVE.o didn't work, right? Can it be removed?
-
-> +# Disable ftrace to avoid recursion.
-> +CFLAGS_REMOVE_core.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_hooks.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_init.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_instrumentation.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
-> +CFLAGS_REMOVE_shadow.o = $(CC_FLAGS_FTRACE)
-> +
->  CFLAGS_core.o := $(CC_FLAGS_KMSAN_RUNTIME)
->  CFLAGS_hooks.o := $(CC_FLAGS_KMSAN_RUNTIME)
->  CFLAGS_init.o := $(CC_FLAGS_KMSAN_RUNTIME)
+> -static inline bool addr_has_metadata(const void *addr)
+> +static __always_inline bool addr_has_metadata(const void *addr)
+>  {
+>         return (kasan_reset_tag(addr) >=
+>                 kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
+> @@ -316,7 +316,7 @@ bool kasan_check_range(unsigned long addr, size_t size, bool write,
+>
+>  #else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
+>
+> -static inline bool addr_has_metadata(const void *addr)
+> +static __always_inline bool addr_has_metadata(const void *addr)
+>  {
+>         return (is_vmalloc_addr(addr) || virt_addr_valid(addr));
+>  }
 > --
 > 2.39.1
 >
