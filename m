@@ -2,204 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 030E768E87F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:50:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A2768E881
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 07:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjBHGt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 01:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S230061AbjBHGw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 01:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjBHGt6 (ORCPT
+        with ESMTP id S229490AbjBHGwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 01:49:58 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303DB3B679
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 22:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675838997; x=1707374997;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jQ0Pzpr+hwWEO+0F2vpI8YRW24uO10v5HXKmbJCnmlE=;
-  b=fFLuugBeL3YpIc6kDVoNraKvrUuRaiZXMAGvLwbzp5cPQ3TxVuyWnXh9
-   w4jlIBoEp64Gr0VCmK0QUDAm0MApzCtpksHJ3em8BzvWIZ3zKgFskm46o
-   9v+UMuqgIIZsyFEdB1nVhAcXfyL0Lo15wQSSBGO4Btcb5mmwL6n0yY6Al
-   8mM1/+in1YQQdxLPHm9MR+DE7+zGmhlwPEDA4jMMKeOc2+ZYR1+D0wWB4
-   2E5mXMhuyAy5HisSt9W9SNTqAU+S3x1U96khT2jrTWHl5CIT5WuVxBVjv
-   dwNc+JwvH5UTsemnvazhI993aWPYGw7BhanVpAvavV4Nw4ru2I+lUz9wW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="331018627"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="331018627"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 22:49:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="730752157"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="730752157"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Feb 2023 22:49:54 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPeHC-0004Fo-0A;
-        Wed, 08 Feb 2023 06:49:54 +0000
-Date:   Wed, 08 Feb 2023 14:49:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/vdso] BUILD SUCCESS WITH WARNING
- dac0da428f8dfb23666ab4ea54a7768c152b857a
-Message-ID: <63e345e4.SOCHp44J2G4L2gZg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 8 Feb 2023 01:52:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3057442E5;
+        Tue,  7 Feb 2023 22:52:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55085614A9;
+        Wed,  8 Feb 2023 06:52:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802ECC433EF;
+        Wed,  8 Feb 2023 06:52:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675839143;
+        bh=1P71LfU0+7FJhlIeYP8dlsmXxGhh3Acgaywm3d013ZY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RyDU3ix2lD9bR86sxLas/tTYmH28sDiYAj6aJu6q1z1coHn1ODc7pYp24nYo3EMex
+         XAuMLx/oCkn3UOiv+LgZCzSXDYTBSKPgSNYvtYbg4rFoeHi5lEMvrey8kBp12VBh3B
+         EOHEH+kYvp+Huh18W7A7c9XLb/Wzv/5TfoTMQTobJP1JXCZDKFyOP/F0Ib19L72Hpd
+         5R7KWA//vxQsXCiKuq1b3vPigUT1JRH3wY2D9K0QlekGSHM0YOfFukMByEi+w8bElH
+         hQH5RuQ6BPTSrzPm2Q/rtC+R7iaYhMYmrVzOWKC5R70Ht0E++MuEKCE8+n0Idt5aYE
+         RtebwbDa60i3w==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Cc:     Bill Wendling <morbo@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] randstruct: disable Clang 15 support
+Date:   Tue,  7 Feb 2023 22:51:33 -0800
+Message-Id: <20230208065133.220589-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/vdso
-branch HEAD: dac0da428f8dfb23666ab4ea54a7768c152b857a  x86/vdso: Fix -Wmissing-prototypes warnings
+From: Eric Biggers <ebiggers@google.com>
 
-Warning reports:
+The randstruct support released in Clang 15 is unsafe to use due to a
+bug that can cause miscompilations: "-frandomize-layout-seed
+inconsistently randomizes all-function-pointers structs"
+(https://github.com/llvm/llvm-project/issues/60349).  It has been fixed
+on the Clang 16 release branch, so add a Clang version check.
 
-https://lore.kernel.org/oe-kbuild-all/202302070742.iYcnoJwk-lkp@intel.com
+Fixes: 035f7f87b729 ("randstruct: Enable Clang support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ security/Kconfig.hardening | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Warning: (recently discovered and may have been fixed)
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index 53baa95cb644f..0f295961e7736 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -281,6 +281,9 @@ endmenu
+ 
+ config CC_HAS_RANDSTRUCT
+ 	def_bool $(cc-option,-frandomize-layout-seed-file=/dev/null)
++	# Randstruct was first added in Clang 15, but it isn't safe to use until
++	# Clang 16 due to https://github.com/llvm/llvm-project/issues/60349
++	depends on !CC_IS_CLANG || CLANG_VERSION >= 160000
+ 
+ choice
+ 	prompt "Randomize layout of sensitive kernel structures"
 
-arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for '__vdso_getcpu' [-Wmissing-prototypes]
-arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: warning: no previous prototype for function '__vdso_getcpu' [-Wmissing-prototypes]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- i386-allyesconfig
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- i386-defconfig
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- i386-randconfig-a011-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- i386-randconfig-a012-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- i386-randconfig-a013-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- i386-randconfig-a014-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- i386-randconfig-a015-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- i386-randconfig-a016-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-allyesconfig
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-defconfig
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-randconfig-a011
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-randconfig-a011-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-randconfig-a015-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-randconfig-a016-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-randconfig-r024-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-rhel-8.3
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-rhel-8.3-func
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-rhel-8.3-kselftests
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-rhel-8.3-kunit
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-|-- x86_64-rhel-8.3-kvm
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-`-- x86_64-rhel-8.3-syz
-    `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-__vdso_getcpu
-clang_recent_errors
-|-- i386-randconfig-a001-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- i386-randconfig-a002-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- i386-randconfig-a003-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- i386-randconfig-a004-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- i386-randconfig-a005-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- i386-randconfig-a006-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- i386-randconfig-a013
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- x86_64-randconfig-a001-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- x86_64-randconfig-a002-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- x86_64-randconfig-a003-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- x86_64-randconfig-a004-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-|-- x86_64-randconfig-a005-20230206
-|   `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-`-- x86_64-rhel-8.3-rust
-    `-- arch-x86-entry-vdso-vdso32-..-vgetcpu.c:warning:no-previous-prototype-for-function-__vdso_getcpu
-
-elapsed time: 722m
-
-configs tested: 42
-configs skipped: 81
-
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64               randconfig-a013-20230206
-x86_64               randconfig-a011-20230206
-x86_64               randconfig-a012-20230206
-x86_64               randconfig-a014-20230206
-i386                                defconfig
-x86_64               randconfig-a015-20230206
-x86_64               randconfig-a016-20230206
-i386                 randconfig-a011-20230206
-i386                 randconfig-a014-20230206
-i386                 randconfig-a012-20230206
-i386                 randconfig-a013-20230206
-i386                             allyesconfig
-i386                 randconfig-a015-20230206
-i386                 randconfig-a016-20230206
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-i386                 randconfig-a002-20230206
-i386                 randconfig-a004-20230206
-i386                 randconfig-a003-20230206
-i386                 randconfig-a001-20230206
-i386                 randconfig-a005-20230206
-i386                 randconfig-a006-20230206
-x86_64               randconfig-a001-20230206
-x86_64               randconfig-a002-20230206
-x86_64               randconfig-a004-20230206
-x86_64               randconfig-a003-20230206
-x86_64               randconfig-a005-20230206
-x86_64               randconfig-a006-20230206
-
+base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
