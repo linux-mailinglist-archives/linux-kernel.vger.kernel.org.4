@@ -2,92 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE4568E554
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405AD68E558
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjBHBRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 20:17:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S230151AbjBHBT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 20:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBHBRq (ORCPT
+        with ESMTP id S229515AbjBHBTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 20:17:46 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4143BDB6;
-        Tue,  7 Feb 2023 17:17:41 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PBMYW5drMz4xFv;
-        Wed,  8 Feb 2023 12:17:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675819057;
-        bh=dYHL607qD4Y5hhqCuRcTxAaY1QabKYCouRtj+G4BJcQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jQyuQKv3TIqT2dHcrNWk7k1XLDsxZqeXao7Enx0n4N9vIMJrHiu2LvfEpsZ2noy/n
-         IrEEkBYplxquBGJH3M9XHkqFFa+qa51kTkQli7U3wUHS6Kg3P8Urexr146yuXusjf/
-         putet2Zrog4WPotv5DaEZThXRhjK5luxH2LsBniHaAPXk/vbNlHqpJANlm9tE7kCep
-         tjd9A+SVcTLNiLDL+ppAz8LgBGswAxmgSaETfL4SPzWFKyNJ14CaUyKV8myaesErHF
-         2qX3n5xtUMdhX9EBmIYxmNt1OuLzy3fMAIyGyfruFd6WOqyNgQx5wW5/NjWBYO++b/
-         Mn7MhxxhSQ3Og==
-Date:   Wed, 8 Feb 2023 12:17:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the usb tree
-Message-ID: <20230208121734.37e45034@canb.auug.org.au>
+        Tue, 7 Feb 2023 20:19:24 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2869241B47;
+        Tue,  7 Feb 2023 17:19:22 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R431e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vb90Ra5_1675819160;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vb90Ra5_1675819160)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Feb 2023 09:19:21 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] HID: core: clean up some inconsistent indentings
+Date:   Wed,  8 Feb 2023 09:19:19 +0800
+Message-Id: <20230208011919.92807-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/96l9e7VU5fn9z7SYWpimaAy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/96l9e7VU5fn9z7SYWpimaAy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+./drivers/hid/hid-core.c:2727:2-17: code aligned with following code on line 2732
 
-Hi all,
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3980
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/hid/hid-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The following commit is also in the net tree tree as a different commit
-(but the same patch):
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 842afc88a949..f080f132b36c 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2729,10 +2729,10 @@ int hid_add_device(struct hid_device *hdev)
+ 	/*
+ 	 * Check for the mandatory transport channel.
+ 	 */
+-	 if (!hdev->ll_driver->raw_request) {
++	if (!hdev->ll_driver->raw_request) {
+ 		hid_err(hdev, "transport driver missing .raw_request()\n");
+ 		return -EINVAL;
+-	 }
++	}
+ 
+ 	/*
+ 	 * Read the device report descriptor once and use as template
+-- 
+2.20.1.7.g153144c
 
-  93fd565919cf ("net: USB: Fix wrong-direction WARNING in plusb.c")
-
-This is commit
-
-  811d581194f7 ("net: USB: Fix wrong-direction WARNING in plusb.c")
-
-in the net tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/96l9e7VU5fn9z7SYWpimaAy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPi+C4ACgkQAVBC80lX
-0GyMZQf/adhYa01yhGLVE7G+Jn0y35VTeInHYuMXnh69qCmjwBFIoxOSRRVMf1W6
-CgWAKNNez4ECbcStsWx2MdHapIEdHUDjsWBqY3t4UJKwWgMoSley9mu/0u9Gu2ku
-zJSq3JeV/Qrt1Kwd0CrbrnLY/Bmh2VT98KBI8PL0tz+j9FRWvKdagm5tJaLMDqna
-7g8443YNNdWTfl+G/bUugbu2VOpZSqgVZTgF+iktfW1/BftPkADXzwF0c2C4J+sQ
-rgLbSEKQVnY70z8q0ZHULl7pAfQ5WnSc6nu0N5ubFpapc8pNXfEds6Z6gEP5fHDd
-FZAr5v7FdKxfnCl5w/NBXILDzsVMBg==
-=umPI
------END PGP SIGNATURE-----
-
---Sig_/96l9e7VU5fn9z7SYWpimaAy--
