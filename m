@@ -2,122 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3232D68E64B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F30A68E651
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:52:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjBHCvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S230291AbjBHCv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 21:51:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjBHCvP (ORCPT
+        with ESMTP id S230287AbjBHCvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:51:15 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47AB42DFE
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 18:51:13 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id g17so284812ply.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 18:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aiw2Ta+qPdaOSYiFSjZzLWkGsOWxNlcenf3Fz/uk66k=;
-        b=ZsCiURAu9xsOOeq+DYgbrFnmT08fASos4hHrcniE2/gf2Mn9G3Ky25vvfkfeMjAg8b
-         4fxNtLqw5OkNi41rNNLlvXtavVGmKBW1kQCuJ7NUC2rzDIhNJNifbGWj5z54Fwm4VzAd
-         mwoBl9t9GhUBYpO4epXx52TJ39nLSE7ECc9F7r8CNl71Uxjhd0npFRp1ct9qb1IVCe1J
-         oKwSfNkBhdvA3GNM6nHlyQUxIbrbCcpBxJQiUedc8NQmx9zS3TfjDCFW0aMU7kWUGmfP
-         R5YbPOFQumIvDkndayj7/xVkahcy+4a6wyv+q3fdKa3kBxRJ8rmQujl+ux/RgaYVpPFv
-         ZH/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aiw2Ta+qPdaOSYiFSjZzLWkGsOWxNlcenf3Fz/uk66k=;
-        b=TVyNqvurOFu7394WOeWL7knqdX2xCu170hTxztdJwcjvkgjituZqBdnFoEgqjpCTHp
-         v3mshnMcvaVyxomfKdhGxM7B5aBXfKVWgnAOEQT+85YI26/ItLeKYBF1miGCywVVbH2q
-         M2mS+qnATkRxLWDyoPmF3XGakjtaXJJtbI19Dc8EGNXRONok4RXnhszjGHhyNnKSptic
-         YZ+pUKGSO8YyPxKbVLvp+aK6sMB1Z9iKJLastbtvWzXjkc/zH4HPQy64h81dUmXFyZrp
-         Z8u87t7rARbAu/kkKkQJ6STW9DgMkWVva4v/N98UA4Q1Cz/vavz7Ygdu/Tk6yApzxKGH
-         MLRQ==
-X-Gm-Message-State: AO0yUKWJIMsyxevaLNaYCMq5ybW3fZYcas+2dLg9ousxFkm2ShvBotBj
-        aCeQCoWXYvZRJUp20OYD2mprSg==
-X-Google-Smtp-Source: AK7set/S2Cq0ByezHnBwLK/m74mZmeQa/ljMv8LSKmVVTJ/rYIKApNbiSJjaZQoXFbrWujDFc/1y7A==
-X-Received: by 2002:a17:903:32c3:b0:199:4362:93f6 with SMTP id i3-20020a17090332c300b00199436293f6mr1129768plr.4.1675824673374;
-        Tue, 07 Feb 2023 18:51:13 -0800 (PST)
-Received: from [10.200.9.31] ([139.177.225.226])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170902a60e00b001990361c134sm6099725plq.87.2023.02.07.18.51.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 18:51:12 -0800 (PST)
-Message-ID: <2dea582a-acb1-c0f5-2e59-8d14470e380a@bytedance.com>
-Date:   Wed, 8 Feb 2023 10:51:05 +0800
+        Tue, 7 Feb 2023 21:51:55 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC1B8684
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 18:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675824713; x=1707360713;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Mwr3qNzGCEl1ilH3eggGBCQcHoceTEn3i6eC1KZclvU=;
+  b=K+U5qdUqqMVaGYb63CrKF7cQ3o4JwzoaebDGaYYv99B8dEq+/hhhhwyP
+   P3hxz4p2sWa+EzM6/A+YXgTXqtM5+VJ4b5MPbr+uXclI7+jB9DeJYSwxt
+   w++fuYgsHCfca8qEIsCfk6rwCm86n7CR2IgovEshWJuObGlq6tZS19mKZ
+   O9N8IsK0jF3D2n9CAWJu35aQPxTfU3+tvaJ1iP1fw0qsS1U9QfNJ0pgVF
+   jrFrNPG9gXiktOORdYlwG0z159oNvNFjL12NYcHZ3SoXPGtKNQvBdDxAF
+   X7GSJO+S9FrH6yS4yQxlJdFjjl1w/RIaTadywa950yJAlPDe22SYBticO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="330984866"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="330984866"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 18:51:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="809777118"
+X-IronPort-AV: E=Sophos;i="5.97,279,1669104000"; 
+   d="scan'208";a="809777118"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Feb 2023 18:51:51 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPaYj-00046e-2I;
+        Wed, 08 Feb 2023 02:51:45 +0000
+Date:   Wed, 8 Feb 2023 10:51:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning:
+ "THREAD_SHIFT" is not defined, evaluates to 0
+Message-ID: <202302081034.IDWxXcwG-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 0/3] some minor fixes of error checking about
- debugfs_rename()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rafael@kernel.org,
-        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230202093256.32458-1-zhengqi.arch@bytedance.com>
- <167548141786.31101.12461204128706467220.git-patchwork-notify@kernel.org>
- <aeae8fb8-b052-0d4a-5d3e-8de81e1b5092@bytedance.com>
- <20230207103124.052b5ce1@kernel.org>
-Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230207103124.052b5ce1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Masahiro,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: 80b6093b55e31c2c40ff082fb32523d4e852954f kbuild: add -Wundef to KBUILD_CPPFLAGS for W=1 builds
+date:   8 weeks ago
+config: powerpc-randconfig-r015-20230208 (https://download.01.org/0day-ci/archive/20230208/202302081034.IDWxXcwG-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=80b6093b55e31c2c40ff082fb32523d4e852954f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 80b6093b55e31c2c40ff082fb32523d4e852954f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/ arch/powerpc/kvm/ arch/powerpc/platforms/85xx/ arch/powerpc/sysdev/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/powerpc/kvm/bookehv_interrupts.S:26:
+>> arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning: "THREAD_SHIFT" is not defined, evaluates to 0 [-Wundef]
+      20 | #if (THREAD_SHIFT < 15)
+         |      ^~~~~~~~~~~~
 
 
-On 2023/2/8 02:31, Jakub Kicinski wrote:
-> On Tue, 7 Feb 2023 18:30:40 +0800 Qi Zheng wrote:
->>> Here is the summary with links:
->>>     - [1/3] debugfs: update comment of debugfs_rename()
->>>       (no matching commit)
->>>     - [2/3] bonding: fix error checking in bond_debug_reregister()
->>>       https://git.kernel.org/netdev/net/c/cbe83191d40d
->>>     - [3/3] PM/OPP: fix error checking in opp_migrate_dentry()
->>>       (no matching commit)
->>
->> Does "no matching commit" means that these two patches have not been
->> applied? And I did not see them in the linux-next branch.
-> 
+vim +/THREAD_SHIFT +20 arch/powerpc/kvm/../kernel/head_booke.h
 
-Hi Jakub,
+1a4b739bbb4f885 Christophe Leroy 2019-04-30  10  
+63dafe5728e7354 Becky Bruce      2006-01-14  11  /*
+63dafe5728e7354 Becky Bruce      2006-01-14  12   * Macros used for common Book-e exception handling
+63dafe5728e7354 Becky Bruce      2006-01-14  13   */
+63dafe5728e7354 Becky Bruce      2006-01-14  14  
+63dafe5728e7354 Becky Bruce      2006-01-14  15  #define SET_IVOR(vector_number, vector_label)		\
+63dafe5728e7354 Becky Bruce      2006-01-14  16  		li	r26,vector_label@l; 		\
+63dafe5728e7354 Becky Bruce      2006-01-14  17  		mtspr	SPRN_IVOR##vector_number,r26;	\
+63dafe5728e7354 Becky Bruce      2006-01-14  18  		sync
+63dafe5728e7354 Becky Bruce      2006-01-14  19  
+e12401222f749c3 Yuri Tikhonov    2009-01-29 @20  #if (THREAD_SHIFT < 15)
+e12401222f749c3 Yuri Tikhonov    2009-01-29  21  #define ALLOC_STACK_FRAME(reg, val)			\
+e12401222f749c3 Yuri Tikhonov    2009-01-29  22  	addi reg,reg,val
+e12401222f749c3 Yuri Tikhonov    2009-01-29  23  #else
+e12401222f749c3 Yuri Tikhonov    2009-01-29  24  #define ALLOC_STACK_FRAME(reg, val)			\
+e12401222f749c3 Yuri Tikhonov    2009-01-29  25  	addis	reg,reg,val@ha;				\
+e12401222f749c3 Yuri Tikhonov    2009-01-29  26  	addi	reg,reg,val@l
+e12401222f749c3 Yuri Tikhonov    2009-01-29  27  #endif
+e12401222f749c3 Yuri Tikhonov    2009-01-29  28  
 
-> Correct, we took the networking patch to the networking tree.
+:::::: The code at line 20 was first introduced by commit
+:::::: e12401222f749c37277a313d631dc024bbfd3b00 powerpc/44x: Support for 256KB PAGE_SIZE
 
-Thank you very much. :)
+:::::: TO: Yuri Tikhonov <yur@emcraft.com>
+:::::: CC: Josh Boyer <jwboyer@linux.vnet.ibm.com>
 
-> You'd be better off not grouping patches from different subsystems
-> if there are no dependencies. Maintainers may get confused about
-> who's supposed to apply them, err on the side of caution and
-> not apply anything.
-
-Got it. I will send [1/3] and [3/3] separately.
-
-> 
->> If so, hi Greg, Can you help to review and apply these two patches
->> ([1/3] and [3/3])?
-> 
-> Or 3/3 should go to Viresh?.. Dunno..
-
-Got it.
-
-Thanks,
-Qi
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
