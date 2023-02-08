@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C26A68EC98
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C780A68EC97
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjBHKQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55508 "EHLO
+        id S231226AbjBHKQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjBHKP6 (ORCPT
+        with ESMTP id S231194AbjBHKP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:15:58 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8422C23662
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:15:57 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id q8so12951291wmo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:15:57 -0800 (PST)
+        Wed, 8 Feb 2023 05:15:59 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CBC4390B
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 02:15:58 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so1059763wma.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 02:15:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7AX0KvsHNXIwnS/VJd4Zm7BJ6Z2WcU4zrwjwY9zApro=;
-        b=otB5oI1h2JjdnPTN1uupxEvdwOdGJFMuwogAF3TapP0WoZkknD9Ir79LtK5kA8SIMi
-         iJwSnkoxqtECHPDMRzgQHfmIiccFRY6jyy3EllP4YZPfOUScCxib0YDMY8XiqcoYfapF
-         YixXF5FqGyzIZ9Oo5YVZK3HRr2u0e8PkFJ2CFJ5tf2B+exRAUUHuKPzaWlO0t8E4IDT4
-         Nbse+sG1sO4pBXqNdrWKxgrMR1dq2/oq2uf8Co6dnxOwxymkuU/vF0vw9A+PUIl0dVsq
-         oJhj6Wl4xajS7UzXwMw9yJLvVK4RLBV6X3N1g+89BY0jhk33VyRzhBewiBaM8TmHDrcx
-         BS2A==
+        bh=49xfQXijB76l60qaT7Z6y5pL81SUu0qI+8WlIubqbjg=;
+        b=gA3+N5HCQCDSfTWCK2lAx7KSNX5Hgzhutg1Rt0iIsmzBXjmyOwn5ijz0CFXd6Dbhsk
+         skuHIVhtJGMwbMbJUdnOXu2NxvJd/+yvOsCXIaKvRGyxVnn6Xs2NtiwKrVvuEwJM0kCS
+         5Txpn44mlT2mdIgjoeVS2iD21KzP8Pqb+/9dEgyg9NCsvkd+LdUZgblIPZ/GeF0X9mXt
+         7Fqf/Fswa21N+/CSvMtXNleg3DXzEkYVHzI0ecwz0Kx20UAHQZzjU136DQMu52SwLv6q
+         LQbF9BN7SVS1E0m47zABYoNrlbHlRWRVZirrXA5ewXHXYzMtLlSZPh9ZIeq8ADMsGQLi
+         o8Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7AX0KvsHNXIwnS/VJd4Zm7BJ6Z2WcU4zrwjwY9zApro=;
-        b=3wjGDagmRDooYouHMeKlOpQmkvCOvibZ7D6C9mOx9bPEg19Efn52Hk8p+KJn/bwp9f
-         d+cjPgz3DVBaARl8ItDjkvOR1ydomEoiAc6zlKE2/ei6WY0lZeaepFA7yJbTgT8VeNjP
-         Zl+cdqDwLGoB+zaQfQou6QqD6uo7sFbWeM4zsaNjZPqq5PYC7Tz+/IT1QNp5+1Il3eY6
-         nJmvOXz6qhrb1z5hXE93kNsm0CUZiGfPF12y9jlYGW9oXY3ImRM9AaaGX863Y624WQuD
-         1cZwoouocMflREcJ8IAaTBbws71eviCQsg0DIZDk89eBKz/y/clLm6ZLWP9/vI53J7rN
-         ElHw==
-X-Gm-Message-State: AO0yUKXTxElzELEURegepVV6su/NEf73TI2zKbNgpwQLuWmgBaWG8Djh
-        /aEeoAtdSw3ndP/me9vHhVR4EA==
-X-Google-Smtp-Source: AK7set/KVAJ9urDvdx9Mib0W5fhtxUGBPc2Cgcsin9K4324Fl6UNdsN4sun4S8bzZmC8WB1eg90eOg==
-X-Received: by 2002:a05:600c:708:b0:3df:fcbd:3159 with SMTP id i8-20020a05600c070800b003dffcbd3159mr1354532wmn.3.1675851356081;
-        Wed, 08 Feb 2023 02:15:56 -0800 (PST)
+        bh=49xfQXijB76l60qaT7Z6y5pL81SUu0qI+8WlIubqbjg=;
+        b=HQHrf4j5K1M7zbLpwBP7Tgk9GRE7xHKg0ejT708tYh3j+0fdOSChOKkqLnpkWgI4Pr
+         3O0ODZ/FFuFEDYmQPQe/R9JAWyM0ggpvKGXmo/O80we7WJ0k9RIO89fglLRaYW1nxMY4
+         VMBZhKjMwEdb4sT42iYfCkLLvclz9zprgPDfjVALtGRedLkJQOVVkOXd/onlq9gkn+Mg
+         YZqckK0L9KBZA8SYyZhZqyD+ZULa8WLWMFQr0bvwvdxXu3gmSmgJlfQhSzewvLHmr4w4
+         UgFmEoOR5ZCNCl5TICCqxZ1fTSvDdRjc+ZdkIyoLn1VuL+UuEJJLJKGC/bEtIFfqVcAB
+         tAkQ==
+X-Gm-Message-State: AO0yUKWPcQ0/sfp7iZicl5DRsH9rj7lX5MzhgQBoBXGAv7xyhm6QnKqT
+        o2HTWIBc7JvQH39NoGRDBvRWJg==
+X-Google-Smtp-Source: AK7set8+a67vFQhEsNOGq72ebMc7Hy74DAStJ4dxQG5w7ZrdDobR6OOZ8N1+Q5kFi4stZWp5ErdDkQ==
+X-Received: by 2002:a05:600c:1604:b0:3d2:3be4:2d9a with SMTP id m4-20020a05600c160400b003d23be42d9amr6073107wmn.20.1675851357957;
+        Wed, 08 Feb 2023 02:15:57 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003dc4ecfc4d7sm1496328wmq.29.2023.02.08.02.15.54
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003dc4ecfc4d7sm1496328wmq.29.2023.02.08.02.15.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 02:15:55 -0800 (PST)
+        Wed, 08 Feb 2023 02:15:57 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -64,9 +64,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 4/7] dt-bindings: mailbox: qcom,apcs-kpss-global: drop mbox-names from example
-Date:   Wed,  8 Feb 2023 11:15:42 +0100
-Message-Id: <20230208101545.45711-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 5/7] dt-bindings: soc: qcom,apr: correct qcom,intents type
+Date:   Wed,  8 Feb 2023 11:15:43 +0100
+Message-Id: <20230208101545.45711-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
 References: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
@@ -82,36 +82,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qualcomm G-Link RPM edge bindings do not allow and do not use mbox-names
-property.
+The qcom,intents property is a list of pairs, thus it should be defined
+as uint32-matrix.
 
+Fixes: b2d7616e13c4 ("dt-bindings: soc: qcom: apr: add missing properties")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 ---
 
 Changes since v1:
-1. None.
-2. Previously was sent as separate patch.
-
-There are no strict dependencies. This can go anytime. The next patch
-(glink-rpm-edge) should be applied in the same or later cycle (could be
-via different trees).
+1. New patch
 ---
- .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml       | 1 -
- 1 file changed, 1 deletion(-)
+ Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-index 943f9472ae10..56b386b688b3 100644
---- a/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-+++ b/Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml
-@@ -155,7 +155,6 @@ examples:
-         interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-         qcom,rpm-msg-ram = <&rpm_msg_ram>;
-         mboxes = <&apcs_glb 0>;
--        mbox-names = "rpm_hlos";
-     };
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+index 6026c21736d8..4502458b0669 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+@@ -62,7 +62,14 @@ properties:
+     maxItems: 1
  
-   # Example apcs with qcs404
+   qcom,intents:
+-    $ref: /schemas/types.yaml#/definitions/uint32-array
++    $ref: /schemas/types.yaml#/definitions/uint32-matrix
++    minItems: 1
++    maxItems: 32
++    items:
++      items:
++        - description: size of each intent to preallocate
++        - description: amount of intents to preallocate
++          minimum: 1
+     description:
+       List of (size, amount) pairs describing what intents should be
+       preallocated for this virtual channel. This can be used to tweak the
 -- 
 2.34.1
 
