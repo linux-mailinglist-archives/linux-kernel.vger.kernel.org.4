@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270B568F895
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193AC68F899
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjBHUI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S232011AbjBHUKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjBHUI5 (ORCPT
+        with ESMTP id S231713AbjBHUJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:08:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134D72D66;
-        Wed,  8 Feb 2023 12:08:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A42CE617C8;
-        Wed,  8 Feb 2023 20:08:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C44CFC433EF;
-        Wed,  8 Feb 2023 20:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675886936;
-        bh=u08v1uuwDFJtOpWpfegicZ6WBuCjXNKnjx/7U+yBIcw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DKp9BLh12I0dzoJ4m2uBCId/223QoOf9AzGj+vgHRsAqqpF0ZIeu/kVJWdudh92HT
-         RqFFOlgfhcKWN+JF6OzbPam8bdSDpe5hv72xmLRnRkZOddKXYAz/rmcvJIEGMNWxna
-         z2fRbu1whwzaOZGDUVvdo7KxCJQDrr9gw6FmdyyRlSQSZ4TgZPxuk0YwXq/IAMce5L
-         13W/egEklQnx0RrbqHN5TKLtqWasH0VXvlWIyhau5243MwwDnp1FViSZV9tB8h+fLe
-         +G86i7TlOiUaCvP0eX5+EqKL9cRf0+NiOjsF/CrUj8oKfh7WgHYVw7MBIHju/YXvOi
-         yrmBww94CQO+A==
-Message-ID: <514ec4b8-ef78-35c1-2215-22884fca87d4@kernel.org>
-Date:   Wed, 8 Feb 2023 21:08:40 +0100
+        Wed, 8 Feb 2023 15:09:58 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB79E38C;
+        Wed,  8 Feb 2023 12:09:57 -0800 (PST)
+Date:   Wed, 08 Feb 2023 20:09:54 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675886995;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=7nkBggcmalQyIVcJVJzEc/6t0NOZc5Dw4snR/EDYZs4=;
+        b=hvFfBHd5EGXj4RmObTGq3wkVU80wsJ57K0ukEaUITpb8STANTBvc++agklzwo/kP9no47e
+        KOV7jIOnLzG04Heyi8BZmkISGkXAulnhSULvDp9rLwlYsY0xa+OlTr4Y7p9XEYdFTWGGKI
+        CvvD/GU1tybLyG7ENTM/0/ggID0h1cfc7N6x0/X5pOV9N045vMXWI7y/dh3tUV5sPu2sju
+        kIssKYn18qFVoA+3fXjlkICKqetRjYk3xH/BsM2ytCC7j6Nl5nt43m+swELZq1cDg+DvQY
+        hvnSznkMQbWKHGtXtJwj6Nus9aWRqR46yWl5Kr3uSs8DA1x9EjcR/r8Cme5HmQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675886995;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=7nkBggcmalQyIVcJVJzEc/6t0NOZc5Dw4snR/EDYZs4=;
+        b=anc3FzAGinGbu5ik5FBLe/mSpbNIm12otmtZkAPPy/JriWjh8cg1LAyUY1huMxR7zYXZHJ
+        9ZTkbwkO1K0DEOCA==
+From:   "tip-bot2 for Nadav Amit" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/kprobes: Fix 1 byte conditional jump target
+Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 03/11] dt-bindings: arm: mediatek: add
- 'mediatek,pn_swap' property
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
-References: <cover.1675779094.git.daniel@makrotopia.org>
- <a8c567cf8c3ec6fef426b64fb1ab7f6e63a0cc07.1675779094.git.daniel@makrotopia.org>
- <ad09a065-c10d-3061-adbe-c58724cdfde0@kernel.org>
- <Y+KR26aepqlfsjYG@makrotopia.org>
- <b6d782ef-b375-1e73-a384-1ff37c1548a7@kernel.org>
- <Y+Oo9HaqPeNVUANR@makrotopia.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <Y+Oo9HaqPeNVUANR@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
+Message-ID: <167588699468.4906.8001929680008508448.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 14:51, Daniel Golle wrote:
-> On Wed, Feb 08, 2023 at 10:32:53AM +0100, Krzysztof Kozlowski wrote:
->> On 07/02/2023 19:00, Daniel Golle wrote:
->>> ...
->>>> 3. Does not look like property of this node. This is a clock controller
->>>> or system controller, not SGMII/phy etc.
->>>
->>> The register range referred to by this node *does* represent also an
->>> SGMII phy. These sgmiisys nodes also carry the 'syscon' compatible, and
->>> are referenced in the node of the Ethernet core, and then used by
->>> drivers/net/ethernet/mediatek/mtk_sgmii.c using syscon_node_to_regmap.
->>> (This is the current situation already, and not related to the patchset
->>> now adding only a new property to support hardware which needs that)
->>
->> Just because a register is located in syscon block, does not mean that
->> SGMII configuration is a property of this device.
-> 
-> It's not just one register, the whole SGMII PCS is located in those
-> mediatek,sgmiisys syscon nodes.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Then maybe this should be a PCS PHY device instead of adding properties
-unrelated to clock/system controller? I don't know, currently this
-binding says it is a provider of clocks...
+Commit-ID:     ae052e3ae09572194d7e574906db7272041577d3
+Gitweb:        https://git.kernel.org/tip/ae052e3ae09572194d7e574906db7272041577d3
+Author:        Nadav Amit <namit@vmware.com>
+AuthorDate:    Wed, 08 Feb 2023 07:17:08 
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Wed, 08 Feb 2023 12:03:27 -08:00
 
-> 
->>
->>>
->>> So: Should I introduce a new binding for the same compatible strings
->>> related to the SGMII PHY features? Or is it fine in this case to add
->>> this property to the existing binding?
->>
->> The user of syscon should configure it. I don't think you need new
->> binding. You just have to update the user of this syscon.
-> 
-> Excuse my confusion, but it's still not entirely clear to me.
-> So in this case I should add the description of the added propterty of
-> the individual SGMII units (there can be more than one) to
-> Documentation/devicetree/bindings/net/mediatek,net.yaml
-> eventhough the properties are in the sgmiisys syscon nodes?
+x86/kprobes: Fix 1 byte conditional jump target
 
-I guess the property should be in the node representing the SGMII. You
-add it now to the clock (or system) controller, so it does not look
-right. It's not a property of a clock controller.
+Commit 3bc753c06dd0 ("kbuild: treat char as always unsigned") broke
+kprobes.  Setting a probe-point on 1 byte conditional jump can cause the
+kernel to crash when the (signed) relative jump offset gets treated as
+unsigned.
 
-Now which node should have this property depends on your devices - which
-I have no clue about, I read what is in the bindings.
+Fix by replacing the unsigned 'immediate.bytes' (plus a cast) with the
+signed 'immediate.value' when assigning to the relative jump offset.
 
-> 
-> If so I will have to figure out how to describe properties of other
-> nodes in the binding of the node referencing them. Are there any
-> good examples for that?
+[ dhansen: clarified changelog ]
 
-phys and pcs'es?
+Fixes: 3bc753c06dd0 ("kbuild: treat char as always unsigned")
+Suggested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Suggested-by: Dave Hansen <dave.hansen@intel.com>
+Signed-off-by: Nadav Amit <namit@vmware.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/all/20230208071708.4048-1-namit%40vmware.com
+---
+ arch/x86/kernel/kprobes/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Or should the property itself be moved into yet another array of
-> booleans which should be added in the node describing the ethernet
-> controller and referencing these sgmiisys syscons using phandles?
-
-Best regards,
-Krzysztof
-
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+index b36f3c3..695873c 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -625,7 +625,7 @@ static int prepare_emulation(struct kprobe *p, struct insn *insn)
+ 		/* 1 byte conditional jump */
+ 		p->ainsn.emulate_op = kprobe_emulate_jcc;
+ 		p->ainsn.jcc.type = opcode & 0xf;
+-		p->ainsn.rel32 = *(char *)insn->immediate.bytes;
++		p->ainsn.rel32 = insn->immediate.value;
+ 		break;
+ 	case 0x0f:
+ 		opcode = insn->opcode.bytes[1];
