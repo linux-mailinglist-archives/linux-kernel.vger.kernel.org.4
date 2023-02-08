@@ -2,106 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD0968F031
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 733FB68F035
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjBHNzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S230421AbjBHN4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjBHNzF (ORCPT
+        with ESMTP id S229724AbjBHN4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:55:05 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3096255BD;
-        Wed,  8 Feb 2023 05:55:04 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318DfIQf028449;
-        Wed, 8 Feb 2023 13:54:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=984loDL0V2FFZOKxWEBpTvfRYvQFpHwHbhUyylx6Mis=;
- b=Vp0bQfkKK7hmRUERVmPERu2Tw1mZ116OiMsyRtnIxa42sTo1xXv2eif57eObyZur5NOw
- DauGpMs90BYYOKvA02RjNyzBQ0NRYkKj8YPqJek5CakOR3Y+4DIMnLzEoVSwW1bNxrR2
- EmE+Z7BGs35NCtmH5YH/ezRwJa+6+A9gRB2j2aG07bsdYSUlX22C7wecCHtvnPL9a4Vi
- SBDJFwda49RMJdXIrMENA5VQz+WmdnjEN5J9Cmqb7X4VCIz45E0592LNye/rjPMQl7nM
- I752EC6ABluQUxP/AXwCiLz3BogD29WT46DmB8PCYfY0s0t529bAmAEhJnx3tx0SjIDU +Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkk2d3v30-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 13:54:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 318DstF6012640
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 13:54:55 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 8 Feb 2023 05:54:52 -0800
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-CC:     Pratham Pratap <quic_ppratap@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH] usb: gadget: u_serial: Add null pointer check in gserial_resume
-Date:   Wed, 8 Feb 2023 19:24:47 +0530
-Message-ID: <1675864487-18620-1-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 8 Feb 2023 08:56:30 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4AC25B9E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 05:56:29 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id m2so19339322plg.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 05:56:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MbjCxpd1Xp38e5yEBPXCZTJ4aQSxWow0JH4h9SbLGXs=;
+        b=lXSTV9mPU2L37vQpxhlnyhmClaA15XL3GB9jC0eY/OX6tInDYTWyHXNYu+83r5y9mz
+         XInocONldXyN+odjFGXSObiCLl/55ZqQb//SjAHL0qqU2Elepv98yyeG9hZLijNZzP6d
+         YvE+GSI+5rX2NJYTTDthQa77m54ctlwFDzAsw+PeHlEbk4YW9vNEkdBPjY2MdPV6hDSP
+         QbOa/wHvRpO6QgMLJR8tQUrV90E5Uco2LgOuBZm5PPYr0iYafESvWArTLbHqNCQ+ecBA
+         mbNBe8+w6Upoh/3MywUfMiRQc0vawmdy1AHiYGy4sGbSb8FOh6FLuPIvyjuAxNr1TzqD
+         Z2nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MbjCxpd1Xp38e5yEBPXCZTJ4aQSxWow0JH4h9SbLGXs=;
+        b=fGwUvxCLZ9dy1k2emflmLljlliwxgM99r9ioE+MrlMEJBCl4QP9V6tLKVokrokUeTF
+         6v34vu/WBsaiqDvYyP42JMTJ5oHeocsllllPuCCQuwu+Rk4BXLvsWSVyOZVAn3ohf4zH
+         K9NUzVuO/qVW8T6oZwDnSj+nOKCFN5PZEItYpNyDoQ1JgdSvxmSAuAGqCv9oN/OYJY0U
+         CTJSMQ4UgDyl8r3t3Yztg0qnZ4SQHJY36QvVQtgEIaW/MYD5bPWHL7BF3VVplKtXnXES
+         GY8WwzrY+RL2X2V0/zoOreHRyCSBU/2V2BYOrXXFEkaklvMxi7GnXCnugG1rVgaL5ema
+         j/Jw==
+X-Gm-Message-State: AO0yUKU5xnSWOhrnu1TVyFh2bpyg2W8dDfveVjCNN39D/0gsyf3Ofx5M
+        VWuDxIUEFy6KlOKh+dbKgeg=
+X-Google-Smtp-Source: AK7set95H8ek/YM3KqQNTOzMLrRwgIEGY5xHgnTz1DP/okx0woSEjQjF6dbp8nw39TEoplPkT9mkmw==
+X-Received: by 2002:a17:902:cad1:b0:198:f2a9:a973 with SMTP id y17-20020a170902cad100b00198f2a9a973mr5723274pld.17.1675864588513;
+        Wed, 08 Feb 2023 05:56:28 -0800 (PST)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id jj9-20020a170903048900b00198bc9ba510sm5794042plb.71.2023.02.08.05.56.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 05:56:26 -0800 (PST)
+Date:   Wed, 8 Feb 2023 13:56:16 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+jIOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>, Joe Perches <joe@perches.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [RFC v3 2/4] mm: move PG_slab flag to page_type
+Message-ID: <Y+OqAFReSIIgQqqy@localhost>
+References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
+ <20221218101901.373450-3-42.hyeyoo@gmail.com>
+ <15fda061-72d9-2ee9-0e9f-6f0f732a7382@suse.cz>
+ <Y9dI88l2YJZfZ8ny@hyeyoo>
+ <Y9dRlNhh6O99tg4E@casper.infradead.org>
+ <Y90viPlfxzq8UKKq@localhost>
+ <Y900FATQ+jlT72Md@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: piPd7KRLe2ExGOqf9zeBqyCpFD4njzrN
-X-Proofpoint-ORIG-GUID: piPd7KRLe2ExGOqf9zeBqyCpFD4njzrN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_05,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
- mlxlogscore=582 clxscore=1011 mlxscore=0 adultscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302080121
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y900FATQ+jlT72Md@casper.infradead.org>
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consider a case where gserial_disconnect has already cleared
-gser->ioport. And if a wakeup interrupt triggers afterwards,
-gserial_resume gets called, which will lead to accessing of
-gserial->port and thus causing null pointer dereference.Add
-a null pointer check to prevent this.
+On Fri, Feb 03, 2023 at 04:19:32PM +0000, Matthew Wilcox wrote:
+> On Fri, Feb 03, 2023 at 04:00:08PM +0000, Hyeonggon Yoo wrote:
+> > On Mon, Jan 30, 2023 at 05:11:48AM +0000, Matthew Wilcox wrote:
+> > > On Mon, Jan 30, 2023 at 01:34:59PM +0900, Hyeonggon Yoo wrote:
+> > > > > Seems like quite some changes to page_type to accomodate SLAB, which is
+> > > > > hopefully going away soon(TM). Could we perhaps avoid that?
+> > > > 
+> > > > If it could be done with less changes, I'll try to avoid that.
+> > > 
+> > > Let me outline the idea I had for removing PG_slab:
+> > > 
+> > > Observe that PG_reserved and PG_slab are mutually exclusive.  Also,
+> > > if PG_reserved is set, no other flags are set.  If PG_slab is set, only
+> > > PG_locked is used.  Many of the flags are only for use by anon/page
+> > > cache pages (eg referenced, uptodate, dirty, lru, active, workingset,
+> > > waiters, error, owner_priv_1, writeback, mappedtodisk, reclaim,
+> > > swapbacked, unevictable, mlocked).
+> > > 
+> > > Redefine PG_reserved as PG_kernel.  Now we can use the other _15_
+> > > flags to indicate pagetype, as long as PG_kernel is set. 
+> > 
+> > So PG_kernel is a new special flag, I thought it indicates
+> > "not usermappable pages", but considering PG_vmalloc it's not.
+> 
+> Right, it means "The kernel allocated this page for its own purposes;
+> what that purpose is might be available by looking at PG_type".  ie
+> it's not-anon, not-page-cache.
+>
+> > > So, eg
+> > > PageSlab() can now be (page->flags & PG_type) == PG_slab where
+> > 
+> > But if PG_xxx and PG_slab shares same bit, PG_xxx would be confused?
+> 
+> Correct.  Ideally those tests wouldn't be used on arbitrary pages,
+> only pages which are already confirmed to be anon or file.  I suspect
+> we haven't been super-careful about that in the past, and so there
+> would be some degree of "Oh, we need to fix this up".  But flags like
+> PG_mappedtodisk, PG_mlocked, PG_unevictable, PG_workingset should be
+> all gated behind "We know this is anon/file".
 
-Fixes: aba3a8d01d62 (" usb: gadget: u_serial: add suspend resume callbacks")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
- drivers/usb/gadget/function/u_serial.c | 3 +++
- 1 file changed, 3 insertions(+)
+Okay. let's just try then!
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 840626e..98be2b8 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1428,6 +1428,9 @@ void gserial_resume(struct gserial *gser)
- 	struct gs_port *port = gser->ioport;
- 	unsigned long	flags;
- 
-+	if (!port)
-+		return;
-+
- 	spin_lock_irqsave(&port->port_lock, flags);
- 	port->suspended = false;
- 	if (!port->start_delayed) {
--- 
-2.7.4
+> > > PG_dirty	0x000008
+> > > PG_owner_priv_1	0x000010
+> > > PG_arch_1	0x000020
+> > > PG_private	0x000040
+> > > PG_waiters	0x000080
+> > > PG_kernel	0x000100
+> > > PG_referenced	0x000200
+> > > PG_uptodate	0x000400
+> > > PG_lru		0x000800
+> > > PG_active	0x001000
+> > > PG_workingset	0x002000
+> > > PG_error	0x004000
+> > > PG_private_2	0x008000
+> > > PG_mappedtodisk	0x010000
+> > > PG_reclaim	0x020000
+> > > PG_swapbacked	0x040000
+> > > PG_unevictable	0x080000
+> > > PG_mlocked	0x100000
+> > > 
+> > > ... or something.  There are a number of constraints and it may take
+> > > a few iterations to get this right.  Oh, and if this is the layout
+> > > we use, then:
+> > > 
+> > > PG_type		0x1fff00
+> > > PG_reserved	(PG_kernel | 0x200)
+> > > PG_slab		(PG_kernel | 0x400)
+> > > PG_buddy	(PG_kernel | 0x600)
+> > > PG_offline	(PG_kernel | 0x800)
+> > > PG_table	(PG_kernel | 0xa00)
+> > > PG_guard	(PG_kernel | 0xc00)
+> > > PG_vmalloc	(PG_kernel | 0xe00)
+> > 
+> > what is PG_vmalloc for, is it just an example for
+> > explaining possible layout?
+> 
+> I really want to mark pages as being allocated from vmalloc.  It's
+> one of the things we could do to make debugging better.
 
+Got it. Anyway, the proposed approach is not compatible with this series
+so I'll try implementing new series based on your outline. 
+
+Thanks!
