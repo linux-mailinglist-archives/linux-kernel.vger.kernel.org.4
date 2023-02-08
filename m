@@ -2,116 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE9768E7A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD3768E7AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 06:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjBHFf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 00:35:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S229953AbjBHFhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 00:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjBHFfI (ORCPT
+        with ESMTP id S229984AbjBHFhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 00:35:08 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338B1367DF;
-        Tue,  7 Feb 2023 21:35:03 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3185WJQP013075;
-        Wed, 8 Feb 2023 05:34:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=UBxzIkc7lP6EOGu67rfNBuaVZ3+fhBWSLMED84IEq9A=;
- b=K4zC9eii3f0UIQpBRPUUJ15ZyxCH8ejiCtXhgbzC4IbAYmiNxqlLYsrDMd/w9I3XpN/e
- L5++iwEG5dZRHCdNKvrzBsTJ8UR6G7TYR/19fTt2DMAQYXIQe+zTDuuhBDClsNc4WvSn
- wNuHvNTNuN5IeOzKZUNkqMLTLgdeV+OdJz7nyjmsPs5fQfnz3ZI5+7+Rd++dRAPnmIGZ
- BeuW0rPg9prvopVOtxJi3MKUSmKC6kDNHGahTAKDyGbDlsV2f0tVIQ2APcIsgIegobDo
- nhWsblIUZEuUsc45ItHfYnh6H7Uvbh+vPZPtdqzRAFG4nkZ7wep5zO1lllfW04fG5F3i aw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkgafk8tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 05:34:50 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3185Ynbu023139
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 05:34:49 GMT
-Received: from poovendh-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+        Wed, 8 Feb 2023 00:37:11 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596098A4F;
+        Tue,  7 Feb 2023 21:36:58 -0800 (PST)
+X-UUID: 991216d0a77211eda06fc9ecc4dadd91-20230208
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=X3cBszW/NxbtABNnIy79YxFnHPtmZaYNwTC7ihSL/WU=;
+        b=rpWyBQqTOG6hLXSVFRs0rYMmHaAm9xONxK2jeV4Yp+WdKNjb8gyMMhHV32CTc7dcvVbCbfUJy8ji9mdrsxb0r6VJxESzKo2tmi5XfgvZTOxyYG3iKPqAezwhNMVb2Iv0xA+OAxs8cQuCnRnjHUZCAMgXcjHUt6oenREYx62l/BI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.19,REQID:06012837-cbf9-4a0b-8ffc-2a5c0a495f49,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:885ddb2,CLOUDID:520b3e8e-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: 991216d0a77211eda06fc9ecc4dadd91-20230208
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 68293331; Wed, 08 Feb 2023 13:36:55 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 7 Feb 2023 21:34:38 -0800
-From:   Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <jassisinghbrar@gmail.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <robimarko@gmail.com>,
-        <dmitry.baryshkov@linaro.org>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <quic_gurus@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-Subject: [PATCH V3 5/5] dt-bindings: mfd: Add the tcsr compatible for IPQ9574
-Date:   Wed, 8 Feb 2023 11:03:32 +0530
-Message-ID: <20230208053332.16537-6-quic_poovendh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230208053332.16537-1-quic_poovendh@quicinc.com>
-References: <20230208053332.16537-1-quic_poovendh@quicinc.com>
+ 15.2.792.15; Wed, 8 Feb 2023 13:36:54 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 8 Feb 2023 13:36:53 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, <nfraprado@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
+        <libo.kang@mediatek.com>, Yunfei Dong <yunfei.dong@mediatek.com>,
+        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
+        <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>,
+        <anan.sun@mediatek.com>
+Subject: [PATCH v2 00/10] Adjust the dma-ranges for MTK IOMMU
+Date:   Wed, 8 Feb 2023 13:36:33 +0800
+Message-ID: <20230208053643.28249-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TPmiLsovj8CDWAZnIRrI5EHFk7xbkoiz
-X-Proofpoint-ORIG-GUID: TPmiLsovj8CDWAZnIRrI5EHFk7xbkoiz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_01,2023-02-06_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1015 bulkscore=0 spamscore=0
- mlxlogscore=961 mlxscore=0 priorityscore=1501 suspectscore=0
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2302080049
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the tcsr compatible string for IPQ9574 SoC
+After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
+controllers"), the dma-ranges is not allowed for dts leaf node.
+but we still would like to separate the different masters into
+different iova regions. Thus we adjust the internal flow, separate
+the 16GB iova range by the master HW larbid/portid and add the
+dma-ranges property in the parent "soc" node. This also could avoid
+the users forget/abuse the iova regions.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
----
- Changes in V3:
-	- Updated the subject
-	- Added the Acked by tag
+The commit f1ad5338a4d5 did affect the mt8195 venc, But it is not
+a fatal issue, it could also work well at 0-4GB iova. thus I don't
+add "Fixes:" tag.
 
- Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
- 1 file changed, 1 insertion(+)
+In this series, I add functions for mt8192/mt8195/mt8186, mt8188 will
+be in its special patchset. and the previous mt8173/mt8183...support
+0-4GB only, no need this function.
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-index 2eeebe920e6e..203fc890c9a3 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-@@ -31,6 +31,7 @@ properties:
-           - qcom,tcsr-ipq5332
-           - qcom,tcsr-ipq6018
-           - qcom,tcsr-ipq8064
-+          - qcom,tcsr-ipq9574
-           - qcom,tcsr-mdm9615
-           - qcom,tcsr-msm8226
-           - qcom,tcsr-msm8660
+Change note:
+v2:
+   a) Base on next-20230206 since mt8195 jpeg node was applied which
+      affect this patchset.
+   b) Reword the commit message [1/10][2/10] to explain effect.
+
+v1: https://lore.kernel.org/linux-mediatek/20230113060133.9394-1-yong.wu@mediatek.com/
+   Base on v6.2-rc3.
+
+Yong Wu (10):
+  dt-bindings: media: mediatek,vcodec: Remove dma-ranges property
+  dt-bindings: media: mediatek,jpeg: Remove dma-ranges property
+  iommu/mediatek: Get regionid from larb/port id
+  iommu/mediatek: mt8195: Add larb_region_msk
+  iommu/mediatek: mt8186: add larb_region_msk
+  iommu/mediatek: mt8192: add larb_region_msk
+  iommu/mediatek: Add a gap for the iova regions
+  arm64: dts: mt8195: Add dma-ranges for the parent "soc" node
+  arm64: dts: mt8195: Remove the unnecessary dma-ranges
+  arm64: dts: mt8186: Add dma-ranges for the parent "soc" node
+
+ .../media/mediatek,mt8195-jpegdec.yaml        |  7 --
+ .../media/mediatek,mt8195-jpegenc.yaml        |  7 --
+ .../media/mediatek,vcodec-decoder.yaml        |  5 -
+ .../media/mediatek,vcodec-encoder.yaml        |  5 -
+ .../media/mediatek,vcodec-subdev-decoder.yaml |  7 --
+ .../bindings/media/mediatek-jpeg-encoder.yaml |  5 -
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  4 +-
+ drivers/iommu/mtk_iommu.c                     | 95 ++++++++++++++-----
+ 9 files changed, 72 insertions(+), 64 deletions(-)
+
 -- 
-2.17.1
+2.18.0
+
 
