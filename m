@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA2968E5B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C317968E5B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 02:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjBHB6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 20:58:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S230171AbjBHB5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 20:57:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjBHB5h (ORCPT
+        with ESMTP id S229796AbjBHB5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 20:57:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2A33F28C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 17:57:35 -0800 (PST)
+        Tue, 7 Feb 2023 20:57:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCF13EFE5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 17:57:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24BCEB81B9B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF49CC433A0;
-        Wed,  8 Feb 2023 01:57:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96BDD61460
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105C7C433AC;
+        Wed,  8 Feb 2023 01:57:33 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pPZiF-006dPq-2l;
-        Tue, 07 Feb 2023 20:57:31 -0500
-Message-ID: <20230208015731.669243610@goodmis.org>
+        id 1pPZiG-006dQO-0D;
+        Tue, 07 Feb 2023 20:57:32 -0500
+Message-ID: <20230208015731.877487562@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 07 Feb 2023 20:56:40 -0500
+Date:   Tue, 07 Feb 2023 20:56:41 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [for-next][PATCH 07/11] tracing: Fix trace_event_raw_event_synth() if else statement
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ross Zwisler <zwisler@google.com>
+Subject: [for-next][PATCH 08/11] tracing: Add creation of instances at boot command line
 References: <20230208015633.791198913@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,48 +50,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-The test to check if the field is a stack is to be done if it is not a
-string. But the code had:
+Add kernel command line to add tracing instances. This only creates
+instances at boot but still does not enable any events to them. Later
+changes will extend this command line to add enabling of events, filters,
+and triggers. As well as possibly redirecting trace_printk()!
 
-    } if (event->fields[i]->is_stack) {
+Link: https://lkml.kernel.org/r/20230207173026.186210158@goodmis.org
 
-and not
-
-   } else if (event->fields[i]->is_stack) {
-
-which would cause it to always be tested. Worse yet, this also included an
-"else" statement that was only to be called if the field was not a string
-and a stack, but this code allows it to be called if it was a string (and
-not a stack).
-
-Also fixed some whitespace issues.
-
-Link: https://lore.kernel.org/all/202301302110.mEtNwkBD-lkp@intel.com/
-Link: https://lore.kernel.org/linux-trace-kernel/20230131095237.63e3ca8d@gandalf.local.home
-
-Cc: Tom Zanussi <zanussi@kernel.org>
-Fixes: 00cf3d672a9d ("tracing: Allow synthetic events to pass around stacktraces")
-Reported-by: kernel test robot <lkp@intel.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Reviewed-by: Ross Zwisler <zwisler@google.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 ---
- kernel/trace/trace_events_synth.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  6 +++
+ kernel/trace/trace.c                          | 50 +++++++++++++++++++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index adb630633f31..306c89e0ce55 100644
---- a/kernel/trace/trace_events_synth.c
-+++ b/kernel/trace/trace_events_synth.c
-@@ -564,8 +564,8 @@ static notrace void trace_event_raw_event_synth(void *__data,
- 					   event->fields[i]->is_dynamic,
- 					   data_size, &n_u64);
- 			data_size += len; /* only dynamic string increments */
--		} if (event->fields[i]->is_stack) {
--		        long *stack = (long *)(long)var_ref_vals[val_idx];
-+		} else if (event->fields[i]->is_stack) {
-+			long *stack = (long *)(long)var_ref_vals[val_idx];
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 6cfa6e3996cf..9545da5ed849 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6272,6 +6272,12 @@
+ 			comma-separated list of trace events to enable. See
+ 			also Documentation/trace/events.rst
  
- 			len = trace_stack(entry, event, stack,
- 					   data_size, &n_u64);
++	trace_instance=[instance-info]
++			[FTRACE] Create a ring buffer instance early in boot up.
++			This will be listed in:
++
++				/sys/kernel/tracing/instances
++
+ 	trace_options=[option-list]
+ 			[FTRACE] Enable or disable tracer options at boot.
+ 			The option-list is a comma delimited list of options
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index b90eecd27dfc..863716fcca49 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -49,6 +49,8 @@
+ #include <linux/irq_work.h>
+ #include <linux/workqueue.h>
+ 
++#include <asm/setup.h> /* COMMAND_LINE_SIZE */
++
+ #include "trace.h"
+ #include "trace_output.h"
+ 
+@@ -186,6 +188,9 @@ static char *default_bootup_tracer;
+ static bool allocate_snapshot;
+ static bool snapshot_at_boot;
+ 
++static char boot_instance_info[COMMAND_LINE_SIZE] __initdata;
++static int boot_instance_index;
++
+ static int __init set_cmdline_ftrace(char *str)
+ {
+ 	strlcpy(bootup_tracer_buf, str, MAX_TRACER_SIZE);
+@@ -239,6 +244,23 @@ static int __init boot_snapshot(char *str)
+ __setup("ftrace_boot_snapshot", boot_snapshot);
+ 
+ 
++static int __init boot_instance(char *str)
++{
++	char *slot = boot_instance_info + boot_instance_index;
++	int left = sizeof(boot_instance_info) - boot_instance_index;
++	int ret;
++
++	if (strlen(str) >= left)
++		return -1;
++
++	ret = snprintf(slot, left, "%s\t", str);
++	boot_instance_index += ret;
++
++	return 1;
++}
++__setup("trace_instance=", boot_instance);
++
++
+ static char trace_boot_options_buf[MAX_TRACER_SIZE] __initdata;
+ 
+ static int __init set_trace_boot_options(char *str)
+@@ -10144,6 +10166,31 @@ ssize_t trace_parse_run_command(struct file *file, const char __user *buffer,
+ 	return ret;
+ }
+ 
++__init static void enable_instances(void)
++{
++	struct trace_array *tr;
++	char *curr_str;
++	char *str;
++	char *tok;
++
++	/* A tab is always appended */
++	boot_instance_info[boot_instance_index - 1] = '\0';
++	str = boot_instance_info;
++
++	while ((curr_str = strsep(&str, "\t"))) {
++
++		tok = strsep(&curr_str, ",");
++
++		tr = trace_array_get_by_name(tok);
++		if (!tr) {
++			pr_warn("Failed to create instance buffer %s\n", curr_str);
++			continue;
++		}
++		/* Allow user space to delete it */
++		trace_array_put(tr);
++	}
++}
++
+ __init static int tracer_alloc_buffers(void)
+ {
+ 	int ring_buf_size;
+@@ -10302,6 +10349,9 @@ void __init early_trace_init(void)
+ void __init trace_init(void)
+ {
+ 	trace_event_init();
++
++	if (boot_instance_index)
++		enable_instances();
+ }
+ 
+ __init static void clear_boot_tracer(void)
 -- 
 2.39.1
