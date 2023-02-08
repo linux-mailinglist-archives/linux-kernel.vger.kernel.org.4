@@ -2,283 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5750868E621
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B584568E627
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 03:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjBHCkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 21:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S230099AbjBHClQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 21:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjBHCkA (ORCPT
+        with ESMTP id S229930AbjBHClO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 21:40:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE22528B;
-        Tue,  7 Feb 2023 18:39:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91FC5B81B2C;
-        Wed,  8 Feb 2023 02:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29FA7C4339B;
-        Wed,  8 Feb 2023 02:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675823996;
-        bh=nW1JQejgpwxI/J74A+QINk7F8fZY6PLGrEawNBPPqsg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cB9bu8lUhnQlJYEt9d86M5p4l0xf2pXte432mkrFvcTS01h/NzycHoNH1Uo49cqCw
-         R98c2NEx51XgB04PCxLMpVJTjEhHEij9uuNADrAK2aR9FitMfONYp/ju3Tth/Nwvts
-         H3Dsh5YU68SanFIe4h1jXdHWro7akfmgougCAFsuklOIqZdGvV/T6RZw9jKS2g9fP3
-         tBCeW6ccsLSuUW1501ivUM30BBP7UugCWkwTQdfgXgNrhBdiq8shfsvcC9qw8z7nPB
-         mpg9tezt6CqMM2qbevKDPGjqvTwQ8lRqWPrwRv5ms7pRo2hCCrpsZBWsfFki3+YaXJ
-         2ch2/cvDibtvw==
-Date:   Wed, 8 Feb 2023 04:39:50 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     robh+dt@kernel.org, broonie@kernel.org, peterhuewe@gmx.de,
-        jgg@ziepe.ca, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        skomatineni@nvidia.com, ldewangan@nvidia.com
-Subject: Re: [PATCH 2/4] tpm: tegra: Support SPI tpm wait state detect
-Message-ID: <Y+MLdjdjMvcLuhbC@kernel.org>
-References: <20230202161750.21210-1-kyarlagadda@nvidia.com>
- <20230202161750.21210-3-kyarlagadda@nvidia.com>
+        Tue, 7 Feb 2023 21:41:14 -0500
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13E562528B;
+        Tue,  7 Feb 2023 18:41:10 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-01 (Coremail) with SMTP id qwCowACXn0vAC+NjYa8MBA--.12914S2;
+        Wed, 08 Feb 2023 10:41:04 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     linuxdrivers@attotech.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] scsi: esas2r: Add missing check and destroy for create_singlethread_workqueue
+Date:   Wed,  8 Feb 2023 10:41:03 +0800
+Message-Id: <20230208024103.38992-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230202161750.21210-3-kyarlagadda@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACXn0vAC+NjYa8MBA--.12914S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw4fXrWfXF1UWryUJFWkWFg_yoWrJF4fpF
+        ZxAa4jkF40yF4xCw45K3W5Za4rK3y8GFyv9ayIq3s0kFsakws5tFy0vFW2vFyrGF4DW347
+        tF4vqwn8CF1UJFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_
+        Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5vtCUUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 09:47:48PM +0530, Krishna Yarlagadda wrote:
-> Tegra234 and Tegra241 chips have QSPI controller that supports TCG
-> TIS hardware flow control. Since the controller only supports half
-> duplex, sw wait polling method implemented in tpm_tis_spi does not
-> suffice. Added extending driver to disable sw flow control and send
+Add the check for the return value of the create_singlethread_workqueue
+in order to avoid NULL pointer dereference.
+Moreover, the allocated "a->fw_event_q" should be destroyed when
+esas2r_init_adapter fails later in order to avoid memory leak.
+It is better to use goto label to remove duplicate error handling code.
 
-s/Added/Add/
+Fixes: 26780d9e12ed ("[SCSI] esas2r: ATTO Technology ExpressSAS 6G SAS/SATA RAID Adapter Driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/scsi/esas2r/esas2r_init.c | 30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
 
-> all transfers in single message.
+diff --git a/drivers/scsi/esas2r/esas2r_init.c b/drivers/scsi/esas2r/esas2r_init.c
+index c1a5ab662dc8..820530639517 100644
+--- a/drivers/scsi/esas2r/esas2r_init.c
++++ b/drivers/scsi/esas2r/esas2r_init.c
+@@ -272,14 +272,14 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 		esas2r_log(ESAS2R_LOG_CRIT,
+ 			   "tried to init invalid adapter index %u!",
+ 			   index);
+-		return 0;
++		goto error_exit;
+ 	}
+ 
+ 	if (esas2r_adapters[index]) {
+ 		esas2r_log(ESAS2R_LOG_CRIT,
+ 			   "tried to init existing adapter index %u!",
+ 			   index);
+-		return 0;
++		goto error_exit;
+ 	}
+ 
+ 	a = (struct esas2r_adapter *)host->hostdata;
+@@ -294,8 +294,7 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 
+ 	if (!dma64 && dma_set_mask_and_coherent(&pcid->dev, DMA_BIT_MASK(32))) {
+ 		esas2r_log(ESAS2R_LOG_CRIT, "failed to set DMA mask");
+-		esas2r_kill_adapter(index);
+-		return 0;
++		goto error_kill_adapter;
+ 	}
+ 
+ 	esas2r_log_dev(ESAS2R_LOG_INFO, &pcid->dev,
+@@ -314,6 +313,10 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 	snprintf(a->fw_event_q_name, ESAS2R_KOBJ_NAME_LEN, "esas2r/%d",
+ 		 a->index);
+ 	a->fw_event_q = create_singlethread_workqueue(a->fw_event_q_name);
++	if (!a->fw_event_q) {
++		esas2r_log(ESAS2R_LOG_CRIT, "failed to allocate workqueue");
++		goto error_kill_adapter;
++	}
+ 
+ 	init_waitqueue_head(&a->buffered_ioctl_waiter);
+ 	init_waitqueue_head(&a->nvram_waiter);
+@@ -338,8 +341,7 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 		if (!alloc_vda_req(a, last_request)) {
+ 			esas2r_log(ESAS2R_LOG_CRIT,
+ 				   "failed to allocate a VDA request!");
+-			esas2r_kill_adapter(index);
+-			return 0;
++			goto error_destroy_workqueue;
+ 		}
+ 	}
+ 
+@@ -350,8 +352,7 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 
+ 	if (esas2r_map_regions(a) != 0) {
+ 		esas2r_log(ESAS2R_LOG_CRIT, "could not map PCI regions!");
+-		esas2r_kill_adapter(index);
+-		return 0;
++		goto error_destroy_workqueue;
+ 	}
+ 
+ 	a->index = index;
+@@ -379,8 +380,7 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 		esas2r_log(ESAS2R_LOG_CRIT,
+ 			   "failed to allocate %d bytes of consistent memory!",
+ 			   a->uncached_size);
+-		esas2r_kill_adapter(index);
+-		return 0;
++		goto error_destroy_workqueue;
+ 	}
+ 
+ 	a->uncached_phys = bus_addr;
+@@ -397,8 +397,7 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 					&next_uncached)) {
+ 		esas2r_log(ESAS2R_LOG_CRIT,
+ 			   "failed to initialize adapter structure (2)!");
+-		esas2r_kill_adapter(index);
+-		return 0;
++		goto error_destroy_workqueue;
+ 	}
+ 
+ 	tasklet_init(&a->tasklet,
+@@ -430,6 +429,13 @@ int esas2r_init_adapter(struct Scsi_Host *host, struct pci_dev *pcid,
+ 		     a, a->disable_cnt);
+ 
+ 	return 1;
++
++error_destroy_workqueue:
++	destroy_workqueue(a->fw_event_q);
++error_kill_adapter:
++	esas2r_kill_adapter(index);
++error_exit:
++	return 0;
+ }
+ 
+ static void esas2r_adapter_power_down(struct esas2r_adapter *a,
+-- 
+2.25.1
 
-I've never heard the term "extended driver" before.
-
-> 
-> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> ---
->  drivers/char/tpm/Makefile            |   1 +
->  drivers/char/tpm/tpm_tis_spi.h       |   1 +
->  drivers/char/tpm/tpm_tis_spi_main.c  |   4 +-
->  drivers/char/tpm/tpm_tis_spi_tegra.c | 123 +++++++++++++++++++++++++++
->  4 files changed, 128 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/char/tpm/tpm_tis_spi_tegra.c
-> 
-> diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-> index 0222b1ddb310..445b15493cb3 100644
-> --- a/drivers/char/tpm/Makefile
-> +++ b/drivers/char/tpm/Makefile
-> @@ -25,6 +25,7 @@ obj-$(CONFIG_TCG_TIS_SYNQUACER) += tpm_tis_synquacer.o
->  
->  obj-$(CONFIG_TCG_TIS_SPI) += tpm_tis_spi.o
->  tpm_tis_spi-y := tpm_tis_spi_main.o
-> +tpm_tis_spi-y += tpm_tis_spi_tegra.o
->  tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
->  
->  obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
-> diff --git a/drivers/char/tpm/tpm_tis_spi.h b/drivers/char/tpm/tpm_tis_spi.h
-> index d0f66f6f1931..feaea14b428b 100644
-> --- a/drivers/char/tpm/tpm_tis_spi.h
-> +++ b/drivers/char/tpm/tpm_tis_spi.h
-> @@ -31,6 +31,7 @@ extern int tpm_tis_spi_init(struct spi_device *spi, struct tpm_tis_spi_phy *phy,
->  extern int tpm_tis_spi_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
->  				u8 *in, const u8 *out);
->  
-> +extern int tegra_tpm_spi_probe(struct spi_device *spi);
->  #ifdef CONFIG_TCG_TIS_SPI_CR50
->  extern int cr50_spi_probe(struct spi_device *spi);
->  #else
-> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-> index a0963a3e92bd..5d4502a4461a 100644
-> --- a/drivers/char/tpm/tpm_tis_spi_main.c
-> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
-> @@ -198,7 +198,7 @@ static int tpm_tis_spi_driver_probe(struct spi_device *spi)
->  	const struct spi_device_id *spi_dev_id = spi_get_device_id(spi);
->  	tpm_tis_spi_probe_func probe_func;
->  
-> -	probe_func = of_device_get_match_data(&spi->dev);
-> +	probe_func = device_get_match_data(&spi->dev);
->  	if (!probe_func) {
->  		if (spi_dev_id) {
->  			probe_func = (tpm_tis_spi_probe_func)spi_dev_id->driver_data;
-> @@ -227,6 +227,7 @@ static const struct spi_device_id tpm_tis_spi_id[] = {
->  	{ "tpm_tis_spi", (unsigned long)tpm_tis_spi_probe },
->  	{ "tpm_tis-spi", (unsigned long)tpm_tis_spi_probe },
->  	{ "cr50", (unsigned long)cr50_spi_probe },
-> +	{ "tegra-tpm-spi", (unsigned long)tegra_tpm_spi_probe },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(spi, tpm_tis_spi_id);
-> @@ -236,6 +237,7 @@ static const struct of_device_id of_tis_spi_match[] = {
->  	{ .compatible = "infineon,slb9670", .data = tpm_tis_spi_probe },
->  	{ .compatible = "tcg,tpm_tis-spi", .data = tpm_tis_spi_probe },
->  	{ .compatible = "google,cr50", .data = cr50_spi_probe },
-> +	{ .compatible = "nvidia,tegra-tpm-spi", .data = tegra_tpm_spi_probe },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, of_tis_spi_match);
-> diff --git a/drivers/char/tpm/tpm_tis_spi_tegra.c b/drivers/char/tpm/tpm_tis_spi_tegra.c
-> new file mode 100644
-> index 000000000000..23f20684513d
-> --- /dev/null
-> +++ b/drivers/char/tpm/tpm_tis_spi_tegra.c
-> @@ -0,0 +1,123 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 NVIDIA CORPORATION.
-> + *
-> + * This device driver implements TEGRA QSPI hw wait detection for chips
-> + *
-> + * It is based on tpm_tis_spi driver by Peter Huewe and Christophe Ricard.
-> + */
-> +
-> +#include <linux/completion.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/pm.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/wait.h>
-> +
-> +#include "tpm_tis_core.h"
-> +#include "tpm_tis_spi.h"
-> +
-> +#define MAX_SPI_FRAMESIZE 64
-> +
-> +int tpm_tis_spi_tegra_transfer(struct tpm_tis_data *data, u32 addr, u16 len,
-> +			       u8 *in, const u8 *out)
-> +{
-> +	struct tpm_tis_spi_phy *phy = to_tpm_tis_spi_phy(data);
-> +	int ret = 0;
-
-Why do you need to initialize ret?
-
-> +	struct spi_message m;
-> +	struct spi_transfer spi_xfer[3];
-> +	u8 transfer_len;
-
-Please reorder declarations to reverse christmas tree order.
-
-> +
-> +	spi_bus_lock(phy->spi_device->master);
-> +
-> +	while (len) {
-> +		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
-> +
-> +		spi_message_init(&m);
-> +		phy->iobuf[0] = (in ? 0x80 : 0) | (transfer_len - 1);
-> +		phy->iobuf[1] = 0xd4;
-> +		phy->iobuf[2] = addr >> 8;
-> +		phy->iobuf[3] = addr;
-> +
-> +		memset(&spi_xfer, 0, sizeof(spi_xfer));
-> +
-> +		spi_xfer[0].tx_buf = phy->iobuf;
-> +		spi_xfer[0].len = 1;
-> +		spi_message_add_tail(&spi_xfer[0], &m);
-> +
-> +		spi_xfer[1].tx_buf = phy->iobuf + 1;
-> +		spi_xfer[1].len = 3;
-> +		spi_message_add_tail(&spi_xfer[1], &m);
-> +
-> +		if (out) {
-> +			spi_xfer[2].tx_buf = &phy->iobuf[4];
-> +			spi_xfer[2].rx_buf = NULL;
-> +			memcpy(&phy->iobuf[4], out, transfer_len);
-> +			out += transfer_len;
-> +		}
-
-Empty line here.
-
-> +		if (in) {
-> +			spi_xfer[2].tx_buf = NULL;
-> +			spi_xfer[2].rx_buf = &phy->iobuf[4];
-> +		}
-
-Ditto.
-
-> +		spi_xfer[2].len = transfer_len;
-> +		spi_message_add_tail(&spi_xfer[2], &m);
-> +
-> +		reinit_completion(&phy->ready);
-
-Ditto.
-
-> +		ret = spi_sync_locked(phy->spi_device, &m);
-> +		if (ret < 0)
-> +			goto exit;
-> +
-> +		if (in) {
-> +			memcpy(in, &phy->iobuf[4], transfer_len);
-> +			in += transfer_len;
-> +		}
-> +
-> +		len -= transfer_len;
-> +	}
-> +
-> +exit:
-> +	spi_bus_unlock(phy->spi_device->master);
-> +	return ret;
-> +}
-> +
-> +static int tpm_tis_spi_tegra_read_bytes(struct tpm_tis_data *data, u32 addr,
-> +					u16 len, u8 *result,
-> +					enum tpm_tis_io_mode io_mode)
-> +{
-> +	return tpm_tis_spi_tegra_transfer(data, addr, len, result, NULL);
-> +}
-> +
-> +static int tpm_tis_spi_tegra_write_bytes(struct tpm_tis_data *data, u32 addr,
-> +					 u16 len, const u8 *value,
-> +					 enum tpm_tis_io_mode io_mode)
-> +{
-> +	return tpm_tis_spi_tegra_transfer(data, addr, len, NULL, value);
-> +}
-> +
-> +static const struct tpm_tis_phy_ops tegra_tpm_spi_phy_ops = {
-> +	.read_bytes = tpm_tis_spi_tegra_read_bytes,
-> +	.write_bytes = tpm_tis_spi_tegra_write_bytes,
-> +};
-> +
-> +int tegra_tpm_spi_probe(struct spi_device *dev)
-> +{
-> +	struct tpm_tis_spi_phy *phy;
-> +	int irq;
-> +
-> +	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_spi_phy),
-> +			   GFP_KERNEL);
-> +	if (!phy)
-> +		return -ENOMEM;
-> +
-> +	phy->flow_control = NULL;
-> +
-> +	/* If the SPI device has an IRQ then use that */
-> +	if (dev->irq > 0)
-> +		irq = dev->irq;
-> +	else
-> +		irq = -1;
-> +
-> +	init_completion(&phy->ready);
-> +	return tpm_tis_spi_init(dev, phy, irq, &tegra_tpm_spi_phy_ops);
-> +}
-> -- 
-> 2.17.1
-> 
-
-BR, Jarkko
