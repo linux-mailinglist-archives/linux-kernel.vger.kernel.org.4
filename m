@@ -2,219 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A70368EA74
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F3168EA72
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 10:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjBHJEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 04:04:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S230103AbjBHJEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 04:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjBHJEg (ORCPT
+        with ESMTP id S230050AbjBHJD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 04:04:36 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306B71E5E1;
-        Wed,  8 Feb 2023 01:04:35 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id z1so18528570plg.6;
-        Wed, 08 Feb 2023 01:04:35 -0800 (PST)
+        Wed, 8 Feb 2023 04:03:56 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C30D1CAF9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 01:03:18 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r2so16002695wrv.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 01:03:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aAj91s2vAzwjp5srAeCydAFC1iHmRvP8BM1070DZihc=;
-        b=hO2Q/Fsp8RsnRUZ5f1DZvCsOfR4n/4OIrYnQqlzlqMJjIi3ZyORabjE+FU6coiYFpC
-         RfKyln/BRTMcVMdS9J263ZrODnClq6lEMUWK98ndDWrNumAIS0kXGjPPV/J2t1iiQE+6
-         /qwF43plDkRaEFhNkY24OF35UuHk2YyhTfG+y/gxlasIzBL1S9D/Wxr5j7M0ZYYXOD0j
-         V4g2yILHuEOtc1ARtREyzH+j9sSPInwHS+B1IbqZmz87C+cVl9V3TqB2wtlDwyZrs2YN
-         cOFBvNaTyMemJ7tGDjyeluzYp/fmmR8w6GDHrtWugNwKEqr66M6tUy6njSG6ytJurOQL
-         KmUA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QNO05S5fEnwEDlCd8SuWqieT8IWig32rfB4rKatfeYc=;
+        b=hLAzW13lNas29EFppeU3uJwQwbMAppolBPjP/eYCNXFn9n3qgX7/tA3rsGvUqxU/LW
+         P+h7XLo4XNkWz1HXcIv38fDTieRLLtpfU1i9kn5i2HCy/NVTNKUXyVumPykpt3Jio0E3
+         bTLbrPuK6SuFYJml2oYA4SQwEsNcg1+8T5zIZBO7zqBqN242mMzen/L0aJS2S18muj7a
+         1DD+6inhDH9aPTnf93J4H0PIU1i2FKG1XStkprZNqksmB6xS5hQd8jZJQbrMLSiJSR+1
+         17TO7ltTIKSZ6jFQpM+Su7EHi+yVi052v1L6HfUwPNpSFoyBZ3JYVgiXOwmoe3GwuP9e
+         KDLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aAj91s2vAzwjp5srAeCydAFC1iHmRvP8BM1070DZihc=;
-        b=3r6L3NTZxpMBxQ1fts5Cw8zaKb2QvcnoB+iM6QMPeqDwpmc9NL9Jk0dZ0WLiLo0Vc9
-         deWg4Pgfn+jfCwTRXGJafj30s6Fdh17fOZeGysLXWSlnTmZ7VmtbgUnLd89AWzrhG91+
-         lyff3hjv7exwFqGslPsjBQp/v4H71M/gnfYOMeT0+Xml7Kw4XGJjsci+WUKq0JJ1udfN
-         DxYM7qrqH1u4LtVrqU6Rd0CTvIXNhVOrYJR+YIihw8AAxDA/1HLC8WT+RQw+y0rjZgrY
-         SA77iwaIYhdBxp3MbV/GoeRRMwkQ+OoO0iM+SR6wLU2wFnTy3oHaK4YLqgwlN8UCmgys
-         EqGw==
-X-Gm-Message-State: AO0yUKXnr/X6fPwIczBieO6dL4PHcCZ5EOnkBzgr6byr0CnmXfzLF31H
-        1AYePm5L+5SZeKS7OWzy+5MiZb+pUlm4zakTEOQ=
-X-Google-Smtp-Source: AK7set8p4Zef3YrRfuBeOMxz1PUuM6l7wNacYIh1MbAFMxQVCOS0SgGHaDvZ7YVH2mXQFVI8JCKRr4g+NkQDSdkgN5Q=
-X-Received: by 2002:a17:90b:242:b0:22b:fdac:6e02 with SMTP id
- fz2-20020a17090b024200b0022bfdac6e02mr533871pjb.133.1675847074335; Wed, 08
- Feb 2023 01:04:34 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QNO05S5fEnwEDlCd8SuWqieT8IWig32rfB4rKatfeYc=;
+        b=MEe95qCJJgZjVP2zDDF3rWt19FYypp0W+ZN8HjDBr8Z3vPub2u7Iqnd+eb9iwklw00
+         ZEim6FlwKnJjP3qhX7MbaSLzF3Ns5b5thZiCKj6AWpB74eeFgByMP7yWfQUWFepuwGY/
+         nkymq8ejIlZYjCX2jPWIE92JFIcARajvlc6yqUe9RO49CbGGLNRkBiFKTo0vKpZRwdSJ
+         0EdGWL+ozyN8JoJ0/ps7yD/A0d9lermANJVhLmt7vx3MOLG7mGM9b1LcGpcEJFX1ick6
+         0jk1DxMOISEqnou2B3QaUxFeb7304bIK0TEwyjrqi2Ci+GxuVvoMGYnDy4tR1CYujl/K
+         Q3Sg==
+X-Gm-Message-State: AO0yUKWotNldzNGFLe3vRLow8Tz2mRIBJ1kBt8qkIddXd7UR5MOMZZHj
+        cDSjpok2vtTWH2U5GmBlt5wp6Q==
+X-Google-Smtp-Source: AK7set9X29yi0PJgoLwkU0q/W2EkfbkArMiu+EWXYrori579HP9kPJrRrwpKBGSJHyDWPzuAGpb/rw==
+X-Received: by 2002:a5d:6b89:0:b0:2bf:d940:29bb with SMTP id n9-20020a5d6b89000000b002bfd94029bbmr5808873wrx.6.1675846996763;
+        Wed, 08 Feb 2023 01:03:16 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id b2-20020a5d4d82000000b002c3ef7e74bdsm5257952wru.73.2023.02.08.01.03.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 01:03:16 -0800 (PST)
+Message-ID: <eda179e1-4cd1-0d1b-4e27-2fe92e959cf2@linaro.org>
+Date:   Wed, 8 Feb 2023 10:03:15 +0100
 MIME-Version: 1.0
-References: <20221129094436.3975668-1-bobo.shaobowang@huawei.com>
-In-Reply-To: <20221129094436.3975668-1-bobo.shaobowang@huawei.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Wed, 8 Feb 2023 17:01:48 +0800
-Message-ID: <CAD-N9QXtwvNXw7r2hhiQ-qkmmpqUn8+HNTcMVETAw5hHTv618w@mail.gmail.com>
-Subject: Re: [PATCH] nfc: llcp: Fix race in handling llcp_devices
-To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
-Cc:     liwei391@huawei.com, sameo@linux.intel.com, kuba@kernel.org,
-        davem@davemloft.net, syzkaller-bugs@googlegroups.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] dt-bindings: dma: qcom,bam-dma: add optional memory
+ interconnect properties
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230207-topic-sm8550-upstream-bam-dma-bindings-fix-v1-1-57dba71e8727@linaro.org>
+ <a188a52e-6327-f0ea-a54e-a23b88bca82f@linaro.org>
+ <a8112f61-f8d3-c1e0-9549-a9036a7e7894@linaro.org>
+ <88c31e71-55b6-a20d-1fcf-07804eace54b@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <88c31e71-55b6-a20d-1fcf-07804eace54b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 5:46 PM 'Wang ShaoBo' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
->
-> There are multiple path operate llcp_devices list without protection:
->
->          CPU0                        CPU1
->
-> nfc_unregister_device()        nfc_register_device()
->  nfc_llcp_unregister_device()    nfc_llcp_register_device() //no lock
->     ...                            list_add(local->list, llcp_devices)
->     local_release()
->       list_del(local->list)
->
->         CPU2
-> ...
->  nfc_llcp_find_local()
->    list_for_each_entry(,&llcp_devices,)
->
-> So reach race condition if two of the three occur simultaneously like
-> following crash report, although there is no reproduction script in
-> syzbot currently, our artificially constructed use cases can also
-> reproduce it:
->
-> list_del corruption. prev->next should be ffff888060ce7000, but was ffff88802a0ad000. (prev=ffffffff8e536240)
-> ------------[ cut here ]------------
-> kernel BUG at lib/list_debug.c:59!
-> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 16622 Comm: syz-executor.5 Not tainted 6.1.0-rc6-next-20221125-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:__list_del_entry_valid.cold+0x12/0x72 lib/list_debug.c:59
-> Code: f0 ff 0f 0b 48 89 f1 48 c7 c7 60 96 a6 8a 4c 89 e6 e8 4b 29 f0 ff 0f 0b 4c 89 e1 48 89 ee 48 c7 c7 c0 98 a6 8a e8 37 29 f0 ff <0f> 0b 48 89 ee 48 c7 c7 a0 97 a6 8a e8 26 29 f0 ff 0f 0b 4c 89 e2
-> RSP: 0018:ffffc900151afd58 EFLAGS: 00010282
-> RAX: 000000000000006d RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff88801e7eba80 RSI: ffffffff8166001c RDI: fffff52002a35f9d
-> RBP: ffff888060ce7000 R08: 000000000000006d R09: 0000000000000000
-> R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8e536240
-> R13: ffff88801f3f3000 R14: ffff888060ce1000 R15: ffff888079d855f0
-> FS:  0000555556f57400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f095d5ad988 CR3: 000000002155a000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __list_del_entry include/linux/list.h:134 [inline]
->  list_del include/linux/list.h:148 [inline]
->  local_release net/nfc/llcp_core.c:171 [inline]
->  kref_put include/linux/kref.h:65 [inline]
->  nfc_llcp_local_put net/nfc/llcp_core.c:181 [inline]
->  nfc_llcp_local_put net/nfc/llcp_core.c:176 [inline]
->  nfc_llcp_unregister_device+0xb8/0x260 net/nfc/llcp_core.c:1619
->  nfc_unregister_device+0x196/0x330 net/nfc/core.c:1179
->  virtual_ncidev_close+0x52/0xb0 drivers/nfc/virtual_ncidev.c:163
->  __fput+0x27c/0xa90 fs/file_table.c:320
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
->  exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->  exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:203
->  __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->  syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
->  do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->
-> This patch add specific mutex lock llcp_devices_list_lock to ensure
-> handling llcp_devices list safety.
->
-> Fixes: 30cc4587659e ("NFC: Move LLCP code to the NFC top level diirectory")
-> Reported-by: syzbot+81232c4a81a886e2b580@syzkaller.appspotmail.com
+On 07/02/2023 16:27, Dmitry Baryshkov wrote:
+> On 07/02/2023 15:35, Neil Armstrong wrote:
+>> On 07/02/2023 11:32, Dmitry Baryshkov wrote:
+>>> On 07/02/2023 12:03, Neil Armstrong wrote:
+>>>> Recents SoCs like the SM8450 or SM8550 requires memory interconnect
+>>>> in order to have functional DMA.
+>>>>
+>>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>>>> ---
+>>>>   Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml | 6 ++++++
+>>>>   1 file changed, 6 insertions(+)
+>>>
+>>> I suspect this will not work without a change for a driver.
+>>>
+>>
+>> I had the impression single interconnect entries would be taken in account
+>> by the platform core, but it doesn't seem to be the case, anyway I can;t 
+>> find
+>> any code doing that.
+> 
+> Probably you mixed interconnects and power-domains here.
+> 
 
-There is another syzbot bug report [1] contributed by the same bug. It
-has the syz reproducer. A patch testing has been deployed on the
-syzbot dashboard.
+The driver change was submitted some time ago:
+https://lore.kernel.org/all/20210505213731.538612-10-bhupesh.sharma@linaro.org/
 
-Besides, I have a doubt about this patch. This patch adds a mutex lock
-to make list operations(add, delete, find etc.) exclusive. If the
-following thread interleaving occurs, will this patch work?
+There is already DTS user of it and we expect driver to be resubmitted
+at some point.
 
-CPU0                                         CPU2
-nfc_llcp_unregister_device        nfc_llcp_unregister_device
-    ......                                             nfc_llcp_find_local
-    local_release                              ......
-        list_del                                    ......
-                                                       local_cleanup
-                                                       local_llcp_local_put
+What I don't really get is that crypto driver sets bandwidth for
+interconnects, not the BAM. Why BAM needs interconnect? Usually you do
+not need to initialize some middle paths. Getting the final interconnect
+path (e.g. crypto-memory) is enough, because it includes everything in
+between.
 
-If nfc_llcp_find_local executes before list deletion, it will still
-lead to double free and UAF. Please correct me if I make any mistakes.
-Thanks in advance.
+Maybe my review tag was a bit premature...
 
-[1] https://syzkaller.appspot.com/bug?id=41d9ed9b6dcd7b7c5611ed5eb64835b1a554e998
+Best regards,
+Krzysztof
 
-> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
-> ---
->  net/nfc/llcp_core.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/net/nfc/llcp_core.c b/net/nfc/llcp_core.c
-> index 3364caabef8b..7deaecd9d3cd 100644
-> --- a/net/nfc/llcp_core.c
-> +++ b/net/nfc/llcp_core.c
-> @@ -17,6 +17,7 @@
->  static u8 llcp_magic[3] = {0x46, 0x66, 0x6d};
->
->  static LIST_HEAD(llcp_devices);
-> +static DEFINE_MUTEX(llcp_devices_list_lock);
->
->  static void nfc_llcp_rx_skb(struct nfc_llcp_local *local, struct sk_buff *skb);
->
-> @@ -168,7 +169,9 @@ static void local_release(struct kref *ref)
->
->         local = container_of(ref, struct nfc_llcp_local, ref);
->
-> +       mutex_lock(&llcp_devices_list_lock);
->         list_del(&local->list);
-> +       mutex_unlock(&llcp_devices_list_lock);
->         local_cleanup(local);
->         kfree(local);
->  }
-> @@ -282,9 +285,13 @@ struct nfc_llcp_local *nfc_llcp_find_local(struct nfc_dev *dev)
->  {
->         struct nfc_llcp_local *local;
->
-> +       mutex_lock(&llcp_devices_list_lock);
->         list_for_each_entry(local, &llcp_devices, list)
-> -               if (local->dev == dev)
-> +               if (local->dev == dev) {
-> +                       mutex_unlock(&llcp_devices_list_lock);
->                         return local;
-> +               }
-> +       mutex_unlock(&llcp_devices_list_lock);
->
->         pr_debug("No device found\n");
->
-> @@ -1600,7 +1607,9 @@ int nfc_llcp_register_device(struct nfc_dev *ndev)
->         timer_setup(&local->sdreq_timer, nfc_llcp_sdreq_timer, 0);
->         INIT_WORK(&local->sdreq_timeout_work, nfc_llcp_sdreq_timeout_work);
->
-> +       mutex_lock(&llcp_devices_list_lock);
->         list_add(&local->list, &llcp_devices);
-> +       mutex_unlock(&llcp_devices_list_lock);
->
->         return 0;
->  }
-> --
-> 2.25.1
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20221129094436.3975668-1-bobo.shaobowang%40huawei.com.
