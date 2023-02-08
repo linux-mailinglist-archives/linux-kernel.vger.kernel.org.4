@@ -2,54 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09AD68F06D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9368B68F07A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 15:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231351AbjBHONF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 09:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S230434AbjBHONW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 09:13:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjBHONB (ORCPT
+        with ESMTP id S231420AbjBHONI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:13:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F164617B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:12:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27DAEB81C76
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 14:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B8AEC433D2;
-        Wed,  8 Feb 2023 14:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675865560;
-        bh=F3zZlNf5kXbKMWpgXrzQW6DGmA4bi8DUoSB2yopbhx0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QosyLxcPoq9hTssY+9afykwNt80UKmkh5DQvvey5c7cL7Sc9raGCbhvvk26VicMOF
-         mmS+AQqEkieNOAQ8wYaPAu4Ijts2IpCbk8S6Y/HBFl7D/E8kCiQHSwRZdyijx7ETl2
-         q48+OiWp26ZMWS2GGWnqjOnP2orwbcND03JorTCs=
-Date:   Wed, 8 Feb 2023 15:12:32 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, stable <stable@kernel.org>
-Subject: Re: [PATCH v2] mtd: spi-nor: fix memory leak when using
- debugfs_lookup()
-Message-ID: <Y+Ot0FXLgrSoLy7Q@kroah.com>
-References: <20230208125758.1515806-1-gregkh@linuxfoundation.org>
- <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc>
+        Wed, 8 Feb 2023 09:13:08 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086324900A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 06:13:07 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k13so19420811plg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 06:13:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aef6bWXseXNyKUxB70l+v+4E0JEFa6CEMVz/HF7sn6E=;
+        b=ZG4PfuCYzhr9e5VecxEtFOld1vD2TJ0a2AoJfHvvLJnX3Y0GtKfdQru7qmU7OM2Ns/
+         wTHY7ameCcA0mdx4Kp8JQYOxSQwe5koQ7ol2gLw9M5rHbcgPHClAFji6lydxRqe1DyUH
+         EIrUE5mD+A4dTXJZXD9DTjg0yRY1WDHIRW2hkgLtMJkH38lqslq905hW+mesmBaW9JQ4
+         J3dbyKgfN/rnBIGA7xs6QFCk+E9F9tjO7rz8WHPmH9m5tAY4+4UY8ksQWELqCH0lH7D9
+         fZzlQtAHBsX92MIzjg7f5wH+BvQ+46uaS0cks5++rG/5E1P2+B6CayiwCs3+UfPB9KJA
+         9NsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Aef6bWXseXNyKUxB70l+v+4E0JEFa6CEMVz/HF7sn6E=;
+        b=aCOsrkIC5yykckR0tLC4JIssok6HgkrwHER3O/PeRz9T/FSnSoYGfDBKwsVRTaRCS8
+         edLdfpKzGZRNs/Ts5+InjFtaq4lU4mlvzEPSc/mNuWmZkxxWrb3ibr1CNkf7a1Y27gDc
+         FIk4XDmoVMmslKT0NSawEmOvVl4Bb0wpj6CwAPvMqjDX6r40ZgXFqEWsJFOMj9NxqfTR
+         GMxooFQRDqKAmgAWKC/4cDON6P49Kg0+h+DNAFxxMngTx9BTwPn+e8cPdibuamfS77bU
+         eqNb59mDOwFTJ32D2zH4kVLOjAhyuxWyIAFG+YHSUtwC8Z6N1ig1YTiGDIPt6pUP3dLl
+         IWqg==
+X-Gm-Message-State: AO0yUKVaqrN4ABJgnTFiMLxY8QrlrlPS6x1vYQIMNp80kBUoMQP19wJ+
+        7tK95g4UOmMUgvDa2qy2NTUsWS8EyxureGnxI9bcCQ==
+X-Google-Smtp-Source: AK7set9dvVXNlNqzj8UkH2d3FFgTZMIFbQ0jclcoNVl0HAvkU/yeZD//5D6Hf4pZcslw4V3bD70r1X6SrrRQRqU5jwE=
+X-Received: by 2002:a17:90a:4e06:b0:22c:4d5:38be with SMTP id
+ n6-20020a17090a4e0600b0022c04d538bemr730862pjh.42.1675865586402; Wed, 08 Feb
+ 2023 06:13:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69fbf8b55dcb9c5c0a1a5d59b2248670@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <113e81f6-b349-97c0-4cec-d90087e7e13b@nvidia.com>
+In-Reply-To: <113e81f6-b349-97c0-4cec-d90087e7e13b@nvidia.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 8 Feb 2023 15:12:55 +0100
+Message-ID: <CAKfTPtCO=GFm6nKU0DVa-aa3f1pTQ5vBEF+9hJeTR9C_RRRZ9A@mail.gmail.com>
+Subject: Re: Bug report: UDP ~20% degradation
+To:     Tariq Toukan <tariqt@nvidia.com>
+Cc:     David Chen <david.chen@nutanix.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Gal Pressman <gal@nvidia.com>, Malek Imam <mimam@nvidia.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Tariq Toukan <ttoukan.linux@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,47 +82,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 02:36:23PM +0100, Michael Walle wrote:
-> Am 2023-02-08 13:57, schrieb Greg Kroah-Hartman:
-> > When calling debugfs_lookup() the result must have dput() called on it,
-> > otherwise the memory will leak over time.
-> > 
-> > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-> > Cc: Pratyush Yadav <pratyush@kernel.org>
-> > Cc: Michael Walle <michael@walle.cc>
-> > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> > Cc: Richard Weinberger <richard@nod.at>
-> > Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> > Cc: linux-mtd@lists.infradead.org
-> > Cc: stable <stable@kernel.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> > v2: fix up to work when module is removed and added, making the fix
-> >     much simpler.
-> > 
-> >  drivers/mtd/spi-nor/debugfs.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/mtd/spi-nor/debugfs.c
-> > b/drivers/mtd/spi-nor/debugfs.c
-> > index ff895f6758ea..af41fbc09a97 100644
-> > --- a/drivers/mtd/spi-nor/debugfs.c
-> > +++ b/drivers/mtd/spi-nor/debugfs.c
-> > @@ -242,6 +242,7 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
-> > 
-> >  	d = debugfs_create_dir(dev_name(nor->dev), rootdir);
-> >  	nor->debugfs_root = d;
-> > +	dput(rootdir);
-> 
-> rootdir might either be the return value of debugfs_lookup() or
-> debugfs_create_dir(). dput() is probably wrong for the latter,
-> right? Also there is an early return, where the dput() is missing,
-> too.
+Hi Tariq,
 
-{sigh}
+On Wed, 8 Feb 2023 at 12:09, Tariq Toukan <tariqt@nvidia.com> wrote:
+>
+> Hi all,
+>
+> Our performance verification team spotted a degradation of up to ~20% in
+> UDP performance, for a specific combination of parameters.
+>
+> Our matrix covers several parameters values, like:
+> IP version: 4/6
+> MTU: 1500/9000
+> Msg size: 64/1452/8952 (only when applicable while avoiding ip
+> fragmentation).
+> Num of streams: 1/8/16/24.
+> Num of directions: unidir/bidir.
+>
+> Surprisingly, the issue exists only with this specific combination:
+> 8 streams,
+> MTU 9000,
+> Msg size 8952,
+> both ipv4/6,
+> bidir.
+> (in unidir it repros only with ipv4)
+>
+> The reproduction is consistent on all the different setups we tested with.
+>
+> Bisect [2] was done between these two points, v5.19 (Good), and v6.0-rc1
+> (Bad), with ConnectX-6DX NIC.
+>
+> c82a69629c53eda5233f13fc11c3c01585ef48a2 is the first bad commit [1].
+>
+> We couldn't come up with a good explanation how this patch causes this
+> issue. We also looked for related changes in the networking/UDP stack,
+> but nothing looked suspicious.
+>
+> Maybe someone here can help with this.
+> We can provide more details or do further tests/experiments to progress
+> with the debug.
 
-Yeah, this is all wrong, sorry.  Let me fix this up again, properly.
-And to do it properly, let's have the module remove the directory if it
-is unloaded, like a good module should :)
+Could you share more details about your system and the cpu topology ?
 
-greg k-h
+The commit  c82a69629c53 migrates a task on an idle cpu when the task
+is the only one running on local cpu but the time spent by this local
+cpu under interrupt or RT context becomes significant (10%-17%)
+I can imagine that 16/24 stream overload your system so load_balance
+doesn't end up in this case and the cpus are busy with several
+threads. On the other hand, 1 stream is small enough to keep your
+system lightly loaded but 8 streams make your system significantly
+loaded to trigger the reduced capacity case but still not overloaded.
+
+Vincent
+
+>
+> Thanks,
+> Tariq
+>
+> [1]
+> commit c82a69629c53eda5233f13fc11c3c01585ef48a2
+> Author: Vincent Guittot <vincent.guittot@linaro.org>
+> Date:   Fri Jul 8 17:44:01 2022 +0200
+>
+>      sched/fair: fix case with reduced capacity CPU
+>
+>      The capacity of the CPU available for CFS tasks can be reduced
+> because of
+>      other activities running on the latter. In such case, it's worth
+> trying to
+>      move CFS tasks on a CPU with more available capacity.
+>
+>
+>
+>
+>      The rework of the load balance has filtered the case when the CPU
+> is
+>
+>
+>      classified to be fully busy but its capacity is reduced.
+>
+>
+>
+>
+>
+>
+>
+>      Check if CPU's capacity is reduced while gathering load balance
+> statistic
+>
+>
+>      and classify it group_misfit_task instead of group_fully_busy so we
+> can
+>
+>
+>      try to move the load on another CPU.
+>
+>
+>
+>
+>
+>
+>
+>      Reported-by: David Chen <david.chen@nutanix.com>
+>
+>
+>
+>      Reported-by: Zhang Qiao <zhangqiao22@huawei.com>
+>
+>
+>
+>      Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+>
+>
+>
+>      Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>
+>
+>
+>      Tested-by: David Chen <david.chen@nutanix.com>
+>
+>
+>
+>      Tested-by: Zhang Qiao <zhangqiao22@huawei.com>
+>
+>
+>
+>      Link:
+> https://lkml.kernel.org/r/20220708154401.21411-1-vincent.guittot@linaro.org
+>
+>
+>
+>
+> [2]
+>
+> Detailed bisec steps:
+>
+> +--------------+--------+-----------+-----------+
+> | Commit       | Status | BW (Gbps) | BW (Gbps) |
+> |              |        | run1      | run2      |
+> +--------------+--------+-----------+-----------+
+> | 526942b8134c | Bad    | ---       | ---       |
+> +--------------+--------+-----------+-----------+
+> | 2e7a95156d64 | Bad    | ---       | ---       |
+> +--------------+--------+-----------+-----------+
+> | 26c350fe7ae0 | Good   | 279.8     | 281.9     |
+> +--------------+--------+-----------+-----------+
+> | 9de1f9c8ca51 | Bad    | 257.243   | ---       |
+> +--------------+--------+-----------+-----------+
+> | 892f7237b3ff | Good   | 285       | 300.7     |
+> +--------------+--------+-----------+-----------+
+> | 0dd1cabe8a4a | Good   | 305.599   | 290.3     |
+> +--------------+--------+-----------+-----------+
+> | dfea84827f7e | Bad    | 250.2     | 258.899   |
+> +--------------+--------+-----------+-----------+
+> | 22a39c3d8693 | Bad    | 236.8     | 245.399   |
+> +--------------+--------+-----------+-----------+
+> | e2f3e35f1f5a | Good   | 277.599   | 287       |
+> +--------------+--------+-----------+-----------+
+> | 401e4963bf45 | Bad    | 250.149   | 248.899   |
+> +--------------+--------+-----------+-----------+
+> | 3e8c6c9aac42 | Good   | 299.09    | 294.9     |
+> +--------------+--------+-----------+-----------+
+> | 1fcf54deb767 | Good   | 292.719   | 301.299   |
+> +--------------+--------+-----------+-----------+
+> | c82a69629c53 | Bad    | 254.7     | 246.1     |
+> +--------------+--------+-----------+-----------+
+> | c02d5546ea34 | Good   | 276.4     | 294       |
+> +--------------+--------+-----------+-----------+
