@@ -2,92 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7539868F7FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFDF68F7FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjBHTZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:25:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S231572AbjBHT1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjBHTY6 (ORCPT
+        with ESMTP id S229686AbjBHT1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:24:58 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A635BA7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:24:58 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso3619590pjj.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 11:24:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nFH9EbcbDU6VShApHck5rgBRp4h43n3I1a0V/XMrymg=;
-        b=cFdTS+fxYQUFjHGd5/a07qXBmf47vi1Y8aqZUxUX1ocUjjtHF+qMNkrAbRjR3CurS9
-         Wysl6/0UmlmRO9hmwCzgBGQJf0D+WarKLRV8ngePn8Sgls/PxPTGKMsUAYbwKuU9WuZy
-         NenYI8OPB0Ekhjb8hIn/r/yxQtOcbRPzUocYKh36skH1N9jVxjXzTOd7qbnMEAskBeNe
-         D554eZfikaAnAAr9udBeL0Z89M3lCU8Mz/x+6HI11a/6LMyPbEIS0oq530D8knVXFH5F
-         JmfuctPtQiIM9BvNYQFLvX6TQISQ6J2B/1LiyrZWFc/KVnaLrGmNWPuEiCf0q02YvmUX
-         aZVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nFH9EbcbDU6VShApHck5rgBRp4h43n3I1a0V/XMrymg=;
-        b=YJREz1brxaBJd2RPmVWrZJE0XelF5IExxh90hch0yJJcqnq+kwqIzu4ocW9FgtMx/y
-         12fSPORXMgM8ywF0bpJBpr8AnJalIkSUFsSSpnqWqxMU3/iJEGkgKOND4+D0oOlnRCA2
-         3G6HtP7gCcSpuCD8BtPRKV/nHmO8M5HyHg+Et2A/6lh3luC4M7TY0VLZn9fM8cf8ObZq
-         i7EBPgvNr3tM/XofKcv9XosEV2MPS1sLVn7rfCgbliTDq/XOm3A5l1k+rt4EW/dBCmeG
-         VqjLatZxhauNZTpb0ME3mOa+63RMxAnEPMb6v8W/p6lPeN9sxKB++FqUv/KNekVit4ww
-         e+YA==
-X-Gm-Message-State: AO0yUKVeahn1h062XnFM3jpeKNl099AKBVDgesgnsKyuC3ix+si4s61V
-        U8nuziGxJmp6ntvqd93IL3mvRW9EEutaFkqn8MU/sQ==
-X-Google-Smtp-Source: AK7set9OCcDDAdFg90qjazeaLAgMFk7kQfWenK545jnfxARWYtHyqmWTlv1mXdao/5ynfJfNZSoWcI13ewlfZoTodp0=
-X-Received: by 2002:a17:902:c412:b0:198:99b5:cabf with SMTP id
- k18-20020a170902c41200b0019899b5cabfmr1996775plk.25.1675884297591; Wed, 08
- Feb 2023 11:24:57 -0800 (PST)
+        Wed, 8 Feb 2023 14:27:04 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1B795279
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:27:02 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CE181477;
+        Wed,  8 Feb 2023 11:27:45 -0800 (PST)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.30.155])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF7063F703;
+        Wed,  8 Feb 2023 11:27:01 -0800 (PST)
+Date:   Wed, 8 Feb 2023 19:26:59 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH V7 3/6] arm64/perf: Add branch stack support in struct
+ arm_pmu
+Message-ID: <Y+P3g8/85FIe/sUK@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230105031039.207972-1-anshuman.khandual@arm.com>
+ <20230105031039.207972-4-anshuman.khandual@arm.com>
+ <Y8ARAjUaE44y+Cw3@FVFF77S0Q05N>
+ <0351f0bc-d94b-957f-8e03-6525e47d63a4@arm.com>
 MIME-Version: 1.0
-References: <20230124211455.2563674-1-dionnaglaze@google.com>
- <20230124211455.2563674-2-dionnaglaze@google.com> <Y9emVjoTBrM2+Y5P@zn.tnic> <e0d52194-d478-b33e-851b-d5067f4a7669@amd.com>
-In-Reply-To: <e0d52194-d478-b33e-851b-d5067f4a7669@amd.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Wed, 8 Feb 2023 11:24:46 -0800
-Message-ID: <CAAH4kHbXKnWyO5hS19q74jDQjvAvj6rUw_Q06Of1+Fmng50-7Q@mail.gmail.com>
-Subject: Re: [PATCH v13 1/4] virt/coco/sev-guest: Add throttling awareness
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Michael Roth <michael.roth@amd.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Michael Sterritt <sterritt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0351f0bc-d94b-957f-8e03-6525e47d63a4@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> >
-> > In any case, I'd like for us to document it somewhere eventually if that
-> > hasn't happened yet so that all parties are clear on what is supposed to
-> > happen and what the protocol is.
-> >
+On Fri, Jan 13, 2023 at 09:45:22AM +0530, Anshuman Khandual wrote:
+> 
+> On 1/12/23 19:24, Mark Rutland wrote:
+> > On Thu, Jan 05, 2023 at 08:40:36AM +0530, Anshuman Khandual wrote:
+> >>  struct arm_pmu {
+> >>  	struct pmu	pmu;
+> >>  	cpumask_t	supported_cpus;
+> >>  	char		*name;
+> >>  	int		pmuver;
+> >> +	int		features;
+> >>  	irqreturn_t	(*handle_irq)(struct arm_pmu *pmu);
+> >>  	void		(*enable)(struct perf_event *event);
+> >>  	void		(*disable)(struct perf_event *event);
+> > 
+> > Hmm, we already have the secure_access field separately. How about we fold that
+> > in and go with:
+> > 
+> > 	unsigned int	secure_access    : 1,
+> > 			has_branch_stack : 1;
+> 
+> Something like this would work, but should we use __u32 instead of unsigned int
+> to ensure 32 bit width ?
 
-Hi y'all, checking in on this thread. Are we waiting for the new GHCB
-spec to be published before merging this fix?
+I don't think that's necessary; the exact size doesn't really matter, and
+unsigned int is 32-bits on all targets suppropted by Linux, not just arm and
+arm64.
 
--- 
--Dionna Glaze, PhD (she/her)
+I do agree that if this were a userspace ABI detail, it might be preferable to
+use __u32. However, I think using it here gives the misleading impression that
+there is an ABI concern when there is not, and as above it's not necessary, so
+I'd prefer unsigned int here.
+
+Thanks,
+Mark.
