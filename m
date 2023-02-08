@@ -2,79 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3613E68F830
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6438C68F834
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 20:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjBHTh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 14:37:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S229663AbjBHTip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 14:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbjBHThp (ORCPT
+        with ESMTP id S231912AbjBHTin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 14:37:45 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24D74ED0B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:37:44 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 318JbUVR012588
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Feb 2023 14:37:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1675885052; bh=WS8yi8V+z1lLpmoH+0uIKeV1wOV5nUwuLs7CM/oWWsE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=fWZexWOdUQPoK2iQ5J7DxyBlN1+HNKAgl/kjEZ6I64BzOGEO8heMMJHy9k+IVPxeS
-         VRS2ZTx6lbpRHO272sSRLoNUoA78BxZ23iUK1GHZPzJ+7A62Xhd0+z2c9dK/KNGIyW
-         wxnQJlRFs8jZ7axYmWilPLcI8Is54nrN+U+2OfPte5vD7GuyuRGDeQucE7Jb8SK4+z
-         Zs1HF5K0VCG9C6Z+jfcGsYJhSkXmtTkqrKadfcsflc2zFPpDrgK73vh41bBcirG/VN
-         iHmka7egx9sOAjDmK5YiOgi79HDBp8fNyWbilNlhm/dKfKbRuFWBO3jIcZ684GtSPD
-         xj5fg03OZiv9w==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 125F715C35A2; Wed,  8 Feb 2023 14:37:30 -0500 (EST)
-Date:   Wed, 8 Feb 2023 14:37:30 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Jan Kara <jack@suse.cz>
-Cc:     "Bhatnagar, Rishabh" <risbhat@amazon.com>,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        abuehaze@amazon.com
-Subject: Re: EXT4 IOPS degradation between 4.14 and 5.10
-Message-ID: <Y+P5+jrsZOjqG+VT@mit.edu>
-References: <053b60a6-133e-5d59-0732-464d5160772a@amazon.com>
- <20230126093231.ujn6yaxhexwzizp5@quack3>
- <b948ed49-1bdf-b17e-d03a-7ec8dfdb1afc@amazon.com>
- <20230127121721.lerrb36nhj7gdiwm@quack3>
- <6a0fcca5-b869-ffb7-426b-b49a6782c1c0@amazon.com>
- <20230208140247.rt62xdtriopfdb4o@quack3>
+        Wed, 8 Feb 2023 14:38:43 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A8E4B779
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 11:38:42 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id m14so17881438wrg.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 11:38:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BdAD5QrpEcQ0zzaMz4kMFeIBnTyIJbzpOOt7zHm3IRI=;
+        b=FkmfxtiPgxjuvvp4A+gPUuNqzf4PAY4/hh36cKhM/flGzlXiF9Zv4MydUlzd8fF/kQ
+         +LUEqLUIm/VeVFGaLnqhnTzrCMtqGCKJ061eSTxQYwnSt1VCKqXN9XdzT5YGh9Zbs15x
+         y79wRHq2HVwTCNYwUX68HNb2pikwg1qXjzpgvXbnPF810JZAtxVE2pLKDIv9/cDrzmJ5
+         Ga84vuFFML6iq3/dvb8y8QPrM7sOZ80Ml1Rv2aJ7UfcT5VpLifz7AWhnDG1bdhuNZcoO
+         4Drt5rZoGR5frOnpRnlBwWjx/X4D2P4PQnLe7hw8WqtDkwVBm1yjqznc+qyza4Nk09Cw
+         lCoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BdAD5QrpEcQ0zzaMz4kMFeIBnTyIJbzpOOt7zHm3IRI=;
+        b=ooMHrRHZhaI1TG7Z+pkLAAw1FU8Nsvo4JfmW+hvhJpPZYCpvA22/qx3HPisPQ2w/6k
+         tLgnEIS26IoqXQBcJ4/j7Hsro8+1dys7phsusujhFMzc8rbZUhjreYMXgnjrJl39KXir
+         LiPbiXI7QFUpB+J2bu+g+JCy2KM9arJEcXci3LXt3kDkNYVOwsI8KXdHcfO8+D7mnOiH
+         i/Rcee4O2j9sJ/Z14nH3YoQQrfAJDms+9BYWb7wOTyNo4LQiYAMuScWmoCM7IR9oEcim
+         Q9DO10aveTOm0REhC415yVobQBZqWxK2m6idP6X1tIplhDh/vdXi1VRFsLFTCS16sIEf
+         PnRg==
+X-Gm-Message-State: AO0yUKVDwZpiCOJZ2qyNx8gq+TGvJuEBDKLLggsAKIcNJX4w2rrApP1M
+        Cjs8tpS9IbvRBWu1F0ztWenBVQ==
+X-Google-Smtp-Source: AK7set/Sk+mM5Gp0qTAl+sx2O3tRO1dQ1UUP0ecynbikcu/9D+jv85ph6CzBBq4we+evJn0ovJMdnA==
+X-Received: by 2002:a5d:62c8:0:b0:2c3:f250:f1ed with SMTP id o8-20020a5d62c8000000b002c3f250f1edmr10154258wrv.1.1675885121164;
+        Wed, 08 Feb 2023 11:38:41 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b002c3efca57e1sm6382181wrt.110.2023.02.08.11.38.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 11:38:40 -0800 (PST)
+Message-ID: <f09a89e0-c93f-dacd-2270-379e43773b61@linaro.org>
+Date:   Wed, 8 Feb 2023 20:38:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208140247.rt62xdtriopfdb4o@quack3>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ASoC: dt-bindings: wlf,wm8994: Convert to dtschema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        - <patches@opensource.cirrus.com>, devicetree@vger.kernel.org
+References: <20230208172552.404324-1-krzysztof.kozlowski@linaro.org>
+ <167588125123.2283195.8694738903913228349.robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <167588125123.2283195.8694738903913228349.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 03:02:47PM +0100, Jan Kara wrote:
-> > I believe its the MySQL database though not so sure.
+On 08/02/2023 19:46, Rob Herring wrote:
 > 
-> Well, in that case I think your MySQL DB is somewhat misconfigured. At
-> least as far as we have been consulting MySQL / MariaDB developers
-> regarding benchmarking, they suggested we should configure the database to
-> use direct IO and increase DB internal buffers instead of relying on
-> buffered IO and pagecache behavior. And if your fio job is representative
-> of the IO load the DB really creates, I'd agree that that would be a saner
-> and likely more performant configuration ;)
+> On Wed, 08 Feb 2023 18:25:52 +0100, Krzysztof Kozlowski wrote:
+>> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
+>> schema.
+>>
+>> Changes against original binding:
+>> 1. Add missing LDO1VDD-supply for WM1811.
+>> 2. Use "gpios" suffix for wlf,ldo1ena and wlf,ldo2ena (Linux kernel's
+>>    gpiolib already looks for both variants).
+>> 3. Do not require AVDD1-supply and DCVDD-supply, because at least on
+>>    Arndale board with Exynos5250 these are grounded.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../devicetree/bindings/sound/wlf,wm8994.yaml | 203 ++++++++++++++++++
+>>  .../devicetree/bindings/sound/wm8994.txt      | 112 ----------
+>>  2 files changed, 203 insertions(+), 112 deletions(-)
+>>  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
+>>  delete mode 100644 Documentation/devicetree/bindings/sound/wm8994.txt
+>>
+> 
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
+> 
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+> 
+> Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230208172552.404324-1-krzysztof.kozlowski@linaro.org
+> 
+> 
+> audio-codec@1a: 'AVDD1-supply' is a required property
+> 	arch/arm/boot/dts/exynos5250-smdk5250.dtb
+> 	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
+> 	arch/arm/boot/dts/s5pv210-galaxys.dtb
+> 
+> audio-codec@1a: 'DCVDD-supply' is a required property
+> 	arch/arm/boot/dts/exynos5250-smdk5250.dtb
+> 	arch/arm/boot/dts/s5pv210-fascinate4g.dtb
+> 	arch/arm/boot/dts/s5pv210-galaxys.dtb
 
-Could it possibly be Postgres?  I happen to know that Amazon RDS and
-Google Cloud SQL support both MySQL and Postgres, and there are some
-optimizations that some of us in the Cloud space have been pursuing
-which are much easier because MySQL uses Direct I/O, but unfortunately
-Postgres uses buffered I/O and doens't support DIO.  :-(
+These two need corrections in the binding - next version of patch.
 
-							- Ted
+> 
+> audio-codec@1a: Unevaluated properties are not allowed ('wlf,ldo1ena', 'wlf,ldo2ena' were unexpected)
+> 	arch/arm/boot/dts/exynos4412-i9300.dtb
+
+These are fixed here:
+https://lore.kernel.org/linux-samsung-soc/20230208172634.404452-1-krzysztof.kozlowski@linaro.org/T/#t
+
+Best regards,
+Krzysztof
+
