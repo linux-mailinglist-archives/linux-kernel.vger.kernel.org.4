@@ -2,50 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9885368F705
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D552D68F706
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjBHSg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        id S230094AbjBHSgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjBHSgZ (ORCPT
+        with ESMTP id S230335AbjBHSge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:36:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFC24F87E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:35:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43D9E6173C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:35:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C11C433D2;
-        Wed,  8 Feb 2023 18:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675881315;
-        bh=pHw45Bur1Eds9PkCMxJM+9DF+J/zCwBWK1Hzb+5N3pY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ib6GrJ8LUqeYE2u8AQSAxwkQRajb4TEym7/HxmGXGiRZWvJcaYhT6u9v9LvZLky8J
-         bo9OegYzItSkCLtyes/yOen4IywXOibVTHu2ERDm5+kcpgzceLf+ny998wY1HLVZ8q
-         frpktdhAIQ8yssliYkYCI1CydUreVJaMRY/6Nt3k78ii+BNhi2OwPNHKwUfmm3NaLy
-         Kmm5sQaLkA1QAe0Hzn1W3Ttl+KHsFqqNnLbqMTb1kEvLKseWJMKxNOH9W2n+78KH4L
-         s7PbYfdaB3TOI8t60KhcXFNa6U9rkSeWQnzf6BiaetUR/oOuP7vj0kw1z+glw8WMEC
-         813NZyo4npQLg==
-Date:   Wed, 8 Feb 2023 11:35:13 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, jpoimboe@redhat.com, linux@weissschuh.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] objtool: Honey, I shrunk the instruction
-Message-ID: <Y+PrYVKwXIyutFEl@dev-arch.thelio-3990X>
-References: <20230208171756.898991570@infradead.org>
+        Wed, 8 Feb 2023 13:36:34 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E01521EA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:35:57 -0800 (PST)
+Received: from [192.168.1.103] (178.176.77.28) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 8 Feb 2023
+ 21:35:28 +0300
+Subject: Re: [PATCH] irq: ipi: fix NULL pointer deref in
+ irq_data_get_affinity_mask()
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>
+References: <b541232d-c2b6-1fe9-79b4-a7129459e4d0@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <774e2812-2856-f146-b8b3-e4f772c5e38a@omp.ru>
+Date:   Wed, 8 Feb 2023 21:35:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208171756.898991570@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <b541232d-c2b6-1fe9-79b4-a7129459e4d0@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.77.28]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/08/2023 18:12:32
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175379 [Feb 08 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_phishing_log_reg_50_60}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.28 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.28 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;178.176.77.28:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.77.28
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/08/2023 18:16:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/8/2023 4:32:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,44 +81,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 06:17:56PM +0100, Peter Zijlstra wrote:
-> Hi,
+On 8/17/22 11:00 PM, Sergey Shtylyov wrote:
+
+> Iff ipi_send_{mask|single}() get called with e.g. an invalid IRQ #, all the
+> local variables there will be NULL -- the problem is that ipi_send_verify()
+> (that's called first thing) doesn't verify its 'data' parameter, resulting
+> in a kernel oops in irq_data_get_affinity_mask() as the passed NULL pointer
+> gets dereferenced.  Add a missing NULL check in ipi_send_verify()...
 > 
-> Boris complained he could no longer build allyesconfig on his 32G desktop
-> machine without having OOM terminate either objtool or chrome.
+> Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+> analysis tool.
 > 
-> After talking about these patches on IRC, Nathan mentioned the linux-clang CI
-> was also having trouble of recent, and these patches appear to make it happy
-> again.
-> 
-> In total these patches shrink an allyesconfig run by about 6G:
-> 
-> pre:	5:58.22 real,   226.69 user,    131.22 sys,     26221520 mem
-> post:	5:03.34 real,   210.75 user,    88.80 sys,      20241232 mem
-> 
-> Also at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=objtool/core
+> Fixes: 3b8e29a82dd1 ("genirq: Implement ipi_send_mask/single()")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-For patches 1-9:
+   Patch fell thru the cracks? :-/
 
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build only
-
-Prior to this series:
-
-    [INFO] Memory used: 25.09GB
-
-After this series:
-
-    [INFO] Memory used: 19.27GB
-
-Our builds on TuxSuite were consistenly timing out after four hours and
-they had no problem passing with this series (the worst time was 2.2h,
-which is line with the VM specs that they use I believe):
-
-https://tuxapi.tuxsuite.com/v1/groups/clangbuiltlinux/projects/nathan/plans/2LQbNuWRo3Xf62Yg3SINuA9d7cR
-
-Thanks a lot!
-
-Cheers,
-Nathan
+MBR, Sergey
