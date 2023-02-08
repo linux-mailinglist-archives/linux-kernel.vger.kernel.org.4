@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E8568EEFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C6568EEFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 13:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjBHM3q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Feb 2023 07:29:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S230290AbjBHMbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 07:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjBHM3o (ORCPT
+        with ESMTP id S229457AbjBHMbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 07:29:44 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05AA2BF26
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:29:42 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-59-Hb1NbtNkMCGu2tgHQ7xvHQ-1; Wed, 08 Feb 2023 12:29:39 +0000
-X-MC-Unique: Hb1NbtNkMCGu2tgHQ7xvHQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 8 Feb
- 2023 12:29:38 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Wed, 8 Feb 2023 12:29:38 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>, Borislav Petkov <bp@alien8.de>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] x86/alternative: Support relocations in alternatives
-Thread-Topic: [PATCH] x86/alternative: Support relocations in alternatives
-Thread-Index: AQHZOjyzxl+xf7lExkaNEfzZDwBgqa7E+/6A
-Date:   Wed, 8 Feb 2023 12:29:38 +0000
-Message-ID: <693ce771113d49da92235a0f6d2e395f@AcuMS.aculab.com>
-References: <Y+EXQlGSI9WUU8nn@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y+EXQlGSI9WUU8nn@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 8 Feb 2023 07:31:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B064AAD2D
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 04:31:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C67D616C1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:31:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B51C433D2;
+        Wed,  8 Feb 2023 12:31:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675859481;
+        bh=Tb3++ufYdLByX152q1sqsAfFlS7LFPTgvHN6jET/kg4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M/KKNJjcQvcBwYAbTmZBT0TWHLxnnRpCL6Rw2sECaV1OaYpwT+Mn/t0DBkocCHiSF
+         7eKpQYoHt2a+2ClJy3XhJ/eY7MfnQHU0AM0nreOhsmi/cmRI/+uuSzAkxTQSitOLyl
+         c72AWBYybuiYOz4gCPJQ329CP8o2/fvcPDlpqGTY=
+Date:   Wed, 8 Feb 2023 13:31:18 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/10] staging: rtl8192e: Calculate definition of
+ MSR_LINK_MASK
+Message-ID: <Y+OWFsZD3m+VsnYS@kroah.com>
+References: <cover.1675792435.git.philipp.g.hortmann@gmail.com>
+ <8c8a126a83683bae69d0fd20a93bdea8f810f6d0.1675792435.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c8a126a83683bae69d0fd20a93bdea8f810f6d0.1675792435.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 06 February 2023 15:06
-...
-> +#define apply_reloc_n(n_, p_, d_)				\
-> +	do {							\
-> +		s32 v = *(s##n_ *)(p_);				\
+On Tue, Feb 07, 2023 at 07:16:22PM +0100, Philipp Hortmann wrote:
+> Calculate definition of MSR_LINK_MASK ((1<<0)|(1<<1)) = 3. Equation is not
+> accepted by checkpatch because of missing spaces.
+> 
+> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> ---
+>  drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+> index 1546bb575293..20a35c9caee8 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+> @@ -170,7 +170,7 @@ enum _RTL8192PCI_HW {
+>  #define	BW_OPMODE_20MHZ			BIT2
+>  	IC_VERRSION		= 0x301,
+>  	MSR			= 0x303,
+> -#define MSR_LINK_MASK      ((1<<0)|(1<<1))
+> +#define MSR_LINK_MASK      3
 
-You've added '_' suffixes to the parameters.
-But these only refer to the body of the #define
-so are never a problem.
+This is a bit field, it should be:
+	#define MSR_LINK_MASK	(BIT(1) | BIT(0))
+right?
 
-OTOH the local 'v' will cause confusion if one of the
-actual parameters is 'v'.
-Which is why it is common to prefix locals with '_'.
-(Which doesn't help with recursive expansions.)
+thanks,
 
-Since this is only actually expended in the one .c file
-it is unlikely to cause a problem.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+greg k-h
