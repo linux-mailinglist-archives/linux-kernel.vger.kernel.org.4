@@ -2,133 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2A768EFEE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730C268EFF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 14:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbjBHNhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 08:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S231365AbjBHNhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 08:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjBHNh3 (ORCPT
+        with ESMTP id S231346AbjBHNhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 08:37:29 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF0828213;
-        Wed,  8 Feb 2023 05:37:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675863449; x=1707399449;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mvzxSsipozkOczStJxxLS2JmQaRIUgdUKmAgwtMA4Cg=;
-  b=XMhIbX3hMjj3Vvi+7z+EybXp+lg5P5jLCYa16LrRRNwREgd1GSa4ITjr
-   rOOEnq2Pb+41o/ZPKux9DfImuCxf2KMBuwpWoZ2zNycZN2ZTL4FMcdNA0
-   hlm7iohjoOx8LleIRxXpPlg2pYdxLr1qHsm0h0u7OpPZgAfI4ktM01WBf
-   292rx18yyiifyO0SNqHdOSQ6asPa/A8AlyylNM9M2optzQhR8jPBNG9PR
-   Emefn14Y9gXGJTZ5kumqpWqBAsTmgf74lPr+4yFhHdIBZz/NzClx8+O+T
-   6S2/8IKIMsrNrguQt1Hwt74OtINeJyAuuke9VnB0sqCSEOIy0DY8yt9Ro
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="313436570"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="313436570"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 05:37:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776020864"
-X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
-   d="scan'208";a="776020864"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Feb 2023 05:37:17 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pPkdN-00485l-0I;
-        Wed, 08 Feb 2023 15:37:13 +0200
-Date:   Wed, 8 Feb 2023 15:37:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Tony Lindgren <tony@atomide.com>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v3 09/12] of: property: Simplify of_link_to_phandle()
-Message-ID: <Y+OliBAHiUPzbBPG@smile.fi.intel.com>
-References: <20230207014207.1678715-1-saravanak@google.com>
- <20230207014207.1678715-10-saravanak@google.com>
- <CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com>
- <CAGETcx8DaZqS7+47PhX4hQOfSk7AzPcTu=2i+4gAgXr6wyDNgg@mail.gmail.com>
- <CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=9e881qmK=vx3hBMyg@mail.gmail.com>
+        Wed, 8 Feb 2023 08:37:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D1128D30;
+        Wed,  8 Feb 2023 05:37:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA7AA616C5;
+        Wed,  8 Feb 2023 13:37:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A83C433D2;
+        Wed,  8 Feb 2023 13:37:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675863465;
+        bh=C18+lmDmHUQw89PNSRvF2CAYrWYkC0qccun9EmBW3H0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lQ8J+eol+yyMXrd4AH9hAcIAZjS6oMI2ukumpGqI19C6GhHc3el6NqpumcupON9OT
+         +L3hz6Cm3GSCwJ2ch8lwtRmPJ/1pLztJkkiMwj1op3bazsPDNMmVBvloIVe4t4Lb4N
+         Q897aDQpW0a7IWfQKgVxei5oCjg3ncT/4C9C/UPEuNGgxcowS0MLo0VAVpnsNiEN21
+         AtattiXwtVfk+1IYaUX1mfB+PfQ6D3e89FV757m4DkKc1S69kq6/AKWD4HPxCynSU9
+         6furEgwbgX3b6CmZj5LY7vXg8nG4RF1u9DAkZsxg9H0aK6MTSkLUxSF0TVFs9QS6r3
+         pnimBmJimBbZA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 7C87F405BE; Wed,  8 Feb 2023 10:37:42 -0300 (-03)
+Date:   Wed, 8 Feb 2023 10:37:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
+        bpf@vger.kernel.org
+Subject: Re: [RFC/PATCH 0/3] perf lock contention: Track lock owner (v2)
+Message-ID: <Y+OlploNJlan/Gkm@kernel.org>
+References: <20230207002403.63590-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=9e881qmK=vx3hBMyg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230207002403.63590-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 11:31:57PM -0800, Saravana Kannan wrote:
-> On Tue, Feb 7, 2023 at 6:08 PM Saravana Kannan <saravanak@google.com> wrote:
-
-...
-
-> Another way to get this to work is to:
-> 1) unload pinctrl driver, unload spi driver.
-> 2) apply overlay
-> 3) reload pinctrl driver, reload spi driver.
+Em Mon, Feb 06, 2023 at 04:24:00PM -0800, Namhyung Kim escreveu:
+> Hello,
 > 
-> This is assuming unloading those 2 drivers doesn't crash your system.
+> When there're many lock contentions in the system, people sometimes
+> want to know who caused the contention, IOW who's the owner of the
+> locks.
+> 
+> This patchset adds -o/--lock-owner option to track the owner info
+> if it's available.  Right now, it supports mutex and rwsem as they
+> have the owner fields in themselves.  Please see the patch 2 for the
+> details.
+> 
+> Changes in v2)
+>  * fix missing callstacks
+>  * support old rwsem type with recent clang (>= 15.0)
+> 
+> The patch 1 is a fix for missing callstacks and the patch 2 is the
+> main change.  The patch 3 adds support for old kernels when compiler
+> supports a recent builtin to check field type in a struct (Thanks
+> to Hao).
+> 
+> Example output (for mutex only):
+> 
+>   $ sudo ./perf lock con -abo -Y mutex -- ./perf bench sched pipe
+>   # Running 'sched/pipe' benchmark:
+>   # Executed 1000000 pipe operations between two processes
+> 
+>        Total time: 4.910 [sec]
+> 
+>          4.910435 usecs/op
+>            203647 ops/sec
+>    contended   total wait     max wait     avg wait          pid   owner
+> 
+>            2     15.50 us      8.29 us      7.75 us      1582852   sched-pipe
+>            7      7.20 us      2.47 us      1.03 us           -1   Unknown
+>            1      6.74 us      6.74 us      6.74 us      1582851   sched-pipe
+> 
+> You can get it from 'perf/lock-owner-v2' branch in
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
-Just a side note.
+Thanks, applied.
 
-For ACPI case the ACPICA prevents appearing of the same device in the
-namespace, so the above is kinda enforced, that's why overlays work better
-there (but have a lot of limitations).
+- Arnaldo
+
+ 
+> Thanks,
+> Namhyung
+> 
+> Namhyung Kim (3):
+>   perf lock contention: Fix to save callstack for the default modified
+>   perf lock contention: Add -o/--lock-owner option
+>   perf lock contention: Support old rw_semaphore type
+> 
+>  tools/perf/Documentation/perf-lock.txt        |  5 +
+>  tools/perf/builtin-lock.c                     | 52 +++++++++--
+>  tools/perf/util/bpf_lock_contention.c         |  1 +
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  | 91 ++++++++++++++++++-
+>  tools/perf/util/lock-contention.h             |  1 +
+>  5 files changed, 136 insertions(+), 14 deletions(-)
+> 
+> 
+> base-commit: 17f248aa8664ff5b3643491136283e73b5c18166
+> -- 
+> 2.39.1.519.gcb327c4b5f-goog
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
 
-
+- Arnaldo
