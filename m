@@ -2,196 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D7568E738
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:44:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA5F68E73B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 05:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjBHEoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Feb 2023 23:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S230361AbjBHEq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Feb 2023 23:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjBHEod (ORCPT
+        with ESMTP id S229739AbjBHEqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Feb 2023 23:44:33 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13F31ADE2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 20:44:24 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id w7so604287pfu.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 20:44:24 -0800 (PST)
+        Tue, 7 Feb 2023 23:46:53 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C5F11675
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 20:46:52 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id k6so18663489vsk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Feb 2023 20:46:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=asus-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EJ7yIiNmxy2KVInIF+Vk3HIxzGj3yaMUNFlUJEi5vOo=;
-        b=e/V0Go6Ui5JzuqZ41s94m6vD4AUjhbNQt221LoVAtFnlWQG4GpsHd1Gp+jT9TafAQO
-         DjO4/qKLVBkwMmT7413q3nWQ6saRUhuHvKmDKKaJXj2dRRz0PSM+VJ+wG5ReEzP5EBFJ
-         thmdqOIATe3WFocqGMo5FUwcVPxgDO0lXvvNsOtkU9lDvDhRzx10NHoW9P3M4C5+mEca
-         tuuY0k8rUy5ezM3W1aFPjO8ee9ruRkvLkcbuBVA3zeL8c3rXyrjFaRGpP4EkrETD+uRR
-         rRDdvyqSsH5TFUulmeOzzhmXz7LIyp8/QxCGiebhar6bV4Gx71JU4rD7npzSil5Wm006
-         vQfQ==
+        bh=9BGUCWxywmSqW/Kd3Ha2QF3DOwIWqbYIoTgVPrb7HQk=;
+        b=zVEq7AVYWPMzLbKz781ZaD2w6e6xN0RFF87o3VIXSzEdWO9Li/ZKLmwvlm9PGlR6ys
+         Ff9BQI9iJmsRcKTG3nEL1fkAc6cJLGSh9fRsfoC8vrrNFzeFlFUT//40j0WY14yNXfXJ
+         KYZx5RHCdrZeIOmPv2gADCpVGX/ShMywFRyKx6bIfQpPvio1lh1jLjZ1RadSKGbWaBeK
+         2ub8cGGc4RpBwXYlK/5PCttQLTEmrXkE0F4Geiwdp8gUkSIBg+hOC/uRE5QphahhO4OJ
+         yDTc5dgcnGTcdscFiata+m8woyEtUCdCfmr3qK0is2dy6IRUBjukxiXnxP3n3YrpyrWk
+         MtUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EJ7yIiNmxy2KVInIF+Vk3HIxzGj3yaMUNFlUJEi5vOo=;
-        b=HvGWyH8PQZYJXcF9kCjbnauWHKIu7xAUVfOaSF8bMDz/E47LrZk8Y2qzfchFP8G4BO
-         lDnLF+8a3BLpvq60wHUfCI6W4lDYQWl/Yzmakf9jw1z93EwSK/57puRBx8PaJzVzpQEK
-         NLnagHJuKDza270/aE7MgtFZK5nPzVzkukaTLZ2BfAX5VziWbkixk48sdElzhIxQaIQ2
-         Rpbn68o+h9ukDuEr4fIjo4J2y1gLBV1mNnSTMGNyJG/O2fOlCol/BpSZTyGFTkSPUfrB
-         fGqKpGkFxRO9ZxVIsh0iF1Il/Dj4t8bUQvsc0FY1EWF+n40+fKmq6jeNLhhYkyxntmEX
-         MudA==
-X-Gm-Message-State: AO0yUKX+qUACDLtvdDhNcLli1wqk2edyiyE94ZPWt8Kdrj9+X47ueNd7
-        2GtPRoY4zkUZRKaVhu52fcPC6Q==
-X-Google-Smtp-Source: AK7set+25XveFeJPmWK20Z1eYLgFDVPE5ZOqAOgucJmOUwYXpqmTY6XfHyTZaN97R8Ae0nnXJUqWgA==
-X-Received: by 2002:aa7:983d:0:b0:593:cdc7:5dd3 with SMTP id q29-20020aa7983d000000b00593cdc75dd3mr5478121pfl.4.1675831464382;
-        Tue, 07 Feb 2023 20:44:24 -0800 (PST)
-Received: from ken-ASUS-EXPERTBOOK-B1500CBA-B1500CBA.. (61-216-65-192.hinet-ip.hinet.net. [61.216.65.192])
-        by smtp.gmail.com with ESMTPSA id v14-20020aa7850e000000b005a81885f342sm637156pfn.21.2023.02.07.20.44.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 20:44:24 -0800 (PST)
-From:   Kencp huang <kencp_huang@asus.corp-partner.google.com>
-To:     kencp_huang@asus.corp-partner.google.com
-Cc:     Laurent.pinchart@ideasonboard.com, andrzej.hajda@intel.com,
-        airlied@gmail.com, neil.armstrong@linaro.org,
-        briannorris@chromium.org, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, hoegsberg@chromium.org,
-        jernej.skrabec@gmail.com, jonas@kwiboo.se, kencp_huang@asus.com,
-        linux-kernel@vger.kernel.org, rfoss@kernel.org,
-        seanpaul@chromium.org, wzz@rock-chips.com, zyw@rock-chips.com
-Subject: [PATCH 1/1] drm/bridge: analogix_dp: add a quirk for Bob panel
-Date:   Wed,  8 Feb 2023 12:44:06 +0800
-Message-Id: <20230208044406.8280-1-kencp_huang@asus.corp-partner.google.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230208031519.7440-1-kencp_huang@asus.corp-partner.google.com>
-References: <20230208031519.7440-1-kencp_huang@asus.corp-partner.google.com>
+        bh=9BGUCWxywmSqW/Kd3Ha2QF3DOwIWqbYIoTgVPrb7HQk=;
+        b=UOrrUB5d4ianNJh8tHfkl+Ze/Sb1ds63SicjUrh2ECtM43DdCWtLUnc9IWtcXyJ9QB
+         skhr/WZfqeyvDrNGF9eELog+MMeycBg1X74hjNmnb8MtV2AGbDung5Tysd+2LE4KKnsF
+         f9CWO892Zq61xwOc2f7SLzr19iolu/jX2EgPLT+iRENWKvqE4HXu+1NKm5k6lI79Ifll
+         JvtGX4oSvcA3Y+A0cvLOxqf0F8uwR2I5nYCPFjAwzQMl2wkbxM6rI6PTqeAUXlyksHrj
+         4dD4b/38NRj82DFbLu0p+cXtOm5On3FPQZh9uLSY0ys/BAjl9vEGH3dtSwpKm03UsDIa
+         +2vA==
+X-Gm-Message-State: AO0yUKWPAe3KLkCcZSYtYXxHUMACF1+J1aumeFIXOUQ5/Sh53fBaIX9l
+        ncDDksFmktHnZo47qYCtvOFlOQ5eisvoMheQtZJOAA==
+X-Google-Smtp-Source: AK7set8DuOCVLtSJUMAUdvgqN+SUpNwTjUDLGPm27qAHduZa07uDph12H6VTsAZVIKkN3aisMtzkSsA2ZcvUvfAFaqw=
+X-Received: by 2002:a05:6102:3652:b0:3f7:4e35:cdfa with SMTP id
+ s18-20020a056102365200b003f74e35cdfamr1260705vsu.83.1675831611087; Tue, 07
+ Feb 2023 20:46:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230207125618.699726054@linuxfoundation.org>
+In-Reply-To: <20230207125618.699726054@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 8 Feb 2023 10:16:40 +0530
+Message-ID: <CA+G9fYsB8ihp81kQ0nD+fKW1S10Kt1CeYMTSGWXU_mBzrrvA4w@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/120] 5.15.93-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zain wang <wzz@rock-chips.com>
+On Tue, 7 Feb 2023 at 18:39, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.93 release.
+> There are 120 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.93-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Some panels' DP_PSR_STATUS (DPCD 0x2008) may be unstable when we
-enable psr. If we get the unexpected psr state, We need try the
-debounce to ensure the panel was in PSR
 
-Signed-off-by: zain wang <wzz@rock-chips.com>
-Signed-off-by: Chris Zhong <zyw@rock-chips.com>
-Commit-Ready: Kristian H. Kristensen <hoegsberg@chromium.org>
-Tested-by: Kristian H. Kristensen <hoegsberg@chromium.org>
-Reviewed-by: Kristian H. Kristensen <hoegsberg@chromium.org>
-Tested-by: Kencp huang <kencp_huang@asus.corp-partner.google.com>
-Signed-off-by: Kencp huang <kencp_huang@asus.corp-partner.google.com>
----
- .../gpu/drm/bridge/analogix/analogix_dp_reg.c | 71 +++++++++++--------
- 1 file changed, 42 insertions(+), 29 deletions(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c
-index 6a4f20fccf84..7b6e3f8f85b0 100644
---- a/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c
-+++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_reg.c
-@@ -935,25 +935,54 @@ void analogix_dp_enable_psr_crc(struct analogix_dp_device *dp)
- 	writel(PSR_VID_CRC_ENABLE, dp->reg_base + ANALOGIX_DP_CRC_CON);
- }
- 
--static ssize_t analogix_dp_get_psr_status(struct analogix_dp_device *dp)
-+static int analogix_dp_get_psr_status(struct analogix_dp_device *dp,
-+				      int status)
- {
- 	ssize_t val;
--	u8 status;
-+	u8 reg, store = 0;
-+	int cnt = 0;
-+
-+	/* About 3ms for a loop */
-+	while (cnt < 100) {
-+		/* Read operation would takes 900us */
-+		val = drm_dp_dpcd_readb(&dp->aux, DP_PSR_STATUS, &reg);
-+		if (val < 0) {
-+			dev_err(dp->dev, "PSR_STATUS read failed ret=%zd", val);
-+			return val;
-+		}
-+
-+		/*
-+		 * Ensure the PSR_STATE should go to DP_PSR_SINK_ACTIVE_RFB
-+		 * from DP_PSR_SINK_ACTIVE_SINK_SYNCED or
-+		 * DP_PSR_SINK_ACTIVE_SRC_SYNCED.
-+		 * Otherwise, if we get DP_PSR_SINK_ACTIVE_RFB twice in
-+		 * succession, it show the Panel is stable PSR enabled state.
-+		 */
-+		if (status == DP_PSR_SINK_ACTIVE_RFB) {
-+			if ((reg == DP_PSR_SINK_ACTIVE_RFB) &&
-+			    ((store == DP_PSR_SINK_ACTIVE_SINK_SYNCED) ||
-+			     (store == DP_PSR_SINK_ACTIVE_SRC_SYNCED) ||
-+			     (store == DP_PSR_SINK_ACTIVE_RFB)))
-+				return 0;
-+			else
-+				store = reg;
-+		} else {
-+			if ((reg == DP_PSR_SINK_INACTIVE) ||
-+			    (reg == DP_PSR_SINK_ACTIVE_RESYNC))
-+				return 0;
-+		}
- 
--	val = drm_dp_dpcd_readb(&dp->aux, DP_PSR_STATUS, &status);
--	if (val < 0) {
--		dev_err(dp->dev, "PSR_STATUS read failed ret=%zd", val);
--		return val;
-+		usleep_range(2100, 2200);
-+		cnt++;
- 	}
--	return status;
-+
-+	return -ETIMEDOUT;
- }
- 
- int analogix_dp_send_psr_spd(struct analogix_dp_device *dp,
- 			     struct dp_sdp *vsc, bool blocking)
- {
- 	unsigned int val;
--	int ret;
--	ssize_t psr_status;
- 
- 	/* don't send info frame */
- 	val = readl(dp->reg_base + ANALOGIX_DP_PKT_SEND_CTL);
-@@ -998,26 +1027,10 @@ int analogix_dp_send_psr_spd(struct analogix_dp_device *dp,
- 	if (!blocking)
- 		return 0;
- 
--	/*
--	 * db[1]!=0: entering PSR, wait for fully active remote frame buffer.
--	 * db[1]==0: exiting PSR, wait for either
--	 *  (a) ACTIVE_RESYNC - the sink "must display the
--	 *      incoming active frames from the Source device with no visible
--	 *      glitches and/or artifacts", even though timings may still be
--	 *      re-synchronizing; or
--	 *  (b) INACTIVE - the transition is fully complete.
--	 */
--	ret = readx_poll_timeout(analogix_dp_get_psr_status, dp, psr_status,
--		psr_status >= 0 &&
--		((vsc->db[1] && psr_status == DP_PSR_SINK_ACTIVE_RFB) ||
--		(!vsc->db[1] && (psr_status == DP_PSR_SINK_ACTIVE_RESYNC ||
--				 psr_status == DP_PSR_SINK_INACTIVE))),
--		1500, DP_TIMEOUT_PSR_LOOP_MS * 1000);
--	if (ret) {
--		dev_warn(dp->dev, "Failed to apply PSR %d\n", ret);
--		return ret;
--	}
--	return 0;
-+	if (vsc->db[1])
-+		return analogix_dp_get_psr_status(dp, DP_PSR_SINK_ACTIVE_RFB);
-+	else
-+		return analogix_dp_get_psr_status(dp, 0);
- }
- 
- ssize_t analogix_dp_transfer(struct analogix_dp_device *dp,
--- 
-2.34.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.15.93-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: a0b338ae148124eaaf13c5cde22eb4026a783229
+* git describe: v5.15.91-142-ga0b338ae1481
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.91-142-ga0b338ae1481
+
+## Test Regressions (compared to v5.15.90-205-g5605d15db022)
+
+## Metric Regressions (compared to v5.15.90-205-g5605d15db022)
+
+## Test Fixes (compared to v5.15.90-205-g5605d15db022)
+
+## Metric Fixes (compared to v5.15.90-205-g5605d15db022)
+
+## Test result summary
+total: 167493, pass: 137421, fail: 4754, skip: 24977, xfail: 341
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 149 total, 148 passed, 1 failed
+* arm64: 49 total, 47 passed, 2 failed
+* i386: 39 total, 35 passed, 4 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 34 total, 32 passed, 2 failed
+* riscv: 14 total, 14 passed, 0 failed
+* s390: 16 total, 14 passed, 2 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
