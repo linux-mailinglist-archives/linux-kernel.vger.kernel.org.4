@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC7368ED39
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D264968ED3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 11:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjBHKp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 05:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S230231AbjBHKqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 05:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjBHKpy (ORCPT
+        with ESMTP id S230061AbjBHKpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:45:54 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6353847EFC;
+        Wed, 8 Feb 2023 05:45:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027A43CE33;
         Wed,  8 Feb 2023 02:45:37 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 724466602091;
-        Wed,  8 Feb 2023 10:45:35 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2FE266602096;
+        Wed,  8 Feb 2023 10:45:36 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1675853136;
-        bh=DG0Bfe4ArjgFwtknCIsWC7PDxg3CMEPnouLpXP/YXz4=;
+        bh=LMUmM4vzAct44Jl/7e6cb9I2iurl6RcV+++kY88mRLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mbSIEeCx3m5ABKgI70bBZlZl72M3m+skFht303Hzt8fhtoCvG9St6GkUQpii7FiVr
-         kBqJ1MkVDcoiZqE5iBf1rV9QCMXuA1r12odYfNycoB0KzRtt1byoEaEPV9AHwu8ZdU
-         Kco5xghQWkzMyG0c4ZBLzZWELpCObGNygTH93Wdnseeuru6frEFZLEgeBAFdYBA6no
-         OmW33r7rjrKw0mKEopkp19ulQQmjUBnIiOGolUcPeqKDoYDFLbBgksMDuUlB4uG7T1
-         qwS29jePIo4NTFRXPqcbx2UVIJyx973ZDn4BdRRAT+UJVlhq7pBo/ZkJBWSIfNc/Kl
-         7sbf726tnsoFw==
+        b=dS9ePikT1qyVvkG1GPge4M8E6i6rRCXNQ8xnDipYzQ3mFWJHfaUeRYlLvsRu9uvRL
+         7UfMdgplKCZa7TfcqhmC3s40g2D/O2djH0Rk7pmJqx42mLSQ4vsGXbBT23Qq+RYnmO
+         OBRTp/N4QHtg1GRWYRRTWyFLB4V3FPWWwp8h2DRF6nW6oSEUPH10KDz1OjQO6Q0Kie
+         bXM28Iq1BAxvuR78j+ifj519bnQzpKkRTezycr0BGiDDLEhejcHrdH09rJvvnu4CfC
+         A3qrtZXoCHsHXSs/AW0WgTsuMlRWrnNEDUzlvRXZt2iQ7968w0L/Hwic5J9I+5XRP8
+         e8ofEfmf8vBvg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -40,9 +40,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, wenst@chromium.org
-Subject: [PATCH 01/16] arm64: dts: mediatek: mt8183-kukui: Couple VGPU and VSRAM_GPU regulators
-Date:   Wed,  8 Feb 2023 11:45:12 +0100
-Message-Id: <20230208104527.118929-2-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 02/16] arm64: dts: mediatek: mt8183-kukui: Override vgpu/vsram_gpu constraints
+Date:   Wed,  8 Feb 2023 11:45:13 +0100
+Message-Id: <20230208104527.118929-3-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230208104527.118929-1-angelogioacchino.delregno@collabora.com>
 References: <20230208104527.118929-1-angelogioacchino.delregno@collabora.com>
@@ -57,50 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add coupling for these regulators, as they have a strict voltage output
-relation to satisfy in order to ensure GPU stable operation.
+Override the PMIC-default voltage constraints for VGPU and VSRAM_GPU
+with the platform specific vmin/vmax for the highest possible SoC
+binning.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index fbe14b13051a..de9778c85b94 100644
+index de9778c85b94..63952c1251df 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -294,7 +294,6 @@ dsi_out: endpoint {
- 
- &gpu {
- 	mali-supply = <&mt6358_vgpu_reg>;
--	sram-supply = <&mt6358_vsram_gpu_reg>;
+@@ -401,6 +401,9 @@ &mt6358codec {
  };
  
- &i2c0 {
-@@ -401,6 +400,11 @@ &mt6358codec {
- 	Avdd-supply = <&mt6358_vaud28_reg>;
- };
- 
-+&mt6358_vgpu_reg {
-+	regulator-coupled-with = <&mt6358_vsram_gpu_reg>;
-+	regulator-coupled-max-spread = <100000>;
-+};
+ &mt6358_vgpu_reg {
++	regulator-min-microvolt = <625000>;
++	regulator-max-microvolt = <900000>;
 +
- &mt6358_vsim1_reg {
- 	regulator-min-microvolt = <2700000>;
- 	regulator-max-microvolt = <2700000>;
-@@ -411,6 +415,11 @@ &mt6358_vsim2_reg {
- 	regulator-max-microvolt = <2700000>;
+ 	regulator-coupled-with = <&mt6358_vsram_gpu_reg>;
+ 	regulator-coupled-max-spread = <100000>;
+ };
+@@ -416,6 +419,9 @@ &mt6358_vsim2_reg {
  };
  
-+&mt6358_vsram_gpu_reg {
-+	regulator-coupled-with = <&mt6358_vgpu_reg>;
-+	regulator-coupled-max-spread = <100000>;
-+};
+ &mt6358_vsram_gpu_reg {
++	regulator-min-microvolt = <850000>;
++	regulator-max-microvolt = <1000000>;
 +
- &pio {
- 	aud_pins_default: audiopins {
- 		pins_bus {
+ 	regulator-coupled-with = <&mt6358_vgpu_reg>;
+ 	regulator-coupled-max-spread = <100000>;
+ };
 -- 
 2.39.1
 
