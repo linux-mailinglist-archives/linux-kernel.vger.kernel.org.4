@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9BC68F6F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1DC68F704
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231942AbjBHSep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S229807AbjBHSgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBHSej (ORCPT
+        with ESMTP id S229732AbjBHSgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:34:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4DF25282
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:34:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74875B81F3F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C01C433EF;
-        Wed,  8 Feb 2023 18:34:33 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aZhH/gPf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1675881270;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cao7atRAj5EzOKn7eWRiDQw9TlKsKb+eWA3SfBqNxKE=;
-        b=aZhH/gPfn495K6PdMZdHWMGLi/CCfz6UzfxXWADnJFFzW+i5jJSz2x7UekVwYPfaeEmPZR
-        jvUYaB6HKdjporxvFcqQkcGZoMtyXxLr8nkRLFTFQjuglHH6qyRZlk0GQ5ZmJ4rv0GyZCh
-        W5ztMFOymgobnq0ocsqDtvU5Tj3bjOc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 84942535 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 8 Feb 2023 18:34:30 +0000 (UTC)
-Date:   Wed, 8 Feb 2023 19:34:30 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>, qemu-devel@nongnu.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH] x86: temporarily remove all attempts to provide
- setup_data
-Message-ID: <Y+PrNmq5nuWKWfGw@zx2c4.com>
-References: <20230208180835.234638-1-Jason@zx2c4.com>
- <20230208131125-mutt-send-email-mst@kernel.org>
- <CAHmME9rMnbGDZ+Rq8ao=gZd10kBp5ni=73HcPpFC58ChoKZObA@mail.gmail.com>
- <20230208131805-mutt-send-email-mst@kernel.org>
- <Y+PpPRvnlakC78Is@zx2c4.com>
- <Y+PqePFLgp5Lel4V@redhat.com>
+        Wed, 8 Feb 2023 13:36:22 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65A053570;
+        Wed,  8 Feb 2023 10:35:44 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1685cf2003aso24368758fac.12;
+        Wed, 08 Feb 2023 10:35:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fJYr4Zf6uscLIIeS4tHZ9ESk+y1K+YlFWuYnR2c2Tyo=;
+        b=yV4672mD6wAnkOeVSOYa4fhpHOcnm78rBFiT1LvLUF8R1fM8UVFXel6u3V+DIMiSt5
+         LIH9WgGFQRfNapmVF0JZg7pCjVwTqPkPewFJCPW6j+0i92fujA8FWn7rs3+vQ1ue1ugf
+         sVviPLv5pGl2dBg0tYj2HJH6/59DT9KCmU+tIsYeZx4mgZ95aK2fBNsrnhC8xE5fBaGI
+         72ihFY1ClcmJw1AGC7bNmYol8rIJ1uzAN2QxtblABdbhKFh8+/Qmr1c/CxaeMBe7NWLS
+         I2q4wS9sEMBtAzowquoPAMzMnfet8STxpnSrrSm5P+9XSuVhhF+q6dlnuMFnGhef9W0r
+         xS4g==
+X-Gm-Message-State: AO0yUKXMk5nystp8i/IOFLHtYHvX8Hyp1xgxk7kzk4KaFSWvRYsyV2qY
+        6tzVvmlZUZonkd2d6DaGhw==
+X-Google-Smtp-Source: AK7set+MOQHxeEfczTB5yVhuZDv87NZx3ov891p44iJXP7TtW1H0LqJOImZCPCO431ZxHvqzR2esjQ==
+X-Received: by 2002:a05:6870:b4a5:b0:166:732f:c936 with SMTP id y37-20020a056870b4a500b00166732fc936mr4200230oap.35.1675881317867;
+        Wed, 08 Feb 2023 10:35:17 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l22-20020a056870d4d600b001636786f7absm7075017oai.43.2023.02.08.10.35.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 10:35:17 -0800 (PST)
+Received: (nullmailer pid 2284391 invoked by uid 1000);
+        Wed, 08 Feb 2023 18:35:16 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: layerscape: Fix GICv3 ITS node names
+Date:   Wed,  8 Feb 2023 12:34:38 -0600
+Message-Id: <20230208183437.2283665-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y+PqePFLgp5Lel4V@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,66 +63,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 06:31:20PM +0000, Daniel P. Berrangé wrote:
-> On Wed, Feb 08, 2023 at 07:26:05PM +0100, Jason A. Donenfeld wrote:
-> > On Wed, Feb 08, 2023 at 01:18:37PM -0500, Michael S. Tsirkin wrote:
-> > > On Wed, Feb 08, 2023 at 03:14:38PM -0300, Jason A. Donenfeld wrote:
-> > > > On Wed, Feb 8, 2023 at 3:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > >
-> > > > > On Wed, Feb 08, 2023 at 03:08:35PM -0300, Jason A. Donenfeld wrote:
-> > > > > > All attempts at providing setup_data have been made as an iteration on
-> > > > > > whatever was there before, stretching back to the original
-> > > > > > implementation used for DTBs that [mis]used the kernel image itself.
-> > > > > > We've now had a dozen rounds of bugs and hacks, and the result is
-> > > > > > turning into a pile of unmaintainable and increasingly brittle hacks.
-> > > > > >
-> > > > > > Let's just rip out all the madness and start over. We can re-architect
-> > > > > > this based on having a separate standalone setup_data file, which is how
-> > > > > > it should have been done in the first place. This is a larger project
-> > > > > > with a few things to coordinate, but we can't really begin thinking
-> > > > > > about that while trying to play whack-a-mole with the current buggy
-> > > > > > implementation.
-> > > > > >
-> > > > > > So this commit removes the setup_data setting from x86_load_linux(),
-> > > > > > while leaving intact the infrastructure we'll need in the future to try
-> > > > > > again.
-> > > > > >
-> > > > > > Cc: Michael S. Tsirkin <mst@redhat.com>
-> > > > > > Cc: Dov Murik <dovmurik@linux.ibm.com>
-> > > > > > Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> > > > > > Cc: Gerd Hoffmann <kraxel@redhat.com>
-> > > > > > Cc: Daniel P. Berrangé <berrange@redhat.com>
-> > > > > > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > > > > > Cc: Richard Henderson <richard.henderson@linaro.org>
-> > > > > > Cc: H. Peter Anvin <hpa@zytor.com>
-> > > > > > Cc: Philippe Mathieu-Daudé <philmd@linaro.org>
-> > > > > > Cc: Nathan Chancellor <nathan@kernel.org>
-> > > > > > Cc: Borislav Petkov <bp@alien8.de>
-> > > > > > Cc: Eric Biggers <ebiggers@kernel.org>
-> > > > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > > >
-> > > > > I think I'll be happier if this is just a revert of
-> > > > > the relevant commits in reverse order to make life easier
-> > > > > for backporters.
-> > > > > Unless that's too much work as we made other changes around
-> > > > > this code?
-> > > > 
-> > > > I think that's going to be messy. And it won't handle the dtb stuff
-> > > > either straightforwardly.
-> > > 
-> > > List of Fixes tags so people can at least figure out whether they
-> > > have a version that needs this fix then?
-> > 
-> > 7.2 is when the functionality started causing problems for most people.
-> > But the buggy code goes back to 3cbeb524 in 2016.
-> 
-> We can't rip out the full setup_data support back to that point. That
-> is deleting significant features that would break -dtb IIUC. For that
-> we would need to have a deprecation period to announce the incompatibility.
-> 
-> I was thinking this would only revert the RNG seed pieces which have
-> negligible user impact.
+The GICv3 ITS is an MSI controller, therefore its node name should be
+'msi-controller'.
 
-I'm pretty sure -dtb is used by nobody...
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+Note that this exposes an issue that #msi-cells is missing. In turn, the 
+use of msi-parent in PCI nodes is wrong and should be msi-map according 
+to my sources (Robin M), but I have no idea what is correct there.
 
-Jason
+ arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 2 +-
+ arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+index 1b33cabb4e14..dd1c8f60fad1 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+@@ -131,7 +131,7 @@ gic: interrupt-controller@6000000 {
+ 		interrupt-controller;
+ 		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0xf) |
+ 					 IRQ_TYPE_LEVEL_LOW)>;
+-		its: gic-its@6020000 {
++		its: msi-controller@6020000 {
+ 			compatible = "arm,gic-v3-its";
+ 			msi-controller;
+ 			reg = <0x0 0x06020000 0 0x20000>;/* GIC Translater */
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
+index 260d045dbd9a..6dd680fb1b22 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
+@@ -123,7 +123,7 @@ gic: interrupt-controller@6000000 {
+ 		#size-cells = <2>;
+ 		ranges;
+ 
+-		its: gic-its@6020000 {
++		its: msi-controller@6020000 {
+ 			compatible = "arm,gic-v3-its";
+ 			msi-controller;
+ 			reg = <0x0 0x6020000 0 0x20000>;
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
+index 348d9e3a9125..d2f5345d0560 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
+@@ -60,7 +60,7 @@ gic: interrupt-controller@6000000 {
+ 		interrupt-controller;
+ 		interrupts = <1 9 0x4>;
+ 
+-		its: gic-its@6020000 {
++		its: msi-controller@6020000 {
+ 			compatible = "arm,gic-v3-its";
+ 			msi-controller;
+ 			reg = <0x0 0x6020000 0 0x20000>;
+diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+index 50c19e8405d5..ea6a94b57aeb 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
+@@ -395,7 +395,7 @@ gic: interrupt-controller@6000000 {
+ 		interrupt-controller;
+ 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+ 
+-		its: gic-its@6020000 {
++		its: msi-controller@6020000 {
+ 			compatible = "arm,gic-v3-its";
+ 			msi-controller;
+ 			reg = <0x0 0x6020000 0 0x20000>;
+-- 
+2.39.1
+
