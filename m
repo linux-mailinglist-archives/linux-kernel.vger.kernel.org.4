@@ -2,219 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1004D68F68D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEFE68F688
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjBHSFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:05:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S231341AbjBHSEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbjBHSFK (ORCPT
+        with ESMTP id S231474AbjBHSEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:05:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8364395
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:03:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675879367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e0LLxloTGcQYsQXrPcewSAimWN5otqrDAlCg4Fi2+Lc=;
-        b=OSKMSMNnQ+HUaMl9+NNcF2gbju194P6Hh1Gv0x3EIATVvqAizKQljgAvj6DHuexS6tqoJr
-        qpwsm6gN191xyG183WNekdGxCj0zGIGhJlOJo9X2pPX/JUpe2mCeMxXbicSfeX3Cddi/9I
-        Xgm6ysDn6aUgyzNnKzVdMabHmT5+OR8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-304-hTkCyC1BOXmAi0w7BMUQ4g-1; Wed, 08 Feb 2023 13:02:44 -0500
-X-MC-Unique: hTkCyC1BOXmAi0w7BMUQ4g-1
-Received: by mail-wr1-f72.google.com with SMTP id i9-20020a0560001ac900b002bfda39265aso3162526wry.13
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:02:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e0LLxloTGcQYsQXrPcewSAimWN5otqrDAlCg4Fi2+Lc=;
-        b=sRCBH40Vz1kCMdfNCclen4vD2YI/rewjoHHpyM3N+gmU99JS3KACx7jXKPumVu+9kL
-         yvtIx8DvqhN0TpG+VHLjEoOOS+jNgfhdGbhWCpNpJrhcW9KuFGz/Wq0HDtOEZn+4IqTW
-         QpX5C0d6YSX5lY8i+m/bkZsa98y95IBvcZnfihEoldVsITZMqTxzxnH6zMEt8nEZrO2Z
-         xU53RQXjK/AXsFOT36efBnB+WwrqYu+tbVwMpTKbwkYig5P3XzoY6+yLi4HRVC/PiQma
-         EdmlkHj1FzTe6AEPAuVQjssb3/Gn0BoB+Mm4/hQseRXz2QzPpvttPmQcGFjDfXbX7kBi
-         JgYA==
-X-Gm-Message-State: AO0yUKWth5cEJmZNyvSaWRi5ey4oUeQuvzxaKZpLx/dx3I8MDcYZZ0xE
-        ZG8tGGqH5gNcXa6/TXKq9I3NUBKbp+0OASfXVLOVoqOvECZoRN+z4IIFE2hiqMtcRaw+rCnWVzK
-        UYCxXDsYHYCeQ0yQuBsYGVVS0
-X-Received: by 2002:a05:600c:3420:b0:3dc:4548:abe6 with SMTP id y32-20020a05600c342000b003dc4548abe6mr7378382wmp.12.1675879362623;
-        Wed, 08 Feb 2023 10:02:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set/+84lky0rDdgPqGXC9RmmGB+bGfZx/9Lnyp5QjpyxHUb0E7utouVFRkJBwvEquSJR7O2f1QA==
-X-Received: by 2002:a05:600c:3420:b0:3dc:4548:abe6 with SMTP id y32-20020a05600c342000b003dc4548abe6mr7378358wmp.12.1675879362384;
-        Wed, 08 Feb 2023 10:02:42 -0800 (PST)
-Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
-        by smtp.gmail.com with ESMTPSA id j40-20020a05600c1c2800b003dc4480df80sm3035820wms.34.2023.02.08.10.02.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 10:02:41 -0800 (PST)
-Date:   Wed, 8 Feb 2023 18:02:39 +0000
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christophe de Dinechin <dinechin@redhat.com>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y+Pjv8CeDiLRxqP/@work-vm>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <658272b5-9547-a69f-b6c9-a7ff2dd2d468@amd.com>
- <Y+HpmIesY96cYcWQ@kroah.com>
- <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
- <Y+MAPHZNLeBY13Pj@mit.edu>
- <20230208041913-mutt-send-email-mst@kernel.org>
- <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y+OAZTljX1I6ZvR/@kroah.com>
- <m2edr03xh4.fsf@redhat.com>
- <Y+Pb4Ood56Wxn4sj@kroah.com>
+        Wed, 8 Feb 2023 13:04:40 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B5E17158
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:04:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MXWv/XpzhFL/3Svn1wfLOdz+zJmzMB7DykCoFL92t/A=; b=bLmbWiK28rXhW7Vn68Q128CJ9A
+        6ps0GP+EVhDle+gD/SgAyhuiYGW91GcuMpIvKemFAjntYYKqwUmBFi2Z9x9GBwIzgrDlf5OEv/Vkz
+        x8r20n6n+pRUY+wIK+J5pOSx+7XmmS5+vi7yjs7jQUX+5WwUrdHlGsM/XpVm3HsSd1/ERrrHrvxlj
+        a47lwSM4dvG0JK+xsjpJIC9765/kRBOJroBWVU5jonnPWCwgVUfJexiyNq1spqgc8zULB+jtxLGqI
+        sQWYRPk57ZrKCM0TQcW3vw3TamfY7u7RpMKpxLK0r6p2KnDhIUmWcesbGpuXkcLbMWg9B437KQ3yU
+        oSrfaGsg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pPomb-007Wp1-2o;
+        Wed, 08 Feb 2023 18:03:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6BA8D300399;
+        Wed,  8 Feb 2023 19:03:39 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 53E3F20F05D4E; Wed,  8 Feb 2023 19:03:39 +0100 (CET)
+Date:   Wed, 8 Feb 2023 19:03:39 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Bharata B Rao <bharata@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, akpm@linux-foundation.org, luto@kernel.org,
+        tglx@linutronix.de, yue.li@memverge.com,
+        Ravikumar.Bangoria@amd.com, ying.huang@intel.com
+Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
+Message-ID: <Y+Pj+9bbBbHpf6xM@hirez.programming.kicks-ass.net>
+References: <20230208073533.715-1-bharata@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y+Pb4Ood56Wxn4sj@kroah.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230208073533.715-1-bharata@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
-> On Wed, Feb 08, 2023 at 05:19:37PM +0100, Christophe de Dinechin wrote:
-> > 
-> > On 2023-02-08 at 11:58 +01, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote...
-> > > On Wed, Feb 08, 2023 at 10:44:25AM +0000, Reshetova, Elena wrote:
-> > >>
-> > >> The CC threat model does change the traditional linux trust boundary regardless of
-> > >> what mitigations are used (kernel config vs. runtime filtering). Because for the
-> > >> drivers that CoCo guest happens to need, there is no way to fix this problem by
-> > >> either of these mechanisms (we cannot disable the code that we need), unless somebody
-> > >> writes a totally new set of coco specific drivers (who needs another set of
-> > >> CoCo specific virtio drivers in the kernel?).
-> > >
-> > > It sounds like you want such a set of drivers, why not just write them?
-> > > We have zillions of drivers already, it's not hard to write new ones, as
-> > > it really sounds like that's exactly what you want to have happen here
-> > > in the end as you don't trust the existing set of drivers you are using
-> > > for some reason.
-> > 
-> > In the CC approach, the hypervisor is considered as hostile. The rest of the
-> > system is not changed much. If we pass-through some existing NIC, we'd
-> > rather use the existing driver for that NIC rather than reinvent
-> > it.
-> 
-> But that is not what was proposed.  I thought this was all about virtio.
-> If not, again, someone needs to write a solid definition.
+On Wed, Feb 08, 2023 at 01:05:28PM +0530, Bharata B Rao wrote:
 
-As I said in my reply to you a couple of weeks ago:
+> - Perf uses IBS and we are using the same IBS for access profiling here.
+>   There needs to be a proper way to make the use mutually exclusive.
 
-  I'm not sure the request here isn't really to make sure *all* PCI devices
-  are safe; just the ones we care about in a CoCo guest (e.g. the virtual devices) -
-  and potentially ones that people will want to pass-through (which
-  generally needs a lot more work to make safe).
-  (I've not looked at these Intel tools to see what they cover)
+No, IFF this lives it needs to use in-kernel perf.
 
-so *mostly* virtio, and just a few of the other devices.
+> - Is tying this up with NUMA balancing a reasonable approach or
+>   should we look at a completely new approach?
 
-> So if you want to use existing drivers, wonderful, please work on making
-> the needed changes to meet your goals to all of them.  I was trying to
-> give you a simple way out :)
-> 
-> > >> 1. these selective CoCo guest required drivers (small set) needs to be hardened
-> > >>  (or whatever word people prefer to use here), which only means that in
-> > >> the presence of malicious host/hypervisor that can manipulate pci config space,
-> > >> port IO and MMIO, these drivers should not expose CC guest memory
-> > >> confidentiality or integrity (including via privilege escalation into CC guest).
-> > >
-> > > Again, stop it please with the "hardened" nonsense, that means nothing.
-> > > Either the driver has bugs, or it doesn't.  I welcome you to prove it
-> > > doesn't :)
-> > 
-> > In a non-CC scenario, a driver is correct if, among other things, it does
-> > not leak kernel data to user space. However, it assumes that PCI devices are
-> > working correctly and according to spec.
-> 
-> And you also assume that your CPU is working properly.
+Is it giving sufficient win to be worth it, afaict it doesn't come even
+close to justifying it.
 
-We require the CPU to give us a signed attestation to prove that it's a
-trusted CPU, that someone external can validate.  So, not quite
-'assume'.
+> - Hardware provided access information could be very useful for driving
+>   hot page promotion in tiered memory systems. Need to check if this
+>   requires different tuning/heuristics apart from what NUMA balancing
+>   already does.
 
->  And what spec
-> exactly are you referring to?  How can you validate any of that without
-> using the PCI authentication protocol already discussed in this thread?
+I think Huang Ying looked at that from the Intel POV and I think the
+conclusion was that it doesn't really work out. What you need is
+frequency information, but the PMU doesn't really give you that. You
+need to process a *ton* of PMU data in-kernel.
 
-The PCI auth protocol looks promising and is possibly the right long
-term answer.   But for a pass through NIC for example, all we'd want is
-that (with the help of the IOMMU) it can't get or corrupt any data the
-guest doesn't give it - and then it's upto the guest to run encryption
-over the protocols over the NIC.
-
-> 
-> > >> Please note that this only applies to a small set (in tdx virtio setup we have less
-> > >> than 10 of them) of drivers and does not present invasive changes to the kernel
-> > >> code. There is also an additional core pci/msi code that is involved with discovery
-> > >> and configuration of these drivers, this code also falls into the category we need to
-> > >> make robust.
-> > >
-> > > Again, why wouldn't we all want "robust" drivers?  This is not anything
-> > > new here,
-> > 
-> > What is new is that CC requires driver to be "robust" against a new kind of
-> > attack "from below" (i.e. from the [virtual] hardware side).
-> 
-> And as I have said multiple times, that is a totally new "requirement"
-> and one that Linux does not meet in any way at this point in time.
-
-Yes, that's a fair statement.
-
-> If
-> you somehow feel this is a change that is ok to make for Linux, you will
-> need to do a lot of work to make this happen.
-> 
-> Anyway, you all are just spinning in circles now.  I'll just mute this
-> thread until I see an actual code change as it seems to be full of
-> people not actually sending anything we can actually do anything with.
-
-I think the challenge will be to come up with non-intrusive, minimal
-changes;  obviously you don't want stuff shutgunned everywhere.
-
-Dave
-
-> greg k-h
-> 
--- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
 
