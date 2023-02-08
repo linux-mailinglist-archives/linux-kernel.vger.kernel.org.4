@@ -2,86 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BA468E8B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB84D68E8B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 08:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjBHHGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 02:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
+        id S230075AbjBHHJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 02:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBHHGW (ORCPT
+        with ESMTP id S229450AbjBHHJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 02:06:22 -0500
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D24AA1BC0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Feb 2023 23:06:20 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowADX3vLgSeNj3KslBA--.38623S2;
-        Wed, 08 Feb 2023 15:06:09 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     ogabbay@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-        ttayar@habana.ai, dliberman@habana.ai, obitton@habana.ai,
-        osharabi@habana.ai, dhirschfeld@habana.ai
-Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] habanalabs: Fix freeing uninitialized pointers
-Date:   Wed,  8 Feb 2023 15:05:59 +0800
-Message-Id: <20230208070559.19589-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Feb 2023 02:09:14 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36E9B19F11;
+        Tue,  7 Feb 2023 23:09:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675840153; x=1707376153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YuHcAmeJD6qZKliGgQx5J9sRN0zTfqdpJlYlq7H4eZE=;
+  b=eLix0cUl8foFTtjKEQLi1nT6T6Ih2WxviXmFHaHvBcEOUoVd4K/EDq0L
+   RmMLSbGNTXuxg+2gXr8NZwy5F39B/P/P+yi3/s9kF5NvV+Hqo+1Sh4tFw
+   DHJanVVL6Op5obKLYr/jwOE+rnvgxVV60Ox/i2VPtarI6NoM6fvjzzt48
+   Lu6xAE3oWc8eFiIxGM5LLRT7bwFjvRgjAyYdnxIm+771VOTi1EdWnuyNv
+   DDQvJv4fQY++fA5TQKajXsiw2jOC4KOsSOepr4DPfnwg/88CdryONIrIv
+   SmXbjlWv4CTB496uMilk2nuR2N5a6NNvWbVF3YDt2KDZKPJGi07vjEF1K
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="392126395"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="392126395"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2023 23:09:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10614"; a="667144392"
+X-IronPort-AV: E=Sophos;i="5.97,280,1669104000"; 
+   d="scan'208";a="667144392"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga002.jf.intel.com with ESMTP; 07 Feb 2023 23:09:10 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal/drivers/intel_powerclamp: Fix module param for duration
+Date:   Tue,  7 Feb 2023 23:09:08 -0800
+Message-Id: <20230208070908.41702-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowADX3vLgSeNj3KslBA--.38623S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GrWrXw18tFWxKw4Dtr1kZrb_yoWDKrb_Wr
-        WrZr12qry8GFnY9wnIyr45Zryjk3yDGr4kZFnagFZ5tryavw4SqryvvrnYg3Wfua1Yywnr
-        Zr1jg3yS9348KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoO
-        J5UUUUU
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the memory allocated by kcalloc has not been set to zero, it may
-contain uninitialized pointers.
-Therefore, free the non-NULL pointers may cause undefined behaviour.
+After switch to use powercap/idle-inject framework in the Intel
+powerclamp driver, the idle "duration" is changed to micro seconds.
 
-Fixes: 5574cb2194b1 ("habanalabs: Assign each CQ with its own work queue")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+But the module parameter for idle "duration" is in milli seconds. So,
+convert to micro seconds in the set callback and convert back to milli
+seconds by adding a get callback.
+
+While here also use mutex protection for setting and getting "duration".
+The other uses of "duration" is already protected by mutex.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- drivers/misc/habanalabs/common/device.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+This patch is for linux-pm bleeding-edge branch. Can be after patch:
+"
+commit 8526eb7fc75abcd09d8bd061610215baf0ca948a
+Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date:   Wed Feb 1 10:28:53 2023 -0800
 
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index 87ab329e65d4..dc6fcb9cca7a 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -901,9 +901,8 @@ static int device_early_init(struct hl_device *hdev)
- free_eq_wq:
- 	destroy_workqueue(hdev->eq_wq);
- free_cq_wq:
--	for (i = 0 ; i < hdev->asic_prop.completion_queues_count ; i++)
--		if (hdev->cq_wq[i])
--			destroy_workqueue(hdev->cq_wq[i]);
-+	while (i--)
-+		destroy_workqueue(hdev->cq_wq[i]);
- 	kfree(hdev->cq_wq);
- asid_fini:
- 	hl_asid_fini(hdev);
+    thermal: intel: powerclamp: Use powercap idle-inject feature
+"
+Can't add Fixes tag as commit ID will change once merged to mainline.
+Or wait till the above patch is merged to mainline.
+
+ drivers/thermal/intel/intel_powerclamp.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 1390748706a6..038acccc0509 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -74,6 +74,7 @@ static struct thermal_cooling_device *cooling_dev;
+ 
+ static DEFINE_MUTEX(powerclamp_lock);
+ 
++/* This duration is in micro seconds */
+ static unsigned int duration;
+ static unsigned int pkg_cstate_ratio_cur;
+ static unsigned int window_size;
+@@ -90,23 +91,34 @@ static int duration_set(const char *arg, const struct kernel_param *kp)
+ 		pr_err("Out of recommended range %lu, between 6-25ms\n",
+ 			new_duration);
+ 		ret = -EINVAL;
++		goto exit;
+ 	}
+ 
+-	duration = clamp(new_duration, 6ul, 25ul);
+-	smp_mb();
+-
++	mutex_lock(&powerclamp_lock);
++	duration = clamp(new_duration, 6ul, 25ul) * 1000;
++	mutex_unlock(&powerclamp_lock);
+ exit:
+ 
+ 	return ret;
+ }
+ 
++static int duration_get(char *buf, const struct kernel_param *kp)
++{
++	int ret;
++
++	mutex_lock(&powerclamp_lock);
++	ret = sysfs_emit(buf, "%d\n", duration / 1000);
++	mutex_unlock(&powerclamp_lock);
++
++	return ret;
++}
++
+ static const struct kernel_param_ops duration_ops = {
+ 	.set = duration_set,
+-	.get = param_get_int,
++	.get = duration_get,
+ };
+ 
+-
+-module_param_cb(duration, &duration_ops, &duration, 0644);
++module_param_cb(duration, &duration_ops, NULL, 0644);
+ MODULE_PARM_DESC(duration, "forced idle time for each attempt in msec.");
+ 
+ struct powerclamp_calibration_data {
 -- 
-2.25.1
+2.39.1
 
