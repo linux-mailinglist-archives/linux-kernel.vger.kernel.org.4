@@ -2,156 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA0868F8E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7885368F8EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 21:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjBHUgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 15:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
+        id S232105AbjBHUii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 15:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjBHUgt (ORCPT
+        with ESMTP id S232094AbjBHUih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 15:36:49 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD363A87
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 12:36:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UhCqbjmutMOLc4n9BwNPODO+rcSew/EeSwGbEuxV5kw=; b=VyJ628LlxNwd4ah3kHSCaoFM4y
-        0GfNWleeoWxUP7niEtvMuEz5mjvOscJA5c6DMfnNaLS/JXKwwQMIFjh858u9HUMta79XTIPVo3qLj
-        fzwxaYnW3yruKGqJIk+HfDTQVofLOK+nGzk2SiNjVAnvz4CfiWoPH8a/cBV441kdgmF8n40TrDMx4
-        PXi7gv2tdyAA+/tT47TUEfrIGuX67stM3hnDAyvLKNuNdEUNsQEj3tE0Qz2moPACRS7HYmRC+qiWz
-        YLJaOLiaoveYWtHHosCl/79IiqUFMEC4lhsfoj89kv50WUtCbtVQyI5/T/UFWzIlI3yIUVGeOzPjq
-        j580eYrA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pPrAP-007aAH-2f;
-        Wed, 08 Feb 2023 20:35:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 54AAE300129;
-        Wed,  8 Feb 2023 21:36:24 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 351E020321D61; Wed,  8 Feb 2023 21:36:24 +0100 (CET)
-Date:   Wed, 8 Feb 2023 21:36:24 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrew.Cooper3@citrix.com
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, mhiramat@kernel.org,
-        kirill.shutemov@linux.intel.com, jpoimboe@redhat.com
-Subject: Re: [PATCH v3 3/4] x86/alternative: Rewrite optimize_nops() some
-Message-ID: <Y+QHyF5K5hSN0ziP@hirez.programming.kicks-ass.net>
-References: <20230208171050.490809180@infradead.org>
- <20230208171431.373412974@infradead.org>
- <f0b54521-26cf-ed38-d805-3a8eef3b3103@citrix.com>
- <Y+QGIiOupDKxlKKR@hirez.programming.kicks-ass.net>
+        Wed, 8 Feb 2023 15:38:37 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71911976F;
+        Wed,  8 Feb 2023 12:38:33 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318KYLT4020473;
+        Wed, 8 Feb 2023 20:37:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=Fz+FHQCR/AArZdbtbzr9TdzXWdNsm9OWfRrg70mi0Uo=;
+ b=m1+iCQHfRRTwbCngCib9juE6Unaq7ct9qJV0mIx7xca+mFuk69CzCkbwXLyf7fpUJtNK
+ 2PNOC9ljai7nBiksO2QxuOyGebkAZ3gvsSlvUBxW34FwvJdv0+9BGmoY65HvJ86jMtpY
+ 2ReuJNNFvSdNZusOdioX4Bs+xnVhS9LSLD7dkHBfkjtrA04OZUbtuNxSMdRsBlSbWZ2f
+ w5sPQIVDOI8/81WWX9JFXwSmo+sBKCkNeoo8OK6dyTRODBv+Z8NL6ox76ZMoqDWHFfs3
+ bsnZV/e11T85cSSTtNKWN+MQCAt6hW4ee3SYD7CzNO9gakcf4EWDshcTV5XL9hU9iK7s Mw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nhe53h8s9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Feb 2023 20:37:44 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 318JbTxZ028341;
+        Wed, 8 Feb 2023 20:37:43 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nhdte9d1a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 08 Feb 2023 20:37:43 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 318Kbhrc001108;
+        Wed, 8 Feb 2023 20:37:43 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3nhdte9d05-1;
+        Wed, 08 Feb 2023 20:37:42 +0000
+From:   Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+To:     stable@vger.kernel.org
+Cc:     saeed.mirzamohammadi@oracle.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Eric Biggers <ebiggers@google.com>,
+        linux-crypto@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH stable 0/1] crypto: testmgr - don't generate WARN for missing modules
+Date:   Wed,  8 Feb 2023 12:37:10 -0800
+Message-Id: <20230208203711.951845-1-saeed.mirzamohammadi@oracle.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+QGIiOupDKxlKKR@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_09,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302080175
+X-Proofpoint-ORIG-GUID: Fun6MAX0JSxeNnCiIJ9yVVG4PKAyW1kZ
+X-Proofpoint-GUID: Fun6MAX0JSxeNnCiIJ9yVVG4PKAyW1kZ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 09:29:23PM +0100, Peter Zijlstra wrote:
+I'm backporting the following stable patch to v5.11+ branches.
 
-> As is, there were only a hand full of NOPs that turned into this jmp.d8
-> thing on the defconfig+kvm_guest.config I build to test this -- it is by
-> no means a common thing. And about half of them would be gone by
-> extending the max nop length to at least 10 or so.
-> 
-> In fact, I did that patch once, lemme see if I still have it...
+Commit Data:
+  commit-id        : a76bd86a85cac9feddc66d38019f943d054f0218
+  subject          : crypto: testmgr - don't generate WARN for missing modules
+  author           : elliott@hpe.com
+  author date      : 2022-08-13 23:14:43
+  committer        : herbert@gondor.apana.org.au
+  committer date   : 2022-08-19 10:39:39
 
-Even still applies too, lemme go test that.
+We observed the same WARN issue when loading the tcrypt module in a v5.15 kernel:
 
-Also, there's a bunch of alternatives() where we explicitly put in that
-short jmp instead of taking the nops, see for example:
+[   84.577572] modprobe tcrypt
+[   84.920899] alg: skcipher: failed to allocate transform for ecb(cast5): -2
+[   84.923050] ------------[ cut here ]------------
+[   84.924541] alg: self-tests for ecb(cast5) (ecb(cast5)) failed (rc=-2)
+[   84.924557] WARNING: CPU: 0 PID: 3910 at crypto/testmgr.c:5681 alg_test+0x344/0x5d8
 
-  $ git grep -i "alternative.*jmp" arch/x86/
+This patch fixes this issue.
 
----
-Subject: x86_64: Longer NOPs
-From: Peter Zijlstra <peterz@infradead.org>
+Robert Elliott (1):
+  crypto: testmgr - don't generate WARN for missing modules
 
+ crypto/testmgr.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/asm/nops.h   |   13 +++++++++++--
- arch/x86/kernel/alternative.c |    8 ++++++++
- 2 files changed, 19 insertions(+), 2 deletions(-)
+-- 
+2.39.1
 
---- a/arch/x86/include/asm/nops.h
-+++ b/arch/x86/include/asm/nops.h
-@@ -34,6 +34,8 @@
- #define BYTES_NOP7	0x8d,0xb4,0x26,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x3e,BYTES_NOP7
- 
-+#define ASM_NOP_MAX 8
-+
- #else
- 
- /*
-@@ -47,6 +49,8 @@
-  * 6: osp nopl 0x00(%eax,%eax,1)
-  * 7: nopl 0x00000000(%eax)
-  * 8: nopl 0x00000000(%eax,%eax,1)
-+ * 9: cs nopl 0x00000000(%eax,%eax,1)
-+ * 10: osp cs nopl 0x00000000(%eax,%eax,1)
-  */
- #define BYTES_NOP1	0x90
- #define BYTES_NOP2	0x66,BYTES_NOP1
-@@ -56,6 +60,13 @@
- #define BYTES_NOP6	0x66,BYTES_NOP5
- #define BYTES_NOP7	0x0f,0x1f,0x80,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00
-+#define BYTES_NOP9	0x2e,BYTES_NOP8
-+#define BYTES_NOP10	0x66,BYTES_NOP9
-+
-+#define ASM_NOP9  _ASM_BYTES(BYTES_NOP9)
-+#define ASM_NOP10 _ASM_BYTES(BYTES_NOP10)
-+
-+#define ASM_NOP_MAX 10
- 
- #endif /* CONFIG_64BIT */
- 
-@@ -68,8 +79,6 @@
- #define ASM_NOP7 _ASM_BYTES(BYTES_NOP7)
- #define ASM_NOP8 _ASM_BYTES(BYTES_NOP8)
- 
--#define ASM_NOP_MAX 8
--
- #ifndef __ASSEMBLY__
- extern const unsigned char * const x86_nops[];
- #endif
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -86,6 +86,10 @@ static const unsigned char x86nops[] =
- 	BYTES_NOP6,
- 	BYTES_NOP7,
- 	BYTES_NOP8,
-+#ifdef CONFIG_64BIT
-+	BYTES_NOP9,
-+	BYTES_NOP10,
-+#endif
- };
- 
- const unsigned char * const x86_nops[ASM_NOP_MAX+1] =
-@@ -99,6 +103,10 @@ const unsigned char * const x86_nops[ASM
- 	x86nops + 1 + 2 + 3 + 4 + 5,
- 	x86nops + 1 + 2 + 3 + 4 + 5 + 6,
- 	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7,
-+#ifdef CONFIG_64BIT
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8,
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9,
-+#endif
- };
- 
- /* Use this to add nops to a buffer, then text_poke the whole buffer. */
