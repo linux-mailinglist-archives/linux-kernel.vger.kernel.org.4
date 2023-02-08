@@ -2,65 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C39A68F6B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E332068F6B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 19:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjBHSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 13:14:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
+        id S230295AbjBHSO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 13:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBHSOc (ORCPT
+        with ESMTP id S229460AbjBHSOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 13:14:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29E620693
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:13:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675880013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oV3LhQWLhZOpmoUA/gu9hDqx3ud2jZxwbGD8NOUQGqQ=;
-        b=PdlgtLhXwdlRJVtMoh+PXKT4mx/vyBGIzYYa+t3NVdkhi/Tn5OfRMTQNMngw3i+VVlf1yx
-        z/BoKAtb7Vz4EFOAquQtiyyGJmty/EpA/7E3m0gI0Hz/gBmBz02lRmcvGN7VYtn2uLBF32
-        tyRoBCdCrOEfpfT37oypQOl/4uwt5C8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-604-YxhGpQJzM82GwYykTSzSxg-1; Wed, 08 Feb 2023 13:13:31 -0500
-X-MC-Unique: YxhGpQJzM82GwYykTSzSxg-1
-Received: by mail-ej1-f69.google.com with SMTP id i11-20020a1709061ccb00b008aadd9cb12fso1955814ejh.5
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 10:13:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oV3LhQWLhZOpmoUA/gu9hDqx3ud2jZxwbGD8NOUQGqQ=;
-        b=At+KPLH1S/FgEm7V6NAsQ2xHHjmaQt742Z+cICnZcb41faJyh70sHMRGpK2813jhkW
-         X3BECgBw7KW09f/qqTHtKL6E89j4m73dsNb1BD9qeS8H/mBbfs4JgR3Q+hwj6a2ddB2N
-         vjmj2rTBJ8Tia0V/Mz3y9llXIj5yeNZiZ0gjklCpfEzJ5do96AkVlOWhFpv3HGXiBO9v
-         T+hzF8YBxNqZ3oQ1DyAC0oah3gwZAZIiZ73pP5bq/mcTyIQUzgUr/38NeAzoR3IJ6RQW
-         VYSxjWDKQ1xk7hA6rjj/R7BOBooz7CeAK3/yTKsR0h9aJNuFPI7WLYQogPkNLYOah7pr
-         VYrA==
-X-Gm-Message-State: AO0yUKUO1kPH2KRkb7NUfcasmaSyUoWfiFOOF373Yrs22Gq6krT1KIDT
-        ihE9cqjCF735pJ5jxLw+qPY0w9gYWlhcJy9RqfSYEorVPJEyQn2mW3G2pHvtQ1Hij1aPZYBdEm5
-        GoemSraI6a8xWDVDsSYX4sHCH
-X-Received: by 2002:a50:d74e:0:b0:4aa:a0ed:e373 with SMTP id i14-20020a50d74e000000b004aaa0ede373mr8450152edj.7.1675880010290;
-        Wed, 08 Feb 2023 10:13:30 -0800 (PST)
-X-Google-Smtp-Source: AK7set+/arhac+UYUxiPqq4ZW4JLXty4MWjPbcojQU/KUpY4QUlatlIbnhawTr4frviDTPnY+etMdA==
-X-Received: by 2002:a50:d74e:0:b0:4aa:a0ed:e373 with SMTP id i14-20020a50d74e000000b004aaa0ede373mr8450124edj.7.1675880010051;
-        Wed, 08 Feb 2023 10:13:30 -0800 (PST)
-Received: from redhat.com ([2.52.132.212])
-        by smtp.gmail.com with ESMTPSA id p21-20020a50cd95000000b004ab0e9e396bsm1035144edi.87.2023.02.08.10.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 10:13:29 -0800 (PST)
-Date:   Wed, 8 Feb 2023 13:13:25 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
+        Wed, 8 Feb 2023 13:14:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D631917177
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 10:14:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73D2761642
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:14:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B1DC4339B;
+        Wed,  8 Feb 2023 18:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675880062;
+        bh=Io+Zftu4/VWY5Uh1c/BIVeYM8UME2HKy1G70ZbQpS18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JPWAu0Ai0p6fsp9Mu4L/AWZs+A1yndq7Fm97JK4NLuXrqxYyDAG3Z5/KekyrrrFgf
+         hYDRXy3fisj/hTXYL6PkjXYp1EA19p/0CTutDx2Bxd9t+6s8H7yfc1CILCK5XEUd1E
+         Lv1rgzyP9/CYSQG5XTScgAESHw9Z90P/7C9BODbnsS2O/TH9BGqtwN5JAk9JHfePPv
+         6AfswXX6NsstN4S2aKxbeiis+Jn4D1qiFkGXAMJ/41fOOFgR5+Ij1QZcJnrDVBtO6E
+         8ACctsltAzh30kAxuAWIo4l8IeYOup7BZnC7xNeBO239SP95bFoqqNVAZ62tZAQn5E
+         7LseKTjM+WWSg==
+Date:   Wed, 8 Feb 2023 11:14:20 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
 To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc:     qemu-devel@nongnu.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Gerd Hoffmann <kraxel@redhat.com>,
         Daniel P =?iso-8859-1?Q?=2E_Berrang=E9?= <berrange@redhat.com>,
@@ -68,22 +46,20 @@ Cc:     qemu-devel@nongnu.org, x86@kernel.org,
         Richard Henderson <richard.henderson@linaro.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
         Borislav Petkov <bp@alien8.de>,
         Eric Biggers <ebiggers@kernel.org>
 Subject: Re: [PATCH] x86: temporarily remove all attempts to provide
  setup_data
-Message-ID: <20230208131125-mutt-send-email-mst@kernel.org>
+Message-ID: <Y+PmfAuNViED6NmS@dev-arch.thelio-3990X>
 References: <20230208180835.234638-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20230208180835.234638-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -122,16 +98,9 @@ On Wed, Feb 08, 2023 at 03:08:35PM -0300, Jason A. Donenfeld wrote:
 > Cc: Eric Biggers <ebiggers@kernel.org>
 > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-I think I'll be happier if this is just a revert of
-the relevant commits in reverse order to make life easier
-for backporters.
-Unless that's too much work as we made other changes around
-this code?
+Thanks for the quick patch! Both of my use cases appear fixed.
 
-Failing that list the affected commits so people at least
-know what to revert?
-
-
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
 >  hw/i386/microvm.c |  15 ++----
@@ -354,4 +323,4 @@ know what to revert?
 >      sev_load_ctx.setup_data = (char *)setup;
 > -- 
 > 2.39.1
-
+> 
