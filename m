@@ -2,89 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6506D68F45A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03F068F46C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Feb 2023 18:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjBHRYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 12:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S231872AbjBHRZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 12:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBHRX7 (ORCPT
+        with ESMTP id S232159AbjBHRZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 12:23:59 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD0530B31
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 09:23:49 -0800 (PST)
+        Wed, 8 Feb 2023 12:25:09 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65E54FAF0;
+        Wed,  8 Feb 2023 09:24:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675877029; x=1707413029;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=APZX0G5IZa6GeGV9W55Z4my3mBh76dR803XupKW3Id8=;
-  b=GhCK99VxDGI0tEUXUIQZQPqD72wKc5l2VLQ38vZFpvuB/TH9M7JHfTlV
-   omDbuxXnK5Jj6xj4w5kR9xLdCl1VHIJt1NPgIaJjFliTYB5nS1UbpXlZN
-   bN4UHQ9Ff3hDa1egbBnuPmfdYTb4xlgmgHNZeLCVshyg+4ZEmWepyvgmn
-   NBxXpxvr4rGzpd39iDEI3pMxorX2xIGaiupxaK1WnwfTbNOzK0IRHjHpt
-   orQ31aN/lQt6fRjCV5n71vV7m7QJJU0/OMqJg6w5g9Vqo4EcbrtnKi3Ay
-   XVa7HoluQrGfEpPSRFYlPFdm/35rERxXi4Q1txSQtjBGGkknOa9C7utni
+  t=1675877088; x=1707413088;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=P9o81TrnMYv/0lzBvAqefabI0OL+xE9TlzWfKBiybMI=;
+  b=Rqoxssfqe405Erkh8i2XjZ8jqj6+AHd7NhXvcw+qIDqt4LPjWwrdepeR
+   CYszjOVruAxVaZ9LMFSWGJ9+AM0AhFQybfmfBMWcY5/te1N7xYQVXJ7cP
+   LoKrMFX8sG6aOa2VAuPNJVMtYl7nVE17I8FadH8pTHVFsEfGWVJfwaJgR
+   t6S3q657Z+BrqT70aPcvSqGWf4qUff8u4/dkQgYoYguW7Ua8+LfnKjRHk
+   o9AQneRrUWc3nd+1EAHiymm3AUaqrccYWPksLHvZnmd6fLWLniV8f/nIY
+   g9vWgNflNzkP33FEsgAdo5YzRczTLiQX80C8pik5JhFggd8IsiyEesB2l
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="357262618"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309515344"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="357262618"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 09:23:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="667325207"
+   d="scan'208";a="309515344"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 09:23:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="699726611"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="667325207"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 09:23:47 -0800
-From:   Tony Luck <tony.luck@intel.com>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH] x86/cpu: Add Lunar Lake M
-Date:   Wed,  8 Feb 2023 09:23:40 -0800
-Message-Id: <20230208172340.158548-1-tony.luck@intel.com>
-X-Mailer: git-send-email 2.39.1
+   d="scan'208";a="699726611"
+Received: from tbacklun-mobl.amr.corp.intel.com (HELO [10.209.14.225]) ([10.209.14.225])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 09:23:47 -0800
+Message-ID: <4216dea6-d899-aecb-2207-caa2ae7db0e3@intel.com>
+Date:   Wed, 8 Feb 2023 09:23:46 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
+ to map as encrypted
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <1673559753-94403-1-git-send-email-mikelley@microsoft.com>
+ <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
+ <Y8r2TjW/R3jymmqT@zn.tnic>
+ <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y9FC7Dpzr5Uge/Mi@zn.tnic>
+ <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y+JG9+zdSwZlz6FU@zn.tnic>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y+JG9+zdSwZlz6FU@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+On 2/7/23 04:41, Borislav Petkov wrote:
+> Or are there no similar TDX solutions planned where the guest runs
+> unmodified and under a paravisor?
 
-Intel confirmed the existence of this CPU in Q4'2022
-earnings presentation.
+I actually don't think paravisors make *ANY* sense for Linux.  If you
+have to modify the guest, then just modify it to talk to the hypervisor
+directly.  This code is... modifying the guest.  What does putting a
+paravisor in the middle do for you?
 
-Add the CPU model number.
+It might help with binary drivers, but we don't do upstream kernel work
+to make silly binary Linux drivers happy.
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/include/asm/intel-family.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 347707d459c6..33a9682a183d 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -123,6 +123,8 @@
- #define INTEL_FAM6_METEORLAKE		0xAC
- #define INTEL_FAM6_METEORLAKE_L		0xAA
- 
-+#define INTEL_FAM6_LUNARLAKE_M		0xBD
-+
- /* "Small Core" Processors (Atom/E-Core) */
- 
- #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
--- 
-2.39.1
-
+So, no, there's no similar TDX solutions planned, at least for Linux
+guests.  Unless I missed the memo.  Kirill?
