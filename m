@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA21B690D0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C50690D13
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbjBIPeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S231136AbjBIPeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjBIPeI (ORCPT
+        with ESMTP id S230308AbjBIPeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:34:08 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6DB32E51
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:33:21 -0800 (PST)
+        Thu, 9 Feb 2023 10:34:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B105C493
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:33:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675956800;
+        s=mimecast20190719; t=1675956804;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=vcrcLyyXGvx1agmSjax9RNBo44/wgLryjaESGOqOIAs=;
-        b=SQ1XHFRfHmAeQP2E7G5cLMPCt9QGbJQaGVV2QwJZNiJ0p0fu/XSNIvrV4w+SYrs/zjNLAK
-        DqfFSfI/QGGQOMf3a6Rcydp7ZNTJ1vV06KGnyDGZ3qMKRm5ngkNWnrYKJGa+ZbudXyp4JO
-        bNmAGGiJKErKdcjHVzZ0/hZ9ggTGKvA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=7C1hmy1E7+0MQkK/mZzmUZ/gKoFVIBd7d2YZY/3tmcQ=;
+        b=iWySdEmx9Bx5S4mWfCEJ+U4sCFcQiw7bYuXnyMszuy5GGxgyAKppQYYct13B/KSfvwLmVA
+        psIiOVFdj3Iy4EwC45ecHCK7y0JX1B5/+r5YxlkWlhM3zQCH6z3X1IO7sN/4J1RauEU73X
+        w6R4tMo3pPZ1+fQ78BAfXb3ztLEJk84=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-QmJbcTqeOtaOCHDJgUQZlw-1; Thu, 09 Feb 2023 10:33:19 -0500
-X-MC-Unique: QmJbcTqeOtaOCHDJgUQZlw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-532-6n2BmqIWMciXOAiOSVn0Kg-1; Thu, 09 Feb 2023 10:33:17 -0500
+X-MC-Unique: 6n2BmqIWMciXOAiOSVn0Kg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C95FD3C10ED4;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C0E6E802C1D;
         Thu,  9 Feb 2023 15:33:14 +0000 (UTC)
 Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A00D4C16022;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8DF9A2026D4B;
         Thu,  9 Feb 2023 15:33:14 +0000 (UTC)
 Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 60375403CC068; Thu,  9 Feb 2023 12:32:51 -0300 (-03)
-Message-ID: <20230209150150.380060673@redhat.com>
+        id 6390E403CC06B; Thu,  9 Feb 2023 12:32:51 -0300 (-03)
+Message-ID: <20230209153204.656996515@redhat.com>
 User-Agent: quilt/0.67
-Date:   Thu, 09 Feb 2023 12:01:50 -0300
+Date:   Thu, 09 Feb 2023 12:01:51 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     Christoph Lameter <cl@linux.com>
 Cc:     Aaron Tomlin <atomlin@atomlin.com>,
         Frederic Weisbecker <frederic@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 00/11] fold per-CPU vmstats remotely
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [PATCH v2 01/11] mm/vmstat: remove remote node draining
+References: <20230209150150.380060673@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -58,60 +63,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series addresses the following two problems:
+Draining of pages from the local pcp for a remote zone was necessary
+since:
 
-    1. A customer provided some evidence which indicates that
-       the idle tick was stopped; albeit, CPU-specific vmstat
-       counters still remained populated.
+"Note that remote node draining is a somewhat esoteric feature that is
+required on large NUMA systems because otherwise significant portions
+of system memory can become trapped in pcp queues. The number of pcp is
+determined by the number of processors and nodes in a system. A system
+with 4 processors and 2 nodes has 8 pcps which is okay. But a system
+with 1024 processors and 512 nodes has 512k pcps with a high potential
+for large amount of memory being caught in them."
 
-       Thus one can only assume quiet_vmstat() was not
-       invoked on return to the idle loop. If I understand
-       correctly, I suspect this divergence might erroneously
-       prevent a reclaim attempt by kswapd. If the number of
-       zone specific free pages are below their per-cpu drift
-       value then zone_page_state_snapshot() is used to
-       compute a more accurate view of the aforementioned
-       statistic.  Thus any task blocked on the NUMA node
-       specific pfmemalloc_wait queue will be unable to make
-       significant progress via direct reclaim unless it is
-       killed after being woken up by kswapd
-       (see throttle_direct_reclaim())
+Since commit 443c2accd1b6679a1320167f8f56eed6536b806e
+("mm/page_alloc: remotely drain per-cpu lists"), drain_all_pages() is able 
+to remotely free those pages when necessary.
 
-    2. With a SCHED_FIFO task that busy loops on a given CPU,
-       and kworker for that CPU at SCHED_OTHER priority,
-       queuing work to sync per-vmstats will either cause that
-       work to never execute, or stalld (i.e. stall daemon)
-       boosts kworker priority which causes a latency
-       violation
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-By having vmstat_shepherd flush the per-CPU counters to the
-global counters from remote CPUs.
-
-This is done using cmpxchg to manipulate the counters,
-both CPU locally (via the account functions),
-and remotely (via cpu_vm_stats_fold).
-
-Thanks to Aaron Tomlin for diagnosing issue 1 and writing
-the initial patch series.
-
-v2:
-- actually use LOCK CMPXCHG on counter mod/inc/dec functions
-  (Christoph Lameter)
-- use try_cmpxchg for cmpxchg loops
-  (Uros Bizjak / Matthew Wilcox)
-
-
- arch/arm64/include/asm/percpu.h     |   16 ++-
- arch/loongarch/include/asm/percpu.h |   23 ++++
- arch/s390/include/asm/percpu.h      |    5 +
- arch/x86/include/asm/percpu.h       |   39 ++++----
- include/asm-generic/percpu.h        |   17 +++
- include/linux/mmzone.h              |    3 
- kernel/fork.c                       |    2 
- kernel/scs.c                        |    2 
- mm/vmstat.c                         |  424 ++++++++++++++++++++++++++++++++++++++++++++++++------------------------------------------
- 9 files changed, 308 insertions(+), 223 deletions(-)
-
-
+Index: linux-vmstat-remote/include/linux/mmzone.h
+===================================================================
+--- linux-vmstat-remote.orig/include/linux/mmzone.h
++++ linux-vmstat-remote/include/linux/mmzone.h
+@@ -577,9 +577,6 @@ struct per_cpu_pages {
+ 	int high;		/* high watermark, emptying needed */
+ 	int batch;		/* chunk size for buddy add/remove */
+ 	short free_factor;	/* batch scaling factor during free */
+-#ifdef CONFIG_NUMA
+-	short expire;		/* When 0, remote pagesets are drained */
+-#endif
+ 
+ 	/* Lists of pages, one per migrate type stored on the pcp-lists */
+ 	struct list_head lists[NR_PCP_LISTS];
+Index: linux-vmstat-remote/mm/vmstat.c
+===================================================================
+--- linux-vmstat-remote.orig/mm/vmstat.c
++++ linux-vmstat-remote/mm/vmstat.c
+@@ -803,7 +803,7 @@ static int fold_diff(int *zone_diff, int
+  *
+  * The function returns the number of global counters updated.
+  */
+-static int refresh_cpu_vm_stats(bool do_pagesets)
++static int refresh_cpu_vm_stats(void)
+ {
+ 	struct pglist_data *pgdat;
+ 	struct zone *zone;
+@@ -814,9 +814,6 @@ static int refresh_cpu_vm_stats(bool do_
+ 
+ 	for_each_populated_zone(zone) {
+ 		struct per_cpu_zonestat __percpu *pzstats = zone->per_cpu_zonestats;
+-#ifdef CONFIG_NUMA
+-		struct per_cpu_pages __percpu *pcp = zone->per_cpu_pageset;
+-#endif
+ 
+ 		for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
+ 			int v;
+@@ -826,44 +823,8 @@ static int refresh_cpu_vm_stats(bool do_
+ 
+ 				atomic_long_add(v, &zone->vm_stat[i]);
+ 				global_zone_diff[i] += v;
+-#ifdef CONFIG_NUMA
+-				/* 3 seconds idle till flush */
+-				__this_cpu_write(pcp->expire, 3);
+-#endif
+ 			}
+ 		}
+-#ifdef CONFIG_NUMA
+-
+-		if (do_pagesets) {
+-			cond_resched();
+-			/*
+-			 * Deal with draining the remote pageset of this
+-			 * processor
+-			 *
+-			 * Check if there are pages remaining in this pageset
+-			 * if not then there is nothing to expire.
+-			 */
+-			if (!__this_cpu_read(pcp->expire) ||
+-			       !__this_cpu_read(pcp->count))
+-				continue;
+-
+-			/*
+-			 * We never drain zones local to this processor.
+-			 */
+-			if (zone_to_nid(zone) == numa_node_id()) {
+-				__this_cpu_write(pcp->expire, 0);
+-				continue;
+-			}
+-
+-			if (__this_cpu_dec_return(pcp->expire))
+-				continue;
+-
+-			if (__this_cpu_read(pcp->count)) {
+-				drain_zone_pages(zone, this_cpu_ptr(pcp));
+-				changes++;
+-			}
+-		}
+-#endif
+ 	}
+ 
+ 	for_each_online_pgdat(pgdat) {
+@@ -1864,7 +1825,7 @@ int sysctl_stat_interval __read_mostly =
+ #ifdef CONFIG_PROC_FS
+ static void refresh_vm_stats(struct work_struct *work)
+ {
+-	refresh_cpu_vm_stats(true);
++	refresh_cpu_vm_stats();
+ }
+ 
+ int vmstat_refresh(struct ctl_table *table, int write,
+@@ -1928,7 +1889,7 @@ int vmstat_refresh(struct ctl_table *tab
+ 
+ static void vmstat_update(struct work_struct *w)
+ {
+-	if (refresh_cpu_vm_stats(true)) {
++	if (refresh_cpu_vm_stats()) {
+ 		/*
+ 		 * Counters were updated so we expect more updates
+ 		 * to occur in the future. Keep on running the
+@@ -1991,7 +1952,7 @@ void quiet_vmstat(void)
+ 	 * it would be too expensive from this path.
+ 	 * vmstat_shepherd will take care about that for us.
+ 	 */
+-	refresh_cpu_vm_stats(false);
++	refresh_cpu_vm_stats();
+ }
+ 
+ /*
 
 
