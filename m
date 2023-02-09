@@ -2,152 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC00768FD22
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5127B68FD20
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbjBIC3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S231971AbjBIC3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjBIC3G (ORCPT
+        with ESMTP id S230501AbjBIC3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Feb 2023 21:29:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E72635AC;
-        Wed,  8 Feb 2023 18:29:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 117B4B81F78;
-        Thu,  9 Feb 2023 02:29:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0EBC433EF;
-        Thu,  9 Feb 2023 02:28:59 +0000 (UTC)
-Date:   Wed, 8 Feb 2023 21:28:58 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Qais Yousef <qyousef@google.com>,
-        Daniele Di Proietto <ddiproietto@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-Message-ID: <20230208212858.477cd05e@gandalf.local.home>
-In-Reply-To: <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-        <Y+QaZtz55LIirsUO@google.com>
-        <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
-        <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9E53C2E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:29:05 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VbDo-JU_1675909741;
+Received: from 30.97.49.34(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VbDo-JU_1675909741)
+          by smtp.aliyun-inc.com;
+          Thu, 09 Feb 2023 10:29:02 +0800
+Message-ID: <416afeb8-4385-6d8a-4b35-2c75ffaa36cc@linux.alibaba.com>
+Date:   Thu, 9 Feb 2023 10:29:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/2] erofs: update print symbols for various flags in
+ trace
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org, huyue2@coolpad.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230208112915.6543-1-jefflexu@linux.alibaba.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230208112915.6543-1-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 16:54:03 -0800
-John Stultz <jstultz@google.com> wrote:
-
-> > Let me understand what you're saying...
-> >
-> > The commit 3087c61ed2c4 did
-> >
-> > -/* Task command name length: */
-> > -#define TASK_COMM_LEN                  16
-> > +/*
-> > + * Define the task command name length as enum, then it can be visible to
-> > + * BPF programs.
-> > + */
-> > +enum {
-> > +       TASK_COMM_LEN = 16,
-> > +};
-> >
-> >
-> > and that caused:
-> >
-> > cat /sys/kernel/debug/tracing/events/task/task_newtask/format
-> >
-> > to print
-> > field:char comm[TASK_COMM_LEN];    offset:12;    size:16;    signed:0;
-
-Yes because there's no easy way to automatically convert an enum to a
-number. And this has been a macro for a very long time (so it works,
-because macros convert to numbers).
-
-And this breaks much more than android. It will break trace-cmd, rasdaemon
-and perf (if it's not using BTF). This change very much "Breaks userspace!"
-And requires a kernel workaround, not a user space one.
 
 
-> > instead of
-> > field:char comm[16];    offset:12;    size:16;    signed:0;
-> >
-> > so the ftrace parsing android tracing tool had to do:
-> >
-> > -  if (Match(type_and_name.c_str(), R"(char [a-zA-Z_]+\[[0-9]+\])")) {
-> > +  if (Match(type_and_name.c_str(),
-> > +            R"(char [a-zA-Z_][a-zA-Z_0-9]*\[[a-zA-Z_0-9]+\])")) {
-> >
-> > to workaround this change.
-> > Right?  
+On 2023/2/8 19:29, Jingbo Xu wrote:
+> As new flags introduced, the corresponding print symbols for trace are
+> not added accordingly.  Add these missing print symbols for these flags.
 > 
-> I believe so.
+> Also remove the print symbol for EROFS_GET_BLOCKS_RAW as it is going to
+> be removed soon.
 > 
-> > And what are you proposing?  
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> ---
+> v2: remove print symbol for EROFS_GET_BLOCKS_RAW
+> ---
+>   include/trace/events/erofs.h | 13 +++++++++----
+>   1 file changed, 9 insertions(+), 4 deletions(-)
 > 
-> I'm not proposing anything. I was just wanting to understand more
-> context around this, as it outwardly appears to be a user-breaking
-> change, and that is usually not done, so I figured it was an issue
-> worth raising.
-> 
-> If the debug/tracing/*/format output is in the murky not-really-abi
-> space, that's fine, but I wanted to know if this was understood as
-> something that may require userland updates or if this was a
-> unexpected side-effect.
+> diff --git a/include/trace/events/erofs.h b/include/trace/events/erofs.h
+> index e095d36db939..cf4a0d28b178 100644
+> --- a/include/trace/events/erofs.h
+> +++ b/include/trace/events/erofs.h
+> @@ -19,12 +19,17 @@ struct erofs_map_blocks;
+>   		{ 1,		"DIR" })
+>   
+>   #define show_map_flags(flags) __print_flags(flags, "|",	\
+> -	{ EROFS_GET_BLOCKS_RAW,	"RAW" })
 
-Linus has already said that /sys/kernel/tracing/* is an ABI (fyi, getting
-to the tracing directory via debugfs is obsolete).
+Should we remove this in the next patch?
+Otherwise it looks good to me.
 
-Usually, when a trace event uses an enum, it can do:
+Thanks,
+Gao XIang
 
-TRACE_DEFINE_ENUM(TASK_COMM_LEN);
-
-But that's a very common define. It would require it updated for every trace
-event, or the change needs to be reverted.
-
-Not sure why BTF needs it like this, because it hasn't changed in years.
-Can't it just hard code it?
-
-For ftrace to change it, it requires reading the format files at boot up
-and replacing the enums with the numbers, which does impact start up.
-
--- Steve
+> +	{ EROFS_GET_BLOCKS_FIEMAP,	"FIEMAP" },	\
+> +	{ EROFS_GET_BLOCKS_READMORE,	"READMORE" },	\
+> +	{ EROFS_GET_BLOCKS_FINDTAIL,	"FINDTAIL" })
+>   
+>   #define show_mflags(flags) __print_flags(flags, "",	\
+> -	{ EROFS_MAP_MAPPED,	"M" },			\
+> -	{ EROFS_MAP_META,	"I" },			\
+> -	{ EROFS_MAP_ENCODED,	"E" })
+> +	{ EROFS_MAP_MAPPED,		"M" },		\
+> +	{ EROFS_MAP_META,		"I" },		\
+> +	{ EROFS_MAP_ENCODED,		"E" },		\
+> +	{ EROFS_MAP_FULL_MAPPED,	"F" },		\
+> +	{ EROFS_MAP_FRAGMENT,		"R" },		\
+> +	{ EROFS_MAP_PARTIAL_REF,	"P" })
+>   
+>   TRACE_EVENT(erofs_lookup,
+>   
