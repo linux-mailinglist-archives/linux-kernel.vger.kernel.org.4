@@ -2,159 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E638690C78
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA21B690D0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjBIPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S231316AbjBIPeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:34:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjBIPLO (ORCPT
+        with ESMTP id S230411AbjBIPeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:11:14 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8D635A7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:11:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675955473; x=1707491473;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tz66tuubq/bhfnrhb8WsaeoYehPN3tAeO/8xb52gI18=;
-  b=BaOBNT3rFdu7TWmj1NQAtD7M2VxGOSoXlbJzG1mk5vCJcB3XDE6gSgOJ
-   Z8ap46XGKs+pqJhOr6r+lSy3MD6B5AdehD1lNyW4b3cr/AHRkrejXJlnp
-   aM7wLcz2ibzx6ITqiucTPpSY01U+JlYwJoWy4NEM24U4+Ki4L0ZloC8NZ
-   Cz5CSwkh3dp4sGVLhuh5Tz5iZDHKpOfBKD3w5+ewNSJqrlnzb7CLIcMeV
-   zVQsFrjVxnZRcug+cHEg+DyG3kT1eKX5d4jqdY6GJr273lA2K8YKIAtC0
-   T7VOzQV4A4o7vaXNal6X0uZazVB7Ka9ALk3tc2QVbiezP35Y7m9bzpqZE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="318140198"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="318140198"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 06:44:11 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="841622648"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="841622648"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 06:44:09 -0800
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     mingo@redhat.com, peterz@infradead.org, frederic@kernel.org
-Cc:     paulmck@kernel.org, joel@joelfernandes.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] sched/isolation: Fix illegal CPU value by housekeeping_any_cpu() return
-Date:   Thu,  9 Feb 2023 22:49:11 +0800
-Message-Id: <20230209144911.987938-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 10:34:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6DB32E51
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:33:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675956800;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=vcrcLyyXGvx1agmSjax9RNBo44/wgLryjaESGOqOIAs=;
+        b=SQ1XHFRfHmAeQP2E7G5cLMPCt9QGbJQaGVV2QwJZNiJ0p0fu/XSNIvrV4w+SYrs/zjNLAK
+        DqfFSfI/QGGQOMf3a6Rcydp7ZNTJ1vV06KGnyDGZ3qMKRm5ngkNWnrYKJGa+ZbudXyp4JO
+        bNmAGGiJKErKdcjHVzZ0/hZ9ggTGKvA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-19-QmJbcTqeOtaOCHDJgUQZlw-1; Thu, 09 Feb 2023 10:33:19 -0500
+X-MC-Unique: QmJbcTqeOtaOCHDJgUQZlw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C95FD3C10ED4;
+        Thu,  9 Feb 2023 15:33:14 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A00D4C16022;
+        Thu,  9 Feb 2023 15:33:14 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 60375403CC068; Thu,  9 Feb 2023 12:32:51 -0300 (-03)
+Message-ID: <20230209150150.380060673@redhat.com>
+User-Agent: quilt/0.67
+Date:   Thu, 09 Feb 2023 12:01:50 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@linux.com>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 00/11] fold per-CPU vmstats remotely
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For kernels built with CONFIG_NO_HZ_FULL=y, running the following tests:
+This patch series addresses the following two problems:
 
-runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4" bootparams=
-"console=ttyS0 nohz_full=0,1 rcu_nocbs=0,1 sched_verbose" -d
+    1. A customer provided some evidence which indicates that
+       the idle tick was stopped; albeit, CPU-specific vmstat
+       counters still remained populated.
 
-root@qemux86-64:~# echo 0 > /sys/devices/system/cpu/cpu2/online
-root@qemux86-64:~# echo 0 > /sys/devices/system/cpu/cpu3/online
+       Thus one can only assume quiet_vmstat() was not
+       invoked on return to the idle loop. If I understand
+       correctly, I suspect this divergence might erroneously
+       prevent a reclaim attempt by kswapd. If the number of
+       zone specific free pages are below their per-cpu drift
+       value then zone_page_state_snapshot() is used to
+       compute a more accurate view of the aforementioned
+       statistic.  Thus any task blocked on the NUMA node
+       specific pfmemalloc_wait queue will be unable to make
+       significant progress via direct reclaim unless it is
+       killed after being woken up by kswapd
+       (see throttle_direct_reclaim())
 
-[   22.838290] BUG: unable to handle page fault for address: ffffffff84cd48c0
-[   22.839409] #PF: supervisor read access in kernel mode
-[   22.840215] #PF: error_code(0x0000) - not-present page
-[   22.841028] PGD 3e19067 P4D 3e19067 PUD 3e1a063 PMD 800ffffffb3ff062
-[   22.841889] Oops: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC KASAN PTI
-[   22.842175] CPU: 0 PID: 16 Comm: rcu_preempt Not tainted 6.2.0-rc1-yocto-standard+ #658
-[   22.842534] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-               BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.o4
-[   22.843036] RIP: 0010:do_raw_spin_trylock+0x70/0x120
-[   22.843267] Code: 81 c7 00 f1 f1 f1 f1 c7 40 04 04 f3 f3 f3 65
-               48 8b 04 25 28 00 00 00 48 89 45 e0 31 c0 e8 b8 0
-[   22.844187] RSP: 0018:ffff8880072b7b30 EFLAGS: 00010046
-[   22.844429] RAX: 0000000000000000 RBX: ffffffff84cd48c0 RCX: dffffc0000000000
-[   22.844751] RDX: 0000000000000003 RSI: 0000000000000004 RDI: ffffffff84cd48c0
-[   22.845074] RBP: ffff8880072b7ba8 R08: ffffffff811daa20 R09: fffffbfff099a919
-[   22.845400] R10: ffffffff84cd48c3 R11: fffffbfff099a918 R12: 1ffff11000e56f66
-[   22.845719] R13: ffffffff84cd48d8 R14: ffffffff84cd48c0 R15: ffff8880072b7cd8
-[   22.846040] FS:  0000000000000000(0000) GS:ffff888035200000(0000) knlGS:0000000000000000
-[   22.846403] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   22.846667] CR2: ffffffff84cd48c0 CR3: 000000001036c000 CR4: 00000000001506f0
-[   22.846988] Call Trace:
-[   22.847105]  <TASK>
-[   22.847208]  ? __pfx_do_raw_spin_trylock+0x10/0x10
-[   22.847430]  ? rcu_read_unlock+0x26/0x80
-[   22.847612]  ? trace_preempt_off+0x2a/0x130
-[   22.847812]  _raw_spin_lock+0x41/0x80
-[   22.847984]  ? schedule_timeout+0x242/0x580
-[   22.848178]  schedule_timeout+0x242/0x580
-[   22.848366]  ? __pfx_schedule_timeout+0x10/0x10
-[   22.848575]  ? __pfx_do_raw_spin_trylock+0x10/0x10
-[   22.848796]  ? __pfx_process_timeout+0x10/0x10
-[   22.849005]  ? _raw_spin_unlock_irqrestore+0x46/0x80
-[   22.849232]  ? prepare_to_swait_event+0xb8/0x210
-[   22.849450]  rcu_gp_fqs_loop+0x66e/0xe70
-[   22.849633]  ? rcu_gp_init+0x87c/0x1130
-[   22.849813]  ? __pfx_rcu_gp_fqs_loop+0x10/0x10
-[   22.850022]  ? _raw_spin_unlock_irqrestore+0x46/0x80
-[   22.850251]  ? finish_swait+0xce/0x100
-[   22.850429]  rcu_gp_kthread+0x2ea/0x6b0
-[   22.850608]  ? __pfx_do_raw_spin_trylock+0x10/0x10
-[   22.850829]  ? __pfx_rcu_gp_kthread+0x10/0x10
-[   22.851039]  ? __kasan_check_read+0x11/0x20
-[   22.851233]  ? __kthread_parkme+0xe8/0x110
-[   22.851424]  ? __pfx_rcu_gp_kthread+0x10/0x10
-[   22.851627]  kthread+0x172/0x1a0
-[   22.851781]  ? __pfx_kthread+0x10/0x10
-[   22.851956]  ret_from_fork+0x2c/0x50
-[   22.852129]  </TASK>
+    2. With a SCHED_FIFO task that busy loops on a given CPU,
+       and kworker for that CPU at SCHED_OTHER priority,
+       queuing work to sync per-vmstats will either cause that
+       work to never execute, or stalld (i.e. stall daemon)
+       boosts kworker priority which causes a latency
+       violation
 
-schedule_timeout()
-->__mod_timer()
- ->get_target_base(base, timer->flags)
-   ->get_timer_cpu_base(tflags, get_nohz_timer_target());
-     ->cpu = get_nohz_timer_target()
-             ->housekeeping_any_cpu(HK_TYPE_TIMER)
-                     /*housekeeping.cpumasks[type] is 2-3*/
-		     /*cpu_online_mask is 0-1*/
-               ->cpu = cpumask_any_and(housekeeping.cpumasks[type],
-			cpu_online_mask);
-             /*cpu value is 4*/
-     ->new_base = per_cpu_ptr(&timer_bases[BASE_DEF], cpu);
-   /*new_base is illegal address*/
- ->if (base != new_base)
-   ->raw_spin_lock(&new_base->lock); ==> trigger Oops
+By having vmstat_shepherd flush the per-CPU counters to the
+global counters from remote CPUs.
 
-This commit therefore add checks for cpumask_any_and() return values
-in housekeeping_any_cpu(), if cpumask_any_and() returns an illegal CPU
-value, the housekeeping_any_cpu() will return current CPU number.
+This is done using cmpxchg to manipulate the counters,
+both CPU locally (via the account functions),
+and remotely (via cpu_vm_stats_fold).
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
----
- kernel/sched/isolation.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thanks to Aaron Tomlin for diagnosing issue 1 and writing
+the initial patch series.
 
-diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
-index 373d42c707bc..e255eb83f14f 100644
---- a/kernel/sched/isolation.c
-+++ b/kernel/sched/isolation.c
-@@ -46,7 +46,9 @@ int housekeeping_any_cpu(enum hk_type type)
- 			if (cpu < nr_cpu_ids)
- 				return cpu;
- 
--			return cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
-+			cpu = cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
-+			if (cpu >= nr_cpu_ids)
-+				return smp_processor_id();
- 		}
- 	}
- 	return smp_processor_id();
--- 
-2.25.1
+v2:
+- actually use LOCK CMPXCHG on counter mod/inc/dec functions
+  (Christoph Lameter)
+- use try_cmpxchg for cmpxchg loops
+  (Uros Bizjak / Matthew Wilcox)
+
+
+ arch/arm64/include/asm/percpu.h     |   16 ++-
+ arch/loongarch/include/asm/percpu.h |   23 ++++
+ arch/s390/include/asm/percpu.h      |    5 +
+ arch/x86/include/asm/percpu.h       |   39 ++++----
+ include/asm-generic/percpu.h        |   17 +++
+ include/linux/mmzone.h              |    3 
+ kernel/fork.c                       |    2 
+ kernel/scs.c                        |    2 
+ mm/vmstat.c                         |  424 ++++++++++++++++++++++++++++++++++++++++++++++++------------------------------------------
+ 9 files changed, 308 insertions(+), 223 deletions(-)
+
+
+
 
