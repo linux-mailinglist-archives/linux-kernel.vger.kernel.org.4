@@ -2,244 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C5969117C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA89691181
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjBITna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S230127AbjBIToa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjBITn2 (ORCPT
+        with ESMTP id S229730AbjBITo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:43:28 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2084.outbound.protection.outlook.com [40.107.22.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B935AB1D;
-        Thu,  9 Feb 2023 11:43:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZPR2BGAedoCRr6pWGT4h9qrprGUie0eGG/wJB8StfDxl90Juczv41Z/lCl9ditEog3HVMmvIcOE0/qkPS3rrcrbX2aVrvVF+pQZiuuAiH8jXzz0h8ShE4Vj3eznOlHMUpaLFlb0AvJUfPOnTf6gqof2OvvPZUtVYRW7Pmw2zXsiLIDWh3/OM0FwFwegw9768gnBhraLjWJtXYflT4+YR5enJzi/UAH8bM9eWI8g7jfmBmWzD+mAuK01ANSZ1slwXOH4WJoWSYTQusCl+lrkMsIGM10G+tKi8C8C+INBqtMnLFaHqgugKpOjY+t9L8ldtdSC5SWze59b+Rk750dM3UQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=inxu91t7eZ8M9/rd1K2ThXllCewieUQFAXzrgHgec/w=;
- b=SJusKqloBKDl3lmToIjEIHL5nbLCE5ROovRIRXqlRlpgmPObIiziNZ1sl3PKs5pwrXl8VnSCApnqUpiZGuwnTfL6KNtv/3zYBnzYJryZbWEGquvDjJiKkoWM7LFJUuZk65OTdqFvb4CFgChUXE2s6KOlBQN4+u3gk0UvyvwcLVXB6yJL8xBuCKZDU1Jvus0TftP7wMqx5Vl5x7s3rxQpibMk0kMTGbVd2h1ZdpMnK4kqsGMm7vLkFr6NZoiIkLBZQc/3jo92dt+ZJx16kV1MZj/6M0AvvG4ZEd35mH41T7F4QqckERo+PRytqwharJtmYSreQ5+48xp0opGATxF0oA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=inxu91t7eZ8M9/rd1K2ThXllCewieUQFAXzrgHgec/w=;
- b=q1E78oHajfcR/dh3BSVeg/3gDDPi4qtIEgaVBoecvrSM454nj2TiZd1AVRFz/4V2D6XZxtyDcl4uuMGKR2LriIalhtrr6iegaws2ovk2eHJIE+YLkUje2OnL/hV+z+twbE9FFKR0ujBHfHhPkeii0XTX/QsZeTQK3QYqhlpYKWB42YSm4JJWhBzlRihsYSwHZamM+tmS/6w4L759WNYMWnn3m20oeWdDTSrhHhjoeLm5+lc6ZAW8uVzJpG0FlQ/+ojtMIfuLAmYYESIl4llexoCDysh8HSnvZ6hhcXNd5Yso75nZmK/Eh6Tz1OaXMewRzyUg38jaCGqUbBO0dAE0lQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2062.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
- 2023 19:43:23 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::2cfb:d4c:1932:b097%4]) with mapi id 15.20.6086.019; Thu, 9 Feb 2023
- 19:43:23 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Song Liu <song@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "hch@lst.de" <hch@lst.de>,
-        "kernel-team@meta.com" <kernel-team@meta.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] module: clean-up for module_memory
-Thread-Topic: [PATCH] module: clean-up for module_memory
-Thread-Index: AQHZPK/uwrnOYdpYckSdgu5yh6Ojt67HBCgA
-Date:   Thu, 9 Feb 2023 19:43:23 +0000
-Message-ID: <a89af714-b9ee-1efa-d21d-92ffc690a7e7@csgroup.eu>
-References: <20230209175653.2275559-1-song@kernel.org>
-In-Reply-To: <20230209175653.2275559-1-song@kernel.org>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2062:EE_
-x-ms-office365-filtering-correlation-id: 8aa0e708-8793-47fa-fc35-08db0ad5e7b4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4089LUFPJPcyDBHxA6Ag8LHjIjIAg32z0ao1tGS/xT/Z7d3cuTyNCCS8aw9Q23JCenYy8RULM/mfl8ewkc+RRwPXYIhtAstBCCF+DET5+Oj1z/D4PmIIYBrG2jFwTUZ/SF/H1ryC3gMo6jW3TVoFCFhGOijRRXghRQiD4BsqYdlQmoJLIXWEHyfC4aSX0ROswzA4lnSyT90rDMkP7jPHjf3ObmgL4nln62IEVUdy0F0TOr4JO+tAU8ecXt4KAxMIlm1oUOMmUg5yLv5rfoRy6lB08kB6Xo1IFAFQ4GtzI3pKckh0wWq5YxDQShnZkP7glnm1fTL6Iql3Pp+LOUHVVSt6g/HN4HRdV6uk/nnBxFn7GpUyZjQYqUmSfVaP5utKjqXTq4fc5m0BOJAh2mn2wgykwjMkzdK8e5ZZtNzIry1I5dZHc5K+uam2P4UfT1NKOZVo/1fCKy8Gw2YkryDaY7XCXIgnrD3z7OEdAzaBT8EiPjLYKUY5HPuiDZDMBYqu6n8KopN9eBOfEz8R8/i9LVuqDQuZMqSbCmey3iWZUNsRDmC1p/RlznLFRFI5Qe2paQDWcVRZ06VBSlDxXOU1IwIWzDOa0lZGHGDrNwhNNjnnTiAj1Dk2nMveQ7VgimZFDZ5QinBtwBv2GZDur3p5W2skOaezy7d+C9DYvyoys/9JLW1vPToSM9ji7TldTiI1awcN09XsrHeAVgOquQWb9SA9IYvheLrbTBqZaqnu0YfmpQPE746NvspYmcQseh0oJbE8CbPScZzOfu/sMBmQz5KoZ3qshbamXdiESC+DUb0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(39850400004)(396003)(366004)(451199018)(31686004)(478600001)(6486002)(966005)(36756003)(2906002)(38100700002)(122000001)(316002)(38070700005)(5660300002)(8936002)(86362001)(110136005)(54906003)(26005)(186003)(83380400001)(8676002)(6506007)(71200400001)(2616005)(31696002)(91956017)(76116006)(66446008)(44832011)(6512007)(66556008)(4326008)(66574015)(66476007)(66946007)(64756008)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y3JCb0pLTkwxWkprbGtZQmRFZlBnVGtjMXdjZWlOT0ZYNEpWeHJFSGtUMG9T?=
- =?utf-8?B?WElKVDBKWUJ6d0w4WCtNODlWd1NURmxEWVIzdE8yZTBlSzdoTzJ0SXNkTTgw?=
- =?utf-8?B?Ynh0cHh0TW5URkRpY2ZoMEE3d0RhMWV2WkpacUxSZ2xMOVRJRjJMQ1R4SkR0?=
- =?utf-8?B?ait2ek5HU1RZcnkvMDFpUHUyWEJSTGFvaWhuNytXS2dDTkllbFlQcVo3RDh0?=
- =?utf-8?B?TzhaL3RzbDhxVEpkU2FTdUNmTFNud0lLMkg3RUEraHE0YXhzOWVTdjRrQlVN?=
- =?utf-8?B?Qmt2Wk9OVmNaK0k3VFY1WWdXbzJNUmIzeUorY3l0SGlwYU8rdzZpYWRvT1Fm?=
- =?utf-8?B?dUxVdzBoak9QdkNwcG93TWJ0VVBlNjBnTVZXcUtqZDk3QTVPV3JmTi9WdFJz?=
- =?utf-8?B?ck54VHdmdFhOVm5pRW5qRHcxSUpHdWJCRStmYjNDSWRLSTc0NDFCUDRjTFA2?=
- =?utf-8?B?OERaN29uMFNKMHpiaWw4Y0hFQWl0TnczTGVvNDBiVnh2cG15ODNKUUlCTFcz?=
- =?utf-8?B?SkpyS2VqTVd4UjloaDNpYXY3M0IxazlHUmlpSkdEQXVGRUZYczQrQ09tVk5p?=
- =?utf-8?B?VzR6MzRZc29LanREbFNkMG1vMnJMSTNTNkJoSSt0dWNiangyZHowVDZtRTRp?=
- =?utf-8?B?bi9TWHh2RlBxWmtmZVNaaktUMm9wZldrRXIyVThseXVvRFYwcHVtUDU3UDhq?=
- =?utf-8?B?T0NyVDZJcVlXOFplUlc4VlcxSU0ydFcxczk1M0FyeGNaVVpGemt2MkxJSHg5?=
- =?utf-8?B?alNYbDZ2VHRXUG40VVB4YmVWL3pHakNjelNaN0hmRTNoY0N1dVppUlpvM2xj?=
- =?utf-8?B?aUlCaC8xWU5wUnI0eUR5b2FmUXMwSjVaSVR6bldEUFo5SDYvckJjRDhwUXB0?=
- =?utf-8?B?d0pYWCtKVWdXWUJ1U2duTWhIZHErSkk3Y043RUZXcWwvd2J6bHBHcXgxVFBr?=
- =?utf-8?B?QXE4amIvKzVrN2ZZSWVKRndTaHhndElIWjlYMFpVTHc0NnQ1TCtjNUFiUmRo?=
- =?utf-8?B?cFR4M0M0TERZYmdxUmEybEZiRjlrWmxsYWNUWEhqbmoxcUt6ZmtKemVPNmZn?=
- =?utf-8?B?aHZlYjZRbkNrenNMYmNSTEdoSi9MOFc2MzNDMmQzTnQ5cEhPc014ZTkwWnF3?=
- =?utf-8?B?NDZDRUVVSm8yWjBwQjgwSHRpZU5QL29QRnVvQVU5YWk1RSs1cEFCTldJam5C?=
- =?utf-8?B?TnhWajBDNGgzMlBLQ0g2TWxsMWdxMU9QQjBFUmdHcFBBaDErMm53aXUycGYy?=
- =?utf-8?B?bDU3VDVNQjhFMDJ4RVNJbXpveEpXMi9CWkYxdFo1bHBuMzUzUENrQUJobURQ?=
- =?utf-8?B?VkFoWExHR3hnb3VwTlNDUjVHcWx6Sk9tSGIwNjdFV0xPdUhVbVJqNVlDd3Qy?=
- =?utf-8?B?KzNDeGV6Q2RVQmZwVFZ6SFVad3FTS0RnQ2QxNzdtM21pcFhHTWxKYTNHMkJm?=
- =?utf-8?B?dzNiUU1xdnF3TmVsekR6N2JUUEh2WlVBNFdEMkcwNW1MUE5uZU40empTTWs3?=
- =?utf-8?B?NGUyZjhIMEJUQlgrVmYycisxTVQvQ1J6byt6a016T1psZE1jYnRxTEpvU2dn?=
- =?utf-8?B?eEZVSDNHMjVYNWhLbmo0bWFvSE9zdm5yb2Zzb29ZSFZyc0hSNnJXOS9WM2xW?=
- =?utf-8?B?SVovajNNVGxXZkQ1SkxqNzhqZDZBcVZFbjZkeVpWdTVFVzlzWG5EVWtXbWpp?=
- =?utf-8?B?WU9QWGJxZTJHWjV2ZlB6clpoSVY5RUkzQ01IUzRkOEN4ajNkSVF1Yk1RbW1h?=
- =?utf-8?B?ekNiKzFPN0YvQW5ZcjdSV1pCWndvc2MxNzNpZkZ4dEN4S0pYNmZtazhxYW43?=
- =?utf-8?B?bW03L050Yk9jRU5OV1d0bVE4WXlrSFJOVkxSSFo3d3FlWTN2czlqOUVrd3M0?=
- =?utf-8?B?dE9BUnphQjlralhTMVJUb2tSaWt3WVo5T0lLbnRmQStLR2JjWDRJL3RTOURO?=
- =?utf-8?B?T1dOZkpTN2NvVzBmNmpwczVFcUZYSUpoTzQyOWZ4NGJDcnMwaWVTc2lUaXNO?=
- =?utf-8?B?cEVTSlBkUjNrcHNlaFo3Y2l6VkplVVZxbDBDSk9KcVgzODhwSUQxM3pSb0l2?=
- =?utf-8?B?ekNxTzM5Q3pQQnNrNkVUR0hmSjhxbGt3YURwSnhLYmMyK0pSZDlVNExkVUN6?=
- =?utf-8?B?c0ErRU00ODVQT0hybGJvckZqQUpDTDZTajI5aGNHVGJpaWxGYjBxN0MrVnMv?=
- =?utf-8?B?WGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4B4113BBC026D3439C40C414919D45F6@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thu, 9 Feb 2023 14:44:28 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB94C1B547;
+        Thu,  9 Feb 2023 11:44:26 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id m2so9669647ejb.8;
+        Thu, 09 Feb 2023 11:44:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8g0V3Mie44ndRQ8V5a+QZDxx9G/ODr7SFY8aAo+jNxI=;
+        b=LZT9upQD8NbcnHErn61UbMAlGnnLEyoh0FeWeuFSMdkRZFTO+BPp4sxa6U/AoRlzoL
+         ptgH4c/9sDqatlltWUrK5UxwMARTs4h4I4yQCppKRe8UYRy+5ZLtki+Rma7PDgDHpf2f
+         IJUfo7wptsxZG2Wjr+wRLJ/kRijMKqFltK/x0B8Dpya0pf4XlQ9w/MKqhV9ozRWGBIWV
+         MeoWiX1vjFVG4abmwve7PirileT6R1Cqg8Ulg4prz0CE7dXOykIQyE9QReo9hdR3fdwI
+         89FHBURZVlzde3gp8QlG5P1QrpEPUPWcOSQC1FtTlHSR6Smn9HXz8bJ+r2BKg/3IHPgI
+         4UTg==
+X-Gm-Message-State: AO0yUKXKiToQ/9sJhqVVLkvvh5HHpMJPYMg1G0Mn+nsQz68gacITnNkG
+        ZDFRluMXzHsOBAyScNHyi+jh82JfCN0bToFmkZk=
+X-Google-Smtp-Source: AK7set+/WRMd5S7v4ep7NTMZRn+QB2NjAKn0W3Uc3lcTXMjwGYZNeqTo0q5lNVbY3sL7ktTStwRdyPiYPE1OcMLNKMA=
+X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
+ sd14-20020a170906ce2e00b0087f575a9b67mr2950151ejb.274.1675971865422; Thu, 09
+ Feb 2023 11:44:25 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8aa0e708-8793-47fa-fc35-08db0ad5e7b4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 19:43:23.4454
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Chb3W6zRpi9x8LPYND6cHshh0awREeVMe+M7k52KCJIyeu/Sdo4+/3+sfHs1xhRmIs8w3BixUM5HZqNbF6uVWs2XqpK49VLmUYhRl5Q7Z+Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2062
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230113193006.1320379-1-bgeffon@google.com> <20230114001518.1378049-1-bgeffon@google.com>
+In-Reply-To: <20230114001518.1378049-1-bgeffon@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Feb 2023 20:44:14 +0100
+Message-ID: <CAJZ5v0geG==MmZfvFBZgkuOuWE17BXYSMEzcYmyz6CALp6w2Fw@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: hibernate: don't store zero pages in the image file.
+To:     Brian Geffon <bgeffon@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDA5LzAyLzIwMjMgw6AgMTg6NTYsIFNvbmcgTGl1IGEgw6ljcml0wqA6DQo+IFRocmVl
-IGNoYW5nZXMgaGVyZToNCj4gDQo+IDEuIFNob3J0ZXIgdmFyaWFibGUgbmFtZXMgaW4gYXJjaC9h
-cmMva2VybmVsL3Vud2luZC5jOnVud2luZF9hZGRfdGFibGUsIHRvDQo+ICAgICBtYWtlIGl0IGVh
-c2llciB0byByZWFkLg0KPiAyLiBSZXdyaXRlIGZyZWVfbW9kX21lbSgpIHNvIGl0IGlzIG1vcmUg
-b2J2aW91cyB0aGF0IE1PRF9EQVRBIG5lZWQgdG8gYmUNCj4gICAgIGZyZWVkIGxhc3QuDQo+IDMu
-IENsZWFuIHVwIHRoZSB1c2Ugb2YgQ09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZN
-QUxMT0MuDQo+IA0KPiBDYzogTHVpcyBDaGFtYmVybGFpbiA8bWNncm9mQGtlcm5lbC5vcmc+DQo+
-IENjOiBUaG9tYXMgR2xlaXhuZXIgPHRnbHhAbGludXRyb25peC5kZT4NCj4gQ2M6IFBldGVyIFpp
-amxzdHJhIDxwZXRlcnpAaW5mcmFkZWFkLm9yZz4NCj4gQ2M6IEd1ZW50ZXIgUm9lY2sgPGxpbnV4
-QHJvZWNrLXVzLm5ldD4NCj4gQ2M6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lA
-Y3Nncm91cC5ldT4NCj4gU2lnbmVkLW9mZi1ieTogU29uZyBMaXUgPHNvbmdAa2VybmVsLm9yZz4N
-Cj4gDQo+IC0tLQ0KPiANCj4gVGhpcyBpcyB0aGUgZm9sbG93IHVwIHBhdGNoIG9uIHRvcCBvZiBb
-MV0uIEkgd291bGQgcmVjb21tZW5kIGZvbGQgdGhpcw0KPiBpbnRvIFsxXS4NCg0KV2l0aCB0aGlz
-IHBhdGNoIGZvbGRlZCBpbnRvIFsxXSwNCg0KUmV2aWV3ZWQtYnk6IENocmlzdG9waGUgTGVyb3kg
-PGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5ldT4NCg0KPiANCj4gWzFdIGh0dHBzOi8vbG9yZS5r
-ZXJuZWwub3JnL2xpbnV4LW1vZHVsZXMvMjAyMzAyMDcwMDI4MDIuMjUxNDgwMi0xLXNvbmdAa2Vy
-bmVsLm9yZy9ULyN1DQo+IC0tLQ0KPiAgIGFyY2gvYXJjL2tlcm5lbC91bndpbmQuYyB8IDE1ICsr
-KystLS0tLS0NCj4gICBrZXJuZWwvbW9kdWxlL21haW4uYyAgICAgfCA2MSArKysrKysrKysrKy0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+ICAgMiBmaWxlcyBjaGFuZ2VkLCAyMiBpbnNl
-cnRpb25zKCspLCA1NCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL2FyYy9r
-ZXJuZWwvdW53aW5kLmMgYi9hcmNoL2FyYy9rZXJuZWwvdW53aW5kLmMNCj4gaW5kZXggOTMzNDUx
-ZjQ0OTRmLi45MjcwZDBhNzEzYzMgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJjL2tlcm5lbC91bndp
-bmQuYw0KPiArKysgYi9hcmNoL2FyYy9rZXJuZWwvdW53aW5kLmMNCj4gQEAgLTM2OSw4ICszNjks
-OCBAQCB2b2lkICp1bndpbmRfYWRkX3RhYmxlKHN0cnVjdCBtb2R1bGUgKm1vZHVsZSwgY29uc3Qg
-dm9pZCAqdGFibGVfc3RhcnQsDQo+ICAgCQkgICAgICAgdW5zaWduZWQgbG9uZyB0YWJsZV9zaXpl
-KQ0KPiAgIHsNCj4gICAJc3RydWN0IHVud2luZF90YWJsZSAqdGFibGU7DQo+IC0Jc3RydWN0IG1v
-ZHVsZV9tZW1vcnkgKm1vZF9tZW1fY29yZV90ZXh0Ow0KPiAtCXN0cnVjdCBtb2R1bGVfbWVtb3J5
-ICptb2RfbWVtX2luaXRfdGV4dDsNCj4gKwlzdHJ1Y3QgbW9kdWxlX21lbW9yeSAqY29yZV90ZXh0
-Ow0KPiArCXN0cnVjdCBtb2R1bGVfbWVtb3J5ICppbml0X3RleHQ7DQo+ICAgDQo+ICAgCWlmICh0
-YWJsZV9zaXplIDw9IDApDQo+ICAgCQlyZXR1cm4gTlVMTDsNCj4gQEAgLTM3OSwxNCArMzc5LDEx
-IEBAIHZvaWQgKnVud2luZF9hZGRfdGFibGUoc3RydWN0IG1vZHVsZSAqbW9kdWxlLCBjb25zdCB2
-b2lkICp0YWJsZV9zdGFydCwNCj4gICAJaWYgKCF0YWJsZSkNCj4gICAJCXJldHVybiBOVUxMOw0K
-PiAgIA0KPiAtCW1vZF9tZW1fY29yZV90ZXh0ID0gJm1vZHVsZS0+bWVtW01PRF9URVhUXTsNCj4g
-LQltb2RfbWVtX2luaXRfdGV4dCA9ICZtb2R1bGUtPm1lbVtNT0RfSU5JVF9URVhUXTsNCj4gKwlj
-b3JlX3RleHQgPSAmbW9kdWxlLT5tZW1bTU9EX1RFWFRdOw0KPiArCWluaXRfdGV4dCA9ICZtb2R1
-bGUtPm1lbVtNT0RfSU5JVF9URVhUXTsNCj4gICANCj4gLQlpbml0X3Vud2luZF90YWJsZSh0YWJs
-ZSwgbW9kdWxlLT5uYW1lLA0KPiAtCQkJICBtb2RfbWVtX2NvcmVfdGV4dC0+YmFzZSwgbW9kX21l
-bV9jb3JlX3RleHQtPnNpemUsDQo+IC0JCQkgIG1vZF9tZW1faW5pdF90ZXh0LT5iYXNlLCBtb2Rf
-bWVtX2luaXRfdGV4dC0+c2l6ZSwNCj4gLQkJCSAgdGFibGVfc3RhcnQsIHRhYmxlX3NpemUsDQo+
-IC0JCQkgIE5VTEwsIDApOw0KPiArCWluaXRfdW53aW5kX3RhYmxlKHRhYmxlLCBtb2R1bGUtPm5h
-bWUsIGNvcmVfdGV4dC0+YmFzZSwgY29yZV90ZXh0LT5zaXplLA0KPiArCQkJICBpbml0X3RleHQt
-PmJhc2UsIGluaXRfdGV4dC0+c2l6ZSwgdGFibGVfc3RhcnQsIHRhYmxlX3NpemUsIE5VTEwsIDAp
-Ow0KPiAgIA0KPiAgIAlpbml0X3Vud2luZF9oZHIodGFibGUsIHVud19oZHJfYWxsb2MpOw0KPiAg
-IA0KPiBkaWZmIC0tZ2l0IGEva2VybmVsL21vZHVsZS9tYWluLmMgYi9rZXJuZWwvbW9kdWxlL21h
-aW4uYw0KPiBpbmRleCBjNTk4ZjExZTcwMTYuLjI3MjRiYzFiOWE5MCAxMDA2NDQNCj4gLS0tIGEv
-a2VybmVsL21vZHVsZS9tYWluLmMNCj4gKysrIGIva2VybmVsL21vZHVsZS9tYWluLmMNCj4gQEAg
-LTkyNywyNiArOTI3LDE3IEBAIHN0YXRpYyBzc2l6ZV90IHN0b3JlX3VldmVudChzdHJ1Y3QgbW9k
-dWxlX2F0dHJpYnV0ZSAqbWF0dHIsDQo+ICAgc3RydWN0IG1vZHVsZV9hdHRyaWJ1dGUgbW9kdWxl
-X3VldmVudCA9DQo+ICAgCV9fQVRUUih1ZXZlbnQsIDAyMDAsIE5VTEwsIHN0b3JlX3VldmVudCk7
-DQo+ICAgDQo+IC0jaWZkZWYgQ09ORklHX0FSQ0hfV0FOVFNfTU9EVUxFU19EQVRBX0lOX1ZNQUxM
-T0MNCj4gLQ0KPiAtc3RhdGljIHNzaXplX3Qgc2hvd19jb3Jlc2l6ZShzdHJ1Y3QgbW9kdWxlX2F0
-dHJpYnV0ZSAqbWF0dHIsDQo+IC0JCQkgICAgIHN0cnVjdCBtb2R1bGVfa29iamVjdCAqbWssIGNo
-YXIgKmJ1ZmZlcikNCj4gLXsNCj4gLQlyZXR1cm4gc3ByaW50ZihidWZmZXIsICIldVxuIiwgbWst
-Pm1vZC0+bWVtW01PRF9URVhUXS5zaXplKTsNCj4gLX0NCj4gLQ0KPiAtI2Vsc2UNCj4gLQ0KPiAg
-IHN0YXRpYyBzc2l6ZV90IHNob3dfY29yZXNpemUoc3RydWN0IG1vZHVsZV9hdHRyaWJ1dGUgKm1h
-dHRyLA0KPiAgIAkJCSAgICAgc3RydWN0IG1vZHVsZV9rb2JqZWN0ICptaywgY2hhciAqYnVmZmVy
-KQ0KPiAgIHsNCj4gLQl1bnNpZ25lZCBpbnQgc2l6ZSA9IDA7DQo+ICsJdW5zaWduZWQgaW50IHNp
-emUgPSBtay0+bW9kLT5tZW1bTU9EX1RFWFRdLnNpemU7DQo+ICAgDQo+IC0JZm9yX2NsYXNzX21v
-ZF9tZW1fdHlwZSh0eXBlLCBjb3JlKQ0KPiAtCQlzaXplICs9IG1rLT5tb2QtPm1lbVt0eXBlXS5z
-aXplOw0KPiArCWlmICghSVNfRU5BQkxFRChDT05GSUdfQVJDSF9XQU5UU19NT0RVTEVTX0RBVEFf
-SU5fVk1BTExPQykpIHsNCj4gKwkJZm9yX2NsYXNzX21vZF9tZW1fdHlwZSh0eXBlLCBjb3JlX2Rh
-dGEpDQo+ICsJCQlzaXplICs9IG1rLT5tb2QtPm1lbVt0eXBlXS5zaXplOw0KPiArCX0NCj4gICAJ
-cmV0dXJuIHNwcmludGYoYnVmZmVyLCAiJXVcbiIsIHNpemUpOw0KPiAgIH0NCj4gLSNlbmRpZg0K
-PiAgIA0KPiAgIHN0YXRpYyBzdHJ1Y3QgbW9kdWxlX2F0dHJpYnV0ZSBtb2RpbmZvX2NvcmVzaXpl
-ID0NCj4gICAJX19BVFRSKGNvcmVzaXplLCAwNDQ0LCBzaG93X2NvcmVzaXplLCBOVUxMKTsNCj4g
-QEAgLTExNzAsMTcgKzExNjEsMTEgQEAgdm9pZCBfX3dlYWsgbW9kdWxlX2FyY2hfZnJlZWluZ19p
-bml0KHN0cnVjdCBtb2R1bGUgKm1vZCkNCj4gICB7DQo+ICAgfQ0KPiAgIA0KPiAtI2lmZGVmIENP
-TkZJR19BUkNIX1dBTlRTX01PRFVMRVNfREFUQV9JTl9WTUFMTE9DDQo+ICAgc3RhdGljIGJvb2wg
-bW9kX21lbV91c2Vfdm1hbGxvYyhlbnVtIG1vZF9tZW1fdHlwZSB0eXBlKQ0KPiAgIHsNCj4gLQly
-ZXR1cm4gbW9kX21lbV90eXBlX2lzX2NvcmVfZGF0YSh0eXBlKTsNCj4gLX0NCj4gLSNlbHNlDQo+
-IC1zdGF0aWMgYm9vbCBtb2RfbWVtX3VzZV92bWFsbG9jKGVudW0gbW9kX21lbV90eXBlIHR5cGUp
-DQo+IC17DQo+IC0JcmV0dXJuIGZhbHNlOw0KPiArCXJldHVybiBJU19FTkFCTEVEKENPTkZJR19B
-UkNIX1dBTlRTX01PRFVMRVNfREFUQV9JTl9WTUFMTE9DKSAmJg0KPiArCQltb2RfbWVtX3R5cGVf
-aXNfY29yZV9kYXRhKHR5cGUpOw0KPiAgIH0NCj4gLSNlbmRpZg0KPiAgIA0KPiAgIHN0YXRpYyB2
-b2lkICptb2R1bGVfbWVtb3J5X2FsbG9jKHVuc2lnbmVkIGludCBzaXplLCBlbnVtIG1vZF9tZW1f
-dHlwZSB0eXBlKQ0KPiAgIHsNCj4gQEAgLTExOTksMzQgKzExODQsMjEgQEAgc3RhdGljIHZvaWQg
-bW9kdWxlX21lbW9yeV9mcmVlKHZvaWQgKnB0ciwgZW51bSBtb2RfbWVtX3R5cGUgdHlwZSkNCj4g
-ICANCj4gICBzdGF0aWMgdm9pZCBmcmVlX21vZF9tZW0oc3RydWN0IG1vZHVsZSAqbW9kKQ0KPiAg
-IHsNCj4gLQkvKiBmcmVlIHRoZSBtZW1vcnkgaW4gdGhlIHJpZ2h0IG9yZGVyIHRvIGF2b2lkIHVz
-ZS1hZnRlci1mcmVlICovDQo+IC0Jc3RhdGljIGVudW0gbW9kX21lbV90eXBlIG1vZF9tZW1fZnJl
-ZV9vcmRlcltNT0RfTUVNX05VTV9UWVBFU10gPSB7DQo+IC0JCS8qIGZpcnN0IGZyZWUgaW5pdCBz
-ZWN0aW9ucyAqLw0KPiAtCQlNT0RfSU5JVF9URVhULA0KPiAtCQlNT0RfSU5JVF9EQVRBLA0KPiAt
-CQlNT0RfSU5JVF9ST0RBVEEsDQo+IC0NCj4gLQkJLyogdGhlbiBjb3JlIHNlY3Rpb25zLCBleGNl
-cHQgcncgZGF0YSAqLw0KPiAtCQlNT0RfVEVYVCwNCj4gLQkJTU9EX1JPREFUQSwNCj4gLQkJTU9E
-X1JPX0FGVEVSX0lOSVQsDQo+IC0NCj4gLQkJLyogcncgZGF0YSBuZWVkIHRvIGJlIGZyZWVkIGxh
-c3QsIGFzIGl0IGhvc3RzIG1vZCAqLw0KPiAtCQlNT0RfREFUQSwNCj4gLQl9Ow0KPiAtCWludCBp
-Ow0KPiAtDQo+IC0JQlVJTERfQlVHX09OKEFSUkFZX1NJWkUobW9kX21lbV9mcmVlX29yZGVyKSAh
-PSBNT0RfTUVNX05VTV9UWVBFUyk7DQo+IC0NCj4gLQlmb3IgKGkgPSAwOyBpIDwgTU9EX01FTV9O
-VU1fVFlQRVM7IGkrKykgew0KPiAtCQllbnVtIG1vZF9tZW1fdHlwZSB0eXBlID0gbW9kX21lbV9m
-cmVlX29yZGVyW2ldOw0KPiArCWZvcl9lYWNoX21vZF9tZW1fdHlwZSh0eXBlKSB7DQo+ICAgCQlz
-dHJ1Y3QgbW9kdWxlX21lbW9yeSAqbW9kX21lbSA9ICZtb2QtPm1lbVt0eXBlXTsNCj4gICANCj4g
-KwkJaWYgKHR5cGUgPT0gTU9EX0RBVEEpDQo+ICsJCQljb250aW51ZTsNCj4gKw0KPiAgIAkJLyog
-RnJlZSBsb2NrLWNsYXNzZXM7IHJlbGllcyBvbiB0aGUgcHJlY2VkaW5nIHN5bmNfcmN1KCkuICov
-DQo+ICAgCQlsb2NrZGVwX2ZyZWVfa2V5X3JhbmdlKG1vZF9tZW0tPmJhc2UsIG1vZF9tZW0tPnNp
-emUpOw0KPiAgIAkJaWYgKG1vZF9tZW0tPnNpemUpDQo+ICAgCQkJbW9kdWxlX21lbW9yeV9mcmVl
-KG1vZF9tZW0tPmJhc2UsIHR5cGUpOw0KPiAgIAl9DQo+ICsNCj4gKwkvKiBNT0RfREFUQSBob3N0
-cyBtb2QsIHNvIGZyZWUgaXQgYXQgbGFzdCAqLw0KPiArCWxvY2tkZXBfZnJlZV9rZXlfcmFuZ2Uo
-bW9kLT5tZW1bTU9EX0RBVEFdLmJhc2UsIG1vZC0+bWVtW01PRF9EQVRBXS5zaXplKTsNCj4gKwlt
-b2R1bGVfbWVtb3J5X2ZyZWUobW9kLT5tZW1bTU9EX0RBVEFdLmJhc2UsIE1PRF9EQVRBKTsNCj4g
-ICB9DQo+ICAgDQo+ICAgLyogRnJlZSBhIG1vZHVsZSwgcmVtb3ZlIGZyb20gbGlzdHMsIGV0Yy4g
-Ki8NCj4gQEAgLTIyMTEsOCArMjE4Myw3IEBAIHN0YXRpYyBpbnQgbW92ZV9tb2R1bGUoc3RydWN0
-IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgbG9hZF9pbmZvICppbmZvKQ0KPiAgIAkJaWYgKCEoc2hkci0+
-c2hfZmxhZ3MgJiBTSEZfQUxMT0MpKQ0KPiAgIAkJCWNvbnRpbnVlOw0KPiAgIA0KPiAtCQlkZXN0
-ID0gbW9kLT5tZW1bdHlwZV0uYmFzZSArDQo+IC0JCQkoc2hkci0+c2hfZW50c2l6ZSAmIFNIX0VO
-VFNJWkVfT0ZGU0VUX01BU0spOw0KPiArCQlkZXN0ID0gbW9kLT5tZW1bdHlwZV0uYmFzZSArIChz
-aGRyLT5zaF9lbnRzaXplICYgU0hfRU5UU0laRV9PRkZTRVRfTUFTSyk7DQo+ICAgDQo+ICAgCQlp
-ZiAoc2hkci0+c2hfdHlwZSAhPSBTSFRfTk9CSVRTKQ0KPiAgIAkJCW1lbWNweShkZXN0LCAodm9p
-ZCAqKXNoZHItPnNoX2FkZHIsIHNoZHItPnNoX3NpemUpOw0K
+On Sat, Jan 14, 2023 at 1:15 AM Brian Geffon <bgeffon@google.com> wrote:
+>
+> On ChromeOS we've observed a considerable number of in-use pages filled
+> with zeros. Today with hibernate it's entirely possible that saveable
+> pages are just zero filled. Since we're already copying pages
+> word-by-word in do_copy_page it becomes almost free to determine if a
+> page was completely filled with zeros.
+>
+> This change introduces a new bitmap which will track these zero pages.
+> If a page is zero it will not be included in the saved image, instead to
+> track these zero pages in the image file we will introduce a new flag
+> which we will set on the packed PFN list. When reading back in the image
+> file we will detect these zero page PFNs and rebuild the zero page bitmap.
+>
+> When the image is being loaded through calls to snapshot_write_next if we
+> encounter a zero page we will silently memset it to 0 and then continue on
+> to the next page. Given the implementation in snapshot_read_next and
+> snapshot_write_next this change  will be transparent to non-compressed,
+> compressed, and swsusp modes of operation.
+>
+> To provide some concrete numbers from simple ad-hoc testing, on a device
+> which was lightly in use we saw that:
+>
+>  PM: hibernation: Image created (964408 pages copied, 548304 zero pages)
+>
+> Of the approximately 6.2GB of saveable pages 2.2GB (36%) were just zero
+> filled and could be tracked entirely within the packed PFN list. The
+> savings would obviously be much lower for lzo compressed images, but even
+> in the case of compression not copying pages across to the compression
+> threads will still speed things up. It's also possible that we would see
+> better overall compression ratios as larger regions of "real data" would
+> improve the compressibility.
+>
+> Finally, such an approach could dramatically improve swsusp performance
+> as each one of those zero pages requires a write syscall to reload, by
+> handling it as part of the packed PFN list we're able to fully avoid
+> that.
+>
+> patch v2:
+>         - correct a minor issue when rebasing.
+
+I need some more time to go through this in more detail, so it is
+likely to miss 6.3.  Sorry about that.
+
+> Signed-off-by: Brian Geffon <bgeffon@google.com>
+> ---
+>  kernel/power/snapshot.c | 129 ++++++++++++++++++++++++++++++----------
+>  1 file changed, 99 insertions(+), 30 deletions(-)
+>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index cd8b7b35f1e8..8d0ba36b0218 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -404,6 +404,7 @@ struct bm_position {
+>         struct mem_zone_bm_rtree *zone;
+>         struct rtree_node *node;
+>         unsigned long node_pfn;
+> +       unsigned long cur_pfn;
+>         int node_bit;
+>  };
+>
+> @@ -589,6 +590,7 @@ static void memory_bm_position_reset(struct memory_bitmap *bm)
+>         bm->cur.node = list_entry(bm->cur.zone->leaves.next,
+>                                   struct rtree_node, list);
+>         bm->cur.node_pfn = 0;
+> +       bm->cur.cur_pfn = BM_END_OF_MAP;
+>         bm->cur.node_bit = 0;
+>  }
+>
+> @@ -850,6 +852,11 @@ static void memory_bm_clear_current(struct memory_bitmap *bm)
+>         clear_bit(bit, bm->cur.node->data);
+>  }
+>
+> +static unsigned long memory_bm_get_current(struct memory_bitmap *bm)
+> +{
+> +       return bm->cur.cur_pfn;
+> +}
+> +
+>  static int memory_bm_test_bit(struct memory_bitmap *bm, unsigned long pfn)
+>  {
+>         void *addr;
+> @@ -929,10 +936,12 @@ static unsigned long memory_bm_next_pfn(struct memory_bitmap *bm)
+>                 if (bit < bits) {
+>                         pfn = bm->cur.zone->start_pfn + bm->cur.node_pfn + bit;
+>                         bm->cur.node_bit = bit + 1;
+> +                       bm->cur.cur_pfn = pfn;
+>                         return pfn;
+>                 }
+>         } while (rtree_next_node(bm));
+>
+> +       bm->cur.cur_pfn = BM_END_OF_MAP;
+>         return BM_END_OF_MAP;
+>  }
+>
+> @@ -1371,14 +1380,18 @@ static unsigned int count_data_pages(void)
+>
+>  /*
+>   * This is needed, because copy_page and memcpy are not usable for copying
+> - * task structs.
+> + * task structs. Returns 1 if a page was filled with only zeros, otherwise 0.
+>   */
+> -static inline void do_copy_page(long *dst, long *src)
+> +static inline int do_copy_page(long *dst, long *src)
+>  {
+>         int n;
+> +       long z = 0;
+>
+> -       for (n = PAGE_SIZE / sizeof(long); n; n--)
+> +       for (n = PAGE_SIZE / sizeof(long); n; n--) {
+> +               z |= *src;
+>                 *dst++ = *src++;
+> +       }
+> +       return !z;
+>  }
+>
+>  /**
+> @@ -1389,15 +1402,17 @@ static inline void do_copy_page(long *dst, long *src)
+>   * CONFIG_ARCH_HAS_SET_DIRECT_MAP is not set. In that case kernel_page_present()
+>   * always returns 'true'.
+>   */
+> -static void safe_copy_page(void *dst, struct page *s_page)
+> +static int safe_copy_page(void *dst, struct page *s_page)
+>  {
+> +       int ret;
+>         if (kernel_page_present(s_page)) {
+> -               do_copy_page(dst, page_address(s_page));
+> +               ret = do_copy_page(dst, page_address(s_page));
+>         } else {
+>                 hibernate_map_page(s_page);
+> -               do_copy_page(dst, page_address(s_page));
+> +               ret = do_copy_page(dst, page_address(s_page));
+>                 hibernate_unmap_page(s_page);
+>         }
+> +       return ret;
+>  }
+>
+>  #ifdef CONFIG_HIGHMEM
+> @@ -1407,17 +1422,18 @@ static inline struct page *page_is_saveable(struct zone *zone, unsigned long pfn
+>                 saveable_highmem_page(zone, pfn) : saveable_page(zone, pfn);
+>  }
+>
+> -static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+> +static int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+>  {
+>         struct page *s_page, *d_page;
+>         void *src, *dst;
+> +       int ret;
+>
+>         s_page = pfn_to_page(src_pfn);
+>         d_page = pfn_to_page(dst_pfn);
+>         if (PageHighMem(s_page)) {
+>                 src = kmap_atomic(s_page);
+>                 dst = kmap_atomic(d_page);
+> -               do_copy_page(dst, src);
+> +               ret = do_copy_page(dst, src);
+>                 kunmap_atomic(dst);
+>                 kunmap_atomic(src);
+>         } else {
+> @@ -1426,30 +1442,32 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+>                          * The page pointed to by src may contain some kernel
+>                          * data modified by kmap_atomic()
+>                          */
+> -                       safe_copy_page(buffer, s_page);
+> +                       ret = safe_copy_page(buffer, s_page);
+>                         dst = kmap_atomic(d_page);
+>                         copy_page(dst, buffer);
+>                         kunmap_atomic(dst);
+>                 } else {
+> -                       safe_copy_page(page_address(d_page), s_page);
+> +                       ret = safe_copy_page(page_address(d_page), s_page);
+>                 }
+>         }
+> +       return ret;
+>  }
+>  #else
+>  #define page_is_saveable(zone, pfn)    saveable_page(zone, pfn)
+>
+> -static inline void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+> +static inline int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+>  {
+> -       safe_copy_page(page_address(pfn_to_page(dst_pfn)),
+> +       return safe_copy_page(page_address(pfn_to_page(dst_pfn)),
+>                                 pfn_to_page(src_pfn));
+>  }
+>  #endif /* CONFIG_HIGHMEM */
+>
+>  static void copy_data_pages(struct memory_bitmap *copy_bm,
+> -                           struct memory_bitmap *orig_bm)
+> +                           struct memory_bitmap *orig_bm,
+> +                           struct memory_bitmap *zero_bm)
+>  {
+>         struct zone *zone;
+> -       unsigned long pfn;
+> +       unsigned long pfn, copy_pfn;
+>
+>         for_each_populated_zone(zone) {
+>                 unsigned long max_zone_pfn;
+> @@ -1462,11 +1480,18 @@ static void copy_data_pages(struct memory_bitmap *copy_bm,
+>         }
+>         memory_bm_position_reset(orig_bm);
+>         memory_bm_position_reset(copy_bm);
+> +       copy_pfn = memory_bm_next_pfn(copy_bm);
+>         for(;;) {
+>                 pfn = memory_bm_next_pfn(orig_bm);
+>                 if (unlikely(pfn == BM_END_OF_MAP))
+>                         break;
+> -               copy_data_page(memory_bm_next_pfn(copy_bm), pfn);
+> +               if (copy_data_page(copy_pfn, pfn)) {
+> +                       memory_bm_set_bit(zero_bm, pfn);
+> +
+> +                       /* We will reuse this copy_pfn for a real 'nonzero' page. */
+> +                       continue;
+> +               }
+> +               copy_pfn = memory_bm_next_pfn(copy_bm);
+>         }
+>  }
+>
+> @@ -1494,6 +1519,9 @@ static struct memory_bitmap orig_bm;
+>   */
+>  static struct memory_bitmap copy_bm;
+>
+> +/* Memory bitmap which tracks which saveable pages were zero filled. */
+> +static struct memory_bitmap zero_bm;
+> +
+>  /**
+>   * swsusp_free - Free pages allocated for hibernation image.
+>   *
+> @@ -1756,6 +1784,12 @@ int hibernate_preallocate_memory(void)
+>                 goto err_out;
+>         }
+>
+> +       error = memory_bm_create(&zero_bm, GFP_IMAGE, PG_ANY);
+> +       if (error) {
+> +               pr_err("Cannot allocate zero bitmap\n");
+> +               goto err_out;
+> +       }
+> +
+>         alloc_normal = 0;
+>         alloc_highmem = 0;
+>
+> @@ -2013,11 +2047,12 @@ static int swsusp_alloc(struct memory_bitmap *copy_bm,
+>
+>  asmlinkage __visible int swsusp_save(void)
+>  {
+> -       unsigned int nr_pages, nr_highmem;
+> +       unsigned int nr_pages, nr_highmem, nr_zero_pages;
+>
+>         pr_info("Creating image:\n");
+>
+>         drain_local_pages(NULL);
+> +       nr_zero_pages = 0;
+>         nr_pages = count_data_pages();
+>         nr_highmem = count_highmem_pages();
+>         pr_info("Need to copy %u pages\n", nr_pages + nr_highmem);
+> @@ -2037,19 +2072,23 @@ asmlinkage __visible int swsusp_save(void)
+>          * Kill them.
+>          */
+>         drain_local_pages(NULL);
+> -       copy_data_pages(&copy_bm, &orig_bm);
+> +       copy_data_pages(&copy_bm, &orig_bm, &zero_bm);
+>
+>         /*
+>          * End of critical section. From now on, we can write to memory,
+>          * but we should not touch disk. This specially means we must _not_
+>          * touch swap space! Except we must write out our image of course.
+>          */
+> +       memory_bm_position_reset(&zero_bm);
+> +       while (memory_bm_next_pfn(&zero_bm) != BM_END_OF_MAP)
+> +               nr_zero_pages++;
+>
+>         nr_pages += nr_highmem;
+> -       nr_copy_pages = nr_pages;
+> +       /* We don't actually copy the zero pages */
+> +       nr_copy_pages = nr_pages - nr_zero_pages;
+>         nr_meta_pages = DIV_ROUND_UP(nr_pages * sizeof(long), PAGE_SIZE);
+>
+> -       pr_info("Image created (%d pages copied)\n", nr_pages);
+> +       pr_info("Image created (%d pages copied, %d zero pages)\n", nr_copy_pages, nr_zero_pages);
+>
+>         return 0;
+>  }
+> @@ -2094,15 +2133,22 @@ static int init_header(struct swsusp_info *info)
+>         return init_header_complete(info);
+>  }
+>
+> +#define ENCODED_PFN_ZERO_FLAG (1UL << (BITS_PER_LONG - 1))
+> +#define ENCODED_PFN_MASK (~ENCODED_PFN_ZERO_FLAG)
+> +
+>  /**
+>   * pack_pfns - Prepare PFNs for saving.
+>   * @bm: Memory bitmap.
+>   * @buf: Memory buffer to store the PFNs in.
+> + * @zero_bm: Memory bitmap containing PFNs of zero pages.
+>   *
+>   * PFNs corresponding to set bits in @bm are stored in the area of memory
+> - * pointed to by @buf (1 page at a time).
+> + * pointed to by @buf (1 page at a time). Pages which were filled with only
+> + * zeros will have the highest bit set in the packed format to distinguish
+> + * them from PFNs which will be contained in the image file.
+>   */
+> -static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
+> +static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm,
+> +               struct memory_bitmap *zero_bm)
+>  {
+>         int j;
+>
+> @@ -2110,6 +2156,8 @@ static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
+>                 buf[j] = memory_bm_next_pfn(bm);
+>                 if (unlikely(buf[j] == BM_END_OF_MAP))
+>                         break;
+> +               if (memory_bm_test_bit(zero_bm, buf[j]))
+> +                       buf[j] |= ENCODED_PFN_ZERO_FLAG;
+>         }
+>  }
+>
+> @@ -2151,7 +2199,7 @@ int snapshot_read_next(struct snapshot_handle *handle)
+>                 memory_bm_position_reset(&copy_bm);
+>         } else if (handle->cur <= nr_meta_pages) {
+>                 clear_page(buffer);
+> -               pack_pfns(buffer, &orig_bm);
+> +               pack_pfns(buffer, &orig_bm, &zero_bm);
+>         } else {
+>                 struct page *page;
+>
+> @@ -2247,24 +2295,32 @@ static int load_header(struct swsusp_info *info)
+>   * unpack_orig_pfns - Set bits corresponding to given PFNs in a memory bitmap.
+>   * @bm: Memory bitmap.
+>   * @buf: Area of memory containing the PFNs.
+> + * @zero_bm: Memory bitmap which will be populated with the PFNs of zero pages.
+>   *
+>   * For each element of the array pointed to by @buf (1 page at a time), set the
+> - * corresponding bit in @bm.
+> + * corresponding bit in @bm. If the page was originally populated with only
+> + * zeros then a corresponding bit will also be set in @zero_bm.
+>   */
+> -static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
+> +static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm,
+> +               struct memory_bitmap *zero_bm)
+>  {
+> -       int j;
+> +       int j, zero;
+> +       unsigned long decoded_pfn;
+>
+>         for (j = 0; j < PAGE_SIZE / sizeof(long); j++) {
+>                 if (unlikely(buf[j] == BM_END_OF_MAP))
+>                         break;
+>
+> -               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
+> -                       memory_bm_set_bit(bm, buf[j]);
+> +               zero = !!(buf[j] & ENCODED_PFN_ZERO_FLAG);
+> +               decoded_pfn = buf[j] & ENCODED_PFN_MASK;
+> +               if (pfn_valid(decoded_pfn) && memory_bm_pfn_present(bm, decoded_pfn)) {
+> +                       memory_bm_set_bit(bm, decoded_pfn);
+> +                       if (zero)
+> +                               memory_bm_set_bit(zero_bm, decoded_pfn);
+>                 } else {
+> -                       if (!pfn_valid(buf[j]))
+> +                       if (!pfn_valid(decoded_pfn))
+>                                 pr_err(FW_BUG "Memory map mismatch at 0x%llx after hibernation\n",
+> -                                      (unsigned long long)PFN_PHYS(buf[j]));
+> +                                      (unsigned long long)PFN_PHYS(decoded_pfn));
+>                         return -EFAULT;
+>                 }
+>         }
+> @@ -2631,6 +2687,7 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>         static struct chain_allocator ca;
+>         int error = 0;
+>
+> +next:
+>         /* Check if we have already loaded the entire image */
+>         if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages)
+>                 return 0;
+> @@ -2657,9 +2714,13 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>                 if (error)
+>                         return error;
+>
+> +               error = memory_bm_create(&zero_bm, GFP_ATOMIC, PG_ANY);
+> +               if (error)
+> +                       return error;
+> +
+>                 hibernate_restore_protection_begin();
+>         } else if (handle->cur <= nr_meta_pages + 1) {
+> -               error = unpack_orig_pfns(buffer, &copy_bm);
+> +               error = unpack_orig_pfns(buffer, &copy_bm, &zero_bm);
+>                 if (error)
+>                         return error;
+>
+> @@ -2686,6 +2747,14 @@ int snapshot_write_next(struct snapshot_handle *handle)
+>                         handle->sync_read = 0;
+>         }
+>         handle->cur++;
+> +
+> +       /* Zero pages were not included in the image, memset it and move on. */
+> +       if ((handle->cur > nr_meta_pages + 1) &&
+> +                       memory_bm_test_bit(&zero_bm, memory_bm_get_current(&orig_bm))) {
+> +               memset(handle->buffer, 0, PAGE_SIZE);
+> +               goto next;
+> +       }
+> +
+>         return PAGE_SIZE;
+>  }
+>
+> --
+> 2.39.0.314.g84b9a713c41-goog
+>
