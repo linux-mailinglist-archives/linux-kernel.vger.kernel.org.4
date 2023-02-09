@@ -2,89 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B981468FC4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 01:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD8468FC51
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjBIA7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 19:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        id S230454AbjBIBA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjBIA7w (ORCPT
+        with ESMTP id S230435AbjBIBAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 19:59:52 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A393122A2B
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 16:59:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=kaXjEiR8MQAfw5oKDquIV0GNyX8JtwAmD302ym/uziI=; b=tfvsP7Or1Pp1HQ8HPBeW4hx10u
-        0bcFuX7NBinoJUyBZXBFGeuOnU5lmoMOFeCyUTC0W4tMt0XDG7YNnvT9mz3hHN7utVc804M1fRV9a
-        PBw4Rlx0exBy7vQ0TNaWfxh3M6KX9H/Hwo1tpsS2DTlnG4PtMlZ5YhfqQrBTgaZnncl7qzhFX5uNF
-        sF3K/f4JEDozpMwgqcl07S55g1JZ55iZlK6+0mtOdFK3lcuRWP8UIHTXnMj/a2BfYVCoQmeNmsk11
-        hpYZlQ+d1uUkVnJ8YU4qwHTe5YD3bV7dQm6leoUaE3A/0N76MHMlqRdx2cFhTp98Ly0qsWHpFvcyI
-        L757oT2A==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pPvHr-00HM4n-Ih; Thu, 09 Feb 2023 00:59:44 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stefan Richter <stefanr@s5r6.in-berlin.de>,
-        linux1394-devel@lists.sourceforge.net,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2] firewire: init_ohci1394_dma: use correct function names in comments
-Date:   Wed,  8 Feb 2023 16:59:42 -0800
-Message-Id: <20230209005942.23566-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
+        Wed, 8 Feb 2023 20:00:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEAF234DE;
+        Wed,  8 Feb 2023 17:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B2DA61852;
+        Thu,  9 Feb 2023 01:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CD43C433D2;
+        Thu,  9 Feb 2023 01:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675904417;
+        bh=kKZbJKq68HUD3fPiTrbY14WyTPSgVoe/5F6U8VCnGjA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Wze7jVPp6F6+sChkuLbqTfB13dj2MO6yElX0WzIuwMcUhOJuisNUOpzR4EPdcqt/X
+         IEtfPb6TaGbAe91gRAeftF0mQdUXhOVsBG7ARjs7gBOGb2DjM48bfYbOfeaeEWTdls
+         TRQCSmq3hNy8juuWqYrW9/YJPbu8WJHTMRCeBr74JudRi1c5YoFMssKyPRMM2YyEnc
+         JB3Mv3zuea/cDM/BHxIwWKw3LoICmAJ10dyXSoU81b6pqyRNQ2lU6zHqLCrxMXW8M5
+         acmec3uR+hHC3Y2pM204kY6dVH91j9x8Z+uuKsaqhnBKTAaUFSepJH0QUB2147Ox77
+         Bbwn3b2/sS80Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 819CAE50D62;
+        Thu,  9 Feb 2023 01:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next v2] samples: bpf: syscall_tp: Add syscall openat2
+ enter/exit tracepoint
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167590441752.22544.17049705662314833420.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Feb 2023 01:00:17 +0000
+References: <tencent_9381CB1A158ED7ADD12C4406034E21A3AC07@qq.com>
+In-Reply-To: <tencent_9381CB1A158ED7ADD12C4406034E21A3AC07@qq.com>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     ast@kernel.org, rongtao@cestc.cn, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent kernel-doc complaints by using the correct function names in
-kernel-doc comments:
+Hello:
 
-drivers/firewire/init_ohci1394_dma.c:258: warning: expecting prototype for debug_init_ohci1394_dma(). Prototype was for init_ohci1394_dma_on_all_controllers() instead
-drivers/firewire/init_ohci1394_dma.c:289: warning: expecting prototype for setup_init_ohci1394_early(). Prototype was for setup_ohci1394_dma() instead
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Stefan Richter <stefanr@s5r6.in-berlin.de>
-Cc: linux1394-devel@lists.sourceforge.net
-Cc: Andrew Morton <akpm@linux-foundation.org>
----
-v2: rebase/resend, add note to Andrew
+On Wed,  8 Feb 2023 09:04:41 +0800 you wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> commit fe3300897cbf("samples: bpf: fix syscall_tp due to unused syscall")
+> add openat() syscall trapoints, this submit support openat2().
+> 
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> 
+> [...]
 
-@Andrew: Please merge this patch. Stefan hasn't been active lately AFAIK.
+Here is the summary with links:
+  - [bpf-next,v2] samples: bpf: syscall_tp: Add syscall openat2 enter/exit tracepoint
+    https://git.kernel.org/bpf/bpf-next/c/06744f24696e
 
- drivers/firewire/init_ohci1394_dma.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-diff -- a/drivers/firewire/init_ohci1394_dma.c b/drivers/firewire/init_ohci1394_dma.c
---- a/drivers/firewire/init_ohci1394_dma.c
-+++ b/drivers/firewire/init_ohci1394_dma.c
-@@ -251,7 +251,7 @@ static inline void __init init_ohci1394_
- }
- 
- /**
-- * debug_init_ohci1394_dma - scan for OHCI1394 controllers and init DMA on them
-+ * init_ohci1394_dma_on_all_controllers - scan for OHCI1394 controllers and init DMA on them
-  * Scans the whole PCI space for OHCI1394 controllers and inits DMA on them
-  */
- void __init init_ohci1394_dma_on_all_controllers(void)
-@@ -283,7 +283,7 @@ void __init init_ohci1394_dma_on_all_con
- }
- 
- /**
-- * setup_init_ohci1394_early - enables early OHCI1394 DMA initialization
-+ * setup_ohci1394_dma - enables early OHCI1394 DMA initialization
-  */
- static int __init setup_ohci1394_dma(char *opt)
- {
+
