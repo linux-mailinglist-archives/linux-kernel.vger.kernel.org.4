@@ -2,65 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148AD69021E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B66690225
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjBII0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 03:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S229664AbjBII14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 03:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjBII0h (ORCPT
+        with ESMTP id S229589AbjBII1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 03:26:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0D649576;
-        Thu,  9 Feb 2023 00:26:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 921F661932;
-        Thu,  9 Feb 2023 08:26:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B93C433EF;
-        Thu,  9 Feb 2023 08:26:19 +0000 (UTC)
-Message-ID: <a524d4df-ea30-7823-fb2e-9f5b9ab7644e@xs4all.nl>
-Date:   Thu, 9 Feb 2023 09:26:17 +0100
+        Thu, 9 Feb 2023 03:27:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2E52E0D1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:27:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675931223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KeiSB4E2wYbQhav/hjow4P+1HmnIHm/QNzDHo+ov7jQ=;
+        b=RHR3oAzWUnhcsdWnDScsMK4HGOwo8qyqzr2B+SCwWqGf6MM4OqqSYWSvcSevXlM2Diapmi
+        eMqbjdMoMl2cNl+qrVjlDMz5DoR1yQwRFFbOUsv3fnWvQ/v3+OSbye7aqhTDAl4geOdp4s
+        nPvlHfbq1pcQyx0UzyMnCCcLEr47YHI=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-265-5Lpme7SWNQOIyxTdUfPA8Q-1; Thu, 09 Feb 2023 03:27:02 -0500
+X-MC-Unique: 5Lpme7SWNQOIyxTdUfPA8Q-1
+Received: by mail-ed1-f70.google.com with SMTP id j10-20020a05640211ca00b0049e385d5830so953264edw.22
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 00:27:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KeiSB4E2wYbQhav/hjow4P+1HmnIHm/QNzDHo+ov7jQ=;
+        b=4Nu0wBJuSR2/gECrrlXTDUhyObM4++9tdRPTWPDY/MuOYk20k8YyKKM4mKMKTsBwIc
+         WP5R/c1cXtHaaEpoKiM9ARvXY4XUKxMXiOoQEXl7L5l0IUBRQ5Bz18mtgk4NQYUjpHwW
+         Jbhu8BNngHw6MVJgRzVWrPDGv6iMiNObubL8afqBXvtnxokc1hb/zQMt9fp71Kv/4jUd
+         Pz0v8dzrc5OJLzNGleOnKcXcXCJ5s+lET9uUSmLZkRXrtuNru/k3slznQGDERgjVUntk
+         bMX1fhM3NfQCEIFR4DFzwTNNdnOI2eN9sAG5CyFwOgRvN40jbJw9LizUWuRkHbY0Wfgf
+         PCJQ==
+X-Gm-Message-State: AO0yUKUiXtRDf3+VambmQh37LJWE/g9lmb6eTMHf/pWKpFFUwsHpQwwU
+        8o/ucMJ8ccUQJOGst4OXjKfcMOMK5nymCZq4v0Iqo4aRH5bVGXb+K1k91kQ+Vr4Tnmkilz4l7SY
+        9Y99fKJ1ky++u0dVYNDhNWkMo
+X-Received: by 2002:a17:906:914:b0:877:a2d1:7560 with SMTP id i20-20020a170906091400b00877a2d17560mr11064808ejd.27.1675931220903;
+        Thu, 09 Feb 2023 00:27:00 -0800 (PST)
+X-Google-Smtp-Source: AK7set+HVTK1AiBbk6GMlw7ohCG7wgotU2j7N1VXPH5fSQyaI8DSS3LYxlt8FWr629Ks1eOmHgrk6g==
+X-Received: by 2002:a17:906:914:b0:877:a2d1:7560 with SMTP id i20-20020a170906091400b00877a2d17560mr11064795ejd.27.1675931220679;
+        Thu, 09 Feb 2023 00:27:00 -0800 (PST)
+Received: from [10.39.193.13] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id i16-20020a170906699000b00883410a786csm552562ejr.207.2023.02.09.00.26.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 Feb 2023 00:27:00 -0800 (PST)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     pshelar@ovn.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, xiangxia.m.yue@gmail.com,
+        netdev@vger.kernel.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: openvswitch: fix possible memory leak in
+ ovs_meter_cmd_set()
+Date:   Thu, 09 Feb 2023 09:26:59 +0100
+X-Mailer: MailMate (1.14r5942)
+Message-ID: <155E8FC1-746B-4BA4-BA80-60868B076F00@redhat.com>
+In-Reply-To: <20230208071623.13013-1-hbh25y@gmail.com>
+References: <20230208071623.13013-1-hbh25y@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20230209075636.313e54e0@canb.auug.org.au>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230209075636.313e54e0@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 21:56, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commits
-> 
->   fd24c6974a3a ("media: Revert "media: saa7146: deprecate hexium_gemini/orion, mxb and ttpci"")
->   a4ff09f5a690 ("media: Revert "media: av7110: move to staging/media/deprecated/saa7146"")
-> 
-> are missing a Signed-off-by from their author.
-> 
 
-Fixed. Thank you for reporting this.
 
-Regards,
+On 8 Feb 2023, at 8:16, Hangyu Hua wrote:
 
-	Hans
+> old_meter needs to be free after it is detached regardless of whether
+> the new meter is successfully attached.
+>
+> Fixes: c7c4c44c9a95 ("net: openvswitch: expand the meters supported num=
+ber")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+>  net/openvswitch/meter.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/openvswitch/meter.c b/net/openvswitch/meter.c
+> index 6e38f68f88c2..e84082e209e9 100644
+> --- a/net/openvswitch/meter.c
+> +++ b/net/openvswitch/meter.c
+> @@ -448,8 +448,10 @@ static int ovs_meter_cmd_set(struct sk_buff *skb, =
+struct genl_info *info)
+>  		goto exit_unlock;
+>
+>  	err =3D attach_meter(meter_tbl, meter);
+> -	if (err)
+> +	if (err) {
+> +		ovs_meter_free(old_meter);
+>  		goto exit_unlock;
+
+It would be nicer to add another goto label like exit_free_old_meter.
+
++	if (err)
++     	goto exit_free_old_meter:
+
+exit_free_old_meter:
+    ovs_meter_free(old_meter);
+exit_unlock:
+	ovs_unlock();
+	nlmsg_free(reply);
+exit_free_meter:
+
+
+Or maybe it would be even nicer to free the old_meter outside of the glob=
+al lock?
+
+> +	}
+>
+>  	ovs_unlock();
+>
+> -- =
+
+> 2.34.1
+
