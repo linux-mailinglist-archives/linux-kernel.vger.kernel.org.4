@@ -2,209 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E12690960
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6C369096A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjBIM5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
+        id S229551AbjBIM6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjBIM5J (ORCPT
+        with ESMTP id S229483AbjBIM62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:57:09 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841B12BEF0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:57:07 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id ud5so6079390ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:57:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ktdDslcvWKj2LkZK7T9I4RYoDooeQBCWJEtHRO61dgQ=;
-        b=YOXfC+GiK/9TPFqoWK5ZxF5T62rURwovnuPa2z7Kn7cdxwQdsDrJNbCPrMqXcizRqg
-         49nqG1FNfipRdXJn4XZVlrMdCDxj1jaI/16QwA/pHhf6FG3C0QHIekljmNblqRPSryNm
-         pDtwFQqIG5bqIgJ+jbj8C5V9XJrwGfZnF34T3qDxn01FdGGmuWu+W5FhAzLWiCxRjOCf
-         LmTEg8LQPc5ZLcc/95npaQrDuV0E/fEV6/O2Pv9GztUajepiNh0NxztcyVwfWHLys89h
-         vruBmurHymumzwCDbNUN280RGQRpS1OsB7sj5N50LiWVJE5bMMf0kBkjI6jQ30DktRZ4
-         Qipw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ktdDslcvWKj2LkZK7T9I4RYoDooeQBCWJEtHRO61dgQ=;
-        b=sqBzo0eZ7MkV2ZJfi/Wf9/gwDNtItdA79gdwAzvQgAEqs/4RLGKH8o0Ziw355hzYBB
-         uQnI4l4nLoAJEjtyE+YM0MR0XZq5b12ycOP+zapMvk8gSd/B/rMwnPGRQS7Rb6sLSZL+
-         jgCox1P06n/n5351l38RYhzjENZrtSB5mCCtkaMhrY9w9u6rBPfywnZ7DyPYi6NRtI6k
-         QWb+5qdnPEiX31Ls52sQhXdlE/lX2+j9RoR8bGuLmkp8TyrvvYMXxSdHUwnYMBeh4r/A
-         cpjGXnHKRRNUf+/n1I1yF8uGpZjhAV4Tu2ure5UE6KMKVll/OuEnCxb3p3Px0mXeroUW
-         kgNA==
-X-Gm-Message-State: AO0yUKVrEEVSfQektl5GU0+fQUW7YZS5na2STy1J+3Sgk+5Kxtk0bu4P
-        4rr8nlDkU+M7QRUQLwVpfPFb72A+JyCo+xsoz5tmHw==
-X-Google-Smtp-Source: AK7set/7AzGhauxDb655geiSBxMuStpM++DIX7DNbp5TTlEYidI+DouqWIiP948oaaKQG7Clc7yZmShEnh8xiIvWsfM=
-X-Received: by 2002:a17:907:10c3:b0:8ae:b14b:4b9e with SMTP id
- rv3-20020a17090710c300b008aeb14b4b9emr476139ejb.9.1675947425558; Thu, 09 Feb
- 2023 04:57:05 -0800 (PST)
+        Thu, 9 Feb 2023 07:58:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAD783EF;
+        Thu,  9 Feb 2023 04:58:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1A7661A3E;
+        Thu,  9 Feb 2023 12:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB78C433D2;
+        Thu,  9 Feb 2023 12:58:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675947506;
+        bh=BIA4FTURFrvXnkpdcGAJC7eUwFXh6Wbr3akTf63NIN4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Mj51+W26Br+nLAcmj0/2vWD6X1CbipF/tiA1ILLUlQQv33y79C+n4+SP18W3KfYKA
+         Cy1Y+K7ws0DNmhpvvZqmeLPmr7FbL1FiJXd2F413m/wa4p46o32VN6v16v5fkQ08Se
+         kgSVcfUvrLyrDc4y4GBGC8Uw6kOWV1vJPHk4Zg2S2dN+SmcAbDog8jsvMD1QPOHlkN
+         EP9H/65qTO53siq9Z77Zapf/RFRNZhQ+vl9iFFTv4M6jG0B3ykPDbGTpHrR1//zC3u
+         ZSoUhb8Z6TlJVNZefk/Sq6O3adLTr7J8MO0Of8cij/pbDOB98DyRfYKZ93KEIBfK5p
+         PDIMpiNMM5JMg==
+Message-ID: <9cc8df06-8ad3-234d-b221-b1af2ee3719a@kernel.org>
+Date:   Thu, 9 Feb 2023 14:58:18 +0200
 MIME-Version: 1.0
-References: <20230130094157.1082712-1-etienne.carriere@linaro.org>
- <CAFA6WYPxzB45pgWkkh++jRaY-d0eHWnrjzu+Z9059PjK5=M-mQ@mail.gmail.com>
- <CAHUa44G3jCqyiXtdZAAEw=8WPC+m5fD8tqsPfGc3MkV3JjRDCA@mail.gmail.com>
- <CAFA6WYN7i+7riJGPH4BEUFK77-kAx4J89Tn3=oX=g6rFUFtDkQ@mail.gmail.com>
- <CAHUa44G1yQtgF1eAUJVA+wtctKHfqYFBhs0PBnpoN-gD8_x8eg@mail.gmail.com>
- <CAN5uoS_M4uMWkf=Q8XFLCrNSvyUdjLgCPixqonKv3mRwRTr-nQ@mail.gmail.com>
- <Y+SdRrwSq/a9OgGr@jade> <CAN5uoS-7Mk6Cy9T9978-5hRUK55UOcCXPFe7Kv8ZUvkJZPi6pw@mail.gmail.com>
- <Y+S6qbgtAViopMPd@jade>
-In-Reply-To: <Y+S6qbgtAViopMPd@jade>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Thu, 9 Feb 2023 13:56:54 +0100
-Message-ID: <CAN5uoS-Qo3gn-JChY1v-kOpYrjSyuL44e1hH_16i6KA+Kx=4UQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] tee: system invocation
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     Sumit Garg <sumit.garg@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/2] net:
+ ti: icssg-prueth: Add ICSSG ethernet driver
+Content-Language: en-US
+To:     Md Danish Anwar <a0501179@ti.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230206060708.3574472-1-danishanwar@ti.com>
+ <20230206060708.3574472-3-danishanwar@ti.com> <Y+ELeSQX+GWS5N2p@lunn.ch>
+ <42503a0d-b434-bbcc-553d-a326af5b4918@ti.com>
+ <e8158969-08d0-1edc-24be-8c300a71adbd@kernel.org>
+ <4438fb71-7e20-6532-a858-b688bc64e826@ti.com> <Y+Ob8++GWciL127K@lunn.ch>
+ <6713252d-6f86-c674-9229-c4512ebf1d72@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <6713252d-6f86-c674-9229-c4512ebf1d72@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Feb 2023 at 10:19, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->
-> Hi,
->
-> On Thu, Feb 09, 2023 at 09:11:53AM +0100, Etienne Carriere wrote:
-> > Hi Jens,
-> >
-> >
-> > On Thu, 9 Feb 2023 at 08:14, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> > >
-> > > Hi Etienne,
-> > >
-> > > On Wed, Feb 08, 2023 at 06:09:17PM +0100, Etienne Carriere wrote:
-> > > > Hello Sumit, Jens,
-> > > >
-> > > [snip]
-> > > > > > > > >
-> > > > > > > > >         if  (rpc_arg && tee_shm_is_dynamic(shm)) {
-> > > > > > > > > -               param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
-> > > > > > > > > +               if (ctx->sys_service &&
-> > > > > > > > > +                   (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_SYSTEM_THREAD))
-> > > > > > > > > +                       param.a0 = OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG;
-> > > > > > > > > +               else
-> > > > > > > > > +                       param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
-> > > > > > > >
-> > > > > > > > This system thread flag should also be applicable to platforms without
-> > > > > > > > registered arguments support. IOW, we need similar equivalents for
-> > > > > > > > OPTEE_SMC_FUNCID_CALL_WITH_ARG and OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG
-> > > > > > > > too. So I would rather suggest that we add following flag to all 3
-> > > > > > > > call types:
-> > > > > > > >
-> > > > > > > > #define OPTEE_SMC_CALL_SYSTEM_THREAD_FLAG    0x8000
-> > > > > > >
-> > > > > > > The main reason platforms don't support registered arguments is that
-> > > > > > > they haven't been updated since this was introduced. So if a platform
-> > > > > > > needs system threads it could update to use registered arguments too.
-> > > > > >
-> > > > > > Are we hinting at deprecating reserved shared memory support? If yes,
-> > > > > > wouldn't it be better to be explicit about it with a boot time warning
-> > > > > > message about its deprecation?
-> > > > > >
-> > > > > > Otherwise it will be difficult to debug for the end user to find out
-> > > > > > why system thread support isn't activated.
-> > > > > >
-> > > > > > > The Linux kernel already supports registered arguments. An advantage
-> > > > > > > with the current approach is that the ABI is easier to implement
-> > > > > > > since we have distinct SMC IDs for each function.
-> > > > > >
-> > > > > > I see your point but my initial thought was that we don't end up
-> > > > > > making that list too large that it becomes cumbersome to maintain,
-> > > > > > involving all the combinatorial.
-> > > > >
-> > > > > You have a point. Etienne, do you think we could give it a try at
-> > > > > https://github.com/OP-TEE/optee_os/pull/5789 to better see how this
-> > > > > would play out?
-> > > > >
-> > > >
-> > > > Indeed I miss that...
-> > > > With the patch proposed here, indeed if OP-TEE does not support
-> > > > dynamic shared memory then Linux will never use the provisioned TEE
-> > > > thread. This is weird as in such a case OP-TEE provisions resources
-> > > > that will never be used, which is the exact opposite goal of this
-> > > > feature. Verified on our qemu-arm setup.
-> > > >
-> > > > For simplicity, I think this system invocation should require OP-TEE
-> > > > supports dyn shm.
-> > >
-> > > It's not obvious to me that this will easier to implement and maintain.
-> > > Looking at the code in optee_os it looks like using a flag bit as
-> > > proposed by Sumit would be quite easy to handle.
-> >
-> > OP-TEE could auto disable thread provis when dyn shm is disabled, right.
-> > Will it be sufficient? We will still face cases where an OP-TEE
-> > provisions thread but Linux kernel is not aware (older vanilla kernel
-> > used with a recent OP-TEE OS). Not much platforms are really affected
-> > I guess but those executing with pager in small RAMs where a 4kB
-> > thread context costs.
->
-> When you add exceptions you make it more complicated. Now we must
-> remember to always use dyn shm if we are to succeed in configuring with
-> system threads. What if both dyn shm and static shm is configured in
-> OP-TEE, but the kernel only uses static shm?
->
-> > > > If OP-TEE could know when Linux does not support TEE system
-> > > > invocation, then OP-TEE could let any invocation use these provisioned
-> > > > resources so that they are not wasted.
-> > > > I think a good way would be Linux to expose if it supports this
-> > > > capability, during capabilities exchange.
-> > > > Would you agree with this approach?
-> > >
-> > > No, I'm not so keen on adding that side effect to
-> > > OPTEE_SMC_EXCHANGE_CAPABILITIES.
-> >
-> > It is a capability REE would exchanges with TEE.
-> > What kind of side effects do you fear?
->
-> I was hoping to keep it stateless. One thing less to keep track of when
-> handing over from a boot stage to the kernel.
 
-Or from a kernel VM unload/reload.
 
->
-> > > The way you're describing the problem it sounds like it's a normal world
-> > > problem to know how many system threads are needed. How about adding a
-> > > fast call where normal world can request how many system threads should
-> > > be reserved?  If none are requested, none will be reserved.
-> >
-> > Well, could be. With caps exchange, we have an SMC funcID to REE to
-> > say to TEE: "reserved the default configured number of sys thread". I
-> > think it is simpler.
->
-> Until you realize the that the default number of system threads doesn't
-> match what you need.
+On 09/02/2023 12:29, Md Danish Anwar wrote:
+> Hi Andrew,
+> 
+> On 08/02/23 18:26, Andrew Lunn wrote:
+>>>>>>> +static int prueth_config_rgmiidelay(struct prueth *prueth,
+>>>>>>> +				    struct device_node *eth_np,
+>>>>>>> +				    phy_interface_t phy_if)
+>>>>>>> +{
+>>>>>>
+>>>>>> ...
+>>>>>>
+>>>>>>> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
+>>>>>>> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
+>>>>>>> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
+>>>>>>> +
+>>>>>>> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
+>>>>
+>>>> This is only applicable to some devices so you need to restrict this only
+>>>> to those devices.
+>>>>
+>>>
+>>> Currently ICSSG driver is getting upstreamed for AM65 SR2.0 device, so I don't
+>>> think there is any need for any device related restriction. Once support for
+>>> other devices are enabled for upstream, we can modify this accordingly.
+>>
+>> The problem is, this is a board property, not a SoC property. What if
+>> somebody designs a board with extra long clock lines in order to add
+>> the delay?
+>>
+>>> I checked the latest Technical Reference Manual [1] (Section 5.1.3.4.49, Table
+>>> 5-624) for AM65 Silicon Revision 2.0.
+>>>
+>>> Below is the description in Table 5-624
+>>>
+>>> BIT	    : 24
+>>> Field	    : RGMII0_ID_MODE
+>>> Type	    : R/W
+>>> Reset	    : 0h
+>>> Description : Controls the PRU_ICSSG0 RGMII0 port internal transmit delay
+>>> 	      0h - Internal transmit delay is enabled
+>>> 	      1h - Reserved
+>>>
+>>> The TX internal delay is always enabled and couldn't be disabled as 1h is
+>>> reserved. So hardware support for disabling TX internal delay is not there.
+>>
+>> So if somebody passes a phy-mode which requires it disabled, you need
+>> to return -EINVAL, to indicate the hardware cannot actually do it.
+>>
+> 
+> Sure, I'll do that. In the list of all phy modes described in [1], I can only
+> see phy-mode "rgmii-txid", for which we can return -EINVAL. Is there any other
+> phy-mode that requires enabling/disabling TX internal delays? Please let me
+> know if any other phy-mode also needs this. I will add check for that as well.
+> 
+>>> As, TX internal delay is always there, there is no need to enable it in MAC or
+>>> PHY. So no need of API prueth_config_rgmiidelay().
+>>>
+>>> My approach to handle delay would be as below.
+>>>
+>>> *) Keep phy-mode = "rgmii-id" in DT as asked by Andrew.
+>>
+>> As i said this depends on the board, not the SoC. In theory, you could
+>> design a board with an extra long RX clock line, and then use phy-mode
+>> rgmii-txid, meaning the MAC/PHY combination needs to add the TX delay.
+>>
+> 
+> Yes I understand that board can have any phy-mode in it's DTS. We need to be
+> able to handle all different phy modes.
+> 
+>>> *) Let TX internal delay enabled in Hardware.
+>>> *) Let PHY configure RX internal delay.
+>>> *) Remove prueth_config_rgmiidelay() API is there is no use of this. TX
+>>> Internal delay is always enabled.
+>>> *) Instead of calling prueth_config_rgmiidelay() API in prueth_netdev_init()
+>>> API, add below if condition.
+>>>
+>>> 	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
+>>> 		emac->phy_if == PHY_INTERFACE_MODE_RGMII_RXID
+>>
+>> You should handle all cases where a TX delay is requested, not just
+>> ID.
+>>
+> 
+> So there could be four different RGMII phy modes as described in [1]. Below is
+> the handling mechanism for different phy modes.
+> 
+> 1)    # RGMII with internal RX and TX delays provided by the PHY,
+>       # the MAC should not add the RX or TX delays in this case
+>       - rgmii-id
+> 
+> For phy-mode="rgmii-id", phy needs to add both TX and RX internal delays. But
+> in our SoC TX internal delay is always enabled. So to handle this, we'll change
 
-Ok, I see your point. Indeed, Linux drivers requiring system context
-could issue a fastcall SMC to request dynamic provisioning of TEE
-context resources, and release their request upon driver unload. I
-agree it would better scale in the long term. I'll propose something
-in a v2.
+OK. I thought that this MAC forced TX delay issue was fixed in Later Silicon Revisions.
+But it looks like it hasn't been fixed yet.
 
->
-> >
-> > With REE calling TEE to provision thread, we would need another call
-> > to release the reservation. Whe caps exchange, we have a single SMC to
-> > reconfig the negotiated caps.
->
-> A single SMC with growing complexity in its arguments.
 
-:)  fair.
+> the phy-mode in driver to "rgmii-rxid" and then pass it ti PHY, so that PHY
+> will enable RX internal delay only.
 
+OK.
+
+> 
+> 2)    # RGMII with internal RX delay provided by the PHY, the MAC
+>       # should not add an RX delay in this case
+>       - rgmii-rxid
+> 
+> For phy-mode="rgmii-rxid", phy needs to add only RX internal delay. We will do
+> nothing in the driver and just pass the same mode to phy, so that PHY will
+> enable RX internal delay only.
+
+But the MAC is forcing TX-delay right? So this case can't be implemented.
+you have to return error.
+
+> 
+> 3)    # RGMII with internal TX delay provided by the PHY, the MAC
+>       # should not add an TX delay in this case
+>       - rgmii-txid
+> 
+> For phy-mode="rgmii-txid", phy needs to add only TX internal delay,the MAC
+> should not add an TX delay in this case. But in our SoC TX internal delay is
+> always enabled. So this scenario can not be handled. We will return -EINVAL in
+> this case.
+
+As you didn't return error for 1st case "rgmii-id" even though TX delay was requested
+for PHY but you added it in the MAC I see no reason to return error here.
+
+You just do the delay in MAC and pass "rgmii" to the PHY.
+
+> 
+> 
+> 4)    # RX and TX delays are added by the MAC when required
+>       - rgmii
+> 
+> For phy-mode="rgmii", MAC needs to add both TX and RX delays. But in our SoC TX
+> internal delay is always enabled so no need to add TX delay. For RX I am not
+> sure what should we do as there is no provision of adding RX delay in MAC
+> currently. Should we ask PHY to add RX delay?
 >
-> Cheers,
-> Jens
+
+I don't think it will work so you can error out in this case.
+ 
+> Andrew, Roger, Can you please comment on this.
+> 
+> Apart from Case 4, below code change will be able to handle all other cases.
+> 
+> 	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
+> 		emac->phy_if = PHY_INTERFACE_MODE_RGMII_RXID;
+> 	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
+> 		return -EINVAL;
+> 
+> Please let me know if I am missing any other phy modes.
+> 
+> [1] Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> 
+>> 	Andrew
+> 
+
+cheers,
+-roger
