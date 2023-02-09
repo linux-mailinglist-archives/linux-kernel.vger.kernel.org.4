@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CD9691123
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAFB691126
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjBITSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S229843AbjBITTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjBITS2 (ORCPT
+        with ESMTP id S229545AbjBITTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:18:28 -0500
+        Thu, 9 Feb 2023 14:19:16 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CED6A70A;
-        Thu,  9 Feb 2023 11:18:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59486BA9C;
+        Thu,  9 Feb 2023 11:18:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1D84B82292;
-        Thu,  9 Feb 2023 19:18:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C81C4339C;
-        Thu,  9 Feb 2023 19:18:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D824AB82287;
+        Thu,  9 Feb 2023 19:18:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE50C433D2;
+        Thu,  9 Feb 2023 19:18:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675970304;
-        bh=NKdf/DmfCqhfyz+hBsxyGBbopa789ZG35qd6K94RXng=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HhkyRF/zpOvo8qUME/yQOqPMB6OJmc0Y3wrOPwQq1Vr/2TcutOLZE3GpTVo62y4lO
-         2gvB4xNDXS2ufFFu5kXwzZNoOiQS/i9vMVtPDplVuPySNv9x+R47NjGWT0+1wXpQok
-         aMFqCqjmZQ5f9fvJATem7WCQgWTDMfNQzUCS95WFr8LOtYhZ3m162G1Y661kqo9tBR
-         F14sKAf4/89QjrMiQR3lfp8hdrWL5mBMywnjI854U/NXvcLJ6kl6JZoEHH8L4x1ReU
-         4uD1foRL8a9CDRhcg3d9BIUdU0btJTfSohGG6D5VhDEMNxmUIZMvgA4jNofd5vrdlo
-         AzeyI4X9Xs/dA==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     live-patching@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Seth Forshee <sforshee@digitalocean.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH 3/3] vhost: Fix livepatch timeouts in vhost_worker()
-Date:   Thu,  9 Feb 2023 11:17:49 -0800
-Message-Id: <76622971662bbd42abc9a1b25a73a8c3ac929ca3.1675969869.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <cover.1675969869.git.jpoimboe@kernel.org>
-References: <cover.1675969869.git.jpoimboe@kernel.org>
+        s=k20201202; t=1675970323;
+        bh=mDkzITMeQax7M/mdpkLZOTnU0VTywWzADEO1NFt7WtI=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=I5qAoAZlJ9ktZK+svpS08bNObcipk6QOo528BUt0+E0F/IbWtNriGeVTjYWXmhIi8
+         xc9Q+c3W+39q0AnwG6PKz1lglgKQSdbOMz5x8L21aRTpLYqbmnn2AN9TYQ1f9dUHav
+         KUj2fgjx0OzhFJwCR0RjuYkFcExiWDXSfSlxEkFptutZ99LeA4ds9f28eHkdcEueCM
+         +RvxK5Wkk5mN5/y3nZgEyxHrE2vOGk/GE23D1c4qxvvAHw5gImOqMG04DkWMp9uedJ
+         zEhwd6gzST5oXrtSowKOb7KZyZGBaIQcWZ5AEmeeVlElZsMnsyOrbfHgmUE9djggEC
+         II+2tN3RKcm2A==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        benliang.zhao@mediatek.com, bin.zhang@mediatek.com
+In-Reply-To: <20230201020921.26712-1-xiangsheng.hou@mediatek.com>
+References: <20230201020921.26712-1-xiangsheng.hou@mediatek.com>
+Subject: Re: [PATCH v6 0/5] Add MediaTek MT7986 SPI NAND support
+Message-Id: <167597032096.933619.6758508358414336782.b4-ty@kernel.org>
+Date:   Thu, 09 Feb 2023 19:18:40 +0000
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,32 +59,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Livepatch timeouts were reported due to busy vhost_worker() kthreads.
-Now that cond_resched() can do livepatch task switching, use
-cond_resched() in vhost_worker().  That's the better way to
-conditionally call schedule() anyway.
+On Wed, 01 Feb 2023 10:09:16 +0800, Xiangsheng Hou wrote:
+> This patch series split from bellow series which pick-up spi relevant patches
+> https://lore.kernel.org/all/20230130030656.12127-1-xiangsheng.hou@mediatek.com.
+> This series add MediaTek MT7986 SPI NAND controller support, add read latch
+> latency, smaple delay adjust and add optional nfi_hclk.
+> 
+> Changes since V5:
+>  - Split spi relevant patches from previous series V4
+> 
+> [...]
 
-Reported-by: Seth Forshee (DigitalOcean) <sforshee@digitalocean.com>
-Link: https://lkml.kernel.org/lkml/20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- drivers/vhost/vhost.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Applied to
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index cbe72bfd2f1f..424c0c939f57 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -363,8 +363,7 @@ static int vhost_worker(void *data)
- 			kcov_remote_start_common(dev->kcov_handle);
- 			work->fn(work);
- 			kcov_remote_stop();
--			if (need_resched())
--				schedule();
-+			cond_resched();
- 		}
- 	}
- 	kthread_unuse_mm(dev->mm);
--- 
-2.39.0
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/5] spi: mtk-snfi: Change default page format to setup default setting
+      commit: 2b1e19811a8ecc776d15da4ca89df48db6974d66
+[2/5] spi: mtk-snfi: Add optional nfi_hclk which is needed for MT7986
+      commit: e40fa328551dd67d14e5dc3e4ed82b5b770f027f
+[3/5] dt-bindings: spi: mtk-snfi: Add compatible for MT7986
+      commit: 8aa2ef233fa3b985ced1ed31b86fddddfd6be4b2
+[4/5] spi: mtk-snfi: Add snfi sample delay and read latency adjustment
+      commit: 1d36c99062bf4e809271cc534486342442508d4a
+[5/5] dt-bindings: spi: mtk-snfi: Add read latch latency property
+      commit: 351c02cb740472c659145b0027e77a3353e58185
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
