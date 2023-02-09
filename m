@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A72E690C7F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:12:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D35690C83
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjBIPMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S230265AbjBIPMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjBIPMD (ORCPT
+        with ESMTP id S230463AbjBIPMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:12:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B015BA44;
-        Thu,  9 Feb 2023 07:12:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C602CB82197;
-        Thu,  9 Feb 2023 15:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23088C433EF;
-        Thu,  9 Feb 2023 15:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675955519;
-        bh=cOBvqeLETPxLw9X8pX0kEtBQ+MndP6A5xsW9XnyXqbU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=i0s0rPrE0iNDl1FZat/nmx1kdTHck+jW4Y18/StgkfB2V0OOT2DwUHhTRZeNiA0oD
-         kTGxR9/+i+0qReQ7adcg9g/NZSKvE3Rgt8RTDd3bIAuhTwvMdhSud9W9GN1SvukNSZ
-         E3a9gyVmuQBmPVSU/eJxGNKcPbMhI0FtSCQBqh7VzXvEM/Qk9/QTN6KvcFckRAYH6G
-         +WcRCzoxg1MR+TTJqhONa5Rb6wpToLlgG4fmlzabFi9eaoogaCWhlqibwqNSQ9O2RQ
-         VocDTqiGrOLlTYhHpH+LUKgRIoFhA9FLrYLUzCehYpLgcaINLOLB/3cTBYEkr98YP5
-         31ivfAo8uw/eg==
-Message-ID: <c122426f-53d5-b5ee-9a15-0a735da4bc29@kernel.org>
-Date:   Thu, 9 Feb 2023 16:11:53 +0100
+        Thu, 9 Feb 2023 10:12:30 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937DD5B76F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:12:27 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ml19so7441265ejb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 07:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NCv1Mu+p+yYwWQ/gt/1Wy0fKjttCDxpodcC19GCmro8=;
+        b=fVZbPZytjkIP27sLlIh/v97JNL2Exdde7Gn89440vvYniQmM2+kE1Jt9btbIrRAJfI
+         4wSb56RfPXVjV8o+G8dkxetBoDJhY3W/Kj0gUWYOJgprlFrEB9bm0qLzmzpw2T4CS1dh
+         EWcoXErTEC9q/7iOGYajO4Tuj/DNr9YiS+QMWC45B0WxOSMAagIwXvbEi0c+nWZyLJ6R
+         EbBke+A4ibiXwrtNOwCG9E+mQzOW7qSAmgQ12fhXrH70zPhKgNvfXgPC4RGWGzikbnZK
+         5lQO9628Ukl0joCUJGPgDaVMmvV3xZrFHkX/KS5BaB0KxwQzEzRp6LtHTT4EcwKoScKO
+         FaMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NCv1Mu+p+yYwWQ/gt/1Wy0fKjttCDxpodcC19GCmro8=;
+        b=btsxwJ9idzXgvfmGKup5QMK9jfM5mUZjMN9e3SB3Vd558ILoWkwdGM5J3QMVaUq+op
+         KXxBTuDKMZB9NBw0hEN21CHsdE5GuMWN0d6cVfbUiFgI/l15uHueykYi0ozrHBqBddYO
+         dyU7Nw8HPHohbvg2HcW1/n1TTepFZABixhd6l9KaY+ct8Gq2iENK0RX4B8hCWyqJ/kDC
+         RvghFxqmGdJL5iKOWdv3D2fLTUSULmdk0ANXoNJB9sXxMjgnOjXd2ubz/jLfSPRZx9O9
+         Zb5hRHaMy0XzjDMz5oiUSN47ii4Qm3/iYVuQPyIyWRvJqqeYJ7ftzTXGtePb8eGKz9qO
+         4PqA==
+X-Gm-Message-State: AO0yUKXNqMeIf0Ps11bi60bp1lH4HiV7MsJQsq4wFSor1X4boqjFSDvM
+        VTEpCsa9PVEzRDo8bTYWMb9Cqg==
+X-Google-Smtp-Source: AK7set+W1ai2HA75DkhrOZnxD6WCcCmjuLOieQg1KjI11RTcEMPbWm1aALIiVdjQVubjVjzuk6hazQ==
+X-Received: by 2002:a17:906:d28e:b0:878:7449:429f with SMTP id ay14-20020a170906d28e00b008787449429fmr11720161ejb.16.1675955546084;
+        Thu, 09 Feb 2023 07:12:26 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id e20-20020a170906c01400b008ae3324c8adsm974949ejz.214.2023.02.09.07.12.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 07:12:25 -0800 (PST)
+Date:   Thu, 9 Feb 2023 16:12:23 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Miko Larsson <mikoxyzzz@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] net/usb: kalmia: Fix uninit-value in
+ kalmia_send_init_packet
+Message-ID: <Y+UNV9xp/U+56Tlx@nanopsycho>
+References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
+ <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+ <Y9pY61y1nwTuzMOa@nanopsycho>
+ <23e899f83c4f05a18deb2f86047d57d941205374.camel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm6115: Add geni debug uart node for
- qup0
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20230208122718.338545-1-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230208122718.338545-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <23e899f83c4f05a18deb2f86047d57d941205374.camel@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,50 +80,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/02/2023 13:27, Bhupesh Sharma wrote:
-> qup0 on sm6115 / sm4250 has 6 SEs, with SE4 as debug uart.
-> Add the debug uart node in sm6115 dtsi file.
-> 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  Changes since v1:
->   - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20221128171215.1768745-1-bhupesh.sharma@linaro.org/
->   - Addressed Konrad's review comments on v1.
->   - Rebased againt latest linux-next/master which now has the 'qupv3_id_0' node
->     already in the dtsi file, so just add the debug uart node in v2.
-> 
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 50cb8a82ecd5..3eccfb8c16ce 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -963,6 +963,15 @@ spi4: spi@4a90000 {
->  				status = "disabled";
->  			};
->  
-> +			uart4: serial@4a90000 {
-> +				compatible = "qcom,geni-debug-uart";
-> +				reg = <0x04a90000 0x4000>;
-> +				clock-names = "se";
-> +				clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>;
-> +				interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
-> +				status = "disabled";
-> +			};
-> +
->  			i2c5: i2c@4a94000 {
->  				compatible = "qcom,geni-i2c";
->  				reg = <0x04a94000 0x4000>;
-> @@ -992,7 +1001,6 @@ spi5: spi@4a94000 {
->  				dma-names = "tx", "rx";
->  				#address-cells = <1>;
->  				#size-cells = <0>;
-> -				status = "disabled";
+Thu, Feb 09, 2023 at 03:47:12PM CET, mikoxyzzz@gmail.com wrote:
+>On Wed, 2023-02-01 at 13:19 +0100, Jiri Pirko wrote:
+>> Tue, Jan 31, 2023 at 03:20:33PM CET, mikoxyzzz@gmail.com wrote:
+>> > syzbot reports that act_len in kalmia_send_init_packet() is
+>> > uninitialized. Fix this by initializing it to 0.
+>> > 
+>> > Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for
+>> > Samsung GT-B3730")
+>> > Reported-and-tested-by:
+>> > syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.com
+>> > Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
+>> > ---
+>> > v1 -> v2
+>> > * Minor alteration of commit message.
+>> > * Added 'reported-and-tested-by' which is attributed to syzbot.
+>> > 
+>> > drivers/net/usb/kalmia.c | 2 +-
+>> > 1 file changed, 1 insertion(+), 1 deletion(-)
+>> > 
+>> > diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+>> > index 9f2b70ef39aa..b158fb7bf66a 100644
+>> > --- a/drivers/net/usb/kalmia.c
+>> > +++ b/drivers/net/usb/kalmia.c
+>> > @@ -56,7 +56,7 @@ static int
+>> > kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8
+>> > init_msg_len,
+>> >         u8 *buffer, u8 expected_len)
+>> > {
+>> > -       int act_len;
+>> > +       int act_len = 0;
+>> >         int status;
+>> > 
+>> >         netdev_dbg(dev->net, "Sending init packet");
+>> 
+>> Hmm, this is not the right fix.
+>> 
+>> If the second call of usb_bulk_msg() in this function returns != 0,
+>> the
+>> act_len printed out contains the value from previous usb_bulk_msg()
+>> call,
+>> which does not make sense.
+>> 
+>> Printing act_len on error path is pointless, so rather remove it from
+>> the error message entirely for both usb_bulk_msg() calls.
+>
+>Something like this, then?
 
-Why do you enable SPI? The commit msg is not explaining it.
+Yes.
 
-Best regards
-
+>
+>diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+>index 9f2b70ef39aa..613fc6910f14 100644
+>--- a/drivers/net/usb/kalmia.c
+>+++ b/drivers/net/usb/kalmia.c
+>@@ -65,8 +65,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8 init_msg_len,
+> 		init_msg, init_msg_len, &act_len, KALMIA_USB_TIMEOUT);
+> 	if (status != 0) {
+> 		netdev_err(dev->net,
+>-			"Error sending init packet. Status %i, length %i\n",
+>-			status, act_len);
+>+			"Error sending init packet. Status %i\n",
+>+			status);
+> 		return status;
+> 	}
+> 	else if (act_len != init_msg_len) {
+>@@ -83,8 +83,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8 init_msg_len,
+> 
+> 	if (status != 0)
+> 		netdev_err(dev->net,
+>-			"Error receiving init result. Status %i, length %i\n",
+>-			status, act_len);
+>+			"Error receiving init result. Status %i\n",
+>+			status);
+> 	else if (act_len != expected_len)
+> 		netdev_err(dev->net, "Unexpected init result length: %i\n",
+> 			act_len);
+>
+>-- 
+>~miko
