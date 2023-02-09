@@ -2,135 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05EB368FFD4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3EB68FFD8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjBIFUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 00:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
+        id S229941AbjBIFUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 00:20:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBIFUe (ORCPT
+        with ESMTP id S229743AbjBIFUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 00:20:34 -0500
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2123.outbound.protection.outlook.com [40.107.255.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EDD02CFDD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 21:20:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BAfit2X2LR135TX2vKQKGxc+0tdCbzeUWBro1e0RnDnzQm1xtFgfSCTu1RO+rnyuoei8mMXzN2hUS6Df540bwz92qjDI5eGyKFOWqMdp9HjBM6dK56TG2GxJZu4+WEjn/6Tzuk1nLgpTV+dKOhxe0kxhfdXLKst2YMfEZ5LVxqchVm5jjCiCzOHfdAuAfAeSdHzBVuzo1D8bXZ1YKkfqKYukKzOxbQHdWSIRZLuwcnkuewLCU4jdgDOjSa2e7P5aGwVEsuZXl31tHmJOsSQfbtedrnGezecyOSHEaSoF1J8p0OvMSmGwNAqPLZOBukGOOnyOwwqB2Q0FyLgD6zmIfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3JGl8KFZctzLkJX0zA/UUfpUfaxkrMddEbbmxDYVQLQ=;
- b=LsfayCrOb1uYoo4dC8jGpaxZbMERUqUx/Qqg8TQVudonwg0h5nxcyXBfW3sR5khmRAViKhscVejBpgLSIzHbUz8sVLSQaRZGaJp1L6Idts4xFFLbvyRfUZ7QeJyzNV6HL6+7aTUiWV1XDhObwWDf7ztVhiSf0YN8ZyJ8gFbxjlb7W5ptyhkcrSUZNSZ2lZt+z9PzCQBscU8hVnl6DfY6VvVcpqO195DBKUuRXD0oAyZNbqLDOQN0fi9kqi/3zNXflishRP7xi/S9DhxS6pRkLnGkAJCHv/wB4381WFK0uDlbpsCCQUXM5n7GC2Qz/OJen/nhMeXvpjxVK8aCBq7DRQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3JGl8KFZctzLkJX0zA/UUfpUfaxkrMddEbbmxDYVQLQ=;
- b=L+RjT8kK8yIyP+InjVBnygFbtlRvcOqNo7sNNoq8TVaiyRMvbdtra0ryMF2YvP95FOKMUgDQcXUDFe2RDrIODspLdUWDFUWKph8o6yGSh7lmF/WeNEgOnrd4jm065ZcXAWPAF2UPuOCPWyqVoFPmr64jVlwOPcxj4VzjHA9J3o3C/Gy6D2y5cmpnnBhqE412sYtuYHBuBs3aEijxBrnjlf0mzc4E4RISGeokpFxAyUDODWS0jl9oy9qehQsKedKPwREV2Skg8xL1t1inLK0+cuo5Q+bCz3DPwPxADka+zcUZa2exaXPmSsGANSq/FezoRaujoRDTCyDFJPrSXlOTrg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB4251.apcprd06.prod.outlook.com (2603:1096:4:154::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
- 2023 05:20:24 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::3e52:d08c:ecf4:d572%5]) with mapi id 15.20.6086.011; Thu, 9 Feb 2023
- 05:20:24 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        jefflexu@linux.alibaba.com
-Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] MAINTAINERS: erofs: Add Documentation/ABI/testing/sysfs-fs-erofs
-Date:   Thu,  9 Feb 2023 13:20:13 +0800
-Message-Id: <20230209052013.34952-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0045.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::19) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Thu, 9 Feb 2023 00:20:49 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0EE2DE7C;
+        Wed,  8 Feb 2023 21:20:46 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31949Kx0030005;
+        Thu, 9 Feb 2023 05:20:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Qi01A4DARysTADEqiJHBihKXJUpLwxjlAn34mXKmldc=;
+ b=NhT1YVbMzr9TdxYQwid6J53k1TQC/tPCZEfcSh54k7mPzi5sCkI1/QKTRZKL1hpo9U8I
+ TspzPshhpnlXLtYVBOItyGALSeuUcwYrvJ72+3g38tijAMDGVc3WYurfh+FspfnDgHk3
+ Z9cjwofYv2SFi2mCf5oF7Q/DeagW2uwnyIK2RS4R6exsI++5EUchcg37ECJeu3kFK2Bt
+ QcuknbCHlwOB4lrEDLX9nU9uF5VNzReU5247xlGlIT/eWaN3divkg4Upi8vL15+8KWat
+ oLNtfdaZTUXjeu8vq1XFFtvmg3lOipCjOWLpwUfQE/3C7bK6nrFRqajKa1CPFiqA77gX PQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm86mtnyq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 05:20:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3195KeTQ010936
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Feb 2023 05:20:40 GMT
+Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
+ 21:20:36 -0800
+Message-ID: <e40b3122-30e6-4619-57db-085d480deef1@quicinc.com>
+Date:   Thu, 9 Feb 2023 10:50:33 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4251:EE_
-X-MS-Office365-Filtering-Correlation-Id: f81aa1c4-3bc7-41ad-8c91-08db0a5d586c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cx6ZvByu0PJqPugASqJ4tB+ObeNH+sj3dZGsCWoVUcBmTu2xkl5bE9KSbnTWQVAUqMMaWmgstx6ZTOwiHtS9G9gjyiiOns+ewOC5q3sDfSpR2iOYsxgVkOfnQq+uFYH+ZCjYWiXIC7YzJif89Wx9KDkV5Xn4LQfK+WNMfsMgzt2m+KO2eWc7b7fFULJ6TxQlL5LIQ8XH7V7r28Q5vYm8UYG5DOS6llEp52Z2mA8aQWk1Gl/b3/49BONT3KreCaaR7RjBqb4EVhQQJ8rM03JuD3shlOvjwi5Furh66cnMtS6GuDkdw0p3qr3a9LGz6gF54z1qYELWXt/EG+AUu3Ghk5/U7uLcdIGTnzUh7dGXpFj47Vn2qs9fQNE3eI+39Q7C/qg3sj6UpHPbI01P78UwnzgV8c3Qzckd2htR3Wtn2hMbtCKKn7sAvDivwWVny63ZcrWkBJduCQZhEYUuDfGNPRwRg6CU52xCj75koa/lXM/maEfI3OuzM+Y96EKD4ny0iTdl3KuOnk1hr/Lu8BNzJr2HsmNlvC/cg29Wta5xiRDd0XN/vSUXM11kCJG7NbWrJ6rWDPCzhYreyLJ32euPqrWoDWxqYpWPgaoU3MdYqO1tfLH88mXItiouyL+BEGd7wL+BLVZch32G1k8UBZRHgSSIc48Dx7koXqruUtvRvxK476Kl8UTIIhrCWMqfvV7TVoxT28TvCiiBrps0fAYTQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(366004)(39860400002)(376002)(346002)(451199018)(6512007)(186003)(8936002)(4744005)(5660300002)(2906002)(36756003)(4326008)(38350700002)(8676002)(38100700002)(66946007)(66476007)(66556008)(26005)(1076003)(2616005)(41300700001)(6506007)(86362001)(6666004)(316002)(52116002)(478600001)(6486002)(107886003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?swaMveYbUy3tf72FDQg48QjkrY/Fqnukdy4yCQbx+8QOXtdlCAQauFvpO232?=
- =?us-ascii?Q?uY7r/9+w7bSXhnEZ69FXiDRmjszYsbaJwx9Oma7A0BE0+T9mtk8W9eRaUZJf?=
- =?us-ascii?Q?0wOgqlU6uu9X8Bd+bftgCchSt2cC0nk5bdWEeer2WhDav03CyymRjzPlcDQP?=
- =?us-ascii?Q?dl5C8qQwDX0ez1w+kccwHLB/rTaJsbQH38GV5hP7drtvsZolzu1zuASasrRh?=
- =?us-ascii?Q?PRHpLmXdNkOpW5HR/o5bC1C5jdxmMoo/72Svqv2B2m0KiDyOZEQcn5HsVY4y?=
- =?us-ascii?Q?SeNr+57kv29o0ld9kRKtIBLTp2xjLtGs44cRxzOsFlfVAzJMbHV3/IxjIPAY?=
- =?us-ascii?Q?d8Ygu+uPNvmrVeCAiWLAdC7mKu/JSEt1mqaK8rD2a9Qdbtmiy8qpHb/DQmbE?=
- =?us-ascii?Q?cUr2cYerkZklrY9S0qBCD/wTOIj+LmdsC/W5MmL0tlqZJkb6Szq2ZHKbQlfX?=
- =?us-ascii?Q?+bDmzhG17J1Pd0QcXg5PTMv9yGsBIettQqXGPw9mLu+00OLEZkvKwTJFAXjh?=
- =?us-ascii?Q?W8yxTfQapHeVVq64rf8cg+RIoAiHq4esbaf+xXje+NbdghGLsCHpzMxMY3bi?=
- =?us-ascii?Q?0UHWpX+Q0B/gIy3HfbqBdziJKjAuIIGN3C9Mg0+pB87osGNQmqIZYD/qXVdx?=
- =?us-ascii?Q?Np7uy/9p0AKdqPW5yfPrZDiiiVHd9NprSv0F2cJ7q+UNa5U68vHZv8RyBQjJ?=
- =?us-ascii?Q?BhLWJov3c0V2j68aAxb/cQXInrsqXCQfqecKxee+EhbrwHNYnZp0Umc5zWpm?=
- =?us-ascii?Q?il8y5+5+gsbu/LV0pj+/2+S159UYR19iCP42ZXyzyW0gHxXsuWEphHbfyphh?=
- =?us-ascii?Q?1P+b2dn4cdrI+hGsj8X+7At1XkPhT+gdvfqk2OHbEmDi6uFnu/KLRvQXc7x/?=
- =?us-ascii?Q?JU0s91bnAQlDdPCBEGKD+voTgu76KRfikml/Zi+9Wk+qd4MUqI8JDvlC4CKi?=
- =?us-ascii?Q?FMtHE+AWSZzioxuB2kcEJonp++N6sRXpkrbtm5zhlzUHv8a7qP0+WbnD5qMy?=
- =?us-ascii?Q?43I4f01rZJOtGeiaGE0RpJI4tXTWQco/kMgfKiPGNTv7XPh7uUiwk4F7LiP9?=
- =?us-ascii?Q?B8cIaD4VbS9Sa5RF5w5qyzgfPVI+99W50a+Ow3iY9uX8uGC/rQ3XomP8g+AR?=
- =?us-ascii?Q?B56r11UcAm0IgnLiPJNKC2B/PNWcBaZVFYABAM+kyKpu7POljhUf5Wbj4Fn9?=
- =?us-ascii?Q?5XQLgn34CVZWOOtkWenGpfu1NaJk+PBzpTjfPXQl0cNg/hT6gqbtSy46lLF5?=
- =?us-ascii?Q?Xm1zGfahocl6eG5a8lfUwlzIM7K1iniJw8u/fBFTwLLym+LbPxT9btky9v8a?=
- =?us-ascii?Q?BLfkeX+LJIPT9+txnOGNuafkvd5SXJ5VdDWn7hRbUKGMeXgi9aMWLmkBbVd7?=
- =?us-ascii?Q?207IM6VKsJ5PcY4IjOooUdI+xP/wk9rr6tneGYrUS+b4oqfNSFvrWDA/2C3h?=
- =?us-ascii?Q?rJ/6wBsrzf+/28hsiPUDv7vHCpbRV73Lylvc11kRQUvzTKNvCGNXGOWefNhu?=
- =?us-ascii?Q?+bjidp/jp/kohDfw+yDBvOkznUooa84Qgkueik2EKwuJubRUdlTt0A5v7hob?=
- =?us-ascii?Q?KqXUxJkSTu0BKTN9K3j89CLsAugnnSOPWIMnax8b?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f81aa1c4-3bc7-41ad-8c91-08db0a5d586c
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 05:20:23.7145
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PFNb9n2JUY7LlRoLfQUzKU/LFWxILRnYS35R2kkBRd5M5MoKmIKL1RED4rYsqnvgoIrsPy3tX3/9Gpx1mTGB1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4251
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V2 5/5] arm64: dts: qcom: ipq5332: enable the CPUFreq
+ support
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>
+References: <20230208042850.1687-1-quic_kathirav@quicinc.com>
+ <20230208042850.1687-6-quic_kathirav@quicinc.com>
+ <61ca391d-05d4-d02b-f57e-5dd0297feceb@linaro.org>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <61ca391d-05d4-d02b-f57e-5dd0297feceb@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Vd3Oo-h3ibUXmvFWTMj3sSMw-h0tc5Pe
+X-Proofpoint-ORIG-GUID: Vd3Oo-h3ibUXmvFWTMj3sSMw-h0tc5Pe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-09_02,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2302090048
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add this doc to the erofs maintainers entry.
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+On 2/8/2023 2:11 PM, Konrad Dybcio wrote:
+>
+> On 8.02.2023 05:28, Kathiravan T wrote:
+>> Add the APCS, A53 PLL, cpu-opp-table nodes to bump the CPU frequency
+>> above 800MHz.
+>>
+>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+>> ---
+>> Changes in V2:
+>> 	- No changes
+>>
+>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 37 +++++++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> index bdf33ef30e10..cec2828c51f8 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> @@ -5,6 +5,7 @@
+>>    * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>    */
+>>   
+>> +#include <dt-bindings/clock/qcom,apss-ipq.h>
+>>   #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>   
+>> @@ -35,6 +36,8 @@
+>>   			reg = <0x0>;
+>>   			enable-method = "psci";
+>>   			next-level-cache = <&L2_0>;
+>> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>> +			operating-points-v2 = <&cpu_opp_table>;
+>>   		};
+>>   
+>>   		CPU1: cpu@1 {
+>> @@ -43,6 +46,8 @@
+>>   			reg = <0x1>;
+>>   			enable-method = "psci";
+>>   			next-level-cache = <&L2_0>;
+>> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>> +			operating-points-v2 = <&cpu_opp_table>;
+>>   		};
+>>   
+>>   		CPU2: cpu@2 {
+>> @@ -51,6 +56,8 @@
+>>   			reg = <0x2>;
+>>   			enable-method = "psci";
+>>   			next-level-cache = <&L2_0>;
+>> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>> +			operating-points-v2 = <&cpu_opp_table>;
+>>   		};
+>>   
+>>   		CPU3: cpu@3 {
+>> @@ -59,6 +66,8 @@
+>>   			reg = <0x3>;
+>>   			enable-method = "psci";
+>>   			next-level-cache = <&L2_0>;
+>> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>> +			operating-points-v2 = <&cpu_opp_table>;
+>>   		};
+>>   
+>>   		L2_0: l2-cache {
+>> @@ -67,6 +76,16 @@
+>>   		};
+>>   	};
+>>   
+>> +	cpu_opp_table: opp-table-cpu{
+> opp-table-cpu {
+> + sort this properly (by node name, not label), please
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d0485b58b9d9..7d50e5df4508 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7745,6 +7745,7 @@ R:	Jeffle Xu <jefflexu@linux.alibaba.com>
- L:	linux-erofs@lists.ozlabs.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git
-+F:	Documentation/ABI/testing/sysfs-fs-erofs
- F:	Documentation/filesystems/erofs.rst
- F:	fs/erofs/
- F:	include/trace/events/erofs.h
--- 
-2.25.1
 
+ahh, missed this. Will fix it in next spin.
+
+
+>
+>> +		compatible = "operating-points-v2";
+>> +		opp-shared;
+>> +
+>> +		opp-1488000000 {
+> Why only one (presumably FMAX) target? This sounds
+> very destructive to power consumption, and by extension
+> heat output.
+
+
+SKU is designed to operate on 1.48GHz only.
+
+
+>
+> The other changes generally look good fwiw.
+>
+> Konrad
+>> +			opp-hz = /bits/ 64 <1488000000>;
+>> +			clock-latency-ns = <200000>;
+>> +		};
+>> +	};
+>> +
+>>   	firmware {
+>>   		scm {
+>>   			compatible = "qcom,scm-ipq5332", "qcom,scm";
+>> @@ -199,6 +218,24 @@
+>>   			};
+>>   		};
+>>   
+>> +		apcs_glb: mailbox@b111000 {
+>> +			compatible = "qcom,ipq5332-apcs-apps-global",
+>> +				     "qcom,ipq6018-apcs-apps-global";
+>> +			reg = <0x0b111000 0x1000>;
+>> +			#clock-cells = <1>;
+>> +			clocks = <&a53pll>, <&xo_board>;
+>> +			clock-names = "pll", "xo";
+>> +			#mbox-cells = <1>;
+>> +		};
+>> +
+>> +		a53pll: clock@b116000 {
+>> +			compatible = "qcom,ipq5332-a53pll";
+>> +			reg = <0x0b116000 0x40>;
+>> +			#clock-cells = <0>;
+>> +			clocks = <&xo_board>;
+>> +			clock-names = "xo";
+>> +		};
+>> +
+>>   		timer@b120000 {
+>>   			compatible = "arm,armv7-timer-mem";
+>>   			reg = <0x0b120000 0x1000>;
