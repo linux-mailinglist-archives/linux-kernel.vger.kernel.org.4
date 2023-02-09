@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9E7690C1B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225A8690C23
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbjBIOo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        id S230108AbjBIOrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:47:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjBIOow (ORCPT
+        with ESMTP id S229551AbjBIOrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:44:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46953144AB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:44:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675953843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dx1WFhuru97TXbKr743lMhpAHRlKr7+HVqCxIDBtFoQ=;
-        b=eqNCWT5mJ14E2wv9b5WLwLHFq6No5XTyzpy+ywO4ott8HCyWDfVYc0WWg5qEWLz1FF1rp7
-        ZIosxoy6D6wuH30cLYx1iMcyV1LF6GBgpwGgl5zasO4d2juNqYrueKM6/Ubz3/kTGOqj2r
-        Xe0jIxIvCONQmm0Vs6JfJwA/GPf9bWM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-493-gXgQnXU3NLywGs5w4Us0zA-1; Thu, 09 Feb 2023 09:44:00 -0500
-X-MC-Unique: gXgQnXU3NLywGs5w4Us0zA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF894382C971;
-        Thu,  9 Feb 2023 14:43:59 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.39.193.146])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6D4772166B2A;
-        Thu,  9 Feb 2023 14:43:58 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 6.2-rc8
-Date:   Thu,  9 Feb 2023 15:42:27 +0100
-Message-Id: <20230209144227.37380-1-pabeni@redhat.com>
+        Thu, 9 Feb 2023 09:47:17 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAAD402CD;
+        Thu,  9 Feb 2023 06:47:15 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id c26so2248281ejz.10;
+        Thu, 09 Feb 2023 06:47:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JA1dtStn/FELPiXnU/VmDeB+f/rDJ8+vPh28Fy48pYw=;
+        b=b+S+v7yTsIIFc/qiVsiiGUPhm8BFWv9mKu53Sg0WaIwcDvnkRKVPnCSgU3m89ijvT3
+         W2bLTq6OrlX9Dt+xg80VrF/gYR3PQdlIIhj67Sr4iAYqKg1IKTSCJ0qZxYrpQR4ctTkL
+         9/1IVt3SWTkXa/R1lqrQzb2Tzj0YpVc8OIAPXabutA+l/zW1sPVgAYEFTfTL92GW472j
+         3eSs0jjKVyyS26r9UZrqQF/Y4982O5GOzfPnz6FyVQlpkhVnJOT3TJQuj/ITzQPR1hzm
+         1LXGu3crCUn09Fmx0JvaWbW76ZrcCRSqYw+44lsgRMyvrIFubKxxyxpE9Hf/rPnPghnh
+         EgHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JA1dtStn/FELPiXnU/VmDeB+f/rDJ8+vPh28Fy48pYw=;
+        b=O0lqMiBGU1eEjHPNmzXYrSLdwFhKd+eTcFcElJdC2U3eCOWlYIL+81OviQMh95KG+6
+         YLGH6uaZPO52V2oLNBStQGDNbhW4yvKuw0svVFZW4JQOkXZwzCAhGHZHj6na42tWucJe
+         ccZfSyK6bkNxIcSTSxVNUmcAYInawXaXx4Gb2B4VjlfJOPhqrx/F+FUY5eD42GRW6RSF
+         Bk2wr3gPtosbwVkzBnsSjTOTuhX44NbE30u1EYdO1VbZTjLa7dd7HWAEvWZrjoI8Rnsz
+         y31VViPZt67sfFTJC6P1ygXYSMyt1CwGnnmzeJ5v69GlDRptiwszQB3EJoTuXtff8X7s
+         04Pg==
+X-Gm-Message-State: AO0yUKUyBz3tjS9O/0j/za9Qmd9F979Sz5shYBKstsw/IWBBHW0vi8hP
+        qAblaqJueIEXcW2a0cAFJXA=
+X-Google-Smtp-Source: AK7set8+Nd1FHDML75QGlIUrQhfdsOT1PjTWh9yS5jCBDzIQINv4qGXDpxa2gKhyOMQDukzv7zCOmg==
+X-Received: by 2002:a17:907:a391:b0:8a9:f870:d25b with SMTP id se17-20020a170907a39100b008a9f870d25bmr11247487ejc.15.1675954034537;
+        Thu, 09 Feb 2023 06:47:14 -0800 (PST)
+Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
+        by smtp.gmail.com with ESMTPSA id fi9-20020a170906da0900b0084c6ec69a9dsm950533ejb.124.2023.02.09.06.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 06:47:13 -0800 (PST)
+Message-ID: <23e899f83c4f05a18deb2f86047d57d941205374.camel@gmail.com>
+Subject: Re: [PATCH v2] net/usb: kalmia: Fix uninit-value in
+ kalmia_send_init_packet
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     Jiri Pirko <jiri@resnulli.us>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Thu, 09 Feb 2023 15:47:12 +0100
+In-Reply-To: <Y9pY61y1nwTuzMOa@nanopsycho>
+References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
+         <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+         <Y9pY61y1nwTuzMOa@nanopsycho>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,275 +80,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
-
-To the better of my knowledge, no outstanding regressions.
-
-The following changes since commit edb9b8f380c3413bf783475279b1a941c7e5cec1:
-
-  Merge tag 'net-6.2-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-02-02 14:03:31 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.2-rc8
-
-for you to fetch changes up to 3a082086aa200852545cf15159213582c0c80eba:
-
-  selftests: forwarding: lib: quote the sysctl values (2023-02-09 11:05:38 +0100)
-
-----------------------------------------------------------------
-Networking fixes for 6.2-rc8, including fixes from can and
-ipsec subtrees
-
-Current release - regressions:
-
- - sched: fix off by one in htb_activate_prios()
-
- - eth: mana: fix accessing freed irq affinity_hint
-
- - eth: ice: fix out-of-bounds KASAN warning in virtchnl
-
-Current release - new code bugs:
-
- - eth: mtk_eth_soc: enable special tag when any MAC uses DSA
-
-Previous releases - always broken:
-
- - core: fix sk->sk_txrehash default
-
- - neigh: make sure used and confirmed times are valid
-
- - mptcp: be careful on subflow status propagation on errors
-
- - xfrm: prevent potential spectre v1 gadget in xfrm_xlate32_attr()
-
- - phylink: move phy_device_free() to correctly release phy device
-
- - eth: mlx5:
-   - fix crash unsetting rx-vlan-filter in switchdev mode
-   - fix hang on firmware reset
-   - serialize module cleanup with reload and remove
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-
-----------------------------------------------------------------
-Adham Faris (1):
-      net/mlx5e: Update rx ring hw mtu upon each rx-fcs flag change
-
-Alan Stern (1):
-      net: USB: Fix wrong-direction WARNING in plusb.c
-
-Allen Hubbe (1):
-      ionic: missed doorbell workaround
-
-Amir Tzin (1):
-      net/mlx5e: Fix crash unsetting rx-vlan-filter in switchdev mode
-
-Anastasia Belova (1):
-      xfrm: compat: change expression for switch in xfrm_xlate64
-
-Anirudh Venkataramanan (1):
-      ice: Do not use WQ_MEM_RECLAIM flag for workqueue
-
-Arınç ÜNAL (1):
-      net: ethernet: mtk_eth_soc: enable special tag when any MAC uses DSA
-
-Benedict Wong (1):
-      Fix XFRM-I support for nested ESP tunnels
-
-Brett Creeley (1):
-      ice: Fix disabling Rx VLAN filtering with port VLAN enabled
-
-Casper Andersson (1):
-      net: microchip: sparx5: fix PTP init/deinit not checking all ports
-
-Christian Hopps (1):
-      xfrm: fix bug with DSCP copy to v6 from v4 tunnel
-
-Clément Léger (1):
-      net: phylink: move phy_device_free() to correctly release phy device
-
-Dan Carpenter (2):
-      ice: Fix off by one in ice_tc_forward_to_queue()
-      net: sched: sch: Fix off by one in htb_activate_prios()
-
-David S. Miller (1):
-      Merge branch 'mptcp-fixes'
-
-Devid Antonio Filoni (1):
-      can: j1939: do not wait 250 ms if the same addr was already claimed
-
-Dragos Tatulea (1):
-      net/mlx5e: IPoIB, Show unknown speed instead of error
-
-Eric Dumazet (3):
-      xfrm/compat: prevent potential spectre v1 gadget in xfrm_xlate32_attr()
-      xfrm: consistently use time64_t in xfrm_timer_handler()
-      xfrm: annotate data-race around use_time
-
-Haiyang Zhang (1):
-      net: mana: Fix accessing freed irq affinity_hint
-
-Hangbin Liu (1):
-      selftests: forwarding: lib: quote the sysctl values
-
-Heiner Kallweit (1):
-      net: phy: meson-gxl: use MMD access dummy stubs for GXL, internal PHY
-
-Herton R. Krzesinski (1):
-      uapi: add missing ip/ipv6 header dependencies for linux/stddef.h
-
-Ido Schimmel (1):
-      selftests: Fix failing VXLAN VNI filtering test
-
-Jakub Kicinski (5):
-      Merge branch 'ionic-code-maintenance'
-      Merge tag 'linux-can-fixes-for-6.2-20230207' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
-      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge tag 'mlx5-fixes-2023-02-07' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
-      Merge tag 'ipsec-2023-02-08' of git://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec
-
-Jiawen Wu (1):
-      net: txgbe: Update support email address
-
-Jiri Pirko (1):
-      devlink: change port event netdev notifier from per-net to global
-
-Julian Anastasov (1):
-      neigh: make sure used and confirmed times are valid
-
-Kevin Yang (1):
-      txhash: fix sk->sk_txrehash default
-
-Maher Sanalla (2):
-      net/mlx5: Store page counters in a single array
-      net/mlx5: Expose SF firmware pages counter
-
-Matthieu Baerts (1):
-      selftests: mptcp: stop tests earlier
-
-Michael Kelley (1):
-      hv_netvsc: Allocate memory in netvsc_dma_map() with GFP_ATOMIC
-
-Michal Swiatkowski (1):
-      ice: fix out-of-bounds KASAN warning in virtchnl
-
-Neel Patel (1):
-      ionic: clean interrupt before enabling queue to avoid credit race
-
-Paolo Abeni (5):
-      mptcp: do not wait for bare sockets' timeout
-      mptcp: fix locking for setsockopt corner-case
-      mptcp: fix locking for in-kernel listener creation
-      mptcp: be careful on subflow status propagation on errors
-      selftests: mptcp: allow more slack for slow test-case
-
-Pietro Borrello (1):
-      rds: rds_rm_zerocopy_callback() use list_first_entry()
-
-Qi Zheng (1):
-      bonding: fix error checking in bond_debug_reregister()
-
-Radhey Shyam Pandey (1):
-      net: macb: Perform zynqmp dynamic configuration only for SGMII interface
-
-Sasha Neftin (1):
-      igc: Add ndo_tx_timeout support
-
-Shannon Nelson (1):
-      ionic: clear up notifyq alloc commentary
-
-Shay Drory (3):
-      net/mlx5: fw_tracer, Clear load bit when freeing string DBs buffers
-      net/mlx5: fw_tracer, Zero consumer index when reloading the tracer
-      net/mlx5: Serialize module cleanup with reload and remove
-
-Tariq Toukan (1):
-      net: ethernet: mtk_eth_soc: fix wrong parameters order in __xdp_rxq_info_reg()
-
-Vlad Buslov (1):
-      net/mlx5: Bridge, fix ageing of peer FDB entries
-
-Vladimir Oltean (5):
-      net: dsa: mt7530: don't change PVC_EG_TAG when CPU port becomes VLAN-aware
-      net: mscc: ocelot: fix VCAP filters not matching on MAC with "protocol 802.1Q"
-      selftests: ocelot: tc_flower_chains: make test_vlan_ingress_modify() more comprehensive
-      net: ethernet: mtk_eth_soc: fix DSA TX tag hwaccel for switch port 0
-      net: mscc: ocelot: fix all IPv6 getting trapped to CPU when PTP timestamping is used
-
-Yevgeny Kliteynik (1):
-      net/mlx5: DR, Fix potential race in dr_rule_create_rule_nic
-
-Yu Xiao (1):
-      nfp: ethtool: fix the bug of setting unsupported port speed
-
-Zhang Changzhong (1):
-      ice: switch: fix potential memleak in ice_add_adv_recipe()
-
- .../device_drivers/ethernet/wangxun/txgbe.rst      |   2 +-
- drivers/net/bonding/bond_debugfs.c                 |   2 +-
- drivers/net/dsa/mt7530.c                           |  26 ++-
- drivers/net/ethernet/cadence/macb_main.c           |  31 ++--
- drivers/net/ethernet/intel/ice/ice_common.c        |   9 +-
- drivers/net/ethernet/intel/ice/ice_main.c          |   2 +-
- drivers/net/ethernet/intel/ice/ice_switch.c        |   2 +-
- drivers/net/ethernet/intel/ice/ice_tc_lib.c        |   2 +-
- drivers/net/ethernet/intel/ice/ice_vf_mbx.c        |  21 +--
- .../net/ethernet/intel/ice/ice_vf_vsi_vlan_ops.c   |  16 +-
- drivers/net/ethernet/intel/igc/igc_main.c          |  25 ++-
- drivers/net/ethernet/mediatek/mtk_eth_soc.c        |  36 ++--
- drivers/net/ethernet/mellanox/mlx5/core/debugfs.c  |   5 +-
- .../ethernet/mellanox/mlx5/core/diag/fw_tracer.c   |   3 +-
- drivers/net/ethernet/mellanox/mlx5/core/ecpf.c     |   2 +-
- .../ethernet/mellanox/mlx5/core/en/rep/bridge.c    |   4 -
- drivers/net/ethernet/mellanox/mlx5/core/en_fs.c    |   2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |  90 ++--------
- .../net/ethernet/mellanox/mlx5/core/esw/bridge.c   |   2 +-
- .../ethernet/mellanox/mlx5/core/ipoib/ethtool.c    |  13 +-
- drivers/net/ethernet/mellanox/mlx5/core/main.c     |  14 +-
- .../net/ethernet/mellanox/mlx5/core/pagealloc.c    |  37 ++--
- drivers/net/ethernet/mellanox/mlx5/core/sriov.c    |   2 +-
- .../ethernet/mellanox/mlx5/core/steering/dr_rule.c |  25 +--
- drivers/net/ethernet/microchip/sparx5/sparx5_ptp.c |   4 +-
- drivers/net/ethernet/microsoft/mana/gdma_main.c    |  37 ++--
- drivers/net/ethernet/mscc/ocelot_flower.c          |  24 +--
- drivers/net/ethernet/mscc/ocelot_ptp.c             |   8 +-
- .../net/ethernet/netronome/nfp/nfp_net_ethtool.c   | 194 +++++++++++++++++----
- drivers/net/ethernet/netronome/nfp/nfp_port.h      |  12 ++
- drivers/net/ethernet/pensando/ionic/ionic_dev.c    |   9 +-
- drivers/net/ethernet/pensando/ionic/ionic_dev.h    |  12 ++
- drivers/net/ethernet/pensando/ionic/ionic_lif.c    |  68 +++++++-
- drivers/net/ethernet/pensando/ionic/ionic_lif.h    |   2 +
- drivers/net/ethernet/pensando/ionic/ionic_main.c   |  29 +++
- drivers/net/ethernet/pensando/ionic/ionic_txrx.c   |  87 ++++++++-
- drivers/net/hyperv/netvsc.c                        |   2 +-
- drivers/net/phy/meson-gxl.c                        |   2 +
- drivers/net/phy/phylink.c                          |   5 +-
- drivers/net/usb/plusb.c                            |   4 +-
- include/linux/mlx5/driver.h                        |  13 +-
- include/uapi/linux/ip.h                            |   1 +
- include/uapi/linux/ipv6.h                          |   1 +
- net/can/j1939/address-claim.c                      |  40 +++++
- net/core/devlink.c                                 |   9 +-
- net/core/neighbour.c                               |  18 +-
- net/core/sock.c                                    |   3 +-
- net/ipv4/af_inet.c                                 |   1 +
- net/ipv4/inet_connection_sock.c                    |   3 -
- net/ipv6/af_inet6.c                                |   1 +
- net/mptcp/pm_netlink.c                             |  10 +-
- net/mptcp/protocol.c                               |   9 +
- net/mptcp/sockopt.c                                |  11 +-
- net/mptcp/subflow.c                                |  12 +-
- net/rds/message.c                                  |   6 +-
- net/sched/sch_htb.c                                |   2 +-
- net/xfrm/xfrm_compat.c                             |   4 +-
- net/xfrm/xfrm_input.c                              |   3 +-
- net/xfrm/xfrm_interface_core.c                     |  54 +++++-
- net/xfrm/xfrm_policy.c                             |  14 +-
- net/xfrm/xfrm_state.c                              |  18 +-
- .../drivers/net/ocelot/tc_flower_chains.sh         |   2 +-
- tools/testing/selftests/net/forwarding/lib.sh      |   4 +-
- tools/testing/selftests/net/mptcp/mptcp_join.sh    |  22 ++-
- .../selftests/net/test_vxlan_vnifiltering.sh       |  18 +-
- 65 files changed, 798 insertions(+), 353 deletions(-)
-
+On Wed, 2023-02-01 at 13:19 +0100, Jiri Pirko wrote:
+> Tue, Jan 31, 2023 at 03:20:33PM CET, mikoxyzzz@gmail.com=C2=A0wrote:
+> > syzbot reports that act_len in kalmia_send_init_packet() is
+> > uninitialized. Fix this by initializing it to 0.
+> >=20
+> > Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for
+> > Samsung GT-B3730")
+> > Reported-and-tested-by:
+> > syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.com
+> > Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
+> > ---
+> > v1 -> v2
+> > * Minor alteration of commit message.
+> > * Added 'reported-and-tested-by' which is attributed to syzbot.
+> >=20
+> > drivers/net/usb/kalmia.c | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+> > index 9f2b70ef39aa..b158fb7bf66a 100644
+> > --- a/drivers/net/usb/kalmia.c
+> > +++ b/drivers/net/usb/kalmia.c
+> > @@ -56,7 +56,7 @@ static int
+> > kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8
+> > init_msg_len,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u8 *buffer, u8 expected=
+_len)
+> > {
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int act_len;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int act_len =3D 0;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int status;
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0netdev_dbg(dev->net, "S=
+ending init packet");
+>=20
+> Hmm, this is not the right fix.
+>=20
+> If the second call of usb_bulk_msg() in this function returns !=3D 0,
+> the
+> act_len printed out contains the value from previous usb_bulk_msg()
+> call,
+> which does not make sense.
+>=20
+> Printing act_len on error path is pointless, so rather remove it from
+> the error message entirely for both usb_bulk_msg() calls.
+
+Something like this, then?
+
+diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+index 9f2b70ef39aa..613fc6910f14 100644
+--- a/drivers/net/usb/kalmia.c
++++ b/drivers/net/usb/kalmia.c
+@@ -65,8 +65,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
+ u8 init_msg_len,
+ 		init_msg, init_msg_len, &act_len, KALMIA_USB_TIMEOUT);
+ 	if (status !=3D 0) {
+ 		netdev_err(dev->net,
+-			"Error sending init packet. Status %i, length %i\n",
+-			status, act_len);
++			"Error sending init packet. Status %i\n",
++			status);
+ 		return status;
+ 	}
+ 	else if (act_len !=3D init_msg_len) {
+@@ -83,8 +83,8 @@ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg,=
+ u8 init_msg_len,
+=20
+ 	if (status !=3D 0)
+ 		netdev_err(dev->net,
+-			"Error receiving init result. Status %i, length %i\n",
+-			status, act_len);
++			"Error receiving init result. Status %i\n",
++			status);
+ 	else if (act_len !=3D expected_len)
+ 		netdev_err(dev->net, "Unexpected init result length: %i\n",
+ 			act_len);
+
+--=20
+~miko
