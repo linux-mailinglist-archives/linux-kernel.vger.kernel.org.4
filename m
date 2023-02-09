@@ -2,183 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6B9690B7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFA5690B84
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjBIOQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
+        id S230418AbjBIOSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjBIOQu (ORCPT
+        with ESMTP id S230071AbjBIOSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:16:50 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E525A10AA4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:16:48 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id 139so1038334ybe.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:16:48 -0800 (PST)
+        Thu, 9 Feb 2023 09:18:32 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6A82E823;
+        Thu,  9 Feb 2023 06:18:30 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so1646194wms.1;
+        Thu, 09 Feb 2023 06:18:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S3LhjlGAoOIaNmMnea1gJTwjbr7JWRXAi3r+eUWSseo=;
-        b=Wp0LBviDkRG9btkeltk0cs+U7e6O8uvQJHsH/Y1H8T8Cg3U4/SotkUq9opub8jPnhb
-         qsCb13jrVjPFtwcxqjzBQ5GuhfzaiCs3lNNBciAlAVrNhGn8Pl2fLsLOjD9BE3B8n2VJ
-         2t5PoifwBruK/wJ/GrG+/jBnYzDKubpdIKwRtS6XxozEzNUuUGfqbvwanK9SZWfTihQ5
-         UEUjX7mXUogbVYme4EmtsBquQy5Zod8jXWrb7TclLuCHWLuBg6PC7T6X3uUuLyq/CtBF
-         ipzgcJIU/G8ckejMV+KkAoX4/sEmTX1VF9gsZE4UwazrNJHcWJx043hf/FcrqmOMRUmS
-         VcIQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n6rfU3Snjl72LWDE6qX15Ocps4cU89fmRgYsFNMufWk=;
+        b=ptrgdRIUbWXZm/c9lvzocxPMYQ+eryxsewr3pbMPofs6WTJXzB1Ds06zzWNlpBFdfE
+         y52VbKkz22dnSCkSuVB6Kqy3Bn0EYvx/voJ6fcGkXc58mN+umM38sBmb1NfC6eTgR5/g
+         Qf4APaaY5Q4j3X5wFir1KJ4coiw/6UX1yJdqYkpE8FxOrw5mgdwYIa0ulh3uF+ZoVJ+5
+         ZQwXYAh9ubL1aXAeRfScDXJx+1YpSXNUVuWCwt2sfQeC6U5GThIdQyWV3OUK6IRbji9x
+         ErxpRJynYb6LskLmbQBbz9a93hHFi7tmhPeCzwsN8HHYsmcdIEvrpMGPKtABOHieEgSX
+         jkiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S3LhjlGAoOIaNmMnea1gJTwjbr7JWRXAi3r+eUWSseo=;
-        b=x44ZjjNh9qfSIIo4O2xpLOUgtKSFiZs7y2u1wuNT8MbeNiHf3KX2Kk6+vatnpyWGoS
-         iUhU1Ns1KbU98RaojtHwSokLAOXuzdMhbFFzB8bY90f+NJ52UGUa16z57mEMHuM+fawC
-         nDorTNyyjZyk+sqgmvD1AxzpBU9mAoLfYmR3vWDjkrzR+i1OMjrrlT1Jz80t7BBbD5MD
-         wbz3cgz7LL2lJjJC1Q487cCtokha0MKiji+zAiQ8sW/vYPu0aXe7COvwuwbNfd+JyEzQ
-         uHXEUyaTxXZqqw9+VqZTJVUAPK8cBy1DRXtiNUWPmGx2mpDJOWmDNr5zN+yb/PkbQQAe
-         wDnQ==
-X-Gm-Message-State: AO0yUKUmFCGWr92QV87eOqxDfqALVG+OrvuOdcYmkBMlvOcBWf7+KE2v
-        EmOwVZqytrOttp3lKhK+1SKcXvc77TVLysOWNOxWoA==
-X-Google-Smtp-Source: AK7set+8s6alxg2Gdtgth43zuRJPxNL8Sj2DVgRo67+4nX4VEDIS4u4HMQ4H6bGKYl/BVbVUuNp0v17FjA/IAhzukxg=
-X-Received: by 2002:a25:f301:0:b0:859:2acc:deb6 with SMTP id
- c1-20020a25f301000000b008592accdeb6mr1205990ybs.79.1675952207653; Thu, 09 Feb
- 2023 06:16:47 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n6rfU3Snjl72LWDE6qX15Ocps4cU89fmRgYsFNMufWk=;
+        b=yf4AAuEn8AoNkJoA6DsVt3yXwDWzQK3iCZDwMlc7gHDCX9GcuULMjmd3AxIBKXW8BK
+         h1svAFYUUJYhBMAnxNQmxRcmHSfTjcOOHPyoLNiYY1QhYL2MnEu7XKlKY003l7jEvM4p
+         MXfixi7HJ0DC34xn4pQD7dhwCc9avFi2Mz4lnFRE9MsrcxOtWpjtTBjBE9L2wT43dXpw
+         4QW+w5E3y80VQYRSmjMUZ5Owhh30HJB7h3dOnAOLC2CdshfM3e4FUwe6mrMzvyEjE+4o
+         H6JpwtIIMgL0+9JXF4y0Tj5e1BwDbAtXnZdocjYIezWnY+1kixuAXvxvAOrxjEZn+cES
+         uVFA==
+X-Gm-Message-State: AO0yUKUnc93qe0TOUt+PEoNyjQnSqeod7S98TQky8gsmOvIokxbLbfB/
+        LrjLNSPjZglkwmz6T5ouUBY=
+X-Google-Smtp-Source: AK7set/oU2MQE6PRrUGZeem/G28nDvWH2jZGBGq/aX3yec9+KFq5SeSvdk3RbW/QsABFEFJLifd0VA==
+X-Received: by 2002:a05:600c:4d21:b0:3de:e447:8025 with SMTP id u33-20020a05600c4d2100b003dee4478025mr9943371wmp.21.1675952309295;
+        Thu, 09 Feb 2023 06:18:29 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id o41-20020a05600c512900b003dc4aae4739sm5886452wms.27.2023.02.09.06.18.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 06:18:28 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 9 Feb 2023 15:18:26 +0100
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [RFC 0/5] mm/bpf/perf: Store build id in file object
+Message-ID: <Y+UAsr8A+xT0bUY/@krava>
+References: <20230201135737.800527-1-jolsa@kernel.org>
 MIME-Version: 1.0
-References: <20230208175253.117714-1-mauro.lima@eclypsium.com> <Y+SHH2+VqLoQ+6Ss@black.fi.intel.com>
-In-Reply-To: <Y+SHH2+VqLoQ+6Ss@black.fi.intel.com>
-From:   Mauro Lima <mauro.lima@eclypsium.com>
-Date:   Thu, 9 Feb 2023 11:16:36 -0300
-Message-ID: <CAArk9MM4ZBL=_+xcJzb3X7yGyKQ6knbbsKAS+y_09Vs6pD4W=w@mail.gmail.com>
-Subject: Re: [PATCH] spi: intel: Update help text of PCI driver
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     broonie@kernel.org, michael@walle.cc, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201135737.800527-1-jolsa@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mika,
+On Wed, Feb 01, 2023 at 02:57:32PM +0100, Jiri Olsa wrote:
+> hi,
+> we have a use cases for bpf programs to use binary file's build id.
+> 
+> After some attempts to add helpers/kfuncs [1] [2] Andrii had an idea [3]
+> to store build id directly in the file object. That would solve our use
+> case and might be beneficial for other profiling/tracing use cases with
+> bpf programs.
+> 
+> This RFC patchset adds new config CONFIG_FILE_BUILD_ID option, which adds
+> build id object pointer to the file object when enabled. The build id is
+> read/populated when the file is mmap-ed.
+> 
+> I also added bpf and perf changes that would benefit from this.
+> 
+> I'm not sure what's the policy on adding stuff to file object, so apologies
+> if that's out of line. I'm open to any feedback or suggestions if there's
+> better place or way to do this.
 
-On Thu, Feb 9, 2023 at 2:39 AM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Wed, Feb 08, 2023 at 02:52:53PM -0300, Mauro Lima wrote:
-> > Modern intel hardware uses controllers that work in hardware
-> > sequencing mode. In this mode, the controller exposes a subset
-> > of operations, like read, write and erase, making it easier
-> > and less error-prone for use.
-> > On the other hand, most of the controllers handled by the
-> > platform driver use software sequencing that exposes the
-> > entire set of opcodes i.e. include the low-level operations
-> > available from the controller.
-> >
-> > Since the PCI driver works with modern controllers, remove the
-> > DANGEROUS tag from it.
-> > Update the driver's help text and leave the DANGEROUS tag of
-> > the platform driver.
->
-> This is not done in this commit. You just update the help texts, right?
-Yes, you are right, I will update it.
+hi,
+Matthew suggested on irc to consider inode for storing build id
 
-> > Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
-> > ---
-> >  For the record of the base commit:
-> >
-> >  Given that the PCI driver handles controllers that only work with
-> >  hardware sequencing, we can remove the dangerous tag.
-> >  This patch is the second part of Mika's suggestion [1].
-> >  The first part was accepted in [2].
-> >
-> >  [1] https://lore.kernel.org/r/Y1d9glOgHsQlZe2L@black.fi.intel.com/
-> >  [2] https://lore.kernel.org/linux-spi/20230201205455.550308-1-mauro.lima@eclypsium.com/
-> >
-> >  This patch continues the work addressing the comments in the previous
-> >  patch adding information about hardware and software sequencing.
-> >  Discussion: https://lore.kernel.org/r/20230206183143.75274-1-mauro.lima@eclypsium.com/
-> >
-> >  drivers/spi/Kconfig | 21 +++++++++++++--------
-> >  1 file changed, 13 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> > index 3a362c450cb6..9eb3c72d7cd8 100644
-> > --- a/drivers/spi/Kconfig
-> > +++ b/drivers/spi/Kconfig
-> > @@ -454,13 +454,16 @@ config SPI_INTEL_PCI
-> >       select SPI_INTEL
-> >       help
-> >         This enables PCI support for the Intel PCH/PCU SPI controller in
-> > -       master mode. This controller is present in modern Intel hardware
-> > -       and is used to hold BIOS and other persistent settings. This
-> > -       driver only supports hardware sequencing mode. Using this
-> > -       driver it is possible to upgrade BIOS directly from Linux.
-> > +       master mode. This controller is used to hold BIOS and other
-> > +       persistent settings. Controllers present in modern Intel hardware
-> > +       only work in hardware sequencing mode, this means that the
-> > +       controller exposes a subset of operations that makes it easier
-> > +       and safer to use. Using this driver it is possible to upgrade BIOS
->
-> I would remove the "easier" part because from user perspective there is
-> really no difference.
-Will do, thanks.
+I tried that and it seems to have better stats wrt allocated build
+id objects, because inode is being shared among file objects
 
-> > +       directly from Linux.
-> >
-> > -       Say N here unless you know what you are doing. Overwriting the
-> > -       SPI flash may render the system unbootable.
-> > +       Say N here unless you want to overwrite the flash memory and
->
-> Putting it like this surely scares all distro folks from ever enabling
-> this ;-)
->
->   "Say N here unless you want to overwrite the flash memory.."
->
-> At least to me this means that if you enable this option your flash
-> memory will be overwritten.
-Do you have a suggestion for the "Say N here" text? Maybe remove it
-since this is safe for use now? I found it difficult to rephrase it
+I took /proc/slabinfo output after running bpf tests
 
-> > +       know what you are doing or you want to read the memory's content.
-> > +       Overwriting the SPI flash may render the system unbootable.
-> >
-> >         To compile this driver as a module, choose M here: the module
-> >         will be called spi-intel-pci.
-> > @@ -473,8 +476,10 @@ config SPI_INTEL_PLATFORM
-> >       help
-> >         This enables platform support for the Intel PCH/PCU SPI
-> >         controller in master mode that is used to hold BIOS and other
-> > -       persistent settings. Most of these controllers are using
-> > -       software sequencing mode. Using this driver it is possible to
-> > +       persistent settings. Most of these controllers work in
-> > +       software sequencing mode, which means that the controller
-> > +       exposes the full set of operations that supports, making it
-> > +       more complex for use. Using this driver it is possible to
->
-> Here,
->
-> exposes the low level SPI-NOR opcodes to the software
-Ok
->
-> I think is better. Also here too drop the "complex" as it looks similar
-> from user perspective.
-I agree
-> >         upgrade BIOS directly from Linux.
-> >
-> >         Say N here unless you know what you are doing. Overwriting the
-> >
-> > base-commit: 7db738b5fea4533fa217dfb05c506c15bd0964d9
-> > --
-> > 2.39.1
+- build id stored in file:
 
-Thanks
+  # name            <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_slabs> <num_slabs> <sharedavail>
+  build_id             668    775    160   25    1 : tunables    0    0    0 : slabdata     31     31      0
+
+- build id stored in inode:
+
+  # name            <active_objs> <num_objs> <objsize> <objperslab> <pagesperslab> : tunables <limit> <batchcount> <sharedfactor> : slabdata <active_slabs> <num_slabs> <sharedavail>
+  build_id             222    225    160   25    1 : tunables    0    0    0 : slabdata      9      9      0
+
+
+I'm stranger to inode/fs/mm code so I'll spend some time checking on
+what I possibly broke in there before I send it, but I'd appreciate
+any early feedback ;-)
+
+the code is in here:
+  git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+  inode_build_id
+
+I'll send another version with inode if there's no objection
+
+thanks,
+jirka
+
+
+> 
+> thanks,
+> jirka
+> 
+> 
+> [1] https://lore.kernel.org/bpf/20221108222027.3409437-1-jolsa@kernel.org/
+> [2] https://lore.kernel.org/bpf/20221128132915.141211-1-jolsa@kernel.org/
+> [3] https://lore.kernel.org/bpf/CAEf4BzaZCUoxN_X2ALXwQeFTCwtL17R4P_B_-hUCcidfyO2xyQ@mail.gmail.com/
+> ---
+> Jiri Olsa (5):
+>       mm: Store build id in file object
+>       bpf: Use file object build id in stackmap
+>       perf: Use file object build id in perf_event_mmap_event
+>       selftests/bpf: Add file_build_id test
+>       selftests/bpf: Add iter_task_vma_buildid test
+> 
+>  fs/file_table.c                                               |  3 +++
+>  include/linux/buildid.h                                       | 17 +++++++++++++++++
+>  include/linux/fs.h                                            |  3 +++
+>  kernel/bpf/stackmap.c                                         |  8 ++++++++
+>  kernel/events/core.c                                          | 43 +++++++++++++++++++++++++++++++++++++++----
+>  lib/buildid.c                                                 | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  mm/Kconfig                                                    |  7 +++++++
+>  mm/mmap.c                                                     | 15 +++++++++++++++
+>  tools/testing/selftests/bpf/prog_tests/bpf_iter.c             | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  tools/testing/selftests/bpf/prog_tests/file_build_id.c        | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  tools/testing/selftests/bpf/progs/file_build_id.c             | 34 ++++++++++++++++++++++++++++++++++
+>  tools/testing/selftests/bpf/trace_helpers.c                   | 35 +++++++++++++++++++++++++++++++++++
+>  tools/testing/selftests/bpf/trace_helpers.h                   |  1 +
+>  14 files changed, 413 insertions(+), 4 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/file_build_id.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/file_build_id.c
