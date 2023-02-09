@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07D2691061
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3B5691065
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjBISgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S229538AbjBIShN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjBISgm (ORCPT
+        with ESMTP id S229657AbjBIShL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:36:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB7E68AE4;
-        Thu,  9 Feb 2023 10:36:34 -0800 (PST)
+        Thu, 9 Feb 2023 13:37:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8F331E0E;
+        Thu,  9 Feb 2023 10:36:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29859B8227D;
-        Thu,  9 Feb 2023 18:36:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 141E7C433EF;
-        Thu,  9 Feb 2023 18:36:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2D0561B7C;
+        Thu,  9 Feb 2023 18:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0322AC433D2;
+        Thu,  9 Feb 2023 18:36:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675967791;
-        bh=KJFYdKEwIQ4c63KYJlEOv6bHkZ40qvZiPlbsQ4nPPMc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=keTcFSJDyJWxI188DJ9zkzk0OZOjkllBpCgxCYXP73ogRTdu2nl3DdKqYia3nQoj1
-         66Hhmjr+RDnThjZW8oTuchniDteXnuiZ2HAxTdcU0Ex64GI5l5aYN9zzVPSWM8Du3n
-         4RAeh+wrzhMCpCJZ/3ecw9TDOVrB0KjvKJRK/xigHzuJSv3gd4V+RsCfuseVEz6Blc
-         qDToSqGR6x43J9rowSP6GW5Mw8HnILSWWZMNsFV4eqISMo/SN9R3JI6cdAUVERZSv4
-         BhgUlCEl7SbxJQPmH6yFuERuSohBPngTSmBvOD4NABczjtlatlbL7JdhcywdPNb/wa
-         YYeoCgfOoYc0w==
+        s=k20201202; t=1675967811;
+        bh=cA+dRECer0ig6WPe93m+aZhMCEF/NVpjI+9dwFw7KB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uL9jQeG2kyhbs16DqROePM9WuIbIYb5SD+pKtQXNSvm8tAyeWNJlB6YR6FZ+dTDxu
+         nEmE25wD66A7vITtA56jPidBHvLPwQ5e8YIKjxCdkJPnEsRuZbOZEra3Jq3JrV/Eef
+         Ej54XRoL0CtcLmJ3J5RohSkNnUO84ggpB17TDG78sVRJw6UNvdi2+JupoJswSu9Hab
+         WtfzWy5P9CVEA6EEUZ/6hjhz+BEHywr5gPOeXkecCdNxK/SO3WRl/tGnykXaOME/rA
+         sS3eaZgX1vqSne3Dsk+ZXODXceE9cA2u9HIFbP71VhHwLvDpOXjOxkQi+HBQ2Xwn8N
+         Apy1oEzHMDX0w==
+Date:   Thu, 9 Feb 2023 18:36:44 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        William Zhang <william.zhang@broadcom.com>,
+        kursad.oney@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com, dregan@mail.com,
+        joel.peshkin@broadcom.com, jonas.gorski@gmail.com,
+        tomer.yacoby@broadcom.com,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20230206144904.91078-1-herve.codina@bootlin.com>
-References: <20230206144904.91078-1-herve.codina@bootlin.com>
-Subject: Re: [PATCH 0/3] Add the Infineon PEB2466 codec support
-Message-Id: <167596778880.879652.18301706233837933352.b4-ty@kernel.org>
-Date:   Thu, 09 Feb 2023 18:36:28 +0000
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/15] spi: bcm63xx-hsspi: driver and doc updates
+Message-ID: <Y+U9PKGLXSYqnavN@sirena.org.uk>
+References: <20230207065826.285013-1-william.zhang@broadcom.com>
+ <167596308461.673456.2324521897149973878.b4-ty@kernel.org>
+ <ac6591f3-0420-3cd0-28b5-8b2ea333d723@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GAiDI2eAEhSaKSHt"
+Content-Disposition: inline
+In-Reply-To: <ac6591f3-0420-3cd0-28b5-8b2ea333d723@gmail.com>
+X-Cookie: Anger is momentary madness.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,45 +66,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Feb 2023 15:49:01 +0100, Herve Codina wrote:
-> The Infineon PEB2466 codec is a programmable DSP-based four channels
-> codec with filters capabilities.
-> It also provides signals as GPIOs.
-> 
-> Best regards,
-> Herve Codina
-> 
-> [...]
 
-Applied to
+--GAiDI2eAEhSaKSHt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+On Thu, Feb 09, 2023 at 10:34:34AM -0800, Florian Fainelli wrote:
+> On 2/9/23 09:18, Mark Brown wrote:
 
-Thanks!
+> > [03/15] ARM: dts: broadcom: bcmbca: Add spi controller node
+> >          (no commit info)
+> > [04/15] arm64: dts: broadcom: bcmbca: Add spi controller node
+> >          (no commit info)
 
-[1/3] dt-bindings: sound: Add the Infineon PEB2466 codec
-      commit: 4c03e952ad8688a28aed9b72fc48291240707c7d
-[2/3] ASoC: codecs: Add support for the Infineon PEB2466 codec
-      commit: 227f609c7c0e44f2103a8406ff9379ee1de3bc28
-[3/3] MAINTAINERS: add the Infineon PEB2466 codec entry
-      commit: 564972dbf85c0900521e6273b772fd7f0b720dd7
+> Usually we have SoC maintainers pick up the DTS patches affecting the
+> platforms they cover to avoid conflicts... I suppose that is fine.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Hence the "no commit info" - there's no commit for those changes.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--GAiDI2eAEhSaKSHt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPlPTwACgkQJNaLcl1U
+h9DY2Qf+JaoFXk8tUqSvhr5cAPLdoynTj2X3ZooLhSr5Y9HRp9lBU11hSgSZqgjV
+q1pZB+BFrTydI5u1H0+K4nimfFRLNxC8j6NQ2D7DIrCAvBSN7ocNvAiSkW2UcA8T
+1WQ4VjUSCeC2uUyrQA/j8RWTLn+H2nK6OsdWnBwss3iHTt63H6GvZ2Fd4mUbtTIJ
+qz7qCeTAglrjIasuIUsOR7ppT81MDDMw1eTJSh+3L+CNMlRyaSSZ1rrM+K9vfogQ
++7VniKjirsda4FvN6SjNrjxJV10FMoytm4YaYGa1iCivmcOWI1qEmXbnvEF4iKJz
+wFchrA17sU/EAYSWsvKGmfY/xmhCgw==
+=WbbJ
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
-
+--GAiDI2eAEhSaKSHt--
