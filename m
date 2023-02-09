@@ -2,131 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AB66912D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFD16912D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjBIVyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 16:54:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S230248AbjBIVyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 16:54:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjBIVyG (ORCPT
+        with ESMTP id S229712AbjBIVyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 16:54:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD59063120
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 13:53:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675979600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kZXtytW52eF9I6Wk1wiK455K/DS7KMbgwYg8Bzqjx40=;
-        b=c0sYeKeyQkRvau33MnvvFYGjMRPZHsZoXiTlYAVWS03hagfULy3Fo8vVmGNMVT3m6EsjO6
-        4K5PwczZvDrdBcuK0E06jWld1Idt7clIzWMNakQwhv8s+ZfZjFbIUEMPTWaUyvqYOlIxwZ
-        ZoXz69V36B+oiXBrMyU/npfBVa5NPGo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-349-gVWLNVltPZKBuDqcZfjoOQ-1; Thu, 09 Feb 2023 16:53:16 -0500
-X-MC-Unique: gVWLNVltPZKBuDqcZfjoOQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 9 Feb 2023 16:54:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C2D65682;
+        Thu,  9 Feb 2023 13:54:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A14E3806632;
-        Thu,  9 Feb 2023 21:53:16 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.50.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id ECB16140EBF6;
-        Thu,  9 Feb 2023 21:53:14 +0000 (UTC)
-Date:   Thu, 9 Feb 2023 16:53:12 -0500
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Stefan Roesch <shr@fb.com>
-Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
-Message-ID: <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
-References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
- <CAHC9VhS0rPfkwUT1WMfqsTF-qYXdbbhHAfVPs=d3ZQVgbXBHnw@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B965661BEC;
+        Thu,  9 Feb 2023 21:54:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005C7C433D2;
+        Thu,  9 Feb 2023 21:54:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675979645;
+        bh=vQHM1OmRYQezs1QT58/QKDPYGkARYmj/V8EfqvpU9KA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s/CbRAFl/FjApouvB+esmVUq7gObd6qZ/xcLA4A6i65tY6b0Gxojs/OtF/+nB98KN
+         xUpYxlVxQ+qPH2ANzPmkQ87lBdTAzhrrj5L5QMsAKcooENRKVUG4W2GKsk1gtbNDlH
+         OG4qjl/tHwwyhj1fpba0ZbdLRCjGnxHOhAOa8O49mJL8f15k1iKQk/hp3AZbbd6LTm
+         gzA0rBN8vVyi7vtNr+BFQFc+mrSsgr2ROd2mFt24+LJOSOMFxpv+alvXaNTgHMgnn3
+         J5C1e3xM9bJcOSwoIG+EcGz6YTC6hdcCGLgKdzReC44y2XXR9R09AYoggMy3r7xWUI
+         nLfI1o9XZ1Ldw==
+Date:   Thu, 9 Feb 2023 21:53:59 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH 21/24] RISC-V: ACPI: Add ACPI initialization in
+ setup_arch()
+Message-ID: <Y+Vrd88ShoaDc0Pv@spud>
+References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
+ <20230130182225.2471414-22-sunilvl@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ult5KqiXxhzSQt3L"
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhS0rPfkwUT1WMfqsTF-qYXdbbhHAfVPs=d3ZQVgbXBHnw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230130182225.2471414-22-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-01 16:18, Paul Moore wrote:
-> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > fadvise and madvise both provide hints for caching or access pattern for
-> > file and memory respectively.  Skip them.
-> 
-> You forgot to update the first sentence in the commit description :/
 
-I didn't forget.  I updated that sentence to reflect the fact that the
-two should be treated similarly rather than differently.
+--ult5KqiXxhzSQt3L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> I'm still looking for some type of statement that you've done some
-> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
-> up calling into the LSM, see my previous emails on this.  I need more
-> than "Steve told me to do this".
-> 
-> I basically just want to see that some care and thought has gone into
-> this patch to verify it is correct and good.
+On Mon, Jan 30, 2023 at 11:52:22PM +0530, Sunil V L wrote:
+> Initialize ACPI tables for RISC-V during boot.
+>=20
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> ---
+>  arch/riscv/kernel/setup.c | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 4335f08ffaf2..5b4ad1baf664 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -8,6 +8,7 @@
+>   *  Nick Kossifidis <mick@ics.forth.gr>
+>   */
+> =20
+> +#include <linux/acpi.h>
+>  #include <linux/init.h>
+>  #include <linux/mm.h>
+>  #include <linux/memblock.h>
+> @@ -276,14 +277,22 @@ void __init setup_arch(char **cmdline_p)
+> =20
+>  	efi_init();
+>  	paging_init();
+> +
+> +	/* Parse the ACPI tables for possible boot-time configuration */
+> +	acpi_boot_table_init();
+> +	if (acpi_disabled) {
+>  #if IS_ENABLED(CONFIG_BUILTIN_DTB)
 
-Steve suggested I look into a number of iouring ops.  I looked at the
-description code and agreed that it wasn't necessary to audit madvise.
-The rationale for fadvise was detemined to have been conflated with
-fallocate and subsequently dropped.  Steve also suggested a number of
-others and after investigation I decided that their current state was
-correct.  *getxattr you've advised against, so it was dropped.  It
-appears fewer modifications were necessary than originally suspected.
+I only poked it with a stick, but I think this `#if IS_ENABLED()` can
+be changed to a normal `if (IS_ENABLED())` while you're already
+modifying this code.
 
-> > Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > ---
-> > changelog
-> > v2:
-> > - drop *GETXATTR patch
-> > - drop FADVISE hunk
-> >
-> >  io_uring/opdef.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-> > index 3aa0d65c50e3..d3f36c633ceb 100644
-> > --- a/io_uring/opdef.c
-> > +++ b/io_uring/opdef.c
-> > @@ -312,6 +312,7 @@ const struct io_op_def io_op_defs[] = {
-> >                 .issue                  = io_fadvise,
-> >         },
-> >         [IORING_OP_MADVISE] = {
-> > +               .audit_skip             = 1,
-> >                 .name                   = "MADVISE",
-> >                 .prep                   = io_madvise_prep,
-> >                 .issue                  = io_madvise,
-> > --
-> > 2.27.0
-> 
-> -- 
-> paul-moore.com
-> 
+> -	unflatten_and_copy_device_tree();
+> +		unflatten_and_copy_device_tree();
+>  #else
+> -	if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
+> -		unflatten_device_tree();
+> -	else
+> -		pr_err("No DTB found in kernel mappings\n");
+> +		if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
+> +			unflatten_device_tree();
+> +		else
+> +			pr_err("No DTB found in kernel mappings\n");
+>  #endif
+> +	} else {
+> +		early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa)));
+> +	}
+> +
+>  	early_init_fdt_scan_reserved_mem();
+>  	misc_mem_init();
+> =20
+> --=20
+> 2.38.0
+>=20
 
-- RGB
+--ult5KqiXxhzSQt3L
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+VrdwAKCRB4tDGHoIJi
+0qvyAP0cVO26J79g8D/az7U6nEgBc35prUqYssgqN0BxemUAWQD/Q+WSgRCcQlie
+1kN+R1JSC4Db+QOviUFUJJ8F20DlTA8=
+=0d4o
+-----END PGP SIGNATURE-----
+
+--ult5KqiXxhzSQt3L--
