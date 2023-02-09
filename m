@@ -2,340 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A096909A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577856909AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjBINPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
+        id S230045AbjBINP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjBINPJ (ORCPT
+        with ESMTP id S230137AbjBINPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:15:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7745FB5D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:14:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675948445;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m+OXcoCacupTD4tofJsHdhQdQk/1iyMKEWkpC01PgCY=;
-        b=Rbf2YM5hOaajClna7z2dGxnRUrH9EwAWYEFRPbvTjd1fEyW8myUl/ppjKG0LdWfNYMiTNg
-        oTNxvdGRnd+rGpTKEe6/SV495P1+Cj71fUK6ueS3wLafxIpgEKX5E3uo9FJfmrhkQ5EdAI
-        /NdyQmAM2wo0Rn8W1xCaSN08q/5gIoQ=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-595-0HTcf-IKPiqu8s0esA7Fbw-1; Thu, 09 Feb 2023 08:14:02 -0500
-X-MC-Unique: 0HTcf-IKPiqu8s0esA7Fbw-1
-Received: by mail-qv1-f69.google.com with SMTP id c3-20020ad44303000000b0056c23d82cffso1200304qvs.15
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 05:14:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m+OXcoCacupTD4tofJsHdhQdQk/1iyMKEWkpC01PgCY=;
-        b=ror5bXiiPHsv2MVlGv1bazf5qIDxQbqDbkgFooqGUX6pcoQ+NubaVKl4BoPzMadAs5
-         P/9ddkcDxZ2HZfroxJuMsnEQcLsP2E4QYY0zSyIiqUUjHzzxGTnEyQIwNwABD1/stIUP
-         On9n61Lvr9D6Cq3COhGqEs02SbIDB99IACQZ2lXtlKBsm1BE7FsgOORK6xBObgMcgiFl
-         6DIlIYeRTMNzDzeB/UqnMQCmBaegORdyN4zO446R4MIenqUOn2ixkcyuwWHb/zp04Uyp
-         7+IHEPka8+dRLENyIIL7cR+9gRTFBYkuchIAqm53Tzsh0ByRcRKmdt1HBr/bhk92mXhX
-         wiNQ==
-X-Gm-Message-State: AO0yUKX2PertCROnS9GcxhWjT9nz1Clb5XadwaHGntf0EpALpcKgRaj8
-        DBNKpZHDaStcrntPAlIDc6pw8WjTGMqbeSB+DJ21qW3gh5YPlo1IoPi+WuUBWmD71bjZ5hnReBG
-        ThQrWVfx7VPjjO4+suKMEMkvC
-X-Received: by 2002:a05:622a:15c7:b0:3b9:a6be:56f6 with SMTP id d7-20020a05622a15c700b003b9a6be56f6mr18572026qty.26.1675948441598;
-        Thu, 09 Feb 2023 05:14:01 -0800 (PST)
-X-Google-Smtp-Source: AK7set90jp6zuQheeSrju4UqtIZlbt4C3l9R5ef4fJaMbX6c85xwbOyjU5jKWWUYbgrhTmJpKLP0AQ==
-X-Received: by 2002:a05:622a:15c7:b0:3b9:a6be:56f6 with SMTP id d7-20020a05622a15c700b003b9a6be56f6mr18571990qty.26.1675948441247;
-        Thu, 09 Feb 2023 05:14:01 -0800 (PST)
-Received: from fedora (ec2-3-80-233-239.compute-1.amazonaws.com. [3.80.233.239])
-        by smtp.gmail.com with ESMTPSA id j8-20020ac85c48000000b003b9b41a32b7sm1186146qtj.81.2023.02.09.05.13.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 05:13:59 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
- CONFIG_HYPERV=n
-In-Reply-To: <20230208205430.1424667-3-seanjc@google.com>
-References: <20230208205430.1424667-1-seanjc@google.com>
- <20230208205430.1424667-3-seanjc@google.com>
-Date:   Thu, 09 Feb 2023 14:13:57 +0100
-Message-ID: <87mt5n6kx6.fsf@redhat.com>
+        Thu, 9 Feb 2023 08:15:48 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2A65FE5C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:15:29 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD22766020C4;
+        Thu,  9 Feb 2023 13:15:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675948511;
+        bh=flYyaBSmlEq7QSoE4eSNQuFLX6pZVzUjxjjfV61BCsE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WZt3qc5nFIEl8Of9UBxnkDrj4UBlzk2nm3enY1yIp552vQwO12nsIdK5EuSLmAjvk
+         2XW+3+SV82Ud+mocxWkMI4fQ/PFMfLAY11BzxaOpjCcbDhqCUXI/SADnEGdMMhcFso
+         jTGscBo0x1BjF3q9SE8jqLwIKkGGzjPnswJbW1NxmQ3LnHnYixJ8vrI5kyRuGm9GIG
+         SqPIebDfj5+SwTvQxWe4l0pPgY3ZCJOeR2yYdSHLBc5b6+HmHTh0yc1eLZ/sTwBxpM
+         gHWGnK4Jn5AEdhn8DgtPzrC3cuK1RRZ33tkQBCKL9hXJZVNrXuW5/scdMXtgpii8AA
+         C//fgtdXaG9sQ==
+Message-ID: <076e1d36-351d-ca36-dde9-50075f02d5c6@collabora.com>
+Date:   Thu, 9 Feb 2023 14:15:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/3] time/sched_clock: Export sched_clock_register()
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        walter.chang@mediatek.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230208094813.20874-1-walter.chang@mediatek.com>
+ <20230208094813.20874-2-walter.chang@mediatek.com>
+ <e1a89a4e-8a0d-47e1-a8fd-75ea152ef816@linaro.org>
+ <ad3a5c30-5062-55ae-7908-c0a127bec5ee@gmail.com>
+ <3bbc55b8-6b12-4e81-026d-75e0c9116a7b@linaro.org>
+ <a021950c-f3d8-8623-4b8f-76c70751c005@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <a021950c-f3d8-8623-4b8f-76c70751c005@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+Il 08/02/23 23:22, Matthias Brugger ha scritto:
+> 
+> 
+> On 08/02/2023 20:45, Krzysztof Kozlowski wrote:
+>> On 08/02/2023 20:41, Matthias Brugger wrote:
+>>>
+>>>
+>>> On 08/02/2023 15:24, Krzysztof Kozlowski wrote:
+>>>> On 08/02/2023 10:48, walter.chang@mediatek.com wrote:
+>>>>> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+>>>>>
+>>>>> clocksource driver may use sched_clock_register()
+>>>>> to resigter itself as a sched_clock source.
+>>>>> Export it to support building such driver
+>>>>> as module, like timer-mediatek.c
+>>>>>
+>>>>> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+>>>>> ---
+>>>>>    kernel/time/sched_clock.c | 4 ++--
+>>>>>    1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/kernel/time/sched_clock.c b/kernel/time/sched_clock.c
+>>>>> index 8464c5acc913..8e49e87d1221 100644
+>>>>> --- a/kernel/time/sched_clock.c
+>>>>> +++ b/kernel/time/sched_clock.c
+>>>>> @@ -150,8 +150,7 @@ static enum hrtimer_restart sched_clock_poll(struct 
+>>>>> hrtimer *hrt)
+>>>>>        return HRTIMER_RESTART;
+>>>>>    }
+>>>>> -void __init
+>>>>> -sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
+>>>>> +void sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
+>>>>
+>>>> Is there a non-init caller?
+>>>>
+>>>>>    {
+>>>>>        u64 res, wrap, new_mask, new_epoch, cyc, ns;
+>>>>>        u32 new_mult, new_shift;
+>>>>> @@ -223,6 +222,7 @@ sched_clock_register(u64 (*read)(void), int bits, unsigned 
+>>>>> long rate)
+>>>>>        pr_debug("Registered %pS as sched_clock source\n", read);
+>>>>>    }
+>>>>> +EXPORT_SYMBOL_GPL(sched_clock_register);
+>>>>
+>>>> Where is the module using it?
+>>>>
+>>>> You need to bring users of these two changes, not just prepare something
+>>>> for your out of tree patches.
+>>>>
+>>>
+>>> I'd propose to add at least one driver that will need these changes, to make it
+>>> clear why you need that.
+>>
+>> ... and actually test if the system works fine when booted from such
+>> clocksource as a module. I have doubts that and unfortunately folks
+>> working on GKI like to put whatever stuff from mainline into modules
+>> even if it does not make sense for us (see long time ago discussion
+>> about pinctrl drivers).
+>>
+> 
+> Yes thinking about it twice, it makes only sense if  the Arm architecture timer is 
+> running. Otherwise the system will hang on boot. I know that older MediaTek devices 
+> had problems with that...
 
-> Wrap enable_evmcs in a helper and stub it out when CONFIG_HYPERV=n in
-> order to eliminate the static branch nop placeholders.  clang-14 is clever
-> enough to elide the nop, but gcc-12 is not.  Stubbing out the key reduces
-> the size of kvm-intel.ko by ~7.5% (200KiB) when compiled with gcc-12
-> (there are a _lot_ of VMCS accesses throughout KVM).
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/hyperv.c  |  4 ++--
->  arch/x86/kvm/vmx/hyperv.h  | 10 ++++++++--
->  arch/x86/kvm/vmx/vmx.c     | 15 +++++++--------
->  arch/x86/kvm/vmx/vmx_ops.h | 22 +++++++++++-----------
->  4 files changed, 28 insertions(+), 23 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/hyperv.c b/arch/x86/kvm/vmx/hyperv.c
-> index b6748055c586..274fbd38c64e 100644
-> --- a/arch/x86/kvm/vmx/hyperv.c
-> +++ b/arch/x86/kvm/vmx/hyperv.c
-> @@ -118,8 +118,6 @@
->  
->  #define EVMCS1_SUPPORTED_VMFUNC (0)
->  
-> -DEFINE_STATIC_KEY_FALSE(enable_evmcs);
-> -
->  #define EVMCS1_OFFSET(x) offsetof(struct hv_enlightened_vmcs, x)
->  #define EVMCS1_FIELD(number, name, clean_field)[ROL16(number, 6)] = \
->  		{EVMCS1_OFFSET(name), clean_field}
-> @@ -611,6 +609,8 @@ int nested_evmcs_check_controls(struct vmcs12 *vmcs12)
->  }
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> +DEFINE_STATIC_KEY_FALSE(enable_evmcs);
-> +
->  /*
->   * KVM on Hyper-V always uses the latest known eVMCSv1 revision, the assumption
->   * is: in case a feature has corresponding fields in eVMCS described and it was
-> diff --git a/arch/x86/kvm/vmx/hyperv.h b/arch/x86/kvm/vmx/hyperv.h
-> index 1299143d00df..a0b6d05dba5d 100644
-> --- a/arch/x86/kvm/vmx/hyperv.h
-> +++ b/arch/x86/kvm/vmx/hyperv.h
-> @@ -16,8 +16,6 @@
->  
->  struct vmcs_config;
->  
-> -DECLARE_STATIC_KEY_FALSE(enable_evmcs);
-> -
->  #define current_evmcs ((struct hv_enlightened_vmcs *)this_cpu_read(current_vmcs))
->  
->  #define KVM_EVMCS_VERSION 1
-> @@ -69,6 +67,13 @@ static inline u64 evmcs_read_any(struct hv_enlightened_vmcs *evmcs,
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
->  
-> +DECLARE_STATIC_KEY_FALSE(enable_evmcs);
-> +
-> +static __always_inline bool is_evmcs_enabled(void)
-> +{
-> +	return static_branch_unlikely(&enable_evmcs);
-> +}
+I think also some very old Qualcomm SoCs have the same timer "issue" and I bet that
+some others as well do.
+Now, I won't argue about the benefits or drawbacks of having X, Y or Z as a module
+because it's probably not the right time/place to... but!
 
-I have a suggestion. While 'is_evmcs_enabled' name is certainly not
-worse than 'enable_evmcs', it may still be confusing as it's not clear
-which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
-ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
-and hide the implementation details (i.e. 'evmcs') inside?
+I was trying to get my brain ticking on this one and I immediately didn't like it:
+as a matter of fact, this kind of clocksources (especially the arch timer[s]) is
+boot critical and that's not limited to ARM, anyway... this means that a such a
+change can't be *that* easy, at all.
 
-> +
->  static __always_inline int get_evmcs_offset(unsigned long field,
->  					    u16 *clean_field)
->  {
-> @@ -158,6 +163,7 @@ static inline void evmcs_load(u64 phys_addr)
->  
->  void evmcs_sanitize_exec_ctrls(struct vmcs_config *vmcs_conf);
->  #else /* !IS_ENABLED(CONFIG_HYPERV) */
-> +static __always_inline bool is_evmcs_enabled(void) { return false; }
->  static __always_inline void evmcs_write64(unsigned long field, u64 value) {}
->  static __always_inline void evmcs_write32(unsigned long field, u32 value) {}
->  static __always_inline void evmcs_write16(unsigned long field, u16 value) {}
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 33614ee2cd67..9f0098c9ad64 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -595,7 +595,7 @@ static void hv_reset_evmcs(void)
->  {
->  	struct hv_vp_assist_page *vp_ap;
->  
-> -	if (!static_branch_unlikely(&enable_evmcs))
-> +	if (!is_evmcs_enabled())
->  		return;
->  
->  	/*
-> @@ -2818,8 +2818,7 @@ static int vmx_hardware_enable(void)
->  	 * This can happen if we hot-added a CPU but failed to allocate
->  	 * VP assist page for it.
->  	 */
-> -	if (static_branch_unlikely(&enable_evmcs) &&
-> -	    !hv_get_vp_assist_page(cpu))
-> +	if (is_evmcs_enabled() && !hv_get_vp_assist_page(cpu))
->  		return -EFAULT;
->  
->  	intel_pt_handle_vmx(1);
-> @@ -2871,7 +2870,7 @@ struct vmcs *alloc_vmcs_cpu(bool shadow, int cpu, gfp_t flags)
->  	memset(vmcs, 0, vmcs_config.size);
->  
->  	/* KVM supports Enlightened VMCS v1 only */
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		vmcs->hdr.revision_id = KVM_EVMCS_VERSION;
->  	else
->  		vmcs->hdr.revision_id = vmcs_config.revision_id;
-> @@ -2966,7 +2965,7 @@ static __init int alloc_kvm_area(void)
->  		 * still be marked with revision_id reported by
->  		 * physical CPU.
->  		 */
-> -		if (static_branch_unlikely(&enable_evmcs))
-> +		if (is_evmcs_enabled())
->  			vmcs->hdr.revision_id = vmcs_config.revision_id;
->  
->  		per_cpu(vmxarea, cpu) = vmcs;
-> @@ -3936,7 +3935,7 @@ static void vmx_msr_bitmap_l01_changed(struct vcpu_vmx *vmx)
->  	 * 'Enlightened MSR Bitmap' feature L0 needs to know that MSR
->  	 * bitmap has changed.
->  	 */
-> -	if (IS_ENABLED(CONFIG_HYPERV) && static_branch_unlikely(&enable_evmcs)) {
-> +	if (is_evmcs_enabled()) {
->  		struct hv_enlightened_vmcs *evmcs = (void *)vmx->vmcs01.vmcs;
->  
->  		if (evmcs->hv_enlightenments_control.msr_bitmap)
-> @@ -7313,7 +7312,7 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
->  	vmx_vcpu_enter_exit(vcpu, __vmx_vcpu_run_flags(vmx));
->  
->  	/* All fields are clean at this point */
-> -	if (static_branch_unlikely(&enable_evmcs)) {
-> +	if (is_evmcs_enabled()) {
->  		current_evmcs->hv_clean_fields |=
->  			HV_VMX_ENLIGHTENED_CLEAN_FIELD_ALL;
->  
-> @@ -7443,7 +7442,7 @@ static int vmx_vcpu_create(struct kvm_vcpu *vcpu)
->  	 * feature only for vmcs01, KVM currently isn't equipped to realize any
->  	 * performance benefits from enabling it for vmcs02.
->  	 */
-> -	if (IS_ENABLED(CONFIG_HYPERV) && static_branch_unlikely(&enable_evmcs) &&
-> +	if (is_evmcs_enabled() &&
->  	    (ms_hyperv.nested_features & HV_X64_NESTED_MSR_BITMAP)) {
->  		struct hv_enlightened_vmcs *evmcs = (void *)vmx->vmcs01.vmcs;
->  
-> diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
-> index db95bde52998..6b072db47fdc 100644
-> --- a/arch/x86/kvm/vmx/vmx_ops.h
-> +++ b/arch/x86/kvm/vmx/vmx_ops.h
-> @@ -147,7 +147,7 @@ static __always_inline unsigned long __vmcs_readl(unsigned long field)
->  static __always_inline u16 vmcs_read16(unsigned long field)
->  {
->  	vmcs_check16(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_read16(field);
->  	return __vmcs_readl(field);
->  }
-> @@ -155,7 +155,7 @@ static __always_inline u16 vmcs_read16(unsigned long field)
->  static __always_inline u32 vmcs_read32(unsigned long field)
->  {
->  	vmcs_check32(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_read32(field);
->  	return __vmcs_readl(field);
->  }
-> @@ -163,7 +163,7 @@ static __always_inline u32 vmcs_read32(unsigned long field)
->  static __always_inline u64 vmcs_read64(unsigned long field)
->  {
->  	vmcs_check64(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_read64(field);
->  #ifdef CONFIG_X86_64
->  	return __vmcs_readl(field);
-> @@ -175,7 +175,7 @@ static __always_inline u64 vmcs_read64(unsigned long field)
->  static __always_inline unsigned long vmcs_readl(unsigned long field)
->  {
->  	vmcs_checkl(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_read64(field);
->  	return __vmcs_readl(field);
->  }
-> @@ -222,7 +222,7 @@ static __always_inline void __vmcs_writel(unsigned long field, unsigned long val
->  static __always_inline void vmcs_write16(unsigned long field, u16 value)
->  {
->  	vmcs_check16(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_write16(field, value);
->  
->  	__vmcs_writel(field, value);
-> @@ -231,7 +231,7 @@ static __always_inline void vmcs_write16(unsigned long field, u16 value)
->  static __always_inline void vmcs_write32(unsigned long field, u32 value)
->  {
->  	vmcs_check32(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_write32(field, value);
->  
->  	__vmcs_writel(field, value);
-> @@ -240,7 +240,7 @@ static __always_inline void vmcs_write32(unsigned long field, u32 value)
->  static __always_inline void vmcs_write64(unsigned long field, u64 value)
->  {
->  	vmcs_check64(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_write64(field, value);
->  
->  	__vmcs_writel(field, value);
-> @@ -252,7 +252,7 @@ static __always_inline void vmcs_write64(unsigned long field, u64 value)
->  static __always_inline void vmcs_writel(unsigned long field, unsigned long value)
->  {
->  	vmcs_checkl(field);
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_write64(field, value);
->  
->  	__vmcs_writel(field, value);
-> @@ -262,7 +262,7 @@ static __always_inline void vmcs_clear_bits(unsigned long field, u32 mask)
->  {
->  	BUILD_BUG_ON_MSG(__builtin_constant_p(field) && ((field) & 0x6000) == 0x2000,
->  			 "vmcs_clear_bits does not support 64-bit fields");
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_write32(field, evmcs_read32(field) & ~mask);
->  
->  	__vmcs_writel(field, __vmcs_readl(field) & ~mask);
-> @@ -272,7 +272,7 @@ static __always_inline void vmcs_set_bits(unsigned long field, u32 mask)
->  {
->  	BUILD_BUG_ON_MSG(__builtin_constant_p(field) && ((field) & 0x6000) == 0x2000,
->  			 "vmcs_set_bits does not support 64-bit fields");
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_write32(field, evmcs_read32(field) | mask);
->  
->  	__vmcs_writel(field, __vmcs_readl(field) | mask);
-> @@ -289,7 +289,7 @@ static inline void vmcs_load(struct vmcs *vmcs)
->  {
->  	u64 phys_addr = __pa(vmcs);
->  
-> -	if (static_branch_unlikely(&enable_evmcs))
-> +	if (is_evmcs_enabled())
->  		return evmcs_load(phys_addr);
->  
->  	vmx_asm1(vmptrld, "m"(phys_addr), vmcs, phys_addr);
+If you really want to register such a clocksource driver, I would suggest instead
+to make an addition that allows you to do so, while *not* touching common code
+paths that are called by multiple architectures and that may need those to stay
+as they are for one reason or another.
 
-With or without the change:
+*If* this kind of modularization will ever happen, it's something that must be
+done slowly and again, not in one shot, especially not with one series "taking
+care of 'em all". Please be careful when touching *core* code.
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+That was just an opinion on something that I can envision to be eventually going
+wrong in many, many ways...
 
--- 
-Vitaly
-
+Regards,
+Angelo
