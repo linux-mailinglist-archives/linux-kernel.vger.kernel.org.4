@@ -2,211 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3EB68FFD8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D3668FFE7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:33:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjBIFUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 00:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S229772AbjBIFcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 00:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjBIFUt (ORCPT
+        with ESMTP id S229505AbjBIFcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 00:20:49 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0EE2DE7C;
-        Wed,  8 Feb 2023 21:20:46 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31949Kx0030005;
-        Thu, 9 Feb 2023 05:20:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Qi01A4DARysTADEqiJHBihKXJUpLwxjlAn34mXKmldc=;
- b=NhT1YVbMzr9TdxYQwid6J53k1TQC/tPCZEfcSh54k7mPzi5sCkI1/QKTRZKL1hpo9U8I
- TspzPshhpnlXLtYVBOItyGALSeuUcwYrvJ72+3g38tijAMDGVc3WYurfh+FspfnDgHk3
- Z9cjwofYv2SFi2mCf5oF7Q/DeagW2uwnyIK2RS4R6exsI++5EUchcg37ECJeu3kFK2Bt
- QcuknbCHlwOB4lrEDLX9nU9uF5VNzReU5247xlGlIT/eWaN3divkg4Upi8vL15+8KWat
- oLNtfdaZTUXjeu8vq1XFFtvmg3lOipCjOWLpwUfQE/3C7bK6nrFRqajKa1CPFiqA77gX PQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm86mtnyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 05:20:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3195KeTQ010936
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 9 Feb 2023 05:20:40 GMT
-Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
- 21:20:36 -0800
-Message-ID: <e40b3122-30e6-4619-57db-085d480deef1@quicinc.com>
-Date:   Thu, 9 Feb 2023 10:50:33 +0530
+        Thu, 9 Feb 2023 00:32:19 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D04301B5
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 21:32:18 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id r2so615597wrv.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 21:32:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=w6z3lxwnln7Ypie34pRxdCgfXQDUlJU7iUw2s4xeNCQ=;
+        b=hbv+iUmy8sb7UTevXZXSzxz4aaIUDG/plNczLQrgAbId4wPVrQ+MkUcq3aY+CY5S+3
+         rjawt/atll9AOMzPTfCwmorE8mJ0IW4ExC+pOffnmttwon2NgCXsQXAHNH70+CqH4Yet
+         b6oLh+gnKxDrXWJ+sVkEhlEAuMsgo82g7kQbD0bRtom8ONxlwBf6CsHrI8kEQQPSr8cE
+         02FslNpxxsQJnKXlRV77g9pOv1nepBqVy0+lQY1q5jHCyV3MZ1/poYrNBSof/aw2ifvB
+         XBsmv3sQsOevFgU/eI4a8Lch+EluHrUqqffry2uORieqI42qXv+KNAZGRuXumHYaK8Mh
+         FeiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w6z3lxwnln7Ypie34pRxdCgfXQDUlJU7iUw2s4xeNCQ=;
+        b=qCwSorlHd7zBXEmQ9X9s0yUpoDCQ2iW0qTJSgVP4/o7JdCKVICY8ogd3rDzeffvteU
+         9Yq0qh0BGH644vlHU85tf8V1fXNy0d1tg6wIJaRAWuNPZM/Q+xaQmBElihOprlBI7mP2
+         eHT3rWSr5jVXuPKIyTrm0V8fyw3sGZIIGE0jiUlrgpbmUMC7N6ufT+1M8PBApeoVfNMu
+         MYK+QKcdp70u1jD1WB6P9t+ofkO+vxHuwBd/HdvWJIRHE/W/N7ZPBC9irx9bNXKbNsOx
+         8YC550KrrGNaVOZDl/2rAZNusFl1iR4t2aNxIQ2ms2xAtbY1e1cM7LEHDoN78zN7XGg1
+         fXSw==
+X-Gm-Message-State: AO0yUKVFYdKEkkB536HAT4hECzyXBt1ZlVYjmBDcFdioQj7si5AMzgeX
+        EZm6WYNU/0tJMwIQdRPyNaw/eppi1Wi3/ks/7PHuIg==
+X-Google-Smtp-Source: AK7set9YGa7NCNq2wHzwRqe7rRW1StB4rmp4kgxLGJELsL8k4ez/VaGVQujKbNDfKlqQkG5awGCGVr1ELO1GQ8rpFMA=
+X-Received: by 2002:a5d:4247:0:b0:2bf:b264:6bf7 with SMTP id
+ s7-20020a5d4247000000b002bfb2646bf7mr251486wrr.427.1675920736829; Wed, 08 Feb
+ 2023 21:32:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V2 5/5] arm64: dts: qcom: ipq5332: enable the CPUFreq
- support
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>, <quic_srichara@quicinc.com>
-References: <20230208042850.1687-1-quic_kathirav@quicinc.com>
- <20230208042850.1687-6-quic_kathirav@quicinc.com>
- <61ca391d-05d4-d02b-f57e-5dd0297feceb@linaro.org>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <61ca391d-05d4-d02b-f57e-5dd0297feceb@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Vd3Oo-h3ibUXmvFWTMj3sSMw-h0tc5Pe
-X-Proofpoint-ORIG-GUID: Vd3Oo-h3ibUXmvFWTMj3sSMw-h0tc5Pe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-09_02,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 phishscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
- adultscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302090048
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221219055431.22596-1-ashimida.1990@gmail.com>
+In-Reply-To: <20221219055431.22596-1-ashimida.1990@gmail.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Wed, 8 Feb 2023 21:32:03 -0800
+Message-ID: <CAMn1gO6hwaSDCqigwoH981ffVbU8OvgJhrGh997kGseCSbpAJA@mail.gmail.com>
+Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
+To:     Dan Li <ashimida.1990@gmail.com>
+Cc:     gcc-patches@gcc.gnu.org,
+        Richard Sandiford <richard.sandiford@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Song Liu <song@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Yuntao Wang <ytcoode@gmail.com>,
+        Changbin Du <changbin.du@intel.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2/8/2023 2:11 PM, Konrad Dybcio wrote:
+On Sun, Dec 18, 2022 at 10:06 PM Dan Li <ashimida.1990@gmail.com> wrote:
 >
-> On 8.02.2023 05:28, Kathiravan T wrote:
->> Add the APCS, A53 PLL, cpu-opp-table nodes to bump the CPU frequency
->> above 800MHz.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
->> Changes in V2:
->> 	- No changes
->>
->>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 37 +++++++++++++++++++++++++++
->>   1 file changed, 37 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> index bdf33ef30e10..cec2828c51f8 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> @@ -5,6 +5,7 @@
->>    * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
->>    */
->>   
->> +#include <dt-bindings/clock/qcom,apss-ipq.h>
->>   #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
->>   #include <dt-bindings/interrupt-controller/arm-gic.h>
->>   
->> @@ -35,6 +36,8 @@
->>   			reg = <0x0>;
->>   			enable-method = "psci";
->>   			next-level-cache = <&L2_0>;
->> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->> +			operating-points-v2 = <&cpu_opp_table>;
->>   		};
->>   
->>   		CPU1: cpu@1 {
->> @@ -43,6 +46,8 @@
->>   			reg = <0x1>;
->>   			enable-method = "psci";
->>   			next-level-cache = <&L2_0>;
->> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->> +			operating-points-v2 = <&cpu_opp_table>;
->>   		};
->>   
->>   		CPU2: cpu@2 {
->> @@ -51,6 +56,8 @@
->>   			reg = <0x2>;
->>   			enable-method = "psci";
->>   			next-level-cache = <&L2_0>;
->> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->> +			operating-points-v2 = <&cpu_opp_table>;
->>   		};
->>   
->>   		CPU3: cpu@3 {
->> @@ -59,6 +66,8 @@
->>   			reg = <0x3>;
->>   			enable-method = "psci";
->>   			next-level-cache = <&L2_0>;
->> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->> +			operating-points-v2 = <&cpu_opp_table>;
->>   		};
->>   
->>   		L2_0: l2-cache {
->> @@ -67,6 +76,16 @@
->>   		};
->>   	};
->>   
->> +	cpu_opp_table: opp-table-cpu{
-> opp-table-cpu {
-> + sort this properly (by node name, not label), please
-
-
-ahh, missed this. Will fix it in next spin.
-
-
+> This series of patches is mainly used to support the control flow
+> integrity protection of the linux kernel [1], which is similar to
+> -fsanitize=kcfi in clang 16.0 [2,3].
 >
->> +		compatible = "operating-points-v2";
->> +		opp-shared;
->> +
->> +		opp-1488000000 {
-> Why only one (presumably FMAX) target? This sounds
-> very destructive to power consumption, and by extension
-> heat output.
+> I hope that this feature will also support user-mode CFI in the
+> future (at least for developers who can recompile the runtime),
+> so I use -fsanitize=cfi as a compilation option here.
 
+Please don't. The various CFI-related build flags are confusing enough
+without also having this inconsistency between Clang and GCC.
 
-SKU is designed to operate on 1.48GHz only.
-
-
->
-> The other changes generally look good fwiw.
->
-> Konrad
->> +			opp-hz = /bits/ 64 <1488000000>;
->> +			clock-latency-ns = <200000>;
->> +		};
->> +	};
->> +
->>   	firmware {
->>   		scm {
->>   			compatible = "qcom,scm-ipq5332", "qcom,scm";
->> @@ -199,6 +218,24 @@
->>   			};
->>   		};
->>   
->> +		apcs_glb: mailbox@b111000 {
->> +			compatible = "qcom,ipq5332-apcs-apps-global",
->> +				     "qcom,ipq6018-apcs-apps-global";
->> +			reg = <0x0b111000 0x1000>;
->> +			#clock-cells = <1>;
->> +			clocks = <&a53pll>, <&xo_board>;
->> +			clock-names = "pll", "xo";
->> +			#mbox-cells = <1>;
->> +		};
->> +
->> +		a53pll: clock@b116000 {
->> +			compatible = "qcom,ipq5332-a53pll";
->> +			reg = <0x0b116000 0x40>;
->> +			#clock-cells = <0>;
->> +			clocks = <&xo_board>;
->> +			clock-names = "xo";
->> +		};
->> +
->>   		timer@b120000 {
->>   			compatible = "arm,armv7-timer-mem";
->>   			reg = <0x0b120000 0x1000>;
+Peter
