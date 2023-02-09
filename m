@@ -2,313 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C235768FE29
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB32768FE2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232890AbjBID7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 22:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
+        id S232915AbjBIEAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbjBID7I (ORCPT
+        with ESMTP id S232905AbjBID7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 22:59:08 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96CAB2FCF8
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 19:58:41 -0800 (PST)
-Received: from loongson.cn (unknown [10.2.9.158])
-        by gateway (Coremail) with SMTP id _____8CxOupwb+RjrkUQAA--.32114S3;
-        Thu, 09 Feb 2023 11:58:40 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axur1vb+RjlQgvAA--.23498S2;
-        Thu, 09 Feb 2023 11:58:39 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        David Laight <David.Laight@ACULAB.COM>
-Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] LoongArch: add checksum optimization for 64-bit system
-Date:   Thu,  9 Feb 2023 11:58:39 +0800
-Message-Id: <20230209035839.2610277-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Wed, 8 Feb 2023 22:59:52 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEE02E819
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 19:59:50 -0800 (PST)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3190ENvf006143;
+        Thu, 9 Feb 2023 03:59:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=rOKREE5rxGMtDjw0nOgGZtb5L4iqSMTSfxWBVUoZGro=;
+ b=AQ0QR1QW7hV76cTy4g3ekhcHId0f3D3/B3nuZzTjJqjNoVDnSNSc7hlqXAJvGt+9fQ18
+ tMp5kM60JU4pF7jl9Wlc2Ird55GwVRsC8s+gwuMlYXAzxqQ5NqyruHIbb1dtz7BN0Hvz
+ jWNjRKxub2MUHsuTRFgEpIAfPrdiPxx/fzYiucFiGBmGoKGxmo7zIMdHaMtd9oisLKBA
+ yzIBfeYCug2zemYoun1eXHTt1O6lP7K6eHE0aEwi4jK7we345f6aYv4FNR5tGOLFxofz
+ N+/ev8dJMi5WMLhZ3/i88B6TaWFWUIjen87j7tJ0oseFf+ROVQ3Y76iwbCrgyXsngD45 vg== 
+Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3nmp421aqb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 03:59:35 +0000
+Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id E86ED805E55;
+        Thu,  9 Feb 2023 03:59:34 +0000 (UTC)
+Received: from p1wg14928.americas.hpqcorp.net (10.119.18.116) by
+ p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 8 Feb 2023 15:59:06 -1200
+Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
+ p1wg14928.americas.hpqcorp.net (10.119.18.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 8 Feb 2023 15:59:06 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36
+ via Frontend Transport; Wed, 8 Feb 2023 15:59:06 -1200
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 8 Feb 2023 15:59:05 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lMEg5R4QbosJb0MqKoE85apsOWWymxKEvlTKns9I48IkjYINvVr2LVLl9mNPeRJtHBvn9cPI1P3Q1fVY+r07e8OkvIdQUEcPXMstXYjUi0zesnJt6On7eI59aSnoS5KRipVyzq+stK8DM4ACEvVnr587bO2Nah1sOPXIS/41lprG7rKNLngPtCEv4zTlw1GpUYjZ68jW1sp/MkMG2tr5vdGpIXJJFQS7HUliRLfoBEDFMZpC9D+eHPnl5MyAMeIRrqq8TUB1bDerWQ1Ulvy8C5tf2C04EBRGA2pcRkvvyjJXhd/EfjGQEP3UHqEzzjZkWE3HGf9lsMHnKHPchzqHjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rOKREE5rxGMtDjw0nOgGZtb5L4iqSMTSfxWBVUoZGro=;
+ b=PygyvaVREHsDGVASO06sgq2otCZ/f1QZ7tFFdIbPy4kX7wmgW39FoLm96UCM6RXAn+6n2+/j2oVkmcRVTeAQeamnVJHO2PDFTRZoV9J4S2hU2bAZg/yoDTgblBEW40Q6kGc/kMXbyinpRLh4AtzQqtFgBOGtfE86Fq8TzgJ17Za7C2Gz30pN2R8H6w1Fr+WwVjAnzBqd30BThOYxMZn7D0BwUI/S4ixkQijbleBnLFwWKvQt8Y1ljahCenFOgjWc7sTMM5ExkneCj9QIZ7eJsGiBqIKyrthyWoMowUu1PFtQeKJs2BPF5fb8NwTmDsaJOFMwQ1/etlISyiHU4FntlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from MW4PR84MB1539.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1a6::17)
+ by SJ0PR84MB1577.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:381::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
+ 2023 03:59:04 +0000
+Received: from MW4PR84MB1539.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::dc3e:55b1:e680:e1ea]) by MW4PR84MB1539.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::dc3e:55b1:e680:e1ea%5]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
+ 03:59:04 +0000
+From:   "Gaba, Aahit" <aahit.gaba@hpe.com>
+To:     "Hsiao, Matt (CBG Linux Enablement)" <matt.hsiao@hpe.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "gustavoars@kernel.org" <gustavoars@kernel.org>,
+        "nishadkamdar@gmail.com" <nishadkamdar@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "dhaval.experiance@gmail.com" <dhaval.experiance@gmail.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "arvind.yadav.cs@gmail.com" <arvind.yadav.cs@gmail.com>,
+        "standby24x7@gmail.com" <standby24x7@gmail.com>,
+        "wfp5p@virginia.edu" <wfp5p@virginia.edu>,
+        "jslaby@suse.cz" <jslaby@suse.cz>,
+        "prarit@redhat.com" <prarit@redhat.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "adobriyan@gmail.com" <adobriyan@gmail.com>
+Subject: RE: [PATCH v2] misc: hpilo: relicense HPE iLO driver as Dual MIT/GPL
+Thread-Topic: [PATCH v2] misc: hpilo: relicense HPE iLO driver as Dual MIT/GPL
+Thread-Index: AQHZPDgD+zqCA8XE+0KJ40CgzpMJRa7F9/3w
+Date:   Thu, 9 Feb 2023 03:59:04 +0000
+Message-ID: <MW4PR84MB1539887EFAA00D60D777C75696D99@MW4PR84MB1539.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20221116103457.27486-1-matt.hsiao@hpe.com>
+ <Y3TLSON/7XRG5BiN@kroah.com>
+ <20230209033812.GA17928@blofly.tw.rdlabs.hpecorp.net>
+In-Reply-To: <20230209033812.GA17928@blofly.tw.rdlabs.hpecorp.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR84MB1539:EE_|SJ0PR84MB1577:EE_
+x-ms-office365-filtering-correlation-id: 954fc036-f720-473c-1bb3-08db0a51fc67
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: SY3mDC5xwAhFChWpXwqTj3mNknOLfXtQ9QPWFdllNCHkb2LxOgdT53Jc4sj4wqq/td84V3I7tKM0l862mQqEzBRg6LDq+Z5NWu5P8n+FX9lBNPep4+eE0z7fH5Oj3P1nhMdp7l2vtgNHixjiFy2/LtzdpvJ3x1aHsXMm2BbVSSjsT5mzV9CUbYt9u0GXPfoSyb7Cn2IDZBznoqt/ZaIN2AlkybYuI47IrGlfkvP2HDoVHhwuRLUhPOHK5ZfjbkK4KlbnwWeObbU5rr5MxnBFx5bnCdQu6ymuTDcOH3vt/r8CbCxyDFL19LQP7s0yCwIRPQGgjjv/1BveI3ToY4zJALCxilYwoOuFXVSjiFP1dZREmygAGZoYN/a0CcaBFzLb/FqAAQJWQ1h8GpPtx6h+tKbfkXaYIHZNHgsZQ7ekhqxEIzZCzrEQpFrbQ01qsf7usQg0LxjRedWLZ0b/yMtfKT/rnKUWw1PRE6y6z6Cf3CLWwFRSIGx5iMf7pDD2kRd0TNryG3Z+4weDbb+JVibCyRRBbmop9MVveG9VXr7I56pf+hzO2oQn59T283tcDAHssl7k0zsEu7OehYCRMobcrLjbyW/l3YJmfhWKFZ+oDePnMFcExPJJsgEpddNXIEuKAOuG25nCGAQV6OvSPG5VwYSKTFzAuHW4ftu+3eLT0xXoIYH0+WQkJeJJ4zlfaMiXvkOtZHd1e564CeKerALjng==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR84MB1539.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(376002)(366004)(396003)(346002)(136003)(451199018)(76116006)(66556008)(54906003)(83380400001)(316002)(66446008)(64756008)(5660300002)(66476007)(8936002)(52536014)(4326008)(110136005)(41300700001)(478600001)(8676002)(9686003)(7416002)(186003)(7696005)(71200400001)(38070700005)(66946007)(55016003)(33656002)(6506007)(38100700002)(86362001)(2906002)(82960400001)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6TkhsptMXwBICFXxcyMynl5xAqzS2sCDSjAS1nJBeCSz9JEykxVjkQb5lSKM?=
+ =?us-ascii?Q?AoCTbrJ1cMujKcBrx/AxrI1XOM3U/NQoNZN3Xgmkt4MbtHWd0AiPmpt6WoSp?=
+ =?us-ascii?Q?PD51z/OysQw0S+1d5ebthd94XwVk/Nz8owCRf3DIKi3QNGpquQjIL/mtRiKB?=
+ =?us-ascii?Q?j94g2tpvNw/AlgCKSTYBbAiqWlUWm1Lyp3JDlS/2Yqm1JfstAaHExkBfT8Sb?=
+ =?us-ascii?Q?IkVovjlrmZje4L4tQm68FeH+on1pUjjOduz46kqHxaXl/0M5Ym4tyi1ru2x/?=
+ =?us-ascii?Q?r7yiTmHTtkctgwZRbOOih5PHCh6PB+nyquLX5/DLo891jODtI/oJblYe7rAr?=
+ =?us-ascii?Q?TmLIFc6Xzoi0BtwzNCXGHpIDf3fN2ruRGMppqW1f/cinTessHUBqbo7GxVKx?=
+ =?us-ascii?Q?uLAKtL7mkOnnzk7169Ayf8jMdzgceeV9AHm+SEeKDHPBNx3pFR7aoDPHWbaP?=
+ =?us-ascii?Q?ofOlqDs8+qWbUZ7/YeehjCxcMwCegEEjLo/WNkzJodswedweMv+AGIBDxg/D?=
+ =?us-ascii?Q?cznrynncY9rmloDL+zaAYr6rd5ukHn3TAciu5pKirMebdgnru+trWEZKxaJG?=
+ =?us-ascii?Q?GMVe8DYBnCsRXbe2Ax0PCh4NW/Gm948YcmcvkzQLuSATBl7FJ8alQScqhIFO?=
+ =?us-ascii?Q?MmMzcy0KBgKPrqNhAxHKDWKbIHGXDU8ztSZbTL7fD7iz0451LcgPKdJ6xVMn?=
+ =?us-ascii?Q?BbNLOvwo2gDB7bFQiqPnx78mioh0w4Th7cPSPCG1nCMZPiJln7u4rTRqxjGW?=
+ =?us-ascii?Q?kaa7lG1ndLAfzurOyYpQB4VDHvlJch/3l0/euNPoNLJv7vN200cwSUcKlKKy?=
+ =?us-ascii?Q?gPBju7WfbEjQmZplXlOHSu+mmwfzyMVLryvCo0P5sg+CGAgg09GWXqa4AivI?=
+ =?us-ascii?Q?V/+U0d1Ha81zi439QXsXWQiKCoHvvz88wzwOM9Qn7yUkkKvN0wY13HJcs3G8?=
+ =?us-ascii?Q?18qOgYkMeYPfXvDE3b7YYWYO2UlU9Db+RHb88TBIF6GRRxXM2pR1SvFd4mqN?=
+ =?us-ascii?Q?Ati/LqOslQ/xfyTy/BEK/WCS3PiIfNVkTSLM3aXZpJMN3XB/ktTP+iYpC/3M?=
+ =?us-ascii?Q?+rVLoNYINngg9P30Txfc0k66zOcKENbY6cEmonXez7J+ABvcY0Gsv/p0I2s3?=
+ =?us-ascii?Q?wjKQD8ruLDrEKXo56fY5yAXSbLI7PLzuR+TVnD4e09AGGRVq/tvRB2kzV1JR?=
+ =?us-ascii?Q?Z7TLFpB7aB7XHwc0C9MCMlk1VwsnXMvgjMoOEwlhHKlljBjHArNjJP2nEkcj?=
+ =?us-ascii?Q?IiVN5zhEUB+7SUpqQO5Z7aLbtG07RaUcYPHf2QAjsAPtIJ6cr/nrXiCrdcdD?=
+ =?us-ascii?Q?QYlW4IjAKe4jUUWEny1j5rNCzlmTlzLtpUCRPc7LMGehYZbh+D7mKFpWCsA7?=
+ =?us-ascii?Q?EMzv8Y9spXO2vPklWeWDSaR3zoTAq3VePQ25Zp4YSqOFyCFC4slmIBMh2pS1?=
+ =?us-ascii?Q?st+lqb8ljRcSuywu2jVCa+q+E4VLXPaZbPb9SY1JxyYX55Zcy4aruZcZO/Dc?=
+ =?us-ascii?Q?7bsOBOCESPX+qJh1IneEb6gVkTCudwSU8TtM9SGazUZ1z4rJc72AfoSlAaYt?=
+ =?us-ascii?Q?iZLEuv0UZAMVtat2AMS9/O/gU5mCP/oJ5a5fHbjzMxgm8gw6++HuWgikVEGF?=
+ =?us-ascii?Q?B1BRH1rw9WY37p/wX3CVOnII7yU8dfRW5Y1AXwJW8+8g?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axur1vb+RjlQgvAA--.23498S2
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3JrW7Jr47XryUXrWDKFWDCFg_yoWxtFy7pF
-        nxAr9Ygr4UGF1Ivr92yrW2qrW3Ja1kGr1agrZIgFy8ArW7X347Jrs3KrZYvFy7Gw4fGFyx
-        Way5KFyagFs3JaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b3kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82
-        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2Iq
-        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
-        126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY
-        6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
-        AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x
-        07jepB-UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR84MB1539.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 954fc036-f720-473c-1bb3-08db0a51fc67
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 03:59:04.5989
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RF4L1bDBUsdpNq4FzZkkxuui7Fx7sCattZNNmSHeXcQ7ku8/ihfck3HPDJwkKHMzLjYcWWfnLFh0XQpScb7qow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1577
+X-OriginatorOrg: hpe.com
+X-Proofpoint-GUID: uesqhcaCrHStjwF5PSYtqtxkEapKyT1f
+X-Proofpoint-ORIG-GUID: uesqhcaCrHStjwF5PSYtqtxkEapKyT1f
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-09_01,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 mlxlogscore=647 phishscore=0
+ bulkscore=0 suspectscore=0 clxscore=1011 adultscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090034
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-loongArch platform is 64-bit system, which supports 8 bytes memory
-accessing, generic checksum function uses 4 byte memory access.
-This patch adds 8-bytes memory access optimization for checksum
-function on loongArch. And the code comes from arm64 system.
+On Thu, Feb 09, 2023 at 09:29:00AM +0530, Aahit Gaba wrote:
+> On Wed, Nov 16, 2022 at 12:36:40PM +0100, Greg KH wrote:
+> > On Wed, Nov 16, 2022 at 06:34:57PM +0800, matt.hsiao@hpe.com wrote:
+> > > From: Matt Hsiao <matt.hsiao@hpe.com>
+> > >
+> > > Currently, the hpilo driver is licensed as GPL. To run OpenBSD on
+> > > HPE servers with BMC (HPE iLO) functionality, a dual MIT/GPL license
+> > > is needed for porting the hpilo driver to OpenBSD.
+> > >
+> > > Signed-off-by: Matt Hsiao <matt.hsiao@hpe.com>
+> > > ---
+> > >
+> > > Hello contributors in the CC list,
+> > >
+> > > Thanks for your contributions to the hpilo driver. Please kindly
+> > > review the license change and hopefully you would agree and approve i=
+t.
+> Thanks!
+> > >
+> > > Patch v2:
+> > > ---------
+> > > - Change MODULE_LICENSE to Dual MIT/GPL too
+> >
+> > As I asked for on the v1 version (delayed email on my side), I need a
+> > lawyer from HPE to sign off on this change as well.
+> >
+> > thanks,
+> >
+> > greg k-h
+>=20
+> Add HPE attorney Aahit Gaba to sign off.
 
-When network hw checksum is disabled, iperf performance improves
-about 10% with this patch.
+Signed-off-by: Aahit Gaba <aahit.gaba@hpe.com>
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
-Changelog:
-v2: use rotation API in csum_fold to reduce one instruction.
----
- arch/loongarch/include/asm/checksum.h |  65 ++++++++++++
- arch/loongarch/lib/Makefile           |   2 +-
- arch/loongarch/lib/csum.c             | 142 ++++++++++++++++++++++++++
- 3 files changed, 208 insertions(+), 1 deletion(-)
- create mode 100644 arch/loongarch/include/asm/checksum.h
- create mode 100644 arch/loongarch/lib/csum.c
-
-diff --git a/arch/loongarch/include/asm/checksum.h b/arch/loongarch/include/asm/checksum.h
-new file mode 100644
-index 000000000000..8a7d368d801d
---- /dev/null
-+++ b/arch/loongarch/include/asm/checksum.h
-@@ -0,0 +1,65 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2016 ARM Ltd.
-+ * Copyright (C) 2023 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_CHECKSUM_H
-+#define __ASM_CHECKSUM_H
-+
-+#include <linux/in6.h>
-+
-+#define _HAVE_ARCH_IPV6_CSUM
-+__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
-+			const struct in6_addr *daddr,
-+			__u32 len, __u8 proto, __wsum sum);
-+
-+/*
-+ * turns a 32-bit partial checksum (e.g. from csum_partial) into a
-+ * 1's complement 16-bit checksum.
-+ */
-+static inline __sum16 csum_fold(__wsum sum)
-+{
-+	u32 tmp = (__force u32)sum;
-+
-+	/*
-+	 * swap the two 16-bit halves of sum
-+	 * if there is a carry from adding the two 16-bit halves,
-+	 * it will carry from the lower half into the upper half,
-+	 * giving us the correct sum in the upper half.
-+	 */
-+	return (__force __sum16)(~(tmp + rol32(tmp, 16)) >> 16);
-+}
-+#define csum_fold csum_fold
-+
-+/*
-+ * This is a version of ip_compute_csum() optimized for IP headers,
-+ * which always checksum on 4 octet boundaries.  ihl is the number
-+ * of 32-bit words and is always >= 5.
-+ */
-+static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
-+{
-+	__uint128_t tmp;
-+	u64 sum;
-+	int n = ihl; /* we want it signed */
-+
-+	tmp = *(const __uint128_t *)iph;
-+	iph += 16;
-+	n -= 4;
-+	tmp += ((tmp >> 64) | (tmp << 64));
-+	sum = tmp >> 64;
-+	do {
-+		sum += *(const u32 *)iph;
-+		iph += 4;
-+	} while (--n > 0);
-+
-+	sum += ror64(sum, 32);
-+	return csum_fold((__force __wsum)(sum >> 32));
-+}
-+#define ip_fast_csum ip_fast_csum
-+
-+extern unsigned int do_csum(const unsigned char *buff, int len);
-+#define do_csum do_csum
-+
-+#include <asm-generic/checksum.h>
-+
-+#endif	/* __ASM_CHECKSUM_H */
-diff --git a/arch/loongarch/lib/Makefile b/arch/loongarch/lib/Makefile
-index 40bde632900f..6ba6df411f90 100644
---- a/arch/loongarch/lib/Makefile
-+++ b/arch/loongarch/lib/Makefile
-@@ -4,4 +4,4 @@
- #
- 
- lib-y	+= delay.o memset.o memcpy.o memmove.o \
--	   clear_user.o copy_user.o dump_tlb.o unaligned.o
-+	   clear_user.o copy_user.o dump_tlb.o unaligned.o csum.o
-diff --git a/arch/loongarch/lib/csum.c b/arch/loongarch/lib/csum.c
-new file mode 100644
-index 000000000000..0f7e3a5ce96a
---- /dev/null
-+++ b/arch/loongarch/lib/csum.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (C) 2019-2020 Arm Ltd.
-+
-+#include <linux/compiler.h>
-+#include <linux/kasan-checks.h>
-+#include <linux/kernel.h>
-+
-+#include <net/checksum.h>
-+
-+/* Looks dumb, but generates nice-ish code */
-+static u64 accumulate(u64 sum, u64 data)
-+{
-+	__uint128_t tmp;
-+
-+	tmp = (__uint128_t)sum + data;
-+	return tmp + (tmp >> 64);
-+}
-+
-+/*
-+ * We over-read the buffer and this makes KASAN unhappy. Instead, disable
-+ * instrumentation and call kasan explicitly.
-+ */
-+unsigned int __no_sanitize_address do_csum(const unsigned char *buff, int len)
-+{
-+	unsigned int offset, shift, sum;
-+	const u64 *ptr;
-+	u64 data, sum64 = 0;
-+
-+	if (unlikely(len == 0))
-+		return 0;
-+
-+	offset = (unsigned long)buff & 7;
-+	/*
-+	 * This is to all intents and purposes safe, since rounding down cannot
-+	 * result in a different page or cache line being accessed, and @buff
-+	 * should absolutely not be pointing to anything read-sensitive. We do,
-+	 * however, have to be careful not to piss off KASAN, which means using
-+	 * unchecked reads to accommodate the head and tail, for which we'll
-+	 * compensate with an explicit check up-front.
-+	 */
-+	kasan_check_read(buff, len);
-+	ptr = (u64 *)(buff - offset);
-+	len = len + offset - 8;
-+
-+	/*
-+	 * Head: zero out any excess leading bytes. Shifting back by the same
-+	 * amount should be at least as fast as any other way of handling the
-+	 * odd/even alignment, and means we can ignore it until the very end.
-+	 */
-+	shift = offset * 8;
-+	data = *ptr++;
-+	data = (data >> shift) << shift;
-+
-+	/*
-+	 * Body: straightforward aligned loads from here on (the paired loads
-+	 * underlying the quadword type still only need dword alignment). The
-+	 * main loop strictly excludes the tail, so the second loop will always
-+	 * run at least once.
-+	 */
-+	while (unlikely(len > 64)) {
-+		__uint128_t tmp1, tmp2, tmp3, tmp4;
-+
-+		tmp1 = *(__uint128_t *)ptr;
-+		tmp2 = *(__uint128_t *)(ptr + 2);
-+		tmp3 = *(__uint128_t *)(ptr + 4);
-+		tmp4 = *(__uint128_t *)(ptr + 6);
-+
-+		len -= 64;
-+		ptr += 8;
-+
-+		/* This is the "don't dump the carry flag into a GPR" idiom */
-+		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
-+		tmp2 += (tmp2 >> 64) | (tmp2 << 64);
-+		tmp3 += (tmp3 >> 64) | (tmp3 << 64);
-+		tmp4 += (tmp4 >> 64) | (tmp4 << 64);
-+		tmp1 = ((tmp1 >> 64) << 64) | (tmp2 >> 64);
-+		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
-+		tmp3 = ((tmp3 >> 64) << 64) | (tmp4 >> 64);
-+		tmp3 += (tmp3 >> 64) | (tmp3 << 64);
-+		tmp1 = ((tmp1 >> 64) << 64) | (tmp3 >> 64);
-+		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
-+		tmp1 = ((tmp1 >> 64) << 64) | sum64;
-+		tmp1 += (tmp1 >> 64) | (tmp1 << 64);
-+		sum64 = tmp1 >> 64;
-+	}
-+	while (len > 8) {
-+		__uint128_t tmp;
-+
-+		sum64 = accumulate(sum64, data);
-+		tmp = *(__uint128_t *)ptr;
-+
-+		len -= 16;
-+		ptr += 2;
-+
-+		data = tmp >> 64;
-+		sum64 = accumulate(sum64, tmp);
-+	}
-+	if (len > 0) {
-+		sum64 = accumulate(sum64, data);
-+		data = *ptr;
-+		len -= 8;
-+	}
-+	/*
-+	 * Tail: zero any over-read bytes similarly to the head, again
-+	 * preserving odd/even alignment.
-+	 */
-+	shift = len * -8;
-+	data = (data << shift) >> shift;
-+	sum64 = accumulate(sum64, data);
-+
-+	/* Finally, folding */
-+	sum64 += (sum64 >> 32) | (sum64 << 32);
-+	sum = sum64 >> 32;
-+	sum += (sum >> 16) | (sum << 16);
-+	if (offset & 1)
-+		return (u16)swab32(sum);
-+
-+	return sum >> 16;
-+}
-+
-+__sum16 csum_ipv6_magic(const struct in6_addr *saddr,
-+			const struct in6_addr *daddr,
-+			__u32 len, __u8 proto, __wsum csum)
-+{
-+	__uint128_t src, dst;
-+	u64 sum = (__force u64)csum;
-+
-+	src = *(const __uint128_t *)saddr->s6_addr;
-+	dst = *(const __uint128_t *)daddr->s6_addr;
-+
-+	sum += (__force u32)htonl(len);
-+	sum += (u32)proto << 24;
-+	src += (src >> 64) | (src << 64);
-+	dst += (dst >> 64) | (dst << 64);
-+
-+	sum = accumulate(sum, src >> 64);
-+	sum = accumulate(sum, dst >> 64);
-+
-+	sum += ((sum >> 32) | (sum << 32));
-+	return csum_fold((__force __wsum)(sum >> 32));
-+}
-+EXPORT_SYMBOL(csum_ipv6_magic);
--- 
-2.27.0
-
+The reasons we want to dual license Linux hpilo driver are:
+- There are required bug fixes that are not copyrighted by HPE in the curre=
+nt Linux hpilo driver.
+- We want to maintain one hpilo driver between Linux and OpenBSD, and dual-=
+licensing of hpilo driver's existing codebase and all the future bug fixes =
+are the requirements for it. Therefore, we requested all other copyright ow=
+ners of Linux hpilo driver to accept dual-licensing (MIT/GPL-2.0) for their=
+ respective contributions.
