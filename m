@@ -2,104 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC550691477
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BAA69146F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjBIXdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:33:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S230491AbjBIXbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjBIXcy (ORCPT
+        with ESMTP id S230388AbjBIXbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:32:54 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D34131E31;
-        Thu,  9 Feb 2023 15:32:52 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pQGPK-0002GU-23;
-        Fri, 10 Feb 2023 00:32:50 +0100
-Date:   Thu, 9 Feb 2023 23:31:13 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
-Subject: [PATCH v3 06/12] net: ethernet: mtk_eth_soc: reset PCS state
-Message-ID: <9de6402e09536d1c1a95d28615c1ed2aba223dbd.1675984550.git.daniel@makrotopia.org>
-References: <cover.1675984550.git.daniel@makrotopia.org>
+        Thu, 9 Feb 2023 18:31:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07ABD76B3;
+        Thu,  9 Feb 2023 15:31:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78137B82361;
+        Thu,  9 Feb 2023 23:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E0F6C433EF;
+        Thu,  9 Feb 2023 23:31:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675985491;
+        bh=O69LuhcZctd57x4lhJFdI4eIyFQSa4iSqPKotAdsMPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ufFIYrT9UvLFb9qyPXt821NOnhRi4wl83XuBhkKVoT3uRaTvaXkMYdTvXuBlRiVCH
+         lL4Vxuewop0JrgU9U1VGZZ59u8rjcYnZB007pA+WN9gR7juX7RHjo6rZSxIvz78jWc
+         bWyP1tL9I1gNbOJ8fL1pkm1qYlIZmwEKboE5b8u3CnWaQcwtN7MYEJf3DqtTXwjo0f
+         YgDAFykZxjYhC1sTpsyozbKJ40tQajhzMCx9uMoL4d/1oEFrs3y8cY86s9fCB+8Svm
+         IFTjkcK9wM14PFlw1Ssh/zSpN5C/Zc5tmp/mAoOSV2cmPkqs2u1hcVwdZ8B79sswW6
+         x7IVYN87AT3VA==
+Date:   Thu, 9 Feb 2023 23:31:24 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Stephano Cetola <stephano@riscv.org>,
+        Jeff Scheel <jeff@riscv.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, pbonzini@redhat.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] RISC-V: Detect AIA CSRs from ISA string
+Message-ID: <Y+WCTDgtTwLB/8re@spud>
+References: <20230128072737.2995881-3-apatel@ventanamicro.com>
+ <mhng-0f9bdf58-5289-4db4-8fd7-38898824c44f@palmer-ri-x1c9>
+ <CAK9=C2X8C4yswGhDwe1OzQXTELXQxp8=ayiFxh1aVMk4TxeDjw@mail.gmail.com>
+ <Y+KS16ZNXrDU+xun@spud>
+ <CAOnJCUKKRRCrKN17ytczYXVLTcMkFaZsg6QXKjPUuSk=PqL6JQ@mail.gmail.com>
+ <Y+K3FyGrNUQJZao8@spud>
+ <CAK9=C2VnkK5GNO4D1AWpiNcTE=OrSueN9NAyhR7rj9csuUi4Mg@mail.gmail.com>
+ <Y+OcId2PZ0pi5T08@wendy>
+ <CAK9=C2VeyJMHocZMQTZoULveAcH0kdH2vBKZYFt5kq9dMYP_Bw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Vv2d+yOSyM4AvbL5"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1675984550.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK9=C2VeyJMHocZMQTZoULveAcH0kdH2vBKZYFt5kq9dMYP_Bw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reset PCS state when changing interface mode.
 
-Tested-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.h | 4 ++++
- drivers/net/ethernet/mediatek/mtk_sgmii.c   | 4 ++++
- 2 files changed, 8 insertions(+)
+--Vv2d+yOSyM4AvbL5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 7014c02ba2d4..142def8629c8 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -548,6 +548,10 @@
- #define SGMII_SEND_AN_ERROR_EN		BIT(11)
- #define SGMII_IF_MODE_MASK		GENMASK(5, 1)
- 
-+/* Register to reset SGMII design */
-+#define SGMII_RESERVED_0	0x34
-+#define SGMII_SW_RESET		BIT(0)
-+
- /* Register to set SGMII speed, ANA RG_ Control Signals III*/
- #define SGMSYS_ANA_RG_CS3	0x2028
- #define RG_PHY_SPEED_MASK	(BIT(2) | BIT(3))
-diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-index d7ffaaeaf9ab..d7e7352041a4 100644
---- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
-@@ -88,6 +88,10 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
- 		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
- 				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
- 
-+		/* Reset SGMII PCS state */
-+		regmap_update_bits(mpcs->regmap, SGMII_RESERVED_0,
-+				   SGMII_SW_RESET, SGMII_SW_RESET);
-+
- 		if (mpcs->flags & MTK_SGMII_FLAG_PN_SWAP)
- 			regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_WRAP_CTRL,
- 					   SGMII_PN_SWAP_MASK,
--- 
-2.39.1
+Hey all,
 
+Just circling back to this one, since the reply from Palmer was to
+another thread with a much smaller CC list.
+
+On Wed, Feb 08, 2023 at 08:27:23PM +0530, Anup Patel wrote:
+> On Wed, Feb 8, 2023 at 6:27 PM Conor Dooley <conor.dooley@microchip.com> =
+wrote:
+> > On Wed, Feb 08, 2023 at 09:24:28AM +0530, Anup Patel wrote:
+
+> > > The presence of S*aia in ISA string only implies that AIA extended
+> > > local interrupt CSRs are implemented by the underlying RISC-V
+> > > implementation.
+> >
+> > Would you mind linking to where this is documented & explaining in your
+> > commit message why it is okay operate on the basis of s*aia in the ISA
+> > string only mandates the presence of the CSRs and nothing more.
+> >
+> > I think when I was reading it last night, I saw some commentary in this
+> > vein in Section 1.6 of the rc2 spec. Although IIRC it noted changes in
+> > interrupt behaviour there too, so I'm not sure if that section is what =
+you
+> > are referring to here.
+> >
+> > Perhaps this is all just a good argument for providing more information
+> > in commit messages ;)
+>=20
+> Sure, I am anyway going to send v3 after rebase so I will cite the
+> Section 1.6 of AIA spec in the commit description.
+
+We had a nice conversation about this on during the weekly patchwork
+sync call :)
+The end result of that one was "inconclusive" and the outcome appears to
+be that we will wait until the entire spec is frozen before doing
+anything here.
+Palmer left a comment in response to another thread to that effect:
+https://lore.kernel.org/linux-riscv/mhng-474f7ecd-65b8-4cfa-8b75-e51b896cc5=
+8e@palmer-ri-x1c9/
+
+Cheers,
+Conor.
+
+
+--Vv2d+yOSyM4AvbL5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+WCTAAKCRB4tDGHoIJi
+0q6sAP49zNucepjSQABZqre91PwzpDcltIfXd1XLoWl0qDu0CQD7BAx2at0D4LVx
+XsqZPYOLysSc280F7lsVo8sayoX3Egs=
+=wLGy
+-----END PGP SIGNATURE-----
+
+--Vv2d+yOSyM4AvbL5--
