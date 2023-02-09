@@ -2,95 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49810691171
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29668691173
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjBITh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S230127AbjBIThw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjBIThX (ORCPT
+        with ESMTP id S229525AbjBIThu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:37:23 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A2F2BF36;
-        Thu,  9 Feb 2023 11:37:22 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id gr7so9659096ejb.5;
-        Thu, 09 Feb 2023 11:37:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kRQ+AqBQSo8wInSluRM33VrrcRj+TuOF6TCeB8K1fMo=;
-        b=KnhyKhobG8EBoOSqMfpRcFMll7YJSkpMsetK7GzrEDpaOs2PAmAUZPlkHlEAI5Yefn
-         TyGWmeE+x9SGeEZCgRF1Oh9fbctCkkq9tT+zAdBXEpmhbj0ngtrUKfr8FwOSxqNKsAG0
-         +n6uCWrzUNW/P4vgEmlged38fIYCq/4MBXbC5X8gxJLGo2G9AoBTvpgSV8Z3NY6psnY/
-         dt2bo0qy6bDJpyGax9VSCzRWeMJ3AoOzCuK/O+YJ5roNQbwBVYjqTR6QEcawghVTHBrn
-         AiRRgxvE1q0h+E1UprW5WBNN8JSbHBtyeMIBu7iGsMeYLN6OQGSd7oZPWM7fVcm9QD+O
-         XXfQ==
-X-Gm-Message-State: AO0yUKUBqp+MiuDtXcPZgUPqF7/JGRIy+pTbalrKofXfJUZReFApE2kn
-        Vq6Xawi8CVAfkc1Ichh21JSpO8nmXfAiezIdNTg=
-X-Google-Smtp-Source: AK7set8AWc9FjJZ4cJ3vdZgcz5eCuoVCOc66/9AX590nDLt1MYnIqjzdWlX49FxX03GMogMn7OIFSN5xKGGRqYhJqD8=
-X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
- sd14-20020a170906ce2e00b0087f575a9b67mr2946159ejb.274.1675971441388; Thu, 09
- Feb 2023 11:37:21 -0800 (PST)
+        Thu, 9 Feb 2023 14:37:50 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F642CC6F;
+        Thu,  9 Feb 2023 11:37:49 -0800 (PST)
+Received: from localhost (unknown [86.120.32.152])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E2F0766020CE;
+        Thu,  9 Feb 2023 19:37:47 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675971468;
+        bh=rhDtpmqy4aWizG8w41QdC/uCJpCIZ4JNM87GvHiVTm0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bWKmBIUWt8UglmQLQVTp2+M07vvVWXpqa77cjPwDR82g7g6wcWB6XtqnuMek7G/K1
+         tdcpQUNs/q9yz7JqzIBgNfylx3LEz3feeAuRiOTdJnTUfydqlt8DaeSaJrNafdNlzI
+         1M7+ZwM+zluWZ1Udm1yoO1Xp2Twl/VOSz6XbckbBRT8zLigfUBSKteuaE2zlT3UYPM
+         LQLjOlJ2Ztd1NnkFrGw4UPqW+nn3qghRVVzIaMMdgFE3piST6UsMoOh+/gm5bQcxRT
+         mVMquwQ+W7u8j8sHuVLdFUK6BEQomVR/tdSNkWLthxjN9QfmXefph/3o2UbV8UyHur
+         /Nbo3mG4B4+bQ==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v2 1/1] dt-bindings: Fix multi pattern support in DT_SCHEMA_FILES
+Date:   Thu,  9 Feb 2023 21:37:35 +0200
+Message-Id: <20230209193735.795288-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230202151515.2309543-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230202151515.2309543-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Feb 2023 20:37:10 +0100
-Message-ID: <CAJZ5v0ikyjgKfrnEk=yiK-KHas8QEC0-O_mdRCMvkeKS+uoovw@mail.gmail.com>
-Subject: Re: [PATCH] kernel/power/energy_model.c: fix memory leak with using debugfs_lookup()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 4:15 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> When calling debugfs_lookup() the result must have dput() called on it,
-> otherwise the memory will leak over time.  To make things simpler, just
-> call debugfs_lookup_and_remove() instead which handles all of the logic
-> at once.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  kernel/power/energy_model.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index f82111837b8d..7b44f5b89fa1 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -87,10 +87,7 @@ static void em_debug_create_pd(struct device *dev)
->
->  static void em_debug_remove_pd(struct device *dev)
->  {
-> -       struct dentry *debug_dir;
-> -
-> -       debug_dir = debugfs_lookup(dev_name(dev), rootdir);
-> -       debugfs_remove_recursive(debug_dir);
-> +       debugfs_lookup_and_remove(dev_name(dev), rootdir);
->  }
->
->  static int __init em_debug_init(void)
-> --
+DT_SCHEMA_FILES used to allow specifying a space separated list of file
+paths, but the introduction of partial matches support broke this
+feature:
 
-Applied as 6.3 material, thanks!
+$ make dtbs_check DT_SCHEMA_FILES="path/to/schema1.yaml path/to/schema2.yaml"
+[...]
+  LINT    Documentation/devicetree/bindings
+usage: yamllint [-h] [-] [-c CONFIG_FILE | -d CONFIG_DATA] [--list-files] [...]
+                [-v]
+                [FILE_OR_DIR ...]
+yamllint: error: one of the arguments FILE_OR_DIR - is required
+[...]
+
+Restore the lost functionality by preparing a grep filter that is able
+to handle multiple search patterns.
+
+Additionally, as suggested by Rob, use ':' instead of ' ' as the
+patterns separator char. Hence, the command above becomes:
+
+$ make dtbs_check DT_SCHEMA_FILES="path/to/schema1.yaml:path/to/schema2.yaml"
+
+Fixes: 309d955985ee ("dt-bindings: kbuild: Support partial matches with DT_SCHEMA_FILES")
+Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+---
+Changes in v2:
+ - Use ':' instead of ' ' as the patterns separator char, per Rob's review
+ - Drop empty line between Fixes and Signed-off-by tags
+
+ Documentation/devicetree/bindings/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
+index bf2d8a8ced77..8b395893bd85 100644
+--- a/Documentation/devicetree/bindings/Makefile
++++ b/Documentation/devicetree/bindings/Makefile
+@@ -28,7 +28,7 @@ $(obj)/%.example.dts: $(src)/%.yaml check_dtschema_version FORCE
+ find_all_cmd = find $(srctree)/$(src) \( -name '*.yaml' ! \
+ 		-name 'processed-schema*' \)
+ 
+-find_cmd = $(find_all_cmd) | grep -F "$(DT_SCHEMA_FILES)"
++find_cmd = $(find_all_cmd) | grep -F -e "$(subst :," -e ",$(DT_SCHEMA_FILES))"
+ CHK_DT_DOCS := $(shell $(find_cmd))
+ 
+ quiet_cmd_yamllint = LINT    $(src)
+-- 
+2.39.1
+
