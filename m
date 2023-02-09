@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1646912F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C70A6912FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjBIWJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 17:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50926 "EHLO
+        id S230264AbjBIWLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 17:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBIWJh (ORCPT
+        with ESMTP id S229589AbjBIWLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 17:09:37 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9011066EC7;
-        Thu,  9 Feb 2023 14:09:33 -0800 (PST)
+        Thu, 9 Feb 2023 17:11:32 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F1066ED1;
+        Thu,  9 Feb 2023 14:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675980573; x=1707516573;
+  t=1675980691; x=1707516691;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=NWdX4ovfeso9/xymokaYM6nKkkxJTUMaRhX9Ah2IpwQ=;
-  b=MqU44/XFDZRVmrHQUdE3pQ/WatTFqMwfweDKuSvxoH7XIO5CPNfoCjOx
-   Iwhxh14R1P0yOgEbr6MYRXt4N1P9cT72ifDkJJpPnqU3K+GfT/LIm4NCa
-   NB8BwMbdnmT0fdIoE6Bzf+1EgHtfbxe9FOGLPNJsmxw6W2FnJ944Ty1Ye
-   5yR3Sd2kjcn2SlLbqwMZiQyREmR8dCdp94mCN4egsOxE1n6z007zYOyQY
-   KEch9GelwaWVYiEiF7Y6CEt1drYGkIE/b3pPfCSbaPHKd8YwOjXMQNqQC
-   Ec4/bhlJBRF8yLgju6I41pSi4CgA/qE4mXNhVHy5k48/lzKofAVVUFznF
+  bh=T4V7k7V2WFxCfD78viO3ITAvZg/skqanlFdtB/Z58dY=;
+  b=UJYCS5e8pRX1DwkQZGTKprEC9dWdmsogGD728UCxeSbCnxry1BqMVZLI
+   6c71GPtkIwbPXPCiMzjrJ1e18fkAmrJlYUsSQ+6+E41UHLqMn2bjPIzaA
+   IuuehJAE+FtqRpzah5mbP9VYw3PGJcmZ82IJrBwzvOLZ5t2ejjZ8LpgE9
+   d8goatD1zJnUMNlb6O8TSQRpEDIfZc4KxC4k7sSYnldHkSC9i6eAv+JS/
+   uwHu3EizWyUCXdtDdv2iBdzgXvEo1HiKAcslCDxedaF8cgMD1jQifdx9d
+   LBQ77b5C5VpqzGoNMXvTTmvFyjsp8zni5zwSuVAKNy8Ak3YIaPyMmHy+K
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="328893458"
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="330272438"
 X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="328893458"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 14:09:20 -0800
+   d="scan'208";a="330272438"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 14:11:30 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="736509528"
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="700244012"
 X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="736509528"
+   d="scan'208";a="700244012"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Feb 2023 14:09:17 -0800
+  by orsmga001.jf.intel.com with ESMTP; 09 Feb 2023 14:11:28 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 9978F1A6; Fri, 10 Feb 2023 00:09:56 +0200 (EET)
+        id 1367C1A6; Fri, 10 Feb 2023 00:12:06 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -49,9 +49,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc:     Manivannan Sadhasivam <mani@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 1/1] media: i2c: imx290: Use device_property_read_u32() directly
-Date:   Fri, 10 Feb 2023 00:09:54 +0200
-Message-Id: <20230209220954.46306-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/1] media: i2c: imx290: Make use of get_unaligned_le24(), put_unaligned_le24()
+Date:   Fri, 10 Feb 2023 00:12:05 +0200
+Message-Id: <20230209221205.46573-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -64,31 +64,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need to call fwnode_property_read_u32(dev_fwnode()), when
-we have already existing helper. So use it.
+Since we have a proper endianness converters for LE 24-bit data use them.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
-v2: added tag (Laurent), wrapped the long line (Laurent)
- drivers/media/i2c/imx290.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2: dropped unrelated noise from the commit message (Laurent)
+ drivers/media/i2c/imx290.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
-index 49d6c8bdec41..dc228af6fac9 100644
+index 49d6c8bdec41..330098a0772d 100644
 --- a/drivers/media/i2c/imx290.c
 +++ b/drivers/media/i2c/imx290.c
-@@ -1132,8 +1132,8 @@ static int imx290_init_clk(struct imx290 *imx290)
- 	u32 xclk_freq;
+@@ -16,6 +16,9 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
++
++#include <asm/unaligned.h>
++
+ #include <media/media-entity.h>
+ #include <media/v4l2-ctrls.h>
+ #include <media/v4l2-device.h>
+@@ -466,18 +469,20 @@ static int __always_unused imx290_read(struct imx290 *imx290, u32 addr, u32 *val
+ 		return ret;
+ 	}
+ 
+-	*value = (data[2] << 16) | (data[1] << 8) | data[0];
++	*value = get_unaligned_le24(data);
+ 	return 0;
+ }
+ 
+ static int imx290_write(struct imx290 *imx290, u32 addr, u32 value, int *err)
+ {
+-	u8 data[3] = { value & 0xff, (value >> 8) & 0xff, value >> 16 };
++	u8 data[3];
  	int ret;
  
--	ret = fwnode_property_read_u32(dev_fwnode(imx290->dev),
--				       "clock-frequency", &xclk_freq);
-+	ret = device_property_read_u32(imx290->dev, "clock-frequency",
-+				       &xclk_freq);
- 	if (ret) {
- 		dev_err(imx290->dev, "Could not get xclk frequency\n");
- 		return ret;
+ 	if (err && *err)
+ 		return *err;
+ 
++	put_unaligned_le24(value, data);
++
+ 	ret = regmap_raw_write(imx290->regmap, addr & IMX290_REG_ADDR_MASK,
+ 			       data, (addr >> IMX290_REG_SIZE_SHIFT) & 3);
+ 	if (ret < 0) {
 -- 
 2.39.1
 
