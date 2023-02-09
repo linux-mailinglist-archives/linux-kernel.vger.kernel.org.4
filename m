@@ -2,275 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A73E690087
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 07:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1028B69008F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 07:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjBIGkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 01:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S229649AbjBIGpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 01:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjBIGkL (ORCPT
+        with ESMTP id S229567AbjBIGpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 01:40:11 -0500
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0E243470
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 22:39:37 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VbEsQkr_1675924757;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VbEsQkr_1675924757)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Feb 2023 14:39:17 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        zhujia.zj@bytedance.com
-Cc:     huyue2@coolpad.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] erofs: unify anonymous inodes for blob
-Date:   Thu,  9 Feb 2023 14:39:13 +0800
-Message-Id: <20230209063913.46341-5-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230209063913.46341-1-jefflexu@linux.alibaba.com>
-References: <20230209063913.46341-1-jefflexu@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 01:45:01 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8148BFF1E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 22:45:00 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id i17-20020a25bc11000000b007b59a5b74aaso1078190ybh.7
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 22:45:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aYA62UM7iNvAalHymUv4OGhwL/goVRk/xLdwvIuRrY8=;
+        b=MMP6r2RdnTh69WtQF55ZH+zjroKR30J8jZ5jVsIaMXCX4TG2ndbpu4toNWm+rH2Inu
+         H3mZtvfKGcZi+1JGFSWKamBVthAdjtyzSdscxxzUni0071VP9Dw96QV8Up8jRPxkBTGQ
+         f3kWHgkdVMWOmzbZNLWmiy3ThzdasvoZ53qRcF3S7FGq1RUjJmIkdMCWKnGygZjcfNXL
+         ZCoBxKNsIvQR/JKFP08PfSb2ldoZyv/ALjGWkkMWNUdVdbnGFgL7rTP7dTzXYFNQMWiq
+         wY2/ze/L4lq6MYAN0rcLVR7tYQbn/7R8dEM5hnPa8WGki3tQZSQpd2aQ5CP6OlPZdHmj
+         PsuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aYA62UM7iNvAalHymUv4OGhwL/goVRk/xLdwvIuRrY8=;
+        b=SDHCvNmrRV6Wfi9eVrr8Bi8Btmff7iHPtgxQyAwNhXZJsiHNoIEvdTqwqaomPmRqXT
+         1xeay5OPN345inD3eGWgr+vFNdYD5jOvyQ+vqqaw8K0o6HVOXqOAHeEG4ZHokM83aiKy
+         xwm9mzm4YUeX3/nmlsfkBesSgvpeboFzifQljEw8wc8EZV2vjikmTRJAFuwc5AO/zKt6
+         gA/xu/Y08EUh9KAXTFzxU5s4Yk6i8xrGCMEK3gnqz965opaWLymxMCUZ/ufmQrPqbcd0
+         sK1I77FQHHeiboZdkwHN50AzQGoAyVtrNbWhY6AgeP8XUrAqGDKNkYFh+97q8IDEc1O5
+         orZA==
+X-Gm-Message-State: AO0yUKV/6qfJNamJjfPM6nj0De/ujdnhyR8z9DF2tzmsKpj0vc1hkWpS
+        JYVM3SkFYdSSRSfvUxalQ9L2viAY+Jh6
+X-Google-Smtp-Source: AK7set+bdzgZW3i0eyMzB8UjNs16FKUeVxGDvyk0dGd+ARkOzBPZZasiKBTZiO1/t6ZzZbNQOMhtazbI6C6L
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:d338:d214:571:e56b])
+ (user=irogers job=sendgmr) by 2002:a05:6902:54a:b0:8bb:dfe8:a33b with SMTP id
+ z10-20020a056902054a00b008bbdfe8a33bmr22ybs.9.1675925099446; Wed, 08 Feb 2023
+ 22:44:59 -0800 (PST)
+Date:   Wed,  8 Feb 2023 22:44:47 -0800
+Message-Id: <20230209064447.83733-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+Subject: [PATCH v1] perf stat: Avoid merging/aggregating metric counts twice
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        James Clark <james.clark@arm.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Perry Taylor <perry.taylor@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently there're two anonymous inodes (inode and anon_inode in struct
-erofs_fscache) for each blob.  The former was introduced as the
-address_space of page cache for bootstrap.
+The added perf_stat_merge_counters combines uncore counters. When
+metrics are enabled, the counts are merged into a metric_leader
+via the stat-shadow saved_value logic. As the leader now is
+passed an aggregated count, it leads to all counters being added
+together twice and counts appearing approximately doubled in
+metrics.
 
-The latter was initially introduced as both the address_space of page
-cache and also a sentinel in the shared domain.  Since now the management
-of cookies in share domain has been decoupled with the anonymous inode,
-there's no need to maintain an extra anonymous inode.  Let's unify these
-two anonymous inodes.
+This change disables the saved_value merging of counts for evsels
+that are merged. It is recommended that later changes remove the
+saved_value entirely as the two layers of aggregation in the code
+is confusing.
 
-Besides, in non-share-domain mode only bootstrap will allocate anonymous
-inode.  To simplify the implementation, always allocate anonymous inode
-for both bootstrap and data blobs.  Similarly release anonymous inodes
-for data blobs when .put_super() is called, or we'll get "VFS: Busy
-inodes after unmount." warning.
-
-Also remove the redundant set_nlink() when initializing the anonymous
-inode, since i_nlink has already been initialized to 1 when the inode
-gets allocated.
-
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
+Fixes: 942c5593393d ("perf stat: Add perf_stat_merge_counters()")
+Reported-by: Perry Taylor <perry.taylor@intel.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- fs/erofs/fscache.c  | 85 ++++++++++++++++++---------------------------
- fs/erofs/internal.h |  7 ++--
- fs/erofs/super.c    |  2 ++
- 3 files changed, 38 insertions(+), 56 deletions(-)
+ tools/perf/util/stat-shadow.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index c6f09928b62c..f41d57893e37 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -420,14 +420,14 @@ static int erofs_fscache_register_domain(struct super_block *sb)
- 	return err;
- }
- 
--static
--struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
--						   char *name,
--						   unsigned int flags)
-+static struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
-+						char *name, unsigned int flags)
- {
- 	struct fscache_volume *volume = EROFS_SB(sb)->volume;
- 	struct erofs_fscache *ctx;
- 	struct fscache_cookie *cookie;
-+	struct super_block *isb;
-+	struct inode *inode;
- 	int ret;
- 
- 	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-@@ -443,33 +443,32 @@ struct erofs_fscache *erofs_fscache_acquire_cookie(struct super_block *sb,
- 		ret = -EINVAL;
- 		goto err;
- 	}
--
- 	fscache_use_cookie(cookie, false);
--	ctx->cookie = cookie;
--
--	if (flags & EROFS_REG_COOKIE_NEED_INODE) {
--		struct inode *const inode = new_inode(sb);
--
--		if (!inode) {
--			erofs_err(sb, "failed to get anon inode for %s", name);
--			ret = -ENOMEM;
--			goto err_cookie;
--		}
--
--		set_nlink(inode, 1);
--		inode->i_size = OFFSET_MAX;
--		inode->i_mapping->a_ops = &erofs_fscache_meta_aops;
--		mapping_set_gfp_mask(inode->i_mapping, GFP_NOFS);
--		inode->i_private = ctx;
- 
--		ctx->inode = inode;
-+	/*
-+	 * Allocate anonymous inode in global pseudo mount for shareable blobs,
-+	 * so that they are accessible among erofs fs instances.
-+	 */
-+	isb = flags & EROFS_REG_COOKIE_SHARE ? erofs_pseudo_mnt->mnt_sb : sb;
-+	inode = new_inode(isb);
-+	if (!inode) {
-+		erofs_err(sb, "failed to get anon inode for %s", name);
-+		ret = -ENOMEM;
-+		goto err_cookie;
- 	}
- 
-+	inode->i_size = OFFSET_MAX;
-+	inode->i_mapping->a_ops = &erofs_fscache_meta_aops;
-+	mapping_set_gfp_mask(inode->i_mapping, GFP_NOFS);
-+	inode->i_private = ctx;
-+
-+	ctx->cookie = cookie;
-+	ctx->inode = inode;
- 	return ctx;
- 
- err_cookie:
--	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
--	fscache_relinquish_cookie(ctx->cookie, false);
-+	fscache_unuse_cookie(cookie, NULL, NULL);
-+	fscache_relinquish_cookie(cookie, false);
- err:
- 	kfree(ctx);
- 	return ERR_PTR(ret);
-@@ -480,18 +479,13 @@ static void erofs_fscache_relinquish_cookie(struct erofs_fscache *ctx)
- 	fscache_unuse_cookie(ctx->cookie, NULL, NULL);
- 	fscache_relinquish_cookie(ctx->cookie, false);
- 	iput(ctx->inode);
--	iput(ctx->anon_inode);
- 	kfree(ctx->name);
- 	kfree(ctx);
- }
- 
--static
--struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
--						       char *name,
--						       unsigned int flags)
-+static struct erofs_fscache *erofs_domain_init_cookie(struct super_block *sb,
-+						char *name, unsigned int flags)
- {
--	int err;
--	struct inode *inode;
- 	struct erofs_fscache *ctx;
- 	struct erofs_domain *domain = EROFS_SB(sb)->domain;
- 
-@@ -501,35 +495,23 @@ struct erofs_fscache *erofs_fscache_domain_init_cookie(struct super_block *sb,
- 
- 	ctx->name = kstrdup(name, GFP_KERNEL);
- 	if (!ctx->name) {
--		err = -ENOMEM;
--		goto out;
--	}
--
--	inode = new_inode(erofs_pseudo_mnt->mnt_sb);
--	if (!inode) {
--		err = -ENOMEM;
--		goto out;
-+		erofs_fscache_relinquish_cookie(ctx);
-+		return ERR_PTR(-ENOMEM);
- 	}
- 
-+	refcount_inc(&domain->ref);
- 	ctx->domain = domain;
--	ctx->anon_inode = inode;
- 	list_add(&ctx->node, &erofs_domain_cookies_list);
--	inode->i_private = ctx;
--	refcount_inc(&domain->ref);
- 	return ctx;
--out:
--	erofs_fscache_relinquish_cookie(ctx);
--	return ERR_PTR(err);
- }
- 
--static
--struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
--						   char *name,
--						   unsigned int flags)
-+static struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
-+						char *name, unsigned int flags)
- {
- 	struct erofs_fscache *ctx;
- 	struct erofs_domain *domain = EROFS_SB(sb)->domain;
- 
-+	flags |= EROFS_REG_COOKIE_SHARE;
- 	mutex_lock(&erofs_domain_cookies_lock);
- 	list_for_each_entry(ctx, &erofs_domain_cookies_list, node) {
- 		if (ctx->domain != domain || strcmp(ctx->name, name))
-@@ -544,7 +526,7 @@ struct erofs_fscache *erofs_domain_register_cookie(struct super_block *sb,
- 		mutex_unlock(&erofs_domain_cookies_lock);
- 		return ctx;
- 	}
--	ctx = erofs_fscache_domain_init_cookie(sb, name, flags);
-+	ctx = erofs_domain_init_cookie(sb, name, flags);
- 	mutex_unlock(&erofs_domain_cookies_lock);
- 	return ctx;
- }
-@@ -583,7 +565,7 @@ int erofs_fscache_register_fs(struct super_block *sb)
- 	int ret;
- 	struct erofs_sb_info *sbi = EROFS_SB(sb);
- 	struct erofs_fscache *fscache;
--	unsigned int flags;
-+	unsigned int flags = 0;
- 
- 	if (sbi->domain_id)
- 		ret = erofs_fscache_register_domain(sb);
-@@ -602,7 +584,6 @@ int erofs_fscache_register_fs(struct super_block *sb)
- 	 *
- 	 * Acquired domain/volume will be relinquished in kill_sb() on error.
- 	 */
--	flags = EROFS_REG_COOKIE_NEED_INODE;
- 	if (sbi->domain_id)
- 		flags |= EROFS_REG_COOKIE_NEED_NOEXIST;
- 	fscache = erofs_fscache_register_cookie(sb, sbi->fsid, flags);
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 8358cf5f731e..50cd257d04e3 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -107,8 +107,7 @@ struct erofs_domain {
- 
- struct erofs_fscache {
- 	struct fscache_cookie *cookie;
--	struct inode *inode;
--	struct inode *anon_inode;
-+	struct inode *inode;	/* anonymous indoe for the blob */
- 
- 	/* used for share domain mode */
- 	struct erofs_domain *domain;
-@@ -450,8 +449,8 @@ extern const struct file_operations erofs_dir_fops;
- extern const struct iomap_ops z_erofs_iomap_report_ops;
- 
- /* flags for erofs_fscache_register_cookie() */
--#define EROFS_REG_COOKIE_NEED_INODE	1
--#define EROFS_REG_COOKIE_NEED_NOEXIST	2
-+#define EROFS_REG_COOKIE_SHARE		0x0001
-+#define EROFS_REG_COOKIE_NEED_NOEXIST	0x0002
- 
- void erofs_unmap_metabuf(struct erofs_buf *buf);
- void erofs_put_metabuf(struct erofs_buf *buf);
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 715efa94eed4..19b1ae79cec4 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -968,6 +968,8 @@ static void erofs_put_super(struct super_block *sb)
- 	iput(sbi->packed_inode);
- 	sbi->packed_inode = NULL;
- #endif
-+	erofs_free_dev_context(sbi->devs);
-+	sbi->devs = NULL;
- 	erofs_fscache_unregister_fs(sb);
- }
- 
+diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
+index cadb2df23c87..4cd05d9205e3 100644
+--- a/tools/perf/util/stat-shadow.c
++++ b/tools/perf/util/stat-shadow.c
+@@ -311,7 +311,7 @@ void perf_stat__update_shadow_stats(struct evsel *counter, u64 count,
+ 		update_stats(&v->stats, count);
+ 		if (counter->metric_leader)
+ 			v->metric_total += count;
+-	} else if (counter->metric_leader) {
++	} else if (counter->metric_leader && !counter->merged_stat) {
+ 		v = saved_value_lookup(counter->metric_leader,
+ 				       map_idx, true, STAT_NONE, 0, st, rsd.cgrp);
+ 		v->metric_total += count;
 -- 
-2.19.1.6.gb485710b
+2.39.1.519.gcb327c4b5f-goog
 
