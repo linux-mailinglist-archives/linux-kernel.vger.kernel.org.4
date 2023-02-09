@@ -2,188 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224E1690790
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1B26907A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjBILiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 06:38:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        id S231142AbjBILnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 06:43:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjBILh4 (ORCPT
+        with ESMTP id S230403AbjBILmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:37:56 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39B52ED58
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:27:21 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id k13so2538687plg.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 03:27:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZO3ixftmMIs/xiv7c1kjdOc3DsbGZoqxHMz7jtDmgVk=;
-        b=pz0kaj4pA+pXJHWrWfY8RAlUSDjOxw5lTXjoH6Rx+LPT4D/JQvlBwdqGOyBXp7cirZ
-         BINbhFoK9wHZs8Qv010Da1XPCFp9gAwYbFdvYXoVSbtaHukBJ7fywT4z7N3RVVTiTrVA
-         Z9JjRowt0NBpoSrH3cMW0e9wIrqcRtKbEkYZWLOW0IacGaKH6WT0v26AFT+4BOma+6cO
-         F0IcYWjcXral5jvNEXjA3cfQBHv9ZdugqHQqqZ+Ogbexj5Pe3Pmd3nH7aTL+HLxCDnW5
-         RmyNBK6PlhorMh4Q6nYjf1hW4O30DNnOpIi+hny8opTUPIAYkmQoh64FpPUijq9vSv6H
-         q3Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZO3ixftmMIs/xiv7c1kjdOc3DsbGZoqxHMz7jtDmgVk=;
-        b=rTwkfw65MAVOm+IGx5zhbBFwFLg5pshWhT1Lki5BPheQfNvy0wyGG+xWryaL9vYPfp
-         G85TpqJZ2kPCMBhivFTzvlUaZqCb5r5CLf5T5Ous0LT1yJ7LsnsZSAN0KYtI51dlC704
-         vd+egbdMbrJ49NAJdkZrX1XVtWYFFrzjM7Y+4osy89azCwwVcYyXgZg81TleMK8SqgvK
-         upeF8f6wUWFTIRx0m7CyFU0r4GjPlOetMP9PIncM0b2dUGrUZGkPX6K27JCvPRpgMWea
-         lfykauuNaepCE7d9eCqYMvJIxiqSBN2wDZow2oadFpX0fGSaYGjrjQGhZyRSGEzTAuiJ
-         wXfg==
-X-Gm-Message-State: AO0yUKXDHkoLONftmSU5wK31+9Ya8Z8dJYGzO234b1jKSQk792m5PUwn
-        l+f+jzZw/y0CcsXmajzU0UnYPgWPYs2JdlMYJtdm0w==
-X-Google-Smtp-Source: AK7set+XcDonRvwNhFSsKoIQMItmhoTXzE9d8mBWZc5HeaWiZD4MUhsV0bteTJ5/3LAZ3deilFdgfHWYGdlvWs7ih7s=
-X-Received: by 2002:a17:90a:b309:b0:233:4f0d:7 with SMTP id
- d9-20020a17090ab30900b002334f0d0007mr4615pjr.42.1675941984166; Thu, 09 Feb
- 2023 03:26:24 -0800 (PST)
+        Thu, 9 Feb 2023 06:42:53 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::601])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1674A6E885;
+        Thu,  9 Feb 2023 03:31:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fZR2Q2RnFbagGyX5YCVSuYN30uU2QVj2mWzqzF5iSq8uUW4IjVxQiHyAyTq7G1UzVoXSYPPxzav5rPK+A4Mh/ITs44ZbIND1iglV/Cg9CtdWk+nP/UsjDrgoohEvcUIMmfCvtrsW9ucUohJUA0pWFevFgGhwwWVOdCbCnS4peIwdf7yWFMTblKG7opUofqjD3ItN4LtFEupsbhcuUAUZ1AMVI/tFG5udQR1aveVu0sPTMcu03/+N9HJ34lha2T9ov4b9RWIDVjyfLtL/76S0EoeMztbaZ0FSEAssaqhjE9mO1JtKZe0aTEEciu4sp+FjobNEClMHCepK60e0W5WEEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wv/h9yMF1V7f8yQyo1ITCHbCwWDrmyWqYtd76E8ToHE=;
+ b=AIikFwk0FSPqlx9eirUO/VY0izD2abhKoCtO6eTgvLeZsmuUWXiz/oBCDhsQ8OKvxZO3q4+HWcM1jYnSUKpge1nvJY06EjhtqK2FVRH9FTe4o7VvSzNqEKGScXyRbT/5u/vcbjZMLhyQ/mNAkI7d2lVf0apkCwLfeBpoucv7z+/C+D9n26w+kFsvkBxmszX2mQaaecnF79j89QyRf4G3gd9yrVOlFThTAUCsFoXT5DNW+fOBJ/xQ7uOnm6/v6pXmzKu/FMjXGdFMGiOGXq0ZxEPZjFRWSZ3HKsHc7ITWKn6Rw+nNrP5boOPCpNb4oeQGu487Zq6v0jc/e3FMMeyPiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wv/h9yMF1V7f8yQyo1ITCHbCwWDrmyWqYtd76E8ToHE=;
+ b=eQ0M/s3sSwbTRQo7lwAn1wirtgYUKwYHdG9hv5MqPxAKIOM3ghMiRZFlyENi13CRosgmdxel+Y/abR18bLp8vVLJ4GTQhrVRKsq3d1pXszWtE5MJHqDS4AUPTMjslA6cATz6aqoENg178ZRXt1GWouS1eHT11vTdPK/uRwAHRQDBWEgvgPS1fRJTJ8R3+ZhILSMwY9qZaV3J8k2rVaQ3NiJlloZoeYOVPYGnaDBDICcAs9mtOXi11VJyBuAtzfl5WrC6QpUvQTgXczW/tWZE3YiKYXeYbAUV2CmymMNLkWCig9KYP/dH2O60W5NjrYY9K3w0bbq704WtoDJXbDbRvQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
+ by DM4PR12MB5245.namprd12.prod.outlook.com (2603:10b6:5:398::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
+ 2023 11:30:03 +0000
+Received: from IA1PR12MB6604.namprd12.prod.outlook.com
+ ([fe80::735c:fa9:2043:279a]) by IA1PR12MB6604.namprd12.prod.outlook.com
+ ([fe80::735c:fa9:2043:279a%4]) with mapi id 15.20.6086.019; Thu, 9 Feb 2023
+ 11:30:03 +0000
+Message-ID: <e9772188-2b52-d7f4-0540-9e9402155285@nvidia.com>
+Date:   Thu, 9 Feb 2023 16:59:24 +0530
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v4 03/18] hte: tegra-194: Use proper includes
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, linux-arch@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>,
+        Russell King <linux@armlinux.org.uk>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Mun Yew Tham <mun.yew.tham@intel.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alexander Aring <alex.aring@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+References: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com>
+ <20230208173343.37582-4-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <20230208173343.37582-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MAXPR01CA0095.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:5d::13) To IA1PR12MB6604.namprd12.prod.outlook.com
+ (2603:10b6:208:3a0::7)
 MIME-Version: 1.0
-References: <Y9GG3N5ivVvyETa2@u40bc5e070a0153.ant.amazon.com>
- <Y9J25xMrItpeHIxD@hirez.programming.kicks-ass.net> <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
- <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net> <CAKfTPtBMSg2SDXq=sVt99TyM+tEXRFL74EQ57-t5uKYAXUUyLg@mail.gmail.com>
- <Y9iJLQxyXp9+x2aF@chenyu5-mobl1> <Y9jmm5c5vT8WXsl6@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtDUMph262w5OSiSQi-BVcNRf2gN=PdmxYCKEuk-8aYhgA@mail.gmail.com>
- <Y+Kob8kOUFa0FnJN@u40bc5e070a0153.ant.amazon.com> <CAKfTPtC8hQ9JysoRNF0egsp+B9+9r4YFC_1-KBnu0GpXts27kw@mail.gmail.com>
- <Y+PlTVfW9Jn1XvYZ@u40bc5e070a0153.ant.amazon.com>
-In-Reply-To: <Y+PlTVfW9Jn1XvYZ@u40bc5e070a0153.ant.amazon.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 9 Feb 2023 12:26:12 +0100
-Message-ID: <CAKfTPtAmLWcaUUrcp8Q_F6FGo2KZrx34vcp+6mw06v9UFi=tMA@mail.gmail.com>
-Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
-To:     Roman Kagan <rkagan@amazon.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Waiman Long <longman@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|DM4PR12MB5245:EE_
+X-MS-Office365-Filtering-Correlation-Id: d27b7497-fb1c-4a3f-af5e-08db0a90fc2c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kJ0ZjfD7taWEJFCo/vx/mTiyAEC2X1B5VCXMLNd1n7I7puu1EUNOPjfMWSzzQb+upc5gf4sayt5uSBAaOua0+lRtCJof0QqjE+OdLxV9ZI2LwKQwOwjKWqh0rw1+BjFmHUWwltOzUMtJ7TvcZ0TJlJfbgG1dNbaQ/FjVpDJ1UFupHN/bpzXp3aWy5iFQF+8yge3ZFseeiJbtQSfImgB61mkjCUK7haZZuKEkXwiQvWSwuWxn/GkoFt7bNUWWMZNEFBCZuDBa5qjEhlk6ndB6o7BKmVuCyzeodyWFqqODQ7DB51pCWN4LJ1Zi6lKqv5gVy2d73VuGe1JMNbk0GUPlWk58Xf3JApo+tBPGCCod9nwzDquDWDUgwIEl80JT6sfMb890EY1Fr35FIQH2pSZYQ5zrFpjEbVUmO/9UrT/y39U1tsQYneP3XpJIHWx+gIuG1u0q+5RTJoffEJ0R3DvYAbbJpFx2EF8sYcitlHUtqk+/CO3MezgmhuOSENdz2PiSj7P9brVdLqMgbD3YHflxi2cWrODBwMhUDWepfTczH3adY0SG5EZLOk6E8Exdx7cURwziwuOQ2r/RXljuyEP0Y5uM8mzQ+TrjhK/H2EWU9wBuTo+hVNXayNt4F92ZTJe+6TrPN8Zgy/0kNK+jYwOMgHTU65PPQmOxNstZ1h3RW3tjFZFUa50ct8m53fVmmnb8up4ySdK4vTmZ9admV0/REWKly8QwbGJteMS6VZYnkAIDfeZGM4oMclXRYlyeM5gU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(366004)(136003)(346002)(39860400002)(451199018)(31686004)(7366002)(36756003)(31696002)(86362001)(2906002)(921005)(7416002)(5660300002)(8936002)(41300700001)(38100700002)(83380400001)(7406005)(66476007)(6486002)(478600001)(6512007)(316002)(4326008)(53546011)(186003)(26005)(66556008)(6666004)(66946007)(54906003)(6506007)(2616005)(110136005)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MkxVbHQ4NE9zeUc3VSs2Qmd5M1VuZXRLYlltcGtEbDc4NlVIb3l4MEhMZmR2?=
+ =?utf-8?B?Q3hRQXpCZTVXMis1RjlPRFBNUnB4emI2LzZBOHpQNE45YmxRQUJ3MThnRzRk?=
+ =?utf-8?B?UEVDa0xFdnJWdzBVSTFOY0NGN0VFM3Fic3ZoYkpaMExMVkpWU0FCaUVUT2Jp?=
+ =?utf-8?B?VlFDaVM4MkhhNjZtYnhGcDN3K1E3ZEhPdWF2b0VkWkdxYlh1VnVMVTR4RUtZ?=
+ =?utf-8?B?QWxpYmRMWXJieGpaRG5nWkFYTnkzMXJRWVVYTzk2RGxqcUdPeFlrSkJsQ3ZJ?=
+ =?utf-8?B?Y3ZqVUwwa0ViZEd4ZHRJbXVlVHJBblZ0RUJHeWk1Y2VuV1l6R0ZkMjNDQ285?=
+ =?utf-8?B?RXJ2ZDJFOGJiQVNrVGphVG14YmVOWC82YTgrT3FKWGdVZURGbjNmdDRYK3pW?=
+ =?utf-8?B?RUZ6Q3ZwLzdVRUVLcHBMU29OM0kvRXhvYjMwZDlNRUJveFZGK2VDRmZEbU50?=
+ =?utf-8?B?TVZ3b1doREt1bkNIQ0J6eHBVVlFGSisvU2lYVmpucmVzSllTSmFiUUdzeFZm?=
+ =?utf-8?B?OGZwc2U3S3lRL3ZSS0xvMFNwRVlLT2xRUjU4eFVGSXRiN1g0TU5LY1BVNEt5?=
+ =?utf-8?B?L3I1dUtkM1BNRFJnY0Qyc2lUMm1oUG1EUlprZ1BBaGYzZWtLTngwUGZUMzFT?=
+ =?utf-8?B?MW0wUFh3Uit4aFM2M3cxTnJkZER4aTRENFFXejBwdm5mdGpOU2pBVWpvTUZr?=
+ =?utf-8?B?RFFBdWMvZjdkSWo1QnZSSWlRUlBwaENqb09zQ0QxdGtZcFBDcVhhZWxwY1A3?=
+ =?utf-8?B?REdORWtmOTdJcjFNcVdQOG1EdW1zM1hiL01ybFJqSG1vRjUyYmU3UEljSkJC?=
+ =?utf-8?B?UEtreXkrUXBubnltVnpObjQ4enZNMG5nZWVNWGF2NFNOVzRTVnMxS0NvU0h6?=
+ =?utf-8?B?MlJqZkZudENxMm9CbFJwU0FCWjRXTTU5Q21iQ3lzR1ZuWHpUMTFOLzJXeVdZ?=
+ =?utf-8?B?T2RCeHBYaHU2amhVcDF6YlNkd1pQRHF5SHVkNnhVZUxPWEdUV2c2djdHMFJM?=
+ =?utf-8?B?RW1lWjRiTDRNUno4MjVzbXB1Nk1nYjhKVXZCNmhGUGpQR0NkZmFrS2NOWmJ4?=
+ =?utf-8?B?UWIzdTF1dzZqMVFkSXliN3hKNFlZOEdpMXNHa21qbGsvZ1dWU1QvZ1JTV0tz?=
+ =?utf-8?B?WHhscVY0SUZ1cE41NU5abnM2SVJMSGE2YnVYWjRUQnQ5QkJoYjNxS3dnUHVL?=
+ =?utf-8?B?MXBFSVF4aDdpRDhsbTYzcjZ0SWFlYjhZTTNaYlRldHZSSmhJVm91eXNqb0Ry?=
+ =?utf-8?B?SGMzN0s1UmMxS3RsOWpIQjJDcmtJdW5FTVBNNU1KUnQ5czBDRXBvOXZ2Qk4v?=
+ =?utf-8?B?N1NpVy95Rjd1SS8yamZnVy9paDNqU0puV3hQdHVZNlFONXdrS0s3TlhpTW50?=
+ =?utf-8?B?dm4rNnpZS2pBbGIxc2swMnNvMFZkd3RYRE1ZdDJMNDNVZUIrZ00zRkoxUU92?=
+ =?utf-8?B?bVJGWXk1ZUEyVk1wd1B1TktNeEtLUUhmWGtMT05qd0ZlUFZMcHc2aDBFbVJz?=
+ =?utf-8?B?YkVESHg0NlNCZTlpWXVzaUxOeW9LeE9JTytqN1pBck5NOE5oa3NZUHU4UUM0?=
+ =?utf-8?B?Nmg4eSsrVUVraGdlbXJEbWJIZkkwanJQYS9WRmwva2ZYMWFzUWFINmx2TzZG?=
+ =?utf-8?B?eit1YkMrWmtpblNaLzJiZDgvTU5OcXorcThFVDVkcGcrcUdKUVpMdFJvTU51?=
+ =?utf-8?B?VzRJTGk5L0V6YXhydFRjbElCM0JyTC9OaDNvUXUzN3h2bTlvaENKQWFnUEdm?=
+ =?utf-8?B?YXZSZzZlWHROZ1gzVHlHSENmOG5RSkJXSXRTdHNuRWpUUE5iVy91Q2VTUjlR?=
+ =?utf-8?B?NlhMZzY4cVZWdWpXUGE2bEROWjRaTzE1ZXhkQ0pvSVM0Yk5EU2xWWlhNanlU?=
+ =?utf-8?B?VDFMeE5ZMEtuOW5oM0UrOWdjS1JxTnp1SDJJSElyN3VIL0pvcDRMV0pNSktO?=
+ =?utf-8?B?R3ZFQ2s5TVo2RzV2WkR5cGVTVCt6bU14ZHhqb2U3bjk4aHhOaGVNMjlXTmFh?=
+ =?utf-8?B?ZS81K3F5dEc1VnlMNWZWZS9BT0xEaHhVN01WZFNiMWJzODJ1NVFDUWQ0ZDJq?=
+ =?utf-8?B?cTMyTzJZWGxKY3ltM1p2VzdBbllPWWxvbE1ZRFBIM2E2TCtCRXhRZzJXelR3?=
+ =?utf-8?Q?yx6R0t4siwkpyC+r0gwCmnBXz?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d27b7497-fb1c-4a3f-af5e-08db0a90fc2c
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 11:30:03.1060
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RgnVePRshhtNyI7EK3hV10yfvYWwoy6r/JMJaW3kBxatpvWgvTplrf0ZPqjDP0Il5grE/15H1h9RyChK1nEEDA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5245
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 at 19:09, Roman Kagan <rkagan@amazon.de> wrote:
->
-> On Wed, Feb 08, 2023 at 11:13:35AM +0100, Vincent Guittot wrote:
-> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> >
-> >
-> >
-> > On Tue, 7 Feb 2023 at 20:37, Roman Kagan <rkagan@amazon.de> wrote:
-> > >
-> > > On Tue, Jan 31, 2023 at 12:10:29PM +0100, Vincent Guittot wrote:
-> > > > On Tue, 31 Jan 2023 at 11:00, Roman Kagan <rkagan@amazon.de> wrote:
-> > > > > On Tue, Jan 31, 2023 at 11:21:17AM +0800, Chen Yu wrote:
-> > > > > > On 2023-01-27 at 17:18:56 +0100, Vincent Guittot wrote:
-> > > > > > > On Fri, 27 Jan 2023 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > > > > >
-> > > > > > > > On Thu, Jan 26, 2023 at 07:31:02PM +0100, Roman Kagan wrote:
-> > > > > > > >
-> > > > > > > > > > All that only matters for small sleeps anyway.
-> > > > > > > > > >
-> > > > > > > > > > Something like:
-> > > > > > > > > >
-> > > > > > > > > >         sleep_time = U64_MAX;
-> > > > > > > > > >         if (se->avg.last_update_time)
-> > > > > > > > > >           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
-> > > > > > > > >
-> > > > > > > > > Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
-> > > > > > > > > others were suggesting?  It appears to better match the notion of sleep
-> > > > > > > > > wall-time, no?
-> > > > > > > >
-> > > > > > > > Should also work I suppose. cfs_rq_clock takes throttling into account,
-> > > > > > > > but that should hopefully also not be *that* long, so either should
-> > > > > > > > work.
-> > > > > > >
-> > > > > > > yes rq_clock_task(rq_of(cfs_rq)) should be fine too
-> > > > > > >
-> > > > > > > Another thing to take into account is the sleeper credit that the
-> > > > > > > waking task deserves so the detection should be done once it has been
-> > > > > > > subtracted from vruntime.
-> > > > > > >
-> > > > > > > Last point, when a nice -20 task runs on a rq, it will take a bit more
-> > > > > > > than 2 seconds for the vruntime to be increased by more than 24ms (the
-> > > > > > > maximum credit that a waking task can get) so threshold must be
-> > > > > > > significantly higher than 2 sec. On the opposite side, the lowest
-> > > > > > > possible weight of a cfs rq is 2 which means that the problem appears
-> > > > > > > for a sleep longer or equal to 2^54 = 2^63*2/1024. We should use this
-> > > > > > > value instead of an arbitrary 200 days
-> > > > > > Does it mean any threshold between 2 sec and 2^54 nsec should be fine? Because
-> > > > > > 1. Any task sleeps longer than 2 sec will get at most 24 ms(sysctl_sched_latency)
-> > > > > >    'vruntime bonus' when enqueued.
-> > > >
-> > > > This means that if a task nice -20 runs on cfs rq while your task is
-> > > > sleeping 2seconds, the min vruntime of the cfs rq will increase by
-> > > > 24ms. If there are 2 nice -20 tasks then the min vruntime will
-> > > > increase by 24ms after 4 seconds and so on ...
-> > > >
-> > > > On the other side, a task nice 19 that runs 1ms will increase its
-> > > > vruntime by around 68ms.
-> > > >
-> > > > So if there is 1 task nice 19 with 11 tasks nice -20 on the same cfs
-> > > > rq, the nice -19 one should run 1ms every 65 seconds and this also
-> > > > means that the vruntime of task nice -19 should still be above
-> > > > min_vruntime after sleeping 60 seconds. Of course this is even worse
-> > > > with a child cgroup with the lowest weight (weight of 2 instead of 15)
-> > > >
-> > > > Just to say that 60 seconds is not so far away and 2^54 should be better IMHO
-> > >
-> > > If we go this route, what would be the proper way to infer this value?
-> > > Looks like
-> > >
-> > >   (1ull << 63) / NICE_0_LOAD * scale_load(MIN_SHARES)
-> >
-> > (1ull << 63) / NICE_0_LOAD * MIN_SHARES
->
-> On 64bit platforms NICE_0_LOAD == 1L << 20 (i.e. it's also scaled) for
-> better precision.  So this will yield 2^63 / 2^20 * 2 = 2^44.  Good
-> enough probably but confusing.
-
-Something like the below should be enough to explain the value
-
-/*
- * min_vruntime can move forward much faster than real time. The worst case
- * happens when an entity with the min weight always runs on the cfs rq. In this
- * case, the max comparison between vruntime and min_vruntime can fail after a
- * sleep greater than :
- *     (1ull << 63) / NICE_0_LOAD) * MIN_SHARES
- * We can simplify this to :
- *     (1ull << 63) / NICE_0_LOAD)
- */
-#define SLEEP_VRUNTIME_OVERFLOW  ((1ull << 63) / NICE_0_LOAD)
-
->
-> Thanks,
-> Roman.
->
->
->
-> Amazon Development Center Germany GmbH
-> Krausenstr. 38
-> 10117 Berlin
-> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-> Sitz: Berlin
-> Ust-ID: DE 289 237 879
->
->
->
+On 2/8/23 11:03 PM, Andy Shevchenko wrote:
+> From: Linus Walleij <linus.walleij@linaro.org>
+> 
+> The test driver uses the gpiod consumer API so include the right
+> <linux/gpio/consumer.h> header. This may cause a problem with
+> struct of_device_id being implcitly pulled in by the legacy
+> header <linux/gpio.h> so include <linux/mod_devicetable.h>
+> explicitly as well.
+> 
+> While at it, drop explicit moduleparam.h (it's included with module.h)
+> and sort the headers.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/hte/hte-tegra194-test.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/hte/hte-tegra194-test.c b/drivers/hte/hte-tegra194-test.c
+> index 5d776a185bd6..358d4a10c6a1 100644
+> --- a/drivers/hte/hte-tegra194-test.c
+> +++ b/drivers/hte/hte-tegra194-test.c
+> @@ -6,14 +6,14 @@
+>   */
+>  
+>  #include <linux/err.h>
+> -#include <linux/module.h>
+> -#include <linux/moduleparam.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/hte.h>
+>  #include <linux/interrupt.h>
+> -#include <linux/gpio.h>
+> -#include <linux/timer.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/timer.h>
+>  #include <linux/workqueue.h>
+> -#include <linux/hte.h>
+>  
+>  /*
+>   * This sample HTE GPIO test driver demonstrates HTE API usage by enabling
+Acked-by: Dipen Patel <dipenp@nvidia.com>
