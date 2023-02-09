@@ -2,94 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2FB690318
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8E569032B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjBIJQP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 04:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
+        id S229939AbjBIJSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBIJQM (ORCPT
+        with ESMTP id S230005AbjBIJSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:16:12 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558EB5B92;
-        Thu,  9 Feb 2023 01:16:10 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pQ323-003ncL-Bt; Thu, 09 Feb 2023 10:15:55 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pQ323-0012H8-3k; Thu, 09 Feb 2023 10:15:55 +0100
-Message-ID: <ed4a36508c3d047f9e9a882475388be18b790b76.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Rob Landley <rob@landley.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Thu, 09 Feb 2023 10:15:52 +0100
-In-Reply-To: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-         <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
-         <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
-         <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-         <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        Thu, 9 Feb 2023 04:18:03 -0500
+Received: from mr85p00im-ztdg06011201.me.com (mr85p00im-ztdg06011201.me.com [17.58.23.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB0E5EFA5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:17:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1675934270; bh=7pXasyRfKVF9IUAegxYhrYLSu6imwBLW9zNCQeKHD28=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=gQAkvJMpUts7a8vDkqQd8GpQeoy7dmn5CdJoIVWcMt2TI05q7hZtVu7ymLgwmxtPW
+         jYrQFag7YJqsQna1g/p3iooJtr6pIu9D+CFDfBPNJXscL12udNk6LMru2QFpGyaTyB
+         OanYyBAZ//EDDKLCQD23RWvAPalvEdZuiu0q+SIgSG9blEkG85+9vQjn9glf8aFVCD
+         7d4uXJyZe8rGsZNMz2KWBKkIIYmcTSm3MYTmK8yRrsHhwhhb58rXPelT3/mb08wHh5
+         4KanEtSETSy7fxWuJTtssk2AecLCWWGR24r1yl8P/wTWE10lPUIe8bWX5+WN+eCboR
+         xwIJb9qWOYBbA==
+Received: from localhost (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+        by mr85p00im-ztdg06011201.me.com (Postfix) with ESMTPSA id B9FD79622C0;
+        Thu,  9 Feb 2023 09:17:49 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, Alain Volmat <avolmat@me.com>
+Subject: [PATCH 00/11] ARM: removal of STiH415/STiH416 remainings bits
+Date:   Thu,  9 Feb 2023 10:16:48 +0100
+Message-Id: <20230209091659.1409-1-avolmat@me.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: C2vTVmPR7z1gInH5yviJ2h-bYafnNbiR
+X-Proofpoint-GUID: C2vTVmPR7z1gInH5yviJ2h-bYafnNbiR
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 phishscore=0 suspectscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2302090088
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-08 at 21:09 -0600, Rob Landley wrote:
-> > Geert has suggested to wait with adding a tree source to the entry until I get my
-> > own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> > on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
-> 
-> So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-> but push to kernel.org and ask Linus to pull from there?
+Most of code in order to support STiH415 and STiH416 have already
+been removed from the kernel in 2016, however few bits are still
+remainings.
+This serie removes the last pieces of support for STiH415, STiH416
+and STiD127.
 
-Yes, that's what Geert recommended.
+Alain Volmat (11):
+  Documentation: arm: remove stih415/stih416 related entries
+  ARM: sti: removal of stih415/stih416 related entries
+  irqchip/st: remove stih415/stih416 and stid127 platforms support
+  dt-bindings: irqchip: sti: remove stih415/stih416 and stid127
+  dt-bindings: arm: sti: remove bindings for stih415 and stih416
+  thermal/drivers/st: remove syscfg based driver
+  net: ethernet: stmmac: dwmac-sti: remove stih415/stih416/stid127
+  dt-bindings: net: dwmac: sti: remove stih415/sti416/stid127
+  dt-bindings: reset: remove stih415/stih416 reset bindings
+  dt-bindings: clock: remove stih416 bindings
+  ARM: debug: removal of STiH415/STiH416 related debug uart
 
-Adrian
+ Documentation/arm/index.rst                   |   2 -
+ Documentation/arm/sti/overview.rst            |  10 +-
+ Documentation/arm/sti/stih415-overview.rst    |  14 --
+ Documentation/arm/sti/stih416-overview.rst    |  13 --
+ .../devicetree/bindings/arm/sti.yaml          |   2 -
+ .../st,sti-irq-syscfg.txt                     |   9 +-
+ .../devicetree/bindings/net/sti-dwmac.txt     |   3 +-
+ arch/arm/Kconfig.debug                        |  28 ---
+ arch/arm/mach-sti/Kconfig                     |  20 +-
+ arch/arm/mach-sti/board-dt.c                  |   2 -
+ drivers/irqchip/irq-st.c                      |  15 --
+ .../net/ethernet/stmicro/stmmac/dwmac-sti.c   |  60 +-----
+ drivers/thermal/st/Kconfig                    |   4 -
+ drivers/thermal/st/Makefile                   |   1 -
+ drivers/thermal/st/st_thermal_syscfg.c        | 174 ------------------
+ include/dt-bindings/clock/stih416-clks.h      |  17 --
+ include/dt-bindings/reset/stih415-resets.h    |  28 ---
+ include/dt-bindings/reset/stih416-resets.h    |  52 ------
+ 18 files changed, 8 insertions(+), 446 deletions(-)
+ delete mode 100644 Documentation/arm/sti/stih415-overview.rst
+ delete mode 100644 Documentation/arm/sti/stih416-overview.rst
+ delete mode 100644 drivers/thermal/st/st_thermal_syscfg.c
+ delete mode 100644 include/dt-bindings/clock/stih416-clks.h
+ delete mode 100644 include/dt-bindings/reset/stih415-resets.h
+ delete mode 100644 include/dt-bindings/reset/stih416-resets.h
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.34.1
+
