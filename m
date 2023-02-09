@@ -2,117 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491626900BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5C1690106
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjBIHMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 02:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S230062AbjBIHPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 02:15:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjBIHMs (ORCPT
+        with ESMTP id S229818AbjBIHOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 02:12:48 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19FF41B59
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:12:46 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id w5so1882823plg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 23:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4WVs22Kg7Btgcs7NcU/V4V2lSD7tkAUiSfve9Y1LNwY=;
-        b=AoYrrJJs6k9GtmQ4jMGk0yXnsurRdiogv4N9KaUtAvk7czZiKUvynb//Bfa2EC5y3x
-         bThSbc2PuWdlSa6zqhkSM3mNpiJHJPK8QHZP0bb0ANnmBRq9y6M6tosCkqa0HtjZEr7m
-         pdZWvIjuSCgtmifIjb6P+QJwoD6nwQX/OA31bMpYqq3qigQS8QSqGSlSiq47cdl+XVQx
-         2JCuvOxpC3CK/kIQhAqtz+Zi7zTcsXfsqIKsjnrCzTvJoB5FP4M6IVUUoVQ4vN1tGuCr
-         X41zK9YDiG7cBtw8BW3R1Jb/SbukYgAhUI7qDCI7mUA4yRA0v5Gq7Ipcnhb/YmqWIm3T
-         qicw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4WVs22Kg7Btgcs7NcU/V4V2lSD7tkAUiSfve9Y1LNwY=;
-        b=kt/WeExLuTCxEnkX9Q0Sgp6JemYqGj5Hn7TiTB90il5upaIK5r4hZd1i+OTyIiAnLv
-         VUujzsLUWNwVGWfZVhvSYnvrgewtSrkXrGbh2w4jsCDT4xVFGD6ge2AiN9s/k04Vo624
-         9yORQTngsNyzPyOCI6t/2VYIGEP/yrF8qmqBDBVXQc8UNx6ZvstIZFHSDO7N5P4/k5x2
-         olKaXw61OjmbPCy4qJrRt1G0tqhizFfgfvgEtjrTSYiVKhSYyvS54BDAgIRXyXptW0Sj
-         L1CTEKazIWWSU0IzTlRRgTnowVGr678gvLALiQU0GLR0eBQyYqytz+JOEjLLqCMWj1OL
-         TP/A==
-X-Gm-Message-State: AO0yUKVnYnfLob+R7yD8nR0R3s085JOA4qkEhmm9vG+Kq5XobRvdbqpH
-        R0jlMZND68En0nulk/7tsTe9m94uqOVnKgwvYBfrlQ==
-X-Google-Smtp-Source: AK7set/JAGjMaYyKUc3wik1Zpc3z1fF27fTbmID4hmKb+mM1VoQt/VnzqKCHgPPcXP/4CDxya8Ss+VkiNAm6JDV2cqw=
-X-Received: by 2002:a17:902:b78a:b0:199:26df:77b6 with SMTP id
- e10-20020a170902b78a00b0019926df77b6mr2518442pls.3.1675926766145; Wed, 08 Feb
- 2023 23:12:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20230201135737.800527-1-jolsa@kernel.org> <Y9vSZhBBCbshI3eM@casper.infradead.org>
- <Y9vX49CtDzyg3B/8@krava>
-In-Reply-To: <Y9vX49CtDzyg3B/8@krava>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 8 Feb 2023 23:12:34 -0800
-Message-ID: <CA+khW7juLEcrTOd7iKG3C_WY8L265XKNo0iLzV1fE=o-cyeHcQ@mail.gmail.com>
-Subject: Re: [RFC 0/5] mm/bpf/perf: Store build id in file object
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Thu, 9 Feb 2023 02:14:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C9942DC2;
+        Wed,  8 Feb 2023 23:14:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=hOwPtrFr9W1RAetj4yw8lS4WGxzVY9WeB5xiD+rtLZk=; b=YzYv5Lu+GhnsQWcrh/P3dNn99Y
+        kFFn/VTStVzrVt7izdrqqcFl3XXWJTiUSU7zkMNSHLZccvHB/fdFfsSF2G3d9l6tM8mZkGWrqFoL+
+        zV70haeTAUkVk/rmntIAjBbeTETDQ9gynZkiS5FkcxD5ysQrDwctOiqgUEqy0Xc8jqVEGJ0uWfK0f
+        t2HqZ/A6Oxx0EJl+SAADCmwyxjMuktOo75CIMUWNmk83r+Z+8eyEK1uwZEhembDTSx9i7ostc00tO
+        /jouGLzfxYzc3+YcINRJIpim6ul86T5PcNwp2g7wUJajkYggQ+pjUyATSgrXOBG/P/NTAUzC9nrO4
+        AJo7w9JQ==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pQ189-000LPt-4s; Thu, 09 Feb 2023 07:14:05 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, keyrings@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-trace-devel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mm@kvack.org,
+        openrisc@lists.librecores.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org
+Subject: [PATCH 00/24 v2] Documentation: correct lots of spelling errors (series 1)
+Date:   Wed,  8 Feb 2023 23:13:36 -0800
+Message-Id: <20230209071400.31476-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 2, 2023 at 7:33 AM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Thu, Feb 02, 2023 at 03:10:30PM +0000, Matthew Wilcox wrote:
-> > On Wed, Feb 01, 2023 at 02:57:32PM +0100, Jiri Olsa wrote:
-> > > hi,
-> > > we have a use cases for bpf programs to use binary file's build id.
-> >
-> > What is your use case?  Is it some hobbyist thing or is it something
-> > that distro kernels are all going to enable?
-> >
->
-> our use case is for hubble/tetragon [1] and we are asked to report
-> buildid of executed binary.. but the monitoring process is running
-> in its own pod and can't access the the binaries outside of it, so
-> we need to be able to read it in kernel
->
-> I understand Hao Luo has also use case for that [2]
->
+Correct many spelling errors in Documentation/ as reported by codespell.
 
-Sorry for the late reply.
+Maintainers of specific kernel subsystems are only Cc-ed on their
+respective patches, not the entire series.
 
-We use BPF to profile stacktraces and build id is more useful than
-instruction addresses. However, sometimes we need to record
-stacktraces from an atomic context. In that case, if the page that
-contains the build id string is not in the page cache, we would fail
-to get build id. Storing the build id in file object solves this
-problem and helps us get build id more reliably.
+These patches are based on linux-next-20230209.
 
-> jirka
->
->
-> [1] https://github.com/cilium/tetragon/
-> [2] https://lore.kernel.org/bpf/CA+khW7gAYHmoUkq0UqTiZjdOqARLG256USj3uFwi6z_FyZf31w@mail.gmail.com/
+
+ [PATCH 01/24] Documentation: arm: correct spelling
+ [PATCH 02/24] Documentation: block: correct spelling
+ [PATCH 03/24] Documentation: core-api: correct spelling
+ [PATCH 04/24] Documentation: fault-injection: correct spelling
+ [PATCH 05/24] Documentation: fb: correct spelling
+ [PATCH 06/24] Documentation: features: correct spelling
+ [PATCH 07/24] Documentation: input: correct spelling
+ [PATCH 08/24] Documentation: isdn: correct spelling
+ [PATCH 09/24] Documentation: livepatch: correct spelling
+ [PATCH 10/24] Documentation: locking: correct spelling
+ [PATCH 11/24] Documentation: mm: correct spelling
+ [PATCH 12/24] Documentation: openrisc: correct spelling
+ [PATCH 13/24] Documentation: PCI: correct spelling
+ [PATCH 14/24] Documentation: powerpc: correct spelling
+ [PATCH 15/24] Documentation: s390: correct spelling
+ [PATCH 16/24] Documentation: scheduler: correct spelling
+ [PATCH 17/24] Documentation: security: correct spelling
+ [PATCH 18/24] Documentation: timers: correct spelling
+ [PATCH 19/24] Documentation: tools/rtla: correct spelling
+ [PATCH 20/24] Documentation: trace/rv: correct spelling
+ [PATCH 21/24] Documentation: trace: correct spelling
+ [PATCH 22/24] Documentation: w1: correct spelling
+ [PATCH 23/24] Documentation: x86: correct spelling
+ [PATCH 24/24] Documentation: xtensa: correct spelling
+
+
+diffstat:
+ Documentation/PCI/endpoint/pci-vntb-howto.rst                    |    2 +-
+ Documentation/PCI/msi-howto.rst                                  |    2 +-
+ Documentation/arm/arm.rst                                        |    2 +-
+ Documentation/arm/ixp4xx.rst                                     |    4 ++--
+ Documentation/arm/keystone/knav-qmss.rst                         |    2 +-
+ Documentation/arm/stm32/stm32-dma-mdma-chaining.rst              |    6 +++---
+ Documentation/arm/sunxi/clocks.rst                               |    2 +-
+ Documentation/arm/swp_emulation.rst                              |    2 +-
+ Documentation/arm/tcm.rst                                        |    2 +-
+ Documentation/arm/vlocks.rst                                     |    2 +-
+ Documentation/block/data-integrity.rst                           |    2 +-
+ Documentation/core-api/packing.rst                               |    2 +-
+ Documentation/core-api/padata.rst                                |    2 +-
+ Documentation/fault-injection/fault-injection.rst                |    2 +-
+ Documentation/fb/sm712fb.rst                                     |    2 +-
+ Documentation/fb/sstfb.rst                                       |    2 +-
+ Documentation/features/core/thread-info-in-task/arch-support.txt |    2 +-
+ Documentation/input/devices/iforce-protocol.rst                  |    2 +-
+ Documentation/input/multi-touch-protocol.rst                     |    2 +-
+ Documentation/isdn/interface_capi.rst                            |    2 +-
+ Documentation/isdn/m_isdn.rst                                    |    2 +-
+ Documentation/livepatch/reliable-stacktrace.rst                  |    2 +-
+ Documentation/locking/lockdep-design.rst                         |    4 ++--
+ Documentation/locking/locktorture.rst                            |    2 +-
+ Documentation/locking/locktypes.rst                              |    2 +-
+ Documentation/locking/preempt-locking.rst                        |    2 +-
+ Documentation/mm/hmm.rst                                         |    4 ++--
+ Documentation/mm/hwpoison.rst                                    |    2 +-
+ Documentation/openrisc/openrisc_port.rst                         |    4 ++--
+ Documentation/power/suspend-and-interrupts.rst                   |    2 +-
+ Documentation/powerpc/kasan.txt                                  |    2 +-
+ Documentation/powerpc/papr_hcalls.rst                            |    2 +-
+ Documentation/powerpc/qe_firmware.rst                            |    4 ++--
+ Documentation/powerpc/vas-api.rst                                |    4 ++--
+ Documentation/s390/pci.rst                                       |    4 ++--
+ Documentation/s390/vfio-ccw.rst                                  |    2 +-
+ Documentation/scheduler/sched-bwc.rst                            |    2 +-
+ Documentation/scheduler/sched-energy.rst                         |    4 ++--
+ Documentation/security/digsig.rst                                |    4 ++--
+ Documentation/security/keys/core.rst                             |    2 +-
+ Documentation/security/secrets/coco.rst                          |    2 +-
+ Documentation/timers/hrtimers.rst                                |    2 +-
+ Documentation/tools/rtla/rtla-timerlat-top.rst                   |    2 +-
+ Documentation/trace/coresight/coresight-etm4x-reference.rst      |    2 +-
+ Documentation/trace/events.rst                                   |    6 +++---
+ Documentation/trace/fprobe.rst                                   |    2 +-
+ Documentation/trace/ftrace-uses.rst                              |    2 +-
+ Documentation/trace/hwlat_detector.rst                           |    2 +-
+ Documentation/trace/rv/runtime-verification.rst                  |    2 +-
+ Documentation/trace/uprobetracer.rst                             |    2 +-
+ Documentation/w1/w1-netlink.rst                                  |    2 +-
+ Documentation/x86/boot.rst                                       |    2 +-
+ Documentation/x86/buslock.rst                                    |    2 +-
+ Documentation/x86/mds.rst                                        |    2 +-
+ Documentation/x86/resctrl.rst                                    |    2 +-
+ Documentation/x86/sgx.rst                                        |    2 +-
+ Documentation/xtensa/atomctl.rst                                 |    2 +-
+ 57 files changed, 70 insertions(+), 70 deletions(-)
+
+
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Vladimir Oltean <olteanv@gmail.com>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: Akinobu Mita <akinobu.mita@gmail.com>
+Cc: Helge Deller <deller@gmx.de>
+?Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Henrik Rydberg <rydberg@bitmath.org>
+Cc: Karsten Keil <isdn@linux-pingi.de>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Jérôme Glisse <jglisse@redhat.com>
+Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Evgeniy Polyakov <zbr@ioremap.net>
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+
+Cc: coresight@lists.linaro.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-block@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-fbdev@vger.kernel.org
+Cc: linux-input@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: linux-sgx@vger.kernel.org
+Cc: linux-trace-devel@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: live-patching@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: openrisc@lists.librecores.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-xtensa@linux-xtensa.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: x86@kernel.org
