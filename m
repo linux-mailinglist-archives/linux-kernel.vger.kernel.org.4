@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00AD68FCAF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6013568FCB2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjBIBk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S230326AbjBIBm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:42:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjBIBk4 (ORCPT
+        with ESMTP id S229911AbjBIBmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:40:56 -0500
+        Wed, 8 Feb 2023 20:42:25 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AC8B20D39;
-        Wed,  8 Feb 2023 17:40:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17242DBCD;
+        Wed,  8 Feb 2023 17:42:23 -0800 (PST)
 Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 09 Feb 2023 10:40:54 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 456DC2019752;
-        Thu,  9 Feb 2023 10:40:54 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 9 Feb 2023 10:40:47 +0900
+  by mx.socionext.com with ESMTP; 09 Feb 2023 10:42:23 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 80DB62012096;
+        Thu,  9 Feb 2023 10:42:23 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Thu, 9 Feb 2023 10:42:34 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 9D3903D57;
-        Thu,  9 Feb 2023 10:40:53 +0900 (JST)
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 1662D3D57;
+        Thu,  9 Feb 2023 10:42:23 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH] dt-bindings: ata: Add UniPhier controller binding
-Date:   Thu,  9 Feb 2023 10:40:52 +0900
-Message-Id: <20230209014052.17654-1-hayashi.kunihiko@socionext.com>
+Subject: [PATCH] dt-bindings: mmc: Add resets property to cadence SDHCI binding
+Date:   Thu,  9 Feb 2023 10:42:11 +0900
+Message-Id: <20230209014211.17816-1-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,38 +45,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add UniPhier SATA controller compatible string to the platform binding.
-This controller needs two reset controls.
+Cadence SDHCI controller allows reset control support on UniPhier SoC.
+Add resets property to cadence SDHCI binding.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- Documentation/devicetree/bindings/ata/ahci-platform.yaml | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-index 7dc2a2e8f598..3f6b21032d02 100644
---- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-+++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-@@ -45,6 +45,9 @@ properties:
-               - marvell,armada-8k-ahci
-               - marvell,berlin2-ahci
-               - marvell,berlin2q-ahci
-+              - socionext,uniphier-pro4-ahci
-+              - socionext,uniphier-pxs2-ahci
-+              - socionext,uniphier-pxs3-ahci
-           - const: generic-ahci
-       - enum:
-           - cavium,octeon-7130-ahci
-@@ -74,7 +77,8 @@ properties:
+diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+index d3dce4d6c168..adacd0535c14 100644
+--- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+@@ -29,6 +29,9 @@ properties:
+   clocks:
      maxItems: 1
  
-   resets:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 2
- 
- patternProperties:
-   "^sata-port@[0-9a-f]+$":
++  resets:
++    maxItems: 1
++
+   # PHY DLL input delays:
+   # They are used to delay the data valid window, and align the window to
+   # sampling clock. The delay starts from 5ns (for delay parameter equal to 0)
 -- 
 2.25.1
 
