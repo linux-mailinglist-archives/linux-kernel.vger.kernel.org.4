@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F028C6905EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4734D6905EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjBIK73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 05:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S229985AbjBIK7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 05:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBIK7X (ORCPT
+        with ESMTP id S229794AbjBIK7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Feb 2023 05:59:23 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF8FB46F
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:58:52 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id j25so1354302wrc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 02:58:52 -0800 (PST)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1415B742
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:58:54 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id a2so1345373wrd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 02:58:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DqyCPgVLwr/SMq8TuN0141mNn36IMKTzmD9m9yiTvNc=;
-        b=fA3Jvt2bYKWJ7esxt2t/Bo3yI38SKiWE7LAJlanQzF79L666FMJQix/t+LsEqsNGlS
-         HTMlbITLH5cF8YZYpcP707M8gTq337sMZc52HP4mURLTGxW2g9KHbpqlUlZX1ocacNN9
-         i4M0gXNqr5ikGf1vOTF/INyqycnxYa7OWDPvSYXsawer5gJmN+N+YBNWTSb1GY/FR83F
-         V/d1icJ5kihlSjGETHgDOl0ryWAgiPIAMQ9UQzcZJcQN7glXWM4IOqFofX924eYo9qwb
-         TuU+OVVB8HcWePNmo3kE9qiuudkKkBe4TQ+010xk0+ad+ORniEjOfbyrBdy4KZSlBHUP
-         n14A==
+        bh=pd0EQYT3xvLBAFUxEB4SCOk7tTyLtVzSlTgWwVunhmk=;
+        b=UFZhwjMoAe2pnTCeATgA/mdyCkRt4+QrdBV6RUM2SauFGIs3EVL7kYrr2Gdk0/5NOB
+         CehvN6CB9zsV3ASLc1n09sE5dpdnTw1HXQ2m+q8jdg4YHEk0oXkJMcuS/e/JRiuAx9j1
+         ynt4EweDSuSOrbWbsswRcIpDcZZNlDZHbt1P484cFTMhsHaWFkrmQT09T4RFzR1kIYcu
+         hCw1QzT0mHQrdZZfUPBvfRJwAlYPlMZwHq0DpqP8ZL9JORVeBTq/aaGjU1bDAxC4hIvL
+         XkTkQJiogrOQTRAYE8/oSVjdrah3IXTBYUlxeM0VdyQLQ/fieNt6FMT2EljGzvnkpwHM
+         5oHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DqyCPgVLwr/SMq8TuN0141mNn36IMKTzmD9m9yiTvNc=;
-        b=3g35vPZLvpVSGyINko0VAdPE0Wl8o6xBGN8Ju3Z+KHWLLd+Okv6a9NnLwyjjriA0yU
-         qQM7CbR1tyrx+SQDyuisQx/Alq6LSjUe8NcisLPMA/UK18CqlJYnXIO4TZ7iIgI02hMx
-         JjQiE+j0dFgwdF7kLcmMBbdxdcbGtqtRYTPuWBv0zxxHrZMRAHdXMfsDaOcmUzU5Ie5J
-         g281cd3UGIxov9YDqhC5pGO+/0Yek8WvPE2BfcS0lrkHoCgsaH5g5wsIP+2yIoVyJT7G
-         gYRW6Fd9VPB8gcSx15OB1XjLvSCbXSzc2UMlIRuHPiwguYIa1Wja1KLhXaBQm5CDzcoe
-         g/JA==
-X-Gm-Message-State: AO0yUKU0y7GKalyQIPMuM2sAc2dCTGUX46quMlfXye9g+86z2+dnVD4r
-        1azGYhFiMA1FFBvuIELsEfI5mQ==
-X-Google-Smtp-Source: AK7set8AkDnBCYmDcO6b3+VQdgZz3RfH1PnwGDouui/n0lah+W4ABazpObkRkPUukQpoD5bEZTKQLg==
-X-Received: by 2002:a5d:6842:0:b0:2bf:ae1e:84d2 with SMTP id o2-20020a5d6842000000b002bfae1e84d2mr9990867wrw.12.1675940329234;
-        Thu, 09 Feb 2023 02:58:49 -0800 (PST)
+        bh=pd0EQYT3xvLBAFUxEB4SCOk7tTyLtVzSlTgWwVunhmk=;
+        b=s6QMlIfr4eJ7yN/e6Borb0sWRa0DzAPssEGLMLrUuR7RSPod1nw+4KglkBLGIqu7Pn
+         WOXh80/K/lQBnnpHgjt4NoRwMWYJdIaIVO/a7YCmad37ziKWlzQP/j4bmLyhw5h3FXXR
+         6nNQoJInrnglTy4/b0wDyyPEKAxY31JwmrZJ+uLHOaCAIEviDbHXrKFdba7vkwiWIddj
+         2Syv8dXv5yruoh6zTxgMomMJP5P0GViymlt0DqjcpLFOi0LE52mcvLblXgSCfdMiOsyg
+         yc78eZNKOYe30M1tRBOM7KTw0HxzJHQzCjleZaEpeghd033HVuYDYpxnp/QBG6FGw8xU
+         rV5w==
+X-Gm-Message-State: AO0yUKVaaT4iJe3ebkkulsNhAeC4BqCDj3+mv7J/sVEMNNyMi9+k0V+5
+        0EbT8jX7guhuLZOoQTHcyBlEYQ==
+X-Google-Smtp-Source: AK7set/R3KiMZzutxvymKpWErO+61RIIKefXKnc/dsa7Oh8E0bx1yHDWxhuoSFrpG29x5LeTQHhe9A==
+X-Received: by 2002:adf:a306:0:b0:2c5:3cd0:88e7 with SMTP id c6-20020adfa306000000b002c53cd088e7mr977911wrb.29.1675940330748;
+        Thu, 09 Feb 2023 02:58:50 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g7-20020a5d6987000000b002be063f6820sm927987wru.81.2023.02.09.02.58.47
+        by smtp.gmail.com with ESMTPSA id g7-20020a5d6987000000b002be063f6820sm927987wru.81.2023.02.09.02.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 02:58:48 -0800 (PST)
+        Thu, 09 Feb 2023 02:58:50 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,9 +64,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         stable@vger.kernel.org
-Subject: [PATCH 2/6] ARM: dts: exynos: correct TMU phandle in Exynos4210
-Date:   Thu,  9 Feb 2023 11:58:37 +0100
-Message-Id: <20230209105841.779596-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/6] ARM: dts: exynos: correct TMU phandle in Exynos5250
+Date:   Thu,  9 Feb 2023 11:58:38 +0100
+Message-Id: <20230209105841.779596-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230209105841.779596-1-krzysztof.kozlowski@linaro.org>
 References: <20230209105841.779596-1-krzysztof.kozlowski@linaro.org>
@@ -83,29 +83,28 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 TMU node uses 0 as thermal-sensor-cells, thus thermal zone referencing
-it must not have an argument to phandle.  Since thermal-sensors property is
-already defined in included exynos4-cpu-thermal.dtsi, drop it from
-exynos4210.dtsi to fix the error and remoev redundancy.
+it must not have an argument to phandle.
 
-Fixes: 9843a2236003 ("ARM: dts: Provide dt bindings identical for Exynos TMU")
 Cc: <stable@vger.kernel.org>
+Fixes: 9843a2236003 ("ARM: dts: Provide dt bindings identical for Exynos TMU")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm/boot/dts/exynos4210.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/boot/dts/exynos5250.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/exynos4210.dtsi b/arch/arm/boot/dts/exynos4210.dtsi
-index 5a1ec714c612..0e27c3375e2e 100644
---- a/arch/arm/boot/dts/exynos4210.dtsi
-+++ b/arch/arm/boot/dts/exynos4210.dtsi
-@@ -393,7 +393,6 @@ &cpu_alert2 {
+diff --git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
+index c76c3a79bbc6..89c8665ac9aa 100644
+--- a/arch/arm/boot/dts/exynos5250.dtsi
++++ b/arch/arm/boot/dts/exynos5250.dtsi
+@@ -1105,7 +1105,7 @@ timer {
  &cpu_thermal {
  	polling-delay-passive = <0>;
  	polling-delay = <0>;
 -	thermal-sensors = <&tmu 0>;
- };
++	thermal-sensors = <&tmu>;
  
- &gic {
+ 	cooling-maps {
+ 		map0 {
 -- 
 2.34.1
 
