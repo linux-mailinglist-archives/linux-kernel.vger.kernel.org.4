@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E550B690B5D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFCB690B5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjBIOI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S230266AbjBIOJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBIOI5 (ORCPT
+        with ESMTP id S229761AbjBIOJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:08:57 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB215DC0D;
-        Thu,  9 Feb 2023 06:08:46 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 732E81EC06C0;
-        Thu,  9 Feb 2023 15:08:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675951725;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Xou1RB46SDCgtcotYrQGJuKVYx7el1N56OECne0l+5Q=;
-        b=DlH5Jenzb+b48eoxSOSc/kjrv112GJSGTCU9Q9mdQSdRgxeL9ZhklF4x+j5/OTdI/oVPtQ
-        gX3ifob7NPiXXNoUJ964/uOTG2j1sf1Uv5GUecaxLhjXHdOMjeNW9hFjFGQdJrjlMpY0au
-        M8VjkBac09LEvoBcFVh9jkVrgJ/GBuE=
-Date:   Thu, 9 Feb 2023 15:08:39 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v5 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Message-ID: <Y+T+ZxydCZS1Yjmz@zn.tnic>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-12-rick.p.edgecombe@intel.com>
+        Thu, 9 Feb 2023 09:09:32 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE4F5D1F0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:09:31 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id j23so1940554wra.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:09:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2wWrZfW6w5Lo0h1Oy2ItuQA9D/VzF8nnzUDHyvuMrIU=;
+        b=qucTY+VUgkLKMzXYSk/yBQjtFtNj+c6L7TTuwK1Io3r7kfJFAj3KyITqXu/AW2vv6y
+         FXdqmlgbpFi7gWp9TTtNm3Aao/lrwrh4V62bDLN4gAJD5gQbj7e9CEkTAMgFWIvpL/F2
+         +EMDd3E+d6HSt0wFZa9G1DxwExyyCorEczfhrmQ/QA8tXN2QUTXxJauRsHWtkMUX5K3J
+         q89nv1MIusbn5ds4ECYKtNBgrKgPUR7Lgro/zOyYEnVK11GhWmc5x4FtgWiVO8vvGWYo
+         C1RSvB0MrHvwXpljDmuImmWC2NBYDBFKIPWOrDy0zBuUzXkj+VZI+KXvoC0wED4Qi6V0
+         ZshQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2wWrZfW6w5Lo0h1Oy2ItuQA9D/VzF8nnzUDHyvuMrIU=;
+        b=KtqePitPrIMt+86w3mT0wagsHxgC9Lzz6LKUsiXu5/aLK1HgbJ717pMoKXKPUC4eZF
+         RR2g1H5zyD4UTWTklXG95RlKi3rnJ404mm8cEICgsMw36rMJDGNv+WzCwMPLyvjSjdlb
+         63SVRiIPim29Gyn/ks6h9GB9d5GMKJdNep7GimojnjF03Vjxf9o8ZMxiMXr9R5Z4D7I3
+         x+UThjhYpTN08m7Klt5mDXCruaT3BH/7U7vq49t8c9kgjLxfcQU54TGNy84LDVSlsOeb
+         08xQZSkdTb3j7nCzfRPUa7mICEbo7yMl7Rym40DqwhKOfHTQi+UjbrppW/0CJ3RLDrfX
+         Gpnw==
+X-Gm-Message-State: AO0yUKXfwJoVCfTUHGjUwSPFH+88oRqJF3R7U822CEVR0hTkAZKtcqTe
+        qvOXDzFhJP7Ae/jWFPIW597T0bE0jOBqtnaTGJ0HGQ==
+X-Google-Smtp-Source: AK7set+1bMzTWNOQIBzf1vZLZYYVwjIVEW9uY+AIm1FM1LTCANjOjwy7DgqukiLUd8hdl+u6TgYhMmTwN8PRU8N0hbk=
+X-Received: by 2002:adf:d0c1:0:b0:2c3:e5e3:c57 with SMTP id
+ z1-20020adfd0c1000000b002c3e5e30c57mr234444wrh.400.1675951769996; Thu, 09 Feb
+ 2023 06:09:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230119212317.8324-12-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123220500.21077-1-kirill.shutemov@linux.intel.com> <20230123220500.21077-6-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20230123220500.21077-6-kirill.shutemov@linux.intel.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 9 Feb 2023 15:08:53 +0100
+Message-ID: <CAG_fn=WuxXWfDRAnJdNu2i0_g6jFhhh27fHHUksb12bSW+53Sw@mail.gmail.com>
+Subject: Re: [PATCHv15 05/17] mm: Introduce untagged_addr_remote()
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:22:49PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> The Write=0,Dirty=1 PTE has been used to indicate copy-on-write pages.
-> However, newer x86 processors also regard a Write=0,Dirty=1 PTE as a
-> shadow stack page. In order to separate the two, the software-defined
-> _PAGE_DIRTY is changed to _PAGE_COW for the copy-on-write case, and
-> pte_*() are updated to do this.
-
-"In order to separate the two, change the software-defined ..."
-
-From section "2) Describe your changes" in
-Documentation/process/submitting-patches.rst:
-
-"Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-to do frotz", as if you are giving orders to the codebase to change
-its behaviour."
-
-> +static inline pte_t __pte_mkdirty(pte_t pte, bool soft)
-> +{
-> +	pteval_t dirty = _PAGE_DIRTY;
-> +
-> +	if (soft)
-> +		dirty |= _PAGE_SOFT_DIRTY;
-> +
-> +	return pte_set_flags(pte, dirty);
-> +}
-
-Dunno, do you even need that __pte_mkdirty() helper?
-
-AFAIU, pte_mkdirty() will always set _PAGE_SOFT_DIRTY too so whatever
-the __pte_mkdirty() thing needs to do, you can simply do it by foot in
-the two callsites.
-
-And this way you won't have the confusion: should I use pte_mkdirty() or
-__pte_mkdirty()?
-
-Ditto for the pmd variants.
-
-Otherwise, this is starting to make more sense now.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+On Mon, Jan 23, 2023 at 11:05 PM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> untagged_addr() removes tags/metadata from the address and brings it to
+> the canonical form. The helper is implemented on arm64 and sparc. Both of
+> them do untagging based on global rules.
+>
+> However, Linear Address Masking (LAM) on x86 introduces per-process
+> settings for untagging. As a result, untagged_addr() is now only
+> suitable for untagging addresses for the current proccess.
+>
+> The new helper untagged_addr_remote() has to be used when the address
+> targets remote process. It requires the mmap lock for target mm to be
+> taken.
+>
+> Export dump_mm() as there's now the first user for it: VFIO can be
+> compiled as module and untagged_addr_remote() triggers dump_mm() via
+> mmap_assert_locked().
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Alexander Potapenko <glider@google.com>
