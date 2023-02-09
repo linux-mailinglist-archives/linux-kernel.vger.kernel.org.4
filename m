@@ -2,132 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19CC6909BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F4B6909C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjBINTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
+        id S230097AbjBINVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjBINTQ (ORCPT
+        with ESMTP id S229515AbjBINVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:19:16 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6D52D7B;
-        Thu,  9 Feb 2023 05:19:15 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id az4-20020a05600c600400b003dff767a1f1so1506607wmb.2;
-        Thu, 09 Feb 2023 05:19:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=s4Q71AiGjsfLKoBxQOWiUkZxB1lpoWpjh8S6/VViVGM=;
-        b=VYsTBOFOg7+qEy3LpjhJFQJ5IlOmZRSSFEFfejUhzvUmjmKz42pecTD9YrGtL5QvCy
-         TFPh/kBqfJu5JHN+mpn1FuUxWtQClRcy/fYXNnur8eCOQ040VCMzfy1zOFWfSPtVI63M
-         KAMZnVlmoOVF2aDtSeIb5vODf16+JY/+uA4dRIjRJqq+er5m69Za6ejhENuF0/esIa4P
-         sYv0fMjtpqFcZY54ic+tyXnGV3MXZS0yQ0NCDnJHxbLZWGYyUXd9HL36Wjumo+xZHq/l
-         v/QVmqEn6U36oY2vQt+SRceIa9T82S07raIaEn3k3ytOVpsnDExGC5LrxiHngiR6AOjE
-         pk8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s4Q71AiGjsfLKoBxQOWiUkZxB1lpoWpjh8S6/VViVGM=;
-        b=8I6JF4rGDV0KYR5FLWniwueSvvKdykGStzJMCNNPs0vJaE4gif6FxemmvNgkrdeVM8
-         0SlER4dobkr5sQroIf4BEeolmeX/uvDmFgTGlgB4vSZCVEt/q22+QTsUIrBBczua1qKP
-         Gor4D9+NoYwiR4IxLOy6gv2jrJ5wJVXV9NoOsC83pHRLohk5TlFkW7gVz/9o4tIDp1q6
-         sIqbQXYa4zf1asTJDxMLksueeDfBjAVIxPwLPN1DIyy1byt5GcrNUcmw7DRPTArauWjs
-         y5jCnplolIOJ6w9a8rWMkwrq+FTOTPD3BKwiL6bhruGEIenkKln8mJMGGc5cR93dq9Vb
-         zpKw==
-X-Gm-Message-State: AO0yUKWZVg/zRWO1vsymeFsWiJHQFLtNiqQyIjHRFSBT/FKsLN1am+eZ
-        PL12mD3BMzYmn9OE3t7N1oY=
-X-Google-Smtp-Source: AK7set8kUwYAxNHUD6tovIM8ZnOWsU0CeR/O9TTfthpdMDuZQbPWx2cIT0b0QPoUc5OSV30H7ZOElg==
-X-Received: by 2002:a05:600c:990:b0:3dc:5abb:2f50 with SMTP id w16-20020a05600c099000b003dc5abb2f50mr9550565wmp.19.1675948753640;
-        Thu, 09 Feb 2023 05:19:13 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a28-20020a5d457c000000b002bdda9856b5sm1244007wrc.50.2023.02.09.05.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 05:19:13 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 9 Feb 2023 14:19:05 +0100
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH RFC 2/5] bpf: Use file object build id in stackmap
-Message-ID: <Y+TyyQ38wYubWZtF@krava>
-References: <20230201135737.800527-1-jolsa@kernel.org>
- <20230201135737.800527-3-jolsa@kernel.org>
- <CA+khW7iGj=Y3NVxc9Y-MnwmPxCz5jHDmSfW-S6KS9Hko=jgJOg@mail.gmail.com>
+        Thu, 9 Feb 2023 08:21:19 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C33F2D7B;
+        Thu,  9 Feb 2023 05:21:18 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9573E66020C1;
+        Thu,  9 Feb 2023 13:21:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675948877;
+        bh=5Zwggcv6csLJeI2CM8HO2R5FA3YxEaWsL1q4vCEhuE0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hYhiRmHYAPd4d++aa+z/MEHxnotplT6a/+agw00/QYjepIBe6j5kw6oAh2pPo0bym
+         jLJw4RkfPzQYgH97L6EXpWlOevTIZfCZEBFjij+/p3Ev9Dr66zzK3GFJDil3A7R4gi
+         yv7vcLhkZi+a7nRYKzSfiL+7kfQPdwLjPH3s/FJC38QhvkGGdbrOCmF7J17GeZwsjU
+         QTtX+Y9u0POfvOJA9cTiPuwJdnr4qV21XRtPZG4+X9Xsir+DuyzK9OIDD/Xy3Whxm5
+         eAF/BAcPY9rXuR4cCBTT1gt2+XAWp2rgETMK/JTA/iLiAWwQnrOCZnoTBC4wfyvoj4
+         Ho/Z7ZroHXuXg==
+Message-ID: <14602081-c361-70e2-afd1-4f5dad8e2869@collabora.com>
+Date:   Thu, 9 Feb 2023 14:21:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+khW7iGj=Y3NVxc9Y-MnwmPxCz5jHDmSfW-S6KS9Hko=jgJOg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] media: platform: mtk-mdp3: Add missing check and free
+ for ida_alloc
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, mchehab@kernel.org,
+        matthias.bgg@gmail.com, moudy.ho@mediatek.com,
+        daoyuan.huang@mediatek.com, hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230209092502.34300-1-jiasheng@iscas.ac.cn>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230209092502.34300-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 11:23:13PM -0800, Hao Luo wrote:
-> On Wed, Feb 1, 2023 at 5:58 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Use build id from file object in stackmap if it's available.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
+Il 09/02/23 10:25, Jiasheng Jiang ha scritto:
+> Add the check for the return value of the ida_alloc in order to avoid
+> NULL pointer dereference.
+> Moreover, free allocated "ctx->id" if mdp_m2m_open fails later in order
+> to avoid memory leak.
 > 
-> Can we insert the lookup from vma->vm_file in build_id_parse() rather
-> than its callers?
-
-that might simplify also the perf code.. we might need to rename
-it though.. maybe build_id_read(vma,...), I'll check
-
-thanks,
-jirka
-
+> Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
 > 
-> >  kernel/bpf/stackmap.c | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> > index aecea7451b61..944cb260a42c 100644
-> > --- a/kernel/bpf/stackmap.c
-> > +++ b/kernel/bpf/stackmap.c
-> > @@ -156,7 +156,15 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
-> >                         goto build_id_valid;
-> >                 }
-> >                 vma = find_vma(current->mm, ips[i]);
-> > +#ifdef CONFIG_FILE_BUILD_ID
-> > +               if (vma && vma->vm_file && vma->vm_file->f_bid) {
-> > +                       memcpy(id_offs[i].build_id,
-> > +                              vma->vm_file->f_bid->data,
-> > +                              vma->vm_file->f_bid->sz);
-> > +               } else {
-> > +#else
-> >                 if (!vma || build_id_parse(vma, id_offs[i].build_id, NULL)) {
-> > +#endif
-> >                         /* per entry fall back to ips */
-> >                         id_offs[i].status = BPF_STACK_BUILD_ID_IP;
-> >                         id_offs[i].ip = ips[i];
-> > --
-> > 2.39.1
-> >
+> v2 -> v3:
+> 
+> 1. Fix the goto label.
+> 
+> v1 -> v2:
+> 
+> 1. Fix the check for the ida_alloc.
+> ---
+>   drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+> index 5f74ea3b7a52..a2d204e90aa4 100644
+> --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+> +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+> @@ -567,6 +567,11 @@ static int mdp_m2m_open(struct file *file)
+>   	}
+>   
+>   	ctx->id = ida_alloc(&mdp->mdp_ida, GFP_KERNEL);
+> +	if (ctx->id < 0) {
+
+There's one main not-so-minor issue here: ctx->id is u32.
+Unsigned types cannot evaluate less than zero: they're .. unsigned!
+
+There's your fix:
+	ret = ida_alloc ...
+	if (ret)
+		....
+	ctx->id = ret;
+
+
+Enjoy.
+
+Regards,
+Angelo
+
