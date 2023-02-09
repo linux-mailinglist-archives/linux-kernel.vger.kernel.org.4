@@ -2,107 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9324369115B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B4A69115E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjBITac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S229836AbjBITbA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 14:31:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjBITab (ORCPT
+        with ESMTP id S229537AbjBITa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:30:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C24A6A71E
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:30:30 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pQCck-0002Gj-6v; Thu, 09 Feb 2023 20:30:26 +0100
-Received: from pengutronix.de (hardanger-9.fritz.box [IPv6:2a03:f580:87bc:d400:3254:7f93:f3b2:3e1b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B9C4E174D02;
-        Thu,  9 Feb 2023 19:30:23 +0000 (UTC)
-Date:   Thu, 9 Feb 2023 20:30:23 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Frank Jungclaus <Frank.Jungclaus@esd.eu>
-Cc:     Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mailhol.vincent@wanadoo.fr" <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH 2/3] can: esd_usb: Improved behavior on esd CAN_ERROR_EXT
- event (2)
-Message-ID: <20230209193023.uyb2isvrrjguhtbc@pengutronix.de>
-References: <20221219212717.1298282-1-frank.jungclaus@esd.eu>
- <CAMZ6RqKAmrgQUKLehUZx+hiSk3jD+o44uGtzrRFk+RBk8Bt81A@mail.gmail.com>
- <a1d253bacdf296947a45fb069a0fd64eabb7e117.camel@esd.eu>
- <CAMZ6RqLeHNzZyKdCmqXDDtd5GZC8KZ0Y1hESYyPaaMbFe=ryYQ@mail.gmail.com>
- <786db8fae65a2ed415b5dd0c3001b4dfc8c7112b.camel@esd.eu>
- <20230202152256.kc5xh4e4m6panumw@pengutronix.de>
- <da0551556e42fd67c0b743d6d066fb09702571ef.camel@esd.eu>
+        Thu, 9 Feb 2023 14:30:58 -0500
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F56192;
+        Thu,  9 Feb 2023 11:30:57 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id u21so3063330edv.3;
+        Thu, 09 Feb 2023 11:30:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KRNBZ9IKSCzIf3bDsBgwoDNrUF4puPgR64KPFao4n1E=;
+        b=BQXj9L9DSp6h3IaKEW/oMvbCnHroEWrtkSMhs0Jg3Vhr1Tr5byOlpDT6kyVcd/ZOkC
+         tywuLBvEiN6DFBwb8KQb8yc460LYxeKSK+3zP16fY6prgFpc/DebM7p6qYLpHdFEvZdA
+         3uYLAFL1Nn9gSoiBMkNEySt5gf8uSYpyOKxgXQ/pNwT/M03HiqvaK1bhHVxFKP3wyaSo
+         tOldVuGeVI6vAx+LFDH9y0qhMIWO8ssnFb+JbMWfRZKh5eKzp7+/SJylXU2ovYNIYmNX
+         p5RUXWhuoJ0OKy/d92sLqiATZ5aQbMJqyEGX4FvUONfJ5kIH+Z5kudO2Slr8K6TQqrYA
+         t6Pw==
+X-Gm-Message-State: AO0yUKUYyLW94OYsyfT/BCrOCVZKm++uLSpAIcQh9/cxTNm41UJoTduk
+        pdt2z6evCDiyk1waSkM+LaV2meel1WHUhq48yGb0U09b
+X-Google-Smtp-Source: AK7set83zyaVsmviZsytUfEdR6S+LSDAFDI/reqhFy9DAnj4nCNrtWk3adJNlx15QYVsuZHzzsz/jFQToKQyI5/f79o=
+X-Received: by 2002:a50:9ecb:0:b0:49d:ec5d:28b4 with SMTP id
+ a69-20020a509ecb000000b0049dec5d28b4mr2826212edf.6.1675971056200; Thu, 09 Feb
+ 2023 11:30:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ls46os5cfnvtd7aa"
-Content-Disposition: inline
-In-Reply-To: <da0551556e42fd67c0b743d6d066fb09702571ef.camel@esd.eu>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230207-kobj_type-cpufreq-v1-1-c7fa2dbd0754@weissschuh.net> <20230208050411.2byi4nfsfiyakfyq@vireshk-i7>
+In-Reply-To: <20230208050411.2byi4nfsfiyakfyq@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Feb 2023 20:30:45 +0100
+Message-ID: <CAJZ5v0h3E7x-0FkLG0fDv0qi-8W+GCS6gmpJtvxPWTVLTWH_KQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Make kobj_type structure constant
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 8, 2023 at 6:04 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 07-02-23, 19:58, Thomas Weißschuh wrote:
+> > Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> > the driver core allows the usage of const struct kobj_type.
+> >
+> > Take advantage of this to constify the structure definition to prevent
+> > modification at runtime.
+> >
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 7e56a42750ea..ceb1574417f9 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -993,7 +993,7 @@ static const struct sysfs_ops sysfs_ops = {
+> >       .store  = store,
+> >  };
+> >
+> > -static struct kobj_type ktype_cpufreq = {
+> > +static const struct kobj_type ktype_cpufreq = {
+> >       .sysfs_ops      = &sysfs_ops,
+> >       .default_groups = cpufreq_groups,
+> >       .release        = cpufreq_sysfs_release,
+> >
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
---ls46os5cfnvtd7aa
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 09.02.2023 19:00:54, Frank Jungclaus wrote:
-> > Not taking this series, waiting for the reworked version.
-> >=20
-> > Marc
-> >=20
-> Marc, can I just send a reworked patch of [PATCH 2/3], let's say
-> with subject [PATCH v2 2/3] as a reply to this thread or should I
-> better resend the complete patch series as [PATCH v2 0/3] up to
-> [PATCH v2 3/3]?
-
-Just re-post the whole series. Complete series are easier to handle.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---ls46os5cfnvtd7aa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmPlScsACgkQvlAcSiqK
-BOgN3gf5AXwvdYF1Okk+KgXGxwMVb1X/CBxO0Xes1mA6DzRZZRUxdw3UU1wDwTc5
-K+5wR3iWcm7bt/PzgDk1kukyQZ7+uVh69IUCGtzP6GgZtOPJjfbP6/lifkJSn7Qc
-ujH1Ay+7Pq/AD9Z4pcSo7CxG/QvCOLL1XaA0eIXqkuPA7jqoSkgqr6rvHz2dFjoZ
-Fd2MJFSPTtYK8qJwTuoYadp070vvRSUajVcT6G+lWQM3m42b9Be+URY345P07PFO
-qY2Dh0B49owZvZ5m4fe/VFwFvkAYyNlwB7p2X8alUwa3is/SzIYCfb1XyTQLYlck
-5EqnUmol4RBRgCgkIYiEPEBdb98qOA==
-=P+AW
------END PGP SIGNATURE-----
-
---ls46os5cfnvtd7aa--
+Applied as 6.3 material, thanks!
