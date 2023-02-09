@@ -2,137 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B808869003A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 07:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C2A69003E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 07:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjBIGMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 01:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
+        id S229683AbjBIGOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 01:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjBIGMe (ORCPT
+        with ESMTP id S229641AbjBIGOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 01:12:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAC91DBA9;
-        Wed,  8 Feb 2023 22:12:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB6D76190D;
-        Thu,  9 Feb 2023 06:12:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F07BC433A7;
-        Thu,  9 Feb 2023 06:12:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675923143;
-        bh=DdJSvxTswgC5jU5eayppndGJdLst1jQJDDB7kJ+HZLo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Txo6IukQjvrRIUdOPYgOGOtVA15oo8ClBPsTSHSOA0EQhxQi0X/BTyy7ArTJeTcaL
-         ipA0VyVjjlAI93OOeIkMhz1rH6H1YYi0cFLASWeOfMCcCipd9ujyBSbGsL2oOXiBT/
-         Al9w1EfuncWJr4VD0BOAA/cogdiW38l7nco+Qh8UmNSmVqZVg34lea/0Gr+McNgB42
-         oYVt34HmCLIJSnQVuAaHvu2eC3NVD78rngrQ65i2gbbwF/4BSfPQqZbUWZi6o71c2y
-         D6rxtyBSIZ0hus1EREIf9sVRRidELjW0GzhX/pFknwy+d8TvyTHucg0JKPThgFdGr1
-         AfLBSWBLCx2dg==
-Received: by mail-ej1-f48.google.com with SMTP id jg8so3327637ejc.6;
-        Wed, 08 Feb 2023 22:12:22 -0800 (PST)
-X-Gm-Message-State: AO0yUKWAevxe1pmBeidYRzsl0uuggcA/oLHasVcnyHAKndnYHC3rmFyR
-        tjHynC1MriHb6Jf4X9PdTdkaTHKhJ5SuUECMvQw=
-X-Google-Smtp-Source: AK7set9+nIqiU+rckSMqjLBSgwaVt9UEWZf6c5d2LjRTGI9OEfPfNfhbvCgOqvaCPOxk5mUX9jgRC44cWeC44zdUhv8=
-X-Received: by 2002:a17:906:5202:b0:877:7480:c561 with SMTP id
- g2-20020a170906520200b008777480c561mr248371ejm.1.1675923141276; Wed, 08 Feb
- 2023 22:12:21 -0800 (PST)
+        Thu, 9 Feb 2023 01:14:33 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115F521A07
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 22:14:30 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VbEsIZ9_1675923266;
+Received: from 30.221.133.91(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VbEsIZ9_1675923266)
+          by smtp.aliyun-inc.com;
+          Thu, 09 Feb 2023 14:14:27 +0800
+Message-ID: <d18fbe06-fec1-2d9a-169e-145fd5ae7c79@linux.alibaba.com>
+Date:   Thu, 9 Feb 2023 14:14:25 +0800
 MIME-Version: 1.0
-References: <20221117020935.32086-1-liupeibao@loongson.cn> <0bb33ba8-00af-777b-fb97-a086b91865b0@loongson.cn>
-In-Reply-To: <0bb33ba8-00af-777b-fb97-a086b91865b0@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 9 Feb 2023 14:12:09 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6CFm2=nDe52NjT6Uy1_mAO=gkTdJfanX8_ZrjifVjMjg@mail.gmail.com>
-Message-ID: <CAAhV-H6CFm2=nDe52NjT6Uy1_mAO=gkTdJfanX8_ZrjifVjMjg@mail.gmail.com>
-Subject: Re: [PATCH V6] PCI: loongson: Skip scanning disabled child devices
-To:     Binbin Zhou <zhoubinbin@loongson.cn>
-Cc:     Liu Peibao <liupeibao@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        wanghongliang <wanghongliang@loongson.cn>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2 3/4] erofs: relinquish volume with mutex held
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        zhujia.zj@bytedance.com
+Cc:     huyue2@coolpad.com, linux-kernel@vger.kernel.org
+References: <20230209051838.33297-1-jefflexu@linux.alibaba.com>
+ <20230209051838.33297-4-jefflexu@linux.alibaba.com>
+ <fcb92d78-fc5a-8f51-8a1b-75fd878cf8a1@linux.alibaba.com>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <fcb92d78-fc5a-8f51-8a1b-75fd878cf8a1@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 11:00 AM Binbin Zhou <zhoubinbin@loongson.cn> wrote:
->
->
-> =E5=9C=A8 2022/11/17 10:09, Liu Peibao =E5=86=99=E9=81=93:
-> > Add a mechanism to disable on chip PCI devices by DT. Typically, when t=
-here
-> > are pins shareable between the platform device and the on chip PCI devi=
-ce,
-> > if the PCI device is not preferred, add `status =3D "disabled"` propert=
-y to
-> > this PCI device DT node.
-> >
-> > For example, on LS2K1000, GMAC1 (on chip PCI device) and GPIO (platform
-> > device, not PCI device) 14 share the same pin. If GMAC1 is not preferre=
-d,
-> > add `status =3D "disabled"` property in GMAC1 DT node.
-> >
-> > Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> Tested-by: Binbin Zhou <zhoubinbin@loongson.cn>
-Acked-by: Huacai Chen <chenhuacai@loongson.cn>
 
 
-> > ---
-> > V5 -> V6: 1. rewrite the commit log to make things clear.
-> >         2. replace "unavailable" as "disabled" in patch subject.
-> > V4 -> V5: clear the issue we are facing in commit log.
-> > V3 -> V4: 1. get rid of the masklist and search the status property
-> >         directly.
-> >            2. check the status property only when accessing the vendor =
-ID.
-> > V2 -> V3: 1. use list_for_each_entry() for more clearly.
-> >            2. fix wrong use of sizeof().
-> > V1 -> V2: use existing property "status" instead of adding new property=
-.
-> >
-> >   drivers/pci/controller/pci-loongson.c | 11 +++++++++++
-> >   1 file changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/contro=
-ller/pci-loongson.c
-> > index 05c50408f13b..efca0b3b5a29 100644
-> > --- a/drivers/pci/controller/pci-loongson.c
-> > +++ b/drivers/pci/controller/pci-loongson.c
-> > @@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct p=
-ci_bus *bus,
-> >                       return NULL;
-> >       }
-> >
-> > +#ifdef CONFIG_OF
-> > +     /* Don't access disabled devices. */
-> > +     if (pci_is_root_bus(bus) && where =3D=3D PCI_VENDOR_ID) {
-> > +             struct device_node *dn;
-> > +
-> > +             dn =3D of_pci_find_child_device(bus->dev.of_node, devfn);
-> > +             if (dn && !of_device_is_available(dn))
-> > +                     return NULL;
-> > +     }
-> > +#endif
-> > +
-> >       /* CFG0 can only access standard space */
-> >       if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
-> >               return cfg0_map(priv, bus, devfn, where);
->
+On 2/9/23 2:06 PM, Gao Xiang wrote:
+> 
+> 
+> On 2023/2/9 13:18, Jingbo Xu wrote:
+>> Relinquish fscache volume with mutex held.  Otherwise if a new domain is
+>> registered when the old domain with the same name gets removed from the
+>> list but not relinquished yet, fscache may complain the collision.
+>>
+>> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+>> Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
+> 
+> Do we need to backport this to old kernels?
+> IOWs, whether "Fixes:" tag is needed?
+
+Yeah the small fix is appropriate for being backported.
+
+Fixes: 8b7adf1dff3d ("erofs: introduce fscache-based domain")
+
+I will add the "Fixes" tag in the next version.
+
+
+-- 
+Thanks,
+Jingbo
