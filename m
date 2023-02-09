@@ -2,82 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7886910E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680416910E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjBITCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
+        id S229914AbjBITDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBITCs (ORCPT
+        with ESMTP id S229695AbjBITDC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:02:48 -0500
-Received: from www.kot-begemot.co.uk (ns1.kot-begemot.co.uk [217.160.28.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264025ACE2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:02:47 -0800 (PST)
-Received: from [192.168.17.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1pQCBu-007WLV-2x; Thu, 09 Feb 2023 19:02:42 +0000
-Received: from madding.kot-begemot.co.uk ([192.168.3.98])
-        by jain.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1pQCBr-0075G5-8A; Thu, 09 Feb 2023 19:02:41 +0000
-Message-ID: <cc1d4868-ee89-519b-9415-1ee2f442d73e@cambridgegreys.com>
-Date:   Thu, 9 Feb 2023 19:02:38 +0000
+        Thu, 9 Feb 2023 14:03:02 -0500
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674C05D1EB;
+        Thu,  9 Feb 2023 11:03:00 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id 14-20020a9d010e000000b0068bdddfa263so846289otu.2;
+        Thu, 09 Feb 2023 11:03:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CIG7XVUrEvHxHM2W2SVN/mGj6ui8gtTwgh3+jRqlHdg=;
+        b=8IM8V3G5OWrZr6iwAs3K9hQ84jkviqvHg97FpWrp1TpU21hLJbd9tFO8JCTr9FnwAX
+         z4KrAD9bxULAShLqed467hhp5xIvf6e1lZXxFfGSMFEXxY543ebpXMxpdp/ls2ZlfCFU
+         IMpRjOysLaNQgNX4cNHzfh/JXluEz52OpDXiAQ/S3z2IlYyiNPdL/6MBqI45EI2yLWJC
+         xnF6Y8ysQUuH58p8rL8ozxnZi0ZGYKJXm7mSWYLZpKpw7HhQGIZVH5IOATwqMXaI6oz4
+         +aVwru8iiuKArdYJCyyglYzYYtONj0DCt9l7x3hYbuqB0dFhTjDtWeSo6xPuR3t5m5V6
+         R1Fg==
+X-Gm-Message-State: AO0yUKUNZHdniVSPmU8FjhVQm0cWtaKMtlRLMqA9qAYMxxttiEKAMGnD
+        Xq3EyLF6feTOf9yt5zNb8mMFehRTvg==
+X-Google-Smtp-Source: AK7set890dZ1sGgTNR93HC0ONDrNKfdkvrQ0cgzhuVqPSxNlKEotCQrIOOY1TJCe6wzGYabR5mBGyw==
+X-Received: by 2002:a9d:12cc:0:b0:68b:c490:5372 with SMTP id g70-20020a9d12cc000000b0068bc4905372mr7565476otg.22.1675969379619;
+        Thu, 09 Feb 2023 11:02:59 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u4-20020a9d4d84000000b0068d752f1870sm1065872otk.5.2023.02.09.11.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 11:02:59 -0800 (PST)
+Received: (nullmailer pid 639835 invoked by uid 1000);
+        Thu, 09 Feb 2023 19:02:58 -0000
+Date:   Thu, 9 Feb 2023 13:02:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 01/12] dt-bindings: remoteproc: mediatek: Improve the
+ rpmsg subnode definition
+Message-ID: <167596937758.639777.17645426181511229001.robh@kernel.org>
+References: <20230209074021.13936-1-tinghan.shen@mediatek.com>
+ <20230209074021.13936-2-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] uml: vector: Remove unused definitions
- VECTOR_{WRITE,HEADERS}
-Content-Language: en-US
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, richard@nod.at,
-        johannes@sipsolutions.net
-Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230209181638.3781977-1-carlos.bilbao@amd.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Organization: Cambridge Greys
-In-Reply-To: <20230209181638.3781977-1-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.0
-X-Spam-Score: -2.0
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209074021.13936-2-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 18:16, Carlos Bilbao wrote:
-> Remove definitions of VECTOR_WRITE and VECTOR_HEADERS since no longer used.
+
+On Thu, 09 Feb 2023 15:40:10 +0800, Tinghan Shen wrote:
+> Improve the definition of the rpmsg subnode by
+> assigning a distinct node name and adding the
+> definition source of node properties.
 > 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 > ---
->   arch/um/drivers/vector_user.h | 2 --
->   1 file changed, 2 deletions(-)
+>  .../bindings/remoteproc/mtk,scp.yaml          | 31 +++++++++----------
+>  1 file changed, 15 insertions(+), 16 deletions(-)
 > 
-> diff --git a/arch/um/drivers/vector_user.h b/arch/um/drivers/vector_user.h
-> index 3a73d17a0161..59ed5f9e6e41 100644
-> --- a/arch/um/drivers/vector_user.h
-> +++ b/arch/um/drivers/vector_user.h
-> @@ -68,8 +68,6 @@ struct vector_fds {
->   };
->   
->   #define VECTOR_READ	1
-> -#define VECTOR_WRITE	(1 < 1)
-> -#define VECTOR_HEADERS	(1 < 2)
->   
->   extern struct arglist *uml_parse_vector_ifspec(char *arg);
->   
 
-Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Acked-by: Rob Herring <robh@kernel.org>
 
--- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
