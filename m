@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3B369145D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F70169145F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjBIX0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S230470AbjBIX0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjBIX0K (ORCPT
+        with ESMTP id S230446AbjBIX0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:26:10 -0500
-Received: from irl.hu (irl.hu [95.85.9.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EB5658EE;
-        Thu,  9 Feb 2023 15:26:00 -0800 (PST)
-Received: from localhost.localdomain (51b6913b.dsl.pool.telekom.hu [::ffff:81.182.145.59])
-  (AUTH: CRAM-MD5 soyer@irl.hu, )
-  by irl.hu with ESMTPSA
-  id 000000000006F771.0000000063E58107.002B65BC; Fri, 10 Feb 2023 00:25:59 +0100
-From:   Gergo Koteles <soyer@irl.hu>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Caleb Connolly <caleb@connolly.tech>,
-        Gergo Koteles <soyer@irl.hu>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sdm845-oneplus: add tri-state-key
-Date:   Fri, 10 Feb 2023 00:25:56 +0100
-Message-Id: <20230209232556.91554-1-soyer@irl.hu>
-X-Mailer: git-send-email 2.39.1
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mime-Autoconverted: from 8bit to 7bit by courier 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 18:26:40 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B582B66EF9;
+        Thu,  9 Feb 2023 15:26:21 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id qw12so11385168ejc.2;
+        Thu, 09 Feb 2023 15:26:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjQEZxP8lMZ2UBLX1ynT5dUYuWcXIgYl0zrxVwqKemg=;
+        b=oAc2ICH0OBXTKGpUsXh7Oa62UNpe3B12xPP3it7lQM3ghOZRi6u5IM0zUZNAoeAloe
+         YorPnFV7eCM7OgtntHJbeh41+eQp+CGeiDR1nccW2d+GUkKFfSXFNanhePmAdZL+Q4rN
+         V9Fjbb+XAI7eLppYpByZ7HzSP5hP2KkzaT0GS2Ysf1gxvJWkK4x8qYPlkfTlBTZNE43J
+         XUKx/isye4CTsOuxGqETRO2g2dJ7MVysOfmKca9Em2BtFsgXO0hQ69qo3TUoQfNGNkWx
+         zILdxBM0TRQjvHIU22W4COjTx5jN2zgHZNYRZwQ6HPP2EQHX6ZE1EGE5NkG41xBgqw4Q
+         x6Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PjQEZxP8lMZ2UBLX1ynT5dUYuWcXIgYl0zrxVwqKemg=;
+        b=4ADgfA4crqJCfOE2Du2Hw+VmN7Cax74/ac9ZH7kgc5NwSyi0WKiMtxN6Zn/5qbr9JA
+         K5vE//yjk1GLu84cbcHVzNFVydYqBBPQKQ4eHtmoZKyTuHFoGDrIv6H2eIsqGWIPcZjA
+         mvUW0NasORoaVIbtgFYGymxY4VDOkttpC57IegCZNOnWWXGBVPny2/dOUY7wTX1E+Gz0
+         s3dqlblSadT27H5gZwZZodePWmD6UsZmck6VnRaIU/Gxe9r7JzD+II3+fQE/zIdxf9NS
+         Sj/Uqs1FlJn1FhWp6N4cEtmG36we88OJxnWdVYCHctRoYOkpTnApXp0COhWb4lJERyG/
+         DysQ==
+X-Gm-Message-State: AO0yUKX6+nnf1XKhPFORLcoixt+zEtDZDVeCLxU2D9ks59SaCWf9fIYh
+        yqga9+6hN3OXfi/HnJ12lWQ=
+X-Google-Smtp-Source: AK7set/xzAGC3h51eCtPDzMsOJDcjSbudUO9W2gjP2kBzBAB6Ft4VbrTkpc7ja4hG/j17s9fihdzlg==
+X-Received: by 2002:a17:906:1dc8:b0:878:8237:7abb with SMTP id v8-20020a1709061dc800b0087882377abbmr14406317ejh.35.1675985180235;
+        Thu, 09 Feb 2023 15:26:20 -0800 (PST)
+Received: from mobilestation ([83.220.236.142])
+        by smtp.gmail.com with ESMTPSA id uo39-20020a170907cc2700b00887ce5caf66sm1517317ejc.59.2023.02.09.15.26.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 15:26:19 -0800 (PST)
+Date:   Fri, 10 Feb 2023 02:26:16 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        caihuoqing <caihuoqing@baidu.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
+Subject: Re: [PATCH 1/3] dmaengine: dw-edma: Rename dw_edma_core_ops
+ structure to dw_edma_plat_ops
+Message-ID: <20230209232616.5zyxtxqzlmbnnzba@mobilestation>
+References: <20220921064859.10328-1-cai.huoqing@linux.dev>
+ <20220921064859.10328-2-cai.huoqing@linux.dev>
+ <Y2UWvjNHBGa8PjBZ@matsya>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2UWvjNHBGa8PjBZ@matsya>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tri-state-key is a sound profile switch found on the OnePlus 6,
-Android maps the states to "mute", "vibrate" and "ring". Expose them as
-ABS_SND_PROFILE events.
-The previous GPIO numbers were wrong. Update them to the correct
-ones.
+Hi Vinod
 
-Co-developed-by: Caleb Connolly <caleb@connolly.tech>
-Signed-off-by: Caleb Connolly <caleb@connolly.tech>
-Signed-off-by: Gergo Koteles <soyer@irl.hu>
----
- .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 39 ++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+On Fri, Nov 04, 2022 at 07:12:22PM +0530, Vinod Koul wrote:
+> On 21-09-22, 14:48, Cai Huoqing wrote:
+> > From: caihuoqing <caihuoqing@baidu.com>
+> > 
+> > Rename dw_edma_core_ops structure to dw_edma_plat_ops,
+> > because the 'ops' is related to platform device
+> 
+> Is that really a case, the device can be non platform too right?
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-index 64638ea94db7..e45d4fdead82 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
-@@ -52,6 +52,43 @@ key-vol-up {
- 		};
- 	};
- 
-+	tri-state-key {
-+		compatible = "gpio-keys";
-+		label = "Tri-state key";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tri_state_key_default>;
-+		state-top {
-+			label = "Tri-state key top";
-+			linux,input-type = <EV_ABS>;
-+			linux,code = <ABS_SND_PROFILE>;
-+			linux,input-value = <0>;
-+			gpios = <&tlmm 126 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <50>;
-+			linux,can-disable;
-+		};
-+
-+		state-middle {
-+			label = "Tri-state key middle";
-+			linux,input-type = <EV_ABS>;
-+			linux,code = <ABS_SND_PROFILE>;
-+			linux,input-value = <1>;
-+			gpios = <&tlmm 52 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <50>;
-+			linux,can-disable;
-+
-+		};
-+
-+		state-bottom {
-+			label = "Tri-state key bottom";
-+			linux,input-type = <EV_ABS>;
-+			linux,code = <ABS_SND_PROFILE>;
-+			linux,input-value = <2>;
-+			gpios = <&tlmm 24 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <50>;
-+			linux,can-disable;
-+		};
-+	};
-+
- 	reserved-memory {
- 		/*
- 		 * The rmtfs_mem needs to be guarded due to "XPU limitations"
-@@ -754,7 +791,7 @@ &tlmm {
- 	gpio-reserved-ranges = <0 4>, <81 4>;
- 
- 	tri_state_key_default: tri-state-key-default-state {
--		pins = "gpio40", "gpio42", "gpio26";
-+		pins = "gpio126", "gpio52", "gpio24";
- 		function = "gpio";
- 		drive-strength = <2>;
- 		bias-disable;
--- 
-2.39.1
+The patchlog is misleading in the suggested naming convention. The
+dw_edma_pcie_plat_ops name was supposed to refer to the platform which
+the DW eDMA engine is embedded to, like PCIe end-point (accessible via
+the PCIe bus) or a PCIe root port (directly accessible by CPU).
+Needless to say that for them the IRQ-vector and PCI-addresses are
+differently determined. The suggested name has a connection with the
+kernel platform device only as a private case of the eDMA/hDMA embedded
+into the DW PCI Root ports, though basically it was supposed to refer to
+any platform in which the DMA hardware lives.
 
+Anyway the renaming was necessary to distinguish two types of
+the implementation callbacks:
+1. DW eDMA/hDMA IP-core specific operations: device-specific CSR
+setups in one or another aspect of the DMA-engine initialization.
+2. DW eDMA/hDMA platform specific operations: the DMA device
+environment configs like IRQs, address translation, etc.
+
+dw_edma_pcie_core_ops is supposed to be used for the case 1, and
+dw_edma_pcie_plat_ops - for the case 2.
+
+-Serge(y)
+
+> 
+> -- 
+> ~Vinod
