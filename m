@@ -2,95 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7481B6914DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 933556914E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:48:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjBIXrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
+        id S229760AbjBIXsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBIXrb (ORCPT
+        with ESMTP id S229483AbjBIXsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:47:31 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898F837B76;
-        Thu,  9 Feb 2023 15:47:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PCYSV2bZRz4xGR;
-        Fri, 10 Feb 2023 10:47:22 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675986443;
-        bh=qMEE4BwygN7AzVIj59Fb7AmZbm5i8MNYMLV473e3kVg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jIgaHve4rToJWs6vTiJUrzI1XT1u8LlcI2bbGZYR6bgOC2g+ty2pJuXjZHuF1GA+R
-         70YdHf0S75jbMsgmpNdjjyrPQizY6bi8fjcOc0w1x2ze3p4yoWo8poySglqKcfLAA8
-         R/5f2y0mXgni7P8MrSlgVZbOG99eVoBjtKmbBz+Yhkju59SqBxhw7NEz9I1wtn8iUY
-         DRJ8wosXKJIT66naxGrHD32iHG2Zga763SzZrkHWLqsGORP1kpOza9X7KjvlSLPFJT
-         js4x4uarbiNsWDPvjudady+HqwEWAkjBEheIaObAXfaNX2V6WjOmuyPCxlPDjMN5fO
-         2HcaiRN2ObNZw==
-Date:   Fri, 10 Feb 2023 10:47:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the drm-misc-fixes tree
-Message-ID: <20230210104720.365557d8@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gVuEw7uYclxycRGjVdNl1TK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 18:48:20 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9FE3803C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 15:48:18 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id s89-20020a17090a2f6200b0023125ebb4b1so3884328pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 15:48:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TbWYdqHwSto9YO7YB+6UGbw5fXLIzmmd65qc7lLKVWc=;
+        b=voxfkaqKTjidecOv8HFOLzIviY9xDjRoVvioBFOWhSdCEJOPDorptBWE98l/Qd4mLF
+         5vb87gMNXo95OnE3zYO9LqzZ//zrzdTxBnd7pHEJCuNxmmy5MDz0bYYvdcOpYBUNNRQe
+         8jIuQAMrYIKrq2M09Z3cI4ZqAVE5CAO8p+TXFjFJtiUfB3xV6oDdJWuya3nJLH538xh+
+         W2MuiRB1BrrgXit7boq1g4vjJZuh5XfcZwu2ggOqHoUBi03nbhbV+5cxSAJAG7KwlwJZ
+         ubmNAqOnh9KwwbUw4tkgDQqbhdJVboD6t/EG8wNCfQm48Q/fJeleZhuR0I/qaoLKruFR
+         MVCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TbWYdqHwSto9YO7YB+6UGbw5fXLIzmmd65qc7lLKVWc=;
+        b=rR7He8pJNhwB8wSYEG6f5eIU65ykPQqAdEzyog1h5HdX7Neq3OVjg7yTICu07uQoYz
+         KBsLzvqICOyL715MJwyE46OOSkLqagOayQBxVyNEcht59KWGlXFJGpq3baNtywICUnoY
+         fs2vqe07hB5zw9rfJLBHUMKFWGM09srDqzGkZCAyp9NN5Az7WfxIjw+B9AHwjq+5kyUh
+         k1+KI6Lr1ZndXm5kMYFovrSZEFxAF9fNQ6lvfsEsvrL0ql9fZfk4LnfDEc+sHhCrYZpq
+         zkqGW1iIX788SCN4aTApd6TH+eLUv0ktbsX3WZvzpzgCY/9Y5/vTSW8uxdDrSa7Q6Dlw
+         OR7w==
+X-Gm-Message-State: AO0yUKXxHyNS/BehD+eq+wOfA2Cl7OULnW6WP+wmtM6HiN7cCEF8SZ44
+        u1IfqlsYrsHb5BeAbogeiTDqiw==
+X-Google-Smtp-Source: AK7set8BpY5cU5Bd5cEH6MQ9aM5cGH2OqoALs0sQq+FyHtNt11Dq6OnthUY0jZwTvEmqw/3PHOqajA==
+X-Received: by 2002:a17:902:da8b:b0:199:bd4:9fbb with SMTP id j11-20020a170902da8b00b001990bd49fbbmr15173197plx.43.1675986498356;
+        Thu, 09 Feb 2023 15:48:18 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id jd2-20020a170903260200b001946a3f4d9csm2097465plb.38.2023.02.09.15.48.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 15:48:17 -0800 (PST)
+Date:   Thu, 09 Feb 2023 15:48:17 -0800 (PST)
+X-Google-Original-Date: Thu, 09 Feb 2023 15:47:34 PST (-0800)
+Subject:     Re: [PATCH] clocksource/drivers/riscv: Refuse to probe on T-Head
+In-Reply-To: <Y+WEfc2fYd3qJmUe@spud>
+CC:     linux-riscv@lists.infradead.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
+        linux@rivosinc.com
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-c66f0475-5f2c-4aab-a532-7ce026fd5413@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/gVuEw7uYclxycRGjVdNl1TK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 09 Feb 2023 15:40:45 PST (-0800), Conor Dooley wrote:
+> Hey Palmer,
+>
+> On Thu, Feb 09, 2023 at 03:23:02PM -0800, Palmer Dabbelt wrote:
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
+>> 
+>> As of d9f15a9de44a ("Revert "clocksource/drivers/riscv: Events are
+>> stopped during CPU suspend"") this driver no longer functions correctly
+>> for the T-Head firmware.  That shouldn't impact any users, as we've got
+>> a functioning driver that's higher priority, but let's just be safe and
+>> ban it from probing at all.
+>> 
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> ---
+>> This feel super ugly to me, but I'm not sure how to do this more
+>> cleanly.  I'm not even sure if it's necessary, but I just ran back into
+>> the driver reviewing some other patches so I figured I'd say something.
+>
+> I'm not super sure what you're trying to fix here. That revert went
+> through to restore behaviour for the SiFive stuff that do deliver events
+> in suspend.
 
-Hi all,
+My worry was that we'd end up probing the SBI driver on T-Head systems, 
+where it doesn't work (as the combination of SBI timer and SBI suspend 
+depends on unspecified behavior).  So we'd be better off just failing 
+early and obviously in the case, rather than letting users think they 
+could get away with only the SBI drivers.
 
-The following commit is also in the drm-fixes tree as a different commit
-(but the same patch):
+> Subsequently, we added a DT property (probably the wrong one tbh, but
+> that's all said and done now) that communicates that a timer is
+> incapable of waking the cpus. See commit 98ce3981716c ("dt-bindings:
+> timer: Add bindings for the RISC-V timer device") & the full patchset is
+> at:
+> https://lore.kernel.org/linux-riscv/20230103141102.772228-1-apatel@ventanamicro.com/
+>
+> AFAIU, the binding for the T-HEAD clint was only accepted in the last
+> week & there's nothing actually using this timer. IIRC, when I wanted to
+> test the timer, Samuel cooked me up a WIP openSBI etc to enable it.
 
-  94d8b6572a1f ("nvidiafb: detect the hardware support before removing cons=
-ole.")
+That makes sense.  I'd assumed these DTs just had the SBI timer in there 
+(as a bunch of other stuff requires it), but from Samuel's reply it 
+sounds like I was just wrong here.  I guess we're sort of in a grey area 
+for DTs that aren't in the kernel source tree, but this code is ugly 
+enough I'm OK just ignoring those.
 
-This is commit
+> So ye, I don't think this is needed fortunately!
 
-  04119ab1a49f ("nvidiafb: detect the hardware support before removing cons=
-ole.")
+Ya, I think so too.
 
-in the drm-fixes tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gVuEw7uYclxycRGjVdNl1TK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPlhggACgkQAVBC80lX
-0Gw25AgAm3SO/3AKTE4jB5UPUjufb/vxFus/4tm6t3cifxuRSDURBF2T9Xe6wbnd
-sSt5PXlPjIDcdUns3vS3o7etdGmeHCnCjt9DzYlAinhazAIz4imS8d8HBoySlOjO
-IT8PKw4KGtcz/wWHlAgjpEQltescsUUbg0z/Ii2vFO/5o2B/+kzwEKR81gIbRnkK
-ex5gi6cVwQeOA3BNb3g/zQ3W1A6faujOWqGhO69MgAq7/IfsWhEh1ePW7c+U3cY6
-icaH5z1zbfkKnaSR9MgMk3Q5oLsY/tty5DHhwgfXK7nWDDU+8t/OkacvXxpdNQsi
-ZZmbJj1COo6OpXTShHwIpLN+m702Sg==
-=np7k
------END PGP SIGNATURE-----
-
---Sig_/gVuEw7uYclxycRGjVdNl1TK--
+>
+> Cheers,
+> Conor.
