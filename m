@@ -2,114 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A99C690DC3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4CF690DC7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:01:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjBIQAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 11:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45860 "EHLO
+        id S230426AbjBIQBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 11:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjBIQAN (ORCPT
+        with ESMTP id S231419AbjBIQBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:00:13 -0500
+        Thu, 9 Feb 2023 11:01:02 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB606199;
-        Thu,  9 Feb 2023 08:00:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB469B752;
+        Thu,  9 Feb 2023 08:01:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D604B8214B;
-        Thu,  9 Feb 2023 16:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07163C433D2;
-        Thu,  9 Feb 2023 16:00:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 305CAB821A7;
+        Thu,  9 Feb 2023 16:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3676C433D2;
+        Thu,  9 Feb 2023 16:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675958409;
-        bh=2qBfEXH1sysFsQEHBBrLRbJmDsQNAiiHqAZPuG0VX1g=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=d0UxyZG4a9phB5e+8r5b19rLlawNmw3xm9hRnpcHCd2N8I0QwjqCHM+F635cRp4/M
-         0ENEdxt30XzkD56yPXNx/zLwbq7lAlyTGez3ny6JFnb44KhkauPkzgCytd6GeaLslq
-         GbqyayTxU0J70CgWCquflyxQdBowha/YRkHMEpIKlUJRcC2hMBVd1q78PsE6pPZkKc
-         aaWJY55MAprYDQHqxGzA6LMh1lKjzAIx1RYvcqgBgVaAFLrpjqYIgonCw4BoXcDLEZ
-         j0fJy6+jubeex5/vqnRLfLvOrLEXk3H73SBePGGQ/6yVuSg2tCaOVA9SqTy/YZQ9+e
-         DLryY43pVpRKA==
-Message-ID: <757804b7-8a63-db1c-afab-3c0c1a602807@kernel.org>
-Date:   Thu, 9 Feb 2023 17:00:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm6115: Add geni debug uart node for
- qup0
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20230208122718.338545-1-bhupesh.sharma@linaro.org>
- <c122426f-53d5-b5ee-9a15-0a735da4bc29@kernel.org>
-In-Reply-To: <c122426f-53d5-b5ee-9a15-0a735da4bc29@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1675958457;
+        bh=qnTNmKXaSHmrgc+WjwwC45H/EzEOVY53kA4QceXhqzM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i9zZSTUspNhS/drJc+CNge6raq/wvY5s0O0fZKPc9eyibZLNUFXQ1A7Q/dT1AIL9/
+         VpcxpE8BXiHQO/C715ih9HqXs4NVg7eAyN/2JK8vuvzsPmOIWAWQQagtuVinZZ/B+R
+         /YJfxIfo15jjmJr8JD2hTlYXba9OsNME8WfxELfojyBwm0ng5HZnwaAnnL9naq04tj
+         AMGKU1uMqqdj5qGQJjxmQU6XjDhUx4KgFQ6vDRSud029bTRmlxCIB45XpV8m0F18Za
+         Q/BncX0+bCSEXODoRrbds03Pye1SLuNkRGnMpZbWx2E+2P/T1jHtgI/SekU9VbmvQ9
+         46Ane+oPCFs+g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pQ9Lz-0092CU-CK;
+        Thu, 09 Feb 2023 16:00:55 +0000
+Date:   Thu, 09 Feb 2023 16:00:55 +0000
+Message-ID: <86cz6izv48.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v5 19/19] irqdomain: Switch to per-domain locking
+In-Reply-To: <20230209132323.4599-20-johan+linaro@kernel.org>
+References: <20230209132323.4599-1-johan+linaro@kernel.org>
+        <20230209132323.4599-20-johan+linaro@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: johan+linaro@kernel.org, tglx@linutronix.de, x86@kernel.org, platform-driver-x86@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, hsinyi@chromium.org, mark-pk.tsai@mediatek.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 16:11, Krzysztof Kozlowski wrote:
-> On 08/02/2023 13:27, Bhupesh Sharma wrote:
->> qup0 on sm6115 / sm4250 has 6 SEs, with SE4 as debug uart.
->> Add the debug uart node in sm6115 dtsi file.
->>
->> Cc: Bjorn Andersson <andersson@kernel.org>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->>  Changes since v1:
->>   - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20221128171215.1768745-1-bhupesh.sharma@linaro.org/
->>   - Addressed Konrad's review comments on v1.
->>   - Rebased againt latest linux-next/master which now has the 'qupv3_id_0' node
->>     already in the dtsi file, so just add the debug uart node in v2.
->>
->>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 10 +++++++++-
->>  1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> index 50cb8a82ecd5..3eccfb8c16ce 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->> @@ -963,6 +963,15 @@ spi4: spi@4a90000 {
->>  				status = "disabled";
->>  			};
->>  
->> +			uart4: serial@4a90000 {
->> +				compatible = "qcom,geni-debug-uart";
->> +				reg = <0x04a90000 0x4000>;
->> +				clock-names = "se";
->> +				clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>;
->> +				interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
->> +				status = "disabled";
->> +			};
->> +
->>  			i2c5: i2c@4a94000 {
->>  				compatible = "qcom,geni-i2c";
->>  				reg = <0x04a94000 0x4000>;
->> @@ -992,7 +1001,6 @@ spi5: spi@4a94000 {
->>  				dma-names = "tx", "rx";
->>  				#address-cells = <1>;
->>  				#size-cells = <0>;
->> -				status = "disabled";
+On Thu, 09 Feb 2023 13:23:23 +0000,
+Johan Hovold <johan+linaro@kernel.org> wrote:
 > 
-> Why do you enable SPI? The commit msg is not explaining it.
+> The IRQ domain structures are currently protected by the global
+> irq_domain_mutex. Switch to using more fine-grained per-domain locking,
+> which can speed up parallel probing by reducing lock contention.
+> 
+> On a recent arm64 laptop, the total time spent waiting for the locks
+> during boot drops from 160 to 40 ms on average, while the maximum
+> aggregate wait time drops from 550 to 90 ms over ten runs for example.
+> 
+> Note that the domain lock of the root domain (innermost domain) must be
+> used for hierarchical domains. For non-hierarchical domains (as for root
+> domains), the new root pointer is set to the domain itself so that
+> domain->root->mutex can be used in shared code paths.
+> 
+> Also note that hierarchical domains should be constructed using
+> irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
+> poking at irqdomain internals. As a safeguard, the lockdep assertion in
+> irq_domain_set_mapping() will catch any offenders that fail to set the
+> root domain pointer.
+> 
+> Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  include/linux/irqdomain.h |  4 +++
+>  kernel/irq/irqdomain.c    | 61 +++++++++++++++++++++++++--------------
+>  2 files changed, 44 insertions(+), 21 deletions(-)
+> 
+> diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
+> index 16399de00b48..cad47737a052 100644
+> --- a/include/linux/irqdomain.h
+> +++ b/include/linux/irqdomain.h
+> @@ -125,6 +125,8 @@ struct irq_domain_chip_generic;
+>   *		core code.
+>   * @flags:	Per irq_domain flags
+>   * @mapcount:	The number of mapped interrupts
+> + * @mutex:	Domain lock, hierarhical domains use root domain's lock
 
-Sent fixup:
-https://lore.kernel.org/linux-arm-msm/20230209155831.100066-1-krzysztof.kozlowski@linaro.org/T/#u
+nit: hierarchical
 
-Best regards,
-Krzysztof
+> + * @root:	Pointer to root domain, or containing structure if non-hierarchical
+>   *
+>   * Optional elements:
+>   * @fwnode:	Pointer to firmware node associated with the irq_domain. Pretty easy
+> @@ -152,6 +154,8 @@ struct irq_domain {
+>  	void				*host_data;
+>  	unsigned int			flags;
+>  	unsigned int			mapcount;
+> +	struct mutex			mutex;
+> +	struct irq_domain		*root;
+>  
+>  	/* Optional data */
+>  	struct fwnode_handle		*fwnode;
+> diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> index 804d316329c8..c96aa5e5a94b 100644
+> --- a/kernel/irq/irqdomain.c
+> +++ b/kernel/irq/irqdomain.c
+> @@ -226,6 +226,17 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+>  
+>  	domain->revmap_size = size;
+>  
+> +	/*
+> +	 * Hierarchical domains use the domain lock of the root domain
+> +	 * (innermost domain).
+> +	 *
+> +	 * For non-hierarchical domains (as for root domains), the root
+> +	 * pointer is set to the domain itself so that domain->root->mutex
+> +	 * can be used in shared code paths.
+> +	 */
+> +	mutex_init(&domain->mutex);
+> +	domain->root = domain;
+> +
+>  	irq_domain_check_hierarchy(domain);
+>  
+>  	mutex_lock(&irq_domain_mutex);
+> @@ -503,7 +514,7 @@ static bool irq_domain_is_nomap(struct irq_domain *domain)
+>  static void irq_domain_clear_mapping(struct irq_domain *domain,
+>  				     irq_hw_number_t hwirq)
+>  {
+> -	lockdep_assert_held(&irq_domain_mutex);
+> +	lockdep_assert_held(&domain->root->mutex);
+>  
+>  	if (irq_domain_is_nomap(domain))
+>  		return;
+> @@ -518,7 +529,11 @@ static void irq_domain_set_mapping(struct irq_domain *domain,
+>  				   irq_hw_number_t hwirq,
+>  				   struct irq_data *irq_data)
+>  {
+> -	lockdep_assert_held(&irq_domain_mutex);
+> +	/*
+> +	 * This also makes sure that all domains point to the same root when
+> +	 * called from irq_domain_insert_irq() for each domain in a hierarchy.
+> +	 */
+> +	lockdep_assert_held(&domain->root->mutex);
+>  
+>  	if (irq_domain_is_nomap(domain))
+>  		return;
+> @@ -540,7 +555,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+>  
+>  	hwirq = irq_data->hwirq;
+>  
+> -	mutex_lock(&irq_domain_mutex);
+> +	mutex_lock(&domain->mutex);
 
+So you made that point about being able to uniformly using root>mutex,
+which I think is a good invariant. Yet you hardly make use of it. Why?
+
+>  
+>  	irq_set_status_flags(irq, IRQ_NOREQUEST);
+>  
+> @@ -562,7 +577,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
+>  	/* Clear reverse map for this hwirq */
+>  	irq_domain_clear_mapping(domain, hwirq);
+>  
+> -	mutex_unlock(&irq_domain_mutex);
+> +	mutex_unlock(&domain->mutex);
+>  }
+>  
+>  static int irq_domain_associate_locked(struct irq_domain *domain, unsigned int virq,
+> @@ -612,9 +627,9 @@ int irq_domain_associate(struct irq_domain *domain, unsigned int virq,
+>  {
+>  	int ret;
+>  
+> -	mutex_lock(&irq_domain_mutex);
+> +	mutex_lock(&domain->mutex);
+>  	ret = irq_domain_associate_locked(domain, virq, hwirq);
+> -	mutex_unlock(&irq_domain_mutex);
+> +	mutex_unlock(&domain->mutex);
+>  
+>  	return ret;
+>  }
+> @@ -731,7 +746,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+>  		return 0;
+>  	}
+>  
+> -	mutex_lock(&irq_domain_mutex);
+> +	mutex_lock(&domain->mutex);
+>  
+>  	/* Check if mapping already exists */
+>  	virq = irq_find_mapping(domain, hwirq);
+> @@ -742,7 +757,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+>  
+>  	virq = irq_create_mapping_affinity_locked(domain, hwirq, affinity);
+>  out:
+> -	mutex_unlock(&irq_domain_mutex);
+> +	mutex_unlock(&domain->mutex);
+>  
+>  	return virq;
+>  }
+> @@ -811,7 +826,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
+>  		type &= IRQ_TYPE_SENSE_MASK;
+>  
+> -	mutex_lock(&irq_domain_mutex);
+> +	mutex_lock(&domain->root->mutex);
+>  
+>  	/*
+>  	 * If we've already configured this interrupt,
+> @@ -864,11 +879,11 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  	/* Store trigger type */
+>  	irqd_set_trigger_type(irq_data, type);
+>  out:
+> -	mutex_unlock(&irq_domain_mutex);
+> +	mutex_unlock(&domain->root->mutex);
+>  
+>  	return virq;
+>  err:
+> -	mutex_unlock(&irq_domain_mutex);
+> +	mutex_unlock(&domain->root->mutex);
+>  
+>  	return 0;
+>  }
+> @@ -1132,6 +1147,7 @@ struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,
+>  	else
+>  		domain = irq_domain_create_tree(fwnode, ops, host_data);
+>  	if (domain) {
+> +		domain->root = parent->root;
+>  		domain->parent = parent;
+>  		domain->flags |= flags;
+
+So we still have a bug here, as we have published a domain that we
+keep updating. A parallel probing could find it in the interval and do
+something completely wrong.
+
+Splitting the work would help, as per the following patch.
+
+Thanks,
+
+	M.
+
+diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+index c96aa5e5a94b..6c675ef672e9 100644
+--- a/kernel/irq/irqdomain.c
++++ b/kernel/irq/irqdomain.c
+@@ -126,23 +126,12 @@ void irq_domain_free_fwnode(struct fwnode_handle *fwnode)
+ }
+ EXPORT_SYMBOL_GPL(irq_domain_free_fwnode);
+ 
+-/**
+- * __irq_domain_add() - Allocate a new irq_domain data structure
+- * @fwnode: firmware node for the interrupt controller
+- * @size: Size of linear map; 0 for radix mapping only
+- * @hwirq_max: Maximum number of interrupts supported by controller
+- * @direct_max: Maximum value of direct maps; Use ~0 for no limit; 0 for no
+- *              direct mapping
+- * @ops: domain callbacks
+- * @host_data: Controller private data pointer
+- *
+- * Allocates and initializes an irq_domain structure.
+- * Returns pointer to IRQ domain, or NULL on failure.
+- */
+-struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int size,
+-				    irq_hw_number_t hwirq_max, int direct_max,
+-				    const struct irq_domain_ops *ops,
+-				    void *host_data)
++static struct irq_domain *__irq_domain_create(struct fwnode_handle *fwnode,
++					      unsigned int size,
++					      irq_hw_number_t hwirq_max,
++					      int direct_max,
++					      const struct irq_domain_ops *ops,
++					      void *host_data)
+ {
+ 	struct irqchip_fwid *fwid;
+ 	struct irq_domain *domain;
+@@ -239,12 +228,44 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+ 
+ 	irq_domain_check_hierarchy(domain);
+ 
++	return domain;
++}
++
++static void __irq_domain_publish(struct irq_domain *domain)
++{
+ 	mutex_lock(&irq_domain_mutex);
+ 	debugfs_add_domain_dir(domain);
+ 	list_add(&domain->link, &irq_domain_list);
+ 	mutex_unlock(&irq_domain_mutex);
+ 
+ 	pr_debug("Added domain %s\n", domain->name);
++}
++
++/**
++ * __irq_domain_add() - Allocate a new irq_domain data structure
++ * @fwnode: firmware node for the interrupt controller
++ * @size: Size of linear map; 0 for radix mapping only
++ * @hwirq_max: Maximum number of interrupts supported by controller
++ * @direct_max: Maximum value of direct maps; Use ~0 for no limit; 0 for no
++ *              direct mapping
++ * @ops: domain callbacks
++ * @host_data: Controller private data pointer
++ *
++ * Allocates and initializes an irq_domain structure.
++ * Returns pointer to IRQ domain, or NULL on failure.
++ */
++struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int size,
++				    irq_hw_number_t hwirq_max, int direct_max,
++				    const struct irq_domain_ops *ops,
++				    void *host_data)
++{
++	struct irq_domain *domain;
++
++	domain = __irq_domain_create(fwnode, size, hwirq_max, direct_max,
++				     ops, host_data);
++	if (domain)
++		__irq_domain_publish(domain);
++
+ 	return domain;
+ }
+ EXPORT_SYMBOL_GPL(__irq_domain_add);
+@@ -1143,13 +1164,16 @@ struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,
+ 	struct irq_domain *domain;
+ 
+ 	if (size)
+-		domain = irq_domain_create_linear(fwnode, size, ops, host_data);
++		domain = __irq_domain_create(fwnode, size, size, 0, ops, host_data);
+ 	else
+-		domain = irq_domain_create_tree(fwnode, ops, host_data);
++		domain = __irq_domain_create(fwnode, 0, ~0, 0, ops, host_data);
++
+ 	if (domain) {
+ 		domain->root = parent->root;
+ 		domain->parent = parent;
+ 		domain->flags |= flags;
++
++		__irq_domain_publish(domain);
+ 	}
+ 
+ 	return domain;
+
+-- 
+Without deviation from the norm, progress is not possible.
