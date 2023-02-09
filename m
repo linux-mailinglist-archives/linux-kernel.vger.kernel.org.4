@@ -2,187 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BAC690B53
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F327690B59
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:08:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjBIOHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:07:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
+        id S229965AbjBIOIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjBIOHV (ORCPT
+        with ESMTP id S229669AbjBIOIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:07:21 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB19D34C23;
-        Thu,  9 Feb 2023 06:07:18 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319Dt8PM016690;
-        Thu, 9 Feb 2023 14:07:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6BjXXrUgtSw1W0BvYgELXc4KDV/uFU8ceLk0soJ1EeE=;
- b=Gzftj8z1qvLQDIysOT/FeruQMfVw+9nZo6ti8CCoPBuumOgxaLGZGk17JZRzYjefLgk6
- e6aH3gkiFcDNgu4gn/i+aBRuXOL8dbjNVY9vvMSjUAVI1xPx6bq0O4Q+bEX+anekcUND
- gTowIlzfh2gyXD70bOEpTd1wvgjMNiJjwvrECeUyFAosfMigK0CTcSVzGe1l45eW5dFp
- gNk7ikHj1igGOUjJuSX5YFl3bQKDf9+bjWLDRUhuggBgiSgS6kHQeaO64vGbcrpgbmd5
- 1p18rEGB1Cm+uAK+kczHFdkmNCsNvDrJ6aMdIXPc/DGOfh7aj3m5piC35ruVfiQM+vUr eg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm7g1ut70-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 14:07:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 319E785k007405
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 9 Feb 2023 14:07:08 GMT
-Received: from [10.216.12.28] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 06:07:05 -0800
-Message-ID: <e7dde0aa-c1e2-dd6c-94a1-1e9049f0a5fb@quicinc.com>
-Date:   Thu, 9 Feb 2023 19:37:01 +0530
+        Thu, 9 Feb 2023 09:08:30 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E1C5D3C9;
+        Thu,  9 Feb 2023 06:08:28 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id x71so1551779ybg.6;
+        Thu, 09 Feb 2023 06:08:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zTk6c7xxPoE+rwd+rpVS+Rn18/CnyngZ+h+vq3GImYA=;
+        b=mMuAVI0L/O4e8lyP0mgsBY0VHx4Ld0Fo2w4jL50qICuexc5hlBgpX8vH6/LB+W7iVT
+         DUz5YQfVX3A7Mwi25p3U/9vdVEVAJeMf3pmsACemtFyhnPQoHCZ0GsVwNvLpAbyQao0L
+         sA73C077Kk91uiCxZ/al97biL1eS30b9I2pZElh35nF9hnn9oCsDCfYshKTWSqKeEzHe
+         YrhGSQe5BtPN0UbZL8IZpB1OnssTcrKbL6YTT+X0dRdjQnnfuTfPwQ8sAu1XQ/9ppoBG
+         QWx8ymsIDj2WL9iuKzRwJ43KkLV/z2VKTnQeI9m9IvtBqVYSE81YLqOJ34ZROEx+xkM5
+         Z7zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zTk6c7xxPoE+rwd+rpVS+Rn18/CnyngZ+h+vq3GImYA=;
+        b=jdSod7X/BpBBKMGDLHilgMMvJGPPQuMcPu57H8GHF2NtCn497WbPydgFhpe3Ng6G5t
+         odov7S3LFGF61kP3bbrb4Cn+Gi6V/spdU/5T8XpNYjP7OGJkb5+HWF6T8+B70KntcOME
+         L/LPZIFHTHGYIqu0vXjO+kwsA+MbpOVuoSAioNKv64iM6ZVgJj/sgJBw3E+a6c4xRDdF
+         QWitUK7mFM8z/4k+kRkwbpGnKaO3v/9hq9TWJu2jtb4GYIwaWecdRTqIkFXdQzMEi5td
+         lkFCs/t18xdprqm/WmVZYzPMsv7gVgsxUNMHRZOihdXdQlSh//5lVFO80pXgiO8OLK8N
+         Nf0g==
+X-Gm-Message-State: AO0yUKWpbIBwZs9GoffWaaV2UCpVg78Nwm+NKvdoJca5MdAXh7omrKIH
+        mXvnGZKkjb57z1/pdgiziHeb/5VXKSODlNsQqp4=
+X-Google-Smtp-Source: AK7set+BF8dIBnhSDmbVZKebbFLMPnR35VaCGnuFoKxHBFulMnf8WDhFJOOYtg6wGwkFZH2ju3P9h0+o2X0T4RKzzOM=
+X-Received: by 2002:a25:73d1:0:b0:87e:d379:a629 with SMTP id
+ o200-20020a2573d1000000b0087ed379a629mr1232996ybc.285.1675951707531; Thu, 09
+ Feb 2023 06:08:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: gadget: u_serial: Add null pointer check in
- gserial_resume
-Content-Language: en-US
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Pratham Pratap <quic_ppratap@quicinc.com>,
-        "Jack Pham" <quic_jackp@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1675864487-18620-1-git-send-email-quic_prashk@quicinc.com>
- <Y+O3vBbBh4ZwSBWT@kroah.com>
- <482f2c32-41d1-f07e-ee3f-3eb9aee76ac7@quicinc.com>
- <Y+QEQBxlr6FZ58DK@rowland.harvard.edu>
- <542ee8a6-598c-ca17-6d75-5eca2b34133a@quicinc.com>
- <Y+SaZrDmaqB0U2QA@kroah.com>
- <f32398bb-62f3-12fd-4b81-7ce7bdf4706a@quicinc.com>
-In-Reply-To: <f32398bb-62f3-12fd-4b81-7ce7bdf4706a@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _4hL5REzVjOxZrLzx7vaX3dRdU_p79HA
-X-Proofpoint-ORIG-GUID: _4hL5REzVjOxZrLzx7vaX3dRdU_p79HA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-09_10,2023-02-09_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxlogscore=693 spamscore=0 bulkscore=0 mlxscore=0 phishscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302090135
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230203031742.1730761-1-imagedong@tencent.com>
+ <20230203031742.1730761-3-imagedong@tencent.com> <CAEf4BzYh90NyyYvfTT=M=-KLspydMX4PZK8jCwNDydAP=kFgYw@mail.gmail.com>
+ <CADxym3a6_wBHW_c_ZYtZ5QXbbunhKxau6k-fn4TNrn+6qzW6fw@mail.gmail.com>
+ <CAEf4BzZAo6Bfio3pbY3j5yUDArCbdiWPC-r=XhFM9Bwq+4VVMg@mail.gmail.com>
+ <75421c53-fa5c-d7c7-4b19-2d97e3e6d7f6@oracle.com> <CAEf4BzZicf3B7BwPj=fWkcVJz0JayB9qUUbJFBPunxOJwQoMdw@mail.gmail.com>
+In-Reply-To: <CAEf4BzZicf3B7BwPj=fWkcVJz0JayB9qUUbJFBPunxOJwQoMdw@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 9 Feb 2023 22:08:16 +0800
+Message-ID: <CADxym3YR6PS_0XfzH6p1CNUAbDxX=gO_aAoOu7fEkx1pAn2AKQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add test for legacy/perf
+ kprobe/uprobe attach mode
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 9, 2023 at 7:31 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Feb 8, 2023 at 3:49 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+> >
+> > On 07/02/2023 22:50, Andrii Nakryiko wrote:
+> > > On Mon, Feb 6, 2023 at 6:39 PM Menglong Dong <menglong8.dong@gmail.com> wrote:
+> > >>
+> > >> On Tue, Feb 7, 2023 at 4:05 AM Andrii Nakryiko
+> > >> <andrii.nakryiko@gmail.com> wrote:
+> > >>>
+> > >>> On Thu, Feb 2, 2023 at 7:18 PM <menglong8.dong@gmail.com> wrote:
+> > >>>>
+> > >>>> From: Menglong Dong <imagedong@tencent.com>
+> > >>>>
+> > >>>> Add the testing for kprobe/uprobe attaching in legacy and perf mode.
+> > >>>> And the testing passed:
+> > >>>>
+> > >>>> ./test_progs -t attach_probe
+> > >>>> $5       attach_probe:OK
+> > >>>> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> > >>>>
+> > >>>> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > >>>> ---
+> > >>>
+> > >>> Do you mind refactoring attach_probe test into multiple subtests,
+> > >>> where each subtest will only test one of the attach mode and type. The
+> > >>> reason is that libbpf CI runs tests with latest selftests and libbpf
+> > >>> against old kernels (4.9 and 5.5, currently). Due to attach_probe
+> > >>> testing all these uprobe/kprobe attach modes with extra features (like
+> > >>> cookie, ref count, etc), we had to disable attach_probe test in libbpf
+> > >>> CI on old kernels.
+> > >>>
+> > >>> If we can split each individual uprobe/kprobe mode, that will give us
+> > >>> flexibility to selectively allowlist those tests that don't force
+> > >>> libbpf to use newer features (like cookies, LINK or PERF mode, etc).
+> > >>>
+> > >>> It would be a great improvement and highly appreciated! If you don't
+> > >>> mind doing this, let's do the split of existing use cases into subtest
+> > >>> in a separate patch, and then add PERF/LEGACY/LINK mode tests on top
+> > >>> of that patch.
+> > >>>
+> > >>
+> > >> Of course, with pleasure. For the existing use cases, we split it into
+> > >> subtests, such as:
+> > >>
+> > >>   kprobe/kretprobe auto attach
+> > >>   kprobe/kretprobe manual attach
+> > >>   uprobe/uretprobe ref_ctr test
+> > >>   uprobe/uretprobe auto attach
+> > >>   sleepable kprobe/uprobe
+> > >>   ......
+> > >>
+> > >> Am I right?
+> > >
+> > > I haven't analysed all the different cases, but roughly it makes
+> > > sense. With more granular subtests we can also drop `legacy` flag and
+> > > rely on subtest allowlisting in CI.
+> > >
+> >
+> > I'm probably rusty on the details, but when you talk about subtest
+> > splitting for the [uk]probe manual attach, are we talking about running
+> > the same manual attach test for the different modes, with each as a
+> > separate subtest, such that each registers as a distinct pass/fail (and
+> > can thus be allowlisted as appropriate)? So in other words
+> >
+> > test__start_subtest("manual_attach_kprobe_link");
+> > attach_kprobe_manual(link_options);
+> > test__start_subtest("manual_attach_kprobe_legacy");
+> > attach_kprobe_manual(legay_options);
+> > test__start_subtest("manual_attach_kprobe_perf");
+> > attach_kprobe_manual(perf_options);
+> >
+> > ?
+>
+> Yep. One of the reasons is that on 4.9 kernel there won't be link or
+> perf method available, so it is expected for such modes to fail. I
+> want to be able to still test the legacy code path on 4.9, though.
+> Similarly tests that are using ref_ctr_offset or bpf_cookie won't work
+> on older kernels as well. Right now because of all of them being in a
+> single test, I have to block entire test, losing coverage on older
+> kernels.
+>
 
+I think I am beginning to understand it now. So we need 2 patches
+for the selftests part. In the 1th patch, we split the existing testings
+into multi subtests, such as:
 
-On 09-02-23 12:33 pm, Prashanth K wrote:
-> 
-> 
-> On 09-02-23 12:31 pm, Greg Kroah-Hartman wrote:
->> On Thu, Feb 09, 2023 at 10:31:50AM +0530, Prashanth K wrote:
->>>
->>>
->>> On 09-02-23 01:51 am, Alan Stern wrote:
->>>> On Wed, Feb 08, 2023 at 09:15:54PM +0530, Prashanth K wrote:
->>>>>
->>>>>
->>>>> On 08-02-23 08:24 pm, Greg Kroah-Hartman wrote:
->>>>>> On Wed, Feb 08, 2023 at 07:24:47PM +0530, Prashanth K wrote:
->>>>>>> Consider a case where gserial_disconnect has already cleared
->>>>>>> gser->ioport. And if a wakeup interrupt triggers afterwards,
->>>>>>> gserial_resume gets called, which will lead to accessing of
->>>>>>> gserial->port and thus causing null pointer dereference.Add
->>>>>>> a null pointer check to prevent this.
->>>>>>>
->>>>>>> Fixes: aba3a8d01d62 (" usb: gadget: u_serial: add suspend resume 
->>>>>>> callbacks")
->>>>>>
->>>>>> Nit, and our tools will complain, no " " before the "usb:" string 
->>>>>> here,
->>>>>> right?
->>>>>>
->>>>> Will fix it in next patch.
->>>>>>
->>>>>>
->>>>>>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
->>>>>>> ---
->>>>>>>     drivers/usb/gadget/function/u_serial.c | 3 +++
->>>>>>>     1 file changed, 3 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/usb/gadget/function/u_serial.c 
->>>>>>> b/drivers/usb/gadget/function/u_serial.c
->>>>>>> index 840626e..98be2b8 100644
->>>>>>> --- a/drivers/usb/gadget/function/u_serial.c
->>>>>>> +++ b/drivers/usb/gadget/function/u_serial.c
->>>>>>> @@ -1428,6 +1428,9 @@ void gserial_resume(struct gserial *gser)
->>>>>>>         struct gs_port *port = gser->ioport;
->>>>>>>         unsigned long    flags;
->>>>>>> +    if (!port)
->>>>>>> +        return;
->>>>>>> +
->>>>>>
->>>>>> What prevents port from going to NULL right after this check?
->>>>> In our case we got a null pointer de-reference while performing USB
->>>>> compliance tests, as the gser->port was null. Because in 
->>>>> gserial_resume,
->>>>> spinlock_irq_save(&port->port_lock) accesses a null-pointer as port 
->>>>> was
->>>>> already marked null by gserial_disconnect.
->>>>>
->>>>> And after gserial_resume acquires the spinlock, gserial_disconnect 
->>>>> cant mark
->>>>> it null until the spinlock is released. We need to check if the 
->>>>> port->lock
->>>>> is valid before accessing it, otherwise it can lead to the above 
->>>>> mentioned
->>>>> scenario
->>>>
->>>> What happens if gserial_disconnect sets gser->port to NULL immediately
->>>> after your new check occurs, but before
->>>> spinlock_irq_save(&port->port_lock) gets called?
->>>>
->>>> You may need to add a static spinlock to prevent this from happening.
->>>>
->>>> Alan Stern
->>> In that case i guess we have to make port_lock a global variable and 
->>> take it
->>> out of gs_port structure.
->>>
->>> + static DEFINE_SPINLOCK(port_lock);
->>>
->>> struct gs_port {
->>>     struct tty_port port;
->>> -    spinlock_t port_lock;
->>>
->>> This will require us to change all the spinlock(port->port_lock) used in
->>> u_serial.c, what do you suggest?
->>
->> Yes, that would be the correct thing to do.
-Hi Greg/Alan, One general doubt, if we make the spinlock static/global, 
-wouldn't that be a problem when there are multiple instances, and also 
-multiple interfaces can use u_serial at same time. Asking this because 
-u_serial can be used by f_serial (gser) as well as f_acm (acm).
+test__start_subtest("manual_attach_probe") // test kprobe/uprobe manual attach
+test__start_subtest("auto_attach_probe") // test kprobe/uprobe auto attach
+test__start_subtest("bpf_cookie") // test bpf_cookie
+test__start_subtest("ref_ctr_offset") test ref_ctr_offset
+test__start_subtest("sleepable_probe") // test sleepable
+uprobe/uretprobe, and sleepable kprobe
+......
 
-Thanks
-Prahanth K
+And in the 2th patch, we change the subtest "manual_attach_probe" into
+the following tests:
 
-> will do it and share next patch
-> 
-> Thanks for the suggestions
-> Prashanth K
+test__start_subtest("manual_attach_kprobe_link");
+test__start_subtest("manual_attach_kprobe_legacy");
+test__start_subtest("manual_attach_kprobe_perf");
+
+Therefore, every feature can be tested in a subtest alone.
+
+Am I right?
+
+Thanks!
+Menglong Dong
+> >
+> > >>
+> > >> Thanks!
+> > >> Dongmeng Long
+> > >>
+> > >>>
+> > >>>>  .../selftests/bpf/prog_tests/attach_probe.c   | 61 ++++++++++++++++++-
+> > >>>>  .../selftests/bpf/progs/test_attach_probe.c   | 32 ++++++++++
+> > >>>>  2 files changed, 92 insertions(+), 1 deletion(-)
+> > >>>>
+> > >>>
+> > >>> [...]
