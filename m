@@ -2,93 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6FA690D5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 947EE690DA5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjBIPnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:43:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S231494AbjBIPyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbjBIPnZ (ORCPT
+        with ESMTP id S230336AbjBIPyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:43:25 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5410765697
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:42:45 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id r18so1713122wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 07:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzvCaAOpYzaP487+BqgN7Jr/isnyXVDVjSzZh2DR0yM=;
-        b=dfs88JgsLidyay+sxi+vKR7hgo3w7zTuP7BefDgQ6Dm3cdKzcaDVcpSIdDcIK53vWW
-         zf+H59Ez5k9pXcfdW4yKKtpZBQMANdUXfZ5JXDXsads+GWrv2tvcFASjcLTZzmx3smlq
-         Y+tBHxnIhSrJ7OHgEkRY7By9FXa73eowBufZjpAtRkAxKM3NEJCWDr4FLfSQYlpw8Wd8
-         XJDLJSsVZpXUeLWk6ExPuBThKf1cBX8hCNefkSyFynrTLU7wq47HZGtOCijM6HbzZzY5
-         Rz3KfSKpWuMW0rdVuurNr6xl3tDJIE/nku4SVf+22nQic4R8AGA6HyQ8totwTAxy6HbL
-         ghZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mzvCaAOpYzaP487+BqgN7Jr/isnyXVDVjSzZh2DR0yM=;
-        b=gNltIXHmGJvSODVq7KsMA2KpzNF5XRmnn2nydshEYWl6hstNdaG8zvu1Abgsao8QDP
-         71dzspeE7tZ+kBvG8joRSKFRjfz/xsr8hoTRG5IMsfAw8cbeO4O9mGriQqu7WfD/bopc
-         yFQSvS2a4rAl+vLBxUKM7kHc5VdQ/2wwPAxMf2Yjv4rxAJTt7rxSYE5u6OEJjaV/qDbj
-         ZzjwT6ChDrmAfL+HvlL/nHhbYHx9UygpzRnvg6KFPQOF1nhaM+o3eBnAQigAUiiyyDUU
-         tWadmKbdB3m2irE/Tw07AsFTrm+av7PS9Pqf0HUkUC8zFf/X+xs3BYjenbGhwygk6ggu
-         zICA==
-X-Gm-Message-State: AO0yUKUqYy58L6f3wpqgrgTQWBxWP3+FAtGl5HT6D+uRwk5f7wMqVFum
-        DinSt5zCBVY4fUctZRX1K/QGFtDB3wMA0elygnMeMA==
-X-Google-Smtp-Source: AK7set8W0PWVGUPhjBZ2DYlfA+2RGsoCXqAPdWpK2WKjVHGh1hIwTceUzAAPDsn2K01NuAuKA910e2dsSWb7dGR+mEI=
-X-Received: by 2002:a05:600c:29ca:b0:3dd:67c6:8c58 with SMTP id
- s10-20020a05600c29ca00b003dd67c68c58mr732120wmd.51.1675957362869; Thu, 09 Feb
- 2023 07:42:42 -0800 (PST)
+        Thu, 9 Feb 2023 10:54:35 -0500
+X-Greylist: delayed 607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Feb 2023 07:54:34 PST
+Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ECA13D64
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:54:33 -0800 (PST)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PCLk53YH7zMrkNX;
+        Thu,  9 Feb 2023 16:43:25 +0100 (CET)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PCLk258CPzlh7;
+        Thu,  9 Feb 2023 16:43:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1675957405;
+        bh=bNW1Wg5WZW0nIMURTxjwXxKKJeK4hLfabPIk0obS01U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=yhrC9HODCmFSivOVE0IKp2ondNaaLvcg5W8tO3K+NLu2V/sCkaEy51YAikMxX/bO+
+         JxbV6GVXYwWp/EAnZjDieUo20IlNb8SiewRkBmtbJDATbN4UF9y7i7V377UMQNMKZD
+         zeNtRSi9skrTTd1wFJGc6zKnCNxdcpxM9Wxblc2U=
+Message-ID: <376258a7-b7fa-51f9-2137-c123b8ff304e@digikod.net>
+Date:   Thu, 9 Feb 2023 16:43:21 +0100
 MIME-Version: 1.0
-References: <20230208164011.2287122-1-arnd@kernel.org> <20230208164011.2287122-2-arnd@kernel.org>
- <CANpmjNNYcVJxeuJPFknf=wCaapgYSn0+as4+iseJGpeBZdi4tw@mail.gmail.com> <7a62bc92-e062-4d33-9c3f-894b49452f1c@app.fastmail.com>
-In-Reply-To: <7a62bc92-e062-4d33-9c3f-894b49452f1c@app.fastmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 9 Feb 2023 16:42:03 +0100
-Message-ID: <CAG_fn=VCTvUF39ORV4FnuhzD0tgRq3mGurTQrwD-_cCwEgXazw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kmsan: disable ftrace in kmsan core code
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Marco Elver <elver@google.com>, Arnd Bergmann <arnd@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+User-Agent: 
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     concord@gentoo.org, linux-hardening@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+ <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+ <202204041451.CC4F6BF@keescook>
+ <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
+ <7e8d9f8a-f119-6d1a-7861-0493dc513aa7@digikod.net>
+ <63e3f8c8.050a0220.c0b3f.434b@mx.google.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <63e3f8c8.050a0220.c0b3f.434b@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 8:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Feb 8, 2023, at 18:00, Marco Elver wrote:
->
-> >>  CFLAGS_REMOVE.o = $(CC_FLAGS_FTRACE)
-> >
-> > That means this CFLAGS_REMOVE.o didn't work, right? Can it be removed?
-> >
->
-> Ah, I missed this. Adjusted the patch and description accordingly.
->
->     Arnd
 
-Acked-by: Alexander Potapenko <glider@google.com>
+On 08/02/2023 20:32, Kees Cook wrote:
+> *thread necromancy*
+> 
+> On Tue, Apr 05, 2022 at 06:09:03PM +0200, Mickaël Salaün wrote:
+>>
+>> On 05/04/2022 01:26, Linus Torvalds wrote:
+>>> On Mon, Apr 4, 2022 at 3:25 PM Kees Cook <keescook@chromium.org> wrote:
+>>
+>> [...]
+>>
+>>>
+>>>> I think this already exists as AT_EACCESS? It was added with
+>>>> faccessat2() itself, if I'm reading the history correctly.
+>>>
+>>> Yeah, I noticed myself, I just hadn't looked (and I don't do enough
+>>> user-space programming to be aware of if that way).
+>>
+>> I think AT_EACCESS should be usable with the new EXECVE_OK too.
+>>
+>>
+>>>
+>>>>>       (a) "what about suid bits that user space cannot react to"
+>>>>
+>>>> What do you mean here? Do you mean setid bits on the file itself?
+>>>
+>>> Right.
+>>>
+>>> Maybe we don't care.
+>>
+>> I think we don't. I think the only corner case that could be different is
+>> for files that are executable, SUID and non-readable. In this case it
+>> wouldn't matter because userspace could not read the file, which is required
+>> for interpretation/execution. Anyway, S[GU]ID bits in scripts are just
+>> ignored by execve and we want to follow the same semantic.
+> 
+> Hi Mickaël,
+> 
+> Is there a new version of this being worked on? It would be really nice
+> to have the O_MAYEXEC/faccessat2() visibility for script execution control
+> in userspace. It seems like it would be mainly a respin of an earlier
+> version of this series before trusted_for() was proposed.
 
-(assuming you did, b/c I couldn't find the new version)
+Yes, I plan to send a new version in a few weeks.
+
+> 
+> -Kees
+> 
