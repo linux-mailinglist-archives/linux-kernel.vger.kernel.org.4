@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0307691093
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C4A691096
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjBISpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
+        id S229737AbjBISqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjBISpP (ORCPT
+        with ESMTP id S229501AbjBISqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:45:15 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9A44ED24
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 10:45:14 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id y19so3163235ljq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 10:45:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D9Vua8LHA9JDjb46CzlFrnWZQdagkljpU9vsHTc0DF8=;
-        b=4Asl2/b/Hg5mXqTofzECxhuPfV/1ELQIDimYZFo5ccuAteJziSJW3pYDXsJDmq7Y+p
-         lpDDHNBVBIsZjuYrhT/8CO7je+D0yRIjnKBMx7GuQ3Iwx4I+G+nLehVUbH0TEajH6s3U
-         IGsZgyI4UYvCbVRF6nLgaIyeCV3hvJ8a2V3A2Vjy++cLtMJNGrdeWeSVfxiocHfTBnmv
-         cOjTcm/RJ8fTXs6aU7mjTOA1KODjFpjh2yfJC5p0X/XOKH0yKrgYtdSeuIdVkI7TSyDb
-         19CjtZZWizsZnlrnI2iIceIRDLtgL1q5rBjOWBiImMnlyVTMwktoAUn5RJDzF2BRDSRK
-         /9dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D9Vua8LHA9JDjb46CzlFrnWZQdagkljpU9vsHTc0DF8=;
-        b=Vb6FJEBCmumDToZpbfqvwUEQsgu+5hJ1O/Rty1fsdc3etSPZ72u8OqTdGmUtZ7PbXD
-         auI+wHDVSs1IuEBs5mx5F9Ei4I/W4+p5BU1fdQ6EoP7nQsiMMtVwkK1l/KZhlkvzKt30
-         4FthgiJ0nqhr7hkNGTpCCqE8445HmdU23F1hw3Txi54QNC3JNv6P9wSrj0iYCS02kaZs
-         NYGCawKedJQgkesILte7OdpQdTqUTUSy7oqSiyq7ckvUIIHaZEGGW0Qy4TYMXHQCx+61
-         32vp60dv2jdrKFGBrD8SfjxZa1XYN+I/rOAKBWRkh+038dq7gVK+xU53e8TlIyrqrw+A
-         UUOA==
-X-Gm-Message-State: AO0yUKVYYsn8SE9MnoWJ3qdd93YbSZSfOAeVeNBmmrQAmMwSK6TPdle8
-        GZ8pQblUJQOQozuEYoo+X5o/6YBDixELtCPetWMIug==
-X-Google-Smtp-Source: AK7set9BEO75w+/zGEdYth0f1dUrFoFb09CZjL4/pITzFZUZHnpCtKSQrnmioh62h4aT4HugkczFG9LjIBQvWztIKT8=
-X-Received: by 2002:a2e:6f14:0:b0:293:125c:284f with SMTP id
- k20-20020a2e6f14000000b00293125c284fmr2100576ljc.148.1675968312327; Thu, 09
- Feb 2023 10:45:12 -0800 (PST)
+        Thu, 9 Feb 2023 13:46:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8024216;
+        Thu,  9 Feb 2023 10:46:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1A89B822BF;
+        Thu,  9 Feb 2023 18:46:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531B1C433D2;
+        Thu,  9 Feb 2023 18:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675968405;
+        bh=NA3iBMWRcwiWdDAwavupXMF3yWhQzTQj/BEcxQTPM/Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gEBA8p5f1drrwalcpKiwz5P6rKDdKFoNX8y+rW0INdsnt8ucIy+YhSmp5RCVU9ZHV
+         452qi9hbX0cxpvblbJ7sg/ihkJkUNKZ3z2vez8Et2PUXeiCB9TPVO6cDBnoZ8nx4By
+         rJo3QmhTOXh6HPbtQglP6pTkfKjAPZX9k8xdWdGB7kmUbWmDVQDE12HGT2tzUPgJ8B
+         S1ISc1VTJHedYKKI1IBXcfHEjIL9tRa748yllU+ywDbebz737Rd8PNWkPj/nE38DaT
+         SBJXGE9F7crNYXg80bBD4yb9ABdb+vI1OJqyCCpPf/Nc5BvZUvA31pE3KZn8s9KO3x
+         fwDJJqM/SV4oA==
+Date:   Thu, 9 Feb 2023 18:46:43 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Munehisa Kamata <kamatam@amazon.com>, hannes@cmpxchg.org,
+        hdanton@sina.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        mengcc@amazon.com, stable@vger.kernel.org
+Subject: Re: [PATCH] sched/psi: fix use-after-free in ep_remove_wait_queue()
+Message-ID: <Y+U/k678tB5w5hJP@gmail.com>
+References: <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
+ <20230202030023.1847084-1-kamatam@amazon.com>
+ <Y9tCl4r/qjqsrVj9@sol.localdomain>
+ <CAJuCfpFb0J5ZwO6kncjRG0_4jQLXUy-_dicpH5uGiWP8aKYEJQ@mail.gmail.com>
+ <CAJuCfpH4aAAfEJeFzZSGsifhFNCpzZ17MEzXtxhZqoX04jrWbA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230206201455.1790329-1-evan@rivosinc.com> <20230206201455.1790329-7-evan@rivosinc.com>
- <Y+FwvI+xRg7zMhSx@sirena.org.uk>
-In-Reply-To: <Y+FwvI+xRg7zMhSx@sirena.org.uk>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Thu, 9 Feb 2023 10:44:36 -0800
-Message-ID: <CALs-HsvQiRm-guFMy-E4J+CTLoOMoxb=JiedbtFrdXwzz-oSoA@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] selftests: Test the new RISC-V hwprobe interface
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <conor@kernel.org>, vineetg@rivosinc.com,
-        heiko@sntech.de, slewis@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpH4aAAfEJeFzZSGsifhFNCpzZ17MEzXtxhZqoX04jrWbA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 1:27 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Mon, Feb 06, 2023 at 12:14:55PM -0800, Evan Green wrote:
->
-> > +int main(int argc, char **argv)
-> > +{
->
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/libc.S
->
-> > +.global _start
-> > +_start:
-> > +.option push
-> > +.option norelax
-> > +     la gp, __global_pointer$
-> > +.option pop
-> > +
-> > +     la sp, stack
-> > +
-> > +     la t0, heap
-> > +     la t1, brk
-> > +     REG_S t0, 0(t1)
-> > +
-> > +     li a0, 0
-> > +     li a1, 0
-> > +
-> > +     call main
->
-> This looks like it's just a standard program entry but I don't speak
-> RISC-V asm so I might be missing something.  If that's the case might it
-> make sense to use nolibc here?
+On Thu, Feb 09, 2023 at 09:09:03AM -0800, Suren Baghdasaryan wrote:
+> On Thu, Feb 2, 2023 at 1:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > On Wed, Feb 1, 2023 at 8:56 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> > >
+> > > On Wed, Feb 01, 2023 at 07:00:23PM -0800, Munehisa Kamata wrote:
+> > > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+> > > > index 8ac8b81bfee6..6e66c15f6450 100644
+> > > > --- a/kernel/sched/psi.c
+> > > > +++ b/kernel/sched/psi.c
+> > > > @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
+> > > >
+> > > >       group = t->group;
+> > > >       /*
+> > > > -      * Wakeup waiters to stop polling. Can happen if cgroup is deleted
+> > > > -      * from under a polling process.
+> > > > +      * Wakeup waiters to stop polling and clear the queue to prevent it from
+> > > > +      * being accessed later. Can happen if cgroup is deleted from under a
+> > > > +      * polling process otherwise.
+> > > >        */
+> > > > -     wake_up_interruptible(&t->event_wait);
+> > > > +     wake_up_pollfree(&t->event_wait);
+> > > >
+> > > >       mutex_lock(&group->trigger_lock);
+> > >
+> > > wake_up_pollfree() should only be used in extremely rare cases.  Why can't the
+> > > lifetime of the waitqueue be fixed instead?
+> >
+> > waitqueue lifetime in this case is linked to cgroup_file_release(),
+> > which seems appropriate to me here. Unfortunately
+> > cgroup_file_release() is not directly linked to the file's lifetime.
+> > For more details see:
+> > https://lore.kernel.org/all/CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com/#t
+> > .
+> > So, if we want to fix the lifetime of the waitqueue, we would have to
+> > tie cgroup_file_release() to the fput() somehow. IOW, the fix would
+> > have to be done at the cgroups or higher (kernfs?) layer.
+> 
+> Hi Eric,
+> Do you still object to using wake_up_pollfree() for this case?
+> Changing higher levels to make cgroup_file_release() be tied to fput()
+> would be ideal but I think that would be a big change for this one
+> case. If you agree I'll Ack this patch.
+> Thanks,
+> Suren.
+> 
 
-I think I can just remove this file entirely along with -nostdlib, and
-just let the compiler add in this glue.
--Evan
+I haven't read the code closely in this case.  I'm just letting you know that
+wake_up_pollfree() is very much a last-resort option for when the waitqueue
+lifetime can't be fixed.  So if you want to use wake_up_pollfree(), you need to
+explain why no other fix is possible.  For example maybe the UAPI depends on the
+waitqueue having a nonstandard lifetime.
+
+- Eric
