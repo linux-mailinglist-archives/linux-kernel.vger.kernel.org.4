@@ -2,130 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957266913AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A01376913B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjBIWrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 17:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
+        id S230455AbjBIWrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 17:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjBIWqq (ORCPT
+        with ESMTP id S230151AbjBIWrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 17:46:46 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B1A2734
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 14:46:43 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id j1so3536944pjd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 14:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9g2yQtWzAVH6ZOpDsD/Sskemui/XDqoYgj9fWj/hkxU=;
-        b=Fcjg1IeCP5a42XMH+PhI6FfYg/ZEC4FgpEwO2V6GvMNyMrvAcl9kKvcS01KBHSx82+
-         OZZKtrI7t5/KX66FOK/1hHFW0nVKD4IBJf/vEIg9028FjBGjeq+MxlG8wtJRbGXCe8Zv
-         ssz7dnJgd1z50RC8sOXXUWNvCagc3zNzWh7y6NFro6FvBBXOx3hjqr8K9oWb616ub3vD
-         nXXLKpIF4/k+oT2CQZYhei6jOVDegdDoUAyaqgD8+2AB3UMhfTdFu+tjTrdWCiYHd/UC
-         /CDS2BY/9+s5PZrlNrGdQPNrWzw61I1u1EAxVPSdCY2ZXwyX7YgR1ABL5UcgKsWMwx8r
-         KwzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9g2yQtWzAVH6ZOpDsD/Sskemui/XDqoYgj9fWj/hkxU=;
-        b=o24RtH31otUgOiyV1rNf/gP5+ZWwtJsObRiU6BK3jJoBNvjYbeKCu7eBgoBLpp9vYy
-         iVqWY6kpa5pyMSjdJk4VfLG/I3uQojPe/g9qgQ0fkj1eIYLIlKB5AfucToAf876gp+lF
-         zG2QioZIe2udkJYwtgXCUSOm8Pd9tyLa6C8va67XCSPFfc45aaPaSK3BAP0883ob4kzj
-         v2Ee78aX+0FRI8iZTXvZuV4+4kuSPFo92pXoM2+AZjCg15IMo+GFUbGt8ZrtURg0SQeP
-         ssmtREolM7/8dTLwKhMu4a2JYREHCoMbq34g1SeaN1aTBvBP+SQLhh7UDCfb4xbk0sdJ
-         iR4Q==
-X-Gm-Message-State: AO0yUKUTtcowtbhnLgEmpvt7a0yzIDQPIjDOSxohxf168x1qnnqxq+VW
-        5//FeTUywT2upLU9ZTRK78qrMycpQE1LMe2LEs7o
-X-Google-Smtp-Source: AK7set+5+CGbyUdx+XEn7CyiOAlZsrmdC59etIZEgrVyrqoicPNTGQjjG1Gn3JnsMH+LPETc4+h+vPAftTT77wQ7BnQ=
-X-Received: by 2002:a17:902:70c4:b0:198:ff55:2ef3 with SMTP id
- l4-20020a17090270c400b00198ff552ef3mr3307989plt.27.1675982803339; Thu, 09 Feb
- 2023 14:46:43 -0800 (PST)
+        Thu, 9 Feb 2023 17:47:01 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544DA21A10
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 14:46:58 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-120-y9Hy2ItONBePGdE4Dx08xA-1; Thu, 09 Feb 2023 22:46:55 +0000
+X-MC-Unique: y9Hy2ItONBePGdE4Dx08xA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Thu, 9 Feb
+ 2023 22:46:53 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Thu, 9 Feb 2023 22:46:53 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guo Ren' <guoren@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+CC:     Evgenii Shatokhin <e.shatokhin@yadro.com>,
+        "suagrfillet@gmail.com" <suagrfillet@gmail.com>,
+        "andy.chiu@sifive.com" <andy.chiu@sifive.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "jolsa@redhat.com" <jolsa@redhat.com>, "bp@suse.de" <bp@suse.de>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "linux@yadro.com" <linux@yadro.com>
+Subject: RE: [PATCH -next V7 0/7] riscv: Optimize function trace
+Thread-Topic: [PATCH -next V7 0/7] riscv: Optimize function trace
+Thread-Index: AQHZPCY58FsBcndYrkieV7dCV5LmRa7HNcCg
+Date:   Thu, 9 Feb 2023 22:46:53 +0000
+Message-ID: <90ad3009049e4d39a952b6e4c170740b@AcuMS.aculab.com>
+References: <20230112090603.1295340-1-guoren@kernel.org>
+ <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
+ <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
+ <Y+DOyqehZvBJlb8N@FVFF77S0Q05N>
+ <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
+ <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N>
+ <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
+ <Y+O1qY453BnhqgQZ@FVFF77S0Q05N.cambridge.arm.com>
+ <CAJF2gTT_aMBx3mPnzWWqj6uGM75yT_62x+_wZ4HkWd7BqEzvug@mail.gmail.com>
+In-Reply-To: <CAJF2gTT_aMBx3mPnzWWqj6uGM75yT_62x+_wZ4HkWd7BqEzvug@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20221227142740.2807136-1-roberto.sassu@huaweicloud.com>
- <20221227142740.2807136-3-roberto.sassu@huaweicloud.com> <Y64XB0yi24yjeBDw@sol.localdomain>
- <d2a54ddec403cad12c003132542070bf781d5e26.camel@huaweicloud.com>
- <857eedc5ad18eddae7686dca63cf8c613a051be4.camel@huaweicloud.com> <Y+VBMQEwPTPGBIpP@gmail.com>
-In-Reply-To: <Y+VBMQEwPTPGBIpP@gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 9 Feb 2023 17:46:32 -0500
-Message-ID: <CAHC9VhTYeqCB8roaNvWUYJeKPwT35ixJ8MMXBe0v0+a9o8CXWw@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] KEYS: asymmetric: Copy sig and digest in public_key_verify_signature()
-To:     David Howells <dhowells@redhat.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 1:53 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> On Thu, Feb 09, 2023 at 11:49:19AM +0100, Roberto Sassu wrote:
-> > On Fri, 2023-01-27 at 09:27 +0100, Roberto Sassu wrote:
-> > > On Thu, 2022-12-29 at 14:39 -0800, Eric Biggers wrote:
-> > > > On Tue, Dec 27, 2022 at 03:27:40PM +0100, Roberto Sassu wrote:
-> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > >
-> > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > > mapping") checks that both the signature and the digest reside in the
-> > > > > linear mapping area.
-> > > > >
-> > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > > stack support") made it possible to move the stack in the vmalloc area,
-> > > > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > > > adjacent pages.
-> > > > >
-> > > > > Always make a copy of the signature and digest in the same buffer used to
-> > > > > store the key and its parameters, and pass them to sg_init_one(). Prefer it
-> > > > > to conditionally doing the copy if necessary, to keep the code simple. The
-> > > > > buffer allocated with kmalloc() is in the linear mapping area.
-> > > > >
-> > > > > Cc: stable@vger.kernel.org # 4.9.x
-> > > > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > > > Link: https://lore.kernel.org/linux-integrity/Y4pIpxbjBdajymBJ@sol.localdomain/
-> > > > > Suggested-by: Eric Biggers <ebiggers@kernel.org>
-> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > ---
-> > > > >  crypto/asymmetric_keys/public_key.c | 38 ++++++++++++++++-------------
-> > > > >  1 file changed, 21 insertions(+), 17 deletions(-)
-> > > >
-> > > > Reviewed-by: Eric Biggers <ebiggers@google.com>
-> > >
-> > > Hi David
-> > >
-> > > could you please take this patch in your repo, if it is ok?
-> >
-> > Kindly ask your support here. Has this patch been queued somewhere?
-> > Wasn't able to find it, also it is not in linux-next.
-> >
->
-> The maintainer of asymmetric_keys (David Howells) is ignoring this patch, so
-> you'll need to find someone else to apply it.  Herbert Xu, the maintainer of the
-> crypto subsystem, might be willing to apply it.  Or maybe Jarkko Sakkinen, who
-> is a co-maintainer of the keyrings subsystem (but not asymmetric_keys, for some
-> reason; should that change?).
+RnJvbTogR3VvIFJlbg0KPiBTZW50OiAwOSBGZWJydWFyeSAyMDIzIDAxOjMxDQouLi4NCj4gPiBJ
+J20gYSBiaXQgY29uZnVzZWQgdGhlcmU7IEkgdGhvdWdodCB0aGF0IHRoZSBgc3ltYm9sKHJlZylg
+IGFkZHJlc3NpbmcgbW9kZSB3YXMNCj4gPiBnZW5lcmF0aW5nIGFkZGl0aW9uYWwgYml0cyB0aGF0
+IHRoZSBBVVBJQyBkaWRuJ3QgLS0gaGF2ZSBJIGdvdCB0aGF0IHdyb25nPw0KPiA+DQo+ID4gV2hh
+dCBzcGVjaWZpZXMgd2hpY2ggcmVnaXN0ZXIgdGhlIEpBTFIgd2lsbCB3cml0ZSB0aGUgbGluayBh
+ZGRyZXNzIHRvPw0KPg0KPiBBY2NvcmRpbmcgdG8gdGhlIHNwZWMsIGF1aXBjIHQxLDB4MCBzaG91
+bGQgd3JpdGUgUEMgKyAweDA8PDEyICh3aGljaA0KPiBpcyBlcXVhbCB0byBQQykgdG8gdDEgYW5k
+IHRoZW4gamFsciB0MCwgKHQwKTAganVtcHMgdG8gdGhlIGFkZHJlc3MNCj4gc3RvcmVkIGluIHQw
+ICsgMHgwIGFuZCBzdG9yZXMgdGhlIHJldHVybiBhZGRyZXNzIHRvIHQwLg0KPiANCj4gVGhhdCBt
+ZWFucyBhdWlwYyBkZWZpbmVzIHh4eCA8PCAxMiBiaXRzLCBqYWxyIGRlZmluZXMgbG93ZXN0IDEy
+IGJpdHMuDQoNCi4uLg0KPiBXaGF0IEkgd2FudCB0byBwb2ludCBvdXQ6DQo+IElmIHdlIGtlZXAg
+ImF1aXBjIChhZGRyKzAwKSIgZml4ZWQsIHdlIGNvdWxkIHVzZSB0aGUgZGlmZmVyZW50DQo+IHRy
+YW1wb2xpbmVzIGF0ICJqYWxyIChhZGRyKzB4NCkiIChBbGwgb2YgdGhlbSBtdXN0IGJlIGluIG9u
+ZSAyaw0KPiBhbGlnbmVkIGFyZWEpLg0KDQpJIGxvb2tlZCB1cCBhdWlwYzoNCiJBVUlQQyBpcyB1
+c2VkIHRvIGJ1aWxkIFBDLXJlbGF0aXZlIGFkZHJlc3NlcyBhbmQgdXNlcyB0aGUgVS10eXBlIGZv
+cm1hdC4NCkFVSVBDIGZvcm1zIGEgMzItYml0IG9mZnNldCBmcm9tIHRoZSBVLWltbWVkaWF0ZSwg
+ZmlsbGluZyBpbiB0aGUgbG93ZXN0DQoxMiBiaXRzIHdpdGggemVyb3MsIGFkZHMgdGhpcyBvZmZz
+ZXQgdG8gdGhlIGFkZHJlc3Mgb2YgdGhlIEFVSVBDIGluc3RydWN0aW9uLA0KdGhlbiBwbGFjZXMg
+dGhlIHJlc3VsdCBpbiByZC4iDQoNClNvIGl0IGdlbmVyYXRlcyAncGMgKyAodmFsIDw8IDEyKScu
+DQpBbmQgdGhlIGphbHIgdGhlbiBhZGRzIGluIGEgMTJiaXQgb2Zmc2V0Lg0KDQpJIHRoaW5rIHRo
+YXQgbWVhbnMgdGhhdCBpZiB5b3UgaGF2ZSB0d28gdHJhbXBvbGluZXMgeW91IG1pZ2h0IG5lZWQN
+CnRvIGNoYW5nZSBib3RoIGluc3RydWN0aW9ucyBldmVuIGlmIHRoZSB0d28gdHJhbXBvbGluZXMg
+YXJlIGFjdHVhbGx5DQphZGphY2VudCBpbnN0cnVjdGlvbnMuDQpJdCBpcyB0aGUgZGlzdGFuY2Ug
+ZnJvbSB0aGUgY2FsbCBzaXRlIHRoYXQgbXVzdG4ndCBjcm9zcyBhIDJrDQpib3VuZGFyeSAtIG5v
+dCB0aGUgYWJzb2x1dGUgYWRkcmVzcyBvZiB0aGUgdHJhbXBvbGluZSBpdHNlbGYuDQoNCglEYXZp
+ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
+RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
+NiAoV2FsZXMpDQo=
 
-It is problematic that David isn't replying to this.  I have no idea
-if it will work, but I just reached out to him to see if I can draw
-his attention back to this ...
-
---
-paul-moore.com
