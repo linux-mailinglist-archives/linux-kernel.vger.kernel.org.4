@@ -2,89 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E937C690838
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2CD69083A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjBIMJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S229782AbjBIMLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjBIMJX (ORCPT
+        with ESMTP id S229632AbjBIMKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:09:23 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163245A928;
-        Thu,  9 Feb 2023 04:04:06 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id r18so1387082pgr.12;
-        Thu, 09 Feb 2023 04:04:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2iL2H66c8egeJxcAcNd53DVufU1j4gsJh0p9vWPKars=;
-        b=HYSrOHlOGHkCBBXo/FhVUHf4PNfH2Exl6Z6W8siW88APvdsy0cxj4dygVgp4Zyb6Dq
-         O1xnt9GpA8ATgCFBeNTRTw5k1ZYRZONlBo0nHzUB5vrPjDDa0ZSFugYFs6jcYZIdVSZs
-         P8uoxbRDQtjBraAyzqiz/b2ZS9T59i5c5oKxSGTCMgEt+ogkvVRC9XPqgCU1W/hsgsYZ
-         lW76hmgEMdXVdpqw6Dd9Ti8wNiVgS/rEoPXwYD9nhvtayiUBNHW16vf533LJlbjZTdSk
-         6joGlO8A3eFDuPCwM1BXmd0aex77OIDHxjUjD3kGmXfhw6Vcxar/FTtGf3MBnwPNcDMR
-         BecA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2iL2H66c8egeJxcAcNd53DVufU1j4gsJh0p9vWPKars=;
-        b=HAAy5t6frU176IYf6QUZubH+6VzQQJi51MfegxLfm6UdtqIOKVMyqE8UaIN7WhhoPu
-         tHkhQ9k29hAAFIvkNHVS+DoeYzkO53nAkSeBcwG763jVkqDZPeXYRV/GT8+NeObJS49u
-         y1sryTG+Ta6oPmGCTVQwgbp6noHHXW0cEeThOpN0KwKJgjtJGfLCWuRigBKobgxpeYML
-         gyG18M/ChBDVyGChRNj3SAOLiBdMxVFyMpNp8MudlTbO3VpGOVSHyW0vCB/f5MmYP1rP
-         iImDbMBs5qgNOR2KUqWky8lreQMcwWdvFWJF3u8OEopOFshUZRo5TUXI69u9HChZbmtW
-         6ZHQ==
-X-Gm-Message-State: AO0yUKVAvrtrVGSHIUuh4hWGweG3s/spoS/C4rpI8LUXESypU9s1nsMP
-        n6uQAxiSvhjggyCE69Eat4aY/rzezeEKkc8YKV8=
-X-Google-Smtp-Source: AK7set+5BFRT8raXxfWMimV2WpjqnoEHyVeYyY5HAmLqQ0HPH3rmaK6Yk3SELenr4S268UyMHdMXS0a6QNoea/S9LmA=
-X-Received: by 2002:aa7:95ae:0:b0:592:6238:a2a with SMTP id
- a14-20020aa795ae000000b0059262380a2amr2455825pfk.39.1675944245529; Thu, 09
- Feb 2023 04:04:05 -0800 (PST)
+        Thu, 9 Feb 2023 07:10:48 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A577257751
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675944462; x=1707480462;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DgCLLbd2OgAmMyk1BGiXGFxAIxijBM0hplnfm2Nw+Fo=;
+  b=LBYhzMIBYjRo0EdSWZPiSjHZ6g8EERT3aGFghUk59jVW56p3TbRUdtJV
+   2449jscxWA8ijadOZHcjg3Uu6J4wcD82s+Kfqapc0UNWqFD+LosH4tNYZ
+   eXCgk41CtXpCCeCs++NEW6auk8pcxS6j9dZ56c6TGhwK3MnUYMgfb6S9A
+   3YumA8uckMtH8ljVmjfTXHogUOydVFLEJ1ASWYGQAejooHbGT1NydOsnu
+   klAB5x4dfFlhrLzn6e7TPDXTaVj32EoPFPyHpI657WTeKCQa7h1OhvZIV
+   iEjxQcnRZE9zCKlPFqLJKLnK/Qa0fodp+oeFUBIHVySRrnDC4Bo/iwfBo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="332206006"
+X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
+   d="scan'208";a="332206006"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 04:07:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="841568158"
+X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
+   d="scan'208";a="841568158"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2023 04:07:40 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pQ5iF-00052g-0A;
+        Thu, 09 Feb 2023 12:07:39 +0000
+Date:   Thu, 9 Feb 2023 20:07:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     kyrie wu <kyrie.wu@mediatek.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        irui wang <irui.wang@mediatek.com>
+Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1859:38:
+ warning: unused variable 'mtk8195_jpegdec_drvdata'
+Message-ID: <202302092008.IgpNeNCW-lkp@intel.com>
 MIME-Version: 1.0
-References: <20221222072603.1175248-1-korantwork@gmail.com>
- <3d1834d9-7905-1225-741a-f298dd5b8a8e@linux.dev> <Y6TSgGdCTvkwPiVg@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYUWf+Fx3FV7vNTc8+O9NSb0iQp75MTC6gra6XapXK=cxw@mail.gmail.com>
- <d14ac29d-027a-08a7-c5c8-848a6920d4a2@linux.dev> <CAEm4hYXncuvL-Gk1aEZExrvkbx=N1aiOQNeNjFdB4443EbKNBA@mail.gmail.com>
- <f05ee82a-4532-b12b-490f-904b946ff7b0@linux.dev> <CAEm4hYXk1RuKEw41VukH2iGTo_9GmZjUfrESWK5vFtpFA_O_4A@mail.gmail.com>
- <CAEm4hYWeZFrYxSvAcBJ8iw=t507vZMqfBwiQXFSJd2Hcyfw7fA@mail.gmail.com>
- <9e6cfda1-4309-d1bb-a0cf-404a7fe7d3aa@linux.intel.com> <Y+FG2EUpmsmCZqwh@kbusch-mbp.dhcp.thefacebook.com>
- <CAEm4hYWjaVCDFtCCyHrq5vOie4wV5LFn-UVZ5qQbpASxVGy1TA@mail.gmail.com> <c830a68e-014b-ddec-4bab-5db337fc378f@linux.intel.com>
-In-Reply-To: <c830a68e-014b-ddec-4bab-5db337fc378f@linux.intel.com>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Thu, 9 Feb 2023 20:05:02 +0800
-Message-ID: <CAEm4hYU46nsN4jiRa0aoq2XTamgFj+OOWy=A+wXFeZFTey_8SA@mail.gmail.com>
-Subject: Re: [PATCH] PCI: vmd: Do not disable MSI-X remapping in VMD 28C0 controller
-To:     "Patel, Nirmal" <nirmal.patel@linux.intel.com>
-Cc:     Keith Busch <kbusch@kernel.org>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        lpieralisi@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xinghui Li <korantli@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patel, Nirmal <nirmal.patel@linux.intel.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=
-=888=E6=97=A5=E5=91=A8=E4=B8=89 04:32=E5=86=99=E9=81=93=EF=BC=9A
->
-> Also newer CPUs have more MSIx (128) which means we can still have
-> better performance without bypass. It would be better if user have
-> can chose module parameter based on their requirements. Thanks.
->
-All right~I will reset the patch V2 with the online node version later.
+Hi kyrie,
 
-Thanks
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: dedc21500334b97b80d4ca37ab683cde214fcb03 media: mtk-jpegdec: add jpeg decode worker interface
+date:   4 months ago
+config: mips-randconfig-r005-20230209 (https://download.01.org/0day-ci/archive/20230209/202302092008.IgpNeNCW-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dedc21500334b97b80d4ca37ab683cde214fcb03
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout dedc21500334b97b80d4ca37ab683cde214fcb03
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/ drivers/soc/renesas/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302092008.IgpNeNCW-lkp@intel.com
+
+All warnings (new ones prefixed by >>):
+
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1818:38: warning: unused variable 'mt8173_jpeg_drvdata' [-Wunused-const-variable]
+   static const struct mtk_jpeg_variant mt8173_jpeg_drvdata = {
+                                        ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1833:38: warning: unused variable 'mtk_jpeg_drvdata' [-Wunused-const-variable]
+   static const struct mtk_jpeg_variant mtk_jpeg_drvdata = {
+                                        ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1848:32: warning: unused variable 'mtk8195_jpegenc_drvdata' [-Wunused-variable]
+   static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
+                                  ^
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1859:38: warning: unused variable 'mtk8195_jpegdec_drvdata' [-Wunused-const-variable]
+   static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+                                        ^
+   4 warnings generated.
+
+
+vim +/mtk8195_jpegdec_drvdata +1859 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+
+  1858	
+> 1859	static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
+  1860		.formats = mtk_jpeg_dec_formats,
+  1861		.num_formats = MTK_JPEG_DEC_NUM_FORMATS,
+  1862		.qops = &mtk_jpeg_dec_qops,
+  1863		.m2m_ops = &mtk_jpeg_multicore_dec_m2m_ops,
+  1864		.dev_name = "mtk-jpeg-dec",
+  1865		.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
+  1866		.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
+  1867		.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
+  1868	};
+  1869	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
