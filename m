@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FBF6912C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B996912C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjBIVtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 16:49:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S230328AbjBIVum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 16:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjBIVti (ORCPT
+        with ESMTP id S229460AbjBIVuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 16:49:38 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E35F60D7F
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 13:49:37 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id g14so3713232ljh.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 13:49:37 -0800 (PST)
+        Thu, 9 Feb 2023 16:50:40 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A4725298
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 13:50:39 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id j6-20020a9d7686000000b0068d4ba9d141so1004256otl.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 13:50:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+hWz7mZJWvEqZkUNY9rF0NUfKN5FMSK3bvphPb5LMAY=;
-        b=EIX9B2h+69ulth/0KTEV/dCBE9jDolM6Be0Vb7N+iyFVGKlPpIW4++6lmWvYSMesqg
-         6Hb9jLVe3JuSh8gjyMpBgBKv7PmyM+4cmbUy8K+DYNdSeVRWKt/y2lwA3Y4shSvuh9MW
-         igPiu8k3NgCn79X/mq9u5plZ1v45LiC4Hcc14=
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LflqKbDPnAQeYR9AbcdPJDaBzU2Bf2qyTJfC5gOQhL8=;
+        b=kXqaFMBOxc4uVQ3XzG0x1KL3GlK1Gi/2GsBJZz95xUBeuFl/18Jh3xiCeDg7jnM/bf
+         QvxKRNqFjXOREnbv3xCHzKfsVJ4rdfMFj1F3mtgHSleUBOxNhbVsFtpbdbIfnJcEfqsX
+         TCk55qDhT4SmaNOJWyn2+DT6MobPKCJZhuVeqAMZTwntlz4ntieeDMG+/Myqs892P8zF
+         dvbw7i5gp3NvlV7wanrEpUtQJkDojM2lXt18L31wqyGCE3Du5S+L5RgSZUrcIbDBH8xZ
+         z89S4C5FSmiBHUSlR15Wh44iD1Up7hBuHXAfjsNEGAOBITphaUDeHn52ACTq5uGOsbFh
+         8thA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+hWz7mZJWvEqZkUNY9rF0NUfKN5FMSK3bvphPb5LMAY=;
-        b=5XOKrU4RSvstY4CD7i84P/fe3hJkes2QdN4dJOon7N44uYMxlsiV3BmTx/9PCi/fU1
-         dTxoZNsR02Y4HhwJD+H3K2v0eT7BS6CbxKPTaxGPyIzZbA66GSJUakQ3AwZcVjJEpiYI
-         NeD7Bmm+yBlbHsxVAYWNliUq6BG4oXzg6t+9i39896TS2PJfV328yvJh9zI4JF+v5qzZ
-         CSx5fN2anIRDDxA78XRPE7+R5ZvV2IW0opsxOfG19NCis4GXu43Ve7LGUKxIReQsoLyo
-         aJhmxmxrO6oMN4R5LnoZVli4J0q2accPBXOtdiNd7RYGw//PCY/VYX51BeKtuNBP9tsW
-         +ONQ==
-X-Gm-Message-State: AO0yUKWP2eLYMoJRFB4PDe8DLZZvCsAo+/cqu/rwtkMgE1O+UKxJ8G0e
-        sNNns7I9/jEMlFzA5XDEBJgJGHCSwmtVH8dmIfKTYA==
-X-Google-Smtp-Source: AK7set/tVvpInH7kCsORem0GFcmD6Wk69koafv46VGU3LB9YCuQKKMGUPBRjHwNpXv1kUB636LjDVAbrQaSJNhoYAes=
-X-Received: by 2002:a2e:8e6c:0:b0:28e:bba7:22dc with SMTP id
- t12-20020a2e8e6c000000b0028ebba722dcmr2252599ljk.56.1675979375448; Thu, 09
- Feb 2023 13:49:35 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 9 Feb 2023 16:49:34 -0500
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LflqKbDPnAQeYR9AbcdPJDaBzU2Bf2qyTJfC5gOQhL8=;
+        b=xy++7/6H7qv6vP0GVLGPdMACdEZ31NmCGQqtMTYDSDaHyixy4/34vIG9JgYL1Wtupp
+         XegSuAEPabWUBCR12x9Hc0F6KqiyiVh/2JZKO/Pds4PorL8+vg7mdnoU/dgcw1gY059d
+         U3kW4R9crDGyAJFnsbt561Y7TfiGNGIj0uGWqAPFSmKhrlAWDEJoLVmbf/sU5ZLlSaix
+         Z1PeEizA2+BL3qQSRcfNqa2HG/NFyQb1tG8uZh22F1XqqYtQ4MAcX4mRHH5T3gIezD4x
+         36GJe4lgfjKJhl9v5zXmIn692SxYkNLFW9dtXjx4n+PCVZ/yoUR3kYE0r2L8fkYL3EEg
+         hG0w==
+X-Gm-Message-State: AO0yUKXLR6gx7X8HNze7wfJU7xt0smgiHpaw1TIFTfDk8AdPzegrFNqh
+        5E4xF6dOkPxBmk4IU3XdqmBPgFHfS/oWSEEdtLc=
+X-Google-Smtp-Source: AK7set+WkhR5tYPUisCbtFnw9buB/s82cjlepH/D4+52yoEbCzMU9BZOC1mPYoBRTixHn9XPjhZrBg==
+X-Received: by 2002:a05:6830:3918:b0:68b:d890:1e03 with SMTP id br24-20020a056830391800b0068bd8901e03mr8275124otb.21.1675979438866;
+        Thu, 09 Feb 2023 13:50:38 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id v26-20020a9d69da000000b0068bcd200247sm1240668oto.75.2023.02.09.13.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 13:50:38 -0800 (PST)
+Date:   Thu, 9 Feb 2023 13:50:30 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Hugh Dickins <hughd@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yang Shi <shy828301@gmail.com>,
+        Zach O'Keefe <zokeefe@google.com>
+Subject: Re: [PATCH 1/2] mm/MADV_COLLAPSE: set EAGAIN on unexpected page
+ refcount
+In-Reply-To: <20230209132846.122ad88e1c2bd0603a630e5c@linux-foundation.org>
+Message-ID: <1f344fc1-834d-f1df-8a2c-79918be5b22@google.com>
+References: <20230125015738.912924-1-zokeefe@google.com> <ecb2cf3-45f0-8aae-3e1-da4e79de9c27@google.com> <20230209132846.122ad88e1c2bd0603a630e5c@linux-foundation.org>
 MIME-Version: 1.0
-In-Reply-To: <1675318653-28352-5-git-send-email-quic_srivasam@quicinc.com>
-References: <1675318653-28352-1-git-send-email-quic_srivasam@quicinc.com> <1675318653-28352-5-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 9 Feb 2023 16:49:34 -0500
-Message-ID: <CAE-0n510UAMzGovJrQtAgtaxEeoPM9VgPHghCeouKvJ9gjrf_w@mail.gmail.com>
-Subject: Re: [PATCH v7 4/5] clk: qcom: lpassaudiocc-sc7280: Merge AHB clocks
- into lpass_aon
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2023-02-01 22:17:32)
-> Merge AHBM and AHBS clocks into lpass_aon clk_regmap structure as they
-> are using same register space.
-> Add conditional check for doing Q6 AHB clocks registration only
-> if regname specified in device tree node.
-> In existing implementation, Q6 AHB clocks and lpass_aon clocks are
-> being registered exclusively and overlapping if both of them are
-> to be used.The regmap region used by Q6 AHB clocks is <0x03389000 0x24>
+On Thu, 9 Feb 2023, Andrew Morton wrote:
+> 
+> Thanks, I'll merge [1/2] into mm-hotfixes.
 
-Add space   ^
+Great, thanks.
 
-> and of lpass_aon clocks is <0x03380000 0x30000>.
-> This is required to avoid such overlapping and to register
-> Q6 AHB clocks and lpass_aon clocks simultaneously.
+> 
+> I'm not seeing anything in the [1/2] changelog which indicates that a
+> backport is needed.  IOW,
 
-The commit text is still really hard to read and understand what's going
-on. Hopefully a binding update makes it clearer. It could also be
-clarified by indicating the compatible string so we know what "Q6 AHB"
-means or what "lpass_aon" means. Then we can grep the dtsi files for
-those compatibles to better understand what is intended.
+Correct: it's just changing the errno for some racy cases from "you're
+wrong, don't bother me again" to "it might be worth having another go":
+not fixing an instability, as 2/2 was.
 
->
-> Fixes: 4ab43d171181 ("clk: qcom: Add lpass clock controller driver for SC7280")
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-> ---
->  drivers/clk/qcom/lpassaudiocc-sc7280.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-> index 1339f92..8e2f433 100644
-> --- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
-> +++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-> @@ -826,10 +829,12 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
->                 return ret;
->
->         if (of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode")) {
-> -               lpass_audio_cc_sc7280_regmap_config.name = "cc";
-> -               desc = &lpass_cc_sc7280_desc;
-> -               ret = qcom_cc_probe(pdev, desc);
-> -               goto exit;
-> +               res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cc");
+> 
+> # cat .signature
+> When fixing a bug, please describe the end-user visible effects of that bug.
 
-This should be index based and not reg-name based. Can you point me to
-the binding update for "qcom,sc7280-lpassaoncc" compatible that supports
-this?
+If whatever's being run by the end-user is coded to try again on -EAGAIN,
+then the end-user will less often see occasional unexplained failures.
 
-> +               if (res) {
-> +                       lpass_audio_cc_sc7280_regmap_config.name = "cc";
-> +                       desc = &lpass_cc_sc7280_desc;
-> +                       return qcom_cc_probe(pdev, desc);
-> +               }
+Hugh
