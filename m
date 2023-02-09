@@ -2,319 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE0E690ACF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE00690AD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjBINrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S230178AbjBINtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjBINrn (ORCPT
+        with ESMTP id S229635AbjBINtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:47:43 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDBC19F2F;
-        Thu,  9 Feb 2023 05:47:40 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675950457; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=dcaDta66ZUyr4xZTMKopwnnbdTVVbGV1apxTvGrXpQKc5CIo6RMlrIrL2GzJffnlRq
-    CQHtlLVr877kBoXyH7Lyr635+Z62OcPiebukMKfZwEkkn/03h3R+ecweSt0lUkzp/2qS
-    wULXIHeKSZ/qf43nkUuiIbZ8N7B9qXVPDziOJsj+WHBMRWowZrg5x30G1zwKEIgcFjKM
-    rh85dcoabvDS8sFY3GNgON6Y76A1mvv8g69eHIaYB7JC8Dtju6Or9pBz7lNwL3XFMNQi
-    k3kqWcXa5DtH4JDgxB00dW9mnQ+81Jx5l+7vjMoeAN32E5aWvFZm0d8WMuZZ4v4HiNPe
-    d4Wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675950457;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=IY2gJ2JdUD9X1qj48Ay5XBdVhmse5lzzITzrG+rllWU=;
-    b=MsuatPmmBrx1YjoToipwFFOD84ldbeBiJ4mUECj/tml8RxaUH4oLrz0UduI+DOiq4A
-    kaqaFD2qBezC9XdGvGgWwtA48xpCYDrnkLZwVagvbC3TvHHXMsaCp4wiD3n2hI7F+UCl
-    56WLuFWNHcjcwFnRB4Em8m2nQceOtiEyHgCj20WDUWTyGzXqXYfy90QOaaIZuWYGTtsQ
-    7ik2lwOuuL6wMpsbvxbTFpLRG/t8s6VKDtjL04Deqq0bpAwx/Z8i/NAxJDqqpBlXsVSe
-    jThQbj0qDptUeG/yU7W6Ltq05q2sroaq8Lxxdl3Oltdo369zW/IeCfZm0KOUM5NrPZT/
-    2Lbw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675950457;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=IY2gJ2JdUD9X1qj48Ay5XBdVhmse5lzzITzrG+rllWU=;
-    b=Gb1rPPdlOTsIOJVciDIA8+2tAm9U9tVKgcsgQeLx8ay4Au34l47Wc+xj1jrDiHYCqq
-    O5GqN+Yxd18mMwE6RDbnGKkZ6CnfpXhFXdU08pZ5YuxA93MgitBs22n7fBE46FIWYJSZ
-    3fjrZNwTMW+CdIV9cxk8/YlYfJGXncdpunZ2vxviLhQ4cxOWJwnhWZyrxEbQtgPuBNPK
-    pIEnc6IG9E0bJUsgtF9tObAt3TW5f7O0ZRTZ0pHLbI49hN/qbiiWSHxPLhYZ3oGZPHza
-    P7O+SvYOEDwq8o1tJSzDP8RZ2sJwjx3CB8zj3L8MHvoPdOQNE3EQE0AHj8r3Xjsx42f+
-    TgFg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267EpF+OQRc4obTF5+Uw3E="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.3.0 DYNA|AUTH)
-    with ESMTPSA id K7ac91z19DlbAQz
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 9 Feb 2023 14:47:37 +0100 (CET)
-Date:   Thu, 9 Feb 2023 14:47:28 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-Subject: Re: [PATCH v5 2/5] arm64: dts: qcom: Add msm8939 SoC
-Message-ID: <Y+T5cF4d667RhrJp@gerhold.net>
-References: <20230206012336.2130341-1-bryan.odonoghue@linaro.org>
- <20230206012336.2130341-3-bryan.odonoghue@linaro.org>
+        Thu, 9 Feb 2023 08:49:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281B340E7;
+        Thu,  9 Feb 2023 05:49:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6+Zzyw9m3LYGRdYxoUvpUCviw1SoqadH8IOU/honxCA=; b=UCQ48snzSx9gY3cAyXWvHv+5/p
+        9/etCpY5EoKh5Bx541XqimynAO2J5+e9rTgLLrSSOGFAfkTN1Ek5G2kQCnUy6HsLY27KkoQr5L7RV
+        l9DVv1jo+AF2VXkveA80jaw+nH2FJuwVGk/PkRXdCKF091kZ7iUb6tYnSOS8Fzs/mZgLX8S/t1C4f
+        7DQSIXTeAq+wm7iuiN9LeIXMxCJAXJnxCyiM0Z1noi1xqhU9v6dpdNaxZFRl35oPdStQZgcmPhs78
+        YNPlmXnTvvYx6qnYQsW9taHntKOAOefhPRH38RpTsrvoK7CegLM+zQ7QWiLr9nKnumtd3m76JFzhX
+        1ONba1Tw==;
+Received: from [2001:8b0:10b:5::bb3] (helo=u3832b3a9db3152.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pQ7Hx-002Eeo-35; Thu, 09 Feb 2023 13:48:37 +0000
+Message-ID: <76b8560c940f4506a690152e91e2f030eb24f86e.camel@infradead.org>
+Subject: Re: [External] Re: [PATCH v7 0/9] Parallel CPU bringup for x86_64
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, paulmck@kernel.org
+Cc:     kim.phillips@amd.com, arjan@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        x86@kernel.org, pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+Date:   Thu, 09 Feb 2023 13:48:36 +0000
+In-Reply-To: <eea887fb7d634c24529743fce8295b2f78eb861d.camel@infradead.org>
+References: <20230207230436.2690891-1-usama.arif@bytedance.com>
+         <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
+         <8e2f03e2-9517-aeb4-df60-b36ef3ff3a75@bytedance.com>
+         <f07b371ae2eb11f541c665b488b3d4b6bf1a81b3.camel@infradead.org>
+         <87357f2gyd.ffs@tglx>
+         <eea887fb7d634c24529743fce8295b2f78eb861d.camel@infradead.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-9LZ2h9AAjtm4GdqBk0oS"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206012336.2130341-3-bryan.odonoghue@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 06, 2023 at 01:23:33AM +0000, Bryan O'Donoghue wrote:
-> Add msm8939 a derivative SoC of msm8916. This SoC contains a number of key
-> differences to msm8916.
-> 
-> - big.LITTLE Octa Core - quad 1.5GHz + quad 1.0GHz
-> - DRAM 1x800 LPDDR3
-> - Camera 4+4 lane CSI
-> - Venus @ 1080p60 HEVC
-> - DSI x 2
-> - Adreno A405
-> - WiFi wcn3660/wcn3680b 802.11ac
-> 
-> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> Co-developed-by: Jun Nie <jun.nie@linaro.org>
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
-> Co-developed-by: Benjamin Li <benl@squareup.com>
-> Signed-off-by: Benjamin Li <benl@squareup.com>
-> Co-developed-by: James Willcox <jwillcox@squareup.com>
-> Signed-off-by: James Willcox <jwillcox@squareup.com>
-> Co-developed-by: Leo Yan <leo.yan@linaro.org>
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> Co-developed-by: Joseph Gates <jgates@squareup.com>
-> Signed-off-by: Joseph Gates <jgates@squareup.com>
-> Co-developed-by: Max Chen <mchen@squareup.com>
-> Signed-off-by: Max Chen <mchen@squareup.com>
-> Co-developed-by: Zac Crosby <zac@squareup.com>
-> Signed-off-by: Zac Crosby <zac@squareup.com>
-> Co-developed-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/msm8939.dtsi | 2344 +++++++++++++++++++++++++
->  1 file changed, 2344 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> new file mode 100644
-> index 0000000000000..17327513a5698
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> @@ -0,0 +1,2344 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020-2023, Linaro Limited
-> + */
-> +
-> +#include <dt-bindings/clock/qcom,gcc-msm8939.h>
-> +#include <dt-bindings/clock/qcom,rpmcc.h>
-> +#include <dt-bindings/interconnect/qcom,msm8939.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/power/qcom-rpmpd.h>
-> +#include <dt-bindings/reset/qcom,gcc-msm8939.h>
-> +#include <dt-bindings/thermal/thermal.h>
-> +
-> +/ {
-> +	interrupt-parent = <&intc>;
-> +
-> +	/*
-> +	 * Stock LK wants address-cells/size-cells = 2
-> +	 * A number of our drivers want address/size cells = 1
-> +	 * hence the disparity between top-level and /soc below.
-> +	 */
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	clocks {
-> +		xo_board: xo-board {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <19200000>;
-> +		};
-> +
-> +		sleep_clk: sleep-clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <32768>;
-> +		};
-> +	};
-> +
-> +	cpus {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		CPU0: cpu@100 {
-> +			compatible = "arm,cortex-a53";
-> +			device_type = "cpu";
-> +			enable-method = "spin-table";
-> +			reg = <0x100>;
-> +			next-level-cache = <&L2_1>;
-> +			power-domains = <&vreg_cpr_stub>;
-> +			power-domain-names = "cpr";
 
-IMHO there are still no compelling arguments for adding this dummy stub
-here, aside from fixing a non-critical DT schema warning that is
-obviously wrong and is being fixed in [1]. But I guess I have made my
-point and you have made yours so I'll leave it up to Bjorn to decide.
+--=-9LZ2h9AAjtm4GdqBk0oS
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[1]: https://lore.kernel.org/linux-arm-msm/20230208153913.24436-2-ansuelsmth@gmail.com/
+On Thu, 2023-02-09 at 12:10 +0000, David Woodhouse wrote:
+> On Thu, 2023-02-09 at 12:53 +0100, Thomas Gleixner wrote:
+> > On Thu, Feb 09 2023 at 11:03, David Woodhouse wrote:
+> > > This one also fixes it for me. If we're happy with this approach, I'l=
+l
+> > > work it into Thomas's original patch (and hopefully eventually he'll =
+be
+> > > happy enough with it and the commit message that he'll give us his
+> > > Signed-off-by for it.)
+> >=20
+> > I'm happy enough by now, but I'm not sure how much of the original patc=
+h
+> > is still left. Also you did the heavy lifting of making it work and
+> > writing the nice changelog. So please make this:
+> >=20
+> > From: David Woodhouse <dwmw2@infradead.org>
+> >=20
+> > Co-developed-by: Thomas Gleixner <tglx@linutronix.de>
+> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> > Signed-off-by: David Woodhouse <dwmw2@infradead.org>
+>=20
+> Thanks. I'll flip that to the Amazon address, of course. It's useless
+> for actual email (until I apply that LART some more) but I should still
+> use it for that.
+>=20
+> I think I'm going to make one more change to that as I review it; in
+> the "should never happen" case of not finding the APIC ID in the
+> cpuid_to_apicid[] array it would just keep searching for ever. I don't
+> know if there's a better thing to do other than just dropping the
+> trampoline lock and 1:cli;hlt;jmp 1b but at least it's *attempting* to
+> handle the failure.
+>=20
+> Patch below, and I'll update the tree shortly. There's a "what if
+> there's noise in the top 32 bits of %rcx" fix in there too.
 
-Otherwise I just have some more nitpicks and one critical issue:
-The timer interrupt numbers are still wrong.
+All done and pushed out to parallel-6.2-rc7-part1 (and not -part1)
+branches. Usama, are you able to redo the testing and take it from
+here? Thanks for that; it's saving me a lot of time!
 
-> + [...]
-> +		tsens: thermal-sensor@4a9000 {
-> +			compatible = "qcom,msm8939-tsens", "qcom,tsens-v0_1";
-> +			reg = <0x004a9000 0x1000>, /* TM */
-> +			      <0x004a8000 0x1000>; /* SROT */
-> +			nvmem-cells = <&tsens_caldata>;
-> +			nvmem-cell-names = "calib";
-> +			#qcom,sensors = <10>;
-> +			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "uplow";
-> +			#thermal-sensor-cells = <1>;
-> +		};
 
-"thermal/drivers/tsens: Drop single-cell code for msm8939" [2] is in
-linux-next now so you need to convert this to use multiple nvmem-cells.
+I'm mostly done for the week now as by this time tomorrow, I need to
+have the skis on the roof of the car and be ready to pick the family up
+from school and start driving south...
 
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=dfadb4599ab0206935d5f14975b5e8112492b29c
+--=-9LZ2h9AAjtm4GdqBk0oS
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-> + [...]
-> +		mdss: display-subsystem@1a00000 {
-> +			compatible = "qcom,mdss";
-> +			reg = <0x01a00000 0x1000>,
-> +			      <0x01ac8000 0x3000>;
-> +			reg-names = "mdss_phys", "vbif_phys";
-> +
-> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +
-> +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> +				 <&gcc GCC_MDSS_AXI_CLK>,
-> +				 <&gcc GCC_MDSS_VSYNC_CLK>;
-> +			clock-names = "iface",
-> +				      "bus",
-> +				      "vsync";
-> +
-> +			power-domains = <&gcc MDSS_GDSC>;
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			#interrupt-cells = <1>;
-> +			ranges;
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMjA5MTM0ODM2WjAvBgkqhkiG9w0BCQQxIgQgzqC+9GiP
+lZcMJb2UFa7+XczrPx6tT/jKjneKC6kTUSgwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgB7TiXREZhPOhUK9XQWaLT9jWDNBepesI9Z
+P+6Gehmdr6q9baoJD2w2VVPdVE62ytcDSgcaitJy/lJDfd4h0++qbrKr+t4U79MShrbTFcXn+utQ
+kog0/5JI9a5QQJFKnH3B6SVud/NTTPvqqSNd1NaQ4BPs7KYul4gb3m+cfP/VLlnhUlr1GnOa7NwP
+S8tFrkMms0lfUmKuUpZzkJzy6Oldz2WMZkCu0A8oGympbPCMI4eu1fclNnU3ZMSYrD6NkI73hMMS
+2gL/rqF+cBb4oalTcaX1FTDiMYFUub+Nl6qJN7+hnMDHsRvpOweyaUpDU1LesCpDTI+Md7iUnUDs
+rjLZuOWukJAF9jte9LaSzJQC1DgF259HgnfDxQMZ9eFMNwPCFpQ/4/XTnHxO/wlEBlmJZMsLwPpD
+7WjYpi2KI1B5YbRe/m3ovJoe9k9YHF3ZhqhN/MFHK0rZIVRiGURRK2v37l6GLW3hsnjvMH3i1fso
+nR7k9xIlStMoidYWfO2pDO8IqMQJu8DWi0tI8O01GtFPiGXQzZdyfDtuJPrIb8KM4XCIWupX7WYT
+c2i5zMXdj13j3w2kMxYyxdusuoMjMvqtTKF3AJpO9Zof5o8bMpvRFMPgggzwsQBB/+MRdsoinKg6
+HK4nCLJKCSL3sLzIpIhp5hysemS+Zmd56lYGuHRXEwAAAAAAAA==
 
-Please disable this by default similar to 5f36d633c214 ("arm64: dts:
-qcom: Disable MDSS by default for 8916/8016 devices") for consistency
-with MSM8916.
 
-> + [...]
-> +		apps_iommu: iommu@1ef0000 {
-> +			compatible = "qcom,msm8916-iommu", "qcom,msm-iommu-v1";
-> +			reg = <0x01ef0000 0x3000>;
-> +			ranges = <0 0x1e20000 0x40000>;
-
-0x01e20000 (pad to 8 digits)
-
-> + [...]
-> +		usb: usb@78d9000 {
-> +			compatible = "qcom,ci-hdrc";
-> +			reg = <0x078d9000 0x200>,
-> +			      <0x078d9200 0x200>;
-> +			interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&gcc GCC_USB_HS_AHB_CLK>,
-> +				 <&gcc GCC_USB_HS_SYSTEM_CLK>;
-> +			clock-names = "iface", "core";
-> +			assigned-clocks = <&gcc GCC_USB_HS_SYSTEM_CLK>;
-> +			assigned-clock-rates = <80000000>;
-> +			resets = <&gcc GCC_USB_HS_BCR>;
-> +			reset-names = "core";
-> +			#reset-cells = <1>;
-> +			phy_type = "ulpi";
-> +			dr_mode = "otg";
-> +			ahb-burst-config = <0>;
-> +			phy-names = "usb-phy";
-> +			phys = <&usb_hs_phy>;
-> +			status = "disabled";
-> +
-> +			ulpi {
-> +				usb_hs_phy: phy {
-> +					compatible = "qcom,usb-hs-phy-msm8916",
-> +						     "qcom,usb-hs-phy";
-> +					clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
-> +					clock-names = "ref", "sleep";
-> +					resets = <&gcc GCC_USB2A_PHY_BCR>, <&usb 0>;
-> +					reset-names = "phy", "por";
-> +					#phy-cells = <0>;
-> +					qcom,init-seq = /bits/ 8 <0x0 0x44
-> +						0x1 0x6b 0x2 0x24 0x3 0x13>;
-
-Should be formatted in pairs, see commit 640e71aac554c ("arm64: dts:
-qcom: msm8916: improve usb hs node formating").
-
-> + [...]
-> +		timer@b020000 {
-> +			compatible = "arm,armv7-timer-mem";
-> +			reg = <0x0b020000 0x1000>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			frame@b021000 {
-> +				reg = <0x0b021000 0x1000>,
-> +				      <0x0b022000 0x1000>;
-> +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> +					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +				frame-number = <0>;
-> +			};
-
-These timer interrupts are still wrong like mentioned in v3:
-https://lore.kernel.org/linux-arm-msm/Y8fC%2FGCHfENQmBNC@gerhold.net/
-
-> + [...]
-> +		pronto: remoteproc@a204000 {
-> +			compatible = "qcom,pronto-v2-pil", "qcom,pronto";
-> +			reg = <0x0a204000 0x2000>,
-> +			      <0x0a202000 0x1000>,
-> +			      <0x0a21b000 0x3000>;
-> +			reg-names = "ccu", "dxe", "pmu";
-> +
-> +			interrupts-extended = <&intc 0 149 IRQ_TYPE_EDGE_RISING>,
-
-&intc GIC_SPI 149
-
-Thanks,
-Stephan
+--=-9LZ2h9AAjtm4GdqBk0oS--
