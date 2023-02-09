@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F70169145F
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1153C691468
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbjBIX0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:26:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
+        id S230478AbjBIX3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjBIX0k (ORCPT
+        with ESMTP id S230309AbjBIX3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:26:40 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B582B66EF9;
-        Thu,  9 Feb 2023 15:26:21 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id qw12so11385168ejc.2;
-        Thu, 09 Feb 2023 15:26:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PjQEZxP8lMZ2UBLX1ynT5dUYuWcXIgYl0zrxVwqKemg=;
-        b=oAc2ICH0OBXTKGpUsXh7Oa62UNpe3B12xPP3it7lQM3ghOZRi6u5IM0zUZNAoeAloe
-         YorPnFV7eCM7OgtntHJbeh41+eQp+CGeiDR1nccW2d+GUkKFfSXFNanhePmAdZL+Q4rN
-         V9Fjbb+XAI7eLppYpByZ7HzSP5hP2KkzaT0GS2Ysf1gxvJWkK4x8qYPlkfTlBTZNE43J
-         XUKx/isye4CTsOuxGqETRO2g2dJ7MVysOfmKca9Em2BtFsgXO0hQ69qo3TUoQfNGNkWx
-         zILdxBM0TRQjvHIU22W4COjTx5jN2zgHZNYRZwQ6HPP2EQHX6ZE1EGE5NkG41xBgqw4Q
-         x6Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PjQEZxP8lMZ2UBLX1ynT5dUYuWcXIgYl0zrxVwqKemg=;
-        b=4ADgfA4crqJCfOE2Du2Hw+VmN7Cax74/ac9ZH7kgc5NwSyi0WKiMtxN6Zn/5qbr9JA
-         K5vE//yjk1GLu84cbcHVzNFVydYqBBPQKQ4eHtmoZKyTuHFoGDrIv6H2eIsqGWIPcZjA
-         mvUW0NasORoaVIbtgFYGymxY4VDOkttpC57IegCZNOnWWXGBVPny2/dOUY7wTX1E+Gz0
-         s3dqlblSadT27H5gZwZZodePWmD6UsZmck6VnRaIU/Gxe9r7JzD+II3+fQE/zIdxf9NS
-         Sj/Uqs1FlJn1FhWp6N4cEtmG36we88OJxnWdVYCHctRoYOkpTnApXp0COhWb4lJERyG/
-         DysQ==
-X-Gm-Message-State: AO0yUKX6+nnf1XKhPFORLcoixt+zEtDZDVeCLxU2D9ks59SaCWf9fIYh
-        yqga9+6hN3OXfi/HnJ12lWQ=
-X-Google-Smtp-Source: AK7set/xzAGC3h51eCtPDzMsOJDcjSbudUO9W2gjP2kBzBAB6Ft4VbrTkpc7ja4hG/j17s9fihdzlg==
-X-Received: by 2002:a17:906:1dc8:b0:878:8237:7abb with SMTP id v8-20020a1709061dc800b0087882377abbmr14406317ejh.35.1675985180235;
-        Thu, 09 Feb 2023 15:26:20 -0800 (PST)
-Received: from mobilestation ([83.220.236.142])
-        by smtp.gmail.com with ESMTPSA id uo39-20020a170907cc2700b00887ce5caf66sm1517317ejc.59.2023.02.09.15.26.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 15:26:19 -0800 (PST)
-Date:   Fri, 10 Feb 2023 02:26:16 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        caihuoqing <caihuoqing@baidu.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH 1/3] dmaengine: dw-edma: Rename dw_edma_core_ops
- structure to dw_edma_plat_ops
-Message-ID: <20230209232616.5zyxtxqzlmbnnzba@mobilestation>
-References: <20220921064859.10328-1-cai.huoqing@linux.dev>
- <20220921064859.10328-2-cai.huoqing@linux.dev>
- <Y2UWvjNHBGa8PjBZ@matsya>
+        Thu, 9 Feb 2023 18:29:46 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EED76B3;
+        Thu,  9 Feb 2023 15:29:45 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pQGMJ-0002DS-2G;
+        Fri, 10 Feb 2023 00:29:43 +0100
+Date:   Thu, 9 Feb 2023 23:27:31 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH v3 02/12] dt-bindings: net: mediatek,net: add mt7981-eth
+ binding
+Message-ID: <83a7d040126f213b4c45072044a7e069218650d9.1675984550.git.daniel@makrotopia.org>
+References: <cover.1675984550.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2UWvjNHBGa8PjBZ@matsya>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1675984550.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod
+Introduce DT bindings for the MT7981 SoC to mediatek,net.yaml.
 
-On Fri, Nov 04, 2022 at 07:12:22PM +0530, Vinod Koul wrote:
-> On 21-09-22, 14:48, Cai Huoqing wrote:
-> > From: caihuoqing <caihuoqing@baidu.com>
-> > 
-> > Rename dw_edma_core_ops structure to dw_edma_plat_ops,
-> > because the 'ops' is related to platform device
-> 
-> Is that really a case, the device can be non platform too right?
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ .../devicetree/bindings/net/mediatek,net.yaml | 43 ++++++++++++++++++-
+ 1 file changed, 41 insertions(+), 2 deletions(-)
 
-The patchlog is misleading in the suggested naming convention. The
-dw_edma_pcie_plat_ops name was supposed to refer to the platform which
-the DW eDMA engine is embedded to, like PCIe end-point (accessible via
-the PCIe bus) or a PCIe root port (directly accessible by CPU).
-Needless to say that for them the IRQ-vector and PCI-addresses are
-differently determined. The suggested name has a connection with the
-kernel platform device only as a private case of the eDMA/hDMA embedded
-into the DW PCI Root ports, though basically it was supposed to refer to
-any platform in which the DMA hardware lives.
+diff --git a/Documentation/devicetree/bindings/net/mediatek,net.yaml b/Documentation/devicetree/bindings/net/mediatek,net.yaml
+index 7ef696204c5a..76a46a7b8228 100644
+--- a/Documentation/devicetree/bindings/net/mediatek,net.yaml
++++ b/Documentation/devicetree/bindings/net/mediatek,net.yaml
+@@ -21,6 +21,7 @@ properties:
+       - mediatek,mt7623-eth
+       - mediatek,mt7622-eth
+       - mediatek,mt7629-eth
++      - mediatek,mt7981-eth
+       - mediatek,mt7986-eth
+       - ralink,rt5350-eth
+ 
+@@ -210,7 +211,7 @@ allOf:
+       properties:
+         compatible:
+           contains:
+-            const: mediatek,mt7986-eth
++            const: mediatek,mt7981-eth
+     then:
+       properties:
+         interrupts:
+@@ -225,8 +226,8 @@ allOf:
+             - const: fe
+             - const: gp2
+             - const: gp1
+-            - const: wocpu1
+             - const: wocpu0
++            - const: sgmii_ck
+             - const: sgmii_tx250m
+             - const: sgmii_rx250m
+             - const: sgmii_cdr_ref
+@@ -247,6 +248,44 @@ allOf:
+           description:
+             Phandle to the mediatek wed-pcie controller.
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mediatek,mt7986-eth
++    then:
++      properties:
++        interrupts:
++          minItems: 4
++
++        clocks:
++          minItems: 15
++          maxItems: 15
++
++        clock-names:
++          items:
++            - const: fe
++            - const: gp2
++            - const: gp1
++            - const: wocpu1
++            - const: wocpu0
++            - const: sgmii_tx250m
++            - const: sgmii_rx250m
++            - const: sgmii_cdr_ref
++            - const: sgmii_cdr_fb
++            - const: sgmii2_tx250m
++            - const: sgmii2_rx250m
++            - const: sgmii2_cdr_ref
++            - const: sgmii2_cdr_fb
++            - const: netsys0
++            - const: netsys1
++
++        mediatek,sgmiisys:
++          minItems: 2
++          maxItems: 2
++
++        mediatek,wed-pcie: true
++
+ patternProperties:
+   "^mac@[0-1]$":
+     type: object
+-- 
+2.39.1
 
-Anyway the renaming was necessary to distinguish two types of
-the implementation callbacks:
-1. DW eDMA/hDMA IP-core specific operations: device-specific CSR
-setups in one or another aspect of the DMA-engine initialization.
-2. DW eDMA/hDMA platform specific operations: the DMA device
-environment configs like IRQs, address translation, etc.
-
-dw_edma_pcie_core_ops is supposed to be used for the case 1, and
-dw_edma_pcie_plat_ops - for the case 2.
-
--Serge(y)
-
-> 
-> -- 
-> ~Vinod
