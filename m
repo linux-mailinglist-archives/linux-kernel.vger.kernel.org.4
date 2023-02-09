@@ -2,70 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB346912CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AB66912D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbjBIVuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 16:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S229460AbjBIVyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 16:54:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjBIVup (ORCPT
+        with ESMTP id S229563AbjBIVyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 16:50:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDF860E7B;
-        Thu,  9 Feb 2023 13:50:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Feb 2023 16:54:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD59063120
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 13:53:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675979600;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kZXtytW52eF9I6Wk1wiK455K/DS7KMbgwYg8Bzqjx40=;
+        b=c0sYeKeyQkRvau33MnvvFYGjMRPZHsZoXiTlYAVWS03hagfULy3Fo8vVmGNMVT3m6EsjO6
+        4K5PwczZvDrdBcuK0E06jWld1Idt7clIzWMNakQwhv8s+ZfZjFbIUEMPTWaUyvqYOlIxwZ
+        ZoXz69V36B+oiXBrMyU/npfBVa5NPGo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-349-gVWLNVltPZKBuDqcZfjoOQ-1; Thu, 09 Feb 2023 16:53:16 -0500
+X-MC-Unique: gVWLNVltPZKBuDqcZfjoOQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 040E56187F;
-        Thu,  9 Feb 2023 21:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA15C4339C;
-        Thu,  9 Feb 2023 21:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675979443;
-        bh=tuk1PM1WHMjxdBlr0beL/zkj3i8hL7PyqoTOxllce+0=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=NnIfqqN7nfF/xsWdi9iF5LQ70RRhm2fcKoOMbzXVnSBs5abYDyiWuwA0rJeiTpamn
-         4LUqKW+5xyfdOE6Ko9F54hKxmjNsYjPQtZ1F0SxDdebabrfOIQJX4bFnz1845he7QA
-         oT5PKXEwtlUfYREESKqg/yorElfq2hPbzEfLuDsz+GLbS9dltoNX3N38d9epBSJuQO
-         eQvYu5dAzZSDvIeqsSKaJCF+BiSBcp9J2kOGXwEEm4QlY97T0+U3zJbB6vsIWkYX18
-         TFJGaTMTBnG2JF1qKqtkeluG/+Gf3bkWBoCNG45CiBPD3GG8QeQxusGY4z55CMeNq/
-         u+FIr+xYMQlvA==
-Message-ID: <80ad3bea4749243f4ba4b535889a0ad9.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A14E3806632;
+        Thu,  9 Feb 2023 21:53:16 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.50.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ECB16140EBF6;
+        Thu,  9 Feb 2023 21:53:14 +0000 (UTC)
+Date:   Thu, 9 Feb 2023 16:53:12 -0500
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Stefan Roesch <shr@fb.com>
+Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
+Message-ID: <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
+References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
+ <CAHC9VhS0rPfkwUT1WMfqsTF-qYXdbbhHAfVPs=d3ZQVgbXBHnw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1675318653-28352-6-git-send-email-quic_srivasam@quicinc.com>
-References: <1675318653-28352-1-git-send-email-quic_srivasam@quicinc.com> <1675318653-28352-6-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [PATCH v7 5/5] clk: qcom: lpassaudiocc-sc7280: Skip lpass_aon_cc_pll config
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org, swboyd@chromium.org
-Date:   Thu, 09 Feb 2023 13:50:41 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhS0rPfkwUT1WMfqsTF-qYXdbbhHAfVPs=d3ZQVgbXBHnw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2023-02-01 22:17:33)
-> Skip lpass_aon_cc_pll configuration for ADSP based platforms
-> based on qcom,adsp-pil-mode property.
-> This is to avoid ADSP out of reset fail.
->=20
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-> ---
+On 2023-02-01 16:18, Paul Moore wrote:
+> On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > fadvise and madvise both provide hints for caching or access pattern for
+> > file and memory respectively.  Skip them.
+> 
+> You forgot to update the first sentence in the commit description :/
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+I didn't forget.  I updated that sentence to reflect the fact that the
+two should be treated similarly rather than differently.
+
+> I'm still looking for some type of statement that you've done some
+> homework on the IORING_OP_MADVISE case to ensure that it doesn't end
+> up calling into the LSM, see my previous emails on this.  I need more
+> than "Steve told me to do this".
+> 
+> I basically just want to see that some care and thought has gone into
+> this patch to verify it is correct and good.
+
+Steve suggested I look into a number of iouring ops.  I looked at the
+description code and agreed that it wasn't necessary to audit madvise.
+The rationale for fadvise was detemined to have been conflated with
+fallocate and subsequently dropped.  Steve also suggested a number of
+others and after investigation I decided that their current state was
+correct.  *getxattr you've advised against, so it was dropped.  It
+appears fewer modifications were necessary than originally suspected.
+
+> > Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> > changelog
+> > v2:
+> > - drop *GETXATTR patch
+> > - drop FADVISE hunk
+> >
+> >  io_uring/opdef.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+> > index 3aa0d65c50e3..d3f36c633ceb 100644
+> > --- a/io_uring/opdef.c
+> > +++ b/io_uring/opdef.c
+> > @@ -312,6 +312,7 @@ const struct io_op_def io_op_defs[] = {
+> >                 .issue                  = io_fadvise,
+> >         },
+> >         [IORING_OP_MADVISE] = {
+> > +               .audit_skip             = 1,
+> >                 .name                   = "MADVISE",
+> >                 .prep                   = io_madvise_prep,
+> >                 .issue                  = io_madvise,
+> > --
+> > 2.27.0
+> 
+> -- 
+> paul-moore.com
+> 
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
+
