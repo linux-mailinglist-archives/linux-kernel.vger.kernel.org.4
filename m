@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6F6690A2F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76FC690A17
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjBINbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S230301AbjBINaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjBINar (ORCPT
+        with ESMTP id S229730AbjBINaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:30:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3125A901;
-        Thu,  9 Feb 2023 05:30:46 -0800 (PST)
+        Thu, 9 Feb 2023 08:30:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92B65A9F8;
+        Thu,  9 Feb 2023 05:30:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B901CB82130;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B55361A8D;
         Thu,  9 Feb 2023 13:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF381C43443;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA64FC4331E;
         Thu,  9 Feb 2023 13:30:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675949442;
-        bh=/tiungLfitFlSrlnkn8ELqW8HMOoeWc08EIHOdGt7VA=;
+        s=k20201202; t=1675949443;
+        bh=B2RPnBJRsHoCKuF0sSxZmpky7dK6bQqySe9k7JgSzc4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kNUJPPGiLLrkXQ7Lc7KLWcNPIwf6YxkF+AjzZksfbfktoP2qeVtUh6bdWj/JsgCGk
-         IuMGLGxWE+YmDJzztXFF1K/jXBzj2fLnoJBl372+kNML0FeheTA/twBYfynl+UW31m
-         y5uKw2SQPdKBYGv+Z3ZjuW0abhbEJHXbZEmNA4m4O7mkCR1TXzf/TLnNRwVmYI3n9E
-         mmLwPPGfUYX5ZiM72NuqXoUW9OuuVj11EskLUvkGL4czFr4MqAsOdt8ZXzAlJvqTHp
-         uvAQ8EHFwT9Fch1BwQYUz0I8zdzppnGTQxV4hRfAve+gpepM7V6OCBAOzgn79dj4X1
-         cHA9F7W2qCLXw==
+        b=izkiq/wiSL2iN7Y5//bt5KpdMPFqD8GyC3PntX7820fd2ChrKFcp0S3qB+QHyWrUB
+         cENZv3hPIOVBhhQCYvGXcIJWM5zKpX2deERHjg+UqvUvYcu4PLmjuwBZFdhzPARx/C
+         AEHDnp22Ef3GNGDgnb05pkIvTU0/s075IKfgKYozlUf4Raxzp5E7x2y5M28gaD3JgB
+         hsSN7A15xWCjDIm1tq4GPAPxKvXhktXsN8HqOIcJa+LBii3Uc1HgfrBgNLXNVFta6e
+         hdLAngCcV6+cWU+1Rl/9wu5zNBvupahpZL23NUCX59CkBJp1baYROf1PNqFIFYdO5u
+         my7XM0BBsYmbg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pQ71G-0001L0-Pm; Thu, 09 Feb 2023 14:31:22 +0100
+        id 1pQ71G-0001L5-SK; Thu, 09 Feb 2023 14:31:22 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
         Hsin-Yi Wang <hsinyi@chromium.org>,
         Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH v5 08/19] irqdomain: Drop dead domain-name assignment
-Date:   Thu,  9 Feb 2023 14:23:12 +0100
-Message-Id: <20230209132323.4599-9-johan+linaro@kernel.org>
+Subject: [PATCH v5 09/19] irqdomain: Drop leftover brackets
+Date:   Thu,  9 Feb 2023 14:23:13 +0100
+Message-Id: <20230209132323.4599-10-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230209132323.4599-1-johan+linaro@kernel.org>
 References: <20230209132323.4599-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,45 +62,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit d59f6617eef0 ("genirq: Allow fwnode to carry name
-information only") an IRQ domain is always given a name during
-allocation (e.g. used for the debugfs entry).
+Drop some unnecessary brackets that were left in place when the
+corresponding code was updated.
 
-Drop the leftover name assignment when allocating the first IRQ.
-
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
 Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- kernel/irq/irqdomain.c | 8 --------
- 1 file changed, 8 deletions(-)
+ kernel/irq/irqdomain.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 28d74549414b..3d635b8bb465 100644
+index 3d635b8bb465..a1c6e01b395e 100644
 --- a/kernel/irq/irqdomain.c
 +++ b/kernel/irq/irqdomain.c
-@@ -598,10 +598,6 @@ static int irq_domain_associate_locked(struct irq_domain *domain, unsigned int v
- 			irq_data->hwirq = 0;
- 			return ret;
- 		}
--
--		/* If not already assigned, give the domain the chip's name */
--		if (!domain->name && irq_data->chip)
--			domain->name = irq_data->chip->name;
- 	}
+@@ -221,9 +221,8 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
+ 	domain->host_data = host_data;
+ 	domain->hwirq_max = hwirq_max;
  
- 	domain->mapcount++;
-@@ -1155,10 +1151,6 @@ static void irq_domain_insert_irq(int virq)
+-	if (direct_max) {
++	if (direct_max)
+ 		domain->flags |= IRQ_DOMAIN_FLAG_NO_MAP;
+-	}
  
- 		domain->mapcount++;
- 		irq_domain_set_mapping(domain, data->hwirq, data);
--
--		/* If not already assigned, give the domain the chip's name */
--		if (!domain->name && data->chip)
--			domain->name = data->chip->name;
- 	}
+ 	domain->revmap_size = size;
  
- 	irq_clear_status_flags(virq, IRQ_NOREQUEST);
+@@ -631,9 +630,8 @@ void irq_domain_associate_many(struct irq_domain *domain, unsigned int irq_base,
+ 	pr_debug("%s(%s, irqbase=%i, hwbase=%i, count=%i)\n", __func__,
+ 		of_node_full_name(of_node), irq_base, (int)hwirq_base, count);
+ 
+-	for (i = 0; i < count; i++) {
++	for (i = 0; i < count; i++)
+ 		irq_domain_associate(domain, irq_base + i, hwirq_base + i);
+-	}
+ }
+ EXPORT_SYMBOL_GPL(irq_domain_associate_many);
+ 
 -- 
 2.39.1
 
