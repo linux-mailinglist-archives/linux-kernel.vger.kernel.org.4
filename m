@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D1A6902F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9626902F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjBIJLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        id S229535AbjBIJL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjBIJLj (ORCPT
+        with ESMTP id S229617AbjBIJL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:11:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0546425940
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:11:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90E4A61953
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 09:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E64C433A0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 09:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675933897;
-        bh=rUqnl2yhgg/wSh6GmALm2a+1dBTMU8RKuIViEGLb7cg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rjXcILcrjp8XTkk6APFP6VS9zYkrvh5Zyu1rMTYhweavvwRYgaQkAOBzjLPmn8DJX
-         pIWwXN2OSkeR7R33hzjvtKOqw/kKKEpRf2JTXkEojhFJ1iG6CLw6nOCy5YnmSPBevK
-         +XsDcAm+Xw1U3wa7WnQ/u8GGL6fAiJ3KHrHw+gVNm0QMoHrE+K7EoDWqx7Ard1jKqk
-         ab4CqeDFPYghFbIqv9t3rblWBYQf2h+7IlLisATFxh8EuwkGjAfcjiHaGv/K/JglrW
-         vcVDBf+1W90zIqwhAZDgQJCae1axNi4GAU+o9BCZmQzBzQsgQZpYAaFfn/2laHWTzJ
-         lsE4XIcBixwnA==
-Received: by mail-ed1-f48.google.com with SMTP id da9so1495308edb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:11:37 -0800 (PST)
-X-Gm-Message-State: AO0yUKVBxvMter5s2Z6IsJapxLfkOa+KqvLHub3tdXmDlQ7SRtoUQUZP
-        eS4LBpapeZ19P+2z5lX+hRYNuC6yvsQ6RYrhjzw=
-X-Google-Smtp-Source: AK7set+2zd+izyEqpj97HFiy856DccBJtPH7FTm1sSwGv31V2vQsWyM66vU6jjahWs1vauH5/qlsb6uSqOnq3gA7zik=
-X-Received: by 2002:a50:99c3:0:b0:49d:ec5d:28b1 with SMTP id
- n3-20020a5099c3000000b0049dec5d28b1mr2400808edb.7.1675933896149; Thu, 09 Feb
- 2023 01:11:36 -0800 (PST)
+        Thu, 9 Feb 2023 04:11:57 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D4783DE
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:11:49 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id y1so1078439wru.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:11:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kxvn5OMzyzBqETwPzu80u7hwe8zuuXrGX7TuXlP4qi0=;
+        b=hdwCkAFjfCYSHKqw8+smBlNg4fCdRKpQTd4YEielegmV0s3MRAorwpnoPeMHJRHWHZ
+         GSvgXupwKUkkicopfmiS+Mhm7bdK6XBHbi9bzTFk2R/ZzSb++inmoaePtx+UHfa6OMs7
+         sOXNRKvNfjnJUQimFfTKrLj6FaEdGF3O+xWdLkEVZM227bDBXkECuoNcOQzzIuseQ3I3
+         /UyOU1t2PmDa9FhOgyXYwE6+wn7rO01aREcZeah/2FK6ILNklzPOPZd24gaq7OWtqYS2
+         aZJPCbLPFraHKUl8NkZtCXTY50WKCHbt5D0BYV0wu5NcvhmoLDLi5wzzA5EeBOo3fmRO
+         YpRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kxvn5OMzyzBqETwPzu80u7hwe8zuuXrGX7TuXlP4qi0=;
+        b=jIDSTAYLxUMNRkRTB9t6iMfErHg0kUCP2r/WvyBW5v4qziN2P0Yoam3GpRfp6ksLTB
+         w/dYEb95Dh3xAaMtV53Ti8QuX++TPTUvUcIAvDg0cKxQS7pH9RVpQY6ypjMKY2/esdwL
+         teS4Duh08yKA+1LYP0yiV6NtNRh7RAaM60/E5JQiQR3eEx58LpMmu14rcNrus1Hj0gSo
+         0aKsC+x/7joscBa9vluuP9VC+8wk/VjNWMuECLpwQjUKI6lgfq3J/AukIAXW0UkLQHbQ
+         Af5U6oTnoURa4ChZADPXms1tyJalkuW5tYgViWDvgBCcRn5dTFF9pAt70z+20D8xL+/q
+         Nbfg==
+X-Gm-Message-State: AO0yUKXCDic90UuKhFRyYYhIbbZTOVJLw6eix041URNe24K4K0Gt+i5W
+        5XehAfXfMvSYsOBWqsW0fl2m4VHJkKpCHuno
+X-Google-Smtp-Source: AK7set8552ZGuPTfdL9T1or1CEjqNNE+WiEnvbxdUuMToBkzo+xCAMUKemqN2e8NlMREeQahOvMNug==
+X-Received: by 2002:a5d:6b4b:0:b0:2c3:ed18:2e96 with SMTP id x11-20020a5d6b4b000000b002c3ed182e96mr9711597wrw.13.1675933907856;
+        Thu, 09 Feb 2023 01:11:47 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s11-20020adfeccb000000b002bfcc9d9607sm720564wro.68.2023.02.09.01.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 01:11:47 -0800 (PST)
+Message-ID: <7ad7710b-2318-4c20-da2f-b0ee1a1a9cef@linaro.org>
+Date:   Thu, 9 Feb 2023 10:11:46 +0100
 MIME-Version: 1.0
-References: <20230112090603.1295340-1-guoren@kernel.org> <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
- <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
- <Y+DOyqehZvBJlb8N@FVFF77S0Q05N> <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
- <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N> <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
- <8154e7e618d84e298bad1dc95f26c000@AcuMS.aculab.com> <CAJF2gTQGxxgusRgPdNaw4-d+o0a4vefUj7PNpZuym6VKQC4dhw@mail.gmail.com>
- <f00256bcbe114669acca1b0105cefb99@AcuMS.aculab.com>
-In-Reply-To: <f00256bcbe114669acca1b0105cefb99@AcuMS.aculab.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 9 Feb 2023 17:11:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQuEiBMg=2KQXb3UZNaH_AdwCHNyNe07dbPd7JDGGExzg@mail.gmail.com>
-Message-ID: <CAJF2gTQuEiBMg=2KQXb3UZNaH_AdwCHNyNe07dbPd7JDGGExzg@mail.gmail.com>
-Subject: Re: [PATCH -next V7 0/7] riscv: Optimize function trace
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Evgenii Shatokhin <e.shatokhin@yadro.com>,
-        "suagrfillet@gmail.com" <suagrfillet@gmail.com>,
-        "andy.chiu@sifive.com" <andy.chiu@sifive.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "jolsa@redhat.com" <jolsa@redhat.com>, "bp@suse.de" <bp@suse.de>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "linux@yadro.com" <linux@yadro.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] dt-bindings: serial: snps-dw-apb-uart: add dma &
+ dma-names properties
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230208171715.70862-1-conor@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230208171715.70862-1-conor@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,39 +77,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 5:00 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Guo Ren
-> > Sent: 09 February 2023 01:51
-> ...
-> > Yours cost one more instruction, right?
-> >          addr-12  auipc
-> >          addr-8    jalr
-> >          addr-4    // Literal (32-bits)
-> >          addr+0   nop or jmp addr-n // one more?
-> >          addr+4   function_code
->
-> Yes, it is 4 bytes larger but there is one less
-> instruction executed (only one nop) when ftrace is disabled.
-> That probably matters more than anything in the ftrace
-> 'prologue' code.
-I've got your point, thx. I would consider your advice and make the tradeoff.
-
->
-> I also suspect that you can use a 32bit integer as
-> a table index in 64bit mode to save a word there.
-Yes, good idea. I've asked Mark Rutland. Let's wait for his feedback.
-It also helps arm64.
-
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+On 08/02/2023 18:17, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Commit 0c559bc8abfb ("dt-bindings: serial: restrict possible child node
+> names") exposed the Allwinner D1 devicetrees as users of unevaluated
+> properties, with a slew of similar warnings now appearing during
+> dtbs_check:
+> sun20i-d1-nezha.dtb: serial@2500400: Unevaluated properties are not allowed ('dma-names', 'dmas' were unexpected)
+> 
+> Document the missing properties.
+> 
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Best Regards
- Guo Ren
+
+Best regards,
+Krzysztof
+
