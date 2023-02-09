@@ -2,126 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44E6690D81
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6855B690D85
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjBIPrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:47:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S231636AbjBIPsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:48:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231524AbjBIPrW (ORCPT
+        with ESMTP id S231593AbjBIPsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:47:22 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32B25FC2;
-        Thu,  9 Feb 2023 07:46:51 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 319FkdpF004770;
-        Thu, 9 Feb 2023 09:46:39 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675957599;
-        bh=4uLEOL/7cdgOYUTQ8XvyqdOxOezuCTHfjMlJtO9i1zs=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Uoe7dW+0Py5NvKnh6F6M8We91YN3U3/6ozN/MDGjUnkF2fkY84sHQCmAtRJp62lNj
-         jSMs43dJ0KogOtVw/37YKQ/3X3ABcYWDignfB5UPOnRSFQ9Q1nwVzle66Kvj3GVxUH
-         VXvyB6llqxDVtx512gsa8wEXn6NJ+Vh7/Lm+qbEk=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 319FkdsE002058
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Feb 2023 09:46:39 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Feb 2023 09:46:39 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Feb 2023 09:46:38 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 319Fkcp5064155;
-        Thu, 9 Feb 2023 09:46:38 -0600
-Date:   Thu, 9 Feb 2023 09:46:38 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Devarsh Thakkar <devarsht@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <kristo@kernel.org>, <vigneshr@ti.com>, <hnagalla@ti.com>,
-        <praneeth@ti.com>, <a-bhatia1@ti.com>, <j-luthra@ti.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62a7-sk: Enable full 4GB DDR
-Message-ID: <20230209154638.zktj5hxthapwbicj@accompany>
-References: <20230206115240.6026-1-devarsht@ti.com>
+        Thu, 9 Feb 2023 10:48:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9E865681
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:47:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675957646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=99X2d/7PnkDB3y5oN6cAQuHXSUMM+INOtp1CuXvzmRI=;
+        b=aFxULGl1d+fJp8h3HlShyXaYcA+KLFHlTk/Dvy20d7Sw2XDscHN2z1N5J1wWNxyhe8DZMq
+        QLgjmLrn/jGxuwHm92CTLEVuolZvQJFno/8d9YiRzoB1h/XdnEbYbWhtyfzpg37FygMv2F
+        Yh8MEOELc0dNsLBDZnn4X/dZZatGXMQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-250-7LEumk4WNcK8yBPhlpASRw-1; Thu, 09 Feb 2023 10:47:23 -0500
+X-MC-Unique: 7LEumk4WNcK8yBPhlpASRw-1
+Received: by mail-ed1-f71.google.com with SMTP id g14-20020a056402090e00b0046790cd9082so1713653edz.21
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 07:47:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=99X2d/7PnkDB3y5oN6cAQuHXSUMM+INOtp1CuXvzmRI=;
+        b=FgctNgrKYaeKmWFCy+SgyPHGeMT84dHcBjBwLLKJQXPQXKujDSmv5iqOJ7a79Z0Jlh
+         jkWMpcOnMCVPP9otPrWjoj8KBWb4euH6uDw6HklZAHE1l/Jzcv+eRB0wHbyFW2PJ56Jw
+         CdZBE6ybmCde3PARmBkQBDrDk9/VcUto4mu5WueKHGZvBq5pdQzNi1Vh4eIYMotcFwfP
+         AV/7/Re0WDjutQCDMZj0DiHnNg/7TqjJ7JWLYiYbpvJdTYUHB+QBFoO/rr+CWtSoq58W
+         kFY6Jwtm8SbRpTUuXCuZa2OH9Qj7/IU6hkA0UNv+cCslQixDgvOXYiqfvsMocDf92ccs
+         wVAg==
+X-Gm-Message-State: AO0yUKW1ZT8qcZfZJNy1ZuntKtUkcx5cPj2uR0k+aGixUtnTMr056Nqc
+        X9GwlytHdy6KYNJn31IFqmt2z8hXIkACy5BkWUDwkzyZoNLLS0Myj9TtPjdau0KuBrwVwfHc2ze
+        a4x5/+QY6ys8s9pJaVefEItdl
+X-Received: by 2002:a17:906:798:b0:88f:6a7e:5fe8 with SMTP id l24-20020a170906079800b0088f6a7e5fe8mr13388232ejc.22.1675957642176;
+        Thu, 09 Feb 2023 07:47:22 -0800 (PST)
+X-Google-Smtp-Source: AK7set8bH9yXuyJR9Eq5RXP63IN3huxAmn1Eoy+f/b6jPBUGaB8xRuruSmBZGeDEKDCr9mS4qoPgqg==
+X-Received: by 2002:a17:906:798:b0:88f:6a7e:5fe8 with SMTP id l24-20020a170906079800b0088f6a7e5fe8mr13388216ejc.22.1675957642021;
+        Thu, 09 Feb 2023 07:47:22 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id se26-20020a170906ce5a00b0086621d9d9b0sm1012318ejb.81.2023.02.09.07.47.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 07:47:21 -0800 (PST)
+Message-ID: <f04fb55c-5fa8-f38d-d6e0-7ba29c1973f6@redhat.com>
+Date:   Thu, 9 Feb 2023 16:47:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230206115240.6026-1-devarsht@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: drm: panel-orientation-quirks: Add quirk for Lenovo IdeaPad Duet
+ 3 10IGL5
+Content-Language: en-US, nl
+To:     Darrell Kavanagh <darrell.kavanagh@gmail.com>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <CAMxBKG1RwbRJMG0cKcnbyKgznXeZLL+Zp1zXeOnxpYU0NkOO8A@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAMxBKG1RwbRJMG0cKcnbyKgznXeZLL+Zp1zXeOnxpYU0NkOO8A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17:22-20230206, Devarsh Thakkar wrote:
-> AM62A7-SK board has 4GB LPDDR4 Micron MT53E2G32D4DE-046 AUT:B memory but
-> only 2GB was enabled early.
+Hi Darrell,
+
+On 2/3/23 19:32, Darrell Kavanagh wrote:
+> Hi,
 > 
-> Enable full 4GB memory by updating the latter 2GB memory region
-> which gets mapped to 0x0880000000 i.e. DDR16SS0_SDRAM as referred in
-> Table 2-1. AM62A Common SoC Memory of AM62Ax TRM.
+> This is another Lenovo with detachable keyboard and 1200x1920 screen
+> mounted sideways.
 > 
-> TRM : https://www.ti.com/lit/zip/spruj16
-
-TRM makes no sense in this patch - it is the data sheet of the memory and part in
-schematics that is relevant
-
-Looking at the design files (link from dts): https://www.ti.com/lit/zip/sprr459
-E1 version of the board has MT53E2G32D4DE-046 Vs E2 version of the board
-is MT53E1G32D2FW-046
-
-The 2GB is accurate for E1 version of the board, 4GB change implies that
-E1 version of the board is no longer supported.
-
-Is the claim that E1 version of the board no longer supported? What
-happens to folks in the community who have an E1 board?
-
+> The following has been tested with 6.2.0-rc6.
 > 
-> Logs:
-> Link : https://gist.github.com/devarsht/e85b6af89c01ddadb3a62f3e5f196af8
+> Thanks,
+> Darrell
 
-Logs dont belong to the commit message. Also missing (if the patch is
-claiming a "fixes") is a Fixes tag.
-> 
-> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> index 5c9012141ee2..f6a67f072dca 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-> @@ -27,8 +27,9 @@
->  
->  	memory@80000000 {
->  		device_type = "memory";
-> -		/* 2G RAM */
-> -		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
-> +		/* 4G RAM */
-> +		reg = <0x00000000 0x80000000 0x00000000 0x80000000>,
-> +		      <0x00000008 0x80000000 0x00000000 0x80000000>;
->  	};
->  
->  	reserved-memory {
-> -- 
-> 2.17.1
-> 
+Thank you for your patch. Note that instead of "Hi, ... Thanks, Darrell"
+there should be a message describing the what and why of the patch
+here, see e.g. :
 
--- 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpu/drm/drm_panel_orientation_quirks.c?id=653f2d94fcda200b02bd79cea2e0307b26c1b747
+
+I also notice that the diff output below has a bit weird file-paths,
+so this patch is clearly not the output of "git format-patch" +
+"git send-email" on a standard linux source tree git clone.
+
+The whole kernel patch workflow can be a bit daunting if you are just
+trying to submit a small quirk like this.
+
+So you can either try again if you want to, or I can fix all of this up
+for you if that is preferred.
+
+If you want me to fix this up for you, there is one thing which I still
+need from you, your patch is missing a Signed-off-by line in the commit-message.
+I can only accept patches with a Signed-off-by line in the commit-message like
+this:
+
+Signed-off-by: Your Real Name <email@your.domain>
+
+By adding this line you indicate that you are the author of the code and
+are submitting it under the existing license for the file which you are
+modifying (typically GPL-2.0) or that you have permission from the author
+to submit it under this license. See:
+
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+
+If you want me to fix this up for you, please reply to this email
+with the proper Signed-off-by: ... line for me to add to the commit
+message.
+
 Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+
+Hans
+
+
+
+
+> 
+> index 3659f04..590bb7b 100644
+> --- a/kernel/drm_panel_orientation
+> _quirks.c
+> +++ b/kernel/linux-6.2-rc6/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> @@ -304,6 +304,12 @@ static const struct dmi_system_id orientation_data[] = {
+>                   DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "Lenovo ideapad
+> D330-10IGM"),
+>                 },
+>                 .driver_data = (void *)&lcd1200x1920_rightside_up,
+> +       }, {    /* Lenovo IdeaPad Duet 3 10IGL5 */
+> +               .matches = {
+> +                 DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +                 DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "IdeaPad Duet 3 10IGL5"),
+> +               },
+> +               .driver_data = (void *)&lcd1200x1920_rightside_up,
+>         }, {    /* Lenovo Ideapad D330-10IGL (HD) */
+>                 .matches = {
+>                   DMI_EXACT_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> 
+
