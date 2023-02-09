@@ -2,194 +2,651 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE2D68FD87
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC0868FD8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjBIC7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S232569AbjBIC7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjBIC6O (ORCPT
+        with ESMTP id S232362AbjBIC6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:58:14 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08EF40C0;
-        Wed,  8 Feb 2023 18:55:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675911336; x=1707447336;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=lRXLKoNt5hm1CGkoFkCCBZntCW4iHeb0hKUfbZO1xWQ=;
-  b=m9VVKviXSE0pU6KwlucyP3d5CcKBxU48qRcNJFl0x2rGuDn4IEnqmCxX
-   s/HfvfrsOU1qYU8TYOOvUNqq2L5vN/n1VVdfWDpca6mOc9euGH1dHMUA1
-   L79Y+7V/qlwM/9FR+o4RTebsZTTDRJgslGz0rP/bE9PEh0zwQhaUQO505
-   kkFHJ2LOj/JXsqkkwmX5WcyzODLMcrM7lUMB6aPlOsnVP3ZIStFW6vO48
-   EVGhXdf0WwjT5yTlKKGRktL9k3DiWjFKdWUb46B1afp6opOLEV9OrKBVD
-   vJBPvdnSP5gAWEMkDliOy+Cm85kIGHzz8SXIzP85V/7aKZ/kR+fXItVVG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="310354128"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="310354128"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 18:55:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="810170368"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="810170368"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2023 18:55:35 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 18:55:35 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 8 Feb 2023 18:55:35 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 8 Feb 2023 18:55:32 -0800
+        Wed, 8 Feb 2023 21:58:25 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2100.outbound.protection.outlook.com [40.107.220.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509CB5B80;
+        Wed,  8 Feb 2023 18:55:45 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bvtcZ8B5aa1bm8inJSIraYRj2QQVojLsYC2J3Y8A4S/l+nzHIThdoIJVkOIJF2c1PbzDmS9gF4ffDUVws7trKtAulT1jG1zAKPlRkkGhDwE0ImBpAeETo0AwsGZnactxBeZRt0b/OInnKMrQ77rXMRnXMcCepe4uKyxnWJbEGBbvLPXlFszcOUI50UX6OMJ71TnuH37SgSf+bBIHmLyxy9eAFDB7odhaoRbShqKhR/12zwmz0elM7eq+LCdqaasIMmRAJXiNiW1rrHr9gZSOps8K61JcgMYoB21YLUPeKmMTCiByQg7CvZY6ALJBGsDJdtwoOjGlSEZjMQLTOae0wQ==
+ b=bttoFjFjs8of+S7JLLJ9GB60sOJ2zbqBjZocd7eKtNyVYP0biCmbZpkP4cKOjlXVj/u+hgiGMzuCWwSLP+5oI+7T/HRbyS8TN6CrfGTTDJu55eyNKoKNWgAio+/YyiXGbpo4faGtbT576PujD1kyDuLu3BA8z4w1Xi6KT3DHyrBLlNd4GtJRBVcBDXhPc7jSmdCVSvXKkPnK+EYlUzO2hHfPUsk7XQxFI/rL6V2+1+Ph9M9b/Bm4heh+qxPNWX3gHDCwVIFq15/Sz/B2emLc4oE7PAW4rhsj7Up+zO6cOCOYyCL+TWXQTG1VUXuN/vwZg7LkVbGVJqO6RTQvztBNuw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8vu5PRkyMD6N8d/zNQMU+kUL1newoZFTLNsqPmbzpqQ=;
- b=YLmIKAqJO8ZSfWsV243m3DCYBGASD8nTMrNl8FJAGWPw+9tKL36KfVZdiYO6p6QQOIZ92Ltwp70DeDKbOPHKk+kRaC84ku2BD5IbXgxpm2a5wNRwRajykKAWJs5gK4cW3fOtW4xkhp7g7DBuNPj5N0xMNHNqFrC+weQ8wqzJPVRRdTx4NJf43amHzLZRdSt4fI89kMeZtT7Pf2Bi47k82l6cYu5q4O/N76Thny9qFk8QOmoevqODEA4bIiKu6vfAByyP5m3ymnHb27U5IaM50+9AIb+M3Y2TpXngCIKqm6IC15aKiBWXDZVSUtbTV1HkOF7ZBh8zbnr0XB6OhdPgaw==
+ bh=u3d3zEUaq76Xf+AaFo2h+ILuKAU+8A8HgVMCUkdHlzM=;
+ b=od9XuxDFbk5dKxMx3WYI7auXVHOkbpbdctjF/DaibVF0HB8054oH/naH2PXTWzxSjDiAW/Yq8AoULTGiltK9HDE7STk/Z6LwK9q37ti41C1R9tAUL8U5B8aXU6Q6zAo0AcT0cx1LPja4XrCOvoIWTzdBv/i4VB5+ke6nvD9d4VQ2i+cuHHoVYUKYMRWMw9AhOsN+2grUQ5qIspILk3vDmUhSHU9OUngtzYTm0rmyFqqA9ENg6v8vzZ8JQuJcAnTmGWkzrKDEskKvtFXUiOi+X4f7lNN3UX7jpmZniHUWHVC1eaveQD+pqKwS9bq2ci0kmb+4apPAM5gf4VVo06xZYQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BL1PR11MB5544.namprd11.prod.outlook.com (2603:10b6:208:314::19) with
- Microsoft SMTP Server (version=TLS1_2,
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u3d3zEUaq76Xf+AaFo2h+ILuKAU+8A8HgVMCUkdHlzM=;
+ b=Tl/wQwAQM4xvjmNxW0QsIcM2Y05CIfux/3sRsQzRIDlHJYLgGb2zDxpwX+movl7jhuv8+QvpCDXh6a7+Wmk2UjW7PlIfWaaYGIE6sL+GCw34hC9QMEeE32RgcjqtvdBp+MyYVG1V3bIag2al/r5LoVT20+sgIGpCZV92jQF2EBM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CH2PR10MB4391.namprd10.prod.outlook.com
+ (2603:10b6:610:7d::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
- 2023 02:55:25 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
- 02:55:24 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: RE: [PATCH v2 02/10] iommu: Introduce a new
- iommu_group_replace_domain() API
-Thread-Topic: [PATCH v2 02/10] iommu: Introduce a new
- iommu_group_replace_domain() API
-Thread-Index: AQHZOzoL2+M6IjP2sU+QmVuzFLJejK7F7DaQ
-Date:   Thu, 9 Feb 2023 02:55:24 +0000
-Message-ID: <BN9PR11MB5276859C11057878722F30988CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1675802050.git.nicolinc@nvidia.com>
- <fa81379dca611c1d9f50f9d8cd2bca0d4ec7f965.1675802050.git.nicolinc@nvidia.com>
-In-Reply-To: <fa81379dca611c1d9f50f9d8cd2bca0d4ec7f965.1675802050.git.nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB5544:EE_
-x-ms-office365-filtering-correlation-id: 631cd0a2-8c94-4ddf-f23d-08db0a491797
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6rczVKXURl34ciN410De91ytOJFwhOyKo3Sve35uI2bLSrRLqkcoxH/n5oNJMomo3rbJJ1DK/WFcA9y7Nksm4oQSnnWQghNn+CCZ6RoeOwPZggAuUJklDqHq+V9AFy0C7bWfcql9hMUoAb9l4LGblCQ3gfZzwaYciVT10cASC7MI9+Rd4Jnh2KTruttvWmfiP+x7Y/Hsp0k12HMDEcSQCjgDLSzK3HmJNl3brdO6R0v8xwjgF47g4g3eE2i6dwgA05RhnTMP/7iuEmryA8sjMWYTALzYySnzEj/JyvM8f6MoK8kknkM4/mCw6EENaKyu0OpqDOtDC0SkLcFQejfXQde6I873YnjcMekrGxjWw8qVF75AZ5WHLrqzFwScoPOODYkbblco2RGzSW5jHYI79x0+l7fFyyAEWAtHDcFpC+QmBB8bR0jTyuhZkWm3fUuhSscOYYQIoFnwkFDvgaUGaats382Y05QZkNmOU8bXjaTDvFH70l5AJEJl9rG44UTbFdPuAqVxYZYumUEAjpFYRRP/TkiyFaEg6hT6SeKDSj+JygqUD5KC0xYD1NWIgE+zNxzkwlYAqqb0fuLQd77E7jpmcZOtaJMIr4ckYhGzq1xPn8Ak9Nkcb4OKMs8VmPWKy2LKTwjpHlmswl9k1gX+Zlfs3pIuHj+atoB2/Lb+107YY4xKqSAQgNqwBDv0sZn4cWWIfnF3BN6IjqA4LyCLIw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(39860400002)(396003)(136003)(346002)(451199018)(83380400001)(55016003)(54906003)(2906002)(316002)(76116006)(110136005)(38070700005)(478600001)(82960400001)(38100700002)(71200400001)(122000001)(26005)(66556008)(66946007)(4326008)(4744005)(8676002)(41300700001)(6506007)(8936002)(5660300002)(7416002)(86362001)(64756008)(52536014)(33656002)(66446008)(9686003)(186003)(7696005)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?85K0fO4lA3cRxTSjz3B0Va1I8XYFixVV8vMnceuMW0FikxpSu6EGO0EdthbW?=
- =?us-ascii?Q?xeFKmdZLcA8HNS8LpqhIslsAf2c6c432/qi6l6d6x4p+zuLRGQxCGexMPMkH?=
- =?us-ascii?Q?+CEtcW/9XVjOBRbf3ZqxMMD6HDvzJ8CZRpdI2sA8wNN3n4ywyxxRPf3cHeLy?=
- =?us-ascii?Q?uiYeoJybwif54iEiLdGiDaYlvuBbuYYme50m9aQeqULpxo3pdg6qfcQi6zHi?=
- =?us-ascii?Q?JDeA793lba4LD2+8Z9Hb3SSN98Xu72Eryvcom2WQw5IG6w/uEPQC1H50wY34?=
- =?us-ascii?Q?CAlRyK1eXsNka5WWxThVMozle37kMVjCXjI/stt22nHRMGFxQWyPL6khYUgR?=
- =?us-ascii?Q?rMaoBzXEtKFP+FcAmC/+HqoQfHz0U/okaiUolouKyKgpox1IegItk+7gc8Oa?=
- =?us-ascii?Q?mCwOqv/fBjbje70mQQjhbXz1UOeN+lJtZwKn7ZeGp1k7hYnZ/84Mgkb1WpDB?=
- =?us-ascii?Q?ggCAwUQgPXmyYh2uZylVN6VHxgePrveMB2rLOj3X6shE/rQTYI2kVr8/HBj2?=
- =?us-ascii?Q?3GMAfqn2F4eK/b8qVvipNhWbpzaxwx1tq0CfwGF+ohhfjGhVSlg0YebiJkCo?=
- =?us-ascii?Q?vkiiaoD5jkr2TgJ8xZTDQlEgEcM/MHa9IDwb6/8xo5WuCyTrIqOB+yrCVbbI?=
- =?us-ascii?Q?zV0ST4KwQSjup7tVj7DGkm30F38u/FoJ93Oekwks1OdVXQ71ZwNRk63BHom2?=
- =?us-ascii?Q?tx2UITw2Nmn9/Fw1SAxU8ViKubfKpTx33ZaPqP5CxGE75uxwG4MZCq8h5BUZ?=
- =?us-ascii?Q?BiLpkYn2yincXUwEkw1R+twyqCB6F0nxoufxHhq8E5E7eOIqONCcqeUqkD5N?=
- =?us-ascii?Q?gWNjqf/rnA36tjUUyARUTZSyB/GnFqt+3XPDvvDGhxuf8tQFhQdIAy0sLYz2?=
- =?us-ascii?Q?86Pe35+zjdKpPcVWlcgIa4r0HMLYbt8wKE2EdBYgOGiUTD212Ot0y7iZUo2x?=
- =?us-ascii?Q?EFGH2D0fUZ4P+NvRDOeqcTzduGcEDYr1y64JPC8JgqO0d9yCycwkMoO3I9yT?=
- =?us-ascii?Q?Z7RflQ36YwJIaTPAtRA7ymsYWLHeT/h0gyOcdoH2KosXQtm4ZHJ5ha7Z4Zyd?=
- =?us-ascii?Q?XEH+ak1NiwEO0A+tjWBGhawvkButVqQddId8Fi9J9XX2NF6MxJSq8hc20tK9?=
- =?us-ascii?Q?yQVcUgI2DVjbJYkHl6xAkHFzOEHnkaTllt+psq7cBSxCL5Hh8yq73umvmfId?=
- =?us-ascii?Q?Ii/oe448heH82stSk9FClwwGVH2LzZt3xD1FSFcQ5KllvWxc89q82c74uuL0?=
- =?us-ascii?Q?pz0WWxNxXGI4NuzNL9YUVqYRUzgDvHpdGc8HwTknE/pTJYyMPAWSpvbTWQ1u?=
- =?us-ascii?Q?r4EnEdQKvt6ZSw/cMHVU2NPeY7gl3FUNn9Z0exQsQZ8kwxpWhJsI2x9WAa2W?=
- =?us-ascii?Q?Ch5dUam75EHN/Soo4Uv+6kkN3KTF61etpD4ca7jlWbjyEAY8ts7WILLFjuTc?=
- =?us-ascii?Q?rei8oVqFi6uymj9iGYMDSEn9N8NBdgnUCi8VEGSQPoAE0udpOqYjPDUYpPo1?=
- =?us-ascii?Q?2PgAzCAZuSXjz7j5PrYyk/NRXkvZNkGnzvLAIeT2B5jU5f/wqVKz3Wz4wY+1?=
- =?us-ascii?Q?+lIWG7gA3cub93nzWTs9GpqVC4toBU9WxfK3Vv5w?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 2023 02:55:43 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6086.017; Thu, 9 Feb 2023
+ 02:55:43 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Tony Lindgren <tony@atomide.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        soc@kernel.org, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v3 2/2] arm: dts: omap4: pcm959: add initial support for phytec pcm959
+Date:   Wed,  8 Feb 2023 18:55:25 -0800
+Message-Id: <20230209025525.148872-3-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230209025525.148872-1-colin.foster@in-advantage.com>
+References: <20230209025525.148872-1-colin.foster@in-advantage.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0156.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::11) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|CH2PR10MB4391:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6b57e81a-7ab8-4f13-b686-08db0a49225a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3Vk3SCsCnz6uQ+TvzgmAX/90nWXSrTUXlfXZXqlHvtAJhov57XtWc7cpxAcbGCOAKrpKCAbiSDWIfY6a8AXC+ZcreKdK9MHptn6kYCRK/hMuon08ivg4MuAPUCwlC2c0cPz4Lnhak11knYE9CGJ3VoDA7pt4PzST4jBbZzTmVSdP6Jr1d3llTrZh3crD4bXyY5543e0MfRp8F/PNdbAnwI5uA4xtziQ11UUDhDNygeI57//Qnn24Mp0HLG/EW7dBdaA16AuwcIHcn1Z5uczEZqfyUw8gtFHaivxZvth/FeYq2hjMFK1qWq5/YlFjvqq8dzcXD6k6iookKqSHa1RAtoS8Ewkrk2sYBY55oeRhY7lPduQEiTpnv4I0hcnHqIldNzzm5YPDqtTf0e7T8wh1NxJ2T5wXSgy6F2ocqPQtzF+dCSYUzYd08mC5f7PFoUzC3huAD4tNqw4zk6Is5QNeiZySXdACdLK9K0+dDqeuWg+bDQ1Tyf5FDd6TQQGc6f0NwEchyCDFsGu1z+8vhrky9kfAWIrLDYHsGBZSEtsMpVIeEhVR+wBuOfXXsJH8pi0wRFQULDrnZxc4hunvajxS3YOF1IVt9XMNRBMgfuNW1RcF9/SjszQ4PAQWGeQwtB556pbGvUTfexdZttsMM3/NAK3J5zUWKtnuuA641+n6XuGklqwv2mOTEGwmOMtTw0bxxlH2Efvy5jZ6nkGLTEDOIg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39830400003)(396003)(346002)(376002)(136003)(451199018)(4326008)(8676002)(66946007)(66556008)(66476007)(41300700001)(38100700002)(38350700002)(2616005)(316002)(186003)(26005)(2906002)(8936002)(1076003)(6506007)(6512007)(6666004)(86362001)(478600001)(6486002)(5660300002)(52116002)(54906003)(83380400001)(30864003)(7416002)(44832011)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RBrwha+vhI+sVahB1k38mb/eu/IisL6FRk0QNsATetVrSBPYmtmpA81nbsAx?=
+ =?us-ascii?Q?RujjoNY0OAJ9FISnOz088DK+JxtqOatlfA5erHwKQUbk6BXzVsSkIyMQi/0t?=
+ =?us-ascii?Q?4f0KckwIJpKiCP+mfqpz2yYRz2AMo8QU/4dN9wThR+oKF+WOnNS8wtQ+R5Ft?=
+ =?us-ascii?Q?XIMTEDMLcAlyK9nndm+FYwIEyAOtixl6dY5kpY+FzPG/1iv5jRRA4Cgk+L1b?=
+ =?us-ascii?Q?6uBramLs4CtsQHS1JKbkyvObhrN4Csl6HsxNPvcJDmo1kVmSfpuR2PZkvCiW?=
+ =?us-ascii?Q?CgArvpWIev9mMNd4gOGlQ7r/813hIq0SL0I4g6AGLWCnfwcZlnZJ/QtAYMDZ?=
+ =?us-ascii?Q?luPoL+bp5xAU3yQjCioPtwABH1TIsCPKlw9uv78Dx8oeUCvvM50BP0PKIsJv?=
+ =?us-ascii?Q?9KGK99Vzmcz/9sWyl/QJKcS5UczlhdIVyR/UOrGRQZZnHc1XYeV5lnf2hLzI?=
+ =?us-ascii?Q?GOvp9hsPn5ZcvDUtYgpmuhZAhWJwGxcf7LSQGikGvYSrveKjqgEeUFJQFcvT?=
+ =?us-ascii?Q?qutNsx8/n+fTBAwJcVRQEX4Ic6wm74B8TAONHE4pkBoz50hTKPkOD3bXGcsp?=
+ =?us-ascii?Q?8Wfp6cu5Oytjg9Kw5RAxU6hNe2lFnC8FxPsNehDJVJiAVXr/X3GAYa705mSb?=
+ =?us-ascii?Q?kuP2OOqRpamNz1Dve0g1KJOl/CYxvfWgKCpxZekVSH85rdrtn6Bq6/WzJLHu?=
+ =?us-ascii?Q?7Hx2sSr4mTkOgajflo54KjS2pxhr0HC7XH1hBbpYTIFbo4Aw5BroSow7z30J?=
+ =?us-ascii?Q?rY/IzVeNU//JEMZcnaT2PDqWhlp4M35/4pQlP7/vliPzSYXQmKybL39V9xV6?=
+ =?us-ascii?Q?zZgMrEfE9pTdSrlUYqSkHuN0cYP7lC1HYNK8XbRfrCpNyqTMUeA8X/S9Co93?=
+ =?us-ascii?Q?O/ioV+vOk67sQKwWzljuByUr4j2JfKwNT6fNT+Ll7xvpuj9iAGaqDSDHJDUg?=
+ =?us-ascii?Q?lfy4NQvCQufm/d42Xz44SJJmtcpmRQUPvgHWNMs3gThm57wXlkDCm+N7Zqyb?=
+ =?us-ascii?Q?Hf1YQNl39ygY1epC30vRtBqHzmdinnSfXaT7C/jrnoe+LkXibw2+zjVzMqyf?=
+ =?us-ascii?Q?GiFL8n1EoPipeusD17iD8BV3Btu8W6jf9W67hzn1d4ktFn8qt7aSEoOhIV3g?=
+ =?us-ascii?Q?QmmZhVBQ7TKWKkbYVY7Fok5v3IOeA7wkFQ7NuSsTsHDplrvNTrXXRsWEBEFw?=
+ =?us-ascii?Q?FwNdmBriykzWJYC+WzrAMnMxm9gW3e8yGrYHQ4Oa+u6ThyfVV+ErfXOvUATa?=
+ =?us-ascii?Q?VqTCNuI+i6dXE4WHGj7IohLW3hm2VM4xPdE4TfNJ2eACsMR2BD8GguCkQ/zP?=
+ =?us-ascii?Q?doTWRrzyJmjVhlmbq4q6sJuutLwbaK9v0QdWCa6AGodK2LH0k1ksu/cjK5yM?=
+ =?us-ascii?Q?8DFf4q2DzHiZZ7BxcP6Z+H78rizgFi/JigluIj6MJBkjE7Oc2AaWMMs23wjO?=
+ =?us-ascii?Q?yI7tX6UYUNFZ7SDnJIXrY9NU3Kqk/1rIFLjbrn3zLPlL1gkZlG8VmzYyBzvm?=
+ =?us-ascii?Q?QKRp0f2Dor5Pr90mOqDnmTHu4xAARmMLZDzcq9+OFvUaF0TSoMf/HqNGGsVZ?=
+ =?us-ascii?Q?xoSgYcTeugVOzIetM0ggGzrFxIqMMDjGIJNmvu+WE0vz3NJTNzD1MpYdBdfI?=
+ =?us-ascii?Q?rMHyvIPcC5cbh6gXIxpSbUI=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b57e81a-7ab8-4f13-b686-08db0a49225a
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 631cd0a2-8c94-4ddf-f23d-08db0a491797
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 02:55:24.7468
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 02:55:43.0817
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aOFnR1Ol2c5RvXzlWS3nOyQzBw3Mjpt2QsBVO7rtx9UzW2nzEY/qLx0YtRUrMKL4Ms6QUhKe/ma6ge+61MiHdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5544
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YFehgpiODG7BrcnL+o9APFNHVdQfeOtSKrwBcxD5KGCjBqrk2v5mTPLekV41exWtV8aHYqIBviMHK1KE4T8G6yVGgeAKF9fmnBfp5xPkZdQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4391
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Wednesday, February 8, 2023 5:18 AM
->=20
-> +int iommu_group_replace_domain(struct iommu_group *group,
-> +			       struct iommu_domain *new_domain)
-> +{
-> +	int ret;
-> +
-> +	if (!new_domain)
-> +		return -EINVAL;
+The Phytec PCM-959 is a development platform for the Phytec PCM-049 SOM.
+Add initial functionality for the board. The verified interfaces and
+peripherals are listed below for the SOM (PCM-049) and the dev board
+(PCM-959)
 
-Is there value of allowing NULL new domain so this plays like
-iommu_detach_group() then iommufd only needs call one
-function in both attach/detach path?
+The omap2plus_defconfig was used for testing. Only the On-board LEDs
+required CONFIG_LEDS_PCA9532 addition.
 
-> +
-> +	mutex_lock(&group->mutex);
-> +	ret =3D __iommu_group_set_domain(group, new_domain);
-> +	if (ret)
-> +		__iommu_group_set_domain(group, group->domain);
-> +	mutex_unlock(&group->mutex);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(iommu_group_replace_domain,
-> IOMMUFD_INTERNAL);
-> +
->  static int iommu_group_do_set_platform_dma(struct device *dev, void
-> *data)
->  {
->  	const struct iommu_ops *ops =3D dev_iommu_ops(dev);
-> --
-> 2.39.1
->=20
+PCM-049:
+i2c1
+  * EEPROM at 0x50
+  * TMP102 (hwmon) at 0x4b
+twl6030
+GPMC
+  * Ethernet
+  * Flash
+Serial (ttyS2 console)
+
+PCM959:
+MMC1
+On-board LEDs (with CONFIG_LEDS_PCA9532)
+
+Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+---
+
+v2->v3
+Code review changes:
+    * Remove unnecessary "okay" statuses
+    * Utilize gpio funciton / color instead of label
+    * Clean up pinctrl whitespace
+    * Change label of TWL6030 to "pmic"
+    * Clean up general whitespace
+Behavioral changes:
+    * Utilize "gpmc-wait" instead of "rb-gpios". The initial
+      configuration would suffer about a 1/100K NAND access
+      failure, snowballing into corrupted NAND after enough
+      boot cycles / downloads. This one was fun to figure out!
+    * Adjustments to gpmc-nand timings from testing.
+
+v1->v2
+    * Almost everything moved to the SOM (PCM049)
+    * Fix where omap_pmx_wkup were actually getting applied to
+      omap_pmx_core.
+    * Use hyphens instead of underscores for names
+    * Remove unnecessary entries of "status=okay"
+    * Use generic "regulator" and "led" names
+    * add compatible strings for the dev board and SOM
+
+---
+ arch/arm/boot/dts/Makefile                  |   1 +
+ arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi | 400 ++++++++++++++++++++
+ arch/arm/boot/dts/omap4-phytec-pcm-959.dts  |  48 +++
+ 3 files changed, 449 insertions(+)
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-959.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 6aa7dc4db2fc..ae8338cb5bb1 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -968,6 +968,7 @@ dtb-$(CONFIG_ARCH_OMAP4) += \
+ 	omap4-panda.dtb \
+ 	omap4-panda-a4.dtb \
+ 	omap4-panda-es.dtb \
++	omap4-phytec-pcm-959.dtb \
+ 	omap4-sdp.dtb \
+ 	omap4-sdp-es23plus.dtb \
+ 	omap4-var-dvk-om44.dtb \
+diff --git a/arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi b/arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
+new file mode 100644
+index 000000000000..3cc029599224
+--- /dev/null
++++ b/arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
+@@ -0,0 +1,400 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2022 Innovative Advantage, Inc.
++ */
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
++
++/ {
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x40000000>; /* 1 GB */
++	};
++
++	reserved-memory {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges;
++
++		dsp_memory_region: dsp-memory@98000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x98000000 0x800000>;
++			reusable;
++		};
++
++		ipu_memory_region: ipu-memory@98800000 {
++			compatible = "shared-dma-pool";
++			reg = <0x98800000 0x7000000>;
++			reusable;
++		};
++	};
++
++	chosen {
++		stdout-path = &uart3;
++	};
++
++	leds: leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&led_gpio_pins>;
++
++		led-0 {
++			function = LED_FUNCTION_HEARTBEAT;
++			color = <LED_COLOR_ID_RED>;
++			gpios = <&gpio5 0x18 GPIO_ACTIVE_HIGH>; /* GPIO 152 */
++			linux,default-trigger = "heartbeat";
++		};
++
++		led-1 {
++			function = LED_FUNCTION_DISK;
++			color = <LED_COLOR_ID_GREEN>;
++			gpios = <&gpio5 0x19 GPIO_ACTIVE_HIGH>; /* GPIO 153 */
++			linux,default-trigger = "mmc0";
++		};
++	};
++};
++
++&gpio1_target {
++	ti,no-reset-on-init;
++};
++
++&omap4_pmx_core {
++	pinctrl-names = "default";
++	pinctrl-0 = <&tps62361_pins>;
++
++	i2c1_pins: pinmux-i2c1-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x122, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c1_scl */
++			OMAP4_IOPAD(0x124, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c1_sda */
++		>;
++	};
++
++	i2c3_pins: pinmux-i2c3-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x12a, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c3_scl */
++			OMAP4_IOPAD(0x12c, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c3_sda */
++		>;
++	};
++
++	i2c4_pins: pinmux-i2c4-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x12e, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c4_scl */
++			OMAP4_IOPAD(0x130, PIN_INPUT_PULLUP | MUX_MODE0)	/* i2c4_sda */
++		>;
++	};
++
++	uart1_pins: pinmux_uart1_pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x126, PIN_INPUT_PULLUP | MUX_MODE1)	/* uart1_rx */
++			OMAP4_IOPAD(0x128, PIN_INPUT_PULLUP | MUX_MODE1)	/* uart1_tx */
++		>;
++	};
++
++	uart2_pins: pinmux-uart2-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x118, PIN_INPUT_PULLUP | MUX_MODE0)	/* uart2_cts */
++			OMAP4_IOPAD(0x11a, PIN_OUTPUT | MUX_MODE0)		/* uart2_rts */
++			OMAP4_IOPAD(0x11c, PIN_INPUT | MUX_MODE0)		/* uart2_rx */
++			OMAP4_IOPAD(0x11e, PIN_OUTPUT | MUX_MODE0)		/* uart2_tx */
++		>;
++	};
++
++	uart3_pins: pinmux-uart3-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x140, PIN_INPUT_PULLUP | MUX_MODE0)	/* uart3_cts */
++			OMAP4_IOPAD(0x142, PIN_OUTPUT | MUX_MODE0)		/* uart3_rts */
++			OMAP4_IOPAD(0x144, PIN_INPUT | MUX_MODE0)		/* uart3_rx */
++			OMAP4_IOPAD(0x146, PIN_OUTPUT | MUX_MODE0)		/* uart3_tx */
++		>;
++	};
++
++	led_gpio_pins: pinmux-leds-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x156, PIN_OUTPUT | MUX_MODE3)	/* gpio_152 */
++			OMAP4_IOPAD(0x158, PIN_OUTPUT | MUX_MODE3)	/* gpio_153 */
++		>;
++	};
++
++	pinctrl_tempsense: pinmux-pinctrl-tempsense-pins{
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x154, PIN_INPUT_PULLUP | MUX_MODE3)	/* gpio_151 */
++		>;
++	};
++
++	gpmc_pins: gpmc-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x40, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad0 */
++			OMAP4_IOPAD(0x42, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad1 */
++			OMAP4_IOPAD(0x44, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad2 */
++			OMAP4_IOPAD(0x46, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad3 */
++			OMAP4_IOPAD(0x48, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad4 */
++			OMAP4_IOPAD(0x4a, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad5 */
++			OMAP4_IOPAD(0x4c, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad6 */
++			OMAP4_IOPAD(0x4e, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad7 */
++			OMAP4_IOPAD(0x50, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad8 */
++			OMAP4_IOPAD(0x52, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad9 */
++			OMAP4_IOPAD(0x54, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad10 */
++			OMAP4_IOPAD(0x56, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad11 */
++			OMAP4_IOPAD(0x58, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad12 */
++			OMAP4_IOPAD(0x5a, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad13 */
++			OMAP4_IOPAD(0x5c, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad14 */
++			OMAP4_IOPAD(0x5e, PIN_INPUT_PULLDOWN | MUX_MODE0)	/* gpmc_ad15 */
++
++			OMAP4_IOPAD(0x60, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a16 */
++			OMAP4_IOPAD(0x62, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a17 */
++			OMAP4_IOPAD(0x64, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a18 */
++			OMAP4_IOPAD(0x66, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a19 */
++			OMAP4_IOPAD(0x68, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a20 */
++			OMAP4_IOPAD(0x6a, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a21 */
++			OMAP4_IOPAD(0x6c, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a22 */
++			OMAP4_IOPAD(0x6e, PIN_OUTPUT | MUX_MODE0)		/* gpmc_a23 */
++
++			OMAP4_IOPAD(0x82, PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* gpmc_noe */
++			OMAP4_IOPAD(0x84, PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* gpmc_nwe */
++
++			OMAP4_IOPAD(0x7c, PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* gpmc_nwp */
++			OMAP4_IOPAD(0x80, PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* gpmc_nadv_ale */
++			OMAP4_IOPAD(0x86, PIN_OUTPUT_PULLDOWN | MUX_MODE0)	/* gpmc_nbe0_cle */
++			OMAP4_IOPAD(0x8a, PIN_INPUT_PULLUP | MUX_MODE0)		/* gpmc_wait0 */
++			OMAP4_IOPAD(0x8c, PIN_INPUT_PULLUP | MUX_MODE0)		/* gpmc_wait1 */
++
++			OMAP4_IOPAD(0x74, PIN_OUTPUT_PULLUP | MUX_MODE0)	/* gpmc_ncs0 */
++			OMAP4_IOPAD(0x76, PIN_OUTPUT_PULLUP | MUX_MODE0)	/* gpmc_ncs1 */
++			OMAP4_IOPAD(0x92, PIN_OUTPUT_PULLUP | MUX_MODE0)	/* gpmc_ncs5 */
++		>;
++	};
++
++	ethernet_pins: ethernet-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x114, PIN_INPUT | MUX_MODE3)		/* gpio_121 */
++		>;
++	};
++
++	tps62361_pins: pinmux-tps62361-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x19c, PIN_OUTPUT_PULLUP | MUX_MODE3)	/* gpio_182 */
++		>;
++	};
++
++	mmc1_pins: pinmux-mmc1-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x0e2, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc1_clk */
++			OMAP4_IOPAD(0x0e4, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc1_cmd */
++			OMAP4_IOPAD(0x0e6, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc1_dat0 */
++			OMAP4_IOPAD(0x0e8, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc1_dat1 */
++			OMAP4_IOPAD(0x0ea, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc1_dat2 */
++			OMAP4_IOPAD(0x0ec, PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc1_dat3 */
++		>;
++	};
++};
++
++&omap4_pmx_wkup {
++	pinctrl-names = "default";
++	pinctrl-0= <&smartreflex_i2c_pins &fref_xtal_in_pins
++		    &fref_clk3_out_pins &sys_pins>;
++
++	ethernet_wkgpio_pins: pinmux-ethernet-wkup-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x66, PIN_OUTPUT | MUX_MODE3)		/* gpio_wk29 */
++		>;
++	};
++
++	smartreflex_i2c_pins: pinmux-smartreflex-i2c-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x4a, PIN_INPUT_PULLUP | MUX_MODE0)		/* sr_scl */
++			OMAP4_IOPAD(0x4c, PIN_INPUT_PULLUP | MUX_MODE0)		/* sr_sda */
++		>;
++	};
++
++	fref_xtal_in_pins: pinmux-fref-xtal-in-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x4e, PIN_OUTPUT | MUX_MODE0)		/* fref_xtal_in */
++		>;
++	};
++
++	fref_clk3_out_pins: pinmux-usb-refclk-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x58, PIN_OUTPUT | MUX_MODE0)		/* fref_clk3_out */
++		>;
++	};
++
++	sys_pins: pinmux-sys-pins {
++		pinctrl-single,pins = <
++			OMAP4_IOPAD(0x5e, PIN_INPUT | MUX_MODE0)		/* sys_32k */
++			OMAP4_IOPAD(0x60, PIN_OUTPUT | MUX_MODE0)		/* sys_nrespwron */
++			OMAP4_IOPAD(0x62, PIN_OUTPUT | MUX_MODE0)		/* sys_nreswarm */
++			OMAP4_IOPAD(0x64, PIN_OUTPUT_PULLUP | MUX_MODE0)	/* sys_pwr_req */
++			OMAP4_IOPAD(0x68, PIN_INPUT | MUX_MODE0)		/* sys_boot6 */
++			OMAP4_IOPAD(0x6a, PIN_INPUT | MUX_MODE0)		/* sys_boot7 */
++		>;
++	};
++};
++
++&i2c1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c1_pins>;
++
++	clock-frequency = <400000>;
++
++	twl: pmic@48 {
++		compatible = "ti,twl6030";
++		reg = <0x48>;
++		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>; /* IRQ_SYS_1N cascaded to gic */
++	};
++
++	core_vdd_reg: regulator@60 {
++		compatible = "ti,tps62361";
++		reg = <0x60>;
++
++		regulator-name = "tps62361-vout";
++		regulator-min-microvolt = <500000>;
++		regulator-max-microvolt = <1500000>;
++		regulator-coupled-max-spread = <300000>;
++		regulator-max-step-microvolt = <100000>;
++		regulator-boot-on;
++		regulator-always-on;
++		ti,vsel0-gpio = <&gpio5 22 GPIO_ACTIVE_HIGH>;
++		ti,vsel0-state-high;
++	};
++
++	temperature-sensor@4b {
++		compatible = "ti,tmp102";
++		reg = <0x4b>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_tempsense>;
++		interrupt-parent = <&gpio5>;
++		interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
++		#thermal-sensor-cells = <1>;
++	};
++
++	eeprom@50 {
++		compatible = "atmel,24c32";
++		reg = <0x50>;
++	};
++};
++
++#include "twl6030.dtsi"
++#include "twl6030_omap4.dtsi"
++
++&i2c2 {
++	status = "disabled";
++};
++
++&i2c3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c3_pins>;
++	status = "okay";
++
++	clock-frequency = <100000>;
++};
++
++&i2c4 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&i2c4_pins>;
++	status = "disabled";
++
++	clock-frequency = <400000>;
++};
++
++&vmmc {
++	ti,retain-on-reset;
++};
++
++&mmc1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&mmc1_pins>;
++
++	vmmc-supply = <&vmmc>;
++	bus-width = <4>;
++	status = "okay";
++};
++
++&mmc2 {
++	status = "disabled";
++};
++
++&mmc3 {
++	status = "disabled";
++};
++
++&mmc4 {
++	status = "disabled";
++};
++
++&mmc5 {
++	status = "disabled";
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&uart3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart3_pins>;
++	status = "okay";
++};
++
++&uart4 {
++	status = "disabled";
++};
++
++&elm {
++	status = "okay";
++};
++
++#include "omap-gpmc-smsc9221.dtsi"
++
++&gpmc {
++	ranges = <5 0 0x2c000000 0x01000000>,
++		 <0 0 0x08000000 0x01000000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&gpmc_pins>;
++	status = "okay";
++
++	nandflash: nand@0,0 {
++		compatible = "ti,omap2-nand";
++		reg = <0 0 4>;
++		interrupt-parent = <&gpmc>;
++
++		nand-bus-width = <16>;
++		ti,nand-ecc-opt = "bch8";
++		ti,elm-id=<&elm>;
++		linux,mtd-name = "micron,nand";
++		gpmc,device-nand = "true";
++		gpmc,device-width = <1>;
++
++		gpmc,cs-rd-off-ns = <40>;
++		gpmc,cs-wr-off-ns = <40>;
++		gpmc,adv-rd-off-ns = <25>;
++		gpmc,adv-wr-off-ns = <40>;
++		gpmc,oe-off-ns = <50>;
++		gpmc,we-off-ns = <30>;
++		gpmc,rd-cycle-ns = <75>;
++		gpmc,wr-cycle-ns = <75>;
++		gpmc,access-ns = <55>;
++		gpmc,wr-access-ns = <55>;
++		gpmc,wait-pin = <0>;
++		gpmc,wait-on-write = "true";
++		gpmc,wait-on-read = "true";
++
++		#address-cells = <1>;
++		#size-cells = <1>;
++	};
++
++	ethernet@gpmc {
++		reg = <5 0 0xff>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&ethernet_pins &ethernet_wkgpio_pins>;
++
++		/* Either GPIO 103 or GPIO 121. Use 121 to match the reference design */
++		interrupt-parent = <&gpio4>;
++		interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
++	};
++};
+diff --git a/arch/arm/boot/dts/omap4-phytec-pcm-959.dts b/arch/arm/boot/dts/omap4-phytec-pcm-959.dts
+new file mode 100644
+index 000000000000..03196e657161
+--- /dev/null
++++ b/arch/arm/boot/dts/omap4-phytec-pcm-959.dts
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2022 Innovative Advantage, Inc.
++ */
++/dts-v1/;
++
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/leds/leds-pca9532.h>
++#include "omap4460.dtsi"
++#include "omap4-phytec-pcm-049.dtsi"
++
++/ {
++	model = "Phytec PCM-959 Eval Board";
++	compatible = "phytec,pcm959", "phytec,pcm049", "ti,omap4460", "ti,omap4430", "ti,omap4";
++};
++
++&i2c4 {
++	status = "okay";
++
++	leddim: led@62 {
++		compatible = "nxp,pca9533";
++		reg = <0x62>;
++
++		led-1 {
++			color = <LED_COLOR_ID_RED>;
++			linux,default-trigger = "none";
++			type = <PCA9532_TYPE_LED>;
++		};
++
++		led-2 {
++			color = <LED_COLOR_ID_YELLOW>;
++			linux,default-trigger = "none";
++			type = <PCA9532_TYPE_LED>;
++		};
++
++		led-3 {
++			color = <LED_COLOR_ID_YELLOW>;
++			linux,default-trigger = "none";
++			type = <PCA9532_TYPE_LED>;
++		};
++
++		led-4 {
++			color = <LED_COLOR_ID_GREEN>;
++			linux,default-trigger = "none";
++			type = <PCA9532_TYPE_LED>;
++		};
++	};
++};
+-- 
+2.25.1
 
