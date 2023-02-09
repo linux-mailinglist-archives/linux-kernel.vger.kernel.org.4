@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1106908C4
+	by mail.lfdr.de (Postfix) with ESMTP id CA7DF6908C5
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjBIM2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S229899AbjBIM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjBIM2W (ORCPT
+        with ESMTP id S229892AbjBIM2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Feb 2023 07:28:22 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0F923C62
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:20 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id a2so1590099wrd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:20 -0800 (PST)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D1A126D8
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:21 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso3738032wmp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=la+zSqZHnDH4NrBUp1B5sU6rN4yJdP2UMwQ4cL39N1A=;
-        b=NjJeO8GgEt5hDiYdbv5bupUhixSFr+wUIsKkd+sY5GLYBTq3Hm+wfWYDNRbQCj3qyY
-         lOCho4plKkO9xSwt3s6vP5IOL3mcbj0Ex52Mfmy1ajY5I7d5jaohXOg55uyzw2cgg3KI
-         zgy84M8Q2FOmONb5dw8Q94MiDi+jbATkcD7EUUIhhDRYnFxgGTlyP3aKIr+4McvVWIGu
-         STr+HyKJGeHESpFdQIBMdibvzGHzG6bf02K5nMsod7TWj1YZmiLmmXL3cwAnjnQVSnB3
-         FMVlG4qroocbJHKg/bHiL9zWuyvnSsHQmeD/CtqPUwprP2y2DmVZaIuGXhyRuxevolhG
-         7wIw==
+        bh=J3ujPUkgM6w68JhuQ2OFyntLPvFx3aPpntFnJGR14xI=;
+        b=Ijtf7zQNxQutfacxe7HkX1oZwBtdY0P9UgLSO8dhkP1U65kpJZJY7R1MMUyp6Ct4cD
+         GLrKvMf4G8iPDCfLMR3KxkIlon3eS1Xk3zCwH/xrQT4V7rasfXSqO1W9FkT8JEwYG5nd
+         vP7HU4m5aPIf3u7g0VK2aJyRsrCAVSO4I+7yaTvQlY0tkYTo78Ug18ERnMuYx1t6mXeu
+         oZSmmi80y0kP5uJ/f6Ek8Y6oJvaacva8e/X8jBsI6J64GMqPq05H2DDCLPvWcgtqAy3k
+         aFstUecHk+zX1c8eISshFvZUTetRV1WcNNIufuMsAsWp1bBovtK8eJZpyD4YQlqFQtJO
+         IJQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=la+zSqZHnDH4NrBUp1B5sU6rN4yJdP2UMwQ4cL39N1A=;
-        b=UnvmK6DUkOKqRYH848vIuWqlFVYj66Qc3ixVxfzSDeRUnG0qNb9wh3ZhO4uMA1kzBH
-         JrQOsPSonmCv27fbGyQx36iH2CgDx4X7Wp3kRHuSyskyA6TCQbZIGgkeguw5oVS50cT6
-         QTntz2MCnQeEqJbc09VRRj+kRW8XgftEJkR6RalmXgF+sneqxivdusCLvpCHEj9fO+lf
-         XXzPwSFzU13Xla0zSnxep1vcqKzE2vmXxm5sV3zerf72eWXNqpaKMy33tSDmNl3IxYKR
-         Ss0Y4kxN/u5iytQ3G4JghkXlicrOtrDVabWkJl/B+pGfjAuzW9JqCjkOZmU1VtHMgsBO
-         7HJQ==
-X-Gm-Message-State: AO0yUKXAehZMMmOQ66DJGgq3g9aMCGGKyPArn6RftIva4NGay2423Mva
-        jv/sh+k+MBevWWrHhdRJaeK62A==
-X-Google-Smtp-Source: AK7set/AU65Rnx4Ciaza1virFRj0oTjWBnjQjLYEOCtTb8yh6x2aof018UXZTiQsjFqaLAQSMVUJWQ==
-X-Received: by 2002:adf:f9cc:0:b0:2c3:e7d8:245c with SMTP id w12-20020adff9cc000000b002c3e7d8245cmr10617613wrr.13.1675945699206;
-        Thu, 09 Feb 2023 04:28:19 -0800 (PST)
+        bh=J3ujPUkgM6w68JhuQ2OFyntLPvFx3aPpntFnJGR14xI=;
+        b=iixzwsf0x1hnqIjn8/8Seeznw9/USez6cA8Oy8KQH1iHUaNNKRxx+lXGI0smuFU2Yf
+         cwyI6kdCteVI/IixaZVvfdX6pcKlKHeSWfpufOOKKQeAD+nzQZuW2wV3aRAoXwpUoC6F
+         CCqUNNpfbDvzLptK90yS5hQp+ysF+L+N0id21xKh+ENvQC+9li9Tgc+CtmcRsqkWYgWM
+         SZMSdEQYJwRHLgiWr2R31YcTIT5sSQC8L5vRlZQB4RuXZWyNP2maYT0JFiYO0FPIKRZh
+         Ivf2b6qcO2G+kb4ooGfXpg+fo/mHIoMRX73ybdYrpZbCgmFmBoXKSUfqces3YoaLnNOr
+         VYZQ==
+X-Gm-Message-State: AO0yUKW0Pc8zOuF8D/eZj/za3585lGajokK59YB59tzfLKHDONnodtvF
+        zJ6pn2wb6NuPYkpX9Z3LZITswg==
+X-Google-Smtp-Source: AK7set9AiscBQz9AMthG4OOWx2uMKBCI8kOz4peYLZo64rXsBho4JKZR0is3unV5v8eYp3JKFk2CzA==
+X-Received: by 2002:a05:600c:511e:b0:3df:9858:c038 with SMTP id o30-20020a05600c511e00b003df9858c038mr5876254wms.13.1675945700377;
+        Thu, 09 Feb 2023 04:28:20 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.17
+        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 04:28:18 -0800 (PST)
+        Thu, 09 Feb 2023 04:28:19 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
         steev@kali.org, johan+linaro@kernel.org, quic_bjorande@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 3/8]  ASoC: qcom: q6apm-dai: Add SNDRV_PCM_INFO_BATCH flag
-Date:   Thu,  9 Feb 2023 12:28:01 +0000
-Message-Id: <20230209122806.18923-4-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 4/8] ASoC: qcom: audioreach: fix ADSP ready check
+Date:   Thu,  9 Feb 2023 12:28:02 +0000
+Message-Id: <20230209122806.18923-5-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
 References: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
@@ -73,62 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the moment, playing audio with PulseAudio with the qdsp6 driver
-results in distorted sound. It seems like its timer-based scheduling
-does not work properly with qdsp6 since setting tsched=0 in
-the PulseAudio configuration avoids the issue.
+currently q6apm_is_adsp_ready() will only return the cached value of
+previous result. If we are unlucky and previous result is not-ready
+then the caller will always get not-ready flag.
 
-Apparently this happens when the pointer() callback is not accurate
-enough. There is a SNDRV_PCM_INFO_BATCH flag that can be used to stop
-PulseAudio from using timer-based scheduling by default.
+This is not correct, we should query the dsp of its current state in
+irrespective of previous reported state.
 
-According to https://www.alsa-project.org/pipermail/alsa-devel/2014-March/073816.html:
-
-The flag is being used in the sense explained in the previous audio
-meeting -- the data transfer granularity isn't fine enough but aligned
-to the period size (or less).
-
-q6apm-dai reports the position as multiple of
-
-prtd->pcm_count = snd_pcm_lib_period_bytes(substream)
-
-so it indeed just a multiple of the period size.
-
-Therefore adding the flag here seems appropriate and makes audio
-work out of the box.
-
-Comment log inspired by Stephan Gerhold sent for q6asm-dai.c few years back.
-
-Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
+Fixes: 47bc8cf60e92 ("ASoC: qdsp6: audioreach: Add ADSP ready check")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/qdsp6/q6apm-dai.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ sound/soc/qcom/qdsp6/q6apm.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-index bd35067a4052..7f02f5b2c33f 100644
---- a/sound/soc/qcom/qdsp6/q6apm-dai.c
-+++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-@@ -64,7 +64,8 @@ struct q6apm_dai_data {
- static struct snd_pcm_hardware q6apm_dai_hardware_capture = {
- 	.info =                 (SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_BLOCK_TRANSFER |
- 				 SNDRV_PCM_INFO_MMAP_VALID | SNDRV_PCM_INFO_INTERLEAVED |
--				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME),
-+				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME |
-+				 SNDRV_PCM_INFO_BATCH),
- 	.formats =              (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE),
- 	.rates =                SNDRV_PCM_RATE_8000_48000,
- 	.rate_min =             8000,
-@@ -82,7 +83,8 @@ static struct snd_pcm_hardware q6apm_dai_hardware_capture = {
- static struct snd_pcm_hardware q6apm_dai_hardware_playback = {
- 	.info =                 (SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_BLOCK_TRANSFER |
- 				 SNDRV_PCM_INFO_MMAP_VALID | SNDRV_PCM_INFO_INTERLEAVED |
--				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME),
-+				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME |
-+				 SNDRV_PCM_INFO_BATCH),
- 	.formats =              (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE),
- 	.rates =                SNDRV_PCM_RATE_8000_192000,
- 	.rate_min =             8000,
+diff --git a/sound/soc/qcom/qdsp6/q6apm.c b/sound/soc/qcom/qdsp6/q6apm.c
+index 8a7dfd27d3c5..994c9e823a88 100644
+--- a/sound/soc/qcom/qdsp6/q6apm.c
++++ b/sound/soc/qcom/qdsp6/q6apm.c
+@@ -145,14 +145,6 @@ static void q6apm_put_audioreach_graph(struct kref *ref)
+ 	kfree(graph);
+ }
+ 
+-bool q6apm_is_adsp_ready(void)
+-{
+-	if (g_apm && g_apm->state)
+-		return true;
+-
+-	return false;
+-}
+-EXPORT_SYMBOL_GPL(q6apm_is_adsp_ready);
+ 
+ static int q6apm_get_apm_state(struct q6apm *apm)
+ {
+@@ -169,6 +161,15 @@ static int q6apm_get_apm_state(struct q6apm *apm)
+ 	return apm->state;
+ }
+ 
++bool q6apm_is_adsp_ready(void)
++{
++	if (g_apm)
++		return q6apm_get_apm_state(g_apm);
++
++	return false;
++}
++EXPORT_SYMBOL_GPL(q6apm_is_adsp_ready);
++
+ static struct audioreach_module *__q6apm_find_module_by_mid(struct q6apm *apm,
+ 						    struct audioreach_graph_info *info,
+ 						    uint32_t mid)
 -- 
 2.21.0
 
