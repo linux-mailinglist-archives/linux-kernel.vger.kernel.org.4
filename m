@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93355690444
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAA969044C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjBIJzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S229741AbjBIJ6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjBIJym (ORCPT
+        with ESMTP id S229511AbjBIJ57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:54:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89427A5D4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:54:36 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DB56150C;
-        Thu,  9 Feb 2023 01:55:18 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 016E23F71E;
-        Thu,  9 Feb 2023 01:54:32 -0800 (PST)
-Date:   Thu, 9 Feb 2023 09:54:27 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     David Laight <david.laight@aculab.com>,
-        Evgenii Shatokhin <e.shatokhin@yadro.com>,
-        "suagrfillet@gmail.com" <suagrfillet@gmail.com>,
-        "andy.chiu@sifive.com" <andy.chiu@sifive.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "jolsa@redhat.com" <jolsa@redhat.com>, "bp@suse.de" <bp@suse.de>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "linux@yadro.com" <linux@yadro.com>
-Subject: Re: [PATCH -next V7 0/7] riscv: Optimize function trace
-Message-ID: <Y+TC037Erd+bsrB7@FVFF77S0Q05N>
-References: <20230112090603.1295340-1-guoren@kernel.org>
- <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
- <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
- <Y+DOyqehZvBJlb8N@FVFF77S0Q05N>
- <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
- <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N>
- <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
- <8154e7e618d84e298bad1dc95f26c000@AcuMS.aculab.com>
- <CAJF2gTQGxxgusRgPdNaw4-d+o0a4vefUj7PNpZuym6VKQC4dhw@mail.gmail.com>
- <CAJF2gTQ61BHUgtPaaH49Srp6Y5NGD4Bvdvw1GF57owuw-h-+nQ@mail.gmail.com>
+        Thu, 9 Feb 2023 04:57:59 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2995917168
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:57:58 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1061685wms.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:57:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sfV9Do/HdQcq0uCvQUoySDURgWgOboDw/UZwNSh/pAM=;
+        b=fSx63I84gOz9OPIxJw6+FADvwnIIRIyjvbWceLbEwIzlrgvMjqfe9MEm61vibCO1zO
+         mThigyA7VOoeAMZdqZteWUtdoDker/xSwP/d23xWlB+GACN1nsnZElYk/Em7g/Nwb4GX
+         QxSyjCBZk46NrajzwZII3P074OVe0p7Cc4k8sZEA2zT2ymo3E6Qy3BBzQW4yobfT1eOa
+         BUaNNAV0F+1Xa+na5S7A4ojplSzUOmJeRY7utxeMigfwUFxrsAremUQyWkml3akMmXD1
+         y23yO4nNh5v7bnFKnkW6Y725JL18oxzZ1q1eqmD8Lapn7LOC0vKqoPzl8uc+YGAKnX1K
+         QovA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sfV9Do/HdQcq0uCvQUoySDURgWgOboDw/UZwNSh/pAM=;
+        b=LlRM9LbkY2goAzucs1aJ5/hExaTM0lpmNkE0/mo+wIMQfXkje4v/ZcG40kdkhh3vfh
+         LDx2R+axc4wz3heAdz9RlQbY47ZUVtnjF3H0ff4dbvDCAAVAMUx3Cvj23ZAn5jQEKcDx
+         eYB3wJUKlifuPIuuTesClkCVun6v4SAFfv0svCQRm/j/aQWjeQBhb7ex8aW2HdpcpUOj
+         ziLk+/qCofb8QOW5mEQyP5uEZGS46psNGAyZt9yRim1vNpJvt1y/dtVjW1C9emTA9qFT
+         0Y/0LJIXAvhGLi0pDVEzF2cVf6ia0DFoU9UOE0lHEaSilk/PTMBzUpM2RRgBYtZxiobP
+         6dQA==
+X-Gm-Message-State: AO0yUKWfGpEnbaKnKXivc2TT/5Uzo3t3qtIr3b7w+VwfreSDrTZJFEhQ
+        zGL7iAQy9xJYdYXNm7XXCMqykQ==
+X-Google-Smtp-Source: AK7set+qS3I9bog7FRrEMzV0+pxdlS90NpWG0myLi+/1qLIMC28to8WdM8qVVaZcgrCl9AQrTayQjw==
+X-Received: by 2002:a05:600c:1713:b0:3dc:5b88:e6dd with SMTP id c19-20020a05600c171300b003dc5b88e6ddmr10730501wmn.10.1675936676768;
+        Thu, 09 Feb 2023 01:57:56 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:7e6e:bfb6:975d:225b])
+        by smtp.gmail.com with ESMTPSA id c63-20020a1c3542000000b003df14531724sm4628913wma.21.2023.02.09.01.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 01:57:56 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2 0/3] arm: qcom: sa8775p: add socinfo support
+Date:   Thu,  9 Feb 2023 10:57:50 +0100
+Message-Id: <20230209095753.447347-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQ61BHUgtPaaH49Srp6Y5NGD4Bvdvw1GF57owuw-h-+nQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 09:59:33AM +0800, Guo Ren wrote:
-> On Thu, Feb 9, 2023 at 9:51 AM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > On Thu, Feb 9, 2023 at 6:29 AM David Laight <David.Laight@aculab.com> wrote:
-> > >
-> > > > >   # Note: aligned to 8 bytes
-> > > > >   addr-08               // Literal (first 32-bits)      // patched to ops ptr
-> > > > >   addr-04               // Literal (last 32-bits)       // patched to ops ptr
-> > > > >   addr+00       func:   mv      t0, ra
-> > > > We needn't "mv t0, ra" here because our "jalr" could work with t0 and
-> > > > won't affect ra. Let's do it in the trampoline code, and then we can
-> > > > save another word here.
-> > > > >   addr+04               auipc   t1, ftrace_caller
-> > > > >   addr+08               jalr    ftrace_caller(t1)
-> > >
-> > > Is that some kind of 'load high' and 'add offset' pair?
-> > Yes.
-> >
-> > > I guess 64bit kernels guarantee to put all module code
-> > > within +-2G of the main kernel?
-> > Yes, 32-bit is enough. So we only need one 32-bit literal size for the
-> > current rv64, just like CONFIG_32BIT.
-> We need kernel_addr_base + this 32-bit Literal.
-> 
-> @Mark Rutland
-> What do you think the idea about reducing one more 32-bit in
-> call-site? (It also sould work for arm64.)
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-The literal pointer is for a struct ftrace_ops, which is data, not code.
+This series adds support for qcom-socinfo for SA8775P SoCs.
 
-An ftrace_ops can be allocated from anywhere (e.g. core kernel data, module
-data, linear map, vmalloc space), and so is not guaranteed to be within 2GiB of
-all code. The literal needs to be able to address the entire kernel addresss
-range, and since it can be modified concurrently (with PREEMPT and not using
-stop_machine()) it needs to be possible to read/write atomically. So
-practically speaking it needs to be the native pointer size (i.e. 64-bit on a
-64-bit kernel).
+v1 -> v2:
+- fix ordering of socinfo defines
+- fix the commit subject line for patch 2/3
+- collect the Ack from Krzysztof
 
-Other schemes for compressing that (e.g. using an integer into an array of
-pointers) is possible, but uses more memory and gets more complicated for
-concurrent manipulation, so I would strongly recommend keeping this simple and
-using a native pointer size here.
+Bartosz Golaszewski (3):
+  soc: qcom: smem: update max processor count
+  dt-bindings: arm: qcom: add the SoC ID for SA8775P
+  soc: qcom: socinfo: add support for SA8775P
 
-> > > > Here is the call-site:
-> > > >    # Note: aligned to 8 bytes
-> > > >    addr-08               // Literal (first 32-bits)      // patched to ops ptr
-> > > >    addr-04               // Literal (last 32-bits)       // patched to ops ptr
-> > > >    addr+00               auipc   t0, ftrace_caller
-> > > >    addr+04               jalr    ftrace_caller(t0)
-> > >
-> > > Could you even do something like:
-> > >         addr-n  call ftrace-function
-> > >         addr-n+x        literals
-> > >         addr+0  nop or jmp addr-n
-> > >         addr+4  function_code
-> > Yours cost one more instruction, right?
-> >          addr-12  auipc
-> >          addr-8    jalr
-> >          addr-4    // Literal (32-bits)
-> >          addr+0   nop or jmp addr-n // one more?
-> >          addr+4   function_code
+ drivers/soc/qcom/smem.c            | 2 +-
+ drivers/soc/qcom/socinfo.c         | 1 +
+ include/dt-bindings/arm/qcom,ids.h | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
 
-Placing instructions before the entry point is going to confuse symbol
-resolution and unwind code, so I would not recommend that. It also means the
-trampoline will need to re-adjust the return address back into the function,
-but that is relatively simple.
+-- 
+2.37.2
 
-I also think that this is micro-optimizing. The AUPIC *should* be cheap, so
-executing that unconditionally should be fine. I think the form that Guo
-suggested with AUIPC + {JALR || NOP} in the function (and 64-bits reserved
-immediately bfore the function) is the way to go, so long as that does the
-right thing with ra.
-
-Thanks,
-Mark.
