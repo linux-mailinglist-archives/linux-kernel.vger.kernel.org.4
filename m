@@ -2,47 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2787E6903F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539B96903FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjBIJgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S229679AbjBIJkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjBIJgH (ORCPT
+        with ESMTP id S229515AbjBIJkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:36:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A77D3B0EB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:36:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D496184B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 09:36:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36F2C4339B;
-        Thu,  9 Feb 2023 09:36:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675935361;
-        bh=1hAyD7M3xjKCOTtuat/cLUesEuTBD1OtwoSuOHanH/g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NSH4mQStk9JoFV/izsTm2bZhUpoUILdHl7Oa0ByKa5dkBW7ORUTuFr64smAFvT23+
-         pgUhha7ttoEfdWQBIdveoxNOUkXrP013Xd6eOk5eJ5xllsivaFmhwMyP0/WPVXQcjF
-         WJhhtLuQHhU6ICoyiL5jCqKyKZhp0XSDEGcgAGTQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH] driver core: bus: add bus_get_dev_root() function
-Date:   Thu,  9 Feb 2023 10:35:56 +0100
-Message-Id: <20230209093556.19132-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        Thu, 9 Feb 2023 04:40:06 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E843E171A;
+        Thu,  9 Feb 2023 01:40:04 -0800 (PST)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3199HVrD002242;
+        Thu, 9 Feb 2023 10:38:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Ol2FAil1EFrxD0YCoc4RaKOOMiU4+0QQ6K3rmBBavMY=;
+ b=zS8kOrt2KVewz+s3mnOTmo7LU9Cc3ORYz7IBRYT5OTjObo1pyepsY+qE5HXkKKN66gpG
+ zziMaf9H7EmROzlrcyjB0I/xViLvFeWfY0cF8425FsZYoM9nFJAJX2fEaDPmtS/Gyvvt
+ ygEnpE96nP1nW3A6JaIGJmXFtnNXCmlCuPgLFYG+AYuMX+O4UU0oi0e8PfMtjQHqLffQ
+ 0NFpsXsAIv4nFggJogS6uMTO44x4AaNU8fit5z0y6zKZavsSTVjeqSaHilzCnUWgR/Df
+ V3NqFFGOR/JrE9YP4YSbYw41TTjdH+tR6aDFUumn17mklQS7fkLD1sxaTZSpAwowrWL+ dw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3nhdcg18v0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 10:38:23 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1C17210002A;
+        Thu,  9 Feb 2023 10:38:19 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EF17D210F8F;
+        Thu,  9 Feb 2023 10:38:18 +0100 (CET)
+Received: from [10.201.21.26] (10.201.21.26) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 9 Feb
+ 2023 10:38:16 +0100
+Message-ID: <c1d361d1-1599-230c-3609-88cd9f455114@foss.st.com>
+Date:   Thu, 9 Feb 2023 10:38:15 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3711; i=gregkh@linuxfoundation.org; h=from:subject; bh=1hAyD7M3xjKCOTtuat/cLUesEuTBD1OtwoSuOHanH/g=; b=owGbwMvMwCRo6H6F97bub03G02pJDMlP9lWbJjB+0TTv3GJx4l/do2lGGRPu1XL6ba/5/vThfkNm a6egjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZhIQBPDgpX9E9/7/L65NV7HfefFGP sDPWoPPBgWTHZQfxrt7y8rxy21NCGkYM7NH8HHAQ==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 02/11] ARM: sti: removal of stih415/stih416 related
+ entries
+Content-Language: en-US
+To:     Alain Volmat <avolmat@me.com>, Jonathan Corbet <corbet@lwn.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang Rui" <rui.zhang@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-pm@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230209091659.1409-1-avolmat@me.com>
+ <20230209091659.1409-3-avolmat@me.com>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20230209091659.1409-3-avolmat@me.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.26]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-09_05,2023-02-08_02,2022-06-22_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,119 +96,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of poking around in the struct bus_type directly for the
-dev_root pointer, provide a function to return it properly reference
-counted, if it is present in the bus.  This will be needed to move the
-pointer out of struct bus_type in the future.
 
-Use the function in the driver core code at the same time it is
-introduced to verify that it works properly.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/bus.c         | 20 ++++++++++++++++++++
- drivers/base/core.c        | 14 +++++++++++---
- drivers/base/cpu.c         | 10 +++++++---
- include/linux/device/bus.h |  1 +
- 4 files changed, 39 insertions(+), 6 deletions(-)
+On 2/9/23 10:16, Alain Volmat wrote:
+> ST's STiH415 and STiH416 platforms have already been removed since
+> a while.  Remove some remaining bits within the mach-sti.
+> 
+> Signed-off-by: Alain Volmat <avolmat@me.com>
+> ---
+>  arch/arm/mach-sti/Kconfig    | 20 +-------------------
+>  arch/arm/mach-sti/board-dt.c |  2 --
+>  2 files changed, 1 insertion(+), 21 deletions(-)
+> 
+> diff --git a/arch/arm/mach-sti/Kconfig b/arch/arm/mach-sti/Kconfig
+> index b2d45cf10a3c..609957dead98 100644
+> --- a/arch/arm/mach-sti/Kconfig
+> +++ b/arch/arm/mach-sti/Kconfig
+> @@ -19,31 +19,13 @@ menuconfig ARCH_STI
+>  	select PL310_ERRATA_769419 if CACHE_L2X0
+>  	select RESET_CONTROLLER
+>  	help
+> -	  Include support for STMicroelectronics' STiH415/416, STiH407/10 and
+> +	  Include support for STMicroelectronics' STiH407/10 and
+>  	  STiH418 family SoCs using the Device Tree for discovery.  More
+>  	  information can be found in Documentation/arm/sti/ and
+>  	  Documentation/devicetree.
+>  
+>  if ARCH_STI
+>  
+> -config SOC_STIH415
+> -	bool "STiH415 STMicroelectronics Consumer Electronics family"
+> -	default y
+> -	help
+> -	  This enables support for STMicroelectronics Digital Consumer
+> -	  Electronics family StiH415 parts, primarily targeted at set-top-box
+> -	  and other digital audio/video applications using Flattned Device
+> -	  Trees.
+> -
+> -config SOC_STIH416
+> -	bool "STiH416 STMicroelectronics Consumer Electronics family"
+> -	default y
+> -	help
+> -	  This enables support for STMicroelectronics Digital Consumer
+> -	  Electronics family StiH416 parts, primarily targeted at set-top-box
+> -	  and other digital audio/video applications using Flattened Device
+> -	  Trees.
+> -
+>  config SOC_STIH407
+>  	bool "STiH407 STMicroelectronics Consumer Electronics family"
+>  	default y
+> diff --git a/arch/arm/mach-sti/board-dt.c b/arch/arm/mach-sti/board-dt.c
+> index ffecbf29646f..8c313f07bd02 100644
+> --- a/arch/arm/mach-sti/board-dt.c
+> +++ b/arch/arm/mach-sti/board-dt.c
+> @@ -12,8 +12,6 @@
+>  #include "smp.h"
+>  
+>  static const char *const stih41x_dt_match[] __initconst = {
+> -	"st,stih415",
+> -	"st,stih416",
+>  	"st,stih407",
+>  	"st,stih410",
+>  	"st,stih418",
 
-diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-index 4c85d264113a..6db88965116a 100644
---- a/drivers/base/bus.c
-+++ b/drivers/base/bus.c
-@@ -1334,6 +1334,26 @@ bool bus_is_registered(const struct bus_type *bus)
- 	return is_initialized;
- }
- 
-+/**
-+ * bus_get_dev_root - return a pointer to the "device root" of a bus
-+ * @bus: bus to return the device root of.
-+ *
-+ * If a bus has a "device root" structure, return it, WITH THE REFERENCE
-+ * COUNT INCREMENTED.
-+ *
-+ * Note, when finished with the device, a call to put_device() is required.
-+ *
-+ * If the device root is not present (or bus is not a valid pointer), NULL
-+ * will be returned.
-+ */
-+struct device *bus_get_dev_root(const struct bus_type *bus)
-+{
-+	if (bus)
-+		return get_device(bus->dev_root);
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(bus_get_dev_root);
-+
- int __init buses_init(void)
- {
- 	bus_kset = kset_create_and_add("bus", &bus_uevent_ops, NULL);
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index e4b18f7ac58a..5f0933188a21 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3026,8 +3026,9 @@ static DEFINE_MUTEX(gdp_mutex);
- static struct kobject *get_device_parent(struct device *dev,
- 					 struct device *parent)
- {
-+	struct kobject *kobj = NULL;
-+
- 	if (dev->class) {
--		struct kobject *kobj = NULL;
- 		struct kobject *parent_kobj;
- 		struct kobject *k;
- 
-@@ -3075,8 +3076,15 @@ static struct kobject *get_device_parent(struct device *dev,
- 	}
- 
- 	/* subsystems can specify a default root directory for their devices */
--	if (!parent && dev->bus && dev->bus->dev_root)
--		return &dev->bus->dev_root->kobj;
-+	if (!parent && dev->bus) {
-+		struct device *dev_root = bus_get_dev_root(dev->bus);
-+
-+		if (dev_root) {
-+			kobj = &dev_root->kobj;
-+			put_device(dev_root);
-+			return kobj;
-+		}
-+	}
- 
- 	if (parent)
- 		return &parent->kobj;
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 441eb5bdec7d..8bb623039bb2 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -610,9 +610,13 @@ static const struct attribute_group cpu_root_vulnerabilities_group = {
- 
- static void __init cpu_register_vulnerabilities(void)
- {
--	if (sysfs_create_group(&cpu_subsys.dev_root->kobj,
--			       &cpu_root_vulnerabilities_group))
--		pr_err("Unable to register CPU vulnerabilities\n");
-+	struct device *dev = bus_get_dev_root(&cpu_subsys);
-+
-+	if (dev) {
-+		if (sysfs_create_group(&dev->kobj, &cpu_root_vulnerabilities_group))
-+			pr_err("Unable to register CPU vulnerabilities\n");
-+		put_device(dev);
-+	}
- }
- 
- #else
-diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-index 31be18608f83..6ce32ef4b8fd 100644
---- a/include/linux/device/bus.h
-+++ b/include/linux/device/bus.h
-@@ -282,5 +282,6 @@ enum bus_notifier_event {
- };
- 
- extern struct kset *bus_get_kset(const struct bus_type *bus);
-+struct device *bus_get_dev_root(const struct bus_type *bus);
- 
- #endif
--- 
-2.39.1
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
+Thanks
+Patrice
