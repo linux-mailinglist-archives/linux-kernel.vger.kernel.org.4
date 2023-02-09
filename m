@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4328568FC22
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 01:47:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFF068FC27
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 01:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjBIArv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 19:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
+        id S230403AbjBIAs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 19:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjBIArt (ORCPT
+        with ESMTP id S230404AbjBIAsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 19:47:49 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D242C1A948;
-        Wed,  8 Feb 2023 16:47:48 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id dr8so1862269ejc.12;
-        Wed, 08 Feb 2023 16:47:48 -0800 (PST)
+        Wed, 8 Feb 2023 19:48:47 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C702222DCE;
+        Wed,  8 Feb 2023 16:48:43 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id p9so2003049ejj.1;
+        Wed, 08 Feb 2023 16:48:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=csaUFD9XPMWnOfebSojpED5cJqAQggMa/pYn+VL37CM=;
-        b=Hcmg3NcuxMZp48JVIaeNVjLdopmTTlbGWWNWRC0ISw5Pvr2pPh4vnggQh4el9ERapf
-         ejxxuI1Z7/Fn69Qt/JUjfqKKUYMswGzh+1KVA9a6wkHn3SdGYkAqjeh1Pobu9RjQyo9o
-         +3RVtr7/bnatz9htnfW/CeAgNdKHTtjM6bn/E3HqVakJwEtHR+B1DwYty3cmGVW9VYq8
-         t9/PFo4ibQWMxq5N77EzESOZMrQDBV1GC7rvh4ceoT53EemhHA0GweR3E0stN1TKKrkc
-         JmCYO0d9qun5EpFHVkwOrfX9e42UXZCb0wOQXqFNjeNfkgiSEJ+oYPMRksCHz/6I5lLJ
-         zhzA==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=eDbaVncBUxxW6kHFQAB219yEc3jjR8rgvjX0ZRJGGLI=;
+        b=owlGzifOKwp5jzBkb30sf2Q44468amjyeChdsqnyPkshRgm2vxmEJWiD8A+xkDtPmo
+         8crFdtuSomkGOOGjyqd+h1tX4tOErOHvsMwIdKLy3a5owFjOLQZgv9H6jnm1MHSqWZ8z
+         O7bjvQpTxb6xOdLu9F/i77CZu/aWgy1uvRLuR0q9hvSVCPUi2F7pnoed8SVfNW+QQCcI
+         asseF/DlDiTLy+fjcNlbBdR0RizRZwUKBq+BAleNGzKexHCfv1MNXnMC0AhZkG9TsqbT
+         qZyFHLNKwSSbWUUsD1hhsR/reAndfqdFqtrt84ev/0ffCkP+jIsX6ydh9v+IuSinV7N5
+         Y32Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=csaUFD9XPMWnOfebSojpED5cJqAQggMa/pYn+VL37CM=;
-        b=4JUKPNhaHumwrEZabho6DZaJ38FHdr0l7Ay82FLvKYR6g1U29oKNOt+7gd1U56YFe8
-         ayJk6PPxE+8gPQhKe2tUncwIHN3NTyMkpFG+I1M7bpD9l42zYkE3FkG1KbNsFjjSYsRQ
-         7DwbzC9VN8WwrnoKMY1VA/IuaE2pPb1/2c4QW+Y47/wiwd7IDgPCRksmP/zz7prj1nDM
-         z/X8GOrjp6qyeeb24r5aAfut5AbjbrHNFCZXBPZiqvyXiMomS7FYYpSUptY33rgiEy5q
-         bYTYosQNBKoMGVJGmnwlZw4WlUmFfzxv2RXs5yf9RhWuq4w3DLeGS0SMdehtUhu2Nr6g
-         KDpw==
-X-Gm-Message-State: AO0yUKUXYY6VjWFh5jfvldqQa/ONHyvtQ+hTQL079DuAasZMXCvg2L/i
-        SPDiONbsUmCVDJZJhZ4A8xeH9i6nvhslzao4Sdk=
-X-Google-Smtp-Source: AK7set/d76zdEJveJUcIvOlKGZ+pCq9PFMXT1MU7EPKOOnVom4NJ66HyMBsOZb5jDHvehUhyf1m5btZIT5sSn3a/jxM=
-X-Received: by 2002:a17:907:2cec:b0:87b:dce7:c245 with SMTP id
- hz12-20020a1709072cec00b0087bdce7c245mr121870ejc.3.1675903667369; Wed, 08 Feb
- 2023 16:47:47 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eDbaVncBUxxW6kHFQAB219yEc3jjR8rgvjX0ZRJGGLI=;
+        b=24i+H+jVQtrVtXS588CO3X1TAv+v2cOVQvhCouHGa1ECCZyMalJHj0mmNW5lPtO80a
+         qlA4BefGoImqXFBwwZ873PH3JBAjhKndjLQo/K2+LTYcexhAPlgfLeazjFTUw2WO4Y30
+         HADyXdqIZn7zQMirex5vJrpfHQFonpg8t9BRiKnbrQ8Yo3g2/CkViyWZV+CjbfeCwBAM
+         7D9vkktoW3a9TlUqb1q5G4Ni2x3PgRAJi1fFWSx23Df1eBbEfotz+gm3G9E5GWSZ7jn9
+         J3o7OIHRL5vmTctMavpmZ+aZtq7Vo4OxevyEaf2wz9g8ndeIQPvAmNB5s2BX5UPyPEoc
+         3r3g==
+X-Gm-Message-State: AO0yUKX3WUYRe441aSihOnzvqA4d0abmLDRnXPN52P1wXNJwTv2mmhIu
+        mr+FmynI0W9W6pYkzJ00GVA=
+X-Google-Smtp-Source: AK7set9d9MdwEmHCInvuMBAXcUUNJ2bzVLkb3cgQH5xfddfwPDr2QGNCHjbNiPpYbQjIklKFd+Cvkg==
+X-Received: by 2002:a17:907:a64b:b0:8af:3382:e578 with SMTP id vu11-20020a170907a64b00b008af3382e578mr1106460ejc.4.1675903722190;
+        Wed, 08 Feb 2023 16:48:42 -0800 (PST)
+Received: from mobilestation ([91.193.176.27])
+        by smtp.gmail.com with ESMTPSA id a15-20020a1709063e8f00b0084cb4d37b8csm150757ejj.141.2023.02.08.16.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 16:48:41 -0800 (PST)
+Date:   Thu, 9 Feb 2023 03:48:37 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Evgenii Shatokhin <e.shatokhin@yadro.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Robin Murphy <robin.murphy@arm.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux@yadro.com,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Will McVicker <willmcvicker@google.com>
+Subject: Re: [PATCH v6 0/2] PCI: dwc: Add support for 64-bit MSI target
+ addresses
+Message-ID: <20230209004837.n62af6wxgjj4kxt6@mobilestation>
+References: <20220825235404.4132818-1-willmcvicker@google.com>
+ <decae9e4-3446-2384-4fc5-4982b747ac03@yadro.com>
+ <c014b074-6d7f-773b-533a-c0500e239ab8@arm.com>
+ <46ba97c9-85ff-eb47-0d05-79dc3960d7b4@yadro.com>
+ <20230203221216.c2s6ahm52ug5jtqv@mobilestation>
+ <66b01fd7-7466-5d76-c384-0758ceadee8e@yadro.com>
 MIME-Version: 1.0
-References: <20230204133535.99921-1-kerneljasonxing@gmail.com> <20230204133535.99921-4-kerneljasonxing@gmail.com>
-In-Reply-To: <20230204133535.99921-4-kerneljasonxing@gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Thu, 9 Feb 2023 08:47:09 +0800
-Message-ID: <CAL+tcoD9nE-Ad7+XoshoQ8qp7C0H+McKX=F6xt2+UF1BeWXKbg@mail.gmail.com>
-Subject: Re: [PATCH net 3/3] ixgbe: add double of VLAN header when computing
- the max MTU
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        alexandr.lobakin@intel.com, maciej.fijalkowski@intel.com,
-        alexander.duyck@gmail.com
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <66b01fd7-7466-5d76-c384-0758ceadee8e@yadro.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,55 +89,256 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC Alexander Duyck
+On Mon, Feb 06, 2023 at 02:27:41PM +0300, Evgenii Shatokhin wrote:
+> Hi Sergey,
+> 
+> First of all, thank you for the detailed explanation. It is clearer now what
+> is going on and why it is that way.
+> 
+> On 04.02.2023 01:12, Serge Semin wrote:
+> > Hi Evgenii
+> > 
+> > On Wed, Feb 01, 2023 at 04:54:55PM +0300, Evgenii Shatokhin wrote:
+> > > On 31.01.2023 15:42, Robin Murphy wrote:
+> > > > 
+> > > > On 2023-01-31 12:29, Evgenii Shatokhin wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On 26.08.2022 02:54, Will McVicker wrote:
+> > > > > > Hi All,
+> > > > > > 
+> > > > > > I've update patch 2/2 to address Robin's suggestions. This includes:
+> > > > > > 
+> > > > > >    * Dropping the while-loop for retrying with a 64-bit mask in favor of
+> > > > > >      retrying within the error if-statement.
+> > > > > >    * Using an int for the DMA mask instead of a bool and ternary
+> > > > > > operation.
+> > > > > > 
+> > > > > > Thanks again for the reviews and sorry for the extra revision today!
+> > > > > > Hopefully this is the last one :) If not, I'd be fine to submit
+> > > > > > patch 1/2
+> > > > > > without 2/2 to avoid resending patch 1/2 for future revisions of patch
+> > > > > > 2/2
+> > > > > > (unless I don't need to do that anyway).
+> > > > > 
+> > > > > The first patch of the series made it into the mainline kernel, but, it
+> > > > > seems, the second one ("PCI: dwc: Add support for 64-bit MSI target
+> > > > > address") did not. As of 6.2-rc6, it is still missing.
+> > > > > 
+> > > > > Was it intentionally dropped because of some issues or, perhaps, just by
+> > > > > accident? If it was by accident, could you please queue it for inclusion
+> > > > > into mainline again?
+> > > > 
+> > > > Yes, it was dropped due to the PCI_MSI_FLAGS_64BIT usage apparently
+> > > > being incorrect, and some other open debate (which all happened on the
+> > > > v5 thread):
+> > > > 
+> > > > https://lore.kernel.org/linux-pci/YzVTmy9MWh+AjshC@lpieralisi/
+> > > 
+> > 
+> > > I see. If I understand it correctly, the problem was that
+> > > PCI_MSI_FLAGS_64BIT flag did not guarantee that 64-bit mask could be used
+> > > for that particular allocation. Right?
+> > > 
+> > 
+> > William was trying to utilize for only software cause. Setting
+> > PCI_MSI_FLAGS_64BIT didn't actually change the hardware behavior.
+> > He could have as well provided just a driver private capability
+> > flag. (see below for a more detailed problem description)
+> > 
+> > > > 
+> > > > The DMA mask issues have now been sorted out,
+> > > 
+> > > I suppose, you mean https://lore.kernel.org/all/20230113171409.30470-26-Sergey.Semin@baikalelectronics.ru/?
+> > 
+> > Well, the way the DMA-mask issue has been solved was a bit of the
+> > hacky. I wouldn't call it a fully proper solution. The problem with
+> > pointlessly allocating physical memory for the iMSI-RX engine (it
+> > doesn't perform any DMA) and artificially restricting the coherent-DMA
+> > mask is still there. The patch in the subject was a compromise in
+> > order to at least permit unrestricted streaming DMAs but limiting the
+> > coherent DMAs for the MSI setup to work properly for all peripheral
+> > devices.
+> > 
+> > > 
+> > > It still breaks our particular case when the SoC has no 32-bit-addressable
+> > > RAM. We'd set DMA masks to DMA_BIT_MASK(36) in the platform-specific driver
+> > > before calling dw_pcie_host_init(). However, dw_pcie_msi_host_init() resets
+> > > it to 32-bit, tries dmam_alloc_coherent() and fails.
+> > 
+> > Yeah. That's another problem with the implemented approach. But are
+> > your sure the driver had worked even before this patch? AFAICS the
+> > driver allocated the MSI-targeted page from DMA32 zone before this
+> > modification. So the allocation must have failed on your platform too.
+> 
+> You are right. I did not notice earlier that the kernel based on 6.0-stable
+> we used before did actually contain our SoC-specific workaround for this.
+> Without that custom patch, initialization of PCIe host does not work. So,
+> yes, the problem was present earlier too.
+> 
+> > 
+> > > 
+> > > With 36-bit masks, the kernel seems to play well with the devices in our
+> > > case.
+> > > 
+> > > I saw your comment in https://lore.kernel.org/linux-pci/4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com/
+> > > that drivers should always explicitly set their masks.
+> > > 
+> > 
+> > > Is it a really bad idea to check the current coherent mask's bits in
+> > > dw_pcie_msi_host_init() and if it is more than 32 - just issue a warning
+> > > rather than reset it to 32-bit unconditionally? That would help in our case.
+> > > Or, perhaps, there is a better workaround.
+> > 
+> > The problem isn't in the value the mask is set to. The problem is
+> > two-leveled, but is mainly connected with the PCIe device detected on
+> > the PCIe bus. There are some of them which can't send MSI TLPs to the
+> > 64-bit addresses. Since we can't predict whether such devices exist on
+> > the bus beforehand the LLDD probe is performed together with the
+> > MSI-engine initialization, the solution was to just restrict the MSIs
+> > base address to be allocated within the lowest 4GB. Moreover as I said
+> > above the iMSI-RX engine doesn't actually cause any DMA thus there is
+> > no need in any memory allocation. Instead reserving some PCIe-bus
+> > space/DWORD for MSIs would be enough. Alas the PCIe-subsystem doesn't
+> > provide a way to do so. That's why we have what you see in the driver:
+> > DMA mask restriction and coherent DMA memory allocation.
+> 
 
-Hello Alexander, thanks for reviewing the other two patches of this
-patchset last night. Would you mind reviewing the last one? :)
+> So, if I understand you correctly, what is needed here is a small area of
+> PCIe address space accessible to any of the connected PCIe devices. As the
+> kernel does not know in advance, which restrictions the devices have, it
+> tries to allocate 32-bit-addressable memory, suitable for DMA. This way, it
+> would be OK for any attached PCIe device. Right?
 
-Thanks,
-Jason
+Right. The restriction is the 64-bit MSI capability. If any PCIe
+peripheral device has no PCI_MSI_64_BIT_ADDR_CAP flag set and the MSI
+target address is selected from the space above 4GB then such device
+MSIs won't be handled.
 
-On Sat, Feb 4, 2023 at 9:36 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
->
-> From: Jason Xing <kernelxing@tencent.com>
->
-> Include the second VLAN HLEN into account when computing the maximum
-> MTU size as other drivers do.
->
-> Fixes: fabf1bce103a ("ixgbe: Prevent unsupported configurations with XDP")
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
->  drivers/net/ethernet/intel/ixgbe/ixgbe.h      | 2 ++
->  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 +--
->  2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe.h b/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-> index bc68b8f2176d..8736ca4b2628 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe.h
-> @@ -73,6 +73,8 @@
->  #define IXGBE_RXBUFFER_4K    4096
->  #define IXGBE_MAX_RXBUFFER  16384  /* largest size for a single descriptor */
->
-> +#define IXGBE_PKT_HDR_PAD   (ETH_HLEN + ETH_FCS_LEN + (VLAN_HLEN * 2))
-> +
->  /* Attempt to maximize the headroom available for incoming frames.  We
->   * use a 2K buffer for receives and need 1536/1534 to store the data for
->   * the frame.  This leaves us with 512 bytes of room.  From that we need
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> index 2c1b6eb60436..149f7baf40fe 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> @@ -6801,8 +6801,7 @@ static int ixgbe_change_mtu(struct net_device *netdev, int new_mtu)
->         struct ixgbe_adapter *adapter = netdev_priv(netdev);
->
->         if (ixgbe_enabled_xdp_adapter(adapter)) {
-> -               int new_frame_size = new_mtu + ETH_HLEN + ETH_FCS_LEN +
-> -                                    VLAN_HLEN;
-> +               int new_frame_size = new_mtu + IXGBE_PKT_HDR_PAD;
->
->                 if (new_frame_size > ixgbe_max_xdp_frame_size(adapter)) {
->                         e_warn(probe, "Requested MTU size is not supported with XDP\n");
-> --
-> 2.37.3
->
+Note as I said above no DMA actually performed if at least one MSI
+vector is enabled. The driver just needs a DWORD within the PCIe bus
+space for the MSI MWr TLPs target address and EP+vector data. The MSI
+TLP data is decoded by the iMSI-RX engine in order to set the
+corresponding flag in the MSI IRQ status register. Such TLPs won't be
+passed to the master AXI-bus.
+
+> 
+> > 
+> > If only we had a way to auto-detected the PCIe-bus space with no
+> > physical memory behind it and take out a DWORD from it to initialize
+> > the iMSI-RX engine we could have immediately got rid from the mask
+> > setting operation and the memory allocation. It would have solved your
+> > problem too.
+> 
+
+> Yes, it would solve our issue too. I do not know, however, if a generic
+> solution is possible here, but I am no expert in PCIe.
+
+Currently the kernel PCIe subsystem doesn't provide a way to reserve a
+range within the PCIe bus memory with no physical RAM behind and left
+unused during the BARs resource initialization. Implementing such
+functionality (perhaps in the framework of the P2P module or based on
+it) would give the generic solution.
+
+> 
+> For now, we are probably better off with SoC-specific patches, when we know
+> which PCIe devices can possibly be used and what their restrictions are.
+
+Since you know that there is no any RAM below 4GB and you have
+matching CPU and PCIe address spaces, then you can just take any
+address below 4GB and use it to initialize the MSI-target address
+(dw_pcie_rp.msi_data). But make sure that the peripheral PCIe-devices
+don't use it for something application-specific (like accessing CPU
+MMIO devices mapped to that base address). That seems like the most
+universal solution for your case.
+
+-Serge(y)
+
+> 
+> > 
+> > -Serge(y)
+> > 
+> > > 
+> > > Looking forward to your comments.
+> > 
+> > 
+> > 
+> > > 
+> > > 
+> > > > so you, or Will, or anyone
+> > > > else interested should be free to rework this on top of linux-next
+> > > > (although at this point, more realistically on top of 6.3-rc1 in a few
+> > > > weeks).
+> > > > 
+> > > > Thanks,
+> > > > Robin.
+> > > > 
+> > > > > Support for 64-bit MSI target addresses is needed for some of our SoCs.
+> > > > > I ran into a situation when there was no available RAM in ZONE_DMA32
+> > > > > during initialization of PCIe host. Hence, dmam_alloc_coherent() failed
+> > > > > in dw_pcie_msi_host_init() and initialization failed with -ENOMEM:
+> > > > > 
+> > > > > [    0.374834] dw-pcie 4000000.pcie0: host bridge /soc/pcie0@4000000
+> > > > > ranges:
+> > > > > [    0.375813] dw-pcie 4000000.pcie0:      MEM
+> > > > > 0x0041000000..0x004fffffff -> 0x0041000000
+> > > > > [    0.376171] dw-pcie 4000000.pcie0:   IB MEM
+> > > > > 0x0400000000..0x07ffffffff -> 0x0400000000
+> > > > > [    0.377914] dw-pcie 4000000.pcie0: Failed to alloc and map MSI data
+> > > > > [    0.378191] dw-pcie 4000000.pcie0: Failed to initialize host
+> > > > > [    0.378255] dw-pcie: probe of 4000000.pcie0 failed with error -12
+> > > > > 
+> > > > > Mainline kernel 6.2-rc6 was used in that test.
+> > > > > 
+> > > > > The hardware supports 64-bit target addresses, so the patch "PCI: dwc:
+> > > > > Add support for 64-bit MSI target address" should help with this
+> > > > > particular failure.
+> > > > > 
+> > > > > 
+> > > > > > 
+> > > > > > Thanks,
+> > > > > > Will
+> > > > > > 
+> > > > > > Will McVicker (2):
+> > > > > >     PCI: dwc: Drop dependency on ZONE_DMA32
+> > > > > > 
+> > > > > > v6:
+> > > > > >    * Retrying DMA allocation with 64-bit mask within the error
+> > > > > > if-statement.
+> > > > > >    * Use an int for the DMA mask instead of a bool and ternary operation.
+> > > > > > 
+> > > > > > v5:
+> > > > > >    * Updated patch 2/2 to first try with a 32-bit DMA mask. On failure,
+> > > > > >      retry with a 64-bit mask if supported.
+> > > > > > 
+> > > > > > v4:
+> > > > > >    * Updated commit descriptions.
+> > > > > >    * Renamed msi_64b -> msi_64bit.
+> > > > > >    * Dropped msi_64bit ternary use.
+> > > > > >    * Dropped export of dw_pcie_msi_capabilities.
+> > > > > > 
+> > > > > > v3:
+> > > > > >     * Switched to a managed DMA allocation.
+> > > > > >     * Simplified the DMA allocation cleanup.
+> > > > > >     * Dropped msi_page from struct dw_pcie_rp.
+> > > > > >     * Allocating a u64 instead of a full page.
+> > > > > > 
+> > > > > > v2:
+> > > > > >     * Fixed build error caught by kernel test robot
+> > > > > >     * Fixed error handling reported by Isaac Manjarres
+> > > > > >    PCI: dwc: Add support for 64-bit MSI target address
+> > > > > > 
+> > > > > >    .../pci/controller/dwc/pcie-designware-host.c | 43 +++++++++----------
+> > > > > >    drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
+> > > > > >    drivers/pci/controller/dwc/pcie-designware.h  |  2 +-
+> > > > > >    3 files changed, 30 insertions(+), 23 deletions(-)
+> > > > > > 
+> > > > > > 
+> > > > > > base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+> > > > > 
+> > > > > Thank you in advance.
+> 
+> Regards,
+> Evgenii
+> 
+> 
