@@ -2,192 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41B868FE3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000D768FE3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbjBIEHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 23:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S229530AbjBIEIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbjBIEHX (ORCPT
+        with ESMTP id S233034AbjBIEIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:07:23 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DCF4201;
-        Wed,  8 Feb 2023 20:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675915640; x=1707451640;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=jw3YkgXIRF8BJnXk37o028tdqDuhdf6Rocu8O/QajCc=;
-  b=bMgSMFlYvcpzlYiuxFFkwA7l8kB0dpGpcItUPJWsuathVZtR6gVUrgeb
-   xi6FlmL7UfmE1uSynYlaB0W5xsrK9yKYhcn1sF9CDmiUfTxRsnZyQZ1aV
-   phXIMIAjcbM+9PDI6lF7XNUIwaEN4Qu8q2fSwCVgMhbPzngjtBIxlDm5Y
-   OFUEHk+wgAno2/VfWcAMuxebnB02mBFscyqTUHpay3dNINbaWd90J16T5
-   Xhu06Zoplsjb+dht+lTkmYOLFUdghLo5GNSI4BUW//vHFj6umkDIWfv4J
-   lBK+VuM0SpisYHvnnshXjZvguaoAUCMCOP4Y3kNRAMFrGRHgx7Jq5hnMf
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,281,1669100400"; 
-   d="scan'208";a="199621235"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Feb 2023 21:07:19 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 21:07:13 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Wed, 8 Feb 2023 21:07:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bun9LXNCoo21sXClh01Ke5GWpUWtEtouqYWu0rDZhlztqg/gVYArb0GQCxRV0Cc4bVCn3u2K1UNlGTXTMoY195oEkQwRC2FZe/oLJ03IIvJdRVzdY+WWI5NczQS8KZQbyONV60Avur2qhWlF3JmrD66FRpAk+5GQUh6D8yeMo4xz2DcCA2HJVvyR9oMdZETrvdH4OX9kgOkeU+C+bDfZceYquVLwz+Lz3ClRKkvys9iHGWZyPZaxTPhne1ls95+qXHbZxjzr+QCOODueDQpt5Ji89qGlTK1W/PP4I3NYbPJyxjRkqwrO0HBzCmXk/AiOPlbZDAbxY2cAaA+sOtYs9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jw3YkgXIRF8BJnXk37o028tdqDuhdf6Rocu8O/QajCc=;
- b=SBtjssARYuSuWDiQayziZP571Bi3evvbUAQ7ef16j8BWlXgZsiH6F6zlE8aYn66+nQG78IbAqXjnLfejbeb0T38LvEsoc9TBmn/uCmUPIixiWdUVGglSWCPQeBsc/PvbyLVSTI93/VoWtbQz+RSdAXAetyVWgDwNSDZtL+FAlNZeEvx36k/xbWsb44z8zrzQL7rvdsWFi48t4HE8b+nzE9mscveyZbq39dAr+ByFJORS+NB0ghFjoWwhmy+ZqeZTPa1kE4BatwZPfkmvHexElHgzvTRvq4Gc4dVtPKISQaBcQFGVY3WIqigOAOPXVA6h1YVh0aaEvX4icp53EXgRFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jw3YkgXIRF8BJnXk37o028tdqDuhdf6Rocu8O/QajCc=;
- b=V9wf6ysBrNxAw3elajFU7BLH41wFxeNzV0CjIj5nWZOV7nQyJJk3HHLZpLawBQBajS9Tp5CjxTwHdYdZ0gketNOE9pPLjh7pOMoVqxh2vllcq5BzF5VJ+tjMZInBzcoMBOoq812W9dUaHGam8SpwCrFl/JBszb58fKwJctESCEc=
-Received: from DM5PR11MB0076.namprd11.prod.outlook.com (2603:10b6:4:6b::28) by
- SA0PR11MB4767.namprd11.prod.outlook.com (2603:10b6:806:97::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.17; Thu, 9 Feb 2023 04:07:11 +0000
-Received: from DM5PR11MB0076.namprd11.prod.outlook.com
- ([fe80::33d3:8fb0:5c42:fac1]) by DM5PR11MB0076.namprd11.prod.outlook.com
- ([fe80::33d3:8fb0:5c42:fac1%5]) with mapi id 15.20.6064.035; Thu, 9 Feb 2023
- 04:07:11 +0000
-From:   <Arun.Ramadoss@microchip.com>
-To:     <olteanv@gmail.com>, <UNGLinuxDriver@microchip.com>,
-        <vivien.didelot@gmail.com>, <andrew@lunn.ch>,
-        <f.fainelli@gmail.com>, <kuba@kernel.org>, <wei.fang@nxp.com>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <o.rempel@pengutronix.de>, <Woojung.Huh@microchip.com>,
-        <davem@davemloft.net>, <hkallweit1@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <kernel@pengutronix.de>
-Subject: Re: [PATCH net-next v6 1/9] net: dsa: microchip: enable EEE support
-Thread-Topic: [PATCH net-next v6 1/9] net: dsa: microchip: enable EEE support
-Thread-Index: AQHZO6i8rQRV75tTjUqi+3V/hQ46ta7GAKUA
-Date:   Thu, 9 Feb 2023 04:07:11 +0000
-Message-ID: <332df2fff4503fac256e0895e4565b68fd76dee4.camel@microchip.com>
-References: <20230208103211.2521836-1-o.rempel@pengutronix.de>
-         <20230208103211.2521836-2-o.rempel@pengutronix.de>
-In-Reply-To: <20230208103211.2521836-2-o.rempel@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR11MB0076:EE_|SA0PR11MB4767:EE_
-x-ms-office365-filtering-correlation-id: 8045f712-8c06-4b07-ec47-08db0a531e87
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: p2lSaPCguL/OPo6+tOAPBpttS7Sj0fMmerZ9ZybJL4luGVo1tpMtML68f8/HDOkNT7otxxwq6HrSg9RrSyswC52ykAkL7LulP6RiaJZ7iXMuDFlM42Omygp99AuX97bhyQMq04vsMiURssTmBNxXwvLFZVmo1ugtR3Aej9qn84rAbMgTkHScQBe2sDSJGzp6SkAR78RXlQsGEtotj4Wm36HprzjkRogr2dg6Qkc/Addrtms3sWbfR0605fLadMiVzUEIZiFll6HK/uSclP5kB+t0AMEr2kzQBDoI4O2HdhDqZjx4CuyKSG0aCocEXLe4re+9Mn7rxh/VcSyQR7rbYd8Xhmny7PuIw8YUuNHfr+dFLpK8m7dbYFfuLDBYX9RoKFE/XwN61ONae5og7qVsfPF6abAHij/S09aSohE//qyxBWZbxsjC7Wb9ajV6Tkfv/8w/2f15UDK/WfmczO6cjNmeA/M9pKlw9Dl4R6uklBW7CWC3i04iTOE2+HFUTIOBMbWlq9rj60E4XkyGZ0WoNag2Z3abey8J4WRInSUdzUhRZ4qivJCIKq4VNrERkSA16+n9EahGp+l5rpw+6vfwyHidQ0PhLDsmndWHrpYKRA32DtEJAQRYqC13oNfO60+XQTLhIfbplQEvi8YP+BRftnVei0t+WyXRLvtpRzcoK/B2/uJrL1dkvE2DtVbCCmxod2H5QriixLtdW3Z6Z7kgmk6PKrx/BbCYJyzzvnrgEw6EHZi+m+e7Aq6cU32jJsrk
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB0076.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199018)(38070700005)(6506007)(921005)(36756003)(71200400001)(86362001)(6486002)(478600001)(2616005)(122000001)(6512007)(26005)(186003)(83380400001)(38100700002)(8936002)(41300700001)(8676002)(316002)(54906003)(5660300002)(110136005)(7416002)(91956017)(76116006)(66946007)(2906002)(4326008)(64756008)(66446008)(66556008)(66476007)(99106002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bk43aWVvTHhnSDNLeWlKSjR4K0cwYk1KR1R2R2RUdTBGYWk3dzJqcmJBMlMz?=
- =?utf-8?B?aW51NzljYmdQY1RTWTBBS05sYUt5dWtwK2c1ZkFabEQ0Vk56SkhHTk04Ymda?=
- =?utf-8?B?a2cybm9xTVp1d1U5S084VHdiSlplWG5pRjVwVmRkTTd0eGdEOE4wbW5zS0Nt?=
- =?utf-8?B?ajBnSm05SnZXSDRiTFJtNXNvQy9Fc0hSaVExa3MxMFE4MVNDMWVZb0Ezb2tl?=
- =?utf-8?B?TEwzMkoxanYxdWlXK3Jua1FUYm16MVNVbzR4UFRNMG5rUC9kZHdYTUIzVnNs?=
- =?utf-8?B?Rks3Wmd1dktFdy8rZmlPbWMzSGF3NTJrR0pCTEV0Mk9XbVpTL21KdVVFN3o3?=
- =?utf-8?B?TXh5UkM2SDFJbCtRZTgxU3NuZW9pN1p3bFdyaXM2QzAvekUxU2Joc0lMRzA5?=
- =?utf-8?B?T3ZGSU0wR1g2TmtGdXJHMjJ0cStHeTNxY3MwdXZVQm9Pbjkwekh0aGJ4RUh2?=
- =?utf-8?B?ZVVMYW1IbVVBNXlBcjJSQTJpemNJWEczUnVZbUd2MC9TSGpWQUFPOWpuZCs3?=
- =?utf-8?B?M0ZiZ2I5bkVFTytrcWxvSTU0emk3cmltcDVVdUc0UHBNR0xiY1YvUFJVTkIv?=
- =?utf-8?B?L1BrdzVZUktMLy91UGM3VFJqblFSclNHN1VLbXYxRU5wS012UllhQm5aUHgv?=
- =?utf-8?B?MmNsZUlkb2k1V1k3SitPYlcxMEF2UlNVZG51VjVXZlJmdnlNc0NzQ0YzNHcw?=
- =?utf-8?B?US9BWTlMR0FHc2tSWU1ub3o1elcxeDFLWUtrbjhpcGl4S2hJL1VDdEpIY3kz?=
- =?utf-8?B?TnBOVEtQR2dETmRIbE5ZSzFiZmdNMHh6RElEalZuaE5mTFpIS3NISzFOUTE0?=
- =?utf-8?B?VGNTU01qNmFNRElXVVlUQVZQcXczM0Y4U3AvcHNLNVd5d0NBSUk0OEM0TXRi?=
- =?utf-8?B?QUp3TnhnRm1WMGRHc29Ob3R2NzhzcmJzU0dyaXcvbDUwRGZlNHFzQzkwdGtq?=
- =?utf-8?B?VE8yMjk1TXhkeHNVOXM2TEpUWTNmSnVPdVNFSWxZOGx6bG1TYUgrSlhBL2tG?=
- =?utf-8?B?WlFCblhMZEFuQkoyMExSSFQ0RjRsZ3hPYzhobWtLOGlPcHUwWEtpTlUxUU1D?=
- =?utf-8?B?bnQwRmlrc3FsSGg1U2tiaVgybWNabVdmMlloaHdBYmVlRC9RUEZUL0NRdHhk?=
- =?utf-8?B?RFozbDd0dTdFcHUxZXJOd2hjOVVzS0ZvUTJUQlBvQzNiaWEwejZINTUzeTAw?=
- =?utf-8?B?cHhWejFPa1UwNEhMQlJTK285c1F0SjArL3YxVTlhUmdmblpUVHcyT1BFN3VM?=
- =?utf-8?B?RU1GMzlVeDF0QkVpRTM0MHBOLzIvRFBxKzY5Y0dzZXJwTGxnNlBBUjN3Y0dD?=
- =?utf-8?B?WmYwUDVQU0hVdFNVRWlSb2RJbmkyL2p6ZmRWWlpkZTk1Q2d3SDZUZnBLcS9s?=
- =?utf-8?B?c2FCN0gwQ2Y3aUlHV1dJVmo4ODJqS3p1aW1yOFBqZWJ6TWQ0RkxOV1hnZ1Zs?=
- =?utf-8?B?SnpGeW9EcXZsMUcvWUdGS0g3Y2VUekovVC9ZWE1Kem1WOXUxck5hS0QyeWNS?=
- =?utf-8?B?T3k4RG43SWEwdEdYVUZjcFQ5TGIvUmtvb01OcTlBcHVac3lmVDlFVUVKak43?=
- =?utf-8?B?SzhCaWxzazM4UHJTN1lVRDBCM2lFancrcklkaXFNVFNFR2VoeGlnT1VubzY2?=
- =?utf-8?B?eU4zNnp6OU13L2tzU2hqcmtxRUZ3Mm5PemNLSTA5ampVbTJQZVdZRGdkMVc1?=
- =?utf-8?B?Q0wyWFVnN1hZQ0RnRFZXM0hheE43c0VRSWdJNDhBeGE0cm1EdHAxZmU2QzhY?=
- =?utf-8?B?Y0tzVFJiWGxzZTdndGJNUFk4QVBoOXMxSElaZnNOTGRNOGxWZWgwbGRBUDU4?=
- =?utf-8?B?UUhoSy9ObW9yMmdFMDVBaWQ3VHdaTm9JdW1zamQxYVVseGxaNVJjZjF4cVhX?=
- =?utf-8?B?dUIxV05PQTAxblFVMXE3aGRhek1McVNWaFZ3YmVORjJmbitXangrVSttTjhk?=
- =?utf-8?B?cnY0ditwWkZxVHdrOS9CQXkvV0VqcUc4NURIMHBhb1U1WWR5T2J2YnBzc0Yw?=
- =?utf-8?B?WEl2b09RUVJ6UFNRcnR2MU0ycVRHTklQWm9yNGIwRnZhRUlWcnJFUWhDNnd2?=
- =?utf-8?B?MUc5elRBSm0zaFZHOFV4RDFIVEpFc1pyOE5nVi9EWUd4V0JaOUltR3QvNzJ6?=
- =?utf-8?B?d2VjZmJiaUtFK3oxam10b09UUXFKUlE1ckcwK1VjelU1UXZETUZ6OE44ZmJL?=
- =?utf-8?Q?ekYFl1TB7CPkr9fmj69lAhc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C746B84289FBE04D8C4AEC364415E006@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB0076.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8045f712-8c06-4b07-ec47-08db0a531e87
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 04:07:11.3219
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nqfCw5dFbExGOK7J31Ln53z1lcWYPr1mDqbaddlsXY4Nqdb9L42fd+K9k1KJATeAAgLGqehygkuAvSvynA03+XNB95lwYRZrkdATJuW+fJU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4767
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 8 Feb 2023 23:08:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409B2903A
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 20:08:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89BAD61838
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F6EC433EF;
+        Thu,  9 Feb 2023 04:08:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1675915709;
+        bh=pHJypjgeDSW+11z03k8Qy0ZiPxB15zj8h5OsUvUjIdM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fJmx7LmC3VIWvSWeCitVOw2zg8kbhehG3WbBeiLxT76ErH2PV7xjYLPH73d/cMjKS
+         IC6YYIWWKtqeZQ2G96J6GDd2i4dFLrw03Nsg/mDL8Mz2a26nH3jpR/aplnRZ38avrN
+         S1mZqAknZagGKwPw5s4Ip1c5Wnpt9X9PonuFX1Es=
+Date:   Wed, 8 Feb 2023 20:08:27 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        llvm@lists.linux.dev, mike.kravetz@oracle.com,
+        muchun.song@linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
+ folio_flags
+Message-Id: <20230208200827.9b461dc5955770535aa2ec78@linux-foundation.org>
+In-Reply-To: <000000000000a6b67d05f43a9854@google.com>
+References: <000000000000cce8cd05f435fc77@google.com>
+        <000000000000a6b67d05f43a9854@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgT2xla3NpaiwNCk9uIFdlZCwgMjAyMy0wMi0wOCBhdCAxMTozMiArMDEwMCwgT2xla3NpaiBS
-ZW1wZWwgd3JvdGU6DQo+IEVYVEVSTkFMIEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3Bl
-biBhdHRhY2htZW50cyB1bmxlc3MgeW91DQo+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiAN
-Cj4gU29tZSBvZiBLU1o5NDc3IGZhbWlseSBzd2l0Y2hlcyBwcm92aWRlcyBFRUUgc3VwcG9ydC4g
-DQoNCm5pdDogSWYgeW91IGNhbiBlbGFib3JhdGUgd2hhdCBhcmUgdGhlIGNoaXAgc3VwcG9ydHMg
-d2lsbCBiZSBnb29kLiANCg0KPiBUbyBlbmFibGUgaXQsIHdlDQo+IGp1c3QgbmVlZCB0byByZWdp
-c3RlciBzZXRfbWFjX2VlZS9zZXRfbWFjX2VlZSBoYW5kbGVycyBhbmQgdmFsaWRhdGUNCj4gc3Vw
-cG9ydGVkIGNoaXAgdmVyc2lvbiBhbmQgcG9ydC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IE9sZWtz
-aWogUmVtcGVsIDxvLnJlbXBlbEBwZW5ndXRyb25peC5kZT4NCj4gUmV2aWV3ZWQtYnk6IEFuZHJl
-dyBMdW5uIDxhbmRyZXdAbHVubi5jaD4NCj4gLS0tDQo+ICBkcml2ZXJzL25ldC9kc2EvbWljcm9j
-aGlwL2tzel9jb21tb24uYyB8IDY1DQo+ICsrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICAx
-IGZpbGUgY2hhbmdlZCwgNjUgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvbmV0L2RzYS9taWNyb2NoaXAva3N6X2NvbW1vbi5jDQo+IGIvZHJpdmVycy9uZXQvZHNhL21p
-Y3JvY2hpcC9rc3pfY29tbW9uLmMNCj4gaW5kZXggNDZiZWNjMDM4MmQ2Li4wYTJkNzgyNTNkMTcg
-MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbmV0L2RzYS9taWNyb2NoaXAva3N6X2NvbW1vbi5jDQo+
-ICsrKyBiL2RyaXZlcnMvbmV0L2RzYS9taWNyb2NoaXAva3N6X2NvbW1vbi5jDQo+IEBAIC0yNjcz
-LDYgKzI2NzMsNjkgQEAgc3RhdGljIGludCBrc3pfbWF4X210dShzdHJ1Y3QgZHNhX3N3aXRjaCAq
-ZHMsDQo+IGludCBwb3J0KQ0KPiAgICAgICAgIHJldHVybiAtRU9QTk9UU1VQUDsNCj4gIH0NCj4g
-DQo+ICtzdGF0aWMgaW50IGtzel9nZXRfbWFjX2VlZShzdHJ1Y3QgZHNhX3N3aXRjaCAqZHMsIGlu
-dCBwb3J0LA0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgZXRodG9vbF9lZWUg
-KmUpDQo+ICt7DQo+ICsgICAgICAgaW50IHJldDsNCj4gKw0KPiArICAgICAgIHJldCA9IGtzel92
-YWxpZGF0ZV9lZWUoZHMsIHBvcnQpOw0KPiArICAgICAgIGlmIChyZXQpDQo+ICsgICAgICAgICAg
-ICAgICByZXR1cm4gcmV0Ow0KPiArDQo+ICsgICAgICAgLyogVGhlcmUgaXMgbm8gZG9jdW1lbnRl
-ZCBjb250cm9sIG9mIFR4IExQSSBjb25maWd1cmF0aW9uLiAqLw0KPiArICAgICAgIGUtPnR4X2xw
-aV9lbmFibGVkID0gdHJ1ZTsNCg0KQmxhbmsgbGluZSBiZWZvcmUgY29tbWVudCB3aWxsIGluY3Jl
-YXNlIHJlYWRhYmlsaXR5Lg0KDQo+ICsgICAgICAgLyogVGhlcmUgaXMgbm8gZG9jdW1lbnRlZCBj
-b250cm9sIG9mIFR4IExQSSB0aW1lci4gQWNjb3JkaW5nDQo+IHRvIHRlc3RzDQo+ICsgICAgICAg
-ICogVHggTFBJIHRpbWVyIHNlZW1zIHRvIGJlIHNldCBieSBkZWZhdWx0IHRvIG1pbmltYWwgdmFs
-dWUuDQo+ICsgICAgICAgICovDQo+ICsgICAgICAgZS0+dHhfbHBpX3RpbWVyID0gMDsNCg0KZm9y
-IGxwaV9lbmFibGVkLCB5b3UgaGF2ZSB1c2VkIHRydWUgYW5kIGZvciBscGlfdGltZXIgeW91IGhh
-dmUgdXNlZCAwLg0KSXQgY2FuIGJlIGNvbnNpc3RlbnQgZWl0aGVyIHRydWUvZmFsc2Ugb3IgMS8w
-LiANCg0KPiArDQo+ICsgICAgICAgcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4gDQo=
+On Wed, 08 Feb 2023 17:49:49 -0800 syzbot <syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com> wrote:
+
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    38d2b86a665b Add linux-next specific files for 20230208
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=15f5e3a7480000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3691b32dd4410e01
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d632e24db18585d7b3c6
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1454ddf3480000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a8431f480000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/0a9d60e90514/disk-38d2b86a.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/71311be5f1a1/vmlinux-38d2b86a.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/a242870cc8eb/bzImage-38d2b86a.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+d632e24db18585d7b3c6@syzkaller.appspotmail.com
+> 
+> memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=5080 'syz-executor561'
+> BUG: unable to handle page fault for address: ffffffffffffffed
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD c570067 P4D c570067 PUD c572067 PMD 0 
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 5080 Comm: syz-executor561 Not tainted 6.2.0-rc7-next-20230208-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+> RIP: 0010:PageTail include/linux/page-flags.h:290 [inline]
+> RIP: 0010:folio_flags.constprop.0+0x2c/0x150 include/linux/page-flags.h:317
+> Code: 49 89 fc 55 53 e8 84 4e b7 ff 49 8d 7c 24 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 f8 00 00 00 <49> 8b 5c 24 08 31 ff 83 e3 01 48 89 de e8 c2 4a b7 ff 48 85 db 0f
+> RSP: 0018:ffffc90003cbfc08 EFLAGS: 00010246
+> RAX: dffffc0000000000 RBX: ffffffffffffffe5 RCX: 0000000000000000
+> RDX: 1ffffffffffffffd RSI: ffffffff81cd1f5c RDI: ffffffffffffffed
+> RBP: ffffffffffffffe5 R08: 0000000000000005 R09: 0000000000000000
+> R10: 00000000ffffffe5 R11: 0000000000000000 R12: ffffffffffffffe5
+> R13: 000feffffff00000 R14: 0000000000000046 R15: 000feffffff00000
+> FS:  0000555556e84300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffffffffffffed CR3: 000000002bb37000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  folio_test_head include/linux/page-flags.h:781 [inline]
+>  folio_test_large include/linux/page-flags.h:802 [inline]
+>  PageHeadHuge+0x18/0xc0 mm/hugetlb.c:2060
+>  folio_test_hugetlb include/linux/page-flags.h:830 [inline]
+>  folio_file_page include/linux/pagemap.h:702 [inline]
+>  shmem_read_mapping_page_gfp+0x34/0x100 mm/shmem.c:4366
+>  shmem_read_mapping_page include/linux/shmem_fs.h:124 [inline]
+>  udmabuf_create+0x93b/0x1440 drivers/dma-buf/udmabuf.c:286
+>  udmabuf_ioctl_create drivers/dma-buf/udmabuf.c:346 [inline]
+>  udmabuf_ioctl+0x156/0x2c0 drivers/dma-buf/udmabuf.c:377
+
+Thanks, I expect Matthew just fixed this.
+
+
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: shmem-add-shmem_read_folio-and-shmem_read_folio_gfp-fix
+Date: Wed Feb  8 07:54:45 PM PST 2023
+
+fix shmem_read_mapping_page_gfp(), per Matthew
+
+Link: https://lkml.kernel.org/r/Y+QdJTuzxeBYejw2@casper.infradead.org
+Cc: Charan Teja Kalla <quic_charante@quicinc.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Mark Hemment <markhemm@googlemail.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+
+--- a/mm/shmem.c~shmem-add-shmem_read_folio-and-shmem_read_folio_gfp-fix
++++ a/mm/shmem.c
+@@ -4354,8 +4354,12 @@ struct page *shmem_read_mapping_page_gfp
+ 					 pgoff_t index, gfp_t gfp)
+ {
+ 	struct folio *folio = shmem_read_folio_gfp(mapping, index, gfp);
+-	struct page *page = folio_file_page(folio, index);
++	struct page *page;
+ 
++	if (IS_ERR(folio))
++		return &folio->page;
++
++	page = folio_file_page(folio, index);
+ 	if (PageHWPoison(page)) {
+ 		folio_put(folio);
+ 		return ERR_PTR(-EIO);
+_
+
