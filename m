@@ -2,235 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4DE690E8F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6CB690E92
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjBIQo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 11:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S229828AbjBIQpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 11:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjBIQoZ (ORCPT
+        with ESMTP id S229580AbjBIQpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:44:25 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE62A5D1FF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:44:23 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id k6so2766031vsk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:44:23 -0800 (PST)
+        Thu, 9 Feb 2023 11:45:38 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1195D1FF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:45:37 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id a2so2391675wrd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:45:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1675961063;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6ufnwo9LJbhlFuZB107t4X1vUwtzNYzWsNbKQX/S5I=;
-        b=crjYNly8goKM1PL6jvQqoL242bnk0fPHB2s/OWy8VaNbVIojCiZjCJ72qunaS77hrF
-         62PaK05FPoMs0Z/zyQDTxf8K9eHUyi0WJJKLCEfPJKNQ9455S+YcrMnY5ardc//tn3Kd
-         cDOWU50PkMx2juUsPrGriXu3DhubDoeoGJINzUnkQLJQdZPK+UlPklS2CxebX3KPhx3c
-         jbz6UaTtwWFjE+fgjiRQy5AyjsISUbvwbi6+icMqHTDZj2NQWY9yQeidrgHajXko3msd
-         69tkkc3IubSQxvRQT/uxkedYX5sJxoqsk8ToGROusER2IijIQhgd8FYDGKQWEK+m/NLc
-         rTPQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5uR5i0FrMW5N/c1BvQuZ5egyuH7BVj5RSnsyknMvLzQ=;
+        b=XaUegsDxVj5QXZDHVD7KSRMczAS+lUxthkMpuK4CerQmBlvHQNoBNpIvqVyaiBM91l
+         bLJL457lpw4igMDHcFVjRooyjly+y7KQxf2yN3xXap1m9Ae/nn8fW94Ap2R8g5lU6DwS
+         vPLvvfDy7XAYrqJXLotfkJl+o4g35ARzuNG6szs5XHhL3jFGojpgN1CVZzOHM/ACQXHO
+         8MIY4OIFNBH/I+26/y2mM+3wAnugSOnhfjOg1/ABjiYmN2OfdHmutuXl9MZewLh54qzM
+         vQaWjDoGPssQTK2v3O4JDd0KwHrEaHNVrX9EhyZiVONHFNHRC6FKZ48VFs714X+CtzpP
+         5Fig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1675961063;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y6ufnwo9LJbhlFuZB107t4X1vUwtzNYzWsNbKQX/S5I=;
-        b=pGW6HVrshYujaY/MPS5hZT8T+Ek/RN+YtTMuMEQrpydE22Lj/3AZn+s+kWPt6h+vkC
-         WmcZXmcU8C9XGqDb7ae3UUSY4QngTDXZCrlksTm14ykP1EUYCQLLNMwEnm30L5t1PzQA
-         8JrNZaVTe44FiP1TBVBrL+M13CFMFvV0BcO3O81zpU8WIQ7uMeAoP7/zaBzTjNfyrkDy
-         9hlT598uq6hSROWnvU/CxJ+fg8TEi5xUWKGZhfQW+DjmYqMdRMe8pOqqdD/jsMr3s3el
-         Sb1n2Zzu6IYTBoPI5szeI5tjsg4LmOtgdyzF/w9vm+eZbbfdEhli5b2lrtR6tTFzrqZC
-         Ygsg==
-X-Gm-Message-State: AO0yUKUEPFfJLJn/98UM7Z1dCMMO9hdQuYHmNwpbRFM0CyMjV7NP51J4
-        3Mjk9gzA+w4CJ+aHQvfaV8jcrDiBLqVYMFyZq5BjOnAkh5wZOACJ5OA=
-X-Google-Smtp-Source: AK7set897AhvKSt608HI0HaJ7+dgNerjiq1J9RXlB0xxyeyPMC5N1Q8qnLyWoTIXdyKuaGPi18NqibYej1lkdNzoZnk=
-X-Received: by 2002:a05:6102:1592:b0:411:adb8:83f with SMTP id
- g18-20020a056102159200b00411adb8083fmr1760047vsv.15.1675961062680; Thu, 09
- Feb 2023 08:44:22 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5uR5i0FrMW5N/c1BvQuZ5egyuH7BVj5RSnsyknMvLzQ=;
+        b=wFx4fGz0PAB1WE2Uf9G6QwJbhUeYirv/8WuZy/VBN6RB1rIO1n3uV70YJXyCsL4FfR
+         2hW44XQ2NBFHAm0iv9t6fha4IUkLYwX0fk5ydSJ9D7Q7xrlHIM4Fr2FfNLB/PLLUbFV1
+         2g4qwP+vA6MFJyRXBWnq3SmijN6+T2IEIKHUDuYohLIOeOTdSSJW9rpm3dNodPDF5eMh
+         jhIqesMTdgqxxm0nXNmrDoV8Vewpej8eGzHK7czA4T2SfvNsmkwYHSavbGAoWIAhYJVi
+         yEF5M7uz1Tpp57c7+4bQd5PkswLKNCPG5538E2C7y45SnHOkEYuAldfP4umWnKWEvbt4
+         ucYw==
+X-Gm-Message-State: AO0yUKXqWO1iHLnLqznJOj6/A/M+fHnamLN+R+eIIAnbtZtnW3o/TV3a
+        xO7gkqwTId+QzATKRutwTXQq/w==
+X-Google-Smtp-Source: AK7set+p7l3XRf70/iTHIzo4O2nXKUZqUcmJodQy8/cPPK7RklqnjaQsmn5XZrA/tviz7lznisNvLQ==
+X-Received: by 2002:a5d:498d:0:b0:2c4:b150:9273 with SMTP id r13-20020a5d498d000000b002c4b1509273mr2836816wrq.19.1675961136292;
+        Thu, 09 Feb 2023 08:45:36 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n1-20020a5d4001000000b002bcaa47bf78sm1649946wrp.26.2023.02.09.08.45.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 08:45:35 -0800 (PST)
+Message-ID: <3c1b7ab9-c228-6d72-47e9-855e12fdba4f@linaro.org>
+Date:   Thu, 9 Feb 2023 17:45:33 +0100
 MIME-Version: 1.0
-References: <Y9m/VVRABt0Blfjh@x1n> <CADrL8HXpfTE1+eE3rNGQyOr1QRtDtG5mBp-b3xcNX22QJRvPaQ@mail.gmail.com>
- <Y9qRta3bd4JqjUHx@x1n> <CADrL8HU809O0cPa9hXjf3k+ob139SQqvxOvpqm6UEv=zrPjHSg@mail.gmail.com>
- <Y9re82gctIZf08cX@x1n> <CADrL8HVja_xJ9qczsd-fQfEPvEEXswhXQwoan=a_LSMyORvqww@mail.gmail.com>
- <CADrL8HUSx6=K0QXQtTmv9ZJQmvhe6KEb+FiAviRfO3HjmRUeTw@mail.gmail.com>
- <CADrL8HUm7g4pBLv9vjmB-LhJqxm4jyksGJQAdwRsweKKAnofDg@mail.gmail.com>
- <Y+LbEY62MT/3yo7I@x1n> <CADrL8HUVCXHsaWU7beYQsLw0C7J730PQm45caKE26V8mCFHjKQ@mail.gmail.com>
- <Y+PKwvLT8+wQ6LPA@x1n>
-In-Reply-To: <Y+PKwvLT8+wQ6LPA@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 9 Feb 2023 08:43:45 -0800
-Message-ID: <CADrL8HUZON-Fc9YxPyTA21AY02OgEXDDsmq9AUSMSxjr83ndYA@mail.gmail.com>
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 1/8] arm64: dts: qcom: sc7280: Extract audio nodes from
+ common idp dtsi file
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org,
+        quic_mohs@quicinc.com
+References: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com>
+ <1675700201-12890-2-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1675700201-12890-2-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 8:16 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Feb 07, 2023 at 04:26:02PM -0800, James Houghton wrote:
-> > On Tue, Feb 7, 2023 at 3:13 PM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > James,
-> > >
-> > > On Tue, Feb 07, 2023 at 02:46:04PM -0800, James Houghton wrote:
-> > > > > Here is the result: [1] (sorry it took a little while heh). The
-> > >
-> > > Thanks.  From what I can tell, that number shows that it'll be great we
-> > > start with your rfcv1 mapcount approach, which mimics what's proposed by
-> > > Matthew for generic folio.
-> >
-> > Do you think the RFC v1 way is better than doing the THP-like way
-> > *with the additional MMU notifier*?
->
-> What's the additional MMU notifier you're referring?
+On 06/02/2023 17:16, Srinivasa Rao Mandadapu wrote:
+> Split common idp dtsi file into audio specific dtsi and common
+> idp dtsi file.
+> 
+> It is required to isolate idp and crd-rev3 platform device tree nodes
+> and convert crd-rev3 platform device tree nodes into audioreach specific
+> device tree nodes.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-audio-idp.dtsi | 135 +++++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts     |   1 +
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 126 -----------------------
+>  3 files changed, 136 insertions(+), 126 deletions(-)
 
-An MMU notifier that informs KVM that a collapse has happened without
-having to invalidate_range_start() and invalidate_range_end(), the one
-you're replying to lower down in the email. :) [ see below... ]
+Actually you need to rebase on latest Bjorn's tree or linux-next as few
+properties were removed, so you need to remove them from
+sc7280-audio-idp.dtsi:
 
->
-> >
-> > >
-> > > > > implementation of the "RFC v1" way is pretty horrible[2] (and this
-> > >
-> > > Any more information on why it's horrible? :)
-> >
-> > I figured the code would speak for itself, heh. It's quite complicated.
-> >
-> > I really didn't like:
-> > 1. The 'inc' business in copy_hugetlb_page_range.
-> > 2. How/where I call put_page()/folio_put() to keep the refcount and
-> > mapcount synced up.
-> > 3. Having to check the page cache in UFFDIO_CONTINUE.
->
-> I think the complexity is one thing which I'm fine with so far.  However
-> when I think again about the things behind that complexity, I noticed there
-> may be at least one flaw that may not be trivial to work around.
->
-> It's about truncation.  The problem is now we use the pgtable entry to
-> represent the mapcount, but the pgtable entry cannot be zapped easily,
-> unless vma unmapped or collapsed.
->
-> It means e.g. truncate_inode_folio() may stop working for hugetlb (of
-> course, with page lock held).  The mappings will be removed for real, but
-> not the mapcount for HGM anymore, because unmap_mapping_folio() only zaps
-> the pgtable leaves, not the ones that we used to account for mapcounts.
->
-> So the kernel may see weird things, like mapcount>0 after
-> truncate_inode_folio() being finished completely.
->
-> For HGM to do the right thing, we may want to also remove the non-leaf
-> entries when truncating or doing similar things like a rmap walk to drop
-> any mappings for a page/folio.  Though that's not doable for now because
-> the locks that truncate_inode_folio() is weaker than what we need to free
-> the pgtable non-leaf entries - we'll need mmap write lock for that, the
-> same as when we unmap or collapse.
->
-> Matthew's design doesn't have such issue if the ptes need to be populated,
-> because mapcount is still with the leaves; not the case for us here.
->
-> If that's the case, _maybe_ we still need to start with the stupid but
-> working approach of subpage mapcounts.
+https://lore.kernel.org/all/20230119122205.73372-2-krzysztof.kozlowski@linaro.org/
 
-Good point. I can't immediately think of a solution. I would prefer to
-go with the subpage mapcount approach to simplify HGM for now;
-optimizing mapcount for HugeTLB can then be handled separately. If
-you're ok with this, I'll go ahead and send v2.
+Best regards,
+Krzysztof
 
-One way that might be possible: using the PAGE_SPECIAL bit on the
-hstate-level PTE to indicate if mapcount has been incremented or not
-(if the PTE is pointing to page tables). As far as I can tell,
-PAGE_SPECIAL doesn't carry any meaning for HugeTLB PTEs, but we would
-need to be careful with existing PTE examination code as to not
-misinterpret these PTEs.
-
->
-> [...]
->
-> > > > > Matthew is trying to solve the same problem with THPs right now: [3].
-> > > > > I haven't figured out how we can apply Matthews's approach to HGM
-> > > > > right now, but there probably is a way. (If we left the mapcount
-> > > > > increment bits in the same place, we couldn't just check the
-> > > > > hstate-level PTE; it would have already been made present.)
-> > >
-> > > I'm just worried that (1) this may add yet another dependency to your work
-> > > which is still during discussion phase, and (2) whether the folio approach
-> > > is easily applicable here, e.g., we may not want to populate all the ptes
-> > > for hugetlb HGMs by default.
-> >
-> > That's true. I definitely don't want to wait for this either. It seems
-> > like Matthew's approach won't work very well for us -- when doing a
-> > lot of high-granularity UFFDIO_CONTINUEs on a 1G page, checking all
-> > the PTEs to see if any of them are mapped would get really slow.
->
-> I think it'll be a common problem to userfaultfd when it comes, e.g.,
-> userfaultfd by design is PAGE_SIZE based so far.  It needs page size
-> granule on pgtable manipulations, unless we extend the userfaultfd protocol
-> to support folios, iiuc.
->
-> >
-> > >
-> > > > >
-> > > > > We could:
-> > > > > - use the THP-like way and tolerate ~1 second collapses
-> > > >
-> > > > Another thought here. We don't necessarily *need* to collapse the page
-> > > > table mappings in between mmu_notifier_invalidate_range_start() and
-> > > > mmu_notifier_invalidate_range_end(), as the pfns aren't changing,
-> > > > we aren't punching any holes, and we aren't changing permission bits.
-> > > > If we had an MMU notifier that simply informed KVM that we collapsed
-> > > > the page tables *after* we finished collapsing, then it would be ok
-> > > > for hugetlb_collapse() to be slow.
-
-[ from above... ] This MMU notifier. :)
-
-> > >
-> > > That's a great point!  It'll definitely apply to either approach.
-> > >
-> > > >
-> > > > If this MMU notifier is something that makes sense, it probably
-> > > > applies to MADV_COLLAPSE for THPs as well.
-> > >
-> > > THPs are definitely different, mmu notifiers should be required there,
-> > > afaict.  Isn't that what the current code does?
-> > >
-> > > See collapse_and_free_pmd() for shmem and collapse_huge_page() for anon.
-> >
-> > Oh, yes, of course, MADV_COLLAPSE can actually move things around and
-> > properly make THPs. Thanks. But it would apply if we were only
-> > collapsing PTE-mapped THPs, I think?
->
-> Yes it applies I think.  And if I'm not wrong it's also doing so. :) See
-> collapse_pte_mapped_thp().
->
-> While for anon we always allocate a new page, hence not applicable.
->
-> --
-> Peter Xu
-
-Thanks Peter!
-- James
