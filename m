@@ -2,84 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C433F68FD27
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDF668FD2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbjBICa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S232057AbjBICd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbjBICav (ORCPT
+        with ESMTP id S232000AbjBICdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:30:51 -0500
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBFAE059
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:30:48 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VbDxLh3_1675909845;
-Received: from 30.221.133.91(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VbDxLh3_1675909845)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Feb 2023 10:30:46 +0800
-Message-ID: <400c57ca-2804-a660-e543-42e15ac3b4a4@linux.alibaba.com>
-Date:   Thu, 9 Feb 2023 10:30:45 +0800
+        Wed, 8 Feb 2023 21:33:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E367D28843;
+        Wed,  8 Feb 2023 18:33:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 634686185A;
+        Thu,  9 Feb 2023 02:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDBC0C433EF;
+        Thu,  9 Feb 2023 02:33:45 +0000 (UTC)
+Date:   Wed, 8 Feb 2023 21:33:43 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Qais Yousef <qyousef@google.com>,
+        Daniele Di Proietto <ddiproietto@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
+ 16 with TASK_COMM_LEN
+Message-ID: <20230208213343.40ee15a5@gandalf.local.home>
+In-Reply-To: <20230208212858.477cd05e@gandalf.local.home>
+References: <20211120112738.45980-1-laoar.shao@gmail.com>
+        <20211120112738.45980-8-laoar.shao@gmail.com>
+        <Y+QaZtz55LIirsUO@google.com>
+        <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
+        <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
+        <20230208212858.477cd05e@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/2] erofs: update print symbols for various flags in
- trace
-Content-Language: en-US
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org, huyue2@coolpad.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230208112915.6543-1-jefflexu@linux.alibaba.com>
- <416afeb8-4385-6d8a-4b35-2c75ffaa36cc@linux.alibaba.com>
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-In-Reply-To: <416afeb8-4385-6d8a-4b35-2c75ffaa36cc@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 8 Feb 2023 21:28:58 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> And this breaks much more than android. It will break trace-cmd, rasdaemon
+> and perf (if it's not using BTF). This change very much "Breaks userspace!"
+> And requires a kernel workaround, not a user space one.
+
+OK, so it doesn't break perf, trace-cmd and rasdaemon, because the enum is
+only needed in the print_fmt part. It can handle it in the field portion.
+
+That is:
 
 
-On 2/9/23 10:29 AM, Gao Xiang wrote:
-> 
-> 
-> On 2023/2/8 19:29, Jingbo Xu wrote:
->> As new flags introduced, the corresponding print symbols for trace are
->> not added accordingly.  Add these missing print symbols for these flags.
->>
->> Also remove the print symbol for EROFS_GET_BLOCKS_RAW as it is going to
->> be removed soon.
->>
->> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
->> ---
->> v2: remove print symbol for EROFS_GET_BLOCKS_RAW
->> ---
->>   include/trace/events/erofs.h | 13 +++++++++----
->>   1 file changed, 9 insertions(+), 4 deletions(-)
->>
->> diff --git a/include/trace/events/erofs.h b/include/trace/events/erofs.h
->> index e095d36db939..cf4a0d28b178 100644
->> --- a/include/trace/events/erofs.h
->> +++ b/include/trace/events/erofs.h
->> @@ -19,12 +19,17 @@ struct erofs_map_blocks;
->>           { 1,        "DIR" })
->>     #define show_map_flags(flags) __print_flags(flags, "|",    \
->> -    { EROFS_GET_BLOCKS_RAW,    "RAW" })
-> 
-> Should we remove this in the next patch?
-> Otherwise it looks good to me.
-> 
+system: sched
+name: sched_switch
+ID: 285
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
 
-Okay I will update this in the next version.
+	field:char prev_comm[TASK_COMM_LEN];	offset:8;	size:16;	signed:0;
+                             ^^^^^^^^^^^^^^                          ^^
+                            is ignored                             is used
 
--- 
-Thanks,
-Jingbo
+
+	field:pid_t prev_pid;	offset:24;	size:4;	signed:1;
+	field:int prev_prio;	offset:28;	size:4;	signed:1;
+	field:long prev_state;	offset:32;	size:8;	signed:1;
+	field:char next_comm[TASK_COMM_LEN];	offset:40;	size:16;	signed:0;
+	field:pid_t next_pid;	offset:56;	size:4;	signed:1;
+	field:int next_prio;	offset:60;	size:4;	signed:1;
+
+print fmt: "prev_comm=%s prev_pid=%d prev_prio=%d prev_state=%s%s ==> next_comm=%s next_pid=%d next_prio=%d", REC->prev_comm, REC->prev_pid, REC->prev_prio, (REC->prev_state & ((((0x00000000 | 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 | 0x00000040) + 1) << 1) - 1)) ? __print_flags(REC->prev_state & ((((0x00000000 | 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 | 0x00000040) + 1) << 1) - 1), "|", { 0x00000001, "S" }, { 0x00000002, "D" }, { 0x00000004, "T" }, { 0x00000008, "t" }, { 0x00000010, "X" }, { 0x00000020, "Z" }, { 0x00000040, "P" }, { 0x00000080, "I" }) : "R", REC->prev_state & (((0x00000000 | 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 | 0x00000040) + 1) << 1) ? "+" : "", REC->next_comm, REC->next_pid, REC->next_prio
+
+   ^^^^^^^
+
+Is what requires the conversions. So I take that back. It only breaks
+perfetto, and that's because it writes its own parser and doesn't use
+libtraceevent.
+
+-- Steve
+
+
