@@ -2,104 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD1F690959
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E12690960
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjBIM4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S229997AbjBIM5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:57:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjBIM4w (ORCPT
+        with ESMTP id S229869AbjBIM5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:56:52 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A653CA08;
-        Thu,  9 Feb 2023 04:56:51 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B4E7766020C1;
-        Thu,  9 Feb 2023 12:56:48 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675947410;
-        bh=B5hP3G6FgIwkwEQg0vRoKUhdtFs0lIrWXYoejF8e8E8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DpNy81Y8cZBUImPcWpwdydIZDClrhB11oZkdB51NOK1gdJxTSZKa17INB6Y1qOA/e
-         1aBmlAIARNWb05savxMJ34bL1fEHn13Xxc2YLaIrQK8HWlxrjKDZij9GO45nzBQhjn
-         YuxI0QTVwSzZKW62zvUvRnd5b1OwwIaIQd1LXWLo9UqM6F2Dg7DC1x4ApKe9+oBk4i
-         loSoUCPgPnZO/w/0yMqrEpm7uOa3/TKrOhHzgLVSznM7Y8xdZqd9UvMzpOEZwyxxKg
-         /YA1Dvjh27HhPl18JDBra/T38K5VUZLdfPcVnwlcnllMegylMsh3zyO8az1Q3genrP
-         LELxvgOf5mSQA==
-Message-ID: <28f167b7-c468-8752-29d1-2a122e8142dd@collabora.com>
-Date:   Thu, 9 Feb 2023 13:56:45 +0100
+        Thu, 9 Feb 2023 07:57:09 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841B12BEF0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:57:07 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id ud5so6079390ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:57:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ktdDslcvWKj2LkZK7T9I4RYoDooeQBCWJEtHRO61dgQ=;
+        b=YOXfC+GiK/9TPFqoWK5ZxF5T62rURwovnuPa2z7Kn7cdxwQdsDrJNbCPrMqXcizRqg
+         49nqG1FNfipRdXJn4XZVlrMdCDxj1jaI/16QwA/pHhf6FG3C0QHIekljmNblqRPSryNm
+         pDtwFQqIG5bqIgJ+jbj8C5V9XJrwGfZnF34T3qDxn01FdGGmuWu+W5FhAzLWiCxRjOCf
+         LmTEg8LQPc5ZLcc/95npaQrDuV0E/fEV6/O2Pv9GztUajepiNh0NxztcyVwfWHLys89h
+         vruBmurHymumzwCDbNUN280RGQRpS1OsB7sj5N50LiWVJE5bMMf0kBkjI6jQ30DktRZ4
+         Qipw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ktdDslcvWKj2LkZK7T9I4RYoDooeQBCWJEtHRO61dgQ=;
+        b=sqBzo0eZ7MkV2ZJfi/Wf9/gwDNtItdA79gdwAzvQgAEqs/4RLGKH8o0Ziw355hzYBB
+         uQnI4l4nLoAJEjtyE+YM0MR0XZq5b12ycOP+zapMvk8gSd/B/rMwnPGRQS7Rb6sLSZL+
+         jgCox1P06n/n5351l38RYhzjENZrtSB5mCCtkaMhrY9w9u6rBPfywnZ7DyPYi6NRtI6k
+         QWb+5qdnPEiX31Ls52sQhXdlE/lX2+j9RoR8bGuLmkp8TyrvvYMXxSdHUwnYMBeh4r/A
+         cpjGXnHKRRNUf+/n1I1yF8uGpZjhAV4Tu2ure5UE6KMKVll/OuEnCxb3p3Px0mXeroUW
+         kgNA==
+X-Gm-Message-State: AO0yUKVrEEVSfQektl5GU0+fQUW7YZS5na2STy1J+3Sgk+5Kxtk0bu4P
+        4rr8nlDkU+M7QRUQLwVpfPFb72A+JyCo+xsoz5tmHw==
+X-Google-Smtp-Source: AK7set/7AzGhauxDb655geiSBxMuStpM++DIX7DNbp5TTlEYidI+DouqWIiP948oaaKQG7Clc7yZmShEnh8xiIvWsfM=
+X-Received: by 2002:a17:907:10c3:b0:8ae:b14b:4b9e with SMTP id
+ rv3-20020a17090710c300b008aeb14b4b9emr476139ejb.9.1675947425558; Thu, 09 Feb
+ 2023 04:57:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] media: mediatek: vcodec: Force capture queue format to
- MM21
-Content-Language: en-US
-To:     Tommaso Merciai <tomm.merciai@gmail.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+References: <20230130094157.1082712-1-etienne.carriere@linaro.org>
+ <CAFA6WYPxzB45pgWkkh++jRaY-d0eHWnrjzu+Z9059PjK5=M-mQ@mail.gmail.com>
+ <CAHUa44G3jCqyiXtdZAAEw=8WPC+m5fD8tqsPfGc3MkV3JjRDCA@mail.gmail.com>
+ <CAFA6WYN7i+7riJGPH4BEUFK77-kAx4J89Tn3=oX=g6rFUFtDkQ@mail.gmail.com>
+ <CAHUa44G1yQtgF1eAUJVA+wtctKHfqYFBhs0PBnpoN-gD8_x8eg@mail.gmail.com>
+ <CAN5uoS_M4uMWkf=Q8XFLCrNSvyUdjLgCPixqonKv3mRwRTr-nQ@mail.gmail.com>
+ <Y+SdRrwSq/a9OgGr@jade> <CAN5uoS-7Mk6Cy9T9978-5hRUK55UOcCXPFe7Kv8ZUvkJZPi6pw@mail.gmail.com>
+ <Y+S6qbgtAViopMPd@jade>
+In-Reply-To: <Y+S6qbgtAViopMPd@jade>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Thu, 9 Feb 2023 13:56:54 +0100
+Message-ID: <CAN5uoS-Qo3gn-JChY1v-kOpYrjSyuL44e1hH_16i6KA+Kx=4UQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] tee: system invocation
+To:     Jens Wiklander <jens.wiklander@linaro.org>
+Cc:     Sumit Garg <sumit.garg@linaro.org>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230209074025.1816-1-yunfei.dong@mediatek.com>
- <Y+S1cA4PXT1MVJm8@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <Y+S1cA4PXT1MVJm8@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/02/23 09:57, Tommaso Merciai ha scritto:
-> Hi Yunfei Dong,
-> 
-> On Thu, Feb 09, 2023 at 03:40:25PM +0800, Yunfei Dong wrote:
->> In order to conver the format of capture queue from mediatek MM21 to
->> standard yuv420 with Libyuv, need to force capture queue format to
->> MM21 for Libyuv can't covert mediatek MT21 format.
-> 
-> Sorry, just some clarifications on my side, just to understand :)
-> The problem is that libyuv can't convert mm21 format into yuv420
-> than you need to use mm21 (forcing this).
-> Did I understand correctly?
-> 
+On Thu, 9 Feb 2023 at 10:19, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+>
+> Hi,
+>
+> On Thu, Feb 09, 2023 at 09:11:53AM +0100, Etienne Carriere wrote:
+> > Hi Jens,
+> >
+> >
+> > On Thu, 9 Feb 2023 at 08:14, Jens Wiklander <jens.wiklander@linaro.org> wrote:
+> > >
+> > > Hi Etienne,
+> > >
+> > > On Wed, Feb 08, 2023 at 06:09:17PM +0100, Etienne Carriere wrote:
+> > > > Hello Sumit, Jens,
+> > > >
+> > > [snip]
+> > > > > > > > >
+> > > > > > > > >         if  (rpc_arg && tee_shm_is_dynamic(shm)) {
+> > > > > > > > > -               param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
+> > > > > > > > > +               if (ctx->sys_service &&
+> > > > > > > > > +                   (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_SYSTEM_THREAD))
+> > > > > > > > > +                       param.a0 = OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG;
+> > > > > > > > > +               else
+> > > > > > > > > +                       param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
+> > > > > > > >
+> > > > > > > > This system thread flag should also be applicable to platforms without
+> > > > > > > > registered arguments support. IOW, we need similar equivalents for
+> > > > > > > > OPTEE_SMC_FUNCID_CALL_WITH_ARG and OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG
+> > > > > > > > too. So I would rather suggest that we add following flag to all 3
+> > > > > > > > call types:
+> > > > > > > >
+> > > > > > > > #define OPTEE_SMC_CALL_SYSTEM_THREAD_FLAG    0x8000
+> > > > > > >
+> > > > > > > The main reason platforms don't support registered arguments is that
+> > > > > > > they haven't been updated since this was introduced. So if a platform
+> > > > > > > needs system threads it could update to use registered arguments too.
+> > > > > >
+> > > > > > Are we hinting at deprecating reserved shared memory support? If yes,
+> > > > > > wouldn't it be better to be explicit about it with a boot time warning
+> > > > > > message about its deprecation?
+> > > > > >
+> > > > > > Otherwise it will be difficult to debug for the end user to find out
+> > > > > > why system thread support isn't activated.
+> > > > > >
+> > > > > > > The Linux kernel already supports registered arguments. An advantage
+> > > > > > > with the current approach is that the ABI is easier to implement
+> > > > > > > since we have distinct SMC IDs for each function.
+> > > > > >
+> > > > > > I see your point but my initial thought was that we don't end up
+> > > > > > making that list too large that it becomes cumbersome to maintain,
+> > > > > > involving all the combinatorial.
+> > > > >
+> > > > > You have a point. Etienne, do you think we could give it a try at
+> > > > > https://github.com/OP-TEE/optee_os/pull/5789 to better see how this
+> > > > > would play out?
+> > > > >
+> > > >
+> > > > Indeed I miss that...
+> > > > With the patch proposed here, indeed if OP-TEE does not support
+> > > > dynamic shared memory then Linux will never use the provisioned TEE
+> > > > thread. This is weird as in such a case OP-TEE provisions resources
+> > > > that will never be used, which is the exact opposite goal of this
+> > > > feature. Verified on our qemu-arm setup.
+> > > >
+> > > > For simplicity, I think this system invocation should require OP-TEE
+> > > > supports dyn shm.
+> > >
+> > > It's not obvious to me that this will easier to implement and maintain.
+> > > Looking at the code in optee_os it looks like using a flag bit as
+> > > proposed by Sumit would be quite easy to handle.
+> >
+> > OP-TEE could auto disable thread provis when dyn shm is disabled, right.
+> > Will it be sufficient? We will still face cases where an OP-TEE
+> > provisions thread but Linux kernel is not aware (older vanilla kernel
+> > used with a recent OP-TEE OS). Not much platforms are really affected
+> > I guess but those executing with pager in small RAMs where a 4kB
+> > thread context costs.
+>
+> When you add exceptions you make it more complicated. Now we must
+> remember to always use dyn shm if we are to succeed in configuring with
+> system threads. What if both dyn shm and static shm is configured in
+> OP-TEE, but the kernel only uses static shm?
+>
+> > > > If OP-TEE could know when Linux does not support TEE system
+> > > > invocation, then OP-TEE could let any invocation use these provisioned
+> > > > resources so that they are not wasted.
+> > > > I think a good way would be Linux to expose if it supports this
+> > > > capability, during capabilities exchange.
+> > > > Would you agree with this approach?
+> > >
+> > > No, I'm not so keen on adding that side effect to
+> > > OPTEE_SMC_EXCHANGE_CAPABILITIES.
+> >
+> > It is a capability REE would exchanges with TEE.
+> > What kind of side effects do you fear?
+>
+> I was hoping to keep it stateless. One thing less to keep track of when
+> handing over from a boot stage to the kernel.
 
-vcodec can output either MM21 or MT21C; libyuv can't handle the MT21C format,
-at least for now, hence he is forcing vcodec to always give MM21 for things
-to actually work... at a later time, I hope and suppose that this driver will
-change to not force anything anymore.
+Or from a kernel VM unload/reload.
 
-> Thanks in advance,
-> Tommaso
-> 
+>
+> > > The way you're describing the problem it sounds like it's a normal world
+> > > problem to know how many system threads are needed. How about adding a
+> > > fast call where normal world can request how many system threads should
+> > > be reserved?  If none are requested, none will be reserved.
+> >
+> > Well, could be. With caps exchange, we have an SMC funcID to REE to
+> > say to TEE: "reserved the default configured number of sys thread". I
+> > think it is simpler.
+>
+> Until you realize the that the default number of system threads doesn't
+> match what you need.
 
-Yunfei, since this is required to get "basic" functionality, this commit needs
-a Fixes tag: can you please add the right one?
+Ok, I see your point. Indeed, Linux drivers requiring system context
+could issue a fastcall SMC to request dynamic provisioning of TEE
+context resources, and release their request upon driver unload. I
+agree it would better scale in the long term. I'll propose something
+in a v2.
 
-Thanks!
-Angelo
+>
+> >
+> > With REE calling TEE to provision thread, we would need another call
+> > to release the reservation. Whe caps exchange, we have a single SMC to
+> > reconfig the negotiated caps.
+>
+> A single SMC with growing complexity in its arguments.
 
+:)  fair.
 
+>
+> Cheers,
+> Jens
