@@ -2,143 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C72691182
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98178691188
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjBITpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        id S230184AbjBITph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:45:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjBITpA (ORCPT
+        with ESMTP id S229743AbjBITpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:45:00 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329125AB38
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:44:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675971899; x=1707507899;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Rfi2aUQmazxGL163Vf4H2PXHnYFMjNmDK8WxON/Futs=;
-  b=VG1TUHw4v3n4/ezoHGe5P/gDMV0jz0iV/8a0995Mi4XWVaqOEqH2+UGs
-   nYglwqKoL9rECqd7AtbuB2JxsgdE65fvsghF76TbxHhzVvFdz2SBlChVd
-   C8HVETa3cVbDGzXUrBHis00TXyHElj9wwyd0iqtUZyfvOcbKeqRr8Zu+u
-   /z4YdfusJN++GBHXFW6qdUqzMoiksSSNIMSwJyDlmjr8CbpJF99A2XugP
-   iKuTNBSo4zHHU1pUWHnXLKlNG4qJQnzwzuSmeCRlcuabLr1fcNrD5SELX
-   3wTC02Yxni07/A50C1HJ3euUC67yaQd2AywBNXUI7ktjk5hX9bW4V0WK4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="327917857"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="327917857"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 11:44:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="996667205"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="996667205"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Feb 2023 11:44:57 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQCqn-0005Gu-0T;
-        Thu, 09 Feb 2023 19:44:57 +0000
-Date:   Fri, 10 Feb 2023 03:44:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 82ba9196cce8f41617e1a3d0d39242df3f5f9773
-Message-ID: <63e54d19.W9PJMaBYAoFgJY2E%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 9 Feb 2023 14:45:34 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF5965EF6
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:45:33 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id y7so1107753iob.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 11:45:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tx7x78jzB/5TcK335na29BDCwW6N/hAYlq6Sp4YpsiI=;
+        b=RZ3yuuESZOagfSBmS5EF9BxQF8Z6uzBibqMujT1Q2VYT/kbeqhgat8wvBSUaQmrsS5
+         3LSQUloXf4nb2orTPziz8csXjYZbzsXrxwEShXVmj4GWoW/P0DQKs1Pp3xW3W6s9Fo8y
+         i6goArMbCCbMAE7lhk59fFsiLBp5EtgqZJIzg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tx7x78jzB/5TcK335na29BDCwW6N/hAYlq6Sp4YpsiI=;
+        b=LZs7lq/jDL+qOvcz1oKUtEXxDK7AiFPRMHiRIIJ++XPpotdPlGe2HLZw+o7hdL0QNY
+         blQxl0oEQjtAqy1orlOwhDsYD8WU5a+8akZx+kOJOOsixh6gwDoghV5gHUqdW0yVUlm6
+         WzHCfTlqBLx+SsiWyWGUj0gm+YMmom68+ZqYfRkD9Hgz/vISmhbtJmPi2qyu+WRMOMRn
+         dyGJ65kS0itNGolTXiFEGJHBjtQJKuYJFc1BDiF9R2tzkG7288himqNQIJGrW1bL00bY
+         /z1PyuH/s3lf7kgMzixYLdRPOKvHox3meEmzBolDviC/F6z1oi9G+h180YItq4nIDWBC
+         iTyQ==
+X-Gm-Message-State: AO0yUKXsUeGWEMbwpr7ELdJ+kmfUgzQ/RBUJbydI/8lMn8RZbLAPTfOG
+        J8YirkF2A9LXwg0P7vLmfmjs/w==
+X-Google-Smtp-Source: AK7set8G93lun+KOXmMrPTB4I5i7w/4YIym7oI6fbFcw1C8vh2FLRyL91TcDy9MjGF5dHvdNY1Su1g==
+X-Received: by 2002:a5e:a908:0:b0:734:8f86:b78d with SMTP id c8-20020a5ea908000000b007348f86b78dmr8497317iod.11.1675971932453;
+        Thu, 09 Feb 2023 11:45:32 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id s26-20020a056602241a00b0071f4551300csm671672ioa.2.2023.02.09.11.45.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 11:45:32 -0800 (PST)
+From:   Matthias Kaehlcke <mka@chromium.org>
+X-Google-Original-From: Matthias Kaehlcke <mka@google.com>
+Date:   Thu, 9 Feb 2023 19:45:31 +0000
+To:     Owen Yang <ecs.taipeikernel@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gavin Lee <gavin.lee@ecs.com.tw>,
+        Doug Anderson <dianders@chromium.org>,
+        Harvey <hunge@google.com>, Abner Yen <abner.yen@ecs.com.tw>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bob Moragues <moragues@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Adjust zombie PWM frequency
+Message-ID: <Y+VNW3ikQVgXK4VV@google.com>
+References: <20230209102807.1.I3e1463cd0fb66311a269f2698d0767a2acfaac3f@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230209102807.1.I3e1463cd0fb66311a269f2698d0767a2acfaac3f@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 82ba9196cce8f41617e1a3d0d39242df3f5f9773  Merge branch into tip/master: 'x86/urgent'
+On Thu, Feb 09, 2023 at 10:28:16AM +0800, Owen Yang wrote:
+> Tune the PWM to solve screen flashing issue and high frequency noise.
+> 
+> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+> ---
+> 
+>  arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> index 64deaaabac0f..000f64d27ab9 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtsi
+> @@ -61,8 +61,8 @@ ap_tp_i2c: &i2c0 {
+>  };
+>  
+>  &pm8350c_pwm_backlight {
+> -	/* Set the PWM period to 200 microseconds (5kHz duty cycle) */
+> -	pwms = <&pm8350c_pwm 3 200000>;
+> +	/* Set the PWM period to 320 microseconds (8kHz duty cycle) */
+> +	pwms = <&pm8350c_pwm 3 320000>;
 
-elapsed time: 726m
+Is 'duty cycle' really correct here? The unit of the duty cycle is
+percent, not kHz and it shouldn't be impacted by this change. I guess
+you mean frequency.
 
-configs tested: 61
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                              defconfig
-arc                                 defconfig
-x86_64                               rhel-8.3
-s390                             allmodconfig
-um                             i386_defconfig
-alpha                               defconfig
-um                           x86_64_defconfig
-s390                                defconfig
-x86_64                           allyesconfig
-s390                             allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-i386                                defconfig
-x86_64                           rhel-8.3-bpf
-powerpc                           allnoconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-arc                  randconfig-r043-20230209
-arm                  randconfig-r046-20230209
-x86_64                        randconfig-a004
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arm                                 defconfig
-x86_64                        randconfig-a002
-m68k                             allyesconfig
-x86_64                        randconfig-a006
-ia64                             allmodconfig
-i386                          randconfig-a014
-i386                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-sh                               allmodconfig
-arm64                            allyesconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-arm                              allyesconfig
-x86_64                        randconfig-a015
-mips                             allyesconfig
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r041-20230209
-hexagon              randconfig-r045-20230209
-s390                 randconfig-r044-20230209
-riscv                randconfig-r042-20230209
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-i386                          randconfig-a002
-i386                          randconfig-a004
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+And how does this change result in a frequency of 8kHz? Wouldn't it be
+3.125 kHz with a peridod of 320us?
