@@ -2,93 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA2B6902AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FB16902B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjBII7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 03:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S229844AbjBIJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjBII7S (ORCPT
+        with ESMTP id S229577AbjBIJAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 03:59:18 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BE110268
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:59:16 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id f23-20020a05600c491700b003dff4480a17so3581436wmp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 00:59:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m8pUbyQuguMCPwZW2RElTPCVuJKUGTRlRW/wJdW3+V4=;
-        b=Ow4huEPqyLhYoVRrD86WnY1MlQp7HdWZQmtkJytSmdBVRtRFPOhg2UCn7XotYGpH+U
-         M8e2ys2LBDh+P7q2fSjS/bSM6jKZqqXKi9+fCaibpBnB+X42dpBUkIVBpfPQNuTo9l+1
-         YLHXs+13djHk9T1fNnUUZeYV5C+B0XEVFZaafAVyboVQWAuGXC/tVB0lNzaQCepNjkji
-         vr1qVnG8mTc1YE31jq9QuuX8PP8sx+zBgokKqTuKPGh6Zat1shYSnc3mPNcRXXX9S/JN
-         RYGuU03KKqp/Mcs2/qJMltEbL4JyfN/hUG2peymAcFNR/prGppXFTTeSB8QsVySv+9K6
-         IlOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m8pUbyQuguMCPwZW2RElTPCVuJKUGTRlRW/wJdW3+V4=;
-        b=LKyouXy4BYh0IP+8Wm/ytB2L/FVeXeCmR6aA7u6XDE5r2RqI19y+o5uNTZO86U0IzY
-         YYPqlsgwjXMaC4bDzKazcJ8fkUgXqZe3Q3hiWU6XuX9irpoTiHln6WIrpks5Imvd4XwB
-         rWMy0tPk8s01C8BV0QelAMeN3PUmaiLUkHrWXNntL4R+yFClGSodJRaPi1mixKvUFrSH
-         CdvOuootuM4xgBzBRIJ7tNq62Y9++FGpM5CceIVtK0B5BIb8UAocoTCTejOa7gMEST/g
-         6dpIldNHAeVmkSl6T9cvbsdpPZbSqZEDBl3HBpsncuMkUpi5mV6KV+lx25H++1EABRqD
-         CjOg==
-X-Gm-Message-State: AO0yUKUYzgv3DhGsliUsREjjFORrmJnAoh3BorM+6Jg+WNasmg9y87C3
-        e2HFd5VWpkrlDIAPrc0y2ZiIbA==
-X-Google-Smtp-Source: AK7set+XdLST77MGN29lRhG+UDTY7sifhmxD3nCMq7rWmiAdHkddtJM/T/83puc6W3tudLYkQombYw==
-X-Received: by 2002:a05:600c:4b1b:b0:3df:fbc7:5b10 with SMTP id i27-20020a05600c4b1b00b003dffbc75b10mr9064027wmp.0.1675933155460;
-        Thu, 09 Feb 2023 00:59:15 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id d14-20020adff2ce000000b002bc7fcf08ddsm700290wrp.103.2023.02.09.00.59.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 00:59:15 -0800 (PST)
-Message-ID: <b2adce9e-df73-db36-9703-a66565120791@linaro.org>
-Date:   Thu, 9 Feb 2023 09:59:13 +0100
+        Thu, 9 Feb 2023 04:00:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5382DB455
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:59:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675933191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yP8Oc/wD0SRDPHRdmmsD8nB/Qzshc+tehAXv+/O2etw=;
+        b=SxjBelhM3bWmqB73Az+FXXS7SrgVlJhcbJYfZQVxRMPfUzrje5vl18k952ewSp9ujLtLYb
+        Egds3xseQPQjxuPvo+FL9wiuX7ULUAtCjw42ShO1rZ8b43L7ESLDz5slOhX8zO5sirTAiV
+        1EyF5Iu7W2NNxagARfXh+E7r8UpvTzQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-kD5fB-FoM7CLI4ap1VLSTQ-1; Thu, 09 Feb 2023 03:59:46 -0500
+X-MC-Unique: kD5fB-FoM7CLI4ap1VLSTQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A8B0029DD980;
+        Thu,  9 Feb 2023 08:59:45 +0000 (UTC)
+Received: from mail.corp.redhat.com (ovpn-192-232.brq.redhat.com [10.40.192.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B95974043840;
+        Thu,  9 Feb 2023 08:59:42 +0000 (UTC)
+Date:   Thu, 9 Feb 2023 09:59:40 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     Jiri Kosina <jikos@kernel.org>, Hanno Zulla <kontakt@hanno.de>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>,
+        Sven Eckelmann <sven@narfation.org>,
+        linux-leds@vger.kernel.org,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jkosina@suse.cz>,
+        Roderick Colenbrander <roderick@gaikai.com>
+Subject: Re: [PATCH v2 3/5] HID: dualsense_remove: manually unregister leds
+Message-ID: <20230209085940.53mrapggf6nagkdh@mail.corp.redhat.com>
+References: <20230125-hid-unregister-leds-v2-0-689cc62fc878@diag.uniroma1.it>
+ <20230125-hid-unregister-leds-v2-3-689cc62fc878@diag.uniroma1.it>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dt-bindings: i2c: uniphier: Add resets property
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230209014340.17979-1-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230209014340.17979-1-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125-hid-unregister-leds-v2-3-689cc62fc878@diag.uniroma1.it>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 02:43, Kunihiko Hayashi wrote:
-> UniPhier I2C controller allows reset control support.
-> Add resets property to the controller as optional.
+On Jan 31 2023, Pietro Borrello wrote:
+> Unregister the LED controllers before device removal, to prevent
+> unnecessary runs of dualsense_player_led_set_brightness().
 > 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> Fixes: 8c0ab553b072 ("HID: playstation: expose DualSense player LEDs through LED class.")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> 
 > ---
+> 
+> Contrary to the other patches in this series, failing to unregister
+> the led controller does not results into a use-after-free thanks
+> to the output_worker_initialized variable and the spinlock checks.
 
+And so we don't need that patch (nor for hid-sony.c) because we have a
+guard against scheduling a worker job when the device is being removed.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+So please drop 3,4,5 from this series, they are just making the code
+worse.
 
-Best regards,
-Krzysztof
+Cheers,
+Benjamin
+
+> 
+> Changes in v2:
+> - Unregister multicolor led controller
+> - Clarify UAF
+> - Link to v1: https://lore.kernel.org/all/20230125-hid-unregister-leds-v1-3-9a5192dcef16@diag.uniroma1.it/
+> ---
+>  drivers/hid/hid-playstation.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/hid/hid-playstation.c b/drivers/hid/hid-playstation.c
+> index 27c40894acab..f23186ca2d76 100644
+> --- a/drivers/hid/hid-playstation.c
+> +++ b/drivers/hid/hid-playstation.c
+> @@ -1503,11 +1503,17 @@ static void dualsense_remove(struct ps_device *ps_dev)
+>  {
+>  	struct dualsense *ds = container_of(ps_dev, struct dualsense, base);
+>  	unsigned long flags;
+> +	int i;
+>  
+>  	spin_lock_irqsave(&ds->base.lock, flags);
+>  	ds->output_worker_initialized = false;
+>  	spin_unlock_irqrestore(&ds->base.lock, flags);
+>  
+> +	for (i = 0; i < ARRAY_SIZE(ds->player_leds); i++)
+> +		devm_led_classdev_unregister(&ps_dev->hdev->dev, &ds->player_leds[i]);
+> +
+> +	devm_led_classdev_multicolor_unregister(&ps_dev->hdev->dev, &ds->lightbar);
+> +
+>  	cancel_work_sync(&ds->output_worker);
+>  }
+>  
+> 
+> -- 
+> 2.25.1
 
