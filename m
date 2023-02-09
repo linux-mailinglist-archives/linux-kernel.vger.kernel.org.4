@@ -2,179 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5172F68FEA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E06068FED5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjBIE0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 23:26:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
+        id S229866AbjBIEa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjBIEZw (ORCPT
+        with ESMTP id S229899AbjBIEaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:25:52 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A95D38B47
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 20:25:20 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id w13so406275ilv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 20:25:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X3JCdbvKeiUcH/OkexvFMP8KnMjvRlzLquNMe2eJDPM=;
-        b=YbUbDyPLqiPzWst58OZ6HfyZTQdO47nm+/kxW34nvPdgReGLE8CZKTkEAsRznj1YyQ
-         Jo+m685SMmEizOIuzU3KvveGYv2W8fURphN+KyHUCLe4XS+I7UPupca2pJiRF0aZ7TYT
-         glzF7jMl7nHOvLmU1nRcYvPKovPfoTljGDOPU=
+        Wed, 8 Feb 2023 23:30:46 -0500
+Received: from mail-io1-xd46.google.com (mail-io1-xd46.google.com [IPv6:2607:f8b0:4864:20::d46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CADF3F2AE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 20:30:09 -0800 (PST)
+Received: by mail-io1-xd46.google.com with SMTP id k5-20020a6bf705000000b0070483a64c60so514344iog.18
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 20:30:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X3JCdbvKeiUcH/OkexvFMP8KnMjvRlzLquNMe2eJDPM=;
-        b=d48pXzUwy4yi+D4eSTz1jLLnQ26bGVaXQzQRWped2JmrJDEVDRIqIa1c8FBRBOKWBi
-         gn65o46Kfik3alCr8vqMT/xOd/Kk6kRDrqn2J0y+Wlzd0iajag/vS7GUhle5gHFwfN54
-         RL2emb2Ry7emQjP/Fc9e10M7MEjwkL+mv6ktS/hARJT+18ZfbqaSVG0DnahyNUQalLjH
-         w6WBx2v09Frjel3gftbMgz8V+7EDRsrdy/HY3Z+az43X+tzhWtxad64kj6EbTJFkRCDj
-         cHq61RtavFU3xbC9Qjoyv+85LPytTqkN/ii1rgXvDZn69bAXA4HdfPkkI0HoVYM7VPcU
-         wiBw==
-X-Gm-Message-State: AO0yUKXG9Z4fF/MbyQSlextPlEZc+Yvdb7bRtRipM2Qv0yjm9jXzbsW/
-        QalAh8aSpp16JdVBhpENXvLFSbKZEj8GEa/ne+s=
-X-Google-Smtp-Source: AK7set8XV7qjtRpTyOB0SQdPl/aKfT1kpk4AknbFQNPkuFIle+3jmukX5R5BCWP95TIPY6MihegR5g==
-X-Received: by 2002:a05:6e02:2168:b0:313:eee4:1365 with SMTP id s8-20020a056e02216800b00313eee41365mr4955879ilv.4.1675916665010;
-        Wed, 08 Feb 2023 20:24:25 -0800 (PST)
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com. [209.85.166.176])
-        by smtp.gmail.com with ESMTPSA id x19-20020a029713000000b003c41434babdsm109783jai.92.2023.02.08.20.24.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 20:24:24 -0800 (PST)
-Received: by mail-il1-f176.google.com with SMTP id v15so388409ilc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 20:24:24 -0800 (PST)
-X-Received: by 2002:a92:b513:0:b0:310:9276:5d29 with SMTP id
- f19-20020a92b513000000b0031092765d29mr5213990ile.76.1675916663704; Wed, 08
- Feb 2023 20:24:23 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rvwnVQ+OsTvO/R4s7QHo3J3Y+IsgRrC0rLTHXRjAvIE=;
+        b=cmvsdR4fHnQtytylJbZszW5nZHpTgRHVk4a7pnjYkDFp4U9zTjwwUMCp4ebI+tsgdq
+         UhEtFA1y453taPttlsK4OlUfCMxONPwbrvsotkwd6pYBhKK404swxHTtd2rr1+LLa+Mw
+         onKPpO3wB1yawftfzFYCCzblIX6zTFlWnty7HsjBt6k+wbCXnaNbbcrjyZn4kuvAREDp
+         1GgWF94/gmel92LYwPIIaDqsvt8dNGL4r8mwRL2tBW5Vidz+kEpkTYY7iF6FiAi+HufS
+         XVWQGVY/cv/J4JXENKz06GMZH3fQWmJXiSwdz53KOYEf7UO/BE/GE4L0dWO4goIQF0Jj
+         RRaQ==
+X-Gm-Message-State: AO0yUKWxyjBP8r4Zj2JAAkDu4NXUouxyi09lWvlvboytpLfb1F0OtzqO
+        PkmCyB8gdFCqGb4uy+IxU15SYnIeOhF97wpaDRbis2aERJZjdSo=
+X-Google-Smtp-Source: AK7set+oeDrxd4GzIaxkIRRkqeNUsielY0Xsb2Vxvx2EuvE1bdyY+lsqTz77lldVZywpvBnzPOwdHD5bVC1RJHS33ttYOC3UGhMf
 MIME-Version: 1.0
-References: <1675863724-28412-1-git-send-email-quic_kalyant@quicinc.com>
- <CAD=FV=WbzmF_Jkwrcm27eqXaqNhGq_D=8yfCKqELET+=+EaLAA@mail.gmail.com> <BN0PR02MB8142207261497BE76A6EA07096D99@BN0PR02MB8142.namprd02.prod.outlook.com>
-In-Reply-To: <BN0PR02MB8142207261497BE76A6EA07096D99@BN0PR02MB8142.namprd02.prod.outlook.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 8 Feb 2023 20:24:08 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XVaEzyZybZ3JmFnPQkSZyw-3UfD0Mupt_adnnJcYy_iQ@mail.gmail.com>
-Message-ID: <CAD=FV=XVaEzyZybZ3JmFnPQkSZyw-3UfD0Mupt_adnnJcYy_iQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Reserve DSPPs based on user request
-To:     Kalyan Thota <kalyant@qti.qualcomm.com>
-Cc:     "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robdclark@chromium.org" <robdclark@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>
+X-Received: by 2002:a6b:6407:0:b0:71b:3f4f:95f9 with SMTP id
+ t7-20020a6b6407000000b0071b3f4f95f9mr5368985iog.30.1675916681161; Wed, 08 Feb
+ 2023 20:24:41 -0800 (PST)
+Date:   Wed, 08 Feb 2023 20:24:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000074335b05f43cc203@google.com>
+Subject: [syzbot] [reiserfs?] BUG: corrupted list in percpu_counter_destroy
+From:   syzbot <syzbot+6b1a2e744e37db9f50b3@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, luto@kernel.org,
+        peterz@infradead.org, reiserfs-devel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On Wed, Feb 8, 2023 at 8:16 PM Kalyan Thota <kalyant@qti.qualcomm.com> wrote:
->
-> Hi Doug,
->
-> Have you picked the core change to program dspp's  (below) ? the current series will go on top of it.
-> https://patchwork.kernel.org/project/linux-arm-msm/patch/1671542719-12655-1-git-send-email-quic_kalyant@quicinc.com/
+syzbot found the following issue on:
 
-I didn't pick v11 of it like you link, but I did pick v12 of the same
-patch. In my response I said that I picked 5 patches, this series plus
-[1] where [1] is:
+HEAD commit:    4fafd96910ad Add linux-next specific files for 20230203
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16b014c5480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d2fba7d42502ca4
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b1a2e744e37db9f50b3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=127247a5480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10cd186d480000
 
-[1] https://lore.kernel.org/all/1674814487-2112-1-git-send-email-quic_kalyant@quicinc.com/
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/348cc2da441a/disk-4fafd969.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e2dedc500f12/vmlinux-4fafd969.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/fae710d9ebd8/bzImage-4fafd969.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/fbee878c2283/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6b1a2e744e37db9f50b3@syzkaller.appspotmail.com
+
+sshd[5074]: segfault at 200000001 ip 0000000200000001 sp 00007ffed2745410 error 14 in sshd[563ab7bc0000+b000] likely on CPU 0 (core 0, socket 0)
+Code: Unable to access opcode bytes at 0x1ffffffd7.
+list_del corruption. prev->next should be ffff88807a4b71e8, but was 0000000200000001. (prev=ffff8880761b16c8)
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:59!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 5074 Comm: sshd Not tainted 6.2.0-rc6-next-20230203-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:__list_del_entry_valid+0x11f/0x1b0 lib/list_debug.c:59
+Code: 07 a7 8a e8 f3 09 4b fd 0f 0b 48 89 ca 48 c7 c7 e0 07 a7 8a e8 e2 09 4b fd 0f 0b 4c 89 c2 48 c7 c7 40 08 a7 8a e8 d1 09 4b fd <0f> 0b 48 89 d1 48 c7 c7 c0 08 a7 8a 4c 89 c2 e8 bd 09 4b fd 0f 0b
+RSP: 0018:ffffc90003bbfaf8 EFLAGS: 00010086
+
+RAX: 000000000000006d RBX: ffff88807a4b71a0 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8168dfbc RDI: 0000000000000005
+RBP: ffff88807a4b71a0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000001 R11: 0000000000000000 R12: 0000000000000292
+R13: ffff88807a4b71e8 R14: ffff88807a4b71f0 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000040048 CR3: 0000000027e6d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ percpu_counter_destroy.part.0+0x4f/0x200 lib/percpu_counter.c:198
+ percpu_counter_destroy+0x3c/0x50 lib/percpu_counter.c:191
+ __mmdrop+0x294/0x470 kernel/fork.c:800
+ mmdrop include/linux/sched/mm.h:50 [inline]
+ __mmput+0x3fd/0x4c0 kernel/fork.c:1220
+ mmput+0x60/0x70 kernel/fork.c:1231
+ exit_mm kernel/exit.c:563 [inline]
+ do_exit+0x9d7/0x2b60 kernel/exit.c:856
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
+ get_signal+0x2321/0x25b0 kernel/signal.c:2859
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x11f/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ exc_page_fault+0xc0/0x170 arch/x86/mm/fault.c:1557
+ asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x200000001
+Code: Unable to access opcode bytes at 0x1ffffffd7.
+RSP: 002b:00007ffed2745410 EFLAGS: 00010202
+
+RAX: 00000000ffffffff RBX: 0000000200000001 RCX: 00007fec0d6ead83
+RDX: fffffffffffffea0 RSI: 0000563ab9bf6f40 RDI: 000000000000000a
+RBP: 0000000000040048 R08: 00007ffed27453d0 R09: 00007ffed27453e0
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+R13: 0000000000000001 R14: 00007ffed2745458 R15: 00007ffed27454d8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_del_entry_valid+0x11f/0x1b0 lib/list_debug.c:59
+Code: 07 a7 8a e8 f3 09 4b fd 0f 0b 48 89 ca 48 c7 c7 e0 07 a7 8a e8 e2 09 4b fd 0f 0b 4c 89 c2 48 c7 c7 40 08 a7 8a e8 d1 09 4b fd <0f> 0b 48 89 d1 48 c7 c7 c0 08 a7 8a 4c 89 c2 e8 bd 09 4b fd 0f 0b
+RSP: 0018:ffffc90003bbfaf8 EFLAGS: 00010086
+
+RAX: 000000000000006d RBX: ffff88807a4b71a0 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8168dfbc RDI: 0000000000000005
+RBP: ffff88807a4b71a0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000001 R11: 0000000000000000 R12: 0000000000000292
+R13: ffff88807a4b71e8 R14: ffff88807a4b71f0 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000040048 CR3: 0000000027e6d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
-> Thanks,
-> Kalyan
->
-> >-----Original Message-----
-> >From: Doug Anderson <dianders@chromium.org>
-> >Sent: Wednesday, February 8, 2023 10:44 PM
-> >To: Kalyan Thota (QUIC) <quic_kalyant@quicinc.com>
-> >Cc: dri-devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
-> >freedreno@lists.freedesktop.org; devicetree@vger.kernel.org; linux-
-> >kernel@vger.kernel.org; robdclark@chromium.org; swboyd@chromium.org;
-> >Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>;
-> >dmitry.baryshkov@linaro.org; Abhinav Kumar (QUIC)
-> ><quic_abhinavk@quicinc.com>; marijn.suijten@somainline.org
-> >Subject: Re: [PATCH v3 0/4] Reserve DSPPs based on user request
-> >
-> >WARNING: This email originated from outside of Qualcomm. Please be wary of
-> >any links or attachments, and do not enable macros.
-> >
-> >Hi,
-> >
-> >On Wed, Feb 8, 2023 at 5:42 AM Kalyan Thota <quic_kalyant@quicinc.com>
-> >wrote:
-> >>
-> >> This series will enable color features on sc7280 target which has
-> >> primary panel as eDP
-> >>
-> >> The series removes DSPP allocation based on encoder type and allows
-> >> the DSPP reservation based on user request via CTM.
-> >>
-> >> The series will release/reserve the dpu resources when ever there is a
-> >> topology change to suit the new requirements.
-> >>
-> >> Kalyan Thota (4):
-> >>   drm/msm/dpu: clear DSPP reservations in rm release
-> >>   drm/msm/dpu: add DSPPs into reservation upon a CTM request
-> >>   drm/msm/dpu: avoid unnecessary check in DPU reservations
-> >>   drm/msm/dpu: reserve the resources on topology change
-> >>
-> >>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  2 +
-> >>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 58 ++++++++++++++++------
-> >-------
-> >>  drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c      |  2 +
-> >>  3 files changed, 37 insertions(+), 25 deletions(-)
-> >
-> >I tried out your changes, but unfortunately it seems like there's something wrong.
-> >:( I did this:
-> >
-> >1. Picked your 5 patches to the chromeos-5.15 tree (this series plus [1])
-> >
-> >2. Put them on herobrine villager.
-> >
-> >3. Booted up with no external display plugged in.
-> >
-> >4. Tried to enable night light in the ChromeOS UI.
-> >
-> >5. Night light didn't turn on for the internal display.
-> >
-> >
-> >I also tried applying them to the top of msm-next (had to resolve some small
-> >conflicts). Same thing, night light didn't work.
-> >
-> >
-> >I thought maybe this was because the Chrome browser hasn't been updated to
-> >properly use atomic_check for testing for night light, so I hacked my herobrine
-> >device tree to not mark "mdss_dp" as "okay". Now there's _only_ an eDP display.
-> >Same thing, night light didn't work.
-> >
-> >
-> >I could only get night light to work for the internal display if I plugged and
-> >unplugged an external display in.
-> >
-> >
-> >Is the above the behavior that's expected right now?
-> >
-> >
-> >[1] https://lore.kernel.org/all/1674814487-2112-1-git-send-email-
-> >quic_kalyant@quicinc.com/
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
