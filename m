@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BF36903D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1436903D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjBIJdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S230245AbjBIJdk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 04:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjBIJdM (ORCPT
+        with ESMTP id S230315AbjBIJdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:33:12 -0500
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F62D627BE;
-        Thu,  9 Feb 2023 01:32:54 -0800 (PST)
-Received: by mail-pl1-x643.google.com with SMTP id u9so2232447plf.3;
-        Thu, 09 Feb 2023 01:32:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RSCzSrWqqFCSoi85FBiCMe7hRIEtbX3lmwkUIluqIE0=;
-        b=pBoefyZ6s2xqr+IWMGdZvzxq+YAqAa0nAZYyzT/vV+X6OyOxBsGpjGKeQXB8O9aTLG
-         gYSszmAarJ3/T39rr7O1Wh5F3jjDuStb3rHTF0GzjJ9kApQhSm7ijJ0nKcB3LpI6QkYu
-         AY9K8XCJYJcyVcmi3X7otABZoLPZHZOAzV0Av8vLIwJUmcFIdZRimhm8/feM2vjPQDtI
-         KdOwNLI07ctCHu2ucoUd1OrqgSJ39PbeCMqb6Qd6cwS378GWclJ/TxNCgdeJJ7CHL3GM
-         RVT9YAR4A//A0hMn7pNh34F2lFXq3ES0X3F4FQA6MGmo9vv3UM71rAx01hSwR991jMPZ
-         l1Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RSCzSrWqqFCSoi85FBiCMe7hRIEtbX3lmwkUIluqIE0=;
-        b=Of3p+GOME2rY1p3RTKDxvVGYEdQOpyBo6SIHka7p8Q5Zf6JePmFknZm0LFXPxHx+ly
-         AhsyRzpdjRkcabSYnBG6adojz2q6vDjCWLnfFjbAsnaW+9lDNorwh+zhafOxApQl1q8b
-         SbOFlLkbWtNvS2JkzESf/CmGwtjNPCB1wU1wgVXBMGxv8FeFev6i3hCp+JgWjL+RMt+D
-         66/twDgBhnv0DZ94Je3fJpg0TXnIhZrP6Ehx1j/YFqVQ4N5nsh6GXhs2deKmta77KUcO
-         VDgCPWxH6GjVBDFQRBOnkrIAWbkVJcw2oGAE8EcWXqW6tE4uebI/WFHvuitfuR54MYep
-         wg2Q==
-X-Gm-Message-State: AO0yUKVOcAo3//sxO7HUN7qebA0nDYfEpZnOj3brN6n05NSJ19krP9OG
-        xUMBA+qBeTjy1OtR47waNuM=
-X-Google-Smtp-Source: AK7set8yQ0RJ4MUM7zshG8MgcCoU9ZatSrW5D3SyCiuGZJdQdUBDKsJMh4F/RtZjXXiNpopRFR7tKA==
-X-Received: by 2002:a17:903:1107:b0:196:3f5a:b4f9 with SMTP id n7-20020a170903110700b001963f5ab4f9mr11140316plh.1.1675935173906;
-        Thu, 09 Feb 2023 01:32:53 -0800 (PST)
-Received: from hbh25y.. ([129.227.150.140])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902a40a00b0019663238703sm989116plq.109.2023.02.09.01.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 01:32:53 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     pshelar@ovn.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, xiangxia.m.yue@gmail.com,
-        echaudro@redhat.com
-Cc:     netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v2] net: openvswitch: fix possible memory leak in ovs_meter_cmd_set()
-Date:   Thu,  9 Feb 2023 17:32:40 +0800
-Message-Id: <20230209093240.14685-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 9 Feb 2023 04:33:23 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78CE65ED4;
+        Thu,  9 Feb 2023 01:33:13 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id AF01B24E2B9;
+        Thu,  9 Feb 2023 17:33:06 +0800 (CST)
+Received: from EXMBX167.cuchost.com (172.16.6.77) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Feb
+ 2023 17:33:06 +0800
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX167.cuchost.com
+ (172.16.6.77) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Feb
+ 2023 17:33:06 +0800
+Received: from EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4]) by
+ EXMBX168.cuchost.com ([fe80::3c2d:dee5:4938:3fc4%16]) with mapi id
+ 15.00.1497.044; Thu, 9 Feb 2023 17:33:06 +0800
+From:   JiaJie Ho <jiajie.ho@starfivetech.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: RE: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+Thread-Topic: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+Thread-Index: AQHZNMIM/vLXVq3JgUiER7vBRC/T367F3jsAgACIQGA=
+Date:   Thu, 9 Feb 2023 09:33:06 +0000
+Message-ID: <88a62a7a11814d629e2198583a0349b6@EXMBX168.cuchost.com>
+References: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
+ <20230130154242.112613-5-jiajie.ho@starfivetech.com>
+ <Y+S5fBjZQZli9nBg@gondor.apana.org.au>
+In-Reply-To: <Y+S5fBjZQZli9nBg@gondor.apana.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [202.188.176.82]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-old_meter needs to be free after it is detached regardless of whether
-the new meter is successfully attached.
 
-Fixes: c7c4c44c9a95 ("net: openvswitch: expand the meters supported number")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
 
-v2: use goto label and free old_meter outside of ovs lock.
+> -----Original Message-----
+> From: Herbert Xu <herbert@gondor.apana.org.au>
+> Sent: 9 February, 2023 5:15 PM
+> To: JiaJie Ho <jiajie.ho@starfivetech.com>
+> Cc: David S . Miller <davem@davemloft.net>; Rob Herring
+> <robh+dt@kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt@linaro.org>; Emil Renner Berthing
+> <kernel@esmil.dk>; Conor Dooley <conor.dooley@microchip.com>; linux-
+> crypto@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-riscv@lists.infradead.org
+> Subject: Re: [PATCH v2 4/4] crypto: starfive - Add hash and HMAC support
+> 
+> On Mon, Jan 30, 2023 at 11:42:42PM +0800, Jia Jie Ho wrote:
+> >
+> > +	cryp->hash_data = (void *)__get_free_pages(GFP_KERNEL |
+> GFP_DMA32,
+> > +pages);
+> 
+> Why do you copy everything before you feed it to the hardware?
+> If the issue is alignment then surely you should only to copy a small amount
+> of header (and perhaps trailer) for that?
+> 
 
- net/openvswitch/meter.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+The DMA can only support 32-bit addressing.
+So, I am copying everything in case kernel allocated memory region >32-bit for a user app.
 
-diff --git a/net/openvswitch/meter.c b/net/openvswitch/meter.c
-index 6e38f68f88c2..9b680f0894f1 100644
---- a/net/openvswitch/meter.c
-+++ b/net/openvswitch/meter.c
-@@ -417,6 +417,7 @@ static int ovs_meter_cmd_set(struct sk_buff *skb, struct genl_info *info)
- 	int err;
- 	u32 meter_id;
- 	bool failed;
-+	bool locked = true;
- 
- 	if (!a[OVS_METER_ATTR_ID])
- 		return -EINVAL;
-@@ -448,11 +449,13 @@ static int ovs_meter_cmd_set(struct sk_buff *skb, struct genl_info *info)
- 		goto exit_unlock;
- 
- 	err = attach_meter(meter_tbl, meter);
--	if (err)
--		goto exit_unlock;
- 
- 	ovs_unlock();
- 
-+	if (err) {
-+		locked = false;
-+		goto exit_free_old_meter;
-+	}
- 	/* Build response with the meter_id and stats from
- 	 * the old meter, if any.
- 	 */
-@@ -472,8 +475,11 @@ static int ovs_meter_cmd_set(struct sk_buff *skb, struct genl_info *info)
- 	genlmsg_end(reply, ovs_reply_header);
- 	return genlmsg_reply(reply, info);
- 
-+exit_free_old_meter:
-+	ovs_meter_free(old_meter);
- exit_unlock:
--	ovs_unlock();
-+	if (locked)
-+		ovs_unlock();
- 	nlmsg_free(reply);
- exit_free_meter:
- 	kfree(meter);
--- 
-2.34.1
+> > +static int starfive_hash_export(struct ahash_request *req, void *out)
+> > +{
+> > +	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
+> > +
+> > +	memcpy(out, rctx, sizeof(*rctx));
+> > +
+> > +	return 0;
+> > +}
+> 
+> You are supposed to extract the entire hardware state after each operation
+> and store that in the request context.  Since your request context doesn't
+> appear to contain any hash state, this can't possibly work.
+> 
+> Does your hardware allow the non-finalised hash state to be exported, and
+> re-imported later? If not then you can only implement support for digest and
+> must use a fallback for everything else.
+
+The hardware doesn't support this. I'll add the fallback in the next version.
+Thanks for taking time reviewing this patch series.
+
+Regards,
+Jia Jie
+
 
