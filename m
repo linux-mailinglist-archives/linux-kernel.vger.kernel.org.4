@@ -2,89 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9397A69025B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E4C690252
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjBIIoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 03:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
+        id S229627AbjBIImI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 03:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjBIIoN (ORCPT
+        with ESMTP id S229473AbjBIImG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 03:44:13 -0500
-Received: from out-88.mta1.migadu.com (out-88.mta1.migadu.com [95.215.58.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B772C67D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:44:10 -0800 (PST)
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675932248;
+        Thu, 9 Feb 2023 03:42:06 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB8F2C64B;
+        Thu,  9 Feb 2023 00:42:02 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4D32FE000B;
+        Thu,  9 Feb 2023 08:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675932120;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X09NlSnlCqOFDHRmNIUla4/Fdrekk7b5KqSyYEpqWl8=;
-        b=WwQGh7T9xxTDhr9W788ubHBHcdXgYY7Oqovq8/c9trbzG6OndR+u8qbMNc2OFhttbkT/m/
-        8eKX8QOVMyAemHWbNxTIPeSlxVP293Ju4CqdYN6UvsEDMe1M2QSS82HQ3BgUhyz6BKXCfe
-        izEKhVRlxFKMICPZA45aYQo1YX9IJkA=
-Date:   Thu, 09 Feb 2023 08:44:02 +0000
-Content-Type: text/plain; charset="utf-8"
+        bh=ooVzYxiM4t9AebCSCVJ70rAuJCUUUwE+rUOXUOUgcxM=;
+        b=gstnFl6MBRr8xq0O17JVgbC1YKDk12nT78/vBDZ4dmM39tT3igbzZ8jeCjdF/Cxjhe6iF/
+        UgGVXO9IqWJ1+PZXQnCXHbWyLRDbOg3pE1UvG0AU3UEALIZ0K0mib7BcwMO45uuCHruW9k
+        fedjyeDwdrrDzQd5dxbPku7/DY6S8VJXMjQCC9w5M3QJ5KyRmg6FdGSuJ6Ul5pOeWcbxs8
+        wqgIJIkS+zpGk7rinikMpK/ejKUlRf6P+oE4BjnyQ0OX6NIhqW4+12Bema7q8gVfMChtm5
+        sd+8EHTtUJ0Il6FLWzVDrJxzWjP4/QVUFC2fTwpiCgPIYLgg2NO9aO5Ptm+mww==
+Date:   Thu, 9 Feb 2023 09:44:22 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/3] net: dsa: rzn1-a5psw: add vlan support
+Message-ID: <20230209094422.3905428c@fixe.home>
+In-Reply-To: <20230208220219.t7nejekbmqu7vv75@skbuf>
+References: <20230208161749.331965-1-clement.leger@bootlin.com>
+        <20230208161749.331965-4-clement.leger@bootlin.com>
+        <317ec9fc-87de-2683-dfd4-30fe94e2efd7@gmail.com>
+        <20230208220219.t7nejekbmqu7vv75@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <7cc548bc6be5f84e1fb9c6cac07b7451@linux.dev>
-Subject: Re: [PATCH] mm/page_alloc: optimize the loop in
- find_suitable_fallback()
-To:     "Vlastimil Babka" <vbabka@suse.cz>, akpm@linux-foundation.org
-Cc:     ziy@nvidia.com, mgorman@techsingularity.net, david@redhat.com,
-        rppt@linux.ibm.com, osalvador@suse.de, rppt@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-In-Reply-To: <362e1270-8a54-36f5-f7c0-d922b3d12860@suse.cz>
-References: <362e1270-8a54-36f5-f7c0-d922b3d12860@suse.cz>
- <20230209024435.3392916-1-yajun.deng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-February 9, 2023 4:12 PM, "Vlastimil Babka" <vbabka@suse.cz> wrote:=0A=0A=
-> On 2/9/23 03:44, Yajun Deng wrote:=0A> =0A>> There is no need to execut=
-e the next loop if it not return in the first=0A>> loop. So add a break a=
-t the end of the loop.=0A>> =0A>> There are only three rows in fallbacks,=
- so reduce the first index size=0A>> from MIGRATE_TYPES to MIGRATE_PCPTYP=
-ES.=0A>> =0A>> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>=0A> =0A> =
-Acked-by: Vlastimil Babka <vbabka@suse.cz>=0A> =0A>> ---=0A>> mm/page_all=
-oc.c | 11 +++++------=0A>> 1 file changed, 5 insertions(+), 6 deletions(-=
-)=0A>> =0A>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c=0A>> index 11=
-13483fa6c5..536e8d838fb5 100644=0A>> --- a/mm/page_alloc.c=0A>> +++ b/mm/=
-page_alloc.c=0A>> @@ -2603,7 +2603,7 @@ struct page *__rmqueue_smallest(s=
-truct zone *zone, unsigned int order,=0A>> *=0A>> * The other migratetype=
-s do not have fallbacks.=0A>> */=0A>> -static int fallbacks[MIGRATE_TYPES=
-][MIGRATE_PCPTYPES - 1] =3D {=0A>> +static int fallbacks[MIGRATE_PCPTYPES=
-][MIGRATE_PCPTYPES - 1] =3D {=0A>> [MIGRATE_UNMOVABLE] =3D { MIGRATE_RECL=
-AIMABLE, MIGRATE_MOVABLE },=0A>> [MIGRATE_MOVABLE] =3D { MIGRATE_RECLAIMA=
-BLE, MIGRATE_UNMOVABLE },=0A>> [MIGRATE_RECLAIMABLE] =3D { MIGRATE_UNMOVA=
-BLE, MIGRATE_MOVABLE },=0A>> @@ -2861,7 +2861,7 @@ int find_suitable_fall=
-back(struct free_area *area, unsigned int order,=0A>> int i;=0A>> int fal=
-lback_mt;=0A>> =0A>> - if (area->nr_free =3D=3D 0)=0A>> + if (area->nr_fr=
-ee =3D=3D 0 || !migratetype_is_mergeable(migratetype))=0A> =0A> Just curi=
-ous, did you the check for extra safety or did you find (by running=0A> o=
-r code inspection) that this can be indeed called with a non-mergeable=0A=
-> migratetype, and cause out of bounds access of the shrinked fallbacks a=
-rray?=0A> =0A=0ANo, I'm not sure if it is called with a non-mergeable mig=
-ratetype.=0AIt is just for extra safety.=0A=0A> BTW, I noticed the commme=
-nt on migratetype_is_mergeable() contains:=0A> =0A> "See fallbacks[MIGRAT=
-E_TYPES][3] in page_alloc.c. "=0A> =0A> Should probably change it to e.g.=
- "See fallbacks[][] array ..." so we don't=0A> have to keep it in exact s=
-ync...=0A> =0A=0AYes, this comment should be changed.=0ASo do I need to s=
-ubmit a v2 patch?=0A=0A>> return -1;=0A>> =0A>> *can_steal =3D false;=0A>=
-> @@ -2873,11 +2873,10 @@ int find_suitable_fallback(struct free_area *ar=
-ea, unsigned int order,=0A>> if (can_steal_fallback(order, migratetype))=
-=0A>> *can_steal =3D true;=0A>> =0A>> - if (!only_stealable)=0A>> - retur=
-n fallback_mt;=0A>> -=0A>> - if (*can_steal)=0A>> + if (!only_stealable |=
-| *can_steal)=0A>> return fallback_mt;=0A>> + else=0A>> + break;=0A>> }=
-=0A>> =0A>> return -1;
+Le Thu, 9 Feb 2023 00:02:19 +0200,
+Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+
+> On Wed, Feb 08, 2023 at 09:38:04AM -0800, Florian Fainelli wrote:
+> > > +	/* Enable TAG always mode for the port, this is actually controlled
+> > > +	 * by VLAN_IN_MODE_ENA field which will be used for PVID insertion
+> > > +	 */
+> > > +	reg =3D A5PSW_VLAN_IN_MODE_TAG_ALWAYS;
+> > > +	reg <<=3D A5PSW_VLAN_IN_MODE_PORT_SHIFT(port);
+> > > +	a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE, A5PSW_VLAN_IN_MODE_PORT(po=
+rt),
+> > > +		      reg); =20
+> >=20
+> > If we always enable VLAN mode, which VLAN ID do switch ports not part o=
+f a
+> > VLAN aware bridge get classified into? =20
+>=20
+> Good question. I'd guess 0, since otherwise, the VLAN-unaware FDB
+> entries added with a5psw_port_fdb_add() wouldn't work.
+
+The name of the mode is probably missleading. When setting VLAN_IN_MODE
+with A5PSW_VLAN_IN_MODE_TAG_ALWAYS, the input packet will be tagged
+_only_ if VLAN_IN_MODE_ENA port bit is set. If this bit is not set,
+packet will passthrough transparently. This bit is actually enabled in
+a5psw_port_vlan_add() when a PVID is set and unset when the PVID is
+removed. Maybe the comment above these lines was not clear enough.
+
+>=20
+> But the driver has to survive the following chain of commands, which, by
+> looking at the current code structure, it doesn't:
+>=20
+> ip link add br0 type bridge vlan_filtering 0
+> ip link set swp0 master br0 # PVID should remain at a value chosen privat=
+ely by the driver
+> bridge vlan add dev swp0 vid 100 pvid untagged # PVID should not change i=
+n hardware yet
+> ip link set br0 type bridge vlan_filtering 1 # PVID should change to 100 =
+now
+> ip link set br0 type bridge vlan_filtering 0 # PVID should change to the =
+value chosen by the driver
+>=20
+> Essentially, what I'm saying is that VLANs added with "bridge vlan add"
+> should only be active while vlan_filtering=3D1.
+>=20
+> If you search for "commit_pvid" in drivers/net/dsa, you'll find a number
+> of drivers which have a more elaborate code structure which allows the
+> commands above to work properly.
+
+
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com
