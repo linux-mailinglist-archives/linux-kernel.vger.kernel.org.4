@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8305D6900F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14136900E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjBIHOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 02:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S229899AbjBIHOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 02:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBIHOK (ORCPT
+        with ESMTP id S229709AbjBIHOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 9 Feb 2023 02:14:10 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BA76EBE;
-        Wed,  8 Feb 2023 23:14:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F2C1B33C;
+        Wed,  8 Feb 2023 23:14:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=ov9sgtmaVVk76Nnibt+EsTt5whBz9yioDNjhR8t7vzM=; b=sotlfO2ckkITNtMuLW72f3/Oed
-        FkjR9N20VHrFzd0sN42rLRcMpV/kIlKfI7aYuhMY7tXgpIVnQ6hdzvPwNPttm4M7zr3y/vDiCVjaM
-        aUk3sUJttR686//8ozmIXp/BAnOuzbxBxMNfjSNfkmN8CTU6ypH4nt5lFmR1uq2Zyrhu7ijerAtYh
-        U4ZfEqYxWoRi4sxIRcaZ+Irg7DPwrf94IEucLhOzwRDftx1vSqObd/F6yHlFEyrak+lFZrdhjNOVW
-        V/3lZhi6gNF0ImlLJC6G1bydJSvVb4iEET4L4i3PfMEwuldWgDhm3dNNGF0zX0Koa1gmkr7PgwoRp
-        Xzk41sTQ==;
+        bh=ne9BZXE2iGM8OzEUId4GcMH1B4GCk5QE1QnyEU0ZMDY=; b=Gnu931rUugqu6/NTy96e4cSCb3
+        YMPfyooaHOAUgFp2TnsirmkhX4rtEbdKrfewKNx1cnlLYCehfbOc9rSYcVTJTAkB3zXuXfkpMFO/c
+        +QbVHWMs5e2kq8xc7DyTdNV1mM2dnSGs5Oua2etemHzKoCVzIwNUZ1SUlRbu4Xou4+f6So4bLMynB
+        GE28fgtIFXNhXmNMBZoOj0ptK/DcpORE3poIdIrEE76JMeobIljmWeD67pj3GiHoHdgH9WkVpC/00
+        PQSlm4vi5Q65OIzZdOpfIABFn8OVhuPjWZm5vMDlxw9PiRJmXr6pPrt+6euJsGLGQW4/FMz5bUR1s
+        5W4QgASA==;
 Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pQ189-000LPt-Tq; Thu, 09 Feb 2023 07:14:06 +0000
+        id 1pQ18A-000LPt-Bf; Thu, 09 Feb 2023 07:14:06 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Vladimir Oltean <olteanv@gmail.com>, netdev@vger.kernel.org,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        linux-crypto@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         linux-doc@vger.kernel.org, Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH 02/24] Documentation: block: correct spelling
-Date:   Wed,  8 Feb 2023 23:13:38 -0800
-Message-Id: <20230209071400.31476-3-rdunlap@infradead.org>
+Subject: [PATCH 03/24] Documentation: core-api: correct spelling
+Date:   Wed,  8 Feb 2023 23:13:39 -0800
+Message-Id: <20230209071400.31476-4-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230209071400.31476-1-rdunlap@infradead.org>
 References: <20230209071400.31476-1-rdunlap@infradead.org>
@@ -50,28 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/block/ as reported
+Correct spelling problems for Documentation/core-api/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org
+Cc: Vladimir Oltean <olteanv@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc: linux-crypto@vger.kernel.org
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
 Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 ---
- Documentation/block/data-integrity.rst |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/core-api/packing.rst |    2 +-
+ Documentation/core-api/padata.rst  |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff -- a/Documentation/block/data-integrity.rst b/Documentation/block/data-integrity.rst
---- a/Documentation/block/data-integrity.rst
-+++ b/Documentation/block/data-integrity.rst
-@@ -209,7 +209,7 @@ will require extra work due to the appli
-       sector must be set, and the bio should have all data pages
-       added.  It is up to the caller to ensure that the bio does not
-       change while I/O is in progress.
--      Complete bio with error if prepare failed for some reson.
-+      Complete bio with error if prepare failed for some reason.
+diff -- a/Documentation/core-api/packing.rst b/Documentation/core-api/packing.rst
+--- a/Documentation/core-api/packing.rst
++++ b/Documentation/core-api/packing.rst
+@@ -161,6 +161,6 @@ xxx_packing() that calls it using the pr
  
+ The packing() function returns an int-encoded error code, which protects the
+ programmer against incorrect API use.  The errors are not expected to occur
+-durring runtime, therefore it is reasonable for xxx_packing() to return void
++during runtime, therefore it is reasonable for xxx_packing() to return void
+ and simply swallow those errors. Optionally it can dump stack or print the
+ error description.
+diff -- a/Documentation/core-api/padata.rst b/Documentation/core-api/padata.rst
+--- a/Documentation/core-api/padata.rst
++++ b/Documentation/core-api/padata.rst
+@@ -42,7 +42,7 @@ padata_shells associated with it, each a
+ Modifying cpumasks
+ ------------------
  
- 5.3 Passing Existing Integrity Metadata
+-The CPUs used to run jobs can be changed in two ways, programatically with
++The CPUs used to run jobs can be changed in two ways, programmatically with
+ padata_set_cpumask() or via sysfs.  The former is defined::
+ 
+     int padata_set_cpumask(struct padata_instance *pinst, int cpumask_type,
