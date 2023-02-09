@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB00868FF75
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D5768FF1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjBIElK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 23:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S230225AbjBIEcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjBIEk1 (ORCPT
+        with ESMTP id S230045AbjBIEbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:40:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A186A13DFD;
-        Wed,  8 Feb 2023 20:37:26 -0800 (PST)
+        Wed, 8 Feb 2023 23:31:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E77334319;
+        Wed,  8 Feb 2023 20:31:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0074BB81FFF;
-        Thu,  9 Feb 2023 04:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA812C433A8;
-        Thu,  9 Feb 2023 04:21:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04946B82003;
+        Thu,  9 Feb 2023 04:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC1DC433AF;
+        Thu,  9 Feb 2023 04:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675916501;
-        bh=XBpGPZeL8XTfy9VO7r09l+ADYGLyAn3GkbuBH5MBYDc=;
+        s=k20201202; t=1675916502;
+        bh=ll02GarvyOKiWpmI4d13m16oTGhxfr7g/ZMhKO6crH4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GhGqSBdXpd1rVykcZRLmBPUvbTGtge3Ou4zWXn6gsseF3IBTFVVqmmzkhNX6iIyjC
-         eoQHcB+DPlvQmjlcqIeTNiiSUfnCHIFm9koKax3iikICnUasZeB6VkFla0jC6dJOwk
-         jkJi/x8OhQ7EXEf0zGo97P5DX4Eh499UGoh138fZMEiDf5QQjel5Q9UMIwcWHomCDn
-         uNwJF8y1H6LuSRn4O8g9NoNFFEL0+/ox4c4VzpCG9xBFiishhEsDaJT7mzZUxwn5Rm
-         SqqnsZsDNEVdShZYhdl1R9OpezZnFNt8ujikRE+Czkk//Y06O50ayZVb1M/9ABcIFp
-         pbu4KDjCLRMUA==
+        b=dGmfIAIJn4Ob7TiGLjPQgSfVH9C6q/OefqwBS/IwO+36kafAvvnZbUAcVtsaFiaj8
+         PQkIaz9gV8TYhaiGwgQpDdsQWegERo1dMFUpMyZDCxkiuFT/chQ7Uq9zdV3FjM2ngO
+         hhsWLHsp83Cg6TJK3/uDB26aJMCQ+Q2rfjw7xN1ja57R2rqhce7FUzYidjNo4d7g+5
+         sTZGi2RvUUdbjLiMWf6bLljkQ51gG6xVZKIKSU2g2aqeCwgWwCgkdxHfj8vLlyUBPd
+         ob5775Pxn1SnJQGS2OaqXkNXe2mbh073wgVA+ml971r2rhOYG7NM2dU5miauGeTfQU
+         bmUQiDDBaeovA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Johan Hovold <johan+linaro@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>,
+To:     agross@kernel.org, krzysztof.kozlowski@linaro.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     bhupesh.sharma@linaro.org, Rob Herring <robh+dt@kernel.org>,
+        marijn.suijten@somainline.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 00/22] rtc: pm8xxx: add support for setting time using nvmem
-Date:   Wed,  8 Feb 2023 20:22:57 -0800
-Message-Id: <167591660371.1230100.17894948728225084854.b4-ty@kernel.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: (subset) [PATCH 1/2] arm64: dts: qcom: sm6115: Add mdss_ prefix to mdss nodes
+Date:   Wed,  8 Feb 2023 20:22:58 -0800
+Message-Id: <167591660365.1230100.11651102668427547462.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202155448.6715-1-johan+linaro@kernel.org>
-References: <20230202155448.6715-1-johan+linaro@kernel.org>
+In-Reply-To: <20230119101644.10711-1-konrad.dybcio@linaro.org>
+References: <20230119101644.10711-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,26 +58,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Feb 2023 16:54:26 +0100, Johan Hovold wrote:
-> This series adds support for setting the RTC time on Qualcomm platforms
-> where the PMIC RTC time registers are read-only by instead storing an
-> offset in some other non-volatile memory. This is used to enable the RTC
-> in the SC8280XP Compute Reference Design (CRD) and Lenovo Thinkpad X13s
-> laptop.
+On Thu, 19 Jan 2023 11:16:43 +0100, Konrad Dybcio wrote:
+> Add a mdss_ prefix to mdss nodes to keep them all near each other
+> when referencing them by label in device DTs.
 > 
-> The RTCs in many Qualcomm devices are effectively broken due to the time
-> registers being read-only. Instead some other non-volatile memory can be
-> used to store and offset which a driver can take into account. On
-> machines like the X13s, the UEFI firmware (and Windows) use a UEFI
-> variable for storing such an offset, but not all Qualcomm systems use
-> UEFI.
 > 
-> [...]
 
 Applied, thanks!
 
-[18/22] arm64: defconfig: enable Qualcomm SDAM nvmem driver
-        commit: 480ba14b9a95641647a6561d5b246de661589514
+[1/2] arm64: dts: qcom: sm6115: Add mdss_ prefix to mdss nodes
+      commit: 2f52e87499dd1644bc3ef6d5e8f817c0285aca4e
+[2/2] arm64: dts: qcom: sm6115: Use 64 bit addressing
+      commit: 70d1e09ebf192fdaf7e62a878842a73ba3a87170
 
 Best regards,
 -- 
