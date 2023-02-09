@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C7B69099E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 522FC69099F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjBINOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S230138AbjBINOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjBINN4 (ORCPT
+        with ESMTP id S230039AbjBINN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:13:56 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2B45EBFC
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:13:53 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id f23-20020a05600c491700b003dff4480a17so3905842wmp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 05:13:53 -0800 (PST)
+        Thu, 9 Feb 2023 08:13:57 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95A15ACC4
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:13:54 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id n13so1385324wmr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 05:13:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=efw37swPmywJmQt7P4bh+b3QJPTdP5Sd+iv+/8BqF9I=;
-        b=Hm2UVZKn8j00Xjy+/2jHbryM9Im/P1TEbXrvCJSQWCI6WDeX7JKZNB+r2LeTFR8Duw
-         52SEspmzdvCK7mZpMpE6Agh8BZZJihf+YT70iQ1F4ISTC7PC3AOpxn9ITwD8rZ+JfnoI
-         HOvRf/nRzH9eqPec2J9G+fldT14gl3Rt7V/8u6ZrQ2pAJYnunMy+MIxLx219gj5BUEM7
-         6GKNHu1jwzOCT8D3gVJWXcntWIifvc4H8c9q/fdeGKyghfeMfbS9X5WY/dfG1PxFYu/i
-         McaheEHsr8hGwE0cqZi0umwPzXKer2TiGkMMnBSXrisXnd3RzyOpGL/JY22nDtqROyfR
-         Fg9Q==
+        bh=NPMNrqeZWO55o8AuAcgfBuwWh3I0TkN1wM5VoUAdYRc=;
+        b=P5/7vAmoDhtyUlDOFPxWWFRqeYKHw8doDPEZBBNdtIVq/tXEgqP6HDXkgsDHQG75uj
+         BuJV5vmjH4QrQCnfFzzcRmVT3ejoinm3y5GEBKxcEeeD05XKfjCBAClKGnST3B8MQWBn
+         Oc9ahTVyT17Vg+/x06m23nWOiXJ4PHkiIM5dWbGETfG8UKXs8GnE9P+l+9vGNhAOPryv
+         SB4acICvJP0dUJDt6xotz75JpNVjolbpfbeHUVPmCeXC2RzRWI3hzObNL8NU/+9JNPDt
+         2mOU8jfUcVHMFTisSeQ4GxV8m4O9Zrv8n5ZG1Pox+2DVnyTohSu+1Kuswuhi67g9tHme
+         /3zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=efw37swPmywJmQt7P4bh+b3QJPTdP5Sd+iv+/8BqF9I=;
-        b=wrUo9qAHRfb+CFKlLdgacSq//oDgrmg6m1J4ZP22OHqgQuUESecjXUjgVuZMGu9LDM
-         ITr9HKkzxBpkb0IFduLqUAX6hK3taNDWBxcLSvjgE+5HF6ebx8NavDjnjroUy02j9rrB
-         Dp/6cmpMvDckKxZ+r1vgxHRYdr36uG1nx6TLn4gzTUYZgr2NDSAwplq3S0Tgm8qJNM6V
-         vqcQM1LWdnwKUjW6uUROQjiRKyu2cLDNO3KomGJJwhMvZ3tcR2aY4mkNxrp8BFGwxsNP
-         C+rz4EqddaSzrfazkSDZYa33gVeBEmzRw6mdI5oP5mx43kkJ4t6VP+1+5IYPENgjN+4t
-         BA6A==
-X-Gm-Message-State: AO0yUKVVM4cFKyDx2u59L3obPI4BuJQnP9k/+zFPRfKL1nk1qx2c9+cJ
-        eIf2YxFqT/8p6qxC1vu68dm2NQ==
-X-Google-Smtp-Source: AK7set/5t4R6vkbCi7xHYljKhRpCdrMwM173eSMG153XkPcECEZOP9zQsPoLSZqZJbWVxrvSBb6VEA==
-X-Received: by 2002:a05:600c:1686:b0:3db:2df0:f2b8 with SMTP id k6-20020a05600c168600b003db2df0f2b8mr5574813wmn.36.1675948432059;
-        Thu, 09 Feb 2023 05:13:52 -0800 (PST)
+        bh=NPMNrqeZWO55o8AuAcgfBuwWh3I0TkN1wM5VoUAdYRc=;
+        b=hWWlqFftJj7yDa5jRuEpdpcalsDdRTs4W8h1K0XSpFmvvmsQLXfcoA+cyQof0JAAUo
+         VUe6cFO7Ac34C9jo+fH7GwYs5ELUWm8v5NzS0r2BfzS+O+EadtU2q+9AfDWPDQ0/0ORG
+         HDnHXKg/92EGomnwWWQwBTmH0Q8AgyP2e8HXALY3tyKKbSWFZ/BYf44v7G6QmN4/Nxws
+         mJ2rhSKAjnmCoHfNKc7PXwIWIoHI9XPEMErN/uxyhGhL0Lmep7bFeDyRy2jRl+YN5/Dj
+         MTjgBTjaqksNwTWNb1qWh6bdglbFRkX85e/7DBof2c80TuUTk79t88WP+diUDMLCeEB4
+         bPwA==
+X-Gm-Message-State: AO0yUKXYPVVuFc85x5WFoBuT4x4CBKkoTnXDwOwTOIuqZqaJctGVgrNz
+        Bz6N3tXy4kwDZnww1PZPlSf0vQ==
+X-Google-Smtp-Source: AK7set8+KF1qJ63RGYOjxvONT/0dXdAeON0gJzSIfKGxOdbH/Nq2pMAk1kkn/QWQI4j+NQDJQZfcUQ==
+X-Received: by 2002:a05:600c:4485:b0:3dc:51ad:9dc4 with SMTP id e5-20020a05600c448500b003dc51ad9dc4mr9701331wmo.18.1675948433322;
+        Thu, 09 Feb 2023 05:13:53 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id ja13-20020a05600c556d00b003dc4b4dea31sm1789394wmb.27.2023.02.09.05.13.50
+        by smtp.gmail.com with ESMTPSA id ja13-20020a05600c556d00b003dc4b4dea31sm1789394wmb.27.2023.02.09.05.13.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 05:13:51 -0800 (PST)
+        Thu, 09 Feb 2023 05:13:52 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     vkoul@kernel.org
 Cc:     yung-chuan.liao@linux.intel.com,
@@ -57,9 +57,9 @@ Cc:     yung-chuan.liao@linux.intel.com,
         linux-kernel@vger.kernel.org, steev@kali.org,
         johan+linaro@kernel.org, quic_bjorande@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 4/5] soundwire: qcom: add software workaround for bus clash interrupt assertion
-Date:   Thu,  9 Feb 2023 13:13:35 +0000
-Message-Id: <20230209131336.18252-5-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 5/5] soundwire: qcom: set clk stop need reset flag at runtime
+Date:   Thu,  9 Feb 2023 13:13:36 +0000
+Message-Id: <20230209131336.18252-6-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230209131336.18252-1-srinivas.kandagatla@linaro.org>
 References: <20230209131336.18252-1-srinivas.kandagatla@linaro.org>
@@ -74,104 +74,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sometimes Hard reset does not clear some of the registers,
-this sometimes results in firing a bus clash interrupt.
-Add workaround for this during power up sequence, as
-suggested by hardware manual.
+WSA Soundwire controller needs an full reset if clock stop support
+is not available in slave devices. WSA881x does not support clock stop
+however WSA883x supports clock stop.
+
+Make setting this flag at runtime to address above issue.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/soundwire/qcom.c | 55 ++++++++++++++++++++++++----------------
- 1 file changed, 33 insertions(+), 22 deletions(-)
+ drivers/soundwire/qcom.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index 465b2a2ef0d5..74e38c0d651b 100644
+index 74e38c0d651b..0224a5a866de 100644
 --- a/drivers/soundwire/qcom.c
 +++ b/drivers/soundwire/qcom.c
-@@ -697,6 +697,26 @@ static irqreturn_t qcom_swrm_irq_handler(int irq, void *dev_id)
- 	return ret;
- }
+@@ -536,10 +536,14 @@ static int qcom_swrm_enumerate(struct sdw_bus *bus)
  
-+static bool swrm_wait_for_frame_gen_enabled(struct qcom_swrm_ctrl *swrm)
-+{
-+	int retry = SWRM_LINK_STATUS_RETRY_CNT;
-+	int comp_sts;
+ 		sdw_extract_slave_id(bus, addr, &id);
+ 		found = false;
++		ctrl->clock_stop_not_supported = false;
+ 		/* Now compare with entries */
+ 		list_for_each_entry_safe(slave, _s, &bus->slaves, node) {
+ 			if (sdw_compare_devid(slave, id) == 0) {
+ 				qcom_swrm_set_slave_dev_num(bus, slave, i);
++				if (!slave->prop.simple_clk_stop_capable)
++					ctrl->clock_stop_not_supported = true;
 +
-+	do {
-+		swrm->reg_read(swrm, SWRM_COMP_STATUS, &comp_sts);
-+
-+		if (comp_sts & SWRM_FRM_GEN_ENABLED)
-+			return true;
-+
-+		usleep_range(500, 510);
-+	} while (retry--);
-+
-+	dev_err(swrm->dev, "%s: link status %s\n", __func__,
-+		comp_sts & SWRM_FRM_GEN_ENABLED ? "connected" : "disconnected");
-+
-+	return false;
-+}
-+
- static int qcom_swrm_init(struct qcom_swrm_ctrl *ctrl)
- {
- 	u32 val;
-@@ -741,16 +761,27 @@ static int qcom_swrm_init(struct qcom_swrm_ctrl *ctrl)
- 				SWRM_RD_WR_CMD_RETRIES);
- 	}
+ 				found = true;
+ 				break;
+ 			}
+@@ -1500,15 +1504,6 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+ 		 (ctrl->version >> 24) & 0xff, (ctrl->version >> 16) & 0xff,
+ 		 ctrl->version & 0xffff);
  
-+	/* COMP Enable */
-+	ctrl->reg_write(ctrl, SWRM_COMP_CFG_ADDR, SWRM_COMP_CFG_ENABLE_MSK);
-+
- 	/* Set IRQ to PULSE */
- 	ctrl->reg_write(ctrl, SWRM_COMP_CFG_ADDR,
--			SWRM_COMP_CFG_IRQ_LEVEL_OR_PULSE_MSK |
--			SWRM_COMP_CFG_ENABLE_MSK);
-+			SWRM_COMP_CFG_IRQ_LEVEL_OR_PULSE_MSK);
-+
-+	ctrl->reg_write(ctrl, SWRM_INTERRUPT_CLEAR, 0xFFFFFFFF);
- 
- 	/* enable CPU IRQs */
- 	if (ctrl->mmio) {
- 		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CPU_EN,
- 				SWRM_INTERRUPT_STATUS_RMSK);
- 	}
-+
-+	/* Set IRQ to PULSE */
-+	ctrl->reg_write(ctrl, SWRM_COMP_CFG_ADDR,
-+			SWRM_COMP_CFG_IRQ_LEVEL_OR_PULSE_MSK |
-+			SWRM_COMP_CFG_ENABLE_MSK);
-+
-+	swrm_wait_for_frame_gen_enabled(ctrl);
- 	ctrl->slave_status = 0;
- 	ctrl->reg_read(ctrl, SWRM_COMP_PARAMS, &val);
- 	ctrl->rd_fifo_depth = FIELD_GET(SWRM_COMP_PARAMS_RD_FIFO_DEPTH, val);
-@@ -1504,26 +1535,6 @@ static int qcom_swrm_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static bool swrm_wait_for_frame_gen_enabled(struct qcom_swrm_ctrl *swrm)
--{
--	int retry = SWRM_LINK_STATUS_RETRY_CNT;
--	int comp_sts;
+-	/* Clk stop is not supported on WSA Soundwire masters */
+-	if (ctrl->version <= 0x01030000) {
+-		ctrl->clock_stop_not_supported = true;
+-	} else {
+-		ctrl->reg_read(ctrl, SWRM_COMP_MASTER_ID, &val);
+-		if (val == MASTER_ID_WSA)
+-			ctrl->clock_stop_not_supported = true;
+-	}
 -
--	do {
--		swrm->reg_read(swrm, SWRM_COMP_STATUS, &comp_sts);
--
--		if (comp_sts & SWRM_FRM_GEN_ENABLED)
--			return true;
--
--		usleep_range(500, 510);
--	} while (retry--);
--
--	dev_err(swrm->dev, "%s: link status not %s\n", __func__,
--		comp_sts & SWRM_FRM_GEN_ENABLED ? "connected" : "disconnected");
--
--	return false;
--}
--
- static int __maybe_unused swrm_runtime_resume(struct device *dev)
- {
- 	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
+ #ifdef CONFIG_DEBUG_FS
+ 	ctrl->debugfs = debugfs_create_dir("qualcomm-sdw", ctrl->bus.debugfs);
+ 	debugfs_create_file("qualcomm-registers", 0400, ctrl->debugfs, ctrl,
 -- 
 2.21.0
 
