@@ -2,127 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1AD6905FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022F6690603
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjBILBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 06:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S230181AbjBILB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 06:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjBILAu (ORCPT
+        with ESMTP id S230162AbjBILBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:00:50 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99CC6F21D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:00:19 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-52bed2ce9bdso19592867b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 03:00:19 -0800 (PST)
+        Thu, 9 Feb 2023 06:01:30 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D7F1A8
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:00:49 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id hx15so5111230ejc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 03:00:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VaYxH+luPubXrxEEO3mp39wyM7U5jIil6rypMHPCRe0=;
-        b=g9QGA7/AAmcCR0u2nHKp/6bm4mxU/rsqb1L8ruwzIkXuGwoZ/JMQ9i4JGhoGQ1e4wj
-         04easd/c+8IUOHEI7Nhrcl8hcJ1p/fcHaJumtOllg3BIwap3oifHTiNMHifpcBmCo0iO
-         qlRnHdMGYBwq168ZdarFDPaOE1jBVf6U+o2gxtcU3h3rCwlUa4VtNNhBM6ThtzneWpjA
-         /t91P9HqhqspPkm6MaTqsh7RiQlqiJglX+n9k1pAILGvjrp3D7UakAzdpgoaal4Lqduu
-         tTNNXJZ/TsShkTQ68tH2cs5p5dYu/nkSJDLN5zzKdBKZO3KNQLJgslDcRaJhppryczWM
-         lV7A==
+        bh=dEiNvwdsh50/luN7kcdBw0tT4i5v1/6EEunHYjmNZXs=;
+        b=Cc5tn2CKinqZh1y6GDQOh3jtJ28lfw2AwbOsVKLtGeveXXSVLDmwew92x9ux+0z56F
+         OfAYNU/fNb6jcMpYuzPpdqEP+cy1mUVEFyu9uOmyx9g2lYIp4o9FqtnL+bv04Ojl193D
+         BUU/NFJ8GwOYJ8E7P2goc0AceLXUIIbs8jlTxm6w9sRRkXKfV1vviPHYRD543YgiL4Q4
+         pivztwB4TrK7gBRgy5u2ivXhVjbx3SNjI2kr+zn2GO8xZ7oLhCjtviVLKl66WkEaViyu
+         pujsrnKl/l5Z4xl0Dd1Wm+OgAfj7DVpTK6iyBB+gyKK9YmCSR27IIyhsIaAbHQGoTTLm
+         z1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VaYxH+luPubXrxEEO3mp39wyM7U5jIil6rypMHPCRe0=;
-        b=OTPVYt6vqojaEc6ZfPWbKgX1M9JayzNrV2CTHmGr9msTtSDQ8iq+7HvutraDM5yR/+
-         JE3l+B8TVqNYyR0+vnu+/ToDS5zDJrYdYxYII9wDq1v7zkPyvbAoKLJPyNAAckAf6RSI
-         hAlRtEXx7BpM491VFyyWddv4uwHMae1zYScrn5CQn/1u27mZxtd2PLeeHg8dYdFAcO1S
-         7JRXTeP/EwlK1EPfi18esTUldBXteUZoGr2WqC85OankC0lDenoLKWKFy6TkdxRz12Lq
-         tZQrLHciUmdDWyLMvFwrjLOvVF1MdD5iX2mmb4Q1e0ifZU+6m+N+wrM+nnZGlL4QblEg
-         hUYQ==
-X-Gm-Message-State: AO0yUKXXVwdmbaNSQA9vG2HETBgMyrYA3extcc/iDiM/8dXk+sS8UviH
-        AHdZnf22EGYAIV3KxUfvlXrNnPMAXC28fDsWdpfHqw==
-X-Google-Smtp-Source: AK7set8Ok3cidPn89sCL0JHH7lDRufF+ifjH+mMj8j5if920VaOPfnFKUBiC/O/WL/lQMnus4S6RwSQgccoZTv8+Nyw=
-X-Received: by 2002:a0d:e743:0:b0:50b:429e:a9ef with SMTP id
- q64-20020a0de743000000b0050b429ea9efmr1049632ywe.434.1675940417102; Thu, 09
- Feb 2023 03:00:17 -0800 (PST)
+        bh=dEiNvwdsh50/luN7kcdBw0tT4i5v1/6EEunHYjmNZXs=;
+        b=C4QHHfBXDYn+ti0P6rbfk9fITS7uGvu7z3Hv0Z79rP7ZuRAew29T+c64+1PdayKckH
+         MmGp8mfZVPFk9eyhV3k4yaNzWsQP3QRQtg4+z3nU6ebUXt7fQyRu2m8QfsW1QL1ZQ+CR
+         T8m/Ig7Pmx1D/25/QKOdFUybJZbzNWZvzZcLo6NdpVdNXeqQelwPuEpoB5yGvdhLjHLJ
+         OnfAy2b0+67aTyirp9TArwlz11EH192cz6DVCfl4T+TDxbO77PaAKR1CjfKtnx9b2C0K
+         ZfNQWSsXcP9vk8Gr0evhOHkzo0/pi5gKIpGHxD6QXyACgoA8ToaCvxrs75RlTt78DtF2
+         ct/A==
+X-Gm-Message-State: AO0yUKVTIhx0fWYgWrJX2kWc/fks1z/jli5ZZgZkCKORP10yutLV78MR
+        iKdDr61pYvZgxKAdW4si2oYFuBlBq6OyyBycWAAL7Q==
+X-Google-Smtp-Source: AK7set+RaPbg+SOCzwGndo1Wa91cwrheg38QQCBg99GhoVwyzzAvFtOaofSU6Q5pBzPM0CXKp4JFifhFaFx0rd/k0bs=
+X-Received: by 2002:a17:906:ca04:b0:7c0:f45e:22ff with SMTP id
+ jt4-20020a170906ca0400b007c0f45e22ffmr2702674ejb.104.1675940443471; Thu, 09
+ Feb 2023 03:00:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20230208185714.27313-1-asmaa@nvidia.com> <20230208185714.27313-3-asmaa@nvidia.com>
-In-Reply-To: <20230208185714.27313-3-asmaa@nvidia.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Feb 2023 12:00:06 +0100
-Message-ID: <CACRpkdZC5YH4=AboEooDd4EQueCipSTbYpRtpxhMopbpXKnESA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] Support NVIDIA BlueField-3 pinctrl driver
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com, bgolaszewski@baylibre.com,
-        linux-acpi@vger.kernel.org, Niyas Sait <niyas.sait@linaro.org>
+References: <20230207130958.608305-2-bchihi@baylibre.com> <202302080018.wNeWiKqz-lkp@intel.com>
+In-Reply-To: <202302080018.wNeWiKqz-lkp@intel.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Thu, 9 Feb 2023 12:00:07 +0100
+Message-ID: <CAGuA+ori24xtbHnzYXGVSUOiU-T+V=33DPsHnsruGnP5Y_L7ZA@mail.gmail.com>
+Subject: Re: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to
+ mediatek folder
+To:     kernel test robot <lkp@intel.com>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Asmaa,
+this warning has been fixed by this patch :
+https://lore.kernel.org/all/20230113064449.15061-1-rdunlap@infradead.org/
 
-thanks for your patch!
-
-(Adding my colleague Niyas so he can have a look at this quite typical ACPI
-embedded pinctrl driver.)
-
-On Wed, Feb 8, 2023 at 7:57 PM Asmaa Mnebhi <asmaa@nvidia.com> wrote:
-
-> This patch adds support to the BlueField-3 SoC pin controller.
-> It allows muxing individual GPIOs to switch from the default
-> hardware mode to software controlled mode.
+On Tue, Feb 7, 2023 at 5:14 PM kernel test robot <lkp@intel.com> wrote:
 >
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
-
-(...)
-> +config PINCTRL_MLXBF
-> +       tristate "NVIDIA BlueField-3 SoC Pinctrl driver"
-> +       depends on (MELLANOX_PLATFORM && ARM64 && ACPI)
-> +       select PINMUX
-> +       select GPIOLIB
-> +       select GPIOLIB_IRQCHIP
-
-Since you're selecting these you could as well
-select GPIO_MLXBF3
-too.
-
-> +#include <linux/acpi.h>
-
-Oh ACPI, I hope Andy has time to look at this.
-
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +#include <linux/gpio.h>
-
-Drop this include, this is a legacy API, also this is not a GPIO driver.
-
-Go through the list and see if there are some more unnecessary headers.
-
-> +#include <linux/pinctrl/machine.h>
-
-Why?
-
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-> +#include <linux/pinctrl/pinconf.h>
-> +#include <linux/pinctrl/pinconf-generic.h>
-> +
-> +#include "core.h"
-
-Do you need this? (I'm uncertain myself, so try without.)
-
-Yours,
-Linus Walleij
+> Hi,
+>
+> Thank you for the patch! Perhaps something to improve:
+>
+> [auto build test WARNING on a2c81dc59d41e92362ab7d41d0c15471ea50637d]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
+> base:   a2c81dc59d41e92362ab7d41d0c15471ea50637d
+> patch link:    https://lore.kernel.org/r/20230207130958.608305-2-bchihi%40baylibre.com
+> patch subject: [PATCH v13 1/6] thermal: drivers: mediatek: Relocate driver to mediatek folder
+> config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230208/202302080018.wNeWiKqz-lkp@intel.com/config)
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/0eb89997925c0d7b47bbeee93016146fc660b259
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230207-211351
+>         git checkout 0eb89997925c0d7b47bbeee93016146fc660b259
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/thermal/mediatek/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/thermal/mediatek/auxadc_thermal.c:562: warning: expecting prototype for raw_to_mcelsius(). Prototype was for raw_to_mcelsius_v1() instead
+>
+>
+> vim +562 drivers/thermal/mediatek/auxadc_thermal.c
+>
+> a4ffe6b52d27f4 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  551
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  552  /**
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  553   * raw_to_mcelsius - convert a raw ADC value to mcelsius
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  554   * @mt:     The thermal controller
+> 3772bb422072d4 drivers/thermal/mtk_thermal.c Amit Kucheria 2019-11-20  555   * @sensno: sensor number
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  556   * @raw:    raw ADC value
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  557   *
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  558   * This converts the raw ADC value to mcelsius using the SoC specific
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  559   * calibration constants
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  560   */
+> 54bf1e5a629dfb drivers/thermal/mtk_thermal.c Henry Yen     2020-04-30  561  static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw)
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30 @562  {
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  563      s32 tmp;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  564
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  565      raw &= 0xfff;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  566
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  567      tmp = 203450520 << 3;
+> f84514766985d3 drivers/thermal/mtk_thermal.c Michael Kao   2019-02-01  568      tmp /= mt->conf->cali_val + mt->o_slope;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  569      tmp /= 10000 + mt->adc_ge;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  570      tmp *= raw - mt->vts[sensno] - 3350;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  571      tmp >>= 3;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  572
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  573      return mt->degc_cali * 500 - tmp;
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  574  }
+> a92db1c8089e82 drivers/thermal/mtk_thermal.c Sascha Hauer  2015-11-30  575
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
