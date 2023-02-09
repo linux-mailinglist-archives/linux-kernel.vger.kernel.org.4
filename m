@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2212A6908C3
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1106908C4
 	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjBIM2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S229870AbjBIM2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjBIM2U (ORCPT
+        with ESMTP id S229881AbjBIM2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:28:20 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B109274B9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:19 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id ba1so1594692wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:19 -0800 (PST)
+        Thu, 9 Feb 2023 07:28:22 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0F923C62
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:20 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id a2so1590099wrd.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JongRsuVGtYNajpohdC5ZEm05+E/44o4yeTIeuBWqPg=;
-        b=alMmw7K9GMnEn1dIokLBXd4VnAN2PqcPqLeYDOvmAEvT+atiV99OFPdGXozBSW1ssj
-         ccORQTeZzjA8aLRxMsj+skj1xDRSXVIxjBTUzh/apuAPqn3ele+M/sugsW1C8k03X4tq
-         YEdEGEkEY0o6n2vIisvGuacfKbPSLlHmbGSqDowpOOmRMEwfTxvAZlQocUX5x+u1kCzO
-         FlguWkcJCItO/oGT/y3ZoY6MzZrV7rX4TJjuDtvzTQtG6M1zMIj58VTStQDka8oVsu6l
-         vxSOHg31mXv1kY4gERgMIEM5NUEpTNpfzi4iQAkFWsF2FXAteACyABSGiHPdHEsbptBC
-         nk1A==
+        bh=la+zSqZHnDH4NrBUp1B5sU6rN4yJdP2UMwQ4cL39N1A=;
+        b=NjJeO8GgEt5hDiYdbv5bupUhixSFr+wUIsKkd+sY5GLYBTq3Hm+wfWYDNRbQCj3qyY
+         lOCho4plKkO9xSwt3s6vP5IOL3mcbj0Ex52Mfmy1ajY5I7d5jaohXOg55uyzw2cgg3KI
+         zgy84M8Q2FOmONb5dw8Q94MiDi+jbATkcD7EUUIhhDRYnFxgGTlyP3aKIr+4McvVWIGu
+         STr+HyKJGeHESpFdQIBMdibvzGHzG6bf02K5nMsod7TWj1YZmiLmmXL3cwAnjnQVSnB3
+         FMVlG4qroocbJHKg/bHiL9zWuyvnSsHQmeD/CtqPUwprP2y2DmVZaIuGXhyRuxevolhG
+         7wIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JongRsuVGtYNajpohdC5ZEm05+E/44o4yeTIeuBWqPg=;
-        b=dgM/jattlhtloyVGd/mxvv7IITqq6v3ufAiB08d03VQ+TZ0MS/fOviemV+qWOuC20s
-         Uw5kfdcNnOkIRA0wteikFO9TwBb+aVlifh6MKnEcJLpT7LTmvym4bNTIBna0C03Sgo6X
-         vE+hbMwmlf6EncVdzZIKzR2TpjFXkCpA3XkHtmRkoRROmprzpZXLjopi/0XQccq3ncDM
-         BN+6/Nrj+o496GIs/4ulYuBQpIH982KMwHT7yaoAA3PN0Zwm9JodY9r1UXyvjmMtUtG9
-         wOmjhiYGzAK5KMncCqNqIfjpohbBKh+LNtutO9SFm5LvVJr3hH0/GVillVm1JjPYxxSH
-         GkjQ==
-X-Gm-Message-State: AO0yUKWD0Ew14Pia1Z5Aqh/9lTO1wvzdSUd/BRTafaSebd9o1lWDSlZM
-        E0IFjBKTbVZzEX3T60wYGwQKgQ==
-X-Google-Smtp-Source: AK7set8SioHyugKUVRQMPGwHDkqYTiDLPA9qpldsYrSbri1MnKs3q0k8fi7Ii5vdS25u7FD8u9iJ2g==
-X-Received: by 2002:a05:6000:8:b0:2c2:ad22:40ba with SMTP id h8-20020a056000000800b002c2ad2240bamr10493326wrx.68.1675945697850;
-        Thu, 09 Feb 2023 04:28:17 -0800 (PST)
+        bh=la+zSqZHnDH4NrBUp1B5sU6rN4yJdP2UMwQ4cL39N1A=;
+        b=UnvmK6DUkOKqRYH848vIuWqlFVYj66Qc3ixVxfzSDeRUnG0qNb9wh3ZhO4uMA1kzBH
+         JrQOsPSonmCv27fbGyQx36iH2CgDx4X7Wp3kRHuSyskyA6TCQbZIGgkeguw5oVS50cT6
+         QTntz2MCnQeEqJbc09VRRj+kRW8XgftEJkR6RalmXgF+sneqxivdusCLvpCHEj9fO+lf
+         XXzPwSFzU13Xla0zSnxep1vcqKzE2vmXxm5sV3zerf72eWXNqpaKMy33tSDmNl3IxYKR
+         Ss0Y4kxN/u5iytQ3G4JghkXlicrOtrDVabWkJl/B+pGfjAuzW9JqCjkOZmU1VtHMgsBO
+         7HJQ==
+X-Gm-Message-State: AO0yUKXAehZMMmOQ66DJGgq3g9aMCGGKyPArn6RftIva4NGay2423Mva
+        jv/sh+k+MBevWWrHhdRJaeK62A==
+X-Google-Smtp-Source: AK7set/AU65Rnx4Ciaza1virFRj0oTjWBnjQjLYEOCtTb8yh6x2aof018UXZTiQsjFqaLAQSMVUJWQ==
+X-Received: by 2002:adf:f9cc:0:b0:2c3:e7d8:245c with SMTP id w12-20020adff9cc000000b002c3e7d8245cmr10617613wrr.13.1675945699206;
+        Thu, 09 Feb 2023 04:28:19 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.16
+        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 04:28:17 -0800 (PST)
+        Thu, 09 Feb 2023 04:28:18 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
         steev@kali.org, johan+linaro@kernel.org, quic_bjorande@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 2/8] ASoC: qcom: q6apm-dai: fix race condition while updating the position pointer
-Date:   Thu,  9 Feb 2023 12:28:00 +0000
-Message-Id: <20230209122806.18923-3-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 3/8]  ASoC: qcom: q6apm-dai: Add SNDRV_PCM_INFO_BATCH flag
+Date:   Thu,  9 Feb 2023 12:28:01 +0000
+Message-Id: <20230209122806.18923-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
 References: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
@@ -73,90 +73,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is noticed that the position pointer value seems to get a get corrupted
-due to missing locking between updating and reading.
+At the moment, playing audio with PulseAudio with the qdsp6 driver
+results in distorted sound. It seems like its timer-based scheduling
+does not work properly with qdsp6 since setting tsched=0 in
+the PulseAudio configuration avoids the issue.
 
-Fix this by adding a spinlock around the position pointer.
+Apparently this happens when the pointer() callback is not accurate
+enough. There is a SNDRV_PCM_INFO_BATCH flag that can be used to stop
+PulseAudio from using timer-based scheduling by default.
+
+According to https://www.alsa-project.org/pipermail/alsa-devel/2014-March/073816.html:
+
+The flag is being used in the sense explained in the previous audio
+meeting -- the data transfer granularity isn't fine enough but aligned
+to the period size (or less).
+
+q6apm-dai reports the position as multiple of
+
+prtd->pcm_count = snd_pcm_lib_period_bytes(substream)
+
+so it indeed just a multiple of the period size.
+
+Therefore adding the flag here seems appropriate and makes audio
+work out of the box.
+
+Comment log inspired by Stephan Gerhold sent for q6asm-dai.c few years back.
 
 Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/qdsp6/q6apm-dai.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ sound/soc/qcom/qdsp6/q6apm-dai.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-index ee59ef36b85a..bd35067a4052 100644
+index bd35067a4052..7f02f5b2c33f 100644
 --- a/sound/soc/qcom/qdsp6/q6apm-dai.c
 +++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-@@ -8,6 +8,7 @@
- #include <linux/slab.h>
- #include <sound/soc.h>
- #include <sound/soc-dapm.h>
-+#include <linux/spinlock.h>
- #include <sound/pcm.h>
- #include <asm/dma.h>
- #include <linux/dma-mapping.h>
-@@ -53,6 +54,7 @@ struct q6apm_dai_rtd {
- 	uint16_t session_id;
- 	enum stream_state state;
- 	struct q6apm_graph *graph;
-+	spinlock_t lock;
- };
- 
- struct q6apm_dai_data {
-@@ -99,20 +101,25 @@ static void event_handler(uint32_t opcode, uint32_t token, uint32_t *payload, vo
- {
- 	struct q6apm_dai_rtd *prtd = priv;
- 	struct snd_pcm_substream *substream = prtd->substream;
-+	unsigned long flags;
- 
- 	switch (opcode) {
- 	case APM_CLIENT_EVENT_CMD_EOS_DONE:
- 		prtd->state = Q6APM_STREAM_STOPPED;
- 		break;
- 	case APM_CLIENT_EVENT_DATA_WRITE_DONE:
-+	        spin_lock_irqsave(&prtd->lock, flags);
- 		prtd->pos += prtd->pcm_count;
-+		spin_unlock_irqrestore(&prtd->lock, flags);
- 		snd_pcm_period_elapsed(substream);
- 		if (prtd->state == Q6APM_STREAM_RUNNING)
- 			q6apm_write_async(prtd->graph, prtd->pcm_count, 0, 0, 0);
- 
- 		break;
- 	case APM_CLIENT_EVENT_DATA_READ_DONE:
-+	        spin_lock_irqsave(&prtd->lock, flags);
- 		prtd->pos += prtd->pcm_count;
-+		spin_unlock_irqrestore(&prtd->lock, flags);
- 		snd_pcm_period_elapsed(substream);
- 		if (prtd->state == Q6APM_STREAM_RUNNING)
- 			q6apm_read(prtd->graph);
-@@ -253,6 +260,7 @@ static int q6apm_dai_open(struct snd_soc_component *component,
- 	if (prtd == NULL)
- 		return -ENOMEM;
- 
-+	spin_lock_init(&prtd->lock);
- 	prtd->substream = substream;
- 	prtd->graph = q6apm_graph_open(dev, (q6apm_cb)event_handler, prtd, graph_id);
- 	if (IS_ERR(prtd->graph)) {
-@@ -332,11 +340,17 @@ static snd_pcm_uframes_t q6apm_dai_pointer(struct snd_soc_component *component,
- {
- 	struct snd_pcm_runtime *runtime = substream->runtime;
- 	struct q6apm_dai_rtd *prtd = runtime->private_data;
-+	snd_pcm_uframes_t ptr;
-+	unsigned long flags;
- 
-+	spin_lock_irqsave(&prtd->lock, flags);
- 	if (prtd->pos == prtd->pcm_size)
- 		prtd->pos = 0;
- 
--	return bytes_to_frames(runtime, prtd->pos);
-+	ptr =  bytes_to_frames(runtime, prtd->pos);
-+	spin_unlock_irqrestore(&prtd->lock, flags);
-+
-+	return ptr;
- }
- 
- static int q6apm_dai_hw_params(struct snd_soc_component *component,
+@@ -64,7 +64,8 @@ struct q6apm_dai_data {
+ static struct snd_pcm_hardware q6apm_dai_hardware_capture = {
+ 	.info =                 (SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_BLOCK_TRANSFER |
+ 				 SNDRV_PCM_INFO_MMAP_VALID | SNDRV_PCM_INFO_INTERLEAVED |
+-				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME),
++				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME |
++				 SNDRV_PCM_INFO_BATCH),
+ 	.formats =              (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE),
+ 	.rates =                SNDRV_PCM_RATE_8000_48000,
+ 	.rate_min =             8000,
+@@ -82,7 +83,8 @@ static struct snd_pcm_hardware q6apm_dai_hardware_capture = {
+ static struct snd_pcm_hardware q6apm_dai_hardware_playback = {
+ 	.info =                 (SNDRV_PCM_INFO_MMAP | SNDRV_PCM_INFO_BLOCK_TRANSFER |
+ 				 SNDRV_PCM_INFO_MMAP_VALID | SNDRV_PCM_INFO_INTERLEAVED |
+-				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME),
++				 SNDRV_PCM_INFO_PAUSE | SNDRV_PCM_INFO_RESUME |
++				 SNDRV_PCM_INFO_BATCH),
+ 	.formats =              (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE),
+ 	.rates =                SNDRV_PCM_RATE_8000_192000,
+ 	.rate_min =             8000,
 -- 
 2.21.0
 
