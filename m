@@ -2,249 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4637690A40
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7572690A4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjBINcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
+        id S229886AbjBINeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjBINbr (ORCPT
+        with ESMTP id S229701AbjBINeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:31:47 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BA35FE47;
-        Thu,  9 Feb 2023 05:31:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675949467; x=1707485467;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/t8Y9QaXdzABbElXcD4B00e+zQHiJl38CC6YeB+Ptco=;
-  b=lcVuPk30qekKGkyRJMWbbJVpE1k9ThYQeJVejwMcsFS9Ya/gUpG59P3b
-   g6SZbdDeX3Gqd28o3SEAaTRRxAAm3dZPEWnyPWG++q1oEEC6wb4ThZ3y9
-   HrrRVciB47HyAuqtJcWAaW2NQ8fcrakoxUb2VDECHVH1AMzVpKeuazOfz
-   MdlcoLW4G28iNxNepS6YFuDWYsAR8rqP6NfzGjW50uC22ktj7OVVCL00A
-   lgrm8KjHi/Z/qjIcYGlvlnR5HpHfwl/Tgm1Mt48TEMbNMSjwgGkNspJ0l
-   bRXpelPWv/dpWK448BTjWPfquT+ruXfsnnqNZjxvRHYJM+OyI3nXWEyRx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="310460234"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="310460234"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 05:31:06 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="698020174"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="698020174"
-Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.67.145.167]) ([10.67.145.167])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 05:31:04 -0800
-Message-ID: <8afe0502-2e2a-a89b-dbe0-bf74aef98290@linux.intel.com>
-Date:   Thu, 9 Feb 2023 19:00:57 +0530
+        Thu, 9 Feb 2023 08:34:20 -0500
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E8640D9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:33:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1675949635; x=1707485635;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Thor02MUzZDcrgTXj8hIhcq33cHhDyPYOs3YccQ1+OI=;
+  b=IVTiOgUJSccSltwwwsrhmh4djrDJJoLZgT3s1ovgcWGsy/G/7yslw+zP
+   fSqA6dzzPqOiCP9e93wHPjyr7qp8rD+Y9fsdOOzKvHo6Y7iZokzerIE60
+   o4Ol0bLYy9rfPchXzi8Mdt8CT9CF1BZWwZ96y4Dr+ZQymX34gofPSTSbk
+   M=;
+X-IronPort-AV: E=Sophos;i="5.97,283,1669075200"; 
+   d="scan'208";a="296998450"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 13:33:27 +0000
+Received: from EX13D47EUC004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com (Postfix) with ESMTPS id C9468C1C3A;
+        Thu,  9 Feb 2023 13:33:23 +0000 (UTC)
+Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
+ EX13D47EUC004.ant.amazon.com (10.43.164.178) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Thu, 9 Feb 2023 13:33:22 +0000
+Received: from u40bc5e070a0153.ant.amazon.com (10.43.161.198) by
+ EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.24; Thu, 9 Feb 2023 13:33:17 +0000
+Date:   Thu, 9 Feb 2023 14:33:08 +0100
+From:   Roman Kagan <rkagan@amazon.de>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Chen Yu <yu.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
+Message-ID: <Y+T2FLrNtQkfg9bd@u40bc5e070a0153.ant.amazon.com>
+Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Chen Yu <yu.c.chen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
+ <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net>
+ <CAKfTPtBMSg2SDXq=sVt99TyM+tEXRFL74EQ57-t5uKYAXUUyLg@mail.gmail.com>
+ <Y9iJLQxyXp9+x2aF@chenyu5-mobl1>
+ <Y9jmm5c5vT8WXsl6@u40bc5e070a0153.ant.amazon.com>
+ <CAKfTPtDUMph262w5OSiSQi-BVcNRf2gN=PdmxYCKEuk-8aYhgA@mail.gmail.com>
+ <Y+Kob8kOUFa0FnJN@u40bc5e070a0153.ant.amazon.com>
+ <CAKfTPtC8hQ9JysoRNF0egsp+B9+9r4YFC_1-KBnu0GpXts27kw@mail.gmail.com>
+ <Y+PlTVfW9Jn1XvYZ@u40bc5e070a0153.ant.amazon.com>
+ <CAKfTPtAmLWcaUUrcp8Q_F6FGo2KZrx34vcp+6mw06v9UFi=tMA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v4] platform/x86/intel/pmc: core: Add support to show
- LTR-ignored components
-To:     "Box, David E" <david.e.box@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "irenic.rajneesh@gmail.com" <irenic.rajneesh@gmail.com>
-Cc:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230205174418.1927876-1-rajat.khandelwal@linux.intel.com>
- <75308e1b2e0406118b1012e271c622b2f02c119e.camel@intel.com>
-Content-Language: en-US
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-In-Reply-To: <75308e1b2e0406118b1012e271c622b2f02c119e.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtAmLWcaUUrcp8Q_F6FGo2KZrx34vcp+6mw06v9UFi=tMA@mail.gmail.com>
+X-Originating-IP: [10.43.161.198]
+X-ClientProxiedBy: EX13D39UWA001.ant.amazon.com (10.43.160.54) To
+ EX19D033EUC004.ant.amazon.com (10.252.61.133)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-Please find the comments inline.
+On Thu, Feb 09, 2023 at 12:26:12PM +0100, Vincent Guittot wrote:
+> On Wed, 8 Feb 2023 at 19:09, Roman Kagan <rkagan@amazon.de> wrote:
+> > On Wed, Feb 08, 2023 at 11:13:35AM +0100, Vincent Guittot wrote:
+> > > On Tue, 7 Feb 2023 at 20:37, Roman Kagan <rkagan@amazon.de> wrote:
+> > > >
+> > > > On Tue, Jan 31, 2023 at 12:10:29PM +0100, Vincent Guittot wrote:
+> > > > > On Tue, 31 Jan 2023 at 11:00, Roman Kagan <rkagan@amazon.de> wrote:
+> > > > > > On Tue, Jan 31, 2023 at 11:21:17AM +0800, Chen Yu wrote:
+> > > > > > > On 2023-01-27 at 17:18:56 +0100, Vincent Guittot wrote:
+> > > > > > > > On Fri, 27 Jan 2023 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On Thu, Jan 26, 2023 at 07:31:02PM +0100, Roman Kagan wrote:
+> > > > > > > > >
+> > > > > > > > > > > All that only matters for small sleeps anyway.
+> > > > > > > > > > >
+> > > > > > > > > > > Something like:
+> > > > > > > > > > >
+> > > > > > > > > > >         sleep_time = U64_MAX;
+> > > > > > > > > > >         if (se->avg.last_update_time)
+> > > > > > > > > > >           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
+> > > > > > > > > >
+> > > > > > > > > > Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
+> > > > > > > > > > others were suggesting?  It appears to better match the notion of sleep
+> > > > > > > > > > wall-time, no?
+> > > > > > > > >
+> > > > > > > > > Should also work I suppose. cfs_rq_clock takes throttling into account,
+> > > > > > > > > but that should hopefully also not be *that* long, so either should
+> > > > > > > > > work.
+> > > > > > > >
+> > > > > > > > yes rq_clock_task(rq_of(cfs_rq)) should be fine too
+> > > > > > > >
+> > > > > > > > Another thing to take into account is the sleeper credit that the
+> > > > > > > > waking task deserves so the detection should be done once it has been
+> > > > > > > > subtracted from vruntime.
+> > > > > > > >
+> > > > > > > > Last point, when a nice -20 task runs on a rq, it will take a bit more
+> > > > > > > > than 2 seconds for the vruntime to be increased by more than 24ms (the
+> > > > > > > > maximum credit that a waking task can get) so threshold must be
+> > > > > > > > significantly higher than 2 sec. On the opposite side, the lowest
+> > > > > > > > possible weight of a cfs rq is 2 which means that the problem appears
+> > > > > > > > for a sleep longer or equal to 2^54 = 2^63*2/1024. We should use this
+> > > > > > > > value instead of an arbitrary 200 days
+> > > > > > > Does it mean any threshold between 2 sec and 2^54 nsec should be fine? Because
+> > > > > > > 1. Any task sleeps longer than 2 sec will get at most 24 ms(sysctl_sched_latency)
+> > > > > > >    'vruntime bonus' when enqueued.
+> > > > >
+> > > > > This means that if a task nice -20 runs on cfs rq while your task is
+> > > > > sleeping 2seconds, the min vruntime of the cfs rq will increase by
+> > > > > 24ms. If there are 2 nice -20 tasks then the min vruntime will
+> > > > > increase by 24ms after 4 seconds and so on ...
+> > > > >
+> > > > > On the other side, a task nice 19 that runs 1ms will increase its
+> > > > > vruntime by around 68ms.
+> > > > >
+> > > > > So if there is 1 task nice 19 with 11 tasks nice -20 on the same cfs
+> > > > > rq, the nice -19 one should run 1ms every 65 seconds and this also
+> > > > > means that the vruntime of task nice -19 should still be above
+> > > > > min_vruntime after sleeping 60 seconds. Of course this is even worse
+> > > > > with a child cgroup with the lowest weight (weight of 2 instead of 15)
+> > > > >
+> > > > > Just to say that 60 seconds is not so far away and 2^54 should be better IMHO
+> > > >
+> > > > If we go this route, what would be the proper way to infer this value?
+> > > > Looks like
+> > > >
+> > > >   (1ull << 63) / NICE_0_LOAD * scale_load(MIN_SHARES)
+> > >
+> > > (1ull << 63) / NICE_0_LOAD * MIN_SHARES
+> >
+> > On 64bit platforms NICE_0_LOAD == 1L << 20 (i.e. it's also scaled) for
+> > better precision.  So this will yield 2^63 / 2^20 * 2 = 2^44.  Good
+> > enough probably but confusing.
+> 
+> Something like the below should be enough to explain the value
+> 
+> /*
+>  * min_vruntime can move forward much faster than real time. The worst case
+>  * happens when an entity with the min weight always runs on the cfs rq. In this
+>  * case, the max comparison between vruntime and min_vruntime can fail after a
+>  * sleep greater than :
+>  *     (1ull << 63) / NICE_0_LOAD) * MIN_SHARES
 
-On 2/5/2023 12:49 AM, Box, David E wrote:
-> Hi Rajat,
->
-> On Sun, 2023-02-05 at 23:14 +0530, Rajat Khandelwal wrote:
->> Currently, 'ltr_ignore' sysfs attribute, when read, returns nothing, even
->> if there are components whose LTR values have been ignored.
->>
->> This patch adds the feature to print out such components, if they exist.
->>
->> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
->> ---
->>
->> v4: Mutex unlock during error conditions
->>
->> v3: Incorporated a mutex lock for accessing 'ltr_ignore_list'
->>
->> v2: kmalloc -> devm_kmalloc
->>
->>   drivers/platform/x86/intel/pmc/core.c | 59 ++++++++++++++++++++++-----
->>   drivers/platform/x86/intel/pmc/core.h |  2 +-
->>   2 files changed, 49 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/platform/x86/intel/pmc/core.c
->> b/drivers/platform/x86/intel/pmc/core.c
->> index 3a15d32d7644..f9d4b2865b03 100644
->> --- a/drivers/platform/x86/intel/pmc/core.c
->> +++ b/drivers/platform/x86/intel/pmc/core.c
->> @@ -53,6 +53,17 @@ const struct pmc_bit_map msr_map[] = {
->>          {}
->>   };
->>   
->> +/* Mutual exclusion to access the list of LTR-ignored components */
->> +static DEFINE_MUTEX(ltr_entry_mutex);
->> +
->> +struct ltr_entry {
->> +       u32 comp_index;
->> +       const char *comp_name;
->> +       struct list_head node;
->> +};
->> +
->> +static LIST_HEAD(ltr_ignore_list);
->> +
->>   static inline u32 pmc_core_reg_read(struct pmc_dev *pmcdev, int reg_offset)
->>   {
->>          return readl(pmcdev->regbase + reg_offset);
->> @@ -435,27 +446,18 @@ static int pmc_core_pll_show(struct seq_file *s, void
->> *unused)
->>   }
->>   DEFINE_SHOW_ATTRIBUTE(pmc_core_pll);
->>   
->> -int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
->> +void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value)
->>   {
->>          const struct pmc_reg_map *map = pmcdev->map;
->>          u32 reg;
->> -       int err = 0;
->>   
->>          mutex_lock(&pmcdev->lock);
->>   
->> -       if (value > map->ltr_ignore_max) {
->> -               err = -EINVAL;
->> -               goto out_unlock;
->> -       }
->> -
->>          reg = pmc_core_reg_read(pmcdev, map->ltr_ignore_offset);
->>          reg |= BIT(value);
->>          pmc_core_reg_write(pmcdev, map->ltr_ignore_offset, reg);
->>   
->> -out_unlock:
->>          mutex_unlock(&pmcdev->lock);
->> -
->> -       return err;
->>   }
->>   
->>   static ssize_t pmc_core_ltr_ignore_write(struct file *file,
->> @@ -464,6 +466,8 @@ static ssize_t pmc_core_ltr_ignore_write(struct file
->> *file,
->>   {
->>          struct seq_file *s = file->private_data;
->>          struct pmc_dev *pmcdev = s->private;
->> +       const struct pmc_reg_map *map = pmcdev->map;
->> +       struct ltr_entry *entry;
->>          u32 buf_size, value;
->>          int err;
->>   
->> @@ -473,13 +477,46 @@ static ssize_t pmc_core_ltr_ignore_write(struct file
->> *file,
->>          if (err)
->>                  return err;
->>   
->> -       err = pmc_core_send_ltr_ignore(pmcdev, value);
->> +       if (value > map->ltr_ignore_max)
->> +               return -EINVAL;
->> +
->> +       mutex_lock(&ltr_entry_mutex);
->> +
->> +       list_for_each_entry(entry, &ltr_ignore_list, node) {
->> +               if (entry->comp_index == value) {
->> +                       err = -EEXIST;
-> Do we need to return an error here? We don't offer a way to undo the ignore and
-> rewriting it doesn't hurt anything. I'm okay with ignoring this.
+Sorry if I'm being dense, but aren't NICE_0_LOAD and MIN_SHARES measured
+in different units: the former is scaled while the latter is not?
 
-Surely, it won't hurt to just write the value again. It does provide a sense of notion
-to the user that "this component was already set" (something like that).
-Not that big a deal, but I would like to keep it that way, if that's okay? :)
+>  * We can simplify this to :
+>  *     (1ull << 63) / NICE_0_LOAD)
+>  */
+> #define SLEEP_VRUNTIME_OVERFLOW  ((1ull << 63) / NICE_0_LOAD)
 
->
->> +                       goto out_unlock;
->> +               }
->> +       }
->> +
->> +       entry = devm_kmalloc(&pmcdev->pdev->dev, sizeof(*entry), GFP_KERNEL);
->> +       if (!entry) {
->> +               err = -ENOMEM;
->> +               goto out_unlock;
->> +       }
->> +
->> +       entry->comp_name = map->ltr_show_sts[value].name;
->> +       entry->comp_index = value;
->> +       list_add_tail(&entry->node, &ltr_ignore_list);
->> +
->> +       pmc_core_send_ltr_ignore(pmcdev, value);
->> +
->> +out_unlock:
->> +       mutex_unlock(&ltr_entry_mutex);
-> You can allocate your entry and do the assignment before you take the list lock.
-> If the allocation fails, return immediately without a goto.
->
-> You can also move pmc_core_send_ltr_ignore() after the unlock.
+Thanks,
+Roman.
 
-Ok, so I allocate it only after I see that the list doesn't already has the value.
-That is why I take the lock and proceed.
-pmc_core_send_ltr_ignore() can be moved after the unlock.
 
-Please let me know your comments for v5.
 
-Thanks
-Rajat
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
 
->
-> David
->
->>   
->>          return err == 0 ? count : err;
->>   }
->>   
->>   static int pmc_core_ltr_ignore_show(struct seq_file *s, void *unused)
->>   {
->> +       struct ltr_entry *entry;
->> +
->> +       mutex_lock(&ltr_entry_mutex);
->> +       list_for_each_entry(entry, &ltr_ignore_list, node) {
->> +               seq_printf(s, "%s\n", entry->comp_name);
->> +       }
->> +       mutex_unlock(&ltr_entry_mutex);
->> +
->>          return 0;
->>   }
->>   
->> diff --git a/drivers/platform/x86/intel/pmc/core.h
->> b/drivers/platform/x86/intel/pmc/core.h
->> index 810204d758ab..da35b0fcbe6e 100644
->> --- a/drivers/platform/x86/intel/pmc/core.h
->> +++ b/drivers/platform/x86/intel/pmc/core.h
->> @@ -396,7 +396,7 @@ extern const struct pmc_reg_map adl_reg_map;
->>   extern const struct pmc_reg_map mtl_reg_map;
->>   
->>   extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
->> -extern int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
->> +extern void pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
->>   
->>   void spt_core_init(struct pmc_dev *pmcdev);
->>   void cnp_core_init(struct pmc_dev *pmcdev);
->> -- 
->> 2.34.1
->>
+
+
