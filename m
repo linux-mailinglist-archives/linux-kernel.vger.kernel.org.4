@@ -2,312 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E654B68FC6C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B717768FC6E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjBIBJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S231172AbjBIBJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbjBIBJH (ORCPT
+        with ESMTP id S231157AbjBIBJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:09:07 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B6FF75F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:09:05 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id r28so183776vka.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 17:09:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6H62EB6tLaeHvjzAo97rklqjg6bi1dWWBwTc9aeeMf4=;
-        b=Mz93eF9A50Xglc3ieDZV3lw5xl6YJIzwHqC2TWPxVu7KTwwuWB2NI56Ru2DdFZMr1r
-         povm8JkEeDnglueKGrnCQZGZLU70+u122ZOgH5rtDRgz3DabCFhxuxtXG7zw4nr/KaC8
-         dalnMHTZ9zLJoVBqBURUOLLmPCcVDzMe9heghM36nKFBmargkqZdBMYzB0hP33SDzRNE
-         I51LRAPshAaDl3ow8vqZyjl/hDF0fbIhJ8gIrsQn48s6oCfgvqvTHxmQwmMqKPlyaU9a
-         M5E96H4Lkwa2f5eP8F5rkIhwY4fi8RZfQ4rHmwsxCMyBP5QVKAm25K9OIr6dupiuczrC
-         2yDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6H62EB6tLaeHvjzAo97rklqjg6bi1dWWBwTc9aeeMf4=;
-        b=OqB1cpDibDwLGgEdWFEhpJ5opPEtnz202VQBKf76w0Ib7TbTXYuYtNfr+sxgmBAtYn
-         +9ktrh3drAPlYLcfHNidOkcwfleDZwsKaQomBsuvW3YX1u8F4wQJ0d3ShFU6LyW+PDw7
-         tlGaUUCFlR0cWPTlGbJch99ytxaz7Nntkh9dvl4KZLIwl76Sba7NY/J8/9N3MbK/2WsD
-         JfsjBA9REbMdyj1uTQ6Run9JpX9eJutQJppl7w/ZCwA3b8DP9VLX5ex6Ea42KsvA5ekM
-         NLxLIVhy/7pIoqmDpVyumbebMdyxF5fA3fSQliCRVFklD3pcFJ4vdi5QrHqCMDh6qIM+
-         rkLQ==
-X-Gm-Message-State: AO0yUKVQaGWyRaxQ8hBmMDImgMPTUK5PCtOBQGIURxU3y4YUDmnAjq2C
-        FypfKOG6DtzthaDHeCQFcEtHHI2U8NLMscgYrMeg
-X-Google-Smtp-Source: AK7set9JSOg1tA8Pr8vC4LCcGfcLTYG59TkHq24Y4OhEr+zDQg/hulqzFt9qwgRPSP4yc0Wu/iGT109021bVdwUbv4I=
-X-Received: by 2002:a1f:2e88:0:b0:3ea:2187:d41f with SMTP id
- u130-20020a1f2e88000000b003ea2187d41fmr2219906vku.0.1675904944256; Wed, 08
- Feb 2023 17:09:04 -0800 (PST)
+        Wed, 8 Feb 2023 20:09:23 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4561F23840;
+        Wed,  8 Feb 2023 17:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675904962; x=1707440962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GI8IwpHrCtLwdiOPxD0L9G1DYq+NLvDgg0Cnzqj/6BM=;
+  b=HkNvNb82/Ue86lo8DpYPO9U9JzmrWdlmXu/zcJlokhY/KssRbPeMdjfc
+   EfXeUUwlbd6QgU3WU89fLEBcIb3xMZz4/JpnCV2svojv5WaiQE1DcqKs5
+   OTUdbD2nYcbHgizXHCdscWNI4osfIXlLVYzDvf2iP78MJqjB/QsmNQ63b
+   Pklp5MvzEkxrVYUbtc9kxta7dN7hg1RJGdjwSunvCtKNsK7epythGwoyA
+   rBbD66IK2SjBrGgVYTVlPbeyaxbr9Y4a1++mmWr9tcQ2wNKoBgupbdaiG
+   uNePGGQABK8KlsiVY6O8s9h8su25kQ2Fpy8qZwy1OE7Qm/P6q4NzEewpx
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309625002"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="309625002"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 17:09:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776267162"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="776267162"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Feb 2023 17:09:19 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPvR8-0004jS-2X;
+        Thu, 09 Feb 2023 01:09:18 +0000
+Date:   Thu, 9 Feb 2023 09:09:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34:
+ warning: unused variable 'samsung_jpeg_match'
+Message-ID: <202302090840.vIjaH7GJ-lkp@intel.com>
 MIME-Version: 1.0
-References: <CALJ9ZPNrF-HhUNskr=_MJ1CrnO+0xzSN8pMpER3FMqf5Pd0idg@mail.gmail.com>
- <20230202214633.12584-1-yabinc@google.com>
-In-Reply-To: <20230202214633.12584-1-yabinc@google.com>
-From:   Yabin Cui <yabinc@google.com>
-Date:   Wed, 8 Feb 2023 17:08:53 -0800
-Message-ID: <CALJ9ZPPte1Gso7LYA6eAVifZJDgdZP+QPdSKUJEpz=+v2S0cag@mail.gmail.com>
-Subject: Re: [PATCH v3] coresight: tmc: Don't enable TMC when it's not ready.
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping?
+Hi Mauro,
 
-On Thu, Feb 2, 2023 at 1:46 PM Yabin Cui <yabinc@google.com> wrote:
->
-> If TMC ETR is enabled without being ready, in later use we may
-> see AXI bus errors caused by accessing invalid addresses.
->
-> Signed-off-by: Yabin Cui <yabinc@google.com>
-> ---
-> V1 -> V2: Make change to all TMCs instead of just ETR
-> V2 -> V3: Handle etr enable failure in tmc_read_unprepare_etr
->
->  .../hwtracing/coresight/coresight-tmc-core.c  |  4 +-
->  .../hwtracing/coresight/coresight-tmc-etf.c   | 43 +++++++++++++++----
->  .../hwtracing/coresight/coresight-tmc-etr.c   | 25 +++++++++--
->  drivers/hwtracing/coresight/coresight-tmc.h   |  2 +-
->  4 files changed, 59 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-tmc-core.c b/drivers/hwtracing/coresight/coresight-tmc-core.c
-> index 07abf28ad725..c106d142e632 100644
-> --- a/drivers/hwtracing/coresight/coresight-tmc-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-tmc-core.c
-> @@ -31,7 +31,7 @@ DEFINE_CORESIGHT_DEVLIST(etb_devs, "tmc_etb");
->  DEFINE_CORESIGHT_DEVLIST(etf_devs, "tmc_etf");
->  DEFINE_CORESIGHT_DEVLIST(etr_devs, "tmc_etr");
->
-> -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
-> +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
->  {
->         struct coresight_device *csdev = drvdata->csdev;
->         struct csdev_access *csa = &csdev->access;
-> @@ -40,7 +40,9 @@ void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata)
->         if (coresight_timeout(csa, TMC_STS, TMC_STS_TMCREADY_BIT, 1)) {
->                 dev_err(&csdev->dev,
->                         "timeout while waiting for TMC to be Ready\n");
-> +               return -EBUSY;
->         }
-> +       return 0;
->  }
->
->  void tmc_flush_and_stop(struct tmc_drvdata *drvdata)
-> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etf.c b/drivers/hwtracing/coresight/coresight-tmc-etf.c
-> index 4c4cbd1f7258..2840227e9135 100644
-> --- a/drivers/hwtracing/coresight/coresight-tmc-etf.c
-> +++ b/drivers/hwtracing/coresight/coresight-tmc-etf.c
-> @@ -16,12 +16,19 @@
->  static int tmc_set_etf_buffer(struct coresight_device *csdev,
->                               struct perf_output_handle *handle);
->
-> -static void __tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
-> +static int __tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
->  {
-> +       int rc = 0;
-> +
->         CS_UNLOCK(drvdata->base);
->
->         /* Wait for TMCSReady bit to be set */
-> -       tmc_wait_for_tmcready(drvdata);
-> +       rc = tmc_wait_for_tmcready(drvdata);
-> +       if (rc) {
-> +               dev_err(&drvdata->csdev->dev, "fails to enable not ready TMC\n");
-> +               CS_LOCK(drvdata->base);
-> +               return rc;
-> +       }
->
->         writel_relaxed(TMC_MODE_CIRCULAR_BUFFER, drvdata->base + TMC_MODE);
->         writel_relaxed(TMC_FFCR_EN_FMT | TMC_FFCR_EN_TI |
-> @@ -33,6 +40,7 @@ static void __tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
->         tmc_enable_hw(drvdata);
->
->         CS_LOCK(drvdata->base);
-> +       return rc;
->  }
->
->  static int tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
-> @@ -42,8 +50,10 @@ static int tmc_etb_enable_hw(struct tmc_drvdata *drvdata)
->         if (rc)
->                 return rc;
->
-> -       __tmc_etb_enable_hw(drvdata);
-> -       return 0;
-> +       rc = __tmc_etb_enable_hw(drvdata);
-> +       if (rc)
-> +               coresight_disclaim_device(drvdata->csdev);
-> +       return rc;
->  }
->
->  static void tmc_etb_dump_hw(struct tmc_drvdata *drvdata)
-> @@ -91,12 +101,19 @@ static void tmc_etb_disable_hw(struct tmc_drvdata *drvdata)
->         coresight_disclaim_device(drvdata->csdev);
->  }
->
-> -static void __tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
-> +static int __tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
->  {
-> +       int rc = 0;
-> +
->         CS_UNLOCK(drvdata->base);
->
->         /* Wait for TMCSReady bit to be set */
-> -       tmc_wait_for_tmcready(drvdata);
-> +       rc = tmc_wait_for_tmcready(drvdata);
-> +       if (rc) {
-> +               dev_err(&drvdata->csdev->dev, "fails to enable not ready TMC\n");
-> +               CS_LOCK(drvdata->base);
-> +               return rc;
-> +       }
->
->         writel_relaxed(TMC_MODE_HARDWARE_FIFO, drvdata->base + TMC_MODE);
->         writel_relaxed(TMC_FFCR_EN_FMT | TMC_FFCR_EN_TI,
-> @@ -105,6 +122,7 @@ static void __tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
->         tmc_enable_hw(drvdata);
->
->         CS_LOCK(drvdata->base);
-> +       return rc;
->  }
->
->  static int tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
-> @@ -114,8 +132,10 @@ static int tmc_etf_enable_hw(struct tmc_drvdata *drvdata)
->         if (rc)
->                 return rc;
->
-> -       __tmc_etf_enable_hw(drvdata);
-> -       return 0;
-> +       rc = __tmc_etf_enable_hw(drvdata);
-> +       if (rc)
-> +               coresight_disclaim_device(drvdata->csdev);
-> +       return rc;
->  }
->
->  static void tmc_etf_disable_hw(struct tmc_drvdata *drvdata)
-> @@ -639,6 +659,7 @@ int tmc_read_unprepare_etb(struct tmc_drvdata *drvdata)
->         char *buf = NULL;
->         enum tmc_mode mode;
->         unsigned long flags;
-> +       int rc = 0;
->
->         /* config types are set a boot time and never change */
->         if (WARN_ON_ONCE(drvdata->config_type != TMC_CONFIG_TYPE_ETB &&
-> @@ -664,7 +685,11 @@ int tmc_read_unprepare_etb(struct tmc_drvdata *drvdata)
->                  * can't be NULL.
->                  */
->                 memset(drvdata->buf, 0, drvdata->size);
-> -               __tmc_etb_enable_hw(drvdata);
-> +               rc = __tmc_etb_enable_hw(drvdata);
-> +               if (rc) {
-> +                       spin_unlock_irqrestore(&drvdata->spinlock, flags);
-> +                       return rc;
-> +               }
->         } else {
->                 /*
->                  * The ETB/ETF is not tracing and the buffer was just read.
-> diff --git a/drivers/hwtracing/coresight/coresight-tmc-etr.c b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> index 867ad8bb9b0c..4952425dd6e4 100644
-> --- a/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> +++ b/drivers/hwtracing/coresight/coresight-tmc-etr.c
-> @@ -983,15 +983,21 @@ static void tmc_sync_etr_buf(struct tmc_drvdata *drvdata)
->         etr_buf->ops->sync(etr_buf, rrp, rwp);
->  }
->
-> -static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
-> +static int __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
->  {
->         u32 axictl, sts;
->         struct etr_buf *etr_buf = drvdata->etr_buf;
-> +       int rc = 0;
->
->         CS_UNLOCK(drvdata->base);
->
->         /* Wait for TMCSReady bit to be set */
-> -       tmc_wait_for_tmcready(drvdata);
-> +       rc = tmc_wait_for_tmcready(drvdata);
-> +       if (rc) {
-> +               dev_err(&drvdata->csdev->dev, "fails to enable not ready TMC\n");
-> +               CS_LOCK(drvdata->base);
-> +               return rc;
-> +       }
->
->         writel_relaxed(etr_buf->size / 4, drvdata->base + TMC_RSZ);
->         writel_relaxed(TMC_MODE_CIRCULAR_BUFFER, drvdata->base + TMC_MODE);
-> @@ -1032,6 +1038,7 @@ static void __tmc_etr_enable_hw(struct tmc_drvdata *drvdata)
->         tmc_enable_hw(drvdata);
->
->         CS_LOCK(drvdata->base);
-> +       return rc;
->  }
->
->  static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
-> @@ -1060,7 +1067,12 @@ static int tmc_etr_enable_hw(struct tmc_drvdata *drvdata,
->         rc = coresight_claim_device(drvdata->csdev);
->         if (!rc) {
->                 drvdata->etr_buf = etr_buf;
-> -               __tmc_etr_enable_hw(drvdata);
-> +               rc = __tmc_etr_enable_hw(drvdata);
-> +               if (rc) {
-> +                       drvdata->etr_buf = NULL;
-> +                       coresight_disclaim_device(drvdata->csdev);
-> +                       tmc_etr_disable_catu(drvdata);
-> +               }
->         }
->
->         return rc;
-> @@ -1750,6 +1762,7 @@ int tmc_read_unprepare_etr(struct tmc_drvdata *drvdata)
->  {
->         unsigned long flags;
->         struct etr_buf *sysfs_buf = NULL;
-> +       int rc = 0;
->
->         /* config types are set a boot time and never change */
->         if (WARN_ON_ONCE(drvdata->config_type != TMC_CONFIG_TYPE_ETR))
-> @@ -1764,7 +1777,11 @@ int tmc_read_unprepare_etr(struct tmc_drvdata *drvdata)
->                  * buffer. Since the tracer is still enabled drvdata::buf can't
->                  * be NULL.
->                  */
-> -               __tmc_etr_enable_hw(drvdata);
-> +               rc = __tmc_etr_enable_hw(drvdata);
-> +               if (rc) {
-> +                       spin_unlock_irqrestore(&drvdata->spinlock, flags);
-> +                       return rc;
-> +               }
->         } else {
->                 /*
->                  * The ETR is not tracing and the buffer was just read.
-> diff --git a/drivers/hwtracing/coresight/coresight-tmc.h b/drivers/hwtracing/coresight/coresight-tmc.h
-> index 66959557cf39..01c0382a29c0 100644
-> --- a/drivers/hwtracing/coresight/coresight-tmc.h
-> +++ b/drivers/hwtracing/coresight/coresight-tmc.h
-> @@ -255,7 +255,7 @@ struct tmc_sg_table {
->  };
->
->  /* Generic functions */
-> -void tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
-> +int tmc_wait_for_tmcready(struct tmc_drvdata *drvdata);
->  void tmc_flush_and_stop(struct tmc_drvdata *drvdata);
->  void tmc_enable_hw(struct tmc_drvdata *drvdata);
->  void tmc_disable_hw(struct tmc_drvdata *drvdata);
-> --
-> 2.39.1.519.gcb327c4b5f-goog
->
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: f4104b7851a8d8b9a70899dcbecdb393eb16cd8a media: platform: rename s5p-jpeg/ to samsung/s5p-jpeg/
+date:   11 months ago
+config: s390-randconfig-r014-20230209 (https://download.01.org/0day-ci/archive/20230209/202302090840.vIjaH7GJ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f4104b7851a8d8b9a70899dcbecdb393eb16cd8a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302090840.vIjaH7GJ-lkp@intel.com
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:15:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3126:34: warning: unused variable 'samsung_jpeg_match' [-Wunused-const-variable]
+   static const struct of_device_id samsung_jpeg_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/samsung_jpeg_match +3126 drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3125  
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18 @3126  static const struct of_device_id samsung_jpeg_match[] = {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3127  	{
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3128  		.compatible = "samsung,s5pv210-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3129  		.data = &s5p_jpeg_drvdata,
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3130  	}, {
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3131  		.compatible = "samsung,exynos3250-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3132  		.data = &exynos3250_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3133  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3134  		.compatible = "samsung,exynos4210-jpeg",
+3246fdaa0ac2d9 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2014-07-11  3135  		.data = &exynos4_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3136  	}, {
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3137  		.compatible = "samsung,exynos4212-jpeg",
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3138  		.data = &exynos4_jpeg_drvdata,
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3139  	}, {
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3140  		.compatible = "samsung,exynos5420-jpeg",
+7c15fd4bf3d367 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-03-09  3141  		.data = &exynos5420_jpeg_drvdata,
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3142  	}, {
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3143  		.compatible = "samsung,exynos5433-jpeg",
+6c96dbbc2aa9f5 drivers/media/platform/s5p-jpeg/jpeg-core.c Andrzej Pietrasiewicz 2015-09-18  3144  		.data = &exynos5433_jpeg_drvdata,
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3145  	},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3146  	{},
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3147  };
+80529ae5c13725 drivers/media/platform/s5p-jpeg/jpeg-core.c Jacek Anaszewski      2013-12-18  3148  
+
+:::::: The code at line 3126 was first introduced by commit
+:::::: 80529ae5c13725e12ba0377e29b2160794ba6b25 [media] s5p-jpeg:  JPEG codec
+
+:::::: TO: Jacek Anaszewski <j.anaszewski@samsung.com>
+:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
