@@ -2,100 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DBC690D7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4719E690D78
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjBIPrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
+        id S230182AbjBIPqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231230AbjBIPrP (ORCPT
+        with ESMTP id S231178AbjBIPqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:47:15 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DB9658D1;
-        Thu,  9 Feb 2023 07:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675957603; x=1707493603;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=cRZrnanpYDkbJPYdwlxFjU/jZt2cfSVpf0RQ5VKig+c=;
-  b=iDUemL93Q4KHdXG7inlZouW4qZLktiUe/WGT5cTij6V3Axg7K8026Wrs
-   rwaCsj/7KJAFlMSWP27Lt5k7AifK/4gSHwG/3DhCXw5GT3t38E6USdGt9
-   1MKr82vHyti/IV43ZJlqGE0GExm1uxmczhnB0+ghpsSQl39r/+Cgb4uFz
-   gL0sjyP/iAZmMWON8uy6C8uavhKd36DLPgRl8SCyKf0bMaB6WV0IP5sdd
-   f1PvUpnfEINJVzva2Zp41TzcfbDZxgWCLGeUwrQAVhLiZ5FAChpxd7w1R
-   fJIWa/ktzNQTuyPKs6xhbzEFHVikcVDYBbqcdENfoTYasbAcsj2Ja/APE
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,284,1669100400"; 
-   d="scan'208";a="211286114"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2023 08:45:37 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 9 Feb 2023 08:45:35 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Thu, 9 Feb 2023 08:45:35 -0700
-From:   <Ryan.Wanner@microchip.com>
-To:     <ludovic.desroches@microchip.com>, <linus.walleij@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <claudiu.beznea@microchip.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <manikandan.M@microchip.com>,
-        Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH 2/2] pinctrl: at91: adding new macros
-Date:   Thu, 9 Feb 2023 08:45:44 -0700
-Message-ID: <20230209154544.535136-3-Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230209154544.535136-1-Ryan.Wanner@microchip.com>
-References: <20230209154544.535136-1-Ryan.Wanner@microchip.com>
+        Thu, 9 Feb 2023 10:46:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5EC1F49B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:46:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1279161AD2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 15:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D77C433EF;
+        Thu,  9 Feb 2023 15:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675957583;
+        bh=4aHZlBX9l/bOuICthQjw5N6vmi8DVGwwgHUPxcnJJvQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sn8szQdEBAlXy0hosk5RI5gEtq9iZ9dljixQ7Nrwb8q+G5djwIOEYX3YSHdgzOwbe
+         1BjEOCMXLUaYw7CKxXbUUQVHVLwvH2dImkZUHwmdSl0gRRgmc7/koo5Vyyu6Fqv7XO
+         tYL8xMWkf2nKDGe81Jk3Wf3rdV6Wg9OdA6TxC0UJ7vZg+/aVxnFbO+sx+8TX9aRgF8
+         74wsOLFlsEQ0Kg0MfNiv9VPfiCXBOWsMX3JIANDJ03SR3h3qhOUq0jjT4ia6FLlNah
+         njap7hGxlL68GRwDu/K8Iek5vadxa2a/A6P5k4u1Hp6/uLiJCZqAnq0sgBbV9ndUdA
+         hDyLDCapKXXlg==
+Date:   Thu, 9 Feb 2023 08:46:20 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     qemu-devel@nongnu.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel P =?iso-8859-1?Q?=2E_Berrang=E9?= <berrange@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH RFC 0/7] revert RNG seed mess
+Message-ID: <Y+UVTFseqHLhxRXR@dev-arch.thelio-3990X>
+References: <20230208211212.41951-1-mst@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208211212.41951-1-mst@redhat.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+On Wed, Feb 08, 2023 at 04:12:23PM -0500, Michael S. Tsirkin wrote:
+> All attempts to fix up passing RNG seed via setup_data entry failed.
+> Let's just rip out all of it.  We'll start over.
+> 
+> 
+> Warning: all I did was git revert the relevant patches and resolve the
+> (trivial) conflicts. Not even compiled - it's almost midnight here.
+> 
+> Jason this is the kind of approach I'd like to see, not yet another
+> pointer math rich patch I need to spend time reviewing. Just get us back
+> to where we started. We can redo "x86: use typedef for SetupData struct"
+> later if we want, it's benign.
+> 
+> Could you do something like this pls?
+> Or test and ack if this patchset happens to work by luck.
+> 
+> Michael S. Tsirkin (7):
+>   Revert "x86: don't let decompressed kernel image clobber setup_data"
+>   Revert "x86: do not re-randomize RNG seed on snapshot load"
+>   Revert "x86: re-initialize RNG seed when selecting kernel"
+>   Revert "x86: reinitialize RNG seed on system reboot"
+>   Revert "x86: use typedef for SetupData struct"
+>   Revert "x86: return modified setup_data only if read as memory, not as
+>     file"
+>   Revert "hw/i386: pass RNG seed via setup_data entry"
+> 
+>  include/hw/i386/microvm.h |   5 +-
+>  include/hw/i386/pc.h      |   3 -
+>  include/hw/i386/x86.h     |   3 +-
+>  include/hw/nvram/fw_cfg.h |  31 ----------
+>  hw/i386/microvm.c         |  17 ++----
+>  hw/i386/pc.c              |   4 +-
+>  hw/i386/pc_piix.c         |   2 -
+>  hw/i386/pc_q35.c          |   2 -
+>  hw/i386/x86.c             | 122 ++++++++++----------------------------
+>  hw/nvram/fw_cfg.c         |  21 ++-----
+>  10 files changed, 49 insertions(+), 161 deletions(-)
+> 
+> -- 
+> MST
+> 
 
-Adding macros for sama7g drive strength.
+For the record, all three of the cases that I tested (i386 no EFI,
+x86_64 with and without EFI) worked fine with this series. In case it is
+useful:
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- include/dt-bindings/pinctrl/at91.h | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-diff --git a/include/dt-bindings/pinctrl/at91.h b/include/dt-bindings/pinctrl/at91.h
-index e8e117306b1b..fd0a389b2a0f 100644
---- a/include/dt-bindings/pinctrl/at91.h
-+++ b/include/dt-bindings/pinctrl/at91.h
-@@ -42,8 +42,14 @@
- #define AT91_PERIPH_C		3
- #define AT91_PERIPH_D		4
- 
--#define ATMEL_PIO_DRVSTR_LO	1
-+#define ATMEL_PIO_DRVSTR_LO_0	0
-+#define ATMEL_PIO_DRVSTR_LO_1	1
- #define ATMEL_PIO_DRVSTR_ME	2
- #define ATMEL_PIO_DRVSTR_HI	3
- 
-+#define ATMEL_PIO_DRVSTR_LO_D 0
-+#define ATMEL_PIO_DRVSTR_HI_A 1
-+#define ATMEL_PIO_DRVSTR_LO_C 2
-+#define ATMEL_PIO_DRVSTR_LO_B 3
-+
- #endif /* __DT_BINDINGS_AT91_PINCTRL_H__ */
--- 
-2.37.2
-
+Cheers,
+Nathan
