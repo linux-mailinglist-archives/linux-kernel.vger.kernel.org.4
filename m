@@ -2,74 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBB069035A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731C669036B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjBIJVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S230198AbjBIJWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjBIJUf (ORCPT
+        with ESMTP id S230134AbjBIJVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:20:35 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F1365ED6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:19:41 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id gr7so4433274ejb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:19:41 -0800 (PST)
+        Thu, 9 Feb 2023 04:21:48 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4328F677A0
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:20:44 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id ay1so902848pfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rPg4EdR7sFNNzQ3B/yZZxndPMDpt8LnVMvk1N2mtNRc=;
-        b=SgcDEleUxhrO6ZMJCiY0GM6uME1n4qRmGiAk7KBD6rVjx2s4oRGYnK+zOzDMxOxIK5
-         NSlCNiGYIcEDdUgPMI05pklHQMxkwhIPNQnjR+QR3kWpdPFPozNnIoCl4jekSgBF7OTC
-         r7KRVu3LFnGr6Sk4PBA1Z7s1ZORGwBW+E7R5SDgQ904LOP3Ue+u/7kyJTt8QVG4bW2F0
-         6wECXQoPNfw3hWpZ5bFA9RmFkQochZyFYtF7guodATaHpbLbGa2BE7rPbKzp5HGUJ1XW
-         y7kp3biMfT/vpKX405SX3m7fVrcI/nMtiRRWk36ihZgfkbqjjzB84tXC0IUpJOvffNYD
-         +4yQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NlaRWpA7tL71Df6i/q0sFCfUUbbYhsY1iDx/MO4gzLY=;
+        b=TFuGzkmfgtQiVx340LL54zjOakAXM3YsZJT8IYUXZ4AxfzSnje1Joq13S4J68tnmgJ
+         rat/LDFvFIYyXL9H5AV4J9ZCty7RHcfelJbGDRt7O0/dj0otCEBEVo1Emmrr+ff8eYdf
+         PoMDW0+1KcAb+ML2/andm4TaLatf3HgtXGh8jfIPO95VwP4cr4QSN7ZAIEwU3Aqrc5qC
+         E78Ko+LkqxfTadFSHh0Yg9iXoiZYyoSTs7wyE1L898WqmgfttxiQzdh00JdvAZ/kzN3V
+         erXpIJRCtACl7OEph3e94rSnb/trH4Ru6XH2tjUt0NGzLK1AsAxU2nvWzcGgP10iHvjJ
+         j0Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rPg4EdR7sFNNzQ3B/yZZxndPMDpt8LnVMvk1N2mtNRc=;
-        b=0WVeXthNeoQc6VsYIvvVJnM6EH/pq5Klz8Qw5xhh9mzVDgpCUAgx5q00cHEkyvodvl
-         7d4X09j20FYiWWrbGfFB9PZPEot/yZaSKNy9EVsQxadoCp3wTH8nU9qzSMPOkNhfb8IU
-         bN477gS8zj/PeQOILDA85Xg9aL4Im0RGBjr9DyarI4TOQqKQuGA4IyX502opsqC3e+Qi
-         RdqC19lvWFsbZdofstu9sYj1Rarjxm1cVfErS32oJmeAdEe3sHmqJi81Z7eB+iKyq9CS
-         j25HIEixrlWr79OrRrr+z91xuu4kvkeh4sMngowUrf84gULuCKfTVMzzeclxeNC69FLg
-         FSJg==
-X-Gm-Message-State: AO0yUKVHVATA3UP2xIxUK85gjEr9Ifq7t8Ocv1D+5xTkcMP66B6PCniR
-        MbSXBpcHzNNcm12snnVAjg8+UA==
-X-Google-Smtp-Source: AK7set+rE77rXdjt5nnew52wEY0H3Z9XKAK5R/SvPZF7NeM3sNTetogGiPPmE0Y+ouMUuKL16VYElQ==
-X-Received: by 2002:a17:906:57d6:b0:86f:fbcf:f30a with SMTP id u22-20020a17090657d600b0086ffbcff30amr12700322ejr.58.1675934379659;
-        Thu, 09 Feb 2023 01:19:39 -0800 (PST)
-Received: from jade (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
-        by smtp.gmail.com with ESMTPSA id i10-20020a1709063c4a00b008af21450420sm629984ejg.85.2023.02.09.01.19.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 01:19:39 -0800 (PST)
-Date:   Thu, 9 Feb 2023 10:19:37 +0100
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     Sumit Garg <sumit.garg@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: Re: [PATCH 1/2] tee: system invocation
-Message-ID: <Y+S6qbgtAViopMPd@jade>
-References: <20230130094157.1082712-1-etienne.carriere@linaro.org>
- <CAFA6WYPxzB45pgWkkh++jRaY-d0eHWnrjzu+Z9059PjK5=M-mQ@mail.gmail.com>
- <CAHUa44G3jCqyiXtdZAAEw=8WPC+m5fD8tqsPfGc3MkV3JjRDCA@mail.gmail.com>
- <CAFA6WYN7i+7riJGPH4BEUFK77-kAx4J89Tn3=oX=g6rFUFtDkQ@mail.gmail.com>
- <CAHUa44G1yQtgF1eAUJVA+wtctKHfqYFBhs0PBnpoN-gD8_x8eg@mail.gmail.com>
- <CAN5uoS_M4uMWkf=Q8XFLCrNSvyUdjLgCPixqonKv3mRwRTr-nQ@mail.gmail.com>
- <Y+SdRrwSq/a9OgGr@jade>
- <CAN5uoS-7Mk6Cy9T9978-5hRUK55UOcCXPFe7Kv8ZUvkJZPi6pw@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NlaRWpA7tL71Df6i/q0sFCfUUbbYhsY1iDx/MO4gzLY=;
+        b=y93KMMYvV6Uj611MRBSO3a6DSB9UJGuppSfTdGCEeEYJ6L2DOw8qibTOm9/qmL9Sgh
+         bwMfIQQN1FHWp7Zm9xPEcyH/LmIoQHXGPB8uZ9907RZvPcFTQ6DDBDKBwEd4p4YLVX5e
+         qsq0GkYWVR7ThvZIg8oDQ965PxXcF/vWOtBxAcWdkzq1sWRAw6z0Et+uQaJvpfS2zy4P
+         hQW8VDO1PKpbXPZmwkgKNv7SPRWMMKkjrl3edvrmlUksZq5t8m6D0JZqs+Uh5wtPE6b7
+         6vFvXJDLtnZFpfRPodtnZj1ugJ0/MqA9Dhc8pABgpKwnWlDe6UO0elxytsGG4Yiil8uG
+         lzMw==
+X-Gm-Message-State: AO0yUKX40tl1us3VhTNDg9ORKcb8VC4TsAg/6V9THUKsirbsmRMQpXEs
+        QCeOEHribKNHZLY6/WiVOJFz0NPdkr2sXMsE14w85g==
+X-Google-Smtp-Source: AK7set+2f9vXIotOMaKv8GeSca304NiFCBOvh/ziF3kJSv0qMNrCGabOh/sgDJDRbTW5Ep2lLylsZsIrFX/llJTS47o=
+X-Received: by 2002:a63:9206:0:b0:4d9:66d4:d05 with SMTP id
+ o6-20020a639206000000b004d966d40d05mr2149570pgd.44.1675934441322; Thu, 09 Feb
+ 2023 01:20:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAN5uoS-7Mk6Cy9T9978-5hRUK55UOcCXPFe7Kv8ZUvkJZPi6pw@mail.gmail.com>
+References: <20230209071400.31476-1-rdunlap@infradead.org> <20230209071400.31476-17-rdunlap@infradead.org>
+In-Reply-To: <20230209071400.31476-17-rdunlap@infradead.org>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 9 Feb 2023 10:20:30 +0100
+Message-ID: <CAKfTPtC5gV3VF7S_BEJ9ndYnGwGuCRvYrKJTABSLHneYZVZvmQ@mail.gmail.com>
+Subject: Re: [PATCH 16/24] Documentation: scheduler: correct spelling
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,121 +69,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 9 Feb 2023 at 08:14, Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Correct spelling problems for Documentation/scheduler/ as reported
+> by codespell.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-On Thu, Feb 09, 2023 at 09:11:53AM +0100, Etienne Carriere wrote:
-> Hi Jens,
-> 
-> 
-> On Thu, 9 Feb 2023 at 08:14, Jens Wiklander <jens.wiklander@linaro.org> wrote:
-> >
-> > Hi Etienne,
-> >
-> > On Wed, Feb 08, 2023 at 06:09:17PM +0100, Etienne Carriere wrote:
-> > > Hello Sumit, Jens,
-> > >
-> > [snip]
-> > > > > > > >
-> > > > > > > >         if  (rpc_arg && tee_shm_is_dynamic(shm)) {
-> > > > > > > > -               param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
-> > > > > > > > +               if (ctx->sys_service &&
-> > > > > > > > +                   (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_SYSTEM_THREAD))
-> > > > > > > > +                       param.a0 = OPTEE_SMC_CALL_SYSTEM_WITH_REGD_ARG;
-> > > > > > > > +               else
-> > > > > > > > +                       param.a0 = OPTEE_SMC_CALL_WITH_REGD_ARG;
-> > > > > > >
-> > > > > > > This system thread flag should also be applicable to platforms without
-> > > > > > > registered arguments support. IOW, we need similar equivalents for
-> > > > > > > OPTEE_SMC_FUNCID_CALL_WITH_ARG and OPTEE_SMC_FUNCID_CALL_WITH_RPC_ARG
-> > > > > > > too. So I would rather suggest that we add following flag to all 3
-> > > > > > > call types:
-> > > > > > >
-> > > > > > > #define OPTEE_SMC_CALL_SYSTEM_THREAD_FLAG    0x8000
-> > > > > >
-> > > > > > The main reason platforms don't support registered arguments is that
-> > > > > > they haven't been updated since this was introduced. So if a platform
-> > > > > > needs system threads it could update to use registered arguments too.
-> > > > >
-> > > > > Are we hinting at deprecating reserved shared memory support? If yes,
-> > > > > wouldn't it be better to be explicit about it with a boot time warning
-> > > > > message about its deprecation?
-> > > > >
-> > > > > Otherwise it will be difficult to debug for the end user to find out
-> > > > > why system thread support isn't activated.
-> > > > >
-> > > > > > The Linux kernel already supports registered arguments. An advantage
-> > > > > > with the current approach is that the ABI is easier to implement
-> > > > > > since we have distinct SMC IDs for each function.
-> > > > >
-> > > > > I see your point but my initial thought was that we don't end up
-> > > > > making that list too large that it becomes cumbersome to maintain,
-> > > > > involving all the combinatorial.
-> > > >
-> > > > You have a point. Etienne, do you think we could give it a try at
-> > > > https://github.com/OP-TEE/optee_os/pull/5789 to better see how this
-> > > > would play out?
-> > > >
-> > >
-> > > Indeed I miss that...
-> > > With the patch proposed here, indeed if OP-TEE does not support
-> > > dynamic shared memory then Linux will never use the provisioned TEE
-> > > thread. This is weird as in such a case OP-TEE provisions resources
-> > > that will never be used, which is the exact opposite goal of this
-> > > feature. Verified on our qemu-arm setup.
-> > >
-> > > For simplicity, I think this system invocation should require OP-TEE
-> > > supports dyn shm.
-> >
-> > It's not obvious to me that this will easier to implement and maintain.
-> > Looking at the code in optee_os it looks like using a flag bit as
-> > proposed by Sumit would be quite easy to handle.
-> 
-> OP-TEE could auto disable thread provis when dyn shm is disabled, right.
-> Will it be sufficient? We will still face cases where an OP-TEE
-> provisions thread but Linux kernel is not aware (older vanilla kernel
-> used with a recent OP-TEE OS). Not much platforms are really affected
-> I guess but those executing with pager in small RAMs where a 4kB
-> thread context costs.
+Acked-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-When you add exceptions you make it more complicated. Now we must
-remember to always use dyn shm if we are to succeed in configuring with
-system threads. What if both dyn shm and static shm is configured in
-OP-TEE, but the kernel only uses static shm?
-
-> > > If OP-TEE could know when Linux does not support TEE system
-> > > invocation, then OP-TEE could let any invocation use these provisioned
-> > > resources so that they are not wasted.
-> > > I think a good way would be Linux to expose if it supports this
-> > > capability, during capabilities exchange.
-> > > Would you agree with this approach?
-> >
-> > No, I'm not so keen on adding that side effect to
-> > OPTEE_SMC_EXCHANGE_CAPABILITIES.
-> 
-> It is a capability REE would exchanges with TEE.
-> What kind of side effects do you fear?
-
-I was hoping to keep it stateless. One thing less to keep track of when
-handing over from a boot stage to the kernel.
-
-> > The way you're describing the problem it sounds like it's a normal world
-> > problem to know how many system threads are needed. How about adding a
-> > fast call where normal world can request how many system threads should
-> > be reserved?  If none are requested, none will be reserved.
-> 
-> Well, could be. With caps exchange, we have an SMC funcID to REE to
-> say to TEE: "reserved the default configured number of sys thread". I
-> think it is simpler.
-
-Until you realize the that the default number of system threads doesn't
-match what you need.
-
-> 
-> With REE calling TEE to provision thread, we would need another call
-> to release the reservation. Whe caps exchange, we have a single SMC to
-> reconfig the negotiated caps.
-
-A single SMC with growing complexity in its arguments.
-
-Cheers,
-Jens
+> ---
+>  Documentation/scheduler/sched-bwc.rst    |    2 +-
+>  Documentation/scheduler/sched-energy.rst |    4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff -- a/Documentation/scheduler/sched-bwc.rst b/Documentation/scheduler/sched-bwc.rst
+> --- a/Documentation/scheduler/sched-bwc.rst
+> +++ b/Documentation/scheduler/sched-bwc.rst
+> @@ -186,7 +186,7 @@ average usage, albeit over a longer time
+>  also limits the burst ability to no more than 1ms per cpu.  This provides
+>  better more predictable user experience for highly threaded applications with
+>  small quota limits on high core count machines. It also eliminates the
+> -propensity to throttle these applications while simultanously using less than
+> +propensity to throttle these applications while simultaneously using less than
+>  quota amounts of cpu. Another way to say this, is that by allowing the unused
+>  portion of a slice to remain valid across periods we have decreased the
+>  possibility of wastefully expiring quota on cpu-local silos that don't need a
+> diff -- a/Documentation/scheduler/sched-energy.rst b/Documentation/scheduler/sched-energy.rst
+> --- a/Documentation/scheduler/sched-energy.rst
+> +++ b/Documentation/scheduler/sched-energy.rst
+> @@ -82,7 +82,7 @@ through the arch_scale_cpu_capacity() ca
+>  The rest of platform knowledge used by EAS is directly read from the Energy
+>  Model (EM) framework. The EM of a platform is composed of a power cost table
+>  per 'performance domain' in the system (see Documentation/power/energy-model.rst
+> -for futher details about performance domains).
+> +for further details about performance domains).
+>
+>  The scheduler manages references to the EM objects in the topology code when the
+>  scheduling domains are built, or re-built. For each root domain (rd), the
+> @@ -281,7 +281,7 @@ mechanism called 'over-utilization'.
+>  From a general standpoint, the use-cases where EAS can help the most are those
+>  involving a light/medium CPU utilization. Whenever long CPU-bound tasks are
+>  being run, they will require all of the available CPU capacity, and there isn't
+> -much that can be done by the scheduler to save energy without severly harming
+> +much that can be done by the scheduler to save energy without severely harming
+>  throughput. In order to avoid hurting performance with EAS, CPUs are flagged as
+>  'over-utilized' as soon as they are used at more than 80% of their compute
+>  capacity. As long as no CPUs are over-utilized in a root domain, load balancing
