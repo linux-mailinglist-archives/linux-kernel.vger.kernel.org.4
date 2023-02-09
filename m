@@ -2,202 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4749F68FCA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AB268FCA6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbjBIBbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S231356AbjBIBdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjBIBbm (ORCPT
+        with ESMTP id S229911AbjBIBdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:31:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B246821A07
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:31:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CFACB81E4C
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:31:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1D1C433EF
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675906299;
-        bh=aYaN7NXRw0ihNR+IL/yGz5yH+5GqO6mxr4X8PdaZnj4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=siGYUNOg2wrrXSZ4e95rNkJJfbu3Y45ev3m1v06eXF4jB44fcEoNegj1Vahw5OtL0
-         xEqprlwErEqer0L5H+PRK5Ipsywpt5kKjiqnZyluXb9K8JRSTr6cxgBsBHaWEUFovZ
-         vp5VGB2020uFgHy6epXWOSZbhS4jkaOAAqicDfK5mQ8+9LlmtW4RqDo7YKLdMJDV0t
-         TPLmU0pn4IMZTlCZB7EtUSLuvaioTGYPD6CksXAJdLaU4+vsFJ3V04wc17D57caxl1
-         kRnKJs+4qllWRk5Ce44ERNI/n+jbVbWevgWdGdb1gtXfIYDotHULQOWCyxXsq9wNRo
-         0tT0ea3H6U6JA==
-Received: by mail-ej1-f47.google.com with SMTP id jg8so2159681ejc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 17:31:38 -0800 (PST)
-X-Gm-Message-State: AO0yUKW7JhhykEASCCIUCl2ae45H2UODP0Ba635V/9pfZSfHJlZb5nGe
-        +TU65eMMIgXQyv8K8Ry3TeQfTjJKLAPcsSz1K0w=
-X-Google-Smtp-Source: AK7set+qmRqoasUpDzhPwymmA1qkI+3NCkGEKe2NpeNzkWqJwSssQ9kHsZ/YyzGRyn8zv9Q3ixAdPd1Gnp+qH9itwMw=
-X-Received: by 2002:a17:906:3e04:b0:884:c19c:7c6 with SMTP id
- k4-20020a1709063e0400b00884c19c07c6mr1991658eji.120.1675906297178; Wed, 08
- Feb 2023 17:31:37 -0800 (PST)
+        Wed, 8 Feb 2023 20:33:16 -0500
+Received: from esa3.hc3370-68.iphmx.com (esa3.hc3370-68.iphmx.com [216.71.145.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9C121A29
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:33:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1675906395;
+  h=message-id:date:from:subject:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=20xt+mNzvHdm8euuw0WgqKhDs7s4IBveoeTdXBalv6s=;
+  b=R7rlsMAkL56HVPJz7MXoTRQ7At46AdabebmhHWriZ9Cq2xaVbc2E1FlD
+   m/mQbo58xTaYgBWsK1UH398bFYXzd+uxh9sJdRhUkdPR+OedU1HmmT/T0
+   eCcIsTC1pBlEV51evQBaulu8qP8eYRjllQ7ZAJrRx2n1QQ4yFANxJZU2O
+   s=;
+X-IronPort-RemoteIP: 104.47.58.106
+X-IronPort-MID: 96286275
+X-IronPort-Reputation: None
+X-IronPort-Listener: OutboundMail
+X-IronPort-SenderGroup: RELAY_O365
+X-IronPort-MailFlowPolicy: $RELAYED
+IronPort-Data: A9a23:6C2ADqih9hZCEh5mWPyJ7auyX161khEKZh0ujC45NGQN5FlHY01je
+ htvWD3TOviCMDemfIxyaIm3/B8Pu5LXmIMyHARu/i0zEX8b9cadCdqndUqhZCn6wu8v7q5Ex
+ 55HNoSfdpBcolv0/ErF3m3J9CEkvU2wbuOgTrWCYmYpHlUMpB4J0XpLg/Q+jpNjne+3CgaMv
+ cKai8DEMRqu1iUc3lg8sspvkzsy+qWt0N8klgZmP6sT5geOzyJ94K83fsldEVOpGuG4IcbiL
+ wrz5OnR1n/U+R4rFuSknt7TGqHdauePVeQmoiM+t5mK2nCulARrukoIHKN0hXNsoyeIh7hMJ
+ OBl7vRcf+uL0prkw4zxWzEAe8130DYvFLXveRBTuuTLp6HKnueFL1yDwyjaMKVBktubD12i+
+ tQAeC4hTE/Sqtut57iXcudXiu4pC+vSadZ3VnFIlVk1DN4AaLWaG+DmwIEd2z09wMdTAfzZe
+ swVLyJ1awjNaAFOPVFRD48imOCvhT/0dDgwRFC9/PJrpTSMilEhluG1brI5efTTLSlRtm+eq
+ njL4CLSBRYCOcbE4TGE7mitlqnEmiaTtIc6RePipqAw3wD7Kmo7K0IqX0v4/OuF1U+4fdhUD
+ F5KwBYplP1nnKCsZpynN/Gim1acswIRQch4Eus08giBx6PYpQGDCQAsXm4fQN8rrsk7QXotz
+ FDht9foAyF/9b6YU3SQ8p+Koj6ofysYN2kPYWkDVwRty9zjoZs6ixvTZtVuCqi4ipvyAz6Y6
+ zOLtik6g/MIjdMX2qC843jDgjSxtt7ISBI44kPcWWfNxgFhY4+gbYulwULW4fZJMMCSSVzpg
+ ZQfs82X7eRLAZTTkiWIGb0JBOvwv6jDNyDAi1lyGZVn7y6q53OoYYFX5nd5OVttNcEHPzTuZ
+ Sc/pD9s2XOaB1PyBYcfXm57I51CIXTIfTg9as3pUw==
+IronPort-HdrOrdr: A9a23:viFh2qyPJ+P4Q1OgTFM+KrPwFr1zdoMgy1knxilNoEpuA6ulfq
+ eV7ZcmPH7P6Ar5N0tKpTntAsO9qBDnlKKdg7N/AV74ZniDhILAFugL0WKF+VDd8kbFmNK1u5
+ 0NT0DQYueAa2STIazBkWuF+3dL+qjjzJyV
+X-IronPort-AV: E=Sophos;i="5.97,281,1669093200"; 
+   d="scan'208";a="96286275"
+Received: from mail-dm6nam10lp2106.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.106])
+  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Feb 2023 20:33:14 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WkYEBLVpcKhJlj/lNZCTc+suPCYaRPSpyD7sss2PNdivlP8b5eCcZS4ntoRx1oNEQm7HTCRkXtSs87r9fD25WFE2OxDS3GGJ5FahNWjO0NKsmuuUdKuriXenx8hO9HbFcj9CMJFZf+ZFCTyOVfI66bnzB3GLwFnKgrzj67gZMmud+ZZI3s0EzKpISXZl83AOMGntp9Jd+wUI5PoK0CpGeMXPS07h0w/7PwFKug48Uz49wYVQNE0Cpxl5OQWdm644heraJUiTcW9xY+pMBFvr8LrnqcxXwLYZBwYqjGJKWACE2F/ZkdTusHKIXYvGDOqPwpDB8CY/AZL37qCQ+OZNyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YiCUD54weNhmShln5BFvovg5Mlr8h++Oo0fvXE3+vvY=;
+ b=ickwTHo/U5wEhT9uS0aFLEuiPwlNr+i10APIMj0UEEBXXbhUrEehhGdxde2GpL+gMkkrZVmQTPRlc2XeyQ7J6On5RbX7ydBOgOL73Dj7RZDAvAYtCYMFf8p2RxPjF58Offefd5/Wv02WZ8ABhkwe/QYhdYg9UZ5nU7eJ/OTAABSYsVSXT99phkE+s1BtI0R2ucCCAErsL2ze/GCzlpye3MoDLrQJ4z4kedOb7NoT6em+dnxlYCi2APkxSu8GWAqNrzYYd/PFGQL14GYtCP0kowP4v4GVc6oFVV4RTDFkvnIh++X8oxk/1vS8mcBZq5NRRl7xfRqLG4n0+mLZHNeykw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
+ dkim=pass header.d=citrix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YiCUD54weNhmShln5BFvovg5Mlr8h++Oo0fvXE3+vvY=;
+ b=kOjEmIGmAQudzIpsciHpYmh/1pTNBHqZ6dXnm4m7BHNZBDg6qJ7BEOriYVemMm72CSd4JvbqVp2r9vijuQx1qF+dylnJSL4GWkVQyeao2owj4qyIwanLitrd0HVW4gqGYhdYYBH+xi0ES1UbAi4DU6DX/h4pArs8beTlVjX1AHc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=citrix.com;
+Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
+ by CO1PR03MB5826.namprd03.prod.outlook.com (2603:10b6:303:9f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
+ 2023 01:33:13 +0000
+Received: from BYAPR03MB3623.namprd03.prod.outlook.com
+ ([fe80::8299:f95f:934b:29e8]) by BYAPR03MB3623.namprd03.prod.outlook.com
+ ([fe80::8299:f95f:934b:29e8%7]) with mapi id 15.20.6086.017; Thu, 9 Feb 2023
+ 01:33:12 +0000
+Message-ID: <6d89fb36-c143-2bdd-9898-6053058b2e12@citrix.com>
+Date:   Thu, 9 Feb 2023 01:33:07 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   Andrew.Cooper3@citrix.com
+Subject: Re: [PATCH v3 3/4] x86/alternative: Rewrite optimize_nops() some
+Content-Language: en-GB
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        kirill.shutemov@linux.intel.com, jpoimboe@redhat.com
+References: <20230208171050.490809180@infradead.org>
+ <20230208171431.373412974@infradead.org>
+ <f0b54521-26cf-ed38-d805-3a8eef3b3103@citrix.com>
+ <Y+QGIiOupDKxlKKR@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y+QGIiOupDKxlKKR@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P265CA0181.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:311::8) To BYAPR03MB3623.namprd03.prod.outlook.com
+ (2603:10b6:a02:aa::12)
 MIME-Version: 1.0
-References: <20230112090603.1295340-1-guoren@kernel.org> <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
- <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
- <Y+DOyqehZvBJlb8N@FVFF77S0Q05N> <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
- <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N> <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
- <Y+O1qY453BnhqgQZ@FVFF77S0Q05N.cambridge.arm.com>
-In-Reply-To: <Y+O1qY453BnhqgQZ@FVFF77S0Q05N.cambridge.arm.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 9 Feb 2023 09:31:25 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT_aMBx3mPnzWWqj6uGM75yT_62x+_wZ4HkWd7BqEzvug@mail.gmail.com>
-Message-ID: <CAJF2gTT_aMBx3mPnzWWqj6uGM75yT_62x+_wZ4HkWd7BqEzvug@mail.gmail.com>
-Subject: Re: [PATCH -next V7 0/7] riscv: Optimize function trace
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Evgenii Shatokhin <e.shatokhin@yadro.com>, suagrfillet@gmail.com,
-        andy.chiu@sifive.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
-        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
-        jpoimboe@kernel.org, linux@yadro.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR03MB3623:EE_|CO1PR03MB5826:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8332e26c-4b67-4e63-a3eb-08db0a3d9bab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ip9wBker6HQuIG3pVpE21qwIYL7IAG9VT+ixmgSIC5nJDsdnrxrbRnGmzUfixOtDQmouFPEFN11DeXWd8QOrIcXM2CZMI0Ht9vcv6ZADregfEsWC7Kx9o1HE3bkADgTcILRBd0x6O/0ydRLoLlh7PQvt5srQNpmPe/xu0M9S2hibTSv4aVTZ6Z5zpKL64ga1MhHC2oJLKevwMhLPcR97ADEXmltfc1MLDNBZ0OwCa6lpSDKczEznJDas+/AADwyQd2Zm2OSdbqSNuhcuBXLhiX9LjfKkgHNzVwVkrntLxoIM2+shjnkGr5Mk5+afu3IxwPAf1MC0C3ejn5f29zCsgo15FNA2ayZN7IIPxURk8nXGzDweQwQPsR/VhuwUAZbAnRgkIAEOB2FnTQCFSDxWkhNshQI8AgP6xFUnvsz/YffWb/dd+gKXNDbcVKrWIdJtr/oYFycblzUKM3d8402slvz0GlO0Qi3r3gQxl3M6i+pAyp6ahkuN49J9osBNaJxPHIhSCuFHwCccDcgQExXmK/b4zuNILu4GnWN+ODtTTXercX0zyUc3E3E6U+mmTq2wKG+B6t7fdhZXv2LXsfaSp4vuqdKnG6azUtfMqEn9APyBKvJyH55+unJO0KpLgK4b9Kq0VBgpwNmQj0Y8JPRoptLjLHtOBH5LWCwR6bil2SIrCFyw4fE6Tx19IV8xy3rAL09ifzQ5k5DtqUFxZ3qomw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(396003)(136003)(366004)(346002)(451199018)(31686004)(2616005)(2906002)(316002)(478600001)(6486002)(82960400001)(38100700002)(36756003)(66556008)(66946007)(4326008)(8676002)(41300700001)(6506007)(6916009)(8936002)(5660300002)(31696002)(86362001)(6512007)(9686003)(186003)(26005)(53546011)(66476007)(6666004)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVFYUEZZZlR0QmlpQzg4UjU2SFozS0RvQzlSckpXRW5kK2E1VHhhMXpSR1cr?=
+ =?utf-8?B?aWs0NkVCMVZ6ZWhYdldXcjJuMEdiaytHaUd5MVZJM2NTZmZCY0YxZVIvaHUz?=
+ =?utf-8?B?LzYwa1lQRFBGcjdNeEZXdllNTStZN0RXaVpaZE9kSzgxQWRrY2FCRk1CRGtL?=
+ =?utf-8?B?YkdOejlsckRURTk0WEk2OC9yRTV1QW9kakpmejlkM2lmeHdib2xxWTV3T3VK?=
+ =?utf-8?B?MTVxKzVmRFRra2lQOTNQb3cxaUxEdWRkMHgzKzJidGJJNEV6VU5saUcxdVUv?=
+ =?utf-8?B?NERrTWNoc0hURE55VTVSaGlvY2dHcDZKUW5EZ3JXQUZQMHpWU0xqTlZDa2VW?=
+ =?utf-8?B?anR2TmsxSHkxZHhoZllxSkpxRXpPVkhmcFJiQTZ6Yk05RkFNUy9mcm9YRjNG?=
+ =?utf-8?B?alhjRUxUQnFIWXJzV3RvdnlMUkxyemNqeXNRb2cvNm92Y2drcllUYjdZSGdT?=
+ =?utf-8?B?SzBKM3p4eUREMjZjbVlNc1dBbmtTbWhlZTExS2RtYTBJY2EvV2lhVEU2Zlp2?=
+ =?utf-8?B?OEQxa1ArNkkzU0IxWnZrVU1TV2xHK1FzMWtjZ0FSNzJpRkIxeEllVnhUMU9V?=
+ =?utf-8?B?dWR2d1B2VDVlNkFMOGx2RkpvVjNyanZYSDBnMDZEM0NYV3ZEbm9pczUySitS?=
+ =?utf-8?B?RmkvOG10RW1RY3FzWXFGdnVDNm9zNTNDbFNxSS82UFZNYW54KzFiN1VjdHhY?=
+ =?utf-8?B?amlQNkJmYUF5QWNCUVFKdS9jLzFPV3ppRlZNbDlOOEQ2YlprUU1LMFJib1NH?=
+ =?utf-8?B?dVlqWmFieXBsK1NjL0Q5TTQ5VjZCRTZLQzZYQUREem9hN1FYVGVGdkUrQW5D?=
+ =?utf-8?B?ZlcyRlh5b2lDd1FhdlZ4aW85d25HdHRWYVJpSTAzblV2cmUwZjZjdFhEWTJJ?=
+ =?utf-8?B?VzRXdW5aLzk3R29EZTZRMXR2cVpGTkVjUjdrNXRLbEZQM1dTTC84eS9TMDAz?=
+ =?utf-8?B?WWZEcWRrSmIwWmNvRS9LN2l6MGluRGo1ZSsxUDVWbFdudkdMZjlidlYyY2p6?=
+ =?utf-8?B?UTU0N01IckpxSFNxZk1MNmVEQXZZdGZuSjVPVytBOEwvbnB5RlBKRlFjY2Yy?=
+ =?utf-8?B?ZEhYRmpLeDdNdFRnMkhLV21oSlZrVjV4bmpLdUFHdUVqMGpKUWtmNXkzaXA1?=
+ =?utf-8?B?REZDSUV2dkJmRzkyYkFWOUxJWWFqK01xRWlHRWczZlV5M1ZYSDVtM0NVNC9P?=
+ =?utf-8?B?TFp1dzl2ZEh3cjlTcDhGZjdvcUJJOVBpa0VJcGsyM1RZamlhZVhkZXJwU0sy?=
+ =?utf-8?B?azJSOWIvdnVEeFNVNzdHVCs3U2l5NXZUVk13ZVZxK0MwcGZieVNENDI2aFVu?=
+ =?utf-8?B?VUVCbnJSd0hpL2pBeUhobW9PcDRUelBsdS9aR2JmUVk3aEpMK1R2Q2VjQ2ZT?=
+ =?utf-8?B?elAzcnZmRFM4OG9uWEtHNkUyLyswdmRpN0hUVFhiK2p4SnZ3ek5sTnlYb1dQ?=
+ =?utf-8?B?Unh2a2ttK3NRV05RYnBia2dtMUpIemIwK3VENFBPb2krWW1Sb1VkMjVWVVpO?=
+ =?utf-8?B?RTNzNDgvRklSY214aGVYQ0xEZFdkWmNQQlMvY1Q5QXpiZmFaUmlrNFliVXBH?=
+ =?utf-8?B?N2Nsamh6ZXYraGJyYmd6UGY3UmR6QTBrSERrU2I5VUVNMHpnN1ZnYlEvdmpp?=
+ =?utf-8?B?c2JyVVVDbEVuNkhlYzBVOU1VOXhncUc4ZUxBM1VEcThqbXp0QlRyUm5CYVBK?=
+ =?utf-8?B?ODVqaXc2VlFjZ3BTR0ZSdWNhWVFyUTJ2K1NiNnZMQVo3Rll3M3BwMFFlZ0l2?=
+ =?utf-8?B?eWVXWENtYWtWdW80R1hrUFdIZUl6QmY1dUdKRXBmdVVMTnFIb1VTS3lzUXBm?=
+ =?utf-8?B?Q21Bb1FGbEFBQ3JuamVNTVN2UXk5RHFrR0RLMGVRWmpQN3JKVXp2cjFqaUtm?=
+ =?utf-8?B?UXZVbmx2UWl4Tkp6ZnlHMEN3TUdkZlQwL0VZRUxkRmxYdjVOdzEvWUxrWTVE?=
+ =?utf-8?B?Ry9NMjhURWx4eXkweEhidDROcmU4YWJoMXcxazV0OGxvdjM2b1BhNEhuYXZn?=
+ =?utf-8?B?K3hCVVd1dGlrcjRpTWJOczVHNHNSTzhBN3kvMjRRQ3ZTY1ZLRjZHVVpSMGJu?=
+ =?utf-8?B?SmJyemliN1JuT3ZMU1JHSlZQSEZnWEk0cm9hZ2dNWFk5OE1ESld6SjNIQTZK?=
+ =?utf-8?B?WnYraWg5c1ppSUFuK0hFRXh3cU1tUkVibndXUzNtMTVWemRxM01tM3lLQkwr?=
+ =?utf-8?B?THc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 6OuqdAzWRB9/JFpJtCfU7C1jMFTynA4AbDNAuKJA6sl5wGd1Ct4pGJ+P3AtmMrZabWfQwXhewFfc/z9LKLM/H+LV8tMN6K35a23aq1js0ddudv1JHfZ4AhVL1zjAa4MwSQvX02U+HVi82H8UoZK//Ng0TYtr9tDXJTmgC2wHZ7lqCz4s3y9Bo3Q2B8o7ila5/s2rabmSUIU+4I9vW/R8j/GU78QkwCSpslltSPrjhWWVwVe+wZ6KDdqu0dhsE3198h1VVP8f5+SGKOnTk0mlQpnpnj1hMaEwbJH/0QILOzPzYfyDF0BUs0AYo60Lr4u3a6Ypz1IcPBupbOnmTGGT/37RudWQxDXAeG6H49sdLJ68x/jFH2e+Ea3rmptfFp3fIqOqkC8pKkwkC69rol3JGZKHEezJp8vlbWYQITXw1c9KU13UHnM/aWY80zHM4h99vY2KUqdHHuPe5DImEOZuQP9YuYoRFNASpDPN4Q1l3q8q0LaYocZq6e9qJp+usGSfNexN5nzPBP/SxxNfa/IUy9V4+ZRv58EhwCEaMR0K0VEMKbBu1LvIhekZEDj3zrzwYnIUEQp4et+daYJDSrPmongxwSXvyLE2BSrGBuFEN2tGwfb/4Npyju6biw0a1s6UDAJ0AGkOFuHMQBhojLq7zM3hIH9b03efSz1sXe3rz84a7wcB3EJLqcF/HDiRTKhE0Emt3maTR9TOhJlrP6ClOzTj8UKRdLdnYYrn8u0ok2qMAQ11vZgMkJUyUrSPFJ4bVGRWRh7Q0DtlpGKixgqvAph9YRUaeXugCbtxanVbRvUL966KQ9dG4vCp9/HEgaxCs4D5w3aA7pDw45Zz/zEWw9udM/BhLu+9GTqd2DlnekWQbtFAMug5CwaWURpe43vvVVxTPFlmogcIhjEXMVg8UQ==
+X-OriginatorOrg: citrix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8332e26c-4b67-4e63-a3eb-08db0a3d9bab
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 01:33:12.7025
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1EgWMGEYSP3milj+bW9AAyys1ttYvLZQ2K06bLPZ9iUI/Fy9+nvvMZnuC6vybTl8DNiNqnqBMyLkhlcHYL42xIhtJaS/TlKIYPkZ7tCOA2E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR03MB5826
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 10:46 PM Mark Rutland <mark.rutland@arm.com> wrote:
+On 08/02/2023 8:29 pm, Peter Zijlstra wrote:
+> On Wed, Feb 08, 2023 at 07:52:04PM +0000, Andrew.Cooper3@citrix.com wrote:
+>> On 08/02/2023 5:10 pm, Peter Zijlstra wrote:
+>>> This rewrite address two issues:
+>>>
+>>>  - it no longer hard requires single byte nop runs, it now accepts
+>>>    any NOP and NOPL encoded instruction (but not the more complicated
+>>>    32bit NOPs).
+>>>
+>>>  - it writes a single 'instruction' replacement.
+>>>
+>>> Specifically, ORC unwinder relies on the tail NOP of an alternative to
+>>> be a single instruction, in particular it relies on the inner bytes
+>>> not being executed.
+>>>
+>>> Once we reach the max supported NOP length (currently 8, could easily
+>>> be extended to 11 on x86_64), switches to JMP.d8 and INT3 padding to
+>>> achieve the same result.
+>>>
+>>> The ORC unwinder uses this guarantee in the analysis of
+>>> alternative/overlapping CFI state,
+>>>
+>>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> How lucky are you feeling for your game of performance roulette?
+> Yeah, not very lucky.. I've been talking about this with Boris for a bit
+> already.
 >
-> On Wed, Feb 08, 2023 at 10:30:56AM +0800, Guo Ren wrote:
-> > Hi Mark,
-> >
-> > Thx for the thoughtful reply.
-> >
-> > On Tue, Feb 7, 2023 at 5:17 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> > > Note that I'm assuming you will *always* go through a common ftrace_caller
-> > > trampoline (even for direct calls), with the trampoline responsible for
-> > > recovering the direct trampoline (or ops->func) from the ops pointer.
-> > >
-> > > That would only require 64-bit alignment on 64-bit (or 32-bit alignment on
-> > > 32-bit) to keep the literal naturally-aligned; the rest of the instructions
-> > > wouldn't require additional alignment.
-> > >
-> > > For example, I would expect that (for 64-bit) you'd use:
-> > >
-> > >   # place 2 NOPs *immediately before* the function, and 3 NOPs at the start
-> > >   -fpatchable-function-entry=5,2
-> > >
-> > >   # Align the function to 8-bytes
-> > >   -falign=functions=8
-> > >
-> > > ... and your trampoline in each function could be initialized to:
-> > >
-> > >   # Note: aligned to 8 bytes
-> > >   addr-08               // Literal (first 32-bits)      // set to ftrace_nop_ops
-> > >   addr-04               // Literal (last 32-bits)       // set to ftrace_nop_ops
-> > >   addr+00       func:   mv      t0, ra
-> > >   addr+04               auipc   t1, ftrace_caller
-> > >   addr+08               nop
-> > >
-> > > ... and when enabled can be set to:
-> > >
-> > >   # Note: aligned to 8 bytes
-> > >   addr-08               // Literal (first 32-bits)      // patched to ops ptr
-> > >   addr-04               // Literal (last 32-bits)       // patched to ops ptr
-> > >   addr+00       func:   mv      t0, ra
-> > We needn't "mv t0, ra" here because our "jalr" could work with t0 and
-> > won't affect ra. Let's do it in the trampoline code, and then we can
-> > save another word here.
->
-> Ah; I thought JALR always clobbered ra? Or can that specify the register to
-> save the link address to?
-Yes, that's the feature of riscv :) We could use any register to save
-the link address.
+>> Unconditional jmps cost branch prediction these days, and won't be
+>> successfully predicted until taken.
+> IKR, insane, but that's what it is.
 
->
-> I'm not that familiar with riscv asm, so I've probably just got that wrong.
->
-> > >   addr+04               auipc   t1, ftrace_caller
-> > >   addr+08               jalr    ftrace_caller(t1)
-> >
-> > Here is the call-site:
-> >    # Note: aligned to 8 bytes
-> >    addr-08               // Literal (first 32-bits)      // patched to ops ptr
-> >    addr-04               // Literal (last 32-bits)       // patched to ops ptr
-> >    addr+00               auipc   t0, ftrace_caller
-> >    addr+04               jalr    ftrace_caller(t0)
-Sorry, it should be:
-         addr+04               jalr    t0, ftrace_caller(t0)
+In terms of rationalising how things work, sure, put the resulting perf
+numbers speak for themselves.
 
->
-> I'm a bit confused there; I thought that the `symbol(reg)` addressing mode was
-> generating additional bits that the AUPIC didn't -- have I got that wrong?
->
-> What specifies which register the JALR will write the link address to?
-According to the spec, auipc t1,0x0 should write PC + 0x0<<12 (which
-is equal to PC) to t1 and then jalr t0, (t0)0 jumps to the address
-stored in t0 + 0x0 and stores the return address to t0.
+For the benefit of others reading this and not following what's going
+on, modern x86 processors have branch prediction occurring pre-decode,
+not post-decode, to reduce the misprediction latency.
 
-That means auipc defines xxx << 12 bits, jalr defines lowest 12 bits.
+Branch prediction operates using the current %rip and past history, and
+selects the $I lines to send for decode.  The "decoded bytes disagree
+with prediction metadata" feedback cycle is fast, but missing this
+disagreement is the root cause of the Branch Type Confusion speculation
+issue (a.k.a. AMD Retbleed).
 
->
-> > > Note: this *only* requires patching the literal and NOP<->JALR; the MV and
-> > > AUIPC aren't harmful and can always be there. This way, you won't need to use
-> > > stop_machine().
-> > Yes, simplest nop is better than c.j. I confused.
-> >
-> > >
-> > > With that, the ftrace_caller trampoline can recover the `ops` pointer at a
-> > > negative offset from `ra`, and can recover the instrumented function's return
-> > > address in `t0`. Using the `ops` pointer, it can figure out whether to branch
-> > > to a direct trampoline or whether to save/restore the regs around invoking
-> > > ops->func.
-> > >
-> > > For 32-bit it would be exactly the same, except you'd only need a single nop
-> > > before the function, and the offset would be -0x10.
-> > Yes, we reduced another 4 bytes & a smaller alignment for better code
-> > size when 32-bit.
-> >    # Note: aligned to 4 bytes
-> >    addr-04               // Literal (last 32-bits)       // patched to ops ptr
-> >    addr+00               auipc   t0, ftrace_caller
-> >    addr+04               jalr    ftrace_caller(t0)
-addr+04               jalr    t0, ftrace_caller(t0)
-
-> > >
->
-> > > That's what arm64 does; the only difference is that riscv would *always* need
-> > > to go via the trampoline in order to make direct calls.
-> > We need one more trampoline here beside ftrace_caller &
-> > ftrace_regs_caller: It's "direct_caller".
-> >
-> > addr+04         nop -> direct_caller/ftrace_caller/ftrace_regs_caller
->
-> I'd strongly recommend that you instead implement FTRACE_WITH_ARGS and
-> deprecate FTRACE_WITH_REGS, like arm64 has done, then you only need a single
-> ftrace_caller, as I mentioned above. That way there's no risk that you need to
-> patch the AUIPC after initialization.
->
-> The arm64 FTRACE_WITH_ARGS conversion is in mainline, and arm64's
-> FTRACE_WITH_CALL_OPS is based upon that. Florent's DIRECT_CALLS patches add the
-> direct call logic to the same ftrace_caller trampoline.
-Thx for the suggestion of only keeping the ftrace_caller idea, but
-it's another topic.
-
-What I want to point out:
-If we keep "auipc (addr+00)" fixed, we could use the different
-trampolines at "jalr (addr+0x4)" (All of them must be in one 2k
-aligned area).
-
->
-> Thanks,
-> Mark.
-
-
-
--- 
-Best Regards
- Guo Ren
+~Andrew
