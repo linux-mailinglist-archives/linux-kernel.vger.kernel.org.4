@@ -2,132 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14006909F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D99F6909F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjBIN2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
+        id S229837AbjBINaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjBIN2j (ORCPT
+        with ESMTP id S229538AbjBINaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:28:39 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F0425EBFF;
-        Thu,  9 Feb 2023 05:28:33 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 464641477;
-        Thu,  9 Feb 2023 05:29:15 -0800 (PST)
-Received: from [192.168.1.110] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B500B3F703;
-        Thu,  9 Feb 2023 05:28:31 -0800 (PST)
-Message-ID: <ff471140-5bbb-fb64-f000-eb7ba97dd74e@arm.com>
-Date:   Thu, 9 Feb 2023 13:28:11 +0000
+        Thu, 9 Feb 2023 08:30:10 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453CB23C66;
+        Thu,  9 Feb 2023 05:30:09 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 86672A6D;
+        Thu,  9 Feb 2023 14:30:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1675949407;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SrOqtqMRVL+oUjt6m967e0yB5Ie1KW5qjLlv8Lsn4MQ=;
+        b=zjTSBKcw28bY1+E69FBghoDKyAhMrFOmoK7q9eKOZGm2mhVtD2dnwivWiYpM4d7FS10UwF
+        8e8672LcOmfq4uSzhjhaVld2+1gIhh6EoLTzjMaZLVbeK9Hha0RDhTn3T2hv94sPhMFJE/
+        eFok+nSRanJXVul+Q3ENcWHqb6Ge7HaHRoEGtd7dFVq0PzzzJdoHgBCk9v+3zoYRX8U0Bd
+        S72wPuo9euYWMWHqbj7kBDY05y5CUCwMKHzvie+DpW+sek3Rb6LqSh52I17P5juLLAGbtT
+        Qzw43BM4XegX21QNArAaegaPRefUHznH/+gZEaOUEfdT6wcTJ+rj3h9eGKq1Xg==
+From:   Michael Walle <michael@walle.cc>
+To:     oliver.graute@kococonnector.com
+Cc:     andrew@lunn.ch, davem@davemloft.net, edumazet@google.com,
+        hkallweit1@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        simon.horman@corigine.com, Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH RFC] linux: net: phy: realtek: changing LED behaviour for RTL8211F
+Date:   Thu,  9 Feb 2023 14:30:02 +0100
+Message-Id: <20230209133002.180178-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230209123917.GA1550@optiplex>
+References: <20230209123917.GA1550@optiplex>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] arm64: dts: layerscape: Fix GICv3 ITS node names
-To:     Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230208183437.2283665-1-robh@kernel.org>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230208183437.2283665-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-08 18:34, Rob Herring wrote:
-> The GICv3 ITS is an MSI controller, therefore its node name should be
-> 'msi-controller'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> Note that this exposes an issue that #msi-cells is missing. In turn, the
-> use of msi-parent in PCI nodes is wrong and should be msi-map according
-> to my sources (Robin M), but I have no idea what is correct there.
+> is this the right place to turn on the realtek phy LEDs for RTL8211F?
 
-This is a funny one, since AIUI those "msi-parent" properties are now 
-really only there for the bootloader to pick up the phandle to build a 
-proper "msi-map" property[1][2]. As such, I imagine it should *probably* 
-be OK to add a dummy argument so that "#msi-cells = <1>" can be 
-correctly specified, however I can't claim to be an expert on these 
-systems and whether there are any other bootloader behaviours that also 
-need to be supported.
+Probably not. There are a few issues. This will only work one particular
+board. Therefore, you'd need some kind of runtime configuration to also
+support other boards. But lately any LED related patches for PHYs were
+NAK'd because they need to integrate with the LED subsystem. See [1].
 
-Thanks,
-Robin.
+-michael
 
-[1] 
-https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/net/fsl-mc/mc.c#L328
-[2] 
-https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_layerscape_fixup.c
-
->   arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 2 +-
->   arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi | 2 +-
->   arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 2 +-
->   arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi | 2 +-
->   4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> index 1b33cabb4e14..dd1c8f60fad1 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> @@ -131,7 +131,7 @@ gic: interrupt-controller@6000000 {
->   		interrupt-controller;
->   		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0xf) |
->   					 IRQ_TYPE_LEVEL_LOW)>;
-> -		its: gic-its@6020000 {
-> +		its: msi-controller@6020000 {
->   			compatible = "arm,gic-v3-its";
->   			msi-controller;
->   			reg = <0x0 0x06020000 0 0x20000>;/* GIC Translater */
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-> index 260d045dbd9a..6dd680fb1b22 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1088a.dtsi
-> @@ -123,7 +123,7 @@ gic: interrupt-controller@6000000 {
->   		#size-cells = <2>;
->   		ranges;
->   
-> -		its: gic-its@6020000 {
-> +		its: msi-controller@6020000 {
->   			compatible = "arm,gic-v3-its";
->   			msi-controller;
->   			reg = <0x0 0x6020000 0 0x20000>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-> index 348d9e3a9125..d2f5345d0560 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-> @@ -60,7 +60,7 @@ gic: interrupt-controller@6000000 {
->   		interrupt-controller;
->   		interrupts = <1 9 0x4>;
->   
-> -		its: gic-its@6020000 {
-> +		its: msi-controller@6020000 {
->   			compatible = "arm,gic-v3-its";
->   			msi-controller;
->   			reg = <0x0 0x6020000 0 0x20000>;
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> index 50c19e8405d5..ea6a94b57aeb 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-lx2160a.dtsi
-> @@ -395,7 +395,7 @@ gic: interrupt-controller@6000000 {
->   		interrupt-controller;
->   		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
->   
-> -		its: gic-its@6020000 {
-> +		its: msi-controller@6020000 {
->   			compatible = "arm,gic-v3-its";
->   			msi-controller;
->   			reg = <0x0 0x6020000 0 0x20000>;
+[1] https://lore.kernel.org/r/YyxOTKJ8OTxXgWcA@lunn.ch/
