@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7DF6908C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB306908C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjBIM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:28:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S229941AbjBIM2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:28:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjBIM2W (ORCPT
+        with ESMTP id S229907AbjBIM2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:28:22 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D1A126D8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:21 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso3738032wmp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:21 -0800 (PST)
+        Thu, 9 Feb 2023 07:28:24 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112A3126D8
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:23 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id d14so1574439wrr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J3ujPUkgM6w68JhuQ2OFyntLPvFx3aPpntFnJGR14xI=;
-        b=Ijtf7zQNxQutfacxe7HkX1oZwBtdY0P9UgLSO8dhkP1U65kpJZJY7R1MMUyp6Ct4cD
-         GLrKvMf4G8iPDCfLMR3KxkIlon3eS1Xk3zCwH/xrQT4V7rasfXSqO1W9FkT8JEwYG5nd
-         vP7HU4m5aPIf3u7g0VK2aJyRsrCAVSO4I+7yaTvQlY0tkYTo78Ug18ERnMuYx1t6mXeu
-         oZSmmi80y0kP5uJ/f6Ek8Y6oJvaacva8e/X8jBsI6J64GMqPq05H2DDCLPvWcgtqAy3k
-         aFstUecHk+zX1c8eISshFvZUTetRV1WcNNIufuMsAsWp1bBovtK8eJZpyD4YQlqFQtJO
-         IJQA==
+        bh=RdgbNuhnuI8HvGFss/JHz5QrLG7sfZSeSJMIaBHo/bk=;
+        b=QJVTqSRdqqHcybqhGKd2Rfv9F2xEWixeuwVkVGwpshvwk/g848tUi0Tnis3ZZPWjWV
+         6Uy+gztl/cYhIirToJICkm5iwqJYu/Uk85Q15oUO6TjGoexpBWWIy1trXUCg7Ynh46Ku
+         t/Qkd/tQhXlzuF43Oqd24cCfB/nMbl3CCCqJFaU/U1CWygEnXA+1F2esIadvmGjC2o1e
+         MBGndlLA5y0/4A6mQ9+piQKENLzl3YM0lVIF3lZdPskfaTS8IuqVw2espMWsccbBEfc2
+         oiGb/P7q7J9IzWau5/7x0jw+TWoH2Nvpo0RxUUMKnuArv9rj1EMfl2khyTzwD+VxJHLj
+         R0pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J3ujPUkgM6w68JhuQ2OFyntLPvFx3aPpntFnJGR14xI=;
-        b=iixzwsf0x1hnqIjn8/8Seeznw9/USez6cA8Oy8KQH1iHUaNNKRxx+lXGI0smuFU2Yf
-         cwyI6kdCteVI/IixaZVvfdX6pcKlKHeSWfpufOOKKQeAD+nzQZuW2wV3aRAoXwpUoC6F
-         CCqUNNpfbDvzLptK90yS5hQp+ysF+L+N0id21xKh+ENvQC+9li9Tgc+CtmcRsqkWYgWM
-         SZMSdEQYJwRHLgiWr2R31YcTIT5sSQC8L5vRlZQB4RuXZWyNP2maYT0JFiYO0FPIKRZh
-         Ivf2b6qcO2G+kb4ooGfXpg+fo/mHIoMRX73ybdYrpZbCgmFmBoXKSUfqces3YoaLnNOr
-         VYZQ==
-X-Gm-Message-State: AO0yUKW0Pc8zOuF8D/eZj/za3585lGajokK59YB59tzfLKHDONnodtvF
-        zJ6pn2wb6NuPYkpX9Z3LZITswg==
-X-Google-Smtp-Source: AK7set9AiscBQz9AMthG4OOWx2uMKBCI8kOz4peYLZo64rXsBho4JKZR0is3unV5v8eYp3JKFk2CzA==
-X-Received: by 2002:a05:600c:511e:b0:3df:9858:c038 with SMTP id o30-20020a05600c511e00b003df9858c038mr5876254wms.13.1675945700377;
-        Thu, 09 Feb 2023 04:28:20 -0800 (PST)
+        bh=RdgbNuhnuI8HvGFss/JHz5QrLG7sfZSeSJMIaBHo/bk=;
+        b=kPenOZ1ZfOMVzC8Yy0ysLbEsmwoNXWFgxJ7FKSMmXFvSVr+fSGP1mOm06CvVvXwfuS
+         8zvmrT1qBHDdD52N/Lc1uvv65vmWkJYpJulAl9t6xFtSqN9U8LwLOhcsIXDcMLkHHTpg
+         q+NvLoL42s3EBlyYmnawPDcXU+n7m5rCbly94qEAw8z4umRAOVt5o6OCGCdCKnehRRQ4
+         xH6QlpEaRPRMS9WMmtM7iTXhmN3yKPucAG9bvHvufGyRziNtXdvzbXYBvX2YIHMU3iuc
+         3j+d21YDyUFfdELYupQWCJCoB66MVOZxh09R8eGaJIG0rm2xdnzOde6r9BXP17ugJtZ1
+         3UFw==
+X-Gm-Message-State: AO0yUKVNdIxdCj6GJVEYd3GLbYruCdO0gp/n0rYhQ3JihtvzNJcdC1IF
+        AJ4PQ28LOjZUCumeljwcH91DaA==
+X-Google-Smtp-Source: AK7set/t5oKzjlWyATb/30pIVAqCDe9grRBKvQ8EXy0hhIFD0gb2WbEgVKamQN6iPJkux3DL11JsNQ==
+X-Received: by 2002:a5d:4806:0:b0:2c3:ea6b:ef83 with SMTP id l6-20020a5d4806000000b002c3ea6bef83mr11677540wrq.12.1675945701608;
+        Thu, 09 Feb 2023 04:28:21 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.19
+        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 04:28:19 -0800 (PST)
+        Thu, 09 Feb 2023 04:28:20 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
         steev@kali.org, johan+linaro@kernel.org, quic_bjorande@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 4/8] ASoC: qcom: audioreach: fix ADSP ready check
-Date:   Thu,  9 Feb 2023 12:28:02 +0000
-Message-Id: <20230209122806.18923-5-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 5/8] ASoC: codecs: lpass: register mclk after runtime pm
+Date:   Thu,  9 Feb 2023 12:28:03 +0000
+Message-Id: <20230209122806.18923-6-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
 References: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
@@ -73,54 +73,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-currently q6apm_is_adsp_ready() will only return the cached value of
-previous result. If we are unlucky and previous result is not-ready
-then the caller will always get not-ready flag.
+move mclk out registration after runtime pm is enabled so that the
+clk framework can resume the codec if it requires to enable the mclk out.
 
-This is not correct, we should query the dsp of its current state in
-irrespective of previous reported state.
-
-Fixes: 47bc8cf60e92 ("ASoC: qdsp6: audioreach: Add ADSP ready check")
+Fixes: c96baa2949b2 ("ASoC: codecs: wsa-macro: add runtime pm support")
+Fixes: 72ad25eabda0 ("ASoC: codecs: va-macro: add runtime pm support")
+Fixes: 366ff79ed539 ("ASoC: codecs: rx-macro: add runtime pm support")
+Fixes: 1fb83bc5cf64 ("ASoC: codecs: tx-macro: add runtime pm support")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/qdsp6/q6apm.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ sound/soc/codecs/lpass-rx-macro.c  |  8 ++++----
+ sound/soc/codecs/lpass-tx-macro.c  |  8 ++++----
+ sound/soc/codecs/lpass-va-macro.c  | 20 ++++++++++----------
+ sound/soc/codecs/lpass-wsa-macro.c |  9 ++++-----
+ 4 files changed, 22 insertions(+), 23 deletions(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm.c b/sound/soc/qcom/qdsp6/q6apm.c
-index 8a7dfd27d3c5..994c9e823a88 100644
---- a/sound/soc/qcom/qdsp6/q6apm.c
-+++ b/sound/soc/qcom/qdsp6/q6apm.c
-@@ -145,14 +145,6 @@ static void q6apm_put_audioreach_graph(struct kref *ref)
- 	kfree(graph);
- }
+diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
+index a9ef9d5ffcc5..dd6970d5eb8d 100644
+--- a/sound/soc/codecs/lpass-rx-macro.c
++++ b/sound/soc/codecs/lpass-rx-macro.c
+@@ -3601,10 +3601,6 @@ static int rx_macro_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_fsgen;
  
--bool q6apm_is_adsp_ready(void)
--{
--	if (g_apm && g_apm->state)
--		return true;
+-	ret = rx_macro_register_mclk_output(rx);
+-	if (ret)
+-		goto err_clkout;
 -
--	return false;
--}
--EXPORT_SYMBOL_GPL(q6apm_is_adsp_ready);
+ 	ret = devm_snd_soc_register_component(dev, &rx_macro_component_drv,
+ 					      rx_macro_dai,
+ 					      ARRAY_SIZE(rx_macro_dai));
+@@ -3618,6 +3614,10 @@ static int rx_macro_probe(struct platform_device *pdev)
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
  
- static int q6apm_get_apm_state(struct q6apm *apm)
- {
-@@ -169,6 +161,15 @@ static int q6apm_get_apm_state(struct q6apm *apm)
- 	return apm->state;
- }
++	ret = rx_macro_register_mclk_output(rx);
++	if (ret)
++		goto err_clkout;
++
+ 	return 0;
  
-+bool q6apm_is_adsp_ready(void)
-+{
-+	if (g_apm)
-+		return q6apm_get_apm_state(g_apm);
+ err_clkout:
+diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
+index 2ef62d6edc30..b9475ba55e20 100644
+--- a/sound/soc/codecs/lpass-tx-macro.c
++++ b/sound/soc/codecs/lpass-tx-macro.c
+@@ -2036,10 +2036,6 @@ static int tx_macro_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_fsgen;
+ 
+-	ret = tx_macro_register_mclk_output(tx);
+-	if (ret)
+-		goto err_clkout;
+-
+ 	ret = devm_snd_soc_register_component(dev, &tx_macro_component_drv,
+ 					      tx_macro_dai,
+ 					      ARRAY_SIZE(tx_macro_dai));
+@@ -2052,6 +2048,10 @@ static int tx_macro_probe(struct platform_device *pdev)
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+ 
++	ret = tx_macro_register_mclk_output(tx);
++	if (ret)
++		goto err_clkout;
 +
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(q6apm_is_adsp_ready);
+ 	return 0;
+ 
+ err_clkout:
+diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
+index b0b6cf29cba3..1623ba78ddb3 100644
+--- a/sound/soc/codecs/lpass-va-macro.c
++++ b/sound/soc/codecs/lpass-va-macro.c
+@@ -1524,16 +1524,6 @@ static int va_macro_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_mclk;
+ 
+-	ret = va_macro_register_fsgen_output(va);
+-	if (ret)
+-		goto err_clkout;
+-
+-	va->fsgen = clk_hw_get_clk(&va->hw, "fsgen");
+-	if (IS_ERR(va->fsgen)) {
+-		ret = PTR_ERR(va->fsgen);
+-		goto err_clkout;
+-	}
+-
+ 	if (va->has_swr_master) {
+ 		/* Set default CLK div to 1 */
+ 		regmap_update_bits(va->regmap, CDC_VA_TOP_CSR_SWR_MIC_CTL0,
+@@ -1560,6 +1550,16 @@ static int va_macro_probe(struct platform_device *pdev)
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+ 
++	ret = va_macro_register_fsgen_output(va);
++	if (ret)
++		goto err_clkout;
 +
- static struct audioreach_module *__q6apm_find_module_by_mid(struct q6apm *apm,
- 						    struct audioreach_graph_info *info,
- 						    uint32_t mid)
++	va->fsgen = clk_hw_get_clk(&va->hw, "fsgen");
++	if (IS_ERR(va->fsgen)) {
++		ret = PTR_ERR(va->fsgen);
++		goto err_clkout;
++	}
++
+ 	return 0;
+ 
+ err_clkout:
+diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
+index 5cfe96f6e430..c0b86d69c72e 100644
+--- a/sound/soc/codecs/lpass-wsa-macro.c
++++ b/sound/soc/codecs/lpass-wsa-macro.c
+@@ -2451,11 +2451,6 @@ static int wsa_macro_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_fsgen;
+ 
+-	ret = wsa_macro_register_mclk_output(wsa);
+-	if (ret)
+-		goto err_clkout;
+-
+-
+ 	ret = devm_snd_soc_register_component(dev, &wsa_macro_component_drv,
+ 					      wsa_macro_dai,
+ 					      ARRAY_SIZE(wsa_macro_dai));
+@@ -2468,6 +2463,10 @@ static int wsa_macro_probe(struct platform_device *pdev)
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+ 
++	ret = wsa_macro_register_mclk_output(wsa);
++	if (ret)
++		goto err_clkout;
++
+ 	return 0;
+ 
+ err_clkout:
 -- 
 2.21.0
 
