@@ -2,159 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E47469115F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E2A691168
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBITbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S229649AbjBITet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjBITbU (ORCPT
+        with ESMTP id S229953AbjBITep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:31:20 -0500
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1A02914D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:31:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1675971079; x=1707507079;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=A6SuQMpZpuB5tW6VlPsSxTVheKhW2mDISHCOjV6LkYE=;
-  b=TqxfKW6VVoHUoY/HSQT9IgEv4heUzpPLib4OvqqPEBCGTK9V1bmw+OK/
-   lvb1z0uY4KSRaZnjeaOnqEa2wvVwFQ7zNw7MTmdbhdDId9qXAhQkYdWTp
-   tB4gd2Avf09uNdHxGP5e9OMBYUTOVZuQ0Up+a1bnuZzcmPID0kC0ZDCYs
-   E=;
-X-IronPort-AV: E=Sophos;i="5.97,284,1669075200"; 
-   d="scan'208";a="309388136"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 19:31:14 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-cadc3fbd.us-west-2.amazon.com (Postfix) with ESMTPS id 0C98FA1427;
-        Thu,  9 Feb 2023 19:31:13 +0000 (UTC)
-Received: from EX19D025UWA003.ant.amazon.com (10.13.139.5) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Thu, 9 Feb 2023 19:31:12 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX19D025UWA003.ant.amazon.com (10.13.139.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.24; Thu, 9 Feb 2023 19:31:12 +0000
-Received: from u40bc5e070a0153.ant.amazon.com (10.1.212.9) by
- mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS) id
- 15.0.1497.45 via Frontend Transport; Thu, 9 Feb 2023 19:31:10 +0000
-From:   Roman Kagan <rkagan@amazon.de>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Valentin Schneider <vschneid@redhat.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Ben Segall <bsegall@google.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Waiman Long <longman@redhat.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: [PATCH v3] sched/fair: sanitize vruntime of entity being placed
-Date:   Thu, 9 Feb 2023 20:31:07 +0100
-Message-ID: <20230209193107.1432770-1-rkagan@amazon.de>
-X-Mailer: git-send-email 2.34.1
+        Thu, 9 Feb 2023 14:34:45 -0500
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65A410259;
+        Thu,  9 Feb 2023 11:34:44 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id lu11so9650660ejb.3;
+        Thu, 09 Feb 2023 11:34:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FQyPKHsnpkMtHTu8wIUgMn7V8u4D4+AVOfDvP1szK50=;
+        b=zr5hyeBKdUpmenmZsXcn9FmLkaOIms+DVYEr63SGk1Nbwb8ZSkrqq3J9rNmSaX7hyJ
+         pAR581h2YRNVG6AA93UdFH2Gkr+SRQI//VXEzfsH8hhohRwVP+7Q5BFEJcyUCKUxZtT1
+         tGyghz6S2QD/9iALq9+pUZBhZMTtcpXgUuOZz2zME8q4bx4oFdv9Y/0/tbo3ktpCfwU4
+         SYbMOC1xS33vFmz5zS4qbWcSSmZfRpF9YZWQjxPY8AHNrXwaEa1vzg+wwb8c8ULyjEkp
+         lRKdXJDjsGKlkMIBPuKGSKCjdib/VPQhnG3WT9rTD+TatYsx4sf+kgCDO9Vjhv5zCd0m
+         PSaQ==
+X-Gm-Message-State: AO0yUKV7rIdmVdL+jnY5iAwCH+kHU/A73OreTXztVR0f83td2in6qNd/
+        9iacKCFkK/jQzmcX/ISWo7799bVr3njBAoj4al0=
+X-Google-Smtp-Source: AK7set+wluxzNyhZvd4jbRFYLJUQ9ghyXw8Cm0oCBDn53ajufkx4Ht18b90WGecWYVh9M9ucqrzSMPx7hO/eypNm2XA=
+X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
+ sd14-20020a170906ce2e00b0087f575a9b67mr2944602ejb.274.1675971283500; Thu, 09
+ Feb 2023 11:34:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230202141545.2295679-1-gregkh@linuxfoundation.org>
+ <CAJZ5v0gMpORi=kB4-PFswmhY2HJggJO+Qh2SMjCuHyn3z+zmTw@mail.gmail.com> <Y9vSQhnCdnInKu/b@kroah.com>
+In-Reply-To: <Y9vSQhnCdnInKu/b@kroah.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Feb 2023 20:34:32 +0100
+Message-ID: <CAJZ5v0hhCAUVb7RgaKkO9j6g0mKUdOcDNy=7vM9kFkm3NyNp-g@mail.gmail.com>
+Subject: Re: [PATCH] drivers: base: power: fix memory leak with using debugfs_lookup()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Qiao <zhangqiao22@huawei.com>
+On Thu, Feb 2, 2023 at 4:09 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Feb 02, 2023 at 03:23:46PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Feb 2, 2023 at 3:15 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > When calling debugfs_lookup() the result must have dput() called on it,
+> > > otherwise the memory will leak over time.  To make things simpler, just
+> > > call debugfs_lookup_and_remove() instead which handles all of the logic
+> > > at
+> > > once.
+> > >
+> > > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > Cc: Kevin Hilman <khilman@kernel.org>
+> > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > Cc: Pavel Machek <pavel@ucw.cz>
+> > > Cc: Len Brown <len.brown@intel.com>
+> > > Cc: linux-pm@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  drivers/base/power/domain.c | 5 +----
+> > >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > > index 967bcf9d415e..6097644ebdc5 100644
+> > > --- a/drivers/base/power/domain.c
+> > > +++ b/drivers/base/power/domain.c
+> > > @@ -220,13 +220,10 @@ static void genpd_debug_add(struct generic_pm_domain *genpd);
+> > >
+> > >  static void genpd_debug_remove(struct generic_pm_domain *genpd)
+> > >  {
+> > > -       struct dentry *d;
+> > > -
+> > >         if (!genpd_debugfs_dir)
+> > >                 return;
+> > >
+> > > -       d = debugfs_lookup(genpd->name, genpd_debugfs_dir);
+> > > -       debugfs_remove(d);
+> > > +       debugfs_lookup_and_remove(genpd->name, genpd_debugfs_dir);
+> > >  }
+> > >
+> > >  static void genpd_update_accounting(struct generic_pm_domain *genpd)
+> > > --
+> >
+> > Does this depend on anything in your tree, or can I apply it?
+>
+> It does not depend on anything in any of my trees, it's made against
+> Linus's tree right now so please take it through yours.
 
-When a scheduling entity is placed onto cfs_rq, its vruntime is pulled
-to the base level (around cfs_rq->min_vruntime), so that the entity
-doesn't gain extra boost when placed backwards.
-
-However, if the entity being placed wasn't executed for a long time, its
-vruntime may get too far behind (e.g. while cfs_rq was executing a
-low-weight hog), which can inverse the vruntime comparison due to s64
-overflow.  This results in the entity being placed with its original
-vruntime way forwards, so that it will effectively never get to the cpu.
-
-To prevent that, ignore the vruntime of the entity being placed if it
-didn't execute for longer than the time that can lead to an overflow.
-
-Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
-[rkagan: formatted, adjusted commit log, comments, cutoff value]
-Co-developed-by: Roman Kagan <rkagan@amazon.de>
-Signed-off-by: Roman Kagan <rkagan@amazon.de>
----
-v2 -> v3:
-- make cutoff less arbitrary and update comments [Vincent]
-
-v1 -> v2:
-- add Zhang Qiao's s-o-b
-- fix constant promotion on 32bit
-
- kernel/sched/fair.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 0f8736991427..3baa6b7ea860 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4656,6 +4656,7 @@ static void
- place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- {
- 	u64 vruntime = cfs_rq->min_vruntime;
-+	u64 sleep_time;
- 
- 	/*
- 	 * The 'current' period is already promised to the current tasks,
-@@ -4685,8 +4686,24 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- 		vruntime -= thresh;
- 	}
- 
--	/* ensure we never gain time by being placed backwards. */
--	se->vruntime = max_vruntime(se->vruntime, vruntime);
-+	/*
-+	 * Pull vruntime of the entity being placed to the base level of
-+	 * cfs_rq, to prevent boosting it if placed backwards.
-+	 * However, min_vruntime can advance much faster than real time, with
-+	 * the exterme being when an entity with the minimal weight always runs
-+	 * on the cfs_rq.  If the new entity slept for long, its vruntime
-+	 * difference from min_vruntime may overflow s64 and their comparison
-+	 * may get inversed, so ignore the entity's original vruntime in that
-+	 * case.
-+	 * The maximal vruntime speedup is given by the ratio of normal to
-+	 * minimal weight: NICE_0_LOAD / MIN_SHARES, so cutting off on the
-+	 * sleep time of 2^63 / NICE_0_LOAD should be safe.
-+	 */
-+	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-+	if ((s64)sleep_time > (1ULL << 63) / NICE_0_LOAD)
-+		se->vruntime = vruntime;
-+	else
-+		se->vruntime = max_vruntime(se->vruntime, vruntime);
- }
- 
- static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
--- 
-2.34.1
-
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+Applied for 6.3 now, thanks!
