@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EF469144D
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A338691462
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjBIXYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:24:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
+        id S230484AbjBIX04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBIXYn (ORCPT
+        with ESMTP id S230477AbjBIX0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:24:43 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0A20059
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 15:24:42 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id b5so4689272plz.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 15:24:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=B3pPfVMpUiPSyCCzmCrD57AemmKpys6aCeZPw1vQkzc=;
-        b=jgWwWwa7nwguVHP8E/H0kL40mtIJGHHQz64K8tE8/mv9uI/opH6H6e97FUaas0zr6f
-         dr8+LAiVB1IFEqTn8CRHISEMxueB9PE/dctAB/0i6Pxp/8ZSJTVWiwBwd8ZcREB+t8bl
-         Vuvz0dzZ890xH9YUzXBgVmR6nBlqgx8Z3n4m5/l4HcsHAADYr9K5MsP1E+v76RlhA87A
-         iootOfpzAYK6GzPDIfn3gLxYiUOpHuMFSP4ZwgehL1mHbkpnuUe6q34DOnw2bZ6Mt28I
-         lWUvXcevpy0UyWSB50Bm8EWjNlV2ITTlux2jSbPEa0gmjU5SWwpb0o27kEP3v76gFV4s
-         jWAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B3pPfVMpUiPSyCCzmCrD57AemmKpys6aCeZPw1vQkzc=;
-        b=DH1rCdMudQAKIPOgkIO4CXGMpMVNSpyo8JwejTvZWa5P0dbLL5eUCtrX0WYmancZtY
-         yimkIB5fxIN5/c0t1az6hqaH2dZWcMvetAlul6W6SUAD3U8zzKmPcE/4GPfRXFdAXeTS
-         tayAnfhEtgufaZD/e5Fy46Sc/8jDtWYwv+W6wzpzlWdL6mbOWHhdYHNorEw2GY909o7f
-         3Kf4JI4n1MXiiUXaFortY7Tv5rEbFp9wpzaGn/Qw5UXrflwI9WUTutyGkoE0SCokEDTo
-         2FQhWicoCElTvLBx5vaCbx6mHhFzQp2Kfl0kQqcsDSFqEIWcwQD22a7VNDmE08B62KrN
-         6FJw==
-X-Gm-Message-State: AO0yUKV8BYNCF6Q9/FCpBoDdPRxVsD3y4oI8437CkjJUICX3AfkjBD/S
-        Z9/uO9htKJubu0gJhoyeFJrBjA==
-X-Google-Smtp-Source: AK7set/Q1MtO27htVLVMwKNv9osyKF2JaGo6dqafw5qA+gpYJFRK6skDPE8u0sHqFzi+/+dJlWJ1mg==
-X-Received: by 2002:a17:903:2288:b0:19a:5939:51e3 with SMTP id b8-20020a170903228800b0019a593951e3mr5594520plh.24.1675985081800;
-        Thu, 09 Feb 2023 15:24:41 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id e18-20020a170902ed9200b0019904abc93dsm2043766plj.250.2023.02.09.15.24.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 15:24:41 -0800 (PST)
-Subject: [PATCH] clocksource/drivers/riscv: Refuse to probe on T-Head
-Date:   Thu,  9 Feb 2023 15:23:02 -0800
-Message-Id: <20230209232302.25658-1-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.39.1
+        Thu, 9 Feb 2023 18:26:52 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0A865672;
+        Thu,  9 Feb 2023 15:26:30 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pQGJ4-0002Bc-0U;
+        Fri, 10 Feb 2023 00:26:22 +0100
+Date:   Thu, 9 Feb 2023 23:24:42 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH v3 00/12] net: ethernet: mtk_eth_soc: various enhancements
+Message-ID: <cover.1675984550.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux@rivosinc.com, Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:         linux-riscv@lists.infradead.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+This series brings a variety of fixes and enhancements for mtk_eth_soc,
+adds support for the MT7981 SoC and facilitates sharing the SGMII PCS
+code between mtk_eth_soc and mt7530.
 
-As of d9f15a9de44a ("Revert "clocksource/drivers/riscv: Events are
-stopped during CPU suspend"") this driver no longer functions correctly
-for the T-Head firmware.  That shouldn't impact any users, as we've got
-a functioning driver that's higher priority, but let's just be safe and
-ban it from probing at all.
+Note that this series depends on commit 697c3892d825
+("regmap: apply reg_base and reg_downshift for single register ops") to
+not break mt7530 pcs register access.
 
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
-This feel super ugly to me, but I'm not sure how to do this more
-cleanly.  I'm not even sure if it's necessary, but I just ran back into
-the driver reviewing some other patches so I figured I'd say something.
----
- drivers/clocksource/timer-riscv.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Changes since v2:
+ * improve dt-bindings, convert sgmisys bindings to dt-schema yaml
+ * fix typo
 
-diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-index a0d66fabf073..d2d0236d1ae6 100644
---- a/drivers/clocksource/timer-riscv.c
-+++ b/drivers/clocksource/timer-riscv.c
-@@ -139,6 +139,22 @@ static int __init riscv_timer_init_dt(struct device_node *n)
- 	if (cpuid != smp_processor_id())
- 		return 0;
- 
-+	/*
-+	 * The T-Head firmware does not route timer interrups to the core
-+	 * during non-retentive suspend.  This is allowed by the specifications
-+	 * (no interrupts are required to wake up the core during non-retentive
-+	 * suspend), but most systems don't behave that way and Linux just
-+	 * assumes that interrupts work.
-+	 *
-+	 * There's another timer for the T-Head sytems that behave this way
-+	 * that is already probed by default, but just to be sure skip
-+	 * initializing the SBI driver as it'll just break things later.
-+	 */
-+	if (sbi_get_mvendorid() == THEAD_VENDOR_ID) {
-+		pr_debug_once("Skipping SBI timer on T-Head due to missed wakeups");
-+		return 0;
-+	}
-+
- 	domain = NULL;
- 	child = of_get_compatible_child(n, "riscv,cpu-intc");
- 	if (!child) {
+Changes since v1:
+ * apply reverse xmas tree everywhere
+ * improve commit descriptions
+ * add dt binding documentation
+ * various small changes addressing all comments received for v1
+
+Daniel Golle (12):
+  net: ethernet: mtk_eth_soc: add support for MT7981 SoC
+  dt-bindings: net: mediatek,net: add mt7981-eth binding
+  dt-bindings: arm: mediatek: sgmiisys: Convert to DT schema
+  dt-bindings: arm: mediatek: sgmiisys: add MT7981 SoC
+  net: ethernet: mtk_eth_soc: set MDIO bus clock frequency
+  net: ethernet: mtk_eth_soc: reset PCS state
+  net: ethernet: mtk_eth_soc: only write values if needed
+  net: ethernet: mtk_eth_soc: fix RX data corruption issue
+  net: ethernet: mtk_eth_soc: ppe: add support for flow accounting
+  net: pcs: add driver for MediaTek SGMII PCS
+  net: ethernet: mtk_eth_soc: switch to external PCS driver
+  net: dsa: mt7530: use external PCS driver
+
+ .../arm/mediatek/mediatek,sgmiisys.txt        |  27 --
+ .../arm/mediatek/mediatek,sgmiisys.yaml       |  75 +++++
+ .../devicetree/bindings/net/mediatek,net.yaml |  43 ++-
+ MAINTAINERS                                   |   7 +
+ drivers/net/dsa/Kconfig                       |   1 +
+ drivers/net/dsa/mt7530.c                      | 277 ++++-----------
+ drivers/net/dsa/mt7530.h                      |  47 +--
+ drivers/net/ethernet/mediatek/Kconfig         |   2 +
+ drivers/net/ethernet/mediatek/mtk_eth_path.c  |  14 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c   |  65 +++-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h   | 100 ++----
+ drivers/net/ethernet/mediatek/mtk_ppe.c       | 114 ++++++-
+ drivers/net/ethernet/mediatek/mtk_ppe.h       |  25 +-
+ .../net/ethernet/mediatek/mtk_ppe_debugfs.c   |   9 +-
+ .../net/ethernet/mediatek/mtk_ppe_offload.c   |   8 +
+ drivers/net/ethernet/mediatek/mtk_ppe_regs.h  |  14 +
+ drivers/net/ethernet/mediatek/mtk_sgmii.c     | 190 ++---------
+ drivers/net/pcs/Kconfig                       |   8 +
+ drivers/net/pcs/Makefile                      |   1 +
+ drivers/net/pcs/pcs-mtk-lynxi.c               | 315 ++++++++++++++++++
+ include/linux/pcs/pcs-mtk-lynxi.h             |  13 +
+ 21 files changed, 825 insertions(+), 530 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,sgmiisys.yaml
+ create mode 100644 drivers/net/pcs/pcs-mtk-lynxi.c
+ create mode 100644 include/linux/pcs/pcs-mtk-lynxi.h
+
+
+base-commit: 20f513df926fac0594a3b65f79d856bd64251861
 -- 
 2.39.1
 
