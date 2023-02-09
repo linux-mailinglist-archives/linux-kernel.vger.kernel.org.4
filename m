@@ -2,142 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8506902E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BF76902E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjBIJH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:07:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S229586AbjBIJI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:08:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjBIJHy (ORCPT
+        with ESMTP id S229865AbjBIJI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:07:54 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7909564B2;
-        Thu,  9 Feb 2023 01:07:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5C27C5C53E;
-        Thu,  9 Feb 2023 09:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675933671; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CU3m83OXbTgSKoJXrcQdDx76tP8O5uzz+pn2OeaAdZw=;
-        b=xNoBE+lwnVUOfPb0zDl+OFfEhjR5FvJXwjcM1KGhzHDounpReRjFnbuR9n6upD40EI2i01
-        cwaOAtP0Xvq1oMGZEw7Re+YEy61VDXgD0LW9bEQNatNBEgPOWDr69FfpAXcttkYkWaeEqn
-        G0CwmdWGvhQM9Kh6BVyIjaYmmpKw+ac=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675933671;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CU3m83OXbTgSKoJXrcQdDx76tP8O5uzz+pn2OeaAdZw=;
-        b=yFiGhdQ5QoCsgxvN6+hnz4ITZQD+Yxwc5mjKJNuH5yq/m/yu1qYx1Ehgxaf+DcdRj1WLjc
-        fFI3EjFXOj4NomCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4CBA61339E;
-        Thu,  9 Feb 2023 09:07:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id niyuEue35GP+IgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 09 Feb 2023 09:07:51 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CA87BA06D8; Thu,  9 Feb 2023 10:07:50 +0100 (CET)
-Date:   Thu, 9 Feb 2023 10:07:50 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Jan Kara <jack@suse.cz>, Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v7 0/3] fanotify: Allow user space to pass back
- additional audit info
-Message-ID: <20230209090750.lx32p57jtul7pnv5@quack3>
-References: <cover.1675373475.git.rgb@redhat.com>
- <20230207120921.7pgh6uxs7ze7hkjo@quack3>
- <CAHC9VhQuD0UMYd12x9kOMwruDmQsyUFxQ8gJ3Q_qF6a58Lu+2Q@mail.gmail.com>
- <20230208120816.2qhck3sb7u67vsib@quack3>
- <CAHC9VhSumNxmoYQ9JPtBgV0dc1fgR38Lqbo0w4PRxhvBdS=W_w@mail.gmail.com>
+        Thu, 9 Feb 2023 04:08:26 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E5659E44
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:08:16 -0800 (PST)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B07B78DD;
+        Thu,  9 Feb 2023 10:08:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1675933693;
+        bh=9gEIDUadgNZyLFj40uCKC8g0CBVkC66Tp2TYayBGgC4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KjzwSJXHCoMsJmFGoR9+EZORgLva+ViDU3OouzPsoumgRO2aJRmca5O4kottegcEh
+         m7/S4PVMz3Scc1g2bPQ3eu+b3XUBHYewoM7vMDO5qZA1qlVdVWccObkaCHjIOAhmxD
+         Sy1EFj75D3YpRUPRTuOl8SigNQI09WFUQPbf4SLs=
+Date:   Thu, 9 Feb 2023 11:08:12 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH] media: i2c: imx290: make suspend/resume functions
+ __maybe_unused
+Message-ID: <Y+S3/E1Djhwilu0k@pendragon.ideasonboard.com>
+References: <20230208211914.7625-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhSumNxmoYQ9JPtBgV0dc1fgR38Lqbo0w4PRxhvBdS=W_w@mail.gmail.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230208211914.7625-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 08-02-23 10:03:24, Paul Moore wrote:
-> On Wed, Feb 8, 2023 at 7:08 AM Jan Kara <jack@suse.cz> wrote:
-> > On Tue 07-02-23 09:54:11, Paul Moore wrote:
-> > > On Tue, Feb 7, 2023 at 7:09 AM Jan Kara <jack@suse.cz> wrote:
-> > > > On Fri 03-02-23 16:35:13, Richard Guy Briggs wrote:
-> > > > > The Fanotify API can be used for access control by requesting permission
-> > > > > event notification. The user space tooling that uses it may have a
-> > > > > complicated policy that inherently contains additional context for the
-> > > > > decision. If this information were available in the audit trail, policy
-> > > > > writers can close the loop on debugging policy. Also, if this additional
-> > > > > information were available, it would enable the creation of tools that
-> > > > > can suggest changes to the policy similar to how audit2allow can help
-> > > > > refine labeled security.
-> > > > >
-> > > > > This patchset defines a new flag (FAN_INFO) and new extensions that
-> > > > > define additional information which are appended after the response
-> > > > > structure returned from user space on a permission event.  The appended
-> > > > > information is organized with headers containing a type and size that
-> > > > > can be delegated to interested subsystems.  One new information type is
-> > > > > defined to audit the triggering rule number.
-> > > > >
-> > > > > A newer kernel will work with an older userspace and an older kernel
-> > > > > will behave as expected and reject a newer userspace, leaving it up to
-> > > > > the newer userspace to test appropriately and adapt as necessary.  This
-> > > > > is done by providing a a fully-formed FAN_INFO extension but setting the
-> > > > > fd to FAN_NOFD.  On a capable kernel, it will succeed but issue no audit
-> > > > > record, whereas on an older kernel it will fail.
-> > > > >
-> > > > > The audit function was updated to log the additional information in the
-> > > > > AUDIT_FANOTIFY record. The following are examples of the new record
-> > > > > format:
-> > > > >   type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3137 subj_trust=3 obj_trust=5
-> > > > >   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=0 subj_trust=2 obj_trust=2
-> > > >
-> > > > Thanks! I've applied this series to my tree.
-> > >
-> > > While I think this version of the patchset is fine, for future
-> > > reference it would have been nice if you had waited for my ACK on
-> > > patch 3/3; while Steve maintains his userspace tools, I'm the one
-> > > responsible for maintaining the Linux Kernel's audit subsystem.
-> >
-> > Aha, I'm sorry for that. I had the impression that on the last version of
-> > the series you've said you don't see anything for which the series should
-> > be respun so once Steve's objections where addressed and you were silent
-> > for a few days, I thought you consider the thing settled... My bad.
+Hi Randy,
+
+Thank you for the patch.
+
+On Wed, Feb 08, 2023 at 01:19:14PM -0800, Randy Dunlap wrote:
+> GCC reports that these 2 functions are defined but not used, so mark
+> them as __maybe_unused to pacify the build.
 > 
-> That's understandable, especially given inconsistencies across
-> subsystems.  If it helps, if I'm going to ACK something I make it
-> explicit with a proper 'Acked-by: ...' line in my reply; if I say
-> something looks good but there is no explicit ACK, there is usually
-> something outstanding that needs to be resolved, e.g. questions,
-> additional testing, etc.
+> drivers/media/i2c/imx290.c:1090:12: warning: 'imx290_runtime_suspend' defined but not used [-Wunused-function]
+>  1090 | static int imx290_runtime_suspend(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~
+> drivers/media/i2c/imx290.c:1082:12: warning: 'imx290_runtime_resume' defined but not used [-Wunused-function]
+>  1082 | static int imx290_runtime_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~
 
-Ok, thanks for letting me now. Next time I'll wait for an explicit ack from
-you. This time, since everybody is fine with the actual patch, let's just
-move on ;).
+Arnd has sent another fix for this, see [1].
 
-								Honza
+[1] https://lore.kernel.org/linux-media/20230207161316.293923-1-arnd@kernel.org/
+
+> Fixes: 02852c01f654 ("media: i2c: imx290: Initialize runtime PM before subdev")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/media/i2c/imx290.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff -- a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> --- a/drivers/media/i2c/imx290.c
+> +++ b/drivers/media/i2c/imx290.c
+> @@ -1079,7 +1079,7 @@ static void imx290_power_off(struct imx2
+>  	regulator_bulk_disable(ARRAY_SIZE(imx290->supplies), imx290->supplies);
+>  }
+>  
+> -static int imx290_runtime_resume(struct device *dev)
+> +static int __maybe_unused imx290_runtime_resume(struct device *dev)
+>  {
+>  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>  	struct imx290 *imx290 = to_imx290(sd);
+> @@ -1087,7 +1087,7 @@ static int imx290_runtime_resume(struct
+>  	return imx290_power_on(imx290);
+>  }
+>  
+> -static int imx290_runtime_suspend(struct device *dev)
+> +static int __maybe_unused imx290_runtime_suspend(struct device *dev)
+>  {
+>  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>  	struct imx290 *imx290 = to_imx290(sd);
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Regards,
+
+Laurent Pinchart
