@@ -2,82 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C97D6904D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C899C6904C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjBIKbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 05:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S230071AbjBIKas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 05:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjBIKar (ORCPT
+        with ESMTP id S229478AbjBIKao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:30:47 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D6E76B3;
-        Thu,  9 Feb 2023 02:30:19 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 319ATkvC121886;
-        Thu, 9 Feb 2023 04:29:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675938586;
-        bh=xIIkAV8g1rE/394M50t+Fx/8OCEy/Yl3d3tlIjdQuaI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=nk95PVgo+1gdIbIFh9M32SNykikSAMYgyxYiGHLoPOd2IXnGZu/dDZ5o8CKKRm5er
-         RlGIe3R4mN2kUR3yzRHE0m9wsuX/PrE0lal8W2y+IC9VqedPRYKIsUHTutQ6VAEUm8
-         OvC244gG/NU/bSf5gJ9peazHPtIRvEfGq/Nti4cM=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 319ATkht028156
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 9 Feb 2023 04:29:46 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 9
- Feb 2023 04:29:46 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 9 Feb 2023 04:29:46 -0600
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 319ATeDH048003;
-        Thu, 9 Feb 2023 04:29:41 -0600
-Message-ID: <6713252d-6f86-c674-9229-c4512ebf1d72@ti.com>
-Date:   Thu, 9 Feb 2023 15:59:40 +0530
+        Thu, 9 Feb 2023 05:30:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B2540E9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:30:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675938603;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4vEba/OySlTdZtDzfMG6AafJ/oXIhw8IMMkEOxChx5k=;
+        b=fiGAb1zESqLPLipEGSPkU2KPQPL8T0Qdt0Gmc1PtaKiOFdl7snYg26JNGyGplsl38CsZKm
+        tdZI4UZnE7QkyO0xoHXlOnWbmB+TXxxWzgvW70aEyCms8+0CuG4q/WTMQq2dORH185ye9+
+        01c9oBLW9Dg49eCiM1OO4yJjyK1DjMs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-373-xHjHRdNPOaW_fhnnvVrgtw-1; Thu, 09 Feb 2023 05:29:59 -0500
+X-MC-Unique: xHjHRdNPOaW_fhnnvVrgtw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E13353C10233;
+        Thu,  9 Feb 2023 10:29:58 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ECAE61410F36;
+        Thu,  9 Feb 2023 10:29:56 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v13 00/12] iov_iter: Improve page extraction (pin or just list)
+Date:   Thu,  9 Feb 2023 10:29:42 +0000
+Message-Id: <20230209102954.528942-1-dhowells@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/2] net:
- ti: icssg-prueth: Add ICSSG ethernet driver
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     Roger Quadros <rogerq@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, <nm@ti.com>,
-        <ssantosh@kernel.org>, <srk@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230206060708.3574472-1-danishanwar@ti.com>
- <20230206060708.3574472-3-danishanwar@ti.com> <Y+ELeSQX+GWS5N2p@lunn.ch>
- <42503a0d-b434-bbcc-553d-a326af5b4918@ti.com>
- <e8158969-08d0-1edc-24be-8c300a71adbd@kernel.org>
- <4438fb71-7e20-6532-a858-b688bc64e826@ti.com> <Y+Ob8++GWciL127K@lunn.ch>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <Y+Ob8++GWciL127K@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,141 +65,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+Hi Jens, Al, Christoph,
 
-On 08/02/23 18:26, Andrew Lunn wrote:
->>>>>> +static int prueth_config_rgmiidelay(struct prueth *prueth,
->>>>>> +				    struct device_node *eth_np,
->>>>>> +				    phy_interface_t phy_if)
->>>>>> +{
->>>>>
->>>>> ...
->>>>>
->>>>>> +	if (phy_if == PHY_INTERFACE_MODE_RGMII_ID ||
->>>>>> +	    phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
->>>>>> +		rgmii_tx_id |= ICSSG_CTRL_RGMII_ID_MODE;
->>>>>> +
->>>>>> +	regmap_update_bits(ctrl_mmr, icssgctrl_reg, ICSSG_CTRL_RGMII_ID_MODE, rgmii_tx_id);
->>>
->>> This is only applicable to some devices so you need to restrict this only
->>> to those devices.
->>>
->>
->> Currently ICSSG driver is getting upstreamed for AM65 SR2.0 device, so I don't
->> think there is any need for any device related restriction. Once support for
->> other devices are enabled for upstream, we can modify this accordingly.
-> 
-> The problem is, this is a board property, not a SoC property. What if
-> somebody designs a board with extra long clock lines in order to add
-> the delay?
-> 
->> I checked the latest Technical Reference Manual [1] (Section 5.1.3.4.49, Table
->> 5-624) for AM65 Silicon Revision 2.0.
->>
->> Below is the description in Table 5-624
->>
->> BIT	    : 24
->> Field	    : RGMII0_ID_MODE
->> Type	    : R/W
->> Reset	    : 0h
->> Description : Controls the PRU_ICSSG0 RGMII0 port internal transmit delay
->> 	      0h - Internal transmit delay is enabled
->> 	      1h - Reserved
->>
->> The TX internal delay is always enabled and couldn't be disabled as 1h is
->> reserved. So hardware support for disabling TX internal delay is not there.
-> 
-> So if somebody passes a phy-mode which requires it disabled, you need
-> to return -EINVAL, to indicate the hardware cannot actually do it.
-> 
+Here are patches to provide support for extracting pages from an iov_iter
+and to use this in the extraction functions in the block layer bio code.
 
-Sure, I'll do that. In the list of all phy modes described in [1], I can only
-see phy-mode "rgmii-txid", for which we can return -EINVAL. Is there any other
-phy-mode that requires enabling/disabling TX internal delays? Please let me
-know if any other phy-mode also needs this. I will add check for that as well.
+The patches make the following changes:
 
->> As, TX internal delay is always there, there is no need to enable it in MAC or
->> PHY. So no need of API prueth_config_rgmiidelay().
->>
->> My approach to handle delay would be as below.
->>
->> *) Keep phy-mode = "rgmii-id" in DT as asked by Andrew.
-> 
-> As i said this depends on the board, not the SoC. In theory, you could
-> design a board with an extra long RX clock line, and then use phy-mode
-> rgmii-txid, meaning the MAC/PHY combination needs to add the TX delay.
-> 
+ (1) Change generic_file_splice_read() to no longer use ITER_PIPE for doing
+     a read from an O_DIRECT file fd, but rather load up an ITER_BVEC
+     iterator with sufficient pages and use that rather than using an
+     ITER_PIPE.  This avoids a problem[2] when __iomap_dio_rw() calls
+     iov_iter_revert() to shorten an iterator when it races with
+     truncation.  The reversion causes the pipe iterator to prematurely
+     release the pages it was retaining - despite the read still being in
+     progress.  This caused memory corruption.
 
-Yes I understand that board can have any phy-mode in it's DTS. We need to be
-able to handle all different phy modes.
+ (2) Change generic_file_splice_read() to no longer use ITER_PIPE for doing
+     a read from a buffered file fd, but rather get pages directly from the
+     pagecache using filemap_get_pages() do all the readahead, reading,
+     waiting and extraction, and then feed the pages directly into the
+     pipe.
 
->> *) Let TX internal delay enabled in Hardware.
->> *) Let PHY configure RX internal delay.
->> *) Remove prueth_config_rgmiidelay() API is there is no use of this. TX
->> Internal delay is always enabled.
->> *) Instead of calling prueth_config_rgmiidelay() API in prueth_netdev_init()
->> API, add below if condition.
->>
->> 	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
->> 		emac->phy_if == PHY_INTERFACE_MODE_RGMII_RXID
-> 
-> You should handle all cases where a TX delay is requested, not just
-> ID.
-> 
+ (3) filemap_get_pages() is altered so that it doesn't take an iterator
+     (which we don't have in (2)), but rather the count and a flag
+     indicating if we can handle partially uptodate pages are passed in and
+     down to its subsidiary functions.
 
-So there could be four different RGMII phy modes as described in [1]. Below is
-the handling mechanism for different phy modes.
+ (4) Remove ITER_PIPE and its paraphernalia as generic_file_splice_read()
+     was the only user.
 
-1)    # RGMII with internal RX and TX delays provided by the PHY,
-      # the MAC should not add the RX or TX delays in this case
-      - rgmii-id
+ (5) Add a function, iov_iter_extract_pages() to replace
+     iov_iter_get_pages*() that gets refs, pins or just lists the pages as
+     appropriate to the iterator type.
 
-For phy-mode="rgmii-id", phy needs to add both TX and RX internal delays. But
-in our SoC TX internal delay is always enabled. So to handle this, we'll change
-the phy-mode in driver to "rgmii-rxid" and then pass it ti PHY, so that PHY
-will enable RX internal delay only.
+     Add a function, iov_iter_extract_will_pin() that will indicate from
+     the iterator type how the cleanup is to be performed, returning true
+     if the pages will need unpinning, false otherwise.
 
-2)    # RGMII with internal RX delay provided by the PHY, the MAC
-      # should not add an RX delay in this case
-      - rgmii-rxid
+ (6) Make the bio struct carry a pair of flags to indicate the cleanup
+     mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (indicating
+     FOLL_GET was used) and BIO_PAGE_PINNED (indicating FOLL_PIN was used)
+     is added.
 
-For phy-mode="rgmii-rxid", phy needs to add only RX internal delay. We will do
-nothing in the driver and just pass the same mode to phy, so that PHY will
-enable RX internal delay only.
+     BIO_PAGE_REFFED will go away, but at the moment fs/direct-io.c sets it
+     and this series does not fully address that file.
 
-3)    # RGMII with internal TX delay provided by the PHY, the MAC
-      # should not add an TX delay in this case
-      - rgmii-txid
+ (7) Add a function, bio_release_page(), to release a page appropriately to
+     the cleanup mode indicated by the BIO_PAGE_* flags.
 
-For phy-mode="rgmii-txid", phy needs to add only TX internal delay,the MAC
-should not add an TX delay in this case. But in our SoC TX internal delay is
-always enabled. So this scenario can not be handled. We will return -EINVAL in
-this case.
+ (8) Make the iter-to-bio code use iov_iter_extract_pages() to retain the
+     pages appropriately and clean them up later.
 
+ (9) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
 
-4)    # RX and TX delays are added by the MAC when required
-      - rgmii
+I've pushed the patches here also:
 
-For phy-mode="rgmii", MAC needs to add both TX and RX delays. But in our SoC TX
-internal delay is always enabled so no need to add TX delay. For RX I am not
-sure what should we do as there is no provision of adding RX delay in MAC
-currently. Should we ask PHY to add RX delay?
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
 
-Andrew, Roger, Can you please comment on this.
+David
 
-Apart from Case 4, below code change will be able to handle all other cases.
+Changes:
+========
+ver #13)
+ - Only use allocation in advance and ITER_BVEC for DIO read-splice.
+ - Make buffered read-splice get pages directly from the pagecache.
+ - Alter filemap_get_pages() & co. so that it doesn't need an iterator.
 
-	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_ID)
-		emac->phy_if = PHY_INTERFACE_MODE_RGMII_RXID;
-	if(emac->phy_if == PHY_INTERFACE_MODE_RGMII_TXID)
-		return -EINVAL;
+ver #12)
+ - Added the missing __bitwise on the iov_iter_extraction_t typedef.
+ - Rebased on -rc7.
+ - Don't specify FOLL_PIN to pin_user_pages_fast().
+ - Inserted patch at front to fix race between DIO read and truncation that
+   caused memory corruption when iov_iter_revert() got called on an
+   ITER_PIPE iterator[2].
+ - Inserted a patch after that to remove the now-unused ITER_PIPE and its
+   helper functions.
+ - Removed the ITER_PIPE bits from iov_iter_extract_pages().
 
-Please let me know if I am missing any other phy modes.
+ver #11)
+ - Fix iov_iter_extract_kvec_pages() to include the offset into the page in
+   the returned starting offset.
+ - Use __bitwise for the extraction flags
 
-[1] Documentation/devicetree/bindings/net/ethernet-controller.yaml
+ver #10)
+ - Fix use of i->kvec in iov_iter_extract_bvec_pages() to be i->bvec.
+ - Drop bio_set_cleanup_mode(), open coding it instead.
 
-> 	Andrew
+ver #9)
+ - It's now not permitted to use FOLL_PIN outside of mm/, so:
+ - Change iov_iter_extract_mode() into iov_iter_extract_will_pin() and
+   return true/false instead of FOLL_PIN/0.
+ - Drop of folio_put_unpin() and page_put_unpin() and instead call
+   unpin_user_page() (and put_page()) directly as necessary.
+ - Make __bio_release_pages() call bio_release_page() instead of
+   unpin_user_page() as there's no BIO_* -> FOLL_* translation to do.
+ - Drop the FOLL_* renumbering patch.
+ - Change extract_flags to extraction_flags.
 
--- 
-Thanks and Regards,
-Danish.
+ver #8)
+ - Import Christoph Hellwig's changes.
+   - Split the conversion-to-extraction patch.
+   - Drop the extract_flags arg from iov_iter_extract_mode().
+   - Don't default bios to BIO_PAGE_REFFED, but set explicitly.
+ - Switch FOLL_PIN and FOLL_GET when renumbering so PIN is at bit 0.
+ - Switch BIO_PAGE_PINNED and BIO_PAGE_REFFED so PINNED is at bit 0.
+ - We should always be using FOLL_PIN (not FOLL_GET) for DIO, so adjust the
+   patches for that.
+
+ver #7)
+ - For now, drop the parts to pass the I/O direction to iov_iter_*pages*()
+   as it turned out to be a lot more complicated, with places not setting
+   IOCB_WRITE when they should, for example.
+ - Drop all the patches that changed things other then the block layer's
+   bio handling.  The netfslib and cifs changes can go into a separate
+   patchset.
+ - Add support for extracting pages from KVEC-type iterators.
+ - When extracting from BVEC/KVEC, skip over empty vecs at the front.
+
+ver #6)
+ - Fix write() syscall and co. not setting IOCB_WRITE.
+ - Added iocb_is_read() and iocb_is_write() to check IOCB_WRITE.
+ - Use op_is_write() in bio_copy_user_iov().
+ - Drop the iterator direction checks from smbd_recv().
+ - Define FOLL_SOURCE_BUF and FOLL_DEST_BUF and pass them in as part of
+   gup_flags to iov_iter_get/extract_pages*().
+ - Replace iov_iter_get_pages*2() with iov_iter_get_pages*() and remove.
+ - Add back the function to indicate the cleanup mode.
+ - Drop the cleanup_mode return arg to iov_iter_extract_pages().
+ - Provide a helper to clean up a page.
+ - Renumbered FOLL_GET and FOLL_PIN and made BIO_PAGE_REFFED/PINNED have
+   the same numerical values, enforced with an assertion.
+ - Converted AF_ALG, SCSI vhost, generic DIO, FUSE, splice to pipe, 9P and
+   NFS.
+ - Added in the patches to make CIFS do top-to-bottom iterators and use
+   various of the added extraction functions.
+ - Added a pair of work-in-progess patches to make sk_buff fragments store
+   FOLL_GET and FOLL_PIN.
+
+ver #5)
+ - Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED and split into own patch.
+ - Transcribe FOLL_GET/PIN into BIO_PAGE_REFFED/PINNED flags.
+ - Add patch to allow bio_flagged() to be combined by gcc.
+
+ver #4)
+ - Drop the patch to move the FOLL_* flags to linux/mm_types.h as they're
+   no longer referenced by linux/uio.h.
+ - Add ITER_SOURCE/DEST cleanup patches.
+ - Make iov_iter/netfslib iter extraction patches use ITER_SOURCE/DEST.
+ - Allow additional gup_flags to be passed into iov_iter_extract_pages().
+ - Add struct bio patch.
+
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/000000000000b0b3c005f3a09383@google.com/ [2]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk/ # v4
+Link: https://lore.kernel.org/r/167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk/ # v5
+Link: https://lore.kernel.org/r/167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk/ # v6
+Link: https://lore.kernel.org/r/20230120175556.3556978-1-dhowells@redhat.com/ # v7
+Link: https://lore.kernel.org/r/20230123173007.325544-1-dhowells@redhat.com/ # v8
+Link: https://lore.kernel.org/r/20230124170108.1070389-1-dhowells@redhat.com/ # v9
+Link: https://lore.kernel.org/r/20230125210657.2335748-1-dhowells@redhat.com/ # v10
+Link: https://lore.kernel.org/r/20230126141626.2809643-1-dhowells@redhat.com/ # v11
+Link: https://lore.kernel.org/r/20230207171305.3716974-1-dhowells@redhat.com/ # v12
+
+Christoph Hellwig (1):
+  block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted
+    logic
+
+David Howells (11):
+  splice: Fix O_DIRECT file read splice to avoid reversion of ITER_PIPE
+  mm: Pass info, not iter, into filemap_get_pages() and unstatic it
+  splice: Do splice read from a buffered file without using ITER_PIPE
+  iov_iter: Kill ITER_PIPE
+  iov_iter: Define flags to qualify page extraction.
+  iov_iter: Add a function to extract a page list from an iterator
+  iomap: Don't get an reference on ZERO_PAGE for direct I/O block
+    zeroing
+  block: Fix bio_flagged() so that gcc can better optimise it
+  block: Add BIO_PAGE_PINNED and associated infrastructure
+  block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+  block: convert bio_map_user_iov to use iov_iter_extract_pages
+
+ block/bio.c               |  33 +-
+ block/blk-map.c           |  26 +-
+ block/blk.h               |  12 +
+ fs/cifs/file.c            |   8 +-
+ fs/direct-io.c            |   2 +
+ fs/iomap/direct-io.c      |   1 -
+ fs/splice.c               | 245 ++++++++++++-
+ include/linux/bio.h       |   5 +-
+ include/linux/blk_types.h |   3 +-
+ include/linux/pagemap.h   |   2 +
+ include/linux/uio.h       |  49 ++-
+ lib/iov_iter.c            | 713 +++++++++++++++-----------------------
+ mm/filemap.c              |  30 +-
+ 13 files changed, 603 insertions(+), 526 deletions(-)
+
