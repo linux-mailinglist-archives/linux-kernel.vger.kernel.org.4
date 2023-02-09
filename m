@@ -2,185 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C7369041D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04538690425
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjBIJte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S230167AbjBIJua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjBIJtb (ORCPT
+        with ESMTP id S229770AbjBIJuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:49:31 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6395732511
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:49:07 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id o18so1170806wrj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:49:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CTEOGPQnS0TIFLEvZd/nSW2p+ZjRxHWqIwAsKqfTz80=;
-        b=V0SzVGtWKLJJvy1I/BjOPA575rNIE4m6Km+ONa3qI2SCaak0FMA6FvxgHXMklDM7wO
-         pF6iG6q/zKW36VjoPOFaKba5yGdnzjSV+pwQBIm37wAnxVkbM+JekJCfSf1iVLstv1dQ
-         Y4lRPVVsF1E4AjIdZi0qAATZCol4XpBW0Rt1SRp1dx/Z0EUjt4d2Th6whIcvM2DIhdj6
-         gmtXzGOYRe0f2tAi+6cHRqwmhfOXcSUd4oiKTIj5FQpGu38Ed7qLLor7iqqBZVcQ9HF2
-         6qW4ssTi8i2ixrcBB9hCZwjd/sOWDsCbK4wkZWLm0/mVrktu6uIatpNKzY56PKJ4jABH
-         1s4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CTEOGPQnS0TIFLEvZd/nSW2p+ZjRxHWqIwAsKqfTz80=;
-        b=2EHK2YuDmdZ7owDIXKl+fKDN2bqWcCUrztUQvC/KDTmVvDP/uSrx6n0Su8XSW6jSdo
-         L2I4rz79fdYKQ12q3zwIfrYKvOWCCcHQMQSk3acMeBVE3vHia4YTZR23OEGKA2A/vGE4
-         0wPpS4W0trnrE6VdeoSo/EVMub9pNnV5aKAC+4ShRaZ9faXGimPrsXjGjOP9VeXQ23J5
-         iJ1x5AB7J/NErHmxQY5ZruigGiddY8QZKuOUIBqmA2ODAoOua7/q/R/BmlBTamvbI9h/
-         qadLTmCiZYxtl3JDFqPke40iimL++ZHtYJDM7zVtxdfDEeP72c1e7buLahRVAt6irJsm
-         zFgg==
-X-Gm-Message-State: AO0yUKU3AV4pCl9yBsco0Oei424WWeF7guB7sdSDvZXspnRZPqKS6l6u
-        IfE7XkFRqifsLEAtyj73sYkIfw==
-X-Google-Smtp-Source: AK7set/zlo+mWdVn4nhTrjKjNcfLDl/mIAyWU45AYYryQiWv4XyrxL+O2BeGHVWc87DSQWF/4zhCVg==
-X-Received: by 2002:a5d:510a:0:b0:2c4:682:5639 with SMTP id s10-20020a5d510a000000b002c406825639mr4191498wrt.1.1675936146028;
-        Thu, 09 Feb 2023 01:49:06 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:8009:2525:9580:8db2? ([2a02:6b6a:b566:0:8009:2525:9580:8db2])
-        by smtp.gmail.com with ESMTPSA id m3-20020adfe0c3000000b002c4084d3472sm809755wri.58.2023.02.09.01.49.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 01:49:05 -0800 (PST)
-Message-ID: <8e2f03e2-9517-aeb4-df60-b36ef3ff3a75@bytedance.com>
-Date:   Thu, 9 Feb 2023 09:49:04 +0000
+        Thu, 9 Feb 2023 04:50:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE54034C11;
+        Thu,  9 Feb 2023 01:50:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65906B8203F;
+        Thu,  9 Feb 2023 09:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D857BC4339C;
+        Thu,  9 Feb 2023 09:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675936217;
+        bh=v4atgNoTsNUmoDqzVIM4vVANn20Me74SAL8sabFYLGo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ONVwlOBNjwbhpBPfRrKXgXCr3SZSH841rj6Xw5iP2tZnk2Kpytzoe8cLdMIQVRVXx
+         uoMk96vEW+NoXQE6HncFrSsul76HpEpClhffNoFqJsAk6rEpSoz6Mru5nw67Ee0Ts7
+         oZDz3DMdX6NSwy7lC+FT1dTs+Qbz1sWsj4HOzrc185lu4o/2pnF8R9xXJhMY6TflXB
+         SC7eELQ0BJGHAyciqNW8RPurlDB5PDSqnoiBwDlDvj4f+aR7pmdiZIC4PbjI/u9Pjz
+         LvQ90Ds260Rxp5Wzpl3BxKtkquSO2xV5MT6hAc9q3etnL2wAWwibk7+YEoTPGPSRDS
+         hF2JSy6+EntLA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF1B1E21ECB;
+        Thu,  9 Feb 2023 09:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v7 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     paulmck@kernel.org, dwmw2@infradead.org, tglx@linutronix.de
-Cc:     kim.phillips@amd.com, arjan@linux.intel.com, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        x86@kernel.org, pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230207230436.2690891-1-usama.arif@bytedance.com>
- <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net v3] rds: rds_rm_zerocopy_callback() use
+ list_first_entry()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167593621777.24180.14940979671887283840.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Feb 2023 09:50:17 +0000
+References: <20230202-rds-zerocopy-v3-1-83b0df974f9a@diag.uniroma1.it>
+In-Reply-To: <20230202-rds-zerocopy-v3-1-83b0df974f9a@diag.uniroma1.it>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     santosh.shilimkar@oracle.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        willemb@google.com, c.giuffrida@vu.nl, h.j.bos@vu.nl,
+        jkl820.git@gmail.com, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 09/02/2023 03:53, Paul E. McKenney wrote:
-> On Tue, Feb 07, 2023 at 11:04:27PM +0000, Usama Arif wrote:
->> Tested on v7, doing INIT/SIPI/SIPI in parallel brings down the time for
->> smpboot from ~700ms to 100ms (85% improvement) on a server with 128 CPUs
->> split across 2 NUMA nodes.
->>
->> The major change over v6 is keeping parallel smp support enabled in AMD.
->> APIC ID for parallel CPU bringup is now obtained from CPUID leaf 0x0B
->> (for x2APIC mode) otherwise CPUID leaf 0x1 (8 bits).
->>
->> The patch for reusing timer calibration for secondary CPUs is also removed
->> from the series as its not part of parallel smp bringup and needs to be
->> further thought about.
+On Tue, 07 Feb 2023 18:26:34 +0000 you wrote:
+> rds_rm_zerocopy_callback() uses list_entry() on the head of a list
+> causing a type confusion.
+> Use list_first_entry() to actually access the first element of the
+> rs_zcookie_queue list.
 > 
-> Running rcutorture on this got me the following NULL pointer dereference
-> on scenario TREE01:
+> Fixes: 9426bbc6de99 ("rds: use list structure to track information for zerocopy completion notification")
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
 > 
-> ------------------------------------------------------------------------
-> 
-> [   34.662066] smpboot: CPU 0 is now offline
-> [   34.674075] rcu: NOCB: Cannot CB-offload offline CPU 25
-> [   35.038003] rcu: De-offloading 5
-> [   35.112997] rcu: Offloading 12
-> [   35.716011] smpboot: Booting Node 0 Processor 0 APIC 0x0
-> [   35.762685] BUG: kernel NULL pointer dereference, address: 0000000000000001
-> [   35.764278] #PF: supervisor instruction fetch in kernel mode
-> [   35.765530] #PF: error_code(0x0010) - not-present page
-> [   35.766700] PGD 0 P4D 0
-> [   35.767278] Oops: 0010 [#1] PREEMPT SMP PTI
-> [   35.768223] CPU: 36 PID: 0 Comm: swapper/36 Not tainted 6.2.0-rc1-00206-g18a37610b632-dirty #3563
-> [   35.770201] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-> 
-> ------------------------------------------------------------------------
-> 
-> Given an x86 system with KVM and qemu, this can be reproduced by running
-> the following from the top-level directory in the Linux-kernel source
-> tree:
-> 
-> 	tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --configs "TREE01 TINY01" --trust-make
-> 
-> Out of 15 runs, 14 blew up just after the first attempt to bring CPU
-> 0 back online.  The 15th run blew up just after the second attempt to
-> bring CPU 0 online, the first attempt having succeeded.
-> 
-> My guess is that the CONFIG_BOOTPARAM_HOTPLUG_CPU0=y Kconfig option is
-> tickling this bug.  This Kconfig option has been added to the TREE01
-> scenario in the -rcu tree's "dev" branch, which might mean that this test
-> would pass on mainline.  But CONFIG_BOOTPARAM_HOTPLUG_CPU0=y is not new,
-> only rcutorture's testing of it.
-> 
-> Thoughts?
-> 
-> 							Thanx, Paul
+> [...]
 
-It looks like its because of the initial_gs, initial_stack and
-early_gdt_descr not being setup properly for CPU0 hotplug, i.e. 
-init_cpu_data isnt called in cpu0 hotplug case.
+Here is the summary with links:
+  - [net,v3] rds: rds_rm_zerocopy_callback() use list_first_entry()
+    https://git.kernel.org/netdev/net/c/f753a68980cf
 
-Its easy to test, just by doing
-echo 0 > /sys/devices/system/cpu/cpu0/online;
-echo 1 > /sys/devices/system/cpu/cpu0/online;
-
-As a quick check, if we do something like below (probably there is a 
-much better place to set these..), the above hotplug commands will work.
-
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 3ec5182d9698..184135c47ee5 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1080,6 +1080,7 @@ wakeup_cpu_via_init_nmi(int cpu, unsigned long 
-start_ip, int apicid,
-                                           wakeup_cpu0_nmi, 0, "wake_cpu0");
-
-         if (!boot_error) {
-+               initial_gs = per_cpu_offset(cpu);
-                 enable_start_cpu0 = 1;
-                 *cpu0_nmi_registered = 1;
-                 id = apic->dest_mode_logical ? cpu0_logical_apicid : 
-apicid;
-@@ -1188,10 +1189,14 @@ static int do_boot_cpu(int apicid, int cpu, 
-struct task_struct *idle,
-                 boot_error = apic->wakeup_secondary_cpu_64(apicid, 
-start_ip);
-         else if (apic->wakeup_secondary_cpu)
-                 boot_error = apic->wakeup_secondary_cpu(apicid, start_ip);
--       else
-+       else {
-+               if(!cpu) {
-+                       early_gdt_descr.address = (unsigned 
-long)get_cpu_gdt_rw(cpu);
-+                       initial_stack  = idle->thread.sp;
-+               }
-                 boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
-                                                      cpu0_nmi_registered);
--
-+       }
-         return boot_error;
-  }
-
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
