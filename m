@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5126908C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2212A6908C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjBIM2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S229840AbjBIM2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjBIM2T (ORCPT
+        with ESMTP id S229854AbjBIM2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:28:19 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E108986AD
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:17 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id y1so1609704wru.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:17 -0800 (PST)
+        Thu, 9 Feb 2023 07:28:20 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B109274B9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:28:19 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id ba1so1594692wrb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:28:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DEzXaR05SusPPC1DvCjjsQFeMd90WYnfj1cUKYhegZE=;
-        b=Ro8BWxNHoJAvx5SGpTR7yXMmlpv09d9Nj0eJZjJSW3/ZEazepb0uXgN9ztasMc+Cll
-         dVA3pJPtNyAV8yMVsPb1/TtSYV000KqkVbzrwx5tu0Q0nqTqgcGh2iHU07/c5xTFUmBy
-         0svc7agcaOFDVVa7bbpvCq9uugf0iFY7YMvlWhCk73OJx4Wm7GVU2U8hyKeNKg6qXqYk
-         G+Zt+bZVSrnmatVQNw02P5i7Mhfk+BYH2ekpfHjDxoJ6U2csb921an3zMk1NGtAa9ImR
-         Lbft66T1ISERPELJc1zb4cC/QzgDS9y9Do+HZCFR/bk4kWbwzvzjUw0DJQ2jq2DNQkOf
-         MHjA==
+        bh=JongRsuVGtYNajpohdC5ZEm05+E/44o4yeTIeuBWqPg=;
+        b=alMmw7K9GMnEn1dIokLBXd4VnAN2PqcPqLeYDOvmAEvT+atiV99OFPdGXozBSW1ssj
+         ccORQTeZzjA8aLRxMsj+skj1xDRSXVIxjBTUzh/apuAPqn3ele+M/sugsW1C8k03X4tq
+         YEdEGEkEY0o6n2vIisvGuacfKbPSLlHmbGSqDowpOOmRMEwfTxvAZlQocUX5x+u1kCzO
+         FlguWkcJCItO/oGT/y3ZoY6MzZrV7rX4TJjuDtvzTQtG6M1zMIj58VTStQDka8oVsu6l
+         vxSOHg31mXv1kY4gERgMIEM5NUEpTNpfzi4iQAkFWsF2FXAteACyABSGiHPdHEsbptBC
+         nk1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DEzXaR05SusPPC1DvCjjsQFeMd90WYnfj1cUKYhegZE=;
-        b=IurW85unG1M73SIoodih1+TSSgc1ZQ8kHO0nyxDh8dx4clHpd3MiQGj4M8oE9Wcn+V
-         lX4Qed68SPLQnjBZK7N2sqG8kGQ61P0L9592F3z29q/s8LTn/QOA/rFfRB76Rs5vGKBS
-         SXv1VMhDfHj+jVTcitN3tLimmpllEXlMDUqH3k3doHIoou5/IiSVQodUCSq5xgqxa0xX
-         Us6pCrC16dUBxIMIi0Dx0ZF6iOvu4TDj5daAaxoBV08pfUcVh2Ahs1E1gZEhdz3kwGY4
-         Wa0sBDf+yN9UqcA8YyMDoRa+OwOdG+qHftEiC274OAd/FKCIZARqPmwa8Q4f4W4UXlZV
-         37UA==
-X-Gm-Message-State: AO0yUKWpsviGJD/rs0dD9XT3dpKUfddZG7Wb36c8/9U3SwECENN/Xn3A
-        2bBN/ce/r8H+ahLwE5HFGTBy1g==
-X-Google-Smtp-Source: AK7set/w5TMutzbY7TMwqS2Sdy2AZrf0aaxC5Vh9Ec926w/x34Wooj0jRJGk5yU9H7y61AKa3/HnVA==
-X-Received: by 2002:a5d:6dd2:0:b0:2c4:b152:9ae with SMTP id d18-20020a5d6dd2000000b002c4b15209aemr1704298wrz.31.1675945696476;
-        Thu, 09 Feb 2023 04:28:16 -0800 (PST)
+        bh=JongRsuVGtYNajpohdC5ZEm05+E/44o4yeTIeuBWqPg=;
+        b=dgM/jattlhtloyVGd/mxvv7IITqq6v3ufAiB08d03VQ+TZ0MS/fOviemV+qWOuC20s
+         Uw5kfdcNnOkIRA0wteikFO9TwBb+aVlifh6MKnEcJLpT7LTmvym4bNTIBna0C03Sgo6X
+         vE+hbMwmlf6EncVdzZIKzR2TpjFXkCpA3XkHtmRkoRROmprzpZXLjopi/0XQccq3ncDM
+         BN+6/Nrj+o496GIs/4ulYuBQpIH982KMwHT7yaoAA3PN0Zwm9JodY9r1UXyvjmMtUtG9
+         wOmjhiYGzAK5KMncCqNqIfjpohbBKh+LNtutO9SFm5LvVJr3hH0/GVillVm1JjPYxxSH
+         GkjQ==
+X-Gm-Message-State: AO0yUKWD0Ew14Pia1Z5Aqh/9lTO1wvzdSUd/BRTafaSebd9o1lWDSlZM
+        E0IFjBKTbVZzEX3T60wYGwQKgQ==
+X-Google-Smtp-Source: AK7set8SioHyugKUVRQMPGwHDkqYTiDLPA9qpldsYrSbri1MnKs3q0k8fi7Ii5vdS25u7FD8u9iJ2g==
+X-Received: by 2002:a05:6000:8:b0:2c2:ad22:40ba with SMTP id h8-20020a056000000800b002c2ad2240bamr10493326wrx.68.1675945697850;
+        Thu, 09 Feb 2023 04:28:17 -0800 (PST)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.15
+        by smtp.gmail.com with ESMTPSA id o8-20020a5d58c8000000b002c3f0a4ce98sm1134763wrf.98.2023.02.09.04.28.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 04:28:15 -0800 (PST)
+        Thu, 09 Feb 2023 04:28:17 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
         steev@kali.org, johan+linaro@kernel.org, quic_bjorande@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 1/8] ASoC: qcom: q6apm-lpass-dai: unprepare stream if its already prepared
-Date:   Thu,  9 Feb 2023 12:27:59 +0000
-Message-Id: <20230209122806.18923-2-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 2/8] ASoC: qcom: q6apm-dai: fix race condition while updating the position pointer
+Date:   Thu,  9 Feb 2023 12:28:00 +0000
+Message-Id: <20230209122806.18923-3-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
 References: <20230209122806.18923-1-srinivas.kandagatla@linaro.org>
@@ -73,34 +73,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-prepare callback can be called multiple times, so unprepare the stream
-if its already prepared.
+It is noticed that the position pointer value seems to get a get corrupted
+due to missing locking between updating and reading.
 
-Without this DSP is not happy to setting the params on a already
-prepared graph.
+Fix this by adding a spinlock around the position pointer.
 
 Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/qdsp6/q6apm-lpass-dais.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ sound/soc/qcom/qdsp6/q6apm-dai.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c b/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c
-index ce9e5646d8f3..23d23bc6fbaa 100644
---- a/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c
-+++ b/sound/soc/qcom/qdsp6/q6apm-lpass-dais.c
-@@ -127,6 +127,11 @@ static int q6apm_lpass_dai_prepare(struct snd_pcm_substream *substream, struct s
- 	int graph_id = dai->id;
- 	int rc;
+diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
+index ee59ef36b85a..bd35067a4052 100644
+--- a/sound/soc/qcom/qdsp6/q6apm-dai.c
++++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
+@@ -8,6 +8,7 @@
+ #include <linux/slab.h>
+ #include <sound/soc.h>
+ #include <sound/soc-dapm.h>
++#include <linux/spinlock.h>
+ #include <sound/pcm.h>
+ #include <asm/dma.h>
+ #include <linux/dma-mapping.h>
+@@ -53,6 +54,7 @@ struct q6apm_dai_rtd {
+ 	uint16_t session_id;
+ 	enum stream_state state;
+ 	struct q6apm_graph *graph;
++	spinlock_t lock;
+ };
  
-+	if (dai_data->is_port_started[dai->id]) {
-+		q6apm_graph_stop(dai_data->graph[dai->id]);
-+		dai_data->is_port_started[dai->id] = false;
-+	}
+ struct q6apm_dai_data {
+@@ -99,20 +101,25 @@ static void event_handler(uint32_t opcode, uint32_t token, uint32_t *payload, vo
+ {
+ 	struct q6apm_dai_rtd *prtd = priv;
+ 	struct snd_pcm_substream *substream = prtd->substream;
++	unsigned long flags;
+ 
+ 	switch (opcode) {
+ 	case APM_CLIENT_EVENT_CMD_EOS_DONE:
+ 		prtd->state = Q6APM_STREAM_STOPPED;
+ 		break;
+ 	case APM_CLIENT_EVENT_DATA_WRITE_DONE:
++	        spin_lock_irqsave(&prtd->lock, flags);
+ 		prtd->pos += prtd->pcm_count;
++		spin_unlock_irqrestore(&prtd->lock, flags);
+ 		snd_pcm_period_elapsed(substream);
+ 		if (prtd->state == Q6APM_STREAM_RUNNING)
+ 			q6apm_write_async(prtd->graph, prtd->pcm_count, 0, 0, 0);
+ 
+ 		break;
+ 	case APM_CLIENT_EVENT_DATA_READ_DONE:
++	        spin_lock_irqsave(&prtd->lock, flags);
+ 		prtd->pos += prtd->pcm_count;
++		spin_unlock_irqrestore(&prtd->lock, flags);
+ 		snd_pcm_period_elapsed(substream);
+ 		if (prtd->state == Q6APM_STREAM_RUNNING)
+ 			q6apm_read(prtd->graph);
+@@ -253,6 +260,7 @@ static int q6apm_dai_open(struct snd_soc_component *component,
+ 	if (prtd == NULL)
+ 		return -ENOMEM;
+ 
++	spin_lock_init(&prtd->lock);
+ 	prtd->substream = substream;
+ 	prtd->graph = q6apm_graph_open(dev, (q6apm_cb)event_handler, prtd, graph_id);
+ 	if (IS_ERR(prtd->graph)) {
+@@ -332,11 +340,17 @@ static snd_pcm_uframes_t q6apm_dai_pointer(struct snd_soc_component *component,
+ {
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	struct q6apm_dai_rtd *prtd = runtime->private_data;
++	snd_pcm_uframes_t ptr;
++	unsigned long flags;
+ 
++	spin_lock_irqsave(&prtd->lock, flags);
+ 	if (prtd->pos == prtd->pcm_size)
+ 		prtd->pos = 0;
+ 
+-	return bytes_to_frames(runtime, prtd->pos);
++	ptr =  bytes_to_frames(runtime, prtd->pos);
++	spin_unlock_irqrestore(&prtd->lock, flags);
 +
- 	/**
- 	 * It is recommend to load DSP with source graph first and then sink
- 	 * graph, so sequence for playback and capture will be different
++	return ptr;
+ }
+ 
+ static int q6apm_dai_hw_params(struct snd_soc_component *component,
 -- 
 2.21.0
 
