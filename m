@@ -2,105 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714F3690304
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18902690309
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjBIJO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S229956AbjBIJPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjBIJOy (ORCPT
+        with ESMTP id S229567AbjBIJPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:14:54 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6825B92
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:14:53 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id ba1so1072682wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:14:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w6LkxZ/ozleS6gLSs0StGzehaVAeduo5o/LmquXsG8k=;
-        b=lih8dgUGhVGc8S80Uh5n8I03OQ7SCoC28FUFGZ5BTXupIfHRzzxlvfgxP4aegEZh+8
-         ljHXXoIjqF5QurcowNHngIg/gyQBTDmPJk0gGVzMG7x0WJu2BdV6r+gHQCDSY3Zcmitz
-         QfiJGEFprgx7VNIod8/r8uC/GkuXk859Nh6VSKHOUoETmooJUasQfK/kIIQpNApDpQie
-         qgWDzQWliPk1jD5iakJcwb9tutiIa6upxniMAxl+S6VnU4eQvngdRMuiywsAMLqT7Zgb
-         leBxQkjAsO3tw8MJdiJOdzmqhBkeIyc6bj2CTQvN/OAKjFi9mkAFGBLCXUOcnLfXxJsd
-         +knQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6LkxZ/ozleS6gLSs0StGzehaVAeduo5o/LmquXsG8k=;
-        b=5v0GxTLRUAX4HaMXDXvda/BTrUT1QPFLQRWbpHt2SzXmQuZi4EuFvo/dSk/g+R86vw
-         ImqXqEMae7nOuqhkPh0a7h2dZPjdUTPQDPehmDToRml1GLzofMDnjrXrr7byshRkH9la
-         /OF+RcaIkXvlkCoJbmIGLJcKLq2f6HlSUT7sNVxjEuub8HKVK/J7AqXsF7mwA4N4gmKd
-         GUTGuH6C7Zo1UHhdVtJJKihHC84i7NYC7XFn7wW3R/r3UFmcN2xxN/rkX0eql0UA0WJm
-         2tUVxkgnY8ZpZ98O0DDDPtpegAKTIJKpSXPZs+98ZPN+d3RdEG7rne9OJgRNnD3vJ2fu
-         AXjA==
-X-Gm-Message-State: AO0yUKUmIrCRp9GLsue3lQjdftyi/Obb8W20ioH7elWMgILYTycrXnx/
-        DZ60P4gxWJ2bhluOEChQkeIuZQ==
-X-Google-Smtp-Source: AK7set9MKJaV9uooZiLHtE9y2zvn5dEl+dTyYB7cId1QM2tDmoDalVOi6rUSBC9nrIoaL1PTa7Ln0g==
-X-Received: by 2002:a5d:5545:0:b0:2c5:3cfa:f7dc with SMTP id g5-20020a5d5545000000b002c53cfaf7dcmr576923wrw.7.1675934091566;
-        Thu, 09 Feb 2023 01:14:51 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h1-20020a056000000100b002c405e19010sm764853wrx.11.2023.02.09.01.14.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 01:14:51 -0800 (PST)
-Message-ID: <ec412378-ae31-e199-b5a1-f37a4731f31a@linaro.org>
-Date:   Thu, 9 Feb 2023 10:14:49 +0100
+        Thu, 9 Feb 2023 04:15:39 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6589E;
+        Thu,  9 Feb 2023 01:15:38 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9E48966020B9;
+        Thu,  9 Feb 2023 09:15:36 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675934137;
+        bh=8edIGnmtJ1NrcW68pSHJQfhqO7Od8cz1RPWn+l0cH7g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=e/Ni+IP7bUf1+wNovwd5vyh4UKNhtU+KHCLfOlNd4MqQoE7qe1vzU3cT6UBUHklbK
+         0Wgwaea/4bQV139qiPB4PxTFgoEf8PVHzpNJkKztb5sdcSAOTmxs5kturOk/S211Uc
+         4DImxXdQqRJbFFc4vfuBd8R88sTPfi9XvNOxKrSZQDjGAMV6WwoaFAJFC2eILgj+0Z
+         aiQk/SHHPVqqd2C4c1hVyMZ2xS1d1u8JB2MZHe3nbHG5Nf7UywFprjykJ/tt1n3FHJ
+         A10ciIkixCQKUYrGnylx90tXmvZVh431qQEuDciYH2s1g4tZBykE6KClzguv8fUAiG
+         DLMJNWWa01NzQ==
+Message-ID: <0faf89cb-4709-17c9-0d67-da7ef2ddb7e6@collabora.com>
+Date:   Thu, 9 Feb 2023 10:15:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dt-bindings: mmc: Add resets property to cadence SDHCI
- binding
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/9] dt-bindings: gpu: mali-bifrost: Don't allow
+ sram-supply by default
 Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230209014211.17816-1-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230209014211.17816-1-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     airlied@gmail.com, tomeu.vizoso@collabora.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, steven.price@arm.com,
+        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
+        alyssa.rosenzweig@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org
+References: <20230208103709.116896-1-angelogioacchino.delregno@collabora.com>
+ <20230208103709.116896-2-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5Gm=Onu2RK+skLgN4Kzo9yP1n5Zb48oQNkQ019838QeEQ@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5Gm=Onu2RK+skLgN4Kzo9yP1n5Zb48oQNkQ019838QeEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 02:42, Kunihiko Hayashi wrote:
-> Cadence SDHCI controller allows reset control support on UniPhier SoC.
-> Add resets property to cadence SDHCI binding.
+Il 09/02/23 03:50, Chen-Yu Tsai ha scritto:
+> On Wed, Feb 8, 2023 at 6:37 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> The sram-supply is MediaTek-specific, it is and will ever be used
+>> only for the mediatek,mt8183-mali compatible due to the addition of
+>> the mediatek-regulator-coupler driver: change the binding to add
+>> this supply when mediatek,mt8183-mali is present as a compatible
+>> instead of disabling it when not present.
+>>
+>> This is done in preparation for adding new bindings for other
+>> MediaTek SoCs, such as MT8192 and others.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 4 +---
+>>   1 file changed, 1 insertion(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+>> index 78964c140b46..69212f3b1328 100644
+>> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+>> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+>> @@ -57,8 +57,6 @@ properties:
+>>
+>>     mali-supply: true
+>>
+>> -  sram-supply: true
+>> -
 > 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> Have you tried actually validating the device trees against this?
+> Based on my previous tests this gives out errors.
+
+I did... and I didn't get any complaint... but perhaps something went wrong
+on my side?
+
+I mean, I can retry just to be sure.
+
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> index d3dce4d6c168..adacd0535c14 100644
-> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-> @@ -29,6 +29,9 @@ properties:
->    clocks:
->      maxItems: 1
->  
-> +  resets:
-> +    maxItems: 1
+> The reason is that each conditional is a separate sub-schema, and the
+> validator is run against each schema and sub-schema separately, instead
+> of collapsing matching schemas and sub-schemas together and validating
+> once. So we'll get a validation error on sram-supply not being a valid
+> property when validating current mt8183 against the base schema.
+> 
+> We have a similar issue with power-domain-names, for which I'll send
+> a patch to fix. See the following for the fix:
+> 
+>      http://git.kernel.org/wens/c/d1adb38ab2ad0442755607c2bcc726cc17cce2c7
+> 
+> and the following for what I did for MT8192 on top of the previous patch:
+> 
+>      http://git.kernel.org/wens/c/049bd164884398d7e5f72c710da6aaa9a95bc10a
+> 
 
-This looks specific to UniPhier, doesn't it?
+Thanks for the pointer, btw
 
-Best regards,
-Krzysztof
+Cheers,
+Angelo
+
+> 
+> Regards
+> ChenYu
+> 
+>>     operating-points-v2: true
+>>
+>>     power-domains:
+>> @@ -157,6 +155,7 @@ allOf:
+>>               - const: core0
+>>               - const: core1
+>>               - const: core2
+>> +        sram-supply: true
+>>
+>>         required:
+>>           - sram-supply
+>> @@ -166,7 +165,6 @@ allOf:
+>>         properties:
+>>           power-domains:
+>>             maxItems: 1
+>> -        sram-supply: false
+>>     - if:
+>>         properties:
+>>           compatible:
+>> --
+>> 2.39.1
+>>
+
+
 
