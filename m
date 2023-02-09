@@ -2,139 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F5269129B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3E06912A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjBIVZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 16:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
+        id S230265AbjBIV2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 16:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjBIVZI (ORCPT
+        with ESMTP id S230040AbjBIV2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 16:25:08 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B227828D28;
-        Thu,  9 Feb 2023 13:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675977907; x=1707513907;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=N6Ck+USojABOxT9CFzTEfdxuALT4Xbd+KeJGB455nkw=;
-  b=GV1Vkces7Ea5HL+w4T7xpxMfsFWu5fYwpOjBqbS+dNZpb+RcLpvvqYfD
-   Z/8pFKznBgnUj674iMTD7S/21NdGQJ2gFsQUMUW5BzZA7qTo9Qj83br1q
-   xeu5woBw0ZZwABmPKNXg76FHqN0Cq5wOxOL6s4EPvj5pfDmMzwTBYUNjJ
-   YL8MXY4+NPCyj9DucKeoQIFJU/KVPXUXS69tPTlTiGt66yOmCNSKLnGCQ
-   ahsJskKcYWLIPQQuEMot01DiMzZMzTybOJ8sIFsA4mNxP17P+/Nf+AOeh
-   bWhZ9RQqZkSA73V3x700RwruiwGk/78Xz3AWNDchWdZUGaV8AQM7x2fd8
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="327943073"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="327943073"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 13:25:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="617678462"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="617678462"
-Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
-  by orsmga003.jf.intel.com with ESMTP; 09 Feb 2023 13:25:06 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     "Robin Murphy" <robin.murphy@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        stable@vger.kernel.org, Sukumar Ghorai <sukumar.ghorai@intel.com>
-Subject: [PATCH v4] iommu/vt-d: Fix PASID directory pointer coherency
-Date:   Thu,  9 Feb 2023 13:28:43 -0800
-Message-Id: <20230209212843.1788125-1-jacob.jun.pan@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 16:28:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07215ACC1
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 13:28:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B486B816DD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 21:28:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E50F3C433D2;
+        Thu,  9 Feb 2023 21:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1675978127;
+        bh=JIXw2whbdGgWRTsPpHpxiQgqK9yNjc5I1PyyB7kT9B4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L3DhU8c3kIoz1NtjNBxBPlQ9e9aKdXbcI5DWWgm0RJHI37wAChN6ynKlC5V+HULml
+         rON3mjf3PkSeQ6xVa2xf2xMaLGXwoC6wtGhX3XHGWV8u6636cGIuh0xlY3RXiXWSqC
+         VZKbh0v63MGx9rdHXzXNGUqf0dOYJHU8svkir+JU=
+Date:   Thu, 9 Feb 2023 13:28:46 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yang Shi <shy828301@gmail.com>,
+        Zach O'Keefe <zokeefe@google.com>
+Subject: Re: [PATCH 1/2] mm/MADV_COLLAPSE: set EAGAIN on unexpected page
+ refcount
+Message-Id: <20230209132846.122ad88e1c2bd0603a630e5c@linux-foundation.org>
+In-Reply-To: <ecb2cf3-45f0-8aae-3e1-da4e79de9c27@google.com>
+References: <20230125015738.912924-1-zokeefe@google.com>
+        <ecb2cf3-45f0-8aae-3e1-da4e79de9c27@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On platforms that do not support IOMMU Extended capability bit 0
-Page-walk Coherency, CPU caches are not snooped when IOMMU is accessing
-any translation structures. IOMMU access goes only directly to
-memory. Intel IOMMU code was missing a flush for the PASID table
-directory that resulted in the unrecoverable fault as shown below.
+On Wed, 8 Feb 2023 21:09:04 -0800 (PST) Hugh Dickins <hughd@google.com> wrote:
 
-This patch adds clflush calls whenever allocating and updating
-a PASID table directory to ensure cache coherency.
+> On Tue, 24 Jan 2023, Zach O'Keefe wrote:
+> 
+> > During collapse, in a few places we check to see if a given small page
+> > has any unaccounted references.  If the refcount on the page doesn't
+> > match our expectations, it must be there is an unknown user concurrently
+> > interested in the page, and so it's not safe to move the contents
+> > elsewhere. However, the unaccounted pins are likely an ephemeral state.
+> > 
+> > In such a situation, make MADV_COLLAPSE set EAGAIN errno, indicating that
+> > collapse may succeed on retry.
+> > 
+> > Fixes: 7d8faaf15545 ("mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse")
+> > Reported-by: Hugh Dickins <hughd@google.com>
+> > Signed-off-by: Zach O'Keefe <zokeefe@google.com>
+> 
+> This was
+> Reviewed-by: Yang Shi <shy828301@gmail.com>
+> and now I'll give it a nudge with
+> Acked-by: Hugh Dickins <hughd@google.com>
+> since it hasn't appeared in mm-unstable or linux-next yet:
 
-On the reverse direction, there's no need to clflush the PASID directory
-pointer when we deactivate a context entry in that IOMMU hardware will
-not see the old PASID directory pointer after we clear the context entry.
-PASID directory entries are also never freed once allocated.
+Buildbot failed on [2/2] so I skipped the whole series in expectation
+of a v2 series, which didn't happen.  Instead, Zach trickily sent what
+was [2/2] as a standalone patch.  So [1/2] got lost.  Sigh, poor me.
 
-[    0.555386] DMAR: DRHD: handling fault status reg 3
-[    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry is clear
-[    0.556348] DMAR: Dump dmar1 table entries for IOVA 0x1026a4000
-[    0.556348] DMAR: scalable mode root entry: hi 0x0000000102448001, low 0x0000000101b3e001
-[    0.556348] DMAR: context entry: hi 0x0000000000000000, low 0x0000000101b4d401
-[    0.556348] DMAR: pasid dir entry: 0x0000000101b4e001
-[    0.556348] DMAR: pasid table entry[0]: 0x0000000000000109
-[    0.556348] DMAR: pasid table entry[1]: 0x0000000000000001
-[    0.556348] DMAR: pasid table entry[2]: 0x0000000000000000
-[    0.556348] DMAR: pasid table entry[3]: 0x0000000000000000
-[    0.556348] DMAR: pasid table entry[4]: 0x0000000000000000
-[    0.556348] DMAR: pasid table entry[5]: 0x0000000000000000
-[    0.556348] DMAR: pasid table entry[6]: 0x0000000000000000
-[    0.556348] DMAR: pasid table entry[7]: 0x0000000000000000
-[    0.556348] DMAR: PTE not present at level 4
+Thanks, I'll merge [1/2] into mm-hotfixes.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 0bbeb01a4faf ("iommu/vt-d: Manage scalalble mode PASID tables")
-Reported-by: Sukumar Ghorai <sukumar.ghorai@intel.com>
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
----
-v4: Remove clflush PASID dir pointer when programming context entry
-v3: Add clflush after PASID directory allocation to prevent malicious
-device attack with unauthorized PASIDs. Also flush all the PASID entries
-after directory updates. (Baolu)
-v2: Add clflush to PASID directory update case (Baolu, Kevin review)
----
- drivers/iommu/intel/pasid.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+> I think its Cc:stable sibling 2/2, already in 6.2-rc, got all the attention.
 
-diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index fb3c7020028d..979f796175b1 100644
---- a/drivers/iommu/intel/pasid.c
-+++ b/drivers/iommu/intel/pasid.c
-@@ -128,6 +128,9 @@ int intel_pasid_alloc_table(struct device *dev)
- 	pasid_table->max_pasid = 1 << (order + PAGE_SHIFT + 3);
- 	info->pasid_table = pasid_table;
- 
-+	if (!ecap_coherent(info->iommu->ecap))
-+		clflush_cache_range(pasid_table->table, size);
-+
- 	return 0;
- }
- 
-@@ -215,6 +218,10 @@ static struct pasid_entry *intel_pasid_get_entry(struct device *dev, u32 pasid)
- 			free_pgtable_page(entries);
- 			goto retry;
- 		}
-+		if (!ecap_coherent(info->iommu->ecap)) {
-+			clflush_cache_range(entries, VTD_PAGE_SIZE);
-+			clflush_cache_range(&dir[dir_index].val, sizeof(*dir));
-+		}
- 	}
- 
- 	return &entries[index];
--- 
-2.25.1
+I'm not seeing anything in the [1/2] changelog which indicates that a
+backport is needed.  IOW,
+
+# cat .signature
+When fixing a bug, please describe the end-user visible effects of that bug.
+
+
 
