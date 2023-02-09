@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B21269043D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FEB690443
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjBIJyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S229669AbjBIJyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjBIJyN (ORCPT
+        with ESMTP id S229818AbjBIJyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:54:13 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6885FFF2D
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:53:53 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EF8CB1EC06BD;
-        Thu,  9 Feb 2023 10:53:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675936431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4LXgg6eGQ1qH1srtU+U2fOYiBbnpfa32IaXXFfMKKgI=;
-        b=WzVRQzzokNidD+nWlWipMdvljGa9V5i9uJOvMmjVVUSBWh4jSmnuwP3o/YefOtSXiXrKDt
-        jYAYv5U6TP2I2GgV8Gmc6lUSLlcNVp+WlkSMz2s0C7To7OOV809gs2695SRNcLThthjfLF
-        t+NePYOESA7Iqn3LbXqX4RJFnNY46oo=
-Date:   Thu, 9 Feb 2023 10:53:47 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Philip Li <philip.li@intel.com>
-Cc:     kernel test robot <lkp@intel.com>, Babu Moger <babu.moger@amd.com>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: Re: [tip:x86/cache 9/13]
- arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but
- not used
-Message-ID: <Y+TCq4k+0AhfjZkL@zn.tnic>
-References: <202301242015.kbzkVteJ-lkp@intel.com>
- <Y8/XoT23HVXHSY73@zn.tnic>
- <Y+RjOpXP1Bbv268n@rli9-mobl>
+        Thu, 9 Feb 2023 04:54:32 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA2D17CD1;
+        Thu,  9 Feb 2023 01:54:17 -0800 (PST)
+Received: from [192.168.1.103] (178.176.75.58) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 9 Feb 2023
+ 12:54:03 +0300
+Subject: Re: [PATCH] ata: pata_pxa: Add missing check for devm_ioremap
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        <damien.lemoal@opensource.wdc.com>
+CC:     <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230209092814.10847-1-jiasheng@iscas.ac.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <1b08e3fb-d1fc-80f2-82f8-873812c0fc8c@omp.ru>
+Date:   Thu, 9 Feb 2023 12:54:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y+RjOpXP1Bbv268n@rli9-mobl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230209092814.10847-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.75.58]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 02/09/2023 08:39:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 175386 [Feb 09 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.75.58 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;omp.ru:7.1.1;lore.kernel.org:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.75.58
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/09/2023 08:42:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/9/2023 6:08:00 AM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 11:06:34AM +0800, Philip Li wrote:
-> Thanks a lot for the suggestions, we will think of this to continuously optimize the
-> service. Right now, we try to build-test the patches that we can find a suitable base
-> to apply the patches successfully, some of effort could fail. Then we only test them
-> when they appears on repo. We will keep monitoring the patch testing status to see
-> anything we can fix as well.
+On 2/9/23 12:28 PM, Jiasheng Jiang wrote:
 
-Cool, thanks.
+> Add the check for the return value of the devm_ioremap in order to avoid
+> NULL pointer dereference.
+> 
+> Fixes: 2dc6c6f15da9 ("[ARM] pata_pxa: DMA-capable PATA driver")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/ata/pata_pxa.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/ata/pata_pxa.c b/drivers/ata/pata_pxa.c
+> index 985f42c4fd70..a20bb0824573 100644
+> --- a/drivers/ata/pata_pxa.c
+> +++ b/drivers/ata/pata_pxa.c
+> @@ -227,6 +227,8 @@ static int pxa_ata_probe(struct platform_device *pdev)
+>  						resource_size(ctl_res));
+>  	ap->ioaddr.bmdma_addr	= devm_ioremap(&pdev->dev, dma_res->start,
+>  						resource_size(dma_res));
+> +	if (!ap->ioaddr.cmd_addr || !ap->ioaddr.ctl_addr || !ap->ioaddr.bmdma_addr)
+> +		return -ENOMEM;
 
-I see you've started doing silly tests like subdirectory builds for W=
-warnings, picking one such report at random from lkml:
+   Such patch has been postyed already but the driver is more broken than just
+ths check missing, see:
 
-https://lore.kernel.org/r/202302091432.VgittDjI-lkp@intel.com
+https://lore.kernel.org/all/20220612073222.18974-1-liqiong@nfschina.com/
 
-COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
-
-and then it says
-
-drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
-
-Yes, this is all fine and dandy but such tests should be the lowest prio
-eva! If you have a way to schedule by prio, those should wait until all
-the other build tests have happened.
-
-I don't know how your resources are spread out and whether you even can
-do as many so I'm only reporting from my experience, in case you were
-wondering what you could improve:
-
-People push branches to their trees and wait for the robot to test them.
-And they wait and wait. But instead, such silly warnings come.
-
-So it would be a lot better if you could expedite such pushed branches'
-build tests first and then the rest.
-
-And then if there are no branches, submitted patchsets on the ML.
-
-If you're trying to figure out what base to use, you can put a doc
-somewhere telling people how to specify the base for you and they will
-start doing it, you will parse the 0th message for that info and use the
-base.
-
-And the long-standing feature request we have: a simple web page
-somewhere which says how far is it with testing. So that people can go
-and look at it and know whether to wait for test results before sending.
-
-The web page doesn't have to be anything special - just a table of
-branches being tested at the moment.
-
-Anyway, I thought I should give you some suggestions if you were looking
-for some. :-)
-
-Thanks for the testing work - it is appreciated!
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+MBR, Sergey
