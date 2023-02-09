@@ -2,91 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7572690A4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2969690A5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjBINeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
+        id S230437AbjBINfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:35:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjBINeU (ORCPT
+        with ESMTP id S230432AbjBINex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:34:20 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E8640D9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1675949635; x=1707485635;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Thor02MUzZDcrgTXj8hIhcq33cHhDyPYOs3YccQ1+OI=;
-  b=IVTiOgUJSccSltwwwsrhmh4djrDJJoLZgT3s1ovgcWGsy/G/7yslw+zP
-   fSqA6dzzPqOiCP9e93wHPjyr7qp8rD+Y9fsdOOzKvHo6Y7iZokzerIE60
-   o4Ol0bLYy9rfPchXzi8Mdt8CT9CF1BZWwZ96y4Dr+ZQymX34gofPSTSbk
-   M=;
-X-IronPort-AV: E=Sophos;i="5.97,283,1669075200"; 
-   d="scan'208";a="296998450"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 13:33:27 +0000
-Received: from EX13D47EUC004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com (Postfix) with ESMTPS id C9468C1C3A;
-        Thu,  9 Feb 2023 13:33:23 +0000 (UTC)
-Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
- EX13D47EUC004.ant.amazon.com (10.43.164.178) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Thu, 9 Feb 2023 13:33:22 +0000
-Received: from u40bc5e070a0153.ant.amazon.com (10.43.161.198) by
- EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.24; Thu, 9 Feb 2023 13:33:17 +0000
-Date:   Thu, 9 Feb 2023 14:33:08 +0100
-From:   Roman Kagan <rkagan@amazon.de>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     Chen Yu <yu.c.chen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Waiman Long <longman@redhat.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [bug-report] possible s64 overflow in max_vruntime()
-Message-ID: <Y+T2FLrNtQkfg9bd@u40bc5e070a0153.ant.amazon.com>
-Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <Y9LG5vkf/4ufJb35@u40bc5e070a0153.ant.amazon.com>
- <Y9O5Fwfib2CVAMwl@hirez.programming.kicks-ass.net>
- <CAKfTPtBMSg2SDXq=sVt99TyM+tEXRFL74EQ57-t5uKYAXUUyLg@mail.gmail.com>
- <Y9iJLQxyXp9+x2aF@chenyu5-mobl1>
- <Y9jmm5c5vT8WXsl6@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtDUMph262w5OSiSQi-BVcNRf2gN=PdmxYCKEuk-8aYhgA@mail.gmail.com>
- <Y+Kob8kOUFa0FnJN@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtC8hQ9JysoRNF0egsp+B9+9r4YFC_1-KBnu0GpXts27kw@mail.gmail.com>
- <Y+PlTVfW9Jn1XvYZ@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtAmLWcaUUrcp8Q_F6FGo2KZrx34vcp+6mw06v9UFi=tMA@mail.gmail.com>
+        Thu, 9 Feb 2023 08:34:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32095FB50;
+        Thu,  9 Feb 2023 05:34:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1515B8212D;
+        Thu,  9 Feb 2023 13:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370A5C433D2;
+        Thu,  9 Feb 2023 13:33:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675949629;
+        bh=oVN64FqEr+efwuF26PEuL8gATG0G1/6rAPqudX6DOdg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CZExgqAzn+K1qkk9d5dSa5leUc0ZpST/jwUncEouLhp7NN/J8uHtK5XCuwmh9lZaK
+         /HsOXM9rEQ7YBP/RoKFPqIOj2XGZO3B5vauogtdxL+/TVBeWsDyVZCwuaKyrDteVaj
+         5XPQf1vrk6PQG8MkGsAFlNhRvTVXcaJ3EMUPRuV0Qj4lYnKnvFaNMrYxWpz4nlXg4c
+         SAq54i6sK1Gc2Wx4gdQuZ3o8cNBp5hEBZOBW52yn08M4an9CiJq3xZYtwkiBj8c9xA
+         2H8QgkOgarYPlRbkgF7/ZX3hsKFobItG58MevfAKuQSxrurSKR5VwaejAguXrQCusf
+         i7rBN5w4ThlOw==
+Message-ID: <8f8039d1-e344-ff84-a503-a944b0df6e58@kernel.org>
+Date:   Thu, 9 Feb 2023 15:33:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtAmLWcaUUrcp8Q_F6FGo2KZrx34vcp+6mw06v9UFi=tMA@mail.gmail.com>
-X-Originating-IP: [10.43.161.198]
-X-ClientProxiedBy: EX13D39UWA001.ant.amazon.com (10.43.160.54) To
- EX19D033EUC004.ant.amazon.com (10.252.61.133)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net] net: ethernet: ti: am65-cpsw: Add RX DMA Channel
+ Teardown Quirk
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, linux@armlinux.org.uk,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com
+References: <20230209084432.189222-1-s-vadapalli@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230209084432.189222-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,108 +60,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 12:26:12PM +0100, Vincent Guittot wrote:
-> On Wed, 8 Feb 2023 at 19:09, Roman Kagan <rkagan@amazon.de> wrote:
-> > On Wed, Feb 08, 2023 at 11:13:35AM +0100, Vincent Guittot wrote:
-> > > On Tue, 7 Feb 2023 at 20:37, Roman Kagan <rkagan@amazon.de> wrote:
-> > > >
-> > > > On Tue, Jan 31, 2023 at 12:10:29PM +0100, Vincent Guittot wrote:
-> > > > > On Tue, 31 Jan 2023 at 11:00, Roman Kagan <rkagan@amazon.de> wrote:
-> > > > > > On Tue, Jan 31, 2023 at 11:21:17AM +0800, Chen Yu wrote:
-> > > > > > > On 2023-01-27 at 17:18:56 +0100, Vincent Guittot wrote:
-> > > > > > > > On Fri, 27 Jan 2023 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > > > > > >
-> > > > > > > > > On Thu, Jan 26, 2023 at 07:31:02PM +0100, Roman Kagan wrote:
-> > > > > > > > >
-> > > > > > > > > > > All that only matters for small sleeps anyway.
-> > > > > > > > > > >
-> > > > > > > > > > > Something like:
-> > > > > > > > > > >
-> > > > > > > > > > >         sleep_time = U64_MAX;
-> > > > > > > > > > >         if (se->avg.last_update_time)
-> > > > > > > > > > >           sleep_time = cfs_rq_clock_pelt(cfs_rq) - se->avg.last_update_time;
-> > > > > > > > > >
-> > > > > > > > > > Interesting, why not rq_clock_task(rq_of(cfs_rq)) - se->exec_start, as
-> > > > > > > > > > others were suggesting?  It appears to better match the notion of sleep
-> > > > > > > > > > wall-time, no?
-> > > > > > > > >
-> > > > > > > > > Should also work I suppose. cfs_rq_clock takes throttling into account,
-> > > > > > > > > but that should hopefully also not be *that* long, so either should
-> > > > > > > > > work.
-> > > > > > > >
-> > > > > > > > yes rq_clock_task(rq_of(cfs_rq)) should be fine too
-> > > > > > > >
-> > > > > > > > Another thing to take into account is the sleeper credit that the
-> > > > > > > > waking task deserves so the detection should be done once it has been
-> > > > > > > > subtracted from vruntime.
-> > > > > > > >
-> > > > > > > > Last point, when a nice -20 task runs on a rq, it will take a bit more
-> > > > > > > > than 2 seconds for the vruntime to be increased by more than 24ms (the
-> > > > > > > > maximum credit that a waking task can get) so threshold must be
-> > > > > > > > significantly higher than 2 sec. On the opposite side, the lowest
-> > > > > > > > possible weight of a cfs rq is 2 which means that the problem appears
-> > > > > > > > for a sleep longer or equal to 2^54 = 2^63*2/1024. We should use this
-> > > > > > > > value instead of an arbitrary 200 days
-> > > > > > > Does it mean any threshold between 2 sec and 2^54 nsec should be fine? Because
-> > > > > > > 1. Any task sleeps longer than 2 sec will get at most 24 ms(sysctl_sched_latency)
-> > > > > > >    'vruntime bonus' when enqueued.
-> > > > >
-> > > > > This means that if a task nice -20 runs on cfs rq while your task is
-> > > > > sleeping 2seconds, the min vruntime of the cfs rq will increase by
-> > > > > 24ms. If there are 2 nice -20 tasks then the min vruntime will
-> > > > > increase by 24ms after 4 seconds and so on ...
-> > > > >
-> > > > > On the other side, a task nice 19 that runs 1ms will increase its
-> > > > > vruntime by around 68ms.
-> > > > >
-> > > > > So if there is 1 task nice 19 with 11 tasks nice -20 on the same cfs
-> > > > > rq, the nice -19 one should run 1ms every 65 seconds and this also
-> > > > > means that the vruntime of task nice -19 should still be above
-> > > > > min_vruntime after sleeping 60 seconds. Of course this is even worse
-> > > > > with a child cgroup with the lowest weight (weight of 2 instead of 15)
-> > > > >
-> > > > > Just to say that 60 seconds is not so far away and 2^54 should be better IMHO
-> > > >
-> > > > If we go this route, what would be the proper way to infer this value?
-> > > > Looks like
-> > > >
-> > > >   (1ull << 63) / NICE_0_LOAD * scale_load(MIN_SHARES)
-> > >
-> > > (1ull << 63) / NICE_0_LOAD * MIN_SHARES
-> >
-> > On 64bit platforms NICE_0_LOAD == 1L << 20 (i.e. it's also scaled) for
-> > better precision.  So this will yield 2^63 / 2^20 * 2 = 2^44.  Good
-> > enough probably but confusing.
+
+
+On 09/02/2023 10:44, Siddharth Vadapalli wrote:
+> In TI's AM62x/AM64x SoCs, successful teardown of RX DMA Channel raises an
+> interrupt. The process of servicing this interrupt involves flushing all
+> pending RX DMA descriptors and clearing the teardown completion marker
+> (TDCM). The am65_cpsw_nuss_rx_packets() function invoked from the RX
+> NAPI callback services the interrupt. Thus, it is necessary to wait for
+> this handler to run, drain all packets and clear TDCM, before calling
+> napi_disable() in am65_cpsw_nuss_common_stop() function post channel
+> teardown. If napi_disable() executes before ensuring that TDCM is
+> cleared, the TDCM remains set when the interfaces are down, resulting in
+> an interrupt storm when the interfaces are brought up again.
 > 
-> Something like the below should be enough to explain the value
+> Since the interrupt raised to indicate the RX DMA Channel teardown is
+> specific to the AM62x and AM64x SoCs, add a quirk for it.
 > 
-> /*
->  * min_vruntime can move forward much faster than real time. The worst case
->  * happens when an entity with the min weight always runs on the cfs rq. In this
->  * case, the max comparison between vruntime and min_vruntime can fail after a
->  * sleep greater than :
->  *     (1ull << 63) / NICE_0_LOAD) * MIN_SHARES
+> Fixes: 4f7cce272403 ("net: ethernet: ti: am65-cpsw: add support for am64x cpsw3g")
+> Co-developed-by: Vignesh Raghavendra <vigneshr@ti.com>
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 
-Sorry if I'm being dense, but aren't NICE_0_LOAD and MIN_SHARES measured
-in different units: the former is scaled while the latter is not?
-
->  * We can simplify this to :
->  *     (1ull << 63) / NICE_0_LOAD)
->  */
-> #define SLEEP_VRUNTIME_OVERFLOW  ((1ull << 63) / NICE_0_LOAD)
-
-Thanks,
-Roman.
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
