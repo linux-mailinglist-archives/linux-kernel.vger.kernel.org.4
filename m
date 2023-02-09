@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CB2690637
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D507769063B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjBILM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 06:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S229770AbjBILNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 06:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjBILMf (ORCPT
+        with ESMTP id S229927AbjBILMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:12:35 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB5055E4C;
-        Thu,  9 Feb 2023 03:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675941140; x=1707477140;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3v3T1RO8GO+qbSn+Gl7E77noF1h3fEPhedIwbOQFC3A=;
-  b=BcBCnY8c8tOylDUb4QRf9j9/LhRYYIcFOR7U6yEZ5xXB++wRn2lt+uoH
-   sxOYkYKj+MN3HoN4v2DUv6X6TRyGjfnQ3OoWQG5pULoWENY2jd9V9jAWJ
-   vi1AI2pY/o5ZunoDNvrg0LoXd12Wt69vRghWxTM2nzabY9rHleJ5s6b2v
-   2zTzhkfv1d6WB2rVXmTqiOfFEty8CGtEeiOxqwt9dKzwFVkoFwNnBBezn
-   mf0S6TTfkf+nwBxwz4+OuggJhxuq9xQGPHYRNM313w2zUwHsxwjnv3RiQ
-   hLWhu0jf7MgeiNzPI0pAZ4VzxwkpSsF6+JvprpE7QMvltEg2cY8Bjy0V7
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,283,1669100400"; 
-   d="asc'?scan'208";a="200225984"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2023 04:12:20 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 9 Feb 2023 04:12:19 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Thu, 9 Feb 2023 04:12:16 -0700
-Date:   Thu, 9 Feb 2023 11:11:51 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Conor Dooley <conor@kernel.org>,
-        Hal Feng <hal.feng@starfivetech.com>
-CC:     Hal Feng <hal.feng@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
-Message-ID: <Y+TU98PLIvtkD8/R@wendy>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-7-hal.feng@starfivetech.com>
- <Y6zHy9oL4xzl+6Rd@spud>
- <c507e0b2-5ca3-cffe-55d2-873ed8c24e3d@starfivetech.com>
- <Y9og8Q2UnJ452KH/@wendy>
- <df6755ed-a358-ea01-d89e-f3c004b9c297@starfivetech.com>
- <Y9wR7Up+iObw5qoE@spud>
+        Thu, 9 Feb 2023 06:12:36 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915537D9B;
+        Thu,  9 Feb 2023 03:12:31 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id l12so1877085edb.0;
+        Thu, 09 Feb 2023 03:12:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b7jADkVcHyEI+ZFTBiWOZYaGwIwnYp4U9ZLL7RuVuyw=;
+        b=W41jSixcZ1F4MtMo5vf0zDFnhgIpXcMZTKJFFYUXhqRNZMlqU6j2xV0fDkxewMtea/
+         I6iVK1i9Q26BIFZjQ0oSr8OyZ29jn6VAhSoSyVyWHhFUJ64+OVl2EZLVQTlrVnAHHW+Z
+         hH6GGOrAwaTNqEBSsoSV+aBYnLjzH8+0S9GGW+RsnQRfP/BPyK0zL3iRMVzMLAO7DN0i
+         JwASqFBIsEjEnyTKdQVajYnlBxpc5imH8g6T7h21rCeA7Kw1Un5cANLEwVLLaDq0rieb
+         gHTs/XovYW7Ry2soqC9biUvmoQtJZh2iQFO+jvo4YkfBw5Wx4C+zrOa8tRBcbZPU75Ga
+         NlKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b7jADkVcHyEI+ZFTBiWOZYaGwIwnYp4U9ZLL7RuVuyw=;
+        b=nEY22SuDrfTv0gUl6RvybsPvrfa6H57SvKqwMKgXdpnTtf3yj4qgajfyE+jR1KkxdE
+         38cEBtmDNHkKB3LYeyRcs9Lt3s0q1nqH8d3JuG57abhLSwFWpLk4r2ySy6BBZsZaJEra
+         0HIPfQsc4LAuO2Z2EfG9Qt2CuPK4HzBszUGvhMKvbFvRwytSlAwYgtkscIFSC5ge7DMF
+         8oKZYR67ijDWDzZSAwPYE9nFWkhbySVGqEnhg0uTCIkR9lKyM9twdXjjVPSPGbsJcCDh
+         jJ2gpxbzIAaFK7GxKjr73UBmNQP81NeVyYA5U/VzxixCvJaYOi7ZXl7fopVvmuPIhjMQ
+         QcLw==
+X-Gm-Message-State: AO0yUKUp48axJiWjYSCx4uCGHRBAIIkw5Nlmic71klwhaaaQc2goUT9r
+        vkSK4MIGh/tnYwID3rnRsCs=
+X-Google-Smtp-Source: AK7set+cBqnu2NjkpbodBt3B7G15qVEMJXnF0ZL5X2yvyD2Q9eCg6ah8fa/f9WQqC4cray235uOhMA==
+X-Received: by 2002:a50:cc9a:0:b0:4aa:b24f:c09b with SMTP id q26-20020a50cc9a000000b004aab24fc09bmr11923980edi.40.1675941149961;
+        Thu, 09 Feb 2023 03:12:29 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id p15-20020a50cd8f000000b0049e19136c22sm597849edi.95.2023.02.09.03.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 03:12:29 -0800 (PST)
+Date:   Thu, 9 Feb 2023 12:12:27 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Petlozu Pravareshwar <petlozup@nvidia.com>
+Cc:     Manikanta Maddireddy <mmaddireddy@nvidia.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "jeffy.chen@rock-chips.com" <jeffy.chen@rock-chips.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "dmitry.osipenko@collabora.com" <dmitry.osipenko@collabora.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "steven.price@arm.com" <steven.price@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>
+Subject: Re: [RFC,v14 4/5] arm64: tegra: Add PCIe port node with PCIe WAKE#
+ for C1 controller
+Message-ID: <Y+TVG4gUbbw5Vehi@orome>
+References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
+ <20230208111645.3863534-5-mmaddireddy@nvidia.com>
+ <Y+OJaGY6mcxM0JOF@orome>
+ <1b24e9f5-539a-dd0f-6485-5dbf3757ef27@nvidia.com>
+ <Y+PKTNEAuPHBdwqX@orome>
+ <DM6PR12MB316420D07FBB9F8CE9AF5CD3B5D99@DM6PR12MB3164.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MTMULKwH45x5IHVU"
+        protocol="application/pgp-signature"; boundary="oI+597r9ve6kB/tz"
 Content-Disposition: inline
-In-Reply-To: <Y9wR7Up+iObw5qoE@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+In-Reply-To: <DM6PR12MB316420D07FBB9F8CE9AF5CD3B5D99@DM6PR12MB3164.namprd12.prod.outlook.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,49 +98,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---MTMULKwH45x5IHVU
+
+--oI+597r9ve6kB/tz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 02, 2023 at 07:41:33PM +0000, Conor Dooley wrote:
-> On Fri, Feb 03, 2023 at 02:56:41AM +0800, Hal Feng wrote:
-> > On Wed, 1 Feb 2023 08:21:05 +0000, Conor Dooley wrote:
-> > > On Wed, Feb 01, 2023 at 03:21:48PM +0800, Hal Feng wrote:
-> > >> On Wed, 28 Dec 2022 22:48:43 +0000, Conor Dooley wrote:
-> > >> > On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
+On Thu, Feb 09, 2023 at 10:53:25AM +0000, Petlozu Pravareshwar wrote:
+> >=20
+> > On Wed, Feb 08, 2023 at 05:43:35PM +0530, Manikanta Maddireddy wrote:
+> > >
+> > > On 2/8/2023 5:07 PM, Thierry Reding wrote:
+> > > > On Wed, Feb 08, 2023 at 04:46:44PM +0530, Manikanta Maddireddy
+> > wrote:
+> > > > > Add PCIe port node under the PCIe controller-1 device tree node to
+> > > > > support PCIe WAKE# interrupt for WiFi.
+> > > > >
+> > > > > Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+> > > > > ---
+> > > > >
+> > > > > Changes in v14:
+> > > > > New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX
+> > Orin.
+> > > > >
+> > > > >   .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts     | 11
+> > +++++++++++
+> > > > >   1 file changed, 11 insertions(+)
+> > > > >
+> > > > > diff --git
+> > > > > a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > > > b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > > > index 8a9747855d6b..9c89be263141 100644
+> > > > > ---
+> > > > > a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+> > > > > +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-
+> > 0000.dt
+> > > > > +++ s
+> > > > > @@ -2147,6 +2147,17 @@ pcie@14100000 {
+> > > > >   			phys =3D <&p2u_hsio_3>;
+> > > > >   			phy-names =3D "p2u-0";
+> > > > > +
+> > > > > +			pci@0,0 {
+> > > > > +				reg =3D <0x0000 0 0 0 0>;
+> > > > > +				#address-cells =3D <3>;
+> > > > > +				#size-cells =3D <2>;
+> > > > > +				ranges;
+> > > > > +
+> > > > > +				interrupt-parent =3D <&gpio>;
+> > > > > +				interrupts =3D <TEGRA234_MAIN_GPIO(L, 2)
+> > IRQ_TYPE_LEVEL_LOW>;
+> > > > > +				interrupt-names =3D "wakeup";
+> > > > > +			};
+> > > > Don't we need to wire this to the PMC interrupt controller and the
+> > > > wake event corresponding to the L2 GPIO? Otherwise none of the wake
+> > > > logic in PMC will get invoked.
+> > > >
+> > > > Thierry
+> > > PCIe wake is gpio based not pmc, only wake support is provided by PMC
+> > > controller.
+> > > I verified this patch and able to wake up Tegra from suspend.
+> > > Petlozu, correct me if my understanding is wrong.
+> >=20
+> > The way that this usually works is that you need to use something like
+> > this:
+> >=20
+> > 	interrupt-parent =3D <&pmc>;
+> > 	interrupts =3D <1 IRQ_TYPE_LEVEL_LOW>;
+> > 	interrupt-names =3D "wakeup";
+> >=20
+> > This will then cause the PMC's interrupt chip callbacks to setup all th=
+e wake-
+> > related interrupts and use the internal wake event tables to forward the
+> > GPIO/IRQ corresponding to the PMC wake event to the GPIO controller or
+> > GIC, respectively.
+> >=20
+> > If you use &gpio as the interrupt parent, none of the PMC logic will be
+> > invoked, so unless this is somehow set up correctly by default, the PMC
+> > wouldn't be able to wake up the system.
+> >=20
+> > Thierry
+> Thierry,
+> Since PMC's IRQ domain is made as parent of GPIO controller's IRQ domain,
+> I think, for GPIO based wakes setting &gpio as the interrupt parent can s=
+till
+> invoke PMC logic to program the required registers to enable such wakes.
+> Related commit in this regard:
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
+t/drivers/gpio/gpio-tegra186.c?id=3D2a36550567307b881ce570a81189682ae1c9d08d
 
-> FWIW, the deadline for getting material in for v6.3 has already passed,
-> so you can send the next version of this series without waiting for
-> clarification on the compatibles & ISA string. We should have plenty of
-> time to get those fixed up before the series gets applied.
+Heh... nicely self-owned =3D). You're right, no need for the detour in DT
+with those, the GPIO driver will hook up the IRQ hierarchy itself. We
+already do this for the "power" key in the various gpio-keys, so it
+should work fine.
 
-Also, as it looks like the pinctrl driver is going to land in time for
-v6.3, that leaves just this series and the clock driver required for
-base support.
+Sorry for the noise,
+Thierry
 
-In the original submission, you sent the clock driver and dt in the same
-series & I think it might make the process a bit faster if you sent them
-both together for the next version again.
-
-That way, both the drivers and dts can go together as their have an
-inter dependence.
-
-That's my opinion anyway, will make trying to sequence things between
-trees easier.
-
-Cheers,
-Conor.
-
-
---MTMULKwH45x5IHVU
+--oI+597r9ve6kB/tz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+TU9wAKCRB4tDGHoIJi
-0u9vAP0Xf4VDqqzWZ4yBX8QlUBK8vmtbnhR61S1/MxTyPlIRcwEAiTc0AaIbs07K
-ETN+C6SSJIg4FTQiNJheaT1H5PhrYQI=
-=w1v/
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPk1RsACgkQ3SOs138+
+s6HqwQ//Zpt5GNboNT6FQXO5Dl4h4mISvUB+mcMRdY9LdmHEZs4O8Xp85ftbrubB
+uHR7S0Fvqt1EDlaPg+tzUYMBGtq/QpUy46Pi69fqHLUsTp8HnrKnIXbQ7KwEpR0z
+RDrfO7dhYMo7Zv4KxuC3H8LmRIqJ54HevvW3sAx/mA2G9Et5CGcWCfUpTYnE8M6P
+DFe4aSPVuetKatXz1oRz7NWR4d2S2ZsEfi7tNqhLnnSuPlJm+400Zz46+k/fmjzt
+m+BKqyTjVwzvNfDdzryZiMMaC9tJMRaU9mAM4KtKwTcbQF78aHmizGdLwcegzCaj
+9kCvG5tnaPhrfm6HZ1mQvgW4GgpXLola7Jpm58WoxuAGt9rjVSek1+taji44dGwV
+N1Q5YrAqBzUTE6Pqm8CcaGP2LR02Jf8d2kJ0HMd7L+/OM1qCoepAepprllBW4hjM
+AbHSu3hLBNt3h9IdYOLMyuTp9HqblZXaUcTsO8YNOTWcNjTSU+NT8BHmmrdOWrHj
+emjW6zsMf0s3aZci5lCDa1MA6IjIjZciEPR1R6+NCKWIoccKCsqhNyAQyKblAX6L
+fJFFg4bBGcy665BGBPogy9jH7L8wstPU+CItRuGrLNIfzjOhIYS6uRmP0gMCFBLS
+34r9vuyy0mx7nApzj1XU4Yaoq8Gt5f9afCgxHdD+T0qCvFzuTxM=
+=0MpZ
 -----END PGP SIGNATURE-----
 
---MTMULKwH45x5IHVU--
+--oI+597r9ve6kB/tz--
