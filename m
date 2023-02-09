@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3AD690F4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 18:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5180690F55
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 18:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjBIRdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 12:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S229791AbjBIRfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 12:35:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBIRda (ORCPT
+        with ESMTP id S229460AbjBIRfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 12:33:30 -0500
-Received: from www.kot-begemot.co.uk (ns1.kot-begemot.co.uk [217.160.28.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE9A4216
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 09:33:29 -0800 (PST)
-Received: from [192.168.17.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1pQAnV-007WF4-HC; Thu, 09 Feb 2023 17:33:25 +0000
-Received: from madding.kot-begemot.co.uk ([192.168.3.98])
-        by jain.kot-begemot.co.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1pQAnT-0070Vl-1C; Thu, 09 Feb 2023 17:33:25 +0000
-Message-ID: <874b2d0c-3500-5c1e-07cd-74f9e91d92d6@cambridgegreys.com>
-Date:   Thu, 9 Feb 2023 17:33:22 +0000
+        Thu, 9 Feb 2023 12:35:37 -0500
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744E04216;
+        Thu,  9 Feb 2023 09:35:36 -0800 (PST)
+Received: by mail-oi1-f174.google.com with SMTP id bd6so2269727oib.6;
+        Thu, 09 Feb 2023 09:35:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uDg+0168zHr+2g1dStzDLeHsdA5LJsyBUjIXGQnr0Uw=;
+        b=gn+5FWReEXgPlJ6dbbq8/0iqe4/yRNcSND+zPnLnfWe98/E9hyWRMX7jGq6svzfL1P
+         QUSGG3OJArd6rVrrro+lqBOpVXPnEtYwvwHXjhrJcqyKjyYlon9Rn/hOGdU7CO5q3SHL
+         fzeYdCVCURQUNzI0MpW2JtEJxo6Jo0QtJR3O9SLYqEFmVg52JIgPzKPEQ/EbwOjx9nHj
+         IAlfbOOYVnQ+Z9IoTh0DFfasP/y1mVw1L6ZOrKXFjuU8kMhHjqoPLLHNH/WqEcfJHWCd
+         4498k3f/IpUKByS3wkRy3bAjgEHb+2Fd3i5qMgOwD82aULQLA6bqx6kbZg3U3gUcWtMu
+         WS3g==
+X-Gm-Message-State: AO0yUKWQeQggX2AM3eairXlGEOsOCVr4JVF8CG7fcwaPB+ZA9V0wK3rF
+        N20iiiAzlVoyVLOrgPD+7m+6DFp58g==
+X-Google-Smtp-Source: AK7set/+azMMFBXOEiuPtaHsvq8e3IvjnwMin5dScWkMDL2fWCaP2EyrZgGMmOcrSa3aOQo3MObWmw==
+X-Received: by 2002:a05:6808:7cf:b0:35b:ae91:db53 with SMTP id f15-20020a05680807cf00b0035bae91db53mr6067889oij.42.1675964135655;
+        Thu, 09 Feb 2023 09:35:35 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h7-20020a056808014700b0037d59e90a07sm502835oie.55.2023.02.09.09.35.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 09:35:35 -0800 (PST)
+Received: (nullmailer pid 543618 invoked by uid 1000);
+        Thu, 09 Feb 2023 17:35:34 -0000
+Date:   Thu, 9 Feb 2023 11:35:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tony Lindgren <tony@atomide.com>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        soc@kernel.org, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: arm: omap: add phytec pcm-049 som
+ and pcm-959 dev board
+Message-ID: <20230209173534.GA539622-robh@kernel.org>
+References: <20230209025525.148872-1-colin.foster@in-advantage.com>
+ <20230209025525.148872-2-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] uml: vector: fix definitios of VECTOR_WRITE and
- VECTOR_HEADERS
-Content-Language: en-US
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, richard@nod.at,
-        johannes@sipsolutions.net
-Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230209161916.3729757-1-carlos.bilbao@amd.com>
-From:   Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Organization: Cambridge Greys
-In-Reply-To: <20230209161916.3729757-1-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -2.0
-X-Spam-Score: -2.0
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209025525.148872-2-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 16:19, Carlos Bilbao wrote:
-> Fix definitions of VECTOR_WRITE and VECTOR_HEADERS with proper bitwise
-> operand for bit shift.
+On Wed, Feb 08, 2023 at 06:55:24PM -0800, Colin Foster wrote:
+> Add documentation for additional OMAP SOMs and development platforms,
+> provided by Phytec as the PCM-049 SOM and the PCM-959 development kit.
 > 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   arch/um/drivers/vector_user.h | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/um/drivers/vector_user.h b/arch/um/drivers/vector_user.h
-> index 3a73d17a0161..f7d3956f5c15 100644
-> --- a/arch/um/drivers/vector_user.h
-> +++ b/arch/um/drivers/vector_user.h
-> @@ -68,8 +68,8 @@ struct vector_fds {
->   };
->   
->   #define VECTOR_READ	1
-> -#define VECTOR_WRITE	(1 < 1)
-> -#define VECTOR_HEADERS	(1 < 2)
-> +#define VECTOR_WRITE	(1 << 1)
-> +#define VECTOR_HEADERS	(1 << 2)
->   
->   extern struct arglist *uml_parse_vector_ifspec(char *arg);
->   
+> v2->v3
+>     * Add Krzysztof Acked
+> 
+> v1->v2
+>     * New patch
+> 
+> ---
+>  Documentation/devicetree/bindings/arm/omap/omap.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/omap/omap.txt b/Documentation/devicetree/bindings/arm/omap/omap.txt
+> index fa8b31660cad..0a28215dfa12 100644
+> --- a/Documentation/devicetree/bindings/arm/omap/omap.txt
+> +++ b/Documentation/devicetree/bindings/arm/omap/omap.txt
+> @@ -131,6 +131,9 @@ Boards (incomplete list of examples):
+>  - OMAP4 PandaBoard : Low cost community board
+>    compatible = "ti,omap4-panda", "ti,omap4430", "ti,omap4"
+>  
+> +- OMAP4 PCM-959 : Commercial dev kit with PCM-049 SOM
+> +  compatible = "phytec,pcm959", "phytec,pcm049", "ti,omap4460", "ti,omap4430", "ti,omap4";
 
-These are no longer used. They were used in some very early versions of 
-the code.
+OMAP maintainers, if no one is going to convert all of omap.txt over to 
+schema, can we at least start an empty schema and add to it instead of 
+here...
 
-They should just be removed instead of redefined correctly.
-
--- 
-Anton R. Ivanov
-Cambridgegreys Limited. Registered in England. Company Number 10273661
-https://www.cambridgegreys.com/
+Rob
