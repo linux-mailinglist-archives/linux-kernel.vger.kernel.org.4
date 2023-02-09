@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3B769105B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6536D69105E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjBISgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S229563AbjBISgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjBISg1 (ORCPT
+        with ESMTP id S229819AbjBISga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:36:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F3668AEB;
-        Thu,  9 Feb 2023 10:36:25 -0800 (PST)
+        Thu, 9 Feb 2023 13:36:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D81763136;
+        Thu,  9 Feb 2023 10:36:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B5A1B82297;
-        Thu,  9 Feb 2023 18:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7170AC433A0;
-        Thu,  9 Feb 2023 18:36:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2656861B80;
+        Thu,  9 Feb 2023 18:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE69BC4339B;
+        Thu,  9 Feb 2023 18:36:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675967783;
-        bh=P3p3nQT18iB5KgEcNBU65v36D9Khuq9im6IUZT0tPnk=;
+        s=k20201202; t=1675967788;
+        bh=m3VjIjkXjpczEE/UKggPWCZa7ltciaHAVYcIm/gP1Mw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=g4QVe/AL+TAnwYSc4YCElFAX9/qtKqwrG4JP7XSpkKtpZ0I9LT4qG9bL4aXXLJbq8
-         eRBDxsuxoY0f62lDt1ch+Ibo8jEZFHvJa+D5y+eQ9FSQfvOLGdWtZtuIjokErjp6wJ
-         wz/nGbHugKD1YcE54LEqlcY9wOB3yVUlxkoFYiPu2AtJMguc427UKhClTkjOubsyFt
-         r047BhG1c2gcN5lbraZNdxyrX86DIsxDWn+dJnYMMX2meZshLszMTqZnR3mvE4CLEj
-         VjzAzJrK9B1rmuM7vMkmG8glUBul1tB+PfeL+zd3KKG8iDdiQ6NL08WUYOJbtdISu6
-         TWkSqu/I3JZvg==
+        b=n2kUP7FO4eMwJ3xUqLKBncdTLjfyZEf/gQC4otqY7i/XBwWsByQW/Xd4pL2W4BirR
+         OcYEelgbeJ9Wx1UL8/MnHFFJjXSFu0YblgXQcDlpgulw1To93dG2kloxEc4hvqvvoD
+         lvbzO6Gmue47PyqPkA5zPOw5WEOKE0hJsR57LfBvjMTv+AQDBzG7U/pnnM/jTo8CHs
+         TIAKzs0Mq5op+OfP76353a3u9r4rTSuFdlqSd5+fvk9TFnBgikQSk9qbPV4TTv9GJr
+         nSrO04ax3DKmArkf7AFz5rLo1nrNH434BjzoReYzAqCDguW256rsI51QIqgthS5IOJ
+         96RgDokh+ayWQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>
-In-Reply-To: <20230206180805.6621-1-krzysztof.kozlowski@linaro.org>
-References: <20230206180805.6621-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [RESEND PATCH 1/3] ASoC: dt-bindings: qcom,wsa881x: Allow
- sound-name-prefix
-Message-Id: <167596778018.879652.6223173953232819619.b4-ty@kernel.org>
-Date:   Thu, 09 Feb 2023 18:36:20 +0000
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        oder_chiou@realtek.com, Sameer Pujar <spujar@nvidia.com>
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        kuninori.morimoto.gx@renesas.com, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+In-Reply-To: <1675953417-8686-1-git-send-email-spujar@nvidia.com>
+References: <1675953417-8686-1-git-send-email-spujar@nvidia.com>
+Subject: Re: (subset) [PATCH 0/2] Codec support on Jetson AGX Orin
+Message-Id: <167596778569.879652.2944492731365735456.b4-ty@kernel.org>
+Date:   Thu, 09 Feb 2023 18:36:25 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -64,12 +58,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Feb 2023 19:08:03 +0100, Krzysztof Kozlowski wrote:
-> Reference common DAI properties to fix:
+On Thu, 09 Feb 2023 20:06:55 +0530, Sameer Pujar wrote:
+> Jetson AGX Orin has onboard RT5640 audio codec and uses I2S1 interface.
+> Add DT bindings to enable codec support. Series also contains a clock
+> fix in the codec driver.
 > 
->   sdm845-db845c.dtb: speaker@0,1: 'sound-name-prefix' does not match any of the regexes: 'pinctrl-[0-9]+'
+> Sameer Pujar (2):
+>   ASoC: rt5640: Update MCLK rate in set_sysclk()
+>   arm64: tegra: Audio codec support on Jetson AGX Orin
 > 
-> 
+> [...]
 
 Applied to
 
@@ -77,12 +75,8 @@ Applied to
 
 Thanks!
 
-[1/3] ASoC: dt-bindings: qcom,wsa881x: Allow sound-name-prefix
-      commit: edcda9a605bbfdd78d8d79043e01544d8b742828
-[2/3] ASoC: dt-bindings: qcom,wcd934x: Describe slim-ifc-dev
-      commit: 636caca3583923b75fa538bc43ce57801fb8a1a2
-[3/3] ASoC: dt-bindings: qcom,wcd934x: Allow usage as IFD device
-      commit: 7ee35b6b099ce6b51c6ac249d19b5b405f8e825d
+[1/2] ASoC: rt5640: Update MCLK rate in set_sysclk()
+      commit: 9f138bb2eaf661788df459dfcaf38feb080af41f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
