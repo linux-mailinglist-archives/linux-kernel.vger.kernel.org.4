@@ -2,246 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0841690D05
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82FA8690D1B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjBIPc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S231373AbjBIPfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:35:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjBIPcY (ORCPT
+        with ESMTP id S231355AbjBIPft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:32:24 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD49C3403F;
-        Thu,  9 Feb 2023 07:32:22 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id u27so2442019ljo.12;
-        Thu, 09 Feb 2023 07:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DTRyrjKJiUmJMr1cI3Ls247CRHoBTq6abpoHxw5vv6k=;
-        b=CkkXpOB+B6zJbRDbAJUxxvNXz2R1GRxWWZnS6q3zol30Nc240hQpc34IKiClJBfagp
-         BSR6lcvR3n6ykkf1+P5n/I/jyjNU0/R8erJhHHFLMFaBDEYSgzwPm1sUgVHhAtYNXjG9
-         8ixK+PqOMEXtTnH1hNegzCIs6esp1s2iXlwV+g5OlB5ZtdTZ8PHLJvlkDVi6g/8QCg8/
-         901+kt7wxw9q0A+tOYAiSnaU7ZWdUqFPN+svq4G3K+cdvf8rv/ScwMpKautirFgfteoO
-         /SMzFfi5STvFVDfvORFnBcP8ToTSBVp1fFhB/c8+sqbmdVTpfg6U6zNMMKO5yiRe67GQ
-         422w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DTRyrjKJiUmJMr1cI3Ls247CRHoBTq6abpoHxw5vv6k=;
-        b=5rcoJKl5ai3TFCFl3CDgeZXYWOb8uKhYVuvA4iT5ZQQbI2QIn7118qx5GRyPljmoNO
-         KfxUEVQJBq/R90G432N35q5IJZJW6q7S1Es8/iUDJuq3CgLcEXnw0bqX2jzJwoL5HCUL
-         xq7URjJCwSeC6k7d21oeUREelLOwKwnzCsu31BI4hva+CowxBQ1tiKQ47bPgDRvOXDH7
-         xQ0EdpmJLC6yhMSlRcPTvAMZbJqyJ+elf5ve3JpkcPOYpULMxLPoMAihAiEawN+OpZRU
-         2Nn1TSblv5XM2di4P9cYP122ur/6XM633JINT5+FviJKh/+eMMA3JdCDAG1h71lwB1kH
-         W+Vw==
-X-Gm-Message-State: AO0yUKXlKL6OG3aE1bSGO1B3Y9wVwYSIuS1m6Ln5W98QvZTuZFa1AqfP
-        9LiJ9pGdotppQSIE+epRlibkRXKXsAyWNrofMB3WJZwMIEiYGcxI
-X-Google-Smtp-Source: AK7set9UM5Z0i9dSTVIbbU8v4XmmAmCDmyErsPrKXV/a3e0jnH3qMrTXK38EYJQAaRyy711yFS6a1jNgvo9IyIKyATw=
-X-Received: by 2002:a2e:80c7:0:b0:293:2bc7:4e5f with SMTP id
- r7-20020a2e80c7000000b002932bc74e5fmr762684ljg.102.1675956741132; Thu, 09 Feb
- 2023 07:32:21 -0800 (PST)
+        Thu, 9 Feb 2023 10:35:49 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DD8611EB
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:35:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675956926; x=1707492926;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=lBCEUSoK05IPzjUXn4+2V8MmciXUhTpk+OYzlHyef5M=;
+  b=lE+S4DCqMIJM4o5Mxn93rwpToIsbkLz6mWj9hhW20vBOozcaUkwn6Xsh
+   52D0j8sL1e2d1DrBL7w3RRGDBBI+ugZ0kwggeE5Ir3SH/5+G+HLB7+xOv
+   ZNCEm7hhGvFLGR9KFUpD0LhQbOIhqQpL9gMqm6XayZ/1ZGTCmNtBAOKXw
+   afV3gNLy7gBBLjaT5xqg4v75ev6HR6TG2k/m7T/AGCGaS9i/ju1I0Di+H
+   t+Yht60kjBk63u+6pNTb4ZStp6ksMQ1PlvA2217yM8ef8l6Pjr9SsxS6G
+   v+j4iIroc4BzwxTHh3Dg6q7JpOUMad6bJArRXlBwlpSmM2e1V79xK7VyJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309782446"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="309782446"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:35:06 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776528834"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="776528834"
+Received: from fpastor-mobl4.amr.corp.intel.com (HELO [10.212.74.130]) ([10.212.74.130])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:35:05 -0800
+Message-ID: <2680bb04-0a58-1914-44a4-a51d5aebb8f1@linux.intel.com>
+Date:   Thu, 9 Feb 2023 09:33:08 -0600
 MIME-Version: 1.0
-References: <20230208161654.99556-1-ryncsn@gmail.com> <20230208161654.99556-3-ryncsn@gmail.com>
- <Y+P0wLTdZcOPiKPZ@cmpxchg.org>
-In-Reply-To: <Y+P0wLTdZcOPiKPZ@cmpxchg.org>
-From:   Kairui Song <ryncsn@gmail.com>
-Date:   Thu, 9 Feb 2023 23:32:03 +0800
-Message-ID: <CAMgjq7AVQBfbr+zqrsGfJMkD-PeciEmOQMbwR4+FLpGQcdyAkw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sched/psi: iterate through cgroups directly
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 5/5] soundwire: qcom: set clk stop need reset flag at
+ runtime
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        johan+linaro@kernel.org, quic_bjorande@quicinc.com
+References: <20230209131336.18252-1-srinivas.kandagatla@linaro.org>
+ <20230209131336.18252-6-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230209131336.18252-6-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Johannes Weiner <hannes@cmpxchg.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=889=E6=
-=97=A5=E5=91=A8=E5=9B=9B 03:15=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Feb 09, 2023 at 12:16:54AM +0800, Kairui Song wrote:
-> > From: Kairui Song <kasong@tencent.com>
-> >
-> > psi_group->parent has the same hierarchy as the cgroup it's in.
-> > So just iterate through cgroup instead.
-> >
-> > By adjusting the iteration logic, save some space in psi_group
-> > struct, and the performance is actually better. I see a measurable
-> > performance gain using mmtests/perfpipe:
-> >
-> > (AVG of 100 test, ops/sec, the higher the better)
-> > KVM guest on a i7-9700:
-> >         psi=3D0         root cgroup   5 levels of cgroup
-> > Before: 59221         55352         47821
-> > After:  60100         56036         50884
-> >
-> > KVM guest on a Ryzen 9 5900HX:
-> >         psi=3D0         root cgroup   5 levels of cgroup
-> > Before: 144566        138919        128888
-> > After:  145812        139580        133514
-> >
-> > Signed-off-by: Kairui Song <kasong@tencent.com>
-> > Signed-off-by: Kairui Song <ryncsn@gmail.com>
->
-> Awesome!
->
-> A few comments below:
->
-> > @@ -858,15 +858,34 @@ static void psi_group_change(struct psi_group *gr=
-oup, int cpu,
-> >               schedule_delayed_work(&group->avgs_work, PSI_FREQ);
-> >  }
-> >
-> > -static inline struct psi_group *task_psi_group(struct task_struct *tas=
-k)
-> > +static inline struct psi_group *psi_iter_first(struct task_struct *tas=
-k, void **iter)
->
-> Please name these psi_groups_first() and psi_groups_next().
->
-> >  #ifdef CONFIG_CGROUPS
-> > -     if (static_branch_likely(&psi_cgroups_enabled))
-> > -             return cgroup_psi(task_dfl_cgroup(task));
-> > +     if (static_branch_likely(&psi_cgroups_enabled)) {
-> > +             struct cgroup *cgroup =3D task_dfl_cgroup(task);
-> > +
-> > +             *iter =3D cgroup_parent(cgroup);
-> > +             return cgroup_psi(cgroup);
-> > +     }
-> >  #endif
-> >       return &psi_system;
-> >  }
-> >
-> > +static inline struct psi_group *psi_iter_next(void **iter)
-> > +{
-> > +#ifdef CONFIG_CGROUPS
-> > +     if (static_branch_likely(&psi_cgroups_enabled)) {
-> > +             struct cgroup *cgroup =3D *iter;
-> > +
-> > +             if (cgroup) {
-> > +                     *iter =3D cgroup_parent(cgroup);
-> > +                     return cgroup_psi(cgroup);
-> > +             }
-> > +     }
-> > +#endif
-> > +     return NULL;
-> > +}
->
-> > @@ -886,6 +905,7 @@ void psi_task_change(struct task_struct *task, int =
-clear, int set)
-> >  {
-> >       int cpu =3D task_cpu(task);
-> >       struct psi_group *group;
-> > +     void *iter;
-> >       u64 now;
-> >
-> >       if (!task->pid)
-> > @@ -895,16 +915,17 @@ void psi_task_change(struct task_struct *task, in=
-t clear, int set)
-> >
-> >       now =3D cpu_clock(cpu);
-> >
-> > -     group =3D task_psi_group(task);
-> > +     group =3D psi_iter_first(task, &iter);
-> >       do {
-> >               psi_group_change(group, cpu, clear, set, now, true);
-> > -     } while ((group =3D group->parent));
-> > +     } while ((group =3D psi_iter_next(&iter)));
-> >  }
-> >
-> >  void psi_task_switch(struct task_struct *prev, struct task_struct *nex=
-t,
-> >                    bool sleep)
-> >  {
-> >       struct psi_group *group, *common =3D NULL;
-> > +     void *iter;
-> >       int cpu =3D task_cpu(prev);
-> >       u64 now =3D cpu_clock(cpu);
->
-> Please add @iter at the end to keep line length sorting.
->
-> > @@ -915,7 +936,7 @@ void psi_task_switch(struct task_struct *prev, stru=
-ct task_struct *next,
-> >                * ancestors with @prev, those will already have @prev's
-> >                * TSK_ONCPU bit set, and we can stop the iteration there=
-.
-> >                */
-> > -             group =3D task_psi_group(next);
-> > +             group =3D psi_iter_first(prev, &iter);
-> >               do {
-> >                       if (per_cpu_ptr(group->pcpu, cpu)->state_mask &
-> >                           PSI_ONCPU) {
-> > @@ -924,7 +945,7 @@ void psi_task_switch(struct task_struct *prev, stru=
-ct task_struct *next,
-> >                       }
-> >
-> >                       psi_group_change(group, cpu, 0, TSK_ONCPU, now, t=
-rue);
-> > -             } while ((group =3D group->parent));
-> > +             } while ((group =3D psi_iter_next(&iter)));
-> >       }
-> >
-> >       if (prev->pid) {
-> > @@ -957,12 +978,12 @@ void psi_task_switch(struct task_struct *prev, st=
-ruct task_struct *next,
-> >
-> >               psi_flags_change(prev, clear, set);
-> >
-> > -             group =3D task_psi_group(prev);
-> > +             group =3D psi_iter_first(prev, &iter);
-> >               do {
-> >                       if (group =3D=3D common)
-> >                               break;
-> >                       psi_group_change(group, cpu, clear, set, now, wak=
-e_clock);
-> > -             } while ((group =3D group->parent));
-> > +             } while ((group =3D psi_iter_next(&iter)));
-> >
-> >               /*
-> >                * TSK_ONCPU is handled up to the common ancestor. If the=
-re are
-> > @@ -972,7 +993,7 @@ void psi_task_switch(struct task_struct *prev, stru=
-ct task_struct *next,
-> >                */
-> >               if ((prev->psi_flags ^ next->psi_flags) & ~TSK_ONCPU) {
-> >                       clear &=3D ~TSK_ONCPU;
-> > -                     for (; group; group =3D group->parent)
-> > +                     for (; group; group =3D psi_iter_next(&iter))
-> >                               psi_group_change(group, cpu, clear, set, =
-now, wake_clock);
-> >               }
-> >       }
-> > @@ -983,6 +1004,7 @@ void psi_account_irqtime(struct task_struct *task,=
- u32 delta)
-> >  {
-> >       int cpu =3D task_cpu(task);
-> >       struct psi_group *group;
-> > +     void *iter;
-> >       struct psi_group_cpu *groupc;
-> >       u64 now;
->
-> Ditto. You can move @groupc in the same patch.
->
-> Otherwise, this looks good to me. Please add:
->
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Thanks! I'll update the patch as you suggested.
+
+On 2/9/23 07:13, Srinivas Kandagatla wrote:
+> WSA Soundwire controller needs an full reset if clock stop support
+> is not available in slave devices. WSA881x does not support clock stop
+> however WSA883x supports clock stop.
+> 
+> Make setting this flag at runtime to address above issue.
+> 
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+>  drivers/soundwire/qcom.c | 13 ++++---------
+>  1 file changed, 4 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index 74e38c0d651b..0224a5a866de 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -536,10 +536,14 @@ static int qcom_swrm_enumerate(struct sdw_bus *bus)
+>  
+>  		sdw_extract_slave_id(bus, addr, &id);
+>  		found = false;
+> +		ctrl->clock_stop_not_supported = false;
+>  		/* Now compare with entries */
+>  		list_for_each_entry_safe(slave, _s, &bus->slaves, node) {
+>  			if (sdw_compare_devid(slave, id) == 0) {
+>  				qcom_swrm_set_slave_dev_num(bus, slave, i);
+> +				if (!slave->prop.simple_clk_stop_capable)
+> +					ctrl->clock_stop_not_supported = true;
+
+IIRC the 'simple_clk_stop_capable' for a peripheral refers to the
+Simplified_SCSP_SM
+
+see Figure 35 "Slave Clock Stop Prepare State Machine (SCSP_SM)"
+
+In addition, there's a requirement that all peripherals shall support
+ClockStopMode0. Only ClockStopMode1 is optional, and that case is
+handled with a different property:
+
+ * @clk_stop_mode1: Clock-Stop Mode 1 is supported
+
+I think you overloaded one concept with another, or used the wrong property?
+
+> +
+>  				found = true;
+>  				break;
+>  			}
+> @@ -1500,15 +1504,6 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>  		 (ctrl->version >> 24) & 0xff, (ctrl->version >> 16) & 0xff,
+>  		 ctrl->version & 0xffff);
+>  
+> -	/* Clk stop is not supported on WSA Soundwire masters */
+> -	if (ctrl->version <= 0x01030000) {
+> -		ctrl->clock_stop_not_supported = true;
+> -	} else {
+> -		ctrl->reg_read(ctrl, SWRM_COMP_MASTER_ID, &val);
+> -		if (val == MASTER_ID_WSA)
+> -			ctrl->clock_stop_not_supported = true;
+> -	}
+> -
+>  #ifdef CONFIG_DEBUG_FS
+>  	ctrl->debugfs = debugfs_create_dir("qualcomm-sdw", ctrl->bus.debugfs);
+>  	debugfs_create_file("qualcomm-registers", 0400, ctrl->debugfs, ctrl,
