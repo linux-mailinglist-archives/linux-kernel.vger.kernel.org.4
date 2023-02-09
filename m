@@ -2,84 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28AC68FFA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C2568FFAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjBIFKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 00:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S230008AbjBIFMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 00:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBIFKU (ORCPT
+        with ESMTP id S229598AbjBIFMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 00:10:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F221ABE1;
-        Wed,  8 Feb 2023 21:10:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 392D761910;
-        Thu,  9 Feb 2023 05:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8BD4BC4339C;
-        Thu,  9 Feb 2023 05:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675919418;
-        bh=SSOMeyVd4NA7ZgP7ISYtRk3lwqy/HPA34kHr4JFJPIU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fVStH8JOzrlLfPh9aZ956cmqZBjhpF9IXTUzmuqi+gM5P3IDTynoEUMZBRzLAgLxB
-         j3CPCCT9lPk72h6Nkp9/kX+Yc3h4PTey7ukilXrs7wr0ysrY9lw+QX/QwVUd+TC3us
-         aMTpugvfGcMzYrrqfEHwgfuq04xb55XAtU6ZlxER8hCqj6qj3xm3TzDnt+DaxUn0oB
-         plax91Wrb4u3N3+tee6kKSlgv1UNvtIGfeh9p9AwaqhD2Oauo9vo0FJJYw3nyGWvkj
-         4h6hXybcAOpz4yNbFym6pTlJlq0dbDT4v25kHobMiPKQ9O7TPGa2qu83NvEdl78b4l
-         +E7Kp/4T9e3mg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 71CB0E4D02F;
-        Thu,  9 Feb 2023 05:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next] net: libwx: clean up one inconsistent indenting
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167591941846.2876.7383521489488340202.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Feb 2023 05:10:18 +0000
-References: <20230208013227.111605-1-yang.lee@linux.alibaba.com>
-In-Reply-To: <20230208013227.111605-1-yang.lee@linux.alibaba.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, jiawenwu@trustnetic.com,
-        mengyuanlou@net-swift.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, abaci@linux.alibaba.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 00:12:16 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894352B298
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 21:12:15 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id w5so1645777plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 21:12:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i/zmyB5ed7X1QuJ3E3Pi4MYoQa0o5KmmlWf5Y2v7TIw=;
+        b=KoxOwAfB2evDlwQdC43RR3+cvwXl+CsNC6c5ASdcFA88hHBZAb2JGL+SUEr6MwRZA1
+         gkVsEeNFr6rOHIeNcjL6Jy3Ego+8VfORmEsufcLyu+D9q2bI4JWAr8PxVRj3DW47eTWn
+         H2Ju4G8oDpPmZhXBDmDLA1F0+Mtv8OlMt8xyJhl5VK28btX6Wb+kb3lU8FdEDB6G1DKu
+         /qN5wTdBUkJT7qezEklgq2kCqkmqu3inMC41/FfVPEP5jD9KRf3jYWAqJiSRtlwWQ4cO
+         abq6xWHJqq2U5WEiVoZsS+A3ZGM+DU+xKP3L0O4nGlz+4mXpKfy4UWFksWXYdjcvGfFA
+         mU1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i/zmyB5ed7X1QuJ3E3Pi4MYoQa0o5KmmlWf5Y2v7TIw=;
+        b=lBEYPBPE/bHzwVh4gztK/g8faARQtgZHZevjmv5+mjG+IFwRifpV1/M11pWReO1kXe
+         YGk5vUP8SjfOvKXPqYVtCUj8iwBGKpGZOvqEIPg9L2TZE99wzhrslGFQf1e0chshPBLu
+         IoJQiIhqEgW3Ph8kyfFH+nSDZ3R6bspkxDkbXEbvg/4r8wP8i268djod7py6Rhzg5mw2
+         SLhb8pNic6c04lfg4SUcVrbBAfFzT/t5hdOr17yWsTlreZ7nyChLuQ6RA9XBPXcpRt7q
+         Fe9P+9V/dSohSb1O7jsjQj0BeYtNr9q7CR+gHD8UA21EdmRPpMoUPnzxsayxw9/UDDIX
+         3fMQ==
+X-Gm-Message-State: AO0yUKX3nTwHsr2269FmYnlDh9lhuxtv2imI7MB/AgUVoQurWcPkJSmD
+        LkDYKT6BdNll7DKDKrwQhdxo8IaLEYI=
+X-Google-Smtp-Source: AK7set85mRngGbLrqjwx1O+DEVdLiY/kT/apfyuSlakyXvcI9AVxfkuo2PRWjoBZ/zKfJ3O8qxh68Q==
+X-Received: by 2002:a05:6a20:e40d:b0:be:96d4:f863 with SMTP id nh13-20020a056a20e40d00b000be96d4f863mr7500208pzb.18.1675919535038;
+        Wed, 08 Feb 2023 21:12:15 -0800 (PST)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id n25-20020aa79059000000b005882b189a44sm356207pfo.104.2023.02.08.21.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 21:12:14 -0800 (PST)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+Subject: [PATCH] Documentation/ABI: sysfs-fs-erofs: update supported features
+Date:   Thu,  9 Feb 2023 13:11:28 +0800
+Message-Id: <20230209051128.10571-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Yue Hu <huyue2@coolpad.com>
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Add missing feaures for sysfs-fs-erofs feature doc.
 
-On Wed,  8 Feb 2023 09:32:27 +0800 you wrote:
-> drivers/net/ethernet/wangxun/libwx/wx_lib.c:1835 wx_setup_all_rx_resources() warn: inconsistent indenting
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3981
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
->  drivers/net/ethernet/wangxun/libwx/wx_lib.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+---
+ Documentation/ABI/testing/sysfs-fs-erofs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Here is the summary with links:
-  - [-next] net: libwx: clean up one inconsistent indenting
-    https://git.kernel.org/netdev/net-next/c/f978fa41f66d
-
-You are awesome, thank you!
+diff --git a/Documentation/ABI/testing/sysfs-fs-erofs b/Documentation/ABI/testing/sysfs-fs-erofs
+index bb4681a01811..284224d1b56f 100644
+--- a/Documentation/ABI/testing/sysfs-fs-erofs
++++ b/Documentation/ABI/testing/sysfs-fs-erofs
+@@ -4,7 +4,8 @@ Contact:	"Huang Jianan" <huangjianan@oppo.com>
+ Description:	Shows all enabled kernel features.
+ 		Supported features:
+ 		zero_padding, compr_cfgs, big_pcluster, chunked_file,
+-		device_table, compr_head2, sb_chksum.
++		device_table, compr_head2, sb_chksum, ztailpacking,
++		dedupe, fragments.
+ 
+ What:		/sys/fs/erofs/<disk>/sync_decompress
+ Date:		November 2021
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 
