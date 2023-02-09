@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDD568FC80
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB45B68FC8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjBIBPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S229867AbjBIBQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjBIBO7 (ORCPT
+        with ESMTP id S230043AbjBIBQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:14:59 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98452112;
-        Wed,  8 Feb 2023 17:14:58 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31915nuq014933;
-        Thu, 9 Feb 2023 01:14:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=6gXvsueo4V2TYRjdqTu7+Svo6u8laPlpEu5sZ1d9BUI=;
- b=NBP3TpfSL9viGYOlxYmL5q8TPDtafOSi72pNGtgieiZRf8hu7DQPO5F5ZX3FtJ4I43DT
- nMuyX4IbrFTmVFp6ESEBwdqAvgzaTXXyMpkOe2KKrgZl+EMBWtxPkooL7G8WuGWjp7Lf
- hYIxf/OTfSOyG+Mll6EPLFBkk9DWGhI6sTuFTO4Qb0gmW4trCv5F+IYHXYOr3syB5P5U
- 6ZEJee6fgtjMdw+INjaEaXNBj//ATXv+fwaXSLHlgol6S0omCEB4Lyw12m5cg161/kT8
- MXEvDoYqLQ8lMFcQvscwkCPIAFcSJopETHv3nO6l3RIqWgKZ9MMkZyLLxy9KitxvR3hc Hg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm86mt91c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 01:14:47 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3191Ei1b015201
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 9 Feb 2023 01:14:46 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 8 Feb 2023 17:14:45 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 4/4] arm64: defconfig: Enable DisplayPort on SC8280XP laptops
-Date:   Wed, 8 Feb 2023 17:13:25 -0800
-Message-ID: <20230209011325.2603663-5-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230209011325.2603663-1-quic_bjorande@quicinc.com>
-References: <20230209011325.2603663-1-quic_bjorande@quicinc.com>
+        Wed, 8 Feb 2023 20:16:32 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA11224C85
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:16:11 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8AxmOlaSeRjLToQAA--.28070S3;
+        Thu, 09 Feb 2023 09:16:10 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxQuVZSeRjCOQuAA--.54035S3;
+        Thu, 09 Feb 2023 09:16:09 +0800 (CST)
+Message-ID: <aea24370-2526-7f43-ca5f-55d1d8b8c4bb@loongson.cn>
+Date:   Thu, 9 Feb 2023 09:16:09 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] LoongArch: add checksum optimization for 64-bit system
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'WANG Xuerui' <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230207040148.1801169-1-maobibo@loongson.cn>
+ <8fa91bca5e624861b190917933951c7e@AcuMS.aculab.com>
+ <5b3c9b61-7fd5-f50c-32ba-e857090b71bc@xen0n.name>
+ <7636a7bebfd44e378c5b16d6fd355232@AcuMS.aculab.com>
+Content-Language: en-US
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <7636a7bebfd44e378c5b16d6fd355232@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XlBvRH2JyG-wqrP9bLc7MZ9g-EqKGG2r
-X-Proofpoint-ORIG-GUID: XlBvRH2JyG-wqrP9bLc7MZ9g-EqKGG2r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_11,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 phishscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
- adultscore=0 mlxscore=0 mlxlogscore=853 lowpriorityscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302090010
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxQuVZSeRjCOQuAA--.54035S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7AFWktw18uF1UGw45WryfZwb_yoW8Gr1Upr
+        1DWay3Ga10q347uwn2yF48Jw15ur43AF45Ja4Yvr1rAFy5XryDJaykGrWjga4Ivr45C3W8
+        uFWUtayayr4F9aDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
+        JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The QCOM_PMIC_GLINK implements the parts of a TCPM necessary for
-negotiating DP altmode and the TYPEC_MUX_GPIO_SBU driver is used for
-controlling connection and orientation switching of the SBU lanes in the
-USB-C connector  Enable these to enable USB Type-C DisplayPort on
-SC8280XP laptops.
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
 
-Changes since v1:
-- None
+在 2023/2/8 22:19, David Laight 写道:
+> From: WANG Xuerui
+>> Sent: 08 February 2023 13:48
+> ...
+>> Yeah LoongArch can do rotates, and your suggestion can indeed reduce one
+>> insn from every invocation of csum_fold.
+>>
+>>  From this:
+>>
+>> 000000000000096c <csum_fold>:
+>>          sum += (sum >> 16) | (sum << 16);
+>>   96c:   004cc08c        rotri.w         $t0, $a0, 0x10
+>>   970:   00101184        add.w           $a0, $t0, $a0
+>>          return ~(__force __sum16)(sum >> 16);
+>>   974:   0044c084        srli.w          $a0, $a0, 0x10
+>>   978:   00141004        nor             $a0, $zero, $a0
+>> }
+>>   97c:   006f8084        bstrpick.w      $a0, $a0, 0xf, 0x0
+>>   980:   4c000020        jirl            $zero, $ra, 0
+>>
+>> To:
+>>
+>> 0000000000000984 <csum_fold2>:
+>>          return (~sum - rol32(sum, 16)) >> 16;
+>>   984:   0014100c        nor             $t0, $zero, $a0
+>>          return (x << amt) | (x >> (32 - amt));
+>>   988:   004cc084        rotri.w         $a0, $a0, 0x10
+>>          return (~sum - rol32(sum, 16)) >> 16;
+>>   98c:   00111184        sub.w           $a0, $t0, $a0
+>> }
+>>   990:   00df4084        bstrpick.d      $a0, $a0, 0x1f, 0x10
+>>   994:   4c000020        jirl            $zero, $ra, 0
+> 
+> It is actually slightly better than that.
+> In the csum_fold2 version the first two instructions
+> are independent - so can execute in parallel on some cpu.
+> 
+> 	David
+>
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks for the good suggestion.
+Will send the second version soon.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 695c4e44d241..edafb5c4b9a1 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -972,6 +972,7 @@ CONFIG_TYPEC_TPS6598X=m
- CONFIG_TYPEC_HD3SS3220=m
- CONFIG_TYPEC_UCSI=m
- CONFIG_UCSI_CCG=m
-+CONFIG_TYPEC_MUX_GPIO_SBU=m
- CONFIG_MMC=y
- CONFIG_MMC_BLOCK_MINORS=32
- CONFIG_MMC_ARMMMCI=y
-@@ -1207,6 +1208,7 @@ CONFIG_QCOM_CPR=y
- CONFIG_QCOM_GENI_SE=y
- CONFIG_QCOM_LLCC=m
- CONFIG_QCOM_OCMEM=m
-+CONFIG_QCOM_PMIC_GLINK=m
- CONFIG_QCOM_RMTFS_MEM=m
- CONFIG_QCOM_RPMH=y
- CONFIG_QCOM_RPMHPD=y
--- 
-2.25.1
+regards
+bibo,mao
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
