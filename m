@@ -2,46 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2D068FF1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AED68FED2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjBIEc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 23:32:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S229685AbjBIEaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:30:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjBIEcC (ORCPT
+        with ESMTP id S229722AbjBIEaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:32:02 -0500
+        Wed, 8 Feb 2023 23:30:16 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3133F2B4;
-        Wed,  8 Feb 2023 20:31:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98EB3B64B;
+        Wed,  8 Feb 2023 20:29:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11D8FB82019;
-        Thu,  9 Feb 2023 04:22:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD3EC433A8;
-        Thu,  9 Feb 2023 04:22:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88ECBB8201A;
+        Thu,  9 Feb 2023 04:22:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1454C433EF;
+        Thu,  9 Feb 2023 04:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675916527;
-        bh=Dk9LU3lz3zg8TjdOVz99Ga2XcB9YAnHzJWtYVcJbL1s=;
+        s=k20201202; t=1675916532;
+        bh=r896al9/ic3TVzWhQihrH5WWe9yq5i1aPuOB0FJblUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r8vHB5JYQcnWnaF+LEK2o2LQx+kvGnra8bIL6v5VVf80bhjs2mO28zKdPskC3HnZX
-         gdOusUnyh9myeFVtuh0feIycbxN3p0O4A1TESTvH36qgBcMl1sCLOj95T2YS2phEo6
-         moeLQfbqhMfQl0eVNy5e/lETBiR/y2gFjrVxowKgasKAfAyU5L/bwIWJeEmS77BhrT
-         Jt+NRbxsz82TxD7p1073ZuLliwHELGVgqcurUN8/1Z/CHZSmqKozl7IDlZdFpaz1lZ
-         3mD1MA1N42KKAqYAy+yFLh4f82sX9qCK1UIJWbjeF6NCnguY/JZHxlcSb+0R4jhUbE
-         m3LnG7aTOAcsw==
+        b=BN/W1fmhyUDYnWQNFRl0yiZAlLtkPZOeM9PRJliT8ril6wiUbcRvBv1HMVz8E0tvT
+         mbyq5LYLXG+Q0iC3FE+j8oPN8wrX8CzcUUbhXZ8fLkv6SW7OFkTdgoSDQ4Z4S7676q
+         ekM+HlbJO6e1a7rJmpHX2uhrjQmq5U7OdTYpCuhnJvE8DoMV488k6BQ9GV5iJQMl+R
+         Z4eAbD3zOtPVRjxwl6mYHQRaDOaj1IjnIDvEt0MNJ02q3yVnhiKjhsmUqY3r16pJbp
+         2l1erYVmeAs/OrQ3L+bCLx5ypvDAgc3kGR5MyqzFDCB3QgSGPs4TzDKRQdWSO0Gb80
+         XNY+n6Qa5PJyg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Niklas Cassel <niklas.cassel@wdc.com>, linux-kernel@vger.kernel.org
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Niklas Cassel <nks@flawful.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Update qcom CPR maintainer entry
-Date:   Wed,  8 Feb 2023 20:23:24 -0800
-Message-Id: <167591660369.1230100.8849740773917373264.b4-ty@kernel.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alex Elder <elder@kernel.org>, Sean Paul <sean@poorly.run>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        David Airlie <airlied@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Amit Kucheria <amitk@kernel.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, ath10k@lists.infradead.org,
+        freedreno@lists.freedesktop.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] firmware: qcom_scm: Move qcom_scm.h to include/linux/firmware/qcom/
+Date:   Wed,  8 Feb 2023 20:23:26 -0800
+Message-Id: <167591660372.1230100.2523010471979974316.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230123104305.44641-1-niklas.cassel@wdc.com>
-References: <20230123104305.44641-1-niklas.cassel@wdc.com>
+In-Reply-To: <20230203210956.3580811-1-quic_eberman@quicinc.com>
+References: <20230203210956.3580811-1-quic_eberman@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,21 +94,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 11:43:05 +0100, Niklas Cassel wrote:
-> From: Niklas Cassel <nks@flawful.org>
+On Fri, 3 Feb 2023 13:09:52 -0800, Elliot Berman wrote:
+> Move include/linux/qcom_scm.h to include/linux/firmware/qcom/qcom_scm.h.
+> This removes 1 of a few remaining Qualcomm-specific headers into a more
+> approciate subdirectory under include/.
 > 
-> I do no longer have access to qcom CPR hardware, nor the documentation for
-> said hardware.
 > 
-> Based on past and recent activity, I propose Bjorn and Konrad as the new
-> qcom CPR maintainers.
-> 
-> [...]
 
 Applied, thanks!
 
-[1/1] MAINTAINERS: Update qcom CPR maintainer entry
-      commit: eade820f7970c18af68591939038b4c3eb111205
+[1/1] firmware: qcom_scm: Move qcom_scm.h to include/linux/firmware/qcom/
+      commit: 3bf90eca76c98c55c975fa817799789b9176f9f3
 
 Best regards,
 -- 
