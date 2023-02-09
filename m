@@ -2,223 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B8168FCA2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4749F68FCA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjBIBa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S231336AbjBIBbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjBIBaY (ORCPT
+        with ESMTP id S229911AbjBIBbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:30:24 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377ED20D3F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:30:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675906223; x=1707442223;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yBJ52FUGL78dzZOqChYA7Idv2yLAxA4Cx/vsei37ZYs=;
-  b=V+Hxmi1Bms6nRkFMcE7AY2YSDmnMJXu/tWOiv5CK+TjalWi/0m884jXs
-   Vfp4eJTZqjbZ8Vw6TokD1lW7QFPMEAUwafEXhkVb3FmxnieZaFJ1zrNTX
-   DW7BKZaLTquFSLSiFa3ylrGfvYt0zn93pVXd6LATB/XoeiWDZMAx+KsG6
-   cHqq7zk8s46TZB5IBXFYIzf5sOfmcGAP9kMQnSj/o2Kop4Q3FnODHu2DR
-   02TFLQyiWGMbyZTjYhGjpAgg2VQoilDRDBrgCtJ9p4eYoVC3CXA5nNSxS
-   s3UXbFwukb/FQ/9BstYee4gzrTy5QIxl3HB/K9MbNd7ZHFw2BOGhvxvJs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309629368"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="309629368"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 17:30:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="660840478"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="660840478"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 08 Feb 2023 17:30:20 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pPvlT-0004k6-1m;
-        Thu, 09 Feb 2023 01:30:19 +0000
-Date:   Thu, 9 Feb 2023 09:30:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
-Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable
- 'ipmmu_of_ids'
-Message-ID: <202302090916.LwXEX2k8-lkp@intel.com>
+        Wed, 8 Feb 2023 20:31:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B246821A07
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:31:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CFACB81E4C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:31:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1D1C433EF
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:31:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675906299;
+        bh=aYaN7NXRw0ihNR+IL/yGz5yH+5GqO6mxr4X8PdaZnj4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=siGYUNOg2wrrXSZ4e95rNkJJfbu3Y45ev3m1v06eXF4jB44fcEoNegj1Vahw5OtL0
+         xEqprlwErEqer0L5H+PRK5Ipsywpt5kKjiqnZyluXb9K8JRSTr6cxgBsBHaWEUFovZ
+         vp5VGB2020uFgHy6epXWOSZbhS4jkaOAAqicDfK5mQ8+9LlmtW4RqDo7YKLdMJDV0t
+         TPLmU0pn4IMZTlCZB7EtUSLuvaioTGYPD6CksXAJdLaU4+vsFJ3V04wc17D57caxl1
+         kRnKJs+4qllWRk5Ce44ERNI/n+jbVbWevgWdGdb1gtXfIYDotHULQOWCyxXsq9wNRo
+         0tT0ea3H6U6JA==
+Received: by mail-ej1-f47.google.com with SMTP id jg8so2159681ejc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 17:31:38 -0800 (PST)
+X-Gm-Message-State: AO0yUKW7JhhykEASCCIUCl2ae45H2UODP0Ba635V/9pfZSfHJlZb5nGe
+        +TU65eMMIgXQyv8K8Ry3TeQfTjJKLAPcsSz1K0w=
+X-Google-Smtp-Source: AK7set+qmRqoasUpDzhPwymmA1qkI+3NCkGEKe2NpeNzkWqJwSssQ9kHsZ/YyzGRyn8zv9Q3ixAdPd1Gnp+qH9itwMw=
+X-Received: by 2002:a17:906:3e04:b0:884:c19c:7c6 with SMTP id
+ k4-20020a1709063e0400b00884c19c07c6mr1991658eji.120.1675906297178; Wed, 08
+ Feb 2023 17:31:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230112090603.1295340-1-guoren@kernel.org> <c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com>
+ <CAJF2gTQm11px3mqyrNk1SRiJZud1yeY2avK99UX9KetWAGe5BA@mail.gmail.com>
+ <Y+DOyqehZvBJlb8N@FVFF77S0Q05N> <CAJF2gTQ6U1vH79Mu53eQ-GVaFx36C-hEt9Qf6=_vAkHfmgFh1Q@mail.gmail.com>
+ <Y+IXB4xQ7ACQWC9U@FVFF77S0Q05N> <CAJF2gTTrX+8wCm-g=L9+3BkCRrZ8SCUM2w1e5duq-+Bsa213mA@mail.gmail.com>
+ <Y+O1qY453BnhqgQZ@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <Y+O1qY453BnhqgQZ@FVFF77S0Q05N.cambridge.arm.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 9 Feb 2023 09:31:25 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT_aMBx3mPnzWWqj6uGM75yT_62x+_wZ4HkWd7BqEzvug@mail.gmail.com>
+Message-ID: <CAJF2gTT_aMBx3mPnzWWqj6uGM75yT_62x+_wZ4HkWd7BqEzvug@mail.gmail.com>
+Subject: Re: [PATCH -next V7 0/7] riscv: Optimize function trace
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Evgenii Shatokhin <e.shatokhin@yadro.com>, suagrfillet@gmail.com,
+        andy.chiu@sifive.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
+        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
+        jpoimboe@kernel.org, linux@yadro.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+On Wed, Feb 8, 2023 at 10:46 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Wed, Feb 08, 2023 at 10:30:56AM +0800, Guo Ren wrote:
+> > Hi Mark,
+> >
+> > Thx for the thoughtful reply.
+> >
+> > On Tue, Feb 7, 2023 at 5:17 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > > Note that I'm assuming you will *always* go through a common ftrace_caller
+> > > trampoline (even for direct calls), with the trampoline responsible for
+> > > recovering the direct trampoline (or ops->func) from the ops pointer.
+> > >
+> > > That would only require 64-bit alignment on 64-bit (or 32-bit alignment on
+> > > 32-bit) to keep the literal naturally-aligned; the rest of the instructions
+> > > wouldn't require additional alignment.
+> > >
+> > > For example, I would expect that (for 64-bit) you'd use:
+> > >
+> > >   # place 2 NOPs *immediately before* the function, and 3 NOPs at the start
+> > >   -fpatchable-function-entry=5,2
+> > >
+> > >   # Align the function to 8-bytes
+> > >   -falign=functions=8
+> > >
+> > > ... and your trampoline in each function could be initialized to:
+> > >
+> > >   # Note: aligned to 8 bytes
+> > >   addr-08               // Literal (first 32-bits)      // set to ftrace_nop_ops
+> > >   addr-04               // Literal (last 32-bits)       // set to ftrace_nop_ops
+> > >   addr+00       func:   mv      t0, ra
+> > >   addr+04               auipc   t1, ftrace_caller
+> > >   addr+08               nop
+> > >
+> > > ... and when enabled can be set to:
+> > >
+> > >   # Note: aligned to 8 bytes
+> > >   addr-08               // Literal (first 32-bits)      // patched to ops ptr
+> > >   addr-04               // Literal (last 32-bits)       // patched to ops ptr
+> > >   addr+00       func:   mv      t0, ra
+> > We needn't "mv t0, ra" here because our "jalr" could work with t0 and
+> > won't affect ra. Let's do it in the trampoline code, and then we can
+> > save another word here.
+>
+> Ah; I thought JALR always clobbered ra? Or can that specify the register to
+> save the link address to?
+Yes, that's the feature of riscv :) We could use any register to save
+the link address.
 
-FYI, the error/warning still remains.
+>
+> I'm not that familiar with riscv asm, so I've probably just got that wrong.
+>
+> > >   addr+04               auipc   t1, ftrace_caller
+> > >   addr+08               jalr    ftrace_caller(t1)
+> >
+> > Here is the call-site:
+> >    # Note: aligned to 8 bytes
+> >    addr-08               // Literal (first 32-bits)      // patched to ops ptr
+> >    addr-04               // Literal (last 32-bits)       // patched to ops ptr
+> >    addr+00               auipc   t0, ftrace_caller
+> >    addr+04               jalr    ftrace_caller(t0)
+Sorry, it should be:
+         addr+04               jalr    t0, ftrace_caller(t0)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
-date:   5 months ago
-config: s390-randconfig-r012-20230209 (https://download.01.org/0day-ci/archive/20230209/202302090916.LwXEX2k8-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b87d6d7fa405e23478f1e1dff6d66b5a533a5433
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b87d6d7fa405e23478f1e1dff6d66b5a533a5433
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+>
+> I'm a bit confused there; I thought that the `symbol(reg)` addressing mode was
+> generating additional bits that the AUPIC didn't -- have I got that wrong?
+>
+> What specifies which register the JALR will write the link address to?
+According to the spec, auipc t1,0x0 should write PC + 0x0<<12 (which
+is equal to PC) to t1 and then jalr t0, (t0)0 jumps to the address
+stored in t0 + 0x0 and stores the return address to t0.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302090916.LwXEX2k8-lkp@intel.com
+That means auipc defines xxx << 12 bits, jalr defines lowest 12 bits.
 
-All warnings (new ones prefixed by >>):
+>
+> > > Note: this *only* requires patching the literal and NOP<->JALR; the MV and
+> > > AUIPC aren't harmful and can always be there. This way, you won't need to use
+> > > stop_machine().
+> > Yes, simplest nop is better than c.j. I confused.
+> >
+> > >
+> > > With that, the ftrace_caller trampoline can recover the `ops` pointer at a
+> > > negative offset from `ra`, and can recover the instrumented function's return
+> > > address in `t0`. Using the `ops` pointer, it can figure out whether to branch
+> > > to a direct trampoline or whether to save/restore the regs around invoking
+> > > ops->func.
+> > >
+> > > For 32-bit it would be exactly the same, except you'd only need a single nop
+> > > before the function, and the offset would be -0x10.
+> > Yes, we reduced another 4 bytes & a smaller alignment for better code
+> > size when 32-bit.
+> >    # Note: aligned to 4 bytes
+> >    addr-04               // Literal (last 32-bits)       // patched to ops ptr
+> >    addr+00               auipc   t0, ftrace_caller
+> >    addr+04               jalr    ftrace_caller(t0)
+addr+04               jalr    t0, ftrace_caller(t0)
 
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/iommu/ipmmu-vmsa.c:11:
-   In file included from include/linux/dma-mapping.h:10:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:75:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
-   static const struct of_device_id ipmmu_of_ids[] = {
-                                    ^
-   13 warnings generated.
+> > >
+>
+> > > That's what arm64 does; the only difference is that riscv would *always* need
+> > > to go via the trampoline in order to make direct calls.
+> > We need one more trampoline here beside ftrace_caller &
+> > ftrace_regs_caller: It's "direct_caller".
+> >
+> > addr+04         nop -> direct_caller/ftrace_caller/ftrace_regs_caller
+>
+> I'd strongly recommend that you instead implement FTRACE_WITH_ARGS and
+> deprecate FTRACE_WITH_REGS, like arm64 has done, then you only need a single
+> ftrace_caller, as I mentioned above. That way there's no risk that you need to
+> patch the AUIPC after initialization.
+>
+> The arm64 FTRACE_WITH_ARGS conversion is in mainline, and arm64's
+> FTRACE_WITH_CALL_OPS is based upon that. Florent's DIRECT_CALLS patches add the
+> direct call logic to the same ftrace_caller trampoline.
+Thx for the suggestion of only keeping the ftrace_caller idea, but
+it's another topic.
+
+What I want to point out:
+If we keep "auipc (addr+00)" fixed, we could use the different
+trampolines at "jalr (addr+0x4)" (All of them must be in one 2k
+aligned area).
+
+>
+> Thanks,
+> Mark.
 
 
-vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
-
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
-33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
-33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
-33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
-33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
-60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
-60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
-60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
-757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
-757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
-757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
-b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
-b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
-b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
-4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
-58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
-58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
-0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
-0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
-0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
-0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
-17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
-98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
-98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
-98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
-3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
-1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
-b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
-b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
-b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
-3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
-3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
-3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
-7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
-9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
-ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
-33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
-33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
-33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
-33f3ac9b511612 Magnus Damm             2017-10-16  995  };
-33f3ac9b511612 Magnus Damm             2017-10-16  996  
-
-:::::: The code at line 946 was first introduced by commit
-:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
-
-:::::: TO: Magnus Damm <damm+renesas@opensource.se>
-:::::: CC: Alex Williamson <alex.williamson@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best Regards
+ Guo Ren
