@@ -2,141 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9178F6912EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F7A6912EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjBIWBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 17:01:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
+        id S229861AbjBIWDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 17:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjBIWBg (ORCPT
+        with ESMTP id S229460AbjBIWC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 17:01:36 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E43C66EF6;
-        Thu,  9 Feb 2023 14:01:28 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id hx15so10686181ejc.11;
-        Thu, 09 Feb 2023 14:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=12EmLmXNPxVlBwqhOstyYyPyvkcnUa7HgYnHDTPPtNE=;
-        b=VlJ35ScMfjK5cUQAGBmGVcnTAuHtfwb/ke2H1l8NFfViNicrUGiQh7hbu/EqVgOJ/5
-         VLgvb9npmAszqdK3H8E4DdfhEQNHVxHGbCdUO+63RdFECF3TBh7o/6pOOvhxj8EjoQkC
-         6zZwCQgwSB9LMqPOgywPSKeefXjNV2A6bwgojpyZ/3k9gBRL870oaTNprn/WE0dwkxKv
-         539yOjP8uezXZe8sTutqBHz2ASYxJzRVQ70Ma53irQRAjyW9oS3U3u8orouGlgHFORSi
-         iZhfr5++lvrlYhacDuhkF/oVvFyZbilzrTFJGx/SeSvRJUvdh9sdEbv0msMn5/gUsOtP
-         IPyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=12EmLmXNPxVlBwqhOstyYyPyvkcnUa7HgYnHDTPPtNE=;
-        b=OkoCU7+ycY3jo/Cb2AuCOb+xvNjuS9Z6YK8CstegsLn59JXrDfHoFsd4zC6Trq8lrN
-         w0p1B1gDgILAZJVmdaiQ06Kvul+KYPeN08ZCka/q+6DfHPG1LVBy4o8TWhhS58CcWtaj
-         coR+K6v18RPhXe8XZmj9AKhj6Gl/eoEm/EJfgQOmizQ0TLJ3wrcMGmck7TEgDRoZwTf7
-         DlC7QT7N9xUn9UhYe75CMGdUVnrmcBuNvCV24zkafXphxc/ebSNPbtuYqxb3vxMrpQ+t
-         ZAtszslnMWvTDbQ23tnS8iedQwp06SnBC9HnmSLV5VpVrWg/WaJQmKLZDU35wiUkRT+S
-         A8Qg==
-X-Gm-Message-State: AO0yUKXWKxSsaQy6UB/BIaxXkQiJZ+aQghiJSlVF3k562Awp6FldFDUX
-        Admu8fo3R+81LhpkYzfcp2R+gb4J8tsf26MKff8=
-X-Google-Smtp-Source: AK7set+ng9pmkzKqIxaS7qA6X4EwNgcgxsLiahOVc2y/+PRfgUFnkEXjaeRFkczOkKCB8xLLHVP05GF+ZrJsP4YTQ1o=
-X-Received: by 2002:a17:906:eb8f:b0:878:786e:8c39 with SMTP id
- mh15-20020a170906eb8f00b00878786e8c39mr2945087ejb.105.1675980086713; Thu, 09
- Feb 2023 14:01:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20230209192337.never.690-kees@kernel.org> <CAEf4BzZXrf48wsTP=2H2gkX6T+MM0B45o0WNswi50DQ_B-WG4Q@mail.gmail.com>
- <63e5521a.170a0220.297d7.3a80@mx.google.com> <CAADnVQKsB2n0=hShYpYnTr5yFYRt5MX2QMWo3V9SB9JrM6GhTg@mail.gmail.com>
- <63e561d8.a70a0220.250aa.3eb9@mx.google.com>
-In-Reply-To: <63e561d8.a70a0220.250aa.3eb9@mx.google.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 9 Feb 2023 14:01:15 -0800
-Message-ID: <CAADnVQJed84rqugpNDY2u1r89QEOyAMMKZHLHefX=GRWZ3haoQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Deprecate "data" member of bpf_lpm_trie_key
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 17:02:58 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 157AA26AD;
+        Thu,  9 Feb 2023 14:02:58 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 66C2920C8AF4;
+        Thu,  9 Feb 2023 14:02:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 66C2920C8AF4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675980177;
+        bh=EK/+vo/FmUepqV7P4sor2Z8FWweETZJ9bVLMsQHPKiI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=APMDTzvkDgMkIwMf4dXfumunuOJPFgopxxev8Va8UXR4D/cPVZlLQWKviXqdOv44k
+         NwPvrQrHpuOMnnfwsNT2dIvDZbK7r9sb1VCu9TwTghZNk1Z9HH7YZJDqZRhUuchepH
+         OlQtgMNiMcVIFholHb2J0qF/t614522a7ZCvSSRo=
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, wei.liu@kernel.org, jinankjain@linux.microsoft.com
+Cc:     mikelley@microsoft.com, kys@microsoft.com,
+        Tianyu.Lan@microsoft.com, haiyangz@microsoft.com,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com
+Subject: [PATCH] x86/hyperv: Fix hv_get/set_register for nested bringup
+Date:   Thu,  9 Feb 2023 14:02:52 -0800
+Message-Id: <1675980172-6851-1-git-send-email-nunodasneves@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 1:12 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Feb 09, 2023 at 12:50:28PM -0800, Alexei Starovoitov wrote:
-> > On Thu, Feb 9, 2023 at 12:05 PM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Thu, Feb 09, 2023 at 11:52:10AM -0800, Andrii Nakryiko wrote:
-> > > > Do we need to add a new type to UAPI at all here? We can make this new
-> > > > struct internal to kernel code (e.g. struct bpf_lpm_trie_key_kern) and
-> > > > point out that it should match the layout of struct bpf_lpm_trie_key.
-> > > > User-space can decide whether to use bpf_lpm_trie_key as-is, or if
-> > > > just to ensure their custom struct has the same layout (I see some
-> > > > internal users at Meta do just this, just make sure that they have
-> > > > __u32 prefixlen as first member).
-> > >
-> > > The uses outside the kernel seemed numerous enough to justify a new UAPI
-> > > struct (samples, selftests, etc). It also paves a single way forward
-> > > when the userspace projects start using modern compiler options (e.g.
-> > > systemd is usually pretty quick to adopt new features).
-> >
-> > I don't understand how the new uapi struct bpf_lpm_trie_key_u8 helps.
-> > cilium progs and progs/map_ptr_kern.c
-> > cannot do s/bpf_lpm_trie_key/bpf_lpm_trie_key_u8/.
-> > They will fail to build, so they're stuck with bpf_lpm_trie_key.
->
-> Right -- I'm proposing not changing bpf_lpm_trie_key. I'm proposing
-> _adding_ bpf_lpm_trie_key_u8 for new users who will be using modern
-> compiler options (i.e. where "data[0]" is nonsense).
->
-> > Can we do just
-> > struct bpf_lpm_trie_key_kern {
-> >   __u32   prefixlen;
-> >   __u8    data[];
-> > };
-> > and use it in the kernel?
->
-> Yeah, I can do that if that's preferred, but it leaves userspace hanging
-> when they eventually trip over this in their code when they enable
-> -fstrict-flex-arrays=3 too.
->
-> > What is the disadvantage?
->
-> It seemed better to give a working example of how to migrate this code.
+hv_get_nested_reg only translates SINT0, resulting in the wrong sint
+being registered by nested vmbus.
+Fix the issue with new utility function hv_is_sint_reg.
+While at it, improve clarity of hv_set_non_nested_register and hv_is_synic_reg.
 
-I understand and agree with intent, but I'm still missing
-how you're going to achieve this migration.
-bpf_lpm_trie_key_u8 doesn't provide a migration path to cilium progs
-and pretty much all bpf progs that use LPM map.
-Sure, one can change the user space part, like you did in test_lpm_map.c,
-but it doesn't address the full scope.
-imo half way is worse than not doing it.
+Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+---
+ arch/x86/include/asm/mshyperv.h | 11 +++++++----
+ arch/x86/kernel/cpu/mshyperv.c  |  8 ++++----
+ 2 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index 9ae1a344536b..684c547c1cca 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -225,10 +225,13 @@ extern bool hv_isolation_type_snp(void);
+ 
+ static inline bool hv_is_synic_reg(unsigned int reg)
+ {
+-	if ((reg >= HV_REGISTER_SCONTROL) &&
+-	    (reg <= HV_REGISTER_SINT15))
+-		return true;
+-	return false;
++	return (reg >= HV_REGISTER_SCONTROL) &&
++	       (reg <= HV_REGISTER_SINT15);
++}
++static inline bool hv_is_sint_reg(unsigned int reg)
++{
++	return (reg >= HV_REGISTER_SINT0) &&
++	       (reg <= HV_REGISTER_SINT15);
+ }
+ 
+ u64 hv_get_register(unsigned int reg);
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 0ceb6d1f9c3c..6bd344e1200f 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -44,6 +44,9 @@ struct ms_hyperv_info ms_hyperv;
+ #if IS_ENABLED(CONFIG_HYPERV)
+ static inline unsigned int hv_get_nested_reg(unsigned int reg)
+ {
++	if (hv_is_sint_reg(reg))
++		return reg - HV_REGISTER_SINT0 + HV_REGISTER_NESTED_SINT0;
++
+ 	switch (reg) {
+ 	case HV_REGISTER_SIMP:
+ 		return HV_REGISTER_NESTED_SIMP;
+@@ -53,8 +56,6 @@ static inline unsigned int hv_get_nested_reg(unsigned int reg)
+ 		return HV_REGISTER_NESTED_SVERSION;
+ 	case HV_REGISTER_SCONTROL:
+ 		return HV_REGISTER_NESTED_SCONTROL;
+-	case HV_REGISTER_SINT0:
+-		return HV_REGISTER_NESTED_SINT0;
+ 	case HV_REGISTER_EOM:
+ 		return HV_REGISTER_NESTED_EOM;
+ 	default:
+@@ -80,8 +81,7 @@ void hv_set_non_nested_register(unsigned int reg, u64 value)
+ 		hv_ghcb_msr_write(reg, value);
+ 
+ 		/* Write proxy bit via wrmsl instruction */
+-		if (reg >= HV_REGISTER_SINT0 &&
+-		    reg <= HV_REGISTER_SINT15)
++		if (hv_is_sint_reg(reg))
+ 			wrmsrl(reg, value | 1 << 20);
+ 	} else {
+ 		wrmsrl(reg, value);
+-- 
+2.25.1
+
