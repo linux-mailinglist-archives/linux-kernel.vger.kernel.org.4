@@ -2,103 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8490690B1C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60469690B24
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjBIN5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:57:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S230141AbjBIN6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjBIN5i (ORCPT
+        with ESMTP id S230201AbjBIN6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:57:38 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB095D1D1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675951000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Y1joeNdYJ7b/1/klwyqyf65Bv+i6Ox7LCf5OuDMUyY=;
-        b=hgniEHRKk9ES10UPgdcEWoSXsZ9i7DzDc9FIoeWVF55xdjwiSnRU6zktcA7ytC3eo8D8QH
-        FYhoeWPiDi/DebTSfmV/J9+5Z/yLI9Ut4pELjL16NBT2y/wSlJLvVwYG8maa49ZS03j1A2
-        ldZEle7lBnfaRKtNdnchJVsSj+cQze0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-583-aVSrhNHpPVqRxs-G3piDRg-1; Thu, 09 Feb 2023 08:56:33 -0500
-X-MC-Unique: aVSrhNHpPVqRxs-G3piDRg-1
-Received: by mail-ed1-f72.google.com with SMTP id w6-20020aa7d286000000b004aaa832ef36so1503335edq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 05:56:32 -0800 (PST)
+        Thu, 9 Feb 2023 08:58:32 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0111D913
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:58:31 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id b3so3288338lfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 05:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5vIk3jzXuSyaHW1FYxyA9cfIJXbVLZ1cRv9vB0DvrCA=;
+        b=Aa2XvtCj7k1EQ5AB4TnvMCLfRsS0RKTQZW/lMsHxUzlMxHgBVyGkCRxYU7RF5RcL9u
+         tY+e/Kqcui8pT9ABaiDJ2k9bJh4xkTUo0awV6587gnbiJcv+pWPGUb4dMlpy0e+UnTfs
+         YlqmgmX5YNE9Sobf3zTNU/9zmW0WB121wYmfr6zagvOy0LSa4Wk16P+4T456WBz41Adc
+         DjjZuQqK4yZu0htvspUodmMMLjKt874cxm/HXTehfcORrwTcl79+uHAtWJCTJ/eZgMHQ
+         3zxnCm5mFkYTi7SYwdXA6gtiXvxsntjgP7Ps+dX/O+oeuQoNwz6u9dS6Wl+MTIz2BA7X
+         v/Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Y1joeNdYJ7b/1/klwyqyf65Bv+i6Ox7LCf5OuDMUyY=;
-        b=kF0tHX0yJuHjbICYmYK6WPOBYb6AIWgkLyzuSM7NqJ87FAsL4mD6olsZrQDnJNogMb
-         F2MzU/jyIDkzBj4uvGeuRXSTzJ2bl1gkuM9JKvYnOXUUzqe6vNPT4PN+pAAk/ZPAXved
-         uVh+NpsEuwc9D1/nWi8oADK9VbFx7kUdkLb2fa9e/FLCvWI7DTTKYSe0T2JZyewI1tqM
-         WuESbhLQTEjX8fteOFrcTQz+5410VFxpwE+YG40YUcKh7POPsrdavvA5n2O+tQlFhRYF
-         L7R+vRKgUWnwDUQUMeXkmkRPYFF9Rkb00ILj9m+GBMxUGZGW3o6E4MPeXuGFG2KlVtyM
-         CsBQ==
-X-Gm-Message-State: AO0yUKWr0HARbXmqJBgWDq0GQuvOqrA8d9TNj+2ra2aF6OG2htbASQje
-        qNo94xym72yvw9UWL3pf9QwEo7pzrxdeDZEiGltSs27cm9axwGw5YTOZ5sktLDDbmUqzA/Bl2p4
-        +dMqdfPtFJU6q3PIH5e0E94Fe
-X-Received: by 2002:a05:6402:194d:b0:4ab:1715:2858 with SMTP id f13-20020a056402194d00b004ab17152858mr4109690edz.11.1675950991946;
-        Thu, 09 Feb 2023 05:56:31 -0800 (PST)
-X-Google-Smtp-Source: AK7set/rRi6gsWVma21TmnsOmaUPrCABx15ptYtiwRoMF39J6s62FtDltEJsH0rjNZMggaFe7tZSYA==
-X-Received: by 2002:a05:6402:194d:b0:4ab:1715:2858 with SMTP id f13-20020a056402194d00b004ab17152858mr4109677edz.11.1675950991787;
-        Thu, 09 Feb 2023 05:56:31 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id k8-20020aa7c388000000b004a2067d6ba4sm786081edq.52.2023.02.09.05.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 05:56:31 -0800 (PST)
-Message-ID: <1433ea0c-5072-b9d9-a533-401bb58f9a80@redhat.com>
-Date:   Thu, 9 Feb 2023 14:56:30 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5vIk3jzXuSyaHW1FYxyA9cfIJXbVLZ1cRv9vB0DvrCA=;
+        b=F1sUipJRAuLaA7mWWKP7uoVZIbIJAIxv3e6h05VAB9Q+NsiwfaYHKnYVxoheAKkL0j
+         Elyg+/5KrNH8wYXl7fWl471wiPuNs13rM/42M1w/KwPTzhfoGrXOSvdYdnKbrLTStcBv
+         RdbYyOO5BccFc55aSvi9GqqhoEtRL8xIHQnJIkC/s5vt1w5cVuJbJOpaT3q1MGvCQgiC
+         Hgku6yIV+Wex/tpvjTBLc/6/mX3Uij8wfv+by4TnwTSZiq8+A7t+yFnfeKCpacGGNTFU
+         fDgvwmqEfhZoJhaNGaOY53C19MLZeapZE1kM/s0aphDmzD0jTLRw+QHc/sNV1GJpZk6X
+         MLBg==
+X-Gm-Message-State: AO0yUKUmk066IngHYghor1BXrzcIf6Tq1vOj9DQprTaO+PU5oFjncnx5
+        zbAPesqndY6IkcJ/1tiuOk7ciD5r8X9HBqIL
+X-Google-Smtp-Source: AK7set9FPvh10WNQrIs+53FfwJ6h4mOwrNl1RN+TN6g0Bj9QedNmNInZVqJ0KHWO+IQLdIhnr37jcQ==
+X-Received: by 2002:a05:6512:94d:b0:4d8:56db:1cd8 with SMTP id u13-20020a056512094d00b004d856db1cd8mr2896775lft.40.1675951109351;
+        Thu, 09 Feb 2023 05:58:29 -0800 (PST)
+Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
+        by smtp.gmail.com with ESMTPSA id m9-20020a056512014900b004d5786b7299sm137785lfo.5.2023.02.09.05.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 05:58:28 -0800 (PST)
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+To:     linux-kernel@vger.kernel.org, rafael@kernel.org
+Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
+        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
+        upstream@semihalf.com, hdegoede@redhat.com, markgross@kernel.org,
+        dtor@google.com, Grzegorz Jaszczyk <jaz@semihalf.com>
+Subject: [RFCv2 0/1] x86: allow to notify host about guest entering s2idle
+Date:   Thu,  9 Feb 2023 13:56:45 +0000
+Message-Id: <20230209135646.3179418-1-jaz@semihalf.com>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 2/2] KVM: VMX: Stub out enable_evmcs static key for
- CONFIG_HYPERV=n
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Tom Rix <trix@redhat.com>, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <20230208205430.1424667-1-seanjc@google.com>
- <20230208205430.1424667-3-seanjc@google.com> <87mt5n6kx6.fsf@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <87mt5n6kx6.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/23 14:13, Vitaly Kuznetsov wrote:
->> +static __always_inline bool is_evmcs_enabled(void)
->> +{
->> +	return static_branch_unlikely(&enable_evmcs);
->> +}
-> I have a suggestion. While 'is_evmcs_enabled' name is certainly not
-> worse than 'enable_evmcs', it may still be confusing as it's not clear
-> which eVMCS is meant: are we running a guest using eVMCS or using eVMCS
-> ourselves? So what if we rename this to a very explicit 'is_kvm_on_hyperv()'
-> and hide the implementation details (i.e. 'evmcs') inside?
+According to the mailing list discussion [1] about the preferred approach
+for notifying hypervisor/VMM about guest entering s2idle state this RFC was
+implemented.
 
-I prefer keeping eVMCS in the name, but I agree a better name could be 
-something like kvm_uses_evmcs()?
+Instead of original hypercall based approach, which involves KVM change [2]
+and makes it hypervisor specific, implement different mechanism, which
+takes advantage of MMIO/PIO trapping and makes it hypervisor independent.
 
-Paolo
+For the RFCv1 [3]:
+  Patch #1 extends S2Idle ops by new notify handler which will be invoked as a
+  very last command before system actually enters S2Idle states. It also allows
+  to register and use driver specific notification hook which is used in
+  patch #2.
+
+  Patch #2 introduces new driver for virtual PMC, which registers
+  acpi_s2idle_dev_ops's notify handler. Its implementation is based on an
+  ACPI _DSM evaluation, which in turn can perform MMIO access and allow to
+  trap and therefore notify the VMM about guest entering S2Idle state.
+
+For the RFCv2: the patch #1 was dropped as in the meantime Mario Limonciello
+introduced a very similar patch [4] which uses s/notify/check and invokes the
+callback a bit earlier just before s2idle_entry. Mentioned patch has already
+been merged.
+
+This patchset is marked as RFC since patch #2 implements driver for non
+existing device "HYPE0001", which ACPI ID was not registered yet.
+Furthermore the required registration process [5] will not be started
+before getting positive feedback about this patchset.
+
+[1] https://patchwork.kernel.org/project/linux-pm/patch/20220609110337.1238762-2-jaz@semihalf.com/
+[2] https://patchwork.kernel.org/project/linux-pm/patch/20220609110337.1238762-3-jaz@semihalf.com/
+[3] https://patchwork.kernel.org/project/linux-pm/cover/20220707125329.378277-1-jaz@semihalf.com/
+[4] https://patchwork.kernel.org/project/linux-pm/patch/20220829162953.5947-2-mario.limonciello@amd.com
+[5] https://uefi.org/PNP_ACPI_Registry
+
+Grzegorz Jaszczyk (1):
+  platform/x86: Add virtual PMC driver used for S2Idle
+
+ drivers/platform/x86/Kconfig    |  7 ++++
+ drivers/platform/x86/Makefile   |  3 ++
+ drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
+ 3 files changed, 83 insertions(+)
+ create mode 100644 drivers/platform/x86/virt_pmc.c
+
+-- 
+2.39.1.519.gcb327c4b5f-goog
 
