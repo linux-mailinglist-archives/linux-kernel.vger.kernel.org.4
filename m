@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFB96902C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6876D6902C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjBIJDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S229804AbjBIJEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBIJDQ (ORCPT
+        with ESMTP id S229476AbjBIJEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:03:16 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9E8B45C
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:03:15 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id y19so1281245ljq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:03:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Rw0L6Va6diQDvp094MQJTGkE+0LV3C/TK0OJjT1s08=;
-        b=h8wuMLA+MgLBAFKKFyrMiipifqF72xDDMTTBAu4XPm1LhFYiMLXckwf65BYJO5YMQO
-         cTAS20GKfPwLaDriDAZshCpSyjENwAQHEvGTQJATKbWVLeuwrkJ1/yYUG5/K186lp5wj
-         yr9OODIC8D6MJ3pIZT22PJXZnn+vz4UT/RIIMiAtL0k0bmUtHQ+LCO2V8dC8vceAJx0a
-         4WAvr9cw1koBKlq0H/8IuCyO8+q6UdlWJIMErFV645sg/8wTU4PvlJpBkOzeSKjWHPmp
-         1HYYOnn17ONab/c0W/ltDjDywvtMhNSJZg3QZLh41ZdSKIc2on3+uQBfGcELn6jYNW/t
-         /uHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Rw0L6Va6diQDvp094MQJTGkE+0LV3C/TK0OJjT1s08=;
-        b=Rzbo750Sqw63txox6JkVPPPGg3LLn6au1mAZU/+KeKazmAQIYwmZ1sgIB10xNZNjuc
-         FHa3aSv5yPaR2D2fZ0iqX9MvtGVDFHt5HDRJrsAJkteEm95AP9cRa3A74GSAQ5d5DJ9j
-         iqX3zDvbfUrt39XtxP4r+/MJi6Xw0X5vafbaou4RWKFGcFxmkpbmd5PC/ZxIeMIYIEo4
-         jNa6ZRsFBkP1mUjqaE2xtH+XD3w0FxK4F3nB5zjCYMM5VrsuDVyjnwMHsfiGEeNLuJBJ
-         qVs6rYII6l8vpGPqmSJX0hzB+lEudgptUbirPGPmQEkqISanzKsYksZ/kVHrn1Nwqemz
-         EFgA==
-X-Gm-Message-State: AO0yUKVyNvFbalFPN4mX3biCBr/6HlQ5o+SQVQwhkaSqZbBTpd8JziYX
-        /+kQ6gmayErVtJtFirdZTtlg4Aew79ZnRGVt8hCQ5Q==
-X-Google-Smtp-Source: AK7set+ZS2F4AKPqgewxK5a53tJil2dGzck8CgFQydNgnyawPi6bcGrUs+oMs1Wk/CvLV7mm9XG6qir+uMAqWgngs28=
-X-Received: by 2002:a2e:91cb:0:b0:293:30ed:25d1 with SMTP id
- u11-20020a2e91cb000000b0029330ed25d1mr216508ljg.15.1675933393549; Thu, 09 Feb
- 2023 01:03:13 -0800 (PST)
+        Thu, 9 Feb 2023 04:04:20 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9291BEC4B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675933458; x=1707469458;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B22J8C980OM1Kvqfd4PEL6BBxLh6LNsp47XsaCW9fb4=;
+  b=hIRQJJGDUfw9/NreacGx+h/dayyQKhxiGt29GqjlcrANcFKDAwWSpDJ/
+   uGqIt93/tY9inztrr/lGlofKPi56pK0AWzVl0tS+2odg3fNN7uLYsP4L3
+   cBkIM7n4oa0I/nVp81pvs0X5IaxcP4Qso8mIu3Ps1g5gt3CWyGr1pg6RR
+   eYkcM4EK0soBbfTvnl7nilwv/iwVNNjARnxcj2hQ6JvkKGTMsbq4ckfdR
+   Oixka0MDKhLDda/GOVJFXze/ix1/43/84O4QAWF7WmdW2SBbr7o7NxFdW
+   qoPs1+VjmyQ684NhsIvTnbaXJbLLGC+SH/5bzKHgBHzSlbGhMEcdkKdhm
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,283,1669100400"; 
+   d="asc'?scan'208";a="211236035"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Feb 2023 02:04:17 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 9 Feb 2023 02:04:17 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Thu, 9 Feb 2023 02:04:15 -0700
+Date:   Thu, 9 Feb 2023 09:03:50 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Conor Dooley <conor@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        <palmer@rivosinc.com>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <christoph.muellner@vrull.eu>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH 1/2] RISC-V: fix ordering of Zbb extension
+Message-ID: <Y+S29qPN6jmMwvi3@wendy>
+References: <20230208225328.1636017-1-heiko@sntech.de>
+ <20230208225328.1636017-2-heiko@sntech.de>
+ <C32D5495-F772-4887-9CAD-66206ECCFC3F@kernel.org>
+ <20230209082520.solukez3jrshv3qo@orel>
 MIME-Version: 1.0
-References: <000000000000f2b07b05d5dc87cc@google.com> <0000000000003deeef05f43f8d47@google.com>
-In-Reply-To: <0000000000003deeef05f43f8d47@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 9 Feb 2023 10:03:00 +0100
-Message-ID: <CACT4Y+YPy1Cf2hDHBXuGjX8QAnESEEN+iGHgeZ8mQiueY5JQ9Q@mail.gmail.com>
-Subject: Re: [syzbot] general protection fault in fscache_free_cookie
-To:     syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, linux-cachefs-bounces@redhat.com,
-        linux-cachefs-owner@redhat.com, linux-cachefs@redhat.com,
-        linux-kernel@vger.kernel.org, mudongliangabcd@gmail.com,
-        nogikh@google.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hNr57WA66Fc7v39A"
+Content-Disposition: inline
+In-Reply-To: <20230209082520.solukez3jrshv3qo@orel>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,43 +68,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Feb 2023 at 08:44, syzbot
-<syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com> wrote:
->
-> This bug is marked as fixed by commit:
-> fscache: fix GPF in fscache_free_cookie
->
-> But I can't find it in the tested trees[1] for more than 90 days.
-> Is it a correct commit? Please update it by replying:
->
-> #syz fix: exact-commit-title
+--hNr57WA66Fc7v39A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Let's remove this fixing commit, it apparently does not exist.
+On Thu, Feb 09, 2023 at 09:25:20AM +0100, Andrew Jones wrote:
+> On Wed, Feb 08, 2023 at 11:20:10PM +0000, Conor Dooley wrote:
+> > Hey Heiko,
+> >=20
+> > On 8 February 2023 22:53:27 GMT, Heiko Stuebner <heiko@sntech.de> wrote:
+> > >From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> > >
+> > >As Andrew reported,
+> > >    Zb* comes after Zi* according 27.11 "Subset Naming Convention"
+> > >so fix the ordering accordingly.
+> > >
+> > >Reported-by: Andrew Jones <ajones@ventanamicro.com>
+> > >Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> >=20
+> > The whole "getting it wrong immediately after fixing it up" ;)
+>=20
+> Hi Conor,
+>=20
+> Do you know any patchwork savvy people that could whip up a check
+> for this array? :-)
 
-#syz unfix
+Maybe that is more of a checkpatch type thing?
 
+Either way, I'll put it on the todo list I suppose!
 
+--hNr57WA66Fc7v39A
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Until then the bug is still considered open and new crashes with
-> the same signature are ignored.
->
-> Kernel: Linux
-> Dashboard link: https://syzkaller.appspot.com/bug?extid=5b129e8586277719bab3
->
-> ---
-> [1] I expect the commit to be present in:
->
-> 1. for-kernelci branch of
-> git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
->
-> 2. master branch of
-> git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
->
-> 3. master branch of
-> git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
->
-> 4. master branch of
-> git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
->
-> The full list of 10 trees can be found at
-> https://syzkaller.appspot.com/upstream/repos
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+S29gAKCRB4tDGHoIJi
+0g7fAP9oVUIeufGJdmfpCNWTvatLD+qZqM6xhguUpuIizocYtQEAlN4fj4zu3jTO
+ex8o2+z+i3+9g/A71DmaXbiPPOIrGQA=
+=581v
+-----END PGP SIGNATURE-----
+
+--hNr57WA66Fc7v39A--
