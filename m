@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C4A691096
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BA769109A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjBISqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:46:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S229616AbjBISr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjBISqt (ORCPT
+        with ESMTP id S229457AbjBISr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:46:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8024216;
-        Thu,  9 Feb 2023 10:46:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1A89B822BF;
-        Thu,  9 Feb 2023 18:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 531B1C433D2;
-        Thu,  9 Feb 2023 18:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675968405;
-        bh=NA3iBMWRcwiWdDAwavupXMF3yWhQzTQj/BEcxQTPM/Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gEBA8p5f1drrwalcpKiwz5P6rKDdKFoNX8y+rW0INdsnt8ucIy+YhSmp5RCVU9ZHV
-         452qi9hbX0cxpvblbJ7sg/ihkJkUNKZ3z2vez8Et2PUXeiCB9TPVO6cDBnoZ8nx4By
-         rJo3QmhTOXh6HPbtQglP6pTkfKjAPZX9k8xdWdGB7kmUbWmDVQDE12HGT2tzUPgJ8B
-         S1ISc1VTJHedYKKI1IBXcfHEjIL9tRa748yllU+ywDbebz737Rd8PNWkPj/nE38DaT
-         SBJXGE9F7crNYXg80bBD4yb9ABdb+vI1OJqyCCpPf/Nc5BvZUvA31pE3KZn8s9KO3x
-         fwDJJqM/SV4oA==
-Date:   Thu, 9 Feb 2023 18:46:43 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Munehisa Kamata <kamatam@amazon.com>, hannes@cmpxchg.org,
-        hdanton@sina.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        mengcc@amazon.com, stable@vger.kernel.org
-Subject: Re: [PATCH] sched/psi: fix use-after-free in ep_remove_wait_queue()
-Message-ID: <Y+U/k678tB5w5hJP@gmail.com>
-References: <CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com>
- <20230202030023.1847084-1-kamatam@amazon.com>
- <Y9tCl4r/qjqsrVj9@sol.localdomain>
- <CAJuCfpFb0J5ZwO6kncjRG0_4jQLXUy-_dicpH5uGiWP8aKYEJQ@mail.gmail.com>
- <CAJuCfpH4aAAfEJeFzZSGsifhFNCpzZ17MEzXtxhZqoX04jrWbA@mail.gmail.com>
+        Thu, 9 Feb 2023 13:47:28 -0500
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48052166D5;
+        Thu,  9 Feb 2023 10:47:27 -0800 (PST)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-16a7f5b6882so3726704fac.10;
+        Thu, 09 Feb 2023 10:47:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qNaA54ncyf5PWWN1fTCkDz/pbo/DWHHSJveDPsBxHU4=;
+        b=RC5fDeLU4vuqW2lgOkZmG/ERSu/X56JhgOTDiJ33opR0qE6xsGWUSPAUbAI2+pN68J
+         BF+Or19LaJNlJtubikdVvwliG7A/L8GtfNeXunbOSL5d9MI1WdDapVqM1Df8PJKJtYED
+         e5n00a21wtPj5ZUaNl+1ruFP9svmvkggSpLlRGfTV5/MRsuLrn4YrTi044viEqhcNOlk
+         DHjCl/7UUU77jSz9tKqQ7Dr7a35LBhUHo6uVEnzuRw2b7cTjsK9z71ZORNJpkSvhwXrP
+         datW8n/N9EBpA+WBNSu0H8F2Bu/XWSYaN51laHBiHtB4Azs7LJZs5212/XVDavxkHUBD
+         r0eA==
+X-Gm-Message-State: AO0yUKXyEZfLNf0khnz3kTgc6ygOApyXTa9GK/wH78mz/znZy/lJKxVs
+        V+CoHgBpS+29/G3HU+RHNw==
+X-Google-Smtp-Source: AK7set+LpAAQrdDi21BmP35c4QuiXWbAckRokthyKVqKkwsAlsFerd9xp/Vfd28aqzRs2F+J01ZqkQ==
+X-Received: by 2002:a05:6870:428f:b0:163:3f73:b0fc with SMTP id y15-20020a056870428f00b001633f73b0fcmr6970166oah.18.1675968446460;
+        Thu, 09 Feb 2023 10:47:26 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u36-20020a056870b0e400b0014ff15936casm1008335oag.40.2023.02.09.10.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 10:47:26 -0800 (PST)
+Received: (nullmailer pid 622962 invoked by uid 1000);
+        Thu, 09 Feb 2023 18:47:25 -0000
+Date:   Thu, 9 Feb 2023 12:47:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, - <patches@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2] ASoC: dt-bindings: wlf,wm8994: Convert to dtschema
+Message-ID: <167596844504.622906.11149464288778013778.robh@kernel.org>
+References: <20230208195235.453774-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJuCfpH4aAAfEJeFzZSGsifhFNCpzZ17MEzXtxhZqoX04jrWbA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230208195235.453774-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 09:09:03AM -0800, Suren Baghdasaryan wrote:
-> On Thu, Feb 2, 2023 at 1:11 PM Suren Baghdasaryan <surenb@google.com> wrote:
-> >
-> > On Wed, Feb 1, 2023 at 8:56 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > >
-> > > On Wed, Feb 01, 2023 at 07:00:23PM -0800, Munehisa Kamata wrote:
-> > > > diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> > > > index 8ac8b81bfee6..6e66c15f6450 100644
-> > > > --- a/kernel/sched/psi.c
-> > > > +++ b/kernel/sched/psi.c
-> > > > @@ -1343,10 +1343,11 @@ void psi_trigger_destroy(struct psi_trigger *t)
-> > > >
-> > > >       group = t->group;
-> > > >       /*
-> > > > -      * Wakeup waiters to stop polling. Can happen if cgroup is deleted
-> > > > -      * from under a polling process.
-> > > > +      * Wakeup waiters to stop polling and clear the queue to prevent it from
-> > > > +      * being accessed later. Can happen if cgroup is deleted from under a
-> > > > +      * polling process otherwise.
-> > > >        */
-> > > > -     wake_up_interruptible(&t->event_wait);
-> > > > +     wake_up_pollfree(&t->event_wait);
-> > > >
-> > > >       mutex_lock(&group->trigger_lock);
-> > >
-> > > wake_up_pollfree() should only be used in extremely rare cases.  Why can't the
-> > > lifetime of the waitqueue be fixed instead?
-> >
-> > waitqueue lifetime in this case is linked to cgroup_file_release(),
-> > which seems appropriate to me here. Unfortunately
-> > cgroup_file_release() is not directly linked to the file's lifetime.
-> > For more details see:
-> > https://lore.kernel.org/all/CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru==MdEHQg@mail.gmail.com/#t
-> > .
-> > So, if we want to fix the lifetime of the waitqueue, we would have to
-> > tie cgroup_file_release() to the fput() somehow. IOW, the fix would
-> > have to be done at the cgroups or higher (kernfs?) layer.
+
+On Wed, 08 Feb 2023 20:52:35 +0100, Krzysztof Kozlowski wrote:
+> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
+> schema.
 > 
-> Hi Eric,
-> Do you still object to using wake_up_pollfree() for this case?
-> Changing higher levels to make cgroup_file_release() be tied to fput()
-> would be ideal but I think that would be a big change for this one
-> case. If you agree I'll Ack this patch.
-> Thanks,
-> Suren.
+> Changes against original binding:
+> 1. Add missing LDO1VDD-supply and LDO2VDD-supply.
+> 2. Use "gpios" suffix for wlf,ldo1ena and wlf,ldo2ena (Linux kernel's
+>    gpiolib already looks for both variants).
+> 3. Do not require AVDD1-supply and DCVDD-supply, because at least on
+>    Arndale board with Exynos5250 these are being supplied by internal
+>    LDOs.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Add LDO2VDD-supply.
+> 2. Do not require AVDD1-supply on WM8994.
+> 3. Move requiring of common supplies to top-level "required:".
+> 
+> DTS is being corrected here:
+> https://lore.kernel.org/linux-samsung-soc/20230208172634.404452-1-krzysztof.kozlowski@linaro.org/T/#t
+> ---
+>  .../devicetree/bindings/sound/wlf,wm8994.yaml | 194 ++++++++++++++++++
+>  .../devicetree/bindings/sound/wm8994.txt      | 112 ----------
+>  2 files changed, 194 insertions(+), 112 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/wm8994.txt
 > 
 
-I haven't read the code closely in this case.  I'm just letting you know that
-wake_up_pollfree() is very much a last-resort option for when the waitqueue
-lifetime can't be fixed.  So if you want to use wake_up_pollfree(), you need to
-explain why no other fix is possible.  For example maybe the UAPI depends on the
-waitqueue having a nonstandard lifetime.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-- Eric
