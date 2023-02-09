@@ -2,200 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6D868FE6C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F2F68FE49
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjBIEUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 23:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S229508AbjBIEPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjBIEUg (ORCPT
+        with ESMTP id S229478AbjBIEPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:20:36 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F72A2E826;
-        Wed,  8 Feb 2023 20:19:32 -0800 (PST)
+        Wed, 8 Feb 2023 23:15:49 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDB41A97E;
+        Wed,  8 Feb 2023 20:14:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675916373; x=1707452373;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=u7/aWh8drFEywB1LXfuI6tYGFq+uw7ZP4i1ii0TSC9I=;
-  b=IKFHjulA1TjFQMBc1vE9+t0ykFNB7irMSWaJD0hGDpnEod0VUaFzzO1g
-   nvzU1mkEr8cHHN0zJhDELOcIlpRUsqC4RbV5eUKQjppA/3HGZPk7SS+Od
-   76CLunnB499i0weUZqVG/nKKWbMVKUIAJFPuPGXbqcKLfzzeTSTj3eq/c
-   B50c9+Blw3U8JXXJG3NN45GIqreJq5ysmN7Fkx9HoKyrk17N+H7CnPsDu
-   ViTwSUorNyPQo5xpSKdNq2/ZTNK6WFd7IzUQJ81XLTddyvbgqQh9iTtHZ
-   6+oPR3w+XWmrkRWfmlKWIEVtsUMwbHRqCrE7oxdBerO9nsSO6aHi4PMlT
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331294743"
+  t=1675916090; x=1707452090;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1qxftDUuR4Z4M+K0ibVCn0KYirP/c/PVNRzQtTRRLqM=;
+  b=J/ivOfJGWziJR6i2YZOvZsso7wrFge6Elw5eOAxmbgQZMMnrqkUp9Xxb
+   Zu6wa8MupaKF592HkpXHFnLPVKC8DmYlAXcr4gqzZR9M4Hh3F1ckBn7xI
+   VewK2tB2zEDfzsB4+kM/O0+QjAjrFs06QfTEW1QYUqsSWrQ1Q158aspv3
+   0WM3GB7qNOc1BxFVZc3anUlJzOWli0l9xM1TKhyYs0d0ommpQzB3qkkNF
+   0Bq17o45ZYosJ3tlIe75+UsvAxYddlM33rTXUdBvZaewPyApDWhqlMv8s
+   sl3DFd56mz50Dg330ThuQ7ldRuzeii6KM179sIt1dwU8f4pBGlKtDhhFd
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="394599997"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="331294743"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:10:07 -0800
+   d="scan'208";a="394599997"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:13:25 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="810186216"
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791449413"
 X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="810186216"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Feb 2023 20:10:07 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 20:10:06 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 8 Feb 2023 20:10:06 -0800
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.45) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 8 Feb 2023 20:10:06 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hBk0T5sk+YMt6+7b/YBrcX/UAuu7hEW/rZD7z1uWbJiABOdBqVsjqN7FLQRopGzLcWF4Dns5mXniPelouoQ5dxW+D4v2AyiJam7iVh2Xv0LLsGJrCvIQE7/hV+LfUDsKuEEWmTLKZ5BO6kB6hnI98uz/Pd8fLAXnExHNeLkY4yZmVcMJUkxHZNcK9nm6Es5HBee8JR64erROWqFpBA2RudmPwC4Rhvw4gL5r9fOKsNlBCVP7q02fhSsXDgEXURjQyFLEJIx8xtgxpZa2122CbX2h1+FI8Kv5iHuxFcjpkfhd+h7rSWZrCkE9PjZb5EiGpVsjWhWU/Qg7TaLOd28Vkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dMTpOTBo0QWxr4lCUtVIfqbTYoxt1lagoT3q1YoGSac=;
- b=bM+KFg+yAwT/PV9mxC/HS/9z7bGi+GI1bXh1eAfHI1AJ78V4Fbqz3LVpleO4pT+hcu0KQbfaX3ruDey/3OIE/tMiOqw4TwLCewFE+cuyci41t2FT9JYenZKm4q4VVMjuUU8/SmXbgcW24lz8fIWBBDVK73UKDXOfLN5QYNq3djt3ttVHDpie7k5iVo7/AEJGgtao6BrvpDT14cUd98w7zH761udye02gXzv4KMGem6aWmXpm4IrGYNlErt/OxJew/BlUAG6C5WSsT8b4SuTduiVerbSEQF/sP3mDwSnQe0VYzL6aBaQNFX9fKjXgKpWAeAT+ZGF2e1bkAeJSPTvv6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SN7PR11MB6995.namprd11.prod.outlook.com (2603:10b6:806:2ae::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
- 2023 04:10:04 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
- 04:10:04 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: RE: [PATCH v2 10/10] vfio: Do not allow !ops->dma_unmap in
- vfio_pin/unpin_pages()
-Thread-Topic: [PATCH v2 10/10] vfio: Do not allow !ops->dma_unmap in
- vfio_pin/unpin_pages()
-Thread-Index: AQHZOzoS0Bls524n7k+sAm+muGsnhq7GAZjQ
-Date:   Thu, 9 Feb 2023 04:10:04 +0000
-Message-ID: <BN9PR11MB527687E27FC35CD842E4EA7B8CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1675802050.git.nicolinc@nvidia.com>
- <59e5eeac675172ab1cb07236a3eb3e166553fe71.1675802050.git.nicolinc@nvidia.com>
-In-Reply-To: <59e5eeac675172ab1cb07236a3eb3e166553fe71.1675802050.git.nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SN7PR11MB6995:EE_
-x-ms-office365-filtering-correlation-id: daa858cd-1d33-41ef-ba96-08db0a53857f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Ee4zWnnVCkBIWtMYowVNFv/0EHAKiFVnyN2t5Vk0rE/vlX6EsUC6XdQ/umfjuvwmiCCzolBYHZjo2gu9Mrud3eVFBJPA4OTB26DzeU5qW1CMd3TSkqD6ei1bq/BLe3DKsMcdPwygJLfVAisiQtJjxUEDtyggPIKAxQTJQvvpLgdfw9z9D6jCs3JRlTuGZcIgTmtClTmQbq6n1gQrlJmGMHpg68kmpoWwYPbYWzTLoXUoGOCqJTPxrXJQiYjVZ3Usoc4H7V5DN5AxrjyvXVNnw/oZ9PVMLwhOaQARHLv1Ol5IDHToDOphi3lXz2k8lFQX/ssEVy6LMOYipJxWvD7Cb0800cZlnKlZD44HAs03AnTEBfR7VyAyd8Zu4i+wBKhWHXdMHFRqh1CSf2cXvNSgLHZGlod7bejoesxMRAFWu/B8By3+7b5e44FllvqNeYRkzjGyJK2unaWPvugVOI6opJrztgrH+SRIFSFh6fYpodLbtfBh/t/3YpC7KalHn9HIomaAfRreH5fmBHJ+o4iayD7uSJCUqhyZ6htXdcS+CM6vFheIXZ153Uf9SZHKCpJvsSyMZ5SJptvkOCpi4jw2uJOJnbEJ5zhcd1Fr3j2hirroFOoUpoGbFtdK1o6hTlxw+d8/bMYwgcwHpCSQhRFEVd4xY/2o/DbhT827IBJr1eKsH2OGW2Ws3YVW4DIQgPkWt4qepTCcw6Yg+9g7k3WGnQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(376002)(346002)(366004)(136003)(451199018)(6506007)(38070700005)(7696005)(26005)(186003)(122000001)(82960400001)(38100700002)(9686003)(2906002)(83380400001)(54906003)(316002)(110136005)(33656002)(41300700001)(478600001)(52536014)(71200400001)(55016003)(8936002)(66446008)(64756008)(4326008)(8676002)(66476007)(66556008)(86362001)(76116006)(66946007)(5660300002)(7416002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IKvLyJEDX0zOgJeXkOJ/tNow6uBwStyrfM9m0acaJTIBY1+9DuXWpzMqMKMx?=
- =?us-ascii?Q?TRDjVekaJUgPYe35NhSRQAxjzqXXcQ53yPzSb9YcRDUvE9ZAd/8rIOmsmSOT?=
- =?us-ascii?Q?3HBs/eD3j4ke+yaZ8bih+lNfr/KJIeiRh6aVzo3j1hC7tpLb3hA7oQ1kvbCe?=
- =?us-ascii?Q?mbZLn+uOOJ06DeXh1b5pZrhYu3m6DfDiq3oud8heRWc6EJM3ifLwq/F1ufWx?=
- =?us-ascii?Q?VtAhxDZWo4Odz+n3eKz6ClZPaU9kurrVMU4f/YzDsjTTxtSMbIIj4SSU1i9y?=
- =?us-ascii?Q?N7vbG756DlHVOnieuys4Q3MU91V0fWB9ow795DKhz0H1im21RuaxEt3dLarx?=
- =?us-ascii?Q?fAs0ZILJZFexE80SUzR0WYTW9+ZHu17dtMToIg7spzAG7dFKjQXm7xmerdtu?=
- =?us-ascii?Q?qoB8tJjbjufEfr1SksyE/4J4iKKaOw2F0aQpiIa0AJV9giGJZ3c1XQoQzZE+?=
- =?us-ascii?Q?sJN+9XdZG9bcSJtEPT73NspON/K/VlT15Q3hcqxSTdjfZEMderDI4PdcHCwc?=
- =?us-ascii?Q?yspRZ/6aRf0JNrgyUNU5fR0mZ/pZjzjaVBNkor0PxLMH5JjqMNH/1E3vLeT/?=
- =?us-ascii?Q?gawOfLd3JpRO0CGdsu4Q6oxEV3aBKeXREfYkNjXwUyBBifAR+fe3gCZAkdQf?=
- =?us-ascii?Q?VP+TsS8hHAPYAatBb7YpDCJqRkp8Ma/NvQY7lojCKlqcxmVZZyJhBslJkUWp?=
- =?us-ascii?Q?KHk1JC1OxKMgHxAnd/pXQgnqsPCqiZmCkxKiqj+4FiLTFSZdDyAgGCCZ3XS5?=
- =?us-ascii?Q?JEZxyYN4hdjSeahVh73EN/o6hxO9uCdKo/oeN0jmTwRv1LZjqqDF8LNTLUJ+?=
- =?us-ascii?Q?EdQUK25CrByKNfn4tlqIdcdX7aSbaKHCIcbYXTEUBAG1ETuOK7feE8PFzcX+?=
- =?us-ascii?Q?r2gnc0zzyPtjwccVvMDgD6iXX5enBLuRu4V/9DyTEzGmx9KMLE2TtPejBaaD?=
- =?us-ascii?Q?5SObEBON46p5WF31NVcwY9/BS6ihtlQOHX69f9y0Blq95eDVHLLM362IXpWZ?=
- =?us-ascii?Q?MF19bJVoUrx+DxKmqQBqqg7GN5PGQh5akpJYEV5iUuXPvXWWmr2u9AhBZ2Y+?=
- =?us-ascii?Q?lSGHu+/zEyZhzKNOjEO0/D+Qa8kBlSto8zfvQn/sri8ddJb/qxS84EMIe9cd?=
- =?us-ascii?Q?7imCNqoCxfUo3UaGjrf8TrqxhJ0IioFreQvdjdNkCJjfo0Tu4AALnRc1kYV8?=
- =?us-ascii?Q?F++zVl/gjPmryemvwlfrVafLrFknM6lDJ3146sUTovAtBCeJUn2l54Y2+WTm?=
- =?us-ascii?Q?SPuJdSq1H3DgEWSyviTJX0DYdxdzq3pEv6pWOq19e0fDZuwnY2tz0Pr/v/RN?=
- =?us-ascii?Q?eJDURg3ESuBnzZJ7/cGhqrfPqZWvi+zn+HYu4r6RJ4afETTq+gQdlRECZpZ0?=
- =?us-ascii?Q?9VT+oYze680/nk+EQrv8pKkWYZT+oKFJr0u/+QrnyDzg02U+IifOL1Rwajkh?=
- =?us-ascii?Q?EMHu9/WpcG7oNH0tY7vGqtSuRraquZOQIDktVc5JGcIe3qw6P6WMCR4f5N7u?=
- =?us-ascii?Q?PdKoS2x+sZCC+oTxKlts/dyOLlrmBjF0gLrzQ53pt7KBsa1MOsmEqqzInolm?=
- =?us-ascii?Q?VIuVt3DKDsoyM2KtlyXt8Sw9EVNkmrgN0f8IIR5E?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+   d="scan'208";a="791449413"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Feb 2023 20:13:23 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPyJG-0004og-26;
+        Thu, 09 Feb 2023 04:13:22 +0000
+Date:   Thu, 9 Feb 2023 12:13:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: drivers/media/platform/verisilicon/hantro_drv.c:618:34: warning:
+ unused variable 'of_hantro_match'
+Message-ID: <202302091243.rvRjqigX-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: daa858cd-1d33-41ef-ba96-08db0a53857f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 04:10:04.1037
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: M5ceS0/DqV69id1MVLrxyIkgbD0/B6jo8evV9L16dknPCXP3cXhBEWlQ1Y/tH0jWIYvjjSDMKN6N7c9U3ucD3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6995
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Wednesday, February 8, 2023 5:18 AM
->=20
-> A driver that doesn't implement ops->dma_unmap shouldn't be allowed to
-> do
-> vfio_pin/unpin_pages(), though it can use vfio_dma_rw() to access an iova
-> range. Deny !ops->dma_unmap cases in vfio_pin/unpin_pages().
->=20
-> Suggested-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/vfio/vfio_main.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index 8559c3dfb335..c7f3251ad6e5 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -1543,6 +1543,8 @@ int vfio_pin_pages(struct vfio_device *device,
-> dma_addr_t iova,
->=20
->  		if (iova > ULONG_MAX)
->  			return -EINVAL;
-> +		if (!device->ops->dma_unmap)
-> +			return -EINVAL;
->  		/*
->  		 * VFIO ignores the sub page offset, npages is from the start
-> of
->  		 * a PAGE_SIZE chunk of IOVA. The caller is expected to
-> recover
-> @@ -1580,6 +1582,8 @@ void vfio_unpin_pages(struct vfio_device *device,
-> dma_addr_t iova, int npage)
->  	if (device->iommufd_access) {
->  		if (WARN_ON(iova > ULONG_MAX))
->  			return;
-> +		if (!device->ops->dma_unmap)
-> +			return;
+Hi Ezequiel,
 
-IMHO this restriction applies to both iommufd and legacy container.
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: fbb6c848dd89786fe24856ee6b5e773910ded29c media: destage Hantro VPU driver
+date:   5 months ago
+config: s390-randconfig-r014-20230209 (https://download.01.org/0day-ci/archive/20230209/202302091243.rvRjqigX-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fbb6c848dd89786fe24856ee6b5e773910ded29c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout fbb6c848dd89786fe24856ee6b5e773910ded29c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/media/platform/verisilicon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302091243.rvRjqigX-lkp@intel.com
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/media/platform/verisilicon/hantro_drv.c:23:
+   In file included from include/media/v4l2-mem2mem.h:16:
+   In file included from include/media/videobuf2-v4l2.h:16:
+   In file included from include/media/videobuf2-core.h:18:
+   In file included from include/linux/dma-buf.h:16:
+   In file included from include/linux/iosys-map.h:10:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/media/platform/verisilicon/hantro_drv.c:618:34: warning: unused variable 'of_hantro_match' [-Wunused-const-variable]
+   static const struct of_device_id of_hantro_match[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/of_hantro_match +618 drivers/media/platform/verisilicon/hantro_drv.c
+
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  617  
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12 @618  static const struct of_device_id of_hantro_match[] = {
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  619  #ifdef CONFIG_VIDEO_HANTRO_ROCKCHIP
+fb7cb344b96938 drivers/staging/media/hantro/hantro_drv.c             Paul Kocialkowski  2021-07-19  620  	{ .compatible = "rockchip,px30-vpu",   .data = &px30_vpu_variant, },
+4f34591568e7a1 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  621  	{ .compatible = "rockchip,rk3036-vpu", .data = &rk3036_vpu_variant, },
+78bb1ae5472cab drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  622  	{ .compatible = "rockchip,rk3066-vpu", .data = &rk3066_vpu_variant, },
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  623  	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
+4b898fedeb26c4 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  624  	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+4b898fedeb26c4 drivers/staging/media/hantro/hantro_drv.c             Alex Bee           2021-06-14  625  	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+6f1ae821a6c4aa drivers/staging/media/hantro/hantro_drv.c             Nicolas Frattaroli 2022-06-12  626  	{ .compatible = "rockchip,rk3568-vepu", .data = &rk3568_vepu_variant, },
+5f6bfab6da6531 drivers/staging/media/hantro/hantro_drv.c             Piotr Oniszczuk    2022-02-14  627  	{ .compatible = "rockchip,rk3568-vpu", .data = &rk3568_vpu_variant, },
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  628  #endif
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  629  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+cf1abc501a5c76 drivers/staging/media/hantro/hantro_drv.c             Adam Ford          2022-01-25  630  	{ .compatible = "nxp,imx8mm-vpu-g1", .data = &imx8mm_vpu_g1_variant, },
+8e4aaa68786319 drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2020-03-20  631  	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+6971efb70ac3e4 drivers/staging/media/hantro/hantro_drv.c             Adam Ford          2022-01-25  632  	{ .compatible = "nxp,imx8mq-vpu-g1", .data = &imx8mq_vpu_g1_variant },
+45040f67504195 drivers/staging/media/hantro/hantro_drv.c             Benjamin Gaignard  2021-06-03  633  	{ .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  634  #endif
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  635  #ifdef CONFIG_VIDEO_HANTRO_SAMA5D4
+82ad940c009499 drivers/staging/media/hantro/hantro_drv.c             Emil Velikov       2021-04-01  636  	{ .compatible = "microchip,sama5d4-vdec", .data = &sama5d4_vdec_variant, },
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  637  #endif
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  638  #ifdef CONFIG_VIDEO_HANTRO_SUNXI
+86790a4fdf4b3d drivers/staging/media/hantro/hantro_drv.c             Jernej Skrabec     2021-11-29  639  	{ .compatible = "allwinner,sun50i-h6-vpu-g2", .data = &sunxi_vpu_variant, },
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  640  #endif
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  641  	{ /* sentinel */ }
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  642  };
+a29add8c9bb29d drivers/staging/media/hantro/hantro_drv.c             Philipp Zabel      2019-06-12  643  MODULE_DEVICE_TABLE(of, of_hantro_match);
+775fec69008d30 drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c Ezequiel Garcia    2018-12-05  644  
+
+:::::: The code at line 618 was first introduced by commit
+:::::: a29add8c9bb29dfa8dc47c71b2702e9cc4f332a6 media: rockchip/vpu: rename from rockchip to hantro
+
+:::::: TO: Philipp Zabel <p.zabel@pengutronix.de>
+:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
