@@ -2,162 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF63691024
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE97691025
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjBISOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:14:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S229789AbjBISO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:14:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjBISOU (ORCPT
+        with ESMTP id S229793AbjBISOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:14:20 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DC1A5D4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 10:14:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BXx42lmy9p7aiEKcNFy2R/zrBkdzXOAVrCbM5YE2mv9kiqHOyaj8cdPOy4E9ELZbMfc7fjfrsziZ+++uVHeDop01+hluMy1+S9uGdztAH6cot86mYfqfHKCx5fJmQS1lEz8lxtNkHh2l0VB5+3RNPWhdOqWWIGYYgZyDN7Jgu60KAX9hn5NywEgWdYlpaLpCeCwtzLrFM4xttK8B+LxPwXpBbyx5V++D3z61TaTM8kiWk7cygFs5mMCpjXj18y+5+ElmmgW0nruRzsliPylbTX8cTyzKwQdcFG2yX+fN5s3/fGdDONf2ScMzrio2CBYJVNxrRLUsKjKyUbJur0GRAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JZQiNs+419Pph2N9ksyrW0Em++OmnJyNkqilRas++54=;
- b=YsXNZ3JkGnK1rgEB9Be/kd8af/umI+6/Ny/A91ioWbdaHxikHsNMMRK3B7FVSK19nYi0RJTMmm0I7rM2KQM90cd9FJ1GRHPmnTrFCgKjGdZ7tnOoP9RkH+EJAjkSHe5Y90PuubuTSrtAThH2GkPPXLb1ykE1ZH/tDTUTRB7qlYpdefGzEV4Bn3pJSbTLcQVpcowWVsujQRyTz8W+vArxclg9TkHGDRM3uHYXS3b7CtovOM1GPobvFZxd01CY/7tmHXotfZ5B3+7jiIgNTF1cPbQFAtQySX+ufB1alWWr/K4ALGDy35VrDDnkdXMYAytzK9cUm2uDn2RaZc3n7GMKjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JZQiNs+419Pph2N9ksyrW0Em++OmnJyNkqilRas++54=;
- b=eZAnv+LYGUwfoycAp2rErBDcsMUDkkazLJYKDfMhxIxpyStCpPXjy97TAZ+xC+FCNoY6bXfrVTacsL9tCHgA11LpPnlsFb6R3lLf/XLWAga+PDt1fxJ6pT+BZI1Fhlu2ImdIX38eGWfWwFIbZBu3bIlv98NjDA5pzIxXKDXSOg0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
- by DM4PR12MB6400.namprd12.prod.outlook.com (2603:10b6:8:b9::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.34; Thu, 9 Feb 2023 18:14:15 +0000
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::f29:b74e:c400:b24]) by BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::f29:b74e:c400:b24%6]) with mapi id 15.20.6086.017; Thu, 9 Feb 2023
- 18:14:15 +0000
-Message-ID: <e309f543-5307-65a9-e5c9-c2a82a17eb89@amd.com>
-Date:   Thu, 9 Feb 2023 12:14:12 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] uml: vector: fix definitios of VECTOR_WRITE and
- VECTOR_HEADERS
-Content-Language: en-US
-To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>, richard@nod.at,
-        johannes@sipsolutions.net
-Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230209161916.3729757-1-carlos.bilbao@amd.com>
- <874b2d0c-3500-5c1e-07cd-74f9e91d92d6@cambridgegreys.com>
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-In-Reply-To: <874b2d0c-3500-5c1e-07cd-74f9e91d92d6@cambridgegreys.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR03CA0068.namprd03.prod.outlook.com
- (2603:10b6:610:cc::13) To BL1PR12MB5874.namprd12.prod.outlook.com
- (2603:10b6:208:396::17)
+        Thu, 9 Feb 2023 13:14:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB24413D4B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 10:14:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 792E761B7C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 18:14:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8825C433D2;
+        Thu,  9 Feb 2023 18:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675966460;
+        bh=wqc+8W13ru5JQp5gJc955Xs1dujcKpGHdtGBfyzBcRQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=BU+dftiJ33c82zBy98VEYDS8WZvWhtjwtZDx44CWiBjSCIHrJFvoFR5jfb93WnYWK
+         z4SB7t6N8IR8KAoIO/D/kSVdcNL9OGhFlv1POD90Qu2quP6tiKP4JhzB+VD4xkpS9g
+         NC9+EdIwSHjTa0Tlqao3jCmSd+0EKZnvRoGgWOMSzN4Y+I4YAwIX6Hy8K1m1Onjrx6
+         i7JjI9Vpk0NlOnp4l/yqnIKTTjTdqgKHa6oai3bDet/u8UqSyiNcY0+2Az8QXyYWDN
+         D/UQViLevfNxhL6ziy1ko3KIzwsbClwHrnRfTHCHPrmV+1SB8BpD5B3/Y1AZ9jxSan
+         jQmNA1/ZSCKIQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2A3855C099C; Thu,  9 Feb 2023 10:14:20 -0800 (PST)
+Date:   Thu, 9 Feb 2023 10:14:20 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, frederic@kernel.org,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/isolation: Fix illegal CPU value by
+ housekeeping_any_cpu() return
+Message-ID: <20230209181420.GM2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230209144911.987938-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|DM4PR12MB6400:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c80126b-d255-4775-08e5-08db0ac97392
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tYOqqbRMJkY7S5DYoQ7jCcLeHwTqmjM6yiZJG3B2TVKDAyLdr0tTgyo78q1bW4mwkhJpy7Tw3N6Ww/fKn2wHANQTk+lh2OhyK0QtSxg7X9+cDn/aN2WiEsufSsXxk43XZf9/PonilXYUXRwXKPnbxrIRKYoTqjnWLNCI65nMRL+R9ZxSWIdlhNh5g0c41q/i+qDAG/N34/BTAokjACvMehTfy2QhUeLFFL5sIKYNkGx8XZlO/m6yFcab1n0vgrOil17W4DXgbGbYlfsG8YrzdmmG2OZ1VsPnQo3NBM6ZfYLF+c6j96NwgwhI4seeg/TK9LBHYWbVoA5HI0H9W37D5JgqpJ5sXphyBEWrYrRjsHlnzj5oWZ9mFtRyjf580B3eyJj3lHJr+GG/FqEZHFNls0s5C8+Ai1tkwH947AbUxcIGfjNblvsDRV6fMYEnebFz9TUphOyjQ+zOq1J39myCz1WIfbuS1VISSNr5MM+TEMjCalwFmYMlgyx4jAYcLbf1lAgpEE3ubaRwffZ84aVWYOqwvoo0cBa+z9A61F8zfupCg7PJQLibQOdDZqNesY7QuXKMtYFiLc1zfe85VsMYknG0+BfSffRuBAGbPI4f9Om3PHe4V92gWd/mc5fQg1P1zWcN7tDzMWHZOJIL0LwsgGqVy6ViIAwOyflLJxiDps7RHXP1xHjViHOqikFKeNcGLyDHqG/I+2tNk+GDD5GnN+vxGrgCJky8tIbDNOu1K6U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(451199018)(44832011)(4326008)(38100700002)(478600001)(186003)(6486002)(6512007)(2616005)(26005)(6506007)(53546011)(6666004)(31696002)(41300700001)(66946007)(5660300002)(8936002)(316002)(8676002)(36756003)(66476007)(86362001)(66556008)(83380400001)(2906002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cE1ZN3FUbHM2QXJhdERXenNEbExLcnhWMC9jYXdLdWZRdG5VNHZ4NDkzMGw1?=
- =?utf-8?B?Y1l4dmoxcWthaERQblRZNnNaZThiOU1jV3BIUWsyU0tGdzJVRUV0WGUreU0w?=
- =?utf-8?B?OTgrQXVNejN0bGFZTER2VDJNNkRJSi9EZ2wzRjd5eUlGNkxPY3E1VVpYVTBk?=
- =?utf-8?B?WTdMbEZMN1NCUHJrM3NaQktoeTNFOVpYSlpHMjYvRG5FU0V2NXVvS3ZuWTFN?=
- =?utf-8?B?WVNhRVpnYVJjNExuMTM3SDhRbVdqaHM5U0dLTnBJNUZybER6djYvTjJYWURo?=
- =?utf-8?B?c0hpb1VGN3ZRbTd4TlFVSDcxQTE3aXdNVUh0MDFPRlBGVU1hUWNJSmdGTkdM?=
- =?utf-8?B?ZGtSTGRxUmZsdkN0aUJKajR1cm9KVE0xdkZYa1lnajd5Q1hqVjdKMFdvdU1j?=
- =?utf-8?B?R2hiTDAzbGZDaTBxRXBPRXFNVmtrQTIzUVAyYURWSEVra1JlTTNGeG9BL3lt?=
- =?utf-8?B?b0hMREhIYXhDek5JRmtLdk41eTllN3loN0xldmlxUis4S2ZTbTFBWkF5Q1Fp?=
- =?utf-8?B?UjJnSTZxaENtSGpLSEhUYzJCY3l2L3daM2hyc3l6YlN4YitMUU9PaERhL2tp?=
- =?utf-8?B?QUhYVWtRM3pWbW5UNmMvLzdkdC9jTE9wa3EvV2FWdjIxVmV0Q3Fzd1RFNzFw?=
- =?utf-8?B?VVBWUG5Ic2xkc0JES2F0ZUxnUzd6bGFGaHNRUFV5SHRRWmpHb3BWQkVESW9s?=
- =?utf-8?B?Uko5TUNQaVh4ekZrbGpvNVN0Q1F2Q3pFZ0x2SVFaWVZHODcwNkh5OFBOMnRB?=
- =?utf-8?B?M0NkanlRZ3ZjY001ZDZrWTAxLzRWRDR6VDZscngxU0dJNkhyRkE5Q0J2MXFm?=
- =?utf-8?B?RFRYRDlLaDdGNHpLa0FVZU9Yb3BEWnlpQzh1SzZJdUtCQWtjbVNLRUI4NDJU?=
- =?utf-8?B?Z2NNVW80L2dXcjlwZExCUWhpNitYSCs1bzVseTBSNmtGNXNpaitLbG00K1Br?=
- =?utf-8?B?UWxzdFFMdms0eFNnc0dSU1hVdVVaM3hqd0dwckpqb3dJYy90SGZZck1NK01W?=
- =?utf-8?B?RlVxNjBxQzdzd2FYaHZycTZMSnduZDZnRU5kaENNb0dESHZ4cXF6d2lVQWxV?=
- =?utf-8?B?UzRNaU94MFZRd3VRVnR6UkpBVTdoZUxxbzJOc1ZZZE0yTnVtd1ZMcERNQktM?=
- =?utf-8?B?dDhJYmt2TW5Rc1QrUFBiVmVyc3gza25LWGo1bWM5NGs2aGM3S3JLaXY5dTBT?=
- =?utf-8?B?Yi9GU2FabnZBZHlGc1VMV2J4cUtUSElqRDBKNnlSY2ZyeTdqbUVPcWcyeDlB?=
- =?utf-8?B?T1lUOHpLUDgra3FNZVBvQ3RGQitXeVZ1eHpXeDhEN0owNjdFbjM4RTlNUk9D?=
- =?utf-8?B?MVFXMmpvakZUc2NpOFQ3SzZtL0hDWmcya2ZmZE1sRk5RVnVERlZ5SytpS29p?=
- =?utf-8?B?bzFjRGx2dnBTRTZad1ZPRVFQRWlyMnM1OURzZ20wL1hqUEZhQTdReGhLZGVa?=
- =?utf-8?B?YXlJM1pwUytZUlNuWjMwZW9VNEU3WXN4VDBNNXovRGVzOHRFMitoeVVhZ0gr?=
- =?utf-8?B?Q0dOVjVEWHlQN0Ric3hSTHFaMGkra0RmU3Q3MDNOejl6V29Pb3VXdGhTQzN1?=
- =?utf-8?B?YnVYR2NRdnU0YVhjdFpVMFduMVNHK0xwMGZ6QXNaRUs3UlhnSVlsQVFESGtw?=
- =?utf-8?B?Mk5WbnlwKzlqQWZ0b0hxUnE1aC82Yk1id2w4d0lhM3M4d1JYSDBLaFJ3cUdQ?=
- =?utf-8?B?RlQ2RHgrTHpnS25nWjV5YnZnMlhCeXlHNmZZNkdET01aMHJaMFEwQnpJSG42?=
- =?utf-8?B?ZERsVytuNUZiazhaSEdTVXVEY1NvNHIyT1g3VnI2SU1iTURFTWtkQkNONVNx?=
- =?utf-8?B?NllodU9HZzJaR2h4T096WkxrVDloQU9HYXZac0dCZDNIcERXTnlJMDcxY0JW?=
- =?utf-8?B?U3JOaWQvNGNwbTA1L1ZYdlorWXdkRE42R3Fpdk5rK1NTYnEydlMwdXZEMUdP?=
- =?utf-8?B?clB3ckJ4SFV2U2NaemdqcllDNDNXRFZqd2ZmV1owOHlUeVNrQTgzek1HczVh?=
- =?utf-8?B?ZlBPVFFkUVZMQi9HaXhrYkNtMWFicEp5eTFFbHB6ZjF3bzJWSGM4UEJ2bnFM?=
- =?utf-8?B?M0J4SjJkbkw4ZWNLVldkQ0RSc3Y3Y3pzQUo5SjhzMzU4ZGc5Q0hKaWR6TTVU?=
- =?utf-8?Q?jkcqOPFaMcvEjPd4UAWu5Or5r?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c80126b-d255-4775-08e5-08db0ac97392
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 18:14:14.8430
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DtGdjTJcK0PIlrXY9PHo06Ug3ROpYFjSkRJmmsgoiW14GwFVfc3JfWUpzbZlhGkiktp9GeDe8oEytMg+T19nsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6400
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230209144911.987938-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/23 11:33, Anton Ivanov wrote:
+On Thu, Feb 09, 2023 at 10:49:11PM +0800, Zqiang wrote:
+> For kernels built with CONFIG_NO_HZ_FULL=y, running the following tests:
+> 
+> runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4" bootparams=
+> "console=ttyS0 nohz_full=0,1 rcu_nocbs=0,1 sched_verbose" -d
+> 
+> root@qemux86-64:~# echo 0 > /sys/devices/system/cpu/cpu2/online
+> root@qemux86-64:~# echo 0 > /sys/devices/system/cpu/cpu3/online
+> 
+> [   22.838290] BUG: unable to handle page fault for address: ffffffff84cd48c0
+> [   22.839409] #PF: supervisor read access in kernel mode
+> [   22.840215] #PF: error_code(0x0000) - not-present page
+> [   22.841028] PGD 3e19067 P4D 3e19067 PUD 3e1a063 PMD 800ffffffb3ff062
+> [   22.841889] Oops: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC KASAN PTI
+> [   22.842175] CPU: 0 PID: 16 Comm: rcu_preempt Not tainted 6.2.0-rc1-yocto-standard+ #658
+> [   22.842534] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+>                BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.o4
+> [   22.843036] RIP: 0010:do_raw_spin_trylock+0x70/0x120
+> [   22.843267] Code: 81 c7 00 f1 f1 f1 f1 c7 40 04 04 f3 f3 f3 65
+>                48 8b 04 25 28 00 00 00 48 89 45 e0 31 c0 e8 b8 0
+> [   22.844187] RSP: 0018:ffff8880072b7b30 EFLAGS: 00010046
+> [   22.844429] RAX: 0000000000000000 RBX: ffffffff84cd48c0 RCX: dffffc0000000000
+> [   22.844751] RDX: 0000000000000003 RSI: 0000000000000004 RDI: ffffffff84cd48c0
+> [   22.845074] RBP: ffff8880072b7ba8 R08: ffffffff811daa20 R09: fffffbfff099a919
+> [   22.845400] R10: ffffffff84cd48c3 R11: fffffbfff099a918 R12: 1ffff11000e56f66
+> [   22.845719] R13: ffffffff84cd48d8 R14: ffffffff84cd48c0 R15: ffff8880072b7cd8
+> [   22.846040] FS:  0000000000000000(0000) GS:ffff888035200000(0000) knlGS:0000000000000000
+> [   22.846403] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   22.846667] CR2: ffffffff84cd48c0 CR3: 000000001036c000 CR4: 00000000001506f0
+> [   22.846988] Call Trace:
+> [   22.847105]  <TASK>
+> [   22.847208]  ? __pfx_do_raw_spin_trylock+0x10/0x10
+> [   22.847430]  ? rcu_read_unlock+0x26/0x80
+> [   22.847612]  ? trace_preempt_off+0x2a/0x130
+> [   22.847812]  _raw_spin_lock+0x41/0x80
+> [   22.847984]  ? schedule_timeout+0x242/0x580
+> [   22.848178]  schedule_timeout+0x242/0x580
+> [   22.848366]  ? __pfx_schedule_timeout+0x10/0x10
+> [   22.848575]  ? __pfx_do_raw_spin_trylock+0x10/0x10
+> [   22.848796]  ? __pfx_process_timeout+0x10/0x10
+> [   22.849005]  ? _raw_spin_unlock_irqrestore+0x46/0x80
+> [   22.849232]  ? prepare_to_swait_event+0xb8/0x210
+> [   22.849450]  rcu_gp_fqs_loop+0x66e/0xe70
+> [   22.849633]  ? rcu_gp_init+0x87c/0x1130
+> [   22.849813]  ? __pfx_rcu_gp_fqs_loop+0x10/0x10
+> [   22.850022]  ? _raw_spin_unlock_irqrestore+0x46/0x80
+> [   22.850251]  ? finish_swait+0xce/0x100
+> [   22.850429]  rcu_gp_kthread+0x2ea/0x6b0
+> [   22.850608]  ? __pfx_do_raw_spin_trylock+0x10/0x10
+> [   22.850829]  ? __pfx_rcu_gp_kthread+0x10/0x10
+> [   22.851039]  ? __kasan_check_read+0x11/0x20
+> [   22.851233]  ? __kthread_parkme+0xe8/0x110
+> [   22.851424]  ? __pfx_rcu_gp_kthread+0x10/0x10
+> [   22.851627]  kthread+0x172/0x1a0
+> [   22.851781]  ? __pfx_kthread+0x10/0x10
+> [   22.851956]  ret_from_fork+0x2c/0x50
+> [   22.852129]  </TASK>
+> 
+> schedule_timeout()
+> ->__mod_timer()
+>  ->get_target_base(base, timer->flags)
+>    ->get_timer_cpu_base(tflags, get_nohz_timer_target());
+>      ->cpu = get_nohz_timer_target()
+>              ->housekeeping_any_cpu(HK_TYPE_TIMER)
+>                      /*housekeeping.cpumasks[type] is 2-3*/
+> 		     /*cpu_online_mask is 0-1*/
+>                ->cpu = cpumask_any_and(housekeeping.cpumasks[type],
+> 			cpu_online_mask);
+>              /*cpu value is 4*/
+>      ->new_base = per_cpu_ptr(&timer_bases[BASE_DEF], cpu);
+>    /*new_base is illegal address*/
+>  ->if (base != new_base)
+>    ->raw_spin_lock(&new_base->lock); ==> trigger Oops
+> 
+> This commit therefore add checks for cpumask_any_and() return values
+> in housekeeping_any_cpu(), if cpumask_any_and() returns an illegal CPU
+> value, the housekeeping_any_cpu() will return current CPU number.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  kernel/sched/isolation.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+> index 373d42c707bc..e255eb83f14f 100644
+> --- a/kernel/sched/isolation.c
+> +++ b/kernel/sched/isolation.c
+> @@ -46,7 +46,9 @@ int housekeeping_any_cpu(enum hk_type type)
+>  			if (cpu < nr_cpu_ids)
+>  				return cpu;
+>  
+> -			return cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
+> +			cpu = cpumask_any_and(housekeeping.cpumasks[type], cpu_online_mask);
+> +			if (cpu >= nr_cpu_ids)
+> +				return smp_processor_id();
 
-> On 09/02/2023 16:19, Carlos Bilbao wrote:
->> Fix definitions of VECTOR_WRITE and VECTOR_HEADERS with proper bitwise
->> operand for bit shift.
->>
->> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
->> ---
->>   arch/um/drivers/vector_user.h | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/um/drivers/vector_user.h 
->> b/arch/um/drivers/vector_user.h
->> index 3a73d17a0161..f7d3956f5c15 100644
->> --- a/arch/um/drivers/vector_user.h
->> +++ b/arch/um/drivers/vector_user.h
->> @@ -68,8 +68,8 @@ struct vector_fds {
->>   };
->>     #define VECTOR_READ    1
->> -#define VECTOR_WRITE    (1 < 1)
->> -#define VECTOR_HEADERS    (1 < 2)
->> +#define VECTOR_WRITE    (1 << 1)
->> +#define VECTOR_HEADERS    (1 << 2)
->>     extern struct arglist *uml_parse_vector_ifspec(char *arg);
->
-> These are no longer used. They were used in some very early versions 
-> of the code.
->
-> They should just be removed instead of redefined correctly.
->
-Ack, sending patch your way.
+Don't we need a "return cpu" here?  Or am I missing something subtle?
 
-Thanks,
+							Thanx, Paul
 
-Carlos
-
+>  		}
+>  	}
+>  	return smp_processor_id();
+> -- 
+> 2.25.1
+> 
