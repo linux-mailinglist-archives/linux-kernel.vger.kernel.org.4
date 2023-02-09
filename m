@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBA86911CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 21:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E90696911C9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 21:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjBIUEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 15:04:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S230005AbjBIUEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 15:04:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjBIUE3 (ORCPT
+        with ESMTP id S230193AbjBIUES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 15:04:29 -0500
-Received: from relay.smtp-ext.broadcom.com (lpdvsmtp11.broadcom.com [192.19.166.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B8765ACCE;
-        Thu,  9 Feb 2023 12:04:20 -0800 (PST)
+        Thu, 9 Feb 2023 15:04:18 -0500
+Received: from relay.smtp-ext.broadcom.com (saphodev.broadcom.com [192.19.144.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E76369537;
+        Thu,  9 Feb 2023 12:04:15 -0800 (PST)
 Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.75.146.107])
-        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id B3408C0000E6;
-        Thu,  9 Feb 2023 12:04:19 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com B3408C0000E6
+        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id EC495C0000F7;
+        Thu,  9 Feb 2023 12:04:14 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com EC495C0000F7
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1675973059;
-        bh=LSc6gVvW76JeEdaqRanq1SO6TNyQn+Rx8s3TB2RHs+U=;
+        s=dkimrelay; t=1675973055;
+        bh=Nl3Rqte+uOd9RA7nIr+QM1PaDO3xyBvfLRKXChuaiKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b4xjI1Xjl7GoqsvSX9mfpPDXvbmcVREZ+OPzPV+1lTdUT+w1cMYwRJYakcQrZU/Zr
-         Orkxbv4vTQY5ps56xU5E/pTxUVjM+NsTftA3L2btWs57Hhp+sRoro86Pv+abtwTsnQ
-         daey4sHS9RmRUixY5jyrIzYafp0SdAZF9h8XLyc4=
+        b=J87q7HmFuH2OXHmWN6s6oU79YZJ176E+3Ht/bK8drD7Wc/kVTqfMcyKmFkJxiwauF
+         H+mZBQd6h+5xouZU7wDP6YthN83WPyBHLtk6jdWqCUS1D9hKdKE+BRLnVUPz2iEyoe
+         rIJ5x/4vw+RMjLDR/S2jTV+wNK/9KjW+bzH0sBIs=
 Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id B071A18041CAC7;
-        Thu,  9 Feb 2023 12:04:19 -0800 (PST)
+        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id AF54618041CAC6;
+        Thu,  9 Feb 2023 12:04:14 -0800 (PST)
 Received: by bcacpedev-irv-3.lvn.broadcom.net (Postfix, from userid 28376)
-        id EF725101B7B; Thu,  9 Feb 2023 12:04:12 -0800 (PST)
+        id ACECA101B61; Thu,  9 Feb 2023 12:04:14 -0800 (PST)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Linux SPI List <linux-spi@vger.kernel.org>,
         Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
@@ -41,13 +41,14 @@ Cc:     f.fainelli@gmail.com, dregan@mail.com, joel.peshkin@broadcom.com,
         kursad.oney@broadcom.com, tomer.yacoby@broadcom.com,
         jonas.gorski@gmail.com, William Zhang <william.zhang@broadcom.com>,
         Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 08/15] spi: export spi_transfer_cs_change_delay_exec function
-Date:   Thu,  9 Feb 2023 12:02:39 -0800
-Message-Id: <20230209200246.141520-9-william.zhang@broadcom.com>
+Subject: [PATCH v4 09/15] spi: bcm63xx-hsspi: Handle cs_change correctly
+Date:   Thu,  9 Feb 2023 12:02:40 -0800
+Message-Id: <20230209200246.141520-10-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20230209200246.141520-1-william.zhang@broadcom.com>
 References: <20230209200246.141520-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
@@ -58,70 +59,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For SPI controller that implements transfer_one_message, it needs to
-insert the delay that required by cs change event between the transfers.
-Add a wrapper for the local function _spi_transfer_cs_change_delay_exec
-and export it for SPI controller driver to use.
+The kernel SPI interface includes the cs_change flag that alters how
+the CS behaves.
 
+If we're in the middle of transfers, it tells us to unselect the
+CS momentarily since the target device requires that.
+
+If we're at the end of a transfer, it tells us to keep the CS
+selected, perhaps because the next transfer is likely targeted
+to the same device.
+
+We implement this scheme in the HSSPI driver in this change.
+
+Prior to this change, the CS would toggle momentarily if cs_change
+was set for the last transfer. This can be ignored by some or
+most devices, but the Microchip TPM2 device does not ignore it.
+
+With the change, the behavior is corrected and the 'glitch' is
+eliminated.
+
+Signed-off-by: Kursad Oney <kursad.oney@broadcom.com>
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
 
 ---
 
-Changes in v4:
-- Rebase using the latest linux spi git for-next branch code
+(no changes since v3)
 
- drivers/spi/spi.c       | 7 +++++++
- include/linux/spi/spi.h | 5 +++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+Changes in v3:
+- Use the cs_change and cs_off logic from SPI core
+spi_transfer_one_message function
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 21a8c3a8eee4..f4eb447c565d 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1483,6 +1483,13 @@ static void _spi_transfer_cs_change_delay(struct spi_message *msg,
- 	}
- }
+Changes in v2:
+- Fix unused variable ‘reg’ compile warning
+
+ drivers/spi/spi-bcm63xx-hsspi.c | 33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/spi/spi-bcm63xx-hsspi.c b/drivers/spi/spi-bcm63xx-hsspi.c
+index 55cbe7deba08..af51488659b8 100644
+--- a/drivers/spi/spi-bcm63xx-hsspi.c
++++ b/drivers/spi/spi-bcm63xx-hsspi.c
+@@ -219,7 +219,8 @@ static int bcm63xx_hsspi_do_txrx(struct spi_device *spi, struct spi_transfer *t)
+ 	unsigned long limit;
  
-+void spi_transfer_cs_change_delay_exec(struct spi_message *msg,
-+						  struct spi_transfer *xfer)
-+{
-+	_spi_transfer_cs_change_delay(msg, xfer);
-+}
-+EXPORT_SYMBOL_GPL(spi_transfer_cs_change_delay_exec);
+ 	bcm63xx_hsspi_set_clk(bs, spi, t->speed_hz);
+-	bcm63xx_hsspi_set_cs(bs, spi->chip_select, true);
++	if (!t->cs_off)
++		bcm63xx_hsspi_set_cs(bs, spi->chip_select, true);
+ 
+ 	if (tx && rx)
+ 		opcode = HSSPI_OP_READ_WRITE;
+@@ -338,7 +339,7 @@ static int bcm63xx_hsspi_transfer_one(struct spi_master *master,
+ 	struct spi_device *spi = msg->spi;
+ 	int status = -EINVAL;
+ 	int dummy_cs;
+-	u32 reg;
++	bool keep_cs = false;
+ 
+ 	mutex_lock(&bs->msg_mutex);
+ 	/* This controller does not support keeping CS active during idle.
+@@ -367,16 +368,28 @@ static int bcm63xx_hsspi_transfer_one(struct spi_master *master,
+ 
+ 		spi_transfer_delay_exec(t);
+ 
+-		if (t->cs_change)
+-			bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
++		/* use existing cs change logic from spi_transfer_one_message */
++		if (t->cs_change) {
++			if (list_is_last(&t->transfer_list, &msg->transfers)) {
++				keep_cs = true;
++			} else {
++				if (!t->cs_off)
++					bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
 +
- /*
-  * spi_transfer_one_message - Default implementation of transfer_one_message()
-  *
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 9b23a1d0dd0d..88cb2a1390ce 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -26,6 +26,7 @@ struct spi_controller;
- struct spi_transfer;
- struct spi_controller_mem_ops;
- struct spi_controller_mem_caps;
-+struct spi_message;
++				spi_transfer_cs_change_delay_exec(msg, t);
++
++				if (!list_next_entry(t, transfer_list)->cs_off)
++					bcm63xx_hsspi_set_cs(bs, spi->chip_select, true);
++			}
++		} else if (!list_is_last(&t->transfer_list, &msg->transfers) &&
++			   t->cs_off != list_next_entry(t, transfer_list)->cs_off) {
++			bcm63xx_hsspi_set_cs(bs, spi->chip_select, t->cs_off);
++		}
+ 	}
  
- /*
-  * INTERFACES between SPI master-side drivers and SPI slave protocol handlers,
-@@ -119,6 +120,8 @@ struct spi_delay {
+-	mutex_lock(&bs->bus_mutex);
+-	reg = __raw_readl(bs->regs + HSSPI_GLOBAL_CTRL_REG);
+-	reg &= ~GLOBAL_CTRL_CS_POLARITY_MASK;
+-	reg |= bs->cs_polarity;
+-	__raw_writel(reg, bs->regs + HSSPI_GLOBAL_CTRL_REG);
+-	mutex_unlock(&bs->bus_mutex);
++	bcm63xx_hsspi_set_cs(bs, dummy_cs, false);
++	if (status || !keep_cs)
++		bcm63xx_hsspi_set_cs(bs, spi->chip_select, false);
  
- extern int spi_delay_to_ns(struct spi_delay *_delay, struct spi_transfer *xfer);
- extern int spi_delay_exec(struct spi_delay *_delay, struct spi_transfer *xfer);
-+extern void spi_transfer_cs_change_delay_exec(struct spi_message *msg,
-+						  struct spi_transfer *xfer);
- 
- /**
-  * struct spi_device - Controller side proxy for an SPI slave device
-@@ -283,8 +286,6 @@ static inline void spi_set_csgpiod(struct spi_device *spi, u8 idx, struct gpio_d
- 	spi->cs_gpiod = csgpiod;
- }
- 
--struct spi_message;
--
- /**
-  * struct spi_driver - Host side "protocol" driver
-  * @id_table: List of SPI devices supported by this driver
+ 	mutex_unlock(&bs->msg_mutex);
+ 	msg->status = status;
 -- 
 2.37.3
 
