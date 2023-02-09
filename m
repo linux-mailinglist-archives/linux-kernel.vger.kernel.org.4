@@ -2,93 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5711690AE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15708690AE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjBINvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S230178AbjBINxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:53:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjBINvp (ORCPT
+        with ESMTP id S229758AbjBINxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:51:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E283C2B2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:51:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675950662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x5tQrzwoV3t9Ch/0Dq/FO83jB00+J9QP6+xd5wU9EE4=;
-        b=E+bOHzthSilyejG3ds/WSkXii8jTgDNcW9RTvzxdaRdYVfLX5cIzqPNr/0bSx36uZwtLTY
-        +znreyY1powRr9+vIlfsM3QQe0fzPd0RCu8wFbX//VHu/2vDYq1Ys+697OSzNXToj1nmjN
-        LAJxu9KhrAkvFrMB/nW5NQXxADveqvs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-410-FOXoZO4LNpGpzHTxFg9kVg-1; Thu, 09 Feb 2023 08:50:56 -0500
-X-MC-Unique: FOXoZO4LNpGpzHTxFg9kVg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 01482803520;
-        Thu,  9 Feb 2023 13:50:54 +0000 (UTC)
-Received: from plouf.local (ovpn-192-232.brq.redhat.com [10.40.192.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 81B19400DB1E;
-        Thu,  9 Feb 2023 13:50:51 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, Stephen Kitt <steve@sk2.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20230207024816.525938-1-dianders@chromium.org>
-References: <20230207024816.525938-1-dianders@chromium.org>
-Subject: Re: (subset) [PATCH 0/7] arm: qcom: Fix touchscreen voltage for
- sc7280-herobrine boards
-Message-Id: <167595065101.337240.12878703764198132712.b4-ty@redhat.com>
-Date:   Thu, 09 Feb 2023 14:50:51 +0100
+        Thu, 9 Feb 2023 08:53:01 -0500
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FC297A81;
+        Thu,  9 Feb 2023 05:52:58 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABHTiat+uRjo3cXBA--.22229S2;
+        Thu, 09 Feb 2023 21:52:45 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     angelogioacchino.delregno@collabora.com, mchehab@kernel.org,
+        matthias.bgg@gmail.com, moudy.ho@mediatek.com,
+        daoyuan.huang@mediatek.com, hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v4] media: platform: mtk-mdp3: Add missing check and free for ida_alloc
+Date:   Thu,  9 Feb 2023 21:52:45 +0800
+Message-Id: <20230209135245.11203-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABHTiat+uRjo3cXBA--.22229S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uryUZFy8Kr4DAF4rKw45KFg_yoW8Xry3pr
+        4xKw47CFW5GrnrKF42y3WxuFW5ArnYgayUWFs7Z3yxZas0grsrCry5C3ZYvryktrW8Ja42
+        qr40vryfCr4YyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCY02Avz4vE14v_Xr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfU1NVyUUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Feb 2023 18:48:09 -0800, Douglas Anderson wrote:
-> Trying to figure out how to talk to the touchscreen properly on
-> sc7280-herobrine boards was a long and difficult process. Many
-> Engineering hours were spent deciding how exactly one should talk over
-> i2c to a peripheral. In the end, a solution has been found and this
-> patch series attempts to implement it in a way that will work for all
-> herobrine-based boards.
-> 
-> [...]
+Add the check for the return value of the ida_alloc in order to avoid
+NULL pointer dereference.
+Moreover, free allocated "ctx->id" if mdp_m2m_open fails later in order
+to avoid memory leak.
 
-Applied to hid/hid.git (for-6.3/i2c-hid), thanks!
+Fixes: 61890ccaefaf ("media: platform: mtk-mdp3: add MediaTek MDP3 driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-[4/7] HID: i2c-hid: goodix: Stop tying the reset line to the regulator
-      https://git.kernel.org/hid/hid/c/557e05fa9fdd
-[5/7] dt-bindings: HID: i2c-hid: goodix: Add mainboard-vddio-supply
-      https://git.kernel.org/hid/hid/c/1d18c1f3b7d9
-[6/7] HID: i2c-hid: goodix: Add mainboard-vddio-supply
-      https://git.kernel.org/hid/hid/c/eb16f59e8e58
+v3 -> v4
 
-Cheers,
+1. Use ret to check the return value.
+
+v2 -> v3:
+
+1. Fix the goto label.
+
+v1 -> v2:
+
+1. Fix the check for the ida_alloc.
+---
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+index 5f74ea3b7a52..8612a48bde10 100644
+--- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
++++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-m2m.c
+@@ -566,7 +566,11 @@ static int mdp_m2m_open(struct file *file)
+ 		goto err_free_ctx;
+ 	}
+ 
+-	ctx->id = ida_alloc(&mdp->mdp_ida, GFP_KERNEL);
++	ret = ida_alloc(&mdp->mdp_ida, GFP_KERNEL);
++	if (ret < 0)
++		goto err_unlock_mutex;
++	ctx->id = ret;
++
+ 	ctx->mdp_dev = mdp;
+ 
+ 	v4l2_fh_init(&ctx->fh, vdev);
+@@ -617,6 +621,8 @@ static int mdp_m2m_open(struct file *file)
+ 	v4l2_fh_del(&ctx->fh);
+ err_exit_fh:
+ 	v4l2_fh_exit(&ctx->fh);
++	ida_free(&mdp->mdp_ida, ctx->id);
++err_unlock_mutex:
+ 	mutex_unlock(&mdp->m2m_lock);
+ err_free_ctx:
+ 	kfree(ctx);
 -- 
-Benjamin Tissoires <benjamin.tissoires@redhat.com>
+2.25.1
 
