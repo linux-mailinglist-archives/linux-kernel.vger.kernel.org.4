@@ -2,95 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57495690C0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B82690C13
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjBIOj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
+        id S230240AbjBIOlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjBIOj4 (ORCPT
+        with ESMTP id S229910AbjBIOlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:39:56 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4965EA33
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:39:40 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id bg26so1617817wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:39:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bCojH4hNqxc1P2ct87iuhUs4QYbjLoq0YF+//3KxCts=;
-        b=Zc6SoVNDffEDBEH8g+eKBBQaC6iJkjSoCxjFv5P6VIKvERM2a5HlK5a+scUCc4Ok1h
-         p7PqRP3wLqmcu93YCiUNFoF6v353pYPe1x+hl4nolaPMzmBnO8apccVo5LlfLWlqDQiH
-         hlmBoD6DJbYtylFTC0UC6uR3LbxWjKlFqtgEtKF0V+VWHVPB06pr+BydXCfhA5W/URbA
-         Gwpw3YUzCDfvJHhaed7HpZq1g6XnEmf29hzcFBxlvgPntfHCs07kvgP+usDrZgvFC7HR
-         H+yXxUTuAqowoX6OYlN/obmEhFo2qDt6bRm0odua8p0KDrbxTFUn4xmXJuodBLSU+CVZ
-         3XKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bCojH4hNqxc1P2ct87iuhUs4QYbjLoq0YF+//3KxCts=;
-        b=1f8MyBave+z+kdiuK23e0pe81FkLbEj8SPo9QINE3+2rSG2S723pIXshmcoOuWSarz
-         wRZxJN+1sjiI7k2q8dX+tUwEVu+pw9CnMnaRr5DG/9YCx56STK9wAR9D/SpnhA+3ZRIi
-         qsgeIPnVEVL9WO1lmesEDeIOh78mW+Xi4pPTaz4c8IMN0vPHQZzY7xuH4dq26yEvBOHp
-         2g/y+PrHIPT8HaaJ8e+BOnJJyeOTDLPu586zVdexnCCR9NZ84aWK6a/XZnmToDk+hMtT
-         cAQkyBD8pF8XWrh7EQJX64K029/KwWdG1a28l30ONTkJXWzFRNEfcROVsFkLgftfFUhI
-         ttjw==
-X-Gm-Message-State: AO0yUKVPWTUEWBpPj1DEtqMNs+slyi4h5xmSUZI7/t0hInoJ8EY1LnQP
-        XMhRlPu5xsfV0evB/mUdeFsRUA==
-X-Google-Smtp-Source: AK7set9LtmpClrPQfcFeByaC8Sa73pVHrg8KxE8i/xi22r9j55C/m7esYo9HnNNONnwlcbZK7ADqCA==
-X-Received: by 2002:a05:600c:44c9:b0:3df:f9e9:7600 with SMTP id f9-20020a05600c44c900b003dff9e97600mr10389317wmo.25.1675953579270;
-        Thu, 09 Feb 2023 06:39:39 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b003dec22de1b1sm2391175wmq.10.2023.02.09.06.39.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 06:39:38 -0800 (PST)
-Message-ID: <29d63a50-bdfe-ef50-c173-cb9e37923758@linaro.org>
-Date:   Thu, 9 Feb 2023 15:39:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] ARM: dts: exynos: drop mshc aliases
-Content-Language: en-US
-To:     Henrik Grimler <henrik@grimler.se>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        m.szyprowski@samsung.com, jenneron@protonmail.com,
-        markuss.broks@gmail.com, martin.juecker@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230128133151.29471-1-henrik@grimler.se>
- <20230128133151.29471-2-henrik@grimler.se>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230128133151.29471-2-henrik@grimler.se>
-Content-Type: text/plain; charset=UTF-8
+        Thu, 9 Feb 2023 09:41:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82944EB58;
+        Thu,  9 Feb 2023 06:41:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15881B82186;
+        Thu,  9 Feb 2023 14:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E462EC433EF;
+        Thu,  9 Feb 2023 14:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675953678;
+        bh=TZ5nyh/Nz50g4Ou5F8th8cMJcRG25BNPZLtFN7x2xjI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pu76DWdLkYzQE4D2cP0ZWJoo2y3ROVjnMDorXBkWR8B6ATdHFA257whhlSlz/AhHA
+         b2cJ4XWmTYB+ZmVYFv9aVr/+r/yjTgvEIqQTZHysD5C2MkIqTw6N8cMn3MHXOCxW6a
+         iFA51/QtcqndrrFScWobLMkChiOonDL8tkTf94HRhHXaQX9BeKHl7xZsAyr5fhrIpm
+         s40oKdIgZhgoVOoVTtLLvQEiBWAhm4ZidNZqUyLwpX0Lh8Ejw98F55rSWMgl99tkRi
+         MFG1/Ba5jDfjo4HmeQvAABpbET3+GWAngv9w3xZlzuoltr8FzvbvAenfvMbNZW3d1o
+         Q8EBt8SxRoNGQ==
+Date:   Thu, 9 Feb 2023 23:41:13 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: Re: [PATCH 21/24] Documentation: trace: correct spelling
+Message-Id: <20230209234113.47c44d04f81204a692f387d3@kernel.org>
+In-Reply-To: <20230209071400.31476-22-rdunlap@infradead.org>
+References: <20230209071400.31476-1-rdunlap@infradead.org>
+        <20230209071400.31476-22-rdunlap@infradead.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/01/2023 14:31, Henrik Grimler wrote:
-> They are no longer needed after commit a13e8ef6008d ("mmc: dw_mmc:
-> exynos: use common_caps").
+On Wed,  8 Feb 2023 23:13:57 -0800
+Randy Dunlap <rdunlap@infradead.org> wrote:
+
+> Correct spelling problems for Documentation/trace/ as reported
+> by codespell.
 > 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+> Cc: linux-trace-kernel@vger.kernel.org
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com> # for coresight
 
-Are you sure? That commit explicitly says that the caps should be set
-from DT and Exynos DT does not set it everywhere...
+Looks good to me.
 
-plus if alias is missing, then the ctrl_id in dw_mmc.c is 0 and such
-caps are applied everywhere - to every DWMMC device.
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Best regards,
-Krzysztof
+Thanks,
 
+> ---
+>  Documentation/trace/coresight/coresight-etm4x-reference.rst |    2 +-
+>  Documentation/trace/events.rst                              |    6 +++---
+>  Documentation/trace/fprobe.rst                              |    2 +-
+>  Documentation/trace/ftrace-uses.rst                         |    2 +-
+>  Documentation/trace/hwlat_detector.rst                      |    2 +-
+>  Documentation/trace/uprobetracer.rst                        |    2 +-
+>  7 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff -- a/Documentation/trace/coresight/coresight-etm4x-reference.rst b/Documentation/trace/coresight/coresight-etm4x-reference.rst
+> --- a/Documentation/trace/coresight/coresight-etm4x-reference.rst
+> +++ b/Documentation/trace/coresight/coresight-etm4x-reference.rst
+> @@ -675,7 +675,7 @@ Bit assignments shown below:-
+>      reconstructed using only conditional branches.
+>  
+>      There is currently no support in Perf for supplying modified binaries to the decoder, so this
+> -    feature is only inteded to be used for debugging purposes or with a 3rd party tool.
+> +    feature is only intended to be used for debugging purposes or with a 3rd party tool.
+>  
+>      Choosing this option will result in a significant increase in the amount of trace generated -
+>      possible danger of overflows, or fewer instructions covered. Note, that this option also
+> diff -- a/Documentation/trace/events.rst b/Documentation/trace/events.rst
+> --- a/Documentation/trace/events.rst
+> +++ b/Documentation/trace/events.rst
+> @@ -903,7 +903,7 @@ functions can be used.
+>  
+>  To create a kprobe event, an empty or partially empty kprobe event
+>  should first be created using kprobe_event_gen_cmd_start().  The name
+> -of the event and the probe location should be specfied along with one
+> +of the event and the probe location should be specified along with one
+>  or args each representing a probe field should be supplied to this
+>  function.  Before calling kprobe_event_gen_cmd_start(), the user
+>  should create and initialize a dynevent_cmd object using
+> @@ -983,7 +983,7 @@ The basic idea is simple and amounts to
+>  layer that can be used to generate trace event commands.  The
+>  generated command strings can then be passed to the command-parsing
+>  and event creation code that already exists in the trace event
+> -subystem for creating the corresponding trace events.
+> +subsystem for creating the corresponding trace events.
+>  
+>  In a nutshell, the way it works is that the higher-level interface
+>  code creates a struct dynevent_cmd object, then uses a couple
+> @@ -1056,7 +1056,7 @@ to add an operator between the pair (her
+>  appended onto the end of the arg pair (here ';').
+>  
+>  There's also a dynevent_str_add() function that can be used to simply
+> -add a string as-is, with no spaces, delimeters, or arg check.
+> +add a string as-is, with no spaces, delimiters, or arg check.
+>  
+>  Any number of dynevent_*_add() calls can be made to build up the string
+>  (until its length surpasses cmd->maxlen).  When all the arguments have
+> diff -- a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
+> --- a/Documentation/trace/fprobe.rst
+> +++ b/Documentation/trace/fprobe.rst
+> @@ -111,7 +111,7 @@ saved at function entry and passed to ex
+>          the instruction pointer of @regs may be different from the @entry_ip
+>          in the entry_handler. If you need traced instruction pointer, you need
+>          to use @entry_ip. On the other hand, in the exit_handler, the instruction
+> -        pointer of @regs is set to the currect return address.
+> +        pointer of @regs is set to the correct return address.
+>  
+>  Share the callbacks with kprobes
+>  ================================
+> diff -- a/Documentation/trace/ftrace-uses.rst b/Documentation/trace/ftrace-uses.rst
+> --- a/Documentation/trace/ftrace-uses.rst
+> +++ b/Documentation/trace/ftrace-uses.rst
+> @@ -193,7 +193,7 @@ FTRACE_OPS_FL_RECURSION
+>  	Not, if this flag is set, then the callback will always be called
+>  	with preemption disabled. If it is not set, then it is possible
+>  	(but not guaranteed) that the callback will be called in
+> -	preemptable context.
+> +	preemptible context.
+>  
+>  FTRACE_OPS_FL_IPMODIFY
+>  	Requires FTRACE_OPS_FL_SAVE_REGS set. If the callback is to "hijack"
+> diff -- a/Documentation/trace/hwlat_detector.rst b/Documentation/trace/hwlat_detector.rst
+> --- a/Documentation/trace/hwlat_detector.rst
+> +++ b/Documentation/trace/hwlat_detector.rst
+> @@ -14,7 +14,7 @@ originally written for use by the "RT" p
+>  kernel is highly latency sensitive.
+>  
+>  SMIs are not serviced by the Linux kernel, which means that it does not
+> -even know that they are occuring. SMIs are instead set up by BIOS code
+> +even know that they are occurring. SMIs are instead set up by BIOS code
+>  and are serviced by BIOS code, usually for "critical" events such as
+>  management of thermal sensors and fans. Sometimes though, SMIs are used for
+>  other tasks and those tasks can spend an inordinate amount of time in the
+> diff -- a/Documentation/trace/uprobetracer.rst b/Documentation/trace/uprobetracer.rst
+> --- a/Documentation/trace/uprobetracer.rst
+> +++ b/Documentation/trace/uprobetracer.rst
+> @@ -55,7 +55,7 @@ Synopsis of uprobe_tracer
+>  
+>    (\*1) only for return probe.
+>    (\*2) this is useful for fetching a field of data structures.
+> -  (\*3) Unlike kprobe event, "u" prefix will just be ignored, becuse uprobe
+> +  (\*3) Unlike kprobe event, "u" prefix will just be ignored, because uprobe
+>          events can access only user-space memory.
+>  
+>  Types
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
