@@ -2,119 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543DA690AED
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360E8690AF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjBINzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S229727AbjBINzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:55:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjBINy6 (ORCPT
+        with ESMTP id S230088AbjBINzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:54:58 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4238A6B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:54:57 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id h3so2175861eda.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 05:54:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2zniVv2S4UvTl9S4r8Pw4LFfVImEUqJM9devi4IDHcY=;
-        b=CcPWCKZUBUexm6pe/qDYFmtoSsAtsDr/UgWHK9QB1eE6wLk71s5STBmiPGG7VI+Vsr
-         yh07JTQXbpzWHdjt43SHnsfHhUOojFqlwtfDrCcv1jKU7xuiK962SAaQZhZUica65Qpv
-         iw2Eue+/1jE6x4ZO3p532xp9yV9SepmOtZpc5Bx9imqobd6cQzMYhnp7aynN6g1tQ/Tk
-         nhlO0OJCYvguenOPcWa7GPGd7ZzHSRqzEcF29E2HHUXu/xGwZYZuP5LaZ4iov0SE4k73
-         CeN97mW0Art+RaYz3P8vmWIJkSFFe9By2+ztvf6SUhHxTUGWCROA1kuzn2VcyxMj5nGq
-         w0YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2zniVv2S4UvTl9S4r8Pw4LFfVImEUqJM9devi4IDHcY=;
-        b=yJa/ATTg+HL2ZxDp3Qfs7U+Z5ZxXN8ibhv10rNkfTsbDLoXbASONImRG8CsKDErWMH
-         vKACB/7PLKDXL2I5Alf7O0oBPomCOz6avFfvX5NVgRnkY0xjGBtjKsvecigFPGiJzjME
-         dlg3TrRyCcosNZUQLBn8HcK4w92Aez+/yt1MJP8D4z+8jLcWwtPgg4j8b7JnfB8n995I
-         +iJnxlB1e0lIBsAgm77Sq1Z7PHKU+cHs2Ev/LMYSmZU1XU6HCTbo7E4fJtKxB2wJ4RpE
-         k3lMzztQJ1UazCH9pGfaH5N0Ri94+b9SJZ99COty2Wbhx7WmwtiN+YxAOaAR22CE4CWU
-         jzDg==
-X-Gm-Message-State: AO0yUKVsIRY8ygQ3d43TmE5tA8HT7OmHamqpSyRLZ0mSkOETOsV7HgGr
-        27ZMiH+R1Y2irN8i1xr9jk9Nc2U+HEP9snf5
-X-Google-Smtp-Source: AK7set8TNilu2XAjEiupey83kpcRjHP7zJSpXkVnUnyK91cl3pYySa3DB2BPn9OBaSa770JjP19XAQ==
-X-Received: by 2002:a50:ccd1:0:b0:486:ecd3:15f8 with SMTP id b17-20020a50ccd1000000b00486ecd315f8mr12188454edj.6.1675950895639;
-        Thu, 09 Feb 2023 05:54:55 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id j9-20020aa7ca49000000b0045ce419ecffsm780531edt.58.2023.02.09.05.54.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 05:54:54 -0800 (PST)
-Message-ID: <dfcc8baa-c0a3-c554-a8cf-75702a1c4cad@linaro.org>
-Date:   Thu, 9 Feb 2023 15:54:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Mark cont splash memory
- region as reserved
-Content-Language: en-GB
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 9 Feb 2023 08:55:17 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB4C5ACED;
+        Thu,  9 Feb 2023 05:55:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=tFaUdKp7wDYrDTvnaxF2KtSQEYEo5175B30HdBwPNXc=; b=fmRTRM/LVwJDezrq4pjisSt/vq
+        GcU5XcVLPw1gcRXIFBP9xYCIb2LmSqP9lC1UbFPZhN0nYc20oT3gn3SnMTTzJtWqvdQ5uLmoL3slx
+        HllmbaL2nK94YEIikq8AIol0hu5xUx3dpdDWvXoMgFyQpNlZsRqkJyxWPD0OjCosvSUE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pQ7O4-004VZS-JC; Thu, 09 Feb 2023 14:54:56 +0100
+Date:   Thu, 9 Feb 2023 14:54:56 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20230124182857.1524912-1-amit.pundir@linaro.org>
- <39751511-3f06-7c39-9c21-208d4c272113@linaro.org>
- <CAA8EJppLBuA08hkqTrZx_wwbtCxK9sAjv48c9_DxgPENgo7a8Q@mail.gmail.com>
- <1a840d88-e5b1-711c-b980-f57620c54472@linaro.org>
- <8508e3d5-7468-0b2f-5a43-7c439ecf2d8b@linaro.org>
- <CAMi1Hd2UNxXHUVWO-=sWh=-bVnrqE3UdLguFOq+62SfvUiEs0A@mail.gmail.com>
- <b2307e91-3373-539a-ecfb-e2542b9f83db@linaro.org>
- <ed737e67-eabc-6f29-b734-f4698767ca8e@linaro.org>
- <fa2e0db7-5b27-5a41-920b-b786dc4e521c@linaro.org>
- <027268b7-4b04-f52e-06a8-9d924dc6efe4@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <027268b7-4b04-f52e-06a8-9d924dc6efe4@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 2/2] net:
+ ti: icssg-prueth: Add ICSSG ethernet driver
+Message-ID: <Y+T7MAu0/s1bjYIt@lunn.ch>
+References: <20230206060708.3574472-1-danishanwar@ti.com>
+ <20230206060708.3574472-3-danishanwar@ti.com>
+ <Y+ELeSQX+GWS5N2p@lunn.ch>
+ <42503a0d-b434-bbcc-553d-a326af5b4918@ti.com>
+ <e8158969-08d0-1edc-24be-8c300a71adbd@kernel.org>
+ <4438fb71-7e20-6532-a858-b688bc64e826@ti.com>
+ <Y+Ob8++GWciL127K@lunn.ch>
+ <6713252d-6f86-c674-9229-c4512ebf1d72@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6713252d-6f86-c674-9229-c4512ebf1d72@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 14:22, Bryan O'Donoghue wrote:
-> On 09/02/2023 12:11, Bryan O'Donoghue wrote:
->>> If the bootloader splash is enabled then this memory is used until the
->>> DPU driver instructs MDP5 pipes to suck data from a newly assigned 
->>> address,
->>> so there's a short window where it is.
->>
->> It seems a shame to reserve 30 something megabytes of memory for 
->> continuous splash unless we are actually using it is my point.
->>
->> If I'm running headless its just wasted memory.
-> 
-> Couldn't we
-> 
-> 1. Find reserved continuous splash memory
-> 2. Fee it in the MDP when we make the transition
+> Sure, I'll do that. In the list of all phy modes described in [1], I can only
+> see phy-mode "rgmii-txid", for which we can return -EINVAL. Is there any other
+> phy-mode that requires enabling/disabling TX internal delays? Please let me
+> know if any other phy-mode also needs this. I will add check for that as well.
 
-Qualcomm has investigated freeing the MDP/DPU cont_splash memory, but I 
-fear that the end result was that it is not _that_ easy to free it. It 
-is marked as reserved/no-map, so the kernel doesn't think about it as a 
-memory region. Adding it back required hacking around that.
+There are 4 phy-modes for RGMII.
 
--- 
-With best wishes
-Dmitry
+rgmii, rgmii-id, rmgii-rxid, rgmii-txid.
 
+rgmii-id, rgmii-txid both require TX delays. If you do that in the MAC
+you then need to pass rgmii-rxid and rgmii to the PHY respectively.
+
+rmii and rgmii-rxid requires no TX delays, which your SoC cannot do,
+so you need to return -EINVAl,
+
+The interpretation of these properties is all really messy and
+historically not very uniformly done. Which is why i recommend the MAC
+does nothing, leaving it to the PHY. That generally works since the
+PHYs have a pretty uniform implementation. But in your case, you don't
+have that option. So i suggest you do what is described above. 
+
+    Andrew
