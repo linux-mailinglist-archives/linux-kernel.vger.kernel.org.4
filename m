@@ -2,309 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705C3690D3A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B63B690D48
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjBIPlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:41:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S231500AbjBIPmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:42:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjBIPlt (ORCPT
+        with ESMTP id S231490AbjBIPm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:41:49 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2053.outbound.protection.outlook.com [40.107.102.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CA11705;
-        Thu,  9 Feb 2023 07:41:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F/kREO+w++CGIryAXXRWD0YGF5Ze9rlVjwgO30+zgfro/LxnM0ToH6AqQFipOO0lGF/g/4mgUOU0y5U7aPtaTA/cTOUvMnJS/GftcENu4sExs3kJBQuEYbBOLZIfb2QfsbM4l00EUBhxGU08zssw12TQRiNIznONNSwXE74/tQR1/i0YiPa+CQcLN4+4K2WgKZE2XZP4wJPXCFVjtPR/JaqWdyBtMT2PBPKSQylixmeukm7QaHROVv26IoEFgIvTCCOl/Ce9WjO2OrMXZVhhgliAzFJT7VY3PEEI0TVxoIXpwmf9Ih1qjfZhXIBf6wMBpv8ilCpepbGEYhjnvt1RYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DyhskwD3TT/SGBdL8wqEqY8p68+eZXYetRcjdYDc0lQ=;
- b=MzezQoY7aScNqh0MbRpqJNsemeyQ2E/bU0xQA/iNVzZonpF3xpQSvK5QNtEAmSRnHh0x+C1Tg0B8GMK7RiRbq/a8jg11VS/4vIImPqzIrTDR2n4MlKB8vNKJ1o/9GrteMIS1HMUSBRzfCJ0JR6f9nr0Jr2kt6I+QiQIPPkK7n4tcumoHqZOI6FLSohGUa1ryZBYSRwH3Zkn5bMEldG+V6RtfqvC8wlDt7UIX8KhD4SfzTJOTAUZjQcyE4Bu79aD3Px/0DjKDa27fkz1lyUnOtHt41o9iGcNkANTGSAhR/VqePse4rCRZW7I+A371FCMoGVrMtSzsSfpGZCqQ+b2gTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DyhskwD3TT/SGBdL8wqEqY8p68+eZXYetRcjdYDc0lQ=;
- b=0iSZzuj3LpocYBVgiXXiJOtbFLP4zvnhfcG27+v9Pg/aEd46fpCsLBhD8sMz/2c6WC4VPl+YakRbLHaUQIBXVT4M6BJRoZU5+QmsTjPePpEcN6FGCpE5Cc3b0+ZAQ+GXO4EVyWNAHvgV1SDSVDciH7QaJjqgSNaUfmfHUA9Cyt8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM6PR12MB4547.namprd12.prod.outlook.com (2603:10b6:5:2a9::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
- 2023 15:41:43 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a59e:bafb:f202:313c]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::a59e:bafb:f202:313c%6]) with mapi id 15.20.6086.017; Thu, 9 Feb 2023
- 15:41:43 +0000
-Message-ID: <543c2e9b-6d82-7ee0-9a1f-e3176aba16e2@amd.com>
-Date:   Thu, 9 Feb 2023 09:41:48 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH RFC] tpm: disable hwrng for known-defective AMD RNGs
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        regressions@lists.linux.dev, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-References: <20230209153120.261904-1-Jason@zx2c4.com>
-Content-Language: en-US
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20230209153120.261904-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0P220CA0021.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:610:ef::11) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Thu, 9 Feb 2023 10:42:27 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBC65DC1F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:42:02 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso4198478wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 07:42:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=davZpZrHKqcK9/fGgGK/yHqe9BiOZs8yrjIgwy5MeSU=;
+        b=oj/9tXMdEYgIuNjMHdwfGMRWRTCwV7MD+QwwAxqGQp7XqZGYnxojuYFwjjTwaCdrOt
+         SZ1/j0R70pXmmaObSwGdCRGPW1jOevhn3Rxenl7Y2mDvh7un2hH/cpOwViTY+qkGB4vR
+         Cq3M/W0zEqmmpkOHiJpC4YFdhHZ3mNtONdOv730PlSUQrXBIFGIAQmv+YCcUds1ajxo7
+         w4RCjH0DQERX2119rlpNNREHEpQ43C02H7VSj+FRpHbc28BIKiXMOeM2btQsSB3PPRLH
+         oN03hs18IKj6vB/M9BGCSScJwHfGpFhm09OHypmZgyQ8Qy8lQEGCNOdy6TMMzPPkdeF6
+         dQ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=davZpZrHKqcK9/fGgGK/yHqe9BiOZs8yrjIgwy5MeSU=;
+        b=XiV7b6yxV/Bs2OspajoAvt+bcmrSRU+lYiuhUCNCUuCM+yJyZMvZRPusbp15L3tAz9
+         nhRQPuA6qeYsk767BaHLPpBJVPHkdxqJPpCe+xNlKmOaWjKzx+JeZLKBuKU2a9VFeJEW
+         UNn/a0vQMFpLtaxy/pcZdN+Jj7gvjuytsziPwAER2WBVDPmo2WL1JWZdy/xsaWDelE3t
+         6CMOwJE8s6wX/qcbLcoAICoWGhM7sq6NZVXOzi9kRLfG7l/sCqqcp+dOEoz+smCE1ore
+         TDN28FWsRhiZ2mZQT73dM9uHbfwRLxDZaJZ702BE0k4EvgERGaS2Njok/OFWEwkFwqu5
+         L4Qw==
+X-Gm-Message-State: AO0yUKW3ZKNgZuyh7k9PzhSge7RrWCKvPr50TxltCE2FqNWklAeiC99T
+        I6KRv75ZcKtQjun0hvcjumMuDg==
+X-Google-Smtp-Source: AK7set/HtFUmlYeGUqLovxpYva8OanJk7C6GRUmo7Y8pHSYRBwwSfFm+gPQ8an2swBtX5NLMoHcxgw==
+X-Received: by 2002:a05:600c:4b1b:b0:3dc:53da:328b with SMTP id i27-20020a05600c4b1b00b003dc53da328bmr13358092wmp.14.1675957320680;
+        Thu, 09 Feb 2023 07:42:00 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:8009:2525:9580:8db2])
+        by smtp.gmail.com with ESMTPSA id y6-20020a05600c364600b003df7b40f99fsm5099754wmq.11.2023.02.09.07.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 07:42:00 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com
+Cc:     arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH v8 1/9] x86/apic/x2apic: Allow CPU cluster_mask to be populated in parallel
+Date:   Thu,  9 Feb 2023 15:41:48 +0000
+Message-Id: <20230209154156.266385-2-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230209154156.266385-1-usama.arif@bytedance.com>
+References: <20230209154156.266385-1-usama.arif@bytedance.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM6PR12MB4547:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b932383-9734-4c27-7459-08db0ab4252f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: alDokiIyReKxhfJYHkGBOy1oGBqEWAK8uQy2Wx2PjoqOHomw6uU9Jm2Jr3eDtIHCN5Add9rhblUjvqxDDr1rc7J1ndCQ2HN6KUxJNGT9jUd4/kwaeaZxECPPL8d6SzJ7ZvalRCc/SZHK5WPLwiRC4fOTOG2AgJVMkBJ7MdUxh/VQ+Gvb4LtmRQhR52szPOpbXZKLqtg06A8lv88xM/vR+t/udYvVp7MunvwjOixYRuCkS+NYJ02vLj6OJD9ZYAkKGi2Faq76OvsVy3GdAQZNo9ajcUBqT47H1kR3FHbaK5z4/0kjMdRZf7WFB3PXu1cfoCpZfy7VXn6/zC2QqWn/SLohc917vO0OxCDnhq2sW4gumsqhjfxRLbXGxNnu6g39nEbKUGiYc/kspNC4GKueJcz6xoVqTL0jFKKeT2u9wOHStpkZJRrbpMmHGaZn5n+waxUCGvO3KABmosFHFKiTxtgC4DC3dHVkyhm3odaIyGf9rFbhsG2BASXkmNmFn4tQZ7WO3bbuIehmVIGOhGrJ2nEL7iq+uVVto3O4RZ8SvTcFMf9x9JGOTktzS9uSrLNW/8eH1CtM2knf7baOZEaPVbQwZRXpTrsknyJNzn5S2wivl/0gNY8n5YSh0E0qG993uxNaeWE060CgBxdWON4LklWmpG9v/ZyqT3zznSUHdVXzOhLeahf+PWLY5/ukZnp87cRkcBPYpBC0gep6w2VIu33+n+o5aNPr79R3WKTKP4A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199018)(66476007)(4326008)(66946007)(8676002)(316002)(38100700002)(66556008)(83380400001)(31696002)(54906003)(86362001)(5660300002)(6486002)(31686004)(478600001)(6506007)(53546011)(26005)(2906002)(6512007)(186003)(36756003)(41300700001)(8936002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yk14cHd3d2t5dXBrSjFraWRWY1p4anpieWhMS3R5VHNDY3daMi9uSFBJd1Vj?=
- =?utf-8?B?T0w1a2l3WFpDVmFvbSt0dDh3Z3FCdGJQRERQeFpLL2trQkIrdlRXTTM3MUoy?=
- =?utf-8?B?dkxuR3NBNllEc2RndlFuRmtOOWRzNU1TL2ZVdmZ6RUNXQjEyak5iM1J5YklF?=
- =?utf-8?B?WHFBL0ZmMHppeG9DQkx5R1JXTXlFaitiaU1mUkJHaXhaSFdsbEhpYVB3ZDlR?=
- =?utf-8?B?SnlMWWdYVnc3U3ZWY1dYaEdyaU9YeGV4SXp3ZkF5NTNjS1RiTTZURUdObVp2?=
- =?utf-8?B?Mkp4SzRQbENrVVZkYWxmRlBFdDAwYzU1S21scFIrNXZSU3RNdlVnaWNGT25o?=
- =?utf-8?B?MldscnI4ZGxoWWVSTG5pTVd4VjVjWDVTeVdqbEZZRTlIV29pWnFscTVaSmxj?=
- =?utf-8?B?MGUvdkpKMDlzeTlIcGZydVJTVnBHM3BPSFVDdnJHWUNNZzFua29YR0MvOUlz?=
- =?utf-8?B?bzl6T3RvVVh0TUVIcWxsVXYxZWl5Y3ZtREVmblIyQmV4OU51Uk9EMlF0Mm81?=
- =?utf-8?B?aDdZNUpJZ0xuelBpMTk4MGswREFudUVKMzJSZHpxMFhiTlZoSWd5dTFVTjdP?=
- =?utf-8?B?Q1dSWHREY1BEQ1dPQkY1T1Y1RnhaT2dzTDM4L25wTzNpNDk2eUZ5UEFzMmY2?=
- =?utf-8?B?c3pQa21XSFZDU0xMQ1pSRjJQY2VSR25yZFlmbDVWekJhOGFnNGM1UGRZMGg0?=
- =?utf-8?B?MjZyQ0NHbUdQR2xCNFBVUnU4cDlXdWI0S1Z5UENRVXlxYzUveFFSMU1EZTdv?=
- =?utf-8?B?TC9vaEVabVlEeklxK2U5d1F4SlJzNldlVnMrSm9vM1QvcktoM1ZxczhUd2pL?=
- =?utf-8?B?SDIvNmRBTldzQkJldDd6L2pMMjFvRCtoRGorWWNMMFIyaFltSGxVVGxJemdu?=
- =?utf-8?B?K3EzY0pvdk05bW5uZnRxcXQyQXdMTmpRQ250aGd5MVQwL21TQy8yRDlFSGdU?=
- =?utf-8?B?Mm5sYWxFZnFvNTg5c3BRVS9BeGdwZHJvNWcwK1g3NDBmSEdJQkhDN2h1ZHIz?=
- =?utf-8?B?TWd5NSs1eDkzN2xPWWgrdWFHYUxOSkVKZVF3cnV6c1JxUVlZT1FFT29CN00z?=
- =?utf-8?B?Qk5RRmEvRFFuTi8rL3FmQzg5Mm1sbmpBR3pXbFZLSUt5VHIzWmRPa0VmbjZh?=
- =?utf-8?B?YlJ2T3FyQVNtWEM4R3BFa29yNVZZSzRaL1BpQmthVUhRQmR2TlRqbXBLTGlu?=
- =?utf-8?B?NExJSjVZOGNISmlXK1pWNlMxMFAvRWZqSnFFYkNjR2RXc0tSNVNwREd3eVBi?=
- =?utf-8?B?bFNaMUJGWVFjek9wRzk5TEFFWlIvamtIYXRzZjhST0RGTjZxRmh0enUrbEVP?=
- =?utf-8?B?WUczM0FVNCs3b29DM1hBbWVkbWIzOUplUWk1NVhvZCtld2grL3h4N1NQMXpw?=
- =?utf-8?B?eCt2TkdnQzREY2JLTFZJRzg4MFdUUHZzRTVIa09ETW9UZDIzNkZQWVhqNTN6?=
- =?utf-8?B?QzY0UmVNV09MbHlpeFlqbk4wUVlpeTZkTHJaWURkeU54eDNYYnVzWnh5OVN4?=
- =?utf-8?B?ZHMxZjkybmQ0OXl2cC9LNlBEK1NBTmZ1LzFDdWE1TTFWSVBSd2ZvTDEwWTBj?=
- =?utf-8?B?V3UzaW5qNWM1VlBvRTlGMG9kS3JrbEpvaWYyaDZmK1EvWVdsN0NITnh2eE9S?=
- =?utf-8?B?c0pzSFIvMG1BT0hhYlNzTlFkNytraU5zNDNQMTBPRm56ZExxT3hHak8yR1pr?=
- =?utf-8?B?NWhmcjY5cDJCYUNlUnpSVkNoaFU4M2xnV2wvaTgxbWIwY244Y1dqQnZzSTRq?=
- =?utf-8?B?STl4bnJKd2RsQ0pqOHJaOVJmckFlM0lPV1VwVGxlNWUwZ2t3TXlBM0U0Q2tL?=
- =?utf-8?B?T1FHdlMxY0J2K0RpWDFJa3hTVHBEeFF0YkxxNGNSWHFVKzNxOTNPRTZWTWxN?=
- =?utf-8?B?THp1dURMS1kyVkx6aEFHM1dWb3FOaWp0Si9aNVZZeFROVXNEN1h1ZE1MQnhL?=
- =?utf-8?B?WkcrUVVMdUdsL0t4c3BOTnNVOTlnZDU0Qlh4SmVUaGNtMXIwQ0pXZGNlTHZR?=
- =?utf-8?B?VG11S1NFcGRyVDREWFZlZitpY0xtY1hFWG90TmxEMEkrdWpMUEp1V2VpUVRC?=
- =?utf-8?B?TjArWjJTQ3JXWVlZeDFDaUsvTlRsQ2U1WVYvaXljK2ZqZnVRY0ZLMVRMR1k5?=
- =?utf-8?Q?89RQKiQ+lcwl48o+bPu9athx6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b932383-9734-4c27-7459-08db0ab4252f
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 15:41:43.8564
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +zYzPOqADFeRfXFDdzSSNvVUAxw7g5RFAdlbTBCZG2QfQDl8AOvloGM5BQRx3BYn7MeKSX1PR0OhsH/RIocCgQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4547
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/2023 09:31, Jason A. Donenfeld wrote:
-> Do not register a hwrng for certain AMD TPMs that are running an old
-> known-buggy revision. Do this by probing the TPM2_PT_MANUFACTURER,
-> TPM2_PT_FIRMWARE_VERSION_1, and TPM2_PT_FIRMWARE_VERSION_2 properties,
-> and failing when an "AMD"-manufactured TPM2 chip is below a threshold.
-> 
-> BROKEN BROKEN BROKEN - I just made the version numbers up and haven't
-> tested this because I don't actually have hardware for it. I'm posting
-> this so that Mario can take over its development and submit a v2 himself
-> once he has confirmed the versioning info from inside AMD.
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Thanks, happy to do that.  As I'll take over some comments are inline 
-mostly for my future self when this is resubmitted.
+Each of the sibling CPUs in a cluster uses the same clustermask. The first
+CPU in a cluster will need a new clustermask allocated, while subsequent
+siblings will use the same clustermask as the first.
 
-Perhaps one of the people who can reproduce this right now can confirm 
-this works?  The version number string should at least trigger one of 
-the reported systems to avoid doing this.
+However, the CPU being brought up cannot yet perform memory allocations
+at the point that this occurs in init_x2apic_ldr().
 
-> 
-> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-> Cc: James Bottomley <James.Bottomley@hansenpartnership.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+So at present, the alloc_clustermask() function allocates a clustermask
+just in case it's needed, storing it in the global cluster_hotplug_mask.
+A CPU which is the first sibling of a cluster will "take" it from there
+and set cluster_hotplug_mask to NULL, in order for alloc_clustermask()
+to allocate a new one before bringing up the next CPU.
 
-At least as a note for myself this needs:
-1. 'Link' tag to the public advisory for this fTPM issue
-2. A 'Fixes' tag to the commit that enabled fTPM as a hwrng source by 
-default and exposed the issue.
-3. A 'Link' tag to the bugzilla.
+To facilitate parallel bringup of CPUs in future, switch to a model
+where alloc_clustermask() prepopulates the clustermask in the per_cpu
+data for each present CPU in the cluster in advance. All that the CPU
+needs to do for itself in init_x2apic_ldr() is set its own bit in that
+mask.
 
-> ---
->   drivers/char/tpm/tpm-chip.c | 34 ++++++++++++++++-
->   drivers/char/tpm/tpm.h      | 73 +++++++++++++++++++++++++++++++++++++
->   2 files changed, 106 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index 741d8f3e8fb3..e0f8134d31a3 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -512,6 +512,37 @@ static int tpm_add_legacy_sysfs(struct tpm_chip *chip)
->   	return 0;
->   }
->   
-> +static bool tpm_is_rng_defective(struct tpm_chip *chip)
-> +{
-> +	int ret;
-> +	u32 val1, val2;
-> +	u64 version;
-> +
-> +	/* No known-broken TPM1 chips. */
-> +	if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-> +		return false;
-> +
-> +	/* Only known-broken are AMD. */
-> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_MANUFACTURER, &val1, NULL);
-> +	if (ret < 0 || val1 != 0x414D4400U /* AMD */)
-> +		return false;
-> +
-> +	/* Grab and concat the version values. */
-> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_1, &val1, NULL);
-> +	if (ret < 0)
-> +		return false;
-> +	ret = tpm2_get_tpm_pt(chip, TPM2_PT_FIRMWARE_VERSION_2, &val2, NULL);
-> +	if (ret < 0)
-> +		return false;
-> +	version = ((u64)val1 << 32) | val2;
-> +
-> +	/* Versions below 3.4e.2.9 are broken. */
-> +	if (version < 0x0003004E0002009ULL)
-> +		return true;
+The 'node' and 'clusterid' members of struct cluster_mask are thus
+redundant, and it can become a simple struct cpumask instead.
 
-We probably want to also do a 'dev_info_once' or 'dev_warn_once' here to 
-let people know that they're not getting a fTPM RNG so it's not a surprise.
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+---
+ arch/x86/kernel/apic/x2apic_cluster.c | 130 +++++++++++++++++---------
+ 1 file changed, 84 insertions(+), 46 deletions(-)
 
-> +
-> +	return false;
-> +}
-> +
->   static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
->   {
->   	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
-> @@ -521,7 +552,8 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
->   
->   static int tpm_add_hwrng(struct tpm_chip *chip)
->   {
-> -	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip))
-> +	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM) || tpm_is_firmware_upgrade(chip) ||
-> +	    tpm_is_rng_defective(chip))
->   		return 0;
->   
->   	snprintf(chip->hwrng_name, sizeof(chip->hwrng_name),
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 24ee4e1cc452..830014a26609 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -150,6 +150,79 @@ enum tpm_sub_capabilities {
->   	TPM_CAP_PROP_TIS_DURATION = 0x120,
->   };
->   
-> +enum tpm2_pt_props {
-> +	TPM2_PT_NONE = 0x00000000,
-> +	TPM2_PT_GROUP = 0x00000100,
-> +	TPM2_PT_FIXED = TPM2_PT_GROUP * 1,
-> +	TPM2_PT_FAMILY_INDICATOR = TPM2_PT_FIXED + 0,
-> +	TPM2_PT_LEVEL = TPM2_PT_FIXED + 1,
-> +	TPM2_PT_REVISION = TPM2_PT_FIXED + 2,
-> +	TPM2_PT_DAY_OF_YEAR = TPM2_PT_FIXED + 3,
-> +	TPM2_PT_YEAR = TPM2_PT_FIXED + 4,
-> +	TPM2_PT_MANUFACTURER = TPM2_PT_FIXED + 5,
-> +	TPM2_PT_VENDOR_STRING_1 = TPM2_PT_FIXED + 6,
-> +	TPM2_PT_VENDOR_STRING_2 = TPM2_PT_FIXED + 7,
-> +	TPM2_PT_VENDOR_STRING_3 = TPM2_PT_FIXED + 8,
-> +	TPM2_PT_VENDOR_STRING_4 = TPM2_PT_FIXED + 9,
-> +	TPM2_PT_VENDOR_TPM_TYPE = TPM2_PT_FIXED + 10,
-> +	TPM2_PT_FIRMWARE_VERSION_1 = TPM2_PT_FIXED + 11,
-> +	TPM2_PT_FIRMWARE_VERSION_2 = TPM2_PT_FIXED + 12,
-> +	TPM2_PT_INPUT_BUFFER = TPM2_PT_FIXED + 13,
-> +	TPM2_PT_HR_TRANSIENT_MIN = TPM2_PT_FIXED + 14,
-> +	TPM2_PT_HR_PERSISTENT_MIN = TPM2_PT_FIXED + 15,
-> +	TPM2_PT_HR_LOADED_MIN = TPM2_PT_FIXED + 16,
-> +	TPM2_PT_ACTIVE_SESSIONS_MAX = TPM2_PT_FIXED + 17,
-> +	TPM2_PT_PCR_COUNT = TPM2_PT_FIXED + 18,
-> +	TPM2_PT_PCR_SELECT_MIN = TPM2_PT_FIXED + 19,
-> +	TPM2_PT_CONTEXT_GAP_MAX = TPM2_PT_FIXED + 20,
-> +	TPM2_PT_NV_COUNTERS_MAX = TPM2_PT_FIXED + 22,
-> +	TPM2_PT_NV_INDEX_MAX = TPM2_PT_FIXED + 23,
-> +	TPM2_PT_MEMORY = TPM2_PT_FIXED + 24,
-> +	TPM2_PT_CLOCK_UPDATE = TPM2_PT_FIXED + 25,
-> +	TPM2_PT_CONTEXT_HASH = TPM2_PT_FIXED + 26,
-> +	TPM2_PT_CONTEXT_SYM = TPM2_PT_FIXED + 27,
-> +	TPM2_PT_CONTEXT_SYM_SIZE = TPM2_PT_FIXED + 28,
-> +	TPM2_PT_ORDERLY_COUNT = TPM2_PT_FIXED + 29,
-> +	TPM2_PT_MAX_COMMAND_SIZE = TPM2_PT_FIXED + 30,
-> +	TPM2_PT_MAX_RESPONSE_SIZE = TPM2_PT_FIXED + 31,
-> +	TPM2_PT_MAX_DIGEST = TPM2_PT_FIXED + 32,
-> +	TPM2_PT_MAX_OBJECT_CONTEXT = TPM2_PT_FIXED + 33,
-> +	TPM2_PT_MAX_SESSION_CONTEXT = TPM2_PT_FIXED + 34,
-> +	TPM2_PT_PS_FAMILY_INDICATOR = TPM2_PT_FIXED + 35,
-> +	TPM2_PT_PS_LEVEL = TPM2_PT_FIXED + 36,
-> +	TPM2_PT_PS_REVISION = TPM2_PT_FIXED + 37,
-> +	TPM2_PT_PS_DAY_OF_YEAR = TPM2_PT_FIXED + 38,
-> +	TPM2_PT_PS_YEAR = TPM2_PT_FIXED + 39,
-> +	TPM2_PT_SPLIT_MAX = TPM2_PT_FIXED + 40,
-> +	TPM2_PT_TOTAL_COMMANDS = TPM2_PT_FIXED + 41,
-> +	TPM2_PT_LIBRARY_COMMANDS = TPM2_PT_FIXED + 42,
-> +	TPM2_PT_VENDOR_COMMANDS = TPM2_PT_FIXED + 43,
-> +	TPM2_PT_NV_BUFFER_MAX = TPM2_PT_FIXED + 44,
-> +	TPM2_PT_MODES = TPM2_PT_FIXED + 45,
-> +	TPM2_PT_MAX_CAP_BUFFER = TPM2_PT_FIXED + 46,
-> +	TPM2_PT_VAR = TPM2_PT_GROUP * 2,
-> +	TPM2_PT_PERMANENT = TPM2_PT_VAR + 0,
-> +	TPM2_PT_STARTUP_CLEAR = TPM2_PT_VAR + 1,
-> +	TPM2_PT_HR_NV_INDEX = TPM2_PT_VAR + 2,
-> +	TPM2_PT_HR_LOADED = TPM2_PT_VAR + 3,
-> +	TPM2_PT_HR_LOADED_AVAIL = TPM2_PT_VAR + 4,
-> +	TPM2_PT_HR_ACTIVE = TPM2_PT_VAR + 5,
-> +	TPM2_PT_HR_ACTIVE_AVAIL = TPM2_PT_VAR + 6,
-> +	TPM2_PT_HR_TRANSIENT_AVAIL = TPM2_PT_VAR + 7,
-> +	TPM2_PT_HR_PERSISTENT = TPM2_PT_VAR + 8,
-> +	TPM2_PT_HR_PERSISTENT_AVAIL = TPM2_PT_VAR + 9,
-> +	TPM2_PT_NV_COUNTERS = TPM2_PT_VAR + 10,
-> +	TPM2_PT_NV_COUNTERS_AVAIL = TPM2_PT_VAR + 11,
-> +	TPM2_PT_ALGORITHM_SET = TPM2_PT_VAR + 12,
-> +	TPM2_PT_LOADED_CURVES = TPM2_PT_VAR + 13,
-> +	TPM2_PT_LOCKOUT_COUNTER = TPM2_PT_VAR + 14,
-> +	TPM2_PT_MAX_AUTH_FAIL = TPM2_PT_VAR + 15,
-> +	TPM2_PT_LOCKOUT_INTERVAL = TPM2_PT_VAR + 16,
-> +	TPM2_PT_LOCKOUT_RECOVERY = TPM2_PT_VAR + 17,
-> +	TPM2_PT_NV_WRITE_RECOVERY = TPM2_PT_VAR + 18,
-> +	TPM2_PT_AUDIT_COUNTER_0 = TPM2_PT_VAR + 19,
-> +	TPM2_PT_AUDIT_COUNTER_1 = TPM2_PT_VAR + 20,
-> +};
->   
-
-I guess these properties should be split out to a separate patch in a 
-series.
-
->   /* 128 bytes is an arbitrary cap. This could be as large as TPM_BUFSIZE - 18
->    * bytes, but 128 is still a relatively large number of random bytes and
+diff --git a/arch/x86/kernel/apic/x2apic_cluster.c b/arch/x86/kernel/apic/x2apic_cluster.c
+index e696e22d0531..d8f513a2287b 100644
+--- a/arch/x86/kernel/apic/x2apic_cluster.c
++++ b/arch/x86/kernel/apic/x2apic_cluster.c
+@@ -9,11 +9,7 @@
+ 
+ #include "local.h"
+ 
+-struct cluster_mask {
+-	unsigned int	clusterid;
+-	int		node;
+-	struct cpumask	mask;
+-};
++#define apic_cluster(apicid) ((apicid) >> 4)
+ 
+ /*
+  * __x2apic_send_IPI_mask() possibly needs to read
+@@ -23,8 +19,7 @@ struct cluster_mask {
+ static u32 *x86_cpu_to_logical_apicid __read_mostly;
+ 
+ static DEFINE_PER_CPU(cpumask_var_t, ipi_mask);
+-static DEFINE_PER_CPU_READ_MOSTLY(struct cluster_mask *, cluster_masks);
+-static struct cluster_mask *cluster_hotplug_mask;
++static DEFINE_PER_CPU_READ_MOSTLY(struct cpumask *, cluster_masks);
+ 
+ static int x2apic_acpi_madt_oem_check(char *oem_id, char *oem_table_id)
+ {
+@@ -60,10 +55,10 @@ __x2apic_send_IPI_mask(const struct cpumask *mask, int vector, int apic_dest)
+ 
+ 	/* Collapse cpus in a cluster so a single IPI per cluster is sent */
+ 	for_each_cpu(cpu, tmpmsk) {
+-		struct cluster_mask *cmsk = per_cpu(cluster_masks, cpu);
++		struct cpumask *cmsk = per_cpu(cluster_masks, cpu);
+ 
+ 		dest = 0;
+-		for_each_cpu_and(clustercpu, tmpmsk, &cmsk->mask)
++		for_each_cpu_and(clustercpu, tmpmsk, cmsk)
+ 			dest |= x86_cpu_to_logical_apicid[clustercpu];
+ 
+ 		if (!dest)
+@@ -71,7 +66,7 @@ __x2apic_send_IPI_mask(const struct cpumask *mask, int vector, int apic_dest)
+ 
+ 		__x2apic_send_IPI_dest(dest, vector, APIC_DEST_LOGICAL);
+ 		/* Remove cluster CPUs from tmpmask */
+-		cpumask_andnot(tmpmsk, tmpmsk, &cmsk->mask);
++		cpumask_andnot(tmpmsk, tmpmsk, cmsk);
+ 	}
+ 
+ 	local_irq_restore(flags);
+@@ -105,55 +100,98 @@ static u32 x2apic_calc_apicid(unsigned int cpu)
+ 
+ static void init_x2apic_ldr(void)
+ {
+-	struct cluster_mask *cmsk = this_cpu_read(cluster_masks);
+-	u32 cluster, apicid = apic_read(APIC_LDR);
+-	unsigned int cpu;
++	struct cpumask *cmsk = this_cpu_read(cluster_masks);
+ 
+-	x86_cpu_to_logical_apicid[smp_processor_id()] = apicid;
++	BUG_ON(!cmsk);
+ 
+-	if (cmsk)
+-		goto update;
+-
+-	cluster = apicid >> 16;
+-	for_each_online_cpu(cpu) {
+-		cmsk = per_cpu(cluster_masks, cpu);
+-		/* Matching cluster found. Link and update it. */
+-		if (cmsk && cmsk->clusterid == cluster)
+-			goto update;
++	cpumask_set_cpu(smp_processor_id(), cmsk);
++}
++
++/*
++ * As an optimisation during boot, set the cluster_mask for all present
++ * CPUs at once, to prevent each of them having to iterate over the others
++ * to find the existing cluster_mask.
++ */
++static void prefill_clustermask(struct cpumask *cmsk, unsigned int cpu, u32 cluster)
++{
++	int cpu_i;
++
++	for_each_present_cpu(cpu_i) {
++		struct cpumask **cpu_cmsk = &per_cpu(cluster_masks, cpu_i);
++		u32 apicid = apic->cpu_present_to_apicid(cpu_i);
++
++		if (apicid == BAD_APICID || cpu_i == cpu || apic_cluster(apicid) != cluster)
++			continue;
++
++		if (WARN_ON_ONCE(*cpu_cmsk == cmsk))
++			continue;
++
++		BUG_ON(*cpu_cmsk);
++		*cpu_cmsk = cmsk;
+ 	}
+-	cmsk = cluster_hotplug_mask;
+-	cmsk->clusterid = cluster;
+-	cluster_hotplug_mask = NULL;
+-update:
+-	this_cpu_write(cluster_masks, cmsk);
+-	cpumask_set_cpu(smp_processor_id(), &cmsk->mask);
+ }
+ 
+-static int alloc_clustermask(unsigned int cpu, int node)
++static int alloc_clustermask(unsigned int cpu, u32 cluster, int node)
+ {
++	struct cpumask *cmsk = NULL;
++	unsigned int cpu_i;
++
++	/*
++	 * At boot time, the CPU present mask is stable. The cluster mask is
++	 * allocated for the first CPU in the cluster and propagated to all
++	 * present siblings in the cluster. If the cluster mask is already set
++	 * on entry to this function for a given CPU, there is nothing to do.
++	 */
+ 	if (per_cpu(cluster_masks, cpu))
+ 		return 0;
++
++	if (system_state < SYSTEM_RUNNING)
++		goto alloc;
++
+ 	/*
+-	 * If a hotplug spare mask exists, check whether it's on the right
+-	 * node. If not, free it and allocate a new one.
++	 * On post boot hotplug for a CPU which was not present at boot time,
++	 * iterate over all possible CPUs (even those which are not present
++	 * any more) to find any existing cluster mask.
+ 	 */
+-	if (cluster_hotplug_mask) {
+-		if (cluster_hotplug_mask->node == node)
+-			return 0;
+-		kfree(cluster_hotplug_mask);
++	for_each_possible_cpu(cpu_i) {
++		u32 apicid = apic->cpu_present_to_apicid(cpu_i);
++
++		if (apicid != BAD_APICID && apic_cluster(apicid) == cluster) {
++			cmsk = per_cpu(cluster_masks, cpu_i);
++			/*
++			 * If the cluster is already initialized, just store
++			 * the mask and return. There's no need to propagate.
++			 */
++			if (cmsk) {
++				per_cpu(cluster_masks, cpu) = cmsk;
++				return 0;
++			}
++		}
+ 	}
+-
+-	cluster_hotplug_mask = kzalloc_node(sizeof(*cluster_hotplug_mask),
+-					    GFP_KERNEL, node);
+-	if (!cluster_hotplug_mask)
+-		return -ENOMEM;
+-	cluster_hotplug_mask->node = node;
+-	return 0;
++	/*
++	 * No CPU in the cluster has ever been initialized, so fall through to
++	 * the boot time code which will also populate the cluster mask for any
++	 * other CPU in the cluster which is (now) present.
++	 */
++ alloc:
++	cmsk = kzalloc_node(sizeof(*cmsk), GFP_KERNEL, node);
++	if (!cmsk)
++ 		return -ENOMEM;
++	per_cpu(cluster_masks, cpu) = cmsk;
++	prefill_clustermask(cmsk, cpu, cluster);
++
++ 	return 0;
+ }
+ 
+ static int x2apic_prepare_cpu(unsigned int cpu)
+ {
+-	if (alloc_clustermask(cpu, cpu_to_node(cpu)) < 0)
++	u32 phys_apicid = apic->cpu_present_to_apicid(cpu);
++	u32 cluster = apic_cluster(phys_apicid);
++	u32 logical_apicid = (cluster << 16) | (1 << (phys_apicid & 0xf));
++
++	x86_cpu_to_logical_apicid[cpu] = logical_apicid;
++
++	if (alloc_clustermask(cpu, cluster, cpu_to_node(cpu)) < 0)
+ 		return -ENOMEM;
+ 	if (!zalloc_cpumask_var(&per_cpu(ipi_mask, cpu), GFP_KERNEL))
+ 		return -ENOMEM;
+@@ -162,10 +200,10 @@ static int x2apic_prepare_cpu(unsigned int cpu)
+ 
+ static int x2apic_dead_cpu(unsigned int dead_cpu)
+ {
+-	struct cluster_mask *cmsk = per_cpu(cluster_masks, dead_cpu);
++	struct cpumask *cmsk = per_cpu(cluster_masks, dead_cpu);
+ 
+ 	if (cmsk)
+-		cpumask_clear_cpu(dead_cpu, &cmsk->mask);
++		cpumask_clear_cpu(dead_cpu, cmsk);
+ 	free_cpumask_var(per_cpu(ipi_mask, dead_cpu));
+ 	return 0;
+ }
+-- 
+2.25.1
 
