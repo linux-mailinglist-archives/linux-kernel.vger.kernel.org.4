@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA7E6902FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA41690301
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:14:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjBIJNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S229892AbjBIJOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjBIJNd (ORCPT
+        with ESMTP id S229601AbjBIJOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:13:33 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E46526B;
-        Thu,  9 Feb 2023 01:13:32 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 9 Feb 2023 04:14:15 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023649E;
+        Thu,  9 Feb 2023 01:14:14 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 526DC5C57E;
-        Thu,  9 Feb 2023 09:13:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1675934011; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/mb4V4AKxUcpCqvygYFU+EbBIkXTjeRr8MrZfnACX74=;
-        b=fyQc2pIiM+B4yHJGOwP8OZD8sN2r0CXFM9T0l/Mq3CbYFt5jfVjyuM1eFu3DMSdlyEhIHJ
-        eMFm0e4hi1TjCM62Vz67ijctSxBHimu6XjzF5rixU9cVMio5GOpat9Cwz8QsH/hD1YItnm
-        7jM6hNCtKl6wu9H0VSDEmb9qZOGcNKI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1675934011;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/mb4V4AKxUcpCqvygYFU+EbBIkXTjeRr8MrZfnACX74=;
-        b=wgtaxmUHC8zYK8sIgcCcpTUz+nbj4Xzu+A48a+sWnSIxjyyk/rhYH0tc/4mMAI0UbXSA9U
-        ovR2XxaPwpPa1FDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A37871339E;
-        Thu,  9 Feb 2023 09:13:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jvc+Jii55GM7JQAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Thu, 09 Feb 2023 09:13:12 +0000
-Date:   Thu, 9 Feb 2023 10:13:10 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] interconnect: qcom: Drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20230209101310.11942cd0@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FA9966020B9;
+        Thu,  9 Feb 2023 09:14:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675934053;
+        bh=X5aykjwR6Noi8jAOHiqv2GSFOIbKzmDiWJfxsu4VbMg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FkgnIEjwSVQE5ec4W06abDhr1CC/YzTFVarvXPYUPv7D1zgXwHOdWwPSCspFnzugx
+         2VBw66rpynAQuskqFhNrPQaVMtIrP9oKKbJ4U75nvZIVmJK/zB3rFy5JKdp4v2NogA
+         R3+fe3ywtA0F2km85iyHw7Udf2aD8o7JYTvQrB3NnsCNLE5CaogZHHm8hpA19w7+2N
+         ryKevvAcea6/xFzwuN19ELDukLFQZsa1I7JvuGqSonY3icS+MH0pHogm2BuZNFDNgj
+         iXKxjp9OQUWx+7eQp/Gr7mhjYtRCv6avpsyinnH0ar6LoxuS1ziPbTtXDho8KdWh3m
+         /fBHZTZsz15UQ==
+Message-ID: <62a86fd9-5770-c32c-ad65-467940cc3ee0@collabora.com>
+Date:   Thu, 9 Feb 2023 10:14:09 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 35/45] clk: mediatek: Split MT8195 clock drivers and
+ allow module build
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230206152928.918562-1-angelogioacchino.delregno@collabora.com>
+ <20230206152928.918562-36-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5HTP0cLGEQ+qkAt8nsOp5DqCOgPyAOJ66fF91SKX=hZvw@mail.gmail.com>
+ <45f8e284-8d56-898b-0897-94c576e09c2c@collabora.com>
+ <CAGXv+5FmmDx0Q_d17hv1gu+drfD12-vtgPoTpefExHGvdkcQyA@mail.gmail.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5FmmDx0Q_d17hv1gu+drfD12-vtgPoTpefExHGvdkcQyA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,33 +71,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+Il 09/02/23 04:46, Chen-Yu Tsai ha scritto:
+> On Wed, Feb 8, 2023 at 5:00 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Il 08/02/23 09:28, Chen-Yu Tsai ha scritto:
+>>> On Mon, Feb 6, 2023 at 11:30 PM AngeloGioacchino Del Regno
+>>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>>
+>>>> MT8195 clock drivers were encapsulated in one single (and big) Kconfig
+>>>> option: there's no reason to do that, as it is totally unnecessary to
+>>>> build in all or none of them.
+>>>>
+>>>> Split them out: keep boot-critical clocks as bool and allow choosing
+>>>> non critical clocks as tristate.
+>>>
+>>> The power domain controller references vppsys*, vdecsys*, vdosys*, wpesys,
+>>> imgsys and camsys. I'd argue that this makes these clock drivers
+>>> semi-boot-critical. Maybe mfgcfg as well when we add the GPU?
+>>
+>> You don't need to power on additional power domains if you want to load modules
+>> from a ramdisk! :-)
+> 
+> Right.
+> 
+>> Besides, you caught me: mtk-pm-domains will be my next target after clocks...
+>> I don't like how it behaves in regard to probe deferrals. Specifically,
+>> I dislike the fact that you either register *all domains* or *none at all*
+>> (unless instantiating two different driver instances and that's ugly).
+> 
+> I don't really like it either, but is it possible to split probe deferrals?
+> I mean, if you skip a couple power domains because the clocks aren't
+> available, how do you come back to them?
+> 
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc: Georgi Djakov <djakov@kernel.org>
----
- drivers/interconnect/qcom/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Honestly, I have no clue right now - I didn't even think about any possible
+implementation for now... but let's see what I can come up with whenever I
+get a chance to actually take a look.
 
---- linux-6.0.orig/drivers/interconnect/qcom/Kconfig
-+++ linux-6.0/drivers/interconnect/qcom/Kconfig
-@@ -74,7 +74,7 @@ config INTERCONNECT_QCOM_RPMH_POSSIBLE
- 	default INTERCONNECT_QCOM
- 	depends on QCOM_RPMH || (COMPILE_TEST && !QCOM_RPMH)
- 	depends on QCOM_COMMAND_DB || (COMPILE_TEST && !QCOM_COMMAND_DB)
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  Compile-testing RPMH drivers is possible on other platforms,
- 	  but in order to avoid link failures, drivers must not be built-in
+Surely not before finishing work on this series, though.
 
+> And IIRC for a clock provider that is _not_ marked as disabled in the DT,
+> trying to fetch a clock from it would just give -EPROBEDEFER until
+> the provider is registered.
+> 
 
--- 
-Jean Delvare
-SUSE L3 Support
+Yes it will give a probe deferral. An internal probe retry mechanism on the
+power domains that couldn't probe would be one of the possible options.
+
+Actually, we have almost endless options on how to resolve that power domains
+issue, so it's not worrying me at all!
+
+Cheers,
+Angelo
+
+> ChenYu
+> 
+>>>
+>>> They should be bundled together at the very least. The power domain
+>>> controller not probing disables all display and multimedia capabilities.
+>>>
+>>> Also wondering if we should have "default COMMON_CLK_MT8195" ...
+>>>
+>>> I suppose the same questions apply to other SoCs.
+>>>
+>>> ChenYu
+>>
+>>
+
