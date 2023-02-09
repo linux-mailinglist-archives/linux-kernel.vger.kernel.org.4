@@ -2,159 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577856909AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985AC6909AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjBINP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S230094AbjBINQO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 08:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjBINPs (ORCPT
+        with ESMTP id S230080AbjBINQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:15:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2A65FE5C
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 05:15:29 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD22766020C4;
-        Thu,  9 Feb 2023 13:15:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675948511;
-        bh=flYyaBSmlEq7QSoE4eSNQuFLX6pZVzUjxjjfV61BCsE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WZt3qc5nFIEl8Of9UBxnkDrj4UBlzk2nm3enY1yIp552vQwO12nsIdK5EuSLmAjvk
-         2XW+3+SV82Ud+mocxWkMI4fQ/PFMfLAY11BzxaOpjCcbDhqCUXI/SADnEGdMMhcFso
-         jTGscBo0x1BjF3q9SE8jqLwIKkGGzjPnswJbW1NxmQ3LnHnYixJ8vrI5kyRuGm9GIG
-         SqPIebDfj5+SwTvQxWe4l0pPgY3ZCJOeR2yYdSHLBc5b6+HmHTh0yc1eLZ/sTwBxpM
-         gHWGnK4Jn5AEdhn8DgtPzrC3cuK1RRZ33tkQBCKL9hXJZVNrXuW5/scdMXtgpii8AA
-         C//fgtdXaG9sQ==
-Message-ID: <076e1d36-351d-ca36-dde9-50075f02d5c6@collabora.com>
-Date:   Thu, 9 Feb 2023 14:15:07 +0100
+        Thu, 9 Feb 2023 08:16:12 -0500
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04695A9C4;
+        Thu,  9 Feb 2023 05:15:48 -0800 (PST)
+Received: by mail-qv1-f52.google.com with SMTP id k28so1284134qve.5;
+        Thu, 09 Feb 2023 05:15:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=weP3SIHvRUQVnBg/cDFazZD9lkCoaJixRzFAmta4Hlc=;
+        b=Q9iDZAk2d2NGIbX0Gx9Ay/J1/tlH8e4Xk0em/sQDjBvGqCDcXahw9Jk54hj+V7kfcm
+         GWLzKJThqu7ew1bscxSX09Qs/vKaUshCSUWDs/7x7MqpFOIRDLoJ9avEYzdw2GtchHON
+         UQlqOnyF5pM3G68iyGJBZSy29dSi+cZp0LMxU7APJUq926I+Jq0XnBMR+wtbOMY2brGu
+         LfVqmAIINvE16UkCEHH9tzGCEjY43h+jxCRGF9tme1dvDrQYszgseSiGV/8RIoc062Gs
+         oi8v1H7MLyByyR6RgCZXoOYKZS9EHUukMim9qwzws4LLFokKw2P7kS9kFVvbLYe40Vkj
+         Yrow==
+X-Gm-Message-State: AO0yUKUi/vPm7SATusgy7tYk1NcEj6PrzzOcmchwQM17R9Yckp8MBOdO
+        EtI8XF9ugRhZW5nLPyrRhZU1rSk1+nN9wQ==
+X-Google-Smtp-Source: AK7set87M5BqYpVU5KG15Dcjd5Jsd90yVBmGE6dyO0JdwThOk9HsRlnVs1qnOxxnAynlUr0/ovTmWA==
+X-Received: by 2002:a0c:cd85:0:b0:56b:fe23:13ac with SMTP id v5-20020a0ccd85000000b0056bfe2313acmr6714063qvm.26.1675948524848;
+        Thu, 09 Feb 2023 05:15:24 -0800 (PST)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id e2-20020a37b502000000b00720f61af739sm1281691qkf.115.2023.02.09.05.15.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 05:15:24 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id q9so2292880ybk.2;
+        Thu, 09 Feb 2023 05:15:24 -0800 (PST)
+X-Received: by 2002:a5b:508:0:b0:8a3:59a4:340e with SMTP id
+ o8-20020a5b0508000000b008a359a4340emr1169830ybp.604.1675948523828; Thu, 09
+ Feb 2023 05:15:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/3] time/sched_clock: Export sched_clock_register()
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        walter.chang@mediatek.com,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        John Stultz <jstultz@google.com>
-Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
-        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230208094813.20874-1-walter.chang@mediatek.com>
- <20230208094813.20874-2-walter.chang@mediatek.com>
- <e1a89a4e-8a0d-47e1-a8fd-75ea152ef816@linaro.org>
- <ad3a5c30-5062-55ae-7908-c0a127bec5ee@gmail.com>
- <3bbc55b8-6b12-4e81-026d-75e0c9116a7b@linaro.org>
- <a021950c-f3d8-8623-4b8f-76c70751c005@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <a021950c-f3d8-8623-4b8f-76c70751c005@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230207145444.166950-1-clement.leger@bootlin.com>
+ <20230207145444.166950-2-clement.leger@bootlin.com> <CAMuHMdVL1YGnX4X2R_O1tMhRt07R8XUD2eWeFFgTcm7ShZrdcg@mail.gmail.com>
+ <20230209141610.31146ea9@fixe.home>
+In-Reply-To: <20230209141610.31146ea9@fixe.home>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 9 Feb 2023 14:15:08 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVs95HXi=sJOE9jyn=jkBtzJTwkqsY+-1hmLEbaV=JWuA@mail.gmail.com>
+Message-ID: <CAMuHMdVs95HXi=sJOE9jyn=jkBtzJTwkqsY+-1hmLEbaV=JWuA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: soc: renesas: renesas.yaml: add
+ renesas,rzn1d400-eb compatible
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/02/23 23:22, Matthias Brugger ha scritto:
-> 
-> 
-> On 08/02/2023 20:45, Krzysztof Kozlowski wrote:
->> On 08/02/2023 20:41, Matthias Brugger wrote:
->>>
->>>
->>> On 08/02/2023 15:24, Krzysztof Kozlowski wrote:
->>>> On 08/02/2023 10:48, walter.chang@mediatek.com wrote:
->>>>> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
->>>>>
->>>>> clocksource driver may use sched_clock_register()
->>>>> to resigter itself as a sched_clock source.
->>>>> Export it to support building such driver
->>>>> as module, like timer-mediatek.c
->>>>>
->>>>> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
->>>>> ---
->>>>>    kernel/time/sched_clock.c | 4 ++--
->>>>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/kernel/time/sched_clock.c b/kernel/time/sched_clock.c
->>>>> index 8464c5acc913..8e49e87d1221 100644
->>>>> --- a/kernel/time/sched_clock.c
->>>>> +++ b/kernel/time/sched_clock.c
->>>>> @@ -150,8 +150,7 @@ static enum hrtimer_restart sched_clock_poll(struct 
->>>>> hrtimer *hrt)
->>>>>        return HRTIMER_RESTART;
->>>>>    }
->>>>> -void __init
->>>>> -sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
->>>>> +void sched_clock_register(u64 (*read)(void), int bits, unsigned long rate)
->>>>
->>>> Is there a non-init caller?
->>>>
->>>>>    {
->>>>>        u64 res, wrap, new_mask, new_epoch, cyc, ns;
->>>>>        u32 new_mult, new_shift;
->>>>> @@ -223,6 +222,7 @@ sched_clock_register(u64 (*read)(void), int bits, unsigned 
->>>>> long rate)
->>>>>        pr_debug("Registered %pS as sched_clock source\n", read);
->>>>>    }
->>>>> +EXPORT_SYMBOL_GPL(sched_clock_register);
->>>>
->>>> Where is the module using it?
->>>>
->>>> You need to bring users of these two changes, not just prepare something
->>>> for your out of tree patches.
->>>>
->>>
->>> I'd propose to add at least one driver that will need these changes, to make it
->>> clear why you need that.
->>
->> ... and actually test if the system works fine when booted from such
->> clocksource as a module. I have doubts that and unfortunately folks
->> working on GKI like to put whatever stuff from mainline into modules
->> even if it does not make sense for us (see long time ago discussion
->> about pinctrl drivers).
->>
-> 
-> Yes thinking about it twice, it makes only sense if  the Arm architecture timer is 
-> running. Otherwise the system will hang on boot. I know that older MediaTek devices 
-> had problems with that...
+Hi Clément,
 
-I think also some very old Qualcomm SoCs have the same timer "issue" and I bet that
-some others as well do.
-Now, I won't argue about the benefits or drawbacks of having X, Y or Z as a module
-because it's probably not the right time/place to... but!
+On Thu, Feb 9, 2023 at 2:13 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> Le Thu, 9 Feb 2023 09:48:09 +0100,
+> Geert Uytterhoeven <geert@linux-m68k.org> a écrit :
+> > On Tue, Feb 7, 2023 at 3:52 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> > > Add "renesas,rzn1d400-eb" which target the RZ/N1 EB board when a RZ/N1D-DB
+> > > daughter board is plugged on it.
+> > >
+> > > Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> >
+> > Thanks for your patch!
+> >
+> > > --- a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> > > +++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> > > @@ -431,6 +431,12 @@ properties:
+> > >                - renesas,rzn1d400-db # RZN1D-DB (RZ/N1D Demo Board for the RZ/N1D 400 pins package)
+> > >            - const: renesas,r9a06g032
+> > >
+> > > +      - description: RZ/N1{D,S} EB
+> > > +        items:
+> > > +          - enum:
+> > > +              - renesas,rzn1d400-eb # RZN1D-EB (Expansion Board when using a RZN1D-DB)
+> > > +          - const: renesas,r9a06g032
+> >
+> > Don't you want to have "renesas,rzn1d400-db", too, in between the two
+> > other values?
+>
+> Do you mean like that ?
+>
+>  - enum:
+>     - renesas,rzn1d400-eb # RZN1D-EB (Expansion Board when using a
+>    RZN1D-DB)
+>  - const: renesas,rzn1d400-db
+>  - const: renesas,r9a06g032
+>
+> And thus using compatible = "renesas,rzn1d400-eb",
+> "renesas,rzn1d400-db", "renesas,r9a06g032" in the EB dt I guess.
 
-I was trying to get my brain ticking on this one and I immediately didn't like it:
-as a matter of fact, this kind of clocksources (especially the arch timer[s]) is
-boot critical and that's not limited to ARM, anyway... this means that a such a
-change can't be *that* easy, at all.
+Exactly!
 
-If you really want to register such a clocksource driver, I would suggest instead
-to make an addition that allows you to do so, while *not* touching common code
-paths that are called by multiple architectures and that may need those to stay
-as they are for one reason or another.
+Gr{oetje,eeting}s,
 
-*If* this kind of modularization will ever happen, it's something that must be
-done slowly and again, not in one shot, especially not with one series "taking
-care of 'em all". Please be careful when touching *core* code.
+                        Geert
 
-That was just an opinion on something that I can envision to be eventually going
-wrong in many, many ways...
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Regards,
-Angelo
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
