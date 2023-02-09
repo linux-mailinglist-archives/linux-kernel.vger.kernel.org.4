@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE5068FE24
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D13D68FE25
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:56:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbjBIDxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 22:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S232873AbjBID4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 22:56:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232887AbjBIDxY (ORCPT
+        with ESMTP id S232432AbjBIDz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 22:53:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685482E825;
-        Wed,  8 Feb 2023 19:53:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01E70B8164F;
-        Thu,  9 Feb 2023 03:53:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 991F1C433EF;
-        Thu,  9 Feb 2023 03:53:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675914781;
-        bh=PrK+3mMGT0AsXDJ9S99RyGu52aNIxwsaYCROU5Oo4OM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=qhTeIYtRUzal1VgLCF0nLl1VCLXJMoZ1czttTNyEQshUW9ZTpBNqcQZOZrmWZRlBz
-         9m3c0DFkw+VdrXqVeHF9FNpRHcFnyPtSj1X8y9GpOk3Aooe48W20eWPdzR8AMUAWrp
-         hgcLaM63vtuur07kSN0Ow5degZjwvUtYj4Eh8KcloqitPmZPnccfOjQmw+ijbbZ5PO
-         T1xPCqKM4EmePKuAiPB/kAXyPA6BmqZEe4ZEe9LxtCUZ1ul1CxZexRDSG8tQDnKlfE
-         0IPBYOL4351HH3rZgjXK8L3nb+LxlOFKmnRFewxeset+ai1TuXi0whpVZ3MUEKJ57d
-         khvC2jyUkFTig==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 120E15C099C; Wed,  8 Feb 2023 19:53:00 -0800 (PST)
-Date:   Wed, 8 Feb 2023 19:53:00 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Usama Arif <usama.arif@bytedance.com>
-Cc:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-Subject: Re: [PATCH v7 0/9] Parallel CPU bringup for x86_64
-Message-ID: <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230207230436.2690891-1-usama.arif@bytedance.com>
+        Wed, 8 Feb 2023 22:55:59 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC3E2B298
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 19:55:57 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VbEPl.i_1675914953;
+Received: from 30.221.133.91(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VbEPl.i_1675914953)
+          by smtp.aliyun-inc.com;
+          Thu, 09 Feb 2023 11:55:54 +0800
+Message-ID: <33043e28-f0ad-852b-f338-c1ac1174a809@linux.alibaba.com>
+Date:   Thu, 9 Feb 2023 11:55:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] erofs: make kobj_type structures constant
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@coolpad.com>
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230209-kobj_type-erofs-v1-1-078c945e2c4b@weissschuh.net>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20230209-kobj_type-erofs-v1-1-078c945e2c4b@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230207230436.2690891-1-usama.arif@bytedance.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 11:04:27PM +0000, Usama Arif wrote:
-> Tested on v7, doing INIT/SIPI/SIPI in parallel brings down the time for
-> smpboot from ~700ms to 100ms (85% improvement) on a server with 128 CPUs
-> split across 2 NUMA nodes.
+
+
+On 2/9/23 11:21 AM, Thomas Wei√üschuh wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
 > 
-> The major change over v6 is keeping parallel smp support enabled in AMD.
-> APIC ID for parallel CPU bringup is now obtained from CPUID leaf 0x0B
-> (for x2APIC mode) otherwise CPUID leaf 0x1 (8 bits).
+> Take advantage of this to constify the structure definitions to prevent
+> modification at runtime.
 > 
-> The patch for reusing timer calibration for secondary CPUs is also removed
-> from the series as its not part of parallel smp bringup and needs to be
-> further thought about.
+> Signed-off-by: Thomas Wei√üschuh <linux@weissschuh.net>
 
-Running rcutorture on this got me the following NULL pointer dereference
-on scenario TREE01:
+Reviewed-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
-------------------------------------------------------------------------
 
-[ † 34.662066] smpboot: CPU 0 is now offline
-[ † 34.674075] rcu: NOCB: Cannot CB-offload offline CPU 25
-[ † 35.038003] rcu: De-offloading 5
-[ † 35.112997] rcu: Offloading 12
-[ † 35.716011] smpboot: Booting Node 0 Processor 0 APIC 0x0
-[ † 35.762685] BUG: kernel NULL pointer dereference, address: 0000000000000001
-[ † 35.764278] #PF: supervisor instruction fetch in kernel mode
-[ † 35.765530] #PF: error_code(0x0010) - not-present page
-[ † 35.766700] PGD 0 P4D 0
-[ † 35.767278] Oops: 0010 [#1] PREEMPT SMP PTI
-[ † 35.768223] CPU: 36 PID: 0 Comm: swapper/36 Not tainted 6.2.0-rc1-00206-g18a37610b632-dirty #3563
-[ † 35.770201] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> ---
+>  fs/erofs/sysfs.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+> index fd476961f742..435e515c0792 100644
+> --- a/fs/erofs/sysfs.c
+> +++ b/fs/erofs/sysfs.c
+> @@ -179,13 +179,13 @@ static const struct sysfs_ops erofs_attr_ops = {
+>  	.store	= erofs_attr_store,
+>  };
+>  
+> -static struct kobj_type erofs_sb_ktype = {
+> +static const struct kobj_type erofs_sb_ktype = {
+>  	.default_groups = erofs_groups,
+>  	.sysfs_ops	= &erofs_attr_ops,
+>  	.release	= erofs_sb_release,
+>  };
+>  
+> -static struct kobj_type erofs_ktype = {
+> +static const struct kobj_type erofs_ktype = {
+>  	.sysfs_ops	= &erofs_attr_ops,
+>  };
+>  
+> @@ -193,7 +193,7 @@ static struct kset erofs_root = {
+>  	.kobj	= {.ktype = &erofs_ktype},
+>  };
+>  
+> -static struct kobj_type erofs_feat_ktype = {
+> +static const struct kobj_type erofs_feat_ktype = {
+>  	.default_groups = erofs_feat_groups,
+>  	.sysfs_ops	= &erofs_attr_ops,
+>  };
+> 
+> ---
+> base-commit: 0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+> change-id: 20230209-kobj_type-erofs-0f0f4c901045
+> 
+> Best regards,
 
-------------------------------------------------------------------------
-
-Given an x86 system with KVM and qemu, this can be reproduced by running
-the following from the top-level directory in the Linux-kernel source
-tree:
-
-	tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --configs "TREE01 TINY01" --trust-make
-
-Out of 15 runs, 14 blew up just after the first attempt to bring CPU
-0 back online.  The 15th run blew up just after the second attempt to
-bring CPU 0 online, the first attempt having succeeded.
-
-My guess is that the CONFIG_BOOTPARAM_HOTPLUG_CPU0=y Kconfig option is
-tickling this bug.  This Kconfig option has been added to the TREE01
-scenario in the -rcu tree's "dev" branch, which might mean that this test
-would pass on mainline.  But CONFIG_BOOTPARAM_HOTPLUG_CPU0=y is not new,
-only rcutorture's testing of it.
-
-Thoughts?
-
-							Thanx, Paul
+-- 
+Thanks,
+Jingbo
