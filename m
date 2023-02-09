@@ -2,192 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640F4690CFC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBDA690D00
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjBIPbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
+        id S231299AbjBIPbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjBIPbN (ORCPT
+        with ESMTP id S231283AbjBIPbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:31:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFF75BA5D;
-        Thu,  9 Feb 2023 07:31:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2363761B05;
-        Thu,  9 Feb 2023 15:31:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79205C4339B;
-        Thu,  9 Feb 2023 15:31:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675956671;
-        bh=BlKYvnz7WNXl24gbX594yEpSvAcoGuqkkt+WsLo2+r8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZkqDugMVdeJGituJmAuVVFVKfpU1yQDHxuK9EoLv8qPAJXLfIWX6OwKqoyn7QMe3v
-         XCSQbazMDJ+QW0jFw8Ff/+z7lo+LUA0FIjN8iRkiCiXYIiScfECGVSK129Bl8/QsIu
-         uilb2SaS+1HIdT20gq/sZTpUBhhm7cXdjsJyquf25wNm5JTn9IyhrLwSDPvc/NL44E
-         CJKEudKXMzz47JeChqn8pTruOF3huDljAFKTm7cdKgSvVWMV0XL1S3juDyqmagJsjP
-         Nw18bO5CQJH+TX0Fd+U71IJSCObzU5sb+lZLfcLDRhzGHTejAE/wyuZUH/6a8NiA+n
-         ZHMhhE11sb2SA==
-Received: by mail-lf1-f43.google.com with SMTP id cf42so3677463lfb.1;
-        Thu, 09 Feb 2023 07:31:11 -0800 (PST)
-X-Gm-Message-State: AO0yUKWMwG6Q7+APHTonruGHBwg+mVmVwXaoHY4jpLh6l/OLJja7pSJZ
-        55G1EDfvh3v8p8818kFo7jd2viJ6bAxJD+egwvM=
-X-Google-Smtp-Source: AK7set/y+U5Z0Ktk9pQgBwA8AKvQcpjCb37bBs8fDFcgJpM/Ys8SVs0RKypLaWQKAZjsIAEcUl1P5fxS3XqvppwkIMA=
-X-Received: by 2002:ac2:55ba:0:b0:4ca:f9e3:c324 with SMTP id
- y26-20020ac255ba000000b004caf9e3c324mr1794776lfg.190.1675956669475; Thu, 09
- Feb 2023 07:31:09 -0800 (PST)
+        Thu, 9 Feb 2023 10:31:18 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D4F611DE;
+        Thu,  9 Feb 2023 07:31:17 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id u27so2437937ljo.12;
+        Thu, 09 Feb 2023 07:31:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HEWeZKg/Hf192mvRWbg97mTukvlnybaYyRe3tKZfeeo=;
+        b=DCoQZ6yFdzTNXWtXD1+O5ROyMvIuQO54tjjNhalWJMnw8ZuJAGBdQEiZu08ampMLix
+         oOx9upeX6NxT2bMwAfNc+cMB/+oUPRCc0d+49Htlgcd2q+gmyIBh/ds28GhsRBIV6bg7
+         p6UAC330wJM7XOAmGpYo5x4vMGYoR5eo52ipbEtkFJ8zrCJO+4g8+xG1cvxXvOYzX2VG
+         eBP+unM4Zyso8zXjynu27I/D9lm7r/HAcW+frImd60C3OJFKlAUK55rb9XI6d/VYH/Dk
+         o+Mp0uB2MB/5561XZUNQJvuWEUq9wlNHiGHK1SpOhEWw3ai17YUCPeaa4g/1UpyxpYhr
+         oQ7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HEWeZKg/Hf192mvRWbg97mTukvlnybaYyRe3tKZfeeo=;
+        b=mf0epMmwCrjvmV8F4oMIbsgoHgANGeBQrFVhAMe/MHCdkyDWROui03j5bJhBbw1qRK
+         4fWLY071CeGlVC526jH9OoUMd0OHu6OH3yFViwmteITPAQTg9x6cUM3NCkA6Ekk+9lr7
+         ucJNT4wob3KxSlsWY3VzCh9FzfoH1daoqL+pcMmUoB78R/sRnZAPQ3q9AIUZBehGpG1N
+         VgefsBcNF4hYRun0OD0o92rZzkvtzCFGzcTj5Pm/9uKj6jqIpYzFRFNL4k/ztVjbGfXM
+         +xAuevlb8u7QFtHo8BS6dg9kMQGVkwT4bP0tCV+zjxeseWV1MxwWw3mV2MMEf7Y6Vcdd
+         ylBA==
+X-Gm-Message-State: AO0yUKUj1ebUrkysEGyV1PSoVdnem5AZkVnqKRK85ToDy2ekf5FtxScB
+        ahOs5O/xoBkZp2LwwgWfjLUivCV4YBES3A1Bpuw=
+X-Google-Smtp-Source: AK7set89qGf5s7nb61Sirj2AJdauT1KC8/wu+eoITk/YjLi73+fHaZ2EBtrTGyBrMytuS9lfD85WLhGLzvWpfCqAhxM=
+X-Received: by 2002:a2e:b683:0:b0:28d:756a:5ade with SMTP id
+ l3-20020a2eb683000000b0028d756a5ademr1750759ljo.85.1675956675670; Thu, 09 Feb
+ 2023 07:31:15 -0800 (PST)
 MIME-Version: 1.0
-References: <2ab9645789707f31fd37c49435e476d4b5c38a0a.1675901828.git.darren@os.amperecomputing.com>
- <DBBPR08MB4538C586B721C8209B03AEEEF7D99@DBBPR08MB4538.eurprd08.prod.outlook.com>
-In-Reply-To: <DBBPR08MB4538C586B721C8209B03AEEEF7D99@DBBPR08MB4538.eurprd08.prod.outlook.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 9 Feb 2023 16:30:57 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG8TY9eKJxtSWYPCu_8qs7W3FWwDSZ+teuwhHb1BHUf7g@mail.gmail.com>
-Message-ID: <CAMj1kXG8TY9eKJxtSWYPCu_8qs7W3FWwDSZ+teuwhHb1BHUf7g@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: efi: Force the use of SetVirtualAddressMap() on
- eMAG and Altra Max machines
-To:     Justin He <Justin.He@arm.com>
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        Alexandru Elisei <alexandru.elisei@gmail.com>, nd <nd@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>
+References: <20230208161654.99556-1-ryncsn@gmail.com> <20230208161654.99556-3-ryncsn@gmail.com>
+ <Y+P0wLTdZcOPiKPZ@cmpxchg.org> <Y+QcJ2OvTmJzrObn@blackbook>
+In-Reply-To: <Y+QcJ2OvTmJzrObn@blackbook>
+From:   Kairui Song <ryncsn@gmail.com>
+Date:   Thu, 9 Feb 2023 23:30:58 +0800
+Message-ID: <CAMgjq7BQ4qAwQ3Obb=7Ytm5tOvWjA0kbfLrwkE=u0PpU2gM+GA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sched/psi: iterate through cgroups directly
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Tejun Heo <tj@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc Nathan, another happy Ampere customer)
-
-On Thu, 9 Feb 2023 at 05:26, Justin He <Justin.He@arm.com> wrote:
+Michal Koutn=C3=BD <mkoutny@suse.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=889=E6=
+=97=A5=E5=91=A8=E5=9B=9B 06:03=E5=86=99=E9=81=93=EF=BC=9A
+> On Wed, Feb 08, 2023 at 02:15:12PM -0500, Johannes Weiner <hannes@cmpxchg=
+.org> wrote:
+> > Please name these psi_groups_first() and psi_groups_next().
 >
+> One more suggestion: s/next/parent/ to avoid impression of (sub)tree
+> iteration and consistence with cg-related iters.
 >
->
-> > -----Original Message-----
-> > From: Darren Hart <darren@os.amperecomputing.com>
-> > Sent: Thursday, February 9, 2023 8:28 AM
-> > To: LKML <linux-kernel@vger.kernel.org>
-> > Cc: stable@vger.kernel.org; linux-efi@vger.kernel.org; Alexandru Elisei
-> > <alexandru.elisei@gmail.com>; Justin He <Justin.He@arm.com>; Huacai Chen
-> > <chenhuacai@kernel.org>; Jason A. Donenfeld <Jason@zx2c4.com>; Ard
-> > Biesheuvel <ardb@kernel.org>
-> > Subject: [PATCH v2] arm64: efi: Force the use of SetVirtualAddressMap() on
-> > eMAG and Altra Max machines
-> >
-> > Commit 550b33cfd445 ("arm64: efi: Force the use of SetVirtualAddressMap()
-> > on Altra machines") identifies the Altra family via the family field in the type#1
-> > SMBIOS record. eMAG and Altra Max machines are similarly affected but not
-> > detected with the strict strcmp test.
-> >
-> > The type1_family smbios string is not an entirely reliable means of identifying
-> > systems with this issue as OEMs can, and do, use their own strings for these
-> > fields. However, until we have a better solution, capture the bulk of these
-> > systems by adding strcmp matching for "eMAG"
-> > and "Altra Max".
-> >
-> > Fixes: 550b33cfd445 ("arm64: efi: Force the use of SetVirtualAddressMap() on
-> > Altra machines")
-> > Cc: <stable@vger.kernel.org> # 6.1.x
-> > Cc: <linux-efi@vger.kernel.org>
-> > Cc: Alexandru Elisei <alexandru.elisei@gmail.com>
-> > Cc: Justin He <Justin.He@arm.com>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> > Cc: Ard Biesheuvel <ardb@kernel.org>
-> > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
-> Tested-by: justin.he@arm.com
-> > ---
-> > V1 -> V2: include eMAG
-> >
-> >  drivers/firmware/efi/libstub/arm64.c | 9 ++++++---
-> >  1 file changed, 6 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/firmware/efi/libstub/arm64.c
-> > b/drivers/firmware/efi/libstub/arm64.c
-> > index ff2d18c42ee7..4501652e11ab 100644
-> > --- a/drivers/firmware/efi/libstub/arm64.c
-> > +++ b/drivers/firmware/efi/libstub/arm64.c
-> > @@ -19,10 +19,13 @@ static bool system_needs_vamap(void)
-> >       const u8 *type1_family = efi_get_smbios_string(1, family);
-> >
-> >       /*
-> > -      * Ampere Altra machines crash in SetTime() if SetVirtualAddressMap()
-> > -      * has not been called prior.
-> > +      * Ampere eMAG, Altra, and Altra Max machines crash in SetTime() if
-> > +      * SetVirtualAddressMap() has not been called prior.
-> >        */
-> > -     if (!type1_family || strcmp(type1_family, "Altra"))
-> > +     if (!type1_family || (
-> > +         strcmp(type1_family, "eMAG") &&
-> > +         strcmp(type1_family, "Altra") &&
-> > +         strcmp(type1_family, "Altra Max")))
-> In terms of resolving the boot hang issue, it looks good to me. And I've verified the
-> "eMAG" part check.
-> So please feel free to add:
-> Tested-by: Justin He <justin.he@arm.com>
+> Thanks,
+> Michal
 >
 
-Thanks. I've queued this up now.
-
-> But I have some other concerns:
-> 1. On an Altra server, the type1_family returns "Server". I don't know whether it
-> is a smbios or server firmware bug.
-
-This is not really a bug. OEMs are free to put whatever they want into
-those fields, although that is a great example of a sloppy vendor that
-just puts random junk in there.
-
-We could plumb in the type 4 smbios record too, and check the version
-for *Altra* - however, it would be nice to get an idea of how many
-more we will end up needing to handle here.
-
-Also, is anyone looking to get this fixed? There is Altra code in the
-public EDK2 repo, but it is very hard to get someone to care about
-these things, and fix their firmware.
-
-
-
-
-> 2. On an eMAG server, I once successfully run efibootmgr -t 10 to call the
-> Set_variable rts, but currently I always met the error, even with above patch:
-> # efibootmgr -t 9; efibootmgr -t 5;
-> Could not set Timeout: Input/output error
-> Could not set Timeout: Input/output error
->
-
-Did this work before? Can you bisect?
-
-> Meanwhile, on the Altra server, it works:
-> # efibootmgr -t 9; efibootmgr -t 5;
-> BootCurrent: 0007
-> Timeout: 9 seconds
-> BootOrder: 0007,0005,0006,0001
-> Boot0001* UEFI: Built-in EFI Shell
-> Boot0005* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
-> Boot0006* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
-> Boot0007* ubuntu
-> BootCurrent: 0007
-> Timeout: 5 seconds
-> BootOrder: 0007,0005,0006,0001
-> Boot0001* UEFI: Built-in EFI Shell
-> Boot0005* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
-> Boot0006* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
-> Boot0007* ubuntu
->
->
->
-> --
-> Cheers,
-> Justin (Jia He)
->
->
+Thanks for the review, I'll update the patch with using this new name.
