@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5D869017F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8399B690183
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjBIHp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 02:45:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
+        id S229701AbjBIHp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 02:45:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjBIHpY (ORCPT
+        with ESMTP id S229640AbjBIHp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 02:45:24 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EAB1BFD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:45:22 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so3213154wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 23:45:22 -0800 (PST)
+        Thu, 9 Feb 2023 02:45:26 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCE41AE
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:45:24 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so3213197wmb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 23:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9TkylMnx0XQBQew9nKf+BKJgpUdEs2B8pdYOfjTDzfQ=;
-        b=mJGpNRd/F4LQdfBYXiJpWkXwj8GEt0IjRpQBjZOnO6dLb5qFtcfi83WQg2Wa5Whl85
-         dDKrubK9L1NpoG9AO6o+buLCb7grKDImJPolYmnr/gX1Fgf71D0P2sYwfumBUECYDi7p
-         FH2blYdNjoGH/bstRynqbsF/ZFeSnPLQXDOXRhDNDUFckjgACFk/adDbUeH4A1bu1tl1
-         tRPY0oiLluOn3zF8H8izL6h9uUo7TdiO/0wrzovumlXjIsTAcxyKyhPcewzApejP0R/C
-         LrsfGESibzYe8+5zaMxm+/S2gOeieI+fP3XM6OC8lG5bdNKtuLdd6sRLueBYQwng1BYh
-         9x0A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gsTN9eojGczStqv1TPLZ5iFIwejDPHD4ltG8erMzZvE=;
+        b=AEVmme3hAlOXspoKKosGhZO2q1YxYiewjqxj+Ww51AVDwiM0/0kBoBIOeHYiTSxzDW
+         1Jhns8X6i3SbAOP3noSNLAgololWlshKzRpbDA1EAZj+HwiECCo5DZ/wRtgpFfH2Ai66
+         TzrrjaSRSu6zSGtfJqPSZmi1fTEVjcUZHU0pV0vgW79V9jOKMw1ufoLjn6snXLWcjXaE
+         tdi9ke0d5C/ifs5P/klf0UwCUWoANJhpaoD0tAxdySL4/VhDFQ21MLOtku4RHx2Zt67L
+         FAyVnuIN/TnXCI9Pbdi9I1fv8ZJUkJPXa8qEvCHmbt3ZvnCFM7qty6nNgVeFPY+l1SD7
+         uKSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9TkylMnx0XQBQew9nKf+BKJgpUdEs2B8pdYOfjTDzfQ=;
-        b=ksoBqH1saGrdt0Eh8lpuxl07SCm8mqWrgWTDUVRMUKGvYxP9S7X/BRjCVuLkrMg4CA
-         7FyuveZR+LG0r0Tc6CZrLU9djSqxYYb28dLcf5Ow7/GC/d43rX5D4GT0QwQ9jGz8fGaB
-         IqTdNRDpxV/Hus6B6PAydrHLx30tF1ooAXyomZOmw11j6VavQcC91hgMuLKAaD1d31rV
-         4kL70IZaw2FuLuBmYmOi6GMpP2kN8SIQ3KJUqJyfkwPDoHfl2HSiI7VHcZKWC//FwREL
-         yv1npXN6E47VPnM481hNu2BaJ2C0oGw6LtzD1Latyff6FSEjaMwfisdH5FaqLy5fAGzq
-         AWnw==
-X-Gm-Message-State: AO0yUKUTwrXJXpIEYTGX5idfd49eT/pUEbzC+Ei8uAIie1VEIN3c5o8v
-        pgg2P6F5lmA9cPtR9s3F4p5EZA==
-X-Google-Smtp-Source: AK7set89HhsrBhTriSqbmLeEi21fPXSAahsF5YD1NGqBEG7pnypTG60x39SPE6byhfuwbIloSUNjtw==
-X-Received: by 2002:a05:600c:491c:b0:3dc:1687:9ba2 with SMTP id f28-20020a05600c491c00b003dc16879ba2mr8734012wmp.35.1675928721190;
-        Wed, 08 Feb 2023 23:45:21 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gsTN9eojGczStqv1TPLZ5iFIwejDPHD4ltG8erMzZvE=;
+        b=A2M2bUTgQoyV/SLaEQHWzJOK6VUsyVRlyqK3l7YKLOc8D9pKm65q+qMYtd9ooFa/as
+         tdttVE4xnAP6LbDcWiKTlUT9ezeMiqiOCdNlkOqqXTK2qjpRC78JtHn4QBJRPS9AO2d/
+         6EQbcDvve4OmYROiqRvO/NZzMefU5vrV1ai5ZbCVYx/gVfO+oFdT9WlWq0SIrti2am4Y
+         OC4FOjkDQijfkIy7zk0CsJUWnR3SB1CDP1HXyErb3tZc+V84o84O0OZbQF0oGITR8Xh1
+         Cmfx3H29G0HOynnum0Cya846HD5K4GBoUAc8a9PLCasMxNL3bnxdhxdnt8KQQlBvYa7t
+         Dj5w==
+X-Gm-Message-State: AO0yUKUxTgna6ZCnxDMhn7JUtFEV53Po7FOu0j9ob8wTsbai0XOi20KO
+        cQBmZNjsd+IHx6KewQROlsIquw==
+X-Google-Smtp-Source: AK7set8C6ruKRM9txpLcVKF635TZ3HNJWJPX/zRC5mAxoAbFRHXEQzg1+M4EiuR4UFtdJJ3J+f2ZLQ==
+X-Received: by 2002:a05:600c:807:b0:3dc:eaef:c1bb with SMTP id k7-20020a05600c080700b003dceaefc1bbmr8916773wmp.35.1675928723289;
+        Wed, 08 Feb 2023 23:45:23 -0800 (PST)
 Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b003da28dfdedcsm1115472wmq.5.2023.02.08.23.45.18
+        by smtp.gmail.com with ESMTPSA id f8-20020a05600c4e8800b003da28dfdedcsm1115472wmq.5.2023.02.08.23.45.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 23:45:19 -0800 (PST)
+        Wed, 08 Feb 2023 23:45:22 -0800 (PST)
 From:   Abel Vesa <abel.vesa@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -58,114 +59,179 @@ To:     Andy Gross <agross@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v4 1/2] pinctrl: qcom: Add support for i2c specific pull feature
-Date:   Thu,  9 Feb 2023 09:45:09 +0200
-Message-Id: <20230209074510.4153294-1-abel.vesa@linaro.org>
+        linux-gpio@vger.kernel.org
+Subject: [PATCH v4 2/2] arm64: dts: qcom: sm8550: Add bias pull up value to tlmm i2c data clk states
+Date:   Thu,  9 Feb 2023 09:45:10 +0200
+Message-Id: <20230209074510.4153294-2-abel.vesa@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230209074510.4153294-1-abel.vesa@linaro.org>
+References: <20230209074510.4153294-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the new i2c_pull property introduced for SM8550 setting
-a I2C specific pull mode on I2C able pins. Add the bit to the SM8550
-specific driver while at it.
+The default bias pull up value for the tlmm i2c data clk states is
+2.2kOhms. Add this value to make sure the driver factors in the i2c pull
+up bit when writing the config register.
 
-Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
 
 The v3 of this specific patch is here:
-https://lore.kernel.org/all/20230208081836.984673-1-abel.vesa@linaro.org/
+https://lore.kernel.org/all/20230208081836.984673-2-abel.vesa@linaro.org/
 
 Changes since v3:
- * changed the condition in msm_config_group_set to "arg == MSM_I2C_STRONG_PULL_UP"
-   as Bjorn suggested
+ * none
 
-Changes since v2:
- * This time, this patch is sent separate w.r.t. SM8550 pinctrl driver
- * The qcom,i2c-pull is dropped, bias-pull-up with value is used instead
- * Default value for i2c pull up is 2.2kOhms and since SM8550 is the
-   first one to use it, we hard code it for now
- * changed the authorship as the implementation looks entirely different now
+ arch/arm64/boot/dts/qcom/sm8550.dtsi | 30 ++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
- drivers/pinctrl/qcom/pinctrl-msm.c    | 7 +++++++
- drivers/pinctrl/qcom/pinctrl-msm.h    | 1 +
- drivers/pinctrl/qcom/pinctrl-sm8550.c | 1 +
- 3 files changed, 9 insertions(+)
-
-diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-index 5142c363480a..a69f93e74435 100644
---- a/drivers/pinctrl/qcom/pinctrl-msm.c
-+++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-@@ -310,6 +310,8 @@ static int msm_config_reg(struct msm_pinctrl *pctrl,
- 	case PIN_CONFIG_BIAS_PULL_UP:
- 		*bit = g->pull_bit;
- 		*mask = 3;
-+		if (g->i2c_pull_bit)
-+			*mask |= BIT(g->i2c_pull_bit) >> *bit;
- 		break;
- 	case PIN_CONFIG_DRIVE_OPEN_DRAIN:
- 		*bit = g->od_bit;
-@@ -336,6 +338,7 @@ static int msm_config_reg(struct msm_pinctrl *pctrl,
- #define MSM_KEEPER		2
- #define MSM_PULL_UP_NO_KEEPER	2
- #define MSM_PULL_UP		3
-+#define MSM_I2C_STRONG_PULL_UP	2200
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index 1dea055a6815..6e60afc748cf 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -2695,7 +2695,7 @@ qup_i2c0_data_clk: qup-i2c0-data-clk-state {
+ 				pins = "gpio28", "gpio29";
+ 				function = "qup1_se0";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
  
- static unsigned msm_regval_to_drive(u32 val)
- {
-@@ -387,6 +390,8 @@ static int msm_config_group_get(struct pinctrl_dev *pctldev,
- 	case PIN_CONFIG_BIAS_PULL_UP:
- 		if (pctrl->soc->pull_no_keeper)
- 			arg = arg == MSM_PULL_UP_NO_KEEPER;
-+		else if (arg & BIT(g->i2c_pull_bit))
-+			arg = MSM_I2C_STRONG_PULL_UP;
- 		else
- 			arg = arg == MSM_PULL_UP;
- 		if (!arg)
-@@ -467,6 +472,8 @@ static int msm_config_group_set(struct pinctrl_dev *pctldev,
- 		case PIN_CONFIG_BIAS_PULL_UP:
- 			if (pctrl->soc->pull_no_keeper)
- 				arg = MSM_PULL_UP_NO_KEEPER;
-+			else if (g->i2c_pull_bit && arg == MSM_I2C_STRONG_PULL_UP)
-+				arg = BIT(g->i2c_pull_bit) | MSM_PULL_UP;
- 			else
- 				arg = MSM_PULL_UP;
- 			break;
-diff --git a/drivers/pinctrl/qcom/pinctrl-msm.h b/drivers/pinctrl/qcom/pinctrl-msm.h
-index 05a1209bf9ae..985eceda2517 100644
---- a/drivers/pinctrl/qcom/pinctrl-msm.h
-+++ b/drivers/pinctrl/qcom/pinctrl-msm.h
-@@ -80,6 +80,7 @@ struct msm_pingroup {
+ 			qup_i2c1_data_clk: qup-i2c1-data-clk-state {
+@@ -2703,7 +2703,7 @@ qup_i2c1_data_clk: qup-i2c1-data-clk-state {
+ 				pins = "gpio32", "gpio33";
+ 				function = "qup1_se1";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
  
- 	unsigned pull_bit:5;
- 	unsigned drv_bit:5;
-+	unsigned i2c_pull_bit:5;
+ 			qup_i2c2_data_clk: qup-i2c2-data-clk-state {
+@@ -2711,7 +2711,7 @@ qup_i2c2_data_clk: qup-i2c2-data-clk-state {
+ 				pins = "gpio36", "gpio37";
+ 				function = "qup1_se2";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
  
- 	unsigned od_bit:5;
- 	unsigned egpio_enable:5;
-diff --git a/drivers/pinctrl/qcom/pinctrl-sm8550.c b/drivers/pinctrl/qcom/pinctrl-sm8550.c
-index 0b7db7d4054a..c9d038098f2c 100644
---- a/drivers/pinctrl/qcom/pinctrl-sm8550.c
-+++ b/drivers/pinctrl/qcom/pinctrl-sm8550.c
-@@ -47,6 +47,7 @@
- 		.mux_bit = 2,			\
- 		.pull_bit = 0,			\
- 		.drv_bit = 6,			\
-+		.i2c_pull_bit = 13,		\
- 		.egpio_enable = 12,		\
- 		.egpio_present = 11,		\
- 		.oe_bit = 9,			\
+ 			qup_i2c3_data_clk: qup-i2c3-data-clk-state {
+@@ -2719,7 +2719,7 @@ qup_i2c3_data_clk: qup-i2c3-data-clk-state {
+ 				pins = "gpio40", "gpio41";
+ 				function = "qup1_se3";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c4_data_clk: qup-i2c4-data-clk-state {
+@@ -2727,7 +2727,7 @@ qup_i2c4_data_clk: qup-i2c4-data-clk-state {
+ 				pins = "gpio44", "gpio45";
+ 				function = "qup1_se4";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c5_data_clk: qup-i2c5-data-clk-state {
+@@ -2735,7 +2735,7 @@ qup_i2c5_data_clk: qup-i2c5-data-clk-state {
+ 				pins = "gpio52", "gpio53";
+ 				function = "qup1_se5";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c6_data_clk: qup-i2c6-data-clk-state {
+@@ -2743,7 +2743,7 @@ qup_i2c6_data_clk: qup-i2c6-data-clk-state {
+ 				pins = "gpio48", "gpio49";
+ 				function = "qup1_se6";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c8_data_clk: qup-i2c8-data-clk-state {
+@@ -2751,14 +2751,14 @@ scl-pins {
+ 					pins = "gpio57";
+ 					function = "qup2_se0_l1_mira";
+ 					drive-strength = <2>;
+-					bias-pull-up;
++					bias-pull-up = <2200>;
+ 				};
+ 
+ 				sda-pins {
+ 					pins = "gpio56";
+ 					function = "qup2_se0_l0_mira";
+ 					drive-strength = <2>;
+-					bias-pull-up;
++					bias-pull-up = <2200>;
+ 				};
+ 			};
+ 
+@@ -2767,7 +2767,7 @@ qup_i2c9_data_clk: qup-i2c9-data-clk-state {
+ 				pins = "gpio60", "gpio61";
+ 				function = "qup2_se1";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c10_data_clk: qup-i2c10-data-clk-state {
+@@ -2775,7 +2775,7 @@ qup_i2c10_data_clk: qup-i2c10-data-clk-state {
+ 				pins = "gpio64", "gpio65";
+ 				function = "qup2_se2";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c11_data_clk: qup-i2c11-data-clk-state {
+@@ -2783,7 +2783,7 @@ qup_i2c11_data_clk: qup-i2c11-data-clk-state {
+ 				pins = "gpio68", "gpio69";
+ 				function = "qup2_se3";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c12_data_clk: qup-i2c12-data-clk-state {
+@@ -2791,7 +2791,7 @@ qup_i2c12_data_clk: qup-i2c12-data-clk-state {
+ 				pins = "gpio2", "gpio3";
+ 				function = "qup2_se4";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c13_data_clk: qup-i2c13-data-clk-state {
+@@ -2799,7 +2799,7 @@ qup_i2c13_data_clk: qup-i2c13-data-clk-state {
+ 				pins = "gpio80", "gpio81";
+ 				function = "qup2_se5";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_i2c15_data_clk: qup-i2c15-data-clk-state {
+@@ -2807,7 +2807,7 @@ qup_i2c15_data_clk: qup-i2c15-data-clk-state {
+ 				pins = "gpio72", "gpio106";
+ 				function = "qup2_se7";
+ 				drive-strength = <2>;
+-				bias-pull-up;
++				bias-pull-up = <2200>;
+ 			};
+ 
+ 			qup_spi0_cs: qup-spi0-cs-state {
 -- 
 2.34.1
 
