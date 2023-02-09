@@ -2,96 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEB4690470
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC954690472
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjBIKIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 05:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S229899AbjBIKIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 05:08:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjBIKIg (ORCPT
+        with ESMTP id S229516AbjBIKIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:08:36 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F20354548
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:08:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675937316; x=1707473316;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=3kM3qVc9Ez61uoBGV4OFIyd2qWSgV9wfm15bdDjlPiw=;
-  b=AfjR7GHMyXBTo1PQWnBoF+uIKch2QyC8UsYw4Lp6jn//svQnZobL4Y/v
-   UbJsO6Fe7EYdBVjhGRs52lpp8FoHbscTQ3uvwPHkaCFya94Srv77BAhZI
-   3W1pCxtcgJe1gF6jxM6YbOaB2aytofVOL6oMkHH3NDOCscuabZ6Z8jX9q
-   dlJpbR/00aWalPIIXVkdu0vdxJo5TYUP+ruva9iBJTzFRnuTt+aRKFBr8
-   Hrvi2TzkIdgaGdd/LBVJYwET7zRuiYjsmZoPGlnODl1uU2SfKQ3X7OoYw
-   /2bDc8T5/Dsv/cwZFtOY8CeUJSsCsQ27LkRrSuCUh06a0mwU24IR2Qu/t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331355005"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="331355005"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 02:08:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="697970307"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="697970307"
-Received: from grizzo-mobl.ger.corp.intel.com (HELO localhost) ([10.252.38.7])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 02:08:31 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     ye.xingchen@zte.com.cn, alexander.deucher@amd.com
-Cc:     sunpeng.li@amd.com, qingqing.zhuo@amd.com, xinhui.pan@amd.com,
-        rodrigo.siqueira@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, wenjing.liu@amd.com,
-        dri-devel@lists.freedesktop.org, george.shen@amd.com,
-        christian.koenig@amd.com
-Subject: Re: [PATCH] drm/amdgpu/display: remove duplicate include header
- =?utf-8?Q?in=C2=A0link=5Fdpms=2Ec?=
-In-Reply-To: <202302091511222329971@zte.com.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <202302091511222329971@zte.com.cn>
-Date:   Thu, 09 Feb 2023 12:08:28 +0200
-Message-ID: <877cwrxiar.fsf@intel.com>
+        Thu, 9 Feb 2023 05:08:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89000564BD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:08:46 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC3EE1515;
+        Thu,  9 Feb 2023 02:09:28 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.89.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 07AB23F71E;
+        Thu,  9 Feb 2023 02:08:44 -0800 (PST)
+Date:   Thu, 9 Feb 2023 10:08:42 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH V7 2/6] arm64/perf: Add BRBE registers and fields
+Message-ID: <Y+TGKnJVaQ86tvPx@FVFF77S0Q05N>
+References: <20230105031039.207972-1-anshuman.khandual@arm.com>
+ <20230105031039.207972-3-anshuman.khandual@arm.com>
+ <Y8AKAZMq7YzOpwwV@FVFF77S0Q05N>
+ <16dcb986-74df-9a78-5cfc-e9f59fbe0997@arm.com>
+ <Y+P2fSWlJ4+PH5sG@FVFF77S0Q05N.cambridge.arm.com>
+ <c22ff85e-17bc-58e6-cc06-86961b9139ed@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c22ff85e-17bc-58e6-cc06-86961b9139ed@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Feb 2023, <ye.xingchen@zte.com.cn> wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
->
-> link_hwss.h is included more than once.
+On Thu, Feb 09, 2023 at 11:19:04AM +0530, Anshuman Khandual wrote:
+> On 2/9/23 00:52, Mark Rutland wrote:
+> > I'd prefer that we fix gen-sysreg.awk to support Enum blocks within
+> > SysregFields blocks (patch below), then use SysregFields as described above.
+> 
+> The following patch did not apply cleanly on v6.2-rc7 but eventually did so after
+> some changes. Is the patch against mainline or arm64-next ? 
 
-You've got U+00A0 non-breaking space in the subject line.
+Sorry I forgot to say: that needs the arm64 for-next/sysreg-hwcaps branch
+(which is merged into arm64 for-next/core).
 
-BR,
-Jani.
+> Nonetheless, it does
+> solve the enum problem for SysregFields. With this patch in place, I was able to
+> 
+> - Change Sysreg BRBINF_EL1 as SysregFields BRBINFx_EL1
+> - Change BRBINF_EL1_XXX fields usage as BRBINFx_EL1_XXX fields
 
->
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/gpu/drm/amd/display/dc/link/link_dpms.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/link/link_dpms.c b/drivers/gpu/drm/amd/display/dc/link/link_dpms.c
-> index 9cdfa7f7dc77..0c26b3589608 100644
-> --- a/drivers/gpu/drm/amd/display/dc/link/link_dpms.c
-> +++ b/drivers/gpu/drm/amd/display/dc/link/link_dpms.c
-> @@ -51,7 +51,6 @@
->  #include "link_enc_cfg.h"
->  #include "resource.h"
->  #include "dsc.h"
-> -#include "link_hwss.h"
->  #include "dccg.h"
->  #include "clk_mgr.h"
->  #include "atomfirmware.h"
+Nice!
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+> Should I take this patch with this series as an initial prerequisite patch or you
+> would like to post this now for current merge window ?
+
+I think for now it's best to add it to this series as a prerequisite.
+
+Thanks,
+Mark.
+
+> 
+> > 
+> > Thanks,
+> > Mark.
+> > 
+> > ---->8----
+> >>From 0c194d92b0b9ff3b32f666a4610b077fdf1b4b93 Mon Sep 17 00:00:00 2001
+> > From: Mark Rutland <mark.rutland@arm.com>
+> > Date: Wed, 8 Feb 2023 17:55:08 +0000
+> > Subject: [PATCH] arm64/sysreg: allow *Enum blocks in SysregFields blocks
+> > 
+> > We'd like to support Enum/SignedEnum/UnsignedEnum blocks within
+> > SysregFields blocks, so that we can define enumerations for sets of
+> > registers. This isn't currently supported by gen-sysreg.awk due to the
+> > way we track the active block, which can't handle more than a single
+> > layer of nesting, which imposes an awkward requirement that when ending
+> > a block we know what the parent block is when calling change_block()
+> > 
+> > Make this nicer by using a stack of active blocks, with block_push() to
+> > start a block, and block_pop() to end a block. Doing so means hat when
+> > ending a block we don't need to know the parent block type, and checks
+> > of the active block become more consistent. On top of that, it's easy to
+> > permit *Enum blocks within both Sysreg and SysregFields blocks.
+> > 
+> > To aid debugging, the stack of active blocks is reported for fatal
+> > errors, and an error is raised if the file is terminated without ending
+> > the active block. For clarity I've renamed the top-level element from
+> > "None" to "Root".
+> > 
+> > The Fields element it intended only for use within Systeg blocks, and
+> > does not make sense within SysregFields blocks, and so remains forbidden
+> > within a SysregFields block.
+> > 
+> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Will Deacon <will@kernel.org>
+> > ---
+> >  arch/arm64/tools/gen-sysreg.awk | 93 ++++++++++++++++++++-------------
+> >  1 file changed, 57 insertions(+), 36 deletions(-)
+> > 
+> > diff --git a/arch/arm64/tools/gen-sysreg.awk b/arch/arm64/tools/gen-sysreg.awk
+> > index 7f27d66a17e1..066ebf5410fa 100755
+> > --- a/arch/arm64/tools/gen-sysreg.awk
+> > +++ b/arch/arm64/tools/gen-sysreg.awk
+> > @@ -4,23 +4,35 @@
+> >  #
+> >  # Usage: awk -f gen-sysreg.awk sysregs.txt
+> >  
+> > +function block_current() {
+> > +	return __current_block[__current_block_depth];
+> > +}
+> > +
+> >  # Log an error and terminate
+> >  function fatal(msg) {
+> >  	print "Error at " NR ": " msg > "/dev/stderr"
+> > +
+> > +	printf "Current block nesting:"
+> > +
+> > +	for (i = 0; i <= __current_block_depth; i++) {
+> > +		printf " " __current_block[i]
+> > +	}
+> > +	printf "\n"
+> > +
+> >  	exit 1
+> >  }
+> >  
+> > -# Sanity check that the start or end of a block makes sense at this point in
+> > -# the file. If not, produce an error and terminate.
+> > -#
+> > -# @this - the $Block or $EndBlock
+> > -# @prev - the only valid block to already be in (value of @block)
+> > -# @new - the new value of @block
+> > -function change_block(this, prev, new) {
+> > -	if (block != prev)
+> > -		fatal("unexpected " this " (inside " block ")")
+> > -
+> > -	block = new
+> > +# Enter a new block, setting the active block to @block
+> > +function block_push(block) {
+> > +	__current_block[++__current_block_depth] = block
+> > +}
+> > +
+> > +# Exit a block, setting the active block to the parent block
+> > +function block_pop() {
+> > +	if (__current_block_depth == 0)
+> > +		fatal("error: block_pop() in root block")
+> > +
+> > +	__current_block_depth--;
+> >  }
+> >  
+> >  # Sanity check the number of records for a field makes sense. If not, produce
+> > @@ -84,10 +96,14 @@ BEGIN {
+> >  	print "/* Generated file - do not edit */"
+> >  	print ""
+> >  
+> > -	block = "None"
+> > +	__current_block_depth = 0
+> > +	__current_block[__current_block_depth] = "Root"
+> >  }
+> >  
+> >  END {
+> > +	if (__current_block_depth != 0)
+> > +		fatal("Missing terminator for " block_current() " block")
+> > +
+> >  	print "#endif /* __ASM_SYSREG_DEFS_H */"
+> >  }
+> >  
+> > @@ -95,8 +111,9 @@ END {
+> >  /^$/ { next }
+> >  /^[\t ]*#/ { next }
+> >  
+> > -/^SysregFields/ {
+> > -	change_block("SysregFields", "None", "SysregFields")
+> > +/^SysregFields/ && block_current() == "Root" {
+> > +	block_push("SysregFields")
+> > +
+> >  	expect_fields(2)
+> >  
+> >  	reg = $2
+> > @@ -109,12 +126,10 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^EndSysregFields/ {
+> > +/^EndSysregFields/ && block_current() == "SysregFields" {
+> >  	if (next_bit > 0)
+> >  		fatal("Unspecified bits in " reg)
+> >  
+> > -	change_block("EndSysregFields", "SysregFields", "None")
+> > -
+> >  	define(reg "_RES0", "(" res0 ")")
+> >  	define(reg "_RES1", "(" res1 ")")
+> >  	print ""
+> > @@ -123,11 +138,13 @@ END {
+> >  	res0 = null
+> >  	res1 = null
+> >  
+> > +	block_pop()
+> >  	next
+> >  }
+> >  
+> > -/^Sysreg/ {
+> > -	change_block("Sysreg", "None", "Sysreg")
+> > +/^Sysreg/ && block_current() == "Root" {
+> > +	block_push("Sysreg")
+> > +
+> >  	expect_fields(7)
+> >  
+> >  	reg = $2
+> > @@ -156,12 +173,10 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^EndSysreg/ {
+> > +/^EndSysreg/ && block_current() == "Sysreg" {
+> >  	if (next_bit > 0)
+> >  		fatal("Unspecified bits in " reg)
+> >  
+> > -	change_block("EndSysreg", "Sysreg", "None")
+> > -
+> >  	if (res0 != null)
+> >  		define(reg "_RES0", "(" res0 ")")
+> >  	if (res1 != null)
+> > @@ -178,12 +193,13 @@ END {
+> >  	res0 = null
+> >  	res1 = null
+> >  
+> > +	block_pop()
+> >  	next
+> >  }
+> >  
+> >  # Currently this is effectivey a comment, in future we may want to emit
+> >  # defines for the fields.
+> > -/^Fields/ && (block == "Sysreg") {
+> > +/^Fields/ && block_current() == "Sysreg" {
+> >  	expect_fields(2)
+> >  
+> >  	if (next_bit != 63)
+> > @@ -200,7 +216,7 @@ END {
+> >  }
+> >  
+> >  
+> > -/^Res0/ && (block == "Sysreg" || block == "SysregFields") {
+> > +/^Res0/ && (block_current() == "Sysreg" || block_current() == "SysregFields") {
+> >  	expect_fields(2)
+> >  	parse_bitdef(reg, "RES0", $2)
+> >  	field = "RES0_" msb "_" lsb
+> > @@ -210,7 +226,7 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^Res1/ && (block == "Sysreg" || block == "SysregFields") {
+> > +/^Res1/ && (block_current() == "Sysreg" || block_current() == "SysregFields") {
+> >  	expect_fields(2)
+> >  	parse_bitdef(reg, "RES1", $2)
+> >  	field = "RES1_" msb "_" lsb
+> > @@ -220,7 +236,7 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^Field/ && (block == "Sysreg" || block == "SysregFields") {
+> > +/^Field/ && (block_current() == "Sysreg" || block_current() == "SysregFields") {
+> >  	expect_fields(3)
+> >  	field = $3
+> >  	parse_bitdef(reg, field, $2)
+> > @@ -231,15 +247,16 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^Raz/ && (block == "Sysreg" || block == "SysregFields") {
+> > +/^Raz/ && (block_current() == "Sysreg" || block_current() == "SysregFields") {
+> >  	expect_fields(2)
+> >  	parse_bitdef(reg, field, $2)
+> >  
+> >  	next
+> >  }
+> >  
+> > -/^SignedEnum/ {
+> > -	change_block("Enum<", "Sysreg", "Enum")
+> > +/^SignedEnum/ && (block_current() == "Sysreg" || block_current() == "SysregFields") {
+> > +	block_push("Enum")
+> > +
+> >  	expect_fields(3)
+> >  	field = $3
+> >  	parse_bitdef(reg, field, $2)
+> > @@ -250,8 +267,9 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^UnsignedEnum/ {
+> > -	change_block("Enum<", "Sysreg", "Enum")
+> > +/^UnsignedEnum/ && (block_current() == "Sysreg" || block_current() == "SysregFields") {
+> > +	block_push("Enum")
+> > +
+> >  	expect_fields(3)
+> >  	field = $3
+> >  	parse_bitdef(reg, field, $2)
+> > @@ -262,8 +280,9 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^Enum/ {
+> > -	change_block("Enum", "Sysreg", "Enum")
+> > +/^Enum/ && (block_current() == "Sysreg" || block_current() == "SysregFields") {
+> > +	block_push("Enum")
+> > +
+> >  	expect_fields(3)
+> >  	field = $3
+> >  	parse_bitdef(reg, field, $2)
+> > @@ -273,16 +292,18 @@ END {
+> >  	next
+> >  }
+> >  
+> > -/^EndEnum/ {
+> > -	change_block("EndEnum", "Enum", "Sysreg")
+> > +/^EndEnum/ && block_current() == "Enum" {
+> > +
+> >  	field = null
+> >  	msb = null
+> >  	lsb = null
+> >  	print ""
+> > +
+> > +	block_pop()
+> >  	next
+> >  }
+> >  
+> > -/0b[01]+/ && block == "Enum" {
+> > +/0b[01]+/ && block_current() == "Enum" {
+> >  	expect_fields(2)
+> >  	val = $1
+> >  	name = $2
