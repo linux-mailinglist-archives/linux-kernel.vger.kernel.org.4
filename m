@@ -2,135 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110BF690B31
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C90690B3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjBIOBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S229728AbjBIOD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjBIOBs (ORCPT
+        with ESMTP id S230030AbjBIODY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:01:48 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB30A113D0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:01:19 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bk16so1838165wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:01:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+evB1wRIs1YVh0m9vaXYV1Eimg/bc2fS/Wf/QcyEWEw=;
-        b=UGsJrKn/adIrTsqzAoUfhxwKHIdPn9Y7s8MU+fSlMTU8+s1TsE5C1qr2E6V0Ck1JId
-         7pjLj77ibjPXMmLEIdnyLL7TSbE05wnyyY2UDeIh0dCvgPG15TCcMAYwoNJ5XbY34WcQ
-         f4l0zRUYxbU8FjNN+HkNJcJgxbwpuWTOPbVEgTAYew0JeB8YAk8NpBx51e05EWZ2dVx+
-         Aa7qUQiPBwU6qGIf9H9CfI66kGI0UY1HiSIG8vwJyvqD5vlWmMq2tv0takrRQHdymbzB
-         2ZrHtZRcA51yblR01blR6SKOzIUEidTff0AyMyogoHMlxbbO9JOrO59IRZQQgE4EONws
-         Y8TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+evB1wRIs1YVh0m9vaXYV1Eimg/bc2fS/Wf/QcyEWEw=;
-        b=svqN/tbjhEILSFfH5KU0+BE04SxicdS0hIJ9PyE1zqhLLSpTMYgXEwi08d3bcPVNjz
-         BJn4h18dVykf9da6hp6UUHQzu69YSIsm0mYpjgUf8gtog4vgl+jZXGaVHg41+b1FZc6a
-         4pj8+b8TJRbagxusFOV+Af7htWhZVWE9/Hevyz4fhe35F55bVoIZ2EFI9x5UqNsBIJoR
-         qw2t8h3hAqMDFGm9wKBNNDyBPcimmadgOq61d1u/V9dNv9Pd9o5ry1s50ioGHfyXbBuT
-         p15Yq/CRvx5hwPx3057249diRP7ykHsC6NAOEeFNar0QPOmkWOkv5ZhrP4AHO/qMD+MR
-         4GYw==
-X-Gm-Message-State: AO0yUKXHN0bS5G42gWBVlzppp6VKXdA8jcA1HopZ+MvWxvUfen134YxQ
-        hrZe6c+xM3L9XNuRzgHfbS2kYQ==
-X-Google-Smtp-Source: AK7set/triGcOEnXv54PfBvlOjeLPOXQlW6J0JP7sHfm/HOZJPeU5N1LK50kZokAKRQ/43+UigvVpg==
-X-Received: by 2002:a5d:65c3:0:b0:2bf:bd69:234b with SMTP id e3-20020a5d65c3000000b002bfbd69234bmr10570099wrw.32.1675951278415;
-        Thu, 09 Feb 2023 06:01:18 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:8009:2525:9580:8db2? ([2a02:6b6a:b566:0:8009:2525:9580:8db2])
-        by smtp.gmail.com with ESMTPSA id l1-20020a5d6741000000b002bdd96d88b4sm1405476wrw.75.2023.02.09.06.01.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 06:01:17 -0800 (PST)
-Message-ID: <46212587-aac6-9513-70a2-32be7eeded14@bytedance.com>
-Date:   Thu, 9 Feb 2023 14:01:16 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v7 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org
-Cc:     kim.phillips@amd.com, arjan@linux.intel.com, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        x86@kernel.org, pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230207230436.2690891-1-usama.arif@bytedance.com>
- <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
- <8e2f03e2-9517-aeb4-df60-b36ef3ff3a75@bytedance.com>
- <f07b371ae2eb11f541c665b488b3d4b6bf1a81b3.camel@infradead.org>
- <87357f2gyd.ffs@tglx>
- <eea887fb7d634c24529743fce8295b2f78eb861d.camel@infradead.org>
- <76b8560c940f4506a690152e91e2f030eb24f86e.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <76b8560c940f4506a690152e91e2f030eb24f86e.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 09:03:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8BB2D6F;
+        Thu,  9 Feb 2023 06:03:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FA461A78;
+        Thu,  9 Feb 2023 14:03:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB71C433EF;
+        Thu,  9 Feb 2023 14:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675951402;
+        bh=3JCu6SWDhRVQ0rFnujYBUtGwwy/pPjw4FuegeZK3AAE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JZXPWu4/X/G4qoSiHhNVQyAWH3EJlNzyFJDOCtgMLgf1PWPRgN4TiBrZOYZeUUNph
+         EaGz3k/t1E0c2gkyeFW90gwClHilCJ6B0i3W5TkoI1IE/rdyOCmGb5dObbeyfmPc08
+         Bk6vdoQEVgkG1D8s1gtnGmuSXJ/LfjdRYD09D4H9rPGXVXAMvrDXAfO3iNnyFrC3Nq
+         8A/P28ia0ViWhzaxAS9mfMiuVskM3v0aJ5pWGQGtOI3+gvT8zadxVAnJGjgg8KmQVU
+         iXhlRjDublWzjoL5k36TVTq8ttYRi96JjDH8UNdVIrvB8xnq0n1A3NMUxQzn07Zuzz
+         OZNMa04mD1qVw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pQ7WC-0090HQ-Ad;
+        Thu, 09 Feb 2023 14:03:20 +0000
+Date:   Thu, 09 Feb 2023 14:03:19 +0000
+Message-ID: <86edqzylzs.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Subject: Re: [PATCH v5 06/19] irqdomain: Fix mapping-creation race
+In-Reply-To: <20230209132323.4599-7-johan+linaro@kernel.org>
+References: <20230209132323.4599-1-johan+linaro@kernel.org>
+        <20230209132323.4599-7-johan+linaro@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: johan+linaro@kernel.org, tglx@linutronix.de, x86@kernel.org, platform-driver-x86@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, dtor@chromium.org, jonathanh@nvidia.com, hsinyi@chromium.org, mark-pk.tsai@mediatek.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 09/02/2023 13:48, David Woodhouse wrote:
-> On Thu, 2023-02-09 at 12:10 +0000, David Woodhouse wrote:
->> On Thu, 2023-02-09 at 12:53 +0100, Thomas Gleixner wrote:
->>> On Thu, Feb 09 2023 at 11:03, David Woodhouse wrote:
->>>> This one also fixes it for me. If we're happy with this approach, I'll
->>>> work it into Thomas's original patch (and hopefully eventually he'll be
->>>> happy enough with it and the commit message that he'll give us his
->>>> Signed-off-by for it.)
->>>
->>> I'm happy enough by now, but I'm not sure how much of the original patch
->>> is still left. Also you did the heavy lifting of making it work and
->>> writing the nice changelog. So please make this:
->>>
->>> From: David Woodhouse <dwmw2@infradead.org>
->>>
->>> Co-developed-by: Thomas Gleixner <tglx@linutronix.de>
->>> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
->>> Signed-off-by: David Woodhouse <dwmw2@infradead.org>
->>
->> Thanks. I'll flip that to the Amazon address, of course. It's useless
->> for actual email (until I apply that LART some more) but I should still
->> use it for that.
->>
->> I think I'm going to make one more change to that as I review it; in
->> the "should never happen" case of not finding the APIC ID in the
->> cpuid_to_apicid[] array it would just keep searching for ever. I don't
->> know if there's a better thing to do other than just dropping the
->> trampoline lock and 1:cli;hlt;jmp 1b but at least it's *attempting* to
->> handle the failure.
->>
->> Patch below, and I'll update the tree shortly. There's a "what if
->> there's noise in the top 32 bits of %rcx" fix in there too.
+On Thu, 09 Feb 2023 13:23:10 +0000,
+Johan Hovold <johan+linaro@kernel.org> wrote:
 > 
-> All done and pushed out to parallel-6.2-rc7-part1 (and not -part1)
-> branches. Usama, are you able to redo the testing and take it from
-> here? Thanks for that; it's saving me a lot of time!
+> Parallel probing of devices that share interrupts (e.g. when a driver
+> uses asynchronous probing) can currently result in two mappings for the
+> same hardware interrupt to be created due to missing serialisation.
 > 
-Thanks! Will retest and repost now!
-
-Usama
-
+> Make sure to hold the irq_domain_mutex when creating mappings so that
+> looking for an existing mapping before creating a new one is done
+> atomically.
 > 
-> I'm mostly done for the week now as by this time tomorrow, I need to
-> have the skis on the roof of the car and be ready to pick the family up
-> from school and start driving south...
+> Fixes: 765230b5f084 ("driver-core: add asynchronous probing support for drivers")
+> Fixes: b62b2cf5759b ("irqdomain: Fix handling of type settings for existing mappings")
+> Link: https://lore.kernel.org/r/YuJXMHoT4ijUxnRb@hovoldconsulting.com
+> Cc: stable@vger.kernel.org      # 4.8
+> Cc: Dmitry Torokhov <dtor@chromium.org>
+> Cc: Jon Hunter <jonathanh@nvidia.com>
+> Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  kernel/irq/irqdomain.c | 55 ++++++++++++++++++++++++++++++------------
+>  1 file changed, 40 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
+> index 7b57949bc79c..1ddb01bd49a4 100644
+> --- a/kernel/irq/irqdomain.c
+> +++ b/kernel/irq/irqdomain.c
+> @@ -25,6 +25,9 @@ static DEFINE_MUTEX(irq_domain_mutex);
+>  
+>  static struct irq_domain *irq_default_domain;
+>  
+> +static int irq_domain_alloc_irqs_locked(struct irq_domain *domain, int irq_base,
+> +					unsigned int nr_irqs, int node, void *arg,
+> +					bool realloc, const struct irq_affinity_desc *affinity);
+>  static void irq_domain_check_hierarchy(struct irq_domain *domain);
+>  
+>  struct irqchip_fwid {
+> @@ -682,9 +685,9 @@ unsigned int irq_create_direct_mapping(struct irq_domain *domain)
+>  EXPORT_SYMBOL_GPL(irq_create_direct_mapping);
+>  #endif
+>  
+> -static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
+> -						  irq_hw_number_t hwirq,
+> -						  const struct irq_affinity_desc *affinity)
+> +static unsigned int irq_create_mapping_affinity_locked(struct irq_domain *domain,
+> +						       irq_hw_number_t hwirq,
+> +						       const struct irq_affinity_desc *affinity)
+>  {
+>  	struct device_node *of_node = irq_domain_get_of_node(domain);
+>  	int virq;
+> @@ -699,7 +702,7 @@ static unsigned int __irq_create_mapping_affinity(struct irq_domain *domain,
+>  		return 0;
+>  	}
+>  
+> -	if (irq_domain_associate(domain, virq, hwirq)) {
+> +	if (irq_domain_associate_locked(domain, virq, hwirq)) {
+>  		irq_free_desc(virq);
+>  		return 0;
+>  	}
+> @@ -735,14 +738,20 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
+>  		return 0;
+>  	}
+>  
+> +	mutex_lock(&irq_domain_mutex);
+> +
+>  	/* Check if mapping already exists */
+>  	virq = irq_find_mapping(domain, hwirq);
+>  	if (virq) {
+>  		pr_debug("existing mapping on virq %d\n", virq);
+> -		return virq;
+> +		goto out;
+>  	}
+>  
+> -	return __irq_create_mapping_affinity(domain, hwirq, affinity);
+> +	virq = irq_create_mapping_affinity_locked(domain, hwirq, affinity);
+> +out:
+> +	mutex_unlock(&irq_domain_mutex);
+> +
+> +	return virq;
+>  }
+>  EXPORT_SYMBOL_GPL(irq_create_mapping_affinity);
+>  
+> @@ -809,6 +818,8 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
+>  		type &= IRQ_TYPE_SENSE_MASK;
+>  
+> +	mutex_lock(&irq_domain_mutex);
+> +
+>  	/*
+>  	 * If we've already configured this interrupt,
+>  	 * don't do it again, or hell will break loose.
+> @@ -821,7 +832,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  		 * interrupt number.
+>  		 */
+>  		if (type == IRQ_TYPE_NONE || type == irq_get_trigger_type(virq))
+> -			return virq;
+> +			goto out;
+>  
+>  		/*
+>  		 * If the trigger type has not been set yet, then set
+> @@ -830,36 +841,43 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
+>  		if (irq_get_trigger_type(virq) == IRQ_TYPE_NONE) {
+>  			irq_data = irq_get_irq_data(virq);
+>  			if (!irq_data)
+> -				return 0;
+> +				goto err;
+>  
+>  			irqd_set_trigger_type(irq_data, type);
+> -			return virq;
+> +			goto out;
+>  		}
+>  
+>  		pr_warn("type mismatch, failed to map hwirq-%lu for %s!\n",
+>  			hwirq, of_node_full_name(to_of_node(fwspec->fwnode)));
+> -		return 0;
+> +		goto err;
+>  	}
+>  
+>  	if (irq_domain_is_hierarchy(domain)) {
+> -		virq = irq_domain_alloc_irqs(domain, 1, NUMA_NO_NODE, fwspec);
+> +		virq = irq_domain_alloc_irqs_locked(domain, -1, 1, NUMA_NO_NODE,
+> +						    fwspec, false, NULL);
+>  		if (virq <= 0)
+> -			return 0;
+> +			goto err;
+>  	} else {
+>  		/* Create mapping */
+> -		virq = __irq_create_mapping_affinity(domain, hwirq, NULL);
+> +		virq = irq_create_mapping_affinity_locked(domain, hwirq, NULL);
+>  		if (!virq)
+> -			return virq;
+> +			goto err;
+>  	}
+>  
+>  	irq_data = irq_get_irq_data(virq);
+>  	if (WARN_ON(!irq_data))
+> -		return 0;
+> +		goto err;
+>  
+>  	/* Store trigger type */
+>  	irqd_set_trigger_type(irq_data, type);
+> +out:
+> +	mutex_unlock(&irq_domain_mutex);
+>  
+>  	return virq;
+> +err:
+> +	mutex_unlock(&irq_domain_mutex);
+> +
+> +	return 0;
+
+nit: it'd look better if we had a single exit path with the unlock,
+setting virq to 0 on failure. Not a big deal, as this can be tidied up
+when applied.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
