@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22B769141B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58A569142F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjBIXAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S230424AbjBIXCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjBIXAQ (ORCPT
+        with ESMTP id S230413AbjBIXCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:00:16 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15FA7EEE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 15:00:14 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id x40so5421565lfu.12
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 15:00:14 -0800 (PST)
+        Thu, 9 Feb 2023 18:02:42 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790725EBE3
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 15:02:38 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id j17so5503791lfr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 15:02:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=to:subject:message-id:date:user-agent:from:references:in-reply-to
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WiBOVyBS3jxeOLS5jdRWtNyu3Pp242/H876fIFzKAmk=;
-        b=G363oTKWPd7OTAHTVIlAF1tmSPBZQHap1zu0Q/66JuLHllBgp162JDmob+GrbeJWvw
-         ATZsHySDeaefJ24LX9yL8F2nwjMTK2RoCVMhMuDtbFBbGbhF0q6y/MujRxfDJIVDh4Xv
-         Z6dFnWw8K1MjPATYPV7WAQz9dbhfP1IwX76JE=
+        bh=peCJVQecXiLHv3VXuncr9j6C4VPJqGmOwwEqDhMNFz8=;
+        b=B5HUOCGpwgLUqbC4wEvg3NBmzQlrcVv8I7q8behP9ZS1KxrSrTKKwgxffb5SlEdj7/
+         c6kCqKxnxVI9w4nSlTtToqohyq7q4A5zg0DZCMP3kdL23OYhqEaazuWYp4HA1apk6BRP
+         PotAfLhGkN3x5CgikLrhCQ5k8VuZtWz4cnjL8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:subject:message-id:date:user-agent:from:references:in-reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WiBOVyBS3jxeOLS5jdRWtNyu3Pp242/H876fIFzKAmk=;
-        b=QBzuXEV35rI6cK3x+qOufVlbsMTw5/lGf0rHQ2FiYmDORtbGsjAuIB593tGdvfR2a2
-         dm+NuEv4YSe1D/X6PBnLjr4NxIPAEwBz0AwOBYlSflSYmRD48Cabn/mc17cNc5w8HFs/
-         jW8fB1q3kjLAo9rKlkvdtdh3AVZdCIvdn4RTeh24Aa4HsOukAld4YfaUqGLCNuMJg9FS
-         hLQLPBTRuyIS8Vas15AN4Nhd59PNLqlmtFHUukfVU4g2jmkTy3h/b5MSoW/mn4SJ3e76
-         2HGWqCpRb/Tw6DX6FL2GfXn+6V5RT2WVjhYeLrfK0iXBxMQCVmg4CKAcfez810Mz8Zuw
-         Ld2w==
-X-Gm-Message-State: AO0yUKXJDbL5OBOTZ8/ExWZkffpla+1q2AYdUPJNQ24o53equoF6Id7e
-        Cn00l/ZxlQFQm6Dt4LXpqr/9nscbOFW+G76MzcVnbw==
-X-Google-Smtp-Source: AK7set8dexKAwHHiOYh04Zt8+CurymxnjylH7GZAEI7nXBU47Y+sRGF7NTh0elgledqS7DrUFTzuJJ3IfScVOz2V7Wc=
-X-Received: by 2002:ac2:4c8f:0:b0:4d9:8773:7d73 with SMTP id
- d15-20020ac24c8f000000b004d987737d73mr2492274lfl.52.1675983613047; Thu, 09
- Feb 2023 15:00:13 -0800 (PST)
+        bh=peCJVQecXiLHv3VXuncr9j6C4VPJqGmOwwEqDhMNFz8=;
+        b=XVrYaPOiZt+mP8uAyNjy7fvxygdBQ50djuXmivFV6MzbSQyyW/E22lbqh+g4JNbIVn
+         +UYLTfoZEz2EP+GGH9yqJLY1sY28+azF4CJndoWoD5Shrokyodt7QT44v4FXE5lldbio
+         jpix7Cs103fDH64FrkvodP7zL366QzIQNWWYmIYruqy9rCgvGur1llaKo0NKTTH0iId+
+         Na2mMgUbwGvH8HGicsCu77A7JQ3YWmIxnfQuy6VoNRzlGVsZqOtdBbFL3KJ8ozfSuc+J
+         PoUr0L4OXlzB45i0Xi1F+f5VUMC0qENJeYmhHgyCIlRX4MIU9DBKYZq35n1cygmncb3R
+         E1oA==
+X-Gm-Message-State: AO0yUKVqKv+wRxXzeNGJhDWZI7KYTPOjv95oVjRMqykxED9pmRvxDaon
+        jmK8iIzdr5NsXg5dwjWVIluqotSSE5QIywvFa4mFlQ==
+X-Google-Smtp-Source: AK7set9XzpuGNqRAqXswm7rG7nSvFG+aoMpYdg/hD1V1I6Z5i9A1s7NpUUjg4N7dzUIRNs9kGqMCjDgeIKJwkZ86bPs=
+X-Received: by 2002:ac2:597a:0:b0:4d8:62ec:1ec0 with SMTP id
+ h26-20020ac2597a000000b004d862ec1ec0mr1894709lfp.247.1675983756760; Thu, 09
+ Feb 2023 15:02:36 -0800 (PST)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 9 Feb 2023 18:00:12 -0500
+ HTTPREST; Thu, 9 Feb 2023 18:02:36 -0500
 MIME-Version: 1.0
-In-Reply-To: <1675700201-12890-8-git-send-email-quic_srivasam@quicinc.com>
-References: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com> <1675700201-12890-8-git-send-email-quic_srivasam@quicinc.com>
+In-Reply-To: <1675700201-12890-6-git-send-email-quic_srivasam@quicinc.com>
+References: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com> <1675700201-12890-6-git-send-email-quic_srivasam@quicinc.com>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date:   Thu, 9 Feb 2023 18:00:12 -0500
-Message-ID: <CAE-0n51nr9MAVptYuNd3KJYVfbKnE1PiG29e8xS7S0gpuhTjXA@mail.gmail.com>
-Subject: Re: [PATCH v5 7/8] arm64: dts: qcom: sc7280: Modify lpasscc node name
+Date:   Thu, 9 Feb 2023 18:02:36 -0500
+Message-ID: <CAE-0n51Ov_0p0JW=4M6NsVzoKUBGaZDKAJtm+wHMMLMiNpDE1Q@mail.gmail.com>
+Subject: Re: [PATCH v5 5/8] arm64: dts: qcom: sc7280: Update lpass_tlmm node
 To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         agross@kernel.org, alsa-devel@alsa-project.org,
         andersson@kernel.org, broonie@kernel.org,
@@ -66,19 +66,19 @@ To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2023-02-06 08:16:40)
-> Modify lpasscc clock controller node name to generic name,
-> that is from lpasscc to clock-controller.
->
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
+Quoting Srinivasa Rao Mandadapu (2023-02-06 08:16:38)
+> Update lpass_tlmm clock properties, as different clock sources
+> are required in ADSP enabled platforms.
+> Also update LPASS_MCC register region. This is required to avoid
+> memory region conflicts due to overlapping lpass_efuse Q6 regmap
+> region used in LPASS PIL node.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+If efuse is overlapping, why isn't that made into an nvmem device that
+can be used or not used depending on the configuration?
