@@ -2,46 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2947B691459
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0F1691465
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjBIXZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
+        id S230464AbjBIX2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:28:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjBIXZp (ORCPT
+        with ESMTP id S230309AbjBIX2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:25:45 -0500
-Received: from irl.hu (irl.hu [95.85.9.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BE13F2AF;
-        Thu,  9 Feb 2023 15:25:42 -0800 (PST)
-Received: from localhost.localdomain (51b6913b.dsl.pool.telekom.hu [::ffff:81.182.145.59])
-  (AUTH: CRAM-MD5 soyer@irl.hu, )
-  by irl.hu with ESMTPSA
-  id 000000000006F75D.0000000063E580F6.002B65B0; Fri, 10 Feb 2023 00:25:41 +0100
-From:   Gergo Koteles <soyer@irl.hu>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Caleb Connolly <caleb@connolly.tech>,
-        Gergo Koteles <soyer@irl.hu>
-Subject: [PATCH v2 2/3] Input: add ABS_SND_PROFILE
-Date:   Fri, 10 Feb 2023 00:25:39 +0100
-Message-Id: <20230209232539.91500-1-soyer@irl.hu>
-X-Mailer: git-send-email 2.39.1
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Mime-Autoconverted: from 8bit to 7bit by courier 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Thu, 9 Feb 2023 18:28:13 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3863F1A1;
+        Thu,  9 Feb 2023 15:28:12 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pQGKn-0002CU-2J;
+        Fri, 10 Feb 2023 00:28:10 +0100
+Date:   Thu, 9 Feb 2023 23:25:54 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH v3 01/12] net: ethernet: mtk_eth_soc: add support for MT7981
+ SoC
+Message-ID: <5621bb7481dea04d0f3cb3d7e81fb383043dcc65.1675984550.git.daniel@makrotopia.org>
+References: <cover.1675984550.git.daniel@makrotopia.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1675984550.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,58 +61,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ABS_SND_PROFILE used to describe the state of a multi-value sound profile
-switch. This will be used for the tri-state key on OnePlus phones or other
-phones.
+The MediaTek MT7981 SoC comes with two 1G/2.5G SGMII ports, just like
+MT7986.
 
-Signed-off-by: Gergo Koteles <soyer@irl.hu>
+In addition MT7981 is equipped with a built-in 1000Base-T PHY which can
+be used with GMAC1.
+
+As many MT7981 boards make use of inverting SGMII signal polarity, add
+new device-tree attribute 'mediatek,pn_swap' to support them.
+
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- Documentation/input/event-codes.rst    | 6 ++++++
- drivers/hid/hid-debug.c                | 1 +
- include/uapi/linux/input-event-codes.h | 1 +
- 3 files changed, 8 insertions(+)
+ drivers/net/ethernet/mediatek/mtk_eth_path.c | 14 +++++++--
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c  | 21 +++++++++++++
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h  | 31 ++++++++++++++++++++
+ drivers/net/ethernet/mediatek/mtk_sgmii.c    | 10 +++++++
+ 4 files changed, 73 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/input/event-codes.rst b/Documentation/input/event-codes.rst
-index b4557462edd7..d43336e64d6a 100644
---- a/Documentation/input/event-codes.rst
-+++ b/Documentation/input/event-codes.rst
-@@ -241,6 +241,12 @@ A few EV_ABS codes have special meanings:
-     emitted only when the selected profile changes, indicating the newly
-     selected profile value.
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_path.c b/drivers/net/ethernet/mediatek/mtk_eth_path.c
+index 72648535a14d..317e447f4991 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_path.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_path.c
+@@ -96,12 +96,20 @@ static int set_mux_gmac2_gmac0_to_gephy(struct mtk_eth *eth, int path)
  
-+* ABS_SND_PROFILE:
+ static int set_mux_u3_gmac2_to_qphy(struct mtk_eth *eth, int path)
+ {
+-	unsigned int val = 0;
++	unsigned int val = 0, mask = 0, reg = 0;
+ 	bool updated = true;
+ 
+ 	switch (path) {
+ 	case MTK_ETH_PATH_GMAC2_SGMII:
+-		val = CO_QPHY_SEL;
++		if (MTK_HAS_CAPS(eth->soc->caps, MTK_U3_COPHY_V2)) {
++			reg = USB_PHY_SWITCH_REG;
++			val = SGMII_QPHY_SEL;
++			mask = QPHY_SEL_MASK;
++		} else {
++			reg = INFRA_MISC2;
++			val = CO_QPHY_SEL;
++			mask = val;
++		}
+ 		break;
+ 	default:
+ 		updated = false;
+@@ -109,7 +117,7 @@ static int set_mux_u3_gmac2_to_qphy(struct mtk_eth *eth, int path)
+ 	}
+ 
+ 	if (updated)
+-		regmap_update_bits(eth->infra, INFRA_MISC2, CO_QPHY_SEL, val);
++		regmap_update_bits(eth->infra, reg, mask, val);
+ 
+ 	dev_dbg(eth->dev, "path %s in %s updated = %d\n",
+ 		mtk_eth_path_name(path), __func__, updated);
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index 14be6ea51b88..cfb15a84b894 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -4860,6 +4860,26 @@ static const struct mtk_soc_data mt7629_data = {
+ 	},
+ };
+ 
++static const struct mtk_soc_data mt7981_data = {
++	.reg_map = &mt7986_reg_map,
++	.ana_rgc3 = 0x128,
++	.caps = MT7981_CAPS,
++	.hw_features = MTK_HW_FEATURES,
++	.required_clks = MT7981_CLKS_BITMAP,
++	.required_pctl = false,
++	.offload_version = 2,
++	.hash_offset = 4,
++	.foe_entry_size = sizeof(struct mtk_foe_entry),
++	.txrx = {
++		.txd_size = sizeof(struct mtk_tx_dma_v2),
++		.rxd_size = sizeof(struct mtk_rx_dma_v2),
++		.rx_irq_done_mask = MTK_RX_DONE_INT_V2,
++		.rx_dma_l4_valid = RX_DMA_L4_VALID_V2,
++		.dma_max_len = MTK_TX_DMA_BUF_LEN_V2,
++		.dma_len_offset = 8,
++	},
++};
 +
-+  - Used to describe the state of a multi-value sound profile switch.
-+    An event is emitted only when the selected profile changes,
-+    indicating the newly selected profile value.
+ static const struct mtk_soc_data mt7986_data = {
+ 	.reg_map = &mt7986_reg_map,
+ 	.ana_rgc3 = 0x128,
+@@ -4902,6 +4922,7 @@ const struct of_device_id of_mtk_match[] = {
+ 	{ .compatible = "mediatek,mt7622-eth", .data = &mt7622_data},
+ 	{ .compatible = "mediatek,mt7623-eth", .data = &mt7623_data},
+ 	{ .compatible = "mediatek,mt7629-eth", .data = &mt7629_data},
++	{ .compatible = "mediatek,mt7981-eth", .data = &mt7981_data},
+ 	{ .compatible = "mediatek,mt7986-eth", .data = &mt7986_data},
+ 	{ .compatible = "ralink,rt5350-eth", .data = &rt5350_data},
+ 	{},
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index afc9d52e79bf..7230dcb29315 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -551,11 +551,22 @@
+ #define SGMSYS_QPHY_PWR_STATE_CTRL 0xe8
+ #define	SGMII_PHYA_PWD		BIT(4)
+ 
++/* Register to QPHY wrapper control */
++#define SGMSYS_QPHY_WRAP_CTRL	0xec
++#define SGMII_PN_SWAP_MASK	GENMASK(1, 0)
++#define SGMII_PN_SWAP_TX_RX	(BIT(0) | BIT(1))
++#define MTK_SGMII_FLAG_PN_SWAP	BIT(0)
 +
- * ABS_MT_<name>:
+ /* Infrasys subsystem config registers */
+ #define INFRA_MISC2            0x70c
+ #define CO_QPHY_SEL            BIT(0)
+ #define GEPHY_MAC_SEL          BIT(1)
  
-   - Used to describe multitouch input events. Please see
-diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
-index e213bdde543a..76fb2ecbbc51 100644
---- a/drivers/hid/hid-debug.c
-+++ b/drivers/hid/hid-debug.c
-@@ -1018,6 +1018,7 @@ static const char *absolutes[ABS_CNT] = {
- 	[ABS_DISTANCE] = "Distance",	[ABS_TILT_X] = "XTilt",
- 	[ABS_TILT_Y] = "YTilt",		[ABS_TOOL_WIDTH] = "ToolWidth",
- 	[ABS_VOLUME] = "Volume",	[ABS_PROFILE] = "Profile",
-+	[ABS_SND_PROFILE] = "SoundProfile",
- 	[ABS_MISC] = "Misc",
- 	[ABS_MT_TOUCH_MAJOR] = "MTMajor",
- 	[ABS_MT_TOUCH_MINOR] = "MTMinor",
-diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-index 022a520e31fc..e765a8f9a3ae 100644
---- a/include/uapi/linux/input-event-codes.h
-+++ b/include/uapi/linux/input-event-codes.h
-@@ -866,6 +866,7 @@
++/* Top misc registers */
++#define USB_PHY_SWITCH_REG	0x218
++#define QPHY_SEL_MASK		GENMASK(1, 0)
++#define SGMII_QPHY_SEL		0x2
++
+ /* MT7628/88 specific stuff */
+ #define MT7628_PDMA_OFFSET	0x0800
+ #define MT7628_SDM_OFFSET	0x0c00
+@@ -736,6 +747,17 @@ enum mtk_clks_map {
+ 				 BIT(MTK_CLK_SGMII2_CDR_FB) | \
+ 				 BIT(MTK_CLK_SGMII_CK) | \
+ 				 BIT(MTK_CLK_ETH2PLL) | BIT(MTK_CLK_SGMIITOP))
++#define MT7981_CLKS_BITMAP	(BIT(MTK_CLK_FE) | BIT(MTK_CLK_GP2) | BIT(MTK_CLK_GP1) | \
++				 BIT(MTK_CLK_WOCPU0) | \
++				 BIT(MTK_CLK_SGMII_TX_250M) | \
++				 BIT(MTK_CLK_SGMII_RX_250M) | \
++				 BIT(MTK_CLK_SGMII_CDR_REF) | \
++				 BIT(MTK_CLK_SGMII_CDR_FB) | \
++				 BIT(MTK_CLK_SGMII2_TX_250M) | \
++				 BIT(MTK_CLK_SGMII2_RX_250M) | \
++				 BIT(MTK_CLK_SGMII2_CDR_REF) | \
++				 BIT(MTK_CLK_SGMII2_CDR_FB) | \
++				 BIT(MTK_CLK_SGMII_CK))
+ #define MT7986_CLKS_BITMAP	(BIT(MTK_CLK_FE) | BIT(MTK_CLK_GP2) | BIT(MTK_CLK_GP1) | \
+ 				 BIT(MTK_CLK_WOCPU1) | BIT(MTK_CLK_WOCPU0) | \
+ 				 BIT(MTK_CLK_SGMII_TX_250M) | \
+@@ -849,6 +871,7 @@ enum mkt_eth_capabilities {
+ 	MTK_NETSYS_V2_BIT,
+ 	MTK_SOC_MT7628_BIT,
+ 	MTK_RSTCTRL_PPE1_BIT,
++	MTK_U3_COPHY_V2_BIT,
  
- #define ABS_VOLUME		0x20
- #define ABS_PROFILE		0x21
-+#define ABS_SND_PROFILE		0x22
+ 	/* MUX BITS*/
+ 	MTK_ETH_MUX_GDM1_TO_GMAC1_ESW_BIT,
+@@ -883,6 +906,7 @@ enum mkt_eth_capabilities {
+ #define MTK_NETSYS_V2		BIT(MTK_NETSYS_V2_BIT)
+ #define MTK_SOC_MT7628		BIT(MTK_SOC_MT7628_BIT)
+ #define MTK_RSTCTRL_PPE1	BIT(MTK_RSTCTRL_PPE1_BIT)
++#define MTK_U3_COPHY_V2		BIT(MTK_U3_COPHY_V2_BIT)
  
- #define ABS_MISC		0x28
+ #define MTK_ETH_MUX_GDM1_TO_GMAC1_ESW		\
+ 	BIT(MTK_ETH_MUX_GDM1_TO_GMAC1_ESW_BIT)
+@@ -955,6 +979,11 @@ enum mkt_eth_capabilities {
+ 		      MTK_MUX_U3_GMAC2_TO_QPHY | \
+ 		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA)
  
++#define MT7981_CAPS  (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | MTK_GMAC2_GEPHY | \
++		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA | \
++		      MTK_MUX_U3_GMAC2_TO_QPHY | MTK_U3_COPHY_V2 | \
++		      MTK_NETSYS_V2 | MTK_RSTCTRL_PPE1)
++
+ #define MT7986_CAPS  (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | \
+ 		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA | \
+ 		      MTK_NETSYS_V2 | MTK_RSTCTRL_PPE1)
+@@ -1068,12 +1097,14 @@ struct mtk_soc_data {
+  * @ana_rgc3:          The offset refers to register ANA_RGC3 related to regmap
+  * @interface:         Currently configured interface mode
+  * @pcs:               Phylink PCS structure
++ * @flags:             Flags indicating hardware properties
+  */
+ struct mtk_pcs {
+ 	struct regmap	*regmap;
+ 	u32             ana_rgc3;
+ 	phy_interface_t	interface;
+ 	struct phylink_pcs pcs;
++	u32		flags;
+ };
+ 
+ /* struct mtk_sgmii -  This is the structure holding sgmii regmap and its
+diff --git a/drivers/net/ethernet/mediatek/mtk_sgmii.c b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+index bb00de1003ac..d7ffaaeaf9ab 100644
+--- a/drivers/net/ethernet/mediatek/mtk_sgmii.c
++++ b/drivers/net/ethernet/mediatek/mtk_sgmii.c
+@@ -88,6 +88,11 @@ static int mtk_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
+ 		regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_PWR_STATE_CTRL,
+ 				   SGMII_PHYA_PWD, SGMII_PHYA_PWD);
+ 
++		if (mpcs->flags & MTK_SGMII_FLAG_PN_SWAP)
++			regmap_update_bits(mpcs->regmap, SGMSYS_QPHY_WRAP_CTRL,
++					   SGMII_PN_SWAP_MASK,
++					   SGMII_PN_SWAP_TX_RX);
++
+ 		if (interface == PHY_INTERFACE_MODE_2500BASEX)
+ 			rgc3 = RG_PHY_SPEED_3_125G;
+ 		else
+@@ -182,6 +187,11 @@ int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *r, u32 ana_rgc3)
+ 
+ 		ss->pcs[i].ana_rgc3 = ana_rgc3;
+ 		ss->pcs[i].regmap = syscon_node_to_regmap(np);
++
++		ss->pcs[i].flags = 0;
++		if (of_property_read_bool(np, "mediatek,pnswap"))
++			ss->pcs[i].flags |= MTK_SGMII_FLAG_PN_SWAP;
++
+ 		of_node_put(np);
+ 		if (IS_ERR(ss->pcs[i].regmap))
+ 			return PTR_ERR(ss->pcs[i].regmap);
 -- 
 2.39.1
 
