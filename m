@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D920C69048E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47058690491
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjBIKX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 05:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S229450AbjBIKYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 05:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjBIKX5 (ORCPT
+        with ESMTP id S229944AbjBIKYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:23:57 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63008193D6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:23:56 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id l201so771094ybf.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 02:23:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ESBIV/kNJUNeYCMfLMjpk+d6xlstSirIwM474nZZD/0=;
-        b=VvSf7nsrTc1HWEqNg6MATvElyfdndYn0+jgpiSPmGNALuJ2YaX+mF3GB/ewxj4du63
-         QYjMg9xZjfdGGfYXEJauxvtHUoY+ohbFXPT1kDLMUdtQRav/86bqucl9bKzjAsldzBnq
-         EGumfKi+HVT8/8afw7Nz5WoNOA2vMT6V3YZ1kdLl2KbuI5hVDl6mJ24nMh8RHAckeE2N
-         HdLAL1lFLsG7Bju0uufjPwWNpOlz5vUVcdnOOV3mt+imkZMufdKt8VYuQz2jqLvGUPfG
-         d4/uChKWIB9oWeOxwMJE2OmYkV1FwuSWdWPXCME8aFd0foD/hv00k824AFxOWTu3l5QJ
-         gizw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ESBIV/kNJUNeYCMfLMjpk+d6xlstSirIwM474nZZD/0=;
-        b=YklWSTw3586gVjlJpubGv3gM/yLOd//ebNv3cTE9VmSujGiyx1P6cP2k78kxgDBqpK
-         Spy7/JRCN+liN4RKGzfTXZQS/w+hqJYG18+We1zTQWqKG4kklBWl17CKHOaR/++rVKoc
-         F9FVWl8Z/wSmnki42LEdcx/lQ5fedwKB52P1HMSXl/UXvS+LXbQZBGJqP6undZgF34lQ
-         dpbGHP8H/neKiKuCDxKxHevAeB1Qw0IponWcbrFkP8C64P4LQFJ6OjQIvsz1SUPDKsW5
-         x2t5uG8FnuRtz6Fk9/GfqsQsKlJQV+sIv1Ef5DXAl2myy7ZCFzSPDTUyCBfE6I9rD2Kh
-         /JnQ==
-X-Gm-Message-State: AO0yUKVE9130w1GFLzWI0nHQ7FLBURTgGDNUuksZVG0LLiB9TOgJQOzt
-        XsdlBjWftMvbFPuvCQY2L4dW3OyVMFnDqrPNpnaRqHwZwdhlUM0I
-X-Google-Smtp-Source: AK7set+C4DcjTmcYWBgoWWJilkxDTiApY+tMJci86TbkIHE286R71lPvBSO/vStE0DPkyAJ6+h7YG1xPTY8D86Vb1XQ=
-X-Received: by 2002:a25:5d02:0:b0:889:f225:d942 with SMTP id
- r2-20020a255d02000000b00889f225d942mr30014ybb.518.1675938235680; Thu, 09 Feb
- 2023 02:23:55 -0800 (PST)
+        Thu, 9 Feb 2023 05:24:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D379266EDB;
+        Thu,  9 Feb 2023 02:24:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A3016195B;
+        Thu,  9 Feb 2023 10:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5782CC433EF;
+        Thu,  9 Feb 2023 10:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675938243;
+        bh=qTSxkPD3QcM5DcX5h7N2ipkmgP1aWhs5Aq6TYFHj180=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nsXmbcx4rleMJ9bZigroeLRiTj7YHoQTL4XXqCL/duHufSN++c7/v42+Hp0ExknGW
+         kA2C5ZFZuB5hYyElhHe0MsgZE1+z0oVnMPRDyBd+YEzOYvxNLWbncpayuEmllkm8DU
+         Mw/7XGqONMA1m3LRpZo1POASFfs5GnMoBhALiyR0=
+Date:   Thu, 9 Feb 2023 11:24:01 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Jann Horn <jannh@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 6.1 000/208] 6.1.11-rc1 review
+Message-ID: <Y+TJwTVFIYBxELwo@kroah.com>
+References: <20230207125634.292109991@linuxfoundation.org>
+ <CA+G9fYtgJX507GJ3fG7-G+vGhG4BnU=kzu3fOH_a-_aMU0S_0w@mail.gmail.com>
+ <Y+KJyTsiio0XMQJ+@x1n>
 MIME-Version: 1.0
-References: <20230127192139.299228-1-brgl@bgdev.pl> <167591660368.1230100.1469946170144348483.b4-ty@kernel.org>
-In-Reply-To: <167591660368.1230100.1469946170144348483.b4-ty@kernel.org>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Thu, 9 Feb 2023 11:23:44 +0100
-Message-ID: <CACMJSet=0TW2u5PNPZFmb3WNrjCxRDaozkS9KLaEcEwPp6zHeQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p compatible
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y+KJyTsiio0XMQJ+@x1n>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,31 +63,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Feb 2023 at 05:21, Bjorn Andersson <andersson@kernel.org> wrote:
->
-> On Fri, 27 Jan 2023 20:21:39 +0100, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > Add a compatible for the sa8775p platform's Secure Channel Manager
-> > firmware interface.
-> >
-> >
->
-> Applied, thanks!
->
-> [1/1] dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p compatible
->       commit: 27d71e8063d99b4429832bc52de171ace6b1e562
->
-> Best regards,
-> --
-> Bjorn Andersson <andersson@kernel.org>
+On Tue, Feb 07, 2023 at 12:26:33PM -0500, Peter Xu wrote:
+> On Tue, Feb 07, 2023 at 10:35:19PM +0530, Naresh Kamboju wrote:
+> > On Tue, 7 Feb 2023 at 18:29, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 6.1.11 release.
+> > > There are 208 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Thu, 09 Feb 2023 12:55:54 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.11-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> > 
+> > Results from Linaro’s test farm.
+> > Following build regressions noticed while building
+> > selftests/vm/hugetlb-madvise.c
+> > with kselftest-merge configs.
+> > 
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > 
+> > Build errors:
+> > ----------
+> > hugetlb-madvise.c:242:13: warning: implicit declaration of function
+> > 'fallocate'; did you mean 'alloca'? [-Wimplicit-function-declaration]
+> >   242 |         if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+> >       |             ^~~~~~~~~
+> >       |             alloca
+> > hugetlb-madvise.c:289:27: error: 'FALLOC_FL_PUNCH_HOLE' undeclared
+> > (first use in this function)
+> >   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> >       |                           ^~~~~~~~~~~~~~~~~~~~
+> > hugetlb-madvise.c:289:27: note: each undeclared identifier is reported
+> > only once for each function it appears in
+> > hugetlb-madvise.c:289:50: error: 'FALLOC_FL_KEEP_SIZE' undeclared
+> > (first use in this function)
+> >   289 |         if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> >       |                                                  ^~~~~~~~~~~~~~~~~~~
+> > make[3]: *** [../lib.mk:145:
+> > /home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/vm/hugetlb-madvise]
+> > Error 1
+> > 
+> > Build log:
+> > https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/jobs/3728198425#L1676
+> > https://storage.tuxsuite.com/public/linaro/lkft/builds/2LPeQeCIu0YEfltwqAFCvDaj29A/
+> 
+> I think we should drop the patch "[PATCH 6.1 012/208] selftests/vm: remove
+> __USE_GNU in hugetlb-madvise.c" from this merge.
+> 
+> That patch fixes commit 62f33fa22800 ("selftests/vm: use memfd for
+> hugetlb-madvise test"), but that's only in 6.2-rc1 and it's not in 6.1.
+> 
+> I don't really know why it got picked for 6.1 stable backport, because the
+> original patch doesn't contain "CC: stable".
 
-Bjorn,
+Now dropped, thanks!
 
-FYI I resent this patch as part of an integration series later[1] as
-per Krzysztof's suggestion. Could you pick the entire thing up too?
-
-Thanks!
-Bart
-
-[1] https://lore.kernel.org/linux-arm-msm/20230201152038.203387-1-brgl@bgdev.pl/
+greg k-h
