@@ -2,93 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC65F690CD2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53563690D1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjBIPWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S230369AbjBIPfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjBIPWx (ORCPT
+        with ESMTP id S231372AbjBIPf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:22:53 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EB3170E;
-        Thu,  9 Feb 2023 07:22:52 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id bk16so2107147wrb.11;
-        Thu, 09 Feb 2023 07:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GxFq7fZlqbGjwXiI/Fc+o/rdi2Z7DhXh24vJqm8qfmA=;
-        b=nJ+n1AC5uVNxc0cXP8KNa/VvP56pb7WfWEWS/VYSLPFHWYIyaQb/UFpYmbxF13aY1Q
-         OWFjFanjY9RbX8QkEE4x2/Uh0QT8ZTwGe7XHx/6B/RB5Q0YUP9Eq/88a9/ndUu+lrWmr
-         furuJSHUyCRCYs8wlGEN/5tO3DaE7bPDq1aZkQDJL0CjJ6LqLzJVVMzFvOrMkL8yja12
-         D6qZLkmL8+vxl1/guzbu/mBgsUm/tmhRHGmZNhZYkIX5Wztewy4gFwz6BtOGtcHyqL9h
-         c2Uu1k0BuZBMpzYag2Owd8yV+5JnTRfZGdYu7smjgpAEkoRzjLSSNW/wXWtUM2Kz6tOJ
-         RwYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GxFq7fZlqbGjwXiI/Fc+o/rdi2Z7DhXh24vJqm8qfmA=;
-        b=wvivJmFi+vg6AO44DE0TyatCIS3t/tgV5M7kioxE4RHaEv5X197TcTgLjLjdZUO5C+
-         WMemjtCO4B7FIzs+7js821HS1Xo7o/ZxsgcKcCZbC2NbRWQeo8ArbREq9rTxSfHu2BSA
-         gOVOzppaVvAxNjzMFYRlz+DI9c4XaBCv/IQY42TfFNk6wlpOJPzWbI/ETz46McxzaOOl
-         k24dopxYgcu/+Vq45mmuhIaYaUZ7ckOmqb4CAZOuw5Bt55tqhCXV7IoVT1yi2rNBZcOV
-         v2CPYuyQp/qAmJSe38wRXy1xeK73bZB7zbp3TkY4H1riUfQTm4BEufdflPYqH6x91xQB
-         /urg==
-X-Gm-Message-State: AO0yUKWo5cbuyy1oHQxt6jGEtv66Q1f19cSJZkvar0ZarVLiblWgJu6z
-        FFI0KevXhHbFDCLDIEYbjr8=
-X-Google-Smtp-Source: AK7set8R7kHBC6zkISR04QehfHSNISlKwiGpLqx83p5E5vQRTm7hFnY0RGGgNm+RKbNrxKMW8+AH3A==
-X-Received: by 2002:a05:6000:110e:b0:2bf:95fb:e5b3 with SMTP id z14-20020a056000110e00b002bf95fbe5b3mr11258205wrw.33.1675956170534;
-        Thu, 09 Feb 2023 07:22:50 -0800 (PST)
-Received: from ?IPv6:2a02:ab88:368f:2080:d12e:7ef:c89a:f600? ([2a02:ab88:368f:2080:d12e:7ef:c89a:f600])
-        by smtp.gmail.com with ESMTPSA id x15-20020adfec0f000000b002be5401ef5fsm1499739wrn.39.2023.02.09.07.22.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 07:22:50 -0800 (PST)
-Message-ID: <9e42dec3978c535d6bee6a8bd0c4137a23b70998.camel@gmail.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: exynos: add mmc aliases
-From:   David Virag <virag.david003@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Henrik Grimler <henrik@grimler.se>
-Cc:     krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        m.szyprowski@samsung.com, jenneron@protonmail.com,
-        markuss.broks@gmail.com, martin.juecker@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Valentine Iourine <iourine@iourine.msk.su>
-Date:   Thu, 09 Feb 2023 16:22:48 +0100
-In-Reply-To: <CAL_Jsq+y2_aHXsxj4sx0KPATDi9-7mujruowpbq2kxro4e13zg@mail.gmail.com>
-References: <20230128133151.29471-1-henrik@grimler.se>
-         <20230128133151.29471-3-henrik@grimler.se>
-         <CAL_Jsq+y2_aHXsxj4sx0KPATDi9-7mujruowpbq2kxro4e13zg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Thu, 9 Feb 2023 10:35:29 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8A564664
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:35:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675956906; x=1707492906;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DBmQQVUz0xBm9mAUPi6p/C1WlTafVt50h5IaYJ0eVDA=;
+  b=KgLntQYyAzzQ+ky5kZKZJxBjd+kRa3+1tGIelntXZnkWpcC9hkci0raC
+   mgFnMUm5eYfRqugJrJ6ajiyDypf2gCTqWAn+oUAIiQWArnKpY2i8Vp93z
+   UPoUQnR00zL1UWoLqdXIJ7aUSjLg8gNH0Gsv0xaLbaebuPV4pK/25ryq0
+   /XGOzPnwrXIMNr6safyena24PkjwVl7KZb56YlzPsG9WR2tXRvVIAKo8J
+   PRCzSkEI40kN2/jaWF4dUaLeViTp9HP/tLRIuVD+j79GNhWq0lrpHIEjb
+   uhKb+8JLhFlu/Z8ZiHbeH+jALKSRr80jxjwkf9GDfVBWlKUYYoiCeuge1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309782438"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="309782438"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:35:05 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776528833"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="776528833"
+Received: from fpastor-mobl4.amr.corp.intel.com (HELO [10.212.74.130]) ([10.212.74.130])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:35:04 -0800
+Message-ID: <dbec6aab-6456-72b3-39b6-3490dfdf083c@linux.intel.com>
+Date:   Thu, 9 Feb 2023 09:23:46 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 3/5] soundwire: qcom: wait for fifo to be empty before
+ suspend
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        vkoul@kernel.org
+Cc:     yung-chuan.liao@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        johan+linaro@kernel.org, quic_bjorande@quicinc.com
+References: <20230209131336.18252-1-srinivas.kandagatla@linaro.org>
+ <20230209131336.18252-4-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230209131336.18252-4-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-09 at 09:06 -0600, Rob Herring wrote:
-> On Sat, Jan 28, 2023 at 7:32 AM Henrik Grimler <henrik@grimler.se>
-> wrote:
-> >=20
-> > Add aliases for eMMC, SD card and WiFi where applicable, so that
-> > assigned mmcblk numbers are always the same.
->=20
-> What does WiFi have to do with mmcblk?
 
-Some devices use SDIO WiFi, which is usually on mmc_1.
-An example of this that I could find is in exynos5250-spring.dts.
+
+On 2/9/23 07:13, Srinivas Kandagatla wrote:
+> Wait for Fifo to be empty before going to suspend or before bank
+> switch happens. Just to make sure that all the reads/writes are done.
+
+For the suspend case that seems like a valid approach, but for bank
+switch don't we already have a bus->msg_lock mutex that will prevent the
+bank switch command from being sent before the other commands are handled?
+
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+>  drivers/soundwire/qcom.c | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index b2363839624c..465b2a2ef0d5 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -325,6 +325,32 @@ static int swrm_wait_for_wr_fifo_avail(struct qcom_swrm_ctrl *swrm)
+>  	return 0;
+>  }
+>  
+> +static bool swrm_wait_for_wr_fifo_done(struct qcom_swrm_ctrl *swrm)
+> +{
+> +	u32 fifo_outstanding_cmds, value;
+> +	int fifo_retry_count = SWR_OVERFLOW_RETRY_COUNT;
+> +
+> +	/* Check for fifo overflow during write */
+> +	swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> +	fifo_outstanding_cmds = FIELD_GET(SWRM_WR_CMD_FIFO_CNT_MASK, value);
+> +
+> +	if (fifo_outstanding_cmds) {
+> +		while (fifo_retry_count) {
+> +			usleep_range(500, 510);
+> +			swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
+> +			fifo_outstanding_cmds = FIELD_GET(SWRM_WR_CMD_FIFO_CNT_MASK, value);
+> +			fifo_retry_count--;
+> +			if (fifo_outstanding_cmds == 0)
+> +				return true;
+> +		}
+> +	} else {
+> +		return true;
+> +	}
+> +
+> +
+> +	return false;
+> +}
+> +
+>  static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
+>  				     u8 dev_addr, u16 reg_addr)
+>  {
+> @@ -356,6 +382,7 @@ static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
+>  		usleep_range(150, 155);
+>  
+>  	if (cmd_id == SWR_BROADCAST_CMD_ID) {
+> +		swrm_wait_for_wr_fifo_done(swrm);
+>  		/*
+>  		 * sleep for 10ms for MSM soundwire variant to allow broadcast
+>  		 * command to complete.
+> @@ -1122,6 +1149,7 @@ static void qcom_swrm_shutdown(struct snd_pcm_substream *substream,
+>  {
+>  	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dai->dev);
+>  
+> +	swrm_wait_for_wr_fifo_done(ctrl);
+>  	sdw_release_stream(ctrl->sruntime[dai->id]);
+>  	ctrl->sruntime[dai->id] = NULL;
+>  	pm_runtime_mark_last_busy(ctrl->dev);
+> @@ -1558,6 +1586,7 @@ static int __maybe_unused swrm_runtime_suspend(struct device *dev)
+>  	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
+>  	int ret;
+>  
+> +	swrm_wait_for_wr_fifo_done(ctrl);
+>  	if (!ctrl->clock_stop_not_supported) {
+>  		/* Mask bus clash interrupt */
+>  		ctrl->intr_mask &= ~SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET;
