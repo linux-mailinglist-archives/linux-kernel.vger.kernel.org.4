@@ -2,234 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B6F68FCD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F9A68FCD5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjBICHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S231470AbjBICIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:08:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbjBICHJ (ORCPT
+        with ESMTP id S231418AbjBICIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:07:09 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57286C66C;
-        Wed,  8 Feb 2023 18:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1675908419;
-        bh=T307AjNgapNVG2vuI3mdmLu0VBxKOLkbyo7sODH20GE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=biuWd9/gcPXd3A6xs869yn+pPG/n/QrnzpDPCqid4y0Z8uI+h0RWZzejRsmXG38KI
-         wiTHdBX6KTJPzj4iqEzP3/h+Q7JKAfCpua7sHsTDIfdcV8flAFcuOUJrxg9gcPqQj/
-         APNfBFLCCAOxuPbYGvpE5uA+k56tyq+EjGQ6VaHfYpGKCs9M8vHKS09eZWLHRju+YI
-         n0OOTH9zn/fdrqD6PIngPpqohnYeQ/NBMIovdANyQYYxkPVfRdQ/0BszqRnYPZfs5F
-         RLei6HMR05iZ4G0oubCPAf1xojBsF32A24J+pFZUqYiflnDLv1buR7uh8GzcVzQXZy
-         nmAncYBl7CIDQ==
-Received: from [10.1.0.205] (192-222-188-97.qc.cable.ebox.net [192.222.188.97])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PC0c31MBDzknt;
-        Wed,  8 Feb 2023 21:06:59 -0500 (EST)
-Message-ID: <08e1c9d0-376f-d669-6fe8-559b2fbc2f2b@efficios.com>
-Date:   Wed, 8 Feb 2023 21:06:58 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded 16
- with TASK_COMM_LEN
-Content-Language: en-US
-To:     John Stultz <jstultz@google.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
+        Wed, 8 Feb 2023 21:08:46 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A97869F;
+        Wed,  8 Feb 2023 18:08:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675908525; x=1707444525;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Hq0qoSXBomXpAsshjH4I0FuSszufPqeMFTdcr0+LsKM=;
+  b=KUSrUb+ratxHfEYthBJXsTUQKe9Nnc9SCqSAZRqTj/BW3bBzyuxWuEJQ
+   43BOkTvbtv7CKdkX5d2SOnnLkVWB1eOLXo2kWFSW6u6XYpFIgJ5BhckAR
+   qZzWj4tUZB2QE3OORJCpV6/3ORsJHETbQhZeqptEFDMkl3JUGon5FrbGK
+   CnX3B+192q7HxhZxxF611Vbmxgu3X5mXfPXyqm933M/VOuWQ21yPEQm2b
+   hb6POKHNd2DF3LHWE3znlOHG2wFE5oqtwij+nWpxADMZWFODk40pELikl
+   0UXXaCx10ME6wzv1wznKjbT0fzJ1vmgKly7cQslir9OMDqU/BqAlaafoN
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="332110579"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="332110579"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 18:08:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="756253047"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="756253047"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Feb 2023 18:08:31 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 8 Feb 2023 18:08:30 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 8 Feb 2023 18:08:30 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 8 Feb 2023 18:08:30 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DrrwjnOOn2XDrxs4yutd5MIkrZ76C4Qh75B+FODn4cNcjeij1crAhMA1UWkZfqJRu3Rn6bRfIatZ4WVaXeEY4yYNacDDdDkChx+YNd70f942t2bhLG6yk/D6mZIGf98S6ykYh2geNKhSWaAm6GukQX2ySTvtydnqF4Rv/PjOM9Y0eZ8OumcjrQ3uzR72aAviRQlk0SHU2mBX/BbW+3itGJQHgrcs7ikFuuO2j4n7WTbNlqLzRSS5uvBqM/LKSpcpdor3ZmFEGkRReaVQKIMNV6vPYEMukmpH2JeSVXAAS6WYcR/cHGEtzXLFTLqXnCxK+HsRGeeO1GmPlmknqGWklQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H7Ox0WN6oD+AUZ8Lbvu8nqCuu6KtJFZOUIyjyBpnHUs=;
+ b=Vj6wn36PRLm6uYuiUtdEuX3CiaqJBSXF9gQYrgcG6nWGFsT3lvBucZ32Z5NEmNj51OA4IkfhuHefjVYhS3hiDIHIUh94UHF6quEWHLVT/MmpMsL5lJxhOtnpe0oQwOojzA9PtfQYDshXAKUiLJa/JMkwgl8UDJPSoFXDWQNe3+08lycYUk9S5EhKP3Mvv+MZHfOgVBtVKEvYbJ2rcWG2AXmd6dsbHD91wMI3ycMJrWoa5mdO0GNf/W3aIhYFhaR7q22xaVLyWSH3Gbb0n8+FjeDlbap5vqWkAS45oHZ+l5oNqfuBvlXCXaUI0xAf0Cg18KNvgGfexR66O5FkTnzeIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SA2PR11MB4857.namprd11.prod.outlook.com (2603:10b6:806:fa::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
+ 2023 02:08:23 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
+ 02:08:23 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Qais Yousef <qyousef@google.com>,
-        Daniele Di Proietto <ddiproietto@google.com>
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
- <20211120112738.45980-8-laoar.shao@gmail.com> <Y+QaZtz55LIirsUO@google.com>
- <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
- <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>
+CC:     David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Ghorai, Sukumar" <sukumar.ghorai@intel.com>
+Subject: RE: [PATCH v3] iommu/vt-d: Fix PASID directory pointer coherency
+Thread-Topic: [PATCH v3] iommu/vt-d: Fix PASID directory pointer coherency
+Thread-Index: AQHZO+D4ZThepv5sI02CzOKy2NWtpK7F3sww
+Date:   Thu, 9 Feb 2023 02:08:23 +0000
+Message-ID: <BN9PR11MB52760B2BBE25C23EE445B2C58CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230208171902.1580104-1-jacob.jun.pan@linux.intel.com>
+In-Reply-To: <20230208171902.1580104-1-jacob.jun.pan@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SA2PR11MB4857:EE_
+x-ms-office365-filtering-correlation-id: 060d4f10-497a-4bfb-c5f5-08db0a42860d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FS9pS3NgmMPjHLErWcHqbIIIjav9/ZzkU/W83ye8TKeRkq4OhhhFaneEkpLetHTy0Rd5SFqVxwnilze5jb81SEEg9BkmgP8Zdvo8uSN6avAj+C59rvBzDiDKoYA3cA14bEibaMS8rHPAk/OkmAGt7/LC8JZLwPYHw63yb/jFutUbLAP5NqHuA1pmpn90mBzmR+E4JbdZtGEkElfbqGJoi3VzTtHmXG+/RuN8M13/hrR+m09+CjStKSofKtr8YCiR7r2bS2WlW75NbZAESs9W8/PlqC1+cd4FjATSjwBgKfVzsmVuO2/r95WkRKO3hWd1L10acggGezGHheQCBcNBpDG1UkENO6wpfFi1/8Ct35TvJxc4IOfYU86PI//8XNO5BaMFJX3DKUpSZvD0dEdH5G9Zr0BWkhwKm3Meq9MABD4a/O61/QZ2Vg5DvOzXeq0k3a5MsoAapYHK3mICnMTP0TXx2b8qPkrc9W9o07S7/ln+CJPMa9ckf7ZbAh98RwrJNy2trOcB03ti1PE1Fwb++60IzSDnFOdNhvebddlKWZ0Hxy5KMEcAsAKSehCTmIGy3qDk9tEXlDF2hnbc1CKHn/bLKI4Qn5ICYAHGYgtsuB5/FocGX4NEjoXeiVb3Vo4ysYAOhCubutXtwc/O+enoYTxjVY67+IG9iNZPq0hqlugBCBpMpS4meAMCtDDjfg7DAjVgylFEPxzN5vsCtDsTJg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(136003)(396003)(39860400002)(376002)(451199018)(55016003)(110136005)(76116006)(38070700005)(54906003)(316002)(2906002)(478600001)(5660300002)(8936002)(86362001)(52536014)(8676002)(66556008)(66946007)(4326008)(41300700001)(6506007)(64756008)(53546011)(66476007)(9686003)(186003)(33656002)(66446008)(7696005)(26005)(82960400001)(38100700002)(71200400001)(122000001)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+VlIrSl/Q2TC1D7H0ktTnt/K2+JX5Mm+Oa+xgoVvPN9xGsu5jEHcS2u9a/V5?=
+ =?us-ascii?Q?mn/ifB6oJVJw6oRSwcYS0Cyphy3+Xqc1K/OVXIQTiaDHcE+e9gHMaRAjTac0?=
+ =?us-ascii?Q?qCsPmB33BFWPyHrOq8aNH0MQ1ZLX2w1fjT+TGLrhDDBpepE0Pi3hKFEY2isU?=
+ =?us-ascii?Q?/rg38hjWH1ulj0Usgc2SXadCViaPMXIVJlp2cU5FMfWaLb6i3IruDyJUVCPt?=
+ =?us-ascii?Q?s+LnaDIHIOpGsoOPN3jF8LOcP3YG1iw7UbMvPgdGn99WEyJiurj3SujX4L3N?=
+ =?us-ascii?Q?AsWzbZP7ZANzFm5T5lIvZgzKeq11zzLiCXvEurLjidfh/lxrUoT01C/5deZC?=
+ =?us-ascii?Q?3n4UJHr0drWg2zXiKbN84JYHF+pg2C0Ajs3jeojpiu0mLaBqCfIL6ucEhak+?=
+ =?us-ascii?Q?9YBv1sHrMhfVXSPHhtGujTi2kHLZPzdzx0yzUjq4tiFiSAX60lzfEYz+AnYt?=
+ =?us-ascii?Q?TbdwSQR0HPRVoOD/2bzNEpezXdihQKT5R3n7XFy/+99ETKbbDCvheXM9fk+O?=
+ =?us-ascii?Q?X2/rmH0eriJh9gkyIq1DKyJgE8W4e3ASu6a+ZMeu2b0OpOTF14TGhLSCOAoK?=
+ =?us-ascii?Q?oy/Ni2dJry38KWemuLNaZb9RRRYELWgx/XK0/+oMb4c7FmBmwrXCOhR/pK02?=
+ =?us-ascii?Q?LHvEa/r8In8TS6WyC24SicXO8vtKqeGY60b2DqLEbbgF34qAAl93zGeeB7iH?=
+ =?us-ascii?Q?zCWvHEg3WJiph7ao/YIs7zp1+HbE6QJ0NCfzwtIor1AEXMY/q5ghymXh9ucL?=
+ =?us-ascii?Q?AfY4hIqoxYe38sefH77YquOdNM9QgZo8Lzc4rQnH/EbzQMgmxhAsNtZo1jV/?=
+ =?us-ascii?Q?cR6OobyEreU2EEePNM+vhDtC3Dof3VoXRbzqECD025YrdkBDxwgyUt4QZzW4?=
+ =?us-ascii?Q?gtEzl3QDhDN77WH9C255EnctSTc4CVkn7UkWr0YNAJE0Mfjrc8ecx1Mld9nF?=
+ =?us-ascii?Q?Hk6KdJCW7zn+od50ypTRh+rE+zBC6KT/XU6sNCUORvoF3dTDadReGZPL0f6t?=
+ =?us-ascii?Q?50yXkuRPOp1DRuz/P1MxH/1J08dsl7z8xxjFo7OQlWyDAhr/Ez6FwXrGuf1a?=
+ =?us-ascii?Q?+Egxo+c/P21lVpEQWY78K+RhO3Z4N9TXTSUYvVtikAzHsX8wz9AI51HAjL9N?=
+ =?us-ascii?Q?pnN8r3hz1Il2d0DYqrbR0bYAE5i3J9Mg1d7VelluHe+rTfvf9d3TCOFzKSI/?=
+ =?us-ascii?Q?O5i3PesBHlckE+cFXJYZ8kHlVd2LO1Qg5TkN/YFdQlQiHtAxqjHngok0ErlH?=
+ =?us-ascii?Q?8qnAc/goNrG1lM6+N3ED82PIYDLYgEbgvNINcB5GTA6+nKaCuiMBeJJ1IDGo?=
+ =?us-ascii?Q?SglKEz35iE9FGjC54NZWLvBxe9d9GeiN1LMQu40Rk0AI0jmEN8W1HcX8b4Kf?=
+ =?us-ascii?Q?22NPolKcm7v+Fpur7kflnBUQvm8S1Yd6WAK9nqAWWhxAH+63n3Z7IbNa8ASb?=
+ =?us-ascii?Q?sPFYEdswGKG9VX0jc7YW2H6RgaAYaBoKh6gzRVlYNuP5i35nLMVbGLT/Y5Lh?=
+ =?us-ascii?Q?Braj9XUmgG1YlVoX4rAUPYgdUYM+AUTyEXsVu1UMjRFbO95zpkwv5n5l4Pl7?=
+ =?us-ascii?Q?LBp5tw6JLJZJXfLmKYR23N4T7lEpEGJidv36CFeZ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 060d4f10-497a-4bfb-c5f5-08db0a42860d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 02:08:23.6069
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: O3XoxmJP9f1v9G7j9TSEc0ny9q9TPcRxhBcVoFAan1lJUkF8zkEIj0UtDEE9rt5+vEArQNzoWPtI96CsqqxPNQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4857
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-08 19:54, John Stultz wrote:
-> On Wed, Feb 8, 2023 at 4:11 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Wed, Feb 8, 2023 at 2:01 PM John Stultz <jstultz@google.com> wrote:
->>>
->>> On Sat, Nov 20, 2021 at 11:27:38AM +0000, Yafang Shao wrote:
->>>> As the sched:sched_switch tracepoint args are derived from the kernel,
->>>> we'd better make it same with the kernel. So the macro TASK_COMM_LEN is
->>>> converted to type enum, then all the BPF programs can get it through BTF.
->>>>
->>>> The BPF program which wants to use TASK_COMM_LEN should include the header
->>>> vmlinux.h. Regarding the test_stacktrace_map and test_tracepoint, as the
->>>> type defined in linux/bpf.h are also defined in vmlinux.h, so we don't
->>>> need to include linux/bpf.h again.
->>>>
->>>> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
->>>> Acked-by: Andrii Nakryiko <andrii@kernel.org>
->>>> Acked-by: David Hildenbrand <david@redhat.com>
->>>> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>>> Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
->>>> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
->>>> Cc: Michal Miroslaw <mirq-linux@rere.qmqm.pl>
->>>> Cc: Peter Zijlstra <peterz@infradead.org>
->>>> Cc: Steven Rostedt <rostedt@goodmis.org>
->>>> Cc: Matthew Wilcox <willy@infradead.org>
->>>> Cc: David Hildenbrand <david@redhat.com>
->>>> Cc: Al Viro <viro@zeniv.linux.org.uk>
->>>> Cc: Kees Cook <keescook@chromium.org>
->>>> Cc: Petr Mladek <pmladek@suse.com>
->>>> ---
->>>>   include/linux/sched.h                                   | 9 +++++++--
->>>>   tools/testing/selftests/bpf/progs/test_stacktrace_map.c | 6 +++---
->>>>   tools/testing/selftests/bpf/progs/test_tracepoint.c     | 6 +++---
->>>>   3 files changed, 13 insertions(+), 8 deletions(-)
->>>
->>> Hey all,
->>>    I know this is a little late, but I recently got a report that
->>> this change was causiing older versions of perfetto to stop
->>> working.
->>>
->>> Apparently newer versions of perfetto has worked around this
->>> via the following changes:
->>>    https://android.googlesource.com/platform/external/perfetto/+/c717c93131b1b6e3705a11092a70ac47c78b731d%5E%21/
->>>    https://android.googlesource.com/platform/external/perfetto/+/160a504ad5c91a227e55f84d3e5d3fe22af7c2bb%5E%21/
->>>
->>> But for older versions of perfetto, reverting upstream commit
->>> 3087c61ed2c4 ("tools/testing/selftests/bpf: replace open-coded 16
->>> with TASK_COMM_LEN") is necessary to get it back to working.
->>>
->>> I haven't dug very far into the details, and obviously this doesn't
->>> break with the updated perfetto, but from a high level this does
->>> seem to be a breaking-userland regression.
->>>
->>> So I wanted to reach out to see if there was more context for this
->>> breakage? I don't want to raise a unnecessary stink if this was
->>> an unfortuante but forced situation.
->>
->> Let me understand what you're saying...
->>
->> The commit 3087c61ed2c4 did
->>
->> -/* Task command name length: */
->> -#define TASK_COMM_LEN                  16
->> +/*
->> + * Define the task command name length as enum, then it can be visible to
->> + * BPF programs.
->> + */
->> +enum {
->> +       TASK_COMM_LEN = 16,
->> +};
->>
->>
->> and that caused:
->>
->> cat /sys/kernel/debug/tracing/events/task/task_newtask/format
->>
->> to print
->> field:char comm[TASK_COMM_LEN];    offset:12;    size:16;    signed:0;
->> instead of
->> field:char comm[16];    offset:12;    size:16;    signed:0;
->>
->> so the ftrace parsing android tracing tool had to do:
->>
->> -  if (Match(type_and_name.c_str(), R"(char [a-zA-Z_]+\[[0-9]+\])")) {
->> +  if (Match(type_and_name.c_str(),
->> +            R"(char [a-zA-Z_][a-zA-Z_0-9]*\[[a-zA-Z_0-9]+\])")) {
->>
->> to workaround this change.
->> Right?
-> 
-> I believe so.
-> 
->> And what are you proposing?
-> 
-> I'm not proposing anything. I was just wanting to understand more
-> context around this, as it outwardly appears to be a user-breaking
-> change, and that is usually not done, so I figured it was an issue
-> worth raising.
-> 
-> If the debug/tracing/*/format output is in the murky not-really-abi
-> space, that's fine, but I wanted to know if this was understood as
-> something that may require userland updates or if this was a
-> unexpected side-effect.
+> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Sent: Thursday, February 9, 2023 1:19 AM
+> To: LKML <linux-kernel@vger.kernel.org>; iommu@lists.linux.dev; Lu Baolu
+> <baolu.lu@linux.intel.com>; Joerg Roedel <joro@8bytes.org>
+> Cc: David Woodhouse <dwmw2@infradead.org>; Raj, Ashok
+> <ashok.raj@intel.com>; Tian, Kevin <kevin.tian@intel.com>; Liu, Yi L
+> <yi.l.liu@intel.com>; Jacob Pan <jacob.jun.pan@linux.intel.com>;
+> stable@vger.kernel.org; Ghorai, Sukumar <sukumar.ghorai@intel.com>
+> Subject: [PATCH v3] iommu/vt-d: Fix PASID directory pointer coherency
+>=20
+> On platforms that do not support IOMMU Extended capability bit 0
+> Page-walk Coherency, CPU caches are not snooped when IOMMU is
+> accessing
+> any translation structures. IOMMU access goes only directly to
+> memory. Intel IOMMU code was missing a flush for the PASID table
+> directory that resulted in the unrecoverable fault as shown below.
+>=20
+> This patch adds clflush calls whenever allocating and updating
+> a PASID table directory to ensure cache coherency.
+>=20
+> On the reverse direction, there's no need to clflush the PASID directory
+> pointer when we deactivate a context entry in that IOMMU hardware will
+> not see the old PASID directory pointer after we clear the context entry.
+> PASID directory entries are also never freed once allocated.
+>=20
+> [    0.555386] DMAR: DRHD: handling fault status reg 3
+> [    0.555805] DMAR: [DMA Read NO_PASID] Request device [00:0d.2] fault
+> addr 0x1026a4000 [fault reason 0x51] SM: Present bit in Directory Entry i=
+s
+> clear
+> [    0.556348] DMAR: Dump dmar1 table entries for IOVA 0x1026a4000
+> [    0.556348] DMAR: scalable mode root entry: hi 0x0000000102448001, low
+> 0x0000000101b3e001
+> [    0.556348] DMAR: context entry: hi 0x0000000000000000, low
+> 0x0000000101b4d401
+> [    0.556348] DMAR: pasid dir entry: 0x0000000101b4e001
+> [    0.556348] DMAR: pasid table entry[0]: 0x0000000000000109
+> [    0.556348] DMAR: pasid table entry[1]: 0x0000000000000001
+> [    0.556348] DMAR: pasid table entry[2]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[3]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[4]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[5]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[6]: 0x0000000000000000
+> [    0.556348] DMAR: pasid table entry[7]: 0x0000000000000000
+> [    0.556348] DMAR: PTE not present at level 4
+>=20
+> Cc: <stable@vger.kernel.org>
+> Fixes: 0bbeb01a4faf ("iommu/vt-d: Manage scalalble mode PASID tables")
+> Reported-by: Sukumar Ghorai <sukumar.ghorai@intel.com>
+> Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> ---
+> v3: Add clflush after PASID directory allocation to prevent malicious
+> device attack with unauthorized PASIDs. Also flush all the PASID entries
+> after directory updates. (Baolu)
+> v2: Add clflush to PASID directory update case (Baolu, Kevin review)
+> ---
+>  drivers/iommu/intel/iommu.c | 2 ++
+>  drivers/iommu/intel/pasid.c | 7 +++++++
+>  2 files changed, 9 insertions(+)
+>=20
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 59df7e42fd53..161342e7149d 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -1976,6 +1976,8 @@ static int domain_context_mapping_one(struct
+> dmar_domain *domain,
+>  		pds =3D context_get_sm_pds(table);
+>  		context->lo =3D (u64)virt_to_phys(table->table) |
+>  				context_pdts(pds);
+> +		if (!ecap_coherent(iommu->ecap))
+> +			clflush_cache_range(table->table, sizeof(u64));
 
-If you are looking at the root cause in the kernel code generating this:
+this is not required if cache is already flushed when the table is allocate=
+d.
 
-kernel/trace/trace_events.c:f_show()
-
-         /*
-          * Smartly shows the array type(except dynamic array).
-          * Normal:
-          *      field:TYPE VAR
-          * If TYPE := TYPE[LEN], it is shown:
-          *      field:TYPE VAR[LEN]
-          */
-
-where it uses the content of field->type (a string) to format the VAR[LEN] part.
-
-This in turn is the result of the definition of the
-struct trace_event_fields done in:
-
-include/trace/trace_events.h at stage 4, thus with the context of those macros defined:
-
-include/trace/stages/stage4_event_fields.h:
-
-#undef __array
-#define __array(_type, _item, _len) {                                   \
-         .type = #_type"["__stringify(_len)"]", .name = #_item,          \
-         .size = sizeof(_type[_len]), .align = ALIGN_STRUCTFIELD(_type), \
-         .is_signed = is_signed_type(_type), .filter_type = FILTER_OTHER },
-
-I suspect the real culprit here is the use of __stringify(_len), which happens to work
-on macros, but not on enum labels.
-
-One possible solution to make this more robust would be to extend
-struct trace_event_fields with one more field that indicates the length
-of an array as an actual integer, without storing it in its stringified
-form in the type, and do the formatting in f_show where it belongs.
-
-This way everybody can stay happy and no ABI is broken.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+>=20
+>  		/* Setup the RID_PASID field: */
+>  		context_set_sm_rid2pasid(context, PASID_RID2PASID);
+> diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
+> index fb3c7020028d..979f796175b1 100644
+> --- a/drivers/iommu/intel/pasid.c
+> +++ b/drivers/iommu/intel/pasid.c
+> @@ -128,6 +128,9 @@ int intel_pasid_alloc_table(struct device *dev)
+>  	pasid_table->max_pasid =3D 1 << (order + PAGE_SHIFT + 3);
+>  	info->pasid_table =3D pasid_table;
+>=20
+> +	if (!ecap_coherent(info->iommu->ecap))
+> +		clflush_cache_range(pasid_table->table, size);
+> +
+>  	return 0;
+>  }
+>=20
+> @@ -215,6 +218,10 @@ static struct pasid_entry
+> *intel_pasid_get_entry(struct device *dev, u32 pasid)
+>  			free_pgtable_page(entries);
+>  			goto retry;
+>  		}
+> +		if (!ecap_coherent(info->iommu->ecap)) {
+> +			clflush_cache_range(entries, VTD_PAGE_SIZE);
+> +			clflush_cache_range(&dir[dir_index].val, sizeof(*dir));
+> +		}
+>  	}
+>=20
+>  	return &entries[index];
+> --
+> 2.25.1
 
