@@ -2,120 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA86691331
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD5B691330
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjBIWWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 17:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S230315AbjBIWWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 17:22:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbjBIWV6 (ORCPT
+        with ESMTP id S230206AbjBIWV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 17:21:58 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87B193CB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 14:21:56 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id gj9-20020a17090b108900b0023114156d36so7366571pjb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 14:21:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HBgooxc0T8xR3a6LCddpzQrYzp6lIglbhu4rq7s0u6g=;
-        b=G66azLLsnTGcPff6dZ1UZZ+l6WItPKuuCA63rRDwBGGG286NbanTz7nS2sZyhkGFxa
-         RuXPkGIsymiNyAWKgcNo8RbtOHohyX3kMlAxKyy93fxILNt+SuJhoSmjxN/nlTmHCdbr
-         fUIg6nbBvmTjIcReqiqmmMljzQddn8PFmwHiuPWhpQutH6p67/3g0CHc8XjEa8cD7f1j
-         08qP74TSw0MId7RvhzbxNMVoWiPDszIkD+6OjDAwl+qU3kyS6mjG9yQWP4wz/p2iiLcV
-         ZWjWGUGEfldnXQUQXPsgNUnKcpEqwVXmHXjmthlBs6J1smjJbgbrwucYOuvqZxwH1aZz
-         GvMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HBgooxc0T8xR3a6LCddpzQrYzp6lIglbhu4rq7s0u6g=;
-        b=qmzX+HIP/JQxJlhmRTNgfE0nfIRr9xMFm3rqiLQ8H+mfDKf6wv2IE7v2r8T4czozao
-         oR2zT4MQtvkQclwz7vV5lWDcE20veHZMj2rHa2FLmg07mYaUNrUunV+axJyw4pc/xnss
-         rLPyKWGhM+K9osoEn76Pc1vwqKje1gLiPAFH1h/Yp0HEiVPeEPtcTJ4bqQO37uUxnOOA
-         /SW2Qifun+jqpq9r81iVBkXZA3iiOXdhPo50c3U3jFMRWQIRmWzTTOJ0PkBitxf/PZn+
-         mrMvZjTZS7wHzvu/HRZSTF8HlDJk4F7R1TiKPWjtSfrHyS5WrZHqgHS43YlX1WZVe/mq
-         OOMQ==
-X-Gm-Message-State: AO0yUKX4WxW1OdhMvpkKvRypB41oDHdsy7SzIkChCMt/NHXjEsbcTtLR
-        oo8bLcAsperQui2mWdhmKkkZGIS/eTnpaijjZsc=
-X-Google-Smtp-Source: AK7set9b+dVUyCJB6vApvDHFGz5DxEUMKinwWM9x06h3G8+Iy6tr5nZNJoGvTj4ukeUpCcN0mwC8IVuFE8KPomfixtI=
-X-Received: by 2002:a17:903:22c1:b0:196:6319:a029 with SMTP id
- y1-20020a17090322c100b001966319a029mr3284169plg.12.1675981316316; Thu, 09 Feb
- 2023 14:21:56 -0800 (PST)
+        Thu, 9 Feb 2023 17:21:56 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17EC331E01;
+        Thu,  9 Feb 2023 14:21:54 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 89F6A20C8AF3; Thu,  9 Feb 2023 14:21:53 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 89F6A20C8AF3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675981313;
+        bh=RUdC5B9WQx/P13jBYCe9d9UCa08CXDooaF6pn5xM0XU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ACCtgB1V7Pj9HpbZCzfkwRaa8mEyqbQ0An9AlLvmPyHKDFnGuWFzikGMzAkAnnOnV
+         6un5wxDChEKMJoG7iGI7AGL8y3IjmRdgvalSdG1Nt3mQ4jy/DFmmUFx2did+hj91Sf
+         +O7rYKknS0EHfFnT9Mu+AfuLB7ZENeKJWbKO5+wU=
+Date:   Thu, 9 Feb 2023 14:21:53 -0800
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, axboe@kernel.dk, agk@redhat.com,
+        snitzer@kernel.org, eparis@redhat.com, paul@paul-moore.com,
+        linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 12/16] fsverity: consume builtin signature via LSM
+ hook
+Message-ID: <20230209222153.GA6647@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-13-git-send-email-wufan@linux.microsoft.com>
+ <Y+Ro2Uor21d/Gfqc@sol.localdomain>
 MIME-Version: 1.0
-References: <20230208164011.2287122-1-arnd@kernel.org>
-In-Reply-To: <20230208164011.2287122-1-arnd@kernel.org>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Thu, 9 Feb 2023 23:21:45 +0100
-Message-ID: <CA+fCnZe_BYgXff6OnU+L4SJC1kbzse9VtdwUS7tQinudL7n=Jg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] kasan: mark addr_has_metadata __always_inline
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kasan-dev@googlegroups.com, Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+Ro2Uor21d/Gfqc@sol.localdomain>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 5:40 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> When the compiler decides not to inline this function, objdump
-> complains about incorrect UACCESS state:
->
-> mm/kasan/generic.o: warning: objtool: __asan_load2+0x11: call to addr_has_metadata() with UACCESS enabled
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  mm/kasan/kasan.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index 3231314e071f..9377b0789edc 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -297,7 +297,7 @@ static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
->                 << KASAN_SHADOW_SCALE_SHIFT);
->  }
->
-> -static inline bool addr_has_metadata(const void *addr)
-> +static __always_inline bool addr_has_metadata(const void *addr)
->  {
->         return (kasan_reset_tag(addr) >=
->                 kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
-> @@ -316,7 +316,7 @@ bool kasan_check_range(unsigned long addr, size_t size, bool write,
->
->  #else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
->
-> -static inline bool addr_has_metadata(const void *addr)
-> +static __always_inline bool addr_has_metadata(const void *addr)
->  {
->         return (is_vmalloc_addr(addr) || virt_addr_valid(addr));
->  }
-> --
-> 2.39.1
->
+On Wed, Feb 08, 2023 at 07:30:33PM -0800, Eric Biggers wrote:
+> So disregarding the fact that using the fsverity builtin signatures still seems
+> like a bad idea to me, here's a few comments on the diff itself:
+> 
+Thanks for the review. I have verified the headers are indeed unnecessary,
+I will remove them in the next version.
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+> On Mon, Jan 30, 2023 at 02:57:27PM -0800, Fan Wu wrote:
+> > diff --git a/fs/verity/open.c b/fs/verity/open.c
+> > index 81ff94442f7b..7e6fa52c0e9c 100644
+> > --- a/fs/verity/open.c
+> > +++ b/fs/verity/open.c
+> > @@ -7,7 +7,9 @@
+> >  
+> >  #include "fsverity_private.h"
+> >  
+> > +#include <linux/security.h>
+> >  #include <linux/slab.h>
+> > +#include <crypto/public_key.h>
+> 
+> There's no need to include <crypto/public_key.h>.
+> 
+> >  
+> > +	if (err) {
+> > +		fsverity_err(inode, "Error %d verifying signature", err);
+> > +		goto out;
+> > +	}
+> 
+> The above error message is unnecessary because fsverity_verify_signature()
+> already prints an error message on failure.
+> 
+> > +
+> > +	err = security_inode_setsecurity(inode, FS_VERITY_INODE_SEC_NAME, desc->signature,
+> > +					 le32_to_cpu(desc->sig_size), 0);
+> 
+> This runs even if CONFIG_FS_VERITY_BUILTIN_SIGNATURES is disabled.  Is that
+> really the right behavior?
+> 
+Yes the hook call should better depend on a KCONFIG. After second thought I think it
+should depend on CONFIG_IPE_PROP_FS_VERITY, which also indirectly introduces the
+dependency on CONFIG_FS_VERITY_BUILTIN_SIGNATURES.
 
-Thanks!
+Currently security_inode_setsecurity only allows one LSM to save data with a given name.
+In our case IPE will be the only LSM that saves the signature.
+
+I will update this part in the next version.
+
+> Also a nit: please stick to the preferred line length of 80 characters.
+> See Documentation/process/coding-style.rst
+> 
+> > diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+> > index 143a530a8008..5d7b9496f9c4 100644
+> > --- a/fs/verity/signature.c
+> > +++ b/fs/verity/signature.c
+> > @@ -9,6 +9,7 @@
+> >  
+> >  #include <linux/cred.h>
+> >  #include <linux/key.h>
+> > +#include <linux/security.h>
+> >  #include <linux/slab.h>
+> >  #include <linux/verification.h>
+> 
+> This change is unnecessary.
+> 
+> > diff --git a/include/linux/fsverity.h b/include/linux/fsverity.h
+> > index 40f14e5fed9d..29e9888287ba 100644
+> > --- a/include/linux/fsverity.h
+> > +++ b/include/linux/fsverity.h
+> > @@ -254,4 +254,6 @@ static inline bool fsverity_active(const struct inode *inode)
+> >  	return fsverity_get_info(inode) != NULL;
+> >  }
+> >  
+> > +#define FS_VERITY_INODE_SEC_NAME "fsverity.inode-info"
+> 
+> "inode-info" is very vague.  Shouldn't it be named "builtin-sig" or something?
+> 
+> - Eric
+
+I agree this name works better, I will change it to "fsverity.builtin-sig".
+-Fan
