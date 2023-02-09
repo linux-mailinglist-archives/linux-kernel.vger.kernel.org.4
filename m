@@ -2,97 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67752690CD4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB59690C94
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjBIPXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S230449AbjBIPOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBIPXr (ORCPT
+        with ESMTP id S229909AbjBIPOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:23:47 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82C1B4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:23:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675956226; x=1707492226;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=u8Vb8/bYrBeWgw+p0XSQUULBRKZVvrASNP/roYXBOOM=;
-  b=Ccyyu4eaz3fSw3n8dI9KFr9b7guWCKN+S0quFYBZsqHTs8QACGg34rs1
-   ERVfUpRQNJqXrILfsj1+obl0F3d5TLrgThTlgjEUP8b5jJMzbpm4s+ImV
-   4r0UnHXwwGr2cDXpxL4o84HhQXxOoZ+ANH3xslE4BpxJ7rLqoUGj7+O7w
-   DrBgSMI8TLGiNCaG+RBvnOk/WtpZ4wjpnRFGcNCCUR3ynAeVVByAA21oz
-   3RomZNQxZdur9c9xWMTs3nnapIO406YAHEL8/OL3gtq4MD0G4vQgJLT2X
-   mxh6kPRif/cjZzCSV+uzaCpahsSy19eo0g81+Mav8T4c0lqHQ53Sa1e+n
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="328771491"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="328771491"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:15:05 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="913156459"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="913156459"
-Received: from fpastor-mobl4.amr.corp.intel.com (HELO [10.212.74.130]) ([10.212.74.130])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:15:03 -0800
-Message-ID: <f73477e9-b27a-8cc7-dfe9-7208b3522083@linux.intel.com>
-Date:   Thu, 9 Feb 2023 09:15:03 -0600
+        Thu, 9 Feb 2023 10:14:18 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01B232523;
+        Thu,  9 Feb 2023 07:14:16 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5DDF2100004;
+        Thu,  9 Feb 2023 15:14:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675955654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YVOvYQa9qOIWTUDpJqNiGlDU/+I5voPK1qjEvEaieaY=;
+        b=Y7+wp6Xw0fNNsld9rdLaqiHWFAYyK3efTcjSVW0j0yaKHFk0EUmpSzre8SqIgEh+tj1fkn
+        l/v9rbwzPUv6+Gxtgim0bKbjjnIh5RVRU1E8kJeg8f4wrieipoJ75fp8bn9vsB0yIDELL2
+        I71Vqc9nU5nT1l+XCNJp9aWBhsSlqJLr6yyaLKQLP4YeA4TyfFZDuyQUuP9xCAjyJyRNyB
+        j2Mn0YerZl36xgXbgHPKAgfbYO7BxvSyWfQ+z5aPbqIvHzV1LKOyQTAc0Xaxm+HUJzW/sw
+        QXbzZYm/3yGpm1l7rz4cFRQotcY6+TuxU8VGDMH9HMXKFRXvngjvcvLMexvjrA==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Wong Vee Khee <veekhee@apple.com>,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH net-next v3 0/6] net: stmmac: add renesas,rzn1-gmac support
+Date:   Thu,  9 Feb 2023 16:16:26 +0100
+Message-Id: <20230209151632.275883-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH] ALSA: hda: remove redundant variable in
- snd_hdac_stream_start()
-To:     Mark Brown <broonie@kernel.org>,
-        Zhang Yiqun <zhangyiqun@phytium.com.cn>
-Cc:     cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        tiwai@suse.com, amadeuszx.slawinski@linux.intel.com,
-        kuninori.morimoto.gx@renesas.com, ckeepax@opensource.cirrus.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20230209121723.14328-1-zhangyiqun@phytium.com.cn>
- <Y+UD4yg2cgsucnlZ@sirena.org.uk>
-Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <Y+UD4yg2cgsucnlZ@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The rzn1-gmac instance is connected to a PCS (MIIC). In order to use
+this pcs, add support in the sttmac driver to set a generic phylink pcs
+device instead of the xpcs only. Moreover, it adds support to provide
+a phylink pcs device from the stmmac platform data and use it with the
+driver. It also adds the bindings and the new rzn1-gmac driver that
+retrieve this pcs from the device-tree.
 
+---
+V3:
+ - Sort out the bindings compatible
 
-On 2/9/23 08:32, Mark Brown wrote:
-> On Thu, Feb 09, 2023 at 08:17:23PM +0800, Zhang Yiqun wrote:
->> This 2nd variables are all set as true in treewide. So I think
->> it can be removed for easy understanding.
-> 
-> Acked-by: Mark Brown <broonie@kernel.org>
+V2:
+ - Remove patch that moves phylink_start() earlier in init
+ - Add miic_early_qsetup()  which allows initializing some miic port
+   earlier to provide a RX clock to stmmac IP
+ - Call miic_early_setup() in rzn1 stmmac driver
+ - Fix bindings
 
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Clément Léger (6):
+  net: pcs: rzn1-miic: add pcs_early_setup() function
+  net: stmmac: add support to use a generic phylink_pcs as PCS
+  net: stmmac: add support to provide pcs from platform data
+  dt-bindings: net: renesas,rzn1-gmac: Document RZ/N1 GMAC support
+  net: stmmac: add support for RZ/N1 GMAC
+  ARM: dts: r9a06g032: describe GMAC1
 
-Btw there's another type of always-true parameter, we have a full_reset
-parameter that's not used.
+ .../bindings/net/renesas,rzn1-gmac.yaml       |  67 ++++++++++
+ arch/arm/boot/dts/r9a06g032.dtsi              |  18 +++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 ++
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ drivers/net/ethernet/stmicro/stmmac/common.h  |   2 +
+ .../net/ethernet/stmicro/stmmac/dwmac-rzn1.c  | 120 ++++++++++++++++++
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |   8 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   1 +
+ drivers/net/pcs/pcs-rzn1-miic.c               |  12 ++
+ include/linux/pcs-rzn1-miic.h                 |   3 +
+ include/linux/stmmac.h                        |   1 +
+ 11 files changed, 240 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/renesas,rzn1-gmac.yaml
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
 
-sound/soc/intel/skylake$ git grep  skl_init_chip
-skl.c:static int skl_init_chip(struct hdac_bus *bus, bool full_reset)
-skl.c:  skl_init_chip(bus, true);
-skl.c:                          skl_init_chip(bus, true);
-skl.c:  err = skl_init_chip(bus, true);
+-- 
+2.39.0
 
-sound/soc/intel/avs$ git grep  init_chip
-core.c:static bool avs_hdac_bus_init_chip(struct hdac_bus *bus, bool
-full_reset)
-core.c: ret = snd_hdac_bus_init_chip(bus, full_reset);
-core.c:         avs_hdac_bus_init_chip(bus, true);
-core.c: avs_hdac_bus_init_chip(bus, true);
-core.c: avs_hdac_bus_init_chip(bus, true);
