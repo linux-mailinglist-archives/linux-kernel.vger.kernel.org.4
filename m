@@ -2,147 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D07690BEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F95690C02
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjBIOgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:36:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
+        id S231156AbjBIOiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjBIOgm (ORCPT
+        with ESMTP id S229789AbjBIOiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:36:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316C95FB51
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675953346;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/TNxD9eCEeQ+7B6yx26kqH/5ttVJ+56DfRBM0E7FvmI=;
-        b=dsG0ASI924eKl8cshjccRY05ZWaEXHXTQdh3INt93k4pS/CmCM3gUg1ncko9z6F8GwMeTR
-        8Qdtzu3ByFUDbOC6duChrFWrGVlGudINYjHxpzK7+FVApQw73jWbMAVGT95HyCgCzmFcKg
-        WbrhEnpovh3OuDxYTCGEwQ8EJCPnBtY=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-240-nyH7ZA4nPJStu1_bfc3OFw-1; Thu, 09 Feb 2023 09:35:45 -0500
-X-MC-Unique: nyH7ZA4nPJStu1_bfc3OFw-1
-Received: by mail-ed1-f71.google.com with SMTP id s26-20020a056402037a00b004a25c2875d6so1567745edw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:35:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/TNxD9eCEeQ+7B6yx26kqH/5ttVJ+56DfRBM0E7FvmI=;
-        b=P6qIocsq76le4dH1wPCySAlZGoYmPVouudPCKenE44ENujfbB2jw3XgWkVMkvrBQOw
-         ucWEhj7SA3D1jQB+kGR4xlqY8N8pmMhXDl8dSynIgbmUEMa2TUZ7lEAq5qUCRaCSpGxw
-         0xiiV5jcDJnhOLs547/J956QLk19Rnwbi2yryTETLqPCHsBPEIBAJmSWXXfzmxJAoq60
-         SDrbHOitdyOJYmcjwSQJa2KUrwtsd1CBN64BYdvCbleCPyQ2qLKC3/iSkt0UOt1ipLIS
-         chPP71KWftf1PL5dzTNruijsUaqWOPyYVPeHuFU39tWvOqm8WF+BNLI89pZf4Zzo53T4
-         I9dg==
-X-Gm-Message-State: AO0yUKURMHAnyVOX23R6DDdTzdI/joDzOFQvo8F8Ijg9ZTBt0NqCYC6k
-        fJ+LUB0hyj8EmO/FNrlu4G/zZryIUvowffdvDFMl/LKBik/BuN+h/QyWf1/iidc7pi/TtHlHFAR
-        oICLEm9mRc2eB9wwVHg1+p0FO
-X-Received: by 2002:a17:906:4fc5:b0:878:683c:f0d1 with SMTP id i5-20020a1709064fc500b00878683cf0d1mr17662594ejw.38.1675953343953;
-        Thu, 09 Feb 2023 06:35:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set8Gq8Lb29eUnowJ6nD+xdHbhxvicrbwXw4bPrC4Uwwx36omr2Tg54EEO64vZjP62/W4oodfmQ==
-X-Received: by 2002:a17:906:4fc5:b0:878:683c:f0d1 with SMTP id i5-20020a1709064fc500b00878683cf0d1mr17662573ejw.38.1675953343768;
-        Thu, 09 Feb 2023 06:35:43 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id f8-20020a1709063f4800b0088385cd6166sm930964ejj.195.2023.02.09.06.35.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 06:35:43 -0800 (PST)
-Message-ID: <9d254312-3526-b0be-7a7d-d533b247fdb2@redhat.com>
-Date:   Thu, 9 Feb 2023 15:35:42 +0100
+        Thu, 9 Feb 2023 09:38:11 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2072.outbound.protection.outlook.com [40.107.223.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650476032D;
+        Thu,  9 Feb 2023 06:37:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yqwq2daZqbw2xoVElPMHJI8WnnIpcyzs+ZXLZBc3vd25HdfGB4E5jH2/1BUtRe2IjOm9OFG2cfRElt5SBVi4xtfgg6Rk3cxR5cjZAvpJk7w4Hv2IYzp38T+p+z1f4JUUj17wWStI6nVr0KSgmdFC8L4pkgdJz6fWrXKUlhf4vSDm+ztAzEfPnRxfylTaorN5zhHqwHa9YInoWMvv4v5O34OKv6cFFowasyZImMeb5P80cHnBbCdq5ubZIuTbZ9RtQLG3Te5n5hQ/7icPhHKQRhGE4QeJPKdeRStjmYunk5P89gTJvIINs7hrFnU5kBnLh7wk49SBhnLCmfgVVCTs2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YMdaSqPKE55bR7qk1vw7VG/3FkD/erVs22Kw0FyP3VI=;
+ b=fGDk+JRs3Ob7N1mpXoUFMd+1tjTCptKPAupw/kw59wT07r5GTmpqgb+pUC8BElmWTdJAd0NpEiri0cACNpcomdKZjWRoijwamlVNgtC+K/ZT51hqyCZ7L62n4Lf2dAl40V39+IeLr7fvpl8Z1594Ev7d0vkZkrwAWL3/jNAlP+ofY+IN3di7IPWIcXJMcVATqOzMo+VgIHoLSMbWyf2TA2rhcHjmABJYdP9KEPBNTVpgik+fVuiK7mHLW9+SwGCtMqVwka0vLJvpuQx6CLvUxkZHKS8tdXKUyUxp3Mu/WFihOcCu9rIWPfwsHVSz0EeAIIBKp/tYTSJkNybeBEG+3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YMdaSqPKE55bR7qk1vw7VG/3FkD/erVs22Kw0FyP3VI=;
+ b=XWgDWsnDBq8PCTC3290W/cOO2vosIIw6wC0fzUKr2MeGvF1Wugq5O4QIQXHQ9GOuVtAZ7a6gYh+JpaIIt24u3+UiUTJ2ChHpC/UNdcsGvAw3IDK66WMGQFb1xlj7X+oMN7MhNazYaS8mLd8GtuYIXrY5GtrxMfsQLHFeHRnGo1m9JGi22nRva9KBr2q8NfSsSwJtzcRh+9oIfrsIa2uzJCHYoRYdlN17dNGsCZFgqgDQDeG8g94QHy37IIxv41Gg/SiiZ4rN18oVYLjWowwlcxCAzwZykyRoHAkwacYV8SJxb9YUCbPzHsRVjOhut4CKL7H2m6Wk9IbQRqAxcWMlbQ==
+Received: from BN0PR03CA0035.namprd03.prod.outlook.com (2603:10b6:408:e7::10)
+ by MN2PR12MB4357.namprd12.prod.outlook.com (2603:10b6:208:262::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
+ 2023 14:37:37 +0000
+Received: from BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e7:cafe::f2) by BN0PR03CA0035.outlook.office365.com
+ (2603:10b6:408:e7::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19 via Frontend
+ Transport; Thu, 9 Feb 2023 14:37:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT069.mail.protection.outlook.com (10.13.176.152) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.19 via Frontend Transport; Thu, 9 Feb 2023 14:37:36 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
+ 06:37:25 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
+ 06:37:24 -0800
+Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
+ Transport; Thu, 9 Feb 2023 06:37:20 -0800
+From:   Sameer Pujar <spujar@nvidia.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <oder_chiou@realtek.com>, <broonie@kernel.org>
+CC:     <perex@perex.cz>, <tiwai@suse.com>, <lgirdwood@gmail.com>,
+        <kuninori.morimoto.gx@renesas.com>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, Sameer Pujar <spujar@nvidia.com>
+Subject: [PATCH 0/2] Codec support on Jetson AGX Orin
+Date:   Thu, 9 Feb 2023 20:06:55 +0530
+Message-ID: <1675953417-8686-1-git-send-email-spujar@nvidia.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFCv2 0/1] x86: allow to notify host about guest entering s2idle
-Content-Language: en-US, nl
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org,
-        rafael@kernel.org
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
-        upstream@semihalf.com, markgross@kernel.org, dtor@google.com
-References: <20230209135646.3179418-1-jaz@semihalf.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230209135646.3179418-1-jaz@semihalf.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT069:EE_|MN2PR12MB4357:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8dc4222-2731-4003-8124-08db0aab3064
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YuPsamz+Z+gprN3hFIcS9iYrMX+aV0oY48JfrsY3xIvSTLdSzBKutAcNtDVwKPH2zhbEkQv77hRZCG7sJ0JjG25fA6IFU4BHyCFEjPbUMk2wMMlbk4Aal/qVB6C6Z3AXApC9bPxsFD6Dx5jmE4W52NXH4yZ4qxQLGL20Bhj9FyxszIkPVNZwS/77ycyQa+7RV2DxEcGnmqDZmdBV1hJEYKLR64KiLC1WJJtgisjvVm6AKNygNOMZ/9eq3BX1kFt7n8lH0IXNvxTi0iPewrnSYltOYwSQiYu3u/SySRhzWrjtMFl8pCa+HFMzKgy+D9MR1aeW+5+EfafzLp19AOChbbOQbEnY4TaqiHDyLO4L8ls4FKo3uqJYHg7VQvRjz0oZ0ZuXGfL6Dv16ukd1WipquXxbUkG8HoBiEBZ8FG1U9vuZXRJsNgLdiXIB4qtWUNHQ6rukGJr8PSJF8AEkfbG94hsBKAVsRei7nFInXhmloqskGJsNXN68ZJyZVBIgBrEB7GTJhXAYgGy+zUPcawmfeDISoR3BkX6wbxwQ9qdDpjwVx+WPOz7OsOAw7dDQ4tifPjaDubWUKz6hdLXEdKMkV5tn9V/hXawJZoVzzJz2mjjW0pbFwqE0NeaRW2yTbTkbw26mpl+rkBwifqMvA/TtJdKyw2VuSrRgPM4aZsL+ILmJ+7av6S+THup08/aOZ4tGmQVJ+Fu41VFVNtNr7Cl0xw==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199018)(36840700001)(46966006)(40470700004)(36756003)(2906002)(82310400005)(40480700001)(478600001)(36860700001)(26005)(7696005)(2616005)(336012)(186003)(83380400001)(47076005)(426003)(8676002)(6666004)(4326008)(40460700003)(107886003)(41300700001)(70206006)(70586007)(4744005)(86362001)(7416002)(5660300002)(8936002)(7636003)(82740400003)(316002)(356005)(54906003)(110136005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 14:37:36.8604
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8dc4222-2731-4003-8124-08db0aab3064
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4357
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Grzegorz,
+Jetson AGX Orin has onboard RT5640 audio codec and uses I2S1 interface.
+Add DT bindings to enable codec support. Series also contains a clock
+fix in the codec driver.
 
-Can you please resend this with the linux-pm@vger.kernel.org,
-x86@kernel.org and platform-driver-x86@vger.kernel.org email-lists
-in the Cc to make sure this gets seen by some more people ?
+Sameer Pujar (2):
+  ASoC: rt5640: Update MCLK rate in set_sysclk()
+  arm64: tegra: Audio codec support on Jetson AGX Orin
 
-(not everyone reads linux-kernel) 
+ .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  | 47 +++++++++++++++++++++-
+ sound/soc/codecs/rt5640.c                          |  5 +++
+ 2 files changed, 51 insertions(+), 1 deletion(-)
 
-And since you mention Mario Limonciello, maybe also add him the the Cc?
-
-Regards,
-
-Hans
-
-
-
-
-On 2/9/23 14:56, Grzegorz Jaszczyk wrote:
-> According to the mailing list discussion [1] about the preferred approach
-> for notifying hypervisor/VMM about guest entering s2idle state this RFC was
-> implemented.
-> 
-> Instead of original hypercall based approach, which involves KVM change [2]
-> and makes it hypervisor specific, implement different mechanism, which
-> takes advantage of MMIO/PIO trapping and makes it hypervisor independent.
-> 
-> For the RFCv1 [3]:
->   Patch #1 extends S2Idle ops by new notify handler which will be invoked as a
->   very last command before system actually enters S2Idle states. It also allows
->   to register and use driver specific notification hook which is used in
->   patch #2.
-> 
->   Patch #2 introduces new driver for virtual PMC, which registers
->   acpi_s2idle_dev_ops's notify handler. Its implementation is based on an
->   ACPI _DSM evaluation, which in turn can perform MMIO access and allow to
->   trap and therefore notify the VMM about guest entering S2Idle state.
-> 
-> For the RFCv2: the patch #1 was dropped as in the meantime Mario Limonciello
-> introduced a very similar patch [4] which uses s/notify/check and invokes the
-> callback a bit earlier just before s2idle_entry. Mentioned patch has already
-> been merged.
-> 
-> This patchset is marked as RFC since patch #2 implements driver for non
-> existing device "HYPE0001", which ACPI ID was not registered yet.
-> Furthermore the required registration process [5] will not be started
-> before getting positive feedback about this patchset.
-> 
-> [1] https://patchwork.kernel.org/project/linux-pm/patch/20220609110337.1238762-2-jaz@semihalf.com/
-> [2] https://patchwork.kernel.org/project/linux-pm/patch/20220609110337.1238762-3-jaz@semihalf.com/
-> [3] https://patchwork.kernel.org/project/linux-pm/cover/20220707125329.378277-1-jaz@semihalf.com/
-> [4] https://patchwork.kernel.org/project/linux-pm/patch/20220829162953.5947-2-mario.limonciello@amd.com
-> [5] https://uefi.org/PNP_ACPI_Registry
-> 
-> Grzegorz Jaszczyk (1):
->   platform/x86: Add virtual PMC driver used for S2Idle
-> 
->  drivers/platform/x86/Kconfig    |  7 ++++
->  drivers/platform/x86/Makefile   |  3 ++
->  drivers/platform/x86/virt_pmc.c | 73 +++++++++++++++++++++++++++++++++
->  3 files changed, 83 insertions(+)
->  create mode 100644 drivers/platform/x86/virt_pmc.c
-> 
+-- 
+2.7.4
 
