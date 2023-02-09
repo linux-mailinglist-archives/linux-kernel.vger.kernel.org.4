@@ -2,80 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CF7690B62
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:10:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C575E690B64
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjBIOKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:10:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S230341AbjBIOLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBIOKu (ORCPT
+        with ESMTP id S230257AbjBIOLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:10:50 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088905D3CA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:10:46 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id bg26so1553532wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:10:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2cJbXIc6sUIZ1i94zwcO4sqv/3DWkbU7YDfCfI7tRws=;
-        b=ha/BiTuHrB/wTAitAvR41ZEFDItgv+gg+2CCyDuNY2W03MoqjyfL+2kJk930XfZmlU
-         iiT4DBYnp6FGvVyuZkYR+LrfvQsopxvgrXVYil8uO2Gfnc7F+bQH9zFTYOEJ/rMquSv2
-         yztSAU3SRJG0YAFJDIDyyObNtp7J/K/OjvOvt02Nzz/uUV2llphLcohPwjDtweFY0MqK
-         UXWP5IHHT1eGbsV5aOz6A7VFJi2ud6YHJFAoY9Ax9GK6eH3s63uLavhYsTm0wdK/JCS1
-         I6jTSmEAgDcIeiMBQkjoEnljP8jxbj/8vqQX8J2UFEf3NwjcjOHxdvjCrF+ULsHh3wDL
-         VAog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2cJbXIc6sUIZ1i94zwcO4sqv/3DWkbU7YDfCfI7tRws=;
-        b=XCw2JolwJaZ/fZVqBXJ7R4JnAC+VsexvTb3K/4HTqoR6lHBCaNOxQAMttaBuPd3nQa
-         8OYJNvwYpC2BvLWk2K/8RF65UAI8JB9FqUCogJUczQkJE0Z9AbhWO8EgT1Qb0nRxkbWN
-         jmajnRBRJOCdNGeCW0bFsnbwzKeeonFGHf+HKpSl/7MxBXtGNohykYm2aVC/bRo9KLAA
-         QN3JbbdoUexQgG02Mbud0E0ar5aiLzG7g0X0fqBIDfSxr3XcJ13w3LBeJABYGjb9m3nS
-         sxytuxW5yJf5vkgX3aRP83bXjoBZt6Fi0zdbdvr5DksQSUF2kflaaaep1FDCk1sWNySA
-         HnMA==
-X-Gm-Message-State: AO0yUKXrW2sF/2ASHyzNXq64LxxnqjAUfA+bbwhE8WfnoNqVI1BIkBs9
-        PdQXXEMSfc+3ByT/YFNWoJOtSLiv1Jbw6QvYtcLHsw==
-X-Google-Smtp-Source: AK7set+veevx98XIJAiGJtc7Cal/+34P2vCmciNiu9Y/kYU7oHAwHt6eWolln0SD7AYnFjM7x7/xsqq8IbEZ9Kqf3Rg=
-X-Received: by 2002:a7b:c2e8:0:b0:3e0:196:208b with SMTP id
- e8-20020a7bc2e8000000b003e00196208bmr506757wmk.162.1675951844523; Thu, 09 Feb
- 2023 06:10:44 -0800 (PST)
+        Thu, 9 Feb 2023 09:11:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2705D1FB
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675951844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8EVZ2hzCIPgSAPXNoHMOtGO/EgYBjGAER2fyRQiSoO0=;
+        b=cdrwB+MxCkpJwpmRo5XU4BUK3Y6DTSrXV7aQ/Gv9+mtPlt+tjREbfbm3mLyOqMSSJVnAE0
+        1f2sbACfTtLE6pTmj6NllQqrz1zKv8IG+o87XoSWNdfp/uFI5GhQzVgzSzr9XsqgJF29oi
+        pJ8Li7m2DEyC3hmRyVKIeXuZtrnN3e4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-EYckN3U-Nr-gmm0uyioYHg-1; Thu, 09 Feb 2023 09:10:29 -0500
+X-MC-Unique: EYckN3U-Nr-gmm0uyioYHg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 73B0B100F91A;
+        Thu,  9 Feb 2023 14:10:28 +0000 (UTC)
+Received: from mail.corp.redhat.com (ovpn-192-232.brq.redhat.com [10.40.192.232])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B8C552026D2A;
+        Thu,  9 Feb 2023 14:10:26 +0000 (UTC)
+Date:   Thu, 9 Feb 2023 15:10:22 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Walt Holman <waltholman09@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Add support for Logitech G923 Xbox Edition steering
+ wheel in hid-logitech-hidpp. We get the same level of features as the
+ regular G920.
+Message-ID: <20230209141022.oql7n52igjybh3km@mail.corp.redhat.com>
+References: <20230207195051.16373-1-waltholman09@gmail.com>
 MIME-Version: 1.0
-References: <20230123220500.21077-1-kirill.shutemov@linux.intel.com> <20230123220500.21077-7-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20230123220500.21077-7-kirill.shutemov@linux.intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 9 Feb 2023 15:10:07 +0100
-Message-ID: <CAG_fn=XyP5hCe8y6B8KpcGbvK6YSuj_1Quq-OgszxRsZ1NXRGg@mail.gmail.com>
-Subject: Re: [PATCHv15 06/17] x86/uaccess: Provide untagged_addr() and remove
- tags before address check
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230207195051.16373-1-waltholman09@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,19 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:05 PM Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> untagged_addr() is a helper used by the core-mm to strip tag bits and
-> get the address to the canonical shape based on rules of the current
-> thread. It only handles userspace addresses.
->
-> The untagging mask is stored in per-CPU variable and set on context
-> switching to the task.
->
-> The tags must not be included into check whether it's okay to access the
-> userspace address. Strip tags in access_ok().
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Alexander Potapenko <glider@google.com>
+Hi Walt, we are almost there. I have applied the following to your patch
+(and will push upstream as soon as the CI says it's fine):
+
+* subject must start with the subsystem: "HID: " in our case
+* in your commit description, you should add a blanck line between the
+  title of the commit and the description. Otherwise, git-format-patch
+  considers everything to be the title, which is a little bit long :)
+* the Signed-of-by line should be added in the commit description, so
+  right here, before the first '---' so that it gets included in the
+  commit itself
+* for future submissions, please try to keep them numbered. Here, it
+  should have been '[PATCH v2] HID: ...' and below the first '---' add
+  what changed between v1 and v2.
+
+Again, I have fixed everything, so no need to send another version :)
+
+Cheers,
+Benjamin
+
+On Feb 07 2023, Walt Holman wrote:
+> ---
+>  drivers/hid/hid-ids.h            | 1 +
+>  drivers/hid/hid-logitech-hidpp.c | 3 +++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> index 0f8c11842a3a..de1f385b0ecc 100644
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -819,6 +819,7 @@
+>  #define USB_DEVICE_ID_LOGITECH_G510_USB_AUDIO	0xc22e
+>  #define USB_DEVICE_ID_LOGITECH_G29_WHEEL	0xc24f
+>  #define USB_DEVICE_ID_LOGITECH_G920_WHEEL	0xc262
+> +#define USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL	0xc26e
+>  #define USB_DEVICE_ID_LOGITECH_WINGMAN_F3D	0xc283
+>  #define USB_DEVICE_ID_LOGITECH_FORCE3D_PRO	0xc286
+>  #define USB_DEVICE_ID_LOGITECH_FLIGHT_SYSTEM_G940	0xc287
+> diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+> index abf2c95e4d0b..4dc833c8a44c 100644
+> --- a/drivers/hid/hid-logitech-hidpp.c
+> +++ b/drivers/hid/hid-logitech-hidpp.c
+> @@ -4347,6 +4347,9 @@ static const struct hid_device_id hidpp_devices[] = {
+>  	{ /* Logitech G920 Wheel over USB */
+>  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL),
+>  		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS},
+> +	{ /* Logitech G923 Wheel (Xbox version) over USB */
+> +	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G923_XBOX_WHEEL),
+> +		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS },
+>  	{ /* Logitech G Pro Gaming Mouse over USB */
+>  	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC088) },
+>  
+> -- 
+> 2.37.2
+> 
+> --signed-of-by: Walt Holman (waltholman09@gmail.com)
+> 
+
