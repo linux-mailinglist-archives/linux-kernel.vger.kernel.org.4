@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C6B68FD39
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3645C68FD35
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbjBIClZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:41:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S232155AbjBIClU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjBIClL (ORCPT
+        with ESMTP id S232081AbjBIClL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Feb 2023 21:41:11 -0500
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BB628237
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:41:06 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id A2637320070D;
-        Wed,  8 Feb 2023 21:41:05 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7387D29405
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:41:08 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id CBFBE320069B;
+        Wed,  8 Feb 2023 21:41:07 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 08 Feb 2023 21:41:05 -0500
+  by compute3.internal (MEProxy); Wed, 08 Feb 2023 21:41:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
         :content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1675910465; x=1675996865; bh=8X
-        YshcktQKtbg7u6Sz06kaSBP+Y6wfJhgkxAyymxnPg=; b=ZkUHZxv2uCRcWMBn7h
-        d61Q9DMtApRwKDiJzGz+LDnGJ7j6W0eAwcw21L/fI9mE4euH46P/ROpPwtZubnTW
-        GK5zuivk3LMC3Z2Tg+axDYgOGPYAMGuvjb4wC/6+9/zLaOzmEJdEyw6Nsu2O1w4h
-        B+0Hi661hex3dGFitJ0ogs1eaPxKThvV6n+HIxA4ikapIlh2cSvkTi77Fk0sdK44
-        liZGTgTUzSWRXn9RZTRclShm9FvndhLF7lVF1iO0/dCjlEPMNgc5+5fp2s3i3Vk9
-        4y5NWN8qcRusfKgB7qslApUQsrm6XYz6JJSq1Yx+bnxUzQREnS57pDdiEQPiIVZ7
-        4TaA==
+        :subject:subject:to:to; s=fm2; t=1675910467; x=1675996867; bh=gT
+        +nXSzpTrk398bfmLTs8NvceS80Cfg6kc1rubDPw4s=; b=bK9C0xqIk6S88QO/d2
+        zUaXoBjAQh2DQClI/XChdA5N7AyFiT5AGQDoqoA/i6T6oHQJe2Z+qlQeRDxAKaN5
+        o4/GurkDKDrkVo2kR8smT44O2eomGjuDUisslZzhFv+ZQQzyQjW5IMYS69XbG9Ik
+        LGYE5IOFe2UAutpN0H0DlaEeJvI7kwCzkgmJI8wIwtAV+uRbXgzgFCdWxJea7J7g
+        sn27eJ6DIQxZe4EUcCzoc/hvGlJP8bvnn4wVw5Yjk0nGkwszCr0STBAWDUD/zrJs
+        IPbOB4egxXrmDSOlWXD4u1uX/CMWvr+zg1sXqHnEBWJ2nj0Uo+Gh5QNngSl3I+vi
+        HZYQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1675910465; x=1675996865; bh=8XYshcktQKtbg
-        7u6Sz06kaSBP+Y6wfJhgkxAyymxnPg=; b=QygVMxEBMcfqVF8RHhvk53/KVpc+C
-        A0gGjI1xNDMuP/IMN4iL7a8EMF/xNwScn9946CsEAk/wUvxAqUK01GhNKBdr8F9T
-        3H4AiBgZH0jekxg5ATfb+VmZboYh+zxk/pmcGNPCz4Aw34t1xMUwz2D3tMCC8gvi
-        TCoSnpIxDi+UojRqlLwdgVPUfHF+EqPdXuv6QQ0w9LYI8sSCLS7lqdJkcT0fF8bj
-        bqNhtWYJ4A9AWfdS+AgP3sCZrCLt45ZcNhzICOKOgI8OxRSuEhlD4dX3ZEdHOgEO
-        9pqGeUQMPvLj0+IFLFh4xP2glIukYqteptQ6BfigKsLxkUWscCxfY8dmQ==
-X-ME-Sender: <xms:QV3kY0TIpswqlCT6ShrMX03y0aEJeomQ0DcIW1f07u5ApZ1sSW1R9Q>
-    <xme:QV3kYxx5ltkc_B776WfI9WD9fpjH0jq0jGuDYXzZkkZNix6p9hwVACi1YhORJeDGP
-    549mmO-lre-H47s49U>
-X-ME-Received: <xmr:QV3kYx0REbtrEfnFdi5yIZEnck8vFjC5_o7rXD9eYdRasgTi41BZilrWkxMjmvcix-PwdS1Lsxzkpu6B1K2EUd19cnUM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehuddgudegkecutefuodetggdotefrod
+        :x-sasl-enc; s=fm1; t=1675910467; x=1675996867; bh=gT+nXSzpTrk39
+        8bfmLTs8NvceS80Cfg6kc1rubDPw4s=; b=lq14KSlugkFJKCMSsbu6QRME9ip+I
+        etbRfQO7eDr7GDow26Zew4CxFtsHDxK1mAcKikocGMdmtEMaLb56JDhMxCSffSM1
+        UAjkA7Dj3EehPxgibyI+yQoBvM4DqmUmg3o98+IJPpIHDL2KviWiMGn7Z7Y6KsP7
+        QIKG1aiHEb8ybAI3PtMXtldPFaNejNyNccUzEZg3ERZVKqX+a9wq7qTfeuR3pgfU
+        OGJZ4jGMjQBzs5HEvScKTUSDe9lb48Ey6WolNmaYh+nQoAM7QuyUeL+d79J8sK84
+        u3kRR00jqRbZtrfvT5OD6ckQVLdr4zlw/rWX3WFCFqU6ibsg0EHstf/2w==
+X-ME-Sender: <xms:Q13kYyj73I-0B7LgdguUnuC4uoJxTmJziYPwRLmAcoOm4S-eUyk8zA>
+    <xme:Q13kYzD8kku983t6Au8jU-_9XdrkS2qd0IEBur3sZj4Rb0ScsPaLjwZMABSOPHH3S
+    40ACEhN8PyLvgzNuT4>
+X-ME-Received: <xmr:Q13kY6HYyE9OzfS6eRuMVDqtcQWHsRMHrUNINHVbIsgAmKi_OCOq--sY7uX9Y7emAQpySsY3xeKrnVsZnsPwhsut2RXO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehuddgudeglecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestd
     ekredtredttdenucfhrhhomhepgghinhgtvghnthcuffgrghhonhhnvggruhcuoehvsehv
-    uggrrdhioheqnecuggftrfgrthhtvghrnhepudejtdeggfdtlefffeejgefggfeigfejve
-    evtdejhfduvdelieduteeutdfffeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghr
-    rghmpehmrghilhhfrhhomhepvhesvhgurgdrihho
-X-ME-Proxy: <xmx:QV3kY4DDQy1YucLfd2rSEOgFm9k6Wc4BV_fw1WBGPTZTxM9X_1brEg>
-    <xmx:QV3kY9gBw51ud6Wt-zCMdI-ldgF_a4vN5HfbSQpdCrgG6lSgivrSfQ>
-    <xmx:QV3kY0p1tuNOw6dyMMBKQ70N830ZBun04Iui9R5JcSqzoNSQuxB9yg>
-    <xmx:QV3kY9a-_8j6757V067SRewSchCbgGL7bk4O5RE4X26FrkNHbOV1LQ>
+    uggrrdhioheqnecuggftrfgrthhtvghrnhepheefveeiveeutdduieevhfejkeehffefje
+    efteefheevgfehteeukeehfeelvdfhnecuffhomhgrihhnpehophgvnhhgrhhouhhprdho
+    rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepvh
+    esvhgurgdrihho
+X-ME-Proxy: <xmx:Q13kY7ROdAJ-EPS6b0TM3IVk3w_0rDrwpoorSRuW2GnPrhd9d_fvuw>
+    <xmx:Q13kY_z-bmxQ2rHB0cXLUqp5kK9juTeinHVczaCZeG7ZFiXnIDB7Ew>
+    <xmx:Q13kY56Vj_3xXrRp5oLvKz2mVChKJf9FDH7CKV6NYVHB7tjOlt_Qxw>
+    <xmx:Q13kY4r8OtXdzYf-9LusrWtu6XKh0pxBIMWLepzfFEGA0p10Y69q3w>
 Feedback-ID: ic7094478:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Feb 2023 21:41:04 -0500 (EST)
+ 8 Feb 2023 21:41:06 -0500 (EST)
 From:   Vincent Dagonneau <v@vda.io>
 To:     linux-kernel@vger.kernel.org
 Cc:     w@1wt.eu, Vincent Dagonneau <v@vda.io>
-Subject: [PATCH v4 1/4] tools/nolibc: Adding stdint.h
-Date:   Wed,  8 Feb 2023 21:40:41 -0500
-Message-Id: <20230209024044.13127-2-v@vda.io>
+Subject: [PATCH v4 2/4] tools/nolibc: Adding integer types and integer limit macros
+Date:   Wed,  8 Feb 2023 21:40:42 -0500
+Message-Id: <20230209024044.13127-3-v@vda.io>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230209024044.13127-1-v@vda.io>
 References: <20230209024044.13127-1-v@vda.io>
@@ -81,91 +82,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nolibc works fine for small and limited program however most program
-expect integer types to be defined in stdint.h rather than std.h.
+This commit adds some of the missing integer types to stdint.h and adds
+limit macros (e.g. INTN_{MIN,MAX}).
 
-This is a quick fix that moves the existing integer definitions in std.h
-to stdint.h.
+The reference used for adding these types is
+https://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdint.h.html.
+
+Note that the maximum size of size_t is implementation-defined (>65535),
+in this case I chose to stick with what the kernel uses in
+linux/include/uapi/asm-generic/posix_types.h: unsigned int on 32bits and
+unsigned long on 64bits.
 
 Signed-off-by: Vincent Dagonneau <v@vda.io>
 ---
- tools/include/nolibc/Makefile |  4 ++--
- tools/include/nolibc/std.h    | 15 +--------------
- tools/include/nolibc/stdint.h | 24 ++++++++++++++++++++++++
- 3 files changed, 27 insertions(+), 16 deletions(-)
- create mode 100644 tools/include/nolibc/stdint.h
+ tools/include/nolibc/stdint.h | 60 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index cfd06764b5ae..ec57d3932506 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -25,8 +25,8 @@ endif
- 
- nolibc_arch := $(patsubst arm64,aarch64,$(ARCH))
- arch_file := arch-$(nolibc_arch).h
--all_files := ctype.h errno.h nolibc.h signal.h std.h stdio.h stdlib.h string.h \
--             sys.h time.h types.h unistd.h
-+all_files := ctype.h errno.h nolibc.h signal.h std.h stdint.h stdio.h stdlib.h \
-+             string.h sys.h time.h types.h unistd.h
- 
- # install all headers needed to support a bare-metal compiler
- all: headers
-diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
-index 1747ae125392..933bc0be7e1c 100644
---- a/tools/include/nolibc/std.h
-+++ b/tools/include/nolibc/std.h
-@@ -18,20 +18,7 @@
- #define NULL ((void *)0)
- #endif
- 
--/* stdint types */
--typedef unsigned char       uint8_t;
--typedef   signed char        int8_t;
--typedef unsigned short     uint16_t;
--typedef   signed short      int16_t;
--typedef unsigned int       uint32_t;
--typedef   signed int        int32_t;
--typedef unsigned long long uint64_t;
--typedef   signed long long  int64_t;
--typedef unsigned long        size_t;
--typedef   signed long       ssize_t;
--typedef unsigned long     uintptr_t;
--typedef   signed long      intptr_t;
--typedef   signed long     ptrdiff_t;
-+#include "stdint.h"
- 
- /* those are commonly provided by sys/types.h */
- typedef unsigned int          dev_t;
 diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-new file mode 100644
-index 000000000000..4ba264031df9
---- /dev/null
+index 4ba264031df9..6a7683de09ec 100644
+--- a/tools/include/nolibc/stdint.h
 +++ b/tools/include/nolibc/stdint.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * Standard definitions and types for NOLIBC
-+ * Copyright (C) 2023 Vincent Dagonneau <v@vda.io>
-+ */
+@@ -21,4 +21,64 @@ typedef unsigned long     uintptr_t;
+ typedef   signed long      intptr_t;
+ typedef   signed long     ptrdiff_t;
+ 
++typedef   int8_t       int_least8_t;
++typedef  uint8_t      uint_least8_t;
++typedef  int16_t      int_least16_t;
++typedef uint16_t     uint_least16_t;
++typedef  int32_t      int_least32_t;
++typedef uint32_t     uint_least32_t;
++typedef  int64_t      int_least64_t;
++typedef uint64_t     uint_least64_t;
 +
-+#ifndef _NOLIBC_STDINT_H
-+#define _NOLIBC_STDINT_H
++typedef  int64_t           intmax_t;
++typedef uint64_t          uintmax_t;
 +
-+typedef unsigned char       uint8_t;
-+typedef   signed char        int8_t;
-+typedef unsigned short     uint16_t;
-+typedef   signed short      int16_t;
-+typedef unsigned int       uint32_t;
-+typedef   signed int        int32_t;
-+typedef unsigned long long uint64_t;
-+typedef   signed long long  int64_t;
-+typedef unsigned long        size_t;
-+typedef   signed long       ssize_t;
-+typedef unsigned long     uintptr_t;
-+typedef   signed long      intptr_t;
-+typedef   signed long     ptrdiff_t;
++/* limits of integral types */
 +
-+#endif /* _NOLIBC_STDINT_H */
++#define        INT8_MIN  (-128)
++#define       INT16_MIN  (-32767-1)
++#define       INT32_MIN  (-2147483647-1)
++#define       INT64_MIN  (-9223372036854775807LL-1)
++
++#define        INT8_MAX  (127)
++#define       INT16_MAX  (32767)
++#define       INT32_MAX  (2147483647)
++#define       INT64_MAX  (9223372036854775807LL)
++
++#define       UINT8_MAX  (255)
++#define      UINT16_MAX  (65535)
++#define      UINT32_MAX  (4294967295U)
++#define      UINT64_MAX  (18446744073709551615ULL)
++
++#define  INT_LEAST8_MIN  INT8_MIN
++#define INT_LEAST16_MIN  INT16_MIN
++#define INT_LEAST32_MIN  INT32_MIN
++#define INT_LEAST64_MIN  INT64_MIN
++
++#define  INT_LEAST8_MAX  INT8_MAX
++#define INT_LEAST16_MAX  INT16_MAX
++#define INT_LEAST32_MAX  INT32_MAX
++#define INT_LEAST64_MAX  INT64_MAX
++
++#define  UINT_LEAST8_MAX UINT8_MAX
++#define UINT_LEAST16_MAX UINT16_MAX
++#define UINT_LEAST32_MAX UINT32_MAX
++#define UINT_LEAST64_MAX UINT64_MAX
++
++#if __WORDSIZE == 64
++  #define         SIZE_MAX  UINT64_MAX
++  #define       INTPTR_MIN  INT64_MIN
++  #define       INTPTR_MAX  INT64_MAX
++  #define      UINTPTR_MAX  UINT64_MAX
++  #define      PTRDIFF_MIN  INT64_MIN
++  #define      PTRDIFF_MAX  INT64_MAX
++#else
++  #define         SIZE_MAX  UINT32_MAX
++  #define       INTPTR_MIN  INT32_MIN
++  #define       INTPTR_MAX  INT32_MAX
++  #define      UINTPTR_MAX  UINT32_MAX
++  #define      PTRDIFF_MIN  INT32_MIN
++  #define      PTRDIFF_MAX  INT32_MAX
++#endif /* __WORDSIZE == 64 */
++
+ #endif /* _NOLIBC_STDINT_H */
 -- 
 2.39.1
 
