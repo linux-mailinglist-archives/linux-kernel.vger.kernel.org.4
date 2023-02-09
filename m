@@ -2,170 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C1469086B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AAE690884
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjBIMNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S229938AbjBIMRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjBIMNS (ORCPT
+        with ESMTP id S229902AbjBIMRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:13:18 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A841A4B2
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:13:11 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id gr7so5727026ejb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:13:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4qtFTvbHxRjvyTRQZm4FOypGXExhOGLEMmjpmKJUfdE=;
-        b=fadsR6LJNu4N9d/Okgy64gjG/yQksFsSZ85Yb9Qte/MGtIV1b7C1gJPdMwNq5+PCYy
-         up3LWvs+r8tVVKnY+zWpFgIXGpn7zNAip/DXXmKZEDjowKlaO/9K4E/LwUERh/xCa1+z
-         mAl9AyezEjXQIHXqHOvHjTJEibuX8vUzbkXJI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4qtFTvbHxRjvyTRQZm4FOypGXExhOGLEMmjpmKJUfdE=;
-        b=k6t6qO7NBhk7RNIAzZ8nzRMqoi7/mlAV03TkmfTM3Q2N0rF/PaiUj2g+cgN3Eppy2a
-         yptspCFVn4OrWcGsE0vGl+i76p6CMkoYVlAc3/2DG97a9VnfFJ7gj1IkSAIu9iYKfSt8
-         mfnlbkAFiKGrDpr+PCeLwVwLxv6QanZNBHxaKRYKqRidI76mDa3EcGLrb7xJ+57Zh6z0
-         pNFQGGfmjeb4N6CwfchAPNZ/XD4Sa5X4omO0TGtqoeuHV4euIKBiPX32gmxUrbaN0i/u
-         jO2bX68LnD7dk6vUHcREurI7yAwWTW/Duqxi5wrCZZFUNBKi1zRRffYzedp/6W8GnSy8
-         KkmA==
-X-Gm-Message-State: AO0yUKW2Ww62dVt0OBhP81ttBzuafCq996077UmA2svrmhj0WRxxR8YS
-        UkKpd1XMcHqnlqrcNiiOVxk9SA==
-X-Google-Smtp-Source: AK7set8g+72zfUkP2goBWQLOKa9VuG5jrw55G0ZPpvezzXsUk/XgNU6C3ANGKZW4+1EPfX/teIiq2w==
-X-Received: by 2002:a17:907:a095:b0:877:8ae7:2e44 with SMTP id hu21-20020a170907a09500b008778ae72e44mr12932864ejc.5.1675944789864;
-        Thu, 09 Feb 2023 04:13:09 -0800 (PST)
-Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id r13-20020a1709064d0d00b0080345493023sm784466eju.167.2023.02.09.04.13.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 04:13:09 -0800 (PST)
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Thu, 09 Feb 2023 12:13:05 +0000
-Subject: [PATCH net-next v2] sctp: sctp_sock_filter(): avoid list_entry()
- on possibly empty list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230208-sctp-filter-v2-1-6e1f4017f326@diag.uniroma1.it>
-X-B4-Tracking: v=1; b=H4sIAFDj5GMC/22NOw6DMBBEr4K2ziJ/+KbKPaIUBhZYKRhkO4gIc
- fcY6pSjNzNvB0+OycM92cHRyp5nG4O6JdCOxg6E3MUMSigtlKjQt2HBnt+BHJY6yzUVea0LAXH
- RGE/YOGPb8dxMxsfWCRZHPW+X5gmWAlraArwiGdmH2X0v/yov/le1SpRYZYZK0dVC1PLRsRnSj
- 2U3T0amHO+O4/gB16rWP9AAAAA=
-To:     Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675944789; l=3275;
- i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
- bh=Rt31ZLPkz0Il+RYbul7rqebXsGaOcZtgeKkEtCXl6uI=;
- b=Us/h7LxyZhJwKTaIzLyY8wiVM+lEItqODOMjjFfYrAuRfjfTiSRPlOX47URMzZ5nyf3MaonPXmOn
- 11ZOz3moCrQO4exnvXRc2Ze0hTysr+Kq96ggS/UBXPHEC2UyzkZy
-X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
- pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 07:17:15 -0500
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 025B8DBD5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:16:53 -0800 (PST)
+Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
+        by hzbj-icmmx-7 (Coremail) with SMTP id AQAAfwBHE+eD4+RjqhtVDw--.64601S2;
+        Thu, 09 Feb 2023 20:13:55 +0800 (CST)
+Received: from phytium.com.cn (unknown [218.68.211.205])
+        by mail (Coremail) with SMTP id AQAAfwAnNCGa4+Rj12gRAA--.4289S3;
+        Thu, 09 Feb 2023 20:14:19 +0800 (CST)
+From:   Zhang Yiqun <zhangyiqun@phytium.com.cn>
+To:     cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
+        liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
+        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        kai.vehmanen@linux.intel.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, amadeuszx.slawinski@linux.intel.com,
+        kuninori.morimoto.gx@renesas.com, ckeepax@opensource.cirrus.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Zhang Yiqun <zhangyiqun@phytium.com.cn>
+Subject: [PATCH] ALSA: hda: remove redundent varible in snd_hdac_stream_start()
+Date:   Thu,  9 Feb 2023 20:14:00 +0800
+Message-Id: <20230209121400.14253-1-zhangyiqun@phytium.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: AQAAfwAnNCGa4+Rj12gRAA--.4289S3
+X-CM-SenderInfo: x2kd0wp1lt30o6sk53xlxphulrpou0/
+Authentication-Results: hzbj-icmmx-7; spf=neutral smtp.mail=zhangyiqun
+        @phytium.com.cn;
+X-Coremail-Antispam: 1Uk129KBjvJXoWxKw4rGF4kXF4xJw47ZF1rXrb_yoW7ArW5pw
+        4kZa4rKFW3tF10vF4UGw15KF17KF1kKasxtry5t348Aw4UJr1FqFyjkryxZryFkry5Wr9x
+        Z3W2y34UGw43WFDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
+        UUUUU
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use list_is_first() to check whether tsp->asoc matches the first
-element of ep->asocs, as the list is not guaranteed to have an entry.
+This 2nd varibles are all set as true in treewide. So I think
+it can be removed for easy understanding.
 
-Fixes: 8f840e47f190 ("sctp: add the sctp_diag.c file")
-Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+Signed-off-by: Zhang Yiqun <zhangyiqun@phytium.com.cn>
 ---
-Changes in v2:
-- Use list_is_first()
-- Link to v1: https://lore.kernel.org/r/20230208-sctp-filter-v1-1-84ae70d90091@diag.uniroma1.it
----
+ include/sound/hdaudio.h           | 2 +-
+ sound/hda/hdac_stream.c           | 7 ++-----
+ sound/pci/hda/hda_controller.c    | 2 +-
+ sound/soc/intel/avs/pcm.c         | 2 +-
+ sound/soc/intel/avs/probes.c      | 2 +-
+ sound/soc/intel/skylake/skl-pcm.c | 4 ++--
+ 6 files changed, 8 insertions(+), 11 deletions(-)
 
-The list_entry on an empty list creates a type confused pointer.
-While using it is undefined behavior, in this case it seems there
-is no big risk, as the `tsp->asoc != assoc` check will almost
-certainly fail on the type confused pointer.
-We report this bug also since it may hide further problems since
-the code seems to assume a non-empty `ep->asocs`.
-
-We were able to trigger sctp_sock_filter() using syzkaller, and
-cause a panic inserting `BUG_ON(list_empty(&ep->asocs))`, so the
-list may actually be empty.
-But we were not able to minimize our testcase and understand how
-sctp_sock_filter may end up with an empty asocs list.
-We suspect a race condition between a connecting sctp socket
-and the diag query.
-
-We attach the stacktrace when triggering the injected
-`BUG_ON(list_empty(&ep->asocs))`:
-
-```
-[  217.044169][T18237] kernel BUG at net/sctp/diag.c:364!
-[  217.044845][T18237] invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-[  217.045681][T18237] CPU: 0 PID: 18237 Comm: syz-executor Not
-tainted 6.1.0-00003-g190ee984c3e0-dirty #72
-[  217.046934][T18237] Hardware name: QEMU Standard PC (i440FX +
-PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[  217.048241][T18237] RIP: 0010:sctp_sock_filter+0x1ce/0x1d0
-[...]
-[  217.060554][T18237] Call Trace:
-[  217.061003][T18237]  <TASK>
-[  217.061409][T18237]  sctp_transport_traverse_process+0x17d/0x470
-[  217.062212][T18237]  ? sctp_ep_dump+0x620/0x620
-[  217.062835][T18237]  ? sctp_sock_filter+0x1d0/0x1d0
-[  217.063524][T18237]  ? sctp_transport_lookup_process+0x280/0x280
-[  217.064330][T18237]  ? sctp_diag_get_info+0x260/0x2c0
-[  217.065026][T18237]  ? sctp_for_each_endpoint+0x16f/0x200
-[  217.065762][T18237]  ? sctp_diag_get_info+0x2c0/0x2c0
-[  217.066435][T18237]  ? sctp_for_each_endpoint+0x1c0/0x200
-[  217.067155][T18237]  sctp_diag_dump+0x2ea/0x480
-[...]
-[  217.093117][T18237]  do_writev+0x22d/0x460
-```
----
- net/sctp/diag.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/net/sctp/diag.c b/net/sctp/diag.c
-index a557009e9832..c3d6b92dd386 100644
---- a/net/sctp/diag.c
-+++ b/net/sctp/diag.c
-@@ -343,11 +343,9 @@ static int sctp_sock_filter(struct sctp_endpoint *ep, struct sctp_transport *tsp
- 	struct sctp_comm_param *commp = p;
- 	struct sock *sk = ep->base.sk;
- 	const struct inet_diag_req_v2 *r = commp->r;
--	struct sctp_association *assoc =
--		list_entry(ep->asocs.next, struct sctp_association, asocs);
+diff --git a/include/sound/hdaudio.h b/include/sound/hdaudio.h
+index a6872537724d..536612c6ab0c 100644
+--- a/include/sound/hdaudio.h
++++ b/include/sound/hdaudio.h
+@@ -575,7 +575,7 @@ void snd_hdac_stream_cleanup(struct hdac_stream *azx_dev);
+ int snd_hdac_stream_setup_periods(struct hdac_stream *azx_dev);
+ int snd_hdac_stream_set_params(struct hdac_stream *azx_dev,
+ 				unsigned int format_val);
+-void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start);
++void snd_hdac_stream_start(struct hdac_stream *azx_dev);
+ void snd_hdac_stream_stop(struct hdac_stream *azx_dev);
+ void snd_hdac_stop_streams(struct hdac_bus *bus);
+ void snd_hdac_stop_streams_and_chip(struct hdac_bus *bus);
+diff --git a/sound/hda/hdac_stream.c b/sound/hda/hdac_stream.c
+index 547adbc22590..1f56fd33b9af 100644
+--- a/sound/hda/hdac_stream.c
++++ b/sound/hda/hdac_stream.c
+@@ -124,11 +124,10 @@ EXPORT_SYMBOL_GPL(snd_hdac_stream_init);
+ /**
+  * snd_hdac_stream_start - start a stream
+  * @azx_dev: HD-audio core stream to start
+- * @fresh_start: false = wallclock timestamp relative to period wallclock
+  *
+  * Start a stream, set start_wallclk and set the running flag.
+  */
+-void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start)
++void snd_hdac_stream_start(struct hdac_stream *azx_dev)
+ {
+ 	struct hdac_bus *bus = azx_dev->bus;
+ 	int stripe_ctl;
+@@ -136,8 +135,6 @@ void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start)
+ 	trace_snd_hdac_stream_start(bus, azx_dev);
  
- 	/* find the ep only once through the transports by this condition */
--	if (tsp->asoc != assoc)
-+	if (!list_is_first(&tsp->asoc->asocs, &ep->asocs))
- 		return 0;
+ 	azx_dev->start_wallclk = snd_hdac_chip_readl(bus, WALLCLK);
+-	if (!fresh_start)
+-		azx_dev->start_wallclk -= azx_dev->period_wallclk;
  
- 	if (r->sdiag_family != AF_UNSPEC && sk->sk_family != r->sdiag_family)
-
----
-base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
-change-id: 20230208-sctp-filter-73453e659360
-
-Best regards,
+ 	/* enable SIE */
+ 	snd_hdac_chip_updatel(bus, INTCTL,
+@@ -966,7 +963,7 @@ EXPORT_SYMBOL_GPL(snd_hdac_dsp_prepare);
+ void snd_hdac_dsp_trigger(struct hdac_stream *azx_dev, bool start)
+ {
+ 	if (start)
+-		snd_hdac_stream_start(azx_dev, true);
++		snd_hdac_stream_start(azx_dev);
+ 	else
+ 		snd_hdac_stream_stop(azx_dev);
+ }
+diff --git a/sound/pci/hda/hda_controller.c b/sound/pci/hda/hda_controller.c
+index 0ff286b7b66b..c19d45618a09 100644
+--- a/sound/pci/hda/hda_controller.c
++++ b/sound/pci/hda/hda_controller.c
+@@ -257,7 +257,7 @@ static int azx_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
+ 		azx_dev = get_azx_dev(s);
+ 		if (start) {
+ 			azx_dev->insufficient = 1;
+-			snd_hdac_stream_start(azx_stream(azx_dev), true);
++			snd_hdac_stream_start(azx_stream(azx_dev));
+ 		} else {
+ 			snd_hdac_stream_stop(azx_stream(azx_dev));
+ 		}
+diff --git a/sound/soc/intel/avs/pcm.c b/sound/soc/intel/avs/pcm.c
+index f930c5e86a84..b673b84ead32 100644
+--- a/sound/soc/intel/avs/pcm.c
++++ b/sound/soc/intel/avs/pcm.c
+@@ -647,7 +647,7 @@ static int avs_dai_fe_trigger(struct snd_pcm_substream *substream, int cmd, stru
+ 	case SNDRV_PCM_TRIGGER_START:
+ 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+ 		spin_lock_irqsave(&bus->reg_lock, flags);
+-		snd_hdac_stream_start(hdac_stream(host_stream), true);
++		snd_hdac_stream_start(hdac_stream(host_stream));
+ 		spin_unlock_irqrestore(&bus->reg_lock, flags);
+ 
+ 		/* Timeout on DRSM poll shall not stop the resume so ignore the result. */
+diff --git a/sound/soc/intel/avs/probes.c b/sound/soc/intel/avs/probes.c
+index 29d63f2a9616..741565c6465a 100644
+--- a/sound/soc/intel/avs/probes.c
++++ b/sound/soc/intel/avs/probes.c
+@@ -190,7 +190,7 @@ static int avs_probe_compr_trigger(struct snd_compr_stream *cstream, int cmd,
+ 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+ 	case SNDRV_PCM_TRIGGER_RESUME:
+ 		spin_lock_irqsave(&bus->reg_lock, cookie);
+-		snd_hdac_stream_start(hdac_stream(host_stream), true);
++		snd_hdac_stream_start(hdac_stream(host_stream));
+ 		spin_unlock_irqrestore(&bus->reg_lock, cookie);
+ 		break;
+ 
+diff --git a/sound/soc/intel/skylake/skl-pcm.c b/sound/soc/intel/skylake/skl-pcm.c
+index dc627d18518d..a4209d88b0c6 100644
+--- a/sound/soc/intel/skylake/skl-pcm.c
++++ b/sound/soc/intel/skylake/skl-pcm.c
+@@ -449,7 +449,7 @@ static int skl_decoupled_trigger(struct snd_pcm_substream *substream,
+ 	spin_lock_irqsave(&bus->reg_lock, cookie);
+ 
+ 	if (start) {
+-		snd_hdac_stream_start(hdac_stream(stream), true);
++		snd_hdac_stream_start(hdac_stream(stream));
+ 		snd_hdac_stream_timecounter_init(hstr, 0);
+ 	} else {
+ 		snd_hdac_stream_stop(hdac_stream(stream));
+@@ -1134,7 +1134,7 @@ static int skl_coupled_trigger(struct snd_pcm_substream *substream,
+ 			continue;
+ 		stream = get_hdac_ext_stream(s);
+ 		if (start)
+-			snd_hdac_stream_start(hdac_stream(stream), true);
++			snd_hdac_stream_start(hdac_stream(stream));
+ 		else
+ 			snd_hdac_stream_stop(hdac_stream(stream));
+ 	}
 -- 
-Pietro Borrello <borrello@diag.uniroma1.it>
+2.17.1
 
