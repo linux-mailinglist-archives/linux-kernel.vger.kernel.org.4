@@ -2,79 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4F6690D2A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD12690D2E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbjBIPko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S231438AbjBIPkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:40:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjBIPkm (ORCPT
+        with ESMTP id S231417AbjBIPky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:40:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6359625BB6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:40:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675957200;
+        Thu, 9 Feb 2023 10:40:54 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275245B74F;
+        Thu,  9 Feb 2023 07:40:52 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675957250;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0hQf86nfARy8f4W7PUmEGo7Q+XTg2P97T/ALpblhSTk=;
-        b=MV8NROgaHiw2/I74A1Idv8qhscdjPanQ8I7gd4/jWRvcgDq6AV/SJEF2eJP0diVSytK7G5
-        NgOpQ676G3p+AWus/rx9MRSNT3jofPWI8m+XZjAqUjqCNMclPyNGm2NQTXUhiT6iFg2haM
-        l0P3NSnlWs5hLTkWjSOIlt2+lHZSwvE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-TC_lS1usPTuLB-2OhgiORQ-1; Thu, 09 Feb 2023 10:39:57 -0500
-X-MC-Unique: TC_lS1usPTuLB-2OhgiORQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D8F561C08794;
-        Thu,  9 Feb 2023 15:39:56 +0000 (UTC)
-Received: from plouf.local (ovpn-192-232.brq.redhat.com [10.40.192.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DDA44140EBF6;
-        Thu,  9 Feb 2023 15:39:54 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     linux-input@vger.kernel.org, Bastien Nocera <hadess@hadess.net>
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>
-In-Reply-To: <20230206221256.129198-1-hadess@hadess.net>
-References: <20230206221256.129198-1-hadess@hadess.net>
-Subject: Re: (subset) [PATCH v2 1/3] HID: logitech-hidpp: Add more debug
- statements
-Message-Id: <167595719424.371927.3678472760896974183.b4-ty@redhat.com>
-Date:   Thu, 09 Feb 2023 16:39:54 +0100
+        bh=OVFhlR2M6tNz8ldOCJ24pLZnOnnyeNs58Qt9EziV6CM=;
+        b=JW7EI1gy7ShLJfGdxUahI0jE6ujpSPzquuMDqkeDl1wd0R1Rdca3VNsHVCn0f4e8fq3JKq
+        zZY+/EBDJH0zjuegVMTrKh2nFkMP0Z2TS2QmRl2Ma76vQ8B7BH8RgJbJ9QnWUz44XaXy9O
+        RKfxQVSJj9SN1nilyERF8ZHFX5CIBivr75l8U60ExWteFiVwwpiouSMfy6f33y/OZGYuXe
+        F3KBCHkONxaqNGTPnIegaW57YEG3eHeHvlyG+NV/NkPu/01ap8Y79zO4N57JbNttCVcr2I
+        pur3/b95DWulKg/YKW1hCvYfIPDTf6oKMORsv1k5+ZAmuJ1k+HzdorIf5ECMQQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675957250;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OVFhlR2M6tNz8ldOCJ24pLZnOnnyeNs58Qt9EziV6CM=;
+        b=Uvene4wD+DyhDsbTMc4drDy2TYTCbUgnzBHvIRIRsrmwLaDxc7QkMPcZtjQsRXYkCuMsV+
+        qFSpFcfPM/4sOaAA==
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc:     Michael <michael@mipisi.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        linux-kernel@vger.kernel.org, John Stultz <jstultz@google.com>
+Subject: Re: Problem when function alarmtimer_suspend returns 0 if time
+ delta is zero
+In-Reply-To: <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
+References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
+ <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de>
+ <20190902074917.GA21922@piout.net>
+ <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
+ <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de>
+ <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
+ <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx>
+ <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
+Date:   Thu, 09 Feb 2023 16:40:49 +0100
+Message-ID: <87zg9m26f2.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Feb 2023 23:12:54 +0100, Bastien Nocera wrote:
-> This should help us figure out some hairy problems with some devices.
-> 
-> 
+Michael!
 
-Applied to hid/hid.git (for-6.3/logitech), thanks!
+On Thu, Feb 09 2023 at 12:19, Michael Nazzareno Trimarchi wrote:
+> On Wed, Feb 8, 2023 at 7:06 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> I wrote that patch against the back then mainline code. No idea if it's
+>> still applying, but the underlying issue is still the same AFAICT.
+>>
+>> It needs some polishing and a proper changelog.
+>>
+> Ok, I will try to update it on some mainline kernel in my environment
+> and test it back. I need
+> a little information if it's possible. Consider that I have no
+> experience in this area. I understand how
+> code was designed in general but the part around the freezer and all
+> those code you remove, what was the logic behind in the removed code?
 
-[1/3] HID: logitech-hidpp: Add more debug statements
-      https://git.kernel.org/hid/hid/c/db5167cfaa0a
+What I can oracle out of that well commented gem is:
 
-Cheers,
--- 
-Benjamin Tissoires <benjamin.tissoires@redhat.com>
+  A userspace task invokes clock_nanosleep(CLOCK_*_ALARM, ...), which
+  arms an alarm timer. The expiry of an alarmtimer causes the system to
+  come out of suspend.
+
+  As the task invokes schedule() it can also be brought back from
+  schedule() via a signal. If that happens then the task cancels the
+  alarmtimer and returns to handle the signal. While doing that it can
+  be frozen, which means the alarm and therefore the wake from suspend
+  is lost.
+
+  To prevent that the code tries to save the earliest expiring alarm if
+  the task is marked freezing() and the suspend code takes that into
+  account.
+
+John, did I summarize that correctly?
+
+The change I made remove that magic and marks the task freezable when it
+goes to schedule, which prevents the signal wakeup. That ensures that
+the alarm stays armed during freeze/suspend.
+
+That obviously needs some testing and scrunity by the folks which use
+this mechanism. IIRC that's used by android, but I might be wrong.
+
+Thanks,
+
+        tglx
+
 
