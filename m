@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1B2690902
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0863A690908
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjBIMhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
+        id S229596AbjBIMjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:39:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjBIMhE (ORCPT
+        with ESMTP id S229505AbjBIMjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:37:04 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E9F5A9E3;
-        Thu,  9 Feb 2023 04:37:01 -0800 (PST)
-Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PCGXQ2yNTznW3J;
-        Thu,  9 Feb 2023 20:34:46 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 9 Feb 2023 20:36:59 +0800
-From:   Weili Qian <qianweili@huawei.com>
-To:     <herbert@gondor.apana.org.au>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
-        Weili Qian <qianweili@huawei.com>
-Subject: [PATCH v2 5/5] crypto: hisilicon/qm - fix coding style issues
-Date:   Thu, 9 Feb 2023 20:36:17 +0800
-Message-ID: <20230209123617.30545-6-qianweili@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230209123617.30545-1-qianweili@huawei.com>
-References: <20230209123617.30545-1-qianweili@huawei.com>
+        Thu, 9 Feb 2023 07:39:15 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C391B575
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:39:13 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-246-maV0mZRmMnWCaAOCB0EZVA-1; Thu, 09 Feb 2023 12:39:11 +0000
+X-MC-Unique: maV0mZRmMnWCaAOCB0EZVA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Thu, 9 Feb
+ 2023 12:39:07 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Thu, 9 Feb 2023 12:39:07 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'maobibo' <maobibo@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>
+CC:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] LoongArch: add checksum optimization for 64-bit system
+Thread-Topic: [PATCH v2] LoongArch: add checksum optimization for 64-bit
+ system
+Thread-Index: AQHZPDrPjnYkuPc3GUK7DnTa61yn8K7GU7lQgAAunoCAAAOYoA==
+Date:   Thu, 9 Feb 2023 12:39:07 +0000
+Message-ID: <2aa6243491784e74960182dc12968170@AcuMS.aculab.com>
+References: <20230209035839.2610277-1-maobibo@loongson.cn>
+ <e6bb59c32134477aa4890047ae5ad51b@AcuMS.aculab.com>
+ <741b2246-d609-ccc6-bf55-d6b0b5e54b54@loongson.cn>
+In-Reply-To: <741b2246-d609-ccc6-bf55-d6b0b5e54b54@loongson.cn>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,133 +61,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Remove extra blank lines.
-2. Remove extra spaces.
-3. Use spaces instead of tabs around '=' and '\',
-to ensure consistent coding styles.
-4. Macros should be capital letters, change 'QM_SQC_VFT_NUM_MASK_v2'
-to 'QM_SQC_VFT_NUM_MASK_V2'.
-
-Signed-off-by: Weili Qian <qianweili@huawei.com>
----
- drivers/crypto/hisilicon/qm.c  | 29 ++++++++++++-----------------
- drivers/crypto/hisilicon/sgl.c |  1 -
- 2 files changed, 12 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index 6ce69e8eba82..04b2d382267a 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -116,7 +116,7 @@
- #define QM_SQC_VFT_BASE_SHIFT_V2	28
- #define QM_SQC_VFT_BASE_MASK_V2		GENMASK(15, 0)
- #define QM_SQC_VFT_NUM_SHIFT_V2		45
--#define QM_SQC_VFT_NUM_MASK_v2		GENMASK(9, 0)
-+#define QM_SQC_VFT_NUM_MASK_V2		GENMASK(9, 0)
- 
- #define QM_ABNORMAL_INT_SOURCE		0x100000
- #define QM_ABNORMAL_INT_MASK		0x100004
-@@ -230,23 +230,23 @@
- #define QM_AUTOSUSPEND_DELAY		3000
- 
- #define QM_MK_CQC_DW3_V1(hop_num, pg_sz, buf_sz, cqe_sz) \
--	(((hop_num) << QM_CQ_HOP_NUM_SHIFT)	| \
--	((pg_sz) << QM_CQ_PAGE_SIZE_SHIFT)	| \
--	((buf_sz) << QM_CQ_BUF_SIZE_SHIFT)	| \
-+	(((hop_num) << QM_CQ_HOP_NUM_SHIFT) | \
-+	((pg_sz) << QM_CQ_PAGE_SIZE_SHIFT) | \
-+	((buf_sz) << QM_CQ_BUF_SIZE_SHIFT) | \
- 	((cqe_sz) << QM_CQ_CQE_SIZE_SHIFT))
- 
- #define QM_MK_CQC_DW3_V2(cqe_sz, cq_depth) \
- 	((((u32)cq_depth) - 1) | ((cqe_sz) << QM_CQ_CQE_SIZE_SHIFT))
- 
- #define QM_MK_SQC_W13(priority, orders, alg_type) \
--	(((priority) << QM_SQ_PRIORITY_SHIFT)	| \
--	((orders) << QM_SQ_ORDERS_SHIFT)	| \
-+	(((priority) << QM_SQ_PRIORITY_SHIFT) | \
-+	((orders) << QM_SQ_ORDERS_SHIFT) | \
- 	(((alg_type) & QM_SQ_TYPE_MASK) << QM_SQ_TYPE_SHIFT))
- 
- #define QM_MK_SQC_DW3_V1(hop_num, pg_sz, buf_sz, sqe_sz) \
--	(((hop_num) << QM_SQ_HOP_NUM_SHIFT)	| \
--	((pg_sz) << QM_SQ_PAGE_SIZE_SHIFT)	| \
--	((buf_sz) << QM_SQ_BUF_SIZE_SHIFT)	| \
-+	(((hop_num) << QM_SQ_HOP_NUM_SHIFT) | \
-+	((pg_sz) << QM_SQ_PAGE_SIZE_SHIFT) | \
-+	((buf_sz) << QM_SQ_BUF_SIZE_SHIFT) | \
- 	((u32)ilog2(sqe_sz) << QM_SQ_SQE_SIZE_SHIFT))
- 
- #define QM_MK_SQC_DW3_V2(sqe_sz, sq_depth) \
-@@ -706,7 +706,7 @@ static void qm_db_v2(struct hisi_qm *qm, u16 qn, u8 cmd, u16 index, u8 priority)
- 
- 	doorbell = qn | ((u64)cmd << QM_DB_CMD_SHIFT_V2) |
- 		   ((u64)randata << QM_DB_RAND_SHIFT_V2) |
--		   ((u64)index << QM_DB_INDEX_SHIFT_V2)	 |
-+		   ((u64)index << QM_DB_INDEX_SHIFT_V2) |
- 		   ((u64)priority << QM_DB_PRIORITY_SHIFT_V2);
- 
- 	writeq(doorbell, io_base);
-@@ -1304,7 +1304,7 @@ static int qm_get_vft_v2(struct hisi_qm *qm, u32 *base, u32 *number)
- 	sqc_vft = readl(qm->io_base + QM_MB_CMD_DATA_ADDR_L) |
- 		  ((u64)readl(qm->io_base + QM_MB_CMD_DATA_ADDR_H) << 32);
- 	*base = QM_SQC_VFT_BASE_MASK_V2 & (sqc_vft >> QM_SQC_VFT_BASE_SHIFT_V2);
--	*number = (QM_SQC_VFT_NUM_MASK_v2 &
-+	*number = (QM_SQC_VFT_NUM_MASK_V2 &
- 		   (sqc_vft >> QM_SQC_VFT_NUM_SHIFT_V2)) + 1;
- 
- 	return 0;
-@@ -3195,7 +3195,6 @@ static int qm_stop_started_qp(struct hisi_qm *qm)
- 	return 0;
- }
- 
--
- /**
-  * qm_clear_queues() - Clear all queues memory in a qm.
-  * @qm: The qm in which the queues will be cleared.
-@@ -3679,7 +3678,7 @@ static ssize_t qm_algqos_read(struct file *filp, char __user *buf,
- 	qos_val = ir / QM_QOS_RATE;
- 	ret = scnprintf(tbuf, QM_DBG_READ_LEN, "%u\n", qos_val);
- 
--	ret =  simple_read_from_buffer(buf, count, pos, tbuf, ret);
-+	ret = simple_read_from_buffer(buf, count, pos, tbuf, ret);
- 
- err_get_status:
- 	clear_bit(QM_RESETTING, &qm->misc_ctl);
-@@ -4176,13 +4175,10 @@ static void qm_dev_ecc_mbit_handle(struct hisi_qm *qm)
- 	if (!qm->err_status.is_dev_ecc_mbit &&
- 	    qm->err_status.is_qm_ecc_mbit &&
- 	    qm->err_ini->close_axi_master_ooo) {
--
- 		qm->err_ini->close_axi_master_ooo(qm);
--
- 	} else if (qm->err_status.is_dev_ecc_mbit &&
- 		   !qm->err_status.is_qm_ecc_mbit &&
- 		   !qm->err_ini->close_axi_master_ooo) {
--
- 		nfe_enb = readl(qm->io_base + QM_RAS_NFE_ENABLE);
- 		writel(nfe_enb & QM_RAS_NFE_MBIT_DISABLE,
- 		       qm->io_base + QM_RAS_NFE_ENABLE);
-@@ -4630,7 +4626,6 @@ static irqreturn_t qm_abnormal_irq(int irq, void *data)
- 	return IRQ_HANDLED;
- }
- 
--
- /**
-  * hisi_qm_dev_shutdown() - Shutdown device.
-  * @pdev: The device will be shutdown.
-diff --git a/drivers/crypto/hisilicon/sgl.c b/drivers/crypto/hisilicon/sgl.c
-index 2b6f2281cfd6..a07257a7e75f 100644
---- a/drivers/crypto/hisilicon/sgl.c
-+++ b/drivers/crypto/hisilicon/sgl.c
-@@ -250,7 +250,6 @@ hisi_acc_sg_buf_map_to_hw_sgl(struct device *dev,
- 		dev_err(dev, "Get SGL error!\n");
- 		dma_unmap_sg(dev, sgl, sg_n, DMA_BIDIRECTIONAL);
- 		return ERR_PTR(-ENOMEM);
--
- 	}
- 	curr_hw_sgl->entry_length_in_sgl = cpu_to_le16(pool->sge_nr);
- 	curr_hw_sge = curr_hw_sgl->sge_entries;
--- 
-2.33.0
+RnJvbTogbWFvYmlibw0KPiBTZW50OiAwOSBGZWJydWFyeSAyMDIzIDExOjU1DQo+IA0KPiANCj4g
+5ZyoIDIwMjMvMi85IDE3OjM1LCBEYXZpZCBMYWlnaHQg5YaZ6YGTOg0KPiA+IEZyb206IEJpYm8g
+TWFvDQo+ID4+IFNlbnQ6IDA5IEZlYnJ1YXJ5IDIwMjMgMDM6NTkNCj4gPj4NCj4gPj4gbG9vbmdB
+cmNoIHBsYXRmb3JtIGlzIDY0LWJpdCBzeXN0ZW0sIHdoaWNoIHN1cHBvcnRzIDggYnl0ZXMgbWVt
+b3J5DQo+ID4+IGFjY2Vzc2luZywgZ2VuZXJpYyBjaGVja3N1bSBmdW5jdGlvbiB1c2VzIDQgYnl0
+ZSBtZW1vcnkgYWNjZXNzLg0KPiA+PiBUaGlzIHBhdGNoIGFkZHMgOC1ieXRlcyBtZW1vcnkgYWNj
+ZXNzIG9wdGltaXphdGlvbiBmb3IgY2hlY2tzdW0NCj4gPj4gZnVuY3Rpb24gb24gbG9vbmdBcmNo
+LiBBbmQgdGhlIGNvZGUgY29tZXMgZnJvbSBhcm02NCBzeXN0ZW0uDQo+ID4NCj4gPiBIb3cgZmFz
+dCBkbyB0aGVzZSBmdW5jdGlvbnMgYWN0dWFsbHkgcnVuIChpbiBieXRlcy9jbG9jayk/DQo+IFdp
+dGggdWludDEyOCBtZXRob2QsIHRoZXJlIHdpbGwgdW5yb2xsZWQgbG9vcCwgaW5zdHJ1Y3Rpb24N
+Cj4gY2FuIGV4ZWN1dGUgaW4gcGFyYWxsZWwuIEl0IGdldHMgdGhlIGJlc3QgcmVzdWx0IG9uIGxv
+b25nYXJjaA0KPiBzeXN0ZW0gd2hlcmUgdGhlcmUgaXMgbm8gbmVpdGhlciBjYXJyeSBmbGFnIG5v
+ciBwb3N0LWluZGV4DQo+IGFkZHJlc3NpbmcgbW9kZXMuDQoNCldlJ3JlIHByb2JhYmx5IGFsbW9z
+dCBhZ3JlZWluZy4uLg0KDQo+IEhlcmUgaXMgdGhlIHBpZWNlIG9mIGRpc2Fzc2VtYmxlIGNvZGUg
+d2l0aCB1aW50MTI4IG1ldGhvZDoNCg0KTG9hZCA4IHZhbHVlczoNCg0KPiAgICAxMjAwMDBhNDA6
+ICAgMjhjMDIyMmYgICAgICAgIGxkLmQgICAgJHIxNSwkcjE3LDgoMHg4KQ0KPiAgICAxMjAwMDBh
+NDQ6ICAgMjhjMDYyMmEgICAgICAgIGxkLmQgICAgJHIxMCwkcjE3LDI0KDB4MTgpDQo+ICAgIDEy
+MDAwMGE0ODogICAyOGMwYTIzMCAgICAgICAgbGQuZCAgICAkcjE2LCRyMTcsNDAoMHgyOCkNCj4g
+ICAgMTIwMDAwYTRjOiAgIDI4YzBlMjMyICAgICAgICBsZC5kICAgICRyMTgsJHIxNyw1NigweDM4
+KQ0KPiAgICAxMjAwMDBhNTA6ICAgMjhjMDAyMmUgICAgICAgIGxkLmQgICAgJHIxNCwkcjE3LDAN
+Cj4gICAgMTIwMDAwYTU0OiAgIDI4YzA0MjJkICAgICAgICBsZC5kICAgICRyMTMsJHIxNywxNigw
+eDEwKQ0KPiAgICAxMjAwMDBhNTg6ICAgMjhjMDgyMmIgICAgICAgIGxkLmQgICAgJHIxMSwkcjE3
+LDMyKDB4MjApDQo+ICAgIDEyMDAwMGE1YzogICAyOGMwYzIyYyAgICAgICAgbGQuZCAgICAkcjEy
+LCRyMTcsNDgoMHgzMCkNCg0KUGFpcndpc2UgYWRkIHRoZW0NCg0KPiAgICAxMjAwMDBhNjA6ICAg
+MDAxMGI5ZjcgICAgICAgIGFkZC5kICAgJHIyMywkcjE1LCRyMTQNCj4gICAgMTIwMDAwYTY0OiAg
+IDAwMTBiNTRkICAgICAgICBhZGQuZCAgICRyMTMsJHIxMCwkcjEzDQo+ICAgIDEyMDAwMGE2ODog
+ICAwMDEwYjI0YyAgICAgICAgYWRkLmQgICAkcjEyLCRyMTgsJHIxMg0KPiAgICAxMjAwMDBhNmM6
+ICAgMDAxMGFlMGIgICAgICAgIGFkZC5kICAgJHIxMSwkcjE2LCRyMTENCg0KR2VuZXJhdGUgNCAn
+Y2FycnknIGJpdHMNCg0KPiAgICAxMjAwMDBhNzA6ICAgMDAxMmM5OTIgICAgICAgIHNsdHUgICAg
+JHIxOCwkcjEyLCRyMTgNCj4gICAgMTIwMDAwYTc0OiAgIDAwMTJiZWVlICAgICAgICBzbHR1ICAg
+ICRyMTQsJHIyMywkcjE1DQo+ICAgIDEyMDAwMGE3ODogICAwMDEyYzE3MCAgICAgICAgc2x0dSAg
+ICAkcjE2LCRyMTEsJHIxNg0KPiAgICAxMjAwMDBhN2M6ICAgMDAxMmE5YWEgICAgICAgIHNsdHUg
+ICAgJHIxMCwkcjEzLCRyMTANCg0KQWRkIHRoZSBjYXJyeSBiaXRzIG9udG8gdGhlIHN1bXMuDQpJ
+J3ZlIG5vdCBxdWl0ZSB3b3JrZWQgb3V0IHdoaWNoIGFkZCBpcyB3aGljaCENCkJ1dCBJIHRoaW5r
+IHlvdSd2ZSBtaXNzZWQgYSBmZXcgYWRkcyBoZXJlLg0KDQo+ICAgIDEyMDAwMGE4MDogICAwMDEw
+YWUwZiAgICAgICAgYWRkLmQgICAkcjE1LCRyMTYsJHIxMQ0KPiAgICAxMjAwMDBhODQ6ICAgMDAx
+MGRkY2UgICAgICAgIGFkZC5kICAgJHIxNCwkcjE0LCRyMjMNCj4gICAgMTIwMDAwYTg4OiAgIDAw
+MTBiMjUwICAgICAgICBhZGQuZCAgICRyMTYsJHIxOCwkcjEyDQo+ICAgIDEyMDAwMGE4YzogICAw
+MDEwYjU0ZCAgICAgICAgYWRkLmQgICAkcjEzLCRyMTAsJHIxMw0KPiAgICAxMjAwMDBhOTA6ICAg
+MDAxMGI1ZDIgICAgICAgIGFkZC5kICAgJHIxOCwkcjE0LCRyMTMNCj4gICAgMTIwMDAwYTk0OiAg
+IDAwMTBjMWYwICAgICAgICBhZGQuZCAgICRyMTYsJHIxNSwkcjE2DQoNClNvbWV3aGVyZSBlYWNo
+IHZhbHVlIG5lZWRzIGFuIGFkZCwgYW4gc2x0dSB0byBnZW5lcmF0ZSB0aGUgJ2NhcnJ5JywNCmFu
+ZCBhbiBhZGQgZm9yIHRoZSBjYXJyeSBpdHNlbGYuDQpJZiB5b3Ugc3VtIHRoZSBjYXJyeSBiaXRz
+IGludG8gYSBzZXBhcmF0ZSByZWdpc3RlciBpdCBpcw0KcG9zc2libGUgdG8gZ2V0IGEgYm90aCBh
+ZGRzIGFuZCB0aGUgc2x0dSAoZm9yIGRpZmZlcmVudCB2YWx1ZXMpDQp0byBydW4gaW4gdGhlIHNh
+bWUgY2xvY2sgKG9uIGEgc3VpdGFibGUgY3B1KS4NCklmIHRoZXJlIGFyZSA0IGludGVnZXIgdW5p
+dHMgeW91IGNhbiBhbHNvIGdldCB0aGUgbG9vcCBpbnN0cnVjdGlvbnMNCidmb3IgZnJlZScgYW5k
+IHVucm9sbGluZyA4IHRpbWVzIG1heSBub3QgYmUgbmVlZGVkIGF0IGFsbC4NCg0KLi4uDQo+IFRo
+ZXJlIGlzIG5vIHBvc3QtaW5kZXggYWRkcmVzc2luZyBtb2RlcyBvbiBsb29uZ2FyY2gsDQo+ICAJ
+dmFsID0gKm1lbTsgIC8vIDY0Yml0IHJlYWQNCj4gICAgICAgICBtZW0rKzsNCj4gIAlzdW0gKz0g
+dmFsOw0KPiAgCWNhcnJ5ID0gc3VtIDwgdmFsOw0KPiAgCWNhcnJ5X3N1bSArPSBjYXJyeTsNCj4g
+aXQgdGFrZXMgNSBpbnN0cnVjdGlvbiBhbmQgdGhlc2UgNSBpbnN0cnVjdGlvbnMgZGVwZW5kcyBv
+biBwcmV2aW91cyBpbnN0ci4NCg0KSSdkIGFzc3VtZSB0aGUgbG9vcCB3YXMgdW5yb2xsZWQgZW5v
+dWdoIHNvIHRoZSBhZGRyZXNzDQppbmNyZW1lbnQgZG9lc24ndCBtYXR0ZXIuDQoNCj4gVGhlcmUg
+aXMgdGhlIHBpZWNlIG9mIGRpc2Fzc2VtYmxlIGNvZGU6DQo+ICAgIDEyMDAwMGQ5MDogICAyOGMw
+MDFmMCAgICAgICAgbGQuZCAgICAkcjE2LCRyMTUsMA0KPiAgICAxMjAwMDBkOTQ6ICAgMDAxMGM1
+OGMgICAgICAgIGFkZC5kICAgJHIxMiwkcjEyLCRyMTcNCj4gICAgMTIwMDAwZDk4OiAgIDAyYzAy
+MWVmICAgICAgICBhZGRpLmQgICRyMTUsJHIxNSw4KDB4OCkNCg0KVGhvc2UgdGhyZWUgaW5zdHJ1
+Y3Rpb25zIGFyZSBpbmRlcGVuZGVudC4NCg0KPiAgICAxMjAwMDBkOWM6ICAgMDAxMGIyMGMgICAg
+ICAgIGFkZC5kICAgJHIxMiwkcjE2LCRyMTINCg0KdGhhdCBvbmUgZGVwZW5kcyBvbiB0aGUgbGQu
+ZA0KDQo+ICAgIDEyMDAwMGRhMDogICAwMDEyYzE5MSAgICAgICAgc2x0dSAgICAkcjE3LCRyMTIs
+JHIxNg0KDQp0aGF0IGRlcGVuZHMgb24gdGhlIGFkZC5kDQpidXQgaXQgY291bGQgYmUgZXhlY3V0
+ZSBhZnRlciB0aGUgJ2JuZScgaW4gcGFyYWxsZWwgd2l0aCB0aGUgbGQuZA0KDQo+ICAgIDEyMDAw
+MGRhNDogICA1ZmZmZWRmMiAgICAgICAgYm5lICAgICAkcjE1LCRyMTgsLTIwKDB4M2ZmZWMpICMg
+MTIwMDAwZDkwIDxkb19jc3VtXzY0KzB4OTA+DQoNCklmIHlvdSB0d2VhayB0aGUgY29kZSBpdCBp
+cyBwb3NzaWJsZSB0byBnZXQgZG93biB0byBqdXN0DQp0aGUgYWRkaS5kIGFuZCBibmUgY29uc3Ry
+YWluaW5nIHRoZSBkZXBlbmRlbmN5IGNoYWluLg0KKEFzc3VtaW5nIHRoZXJlIGlzIG5vIGRlbGF5
+IG9uIHRoZSByZWFkIGFuZCB0aGVyZSBhcmUgYW4gaW5maW5pdGUNCm51bWJlciBvZiBleGVjdXRp
+b24gdW5pdHMuKQ0KVW5yb2xsIG9uY2UgYW5kIGRvOg0KCWxkLmQgcixhZGRyLDANCglhZGRpLmQg
+YWRkciwxNg0KCWxkLmQgcixhZGRyLC04DQoJYm5lIGFkZHIsbGltaXQsbG9vcF90b3ANCmFuZCB5
+b3UgbWlnaHQgZ2V0IGEgbG9vcCB0aGF0IGRvZXMgYSBtZW1vcnkgcmVhZCBldmVyeSBjbG9jay4N
+Cg0KU28geW91IGVuZCB1cCB3b3JyeWluZyBhYm91dCBob3cgdGhlIG1lbW9yeSByZWFkIGRlbGF5
+cyBhZmZlY3QNCnRoZSBpbnN0cnVjdGlvbiBwaXBlbGluZS4NClRoZSBJbnRlbCB4ODYgY3B1IEkn
+dmUgZ290IGp1c3QgcGlsZSB1cCB0aGUgYXJpdGhtZXRpYyBpbnN0cnVjdGlvbnMNCndhaXRpbmcg
+Zm9yIHRoZSBkYXRhIHRvIGJlIHJlYWQuDQpJZiB5b3UgZ2V0IGEgbWVtb3J5IHJlYWQgcmVxdWVz
+dGVkIGV2ZXJ5IGNsb2NrIGV2ZXJ5dGhpbmcgZWxzZQ0KZm9sbG93cyAtIHByb3ZpZGVkIHlvdSBk
+b24ndCB0cnkgdG8gZXhlY3V0ZSB0b28gbWFueSBpbnN0cmN1dGlvbnMNCmF0IG9uY2UuDQoNCglE
+YXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91
+bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5
+NzM4NiAoV2FsZXMpDQo=
 
