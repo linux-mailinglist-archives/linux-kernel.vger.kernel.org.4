@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDF668FD2D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31AF168FD32
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjBICd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        id S232109AbjBIClM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:41:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbjBICdu (ORCPT
+        with ESMTP id S232076AbjBIClK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:33:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E367D28843;
-        Wed,  8 Feb 2023 18:33:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 634686185A;
-        Thu,  9 Feb 2023 02:33:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDBC0C433EF;
-        Thu,  9 Feb 2023 02:33:45 +0000 (UTC)
-Date:   Wed, 8 Feb 2023 21:33:43 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Qais Yousef <qyousef@google.com>,
-        Daniele Di Proietto <ddiproietto@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-Message-ID: <20230208213343.40ee15a5@gandalf.local.home>
-In-Reply-To: <20230208212858.477cd05e@gandalf.local.home>
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-        <Y+QaZtz55LIirsUO@google.com>
-        <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
-        <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
-        <20230208212858.477cd05e@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 8 Feb 2023 21:41:10 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F0E1C5BF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:41:05 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id ADB3C3200681;
+        Wed,  8 Feb 2023 21:41:02 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 08 Feb 2023 21:41:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vda.io; h=cc:cc
+        :content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1675910462; x=1675996862; bh=YHjqVPP3VMHB9eZWAfU9+XuZd
+        kAw/FY0BkaiVpBExEw=; b=RQA6je9AyRzH7/NSMO49a+HULinlWdUPsASKzyPVC
+        L1XFgqp4Y/IclzyTD3nVpQBigiD+uzTcasm8+DjmrWKzZKXu+VqnKf3xLs+P+ijS
+        pUPyj9saUTgKHml2s6LOQCFKuxu0zJ7/lX3sODL73paTnl1pTOpm7XoxljFGfZqK
+        SGU480GKAnel2sumE1bNpH4IMnk0uy8WCQQ17qmI+Y8Aj/boEvuTQUyk3Ihax4ME
+        JyJVxtHHmwH7TjB2YkP7NvNJLznx/RJxM9gBbfMW25lcvvVUSmz3sDQqWRNA+OEC
+        3alFfIhS2WnW1TwptzWDTHJfMKF3mZNcoDj4DrPU+1FOQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1675910462; x=1675996862; bh=YHjqVPP3VMHB9eZWAfU9+XuZdkAw/FY0Bka
+        iVpBExEw=; b=Trp1DmrFRFXZnedNCoDY+1WxQoyihbz2JcatojQzkfQ2a3fRbaV
+        +mdNkF7SL83pKPG3fzW+EXGhDztf94xqZbIF1HcGHZEFVTjG0f20gIaYIgAjnP1u
+        EcEFJVihlx2Wm1deNLzEdXyiP2qKXV14q1vXB6WGnyD6PR6hO6HsN9lzCYYeYdyZ
+        +w5/NaaavfW6DM91Y1hjNgKEzaQf9vP3jPSOtv8Hro2UxH414wo9i8mnbMFkCzA+
+        h5x84QIVi9yg/Vmqj294IfzpQfbem8vUrdezh/saU9pq6AtiMXot97DfvCFNd8P+
+        YTuX4clkX//uSDBxaEgv7Xl8wZUHTxE79wQ==
+X-ME-Sender: <xms:PV3kY9uQfxRQemEiFs7P--Yfyam7THsMDNie8jZkuJm3sYkHvLAyCA>
+    <xme:PV3kY2eLTxJP11RJdDbUMqVnYrwWkNj_EHmv38Uy0XgB8ZTxolIxng7t1vI_TSi-y
+    ksoZL4YTRxn8XX1UCE>
+X-ME-Received: <xmr:PV3kYww9cQ9ms0oVNd4rj2sbJm-XzKkozl-G0exqqNKgBmHskGrU8Gy1RFujTQ48PnEMrAqnJ-AArWSLj2sACepEZcIG>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehuddgudegkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
+    dtredttdenucfhrhhomhepgghinhgtvghnthcuffgrghhonhhnvggruhcuoehvsehvuggr
+    rdhioheqnecuggftrfgrthhtvghrnhepteekhefgudekjeehgeelfeejudegieevveeutd
+    duleegudehueelkeettdevffdtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehvsehvuggrrd
+    hioh
+X-ME-Proxy: <xmx:PV3kY0MyA0SW5u6CHUXkM7TxBJ8u7cA6FsMhQWlaZ0YqeBAakUWxrg>
+    <xmx:PV3kY99cjICMftSwcxI2RiLvM9Oa0mTHR_trkRkorI23cg0HDGK_Yw>
+    <xmx:PV3kY0WBrlf5SJjqjDyP6EdXN3sz4GQXACC-5W-ZIYwFgnUmHCkKeg>
+    <xmx:Pl3kY_kip7zyaZlLRAnSuW55bUv-ZWikcZb1-agZSc446xfW_hoBRA>
+Feedback-ID: ic7094478:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 8 Feb 2023 21:41:01 -0500 (EST)
+From:   Vincent Dagonneau <v@vda.io>
+To:     linux-kernel@vger.kernel.org
+Cc:     w@1wt.eu, Vincent Dagonneau <v@vda.io>
+Subject: [PATCH v4 0/4] tools/nolibc: Adding stdint.h, more integer types and tests
+Date:   Wed,  8 Feb 2023 21:40:40 -0500
+Message-Id: <20230209024044.13127-1-v@vda.io>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 21:28:58 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hi,
 
-> And this breaks much more than android. It will break trace-cmd, rasdaemon
-> and perf (if it's not using BTF). This change very much "Breaks userspace!"
-> And requires a kernel workaround, not a user space one.
+This is version 4 of my patch to add stdint.h to nolibc. Previous
+versions of this patch are available here:
 
-OK, so it doesn't break perf, trace-cmd and rasdaemon, because the enum is
-only needed in the print_fmt part. It can handle it in the field portion.
+* v3: https://lore.kernel.org/all/20230206013248.471664-1-v@vda.io/
+* v2: https://lore.kernel.org/all/20230202201101.43160-1-v@vda.io/
+* v1: https://lore.kernel.org/all/20230202160236.25342-1-v@vda.io/
 
-That is:
+I tested it successfully on x86_64, as well as i386 and arm on qemu.
 
+Thank you Willy for the review and the guidance!
+Vincent.
 
-system: sched
-name: sched_switch
-ID: 285
-format:
-	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-	field:int common_pid;	offset:4;	size:4;	signed:1;
+Vincent Dagonneau (4):
+  tools/nolibc: Adding stdint.h
+  tools/nolibc: Adding integer types and integer limit macros
+  tools/nolibc: Enlarging column width of tests
+  tools/nolibc: Adds tests for the integer limits in stdint.h
 
-	field:char prev_comm[TASK_COMM_LEN];	offset:8;	size:16;	signed:0;
-                             ^^^^^^^^^^^^^^                          ^^
-                            is ignored                             is used
+ tools/include/nolibc/Makefile                |   4 +-
+ tools/include/nolibc/std.h                   |  15 +-
+ tools/include/nolibc/stdint.h                |  84 +++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 139 ++++++++++++-------
+ 4 files changed, 177 insertions(+), 65 deletions(-)
+ create mode 100644 tools/include/nolibc/stdint.h
 
-
-	field:pid_t prev_pid;	offset:24;	size:4;	signed:1;
-	field:int prev_prio;	offset:28;	size:4;	signed:1;
-	field:long prev_state;	offset:32;	size:8;	signed:1;
-	field:char next_comm[TASK_COMM_LEN];	offset:40;	size:16;	signed:0;
-	field:pid_t next_pid;	offset:56;	size:4;	signed:1;
-	field:int next_prio;	offset:60;	size:4;	signed:1;
-
-print fmt: "prev_comm=%s prev_pid=%d prev_prio=%d prev_state=%s%s ==> next_comm=%s next_pid=%d next_prio=%d", REC->prev_comm, REC->prev_pid, REC->prev_prio, (REC->prev_state & ((((0x00000000 | 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 | 0x00000040) + 1) << 1) - 1)) ? __print_flags(REC->prev_state & ((((0x00000000 | 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 | 0x00000040) + 1) << 1) - 1), "|", { 0x00000001, "S" }, { 0x00000002, "D" }, { 0x00000004, "T" }, { 0x00000008, "t" }, { 0x00000010, "X" }, { 0x00000020, "Z" }, { 0x00000040, "P" }, { 0x00000080, "I" }) : "R", REC->prev_state & (((0x00000000 | 0x00000001 | 0x00000002 | 0x00000004 | 0x00000008 | 0x00000010 | 0x00000020 | 0x00000040) + 1) << 1) ? "+" : "", REC->next_comm, REC->next_pid, REC->next_prio
-
-   ^^^^^^^
-
-Is what requires the conversions. So I take that back. It only breaks
-perfetto, and that's because it writes its own parser and doesn't use
-libtraceevent.
-
--- Steve
-
+-- 
+2.39.1
 
