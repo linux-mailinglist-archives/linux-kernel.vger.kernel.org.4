@@ -2,120 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE9A6912DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 22:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF1A6912E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjBIVyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 16:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S230005AbjBIWAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 17:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbjBIVyv (ORCPT
+        with ESMTP id S229460AbjBIV76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 16:54:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5416312D;
-        Thu,  9 Feb 2023 13:54:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED00DB816DD;
-        Thu,  9 Feb 2023 21:54:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA4CC433D2;
-        Thu,  9 Feb 2023 21:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675979687;
-        bh=jRismUHOyVxVBabYaWn4wT8Nrr82S/bxWlRxPdH4hO4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R1NVK4lpV5VB6E2sgPr/s/cSKIEm2oUyhlAyffmdhJiJQJ0YjGJcPDGmGpjDbHmXW
-         HRJGhBBdW1Iia4hzMLl5bU2BE+rwlOa7E/M2USCNji8LBCIfWhiNC9ujBSojlHcDaJ
-         tM5XaPqnzeqFJC5LzDSzvvZliOzPc3yMNUN8XB1Hb8YrUgpJUU1QVPNMy03EppKxDZ
-         qPz4BoCynp/MOMccqOOUXKAhftwYEvE3shOtSoLdoc8XK7U8rRNVlCRfSLMsz3u0nB
-         6tv8EvcJ6RaAAY4rnDasoNvXcbprzoPJwijhU0enTk+csnSekIiA2cH9c1+xSD0Vbq
-         3VS4mfUuoLP0g==
-Date:   Thu, 9 Feb 2023 21:54:42 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH 23/24] MAINTAINERS: Add entry for drivers/acpi/riscv
-Message-ID: <Y+Vroj6CmrL4I9lN@spud>
-References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
- <20230130182225.2471414-24-sunilvl@ventanamicro.com>
+        Thu, 9 Feb 2023 16:59:58 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D7C65686;
+        Thu,  9 Feb 2023 13:59:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675979998; x=1707515998;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/k0M+qJgBKHvFKI5TOmiZn2Yf3hcbjt7xbw8P5ZDUE8=;
+  b=iN957IQlR4J5lK4YnDkJfUPEZpZ5dfIYc7gwR+BGZLHtru0NfVpie5kf
+   dlApywzU369vbG/QUmE0chzfW59SszWyDahuA7QFxcEckL6zRHQaAE2CU
+   FqsvvW48yr30oK2rDBCLnz13Hl4n/tGQeOYmVDG/yJ6ffHlQ7MptwSnGw
+   udUzYEv4ULjALW3+YO9EPK4q5ZvU4ijycmnDCjX3qrVWIR9pBUAMLq6pT
+   it8oSEL4LiCD8vHAXBiSCHma2cGPFd4Gm3IcBjM4BptgL+LA261ozpYaV
+   KfZVp2fnVuuJzpLi1mxYcYX8tsjSAOr7i6RHjeOF3DOl4xL9n9WKA3mRA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="310620283"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="310620283"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 13:59:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="661176621"
+X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
+   d="scan'208";a="661176621"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 09 Feb 2023 13:59:55 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pQExN-004nEd-2b;
+        Thu, 09 Feb 2023 23:59:53 +0200
+Date:   Thu, 9 Feb 2023 23:59:53 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     David Thompson <davthompson@nvidia.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        limings@nvidia.com
+Subject: Re: [PATCH v1 v/1] gpio: mlxbf: enable GPIO interface and ACPI event
+ for host-gpio[7]
+Message-ID: <Y+Vs2WxqXVQmh4+z@smile.fi.intel.com>
+References: <20230203184907.18786-1-davthompson@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="V5lUTQp9r2xga7S0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230130182225.2471414-24-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230203184907.18786-1-davthompson@nvidia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Feb 03, 2023 at 01:49:07PM -0500, David Thompson wrote:
+> This commit adds ACPI handling for host-gpio[7] to trigger
+> the power-button event.
 
---V5lUTQp9r2xga7S0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This has something to discuss...
 
-On Mon, Jan 30, 2023 at 11:52:24PM +0530, Sunil V L wrote:
-> ACPI defines few RISC-V specific tables which need
-> parsing code added in drivers/acpi/riscv. Add maintainer
-> entries for this newly created folder.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> ---
->  MAINTAINERS | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8a5c25c20d00..b14ceb917a81 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -450,6 +450,13 @@ S:	Orphan
->  F:	drivers/platform/x86/wmi.c
->  F:	include/uapi/linux/wmi.h
-> =20
-> +ACPI FOR RISC-V (ACPI/riscv)
-> +M:	Sunil V L <sunilvl@ventanamicro.com>
-> +L:	linux-acpi@vger.kernel.org
-> +L:	linux-riscv@lists.infradead.org
-> +S:	Maintained
+...
 
-Supported, no?
+>  /* Pad Electrical Controls. */
+> -#define MLXBF_GPIO_PAD_CONTROL_FIRST_WORD 0x0700
+> -#define MLXBF_GPIO_PAD_CONTROL_1_FIRST_WORD 0x0708
+> -#define MLXBF_GPIO_PAD_CONTROL_2_FIRST_WORD 0x0710
+> -#define MLXBF_GPIO_PAD_CONTROL_3_FIRST_WORD 0x0718
+> +#define MLXBF_GPIO_PAD_CONTROL_FIRST_WORD	0x0700
+> +#define MLXBF_GPIO_PAD_CONTROL_1_FIRST_WORD	0x0708
+> +#define MLXBF_GPIO_PAD_CONTROL_2_FIRST_WORD	0x0710
+> +#define MLXBF_GPIO_PAD_CONTROL_3_FIRST_WORD	0x0718
 
-> +F:	drivers/acpi/riscv
+Unrelated change.
+
+> +#define MLXBF_GPIO_PIN_DIR_I                    0x1040
+> +#define MLXBF_GPIO_PIN_DIR_O                    0x1048
+> +#define MLXBF_GPIO_PIN_STATE                    0x1000
+> +#define MLXBF_GPIO_SCRATCHPAD                   0x20
+
+Ditto. You already have it defined, why to change?
+
+> -#define MLXBF_GPIO_PIN_DIR_I 0x1040
+> -#define MLXBF_GPIO_PIN_DIR_O 0x1048
+> -#define MLXBF_GPIO_PIN_STATE 0x1000
+> -#define MLXBF_GPIO_SCRATCHPAD 0x20
+
+...
+
+> +	gs->hwirq = irq;
+> +	gc->to_irq = mlxbf_gpio_to_irq;
+
+This sounds incorrect. Seems like for _any_ interrupt you will give the same
+result. Moreover, you should not use to_irq(). Try to model proper IRQ chip.
+
+...
+
+>  	platform_set_drvdata(pdev, gs);
+> +	acpi_gpiochip_request_interrupts(gc);
+
+This is done by GPIO library, no?
+
+...
+
+>  	dev_info(&pdev->dev, "registered Mellanox BlueField GPIO");
 > +
->  ACRN HYPERVISOR SERVICE MODULE
->  M:	Fei Li <fei1.li@intel.com>
->  L:	acrn-dev@lists.projectacrn.org (subscribers-only)
-> --=20
-> 2.38.0
->=20
+>  	return 0;
 
---V5lUTQp9r2xga7S0
-Content-Type: application/pgp-signature; name="signature.asc"
+Stray change.
 
------BEGIN PGP SIGNATURE-----
+-- 
+With Best Regards,
+Andy Shevchenko
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+VroQAKCRB4tDGHoIJi
-0hKrAP9++kwugl7SFcTtfhGUxoAGynIdNXhyQA747zCm8InMJgEA//0+dz0BbQmI
-3S1VtaoE6iBUoXd7Qq+7iHfGORrEogM=
-=gQ/m
------END PGP SIGNATURE-----
 
---V5lUTQp9r2xga7S0--
