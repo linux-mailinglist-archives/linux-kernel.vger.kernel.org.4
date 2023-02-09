@@ -2,107 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B8468FF0C
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEFFF68FF35
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjBIEce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 23:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S230123AbjBIEeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:34:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjBIEbs (ORCPT
+        with ESMTP id S230184AbjBIEdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:31:48 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038A0410A4;
-        Wed,  8 Feb 2023 20:31:24 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id cr22so740513qtb.10;
-        Wed, 08 Feb 2023 20:31:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VYWiP+RsM80H7wNl1WU3UTCyecPhj1rDTS0XQ6/EiJw=;
-        b=hbYjs18CuQ0IQIi/4UFBBwFlt4MSIr6vr81jKyijX8hbDAOoyJN3fTFZjDoMHUG1bM
-         0iIhI3c62lP2A4OrZEnGXHLhMTNnGsO1RnuaHvqAiPT66Z/L0AcirFHqvngA05AA2WvT
-         NFAm7bgGiHeu/JNV2zkLZdWEyRXt9JeOXCVKbaeRnU5sfmkKE8mWIqR2bEtMy24mM0QK
-         XKjnLUFEIz07fE1krRmq/21MV48wsOFCIbomIIM8oqgbxQRfsM+K5aPe7IfKIwPXdqBz
-         tSkSj4WVRYZy9I4VIe5nSz/kjjvZd/Bnc1T/rX1pQsvv/0wCxWZsmWl5/dw2GKaFU2FF
-         JJNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VYWiP+RsM80H7wNl1WU3UTCyecPhj1rDTS0XQ6/EiJw=;
-        b=PdyzyKYa8PoIVlFIhxIFVbAPzTqni0sUUhbgGW6onEh+XWFXU++9L5JOjrTGcAbyWA
-         midH2vVQqB390AEJGkLcl7MO9W9vQ5Om/YQD3Zt/qEJnmx8YtnXMZ9JdIySbfu74NxeJ
-         E/8U1xGe4t990gQf8l5szDMkVYak905jsMK74qcTapcmVuskPfmq29hdAqip1tUA3fqH
-         o2//gmAVi087uYizEeL2x1JQyJDjswC18jjZvlyZknsEcbFuoAayBWxTbhEnksepyEgE
-         z3aDapJiGIDmieGUl4af3P0o5Ls+wA/GJCUg5QgM/Vk3kUYEHBLHwBGVtfHF92A3j0oG
-         b5vg==
-X-Gm-Message-State: AO0yUKVPPzPwAEirZL0qlqLI+NT30QyLqjkaYtWcOCMApd879gUmdhIJ
-        ezetJQgBRQL7CdaM/tR3M41LWi8UF4k=
-X-Google-Smtp-Source: AK7set8dGL84ssKLZLSeE60Lv0RqogRPo+cGf2+zrA1Ok1ed4iVWSrC5cSgmpAS+7CG0FqkagsDylw==
-X-Received: by 2002:ac8:48cd:0:b0:3b9:bc8c:c213 with SMTP id l13-20020ac848cd000000b003b9bc8cc213mr844571qtr.30.1675917076899;
-        Wed, 08 Feb 2023 20:31:16 -0800 (PST)
-Received: from localhost.localdomain (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id ca16-20020a05622a1f1000b003a7e38055c9sm548560qtb.63.2023.02.08.20.31.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 20:31:16 -0800 (PST)
-From:   Trevor Woerner <twoerner@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: gpio: nxp,pcf8575: add gpio-line-names
-Date:   Wed,  8 Feb 2023 23:31:00 -0500
-Message-Id: <20230209043100.1508-1-twoerner@gmail.com>
-X-Mailer: git-send-email 2.36.0.rc2.17.g4027e30c53
-In-Reply-To: <20230209041752.35380-1-twoerner@gmail.com>
-References: <20230209041752.35380-1-twoerner@gmail.com>
+        Wed, 8 Feb 2023 23:33:40 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0B53D924;
+        Wed,  8 Feb 2023 20:32:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675917152; x=1707453152;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FxTu9xVn0q17LFAoBZGb5vcNT6+3d43snW3rZ3K2Mik=;
+  b=MnQ/FdYPY/nEYAzHhf1lZaHyg/Z0OC027yqQvGuFrPAaQyEFfDEV6kDD
+   ZNxvqoy7j6bpiHe3iPy4DTbycCyGwb118zh0PmXWIRxolIQTK8IV5XHaP
+   0MseU2yCtR6m4Ko5mxFDO1uunZr7+z8UshUBCZesQwdjpYOVqXmjQOz53
+   fK1MLMqNMXGtMdY/4zfvUmSYUKlGBcOQJ+qh4cHvEw1cNzxyKWHNQae+E
+   g3w1Wy04Yihg+my2bacA8ukVhi+A7u/vdO8iuscBbtHGo10AS/SFsnPJp
+   OV8pwMoH00j4mB4hUEycm8Kh1xcs/WWsdS2ODY+G5eBG5iMLt+d4J62nb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331298571"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="331298571"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 20:31:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="669447422"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="669447422"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Feb 2023 20:31:56 -0800
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+Subject: [PATCH 00/17] Add Intel VT-d nested translation
+Date:   Wed,  8 Feb 2023 20:31:36 -0800
+Message-Id: <20230209043153.14964-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The family of PCF857x-compatible chips describe 8-bit i2c i/o expanders.
-Allow the user to specify names for the 8 gpio lines.
+Nested translation has two stage address translations to get the final
+physical addresses. Take Intel VT-d as an example, the first stage translation
+structure is I/O page table. As the below diagram shows, guest I/O page
+table pointer in GPA (guest physical address) is passed to host to do the
+first stage translation. Along with it, guest modifications to present
+mappings in the first stage page should be followed with an iotlb invalidation
+to sync host iotlb.
 
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
----
-changes in v2:
-- the original said [PATCH 1/2], there is no 2/2
+    .-------------.  .---------------------------.
+    |   vIOMMU    |  | Guest I/O page table      |
+    |             |  '---------------------------'
+    .----------------/
+    | PASID Entry |--- PASID cache flush --+
+    '-------------'                        |
+    |             |                        V
+    |             |           I/O page table pointer in GPA
+    '-------------'
+Guest
+------| Shadow |--------------------------|--------
+      v        v                          v
+Host
+    .-------------.  .------------------------.
+    |   pIOMMU    |  |  FS for GIOVA->GPA      |
+    |             |  '------------------------'
+    .----------------/  |
+    | PASID Entry |     V (Nested xlate)
+    '----------------\.----------------------------------.
+    |             |   | SS for GPA->HPA, unmanaged domain|
+    |             |   '----------------------------------'
+    '-------------'
+Where:
+ - FS = First stage page tables
+ - SS = Second stage page tables
+<Intel VT-d Nested translation>
 
----
- Documentation/devicetree/bindings/gpio/nxp,pcf8575.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+Different platform vendors have different first stage translation formats,
+so userspace should query the underlying iommu capability before setting
+first stage translation structures to host.[1]
 
-diff --git a/Documentation/devicetree/bindings/gpio/nxp,pcf8575.yaml b/Documentation/devicetree/bindings/gpio/nxp,pcf8575.yaml
-index f0ff66c4c74e..81b825a4353c 100644
---- a/Documentation/devicetree/bindings/gpio/nxp,pcf8575.yaml
-+++ b/Documentation/devicetree/bindings/gpio/nxp,pcf8575.yaml
-@@ -39,6 +39,10 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  gpio-line-names:
-+    minItems: 1
-+    maxItems: 8
-+
-   gpio-controller: true
- 
-   '#gpio-cells':
+In iommufd subsystem, I/O page tables would be tracked by hw_pagetable objects.
+First stage page table is owned by userspace (guest), while second stage page
+table is owned by kernel for security. So First stage page tables are tracked
+by user-managed hw_pagetable, second stage page tables are tracked by kernel-
+managed hw_pagetable.
+
+This series first introduces new iommu op for allocating domains for iommufd,
+and op for syncing iotlb for first stage page table modifications, and then
+add the implementation of the new ops in intel-iommu driver. After this
+preparation, adds kernel-managed and user-managed hw_pagetable allocation for
+userspace. Last, add self-test for the new ioctls.
+
+This series is based on "[PATCH 0/6] iommufd: Add iommu capability reporting"[1]
+and Nicolin's "[PATCH v2 00/10] Add IO page table replacement support"[2]. Complete
+code can be found in[3]. Draft Qemu code can be found in[4].
+
+Basic test done with DSA device on VT-d. Where the guest has a vIOMMU built
+with nested translation.
+
+[1] https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.com/
+[2] https://lore.kernel.org/linux-iommu/cover.1675802050.git.nicolinc@nvidia.com/
+[3] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting_vtd_v1
+[4] https://github.com/yiliu1765/qemu/tree/wip/iommufd_rfcv3%2Bnesting
+
+Regards,
+	Yi Liu
+
+Lu Baolu (5):
+  iommu: Add new iommu op to create domains owned by userspace
+  iommu: Add nested domain support
+  iommu/vt-d: Extend dmar_domain to support nested domain
+  iommu/vt-d: Add helper to setup pasid nested translation
+  iommu/vt-d: Add nested domain support
+
+Nicolin Chen (6):
+  iommufd: Add/del hwpt to IOAS at alloc/destroy()
+  iommufd/device: Move IOAS attaching and detaching operations into
+    helpers
+  iommufd/selftest: Add IOMMU_TEST_OP_MOCK_DOMAIN_REPLACE test op
+  iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC ioctl
+  iommufd/selftest: Add IOMMU_TEST_OP_MD_CHECK_IOTLB test op
+  iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
+
+Yi Liu (6):
+  iommufd/hw_pagetable: Use domain_alloc_user op for domain allocation
+  iommufd: Split iommufd_hw_pagetable_alloc()
+  iommufd: Add kernel-managed hw_pagetable allocation for userspace
+  iommufd: Add infrastructure for user-managed hw_pagetable allocation
+  iommufd: Add user-managed hw_pagetable allocation
+  iommufd/device: Report supported stage-1 page table types
+
+ drivers/iommu/intel/Makefile                  |   2 +-
+ drivers/iommu/intel/iommu.c                   |  38 ++-
+ drivers/iommu/intel/iommu.h                   |  50 +++-
+ drivers/iommu/intel/nested.c                  | 143 +++++++++
+ drivers/iommu/intel/pasid.c                   | 142 +++++++++
+ drivers/iommu/intel/pasid.h                   |   2 +
+ drivers/iommu/iommufd/device.c                | 117 ++++----
+ drivers/iommu/iommufd/hw_pagetable.c          | 280 +++++++++++++++++-
+ drivers/iommu/iommufd/iommufd_private.h       |  23 +-
+ drivers/iommu/iommufd/iommufd_test.h          |  35 +++
+ drivers/iommu/iommufd/main.c                  |  11 +
+ drivers/iommu/iommufd/selftest.c              | 149 +++++++++-
+ include/linux/iommu.h                         |  11 +
+ include/uapi/linux/iommufd.h                  | 196 ++++++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 124 +++++++-
+ tools/testing/selftests/iommu/iommufd_utils.h | 106 +++++++
+ 16 files changed, 1329 insertions(+), 100 deletions(-)
+ create mode 100644 drivers/iommu/intel/nested.c
+
 -- 
-2.36.0.rc2.17.g4027e30c53
+2.34.1
 
