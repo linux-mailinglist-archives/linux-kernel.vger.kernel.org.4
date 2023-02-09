@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C6368FEE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F1768FEDF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 05:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjBIEbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 23:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S229990AbjBIEbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 23:31:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbjBIEbO (ORCPT
+        with ESMTP id S229843AbjBIEa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 23:31:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9EC41B64;
-        Wed,  8 Feb 2023 20:30:37 -0800 (PST)
+        Wed, 8 Feb 2023 23:30:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237253EC42;
+        Wed,  8 Feb 2023 20:30:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 151276181D;
-        Thu,  9 Feb 2023 04:22:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A777AC433A4;
-        Thu,  9 Feb 2023 04:22:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5203B82012;
+        Thu,  9 Feb 2023 04:22:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACB92C433D2;
+        Thu,  9 Feb 2023 04:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675916524;
-        bh=6a8IHCccFNXAqRbdKPys5PCrGXhM//ox9j3YLmVPDYY=;
+        s=k20201202; t=1675916525;
+        bh=sWvmC9ahPsg0xDLGldFddT4dv4jY9/tk2f9UYE0RvJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lbFOz4zaaTcQ19ymnxXHyCOL2Kx6Md/2lqVLvfsCZy2Y49Mdy2REkslp2kf57ZnJ+
-         qY+Ej7GN+1O+l+DhggGB20on1OgfTy4senOqv1+egENUEWASMRYjiMuYt0tDsnc/TG
-         d3E+8tjeE8q1Stl0XOpwhSetg8keMws7DDOPUyAYmZi3zptb3pHh8Blo8KAz5OwdSu
-         NSHYxYVPh3ZU+D52EP5weulVuLpwCnjsE1hBaeOqNytE7b41gT64BUewuOmwEGqgKI
-         JWbLF3DTaZKmaYrDSU0oBMa5UE9OzvftqrH1jYM0girzhUiarxzI3FgOyPD3Mrn90O
-         FKOnjUk9VATMQ==
+        b=HNwEPX/3TanBuMz01oG7bY7mSc23DAii7zqVJbhCJIDJlzHkiYSux906cPId4vvv6
+         lR3gZQEDlsN41SXuJpXjws/k8hkmlPatiJE95QEeAh0bvyZzw+sAl5DY85IPuGQjS0
+         HqQhep5dJrpYxGMxAXLtRqBkCp7ltkIv0oicDtDhPcOCCqgcPgjpvihAHbXqJ9JPpk
+         iD5tpV0jhKa1kJ/HfvPBeUWr6BGCf8lhNu0LhFLskcouBNKAotSYOla2xqXvi3mO2R
+         8ko8wawxktkkgtGSVpRYF5O+iD2a48bR6+XUkEpcKUFU1CE7WszCx5c0TGoKlPWjoP
+         cJVm1kKQoCTxw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        robh+dt@kernel.org, joro@8bytes.org,
-        krzysztof.kozlowski+dt@linaro.org, will@kernel.org
-Cc:     konrad.dybcio@linaro.org, devicetree@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/3] Fix SMMU on SDX55 and SDX65
-Date:   Wed,  8 Feb 2023 20:23:20 -0800
-Message-Id: <167591660366.1230100.12722515257767815828.b4-ty@kernel.org>
+To:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/2] arm64: dts: qcom: various sm8550 DT fixes
+Date:   Wed,  8 Feb 2023 20:23:21 -0800
+Message-Id: <167591660372.1230100.15286899195594133181.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230123131931.263024-1-manivannan.sadhasivam@linaro.org>
-References: <20230123131931.263024-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230207-topic-sm8550-upstream-sm8550-dt-fix-v1-0-698d132ab285@linaro.org>
+References: <20230207-topic-sm8550-upstream-sm8550-dt-fix-v1-0-698d132ab285@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,23 +57,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 23 Jan 2023 18:49:28 +0530, Manivannan Sadhasivam wrote:
-> Both SDX55 and SDX65 SoCs are using the Qcom version of the ARM SMMU-500
-> IP. Even though the SoC specfic compatibles were being used in devicetree,
-> the compatibles were not added to the arm-smmu-qcom driver. So they end up
-> using the generic ARM SMMU-500 driver instead.
+On Tue, 07 Feb 2023 11:06:56 +0100, Neil Armstrong wrote:
+> Fixes PON compatible and DSI controllers compatible properties.
 > 
-> Spotting this discrepancy, the recent arm,smmu bindings change moved these
-> SoCs under the non-qcom implementation of the SMMU.
 > 
-> [...]
 
 Applied, thanks!
 
-[2/3] ARM: dts: qcom: sdx55: Add Qcom SMMU-500 as the fallback for IOMMU node
-      commit: af4ab377543853b690cc85b4c46cf976ab560dc2
-[3/3] ARM: dts: qcom: sdx65: Add Qcom SMMU-500 as the fallback for IOMMU node
-      commit: 157178a7912e00a0aa0371dc9041952c1a21d112
+[1/2] arm64: dts: qcom: sm8550: fix DSI controller compatible
+      commit: c64c1c245f667e32eb02eaa5d63363d35880664d
+[2/2] arm64: dts: qcom: pmk8550: fix PON compatible
+      commit: 12efdeec570c24e205484c1191265593f1dd4679
 
 Best regards,
 -- 
