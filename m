@@ -2,143 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D7C690D9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EDB690DA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbjBIPwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
+        id S230167AbjBIPyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjBIPwl (ORCPT
+        with ESMTP id S230315AbjBIPyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:52:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD81BB9F
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:52:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0EABB821AB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 15:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F39A6C433D2;
-        Thu,  9 Feb 2023 15:52:35 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="T7479kc0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1675957953;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 9 Feb 2023 10:54:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95681C311
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:53:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675958012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ClkILBFhwZ0hiKBY6JMu424+AE+9QOn/sCNADO5raM4=;
-        b=T7479kc0O5QmNDeC9Qyyjh2xEhjUPOaZMFArkBoVaJdeKu5s8jYbfZ3xK5J1iDriwR9uXN
-        3rZodz28XhNZYDKZ2BNgwrbtP0eDeGzvsjyTpVCHnMY+cbpXIJyED9KhTuTJmG/5qUk7Jv
-        78ZT6IAAB0MueXiEXNco+4O6qJhrNR8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 79d27562 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 9 Feb 2023 15:52:33 +0000 (UTC)
-Date:   Thu, 9 Feb 2023 16:52:32 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     qemu-devel@nongnu.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel P =?utf-8?B?LiBCZXJyYW5nw6k=?= <berrange@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Marcel Apfelbaum <marcel.apfelbaum@gmail.com>,
-        Eduardo Habkost <eduardo@habkost.net>
-Subject: Re: [PATCH RFC 6/7] Revert "x86: return modified setup_data only if
- read as memory, not as file"
-Message-ID: <Y+UWwJRY/ejrIqv7@zx2c4.com>
-References: <20230208211212.41951-1-mst@redhat.com>
- <20230208211212.41951-7-mst@redhat.com>
+        bh=duqR2qst+IvmIa7vfxKDeX9EYe2M/CdxGV7kSNVEtJE=;
+        b=BQvxfxhXGF0gi3JxlAkrkK5UqeLT6ae7vAO9yBmyOv+ihhTH2weryL3eoPNWHhOmrOvIN/
+        N2x5XL4Xhp3QcyWRSdvcMjKL6aJ44aBI+JNeehNYHHP4OZdhKn5Zp1AKEDttCjKvi0VaAd
+        OpQO6s2UveTfe15pEJ21ZtsP8xs9wWs=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-99-aOe-8l5hPg6aIwRrBWVDKg-1; Thu, 09 Feb 2023 10:53:31 -0500
+X-MC-Unique: aOe-8l5hPg6aIwRrBWVDKg-1
+Received: by mail-ej1-f71.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso1764775ejb.14
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 07:53:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=duqR2qst+IvmIa7vfxKDeX9EYe2M/CdxGV7kSNVEtJE=;
+        b=yCMyqU9qp5wE0ErbyW+kicvaUVJjyeFYSNxJZGrNH4jxfLo8qSjgCEioRcAHuKKOMs
+         MNF+V5pp/S4N+jEY88TswQcHSrPR6mundOnD9Jen6847dt3Avk8JWMmslYcFIeZ74D5B
+         G5H9PlD6NhWsffD32VGskBrYbPJfOvz6FGhSaUoOyu9z3t8jFsUsrcmDUkcwJcLjnWIj
+         6w/MouICeyreNPjdSI8m7h2F5J4LccNTUwd3IVdx14Mh1fbsk+eURMtXQWJwOCn8y/n1
+         J28soabiw2CKbvwiwY/+es8ZvryLC1hMw/ABuJw2t1sydrH60mdRLDlD21vykIlFa/1S
+         UZpg==
+X-Gm-Message-State: AO0yUKXjVjXIvzSnUI6UI6Zy9VVSekDxE/24/D7R/OnyGn//Q/vY9HvF
+        W2Srh+i4SrK7KXwiejOzEaXRahkJ0TsYVVI/bw/Thoh4skwN7LjScwcmiu3ZFMKUJnBDHVgeWO0
+        nOEgW3krs+HOoyg9au0ZVu9aR
+X-Received: by 2002:a50:d49e:0:b0:46d:35f6:5a9b with SMTP id s30-20020a50d49e000000b0046d35f65a9bmr12745006edi.24.1675958010386;
+        Thu, 09 Feb 2023 07:53:30 -0800 (PST)
+X-Google-Smtp-Source: AK7set9oGPruByEcU7O1yRet1x2a4MRvbxei/DghFCpGL/0sEQv3gJp2cbeh1tYhJmXvSH0ZwhUTkA==
+X-Received: by 2002:a50:d49e:0:b0:46d:35f6:5a9b with SMTP id s30-20020a50d49e000000b0046d35f65a9bmr12744991edi.24.1675958010245;
+        Thu, 09 Feb 2023 07:53:30 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id p14-20020a50cd8e000000b004a26665b962sm923715edi.89.2023.02.09.07.53.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 07:53:29 -0800 (PST)
+Message-ID: <cefe5482-f30f-e5cc-8722-1f60d610f059@redhat.com>
+Date:   Thu, 9 Feb 2023 16:53:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230208211212.41951-7-mst@redhat.com>
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MISSING_HEADERS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: drm: panel-orientation-quirks: Add quirk for Lenovo IdeaPad Duet
+ 3 10IGL5
+Content-Language: en-US, nl
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Darrell Kavanagh <darrell.kavanagh@gmail.com>
+Cc:     maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
+        airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <CAMxBKG1RwbRJMG0cKcnbyKgznXeZLL+Zp1zXeOnxpYU0NkOO8A@mail.gmail.com>
+ <CAMxBKG3o_6R7M0gaUHXA5yGgSe6HBWYK25fwF=8mN+JTno9t7Q@mail.gmail.com>
+ <CAMxBKG0wDi-XwMZwMHq_DbFXt3pgK-CV-G7iT9BNftiXBoUHzQ@mail.gmail.com>
+ <20230209153600.jtj6deqhgfocvwgc@houat>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230209153600.jtj6deqhgfocvwgc@houat>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 04:12:51PM -0500, Michael S. Tsirkin wrote:
-> This reverts commit e935b735085dfa61d8e6d276b6f9e7687796a3c7.
-> 
-> Fixes: e935b73508 ("x86: return modified setup_data only if read as memory, not as file")
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
->  include/hw/nvram/fw_cfg.h | 22 -------------------
->  hw/i386/x86.c             | 46 +++++++++------------------------------
->  hw/nvram/fw_cfg.c         | 12 +++++-----
->  3 files changed, 16 insertions(+), 64 deletions(-)
-> 
-> diff --git a/include/hw/nvram/fw_cfg.h b/include/hw/nvram/fw_cfg.h
-> index 2e503904dc..c1f81a5f13 100644
-> --- a/include/hw/nvram/fw_cfg.h
-> +++ b/include/hw/nvram/fw_cfg.h
-> @@ -117,28 +117,6 @@ struct FWCfgMemState {
->   */
->  void fw_cfg_add_bytes(FWCfgState *s, uint16_t key, void *data, size_t len);
->  
-> -/**
-> - * fw_cfg_add_bytes_callback:
-> - * @s: fw_cfg device being modified
-> - * @key: selector key value for new fw_cfg item
-> - * @select_cb: callback function when selecting
-> - * @write_cb: callback function after a write
-> - * @callback_opaque: argument to be passed into callback function
-> - * @data: pointer to start of item data
-> - * @len: size of item data
-> - * @read_only: is file read only
-> - *
-> - * Add a new fw_cfg item, available by selecting the given key, as a raw
-> - * "blob" of the given size. The data referenced by the starting pointer
-> - * is only linked, NOT copied, into the data structure of the fw_cfg device.
-> - */
-> -void fw_cfg_add_bytes_callback(FWCfgState *s, uint16_t key,
-> -                               FWCfgCallback select_cb,
-> -                               FWCfgWriteCallback write_cb,
-> -                               void *callback_opaque,
-> -                               void *data, size_t len,
-> -                               bool read_only);
-> -
->  /**
->   * fw_cfg_add_string:
->   * @s: fw_cfg device being modified
-> diff --git a/hw/nvram/fw_cfg.c b/hw/nvram/fw_cfg.c
-> index a00881bc64..29a5bef1d5 100644
-> --- a/hw/nvram/fw_cfg.c
-> +++ b/hw/nvram/fw_cfg.c
-> @@ -693,12 +693,12 @@ static const VMStateDescription vmstate_fw_cfg = {
->      }
->  };
->  
-> -void fw_cfg_add_bytes_callback(FWCfgState *s, uint16_t key,
-> -                               FWCfgCallback select_cb,
-> -                               FWCfgWriteCallback write_cb,
-> -                               void *callback_opaque,
-> -                               void *data, size_t len,
-> -                               bool read_only)
-> +static void fw_cfg_add_bytes_callback(FWCfgState *s, uint16_t key,
-> +                                      FWCfgCallback select_cb,
-> +                                      FWCfgWriteCallback write_cb,
-> +                                      void *callback_opaque,
-> +                                      void *data, size_t len,
-> +                                      bool read_only)
->  {
->      int arch = !!(key & FW_CFG_ARCH_LOCAL);
+Hi,
 
-Could you leave these snippets in? This function is useful and will be
-needed in the reprise.
+On 2/9/23 16:36, Maxime Ripard wrote:
+> Hi,
+> 
+> On Wed, Feb 08, 2023 at 07:04:58PM +0000, Darrell Kavanagh wrote:
+>> I've resolved this by adding a matching quirk in
+>> drivers/firmware/efi/sysfb_efi.c - see below.
 
-Jason
+Right, this is a known issue on Lenovo 2-in-1s with
+the panel mounted 90 degree rotated issue. For some reason
+the efifb info still gives a landscape resolution even though
+the actual resolution really is portrait. This also messes
+up the pitch of the framebuffer leading to the weird corrupted
+looking output you saw.
+
+>> I've resolved this by adding a matching quirk in
+>> drivers/firmware/efi/sysfb_efi.c - see below.
+>>
+>> Are you the right people to be notifying about this?
+> 
+> Yes, we are.
+> 
+> Howewer, please follow
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+> 
+> In particular, a proper commit log and your Signed-off-By tag is missing.
+
+Are we, do patches to that file go through drm-misc ?  :
+
+[hans@shalem linux]$ scripts/get_maintainer.pl -f drivers/firmware/efi/sysfb_efi.c
+Ard Biesheuvel <ardb@kernel.org> (maintainer:EXTENSIBLE FIRMWARE INTERFACE (EFI))
+linux-efi@vger.kernel.org (open list:EXTENSIBLE FIRMWARE INTERFACE (EFI))
+linux-kernel@vger.kernel.org (open list)
+
+Either way this should be turned into a proper patch with a proper
+Signed-off-By message as Maxime mentioned.
+
+My offer for the drm_panel_orientation_quirks.c patch to turn it into
+a proper patch for you also extends to this one. If you want that,
+please let me know and again add your Signed-off-by as a standalone
+separate line in your reply so that I can use it for the commit message.
+
+Regards,
+
+Hans
+
+
