@@ -2,191 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC519690A52
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5A2690A61
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjBINej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        id S230038AbjBINgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjBINee (ORCPT
+        with ESMTP id S229740AbjBINgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:34:34 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C353AA7;
-        Thu,  9 Feb 2023 05:34:12 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 64CC8FF80B;
-        Thu,  9 Feb 2023 13:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675949577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7ZjOPNQQKb7DxpHUdxqyVK5aYueuKDdegERx8SUXTnE=;
-        b=IwC0cz7U7RR4yBM0F/PGlCB3WrjoddUt9+Ap9ANmhR48Y3kbpag/GwG/JT3qbnqjFFj0zc
-        tu33Dl8zfjTM6DJXKu3XQlyjbEHLnEnLlcrJ4uX7qUc1IpYPnqTS0lxC+URnlzDmciHIfe
-        SL27TeNQvYbXH29pzWvlEwB8Lwy5cjp9oa0SqRWKjfU4u9RiH/61R2ssuf9/vQ01hvW0rp
-        qNzlhCZs87BKB55InIhmXB9ilmyfYcm7wlvbAn4IKQ/Kjadc6A/jwKV9V6rim0IlDzdUi7
-        rEZ/ObiLwKVDcBNOZ8lvCsjumuHttGvi+MO7rAOCSETa00cuWc5khqOHjyIdWQ==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ARM: dts: r9a06g032: add r9a06g032-rzn1d400-eb board device-tree
-Date:   Thu,  9 Feb 2023 14:35:07 +0100
-Message-Id: <20230209133507.150571-3-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230209133507.150571-1-clement.leger@bootlin.com>
-References: <20230209133507.150571-1-clement.leger@bootlin.com>
+        Thu, 9 Feb 2023 08:36:23 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF425EF86;
+        Thu,  9 Feb 2023 05:36:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=fx8iFMyCgB7HyH9Espp2nPfUarro5nGFLOTsVtWbQy4=; b=il8XwAwgfriM/TQ67AvQ/ELfHn
+        45/8Ohlp9aNmk5CqLahp8zYrY5WeDJK49EOhjHjpgXM2JkQehsmnQokacz2o4jxinJLBPHqPRmSZX
+        ZypWC3WL2z+RcTYnr3aydaJGlJhdn6d/fVBdpfuqE65AbrB0SOQO+ZkI+bo6xBhyasZs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pQ75G-004VPn-Ja; Thu, 09 Feb 2023 14:35:30 +0100
+Date:   Thu, 9 Feb 2023 14:35:30 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
+Cc:     "wei.fang@nxp.com" <wei.fang@nxp.com>,
+        "xiaoning.wang@nxp.com" <xiaoning.wang@nxp.com>,
+        "shenwei.wang@nxp.com" <shenwei.wang@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: fec: Defer probe if other FEC has deferred MDIO
+Message-ID: <Y+T2oku3ocAuafe0@lunn.ch>
+References: <20230208101821.871269-1-alexander.sverdlin@siemens.com>
+ <Y+REjDdjHkv4g45o@lunn.ch>
+ <9a520aac82f90b222c72c3a7e08fdbdb68d2d2f6.camel@siemens.com>
+ <DB9PR04MB81063375BAC5F0B9CBBB6A0D88D99@DB9PR04MB8106.eurprd04.prod.outlook.com>
+ <60f22dab4c51ee7e1a62d91c64e55205c18b9265.camel@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <60f22dab4c51ee7e1a62d91c64e55205c18b9265.camel@siemens.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The EB board (Expansion board) supports both RZ/N1D and RZ-N1S. Since this
-configuration targets only the RZ/N1D, it is named r9a06g032-rzn1d400-eb.
-It adds support for the 2 additional switch ports (port C and D) that are
-available on that board.
+> You are right, there is unfortunately no i.MX8 support in the upstream
+> tree, so it's not possible to reproduce anything.
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- arch/arm/boot/dts/Makefile                  |  1 +
- arch/arm/boot/dts/r9a06g032-rzn1d400-eb.dts | 94 +++++++++++++++++++++
- 2 files changed, 95 insertions(+)
- create mode 100644 arch/arm/boot/dts/r9a06g032-rzn1d400-eb.dts
+commit 947240ebcc635ab063f17ba027352c3a474d2438
+Author: Fugang Duan <fugang.duan@nxp.com>
+Date:   Wed Jul 28 19:51:59 2021 +0800
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index d08a3c450ce7..8938db01e939 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1123,6 +1123,7 @@ dtb-$(CONFIG_ARCH_RENESAS) += \
- 	r8a7794-alt.dtb \
- 	r8a7794-silk.dtb \
- 	r9a06g032-rzn1d400-db.dtb \
-+	r9a06g032-rzn1d400-eb.dtb \
- 	sh73a0-kzm9g.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += \
- 	rv1108-elgin-r1.dtb \
-diff --git a/arch/arm/boot/dts/r9a06g032-rzn1d400-eb.dts b/arch/arm/boot/dts/r9a06g032-rzn1d400-eb.dts
-new file mode 100644
-index 000000000000..c9de18d49fde
---- /dev/null
-+++ b/arch/arm/boot/dts/r9a06g032-rzn1d400-eb.dts
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for the RZN1D-EB Board
-+ *
-+ * Copyright (C) 2023 Schneider-Electric
-+ *
-+ */
-+
-+#include "r9a06g032-rzn1d400-db.dts"
-+
-+/ {
-+	model = "RZN1D-EB Board";
-+	compatible = "renesas,rzn1d400-eb", "renesas,rzn1d400-db",
-+		     "renesas,r9a06g032";
-+};
-+
-+&mii_conv2 {
-+	renesas,miic-input = <MIIC_SWITCH_PORTD>;
-+	status = "okay";
-+};
-+
-+&mii_conv3 {
-+	renesas,miic-input = <MIIC_SWITCH_PORTC>;
-+	status = "okay";
-+};
-+
-+&pinctrl{
-+	pins_eth1: pins-eth1 {
-+		pinmux = <RZN1_PINMUX(12, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(13, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(14, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(15, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(16, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(17, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(18, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(19, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(20, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(21, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(22, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(23, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>;
-+		drive-strength = <6>;
-+		bias-disable;
-+	};
-+
-+	pins_eth2: pins-eth2 {
-+		pinmux = <RZN1_PINMUX(24, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(25, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(26, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(27, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(28, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(29, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(30, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(31, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(32, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(33, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(34, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>,
-+			 <RZN1_PINMUX(35, RZN1_FUNC_CLK_ETH_MII_RGMII_RMII)>;
-+		drive-strength = <6>;
-+		bias-disable;
-+	};
-+};
-+
-+&switch {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_eth1>, <&pins_eth2>, <&pins_eth3>, <&pins_eth4>,
-+		    <&pins_mdio1>;
-+
-+	mdio {
-+		/* CN15 and CN16 switches must be configured in MDIO2 mode */
-+		switch0phy1: ethernet-phy@1 {
-+			reg = <1>;
-+			marvell,reg-init = <3 16 0 0x1010>;
-+		};
-+
-+		switch0phy10: ethernet-phy@10 {
-+			reg = <10>;
-+			marvell,reg-init = <3 16 0 0x1010>;
-+		};
-+	};
-+};
-+
-+&switch_port2 {
-+	label = "lan2";
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&switch0phy10>;
-+	status = "okay";
-+};
-+
-+&switch_port3 {
-+	label = "lan3";
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&switch0phy1>;
-+	status = "okay";
-+};
--- 
-2.39.0
+    net: fec: add imx8mq and imx8qm new versions support
+    
+    The ENET of imx8mq and imx8qm are basically the same as imx6sx,
+    but they have new features support based on imx6sx, like:
+    - imx8mq: supports IEEE 802.3az EEE standard.
+    - imx8qm: supports RGMII mode delayed clock.
 
+Are you using some other imx8 SoC?
+
+> Just wanted to discuss the probe concept of this driver, which is
+> rather fragile with all there static local variables, probe call
+> counters and relying on the probe order. All of this falls together
+> like a house of cards if something gets deferred.
+
+I agree with the comments about it being fragile. It would be good to
+get all the naming from OF nodes/addresses. But it needs doing by
+somebody with access to a test farm of lots of different boards with
+IMX2/5, IMX6 through to 8 and Vybrid.
+
+    Andrew
