@@ -2,80 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750B7691153
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFDB8691159
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjBIT1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
+        id S230115AbjBITaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjBIT1h (ORCPT
+        with ESMTP id S229537AbjBITaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:27:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02727683
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675970808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=akijUhdsZtbO6GrY7g1LPHTtADkehACs6oFy8tM6Z4w=;
-        b=P6veRR3oeZXgPJHeBEFiUBjAOaOOQaihaKOOVwzg0d6xihQqFcj4KFwHSsK4yHGnmnLxxO
-        /yOZjCRuS0QDGXbI2SYtPnozBms45QcRuDTkO+1nstcFu4y85fmKldqHvmsY5sXpkDpS6U
-        AArjcAGxf/8UBk97Wd+8oLRckc+8Uck=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-639-o7tJv8JrM2yqoYlzAMVXKg-1; Thu, 09 Feb 2023 14:26:47 -0500
-X-MC-Unique: o7tJv8JrM2yqoYlzAMVXKg-1
-Received: by mail-qt1-f197.google.com with SMTP id s4-20020ac85284000000b003b849aa2cd6so1684763qtn.15
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 11:26:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:date
-         :cc:to:from:subject:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=akijUhdsZtbO6GrY7g1LPHTtADkehACs6oFy8tM6Z4w=;
-        b=IH9jvObdqm6Q8mn6kkekopZovEHoJN+TE5pJAUk2p7RxqsTo4N900VUWYMb67jq4QP
-         um9k3cUq5jf0XF420l5P/WolVoviiHfMKPrC6+MXPQm7sFtX7p6s6AtWvsA4tGeZ+A7x
-         lDZWMSZHWXbNap4dPUMIiomXulclBrfljtnvVPRw6aTe6fCKhsG4XZwXPU0NXBr9zL4i
-         m3+8D4/dpo6iNtr23++2ji/j27fEd3iRCDNXF6t4BlRTbh7sbTToYKdwZqzk8xsg71nV
-         m1QTl8x5+FSWmwwOyMOdyzKczw/g+luKwjLhuirqn7cb1/F2cF9n2Cq0f7Aio7PLG1ZH
-         zk5g==
-X-Gm-Message-State: AO0yUKVny6zXZcHybDW6zYh0FCBFGuTcQczv0iPjTeCTWkBPJDFdORpS
-        dnlK8fCE++OtQFto0T17itJ0OMllvNU33axHf8+Rpjee2Kc1Ws5vvaKbChcUPXcvTxriba+zBte
-        RXUsUFRfNxiP5LS8QO1CjMtpX0QtVlA==
-X-Received: by 2002:ac8:7fcd:0:b0:3ba:19e5:3e45 with SMTP id b13-20020ac87fcd000000b003ba19e53e45mr21079033qtk.13.1675970806128;
-        Thu, 09 Feb 2023 11:26:46 -0800 (PST)
-X-Google-Smtp-Source: AK7set9vrrF2w5Al3fvqHIUnNh/FqiDLAli3cZUHRYIwK1b1hSjOhIxwMzM7+hcFYu3tH0gOx6SFiA==
-X-Received: by 2002:ac8:7fcd:0:b0:3ba:19e5:3e45 with SMTP id b13-20020ac87fcd000000b003ba19e53e45mr21078996qtk.13.1675970805679;
-        Thu, 09 Feb 2023 11:26:45 -0800 (PST)
-Received: from lobep17 ([2600:6c64:4e7f:603b:6e24:8ff:feb9:533e])
-        by smtp.gmail.com with ESMTPSA id m28-20020aed27dc000000b003b635a5d56csm1869655qtg.30.2023.02.09.11.26.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 11:26:45 -0800 (PST)
-Message-ID: <6fc6c8c2a94aa46b99f276bf32650ec43d79328d.camel@redhat.com>
-Subject: Re: [PATCH] scsi: target: iscsi: set memalloc_noio with loopback
- network connections
-From:   Laurence Oberman <loberman@redhat.com>
-To:     David Jeffery <djeffery@redhat.com>, target-devel@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Maurizio Lombardi <mlombard@redhat.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 09 Feb 2023 14:26:44 -0500
-In-Reply-To: <caff1add88d1e46c962ee52aae441769450c4dd9.camel@redhat.com>
-References: <20230208200957.14073-1-djeffery@redhat.com>
-         <caff1add88d1e46c962ee52aae441769450c4dd9.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        Thu, 9 Feb 2023 14:30:19 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1E4EE;
+        Thu,  9 Feb 2023 11:30:17 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0D99440008;
+        Thu,  9 Feb 2023 19:30:13 +0000 (UTC)
+Message-ID: <7ae60bca-5cc0-6cc6-f68a-b48c0b43388b@ghiti.fr>
+Date:   Thu, 9 Feb 2023 20:30:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] riscv: Bump COMMAND_LINE_SIZE value to 1024
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, macro@orcam.me.uk,
+        david.abdurachmanov@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-api@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <mhng-9e6b4607-6bea-411c-b843-916c1e0798ee@palmerdabbelt-glaptop>
+ <182c1d4e-a117-79d6-4dd1-8e3c8a447b4a@ghiti.fr>
+ <CACT4Y+YYAfTafFk7DE0B=qQFgkPXS7492AhBdY_CP1WdB8CGfA@mail.gmail.com>
+ <CACT4Y+Y1s2iE3OF8WHwb7F2crRjgnFCWQfoFvs3d-KgHpMLeKg@mail.gmail.com>
+Content-Language: fr
+From:   Alex Ghiti <alex@ghiti.fr>
+In-Reply-To: <CACT4Y+Y1s2iE3OF8WHwb7F2crRjgnFCWQfoFvs3d-KgHpMLeKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,106 +48,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-08 at 15:58 -0500, Laurence Oberman wrote:
-> On Wed, 2023-02-08 at 15:09 -0500, David Jeffery wrote:
-> > If an admin connects an iscsi initiator to an iscsi target on the
-> > same
-> > system, the iscsi connection is vulnerable to deadlocks during
-> > memory
-> > allocations. Memory allocations in the target task accepting the
-> > I/O
-> > from
-> > the initiator can wait on the initiator's I/O when the system is
-> > under
-> > memory pressure, causing a deadlock situation between the iscsi
-> > target and
-> > initiator.
-> > 
-> > When in this configuration, the deadlock scenario can be avoided by
-> > use of
-> > GFP_NOIO allocations. Rather than force all configurations to use
-> > NOIO,
-> > memalloc_noio_save/restore can be used to force GFP_NOIO
-> > allocations
-> > only
-> > when in this loopback configuration.
-> > 
-> > Signed-off-by: David Jeffery <djeffery@redhat.com>
-> > ---
-> >  drivers/target/iscsi/iscsi_target.c | 21 +++++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> > 
-> > diff --git a/drivers/target/iscsi/iscsi_target.c
-> > b/drivers/target/iscsi/iscsi_target.c
-> > index baf4da7bb3b4..a68e47e2cdf9 100644
-> > --- a/drivers/target/iscsi/iscsi_target.c
-> > +++ b/drivers/target/iscsi/iscsi_target.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/vmalloc.h>
-> >  #include <linux/idr.h>
-> >  #include <linux/delay.h>
-> > +#include <linux/sched/mm.h>
-> >  #include <linux/sched/signal.h>
-> >  #include <asm/unaligned.h>
-> >  #include <linux/inet.h>
-> > @@ -4168,7 +4169,10 @@ int iscsi_target_rx_thread(void *arg)
-> >  {
-> >  	int rc;
-> >  	struct iscsit_conn *conn = arg;
-> > +	struct dst_entry *dst;
-> >  	bool conn_freed = false;
-> > +	bool loopback = false;
-> > +	unsigned int flags;
-> >  
-> >  	/*
-> >  	 * Allow ourselves to be interrupted by SIGINT so that a
-> > @@ -4186,8 +4190,25 @@ int iscsi_target_rx_thread(void *arg)
-> >  	if (!conn->conn_transport->iscsit_get_rx_pdu)
-> >  		return 0;
-> >  
-> > +	/*
-> > +	 * If the iscsi connection is over a loopback device from using
-> > +	 * iscsi and iscsit on the same system, we need to set
-> > memalloc_noio to
-> > +	 * prevent memory allocation deadlocks between target and
-> > initiator.
-> > +	 */
-> > +	rcu_read_lock();
-> > +	dst = rcu_dereference(conn->sock->sk->sk_dst_cache);
-> > +	if (dst && dst->dev && dst->dev->flags & IFF_LOOPBACK)
-> > +		loopback = true;
-> > +	rcu_read_unlock();
-> > +
-> > +	if (loopback)
-> > +		flags = memalloc_noio_save();
-> > +
-> >  	conn->conn_transport->iscsit_get_rx_pdu(conn);
-> >  
-> > +	if (loopback)
-> > +		memalloc_noio_restore(flags);
-> > +
-> >  	if (!signal_pending(current))
-> >  		atomic_set(&conn->transport_failed, 1);
-> >  	iscsit_take_action_for_connection_exit(conn, &conn_freed);
+Le 9/02/2023 à 12:37, Dmitry Vyukov a écrit :
+> On Thu, 10 Nov 2022 at 22:01, Dmitry Vyukov <dvyukov@google.com> wrote:
+>>
+>> On Mon, 21 Jun 2021 at 00:11, Alex Ghiti <alex@ghiti.fr> wrote:
+>>>
+>>> Hi Palmer,
+>>>
+>>> Le 23/04/2021 à 04:57, Palmer Dabbelt a écrit :
+>>>> On Fri, 02 Apr 2021 11:33:30 PDT (-0700), macro@orcam.me.uk wrote:
+>>>>> On Fri, 2 Apr 2021, David Abdurachmanov wrote:
+>>>>>
+>>>>>>>>>   This macro is exported as a part of the user API so it must
+>>>>>> not depend on
+>>>>>>>>> Kconfig.  Also changing it (rather than say adding
+>>>>>> COMMAND_LINE_SIZE_V2 or
+>>>>>>>>> switching to an entirely new data object that has its dimension
+>>>>>> set in a
+>>>>>>>>> different way) requires careful evaluation as external binaries
+>>>>>> have and
+>>>>>>>>> will have the value it expands to compiled in, so it's a part
+>>>>>> of the ABI
+>>>>>>>>> too.
+>>>>>>>>
+>>>>>>>> Thanks, I didn't realize this was part of the user BI.  In that
+>>>>>> case we
+>>>>>>>> really can't chage it, so we'll have to sort out some other way
+>>>>>> do fix
+>>>>>>>> whatever is going on.
+>>>>>>>>
+>>>>>>>> I've dropped this from fixes.
+>>>>>>>
+>>>>>>> Does increasing COMMAND_LINE_SIZE break user-space binaries? I would
+>>>>>>> expect it to work the same way as adding new enum values, or adding
+>>>>>>> fields at the end of versioned structs, etc.
+>>>>>>> I would assume the old bootloaders/etc will only support up to the
+>>>>>>> old, smaller max command line size, while the kernel will support
+>>>>>>> larger command line size, which is fine.
+>>>>>>> However, if something copies /proc/cmdline into a fixed-size buffer
+>>>>>>> and expects that to work, that will break... that's quite unfortunate
+>>>>>>> user-space code... is it what we afraid of?
+>>>>>>>
+>>>>>>> Alternatively, could expose the same COMMAND_LINE_SIZE, but internally
+>>>>>>> support a larger command line?
+>>>>>>
+>>>>>> Looking at kernel commit history I see PowerPC switched from 512 to
+>>>>>> 2048, and I don't see complaints about the ABI on the mailing list.
+>>>>>>
+>>>>>> If COMMAND_LINE_SIZE is used by user space applications and we
+>>>>>> increase it there shouldn't be problems. I would expect things to
+>>>>>> work, but just get truncated boot args? That is the application will
+>>>>>> continue only to look at the initial 512 chars.
+>>>>>
+>>>>>   The macro is in an include/uapi header, so it's exported to the userland
+>>>>> and a part of the user API.  I don't know what the consequences are for
+>>>>> the RISC-V port specifically, but it has raised my attention, and I think
+>>>>> it has to be investigated.
+>>>>>
+>>>>>   Perhaps it's OK to change it after all, but you'd have to go through
+>>>>> known/potential users of this macro.  I guess there shouldn't be that
+>>>>> many
+>>>>> of them.
+>>>>>
+>>>>>   In any case it cannot depend on Kconfig, because the userland won't have
+>>>>> access to the configuration, and then presumably wants to handle any and
+>>>>> all.
+>>>>
+>>>> It kind of feels to me like COMMAND_LINE_SIZE shouldn't have been part
+>>>> of the UABI to begin with.  I sent a patch to remove it from the
+>>>> asm-generic UABI, let's see if anyone knows of a reason it should be UABI:
+>>>>
+>>>> https://lore.kernel.org/linux-arch/20210423025545.313965-1-palmer@dabbelt.com/T/#u
+>>>
+>>> Arnd seemed to agree with you about removing COMMAND_LINE_SIZE from the
+>>> UABI, any progress on your side?
+>>
+>> Was this ever merged? Don't see this even in linux-next.
 > 
-> I had mentioned to Mike that this was already tested at a large
-> customer and in our labs and resolved the deadlocks .
+> Ping. Still an issue at least for syzbot.
+
+Yes, agreed, Palmer proposed the following instead since blindly 
+increasing the command line size would break userspace ABI: 
+https://lore.kernel.org/lkml/20221211061358.28035-1-palmer@rivosinc.com/T/
+
+I will bump this thread to make progress, thanks for the ping.
+
+Alex
+
 > 
-> Regards
-> Laurence Oberman
-> 
-
-Tested-by:   Laurence Oberman <loberman@redhat.com>
-Reviewed-by: Laurence Oberman <loberman@redhat.com>
-
-I hate  to nag here but we have a pressing customer issue and are keen
-to get others to weigh in here.
-
-Regards
-Laurence
-
-
-
-Thanks
-Laurence
-
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
