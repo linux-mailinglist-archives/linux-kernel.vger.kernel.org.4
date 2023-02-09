@@ -2,172 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F28691492
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B48269148F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Feb 2023 00:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjBIXgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 18:36:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S231272AbjBIXfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 18:35:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjBIXfg (ORCPT
+        with ESMTP id S231194AbjBIXf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 18:35:36 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68176F201;
-        Thu,  9 Feb 2023 15:35:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675985712; x=1707521712;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XCVgqF8shH5rFyH7hk0Emjtujq62iDahDM3kYDntmz4=;
-  b=HvkrHeTa4VBHBXazw+WB9hly1+XkQGAY3hnHhnLC0o4Yjd1ti+qLFq6Q
-   lYsfOfqS0jmhu5lj3PZZreN+439RfPPCMjY9aLaABoXB0niUYWaB+gINV
-   gG2rTnA47I965A81UueXJMP7T7nJ0Hqdp5uqoaOh78WxKIOeA1IjoFclf
-   E03hFiy7cxeCfDPSjXZpAHw3C4XGUhq9kjBvlzc5qEXgBWu4HaUtE6D1Q
-   uuNFXh7d6bhIX+YTY+ZY/RAeYH2FTFyIfMBHd62K25RUAzXzVF6w/fpMY
-   4hAtDyd8PWS9A/lIXSMQ+9HvjMvIo07frg+2+7gbT8LjyhVeRArEEjbPr
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="416508753"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="416508753"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 15:33:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10616"; a="756592054"
-X-IronPort-AV: E=Sophos;i="5.97,285,1669104000"; 
-   d="scan'208";a="756592054"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.13.232])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 15:33:11 -0800
-From:   alison.schofield@intel.com
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alison Schofield <alison.schofield@intel.com>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v6 6/6] tools/testing/cxl: Mock support for Get Poison List
-Date:   Thu,  9 Feb 2023 15:32:59 -0800
-Message-Id: <26eb1ac9b8d6e7ff969537e29812d9e2d007632a.1675983077.git.alison.schofield@intel.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <cover.1675983077.git.alison.schofield@intel.com>
-References: <cover.1675983077.git.alison.schofield@intel.com>
+        Thu, 9 Feb 2023 18:35:28 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D5E26D8EE;
+        Thu,  9 Feb 2023 15:35:00 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pQGRN-0002Ig-1V;
+        Fri, 10 Feb 2023 00:34:57 +0100
+Date:   Thu, 9 Feb 2023 23:33:20 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH v3 08/12] net: ethernet: mtk_eth_soc: fix RX data corruption
+ issue
+Message-ID: <6d2dd59aa56238dd3afebedd8c131bcd988a8f91.1675984550.git.daniel@makrotopia.org>
+References: <cover.1675984550.git.daniel@makrotopia.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1675984550.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alison Schofield <alison.schofield@intel.com>
+Also set bit 12 when setting up MAC MCR, as MediaTek SDK did the same
+change stating:
+"If without this patch, kernel might receive invalid packets that are
+corrupted by GMAC."[1]
+Unfortunately the meaning of bit 12 is not documented in datasheets or
+vendor code.
 
-Make mock memdevs support the Get Poison List mailbox command.
-Return a fake poison error record when the get poison list command
-is issued.
-
-This supports testing the kernel tracing and cxl list capabilities
-for media errors.
-
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
+Tested-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- tools/testing/cxl/test/mem.c | 42 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 2 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-index 9263b04d35f7..2fa9c18d4c2c 100644
---- a/tools/testing/cxl/test/mem.c
-+++ b/tools/testing/cxl/test/mem.c
-@@ -7,6 +7,7 @@
- #include <linux/delay.h>
- #include <linux/sizes.h>
- #include <linux/bits.h>
-+#include <asm/unaligned.h>
- #include <cxlmem.h>
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index 030d87c42bd4..fa61eefe0a61 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -615,7 +615,7 @@ static int mtk_mac_finish(struct phylink_config *config, unsigned int mode,
+ 	/* Setup gmac */
+ 	mcr_cur = mtk_r32(mac->hw, MTK_MAC_MCR(mac->id));
+ 	mcr_new = mcr_cur;
+-	mcr_new |= MAC_MCR_IPG_CFG | MAC_MCR_FORCE_MODE |
++	mcr_new |= MAC_MCR_IPG_CFG | MAC_MCR_BIT_12 | MAC_MCR_FORCE_MODE |
+ 		   MAC_MCR_BACKOFF_EN | MAC_MCR_BACKPR_EN | MAC_MCR_FORCE_LINK;
  
- #include "trace.h"
-@@ -40,6 +41,10 @@ static struct cxl_cel_entry mock_cel[] = {
- 		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_HEALTH_INFO),
- 		.effect = cpu_to_le16(0),
- 	},
-+	{
-+		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_POISON),
-+		.effect = cpu_to_le16(0),
-+	},
- };
- 
- /* See CXL 2.0 Table 181 Get Health Info Output Payload */
-@@ -471,6 +476,8 @@ static int mock_id(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
- 			cpu_to_le64(DEV_SIZE / CXL_CAPACITY_MULTIPLIER),
- 	};
- 
-+	put_unaligned_le24(CXL_POISON_LIST_MAX, id.poison_list_max_mer);
-+
- 	if (cmd->size_out < sizeof(id))
- 		return -EINVAL;
- 
-@@ -888,6 +895,34 @@ static int mock_health_info(struct cxl_dev_state *cxlds,
- 	return 0;
- }
- 
-+static int mock_get_poison(struct cxl_dev_state *cxlds,
-+			   struct cxl_mbox_cmd *cmd)
-+{
-+	struct cxl_mbox_poison_payload_in *pi = cmd->payload_in;
-+
-+	/* Mock one poison record at pi.offset for 64 bytes */
-+	struct {
-+		struct cxl_mbox_poison_payload_out po;
-+		struct cxl_poison_record record;
-+	} __packed mock_plist = {
-+		.po = {
-+			.count = cpu_to_le16(1),
-+		},
-+		.record = {
-+			.length = cpu_to_le32(1),
-+			.address = cpu_to_le64(le64_to_cpu(pi->offset) +
-+					       CXL_POISON_SOURCE_INJECTED),
-+		},
-+	};
-+
-+	if (cmd->size_out < sizeof(mock_plist))
-+		return -EINVAL;
-+
-+	memcpy(cmd->payload_out, &mock_plist, sizeof(mock_plist));
-+	cmd->size_out = sizeof(mock_plist);
-+	return 0;
-+}
-+
- static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
- {
- 	struct device *dev = cxlds->dev;
-@@ -942,6 +977,9 @@ static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *
- 	case CXL_MBOX_OP_PASSPHRASE_SECURE_ERASE:
- 		rc = mock_passphrase_secure_erase(cxlds, cmd);
- 		break;
-+	case CXL_MBOX_OP_GET_POISON:
-+		rc = mock_get_poison(cxlds, cmd);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -1010,6 +1048,10 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
- 	if (rc)
- 		return rc;
- 
-+	rc = cxl_poison_state_init(cxlds);
-+	if (rc)
-+		return rc;
-+
- 	rc = cxl_dev_state_identify(cxlds);
- 	if (rc)
- 		return rc;
+ 	/* Only update control register when needed! */
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 142def8629c8..084d07c96c04 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -404,6 +404,7 @@
+ #define MAC_MCR_FORCE_MODE	BIT(15)
+ #define MAC_MCR_TX_EN		BIT(14)
+ #define MAC_MCR_RX_EN		BIT(13)
++#define MAC_MCR_BIT_12		BIT(12)
+ #define MAC_MCR_BACKOFF_EN	BIT(9)
+ #define MAC_MCR_BACKPR_EN	BIT(8)
+ #define MAC_MCR_FORCE_RX_FC	BIT(5)
 -- 
-2.37.3
+2.39.1
 
