@@ -2,92 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC49068FDB2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 324ED68FDB9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjBIDFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 22:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S232478AbjBIDHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 22:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjBIDFN (ORCPT
+        with ESMTP id S232475AbjBIDHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 22:05:13 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDB559D7;
-        Wed,  8 Feb 2023 19:00:13 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PC1nN0xZJz4xyp;
-        Thu,  9 Feb 2023 14:00:07 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675911608;
-        bh=4bwDRsI45ygPhJblq72LnbrP7LzKIK62YCeCpS+CAT0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SragqGxbLUBXOa178ThkVqdyR/VGQnfdpwWpKwNZH8Fk0Nf0JePpepZG3USMrncx2
-         FRQVBpwWKXfp1J5qxlgNMIkCeEWVNTzpn/UlkWwD5o/QbXaM4tpoyJRaOUSJQQ9sIe
-         lCngZuDXyscoLTEXFuNDM4oLCUfoPgV+fFhZFaezKa8ukfNf8z5EDmOOK7sAp2/Neu
-         aVxnh6Uca9mLqn9eF8kmpJQvSH/sYiQch/CLgQc7KoB9QKkCjAtdnttVY9UVdkAFoT
-         BMbu6Nlg6BxlkcIr0WmyxW0mLTE3mqZqVbTiYSmVqp5ZS+1I356pr4Ikr7uq3PCgbN
-         jwFcgBgiMFrEg==
-Date:   Thu, 9 Feb 2023 14:00:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     David Howells <dhowells@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the block tree
-Message-ID: <20230209140006.06eb8973@canb.auug.org.au>
+        Wed, 8 Feb 2023 22:07:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBE5BB97;
+        Wed,  8 Feb 2023 19:03:09 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3190MR2P016602;
+        Thu, 9 Feb 2023 03:02:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bUW7dhTOA4J7ntYe0YElJ8u8CDEjugABASBb2PexONc=;
+ b=NrpKqlh67jBu/PMYyKcqKYsluGgVLFl7gJ6vST6PdDxJQZBao4LOzKJf2/ZEbRVIMpty
+ V1IOAG/ZCc3l3RAnqfKNGPDYJrJo1Mq8hTMWW9c4qeOBbvnVDZTOYXqKiIBuBE3ofRLZ
+ EuLsnwUvdAuLhNAMif1q3HXQYUvf/RMYuVGVHiTHOeHTWOvdXvBRXKvOFf7vbor2rIdU
+ WQfyNm7YeqtHXz5DREHwcp4PLvEkQ5Kcj33oZer7qaXQFpstjtR8ElnXa+xboqoueGpU
+ pu672HmVjf7a5GuIJ4kpm1Zs6VVdenlSUblmnalQ9HtF4/W0gTB9cytDT7avXhrGJcqc Bw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm1yf3bja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 03:02:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31932hU7013049
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Feb 2023 03:02:43 GMT
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
+ 19:02:39 -0800
+Message-ID: <1d9b8ee8-c3f2-99bc-cd4e-8c2dd0f04b2b@quicinc.com>
+Date:   Thu, 9 Feb 2023 11:02:36 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/J1+HGdZn4MFfK.8cC5H1FE7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] coresight: core: Add sysfs node to reset all sources and
+ sinks
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20230208111630.20132-1-quic_jinlmao@quicinc.com>
+ <CAJ9a7ViBS9K6cKsOi3btw1b5cM9VTSb-q8s6W3WUAgeW3-T2Sg@mail.gmail.com>
+ <CAJ9a7ViA5BsbLjRWMsttmpmcPh1yUXK8J79k-pqYybVZkMQHXQ@mail.gmail.com>
+ <bb6c9df9-af9b-873e-85bd-a29d00bb39d7@arm.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <bb6c9df9-af9b-873e-85bd-a29d00bb39d7@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BIraKdY_9K6WNvdrRoA0NvCHhEwZIwQ1
+X-Proofpoint-GUID: BIraKdY_9K6WNvdrRoA0NvCHhEwZIwQ1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_11,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015
+ mlxlogscore=893 suspectscore=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2302090026
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/J1+HGdZn4MFfK.8cC5H1FE7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 2/9/2023 12:36 AM, Suzuki K Poulose wrote:
+> On 08/02/2023 16:20, Mike Leach wrote:
+>> Quick correction - you need to look for enable_source  / enable_sink
+>> files and disable those that are currently '1'
+>>
+>> Mike
+>>
+>> On Wed, 8 Feb 2023 at 16:16, Mike Leach <mike.leach@linaro.org> wrote:
+>>>
+>>> Hi
+>>>
+>>> As this is a sysfs only update - would it not be easier to simply use
+>>> a shell script to iterate through coresight/devices/ looking for
+>>> disable_source / disable_sink files and setting those accordingly?
+>>>
+>>> See tools/perf/tests/shell/test_arm_coresight.sh for an example of a
+>>> script that does similar iteration to test coresight in perf
+>>>
+>
+> +1
+>
+> Suzuki
 
-After merging the block tree, today's linux-next build (htmldocs)
-produced this warning:
+Hi Mike & Suzuki,
 
-fs/splice.c:301: warning: Function parameter or member 'file' not described=
- in 'generic_file_splice_read'
-fs/splice.c:301: warning: Excess function parameter 'in' description in 'ge=
-neric_file_splice_read'
+Sometimes user just want to have some quick test from PC with adb commands.
+It is very easy to reset all sources and sinks' status by command below.
+echo 1 > /sys/bus/coresight/reset_source_sink
 
-Introduced by commit
+Preparing the script for test is not easy for users who are not familiar 
+with the coresight framework.
 
-  df77cb28d575 ("vfs, iomap: Fix generic_file_splice_read() to avoid revers=
-ion of ITER_PIPE")
+Thanks
+Jinlong Mao
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/J1+HGdZn4MFfK.8cC5H1FE7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkYbcACgkQAVBC80lX
-0GypEAf/T7ytuizCZtpgKd24T4TsZm9PVytDN46Di0GxeWcQ1bVEGzU3reqP13Yz
-0NXigRxMNP2dAlFVGxNoD8AZebIap59UEi0yYPnwM+sdwZKdGOxx3aYoD7Ey5cS6
-XgKtN2A1FIjMiEAdPNnh2Le8ASyPh9uxKgdrQGeJz6cBvl39H01Ko8YOuv+NIy+1
-2J4qCKTXNJj3aB7GSxRkiIajxDIxAYHya/9ujFkTEWsCB7v7s1STexQUEqKauKHW
-w5urS5jl1yCkr8Cs70rsUquR8zJXoioUafcQHQFSs/aeunW6E6EYy0WJaewWP1JM
-OXphXPOH2tTRbmoC+7KzprM6/PyH0A==
-=PeIV
------END PGP SIGNATURE-----
-
---Sig_/J1+HGdZn4MFfK.8cC5H1FE7--
+>
+>
