@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC807690DEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1242D690DED
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjBIQGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 11:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S231758AbjBIQGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 11:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjBIQGH (ORCPT
+        with ESMTP id S231707AbjBIQGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:06:07 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63865EF9
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:05:44 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id ki19-20020a17090ae91300b00232cba666bbso3163278pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:05:44 -0800 (PST)
+        Thu, 9 Feb 2023 11:06:10 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7C4663DD
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:05:45 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d8so2086577plr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:05:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Sf2l9AGiK/XTzlXl4XjI0+S7/VkPLyFDxWXaWXs07cs=;
-        b=ap9mGPZvoYruczna13BftwI0vtEG6rqrkcF3LueRlZJK0myK6E+p9xuBd7QZQdsSqw
-         GMRbEgkRwAe8CFvo9y+AMmfgyXmDBWWzaL2YwBTmaMu3Sw4q5zjx2tRW4HHnYqpRFdlz
-         Vp9bXXzNnU/zTTCyFoG9nuN7bfGit91IJxUoAoI7itOcryA5yfNv8VETkWcQqyFyF7cY
-         MvrQ10MD+1x2K8ojw5Xfvw+RnOsg8T9jdBMULo/PscGE6kDmCGS+IuwmqQWGCHvvSbqi
-         psdcPatFzoBuhkDqM5VvVD4A+xEnKx2vltnL/mzAOutsjbi9FpLz51e4o/WbcYIWIFxA
-         WFlg==
+        bh=tUoXpMWjy0LjmD/q6WT+yIP2GHxBl2GI5Eeo4fd+3vE=;
+        b=ZhkELgVyfpp57sqO9hBY8eIIART2+q1p9MUrFQOa0wSHLo8IJxS0mg48FUrMIvKJmG
+         bgl+JrGKhTVJyEVKL07VpwJdNlOxGfNIp8eKuehdGiCCqO3gPRywUZt/9NHziUKcWQrX
+         j42CCgwNjZqJn6cS2EBkFPSoAWARPVfmTOcsbErxr75euf7Udx1+vnih1+1S62blIDmt
+         AlNw0Dx2msH4zqTux3W6nPaana9nwpM0vfCzWlAox1cIHyVS2pU2ScRDneeBu5RBu+0p
+         HO00j77c21kCLIws5xe2cM0U7c/3LFb8EjWtSPo7Ws8t448Y/Duf6S2aj7EEhfrKPaaF
+         yS0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Sf2l9AGiK/XTzlXl4XjI0+S7/VkPLyFDxWXaWXs07cs=;
-        b=J9SN8kVm2TLovh3j1AKXtE1byQTdGsiJ8MR0z7K85jKHN3RhQ1NCxF9+soy35+e1nm
-         FAXSfjOvAiWAsqww/eOJMuYccuAOlkSr577OfjoKZs8xIAN8KRro50vSEY8CZ9CR2xpV
-         TCUQKyaV5A1P+8Wrue4G5rWfQLihMR7uLGmoXaI0Qi4i9MfxZ+Mji0HSM5FkEcxUoxnP
-         gv3Nf6+RPZjMdYhJ08ibcUzj7BG9olE3Ap9B2UIk1SWudnW5rBBGNatuYQ810QIgAZhN
-         lEaIYp2bctduXnY5S+fN0vlzyt/BjWPy4825R5wxECMx/8XG9taMn/FWmfxxNRXEToCm
-         rOSg==
-X-Gm-Message-State: AO0yUKXAI0trTFEuIvw1jguZyni5JDGiMNl3bnwRn/I6Ea0AFbyP1FAP
-        4j1SKjJHerdzm7kwUGbqM+A=
-X-Google-Smtp-Source: AK7set/4u7jPzC5Cd4Ek/0le3WT3Tpe2/hGKa0iVWneq4F3cmrIO4qbd77bCEEd1/a5+oH3tyBGjag==
-X-Received: by 2002:a17:90a:ae0e:b0:232:cdb6:c4ad with SMTP id t14-20020a17090aae0e00b00232cdb6c4admr2940951pjq.0.1675958743585;
-        Thu, 09 Feb 2023 08:05:43 -0800 (PST)
+        bh=tUoXpMWjy0LjmD/q6WT+yIP2GHxBl2GI5Eeo4fd+3vE=;
+        b=jQKfH2eYQIr5anHjShImiuMFpJlptW1IaVKjR/KVZm6skmeV5Q8y+caufITBSIsEi5
+         eh2G/15XFkqMMT27jwQVpP9vUdZSpcSPdiu5XCGwoLpGFSTsI999aLwOU+lAvjdJWHBL
+         aKaIHuupHtptqX8NRkVQtpXJXMqTzI/3d1O+mfnCXDvTrs0XdDLNlrMFA9SqvO5EzY/z
+         X3tBeGMTTzY9GJrns305l5o/2nIINljLXDu0px5bz1J/yeK+BZ+4AmSVnlYiszOqr51x
+         HTnzh3WI5HuYraZOB+9TnvIfZGAW9cyOQ9H8gu34eOnH8sOIp3LHnmZMuKIJvD6iyRjc
+         wZww==
+X-Gm-Message-State: AO0yUKWLZWpYwM74gjr1A5drM40l8Vzf1nj2B65CJ7q+BV/FkUqd+NaX
+        2aMao9qe7BJCRBMyTjQLp40=
+X-Google-Smtp-Source: AK7set8vRBjTX+U/gBcXGt9hO7P8MDbbvvljef0i2kbjyYO82HttbYmvGbc0ShQyaUJDVgXjFiiw8g==
+X-Received: by 2002:a17:90b:2250:b0:230:c41b:4d87 with SMTP id hk16-20020a17090b225000b00230c41b4d87mr13424320pjb.6.1675958744782;
+        Thu, 09 Feb 2023 08:05:44 -0800 (PST)
 Received: from f37.eng.vmware.com ([66.170.99.1])
-        by smtp.googlemail.com with ESMTPSA id p22-20020a17090a0e5600b001fde655225fsm7080135pja.2.2023.02.09.08.05.42
+        by smtp.googlemail.com with ESMTPSA id p22-20020a17090a0e5600b001fde655225fsm7080135pja.2.2023.02.09.08.05.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 08:05:43 -0800 (PST)
+        Thu, 09 Feb 2023 08:05:44 -0800 (PST)
 From:   Shreenidhi Shedi <yesshedi@gmail.com>
 X-Google-Original-From: Shreenidhi Shedi <sshedi@vmware.com>
 To:     dhowells@redhat.com, dwmw2@infradead.org
 Cc:     linux-kernel@vger.kernel.org, Shreenidhi Shedi <sshedi@vmware.com>
-Subject: [PATCH 3/4] sign-file: fix few checkpatch issues
-Date:   Thu,  9 Feb 2023 21:35:22 +0530
-Message-Id: <20230209160523.858502-3-sshedi@vmware.com>
+Subject: [PATCH 4/4] sign-file: improve help message
+Date:   Thu,  9 Feb 2023 21:35:23 +0530
+Message-Id: <20230209160523.858502-4-sshedi@vmware.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230209160523.858502-1-sshedi@vmware.com>
 References: <20230209160523.858502-1-sshedi@vmware.com>
@@ -74,31 +74,91 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Shreenidhi Shedi <sshedi@vmware.com>
 ---
- sign-file.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sign-file.c | 49 ++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 40 insertions(+), 9 deletions(-)
 
 diff --git a/sign-file.c b/sign-file.c
-index b2619db..2faf302 100644
+index 2faf302..0c41a5a 100644
 --- a/sign-file.c
 +++ b/sign-file.c
-@@ -73,7 +73,7 @@ struct module_signature {
- 
- #define PKEY_ID_PKCS7 2
- 
--static char magic_number[] = "~Module signature appended~\n";
-+static const char magic_number[] = "~Module signature appended~\n";
+@@ -76,13 +76,44 @@ struct module_signature {
+ static const char magic_number[] = "~Module signature appended~\n";
  
  static __attribute__((noreturn))
- void format(void)
-@@ -118,7 +118,7 @@ static void drain_openssl_errors(void)
- 		if (__cond) {				\
- 			errx(1, fmt, ## __VA_ARGS__);	\
- 		}					\
--	} while(0)
-+	} while (0)
+-void format(void)
++void print_usage(int retval)
+ {
+-	fprintf(stderr,
+-		"Usage: scripts/sign-file [-dp] <hash algo> <key> <x509> <module> [<dest>]\n");
+-	fprintf(stderr,
+-		"       scripts/sign-file -s <raw sig> <hash algo> <x509> <module> [<dest>]\n");
+-	exit(2);
++	fprintf(stderr, "Usage: scripts/sign-file [OPTIONS]... [MODULE]...\n");
++	fprintf(stderr, "Available options:\n");
++	fprintf(stderr, "-h, --help		Print this help message and exit\n");
++
++	fprintf(stderr, "\nOptional args:\n");
++	fprintf(stderr, "-s, --savesig		Save signature\n");
++	fprintf(stderr, "-o, --signonly		Sign only\n");
++	fprintf(stderr, "-b, --bulksign		Sign modules in bulk\n");
++	fprintf(stderr, "-l, --replaceorig	Replace original\n");
++#ifndef USE_PKCS7
++	fprintf(stderr, "-k, --usekeyid		Use key ID\n");
++#endif
++	fprintf(stderr, "-r, --rawsig <sig>	Raw signature\n");
++	fprintf(stderr, "-d, --dest <dest>	Destination path ");
++	fprintf(stderr, "(Exclusive with bulk option)\n");
++
++	fprintf(stderr, "\nMandatory args:\n");
++	fprintf(stderr, "-p, --privkey <key>	Private key\n");
++	fprintf(stderr, "-a, --hashalgo <alg>	Hash algorithm\n");
++	fprintf(stderr, "-x, --x509 <x509>	X509\n");
++
++	fprintf(stderr, "\nExamples:\n");
++
++	fprintf(stderr, "\nRegular signing:\n");
++	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
++	fprintf(stderr, "-x certs/signing_key.x509 <module>\n");
++
++	fprintf(stderr, "\nSigning with destination path:\n");
++	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
++	fprintf(stderr, "-x certs/signing_key.x509 <module> -d <path>\n");
++
++	fprintf(stderr, "\nSigning modules in bulk:\n");
++	fprintf(stderr, "scripts/sign-file -a sha512 -p certs/signing_key.pem ");
++	fprintf(stderr, "-x certs/signing_key.x509 -b <module1> <module2> ...\n");
++
++	exit(retval);
+ }
  
- static const char *key_pass;
+ static void display_openssl_errors(int l)
+@@ -266,7 +297,7 @@ void parse_args(int *argc, char **argv, struct cmd_opts *opts)
+ #endif
+ 		switch (opt) {
+ 		case 'h':
+-			format();
++			print_usage(0);
+ 			break;
  
+ 		case 'r':
+@@ -317,7 +348,7 @@ void parse_args(int *argc, char **argv, struct cmd_opts *opts)
+ 			break;
+ 
+ 		default:
+-			format();
++			print_usage(2);
+ 			break;
+ 		}
+ 	} while (opt != -1);
+@@ -374,7 +405,7 @@ int main(int argc, char **argv)
+ #endif
+ 
+ 	if ((bulk_sign && dest_name) || (!bulk_sign && argc != 1))
+-		format();
++		print_usage(2);
+ 
+ 	if (dest_name && strcmp(argv[0], dest_name)) {
+ 		replace_orig = false;
 -- 
 2.39.0
 
