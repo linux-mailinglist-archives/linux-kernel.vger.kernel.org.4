@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC98690E40
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3443A690E44
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjBIQUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 11:20:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S229655AbjBIQVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 11:21:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjBIQTy (ORCPT
+        with ESMTP id S229602AbjBIQVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:19:54 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD4C60BAA
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:19:48 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-52bdbd30328so31744887b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:19:48 -0800 (PST)
+        Thu, 9 Feb 2023 11:21:16 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D4A1CADC
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:21:16 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id b9so864264ila.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:21:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GlZRd41K0U+KP9r4brauY7yZjWAhAwpFA59RBThBcPw=;
-        b=eYSaPjytR6e1YtVWU78vCni4OsGr+H50oE8zveFDkE72S3iysIkbXHTC29ydnKhB6N
-         yzp2dvxWGTmrzP08y7IFyUI1wh1Qr3o5lSzxFdwhWxnHRl/ehjqXFLf8nFMhwOZ3Nrm6
-         YHxzrdzH6e5i+pshM0zBQ8okF7Y3yisMErIxhwGKvYXpfIBuWCy/j9RVPQt+B723ShIr
-         +/Y/5DPghqgzxgcDTTRq+9gnUQOk0otYh5o0w7fobXbQ6ChZ/vk2xMcn9GfapdZFK2S9
-         WjHZMRp2eBMg2QFhiCZ09O5P+8V88640tiOxHIVTNx6G2Bnw7keMa+tBDtR85LQ2iiW6
-         tDtg==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UKngE7ngQXAHNLalqbKKmwc136Q0QfwqqYmXJMalfRU=;
+        b=JHU9uTfXweyjbybwxNuRKLwHCy7ZW3Xaw4yrp+nEN1I3UQMTsiDfcqyF8JPAxqPnFM
+         vX/xbJGWcmn4LBLVwRRaHlflnK68kh9QJbY8yxHHXbtd6xwIeRb4jOaOoO5CciWJ2I0F
+         WP18JJ8KK7s/hAyIXgeM2yS1Ie5ScReIGnSZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GlZRd41K0U+KP9r4brauY7yZjWAhAwpFA59RBThBcPw=;
-        b=AlQRdH0VijzeGNEdw/Ura/v6vhThTahEPBhel/+f0YPhJILGtTWIEg8OSbKK8dKfoi
-         PslIMc45AS4djNPOYh2Mx+i5+0GUn6OOAx1eBGfGe/khM3gLfeIMlMOVjRkAy0g69icN
-         tl8iwESeV6dWLOXGeEIZaPp/ciAaNbfJ6v6RXoQMNrnBedAK92qJCyJib3kjDn+ezJyG
-         w0fqwhs6Fcoz4N/Bu9awqFbWoDdq5Sf0vIEwNS8xXPAtRDxLPgZ0tgArs+jWpAoSABcJ
-         +hBlcRBH4zDJwoZGU2fkay2C5ZynejiyeP8XGah+7LYaCFmOP+a9L2hUPBCgYxzPUg4v
-         uCNQ==
-X-Gm-Message-State: AO0yUKXZPoUK5GnlXJOnw0nzgsWr94C2t8AAtmUSE4cUTv8dJ0QDJRWd
-        gbewHue1OyQipuCl9bVKKm2+igxf9nM+kX+aQG8rZw==
-X-Google-Smtp-Source: AK7set8OqEMq5GVQpATraghSz4T7y8K22eJbquY9L4FPI3bDQymX3ttwp3VTYr/LsrqmNZTNfL9Hby4JVEz8JTeXrSo=
-X-Received: by 2002:a81:69d5:0:b0:506:8253:3444 with SMTP id
- e204-20020a8169d5000000b0050682533444mr1180650ywc.436.1675959587431; Thu, 09
- Feb 2023 08:19:47 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UKngE7ngQXAHNLalqbKKmwc136Q0QfwqqYmXJMalfRU=;
+        b=a7o55srFwvtUF2MkV1GfmpBHp9ivNOMLF4U5s+N+55pJAQgOxVFhK4z26bNM/O1J89
+         5tno7YFggVeLZqea/+5JK+duqsc61Rja/CfZ7EyWDaYXUN76FOP7d327umX2zLemGuj3
+         1mH/oVYrd8xa8YB6NO55VqXPjsyb6DQJmJ7qjEl8eMdcBdKdDQThBCQBDxTkoZkm7fOw
+         FcZ1ovT7OM+dZPZAli/9G4wtMq/oxjDZgGl/kzxJ2YOgRGaqZ3DVAE+/X+ZwjdwvKQ8F
+         PwY3Xahzhb3nFiTccCrHUpYPy2+U4uyRDyVQklThxazd+FAkELDyFk9nnOO21diS6MEX
+         vnaQ==
+X-Gm-Message-State: AO0yUKVoS28UBQDhFTttM0Jk7I8SyqqrBkmc1Ytcr+U6BXdz6ybqC6x+
+        9guvfFFRUDJNQDYRC93YXdySrQ==
+X-Google-Smtp-Source: AK7set87dIrlO4+nZUuMC6eIx+SM5Upnj0kqBRD592ICoZZYE8vdX3uKGWNFHW600n7ClXSu/S70xQ==
+X-Received: by 2002:a05:6e02:1b09:b0:310:f912:5a68 with SMTP id i9-20020a056e021b0900b00310f9125a68mr5337170ilv.3.1675959675409;
+        Thu, 09 Feb 2023 08:21:15 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id h8-20020a92c268000000b0030da1d0c348sm536362ild.87.2023.02.09.08.21.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 08:21:15 -0800 (PST)
+Date:   Thu, 9 Feb 2023 16:21:14 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: dts: qcom: sm6115: Add geni debug uart node
+ for qup0
+Message-ID: <Y+UdetQklamQUehi@google.com>
+References: <20230208122718.338545-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-References: <20230209085536.1076662-1-guillaume.tucker@collabora.com>
-In-Reply-To: <20230209085536.1076662-1-guillaume.tucker@collabora.com>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Thu, 9 Feb 2023 08:19:36 -0800
-Message-ID: <CABXOdTdnntA=oU4==suO-DP-8S9zb0AhqtwekCRCbpOpku7MQg@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests: use printf instead of echo -ne
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Gautam <gautammenghani201@gmail.com>,
-        David Laight <David.Laight@aculab.com>, kernel@collabora.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernelci@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230208122718.338545-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 12:55 AM Guillaume Tucker
-<guillaume.tucker@collabora.com> wrote:
->
-> Rather than trying to guess which implementation of "echo" to run with
-> support for "-ne" options, use "printf" instead of "echo -ne".  It
-> handles escape characters as a standard feature and it is widespread
-> among modern shells.
->
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> Suggested-by: David Laight <David.Laight@ACULAB.COM>
-> Fixes: 3297a4df805d ("kselftests: Enable the echo command to print newlines in Makefile")
-> Fixes: 79c16b1120fe ("selftests: find echo binary to use -ne options")
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+On Wed, Feb 08, 2023 at 05:57:18PM +0530, Bhupesh Sharma wrote:
+> qup0 on sm6115 / sm4250 has 6 SEs, with SE4 as debug uart.
+> Add the debug uart node in sm6115 dtsi file.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Is there anything special about SE4 that makes it *the* debug
+UART or does it just happen to be the UART that is used by the
+reference board? I suspect the latter, in which case the
+"qcom,geni-debug-uart" string should be set/overwritten in the
+board file as in sc7280-qcard.dtsi or sc8280xp-crd.dts.
 
+> Cc: Bjorn Andersson <andersson@kernel.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->
-> Notes:
->     v2: use printf insead of $(which echo)
->     v3: rebase on top of fix with $(which echo)
->
->  tools/testing/selftests/Makefile | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 9619d0f3b2ff..06578963f4f1 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -234,11 +234,10 @@ ifdef INSTALL_PATH
->         @# While building kselftest-list.text skip also non-existent TARGET dirs:
->         @# they could be the result of a build failure and should NOT be
->         @# included in the generated runlist.
-> -       ECHO=`which echo`; \
->         for TARGET in $(TARGETS); do \
->                 BUILD_TARGET=$$BUILD/$$TARGET;  \
-> -               [ ! -d $(INSTALL_PATH)/$$TARGET ] && $$ECHO "Skipping non-existent dir: $$TARGET" && continue; \
-> -               $$ECHO -ne "Emit Tests for $$TARGET\n"; \
-> +               [ ! -d $(INSTALL_PATH)/$$TARGET ] && printf "Skipping non-existent dir: $$TARGET\n" && continue; \
-> +               printf "Emit Tests for $$TARGET\n"; \
->                 $(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
->                         -C $$TARGET emit_tests >> $(TEST_LIST); \
->         done;
-> --
-> 2.30.2
->
->
+>  Changes since v1:
+>   - v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20221128171215.1768745-1-bhupesh.sharma@linaro.org/
+>   - Addressed Konrad's review comments on v1.
+>   - Rebased againt latest linux-next/master which now has the 'qupv3_id_0' node
+>     already in the dtsi file, so just add the debug uart node in v2.
+> 
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index 50cb8a82ecd5..3eccfb8c16ce 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -963,6 +963,15 @@ spi4: spi@4a90000 {
+>  				status = "disabled";
+>  			};
+>  
+> +			uart4: serial@4a90000 {
+> +				compatible = "qcom,geni-debug-uart";
+> +				reg = <0x04a90000 0x4000>;
+> +				clock-names = "se";
+> +				clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>;
+> +				interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
+> +				status = "disabled";
+> +			};
+> +
+>  			i2c5: i2c@4a94000 {
+>  				compatible = "qcom,geni-i2c";
+>  				reg = <0x04a94000 0x4000>;
+> @@ -992,7 +1001,6 @@ spi5: spi@4a94000 {
+>  				dma-names = "tx", "rx";
+>  				#address-cells = <1>;
+>  				#size-cells = <0>;
+> -				status = "disabled";
+>  			};
+>  		};
+>  
+> -- 
+> 2.38.1
+> 
