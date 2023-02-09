@@ -2,164 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0806911A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BDC6911A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjBITw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
+        id S229663AbjBITyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjBITwZ (ORCPT
+        with ESMTP id S229461AbjBITyV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:52:25 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48829A247
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:52:23 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id l201so2750448ybf.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 11:52:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gak+KHQrZHZhynVQqhTnxuXD1WeJ/HVw4s5OD1Q4rA0=;
-        b=ecvGBiwF+i9RZ/cNcnKvKBaPYYMWqSEN94BTyPiLLaKx1ROr1Ed+Qp6E0bb5shUPik
-         xCmOmFzs9f9+WPy6cq91ByV5C4EjT/hJaGStK4GEjCBdknjhay7IYsOQ85mfvcK5NWWA
-         8MjDzScTQTDOawoRqQ5Dz4NleF0Zi9QlM1zuw3VWM9QsRe5VQB15JcnUZ0i50/dEjKhn
-         DHcoOkwjW1mYOAbEA5qj6YvhK6yi4aaM+xhbveIDU46QrwOD6GTaSAsO3SiehiNHCqgS
-         5kdOCGXhUo99/ccfUdCcFkETyaW5WhSFZVSsIc74ofUTzmb+WEjZtB/mWekuz6O3NMUq
-         1MNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gak+KHQrZHZhynVQqhTnxuXD1WeJ/HVw4s5OD1Q4rA0=;
-        b=McwIIqLQxoIQbm+LJ8wM35l2dSTTIMyKzT5pAoafw50KtPMoF9yE3Ih81A1yXyriH/
-         /LMPCVI172FMU5u3EfWP93KmHaVDincO60Y5UfdgW27r7XojKhooGFJFRIJ0W3zZrDQF
-         x2Pez9QTmY2KdcMkXJtZeW8PZKKyom4igTfL8QaYdXQ2kn8d3daelMXN90wNSyov1uwr
-         glYr8KM/XfLM1XyIIca7Sj4k7suauotYbohwCV2OfLZlLJo1FllvU6KrcSsj2AnYCQG1
-         J0G0REEz24hcO5lOGKHVUTDrhtwSGJ0DLohsKcYn6/CxJRgLVxikbOO6xhvuKJMQj4s7
-         7rmw==
-X-Gm-Message-State: AO0yUKWepvnR04SCPl3FS8iVqXr+CYeFehBwH1GvXttgbxpWn5VN81N3
-        nZ7LIauuG4jB9hfJAgYLo7wKjb1CLaH5eOFLf9DiSg==
-X-Google-Smtp-Source: AK7set/dfA0H3z8dZoAmHffHfvJva21U88eArrk+ERDSZ+O6z+2PLNUV4RZPkxrXiyvz0odf7r8/ncU5nx9gtz/D3qI=
-X-Received: by 2002:a25:5d02:0:b0:889:f225:d942 with SMTP id
- r2-20020a255d02000000b00889f225d942mr208578ybb.518.1675972342504; Thu, 09 Feb
- 2023 11:52:22 -0800 (PST)
+        Thu, 9 Feb 2023 14:54:21 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF34512F19;
+        Thu,  9 Feb 2023 11:54:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RajTDqa3n1CSzZ9l8i/21Vkb05srnfTlg5QU15gjQVAttmFP1xMzEQY5N0RQmaEKqsVWXjhvDVIXe+wTeFzQB6lKLs6Dhw6J9WvpED5uclG3uicgXEskAAEEQNUGJzAJzfB5olSmmsGW+Md18kFf7Z7HsIvrXOKE16AksEq9H2TN/Lpbe9n5qRbQ45TGOTngO0Li9zB3r0YR8q9cSGfuE0vHGcfeLovtFdBLPwFs2bDjVomYLu1ACtvyggZ97G76S0UqlkxUXy7I10fTISQeOpKG63uTUH1IN1RB6Pa4CVzXttO8ZJ0yaA/SaghGcVpG27FoFJn2gSAHVYMSazoL9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LCDYzWlFYAdtaVyuQgtMhybo0OMzEbL4PAHTuusIAr8=;
+ b=oIUJxJ+Hgh7VDveZxqyLBcETH20IwIPWNSMIzRNDWzKhTsBVEiQfqd2Z6P2AYfC6L1N3KDfBTlg5v5rYlEI/2PNGpeEUBihlu6kJ0doSWkmf3IwyskC8kCsQIf69GSx3uziQrp674qj4rLjbG4fczQ1hNgnmQ1pD/xiRZ+3yOCqKH9jiXDUd/AKNmuGrMw4qQoQ+l+RMeg9b9n1YJLSP89W9gqskRCaWcPBFlBnlLx0FYME5ep/tJ0XZT67yNxL6SU+DIcDhXvyCZFGAtzA7VAWAf0kBLBUm2dgtx4nMdBPKs8z4UQhtju27es+2wD36WiwRYU++sI8mSFpLWV5NBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LCDYzWlFYAdtaVyuQgtMhybo0OMzEbL4PAHTuusIAr8=;
+ b=uG4X+X7pEADe8Aj/A5Qov6EuN0yUNbTKuK3EmVqyGNCuGU5RvscJ91qROlinta0NiEdTR5tAqzAdt6R3pYdYiFnC33e9Nnnn4PNqd2jPRHUbL68SLh5Jlre9PgZrl8Oku/ShYxLOv+M78weo41HUN9lF0lmF5jqpEiZNHr9W/Jc4RkReJ4Gne5uRy+lqwQ+ZgBmazKsYBzh0R9oGztd2iAr1oYddFuTHTgp9yVFrCOhkypcuxzVMHBisfPoHi2GGgyPHlI2cV/R5Ovc4EMRHmhTrjAYnz3z4VmqLGyxUdwWG4iOvUYkt2w1NbqWrRhkdzJqaxUorSn9FCS+VHQ/w5A==
+Received: from DM6PR08CA0031.namprd08.prod.outlook.com (2603:10b6:5:80::44) by
+ MW3PR12MB4410.namprd12.prod.outlook.com (2603:10b6:303:5b::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.19; Thu, 9 Feb 2023 19:54:18 +0000
+Received: from DS1PEPF0000E63D.namprd02.prod.outlook.com
+ (2603:10b6:5:80:cafe::a5) by DM6PR08CA0031.outlook.office365.com
+ (2603:10b6:5:80::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19 via Frontend
+ Transport; Thu, 9 Feb 2023 19:54:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ DS1PEPF0000E63D.mail.protection.outlook.com (10.167.17.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.16 via Frontend Transport; Thu, 9 Feb 2023 19:54:17 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
+ 11:54:09 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 9 Feb 2023 11:54:09 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.180)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Thu, 9 Feb 2023 11:54:08 -0800
+Date:   Thu, 9 Feb 2023 11:54:07 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Eric Farman <farman@linux.ibm.com>
+CC:     <jgg@nvidia.com>, <kevin.tian@intel.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <robin.murphy@arm.com>,
+        <alex.williamson@redhat.com>, <shuah@kernel.org>,
+        <yi.l.liu@intel.com>, <linux-kernel@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <baolu.lu@linux.intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>
+Subject: Re: [PATCH v2 03/10] iommufd: Create access in
+ vfio_iommufd_emulated_bind()
+Message-ID: <Y+VPXwjMhgWe/c0m@Asurada-Nvidia>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+ <6083ba9a3c1d92baf1f324d4748333d80d3de830.1675802050.git.nicolinc@nvidia.com>
+ <c5f5b03420367dc4280cc54c36dbe03fb34fffa0.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230201152038.203387-1-brgl@bgdev.pl> <20230201152038.203387-6-brgl@bgdev.pl>
- <20230209180456.eahx5fbcd2kax2au@echanude>
-In-Reply-To: <20230209180456.eahx5fbcd2kax2au@echanude>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Thu, 9 Feb 2023 20:52:11 +0100
-Message-ID: <CACMJSevxZ0_40MwqVSm401=us6dwpKYcuOzFW+Ypks3Ri4eReg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: add initial support for qcom sa8775p-ride
-To:     Eric Chanudet <echanude@redhat.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <c5f5b03420367dc4280cc54c36dbe03fb34fffa0.camel@linux.ibm.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E63D:EE_|MW3PR12MB4410:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb61232b-18a6-4535-07b3-08db0ad76dd0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KPDmptlfANVd+gL3ow58knIrfsYqNUTT9Ppgbfs7PWlX8jO4MRCGxoAXqGwmdduaKZcivyih8dEcp57BxjNtufcyPGqrb80jJIyNWZ/a1AESNZixYhFToK8y3G2shwoYnAd2poSrkaJC4O0fOUJcX6a/WBJ0BYL4xpUR+TSzKhjmOjuWwxsbsMnGumB1uASahVpQnIQg7CBkG2xgQNmeGjebIJDF7fOhlfHqY8ZS5WUepzY4VKnfOPsQm71zopfDI050QYvSjdh2jWLBlo5Rb8Hegmw1slLh64/HL7liUFnmX99RLgAWlPg4v/MC78744P8etMuAllCogfFRje+uTePV/RNuKhPfg9FiA0aOjGT1ygXTxf6nDT98A9xvZs4JaGBfzw+0+uARzabi/ig/o2p1ROgpLPTZsRe17w+tgDQUlHNyn2YgqEcUEWBCARR6m6ol/bG0PEZbS8R9ifZ/nHzhHOwzxV6TaXqgWzloXbgfQGtKTZnmgIDcSxYRPfnzKvj+BYqsAGGHLAZM0/0eEZg6yTi+TQ3DBdERXvQDmHjjAR4hjcdCVaBzRDNGAR+bkoALz/aY+yQx9sfCy8PSp1XWlW3oMqsIPVy9f4T2H8fO4VPA41u1XUHiPBMeO52U2R3okArAIczKry8ZunfRJxpsp38rjiMl5jkaY9BeIhXY8rMRE/LBjprfaN+/yMkG6cXtcb0rd9PeTwoUe2tYFg==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(136003)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(82740400003)(36860700001)(40460700003)(7636003)(5660300002)(8936002)(41300700001)(7416002)(6916009)(70586007)(4326008)(70206006)(8676002)(86362001)(47076005)(336012)(426003)(2906002)(316002)(478600001)(54906003)(186003)(26005)(9686003)(55016003)(356005)(82310400005)(40480700001)(83380400001)(33716001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 19:54:17.7778
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb61232b-18a6-4535-07b3-08db0ad76dd0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E63D.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4410
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Feb 2023 at 19:05, Eric Chanudet <echanude@redhat.com> wrote:
->
-> On Wed, Feb 01, 2023 at 04:20:38PM +0100, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > This adds basic support for the Qualcomm sa8775p platform and the
-> > reference board: sa8775p-ride. The dt files describe the basics of the
-> > SoC and enable booting to shell.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > ---
-
-[...]
-
+On Thu, Feb 09, 2023 at 01:58:47PM -0500, Eric Farman wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Tue, 2023-02-07 at 13:17 -0800, Nicolin Chen wrote:
+> ...snip...
+> > diff --git a/drivers/vfio/iommufd.c b/drivers/vfio/iommufd.c
+> > index 026f81a87dd7..dc9feab73db7 100644
+> > --- a/drivers/vfio/iommufd.c
+> > +++ b/drivers/vfio/iommufd.c
+> > @@ -141,10 +141,19 @@ static const struct iommufd_access_ops
+> > vfio_user_ops = {
+> >  int vfio_iommufd_emulated_bind(struct vfio_device *vdev,
+> >                                struct iommufd_ctx *ictx, u32
+> > *out_device_id)
+> >  {
+> > +       struct iommufd_access *user;
 > > +
-> > +             watchdog@17c10000 {
-> > +                     compatible = "qcom,apss-wdt-sa8775p", "qcom,kpss-wdt";
-> > +                     reg = <0x0 0x17c10000 0x0 0x1000>;
-> > +                     clocks = <&sleep_clk>;
-> > +                     interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-> > +             };
->
-> Trying this DTS on sa8775p-ride with next-20230209, I get this splat
-> with the qcom_wdt:
->
-> [    2.667479] Internal error: synchronous external abort: 0000000096000010 [#1] PREEMPT SMP
-> [    2.675911] Modules linked in: qcom_wdt(+) crct10dif_ce socinfo fuse ipv6
-> [    2.675931] CPU: 5 PID: 155 Comm: systemd-udevd Not tainted 6.2.0-rc7-next-20230209-00011-g897899f9de9e #80
-> [    2.675936] Hardware name: Qualcomm SA8775P Ride (DT)
-> [    2.675938] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    2.675942] pc : qcom_wdt_probe+0x20c/0x388 [qcom_wdt]
-> [    2.675964] lr : qcom_wdt_probe+0x308/0x388 [qcom_wdt]
-> [    2.675970] sp : ffff80000a4db8e0
-> [    2.675971] x29: ffff80000a4db8e0 x28: 0000000000000000 x27: ffff80000a4dbd50
-> [    2.675975] x26: 0000000000000000 x25: ffff80000a4dbcd0 x24: ffff060041723680
-> [    2.675978] x23: ffff060040c2b400 x22: ffffdc111597c560 x21: ffff060040c2b410
-> [    2.675981] x20: ffff060040959e80 x19: 0000000000000000 x18: ffffffffffffffff
-> [    2.675984] x17: 0000000000000000 x16: ffffdc116777c59c x15: ffff80000a4db670
-> [    2.675987] x14: ffff80008a4db7cd x13: 007473696c5f7974 x12: 0000000000000001
-> [    2.675990] x11: 0000000000000040 x10: ffffdc1169893790 x9 : 0000000000000000
-> [    2.675994] x8 : ffff0600414ffd80 x7 : 0000000000000000 x6 : 0000000000000000
-> [    2.675997] x5 : ffff0600414ffc88 x4 : ffff060040c2b610 x3 : 0000000000007ffc
-> [    2.676001] x2 : 0000000000000001 x1 : 000000000000000c x0 : ffff800008f5d00c
-> [    2.676004] Call trace:
-> [    2.676006]  qcom_wdt_probe+0x20c/0x388 [qcom_wdt]
-> [    2.676013]  platform_probe+0x68/0xc4
-> [    2.676026]  really_probe+0x148/0x2ac
-> [    2.676038]  __driver_probe_device+0x78/0xe0
-> [    2.676042]  driver_probe_device+0x3c/0x15c
-> [    2.676045]  __driver_attach+0x94/0x19c
-> [    2.676048]  bus_for_each_dev+0x74/0xcc
-> [    2.676052]  driver_attach+0x24/0x30
-> [    2.676055]  bus_add_driver+0x104/0x204
-> [    2.676059]  driver_register+0x68/0x12c
-> [    2.676063]  __platform_driver_register+0x28/0x34
-> [    2.676065]  qcom_watchdog_driver_init+0x20/0x1000 [qcom_wdt]
-> [    2.676072]  do_one_initcall+0x80/0x1c4
-> [    2.676081]  do_init_module+0x58/0x1e8
-> [    2.676088]  load_module+0x19d4/0x1a18
-> [    2.676091]  __do_sys_finit_module+0xa8/0xfc
-> [    2.676095]  __arm64_sys_finit_module+0x20/0x2c
-> [    2.676098]  invoke_syscall+0x48/0x114
-> [    2.676107]  el0_svc_common.constprop.0+0xcc/0xec
-> [    2.676110]  do_el0_svc+0x38/0x98
-> [    2.676113]  el0_svc+0x2c/0x84
-> [    2.676121]  el0t_64_sync_handler+0xf4/0x120
-> [    2.676123]  el0t_64_sync+0x190/0x194
-> [    2.676129] Code: f94002c1 f9006a81 b9400821 8b010000 (b9400000)
-> [    2.676135] ---[ end trace 0000000000000000 ]---
->
-> I most likely did not see it before as I either had qcom_wdt configured
-> out or disabled on the kernel cmdline.
->
+> >         lockdep_assert_held(&vdev->dev_set->lock);
+> >
+> > -       vdev->iommufd_ictx = ictx;
+> >         iommufd_ctx_get(ictx);
+> > +       user = iommufd_access_create(vdev->iommufd_ictx,
+> > &vfio_user_ops, vdev);
+> > +       if (IS_ERR(user)) {
+> > +               iommufd_ctx_put(vdev->iommufd_ictx);
+> 
+> Matthew noticed a vfio-ccw and -ap regression that blames this patch.
+> 
+> Probably both the iommufd_access_create() and iommufd_ctx_put() calls
+> want the ictx variable itself, instead of the (uninitialized) pointer
+> in the vfio_device. (At least that gets -ccw and -ap working again.)
 
-On Bjorn's board I can probe the watchdog and even trigger it from
-user-space (although it doesn't seem to reset the board, it just
-freezes - not sure if that's not Bjorn's setup as rebooting the board
-from console doesn't work either).
+Oops. Yes, it should be:
 
-Can this be the hypervisor's doing?
+	iommufd_ctx_get(ictx);
+	user = iommufd_access_create(ictx, &vfio_user_ops, vdev);
+	if (IS_ERR(user)) {
+		iommufd_ctx_put(ictx);
 
-Bart
+Will fix in v3.
 
-[...]
+Thanks!
+Nic
