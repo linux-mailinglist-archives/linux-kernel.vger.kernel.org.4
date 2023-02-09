@@ -2,318 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E21B690A2B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F58B6909CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 14:24:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjBINbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 08:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S230140AbjBINYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 08:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjBINaq (ORCPT
+        with ESMTP id S229515AbjBINYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 08:30:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCC35C8BF;
-        Thu,  9 Feb 2023 05:30:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99EBC61A9F;
-        Thu,  9 Feb 2023 13:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07245C4339C;
-        Thu,  9 Feb 2023 13:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675949444;
-        bh=4fhmTJDkTgZYwnfzYcbdgi/FgwWExuprRiWT2JjWajs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vHp8tA5LH83oMSkvbBs9C+HHYvGaDzE+4zMD1Mz9+PDcNCSBTiF5AYN121QQNWmiX
-         2uYkHYk64gOk/5kEhf4PTRCyKIW6nf1SjQzPax6S9KrcpcHZIbY6V3/9wYcykUkFLq
-         onCHVKQiZ+Nw8Sr4OMbwzxrpTDE69HfttyBB4O6PVG5BGmDs72Ix0+SAK+OCWbBLWw
-         ZODUivqO97FmVIetaGQn2+nfDX5yIjU81vQ8vMMKYjdW+wJISEy/cAQpHSrJ6heNcz
-         96FJPZ+llfzX+SJXYSlGYEmxVPRLGFnIL7JabWOlOCrdXlPTnnj94Ws7nqM2kwbsOc
-         k+c8NzFKrIY6g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pQ71H-0001Lg-Od; Thu, 09 Feb 2023 14:31:23 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Subject: [PATCH v5 19/19] irqdomain: Switch to per-domain locking
-Date:   Thu,  9 Feb 2023 14:23:23 +0100
-Message-Id: <20230209132323.4599-20-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230209132323.4599-1-johan+linaro@kernel.org>
-References: <20230209132323.4599-1-johan+linaro@kernel.org>
+        Thu, 9 Feb 2023 08:24:19 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2050.outbound.protection.outlook.com [40.107.243.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2B853E42;
+        Thu,  9 Feb 2023 05:24:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J6ARnqvYiKlX9+MhE2N9ZkseKOuiZmZvsNUAi9a8LQv85oOdcRE/u5k8MfwoVAbuKRZ+01ug1jCYLPGvjr3Wk+bqHYRhbJY38KWX6TxBbmTEZH5ZCEIE26g+fjv0LOrP+mkLyzXSvgBq+kC03KqgRUjdvcXRkeiI1X+YossAR7WUWFO9nVmQaulyDyOVPxQNrvFz7kMbRuzQO8f/f2XYtoz6HrsQdeE1mFoE7a0cS/1c51u/OuIjv+ef19zDjiWepLShsCvn8pRD7ap6jaYAy/uPIRnx6qW0Ks+fcIvnIkzrc2ffmIM3rMGvYRSIMmMcIvHgW19S/g8xs7VZTxnZ9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f6/CtLd0uVUuOTR5pM1A1nQ4mWFp9p8GTMMRcKI07pk=;
+ b=CsDAo46t6Dz1QKkHVfSZExU+SOsSjB0RsH46cZhhEMNNQ557RLapylhzUhjDf1ntTFHgadMAyMokWD5SYg0vjH4Y5ulASD7lp6M8OuMeWTduntfjygc673xupe443X+iB0ll8+EGJR/wqJYYntcCLcG6ayy2cqFutP3pODHpsuEbwTPNCMjZyV5T+4l2jSdhV6mJs64BSg4FQxYVlkqVV0TYk22oz7FvgqnMg/j0jHm0bJ307InN2SuHtZTy3/3DLDl9XztEoqxtQWE9q9xGykyx/fqrJ25AuUBKosiANTdjh35wHjXEfxc3brr6zOrCiolRjiDMLfCg8QoNlG1lng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f6/CtLd0uVUuOTR5pM1A1nQ4mWFp9p8GTMMRcKI07pk=;
+ b=AOvx5qYP6+nB4d4LfmQCKcYwgb0TH5nYGMQE3W/PU6oiKHiyV6cotx7g+70F50q08cRiveWxVt73rTKfUW1hMyg3jTICQzjclpUrDsvTckmSW+eUXzEBHjfYfD45rxQ/BI8Q5yAIcmzZjAXWHj3pVok10RixzktwY2D9j0LsdMlXO//mRU1qvDUk5zhier+jAMxeo5IpZadFJrLaQZ5IlYcIY/wsn9HOSU2iQI1TNuPI8c9UeOw/g1+S/UeqtPMByERba6j4qLBV8OAADAsW/MXnYYSRd8fdbDYUuJeNdswkw2FVusZ4M+7U65uJwVjbHFjw3xrR1EvpJgnhCeZnXg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB8336.namprd12.prod.outlook.com (2603:10b6:208:3fc::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
+ 2023 13:24:16 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6086.019; Thu, 9 Feb 2023
+ 13:24:15 +0000
+Date:   Thu, 9 Feb 2023 09:24:14 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Nicolin Chen <nicolinc@nvidia.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH v2 07/10] iommufd/device: Make hwpt_list list_add/del
+ symmetric
+Message-ID: <Y+Tz/kkZ68e9QWR/@nvidia.com>
+References: <cover.1675802050.git.nicolinc@nvidia.com>
+ <9d0d4f935c4972771f5aed4b4837d8ae35814e06.1675802050.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276F36D2F07209AC7155BAB8CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276F36D2F07209AC7155BAB8CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: MN2PR12CA0032.namprd12.prod.outlook.com
+ (2603:10b6:208:a8::45) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB8336:EE_
+X-MS-Office365-Filtering-Correlation-Id: a21ca10f-40f8-41af-a34c-08db0aa0f0d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TveSWZMEFCD/jUYUcym3cM40vQAL/2E6BFo0BG2ztldam2odBZhkhi3FDEfSg6+a6Cb8yYJq9iWUrEHGhxU9HheZVUv611V5HGGXFD/TUwy2XvJGL7QkpoGK+lFzFObH8skzfGaNF1dyRXQL+FvHeF5XG082+e2+Aah8yufbkOh/Z/aSpugga46AtwqqtLWyAGYg2jEfGmr3SE6LJHHTiHl13YRQ6ttOPsu9JxxbleLFN0cxWXClAHUnVTUFom1rkU8LbAhKd/FMIXqLRgq0lkiMZPD5WXBuNnpqm6uHdEnCPSKiER+iR4ZwQVPZICrb0O+WpHx6W1HODwmoOP9L5gc5mB06VvkA/pWuPsS5XMrYAzPpf6s5Zc199NyZVsqPD5/VfFYlVsrDWJAGdyMW0UBocMBmAAMpKFM3NgshVQHYagT0iVVyPbYWF6wExICXYxfDm0ekCGym+/aAEFnq1yWdfNFWXcVz105cFgm8e9hD7JTx5YnEjIhTTp7NKIrYAMsOtFVWRpxkZf5ALNb2M6bqOg7kfvKvUfYiDBKux+HgdJP1MxhMUSjjf5lMgDHyZiy1Z6u9c4zaltRAiqZ84QaQJ0C3RMdAUmqCCz3q+VzcrWXDOgP44fxLt50OMkfKpWN0Ry8dAYac/vgmZ75gqA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(376002)(346002)(366004)(451199018)(54906003)(86362001)(26005)(186003)(6512007)(36756003)(2616005)(66556008)(7416002)(5660300002)(4326008)(6916009)(8676002)(8936002)(478600001)(41300700001)(66946007)(66476007)(4744005)(6486002)(6506007)(2906002)(38100700002)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BT/0DCCzFnRlsJnCV4ktRyrCQ/ixvTx+m6PjSC+uIesqfo6e7J8mr5Kj2dWk?=
+ =?us-ascii?Q?+NXElMHc8OdvWmuN3XUo1PThnyp23sQD0ukkSOJYg0H5KvKvJcYfs3nQ9lZs?=
+ =?us-ascii?Q?ImnIhvbFI0uR9bZztLLj1mq18S+V9CIAg3TRyE8Jw3GqvDeKkLfPMLzZffTQ?=
+ =?us-ascii?Q?t3EDCIrBhwW88GVVj2n7sPfpQqXv8kft+rhRsCquJ/hfOPVOxKFxgNIEsQCf?=
+ =?us-ascii?Q?rZPd8I2fwWHKY4y+iydacR4ZB8Km2rSbMcVVfcuIkouV+e5Nv313D0yjMLKs?=
+ =?us-ascii?Q?TOs96cwcjE4QUa6mtT6Rl9W1N2zfLBzttjoQp1ThAudNhHdYjK5NEKLVtR5p?=
+ =?us-ascii?Q?SzWsXThVYGsMBN/1ogp5/KnA4n90mKeLDlcl/EhtKFqPq5rUaEL9z8kEwX2+?=
+ =?us-ascii?Q?86T0nGww1sXK7gMgYBcaT8CEBGS9qZVgnWhjgAxyYWXxmBVirixw360JJwiX?=
+ =?us-ascii?Q?z0MErlw2HNGWZ5GJwx+GFBqxmJxB5AXp39BwkxwzBaC99++6Kd1/r47sJaeJ?=
+ =?us-ascii?Q?gkiRIbz5ir3dKp5PrRZGvqzH9k5fHgzCDyf6CI7VhZrCL+0ItPYiNxe6qzet?=
+ =?us-ascii?Q?J295Z3TaDmtifapoZ3u3KEn62LB7vay/JrrEfU3a2uqr2sc8Ll/6XUWsZ9Vi?=
+ =?us-ascii?Q?LXzNV7ZX6C5aQ597vD9jmiECFEQWiZi6kPE5jrLWREfAye2SOeTtcPFNY+Tl?=
+ =?us-ascii?Q?Ix+nAwK3/UMNOBepo05o/RxYlabVLMA7xpalCT6M2e9i9DP7ReXOt37Z0pFC?=
+ =?us-ascii?Q?ddGN0ELRlIEJ59Ubr43WE1QDwGj+5GviNb7SO1Rr4SkGgvJuBLWekaPmI4LR?=
+ =?us-ascii?Q?VrjRyYQK5eFiZaf7VkVglE3XokYaYJP1IysfBxOxzTLE5q23lqva7XS0hRDc?=
+ =?us-ascii?Q?C0jHMHyR0LTVV0akTWW4av58sYQEvUILS7zc1TEZijLKjtnIzYFzZklg8WQE?=
+ =?us-ascii?Q?iYlrGCtr3CkM17TAJBpa2abqkQTfnWNH++GGtmJXRp5VUnoRFiDX+7WI7s8b?=
+ =?us-ascii?Q?yh1UpD8wiTJqp7bWiRaMLSYMAAkgwVbxErhybDLss6T9RpY5eik/2fZpxC6h?=
+ =?us-ascii?Q?xLke9R2WgmvZ+vQSFcuqafbMfzZ0VVoxq7MhH02i2KYWfkawF5JSp1kHDU1j?=
+ =?us-ascii?Q?7PgCbH8nloZlQ7HoIbcMbcXiJqvSHGoOKql4p+I6tycX3aoMePRPa05sY1yI?=
+ =?us-ascii?Q?SuE0A0mIwFOQKThfYYK+XS1VrEkXZL6TboDVEFmsk3oqs1vi/oq2ReQoHfRN?=
+ =?us-ascii?Q?QH/6mbEuwfwb10GW4JVszdStoRf7Dc/6kztUo7s1OamxCvAt+F95iQHJIov/?=
+ =?us-ascii?Q?uBtgAF028jaRCXQe2GpfaPsGHLhZePca+mktoJFnmzQtQDM5n4z7cJhmi8AZ?=
+ =?us-ascii?Q?e/BZ5xeNsZ/5ZiAw1/YnfLqJEkut4a0LR+ee0XvY0DtlOFDn31+oj54a8DkO?=
+ =?us-ascii?Q?oda2wxPB2c0nDs9fTzCiwKp1jfKBuHKiQ+qL18mFivSBabri6giUrw/HiM+i?=
+ =?us-ascii?Q?eiFhVd8pfDJ4Zhj3DYGxz8S5XgOg6e58tgk3ZpwedEjuLyr9AXNNM18oRynV?=
+ =?us-ascii?Q?ytiMGrZvAGs96fNXlKeLPXLuPBEnKbqXZpk7juNT?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a21ca10f-40f8-41af-a34c-08db0aa0f0d5
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 13:24:15.5728
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h5K4VlmBJfgOEuNVI7CHGyOmcNPiFM/4WLzJSEFMMNWgwiL6j4riWKY7xesW/btP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8336
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IRQ domain structures are currently protected by the global
-irq_domain_mutex. Switch to using more fine-grained per-domain locking,
-which can speed up parallel probing by reducing lock contention.
+On Thu, Feb 09, 2023 at 03:23:47AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Wednesday, February 8, 2023 5:18 AM
+> > 
+> > Because list_del() is together with iopt_table_remove_domain(), it makes
+> > sense to have list_add_tail() together with iopt_table_add_domain().
+> > 
+> > Also place the mutex outside the iommufd_device_do_attach() call, similar
+> > to what's in the iommufd_device_auto_get_domain() function.
+> > 
+> > Co-developed-by: Yi Liu <yi.l.liu@intel.com>
+> > Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> 
+> shouldn't this be a separate bug fix and backported? double adding a
+> list item would certainly clobber the list...
 
-On a recent arm64 laptop, the total time spent waiting for the locks
-during boot drops from 160 to 40 ms on average, while the maximum
-aggregate wait time drops from 550 to 90 ms over ten runs for example.
+AFAIK there is no bug, this is just reorganizing things
 
-Note that the domain lock of the root domain (innermost domain) must be
-used for hierarchical domains. For non-hierarchical domains (as for root
-domains), the new root pointer is set to the domain itself so that
-domain->root->mutex can be used in shared code paths.
-
-Also note that hierarchical domains should be constructed using
-irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoid
-poking at irqdomain internals. As a safeguard, the lockdep assertion in
-irq_domain_set_mapping() will catch any offenders that fail to set the
-root domain pointer.
-
-Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
-Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- include/linux/irqdomain.h |  4 +++
- kernel/irq/irqdomain.c    | 61 +++++++++++++++++++++++++--------------
- 2 files changed, 44 insertions(+), 21 deletions(-)
-
-diff --git a/include/linux/irqdomain.h b/include/linux/irqdomain.h
-index 16399de00b48..cad47737a052 100644
---- a/include/linux/irqdomain.h
-+++ b/include/linux/irqdomain.h
-@@ -125,6 +125,8 @@ struct irq_domain_chip_generic;
-  *		core code.
-  * @flags:	Per irq_domain flags
-  * @mapcount:	The number of mapped interrupts
-+ * @mutex:	Domain lock, hierarhical domains use root domain's lock
-+ * @root:	Pointer to root domain, or containing structure if non-hierarchical
-  *
-  * Optional elements:
-  * @fwnode:	Pointer to firmware node associated with the irq_domain. Pretty easy
-@@ -152,6 +154,8 @@ struct irq_domain {
- 	void				*host_data;
- 	unsigned int			flags;
- 	unsigned int			mapcount;
-+	struct mutex			mutex;
-+	struct irq_domain		*root;
- 
- 	/* Optional data */
- 	struct fwnode_handle		*fwnode;
-diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 804d316329c8..c96aa5e5a94b 100644
---- a/kernel/irq/irqdomain.c
-+++ b/kernel/irq/irqdomain.c
-@@ -226,6 +226,17 @@ struct irq_domain *__irq_domain_add(struct fwnode_handle *fwnode, unsigned int s
- 
- 	domain->revmap_size = size;
- 
-+	/*
-+	 * Hierarchical domains use the domain lock of the root domain
-+	 * (innermost domain).
-+	 *
-+	 * For non-hierarchical domains (as for root domains), the root
-+	 * pointer is set to the domain itself so that domain->root->mutex
-+	 * can be used in shared code paths.
-+	 */
-+	mutex_init(&domain->mutex);
-+	domain->root = domain;
-+
- 	irq_domain_check_hierarchy(domain);
- 
- 	mutex_lock(&irq_domain_mutex);
-@@ -503,7 +514,7 @@ static bool irq_domain_is_nomap(struct irq_domain *domain)
- static void irq_domain_clear_mapping(struct irq_domain *domain,
- 				     irq_hw_number_t hwirq)
- {
--	lockdep_assert_held(&irq_domain_mutex);
-+	lockdep_assert_held(&domain->root->mutex);
- 
- 	if (irq_domain_is_nomap(domain))
- 		return;
-@@ -518,7 +529,11 @@ static void irq_domain_set_mapping(struct irq_domain *domain,
- 				   irq_hw_number_t hwirq,
- 				   struct irq_data *irq_data)
- {
--	lockdep_assert_held(&irq_domain_mutex);
-+	/*
-+	 * This also makes sure that all domains point to the same root when
-+	 * called from irq_domain_insert_irq() for each domain in a hierarchy.
-+	 */
-+	lockdep_assert_held(&domain->root->mutex);
- 
- 	if (irq_domain_is_nomap(domain))
- 		return;
-@@ -540,7 +555,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
- 
- 	hwirq = irq_data->hwirq;
- 
--	mutex_lock(&irq_domain_mutex);
-+	mutex_lock(&domain->mutex);
- 
- 	irq_set_status_flags(irq, IRQ_NOREQUEST);
- 
-@@ -562,7 +577,7 @@ static void irq_domain_disassociate(struct irq_domain *domain, unsigned int irq)
- 	/* Clear reverse map for this hwirq */
- 	irq_domain_clear_mapping(domain, hwirq);
- 
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->mutex);
- }
- 
- static int irq_domain_associate_locked(struct irq_domain *domain, unsigned int virq,
-@@ -612,9 +627,9 @@ int irq_domain_associate(struct irq_domain *domain, unsigned int virq,
- {
- 	int ret;
- 
--	mutex_lock(&irq_domain_mutex);
-+	mutex_lock(&domain->mutex);
- 	ret = irq_domain_associate_locked(domain, virq, hwirq);
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->mutex);
- 
- 	return ret;
- }
-@@ -731,7 +746,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
- 		return 0;
- 	}
- 
--	mutex_lock(&irq_domain_mutex);
-+	mutex_lock(&domain->mutex);
- 
- 	/* Check if mapping already exists */
- 	virq = irq_find_mapping(domain, hwirq);
-@@ -742,7 +757,7 @@ unsigned int irq_create_mapping_affinity(struct irq_domain *domain,
- 
- 	virq = irq_create_mapping_affinity_locked(domain, hwirq, affinity);
- out:
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->mutex);
- 
- 	return virq;
- }
-@@ -811,7 +826,7 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
- 	if (WARN_ON(type & ~IRQ_TYPE_SENSE_MASK))
- 		type &= IRQ_TYPE_SENSE_MASK;
- 
--	mutex_lock(&irq_domain_mutex);
-+	mutex_lock(&domain->root->mutex);
- 
- 	/*
- 	 * If we've already configured this interrupt,
-@@ -864,11 +879,11 @@ unsigned int irq_create_fwspec_mapping(struct irq_fwspec *fwspec)
- 	/* Store trigger type */
- 	irqd_set_trigger_type(irq_data, type);
- out:
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->root->mutex);
- 
- 	return virq;
- err:
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->root->mutex);
- 
- 	return 0;
- }
-@@ -1132,6 +1147,7 @@ struct irq_domain *irq_domain_create_hierarchy(struct irq_domain *parent,
- 	else
- 		domain = irq_domain_create_tree(fwnode, ops, host_data);
- 	if (domain) {
-+		domain->root = parent->root;
- 		domain->parent = parent;
- 		domain->flags |= flags;
- 	}
-@@ -1528,10 +1544,10 @@ int __irq_domain_alloc_irqs(struct irq_domain *domain, int irq_base,
- 			return -EINVAL;
- 	}
- 
--	mutex_lock(&irq_domain_mutex);
-+	mutex_lock(&domain->root->mutex);
- 	ret = irq_domain_alloc_irqs_locked(domain, irq_base, nr_irqs, node, arg,
- 					   realloc, affinity);
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->root->mutex);
- 
- 	return ret;
- }
-@@ -1542,7 +1558,7 @@ static void irq_domain_fix_revmap(struct irq_data *d)
- {
- 	void __rcu **slot;
- 
--	lockdep_assert_held(&irq_domain_mutex);
-+	lockdep_assert_held(&d->domain->root->mutex);
- 
- 	if (irq_domain_is_nomap(d->domain))
- 		return;
-@@ -1608,7 +1624,7 @@ int irq_domain_push_irq(struct irq_domain *domain, int virq, void *arg)
- 	if (!parent_irq_data)
- 		return -ENOMEM;
- 
--	mutex_lock(&irq_domain_mutex);
-+	mutex_lock(&domain->root->mutex);
- 
- 	/* Copy the original irq_data. */
- 	*parent_irq_data = *irq_data;
-@@ -1636,7 +1652,7 @@ int irq_domain_push_irq(struct irq_domain *domain, int virq, void *arg)
- 	irq_domain_fix_revmap(parent_irq_data);
- 	irq_domain_set_mapping(domain, irq_data->hwirq, irq_data);
- error:
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->root->mutex);
- 
- 	return rv;
- }
-@@ -1691,7 +1707,7 @@ int irq_domain_pop_irq(struct irq_domain *domain, int virq)
- 	if (WARN_ON(!parent_irq_data))
- 		return -EINVAL;
- 
--	mutex_lock(&irq_domain_mutex);
-+	mutex_lock(&domain->root->mutex);
- 
- 	irq_data->parent_data = NULL;
- 
-@@ -1703,7 +1719,7 @@ int irq_domain_pop_irq(struct irq_domain *domain, int virq)
- 
- 	irq_domain_fix_revmap(irq_data);
- 
--	mutex_unlock(&irq_domain_mutex);
-+	mutex_unlock(&domain->root->mutex);
- 
- 	kfree(parent_irq_data);
- 
-@@ -1719,17 +1735,20 @@ EXPORT_SYMBOL_GPL(irq_domain_pop_irq);
- void irq_domain_free_irqs(unsigned int virq, unsigned int nr_irqs)
- {
- 	struct irq_data *data = irq_get_irq_data(virq);
-+	struct irq_domain *domain;
- 	int i;
- 
- 	if (WARN(!data || !data->domain || !data->domain->ops->free,
- 		 "NULL pointer, cannot free irq\n"))
- 		return;
- 
--	mutex_lock(&irq_domain_mutex);
-+	domain = data->domain;
-+
-+	mutex_lock(&domain->root->mutex);
- 	for (i = 0; i < nr_irqs; i++)
- 		irq_domain_remove_irq(virq + i);
--	irq_domain_free_irqs_hierarchy(data->domain, virq, nr_irqs);
--	mutex_unlock(&irq_domain_mutex);
-+	irq_domain_free_irqs_hierarchy(domain, virq, nr_irqs);
-+	mutex_unlock(&domain->root->mutex);
- 
- 	irq_domain_free_irq_data(virq, nr_irqs);
- 	irq_free_descs(virq, nr_irqs);
--- 
-2.39.1
-
+Jason
