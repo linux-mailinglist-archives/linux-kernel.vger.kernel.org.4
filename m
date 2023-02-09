@@ -2,73 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D81690C65
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5923E690C6D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjBIPGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S231163AbjBIPIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjBIPGn (ORCPT
+        with ESMTP id S231229AbjBIPH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:06:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF73A0;
-        Thu,  9 Feb 2023 07:06:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 9 Feb 2023 10:07:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB815CBE2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:07:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675955232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2bykY5ltudiFVwAjrX3Al4RUFY4iK7RUW76wSPYzOKs=;
+        b=HRgWIqxhcEQKb3WODeG6vOQl8FaJ6dbM5IiZdCq2xIhfYBR8BnevDwkK639knKCtDuy1fu
+        ZZvZQtdk/zNkTwdG24dIVHqzdfwsrQEpn7EUo5L0CqDYc227AoScyPPYmG5G3GcLY4QHge
+        R42OLWpokGIN4+JHMex+qIoc6ZZERA8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-sQ-OEzM-NNunWl4RcBiL1A-1; Thu, 09 Feb 2023 10:07:05 -0500
+X-MC-Unique: sQ-OEzM-NNunWl4RcBiL1A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FAB6B82186;
-        Thu,  9 Feb 2023 15:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA404C43443;
-        Thu,  9 Feb 2023 15:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675955199;
-        bh=YzH3oVoNE1CjwPcE3PjI1A0MAUIcY7ST9R5Q0/Ug9Dc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=r7G1O3UjQ2cuOkEmjpThjB9EndPzQzUWeS4crAhbGCwKu9JkoPLJAxaRo8BOQSu4H
-         Wu9oOkHY3VMJiww8tV3f/Y95XuvnylF2rUD1O0bLX4o7dHgymHJaXJ3qLnQSLVFSmD
-         lTHnl3CSxaYfTI1xADtmO/Q/E4FiBd0Pa9Ne0fHU6uNBME0vYLbQPKIIKvuRrHRfG5
-         6tTARHmyZkA4WMG+tJXjDCYvLnvFrrKrQ3TpuNLIEhjCKGxjkbaRa3KzxvLf9CtCda
-         rV61BZhx1pUwWjgohItlUYs5I/pOtBL5ELfJvDVCoEf/+F+qNcfgoBH9fhu56wU11b
-         VOtSM6Mnsfh8w==
-Received: by mail-vs1-f49.google.com with SMTP id l8so2378896vsm.11;
-        Thu, 09 Feb 2023 07:06:39 -0800 (PST)
-X-Gm-Message-State: AO0yUKX7aH+AXQoAMfoR7LhxhOcg/0K9322fxEtnx81z2oZOqJ1vCJpN
-        ul0jACVq3noTBTLPHk8PgsDcUCa1oxo8WEnjGA==
-X-Google-Smtp-Source: AK7set8xITZUTZ7JTnJX/T1dUh1NB+jPvj8WgukL1xX/D/0q7BYlqVwEIJC1MmlL4EbavNkjzHZN/z55yic1gqQHloI=
-X-Received: by 2002:a05:6102:2ea:b0:411:b8c5:973a with SMTP id
- j10-20020a05610202ea00b00411b8c5973amr1374534vsj.0.1675955198667; Thu, 09 Feb
- 2023 07:06:38 -0800 (PST)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3429857D07;
+        Thu,  9 Feb 2023 15:07:03 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6E2F1140EBF6;
+        Thu,  9 Feb 2023 15:07:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y+UJAdnllBw+uxK+@casper.infradead.org>
+References: <Y+UJAdnllBw+uxK+@casper.infradead.org> <20230209102954.528942-1-dhowells@redhat.com> <20230209102954.528942-2-dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org,
+        syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v13 01/12] splice: Fix O_DIRECT file read splice to avoid reversion of ITER_PIPE
 MIME-Version: 1.0
-References: <20230128133151.29471-1-henrik@grimler.se> <20230128133151.29471-3-henrik@grimler.se>
-In-Reply-To: <20230128133151.29471-3-henrik@grimler.se>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 9 Feb 2023 09:06:27 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+y2_aHXsxj4sx0KPATDi9-7mujruowpbq2kxro4e13zg@mail.gmail.com>
-Message-ID: <CAL_Jsq+y2_aHXsxj4sx0KPATDi9-7mujruowpbq2kxro4e13zg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: exynos: add mmc aliases
-To:     Henrik Grimler <henrik@grimler.se>
-Cc:     krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
-        m.szyprowski@samsung.com, jenneron@protonmail.com,
-        markuss.broks@gmail.com, martin.juecker@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Valentine Iourine <iourine@iourine.msk.su>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <757357.1675955219.1@warthog.procyon.org.uk>
+Date:   Thu, 09 Feb 2023 15:06:59 +0000
+Message-ID: <757358.1675955219@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 7:32 AM Henrik Grimler <henrik@grimler.se> wrote:
->
-> Add aliases for eMMC, SD card and WiFi where applicable, so that
-> assigned mmcblk numbers are always the same.
+Matthew Wilcox <willy@infradead.org> wrote:
 
-What does WiFi have to do with mmcblk?
+> On Thu, Feb 09, 2023 at 10:29:43AM +0000, David Howells wrote:
+> > +	npages = alloc_pages_bulk_list(GFP_USER, npages, &pages);
+> 
+> Please don't use alloc_pages_bulk_list().  If nobody uses it, it can go
+> away again soon.  Does alloc_pages_bulk_array() work for you?  It's
+> faster.
+
+Sure.
+
+> > +	/* Free any pages that didn't get touched at all. */
+> > +	for (; reclaim >= PAGE_SIZE; reclaim -= PAGE_SIZE)
+> > +		__free_page(bv[--npages].bv_page);
+> 
+> If you have that array, you can then use release_pages() to free
+> them, which will be faster.
+
+Um.  I would normally overlay the array on end of the bvec[] so that I could
+save on an allocation (I have to fill in the bvec[] anyway) - which means I
+wouldn't still have the array at release time.  But in this case I can make an
+exception, though I would've thought that the expectation would be that all
+the requested data would be fetched.
+
+David
+
