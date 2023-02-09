@@ -2,191 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A202B68FDAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1AA68FD77
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:57:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbjBIDDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 22:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S231687AbjBIC5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:57:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbjBIDBL (ORCPT
+        with ESMTP id S231694AbjBICzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 22:01:11 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245C837B4D;
-        Wed,  8 Feb 2023 18:57:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675911453; x=1707447453;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=khfiQRG9pgnPxYUscU34mN/SP18T6ncjcuUhtnuAHIs=;
-  b=JCWYQJLA7XZW36zsJ3JjivjGrzfjXl6bCIcwm/46rB2dk7rZoMI0dkWo
-   RnUth70tabz28+ZcKqolb8pyv/Wk3m7P/C+uw8Lb66nHMc6CsQz9wd/FM
-   eSr72Kka/t7N7Uq8KQRxkzBtju/c7PgWm/c0+dGgLUzpvoanuNS2h5c74
-   n+L0U+p/+VgtHL8o6RvWVI0rs/o34DmUeW+goj/c3HAZTR3rrVUdtffx7
-   O1JiPhcoIzqQtoAoHRoZP+hoydfH8FMCq4vRJluLsjK49tdKPBm9ds5B3
-   F9UOv234ezP3K45/4JZqJfNUkkWjEtq1TSQSLPxfaKnJVgipabRUcT/s9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="392384904"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="392384904"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 18:57:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776298974"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="776298974"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Feb 2023 18:56:50 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 18:56:50 -0800
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 8 Feb 2023 18:56:49 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 8 Feb 2023 18:56:49 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.171)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 8 Feb 2023 18:56:47 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hreIaTjbF96a/b4XO6TQWXLrJ45L4CkkSLK+9p7Xy0ezoP+k1Z3yxqbzYROOgmq9fh+bBYRM2W9hliGQAvi3e8n56t8mGxGyFQjTtnglQVtb1y1pS+vROP3yh5z8P5zSFyv8J9ewW+dasoCBlnnF4fthvWN0UpauqJKER4UY5+7NipCrpL2+yRsMOZHbqOSJOp6B8pQS7HwYJavR5SfHhxbgBkwqGvQj4V6X1+qq0Hra3nEBBqT5zjaYsqUHzAfijzKfD8IoiiYlhNsRMy0jshZEVl3+9X3IiSWE2fIJnCwE0Ri7Bft+IXSIHVYUvB4pQlV9LzgR9+WnTJb8zTkH7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q7+c1niD9ZdB+kryMW5aNgIxJnJY2AmouBctvrQdLj0=;
- b=PNbHIUh2NRnl+CEXJsc6noZmKDMwAq8cVhh3DHJfs+JPL7m2tOHhxsLvOjuMi0upFZde+wZP2wd5dZwEyfGT+oZ4UMYnAXRiFljejgpijyucex5aNA5gziY71ZN0cOlcmafrSP9L4ygZ6DoeXeQS0Exox4C3LaUNnQy7LtXZyy7wiTH7k6T4VfiW3MZSnn9lwUJs+fty4mm1dnyIQZ+1QLXBeUIRxYW4vpEUiACNC6kMQnec4A0bQ8/nufOVscngxEgCr3GWGjesTEk5vb5HVYbaWg/VnBCyIJ19X6QJRq123XM0vntieIPCmwyTiyXyupOVYi/QVhXLti3L/pN3Mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BL1PR11MB5544.namprd11.prod.outlook.com (2603:10b6:208:314::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
- 2023 02:56:39 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
- 02:56:39 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-Subject: RE: [PATCH v2 03/10] iommufd: Create access in
- vfio_iommufd_emulated_bind()
-Thread-Topic: [PATCH v2 03/10] iommufd: Create access in
- vfio_iommufd_emulated_bind()
-Thread-Index: AQHZOzoM5El+JaA+Aka5+yDNWUDRda7F7ZHw
-Date:   Thu, 9 Feb 2023 02:56:39 +0000
-Message-ID: <BN9PR11MB527662B3BCB562D4E0969C878CD99@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1675802050.git.nicolinc@nvidia.com>
- <6083ba9a3c1d92baf1f324d4748333d80d3de830.1675802050.git.nicolinc@nvidia.com>
-In-Reply-To: <6083ba9a3c1d92baf1f324d4748333d80d3de830.1675802050.git.nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB5544:EE_
-x-ms-office365-filtering-correlation-id: caab7c7a-0027-4e18-2c16-08db0a4943e5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1T/jYzEZZUXStCbQDBZa3L12jTrZmG1Rm6+2s7zFRvRy9ED9Ttnpj3MteJDudPbumjPPqtgrOpx4KLZmUsEG2jKYhZGoIa2jrpsYDAFPscNYzoxhpvlth6UzDsd8n6DlyirvA14LBdRp/dymD20JrEP1nVjj4j5g0kKCtP3NeCtgg03X/PB7RLUvPkTDPHMkC27CJAHFT4SEXJX4FJFwEnih14w4THQapA5xN5RCQIejaeO+I364MRAuJz70hZWIUMIit54scYAfpakUCbehVOg2wTUxtru1SGbXVIPl4L6/hhWN5pKG8dHLLYMvdcsV2N3zfa5273IZM4jOzVAh4izLvcLRHupJmKwx8YHwy0hXrZAhk0KIOXuAMPYAXt/htHSIjZujxvKjmAwy2hoJwB4yutJDFR57nJoujhHCkZNaQaKGMkqPisCTsNLRo27DZRYB3egDjRppbM9v/lG8mSrpnAWD3E35MlSMSR1L+HxEjZ3RJdfvs/x0NaZeI56fn2Rb1g3uGAe4YxpTgNB5Hbo6mchChxSdbcyG/VahUvUW6bDvqc3safC6XQ8dALHw/S14XtbzVsFC7nbcUdi9hNUASsWMjpCylm79iw1FrwBb+2hC93rl+bYXsngNzYPeOuUno6ANbZnI5Ooi+7PWBb/cv2O0UZ8Wt7DMmx1lYMxsz1L16F0jdRuQhfIlARTj72oNwGLn0bmMp/rSR8FtEQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(39860400002)(396003)(136003)(346002)(451199018)(83380400001)(55016003)(54906003)(2906002)(316002)(76116006)(110136005)(38070700005)(478600001)(82960400001)(38100700002)(71200400001)(122000001)(26005)(66556008)(66946007)(4326008)(4744005)(8676002)(41300700001)(6506007)(8936002)(5660300002)(7416002)(86362001)(64756008)(52536014)(33656002)(66446008)(9686003)(186003)(7696005)(66476007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kj/yGaldp6J3RsTih09MmQk+avPGJhjTtzJ/4J09ivncysLJjPdJLO3HY/Xc?=
- =?us-ascii?Q?1XDIN43hBrZf2Xxu1F1I8xpiCzbGuVTWdhEy4peWZbiyA5PJyugsB5oIan3j?=
- =?us-ascii?Q?BggU1lL5snhNodAp9T3BNvMv8Jy6XaLEKENdCYKnkGmFA9EIqE9WgcRuU00f?=
- =?us-ascii?Q?yvnHRi3mmzOdDtW9AqhBvBfXZ0191LO2hct9xVCuc2O6PcChW8g7cbeLh7l+?=
- =?us-ascii?Q?93G64NNaUeNSFjV9FNTaDSCaMsWQ2T5tfiHfy48zJaz1kA1oZvA0F2TGIYGq?=
- =?us-ascii?Q?q29QY1DLKnpig3tfHkSyXeLrXnwaPnjEJSowCcdgUOEri+pz15p9yQGRhok9?=
- =?us-ascii?Q?Yc2kNT8Nn/nNLq97968G5N0mYRw3U8eLWfgo3UkVsUuuEOHceNwNseFsCcPF?=
- =?us-ascii?Q?VleTVHh/L+s9oAlMc7EspkQaXuCbH0XUQbo5pKkX0JHkOlZtJp7fyCaZ01zm?=
- =?us-ascii?Q?uCiCeYpJFODxmk7+HYNHqhArfPm1KRu1sRaepj9/BQPeFKsKznmgKHT6Qa5q?=
- =?us-ascii?Q?nHJlIAz9gF6elK+gRbaKtgmIMm6UPM2Lrc5Sm8FTtxcULYdLnPmVwAsLkWaG?=
- =?us-ascii?Q?lT0+fVsqtd1129h20lou2InKkypfZGZgEDkzowgFuKoXzGZ6IBTnomMdwlUB?=
- =?us-ascii?Q?EGIP98rn2iWZO6NsDgGUl4nG5qndP3+GRq9pgrq8eVDVQ/8MoE+qiIHhT+bP?=
- =?us-ascii?Q?phGR9lRH5RXEZ6oXij4+Rg61PndHMKlpiDPlJ1Te9Kx5e9DS3UyJISo5o+Et?=
- =?us-ascii?Q?Mdo7ZX+2jQNWJzHEgF6mM8lwWeX8GlJyBosNGQ8ErvpVXJZ39LpMbS0R/9yX?=
- =?us-ascii?Q?yxniz4qOxo+BxnbdRqnYDVoWJq7uM0jlehso2AJbg67tvieQTnCHDL98Hs6g?=
- =?us-ascii?Q?HIEcawV+M906YI66gttfAEzktuw96xrIIZZZ+FG3u1GF0TAcCCYE7tvbZoUa?=
- =?us-ascii?Q?40+KLaGVKnIJkq+xq+3kSR70DS/36HFGQCRooDZWtucTfUg03343Fz9jC5+y?=
- =?us-ascii?Q?17UTvAJE1L7BcuCj1Xrgf81fq+LItoJJvu52WyziGcs71R+fCDRRqZ1GtJri?=
- =?us-ascii?Q?5e7uSEeqzAIJOjWIBnuqv81a5rdstfy155nBBgHe6GazyQw/A/WjALLsmKCy?=
- =?us-ascii?Q?GxpbGhVAqjLmORGanR1ovIaPGt4SwL9smytc18VwFm3/EHA3pHm10Xg8/EuI?=
- =?us-ascii?Q?cBHdywmPm4SvSMBfzDIG8OJrU0R46Rb5Vyjf4niMZYfkA0NOCEUngPzYteln?=
- =?us-ascii?Q?Vbibk9OeKcwnI51Xh1bJVtWWB5lpz/hHosPrBWGS8olTfxJCgVwOcItAAvYV?=
- =?us-ascii?Q?mXUU5GorxsMxD60znkb1co1hmBahEBD60fBdnRLCBMdWLg0f8e7koang71Fp?=
- =?us-ascii?Q?ESTCPOQjl9lPGzMthmoo2l2wU59nIaarI9t4IU5Vs0od1jMHQuGSH8Yo3KHY?=
- =?us-ascii?Q?sj8tKgODWyZARTglvHYSgjj4bDMD65HUkHEXfo9EDTNJxnk6QEaQRuMdpIy4?=
- =?us-ascii?Q?p2RtxNNGEjlHBKkoHIC/XsuEBmuKhMHWsI06lkOmO0DniUVmxxfAQ3cBRE+S?=
- =?us-ascii?Q?JN+dro13paKKSt7djLzBANbMbQYVp+lwZCcCH9rt?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 8 Feb 2023 21:55:51 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596B432E7E
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:53:23 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1685cf2003aso928421fac.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 18:53:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uim76Lm5dMHI6OEZRl5dYh1Pi4k74h79vxsD8ejV228=;
+        b=cGJLZWh92YeqRetjDZ7mm7cWN9+7V9DkC4NxT3TFyzxOr/dT+y9RySdTXQJoGNFodj
+         Lhk5mURgRjvFpcDTTz997u4uYb5mXXSYufkvOHW16uecAigBafpKfrfPhjupqfB69TqU
+         CpdJtnnu16tBfQsfiDPbx5CJt8woI9p/61QJECQkg6ib53DsbPoG/6qEIFtT82h7XZEd
+         bH7zIZ7zeIu+guqsHWHH7HwzmCW5uJfaHSVq8vhoIZZxTs9cCuui2tEeecApAXxH34Kl
+         VCUo/SLo54vsVKd1HLhUdcTfFi+wK+KZOUpQFgXm1zVH8Gmha3IwtqAbksT7XdA8QMjg
+         0+9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uim76Lm5dMHI6OEZRl5dYh1Pi4k74h79vxsD8ejV228=;
+        b=LPgXgqSBQp5EHn9ili8WOSvCT0+5PoeHLCP0rPOaVl+fpfgrDmlOAx3Arnh5+fT5QJ
+         fPBvRqu1ubNHygkFaFfdR7EJJcmOOu5BepNo4kaJeF2Ip1Lg1UnzJCGnRj1r8z9IiFXY
+         YFiAzCMwapO4swYdZSfy5EZK9Fhv271mesVX8Tyaccw7IDy7EHOx15hXsvIvqQo0Thhb
+         PLl+VF0Yez6kMAZJIt7f7fpCLrgkNPVaPcmB+MITtV4a+qBotRfofj+r/n+LdsLPwQga
+         Yqj1kLBYTJePuGcrNumuyiJr+4aqSY9MAPrGnwkuQ1lrvr9hCux/LhUN1qUmg4K8Z9/G
+         vCzQ==
+X-Gm-Message-State: AO0yUKUajhhP0i5yQ2TA6X+t4XF/i/yOElQa7Rtn47pwNiWW1k+3Uv1G
+        DIyN0MUOtdiS4CaERZ2PCWNxGg==
+X-Google-Smtp-Source: AK7set/IY8hpNoA4Lil9GPnYxD0kM8QMzh26dc48QApuMMt+T/W+mzLQoVZI9oh721NfnL8VF3E7Fg==
+X-Received: by 2002:a05:6870:7386:b0:163:ad96:f89c with SMTP id z6-20020a056870738600b00163ad96f89cmr5551951oam.15.1675911202632;
+        Wed, 08 Feb 2023 18:53:22 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id v6-20020a4a5a06000000b00517b076e071sm100253ooa.47.2023.02.08.18.53.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 18:53:21 -0800 (PST)
+Message-ID: <b394bf10-2fc5-6498-955f-a904a756e0c9@landley.net>
+Date:   Wed, 8 Feb 2023 21:06:19 -0600
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: caab7c7a-0027-4e18-2c16-08db0a4943e5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2023 02:56:39.0571
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WZN11YOTeFjen3x1deDFtoqL6WxDTc3Gbn8DFSpyNy0c1f1z970/WQmyRoAUOSb5svr/NxgZXteSVHD2+p4sUw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5544
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+ <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+ <20230203071423.GA24833@lst.de>
+ <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+ <20230203083037.GA30738@lst.de>
+ <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
+ <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
+ <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Wednesday, February 8, 2023 5:18 AM
->
-> @@ -141,10 +141,19 @@ static const struct iommufd_access_ops
-> vfio_user_ops =3D {
->  int vfio_iommufd_emulated_bind(struct vfio_device *vdev,
->  			       struct iommufd_ctx *ictx, u32 *out_device_id)
->  {
-> +	struct iommufd_access *user;
-> +
->  	lockdep_assert_held(&vdev->dev_set->lock);
->=20
-> -	vdev->iommufd_ictx =3D ictx;
->  	iommufd_ctx_get(ictx);
-> +	user =3D iommufd_access_create(vdev->iommufd_ictx, &vfio_user_ops,
-> vdev);
-> +	if (IS_ERR(user)) {
-> +		iommufd_ctx_put(vdev->iommufd_ictx);
-> +		return PTR_ERR(user);
-> +	}
-> +	iommufd_access_set_ioas(user, 0);
+On 2/3/23 09:57, Randy Dunlap wrote:
+> Hi--
+> 
+> On 2/3/23 02:33, Geert Uytterhoeven wrote:
+>> Hi Adrian,
+>> 
+>> On Fri, Feb 3, 2023 at 11:29 AM John Paul Adrian Glaubitz
+>> <glaubitz@physik.fu-berlin.de> wrote:
+>>> On Fri, 2023-02-03 at 09:30 +0100, Christoph Hellwig wrote:
+>>>> On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
+>>>>> Since this is my very first time stepping up as a kernel maintainer, I was hoping
+>>>>> to get some pointers on what to do to make this happen.
+>>>>>
+>>>>> So far, we have set up a new kernel tree and I have set up a local development and
+>>>>> test environment for SH kernels using my SH7785LCR board as the target platform.
+>>>>>
+>>>>> Do I just need to send a patch asking to change the corresponding entry in the
+>>>>> MAINTAINERS file?
+>>>>
+>>>> I'm not sure a there is a document, but:
+>>>>
+>>>>  - add the MAINTAINERS change to your tree
+>>>>  - ask Stephen to get your tree included in linux-next
+>>>>
+>>>> then eventually send a pull request to Linus with all of that.  Make
+>>>> sure it's been in linux-next for a while.
+>>>
+>>> OK, thanks for the pointers! Will try to get this done by next week.
+>>>
+>>> We're still discussing among SuperH developer community whether there will be a second
+>>> maintainer, so please bear with us a few more days. I will collect patches in the
+>>> meantime.
+>> 
+>> Thanks a lot!
+>> 
+>> If you need any help with process, setup, ... don't hesitate to ask
+>> (on e.g. #renesas-soc on Libera).
+> 
+> While Adrian and Geert are reading this, I have a question:
+> 
+> Is this "sh64" still accurate and applicable?
 
-this is not required since ioas has been NULL after creation.
+I hadn't noticed it was there... Randy Dunlap added that in 2018 (commit
+09b1565324cba). I wonder why?
 
-otherwise,
+> from Documentation/kbuild/kbuild.rst:
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+There isn't an active 64 bit superh architecture for the moment: sh5 was a
+prototype that never shipped in volume, and support was removed in commit
+37744feebc08. From the j-core side j64 hasn't shipped yet either (still planned
+last I heard, but j-core went downmarket first instead due to customer demand,
+and multi-issue is on the roadmap before 64 bit address space).
+
+The general trend in linux kernel architectures has been to merge 32 and 64 bit
+anyway, and just have the .config set CONFIG_64BIT to distinguish: arch/x86 was
+created by merging arch/i386 and arch/x86_64 in 2007, arch/powerpc merged the 32
+and 64 bit directories in 2005, arch/s390 and s390x are in the same dir,
+arch/mips... (For some reason arm and arm64 are still split, but that might be
+fallout from Arm Ltd trying to distinguish aarrcchh6644 from "arm" for some
+reason? Dunno.)
+
+I wonder why is this going the other way? I thought $ARCH mostly just specified
+the subdirectory under arch/ with a few historical aliases in the top level
+Makefile:
+
+# Additional ARCH settings for x86
+ifeq ($(ARCH),i386)
+        SRCARCH := x86
+endif
+ifeq ($(ARCH),x86_64)
+        SRCARCH := x86
+endif
+
+# Additional ARCH settings for sparc
+ifeq ($(ARCH),sparc32)
+       SRCARCH := sparc
+endif
+ifeq ($(ARCH),sparc64)
+       SRCARCH := sparc
+endif
+
+# Additional ARCH settings for parisc
+ifeq ($(ARCH),parisc64)
+       SRCARCH := parisc
+endif
+
+But you could always just specify the correct ARCH directory directly and it
+would work. (Always did when I tried it, although I haven't built sparc in years
+because there's no musl-libc support, and never built parisc64 because I
+couldn't get it to work with uClibc even before musl. I _am_ still building both
+32 bit and 64 bit x86 with ARCH=x86 both times...)
+
+> But some architectures such as x86 and sparc have aliases.
+> 
+> - x86: i386 for 32 bit, x86_64 for 64 bit
+> - sh: sh for 32 bit, sh64 for 64 bit <<<<<<<<<<<<<<<
+> - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+
+Randy also added the sparc alias in commit 5ba800962a80. That at least exists in
+the top level Makefile.
+
+Did he mean parisc64 and typoed sh64? Because that's the only other alias in the
+top level Makefile...
+
+In any case, these are historical aliases for old builds, which can probably get
+yanked because it should be a trivial fix to use the right ARCH= value for
+modern builds? (I'd think?)
+
+You'd even be able to build a 64 bit version of ARCH=i386 just fine if it wasn't
+for the ONE place in arch/x86/Kconfig that actually checks:
+
+config 64BIT
+        bool "64-bit kernel" if "$(ARCH)" = "x86"
+        default "$(ARCH)" != "i386"
+
+Same for arch/sparc/Kconfig:
+
+config 64BIT
+        bool "64-bit kernel" if "$(ARCH)" = "sparc"
+        default "$(ARCH)" = "sparc64"
+
+Nothing else anywhere seems to care...
+
+> Thanks.
+
+Rob
