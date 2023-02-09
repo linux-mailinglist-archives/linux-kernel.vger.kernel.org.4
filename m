@@ -2,177 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AAE690884
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC38690872
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjBIMRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S229648AbjBIMQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjBIMRP (ORCPT
+        with ESMTP id S229449AbjBIMQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:17:15 -0500
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 025B8DBD5
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:16:53 -0800 (PST)
-Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
-        by hzbj-icmmx-7 (Coremail) with SMTP id AQAAfwBHE+eD4+RjqhtVDw--.64601S2;
-        Thu, 09 Feb 2023 20:13:55 +0800 (CST)
-Received: from phytium.com.cn (unknown [218.68.211.205])
-        by mail (Coremail) with SMTP id AQAAfwAnNCGa4+Rj12gRAA--.4289S3;
-        Thu, 09 Feb 2023 20:14:19 +0800 (CST)
-From:   Zhang Yiqun <zhangyiqun@phytium.com.cn>
-To:     cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
-        liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, amadeuszx.slawinski@linux.intel.com,
-        kuninori.morimoto.gx@renesas.com, ckeepax@opensource.cirrus.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Zhang Yiqun <zhangyiqun@phytium.com.cn>
-Subject: [PATCH] ALSA: hda: remove redundent varible in snd_hdac_stream_start()
-Date:   Thu,  9 Feb 2023 20:14:00 +0800
-Message-Id: <20230209121400.14253-1-zhangyiqun@phytium.com.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: AQAAfwAnNCGa4+Rj12gRAA--.4289S3
-X-CM-SenderInfo: x2kd0wp1lt30o6sk53xlxphulrpou0/
-Authentication-Results: hzbj-icmmx-7; spf=neutral smtp.mail=zhangyiqun
-        @phytium.com.cn;
-X-Coremail-Antispam: 1Uk129KBjvJXoWxKw4rGF4kXF4xJw47ZF1rXrb_yoW7ArW5pw
-        4kZa4rKFW3tF10vF4UGw15KF17KF1kKasxtry5t348Aw4UJr1FqFyjkryxZryFkry5Wr9x
-        Z3W2y34UGw43WFDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
-        UUUUU
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 07:16:47 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B9F66A4F;
+        Thu,  9 Feb 2023 04:16:29 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 81C4B20C8AEA;
+        Thu,  9 Feb 2023 04:15:43 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 81C4B20C8AEA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675944943;
+        bh=NJCW5JSyQq5dAWVf5JpWprMe43t8PWxMWSTw86YjVx4=;
+        h=From:To:Subject:Date:From;
+        b=WwNLMKmd4LzkY4E1aUPH3nKpUlJ9ZpjvqSuIfGSAsvKJlaQHSJ37Y5FVPP4Ff9c6K
+         5GFXTF92lm1N4M0YbGffAYnDwBg1/4hXAM2CprgZM5QK6Oz00e5peI6cKoQgWACzJq
+         t6hVYMF5yRfSyi3+Ur6yJtNJ5xHuGJ1Puttg6ONo=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@linux.microsoft.com, dphadke@linux.microsoft.com
+Subject: [PATCH v5 0/5] Device tree support for Hyper-V VMBus driver
+Date:   Thu,  9 Feb 2023 04:15:34 -0800
+Message-Id: <1675944939-22631-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This 2nd varibles are all set as true in treewide. So I think
-it can be removed for easy understanding.
+This set of patches expands the VMBus driver to include device tree
+support. This feature allows for a kernel boot without the use of ACPI
+tables, resulting in a smaller memory footprint and potentially faster
+boot times. This is tested by enabling CONFIG_FLAT and OF_EARLY_FLATTREE
+for x86.
 
-Signed-off-by: Zhang Yiqun <zhangyiqun@phytium.com.cn>
----
- include/sound/hdaudio.h           | 2 +-
- sound/hda/hdac_stream.c           | 7 ++-----
- sound/pci/hda/hda_controller.c    | 2 +-
- sound/soc/intel/avs/pcm.c         | 2 +-
- sound/soc/intel/avs/probes.c      | 2 +-
- sound/soc/intel/skylake/skl-pcm.c | 4 ++--
- 6 files changed, 8 insertions(+), 11 deletions(-)
+The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+build.
 
-diff --git a/include/sound/hdaudio.h b/include/sound/hdaudio.h
-index a6872537724d..536612c6ab0c 100644
---- a/include/sound/hdaudio.h
-+++ b/include/sound/hdaudio.h
-@@ -575,7 +575,7 @@ void snd_hdac_stream_cleanup(struct hdac_stream *azx_dev);
- int snd_hdac_stream_setup_periods(struct hdac_stream *azx_dev);
- int snd_hdac_stream_set_params(struct hdac_stream *azx_dev,
- 				unsigned int format_val);
--void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start);
-+void snd_hdac_stream_start(struct hdac_stream *azx_dev);
- void snd_hdac_stream_stop(struct hdac_stream *azx_dev);
- void snd_hdac_stop_streams(struct hdac_bus *bus);
- void snd_hdac_stop_streams_and_chip(struct hdac_bus *bus);
-diff --git a/sound/hda/hdac_stream.c b/sound/hda/hdac_stream.c
-index 547adbc22590..1f56fd33b9af 100644
---- a/sound/hda/hdac_stream.c
-+++ b/sound/hda/hdac_stream.c
-@@ -124,11 +124,10 @@ EXPORT_SYMBOL_GPL(snd_hdac_stream_init);
- /**
-  * snd_hdac_stream_start - start a stream
-  * @azx_dev: HD-audio core stream to start
-- * @fresh_start: false = wallclock timestamp relative to period wallclock
-  *
-  * Start a stream, set start_wallclk and set the running flag.
-  */
--void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start)
-+void snd_hdac_stream_start(struct hdac_stream *azx_dev)
- {
- 	struct hdac_bus *bus = azx_dev->bus;
- 	int stripe_ctl;
-@@ -136,8 +135,6 @@ void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start)
- 	trace_snd_hdac_stream_start(bus, azx_dev);
- 
- 	azx_dev->start_wallclk = snd_hdac_chip_readl(bus, WALLCLK);
--	if (!fresh_start)
--		azx_dev->start_wallclk -= azx_dev->period_wallclk;
- 
- 	/* enable SIE */
- 	snd_hdac_chip_updatel(bus, INTCTL,
-@@ -966,7 +963,7 @@ EXPORT_SYMBOL_GPL(snd_hdac_dsp_prepare);
- void snd_hdac_dsp_trigger(struct hdac_stream *azx_dev, bool start)
- {
- 	if (start)
--		snd_hdac_stream_start(azx_dev, true);
-+		snd_hdac_stream_start(azx_dev);
- 	else
- 		snd_hdac_stream_stop(azx_dev);
- }
-diff --git a/sound/pci/hda/hda_controller.c b/sound/pci/hda/hda_controller.c
-index 0ff286b7b66b..c19d45618a09 100644
---- a/sound/pci/hda/hda_controller.c
-+++ b/sound/pci/hda/hda_controller.c
-@@ -257,7 +257,7 @@ static int azx_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
- 		azx_dev = get_azx_dev(s);
- 		if (start) {
- 			azx_dev->insufficient = 1;
--			snd_hdac_stream_start(azx_stream(azx_dev), true);
-+			snd_hdac_stream_start(azx_stream(azx_dev));
- 		} else {
- 			snd_hdac_stream_stop(azx_stream(azx_dev));
- 		}
-diff --git a/sound/soc/intel/avs/pcm.c b/sound/soc/intel/avs/pcm.c
-index f930c5e86a84..b673b84ead32 100644
---- a/sound/soc/intel/avs/pcm.c
-+++ b/sound/soc/intel/avs/pcm.c
-@@ -647,7 +647,7 @@ static int avs_dai_fe_trigger(struct snd_pcm_substream *substream, int cmd, stru
- 	case SNDRV_PCM_TRIGGER_START:
- 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
- 		spin_lock_irqsave(&bus->reg_lock, flags);
--		snd_hdac_stream_start(hdac_stream(host_stream), true);
-+		snd_hdac_stream_start(hdac_stream(host_stream));
- 		spin_unlock_irqrestore(&bus->reg_lock, flags);
- 
- 		/* Timeout on DRSM poll shall not stop the resume so ignore the result. */
-diff --git a/sound/soc/intel/avs/probes.c b/sound/soc/intel/avs/probes.c
-index 29d63f2a9616..741565c6465a 100644
---- a/sound/soc/intel/avs/probes.c
-+++ b/sound/soc/intel/avs/probes.c
-@@ -190,7 +190,7 @@ static int avs_probe_compr_trigger(struct snd_compr_stream *cstream, int cmd,
- 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
- 	case SNDRV_PCM_TRIGGER_RESUME:
- 		spin_lock_irqsave(&bus->reg_lock, cookie);
--		snd_hdac_stream_start(hdac_stream(host_stream), true);
-+		snd_hdac_stream_start(hdac_stream(host_stream));
- 		spin_unlock_irqrestore(&bus->reg_lock, cookie);
- 		break;
- 
-diff --git a/sound/soc/intel/skylake/skl-pcm.c b/sound/soc/intel/skylake/skl-pcm.c
-index dc627d18518d..a4209d88b0c6 100644
---- a/sound/soc/intel/skylake/skl-pcm.c
-+++ b/sound/soc/intel/skylake/skl-pcm.c
-@@ -449,7 +449,7 @@ static int skl_decoupled_trigger(struct snd_pcm_substream *substream,
- 	spin_lock_irqsave(&bus->reg_lock, cookie);
- 
- 	if (start) {
--		snd_hdac_stream_start(hdac_stream(stream), true);
-+		snd_hdac_stream_start(hdac_stream(stream));
- 		snd_hdac_stream_timecounter_init(hstr, 0);
- 	} else {
- 		snd_hdac_stream_stop(hdac_stream(stream));
-@@ -1134,7 +1134,7 @@ static int skl_coupled_trigger(struct snd_pcm_substream *substream,
- 			continue;
- 		stream = get_hdac_ext_stream(s);
- 		if (start)
--			snd_hdac_stream_start(hdac_stream(stream), true);
-+			snd_hdac_stream_start(hdac_stream(stream));
- 		else
- 			snd_hdac_stream_stop(hdac_stream(stream));
- 	}
+The third patch converts the VMBus driver from acpi to more generic
+platform driver.
+
+Further to add device tree documentation for VMBus, it needs to club with
+other virtualization driver's documentation. For this rename the virtio
+folder to more generic hypervisor, so that all the hypervisor based
+devices can co-exist in a single place in device tree documentation. The
+fourth patch does this renaming.
+
+The fifth patch introduces the device tree documentation for VMBus.
+
+The sixth patch adds device tree support to the VMBus driver. Currently
+this is tested only for x86 and it may not work for other archs.
+
+[V5]
+- Removed #else for device tree parsing code. This should help better
+  test coverage.
+- Fix macro '__maybe_unused' warning
+- Added below options in Kconfig to enable device tree options for HYPERV
+	select OF if !ACPI
+	select OF_EARLY_FLATTREE if !ACPI
+- moved dt documantation to bus folder
+- update the dt node to have 'bus' as parent node instead of 'soc'. Also
+  added compatible and ranges property for parent node.
+- Made sure dt_binding_check have no error/varnings for microsoft,vmbus.yaml file
+- Fix commit messages and add Reviwed-by from Michael for first 3 patches
+
+[V4]
+- rebased which fixed return type of 'vmbus_mmio_remove' from int to void
+- used __maybe_unused for 'vmbus_of_match' and safeguard vmbus_acpi_device_ids
+  under #ifdef
+
+[V3]
+- Changed the logic to use generic api (for_each_of_range) for parsing "ranges".
+- Remove dependency of ACPI for HYPERV in case of x86.
+- Removed "device tree bindings" from title and patch subject.
+- Removed duplicate vendor prefix, used microsoft instead of msft.
+- Use 'soc' in example of device tree documantation for parent node.
+- Fixed compatible schemas error generated in other modules referring to
+  virtio.
+- Drop hex notation and leading zeros from device tree cell properties.
+
+Saurabh Sengar (5):
+  drivers/clocksource/hyper-v: non ACPI support in hyperv clock
+  Drivers: hv: allow non ACPI compilation for
+    hv_is_hibernation_supported
+  Drivers: hv: vmbus: Convert acpi_device to more generic
+    platform_device
+  dt-bindings: hypervisor: VMBus
+  Driver: VMBus: Add device tree support
+
+ .../bindings/bus/microsoft,vmbus.yaml         |  50 ++++++++
+ MAINTAINERS                                   |   1 +
+ drivers/clocksource/hyperv_timer.c            |  15 ++-
+ drivers/hv/Kconfig                            |   6 +-
+ drivers/hv/hv_common.c                        |   4 +
+ drivers/hv/vmbus_drv.c                        | 118 ++++++++++++++----
+ 6 files changed, 165 insertions(+), 29 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+
 -- 
-2.17.1
+2.34.1
 
