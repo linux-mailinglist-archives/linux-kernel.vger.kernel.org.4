@@ -2,115 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AC1691372
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B41691378
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjBIWhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 17:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
+        id S230385AbjBIWie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 17:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjBIWhf (ORCPT
+        with ESMTP id S229602AbjBIWic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 17:37:35 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0EB54554
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 14:37:34 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d8so3360196plr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 14:37:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hwtypz4GumTJ+cjPZt4+9SVVyQ90xH/ty3YTeW6kigU=;
-        b=Y1Ik3yXSoCWksBSOEEuendxNYIN/xRSmMBO4kuKOOzb/4pqRhDbtHKarNLLfASTJtj
-         gcrzE/sQ2ij2u9ByfMCDD0pEb/ddZ4faEEWQP9wkoboYUZWr/gfOWDkX33YMSZyYYo0/
-         foait9jJpeNrPgBsK4omT9/6tvuotS7kmeiAuwBv9Z4VcyvB3An62Wv8uIBsh72bZhhU
-         N3+d1/+sBMC1hasttKa2cHcBPh6ELQudvtSNIi4wqNJYQ4vbOgvrKrIjLUSWYiLaDGUR
-         s+YdFt6dtEMRtI8noI3lb2zdgsINk895c9UP/ylNESVJxfPXOlaXqYCIh8RtOTKrTCpY
-         5e0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hwtypz4GumTJ+cjPZt4+9SVVyQ90xH/ty3YTeW6kigU=;
-        b=CDV+1cPAtbUaLTqYK4so0+58GtG4jKU2ZJBKfPEsjyE5247bAsFOPdrTxD5HS7zyOI
-         dSmknZk7VnfXsqTEV4Uf/ci78W5iRwWLtd/3/EdWboqfcWjkXbcRcDy7uIiZnW9Jvjmi
-         RtJJB0iotAweY08CwQKOm9uk3HCbdy7DukkKjj5DEgb+8MhwsUYWHKHA0C7Rc13WbTfI
-         rB2Q8ktAKNw+TcKXQroXl5WIch3DpTzj/bcpjIYpaxtKucMhcRpyEd2x1DSOH34vuUwO
-         +LjhyCCFaoro1K2eN0AEC8+HigrqB5E1FN14PJoZGKi3plrgfrta8UTp4hlkyx5Q9N9s
-         s3XQ==
-X-Gm-Message-State: AO0yUKWaIoHL49HBPwDoFXQtxah519wZTwW34Qnu9jYNGrEN6cMUpt3P
-        h79l0K10JNamcZNeCxWqwmBnA0zzfyqgCdbFd78S
-X-Google-Smtp-Source: AK7set9TglaxYfjekFil+jFiNjwYsr8jWmSQ++F779gm/+8NIlCPQYs53uzH3AzBWNKyl8pzsR+e5WB/o7jnRyXS4gs=
-X-Received: by 2002:a17:90a:4f85:b0:22c:41c7:c7ed with SMTP id
- q5-20020a17090a4f8500b0022c41c7c7edmr2117292pjh.61.1675982253954; Thu, 09 Feb
- 2023 14:37:33 -0800 (PST)
+        Thu, 9 Feb 2023 17:38:32 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233B856EDE;
+        Thu,  9 Feb 2023 14:38:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=neC5cJov89mLNNSwpqs/RQo9M584zz5Hoy8m2ZsLhIEeDlB+2Lpy+zm9pMIHISGZ0ceUYLXkTwAK2iOe9yaNd89HUHm8jH8vfcQC+pvydaWVF4CV1atA9GKD3XeXzIhk86LFii//O4iGYg/ihofY80JMXifKyU5qsNgNUJPjGMhC2iaeqqqIjImSZeOAzB0VBEBjtxpMqNWqtYZF1IvkURkxrH/mjbAGxZTs5s6F9GdIzl8yYF+NeI67lNHDmGoIMQm6CZY0ubuLEJLqYtJQzyLcv+6msgQl3gmaw0rhz7WZCtWubjE7up/riK9sKoXBQS1+dJWYCzdu5J7vTcGL2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=10cxf3AOQcl4E54/idE065bFMSUnOF6E4tfd704wH0o=;
+ b=SlG4Tv/mrLDxK4D9rcMRDXJGmKbpUVb8zW12m/LrZz1UfEsUP2vzoioBgHIqyBwdfCtrZdn8S5I4jYAL8A/T6uXLcGcv+y0301neqYuWjbmmnvO9a+c3pt0pjozw4TRZ8GMQEh82ce9+GaFdHUIWnDENcs54iN+vc5u5DxzMPvcJq2HDhbDDjBQBy/+TwxvdaQ126wpaY5N7t6118VLfv9gropJhmyy0XzsBLCHaJmFX2U/X1vh7BwGxt8VaO0NAYjHIqFWHZtIHtvuaJDZVUydcA2r7RKiA1ud+Q1gEm7gyzU7uvWwa56ul3UR5U2mX0VQmypDPkDNMgKXof2S8pQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=semihalf.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=10cxf3AOQcl4E54/idE065bFMSUnOF6E4tfd704wH0o=;
+ b=B9elWmjPxrjuAPrpfkVmOxgDE2g57kJLaTzfVpIWEu7NP//ak/oeP/lckaAVapcr6xjUUwdHGvYuzRfr7mgyn0KKtYez6S+/N+tCnOoMXNxceqtDdlprdYy4pzlqvWCCjuSqQ6H+IOc9pF/NvDTU/dBVq+DtonIgbdDEX+y/w/Y=
+Received: from DS7PR06CA0047.namprd06.prod.outlook.com (2603:10b6:8:54::27) by
+ BL1PR12MB5945.namprd12.prod.outlook.com (2603:10b6:208:398::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.36; Thu, 9 Feb
+ 2023 22:38:29 +0000
+Received: from DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::57) by DS7PR06CA0047.outlook.office365.com
+ (2603:10b6:8:54::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17 via Frontend
+ Transport; Thu, 9 Feb 2023 22:38:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT038.mail.protection.outlook.com (10.13.173.137) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6086.19 via Frontend Transport; Thu, 9 Feb 2023 22:38:28 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 9 Feb
+ 2023 16:38:27 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     =?UTF-8?q?Jan=20D=C4=85bro=C5=9B?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>,
+        Thomas Rijo-john <Rijo-john.Thomas@amd.com>,
+        "Lendacky Thomas" <Thomas.Lendacky@amd.com>,
+        <herbert@gondor.apana.org.au>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        <kvm@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        <op-tee@lists.trustedfirmware.org>
+Subject: [PATCH 0/6] Export platform features from ccp driver
+Date:   Thu, 9 Feb 2023 16:38:02 -0600
+Message-ID: <20230209223811.4993-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <b5dfdcd541115c86dbc774aa9dd502c964849c5f.1675282642.git.rgb@redhat.com>
- <CAHC9VhS0rPfkwUT1WMfqsTF-qYXdbbhHAfVPs=d3ZQVgbXBHnw@mail.gmail.com> <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
-In-Reply-To: <Y+VrSLZKZoAGikUS@madcap2.tricolour.ca>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 9 Feb 2023 17:37:22 -0500
-Message-ID: <CAHC9VhTNb4gOpk9=49-ABtYs1DFKqqwXPSc-2bhJX7wcZ82o=g@mail.gmail.com>
-Subject: Re: [PATCH v2] io_uring,audit: don't log IORING_OP_MADVISE
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Stefan Roesch <shr@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT038:EE_|BL1PR12MB5945:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1eee4d7d-12e4-4562-ebca-08db0aee5d3d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vfWtBKbxq1+8a4ud44IBfExgbcMQEBz8rusddVlnfa57XubF9hTjAjliDw76LFWnEifWGajZVaEOziz0MQYR02vldom3ju1J0qOzmPBDJ8Zv5ZbkKdmROMB7S4jC4W1uG7C0tL0G9s7aKXcZc30o+1tyJOQ9II1JadyzHrxu0qXLxLOwkRjABvxZcVyNau9o2E1Q1b5o4BN/EYRA2Bnca9lz3QTsE37pjPqy5ZFXGzh4V7Bzi/Y4iOdyoYqQeIYMQOzSACLMD0gl/BHZAg0oRthjp46ic0VTDu+SnY5Tm7Ps6DyR7I+WrXq36W6ioOyDRwmTT23r0WKUZbkHqLYB3zgvDNGo9Ch3kLG8poZVHW1+lQ5LbPAiRwfYZnX0Yxg2QRVZ8LTL0Ckizv7yYg9JCR9jgQ9tDpeBeOhl9fC1j5kc/jXxf/824hHkgFsPlkAXfk5GNP3M8z6UsuIox91s7bUdenimYUn+5qrlsyr9cNdBheEq/5yr48iE0w6sHGsAdbwRtCGCNRRMp+aSK2E3atK4nUApf5/oYvZ8B3Ywk3ZT8pfW6JopJ/rSq5tncXhC3RsMK7/p+K0XdV5H1ALTFXY8DC7meD9DmY8F7doeRuC5apjA5tG2RQzYzVRqXA2oEtXWMv54SLu3VVJj05oJd/jimFO6aBlm9argVgf49I31yJweAiWJtjKNSG1mJS4nQFAEa+3LLDP11N7k8Ub7sCOa/c84ecfn7OCpms+z1J2kmyjxKtCQBZqNJCzHPtax
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199018)(36840700001)(40470700004)(46966006)(426003)(26005)(1076003)(86362001)(6666004)(186003)(36756003)(16526019)(83380400001)(336012)(7696005)(47076005)(70206006)(54906003)(316002)(110136005)(70586007)(8676002)(82310400005)(41300700001)(40480700001)(8936002)(2616005)(36860700001)(4326008)(44832011)(7416002)(921005)(2906002)(40460700003)(356005)(5660300002)(81166007)(82740400003)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 22:38:28.5109
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1eee4d7d-12e4-4562-ebca-08db0aee5d3d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT038.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5945
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 4:53 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> On 2023-02-01 16:18, Paul Moore wrote:
-> > On Wed, Feb 1, 2023 at 3:34 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> > > fadvise and madvise both provide hints for caching or access pattern for
-> > > file and memory respectively.  Skip them.
-> >
-> > You forgot to update the first sentence in the commit description :/
->
-> I didn't forget.  I updated that sentence to reflect the fact that the
-> two should be treated similarly rather than differently.
+The i2c-designware-amdpsp driver communicates with a platform
+features mailbox provided by the PSP.  The address used for
+communication is discovered via a non-architecturally
+guaranteed mechanism.
 
-Ooookay.  Can we at least agree that the commit description should be
-rephrased to make it clear that the patch only adjusts madvise?  Right
-now I read the commit description and it sounds like you are adjusting
-the behavior for both fadvise and madvise in this patch, which is not
-true.
+To better scale, export a feature for communication with platform
+features directly from the ccp driver.
 
-> > I'm still looking for some type of statement that you've done some
-> > homework on the IORING_OP_MADVISE case to ensure that it doesn't end
-> > up calling into the LSM, see my previous emails on this.  I need more
-> > than "Steve told me to do this".
-> >
-> > I basically just want to see that some care and thought has gone into
-> > this patch to verify it is correct and good.
->
-> Steve suggested I look into a number of iouring ops.  I looked at the
-> description code and agreed that it wasn't necessary to audit madvise.
-> The rationale for fadvise was detemined to have been conflated with
-> fallocate and subsequently dropped.  Steve also suggested a number of
-> others and after investigation I decided that their current state was
-> correct.  *getxattr you've advised against, so it was dropped.  It
-> appears fewer modifications were necessary than originally suspected.
+Mario Limonciello (6):
+  crypto: ccp: Drop TEE support for IRQ handler
+  crypto: ccp: Add a header for multiple drivers to use `__psp_pa`
+  crypto: ccp: Move some PSP mailbox bit definitions into common header
+  crypto: ccp: Add support for an interface for platform features
+  crypto: ccp: Enable platform access interface on client PSP parts
+  i2c: designware: Use PCI PSP driver for communication
 
-My concern is that three of the four changes you initially proposed
-were rejected, which gives me pause about the fourth.  You mention
-that based on your reading of madvise's description you feel auditing
-isn't necessary - and you may be right - but based on our experience
-so far with this patchset I would like to hear that you have properly
-investigated all of the madvise code paths, and I would like that in
-the commit description.
+ arch/x86/kvm/svm/sev.c                      |   1 +
+ drivers/crypto/ccp/Makefile                 |   3 +-
+ drivers/crypto/ccp/platform-access.c        | 166 ++++++++++++++++++++
+ drivers/crypto/ccp/platform-access.h        |  34 ++++
+ drivers/crypto/ccp/psp-dev.c                |  32 ++--
+ drivers/crypto/ccp/psp-dev.h                |  11 +-
+ drivers/crypto/ccp/sev-dev.c                |  16 +-
+ drivers/crypto/ccp/sev-dev.h                |   2 +-
+ drivers/crypto/ccp/sp-dev.h                 |   7 +
+ drivers/crypto/ccp/sp-pci.c                 |   7 +
+ drivers/crypto/ccp/tee-dev.c                |  17 +-
+ drivers/i2c/busses/Kconfig                  |   2 +-
+ drivers/i2c/busses/i2c-designware-amdpsp.c  | 149 +-----------------
+ drivers/i2c/busses/i2c-designware-core.h    |   1 -
+ drivers/i2c/busses/i2c-designware-platdrv.c |   1 -
+ drivers/tee/amdtee/call.c                   |   2 +-
+ drivers/tee/amdtee/shm_pool.c               |   2 +-
+ include/linux/psp-platform-access.h         |  50 ++++++
+ include/linux/psp-sev.h                     |   8 -
+ include/linux/psp.h                         |  26 +++
+ 20 files changed, 340 insertions(+), 197 deletions(-)
+ create mode 100644 drivers/crypto/ccp/platform-access.c
+ create mode 100644 drivers/crypto/ccp/platform-access.h
+ create mode 100644 include/linux/psp-platform-access.h
+ create mode 100644 include/linux/psp.h
 
+
+base-commit: c7410b425de40e9b163eef781e1bdacf1bf2962e
 -- 
-paul-moore.com
+2.34.1
+
