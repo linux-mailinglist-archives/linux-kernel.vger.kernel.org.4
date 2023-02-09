@@ -2,49 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA7A690887
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A647A690898
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbjBIMSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
+        id S229655AbjBIMXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjBIMS0 (ORCPT
+        with ESMTP id S229642AbjBIMW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:18:26 -0500
-X-Greylist: delayed 83 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Feb 2023 04:18:04 PST
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 554F9A5D4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:18:03 -0800 (PST)
-Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
-        by hzbj-icmmx-7 (Coremail) with SMTP id AQAAfwBnMeVP5ORj0V5VDw--.46155S2;
-        Thu, 09 Feb 2023 20:17:19 +0800 (CST)
-Received: from phytium.com.cn (unknown [218.68.211.205])
-        by mail (Coremail) with SMTP id AQAAfwDH1CFi5ORj8mgRAA--.4393S3;
-        Thu, 09 Feb 2023 20:17:43 +0800 (CST)
-From:   Zhang Yiqun <zhangyiqun@phytium.com.cn>
-To:     cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
-        liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, amadeuszx.slawinski@linux.intel.com,
-        kuninori.morimoto.gx@renesas.com, ckeepax@opensource.cirrus.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Zhang Yiqun <zhangyiqun@phytium.com.cn>
-Subject: [PATCH] ALSA: hda: remove redundant variable in snd_hdac_stream_start()
-Date:   Thu,  9 Feb 2023 20:17:23 +0800
-Message-Id: <20230209121723.14328-1-zhangyiqun@phytium.com.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: AQAAfwDH1CFi5ORj8mgRAA--.4393S3
-X-CM-SenderInfo: x2kd0wp1lt30o6sk53xlxphulrpou0/
-Authentication-Results: hzbj-icmmx-7; spf=neutral smtp.mail=zhangyiqun
-        @phytium.com.cn;
-X-Coremail-Antispam: 1Uk129KBjvJXoWxKw4rGF4kXF4xJw47ZF1rXrb_yoW7ArWrpw
-        4kZa4rKFW3tF10vF4UGw15KF17KF1kKasxtry5t348Aw4UJr1FqFyjkryxZryFkry5Wr9x
-        Z3W2y34UGw43WFDanT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
-        UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        Thu, 9 Feb 2023 07:22:59 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCDD125A8
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:22:58 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so1415493wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LSnO37B34hy1pNZA6pCiDi9wzcXDsjOg5QyQA1q+Ms4=;
+        b=OuLFbs3kk5PBuZV1uVbAjaYQdXyT2NX7mXCS04oJUM7Xa2FHT/XMcyVHEp78GSXeqy
+         FrKWhvbBnZVt2Wbz+os/9+v8AieE0a8OwzrV318CBrG7YWWj949GfCH8ZbEae/HzQv4j
+         hRy3A5oS5i3zzcgb1I7FYbijRH/9TUOdZFVXA+6czIvZGXSqb2NDPuTEQiGiRaBx01M8
+         pYFvndv97Uce4pzf/VnPmRcNSk0qqFCbAEpRnjxgSQO7sb+IGlQ17fBxSoiM05f9Vufl
+         /n0gtyi71PEFKQ0uuyTf1TpHHon9AKiFLc+cKm2HB33p2rM/77l42dvdPoejKImyb8I8
+         3/sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LSnO37B34hy1pNZA6pCiDi9wzcXDsjOg5QyQA1q+Ms4=;
+        b=ll/7jfLu1mu/rAejEFB1+81NT6JDlX8sg9YZcvWHoKGMxF0vtlQKyk460514Uba0MJ
+         +UdERSW+4lzYT5VyfZIkgg3gf0aLSEZYxmg4+XPB4kfoKDhwPo634uS0UmDEEyk6rNc+
+         uSUyJ4Rc4tol2X7toN0l7gJ84NpGBO3H9rlYZaGWBm6RMV07QQSDwyUK8yQS1rk8z9DS
+         +KwCRgkzzCTMzU3Z5+ch/vvdKUrGBRDDR6w4x7nPULorMjs67PutxU6KHqrozGQ6au9d
+         d8HSIbYLPJ4hbrYRdGde7+BMhoNQeiyuAIy0b3Y4xsx6GO8xtAHHkv6VJhPl+CktTumo
+         hrNw==
+X-Gm-Message-State: AO0yUKW97oLpxqplmxoY+bwjqfdYD4X2xSuBcQjN2OyH8ikZ1VKSOGWm
+        ZhHN3LvNt+9IkqfhQqJ+75uCRw==
+X-Google-Smtp-Source: AK7set8vBWfXVH0I3G7ClYmPs1n81MK1qNsDlSUnJEVAfy1Nyh+CRYkg6nzQx4o/eaCCvokyLt3ubw==
+X-Received: by 2002:a05:600c:130f:b0:3cf:7197:e68a with SMTP id j15-20020a05600c130f00b003cf7197e68amr9902039wmf.18.1675945377311;
+        Thu, 09 Feb 2023 04:22:57 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id t8-20020a7bc3c8000000b003e00c9888besm4850980wmj.30.2023.02.09.04.22.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 04:22:56 -0800 (PST)
+Message-ID: <027268b7-4b04-f52e-06a8-9d924dc6efe4@linaro.org>
+Date:   Thu, 9 Feb 2023 12:22:55 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Mark cont splash memory
+ region as reserved
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <20230124182857.1524912-1-amit.pundir@linaro.org>
+ <39751511-3f06-7c39-9c21-208d4c272113@linaro.org>
+ <CAA8EJppLBuA08hkqTrZx_wwbtCxK9sAjv48c9_DxgPENgo7a8Q@mail.gmail.com>
+ <1a840d88-e5b1-711c-b980-f57620c54472@linaro.org>
+ <8508e3d5-7468-0b2f-5a43-7c439ecf2d8b@linaro.org>
+ <CAMi1Hd2UNxXHUVWO-=sWh=-bVnrqE3UdLguFOq+62SfvUiEs0A@mail.gmail.com>
+ <b2307e91-3373-539a-ecfb-e2542b9f83db@linaro.org>
+ <ed737e67-eabc-6f29-b734-f4698767ca8e@linaro.org>
+ <fa2e0db7-5b27-5a41-920b-b786dc4e521c@linaro.org>
+In-Reply-To: <fa2e0db7-5b27-5a41-920b-b786dc4e521c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,128 +91,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This 2nd variables are all set as true in treewide. So I think
-it can be removed for easy understanding.
+On 09/02/2023 12:11, Bryan O'Donoghue wrote:
+>> If the bootloader splash is enabled then this memory is used until the
+>> DPU driver instructs MDP5 pipes to suck data from a newly assigned 
+>> address,
+>> so there's a short window where it is.
+> 
+> It seems a shame to reserve 30 something megabytes of memory for 
+> continuous splash unless we are actually using it is my point.
+> 
+> If I'm running headless its just wasted memory.
 
-Signed-off-by: Zhang Yiqun <zhangyiqun@phytium.com.cn>
+Couldn't we
+
+1. Find reserved continuous splash memory
+2. Fee it in the MDP when we make the transition
+
+It must be possible
+
 ---
- include/sound/hdaudio.h           | 2 +-
- sound/hda/hdac_stream.c           | 7 ++-----
- sound/pci/hda/hda_controller.c    | 2 +-
- sound/soc/intel/avs/pcm.c         | 2 +-
- sound/soc/intel/avs/probes.c      | 2 +-
- sound/soc/intel/skylake/skl-pcm.c | 4 ++--
- 6 files changed, 8 insertions(+), 11 deletions(-)
-
-diff --git a/include/sound/hdaudio.h b/include/sound/hdaudio.h
-index a6872537724d..536612c6ab0c 100644
---- a/include/sound/hdaudio.h
-+++ b/include/sound/hdaudio.h
-@@ -575,7 +575,7 @@ void snd_hdac_stream_cleanup(struct hdac_stream *azx_dev);
- int snd_hdac_stream_setup_periods(struct hdac_stream *azx_dev);
- int snd_hdac_stream_set_params(struct hdac_stream *azx_dev,
- 				unsigned int format_val);
--void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start);
-+void snd_hdac_stream_start(struct hdac_stream *azx_dev);
- void snd_hdac_stream_stop(struct hdac_stream *azx_dev);
- void snd_hdac_stop_streams(struct hdac_bus *bus);
- void snd_hdac_stop_streams_and_chip(struct hdac_bus *bus);
-diff --git a/sound/hda/hdac_stream.c b/sound/hda/hdac_stream.c
-index 547adbc22590..1f56fd33b9af 100644
---- a/sound/hda/hdac_stream.c
-+++ b/sound/hda/hdac_stream.c
-@@ -124,11 +124,10 @@ EXPORT_SYMBOL_GPL(snd_hdac_stream_init);
- /**
-  * snd_hdac_stream_start - start a stream
-  * @azx_dev: HD-audio core stream to start
-- * @fresh_start: false = wallclock timestamp relative to period wallclock
-  *
-  * Start a stream, set start_wallclk and set the running flag.
-  */
--void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start)
-+void snd_hdac_stream_start(struct hdac_stream *azx_dev)
- {
- 	struct hdac_bus *bus = azx_dev->bus;
- 	int stripe_ctl;
-@@ -136,8 +135,6 @@ void snd_hdac_stream_start(struct hdac_stream *azx_dev, bool fresh_start)
- 	trace_snd_hdac_stream_start(bus, azx_dev);
- 
- 	azx_dev->start_wallclk = snd_hdac_chip_readl(bus, WALLCLK);
--	if (!fresh_start)
--		azx_dev->start_wallclk -= azx_dev->period_wallclk;
- 
- 	/* enable SIE */
- 	snd_hdac_chip_updatel(bus, INTCTL,
-@@ -966,7 +963,7 @@ EXPORT_SYMBOL_GPL(snd_hdac_dsp_prepare);
- void snd_hdac_dsp_trigger(struct hdac_stream *azx_dev, bool start)
- {
- 	if (start)
--		snd_hdac_stream_start(azx_dev, true);
-+		snd_hdac_stream_start(azx_dev);
- 	else
- 		snd_hdac_stream_stop(azx_dev);
- }
-diff --git a/sound/pci/hda/hda_controller.c b/sound/pci/hda/hda_controller.c
-index 0ff286b7b66b..c19d45618a09 100644
---- a/sound/pci/hda/hda_controller.c
-+++ b/sound/pci/hda/hda_controller.c
-@@ -257,7 +257,7 @@ static int azx_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
- 		azx_dev = get_azx_dev(s);
- 		if (start) {
- 			azx_dev->insufficient = 1;
--			snd_hdac_stream_start(azx_stream(azx_dev), true);
-+			snd_hdac_stream_start(azx_stream(azx_dev));
- 		} else {
- 			snd_hdac_stream_stop(azx_stream(azx_dev));
- 		}
-diff --git a/sound/soc/intel/avs/pcm.c b/sound/soc/intel/avs/pcm.c
-index f930c5e86a84..b673b84ead32 100644
---- a/sound/soc/intel/avs/pcm.c
-+++ b/sound/soc/intel/avs/pcm.c
-@@ -647,7 +647,7 @@ static int avs_dai_fe_trigger(struct snd_pcm_substream *substream, int cmd, stru
- 	case SNDRV_PCM_TRIGGER_START:
- 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
- 		spin_lock_irqsave(&bus->reg_lock, flags);
--		snd_hdac_stream_start(hdac_stream(host_stream), true);
-+		snd_hdac_stream_start(hdac_stream(host_stream));
- 		spin_unlock_irqrestore(&bus->reg_lock, flags);
- 
- 		/* Timeout on DRSM poll shall not stop the resume so ignore the result. */
-diff --git a/sound/soc/intel/avs/probes.c b/sound/soc/intel/avs/probes.c
-index 29d63f2a9616..741565c6465a 100644
---- a/sound/soc/intel/avs/probes.c
-+++ b/sound/soc/intel/avs/probes.c
-@@ -190,7 +190,7 @@ static int avs_probe_compr_trigger(struct snd_compr_stream *cstream, int cmd,
- 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
- 	case SNDRV_PCM_TRIGGER_RESUME:
- 		spin_lock_irqsave(&bus->reg_lock, cookie);
--		snd_hdac_stream_start(hdac_stream(host_stream), true);
-+		snd_hdac_stream_start(hdac_stream(host_stream));
- 		spin_unlock_irqrestore(&bus->reg_lock, cookie);
- 		break;
- 
-diff --git a/sound/soc/intel/skylake/skl-pcm.c b/sound/soc/intel/skylake/skl-pcm.c
-index dc627d18518d..a4209d88b0c6 100644
---- a/sound/soc/intel/skylake/skl-pcm.c
-+++ b/sound/soc/intel/skylake/skl-pcm.c
-@@ -449,7 +449,7 @@ static int skl_decoupled_trigger(struct snd_pcm_substream *substream,
- 	spin_lock_irqsave(&bus->reg_lock, cookie);
- 
- 	if (start) {
--		snd_hdac_stream_start(hdac_stream(stream), true);
-+		snd_hdac_stream_start(hdac_stream(stream));
- 		snd_hdac_stream_timecounter_init(hstr, 0);
- 	} else {
- 		snd_hdac_stream_stop(hdac_stream(stream));
-@@ -1134,7 +1134,7 @@ static int skl_coupled_trigger(struct snd_pcm_substream *substream,
- 			continue;
- 		stream = get_hdac_ext_stream(s);
- 		if (start)
--			snd_hdac_stream_start(hdac_stream(stream), true);
-+			snd_hdac_stream_start(hdac_stream(stream));
- 		else
- 			snd_hdac_stream_stop(hdac_stream(stream));
- 	}
--- 
-2.17.1
-
+bod
