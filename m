@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E84690D0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82994690D15
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjBIPeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
+        id S231378AbjBIPe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjBIPeJ (ORCPT
+        with ESMTP id S230435AbjBIPet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:34:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B6C38B55
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:33:22 -0800 (PST)
+        Thu, 9 Feb 2023 10:34:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D53D5C48F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:33:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675956801;
+        s=mimecast20190719; t=1675956804;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=1qMXUw9dsgBVhjNMR0OfieQvkRg7GOetq5N/8/ayAmg=;
-        b=O9IyU574Fv4knMpc7dsljjE9ZyEP581ejvihoL3kF99WyEJqOQ3qBcbWlCccyfoC0KNjmF
-        mEp7GrkzzMr5Oi+V9p72IrW8Lac0c9PkkLL1VcUT600EBYzmymt3t2piJa576KBMx7t4AL
-        fXGXJSzfyWIPBNA7GiG2/64uO/FNE5I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         references:references; bh=FePX2+VFBr01iZwaVbBM1HjdLAtX/eNoAgkcl35m848=;
+        b=DueGOE/WgGjuikn8AERpx5fogV0gjbbI5u+9lzu2vp86IdhcyEcZKBkMeRtDD2iZgVnelP
+        NewLAoEBMw/s44r2qQMyvQBALYDm0gKeCYT+jJRh8qQ17ZPtDgSbN0H2nmDrL9aoNk5tBb
+        iAzVJas9iO3TD9GZhAYHoghwQ4dWfq0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-gM0BUYDHOl-4dDHK3bUZLg-1; Thu, 09 Feb 2023 10:33:17 -0500
-X-MC-Unique: gM0BUYDHOl-4dDHK3bUZLg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-467-f84dd5UROTGCJx2buXnEzg-1; Thu, 09 Feb 2023 10:33:20 -0500
+X-MC-Unique: f84dd5UROTGCJx2buXnEzg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D00932807D6A;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CFC68104F0D0;
         Thu,  9 Feb 2023 15:33:14 +0000 (UTC)
 Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9FE17440BC;
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A28292026D76;
         Thu,  9 Feb 2023 15:33:14 +0000 (UTC)
 Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 6B645403CC071; Thu,  9 Feb 2023 12:32:51 -0300 (-03)
-Message-ID: <20230209153204.711672794@redhat.com>
+        id 6F68A403CC073; Thu,  9 Feb 2023 12:32:51 -0300 (-03)
+Message-ID: <20230209153204.737772842@redhat.com>
 User-Agent: quilt/0.67
-Date:   Thu, 09 Feb 2023 12:01:53 -0300
+Date:   Thu, 09 Feb 2023 12:01:54 -0300
 From:   Marcelo Tosatti <mtosatti@redhat.com>
 To:     Christoph Lameter <cl@linux.com>
 Cc:     Aaron Tomlin <atomlin@atomlin.com>,
@@ -48,11 +48,11 @@ Cc:     Aaron Tomlin <atomlin@atomlin.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH v2 03/11] this_cpu_cmpxchg: loongarch: switch this_cpu_cmpxchg to locked, add _local function
+Subject: [PATCH v2 04/11] this_cpu_cmpxchg: S390: switch this_cpu_cmpxchg to locked, add _local function
 References: <20230209150150.380060673@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -68,50 +68,25 @@ per-CPU counters to global counters remotely. For this,
 an atomic this_cpu_cmpxchg is necessary.
 
 Following the kernel convention for cmpxchg/cmpxchg_local,
-add this_cpu_cmpxchg_local helpers to Loongarch.
+add S390's this_cpu_cmpxchg_local.
 
 Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-Index: linux-vmstat-remote/arch/loongarch/include/asm/percpu.h
+Index: linux-vmstat-remote/arch/s390/include/asm/percpu.h
 ===================================================================
---- linux-vmstat-remote.orig/arch/loongarch/include/asm/percpu.h
-+++ linux-vmstat-remote/arch/loongarch/include/asm/percpu.h
-@@ -150,6 +150,16 @@ static inline unsigned long __percpu_xch
- }
+--- linux-vmstat-remote.orig/arch/s390/include/asm/percpu.h
++++ linux-vmstat-remote/arch/s390/include/asm/percpu.h
+@@ -148,6 +148,11 @@
+ #define this_cpu_cmpxchg_4(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
+ #define this_cpu_cmpxchg_8(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
  
- /* this_cpu_cmpxchg */
-+#define _protect_cmpxchg(pcp, o, n)				\
-+({								\
-+	typeof(*raw_cpu_ptr(&(pcp))) __ret;			\
-+	preempt_disable_notrace();				\
-+	__ret = cmpxchg(raw_cpu_ptr(&(pcp)), o, n);		\
-+	preempt_enable_notrace();				\
-+	__ret;							\
-+})
++#define this_cpu_cmpxchg_local_1(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
++#define this_cpu_cmpxchg_local_2(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
++#define this_cpu_cmpxchg_local_4(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
++#define this_cpu_cmpxchg_local_8(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
 +
-+/* this_cpu_cmpxchg_local */
- #define _protect_cmpxchg_local(pcp, o, n)			\
- ({								\
- 	typeof(*raw_cpu_ptr(&(pcp))) __ret;			\
-@@ -222,10 +232,15 @@ do {									\
- #define this_cpu_xchg_4(pcp, val) _percpu_xchg(pcp, val)
- #define this_cpu_xchg_8(pcp, val) _percpu_xchg(pcp, val)
- 
--#define this_cpu_cmpxchg_1(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
--#define this_cpu_cmpxchg_2(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
--#define this_cpu_cmpxchg_4(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
--#define this_cpu_cmpxchg_8(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
-+#define this_cpu_cmpxchg_local_1(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
-+#define this_cpu_cmpxchg_local_2(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
-+#define this_cpu_cmpxchg_local_4(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
-+#define this_cpu_cmpxchg_local_8(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
-+
-+#define this_cpu_cmpxchg_1(ptr, o, n) _protect_cmpxchg(ptr, o, n)
-+#define this_cpu_cmpxchg_2(ptr, o, n) _protect_cmpxchg(ptr, o, n)
-+#define this_cpu_cmpxchg_4(ptr, o, n) _protect_cmpxchg(ptr, o, n)
-+#define this_cpu_cmpxchg_8(ptr, o, n) _protect_cmpxchg(ptr, o, n)
- 
- #include <asm-generic/percpu.h>
- 
+ #define arch_this_cpu_xchg(pcp, nval)					\
+ ({									\
+ 	typeof(pcp) *ptr__;						\
 
 
