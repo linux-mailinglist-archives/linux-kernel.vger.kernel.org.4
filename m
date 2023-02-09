@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168B168FC88
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD76A68FC8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjBIBPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:15:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S231316AbjBIBPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:15:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbjBIBPB (ORCPT
+        with ESMTP id S231274AbjBIBPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:15:01 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4312112;
-        Wed,  8 Feb 2023 17:15:00 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318NtCrE002600;
-        Thu, 9 Feb 2023 01:14:47 GMT
+        Wed, 8 Feb 2023 20:15:02 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F92D4684;
+        Wed,  8 Feb 2023 17:15:01 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 318MfDwK027647;
+        Thu, 9 Feb 2023 01:14:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=Gefn7U10FjXoZFMeGM4wlvJm5FR6Qk3g5g9TG7UvIb0=;
- b=RVHm4rGDVYnOyEECoC31eIx9F3cR5TV0LjSb2dQvIXJ18T9QzLBtNrpMBCQQo7igrjqh
- E5LXZWj94iwlUU/8/KYts8uXDB46hekL5m4SVtzyELceLBSk9rTo+/s8cSmjgxwdCxM1
- +u0cWtGrso7gPY/hWcknLd/HIWQaXPADV58tBKBMA2MAKAHzaaI5owBo1+YxQtschcsM
- Ctn3Z02gYnAs3T32Ih1P2Er7W0oqKhAQ9+ryl32Nb0+AMbCU36q2Ew5qsbEwKPkNGn+W
- HkkTkBAT293BHIocSw8uMAI6xBioktD2gCUmm7PcARqINjWuk9dlii6v1m8+cz0V+Zeq ag== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nm7u8abdb-1
+ bh=MrIp1Up8n5Xbu0zttFuFGM8RbbY2L2qvKoa1xIP/6Fg=;
+ b=J+7p9Wc/k21f5bkLAl7NRLjMlIUcTzsqjRGw4e4SSNbEhO/PnlEERBw8V/4ApU8ITvg+
+ MyyWeqxRGLSuqcIU6Wx5isQk3276sGwBGDVeqn2vEcl27o0WVVeOS17MnW4NG63Jhare
+ gzZFBs4UVD9Wp0gUNCdJqAdPdoIfh9DKY05568+6yIFiQB36DdlVZMUq4krtAbAR0+Xa
+ wtIesLEZ1dlVLu0QfX+dQgVBwa0sUvvtQgI3Lc+cBvlsJ42FmNy+41qN/WXq9/pl6/YO
+ /i625vBskw8dXE18D4fm80dA7Qd8vCOQ7rLf0Zoq0f0twXQ8/BbR2KoIn2ETiuTpMTe/ WA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nmg9egwsu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 01:14:47 +0000
+        Thu, 09 Feb 2023 01:14:48 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3191Ei1Z015201
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3191Ekqm032323
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 9 Feb 2023 01:14:46 GMT
 Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 8 Feb 2023 17:14:44 -0800
+ 15.2.986.36; Wed, 8 Feb 2023 17:14:45 -0800
 From:   Bjorn Andersson <quic_bjorande@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -49,9 +49,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 2/4] arm64: dts: qcom: sc8280xp-crd: Introduce pmic_glink
-Date:   Wed, 8 Feb 2023 17:13:23 -0800
-Message-ID: <20230209011325.2603663-3-quic_bjorande@quicinc.com>
+Subject: [PATCH v2 3/4] arm64: dts: qcom: sc8280xp-x13s: Enable external display
+Date:   Wed, 8 Feb 2023 17:13:24 -0800
+Message-ID: <20230209011325.2603663-4-quic_bjorande@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230209011325.2603663-1-quic_bjorande@quicinc.com>
 References: <20230209011325.2603663-1-quic_bjorande@quicinc.com>
@@ -63,34 +63,28 @@ X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ePCZzepJxsWrxPVqeyfTMrXFuTLOUcGr
-X-Proofpoint-ORIG-GUID: ePCZzepJxsWrxPVqeyfTMrXFuTLOUcGr
+X-Proofpoint-GUID: aW2RFZCPBtbVpvJ43QU-Svn_3hsXgY2u
+X-Proofpoint-ORIG-GUID: aW2RFZCPBtbVpvJ43QU-Svn_3hsXgY2u
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-02-08_11,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- mlxlogscore=999 bulkscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302090010
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ malwarescore=0 impostorscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1015 lowpriorityscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090009
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+Like on the CRD, add the necessary nodes to enable USB Type-C
+altmode-based external display on the Lenovo ThinkPad X13s.
 
-The SC8280XP CRD control over battery management and its two USB Type-C
-port using pmic_glink and two GPIO-based SBU muxes.
-
-Enable the two DisplayPort instances, GPIO SBU mux instance and
-pmic_glink with the two connectors on the CRD.
-
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 ---
 
@@ -98,17 +92,17 @@ Changes since v1:
 - Fixed style and property sort issues
 - Moved dwc3/port to sc8280xp.dtsi, override remote-endpoint here
 - Added pinconf properties to SBU control pins
+- Dropped unused mode-pins
 
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 200 +++++++++++++++++++++-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi    |   9 +
- 2 files changed, 207 insertions(+), 2 deletions(-)
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 188 +++++++++++++++++-
+ 1 file changed, 186 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-index 3f116a879e22..d2276b28b5db 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-@@ -36,6 +36,78 @@ chosen {
- 		stdout-path = "serial0:115200n8";
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index f936b020a71d..923972e54eb1 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -77,6 +77,78 @@ switch-lid {
+ 		};
  	};
  
 +	pmic-glink {
@@ -186,8 +180,8 @@ index 3f116a879e22..d2276b28b5db 100644
  	vreg_edp_3p3: regulator-edp-3p3 {
  		compatible = "regulator-fixed";
  
-@@ -139,6 +211,46 @@ linux,cma {
- 			linux,cma-default;
+@@ -238,6 +310,46 @@ map1 {
+ 			};
  		};
  	};
 +
@@ -233,7 +227,7 @@ index 3f116a879e22..d2276b28b5db 100644
  };
  
  &apps_rsc {
-@@ -262,6 +374,34 @@ &mdss0 {
+@@ -377,6 +489,34 @@ &mdss0 {
  	status = "okay";
  };
  
@@ -267,48 +261,41 @@ index 3f116a879e22..d2276b28b5db 100644
 +
  &mdss0_dp3 {
  	compatible = "qcom,sc8280xp-edp";
- 	/delete-property/ #sound-dai-cells;
-@@ -480,7 +620,6 @@ &usb_0 {
+ 
+@@ -871,8 +1011,13 @@ &usb_0 {
  };
  
  &usb_0_dwc3 {
 -	/* TODO: Define USB-C connector properly */
  	dr_mode = "host";
- };
- 
-@@ -499,12 +638,15 @@ &usb_0_qmpphy {
- 	status = "okay";
- };
- 
-+&usb_0_role_switch {
-+	remote-endpoint = <&pmic_glink_con0_hs>;
-+};
 +
- &usb_1 {
- 	status = "okay";
++	port {
++		usb_0_role_switch: endpoint {
++			remote-endpoint = <&pmic_glink_con0_hs>;
++		};
++	};
+ };
+ 
+ &usb_0_hsphy {
+@@ -895,8 +1040,13 @@ &usb_1 {
  };
  
  &usb_1_dwc3 {
 -	/* TODO: Define USB-C connector properly */
  	dr_mode = "host";
- };
- 
-@@ -523,6 +665,10 @@ &usb_1_qmpphy {
- 	status = "okay";
- };
- 
-+&usb_1_role_switch {
-+	remote-endpoint = <&pmic_glink_con1_hs>;
-+};
 +
- &xo_board_clk {
- 	clock-frequency = <38400000>;
++	port {
++		usb_1_role_switch: endpoint {
++			remote-endpoint = <&pmic_glink_con1_hs>;
++		};
++	};
  };
-@@ -709,4 +855,54 @@ reset-n-pins {
- 			drive-strength = <16>;
+ 
+ &usb_1_hsphy {
+@@ -1147,6 +1297,40 @@ reset-n-pins {
  		};
  	};
-+
+ 
 +	usb0_sbu_default: usb0-sbu-state {
 +		oe-n-pins {
 +			pins = "gpio101";
@@ -323,14 +310,6 @@ index 3f116a879e22..d2276b28b5db 100644
 +			function = "gpio";
 +			bias-disable;
 +			drive-strength = <16>;
-+		};
-+
-+		mode-pins {
-+			pins = "gpio167";
-+			function = "gpio";
-+			bias-disable;
-+			drive-strength = <16>;
-+			output-high;
 +		};
 +	};
 +
@@ -349,43 +328,11 @@ index 3f116a879e22..d2276b28b5db 100644
 +			bias-disable;
 +			drive-strength = <16>;
 +		};
-+
-+		mode-pins {
-+			pins = "gpio50";
-+			function = "gpio";
-+			bias-disable;
-+			drive-strength = <16>;
-+			output-high;
-+		};
 +	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index fcd393444f47..0495361fc0fd 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -3040,6 +3040,11 @@ usb_0_dwc3: usb@a600000 {
- 				iommus = <&apps_smmu 0x820 0x0>;
- 				phys = <&usb_0_hsphy>, <&usb_0_qmpphy QMP_USB43DP_USB3_PHY>;
- 				phy-names = "usb2-phy", "usb3-phy";
 +
-+				port {
-+					usb_0_role_switch: endpoint {
-+					};
-+				};
- 			};
- 		};
- 
-@@ -3095,6 +3100,10 @@ usb_1_dwc3: usb@a800000 {
- 				iommus = <&apps_smmu 0x860 0x0>;
- 				phys = <&usb_1_hsphy>, <&usb_1_qmpphy QMP_USB43DP_USB3_PHY>;
- 				phy-names = "usb2-phy", "usb3-phy";
-+				port {
-+					usb_1_role_switch: endpoint {
-+					};
-+				};
- 			};
- 		};
- 
+ 	wcd_default: wcd-default-state {
+ 		reset-pins {
+ 			pins = "gpio106";
 -- 
 2.25.1
 
