@@ -2,110 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6726E68FD81
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 101AC68FD8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbjBIC7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S232558AbjBIC7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232100AbjBIC6N (ORCPT
+        with ESMTP id S231868AbjBIC6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:58:13 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA5610D9;
-        Wed,  8 Feb 2023 18:54:57 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3192q8Su028492;
-        Thu, 9 Feb 2023 02:54:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=xRBCpmMlb+PdxAxbWJgFjwkY9Jhnv3MJ4cp7Q/6EzsY=;
- b=saqJ+7WSaSVGTecgo/8Q4Kn2NksUR7c28xV1hoGJxk0uSMrS0Kd5x6GiMOl1Wh+oTJNg
- NkOC5MCRdfKvt5DhK5ZmqIH8R+ab2S1dzp84u0dEMleSDDxSRoYboqT1pag/eIKva7QJ
- 15aQhxJJTMCXolTDhx5O7SA/NaRHKW0fZ4+DhjWfo6HXpXzE/Y6rwHGpaljlmKJfX8ru
- EMtgRCaQRO0rbRYdjRfMuO/iPkiYOJ9T/LhpNTjHnH9nlIiu07nM+hYEwJHBZZBefIUP
- ptSaXFRY7mrsUbgEZwuESTODgy+5H7SpP2kN9LfIcUrgbzcEM3sWY1KN54Yn9mEzLDpA Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmre4g1q1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 02:54:35 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3192qM8R029126;
-        Thu, 9 Feb 2023 02:54:34 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nmre4g1pu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 02:54:34 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 31905bgV003472;
-        Thu, 9 Feb 2023 02:54:33 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3nhf07gcch-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Feb 2023 02:54:33 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3192sWqL54264188
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 9 Feb 2023 02:54:32 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3549358064;
-        Thu,  9 Feb 2023 02:54:32 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CA1F15805C;
-        Thu,  9 Feb 2023 02:54:29 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.12.101])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  9 Feb 2023 02:54:29 +0000 (GMT)
-Message-ID: <d30b895e677613bca520d626741cc9424f8d46e8.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 0/6] Add CA enforcement keyring restrictions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>,
-        "tadeusz.struk@intel.com" <tadeusz.struk@intel.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>,
-        Elaine Palmer <erpalmer@linux.vnet.ibm.com>,
-        Coiby Xu <coxu@redhat.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "Lee, Chun-Yi" <jlee@suse.com>
-Date:   Wed, 08 Feb 2023 21:54:29 -0500
-In-Reply-To: <D598759A-48FD-46E2-979C-3022A5920C0F@oracle.com>
-References: <20230207025958.974056-1-eric.snowberg@oracle.com>
-         <41dffdaeb7eb7840f7e38bc691fbda836635c9f9.camel@linux.ibm.com>
-         <D598759A-48FD-46E2-979C-3022A5920C0F@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 8 Feb 2023 21:58:16 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2106.outbound.protection.outlook.com [40.107.220.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3EB5FC5;
+        Wed,  8 Feb 2023 18:55:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EqvwgFteqTsrT7hjFlJEiH2aoKa1o3EoY/xH2AVnDLTOUs2DgtkNtdEdwdUKvET/uad0VBzSClto0AArd6Sh0hLR2/rUy6HkrBtJk/i1eJY6a/WT986UL74GKABZ/13LYb85q3Vy5fYuehZ92YVq8nzUcpvQ0HMdwRoSlsIjHuj8B2lGhucejC5CtISsXpi4M3Y3acgJhkpCLesCaK657gsnb/l15BBw8WZFR9D/b0n2PwSTyBBXczpUiki8he35Vq1iGQOreUs5MININK//GwIUq6hW55xW6zQ5/5z5uL/Uznsz4A1Nh7DZEZXm4qI8wvI8XrkepY2SUqGfQUVAjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eBpIFgA13eOlz18P+RWkeh6slWc4sJjwbtFMtWOwKG4=;
+ b=Ok4NYeLo2dLEeh1oQFYHuk6TBWpgUi5LmesJROHHX3lbwciNfxy5E5Tuml6nE1BS2QMn8GEvOripm8i9VAItSSc97wd2smL6mDUNyxKl1yefBAEsnNqovFruv0CKjhzb9V7xsO6tgOPCFOpcXBNyViuLxtXzpwL4O+ZYffL3+bytskuLlvPwPHmIQ9TosCDHRUuLfnqvEmcZw17w8RT2TsjBh7N0/xaNEEC89wLMpSaEqyg8gORk+BgaCaI4IX8jD8nwUOq5XqD0uekuiGOwpNlLSH/L9gsMo/BhMeKouGFk6sukeOasWEzvTo8fHtdjwuSikQBF4T2XL4WnEf3ZCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eBpIFgA13eOlz18P+RWkeh6slWc4sJjwbtFMtWOwKG4=;
+ b=dB0L059Hp5HxrO617fgpRi2iWtKjgqC7Rq6amlVCa2pNgJv6YXKP22SyTGJOySMJAnbwJ83l7V8XpCp8V4B5hGObIoEB+92Zgayx5pU10p7XMIBkXFOKNAth8ZY/0zLQyKJLijtRVm2F308IQewMkfRmlkR7R/WMv/7tI7dnrAs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by CH2PR10MB4391.namprd10.prod.outlook.com
+ (2603:10b6:610:7d::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.17; Thu, 9 Feb
+ 2023 02:55:39 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::1897:6663:87ba:c8fa%4]) with mapi id 15.20.6086.017; Thu, 9 Feb 2023
+ 02:55:38 +0000
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Tony Lindgren <tony@atomide.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        soc@kernel.org, Olof Johansson <olof@lixom.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v3 0/2] add support for Phytec PCM-049 and PCM-959
+Date:   Wed,  8 Feb 2023 18:55:23 -0800
+Message-Id: <20230209025525.148872-1-colin.foster@in-advantage.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1GQvbMw_VvDMw8nv8e1DUbPR4TuWc0Ba
-X-Proofpoint-ORIG-GUID: JKwvLUPNM1mWkzMrS0fiyiX_lTaE9-OX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_11,2023-02-08_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 clxscore=1015 mlxscore=0
- bulkscore=0 impostorscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302090022
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0156.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::11) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|CH2PR10MB4391:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4cedd749-7fab-4eb9-444b-08db0a491fb3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iZhhB6deO2bqiddAyWDvGLhoQAhvsbyIi3JUI214vJ/b8H1yb5OhaUA4TIs7seIWQwseXiaTHxcCIJtRiUQclOqHauzSr5G7RWgIekN64CZ1tPydrHSysrO0k4xCrVII9rUpC9sWhM9+5xa5wMtodiZeBJ8qKo1T4oOufeyXleL/EzGk1XOEF5Tx2Pz2vQL57Se1FYeV23dJlL3BTgVhfBWsa7wosm2kpZ8LWgcOF17SMO2gA++/jhKa5o++UTkAiYBqYfxXtc50Cpf2TUXB4DW9vDxF+1trLwZnwguj52Vc9tQ/O3MG1qCw5Nyrp4hCsbqZac1SMrGoMZhTx48/GCWhOWeX0lz/ZhWNG3wxmqyS6R24CWXf9mlhNbSXdbZywcGPaRLHKfBxbbE0yf6QYjjYYOM4QPOhO+g9aMr4UOmmhCr/ICf0e99Yxzvh13iIdDz1IHN5AWIxGrLbXHPULxvwNZEOVlYe8kufQjA9vbnq9FiblTVM2u8gzYak1RHR4BrJGcMI9UG/E0qkpf5XQYKAjEy8ecWscrwW6BI+aJ3E5UzV5cOvisNq/Z47hlxPBaZB78ZYNTj1/7vjsgVBiimTnTYsjBiAA18a498c3EJvVxrPCU8CWJZg7Vq3Pks3JLWOX1H37Bjc6g3UzJ+F4Oxox7NpLZOF2LhxVPcMXLYM7dsGcGp2rnNKHNYRpfYd7EUEuAYFM+P6voAmUxFJDI36dQaXsgQrkkyic4Keo3I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39830400003)(396003)(346002)(376002)(136003)(451199018)(4326008)(8676002)(66946007)(66556008)(66476007)(66899018)(41300700001)(38100700002)(38350700002)(2616005)(316002)(186003)(26005)(2906002)(8936002)(1076003)(6506007)(6512007)(6666004)(86362001)(478600001)(966005)(6486002)(5660300002)(52116002)(54906003)(83380400001)(7416002)(44832011)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?356gvC19D3Xn/ec4Tn00btJR81dNtnGHprTYhAIHALd6KuuGz9GIlwYyhVAv?=
+ =?us-ascii?Q?UrO9V2QJwwxFdGSD6eTxrac84fehydc0jC1ehF5wtmOAJcDQT2DQPURNrCZW?=
+ =?us-ascii?Q?1i+CAflVDdfaJXpKEYNErXNJcDhzQunUlHx6Hd0oufIzlDLfxuJrSAe+F8y7?=
+ =?us-ascii?Q?Xx2PdAgXBkQbrHttCd1FhkCoYM3cnKfgJgD/f0G1XkEGEEGR8PwCxerjkveP?=
+ =?us-ascii?Q?YWTNPp3PCy8T/Rg7NknrH2gfjr5qVJ+q+v7aa0COaeLymh5f4Tq+26UlnqJj?=
+ =?us-ascii?Q?TMS2CpgDUzWvpK9ttf7U6rySNNc1FynzqupuzqNaBooo+M/wvyvqHf3kWSAN?=
+ =?us-ascii?Q?KqYs1n+fbmwSkJlV5d89muzSNsQ0JjuVy4rmlXVYaxcEMEAteA6Lyr/u2Kxs?=
+ =?us-ascii?Q?QqV2wx+MKxNql4ZxZ8c6YujgcXpiatdZin2JlICBV8YeI2kdotkp4nhVMkq8?=
+ =?us-ascii?Q?DPrfrBm0YEEbqD6DruSkdEpXZmapgQl9eYkHfdRykWjDCOCDaqG2jArJBR6h?=
+ =?us-ascii?Q?p8vAcZw5IqS7qpv8zLMCkmmC2wFVPGg0PLfDm3biBQ7SNzlPKbY4sg6UGmVm?=
+ =?us-ascii?Q?jSDfpGGTa3N9HCoXwiBvYQpk0IIUxgukvuAzf85jqqVrPp0jh4fNZrUVxyJ2?=
+ =?us-ascii?Q?sxZw8qhu36jpwGrriLoYSOvZ5ct189HHEcfuXPEp+Fi+w/RWAC0E0WjznYbj?=
+ =?us-ascii?Q?ZbKLe0qeghTb0+dZnbPVNMTG5JGT8TcgafRkpl7LvHqCQzUzx17o3e71OPtP?=
+ =?us-ascii?Q?hqyipiMGuueT0e3X7OuV9MQWHoEWNweclJ/9fMAGhr4klbN3Lgi87tU9/pH2?=
+ =?us-ascii?Q?5322I26XWdQILVuVpAYA3U4UeYa8Q0P68sbmecjHEYZ30208WSCGOV6p00gq?=
+ =?us-ascii?Q?DCdNtXbv4XrDhiyMum0M1rhckoQkzloljMXfM5v/P9V55xK2V8+Fd4WB+f0i?=
+ =?us-ascii?Q?hL+AaGIuQjbgm5h8PFywadaRg1VsEA0g+/WjEPQDYL5yAQzBqfNYUcUvXRxp?=
+ =?us-ascii?Q?gcTq/V/SBoa30S/ApgUq5jIh8rGYcz2wbEZqUblLdUF0MEjGJ/RJWXMN9GlO?=
+ =?us-ascii?Q?5yOiCPSq3DBH4TLI9IozxNOk4qysjypTzkhDVT9FbYZTGzBGYzcoBV1bkWWA?=
+ =?us-ascii?Q?d0MDs6NdFft7DfVe7Igalv6Cj2Gz/fIfQFO7lc7KkVpIu/zGqVjLDpFq4OAF?=
+ =?us-ascii?Q?QGIHcGy8TzSRBvQ2HLvs8OMuz5V4LmHME9kxhCzbZzct1rS38QiMujj/FtTo?=
+ =?us-ascii?Q?xqPpuoHSTA7zAngOKOPLWtrykBoQPwJ2TsNUm2a92A9Wu9df4x1BbUMMidEG?=
+ =?us-ascii?Q?rrinwyQ/UQePfO+nGs95iUPfEBpeiUv0path9t0FG4ADu2yZYSxaDb1VD+sp?=
+ =?us-ascii?Q?n9t3IQxj23X0TxtHv01t5ONGYlKboQYc1PzznZK3mO0KR0048bK23mVuTc98?=
+ =?us-ascii?Q?nik5Ssr1sJfob4xVj/C5muAQmObzMuOCHdE8aj4dPyE8ntq8TdlC9BiouLJM?=
+ =?us-ascii?Q?PzDRUUjPRyz8ZfekYOpcP05HP7wyLhHa2SmqynQHtbJikEELpX7sw+QDNCpr?=
+ =?us-ascii?Q?MMU00w2u8qxUW0LaHK6ArHrAeHTZJoa7S+W47u6wj7D4M9FoGi/oi3r7V3t0?=
+ =?us-ascii?Q?5sxu0/24Z9//CU8BUOTTdcE=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cedd749-7fab-4eb9-444b-08db0a491fb3
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 02:55:38.7070
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kV/lOyTwf9ijaEJgWJ02LY7WbxNUZhQmgAaiF6vEba6vMcAcyJXpnmwJV/VrJuWV5MFwb3XQCr29CuA1/Pf1ciWyJtpS7QOUl2dKuCBsTPk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4391
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,92 +117,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-08 at 23:26 +0000, Eric Snowberg wrote:
-> 
-> > On Feb 8, 2023, at 5:38 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > 
-> > [CC'ing: Lee, Chun-Yi]
-> > 
-> > On Mon, 2023-02-06 at 21:59 -0500, Eric Snowberg wrote:
-> >> Prior to the introduction of the machine keyring, most distros simply 
-> >> allowed all keys contained within the platform keyring to be used
-> >> for both kernel and module verification.  This was done by an out of
-> >> tree patch.  Some distros took it even further and loaded all these keys
-> >> into the secondary trusted keyring.  This also allowed the system owner 
-> >> to add their own key for IMA usage.
-> >> 
-> >> Each distro contains similar documentation on how to sign kernel modules
-> >> and enroll the key into the MOK.  The process is fairly straightforward.
-> >> With the introduction of the machine keyring, the process remains
-> >> basically the same, without the need for any out of tree patches.
-> >> 
-> >> The machine keyring allowed distros to eliminate the out of tree patches
-> >> for kernel module signing.  However, it falls short in allowing the end 
-> >> user to add their own keys for IMA. Currently, the machine keyring can not 
-> >> be used as another trust anchor for adding keys to the ima keyring, since 
-> >> CA enforcement does not currently exist.  This would expand the current 
-> >> integrity gap. The IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY 
-> >> Kconfig states that keys may be added to the ima keyrings if the key is 
-> >> validly signed by a CA cert in the system built-in or secondary trusted 
-> >> keyring.  Currently, there is not code that enforces the contents of a
-> >> CA cert.
-> >> 
-> >> This series introduces a way to do CA enforement with the machine
-> >> keyring. It introduces three different ways to configure the machine
-> >> keyring. A new menu option is added to control the type of keys that may
-> >> be added to it.  The options include none, min, and max restrictions. The
-> >> default is CONFIG_INTEGRITY_CA_MACHINE_KEYRING_NONE. This allows all MOK
-> >> keys into the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MIN
-> >> is selected, the X.509 CA bit must be true.  Also, the key usage must
-> >> contain keyCertSign, any other usage field may also be set. When 
-> >> CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the X.509 CA bit
-> >> must be true.  Also, the key usage must contain keyCertSign and the
-> >> digitialSignature usage may not be set. If a key doesn't pass the CA
-> >> restriction check, instead of going into the machine keyring, it is
-> >> added to the platform keyring. With the ability to configure the machine
-> >> keyring with CA restrictions, code that prevented the machine keyring
-> >> from being enabled with IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY
-> >> has been removed.
-> >> 
-> >> Changelog:
-> >> v4:
-> >> - Removed all code that validated the certificate chain back to the root
-> >>  CA. Now the only restriction is what is initially placed in the
-> >>  machine keyring.
-> >> - Check and store if the X.509 usage contains digitalSignature
-> >> - New Kconfig menu item with none, min and max CA restriction on the 
-> >>  machine keyring
-> > 
-> > Thank you, Eric.
-> > 
-> > For complete separation of certificate usage, at least in the "max" CA
-> > restriction case, the next step would be to limit certificates being
-> > loaded onto the IMA keyring to those with key usage of
-> > "digitalSignature".
-> > 
-> > Perhaps also require a "codeSigning" extendedKeyUsage, though that
-> > might break existing usages.  The "codeSigning" checking could
-> > piggyback on Joey's proposed "Check codeSigning extended key usage
-> > extension" patch set.
-> > 
-> > What do you think?  Do you have any concerns with limiting the type of
-> > certificate being loaded onto the IMA keyring to those with
-> > "digitalSignature"?
-> 
-> In the MAX setting I would not have a concern.  Instead of restrict_link_to_ima 
-> being a macro, a new restriction similar to restrict_link_by_ca could be created.  
-> The new restriction would simply verify digitialSignature is set and the key can be 
-> vouched for by either the built-in or secondary keyrings. Joey’s work to parse 
-> the extended key usage extension could also be included in this restriction.
+As should be clear for the title and patch title, this is adding initial
+support for the OMAP 4460 SOM and dev kit for Phytec's PCM959 evaluation
+kit.
 
-Sounds good.
+The PCM049 is a legacy SOM offered by Phytec:
+https://www.phytec.com/legacy-soms/
+There was a vendor BSP offered by Phytec, but that never entered the
+Device Tree era. This patch is meant to change that.
 
-> I’m assuming this would be follow on work?
+My development bootloader has moved to U-Boot, but I have verified
+Barebox works in the past. When booting from SD card, either bootloader
+should work. When booting from Barebox, the NAND OOB layout is
+incompatible between the bootloader and the kernel.
 
-Yes, that probably makes the most sense.
+I haven't had any OOB / ECC errors in the NAND at all, which was my
+main concern. Due to that, I'm submitting this as a patch instead of
+an RFC. Hardware ECC correction seems to be fully functional.
+
+
+
+v2->v3
+    * Acked-by on patch 1
+    * Code review changes (see patch 2 for details)
+    * Fix intermittent NAND failures (patch 2)
+
+v1->v2
+    * Almost everything moved into the SOM (PCM-049) .dtsi. Only the
+      LED chip is dev-board specific.
+    * Fix pinmux associations (*pmx_core was applying *pmx_wkup
+      entries... I'm surprised that didn't cause more issues)
+    * Documentation added
+
+    * Updates from review:
+    *   Board compatible strings added
+    *   Hyphen / underscore changes
+    *   Remove unnecessary status="okay" entries
+    *   Generic names used (regulator, led-1, etc.)
+
+
+Colin Foster (2):
+  dt-bindings: arm: omap: add phytec pcm-049 som and pcm-959 dev board
+  arm: dts: omap4: pcm959: add initial support for phytec pcm959
+
+ .../devicetree/bindings/arm/omap/omap.txt     |   3 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi   | 400 ++++++++++++++++++
+ arch/arm/boot/dts/omap4-phytec-pcm-959.dts    |  48 +++
+ 4 files changed, 452 insertions(+)
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-049.dtsi
+ create mode 100644 arch/arm/boot/dts/omap4-phytec-pcm-959.dts
 
 -- 
-thanks,
-
-Mimi
+2.25.1
 
