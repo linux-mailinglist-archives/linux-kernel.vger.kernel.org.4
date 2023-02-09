@@ -2,217 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F11368FF9B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E4268FF9D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjBIFEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 00:04:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
+        id S229896AbjBIFGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 00:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjBIFEV (ORCPT
+        with ESMTP id S229629AbjBIFGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 00:04:21 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CB523332;
-        Wed,  8 Feb 2023 21:04:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MB7Hm33aFdCSfPO5EAp30o5D4TtR6HZrXXAjkMRFMhWkL7awv32rW+qcNfjqgVlQu5CKsll7aecoGq0C3OU0sHNHzavYIbLBjOnC+CVJROtRj7nhASuvg4E4f4eKXWPKllTZOBZpiiQbF+yXkArEHWsqm7KvWbTHCwUdGmBLu/n3r6LufXlC8Rbb+6x8aP/UHBWE6iF8Fny56c8J0PlUNmjOMM0PsW1w72cdANbXymTqUG4ETkQolTntYx/SOazaWOis9c5Sq7XRfmMDXqA5W2YG4lDpWh4xHune6av/nxRgdVvDEipDQicurSXiTn91MRtMOKT3tx/zPeEH2xCz8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/tKlnkowQWviMlVNsSoWbtUa16Z60QCNas/6fiQTFGA=;
- b=Jj/PDzugyh74TD7gKGNOHjll2iJctsg4ztzKQ5l1+i/idgh7iRDJPR6SdPU7XXoTXT6xEfgaS8cAC5NNT3YJTrsMknNOGfvX8K4lwFGMR628qsu5+1Kp/hMwn5DQgO93iI6762NzWWddYsxabctRjbo6CGttd2gvDorBxXRWKCTUe9jSu2dYhhUtplsA/QD/t/LktbB56sBiPLto3FZTOFKjU/52QgLW1W4rYa2yDZMkBiojrotuHlUG7LnWCx4pqEDZGKP8BoH8DeNnUuxiRaOFHBKCPJQW9yuHGVhRWGeoyiAsF/o7zPfXHlbgtOpb4uoY7lLCZnYq2OevV5uR9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/tKlnkowQWviMlVNsSoWbtUa16Z60QCNas/6fiQTFGA=;
- b=0xAfzHd3JUO7bF2LLlixUfCqP7frdxuXy3AHTV6hBPD1Jz+J2q80QvJ+a8+2Bc6rffgxmldIEdupPccxMW15mmU0PrfRpeYc7EmUCknnMsAZlTajaQGCUEuoii9lM22eDwglstqg4tfiC2F497jOYqka/ltQXfZWR2pa+yPwe9E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- IA1PR12MB6579.namprd12.prod.outlook.com (2603:10b6:208:3a1::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.27; Thu, 9 Feb
- 2023 05:04:15 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::93f9:c1df:8ca3:fc5b%7]) with mapi id 15.20.6064.034; Thu, 9 Feb 2023
- 05:04:15 +0000
-Date:   Thu, 9 Feb 2023 13:03:52 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jinzhou Su <Jinzhou.Su@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: amd-pstate: avoid uninitialized variable use
-Message-ID: <Y+R+uNXkS/BPpdZc@amd.com>
-References: <20230207161256.271613-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207161256.271613-1-arnd@kernel.org>
-X-ClientProxiedBy: SI1PR02CA0050.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::12) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        Thu, 9 Feb 2023 00:06:23 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7543233EF
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 21:06:19 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id e3so570481wrs.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 21:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SCAErNiP5jJACiJ5m3VC2Hy8VRCwKaL4b/roXt2Wa4I=;
+        b=bSmWByrBZo/BCAzJogEduDSh495ueSvArcTv0JyU1r9RvcoDP69ivbfAQ3rKc4RqBG
+         cHLTg64Doo0Nyv12XsU6SqJguVx4jZ/4Frj+zUVRh4hh7TMxSHOWm5LnCsFlQl4B++Ab
+         y8LwprtakU2mujyXtfHCIDAigXoJuWHwaKp/NLd+a8lY8nhecZmpLPI6NtSYntZjDu8T
+         4Ywr7pDvXO05m008rssriQhELL7896UyfsKHivtCu50TA9wOSJH5Pkeq/KLoVo9UWAXX
+         8iymlnPaOwrwgKG7xTZvhysz5IVlPpqx9sB9Q9nQXRyvmAVxYnY/rXr7s6ZTZLAWJtcv
+         sKXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SCAErNiP5jJACiJ5m3VC2Hy8VRCwKaL4b/roXt2Wa4I=;
+        b=bM1pE0gaQVcDy4vXZCuIjleJpkFS4y3arpuUjTqKLPDVQuTKCj2WSP+wq+tqcEaWq/
+         xxCjfyFTFtc9OoILGnhXJRw49IP171gY7VLwEPPlKFyNtttXm8fO5FoBMw+xjmDAYeOm
+         PBlzBmL6QYIfCkMPvjF9bXSIe/rtFq5Xwaf2LP0g33NOt/fm43tvIZnXkG3sdiFByzdd
+         ssMDmawRPEJPyV1gzf6eOxVucDRG4gJiqDHG0lZmQR+jt4yXJm2bV1pXSpi+c1knEsO6
+         kwptbgwIbjZrCdxIzeenXUiwq0hp8tOUFoCrmlgLbefZQIb9/OaA5lxFIEoCMhFlcjmT
+         Du/A==
+X-Gm-Message-State: AO0yUKWtumi0jeJqf1NWr9B1sc1WqC4B8Bu30Kw0qHIZfJ0Dxdawnwfg
+        1IGiK2kIZnH8q988zwseW/pu+vALBlCoNgJldWVxYzWdIqOKi6zjcA8=
+X-Google-Smtp-Source: AK7set/fV0y4CE2KeB1AaU5aeGLI1JCa4nGM2JenpGvcsQrPtJVH+PObWCiWxyyRsHkGCoo7V3xGudC1V+IjXSkBcmY=
+X-Received: by 2002:a5d:40cb:0:b0:2bf:d0b4:8bb2 with SMTP id
+ b11-20020a5d40cb000000b002bfd0b48bb2mr446711wrq.695.1675919178409; Wed, 08
+ Feb 2023 21:06:18 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|IA1PR12MB6579:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54eb7c65-a4ee-416f-4e31-08db0a5b1739
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x4H7XaoK/LCWq0vN3Z1CPJ83eIWnNZojF44OfnMwCi3G+erY32T2XrsSeHZTPj30Jvqt54haplggWcJwDaJHlJhmNNCiRh1MxszAWl6l3nkCDDiREeTXoceHwjr3/blA7GZ9oky506abbqN+SJT8CPWmGgDfSztxY4aBII9EClxuHyrMcMfZuzSJC5V5FbyHdOwH3RzhZYGCoIRLysE8NyGQ4D+X2frYM+vIgPh5QMkiHWfSSCOrXDtn2Gm1dsqDsR8QA6qRXxm83ZbiSQNCWw7meFe6rwxnkcpQVuYdsaREs74JO00j052uZgnKCzAFfHwW0aNHU/HnyTP1vUVXHW4/kf4TnDFsR5SB4v5cydHU8a51zGl3kqnaaH6kY9Ockim7F7vDkwq1VTLrmH+24nZKW0ciSFZyQCKCJkG8z5hOevswmkLnVsMYXDCfCW2xuCzm7XRB4jprcG4YkWFSxX0LmY4G2UDHE99uUzDhYZnbTLn1DDHEFz5oHdBu0hZAVnN0OQyI48tJBiv11KftoXCCOXi0kA9DIqu9jp17kY2/GLg5AtTp6H/XhOT0TxmM4+2dZBbSx+s1YvvUabo4kT3w0q+vKJY9WuNxKMArTTQd6MuctD0tsMSUu6m2HyrasxBZ30Bc6Pc/S3eZwN4DNA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(396003)(39860400002)(346002)(376002)(451199018)(41300700001)(66556008)(66946007)(4326008)(6916009)(8676002)(66476007)(36756003)(2906002)(86362001)(38100700002)(5660300002)(8936002)(6486002)(26005)(6512007)(186003)(478600001)(6666004)(6506007)(2616005)(316002)(54906003)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TZompnpQ6O/u4y27on+zIXpqIz5n01OnRHb4fG+oKZvzYSSkYTn4nxjUyRf+?=
- =?us-ascii?Q?NyZHPkZywSLkfO3OCc8bktF0N5HK/yYyx2fStp9okRE9fjusbFUgkfAn2RcC?=
- =?us-ascii?Q?UkjZTmEL+NkfT/9Exjd+W0WfIK5SI4qHgwI2wMtM0W7UvCUdz8voTzPDCASw?=
- =?us-ascii?Q?jzlah+o96VXFo8f3It30w7bLzuwscWmDhAgXSxyw41caMXdjYEkKq1MtlYN1?=
- =?us-ascii?Q?XuikP+cnbkVsoPU2K+Hl67HkxzQyPfvW33cKNOhms/goM+z8JgJQivk+59I4?=
- =?us-ascii?Q?XdXUZdk5x7EPYj8LZnJkeDfaIjaJpmNhlzDKwWWL0SGvjL5lc1qTYlU10VB9?=
- =?us-ascii?Q?g3QFt+AApMTbRlNbEoKV0Vih6TUAK7FtIBrBOdqhsKTgt7hb8Iq2mjwWq52C?=
- =?us-ascii?Q?RZg/p5UIDNWsOlqARhi3CL5Diz+P2u/VzY5qc8E4Ocws+PdiGvpxf2WlY99a?=
- =?us-ascii?Q?lYNKeqY/D4SL2NhD7ejabaOBFpXK/mw9dLNLuX0jCDPJrYr3NDKbCJuoV/5L?=
- =?us-ascii?Q?ahMNQ1l/NsrxBvDyTFwPqp62m7GSSDOacttOCaJVz7eD4IR86Pi1p8S0G6j3?=
- =?us-ascii?Q?OvslIWr5EK9Zqd0cefxiRdYU4X//LyTSoX1Ga8cO3dlc40iBMrgeADvZ6ogD?=
- =?us-ascii?Q?Fe+RjHjOkFBHGhNH6VRwGNnAE5qqlWebt0SbMr/NZ/AXsWxxQimPtXT4Vn0s?=
- =?us-ascii?Q?CiRrvQYCkqcXwkpmyDmEYSrjkFdep5hTaZ2J+ujv1ws+RcoQuASHC6X407YY?=
- =?us-ascii?Q?/rBcdjYne6ERNx91cTqgOlbsRNBax0TcSwv70tY1xt0B2ylJxZwFBvVjqMik?=
- =?us-ascii?Q?JrZj1jQpEYj482wNrJhG1DILKudaKl+XyqRXsSM4B96AGVJYpn2blgIMcNwS?=
- =?us-ascii?Q?fuy30LxqJUJGrnyvRdKd3wDELL8BbN4WszkvBYq0X3sZJ0J/cW3pu27ydQhS?=
- =?us-ascii?Q?bHqUGznT5z46xxSjRxklE9dPqG1K7kHRi35/n4XiWTMyNk7M9nU9CrdKLX1j?=
- =?us-ascii?Q?zlooE7Vw2XWpkZAFeefko6WZPxVXqJRWO1QcUditU/3l4iHrpwG4qHEUGU/2?=
- =?us-ascii?Q?rIX2lNFESM8zaXBvuEloHQ/lO8kDyiloDuovTUq27swFDOIglOTkmzLlyYtu?=
- =?us-ascii?Q?mJ5+FpqsPadlooMUwFseqmKTvdv7jAccbNn+II+ubb+riOtBLj3tNtO1IUyk?=
- =?us-ascii?Q?L8cRzQtx2/M+L5qkyYSn7MYiVypxRacc/so5NcSP2fqKzeOlGnEYzwyvfO64?=
- =?us-ascii?Q?BC8pWRmyRWuk8eg+5SQmK3xRIJCcC3UplPItEexVIS5z9tPy5lwgjcFhpBpL?=
- =?us-ascii?Q?DHQz3bpFNtWhnt6lT0tw71vV0zcuWpYylVOEQVRzK1yZqbHyAVmIbnWaVXWF?=
- =?us-ascii?Q?Q+8UaXJnnk50grVKibkBw/G1ugh4MDDIhH9OnEK3gQfkkoZNPB5Q/9JkleA5?=
- =?us-ascii?Q?HnU93oBbo40ustA6MHLLR/coxOrtz5SehzmDTYZdLg2Q4XEXZjvZPK1SREZ0?=
- =?us-ascii?Q?OK1swxHiuqruCg85raFZXZyFXEQSYwQd/lo9t50RiRN2esZxMRWSMkIf5naW?=
- =?us-ascii?Q?j/2Ozl5qnghy1YI3r8ScnN7sNXine9OfwcLXk6Jl?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54eb7c65-a4ee-416f-4e31-08db0a5b1739
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 05:04:15.3021
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HLbjgcD9NiZTL4mNwrMalU9ArwVjF/NDCvS+V4zsEMtgLRafUGAt/KTlIh5bsyXMpB+DN59c6f3Be/eZ9AQwIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6579
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230131220355.1603527-1-rmoar@google.com> <20230131220355.1603527-2-rmoar@google.com>
+In-Reply-To: <20230131220355.1603527-2-rmoar@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 9 Feb 2023 13:06:05 +0800
+Message-ID: <CABVgOSmYmP+yO1BQ2m8nA+czTjQZrYeOWkn1b47UUiFKG3NUZA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized tests
+To:     Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000518c4a05f43d572a"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 12:12:51AM +0800, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The new epp support causes warnings about three separate
-> but related bugs:
-> 
-> 1) failing before allocation should just return an error:
-> 
-> drivers/cpufreq/amd-pstate.c:951:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (!dev)
->             ^~~~
-> drivers/cpufreq/amd-pstate.c:1018:9: note: uninitialized use occurs here
->         return ret;
->                ^~~
-> 
-> 2) wrong variable to store return code:
-> 
-> drivers/cpufreq/amd-pstate.c:963:6: error: variable 'ret' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (rc)
->             ^~
-> drivers/cpufreq/amd-pstate.c:1019:9: note: uninitialized use occurs here
->         return ret;
->                ^~~
-> drivers/cpufreq/amd-pstate.c:963:2: note: remove the 'if' if its condition is always false
->         if (rc)
->         ^~~~~~~
-> 
-> 3) calling amd_pstate_set_epp() in cleanup path after determining
-> that it should not be called:
-> 
-> drivers/cpufreq/amd-pstate.c:1055:6: error: variable 'epp' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->         if (cpudata->epp_policy == cpudata->policy)
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/cpufreq/amd-pstate.c:1080:30: note: uninitialized use occurs here
->         amd_pstate_set_epp(cpudata, epp);
->                                     ^~~
-> 
-> All three are trivial to fix, but most likely there are additional bugs
-> in this function when the error handling was not really tested.
-> 
-> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+--000000000000518c4a05f43d572a
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks!
+On Wed, 1 Feb 2023 at 06:04, Rae Moar <rmoar@google.com> wrote:
+>
+> Fix bug in debugfs logs that causes parameterized results to not appear
+> in the log because the log is reintialized (cleared) when each parameter is
 
-Acked-by: Huang Rui <ray.huang@amd.com>
+Nit: s/reintialized/reinitialized
 
+> run.
+>
+> Ensure these results appear in the debugfs logs and increase log size to
+> allow for the size of parameterized results.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 168a28bed6ee..847f5f31396d 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -940,7 +940,6 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->  	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
->  	struct amd_cpudata *cpudata;
->  	struct device *dev;
-> -	int rc;
->  	u64 value;
->  
->  	/*
-> @@ -950,7 +949,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->  	amd_perf_ctl_reset(policy->cpu);
->  	dev = get_cpu_device(policy->cpu);
->  	if (!dev)
-> -		goto free_cpudata1;
-> +		return -ENODEV;
->  
->  	cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
->  	if (!cpudata)
-> @@ -959,8 +958,8 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->  	cpudata->cpu = policy->cpu;
->  	cpudata->epp_policy = 0;
->  
-> -	rc = amd_pstate_init_perf(cpudata);
-> -	if (rc)
-> +	ret = amd_pstate_init_perf(cpudata);
-> +	if (ret)
->  		goto free_cpudata1;
->  
->  	min_freq = amd_get_min_freq(cpudata);
-> @@ -1076,9 +1075,9 @@ static void amd_pstate_epp_init(unsigned int cpu)
->  		value |= (u64)epp << 24;
->  	}
->  
-> +	amd_pstate_set_epp(cpudata, epp);
->  skip_epp:
->  	WRITE_ONCE(cpudata->cppc_req_cached, value);
-> -	amd_pstate_set_epp(cpudata, epp);
->  	cpufreq_cpu_put(policy);
->  }
->  
-> -- 
-> 2.39.1
-> 
+
+This looks pretty good to me, but we may need to restrict the size of
+a single log line separately from that of the whole log.
+
+(It'd also be nice to include a before/after in the commit description.)
+
+With the stack size issue fixed, though, this looks good to me:
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  include/kunit/test.h | 2 +-
+>  lib/kunit/test.c     | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 87ea90576b50..0a077a4c067c 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+>  struct kunit;
+>
+>  /* Size of log associated with test. */
+> -#define KUNIT_LOG_SIZE 512
+> +#define KUNIT_LOG_SIZE 1500
+
+This is used both as the overall log size, and the size of a single
+line in kunit_log_append.
+
+As the latter involves a local 'line' array, it can bloat out stack usage.
+
+Could we either restrict the maximum line length separately, or rework
+kunit_log_append() to not use a local variable?
+(I imagine we could just vsnprintf() directly into the log buffer. We
+could make two sprintf calls to calculate the length required to
+maintain some atomicity as well (this could open us up to
+time-of-check/time-of-use vulnerabilities, but I think the
+vulnerability ship has sailed if you're passing untrusted pointers
+into the kunit_log macro anyway))
+
+>
+>  /* Maximum size of parameter description string. */
+>  #define KUNIT_PARAM_DESC_SIZE 128
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 51cae59d8aae..66ba93b8222c 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -437,7 +437,6 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+>         struct kunit_try_catch_context context;
+>         struct kunit_try_catch *try_catch;
+>
+> -       kunit_init_test(test, test_case->name, test_case->log);
+>         try_catch = &test->try_catch;
+>
+>         kunit_try_catch_init(try_catch,
+> @@ -533,6 +532,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+>                 struct kunit_result_stats param_stats = { 0 };
+>                 test_case->status = KUNIT_SKIPPED;
+>
+> +               kunit_init_test(&test, test_case->name, test_case->log);
+> +
+>                 if (!test_case->generate_params) {
+>                         /* Non-parameterised test. */
+>                         kunit_run_case_catch_errors(suite, test_case, &test);
+> --
+> 2.39.1.456.gfc5497dd1b-goog
+>
+
+--000000000000518c4a05f43d572a
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDG
+NKdF5VTIdD7sGNDF6Nx9i8ahV8Jgksml2QZ7E9VPHTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAyMDkwNTA2MThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAYmL0SPhnPhlaV4uEr6uC
+BukjqYk/57Tnafwl1Dc+KTncKDym5v2cUWFCxfJxM8sMGPXCouSVB/60FNSELQTjhOyPVeXoOiuM
+HcRYnwinwxHfkIrzBDLwVgFycYbR/Yo+ZbL7TGESobZa9yY31hb4qQ64d4gZDCinBxwfthzzbFIh
+8JkYLZqDwC5jp8H8TIYN/S14dZJ0w52UCVeFgInyk4l1xfBkRHJYzoZDb3RPhIOfPezWK0vWbHyy
+IRHAs8iRTqo0BLIfHBj0XYf3nTnX6eRfi0HgZWIZaH21p2QfUCiA7Gz8T+wrCcMNe/gasUkf8zl1
+9ogVQLWfOT5hf4jtww==
+--000000000000518c4a05f43d572a--
