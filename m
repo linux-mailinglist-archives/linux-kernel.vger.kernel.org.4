@@ -2,85 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A594A691177
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498E469117A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjBITkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        id S229592AbjBITmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjBITkW (ORCPT
+        with ESMTP id S229647AbjBITma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:40:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68ED0457E6
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:40:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E696B816DD
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 19:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9FCA6C4339B;
-        Thu,  9 Feb 2023 19:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675971618;
-        bh=TgmrnC/M5HXZGBRzFdINy6NLvEYYMbHiA4VgIM1fb3k=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Zobd8bf4shU+7TgwlyO/tvuH9iFjLJUi8MXNllc+GXQL3pHFMBS8w+XB8dDIMXSHj
-         6a01mwz6I4dcdvxwqVj2pcnnTUXHS6I+VkeEs3kvxjCN8j1myMfdNbUFSnPNqZPsrx
-         FZQul7aKl+oqUwID1hnxPbiSe5UNLcRQ4YBh57CcsRxO1BfdLtHB5kzi+jwq5W4hfo
-         hOTDQIv/FE2T7a8lOdKWziWHjbiZC4UBoeYxnW49WDwOyGZ4eipd/9DKxKxENgD4Cj
-         LKQgYzSUveyTxGL2vkz2efzE5oWlJQvgJ5zWED160MZrMpfR+gi15zHcdqL3bNMkCd
-         HRHV7e61LyL1w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8750EE21EC9;
-        Thu,  9 Feb 2023 19:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 9 Feb 2023 14:42:30 -0500
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FBD1B547;
+        Thu,  9 Feb 2023 11:42:29 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id m2so9654926ejb.8;
+        Thu, 09 Feb 2023 11:42:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BIp4RCzsuu35MBgWRTOTjpC9otkcQ5vDTd9A2EAVu3k=;
+        b=YF3u5kT+yNPiebG7pUoqtB/FskZHuK+UbhVDR/s27cnDP2bcBY+UZe6HwuQ0s8OsQ8
+         m3AkCvI3mciNLlmQ86PSe6NF9+ik78uJMsNxf60dl1d6kRrVZAoyyFTsyb4DQnSlMZsh
+         hujgZjyllWkBAwE7iBKC3OuDR95IfahgFloxmATqRURapiZIAUNhzh4EaDIG/ilcxo1g
+         BrpfYVmAqRAvV3UNzEZi/DCMkfA3TsQxYxDzLuCtOq+oe7bw9c6dfpFLzjHF7Q3aj/5U
+         qwuP3RRLClbzDpFrhbvT2NV5nIZAvZWkofQ2GUJmtoDyjWKGn8zvuaR8JvjIi/wVmnvw
+         vy6A==
+X-Gm-Message-State: AO0yUKWkBCzJ9viM0yjBWDchoHzsrBAU/f+U/BUZ+ac53DtU6+rNaq2u
+        dlQPuMbCe+HFmJJyvUu1qsMmWoDZaPWKZ8LCNKU=
+X-Google-Smtp-Source: AK7set/myRyfqM930pQEapD3coaAXFkNN8bumi2nngi2vSDno8HhTBlHrWFKVLkepofAUR+80g7XcLt3CtNVOS37sLQ=
+X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
+ sd14-20020a170906ce2e00b0087f575a9b67mr2949049ejb.274.1675971748184; Thu, 09
+ Feb 2023 11:42:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] riscv: stacktrace: Fix missing the first frame
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167597161855.28032.12085099343569341369.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Feb 2023 19:40:18 +0000
-References: <20221207025038.1022045-1-liushixin2@huawei.com>
-In-Reply-To: <20221207025038.1022045-1-liushixin2@huawei.com>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, changbin.du@intel.com,
+References: <202301171040260804580@zte.com.cn>
+In-Reply-To: <202301171040260804580@zte.com.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Feb 2023 20:42:16 +0100
+Message-ID: <CAJZ5v0j2R0BW+Z9zZSW__7SxSDMuCikk5DUnDfp+VvOQdhjCuw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Convert to use sysfs_emit_at() API
+To:     ye.xingchen@zte.com.cn
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Jan 17, 2023 at 3:40 AM <ye.xingchen@zte.com.cn> wrote:
+>
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/thermal/thermal_core.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index d9a3d9566d73..5ffc7006cce4 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -229,10 +229,9 @@ int thermal_build_list_of_policies(char *buf)
+>         mutex_lock(&thermal_governor_lock);
+>
+>         list_for_each_entry(pos, &thermal_governor_list, governor_list) {
+> -               count += scnprintf(buf + count, PAGE_SIZE - count, "%s ",
+> -                                  pos->name);
+> +               count += sysfs_emit_at(buf, count, "%s ", pos->name);
+>         }
+> -       count += scnprintf(buf + count, PAGE_SIZE - count, "\n");
+> +       count += sysfs_emit_at(buf, count, "\n");
+>
+>         mutex_unlock(&thermal_governor_lock);
+>
+> --
 
-This patch was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
-
-On Wed, 7 Dec 2022 10:50:38 +0800 you wrote:
-> When running kfence_test, I found some testcases failed like this:
-> 
->  # test_out_of_bounds_read: EXPECTATION FAILED at mm/kfence/kfence_test.c:346
->  Expected report_matches(&expect) to be true, but is false
->  not ok 1 - test_out_of_bounds_read
-> 
-> The corresponding call-trace is:
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2] riscv: stacktrace: Fix missing the first frame
-    https://git.kernel.org/riscv/c/cb80242cc679
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Applied as 6.3 material, thanks!
