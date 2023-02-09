@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69582690BDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:33:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D9D690BE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjBIOcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S231139AbjBIOfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:35:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbjBIOcp (ORCPT
+        with ESMTP id S231138AbjBIOew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:32:45 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B87211EAB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:32:37 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-16aca2628c6so512835fac.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:32:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LKj6y9Z9IvpBl0jxMUlOB98r+8XwPKm+/9oH/+jgH+A=;
-        b=IVDPMcPlukIfsCfo145XvWKWae7B04hhyFiWBRq9J+K6aWc+cyQh85M/m5/2zmAOkG
-         OLC6Akt28l95cibrdjMYdYpex34u9PyPw4TtJYy6lRygGxsbG/0fHcpAcqGSWPn2fItQ
-         o6YAsZ5sN2//jS4bMg3QZCXoVBPxwTDUm8li0L8cnTe1HwtznWrpTAHf1n/rP6T6X2H2
-         ef7xbl41/mFGCXsWpeYqU71AlU2DziUXhGYDNYmaBlVSMfJLYarlVBxIKo234lYN0quM
-         dZTsMBjur/UststIY4hWvDhvCiny5o1ZnHoGxB6HqtSf6Sju9GssX040shZAwThUkyVt
-         5ufA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LKj6y9Z9IvpBl0jxMUlOB98r+8XwPKm+/9oH/+jgH+A=;
-        b=YDx1kHQqeFxr+gB//hZMRxJCp6fqlDS74IwBr05IZDAaNPqb1M/uuYYvSoL93vnPb8
-         bIvAPpXsf6zefJbw2nkVF9ew2n9AgMFn9mClOtp3gX+0ppvB4WcoNv7sGelYbBS0DvZK
-         qeI5f/oHO2bjHXgSY9AFX4waZg4tjijQVaZRDsda/1Jl4lIPb9ENGjNNRelFv1HaK0yC
-         G0+ht3ESaW1j9ASJsWLlPuLaQdJRiXHwdN2NCLia9ApomNyWXWvz1qFYcsGAPxpCfX/N
-         jhcmocGtvv0eVbRzTdusklXu0B5MQCiqTrRQDAtqZ9iCPprY43tk6A7ARxcUxOHccYXE
-         tetw==
-X-Gm-Message-State: AO0yUKVjTeI3J93J8KmkoEF0anSv+lE5MNlyvAFyIgVLkhqbDrt9XJlh
-        NIIqum7paCei9L4vymdoHqaJ1EbfKoybFFvyOK8mn0T0
-X-Google-Smtp-Source: AK7set+3USxeqX4PBZMGHOkvS2plp2YCQOH/qwTDyDN1wGmHqvN/vX1MIptJN9ZicpG4pHKkIqnl3xdCoWzhtmkbTaw=
-X-Received: by 2002:a05:6871:29c:b0:163:8cc6:86a with SMTP id
- i28-20020a056871029c00b001638cc6086amr1084007oae.46.1675953156618; Thu, 09
- Feb 2023 06:32:36 -0800 (PST)
+        Thu, 9 Feb 2023 09:34:52 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1351F5C9
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:34:51 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4PCKBx2BsCz1S5Gk
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 09:34:49 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:content-type:in-reply-to:from
+        :references:to:content-language:subject:user-agent:mime-version
+        :date:message-id; s=dkim; t=1675953288; x=1676817289; bh=OtwHaQd
+        43ev0CTnwqIm/FUCsnnqbo5VRlxBW82fmyng=; b=H45rGLKnOkvzxImDk3fnZ7B
+        PaQmSau8WRULXMxDKa2GyRi0GarWzEdFJm6F234o6B1a1pSKi/NGa8vap4goDoQG
+        RoLr4F4qpmeWfor/YEdkU8RqEdgt/rh5I0FnuYt1af0u0bp4/WRXvdI3/qkF+bQT
+        RGIrEs/k5zE2wbVid1TkcQFJ0aPmuuWo+K0J03jhijsN5U0UC5AM79z3PC019cN0
+        FReRT4iwjQyZax9lEdnIZggVjpt42L1vum6bewMifqlXBdUgm9ByVRFuRIXiLVgd
+        QyI+LReM82T+ip68VXqcbtDFig+3Nk66rfLhHi3VSIcDOEwS3ZIQnjJ98UVyvAg=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id WOPhAXx4-T0C for <linux-kernel@vger.kernel.org>;
+        Thu,  9 Feb 2023 09:34:48 -0500 (EST)
+Received: from [192.168.4.25] (unknown [190.196.95.28])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4PCKBY4Xnbz1S5Gh;
+        Thu,  9 Feb 2023 09:34:21 -0500 (EST)
+Message-ID: <bb6f8a51-cec8-02cc-8ac1-3cd714a2e59a@mint.lgbt>
+Date:   Thu, 9 Feb 2023 11:34:17 -0300
 MIME-Version: 1.0
-References: <202302091847543326041@zte.com.cn>
-In-Reply-To: <202302091847543326041@zte.com.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 9 Feb 2023 09:32:25 -0500
-Message-ID: <CADnq5_MLTxWSVwdd9=WuV63HLRHqfYqos-Myn6VLdSM5Q0FymQ@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/amd/display: remove duplicate include header
-To:     ye.xingchen@zte.com.cn
-Cc:     alexander.deucher@amd.com, sunpeng.li@amd.com,
-        qingqing.zhuo@amd.com, xinhui.pan@amd.com,
-        rodrigo.siqueira@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, wenjing.liu@amd.com,
-        dri-devel@lists.freedesktop.org, george.shen@amd.com,
-        christian.koenig@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 3/6] phy: qcom-qmp: Add SM6125 UFS PHY support
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org
+References: <20230108195336.388349-1-they@mint.lgbt>
+ <20230108195336.388349-4-they@mint.lgbt>
+ <CAA8EJpp-RwPOv61MtoXYb3Tuy5LDWWBCvYSrGUOvg8vWhid_tw@mail.gmail.com>
+From:   Lux Aliaga <they@mint.lgbt>
+In-Reply-To: <CAA8EJpp-RwPOv61MtoXYb3Tuy5LDWWBCvYSrGUOvg8vWhid_tw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On 13/01/2023 16:31, Dmitry Baryshkov wrote:
 
-Alex
+> On Sun, 8 Jan 2023 at 21:54, Lux Aliaga <they@mint.lgbt> wrote:
+>> The SM6125 UFS PHY is compatible with the one from SM6115. Add a
+>> compatible for it and modify the config from SM6115 to make them
+>> compatible with the SC8280XP binding
+>>
+>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+>> Reviewed-by: Martin Botka <martin.botka@somainline.org>
+>> ---
+>>   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+>> index 318eea35b972..f33c84578940 100644
+>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
+>> @@ -693,6 +693,8 @@ static const struct qmp_phy_cfg sdm845_ufsphy_cfg = {
+>>   static const struct qmp_phy_cfg sm6115_ufsphy_cfg = {
+>>          .lanes                  = 1,
+>>
+>> +       .offsets                = &qmp_ufs_offsets_v5,
+> Please don't randomly reuse generation-specific structures. This
+> structure is clearly related to v5, while the PHY is from the v2
+> generation.
 
-On Thu, Feb 9, 2023 at 5:48 AM <ye.xingchen@zte.com.cn> wrote:
+I'm a bit confused here. When referencing back to downstream the driver 
+used has the suffix "v3-660". Should I use that suffix to name these 
+offsets? Because I'm not too sure if this is from the v2 generation due 
+to how it's named there.
+
+>> +
+>>          .serdes_tbl             = sm6115_ufsphy_serdes_tbl,
+>>          .serdes_tbl_num         = ARRAY_SIZE(sm6115_ufsphy_serdes_tbl),
+>>          .tx_tbl                 = sm6115_ufsphy_tx_tbl,
+>> @@ -1172,6 +1174,9 @@ static const struct of_device_id qmp_ufs_of_match_table[] = {
+>>          }, {
+>>                  .compatible = "qcom,sm6115-qmp-ufs-phy",
+>>                  .data = &sm6115_ufsphy_cfg,
+>> +       }, {
+>> +               .compatible = "qcom,sm6125-qmp-ufs-phy",
+>> +               .data = &sm6115_ufsphy_cfg,
+>>          }, {
+>>                  .compatible = "qcom,sm6350-qmp-ufs-phy",
+>>                  .data = &sdm845_ufsphy_cfg,
+>> --
+>> 2.39.0
+>>
 >
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
->
-> link_hwss.h is included more than once in link_dpms.c .
->
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
-> v1 -> v2
-> Fix the U+00A0 non-breaking space in the subject line.
->  drivers/gpu/drm/amd/display/dc/link/link_dpms.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/link/link_dpms.c b/drivers/gpu/drm/amd/display/dc/link/link_dpms.c
-> index 9cdfa7f7dc77..0c26b3589608 100644
-> --- a/drivers/gpu/drm/amd/display/dc/link/link_dpms.c
-> +++ b/drivers/gpu/drm/amd/display/dc/link/link_dpms.c
-> @@ -51,7 +51,6 @@
->  #include "link_enc_cfg.h"
->  #include "resource.h"
->  #include "dsc.h"
-> -#include "link_hwss.h"
->  #include "dccg.h"
->  #include "clk_mgr.h"
->  #include "atomfirmware.h"
-> --
-> 2.25.1
+-- 
+Lux Aliaga
+https://nixgoat.me/
+
