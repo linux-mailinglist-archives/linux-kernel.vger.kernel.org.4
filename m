@@ -2,92 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85F068FCF5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B9668FCF7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjBICMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S231682AbjBICNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjBICMc (ORCPT
+        with ESMTP id S231666AbjBICNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:12:32 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA2525BB8;
-        Wed,  8 Feb 2023 18:11:54 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31921Km4026350;
-        Wed, 8 Feb 2023 18:11:22 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=HQTLW3GXXAvE//tLnEkmnSFWMNDpVwqLK+9NZXZOOD8=;
- b=OPHUKGCps/Qlt782HCW2QzgPHwii79HXF8B9Mk17M4fe7SdbTWXimkVTDexamoVNexOm
- d4+BslFvmX7nG4bugylOLBqYWKJjZwSsvEbIj68o7lIK651oBTySwZOhG2TipLQHUSU2
- 9tiDCb4VSWC4IZT6xi8R9MZiPgeaP8uSCNEE9gjo+xXc5iCiCfPW+0NRyWLoXf/ps0+m
- nD3GVepNrGv9rWg9P3531JrV87IoLzKxj+rWcGJ1KkC4I9uPQ1bOW2cFk5+E2WtTqW2t
- YZrLmXT9jB6j+UjWdJ8HH4WFgYNZRHqKNF5cwlkNJd278x/TpmsujheCDpGsoXfyQILH WQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nm65kydux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 18:11:21 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Feb
- 2023 18:11:19 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Wed, 8 Feb 2023 18:11:19 -0800
-Received: from tx2-sever.caveonetworks.com (unknown [10.110.141.15])
-        by maili.marvell.com (Postfix) with ESMTP id 587ED5B692A;
-        Wed,  8 Feb 2023 18:11:19 -0800 (PST)
-From:   George Cherian <george.cherian@marvell.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <zhangshaokun@hisilicon.com>
-CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "George Cherian" <george.cherian@marvell.com>
-Subject: [PATCH v3] watchdog: sbsa_wdog: Make sure the timeout programming is within the limits
-Date:   Thu, 9 Feb 2023 02:11:17 +0000
-Message-ID: <20230209021117.1512097-1-george.cherian@marvell.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Feb 2023 21:13:11 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECFD14229;
+        Wed,  8 Feb 2023 18:13:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PC0kz3RSnz4xxJ;
+        Thu,  9 Feb 2023 13:12:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675908779;
+        bh=SqqF476/gbjX9ylAeRVbe5SjYoh4ca/kGQLCtFrnXwo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KrD358W7irL6HmUqJ8Xn7pLiYicHck4q2w0fVK50bvaKAQh8J9+7jA6LUZ+J/0CaQ
+         21rguaLdlMHo7JJU8Ic+jGFhsEAd+QKyGy/E2n17FrFTaQ1aYG5EngpufEsyw2rPTM
+         uDmmrPIBgny1igi9IkFbZDg77yHsM/h5vscoQmXYk8R3DAQ54prVi83aONbwJuE/Z2
+         SrMGEB7hfXLplKUGqC+Vt+PPS6p0tdKHeSGoPmklcQqDOZBhJy1NbUPoYrW0XWhr2M
+         AXzsAGnoF4AcG0tI1ZhkA8bpkduV83Xm8aSXo3DWs6Oext9NXpC2Ua5qw32PU/CPq2
+         q28C4rEXdNU1w==
+Date:   Thu, 9 Feb 2023 13:12:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        SeongJae Park <sj@kernel.org>
+Subject: linux-next: manual merge of the mm-stable tree with the jc_docs
+ tree
+Message-ID: <20230209131258.1d7a28fb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: opIW65Fj7LaV0cAkHuyAIl6IO-X7noSs
-X-Proofpoint-ORIG-GUID: opIW65Fj7LaV0cAkHuyAIl6IO-X7noSs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_11,2023-02-08_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/9O9glMUJSxK.Qu1Jzqyzuly";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure to honour the max_hw_heartbeat_ms while programming the timeout
-value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
-make sure the programmed value is within the permissible range.
+--Sig_/9O9glMUJSxK.Qu1Jzqyzuly
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+Hi all,
 
-Signed-off-by: George Cherian <george.cherian@marvell.com>
----
- drivers/watchdog/sbsa_gwdt.c | 1 +
- 1 file changed, 1 insertion(+)
+Today's linux-next merge of the mm-stable tree got a conflict in:
 
-diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-index 9791c74aebd4..63862803421f 100644
---- a/drivers/watchdog/sbsa_gwdt.c
-+++ b/drivers/watchdog/sbsa_gwdt.c
-@@ -150,6 +150,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
- 	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
- 
- 	wdd->timeout = timeout;
-+	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
- 
- 	if (action)
- 		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
--- 
-2.34.1
+  Documentation/admin-guide/mm/numaperf.rst
 
+between commit:
+
+  00cba6b60fed ("docs/admin-guide/mm: remove useless markup")
+
+from the jc_docs tree and commit:
+
+  6c364edc194e ("Docs/admin-guide/mm/numaperf: increase depth of subsection=
+s")
+
+from the mm-stable tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/admin-guide/mm/numaperf.rst
+index 24e63e740420,544a6d16c801..000000000000
+--- a/Documentation/admin-guide/mm/numaperf.rst
++++ b/Documentation/admin-guide/mm/numaperf.rst
+@@@ -1,4 -1,9 +1,7 @@@
+- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ -.. _numaperf:
+ -
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++ NUMA Memory Performance
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++=20
+  NUMA Locality
+  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ =20
+
+--Sig_/9O9glMUJSxK.Qu1Jzqyzuly
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPkVqoACgkQAVBC80lX
+0GyebQgAnSHiz16KoUVD+5vRL2hVs5unjUdR37Q9+6QNnB6PRTcAX7ha6NdIillh
+FmUVW4GBa4064GnQg+xB0r6S9+oVe2430meQqeuhh/AyvPihctBR3w/+NmUU/sam
+rfyne3hlhhHlp5n5owXslzh+qu1c2NBDBwQ7tpYhvDdPeZ7GUqPBk+iSjjWZistE
+BsytITl5QZSRm472vrIUhMXw3ii4kJumSzTpCnjdRQf45XS38wVnHHvp/ISjOLpI
++2T2/jiMurLzTrGypcKff0UkR0ve8inHYht7kSpRQ+q8EDlaZwJa4mnpd9gyvDuO
++S27MjKEhY0iqGF+/xxEYAuSHbWZug==
+=lCrr
+-----END PGP SIGNATURE-----
+
+--Sig_/9O9glMUJSxK.Qu1Jzqyzuly--
