@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCFE68FD58
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B8268FD59
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjBICvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S232334AbjBICvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbjBICum (ORCPT
+        with ESMTP id S232258AbjBICuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:50:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A01D1708;
-        Wed,  8 Feb 2023 18:48:21 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 304C7150C;
-        Wed,  8 Feb 2023 18:49:03 -0800 (PST)
-Received: from [10.162.40.17] (unknown [10.162.40.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2291C3F71E;
-        Wed,  8 Feb 2023 18:48:14 -0800 (PST)
-Message-ID: <6fd66a78-6c18-3b61-483b-0e821082aaac@arm.com>
-Date:   Thu, 9 Feb 2023 08:18:11 +0530
+        Wed, 8 Feb 2023 21:50:44 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF7110F8
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:48:28 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R671e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VbE3e2D_1675910906;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VbE3e2D_1675910906)
+          by smtp.aliyun-inc.com;
+          Thu, 09 Feb 2023 10:48:26 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        huyue2@coolpad.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] erofs: update print symbols for various flags in trace
+Date:   Thu,  9 Feb 2023 10:48:24 +0800
+Message-Id: <20230209024825.17335-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH V8 5/6] arm64/perf: Add branch stack support in ARMV8 PMU
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Will Deacon <will@kernel.org>, kernel test robot <lkp@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230123125956.1350336-6-anshuman.khandual@arm.com>
- <202301310047.b5iv9hM8-lkp@intel.com>
- <20230203113153.GA5927@willie-the-truck>
- <143549b7-6f16-209f-b1be-c8202fd55d05@arm.com>
- <Y+QA0tRk2VVJ4gwu@FVFF77S0Q05N.cambridge.arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <Y+QA0tRk2VVJ4gwu@FVFF77S0Q05N.cambridge.arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As new flags introduced, the corresponding print symbols for trace are
+not added accordingly.  Add these missing print symbols for these flags.
 
+Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+v3: print symbols for EROFS_GET_BLOCKS_RAW is deleted in patch 2
+---
+ include/trace/events/erofs.h | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-On 2/9/23 01:36, Mark Rutland wrote:
-> On Mon, Feb 06, 2023 at 09:46:25AM +0530, Anshuman Khandual wrote:
->> On 2/3/23 17:01, Will Deacon wrote:
->>> On Tue, Jan 31, 2023 at 12:28:17AM +0800, kernel test robot wrote:
-> 
-> [...]
-> 
->>> This looks like it should be fixed. I'd also like to see Mark's ack on the
->>
->> This build warning is triggered when CONFIG_PERF_EVENTS is not enabled, when
->> all the fallback stubs in there try to use has_branch_stack() which does not
->> get defined. The following change, fixes the problem.
-> 
-> I expect that you'll post a v9 with that folded in, and I've just made some
-> comments on v7 which I expect will require some changes, so I'm going to wait
-> for v9 for further review to keep this manageable.
+diff --git a/include/trace/events/erofs.h b/include/trace/events/erofs.h
+index e095d36db939..f0e43e40a4a1 100644
+--- a/include/trace/events/erofs.h
++++ b/include/trace/events/erofs.h
+@@ -19,12 +19,18 @@ struct erofs_map_blocks;
+ 		{ 1,		"DIR" })
+ 
+ #define show_map_flags(flags) __print_flags(flags, "|",	\
+-	{ EROFS_GET_BLOCKS_RAW,	"RAW" })
++	{ EROFS_GET_BLOCKS_RAW,		"RAW" },	\
++	{ EROFS_GET_BLOCKS_FIEMAP,	"FIEMAP" },	\
++	{ EROFS_GET_BLOCKS_READMORE,	"READMORE" },	\
++	{ EROFS_GET_BLOCKS_FINDTAIL,	"FINDTAIL" })
+ 
+ #define show_mflags(flags) __print_flags(flags, "",	\
+-	{ EROFS_MAP_MAPPED,	"M" },			\
+-	{ EROFS_MAP_META,	"I" },			\
+-	{ EROFS_MAP_ENCODED,	"E" })
++	{ EROFS_MAP_MAPPED,		"M" },		\
++	{ EROFS_MAP_META,		"I" },		\
++	{ EROFS_MAP_ENCODED,		"E" },		\
++	{ EROFS_MAP_FULL_MAPPED,	"F" },		\
++	{ EROFS_MAP_FRAGMENT,		"R" },		\
++	{ EROFS_MAP_PARTIAL_REF,	"P" })
+ 
+ TRACE_EVENT(erofs_lookup,
+ 
+-- 
+2.19.1.6.gb485710b
 
-Sure, will work on a V9 and post when ready.
