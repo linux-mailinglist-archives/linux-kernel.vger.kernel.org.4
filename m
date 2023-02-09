@@ -2,95 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C89690813
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A262B690851
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjBIL61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 06:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S230424AbjBIMLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjBIL4R (ORCPT
+        with ESMTP id S229615AbjBIMLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:56:17 -0500
+        Thu, 9 Feb 2023 07:11:12 -0500
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081D05C4A6;
-        Thu,  9 Feb 2023 03:46:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046122685;
+        Thu,  9 Feb 2023 04:09:20 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PCFSk0tgTz4f3k61;
-        Thu,  9 Feb 2023 19:46:30 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PCFyz1VWTz4f3jZH;
+        Thu,  9 Feb 2023 20:09:15 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgAn3rEQ3eRjgb0tDQ--.53508S23;
-        Thu, 09 Feb 2023 19:46:32 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgAHvrFr4uRj4rAuDQ--.53349S2;
+        Thu, 09 Feb 2023 20:09:17 +0800 (CST)
 From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 21/21] ext4: simplify calculation of blkoff in ext4_mb_new_blocks_simple
-Date:   Fri, 10 Feb 2023 03:48:25 +0800
-Message-Id: <20230209194825.511043-22-shikemeng@huaweicloud.com>
+To:     axboe@kernel.dk, hch@lst.de, jack@suse.cz
+Cc:     andriy.shevchenko@linux.intel.com, qiulaibin@huawei.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] A few bugfix and cleanup patches to blk-mq
+Date:   Fri, 10 Feb 2023 04:11:09 +0800
+Message-Id: <20230209201116.579809-1-shikemeng@huaweicloud.com>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20230209194825.511043-1-shikemeng@huaweicloud.com>
-References: <20230209194825.511043-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAn3rEQ3eRjgb0tDQ--.53508S23
-X-Coremail-Antispam: 1UD129KBjvdXoWrtFWDZw4xCw4DKr4UCw4fGrg_yoWfKFc_Ka
-        4xZr48JFyrJr1fuFnYqrZ8tFW7ta1xAr1ruFWIqrySvF1YqFWxu3WDArZ0yF9ruay3Aas8
-        Cr9xurW3KF109jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbSAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JFv_Gryl82
-        xGYIkIc2x26280x7IE14v26r126s0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC
-        64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM2
-        8EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq
-        3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8w
-        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE
-        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jstxDUUUUU=
+X-CM-TRANSID: gCh0CgAHvrFr4uRj4rAuDQ--.53349S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF15ur18ur1xWw4Dtw1rtFb_yoWfGFb_WF
+        y8CFySkrWUGFn8CFyUKF1UXFZrKw4UCr1UtF1vqrZxJw1xJrs5Jws5CrW3Xrn8Wa17CF1r
+        Ar1UGr4kArnI9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2kYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JFv_Gryl8c
+        AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7
+        JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+        r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
+        Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0VnQUUUUUU==
 X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We try to allocate a block from goal in ext4_mb_new_blocks_simple. We
-only need get blkoff in first group with goal and set blkoff to 0 for
-the rest groups.
+Hi, this patchset contains a few bugfix patches to avoid recalculation
+race, mark active before allocating tag in blk_mq_get_tag and some a
+few random cleanup patches.
 
-Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
----
- fs/ext4/mballoc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Kemeng Shi (7):
+  blk-mq: sync wake_batch update and users number change
+  blk-mq: count changed hctx as active in blk_mq_get_tag
+  blk-mq: remove wake_batch recalculation for reserved tags
+  blk-mq: remove unnecessary bit clear in __blk_mq_alloc_requests_batch
+  blk-mq: remove unnecessary "set->queue_depth == 0" check in
+    blk_mq_alloc_set_map_and_rqs
+  blk-mq: Remove unnecessary hctx check in function
+    blk_mq_alloc_and_init_hctx
+  blk-mq: remove stale comment of function called for iterated request
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 5bc30cd5debf..bd5e4db677c7 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -5772,9 +5772,6 @@ static ext4_fsblk_t ext4_mb_new_blocks_simple(handle_t *handle,
- 			return 0;
- 		}
- 
--		ext4_get_group_no_and_offset(sb,
--			max(ext4_group_first_block_no(sb, group), goal),
--			NULL, &blkoff);
- 		while (1) {
- 			i = mb_find_next_zero_bit(bitmap_bh->b_data, max,
- 						blkoff);
-@@ -5789,6 +5786,8 @@ static ext4_fsblk_t ext4_mb_new_blocks_simple(handle_t *handle,
- 		brelse(bitmap_bh);
- 		if (i < max)
- 			break;
-+
-+		blkoff = 0;
- 	}
- 
- 	if (group >= ext4_get_groups_count(sb) || i >= max) {
+ block/blk-mq-tag.c | 49 +++++++++++++++++++++++++---------------------
+ block/blk-mq.c     |  8 +++-----
+ 2 files changed, 30 insertions(+), 27 deletions(-)
+
 -- 
 2.30.0
 
