@@ -2,58 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D0168FCFF
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6CC68FD05
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbjBICQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
+        id S230311AbjBICUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjBICQe (ORCPT
+        with ESMTP id S231812AbjBICTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:16:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E87273C;
-        Wed,  8 Feb 2023 18:16:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00E316181D;
-        Thu,  9 Feb 2023 02:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98292C433EF;
-        Thu,  9 Feb 2023 02:16:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675908992;
-        bh=zxuoxziI8jyG8v98JQH01KgPXTbx+A+CFTlPIEN0GQU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sm6TfzLOF0gZqsGaSMjp84t6qn5Of94Ig7kL6TWiZkCPPaGkgV1yw8cNw2+Dn/sTC
-         YcCkMCT2cafy6T3FwQakjS/o8MmYmG86ALCYSbqskN4S2yTIpEIoAWjNwHbvh4aztd
-         et1ANYNbJPyNYOsFs5awDf8GXvUfY2PcpbRUJLG5fC+oFU2Cg37K3QrGdjMBAw38vG
-         60kYVKZ4cOAgEtybsVOpvbutdzgky/m4h+phH2N9mNCP1CffDQ2qzVjXFWiFEuoaQF
-         6+pcx0WDlrMczyafXBtyAjPCjrnf6WCbzR+LFokGTEOxfHbDNvDbPwdhPErAzoRRWW
-         XUtOKTCpsOLzQ==
-Date:   Wed, 8 Feb 2023 19:16:29 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Mark Zhang <markzhang@nvidia.com>,
-        Patrisious Haddad <phaddad@nvidia.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        =?iso-8859-1?Q?H=E5kon?= Bugge <haakon.bugge@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] RDMA/cma: Distinguish between sockaddr_in and
- sockaddr_in6 by size
-Message-ID: <Y+RXfXDDKxKHjLbh@dev-arch.thelio-3990X>
-References: <20230208232549.never.139-kees@kernel.org>
+        Wed, 8 Feb 2023 21:19:50 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A523233F8;
+        Wed,  8 Feb 2023 18:19:48 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3191LpZZ013465;
+        Thu, 9 Feb 2023 02:19:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=G0Wct4skFZ4mzDC58ftjaj74vgAs7Tbd+XhwQZLGwV4=;
+ b=JGOkTg0eF8jILRhFqY6u8uyouIVRdVz6+I9yD+e9+fGrYF+Su0OY5vx++eFmZABPVrst
+ vEj9BaysglkyhGFA958f378YFm8yBxNpBy5nzs8B9ffP6s5DCg0UydGq+dMAfJkv6VuB
+ eR1bDyxxQneX2S4LqGRgTxJIIaKfZgAUofN1Jy+UIqfZRXjnxh96a4zbTp+dTJ0D81Be
+ T6j0y+hfnFmD8Rp7SwC972GzCZTqZo1HDTIzKEr4J8ArWxTBrtijOnnk2sW43SARQzTQ
+ AIL764cm+WlkwEzn7eR6D7kvvxdak4XhSed9SpKDk/hDWlJVZdQ555BXYI4JbvSxRsCj sA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nkga2wyah-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 02:19:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3192JASZ029508
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 9 Feb 2023 02:19:10 GMT
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 8 Feb 2023
+ 18:19:06 -0800
+Message-ID: <180a66b1-6996-c705-5d8a-0a69ce0353d7@quicinc.com>
+Date:   Thu, 9 Feb 2023 10:16:57 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208232549.never.139-kees@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] coresight: core: Add coresight name support
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+CC:     <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Tingwei Zhang" <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20230208110716.18321-1-quic_jinlmao@quicinc.com>
+ <3c105c79-f523-653e-5154-7ba641e51a96@arm.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <3c105c79-f523-653e-5154-7ba641e51a96@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: XjYfMfdIuh0kTJWqikxNjd3m9KHHSBnS
+X-Proofpoint-ORIG-GUID: XjYfMfdIuh0kTJWqikxNjd3m9KHHSBnS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-08_11,2023-02-08_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=887 clxscore=1015 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090019
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,80 +88,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 03:25:53PM -0800, Kees Cook wrote:
-> Clang can do some aggressive inlining, which provides it with greater
-> visibility into the sizes of various objects that are passed into
-> helpers. Specifically, compare_netdev_and_ip() can see through the type
-> given to the "sa" argument, which means it can generate code for "struct
-> sockaddr_in" that would have been passed to ipv6_addr_cmp() (that expects
-> to operate on the larger "struct sockaddr_in6"), which would result in a
-> compile-time buffer overflow condition detected by memcmp(). Logically,
-> this state isn't reachable due to the sa_family assignment two callers
-> above and the check in compare_netdev_and_ip(). Instead, provide a
-> compile-time check on sizes so the size-mismatched code will be elided
-> when inlining. Avoids the following warning from Clang:
-> 
-> ../include/linux/fortify-string.h:652:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
->                         __read_overflow();
->                         ^
-> note: In function 'cma_netevent_callback'
-> note:   which inlined function 'node_from_ndev_ip'
-> 1 error generated.
-> 
-> When the underlying object size is not known (e.g. with GCC and older
-> Clang), the result of __builtin_object_size() is SIZE_MAX, which
-> will also compile away, leaving the code as it was originally.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1687
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: Mark Zhang <markzhang@nvidia.com>
-> Cc: Patrisious Haddad <phaddad@nvidia.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: linux-rdma@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
+On 2/8/2023 10:26 PM, Suzuki K Poulose wrote:
+> On 08/02/2023 11:07, Mao Jinlong wrote:
+>> Apart from STM and ETM sources, there will be more sources added to
+>> coresight components. For example, there are over 10 TPDM sources.
+>> Add coresight name support for custom names which will be
+>> easy to identify the source.
+>>
+>
+> As we have previously discussed, please don't make this a generic
+> code change. If your device has a "specifici" name, use that for
+> allocating in the driver and leave the core code alone.
+>
+> Suzuki
+>
+Hi Suzuki,
 
-Should this have a 'Cc: stable@vger.kernel.org', since we see this in
-6.1?
+Not only for TPDMs. There could be dozens of CTI devices.
+It is hard for user to know which CTI device it is with current names.
 
-> ---
->  drivers/infiniband/core/cma.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-> index 1d2bff91d78b..308155937713 100644
-> --- a/drivers/infiniband/core/cma.c
-> +++ b/drivers/infiniband/core/cma.c
-> @@ -479,13 +479,20 @@ static int compare_netdev_and_ip(int ifindex_a, struct sockaddr *sa,
->  	if (sa->sa_family != sb->sa_family)
->  		return sa->sa_family - sb->sa_family;
->  
-> -	if (sa->sa_family == AF_INET)
-> -		return memcmp((char *)&((struct sockaddr_in *)sa)->sin_addr,
-> -			      (char *)&((struct sockaddr_in *)sb)->sin_addr,
-> +	if (sa->sa_family == AF_INET &&
-> +	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in)) {
-> +		return memcmp(&((struct sockaddr_in *)sa)->sin_addr,
-> +			      &((struct sockaddr_in *)sb)->sin_addr,
->  			      sizeof(((struct sockaddr_in *)sa)->sin_addr));
-> +	}
-> +
-> +	if (sa->sa_family == AF_INET6 &&
-> +	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in6)) {
-> +		return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
-> +				     &((struct sockaddr_in6 *)sb)->sin6_addr);
-> +	}
->  
-> -	return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
-> -			     &((struct sockaddr_in6 *)sb)->sin6_addr);
-> +	return -1;
->  }
->  
->  static int cma_add_id_to_tree(struct rdma_id_private *node_id_priv)
-> -- 
-> 2.34.1
-> 
+Thanks
+Jinlong Mao
+>
+>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-core.c | 34 +++++++++++---------
+>>   1 file changed, 19 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+>> b/drivers/hwtracing/coresight/coresight-core.c
+>> index d3bf82c0de1d..5e95d9c7f256 100644
+>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>> @@ -1733,28 +1733,32 @@ char *coresight_alloc_device_name(struct 
+>> coresight_dev_list *dict,
+>>   {
+>>       int idx;
+>>       char *name = NULL;
+>> +    const char *coresight_name = NULL;
+>>       struct fwnode_handle **list;
+>> +    struct device_node *node = dev->of_node;
+>>         mutex_lock(&coresight_mutex);
+>>   -    idx = coresight_search_device_idx(dict, dev_fwnode(dev));
+>> -    if (idx < 0) {
+>> -        /* Make space for the new entry */
+>> -        idx = dict->nr_idx;
+>> -        list = krealloc_array(dict->fwnode_list,
+>> -                      idx + 1, sizeof(*dict->fwnode_list),
+>> -                      GFP_KERNEL);
+>> -        if (ZERO_OR_NULL_PTR(list)) {
+>> -            idx = -ENOMEM;
+>> -            goto done;
+>> +    if (!of_property_read_string(node, "coresight-name", 
+>> &coresight_name))
+>> +        name = devm_kasprintf(dev, GFP_KERNEL, "%s", coresight_name);
+>> +    else {
+>> +        idx = coresight_search_device_idx(dict, dev_fwnode(dev));
+>> +        if (idx < 0) {
+>> +            /* Make space for the new entry */
+>> +            idx = dict->nr_idx;
+>> +            list = krealloc_array(dict->fwnode_list,
+>> +                          idx + 1, sizeof(*dict->fwnode_list),
+>> +                          GFP_KERNEL);
+>> +            if (ZERO_OR_NULL_PTR(list))
+>> +                goto done;
+>> +
+>> +            list[idx] = dev_fwnode(dev);
+>> +            dict->fwnode_list = list;
+>> +            dict->nr_idx = idx + 1;
+>>           }
+>>   -        list[idx] = dev_fwnode(dev);
+>> -        dict->fwnode_list = list;
+>> -        dict->nr_idx = idx + 1;
+>> +        name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
+>>       }
+>> -
+>> -    name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
+>>   done:
+>>       mutex_unlock(&coresight_mutex);
+>>       return name;
+>
