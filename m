@@ -2,259 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95C8690EA9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442EA690EAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjBIQwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 11:52:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S229868AbjBIQzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 11:55:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBIQwW (ORCPT
+        with ESMTP id S229504AbjBIQzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:52:22 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54D21817B;
-        Thu,  9 Feb 2023 08:52:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=wvGkVNR7Kt7J6/yu+Te1okCnObmv66IkihKqSceI0Dc=; b=Wj2hJZKPNL80bvox5/FV1a6sg5
-        Oc+cEMQCo6GY/A4nxogX20wUKQYDJiERuH2xRHxBzBbkLuXoCsddt90ihfyDHkxWhd7PxT/5gJADB
-        JH58J4KjZvv2zZVag82gdwKKWXA7HnJdgs11/UycXLdLd8IcPZIKTxX368aWP6/c1K2DeCLo2nKZv
-        +6qeddXumJqwYVxsHqgcYGGlOtfutYBfLNKaxURyNPjKV4tHO21YEehqQ2pyojfoQJbRLduEvcTiF
-        7rzX3GdM7Xy36SLQm7X3WSqHfGj6P1AKqclJTr9RyDRmt+MT/X+I8Sz/QNBhji4TIRYck4btkCtvQ
-        36n4Xnhw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36484)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pQA9H-00089d-5m; Thu, 09 Feb 2023 16:51:50 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pQA9A-0004kb-Bs; Thu, 09 Feb 2023 16:51:44 +0000
-Date:   Thu, 9 Feb 2023 16:51:44 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v2 5/6] net: stmmac: add support for RZ/N1 GMAC
-Message-ID: <Y+UkoNpA9NiXlGmT@shell.armlinux.org.uk>
-References: <20230208164203.378153-1-clement.leger@bootlin.com>
- <20230208164203.378153-6-clement.leger@bootlin.com>
+        Thu, 9 Feb 2023 11:55:38 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2220643D1;
+        Thu,  9 Feb 2023 08:55:36 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id rp23so8234625ejb.7;
+        Thu, 09 Feb 2023 08:55:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6l9av8nyvwfd+ZGZCPAlJ7AddxXr455p4AhnsNGCvcw=;
+        b=NK6ht5AeLDqVY2CrdjEahAMWjJ6lCy6wb9emMfbDBaChLtmf8gp9iD92C9KQJGfVlD
+         wY22m0p4Tm+/AJ+H7ByoYFakSdzi60vnFUVJUF0PNgFB+zVFxmLl6cEDKmDeo5v+sg0c
+         Iney5rYxDEs6h8dSCWxMhEypm6F4MIXHsdTEbIk6weBpBW6YqAbzbM1gxYZB+yAMLkcT
+         BA+f4Y9Lqq1nWlFLsQEZ8PQQD8E3t6zbkD375wogCImI+QhO5nBr8HldEzS8US6pvrIy
+         CCGQKdPZiaYqMEfwm4lCXlJSQ14UnAu62oHi/Zz9WWqDCmuUlN3lehyeee0lVbluydro
+         nagQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6l9av8nyvwfd+ZGZCPAlJ7AddxXr455p4AhnsNGCvcw=;
+        b=P5QmLL1IDchHlMEHPZkm0UdHf+ph7+YrGh9ADOqBsX3oQR5x23gv24ztF9LDzUN4Oa
+         0Bn9h+1Nl487aPVs06Gi6OxICrb9vqmRJSy/WLyEuqWYaYG6zyMxzrLaDzgb6a2f2OA7
+         P0S41BGvWPaJS/cAl23HPnWGPVo4KCH3ioqUTzeK3VAqx9bZTsSLKJGwy+BxThrL2Hjr
+         8Q6UiUmGZgz2KLGAA0dc0UYHhBrwmGcAK6OaZChqTtpjQJlc/zDnCavYyOf3jsiClCZK
+         o5mWl/5UpKW2ZzGqSuyIfoHHsGxmO0spUEjxEE+lOGrNEPR/F89ku2wHW/hEQsUyxfg0
+         u8DQ==
+X-Gm-Message-State: AO0yUKXcxXA3J8Cjd+I+Fk4FZuaeUc2iFDPfwUbIHmgOfmQ6tja46by2
+        UKtmS9m7eyWobMecAXakgHcADciVkKENvinGfTA=
+X-Google-Smtp-Source: AK7set88flBG1oPZ+F0ymt+9FEmLxGig3e1Yib4mMs5R3zvW6Pd9XtM8vdWyXxN7/vcJ1Pb02MnQPZaeONxgiZE12yM=
+X-Received: by 2002:a17:906:eb8f:b0:878:786e:8c39 with SMTP id
+ mh15-20020a170906eb8f00b00878786e8c39mr2756943ejb.105.1675961735319; Thu, 09
+ Feb 2023 08:55:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230208164203.378153-6-clement.leger@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20230204183241.never.481-kees@kernel.org> <CAKH8qBvqLeR3Wsbpb-v=EUY=Bw0jCP2OAaBn4tOqGmA1AqBZbA@mail.gmail.com>
+ <63e14abb.170a0220.ca425.b7bc@mx.google.com> <CAKH8qBtX0HU4_YtnZ3hU4NhGHSQ9VU70niXFFoqf3k67a1+6aA@mail.gmail.com>
+ <63e5210b.630a0220.c17be.27ff@mx.google.com>
+In-Reply-To: <63e5210b.630a0220.c17be.27ff@mx.google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 9 Feb 2023 08:55:23 -0800
+Message-ID: <CAADnVQK-sW51SsC7FYDqLaO8c5xj=MAgcu_6p8L-JN9kAsrzeA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Replace bpf_lpm_trie_key 0-length array with
+ flexible array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 05:42:02PM +0100, Clément Léger wrote:
-> Add support for Renesas RZ/N1 GMAC. This support uses a custom PCS (MIIC)
-> which is handle by parsing the pcs-handle device tree property.
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 ++
->  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
->  .../net/ethernet/stmicro/stmmac/dwmac-rzn1.c  | 120 ++++++++++++++++++
->  3 files changed, 132 insertions(+)
->  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> index f77511fe4e87..be5429b7e192 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> @@ -153,6 +153,17 @@ config DWMAC_ROCKCHIP
->  	  This selects the Rockchip RK3288 SoC glue layer support for
->  	  the stmmac device driver.
->  
-> +config DWMAC_RZN1
-> +	tristate "Renesas RZ/N1 dwmac support"
-> +	default ARCH_RZN1
-> +	depends on OF && (ARCH_RZN1 || COMPILE_TEST)
-> +	select PCS_RZN1_MIIC
-> +	help
-> +	  Support for Ethernet controller on Renesas RZ/N1 SoC family.
-> +
-> +	  This selects the Renesas RZ/N1 SoC glue layer support for
-> +	  the stmmac device driver.
-> +
->  config DWMAC_SOCFPGA
->  	tristate "SOCFPGA dwmac support"
->  	default ARCH_INTEL_SOCFPGA
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> index 057e4bab5c08..53a0f74c1cb5 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
-> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> @@ -22,6 +22,7 @@ obj-$(CONFIG_DWMAC_MESON)	+= dwmac-meson.o dwmac-meson8b.o
->  obj-$(CONFIG_DWMAC_OXNAS)	+= dwmac-oxnas.o
->  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)	+= dwmac-qcom-ethqos.o
->  obj-$(CONFIG_DWMAC_ROCKCHIP)	+= dwmac-rk.o
-> +obj-$(CONFIG_DWMAC_RZN1)	+= dwmac-rzn1.o
->  obj-$(CONFIG_DWMAC_SOCFPGA)	+= dwmac-altr-socfpga.o
->  obj-$(CONFIG_DWMAC_STI)		+= dwmac-sti.o
->  obj-$(CONFIG_DWMAC_STM32)	+= dwmac-stm32.o
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
-> new file mode 100644
-> index 000000000000..82118d8cb50e
-> --- /dev/null
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
-> @@ -0,0 +1,120 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (C) 2022 Schneider-Electric
-> + *
-> + * Clément Léger <clement.leger@bootlin.com>
-> + */
-> +
-> +#include <linux/of.h>
-> +#include <linux/pcs-rzn1-miic.h>
-> +#include <linux/phylink.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include "stmmac_platform.h"
-> +#include "stmmac.h"
-> +
-> +struct rzn1_dwmac {
-> +	struct phylink_pcs *pcs;
-> +};
+On Thu, Feb 9, 2023 at 8:36 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Feb 06, 2023 at 11:17:06AM -0800, Stanislav Fomichev wrote:
+> > It's my understanding that it's the intended use-case. Users are
+> > expected to use this struct as a header; at least we've been using it
+> > that way :-)
+> >
+> > For me, both return the same:
+> > sizeof(struct { __u32 prefix; __u8 data[0]; })
+> > sizeof(struct { __u32 prefix; __u8 data[]; })
+> >
+> > So let's do s/data[0]/data[]/ in the UAPI only? What's wrong with
+> > using this struct as a header?
+>
+> For the whole struct, yup, the above sizeof()s are correct. However:
+>
+> sizeof(foo->data) == 0             // when data[0]
+> sizeof(foo->data) == compile error // when data[]
+>
+> The [0]-array GNU extension doesn't have consistent behavior, so it's
+> being removed from the kernel in favor of the proper C99 [] flexible
+> arrays, so we can enable -fstrict-flex-arrays=3 to remove all the
+> ambiguities with array bounds:
+> https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays
+> https://people.kernel.org/kees/bounded-flexible-arrays-in-c
+>
+> As a header, this kind of overlap isn't well supported. Clang already
+> warns, and GCC is going to be removing support for overlapping composite
+> structs with a flex array in the middle (and also warns under -pedantic):
+> https://godbolt.org/z/vWzqs41h6
+>
+> I talk about dealing with these specific cases in my recent write-up
+> on array bounds checking -- see "Overlapping composite structure members"
+> in the people.kernel.org post above.
+>
+> > > Perhaps better might be:
+> > >
+> > > struct bpf_lpm_trie_key {
+> > >     __u32   prefixlen;      /* up to 32 for AF_INET, 128 for AF_INET6 */
+> > > };
+> > >
+> > > struct bpf_lpm_trie_key_raw {
+> > >     struct bpf_lpm_trie_key_prefix prefix;
+> > >     u8 data[];
+> > > };
+> > >
+> > > struct my_key {
+> > >     struct bpf_lpm_trie_key_prefix prefix;
+> > >     int a, b, c;
+> > > };
+>
+> This approach is, perhaps, the best way to go? Besides the selftest,
+> what things in userspace consumes struct bpf_lpm_trie_key?
 
-I don't understand why you need this...
-
-> +
-> +static int rzn1_dt_parse(struct device *dev, struct rzn1_dwmac *dwmac)
-
-You could pass a pointer to struct plat_stmmacenet_data into here, and
-have it fill in your new ->pcs directly, and save the extra devm
-allocations.
-
-> +{
-> +	struct device_node *np = dev->of_node;
-> +	struct device_node *pcs_node;
-> +	struct phylink_pcs *pcs;
-> +	int ret;
-> +
-> +	pcs_node = of_parse_phandle(np, "pcs-handle", 0);
-> +	if (!pcs_node)
-> +		return 0;
-> +
-> +	pcs = miic_create(dev, pcs_node);
-
-Don't you need to put pcs_node?
-
-> +	if (IS_ERR(pcs))
-> +		return PTR_ERR(pcs);
-> +
-> +	ret = miic_early_setup(pcs, dev);
-> +	if (ret) {
-> +		miic_destroy(pcs);
-> +		return ret;
-> +	}
-> +
-> +	dwmac->pcs = pcs;
-> +
-> +	return 0;
-> +}
-> +
-> +static int rzn1_dwmac_probe(struct platform_device *pdev)
-> +{
-> +	struct plat_stmmacenet_data *plat_dat;
-> +	struct stmmac_resources stmmac_res;
-> +	struct device *dev = &pdev->dev;
-> +	struct rzn1_dwmac *dwmac;
-> +	int ret;
-> +
-> +	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
-> +	if (ret)
-> +		return ret;
-> +
-> +	plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
-> +	if (IS_ERR(plat_dat))
-> +		return PTR_ERR(plat_dat);
-> +
-> +	dwmac = devm_kzalloc(dev, sizeof(*dwmac), GFP_KERNEL);
-> +	if (!dwmac) {
-> +		ret = -ENOMEM;
-> +		goto err_remove_config_dt;
-> +	}
-> +
-> +	ret = rzn1_dt_parse(dev, dwmac);
-> +	if (ret)
-> +		goto err_remove_config_dt;
-> +
-> +	plat_dat->bsp_priv = dwmac;
-
-You could set this to point back to plat_dat.
-
-> +	plat_dat->pcs = dwmac->pcs;
-> +
-> +	ret = stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
-> +	if (ret)
-> +		goto err_free_pcs;
-> +
-> +	return 0;
-> +
-> +err_free_pcs:
-> +	if (dwmac->pcs)
-> +		miic_destroy(dwmac->pcs);
-> +
-> +err_remove_config_dt:
-> +	stmmac_remove_config_dt(pdev, plat_dat);
-> +
-> +	return ret;
-> +}
-> +
-> +static int rzn1_dwmac_remove(struct platform_device *pdev)
-> +{
-> +	struct rzn1_dwmac *dwmac = get_stmmac_bsp_priv(&pdev->dev);
-
-... which means you get plat_dat back here...
-
-> +	int ret = stmmac_dvr_remove(&pdev->dev);
-> +
-> +	if (dwmac->pcs)
-> +		miic_destroy(dwmac->pcs);
-
-and can still destroy the pcs.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Plenty of bpf progs use it:
+https://github.com/cilium/cilium/blob/master/bpf/lib/common.h#L352
