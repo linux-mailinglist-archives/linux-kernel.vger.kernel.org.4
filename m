@@ -2,197 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3FB690C06
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4F0690BF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjBIOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S231178AbjBIOh1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 09:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjBIOiY (ORCPT
+        with ESMTP id S231146AbjBIOhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:38:24 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2049.outbound.protection.outlook.com [40.107.237.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224CA6033D;
-        Thu,  9 Feb 2023 06:37:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NapcCZADFb8j+vx/N1Vc5L17AJ/K4suDQQls/kbYQEJSnESbaf4xPd53MHof5w+5UPhVIXLQdj5CB9T4ir01qQG13MvrOSxWoLZPrabsPINpgNjGkF8MblgPGkoGgZCo0DbK9/3pHD06OOOWPzv3BTp7k4SaZxczUNqU/M+XxcVyeoeyiwMDz7n8DxlnsyWjtWkqD5MHaSa7ssjTkp52uk4mXsNsItD1PULRKg59FZIBOCBqQDTSqqTDmyLFPQ+6EvflE2rZw9pDoKpUYMgk5o6N8ote97vu7wyQ7n68OSpU3vuMREpv+2+EPurJO2AKWkcWrlDhys/nkJLktIQP8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8ckuwIPY2NfACh0tyapv5v43z8gJvjALcrkaX0Cfrac=;
- b=fOv01aekiFJo+n3cIOPc+vbEf3EoRPplDPb4XqVMt23F1rF+Rd1a5WSJ/5e32YMZ+jn8lWuYVhSbbe5LVHqHlwFg1W5jzFWFfiTBPHkVtjiNoTOJviTtRupvGqJ5FsFy5O1rBhKifu9n+EJ2duuraUUSosbPQq3lXf1+3uvt9xaFr70O8cE1Wn54GAbE4kfBcPx2Ou9DUfsmqsqvNPd2q8zfjT1C2nqwR3P3hbEgcE56USb63jD+qNlrqAu8GY+OG83464fRjz/M6Ycmlc+8SClQuftDETjxKvwgS6ldTXe7NLfnG5sbUTeye/qkIJbgoBLm4xSrGLZBt21REa0nmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8ckuwIPY2NfACh0tyapv5v43z8gJvjALcrkaX0Cfrac=;
- b=cafumfHvAZ1aiLJfZQOk0CC9CtAag1R4mOs1lz3HnkhI11Uj3lOs2VaBGRw7TLPzcRs8gicBPtDBp51J3xI/j+ZKWoMXCcCd0Cj4PuN3KyswEQ307ofexSxSE4AO7+6Hs9Oe4s/qjXfEjKqjIXBaVDmN2ioPQ5evJoo8LqsiWiI9haiU6luNqT12SG9WxanUdO/X/ufNgvvPV/78feAr4C2IodCeEO9Bu0fyedvoOFsTbO4kPOx65rjlDVPHSK2KtvdyFkHYKw6mJaduTMGhSrcxWT4jfAFlbzLjof617Hkt537XBHlcfgzNaIenjLrX/aypYeSE3xqoKIMKmiGehQ==
-Received: from MW4PR04CA0270.namprd04.prod.outlook.com (2603:10b6:303:88::35)
- by DS7PR12MB6095.namprd12.prod.outlook.com (2603:10b6:8:9c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19; Thu, 9 Feb
- 2023 14:37:41 +0000
-Received: from CO1NAM11FT081.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::30) by MW4PR04CA0270.outlook.office365.com
- (2603:10b6:303:88::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.19 via Frontend
- Transport; Thu, 9 Feb 2023 14:37:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT081.mail.protection.outlook.com (10.13.174.80) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6086.19 via Frontend Transport; Thu, 9 Feb 2023 14:37:41 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 06:37:34 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 9 Feb 2023
- 06:37:33 -0800
-Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Thu, 9 Feb 2023 06:37:29 -0800
-From:   Sameer Pujar <spujar@nvidia.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <oder_chiou@realtek.com>, <broonie@kernel.org>
-CC:     <perex@perex.cz>, <tiwai@suse.com>, <lgirdwood@gmail.com>,
-        <kuninori.morimoto.gx@renesas.com>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, Sameer Pujar <spujar@nvidia.com>
-Subject: [PATCH 2/2] arm64: tegra: Audio codec support on Jetson AGX Orin
-Date:   Thu, 9 Feb 2023 20:06:57 +0530
-Message-ID: <1675953417-8686-3-git-send-email-spujar@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1675953417-8686-1-git-send-email-spujar@nvidia.com>
-References: <1675953417-8686-1-git-send-email-spujar@nvidia.com>
+        Thu, 9 Feb 2023 09:37:15 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71725C168;
+        Thu,  9 Feb 2023 06:37:13 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0B7E224E2D9;
+        Thu,  9 Feb 2023 22:37:04 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Feb
+ 2023 22:37:04 +0800
+Received: from ubuntu.localdomain (183.27.96.33) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 9 Feb
+ 2023 22:37:03 +0800
+From:   Hal Feng <hal.feng@starfivetech.com>
+To:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Andreas Schwab <schwab@suse.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Jianlong Huang <jianlong.huang@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/4] Basic pinctrl support for StarFive JH7110 RISC-V SoC
+Date:   Thu, 9 Feb 2023 22:36:58 +0800
+Message-ID: <20230209143702.44408-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT081:EE_|DS7PR12MB6095:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96e75efd-8b3e-4c34-3bba-08db0aab32da
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XMrLu864+HTJWalmmPGn9xtClq3B6ZzhlaCp1MCYpTxAlWXk/ZsHsW4+x9dgC2sYK0Z20ri5byveA2XzyqP8ah52xDWcT7A0WXgsQp2WL/Iq2r8aNSDpiYQkLggxVCLD9JOYGnfmx2bIJCfNLTTLdKMUR7Boxnudy5objZt8N1DDVbvrTCBpoiD+/99SPjl2R9yx3pdj0+0HcUwiBa94TIFRGfjA6bd6K/odaxeCfAjmwTkqH5HcNqzmoHzwdH/hQUpUXvluBtGSvpmbRcj5rq1dfvpO/pA3HgkhO4UkHrvRpsuIyUGRSIQjfGYGvX+16SSeddPNnHLwb+sXChN7Rsd2GLL/ZFsegr3ogO/wsgBcBxlVCMx5esaulLOuYMERlHSa3w1mOOu4t4E9075tKwNDSU8eCFaie2qG24QDfK3L7tWWElDRW7LxO3gMN2NEWGggB37xwLAbhWlNceXq9w9rF2iKyXJWYCndT9O65SRupwHOWOqtXoHb3GJu8b9NeTW4TNkuAq485i9uMEyoo/uijiyAGEX3YUeeQRtoFZL245wO/DtmP9TthP+kdtUJroHe7MbDNqTa1zpIu8wnzLopBAKrpmCeokUM7LY8vpGXyP3rjd4N1EJ47+uQaSy6Yhry6Ba23bBtt0+q5+oQjLBZwiHSoGw++8CJtfHyf0VcXRT1RBxUZgBEDI5t9jFm3cZ/gR9z+iVDp2tFB9l7KQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199018)(46966006)(40470700004)(36840700001)(6666004)(26005)(107886003)(186003)(82740400003)(86362001)(36860700001)(82310400005)(356005)(36756003)(70206006)(70586007)(316002)(8676002)(7416002)(7696005)(54906003)(110136005)(426003)(336012)(83380400001)(47076005)(478600001)(40480700001)(40460700003)(4326008)(41300700001)(2906002)(2616005)(7636003)(5660300002)(8936002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 14:37:41.0968
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96e75efd-8b3e-4c34-3bba-08db0aab32da
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT081.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6095
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [183.27.96.33]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jetson AGX Orin has onboard RT5640 audio codec. This patch adds the
-codec device node and the bindings to I2S1 interface.
+This patch series adds basic pinctrl support for StarFive JH7110 SoC.
 
-Signed-off-by: Sameer Pujar <spujar@nvidia.com>
----
- .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts  | 47 +++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+Changes since v4:
+Patch 1 & 2:
+- Added pinmux-node.yaml reference for '-pins$' patternProperties.
+- Dropped reference for pinmux properties.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-index 8a97478..5881fbf 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
-@@ -3,6 +3,7 @@
- 
- #include <dt-bindings/input/linux-event-codes.h>
- #include <dt-bindings/input/gpio-keys.h>
-+#include <dt-bindings/sound/rt5640.h>
- 
- #include "tegra234-p3701-0000.dtsi"
- #include "tegra234-p3737-0000.dtsi"
-@@ -49,7 +50,7 @@
- 
- 							i2s1_dap: endpoint {
- 								dai-format = "i2s";
--								/* placeholder for external codec */
-+								remote-endpoint = <&rt5640_ep>;
- 							};
- 						};
- 					};
-@@ -2017,6 +2018,32 @@
- 			status = "okay";
- 		};
- 
-+		i2c@31e0000 {
-+			status = "okay";
-+
-+			audio-codec@1c {
-+				status = "okay";
-+
-+				compatible = "realtek,rt5640";
-+				reg = <0x1c>;
-+				interrupt-parent = <&gpio>;
-+				interrupts = <TEGRA234_MAIN_GPIO(AC, 5) GPIO_ACTIVE_HIGH>;
-+				clocks = <&bpmp TEGRA234_CLK_AUD_MCLK>;
-+				clock-names = "mclk";
-+				realtek,dmic1-data-pin = <RT5640_DMIC1_DATA_PIN_NONE>;
-+				realtek,dmic2-data-pin = <RT5640_DMIC2_DATA_PIN_NONE>;
-+				realtek,jack-detect-source = <RT5640_JD_SRC_HDA_HEADER>;
-+				sound-name-prefix = "CVB-RT";
-+
-+				port {
-+					rt5640_ep: endpoint {
-+						remote-endpoint = <&i2s1_dap>;
-+						mclk-fs = <256>;
-+					};
-+				};
-+			};
-+		};
-+
- 		pwm@32a0000 {
- 			assigned-clocks = <&bpmp TEGRA234_CLK_PWM3>;
- 			assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLP_OUT0>;
-@@ -2293,5 +2320,23 @@
- 		       <&dmic3_port>;
- 
- 		label = "NVIDIA Jetson AGX Orin APE";
-+
-+		widgets = "Microphone",	"CVB-RT MIC Jack",
-+			  "Microphone",	"CVB-RT MIC",
-+			  "Headphone",	"CVB-RT HP Jack",
-+			  "Speaker",	"CVB-RT SPK";
-+
-+		routing = /* I2S1 <-> RT5640 */
-+			  "CVB-RT AIF1 Playback",	"I2S1 DAP-Playback",
-+			  "I2S1 DAP-Capture",		"CVB-RT AIF1 Capture",
-+			  /* RT5640 codec controls */
-+			  "CVB-RT HP Jack",		"CVB-RT HPOL",
-+			  "CVB-RT HP Jack",		"CVB-RT HPOR",
-+			  "CVB-RT IN1P",		"CVB-RT MIC Jack",
-+			  "CVB-RT IN2P",		"CVB-RT MIC Jack",
-+			  "CVB-RT SPK",			"CVB-RT SPOLP",
-+			  "CVB-RT SPK",			"CVB-RT SPORP",
-+			  "CVB-RT DMIC1",		"CVB-RT MIC",
-+			  "CVB-RT DMIC2",		"CVB-RT MIC";
- 	};
- };
+  v4: https://lore.kernel.org/all/20230203141801.59083-1-hal.feng@starfivetech.com/
+
+Changes since v3:
+- Rebased on Linus's "devel" branch of linux-pinctrl repo, which was based on
+  on tag v6.2-rc1.
+- Dropped patch 1.
+Patch 2 & 3:
+- Added a reference for '-pins$' patternProperties.
+- Put "additionalProperties: false" before properties section. (by Rob)
+- Improved the description.
+- Changed the node name in examples from "gpio" to "pinctrl".
+Patch 4:
+- Added some missing headers. (by Andreas)
+
+  v3: https://lore.kernel.org/all/20221220005529.34744-1-hal.feng@starfivetech.com/
+
+Changes since v2:
+- Rebased on tag v6.1.
+Patch 1:
+- Renamed pinctrl-starfive-jh7110.h to
+  starfive,jh7110-pinctrl.h. (by Krzysztof)
+- Separated the register values in the binding header and stored them in
+  a new file arch/riscv/boot/dts/starfive/jh7110-pinfunc.h. (by Krzysztof)
+- Split patch 1 into sys part and aon part. Merged them into patch 2
+  and patch 3 respectively.
+Patch 2 & 3:
+- Dropped "reg-names" and the description of "interrupts". Dropped quotes
+  behind "$ref" and kept consisitent quotes. (by Krzysztof)
+- Moved gpio properties behind interrupt properties.
+- Moved "required" behind "patternProperties". (by Krzysztof)
+- Rewrote the examples of bindings. (by Krzysztof and Emil)
+- Added Co-developed-by tag for Emil.
+- Dropped unused "clocks" property in patch 3.
+Patch 4 & 5:
+- Renamed "pinctrl-starfive.*" to "pinctrl-starfive-jh7110.*" and replaced
+  all "starfive_" prefix with "jh7110_" in these files. (by Emil)
+- Dropped macro GPIO_NUM_PER_WORD. (by Emil)
+- Dropped unused flag member in starfive_pinctrl_soc_info structure. (by Emil)
+- Renamed "pinctrl-jh7110-sys.c" to "pinctrl-starfive-jh7110-sys.c".
+  Renamed "pinctrl-jh7110-aon.c" to "pinctrl-starfive-jh7110-aon.c". (by Emil)
+- Added individual Kconfig options for sys and aon pinctrl drivers. (by Emil)
+- Made the sys and aon pinctrl drivers be modules. (by Emil)
+- Added "JH7110_" prefix for macro SYS_GPO_PDA_0_74_CFG,
+  SYS_GPO_PDA_89_94_CFG and AON_GPO_PDA_0_5_CFG. (by Emil)
+- Dropped jh7110_sys_pinctrl_probe() and jh7110_aon_pinctrl_probe().
+  Got the match data in the common jh7110_pinctrl_probe() and used it
+  to probe. (by Emil)
+- Dropped the of_match_ptr macro(). (by Emil)
+- Set the MODULE_LICENSE as "GPL" according to commit bf7fbeeae6db.
+
+  v2: https://lore.kernel.org/all/20221118011108.70715-1-hal.feng@starfivetech.com/
+
+Changes since v1:
+- Rebased on tag v6.1-rc5.
+- Dropped patch 22 and 23 since they were merged in v6.1-rc1.
+- Removed some unused macros and register values which do not belong to
+  bindings. Simplified pinctrl definitions in patch 24. (by Krzysztof)
+- Split the bindings into sys pinctrl bindings and aon pinctrl bindings,
+  and split patch 25 into two patches.
+- Made the bindings follow generic pinctrl bindings. (by Krzysztof)
+- Fixed some wrong indentation in bindings, and checked it with
+  `make dt_binding_check`.
+- Split the patch 26 into two patches which added sys and aon pinctrl
+  driver respectively.
+- Restructured the pinctrl drivers so made them follow generic pinctrl
+  bindings. Rewrote `dt_node_to_map` and extracted the public code to make
+  it clearer.
+
+  v1: https://lore.kernel.org/all/20220929143225.17907-1-hal.feng@linux.starfivetech.com/
+
+Jianlong Huang (4):
+  dt-bindings: pinctrl: Add StarFive JH7110 sys pinctrl
+  dt-bindings: pinctrl: Add StarFive JH7110 aon pinctrl
+  pinctrl: starfive: Add StarFive JH7110 sys controller driver
+  pinctrl: starfive: Add StarFive JH7110 aon controller driver
+
+ .../pinctrl/starfive,jh7110-aon-pinctrl.yaml  | 124 +++
+ .../pinctrl/starfive,jh7110-sys-pinctrl.yaml  | 142 +++
+ MAINTAINERS                                   |   8 +-
+ drivers/pinctrl/starfive/Kconfig              |  33 +
+ drivers/pinctrl/starfive/Makefile             |   4 +
+ .../starfive/pinctrl-starfive-jh7110-aon.c    | 177 ++++
+ .../starfive/pinctrl-starfive-jh7110-sys.c    | 449 ++++++++
+ .../starfive/pinctrl-starfive-jh7110.c        | 982 ++++++++++++++++++
+ .../starfive/pinctrl-starfive-jh7110.h        |  70 ++
+ .../pinctrl/starfive,jh7110-pinctrl.h         | 137 +++
+ 10 files changed, 2123 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-aon-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive-jh7110-aon.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive-jh7110-sys.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c
+ create mode 100644 drivers/pinctrl/starfive/pinctrl-starfive-jh7110.h
+ create mode 100644 include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
+
 -- 
-2.7.4
+2.38.1
 
