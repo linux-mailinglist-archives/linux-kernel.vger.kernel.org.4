@@ -2,190 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEAC690EA3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95C8690EA9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjBIQv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 11:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
+        id S229865AbjBIQwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 11:52:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjBIQvZ (ORCPT
+        with ESMTP id S229504AbjBIQwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:51:25 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE946310B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:51:23 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id iz19so2108768plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:51:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gFqj+biyDpY9pXqvmkLkzDhno/QTWqjT+mpxmEuFlIE=;
-        b=VDTA9tS4LubStVk5KAn8x5cPGoOp99eJz0Kygp3vdTQUGkoiRVuoIS7n9bY8qwL85b
-         rjwClE3hOwhV3Of1ekxPfOGBgY5HAqnTT+dM/8+tL0bXG6nJurzutM+JzB9Rn6VyUnEV
-         GwSFt5EGOT2WL6Ibb7gaLwB85VqyWQnig8hDaaeXqkLPTTwOmAdcXirHzFpYCrDxtz75
-         Bx0weyxL/oQVROo7My9Uxt8p7vvNM9uVFU2UVdz9cdJyTibKGf2ZvKkJiCtheffJdCMT
-         IC82A+fCcrwt85502UiQ+XNLw2e+eXNbVDC6A08p023lu6BAWviul2X62bRmJpnUNXM8
-         +pgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gFqj+biyDpY9pXqvmkLkzDhno/QTWqjT+mpxmEuFlIE=;
-        b=lgTcI2ISrhqX4qyqwluGQCDfq0MAgfSd505N5dr0qRAzgRG2FA9aB7DnL8G0maFvth
-         MGNLRMrSZx7tqclN+KD2pvfpO4U8jAAkb5MZrFtZvGle72UizPFQcv3T//JsoQrHquA+
-         VL7KG1O4uyTOgiYCwKCoxwFt8Qj2lw7eXcBlyNdEe+CTxCxUOOPTDnIwqIeJmvGCyjZ/
-         zevW+s9qPdesXSBLwo6GoNnWAz2Bdj6jiN0x7pMeB5fZiZNcq2mfwErho7zw3WhWJ0Nq
-         mNGPfe+3tMcdgYzb2V/HmoWUw+MurIFh5vrspyXZeEfcy9/M3EmudnrTzp9ooqC97yDg
-         /LBw==
-X-Gm-Message-State: AO0yUKV8JUn9zfGtU4RngMvAfScZwnVFovmuaT1I5iTMpG1gZbMQoBN7
-        qbAALBx/LPaiclWUwFiIl701Ig==
-X-Google-Smtp-Source: AK7set9dXtbFLqR0SLyd6Rfiqg0GWw0+da8IB1XBCGr+lJRziUoT47+K2T9x09vL9nopKJoJT5bMlA==
-X-Received: by 2002:a17:90b:1c86:b0:22c:792:d342 with SMTP id oo6-20020a17090b1c8600b0022c0792d342mr13638710pjb.26.1675961483220;
-        Thu, 09 Feb 2023 08:51:23 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id jw14-20020a17090b464e00b002338ff973d4sm101213pjb.11.2023.02.09.08.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 08:51:22 -0800 (PST)
-Date:   Thu, 09 Feb 2023 08:51:22 -0800 (PST)
-X-Google-Original-Date: Thu, 09 Feb 2023 08:51:16 PST (-0800)
-Subject:     RE: [PATCH v2 4/6] dt-bindings: Add RISC-V misaligned access performance
-In-Reply-To: <4bd24def02014939a87eb8430ba0070d@AcuMS.aculab.com>
-CC:     robh@kernel.org, evan@rivosinc.com,
-        Conor Dooley <conor@kernel.org>,
-        Vineet Gupta <vineetg@rivosinc.com>, heiko@sntech.de,
-        slewis@rivosinc.com, aou@eecs.berkeley.edu,
-        krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     David.Laight@ACULAB.COM
-Message-ID: <mhng-8736b349-e27a-4372-81ca-3a25d2ec1e94@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 9 Feb 2023 11:52:22 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54D21817B;
+        Thu,  9 Feb 2023 08:52:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wvGkVNR7Kt7J6/yu+Te1okCnObmv66IkihKqSceI0Dc=; b=Wj2hJZKPNL80bvox5/FV1a6sg5
+        Oc+cEMQCo6GY/A4nxogX20wUKQYDJiERuH2xRHxBzBbkLuXoCsddt90ihfyDHkxWhd7PxT/5gJADB
+        JH58J4KjZvv2zZVag82gdwKKWXA7HnJdgs11/UycXLdLd8IcPZIKTxX368aWP6/c1K2DeCLo2nKZv
+        +6qeddXumJqwYVxsHqgcYGGlOtfutYBfLNKaxURyNPjKV4tHO21YEehqQ2pyojfoQJbRLduEvcTiF
+        7rzX3GdM7Xy36SLQm7X3WSqHfGj6P1AKqclJTr9RyDRmt+MT/X+I8Sz/QNBhji4TIRYck4btkCtvQ
+        36n4Xnhw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36484)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pQA9H-00089d-5m; Thu, 09 Feb 2023 16:51:50 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pQA9A-0004kb-Bs; Thu, 09 Feb 2023 16:51:44 +0000
+Date:   Thu, 9 Feb 2023 16:51:44 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next v2 5/6] net: stmmac: add support for RZ/N1 GMAC
+Message-ID: <Y+UkoNpA9NiXlGmT@shell.armlinux.org.uk>
+References: <20230208164203.378153-1-clement.leger@bootlin.com>
+ <20230208164203.378153-6-clement.leger@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230208164203.378153-6-clement.leger@bootlin.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Feb 2023 04:45:10 PST (-0800), David.Laight@ACULAB.COM wrote:
-> From: Rob Herring
->> Sent: 07 February 2023 17:06
->>
->> On Mon, Feb 06, 2023 at 12:14:53PM -0800, Evan Green wrote:
->> > From: Palmer Dabbelt <palmer@rivosinc.com>
->> >
->> > This key allows device trees to specify the performance of misaligned
->> > accesses to main memory regions from each CPU in the system.
->> >
->> > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> > Signed-off-by: Evan Green <evan@rivosinc.com>
->> > ---
->> >
->> > (no changes since v1)
->> >
->> >  Documentation/devicetree/bindings/riscv/cpus.yaml | 15 +++++++++++++++
->> >  1 file changed, 15 insertions(+)
->> >
->> > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml
->> b/Documentation/devicetree/bindings/riscv/cpus.yaml
->> > index c6720764e765..2c09bd6f2927 100644
->> > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
->> > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
->> > @@ -85,6 +85,21 @@ properties:
->> >      $ref: "/schemas/types.yaml#/definitions/string"
->> >      pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
->> >
->> > +  riscv,misaligned-access-performance:
->> > +    description:
->> > +      Identifies the performance of misaligned memory accesses to main memory
->> > +      regions.  There are three flavors of unaligned access performance: "emulated"
->> > +      means that misaligned accesses are emulated via software and thus
->> > +      extremely slow, "slow" means that misaligned accesses are supported by
->> > +      hardware but still slower that aligned accesses sequences, and "fast"
->> > +      means that misaligned accesses are as fast or faster than the
->> > +      cooresponding aligned accesses sequences.
->> > +    $ref: "/schemas/types.yaml#/definitions/string"
->> > +    enum:
->> > +      - emulated
->> > +      - slow
->> > +      - fast
->>
->> I don't think this belongs in DT. (I'm not sure about a userspace
->> interface either.)
+On Wed, Feb 08, 2023 at 05:42:02PM +0100, Clément Léger wrote:
+> Add support for Renesas RZ/N1 GMAC. This support uses a custom PCS (MIIC)
+> which is handle by parsing the pcs-handle device tree property.
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 ++
+>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+>  .../net/ethernet/stmicro/stmmac/dwmac-rzn1.c  | 120 ++++++++++++++++++
+>  3 files changed, 132 insertions(+)
+>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> index f77511fe4e87..be5429b7e192 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> @@ -153,6 +153,17 @@ config DWMAC_ROCKCHIP
+>  	  This selects the Rockchip RK3288 SoC glue layer support for
+>  	  the stmmac device driver.
+>  
+> +config DWMAC_RZN1
+> +	tristate "Renesas RZ/N1 dwmac support"
+> +	default ARCH_RZN1
+> +	depends on OF && (ARCH_RZN1 || COMPILE_TEST)
+> +	select PCS_RZN1_MIIC
+> +	help
+> +	  Support for Ethernet controller on Renesas RZ/N1 SoC family.
+> +
+> +	  This selects the Renesas RZ/N1 SoC glue layer support for
+> +	  the stmmac device driver.
+> +
+>  config DWMAC_SOCFPGA
+>  	tristate "SOCFPGA dwmac support"
+>  	default ARCH_INTEL_SOCFPGA
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> index 057e4bab5c08..53a0f74c1cb5 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> @@ -22,6 +22,7 @@ obj-$(CONFIG_DWMAC_MESON)	+= dwmac-meson.o dwmac-meson8b.o
+>  obj-$(CONFIG_DWMAC_OXNAS)	+= dwmac-oxnas.o
+>  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)	+= dwmac-qcom-ethqos.o
+>  obj-$(CONFIG_DWMAC_ROCKCHIP)	+= dwmac-rk.o
+> +obj-$(CONFIG_DWMAC_RZN1)	+= dwmac-rzn1.o
+>  obj-$(CONFIG_DWMAC_SOCFPGA)	+= dwmac-altr-socfpga.o
+>  obj-$(CONFIG_DWMAC_STI)		+= dwmac-sti.o
+>  obj-$(CONFIG_DWMAC_STM32)	+= dwmac-stm32.o
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
+> new file mode 100644
+> index 000000000000..82118d8cb50e
+> --- /dev/null
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rzn1.c
+> @@ -0,0 +1,120 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2022 Schneider-Electric
+> + *
+> + * Clément Léger <clement.leger@bootlin.com>
+> + */
+> +
+> +#include <linux/of.h>
+> +#include <linux/pcs-rzn1-miic.h>
+> +#include <linux/phylink.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "stmmac_platform.h"
+> +#include "stmmac.h"
+> +
+> +struct rzn1_dwmac {
+> +	struct phylink_pcs *pcs;
+> +};
 
-[Kind of answered below.]
+I don't understand why you need this...
 
->> Can't this be tested and determined at runtime? Do misaligned accesses
->> and compare the performance. We already do this for things like memcpy
->> or crypto implementation selection.
+> +
+> +static int rzn1_dt_parse(struct device *dev, struct rzn1_dwmac *dwmac)
 
-We've had a history of broken firmware emulation of misaligned accesses 
-wreaking havoc.  We don't run into concrete bugs there because we avoid 
-misaligned accesses as much as possible in the kernel, but I'd be 
-worried that we'd trigger a lot of these when probing for misaligned 
-accesses.
+You could pass a pointer to struct plat_stmmacenet_data into here, and
+have it fill in your new ->pcs directly, and save the extra devm
+allocations.
 
-> There is also an long discussion about misaligned accesses
-> for loooongarch.
->
-> Basically if you want to run a common kernel (and userspace)
-> you have to default to compiling everything with -mno-stict-align
-> so that the compiler generates byte accesses for anything
-> marked 'packed' (etc).
->
-> Run-time tests can optimise some hot-spots.
->
-> In any case 'slow' is probably pointless - unless the accesses
-> take more than 1 or 2 extra cycles.
+> +{
+> +	struct device_node *np = dev->of_node;
+> +	struct device_node *pcs_node;
+> +	struct phylink_pcs *pcs;
+> +	int ret;
+> +
+> +	pcs_node = of_parse_phandle(np, "pcs-handle", 0);
+> +	if (!pcs_node)
+> +		return 0;
+> +
+> +	pcs = miic_create(dev, pcs_node);
 
-[Also below.]
+Don't you need to put pcs_node?
 
-> Oh, and you really never, ever want to emulate them.
+> +	if (IS_ERR(pcs))
+> +		return PTR_ERR(pcs);
+> +
+> +	ret = miic_early_setup(pcs, dev);
+> +	if (ret) {
+> +		miic_destroy(pcs);
+> +		return ret;
+> +	}
+> +
+> +	dwmac->pcs = pcs;
+> +
+> +	return 0;
+> +}
+> +
+> +static int rzn1_dwmac_probe(struct platform_device *pdev)
+> +{
+> +	struct plat_stmmacenet_data *plat_dat;
+> +	struct stmmac_resources stmmac_res;
+> +	struct device *dev = &pdev->dev;
+> +	struct rzn1_dwmac *dwmac;
+> +	int ret;
+> +
+> +	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
+> +	if (ret)
+> +		return ret;
+> +
+> +	plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+> +	if (IS_ERR(plat_dat))
+> +		return PTR_ERR(plat_dat);
+> +
+> +	dwmac = devm_kzalloc(dev, sizeof(*dwmac), GFP_KERNEL);
+> +	if (!dwmac) {
+> +		ret = -ENOMEM;
+> +		goto err_remove_config_dt;
+> +	}
+> +
+> +	ret = rzn1_dt_parse(dev, dwmac);
+> +	if (ret)
+> +		goto err_remove_config_dt;
+> +
+> +	plat_dat->bsp_priv = dwmac;
 
-Unfortunately we're kind of stuck with this one: the specs used to 
-require that misaligned accesses were supported and thus there's a bunch 
-of firmwares that emulate them (and various misaligned accesses spread 
-around, though they're kind of a mess).  The specs no longer require 
-this support, but just dropping it from firmware will break binaries.
+You could set this to point back to plat_dat.
 
-There's been some vague plans to dig out of this, but it'd require some 
-sort of firmware interface additions in order to turn off the emulation 
-and that's going to take a while.  As it stands we've got a bunch of 
-users that just want to know when they can emit misaligned accesses.
+> +	plat_dat->pcs = dwmac->pcs;
+> +
+> +	ret = stmmac_dvr_probe(dev, plat_dat, &stmmac_res);
+> +	if (ret)
+> +		goto err_free_pcs;
+> +
+> +	return 0;
+> +
+> +err_free_pcs:
+> +	if (dwmac->pcs)
+> +		miic_destroy(dwmac->pcs);
+> +
+> +err_remove_config_dt:
+> +	stmmac_remove_config_dt(pdev, plat_dat);
+> +
+> +	return ret;
+> +}
+> +
+> +static int rzn1_dwmac_remove(struct platform_device *pdev)
+> +{
+> +	struct rzn1_dwmac *dwmac = get_stmmac_bsp_priv(&pdev->dev);
 
-> Technically misaligned reads on (some) x86-64 cpu are slower
-> than aligned ones, but the difference is marginal.
-> I've measured two 64bit misaligned reads every clock.
-> But it is consistently slower by much less than one clock
-> per cache line.
+... which means you get plat_dat back here...
 
-The "fast" case is explicitly written to catch that flavor of 
-implementation.
+> +	int ret = stmmac_dvr_remove(&pdev->dev);
+> +
+> +	if (dwmac->pcs)
+> +		miic_destroy(dwmac->pcs);
 
-The "slow" one is a bit vaguer, but the general idea is to catch 
-implementations that end up with some sort of pipeline flush on 
-misaligned accesses.  We've got a lot of very small in-order processors 
-in RISC-V land, and while I haven't gotten around to benchmarking them 
-all my guess is that the spec requirement for support ended up with some 
-simple implementations.
+and can still destroy the pcs.
 
-FWIW: I checked the c906 RTL and it's setting some exception-related 
-info on misaligned accesses, but I'd need to actually benchmark on to 
-know for sure and they're kind of a headache to deal with.
-
->
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
