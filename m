@@ -2,142 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4683B68FC94
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B8168FCA2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjBIBUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S230313AbjBIBa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:30:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjBIBUc (ORCPT
+        with ESMTP id S229911AbjBIBaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:20:32 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE144AD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:20:31 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id f10so270215ilc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 17:20:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c4B/fP2D/WU+gvJrKKscgdRErT41eDBoC5g7skBzasQ=;
-        b=NkUqlJEjSov6W2wIEnq48XFTKiW5FzL+wHt0lB8O7+5qepak1bLdF+ealyW5nlTKoZ
-         R8WVT9oDjgCa5PTbHJDSjUqTaQ3Emw95eyyahcVuOWAS1J+vEKh/V3iNGOe5WPoPS+7F
-         i0ewRT6s/2PRIPWclUIcBjYqUZZx3afRiZx8c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c4B/fP2D/WU+gvJrKKscgdRErT41eDBoC5g7skBzasQ=;
-        b=rBZ5ZXbvomDrDLe1Dfilob4nugARLoNGJQzHX0VXyDXjPKHH7SZBtWUemO2BPJetod
-         SgJ9OSiRgPAnFPuqYH5gwgA6cg6Ty+3zuKc7bWtJ9VKP52B/mkPNyxdLAlG0rdPfQJ1z
-         mWX5u17ImvfQMANinkWZkqt4FTU4dx/6g3fXI2BpKKVbUj5Ne/FBcOhKpGGottEX6Qdc
-         cG4kgslxIQgmyUitJysIs0CaIUsnoKG8ntCyO9e1Nx0kv5rCwJ6v4zrgNbjhruWZf/iN
-         kX6vb88sgJEbzhzDeyv0kmlmL/Qt6L4+FPatf4XwLK1GYcdmBS97PwY4edCuy2tpceWY
-         0rAA==
-X-Gm-Message-State: AO0yUKXd48mvvLpcv6xEgUQiCJe8lqiAtw3HRyaWJ85JKNZaMzfBPOpD
-        PkDHicoX05nXUkdlzZ5uc6JBQA==
-X-Google-Smtp-Source: AK7set/BMy8+uzdHTjc28D58ZB+OLGxa38IJBo8tQeuPQ/aQ4jNRmPt1RTq9/JLVWjl906HZlLggUg==
-X-Received: by 2002:a05:6e02:12ed:b0:310:e9f4:1e32 with SMTP id l13-20020a056e0212ed00b00310e9f41e32mr10892050iln.19.1675905631149;
-        Wed, 08 Feb 2023 17:20:31 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id j18-20020a02cc72000000b003a60e059970sm2253jaq.84.2023.02.08.17.20.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 17:20:30 -0800 (PST)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH] SoC: rt5682s: Disable jack detection interrupt during suspend
-Date:   Thu,  9 Feb 2023 01:20:23 +0000
-Message-Id: <20230209012002.1.Ib4d6481f1d38a6e7b8c9e04913c02ca88c216cf6@changeid>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+        Wed, 8 Feb 2023 20:30:24 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377ED20D3F
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 17:30:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675906223; x=1707442223;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yBJ52FUGL78dzZOqChYA7Idv2yLAxA4Cx/vsei37ZYs=;
+  b=V+Hxmi1Bms6nRkFMcE7AY2YSDmnMJXu/tWOiv5CK+TjalWi/0m884jXs
+   Vfp4eJTZqjbZ8Vw6TokD1lW7QFPMEAUwafEXhkVb3FmxnieZaFJ1zrNTX
+   DW7BKZaLTquFSLSiFa3ylrGfvYt0zn93pVXd6LATB/XoeiWDZMAx+KsG6
+   cHqq7zk8s46TZB5IBXFYIzf5sOfmcGAP9kMQnSj/o2Kop4Q3FnODHu2DR
+   02TFLQyiWGMbyZTjYhGjpAgg2VQoilDRDBrgCtJ9p4eYoVC3CXA5nNSxS
+   s3UXbFwukb/FQ/9BstYee4gzrTy5QIxl3HB/K9MbNd7ZHFw2BOGhvxvJs
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309629368"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="309629368"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 17:30:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="660840478"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="660840478"
+Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 08 Feb 2023 17:30:20 -0800
+Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pPvlT-0004k6-1m;
+        Thu, 09 Feb 2023 01:30:19 +0000
+Date:   Thu, 9 Feb 2023 09:30:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable
+ 'ipmmu_of_ids'
+Message-ID: <202302090916.LwXEX2k8-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rt5682s driver switches its regmap to cache-only when the
-device suspends and back to regular mode on resume. When the
-jack detect interrupt fires rt5682s_irq() schedules the jack
-detect work. This can result in invalid reads from the regmap
-in cache-only mode if the work runs before the device has
-resumed:
+Hi Robin,
 
-[   19.672162] rt5682s 2-001a: ASoC: error at soc_component_read_no_lock on rt5682s.2-001a for register: [0x000000f0] -16
+FYI, the error/warning still remains.
 
-Disable the jack detection interrupt during suspend and
-re-enable it on resume. The driver already schedules the
-jack detection work on resume, so any state change during
-suspend is still handled.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
+commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
+date:   5 months ago
+config: s390-randconfig-r012-20230209 (https://download.01.org/0day-ci/archive/20230209/202302090916.LwXEX2k8-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b87d6d7fa405e23478f1e1dff6d66b5a533a5433
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b87d6d7fa405e23478f1e1dff6d66b5a533a5433
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202302090916.LwXEX2k8-lkp@intel.com
 
- sound/soc/codecs/rt5682s.c | 10 +++++++++-
- sound/soc/codecs/rt5682s.h |  1 +
- 2 files changed, 10 insertions(+), 1 deletion(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
-index f5e5dbc3b0f0..59117ebc5ecd 100644
---- a/sound/soc/codecs/rt5682s.c
-+++ b/sound/soc/codecs/rt5682s.c
-@@ -2895,6 +2895,9 @@ static int rt5682s_suspend(struct snd_soc_component *component)
- {
- 	struct rt5682s_priv *rt5682s = snd_soc_component_get_drvdata(component);
- 
-+	if (rt5682s->irq)
-+		disable_irq(rt5682s->irq);
-+
- 	cancel_delayed_work_sync(&rt5682s->jack_detect_work);
- 	cancel_delayed_work_sync(&rt5682s->jd_check_work);
- 
-@@ -2919,6 +2922,9 @@ static int rt5682s_resume(struct snd_soc_component *component)
- 			&rt5682s->jack_detect_work, msecs_to_jiffies(0));
- 	}
- 
-+	if (rt5682s->irq)
-+		enable_irq(rt5682s->irq);
-+
- 	return 0;
- }
- #else
-@@ -3259,7 +3265,9 @@ static int rt5682s_i2c_probe(struct i2c_client *i2c)
- 		ret = devm_request_threaded_irq(&i2c->dev, i2c->irq, NULL, rt5682s_irq,
- 			IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
- 			"rt5682s", rt5682s);
--		if (ret)
-+		if (!ret)
-+			rt5682s->irq = i2c->irq;
-+		else
- 			dev_err(&i2c->dev, "Failed to reguest IRQ: %d\n", ret);
- 	}
- 
-diff --git a/sound/soc/codecs/rt5682s.h b/sound/soc/codecs/rt5682s.h
-index 67f86a38a1cc..caa7733b430f 100644
---- a/sound/soc/codecs/rt5682s.h
-+++ b/sound/soc/codecs/rt5682s.h
-@@ -1472,6 +1472,7 @@ struct rt5682s_priv {
- 	int pll_comb;
- 
- 	int jack_type;
-+	unsigned int irq;
- 	int irq_work_delay_time;
- 	int wclk_enabled;
- };
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/iommu/ipmmu-vmsa.c:11:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/iommu/ipmmu-vmsa.c:946:34: warning: unused variable 'ipmmu_of_ids' [-Wunused-const-variable]
+   static const struct of_device_id ipmmu_of_ids[] = {
+                                    ^
+   13 warnings generated.
+
+
+vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
+
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
+33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
+33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
+33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
+33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
+60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
+60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
+60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
+757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
+757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
+757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
+b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
+b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
+b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
+58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
+58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
+0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
+0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
+0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
+0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
+98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
+98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
+98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
+3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
+b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
+b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
+b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
+3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
+9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
+33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
+33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
+33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
+33f3ac9b511612 Magnus Damm             2017-10-16  995  };
+33f3ac9b511612 Magnus Damm             2017-10-16  996  
+
+:::::: The code at line 946 was first introduced by commit
+:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
+
+:::::: TO: Magnus Damm <damm+renesas@opensource.se>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
+
 -- 
-2.39.1.519.gcb327c4b5f-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
