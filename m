@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AB0690D21
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F167F690D1E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjBIPhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47572 "EHLO
+        id S230286AbjBIPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbjBIPhB (ORCPT
+        with ESMTP id S231299AbjBIPg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:37:01 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335875D3D0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:36:35 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id A1F6B5C00E7;
-        Thu,  9 Feb 2023 10:36:03 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 09 Feb 2023 10:36:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1675956963; x=1676043363; bh=Yu0n+6Ru2P
-        15abCrftT2Y1fVzc5CVENWKnJ5+W06L8c=; b=ZZ6EUNot6kq9ilrYWOB9t/onOH
-        0L04NESkjcvx7Twcm1gZ7SKqopNW4Fo9J+jOSHD/cNmVfU9Wii6YVP9jVL5Z2HM0
-        eA2fx38YyjRYMmLGhTpRaCSmhPRLVvcZ7B/8nytXGXD/ymvLhnIrHJhiZ1HV37aE
-        oGaTvckTDWy+bJxGgZbaZxd2w4gdECmKcKszdh4hV1L4TSzWKTlwx51qF8ak3Ufe
-        FaWsjB2coBVoUpliQLV2kWZlwWW1LdlosF84oT0whRXhOIo2Fm1J+EKk99xpuwRQ
-        dTzVS2mGCVL0d/cbY5DYCWG4DCupZ75+OhxRg1wPZf4pxLfYI4DoAUk53VjQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1675956963; x=1676043363; bh=Yu0n+6Ru2P15abCrftT2Y1fVzc5C
-        VENWKnJ5+W06L8c=; b=R2Nu7RZcGDquVg535IQisk/ZZrz73ooNN4vzsImm/OJU
-        ofy7T65YDgoWVtT4piFVN+L12xPHISjNzhLcWswhtr8jLplIC9zgmAg8O5wfK7h9
-        Ez87X8GWlOG5j6GyEbCjWoolxX0T31FT1oDXS9SqDOmvNFfYZs1PqL8vvSBCczFv
-        zs8RCzleXteDnEBr6Q5WhKPgvqwyfP6ONY2n3Zsw27rZz3XCAoheN7eSgo/iOHKP
-        Dkc7HeKA0cHYB6xzaY+rfK9XMVQcSNDuDLMu888tlTbcpsR764rbTMzQFhgqA2F/
-        ulJ/cGc1NuWJ58usJ+p2YSSd2JOJ4wrwhrn35YZY9w==
-X-ME-Sender: <xms:4xLlY56ZxQF7Dp4Sg6TVTkBcxsL-93uDSnK89v_fOg-jq2HQy9qu4A>
-    <xme:4xLlY254xDJQQ5TeJVA7mKquYEMPq8IL3oBCUt2DMGDTR73rpm4E3IT3vIOJv0Lb6
-    TH1NwcUcFdb3dZLKro>
-X-ME-Received: <xmr:4xLlYwdzooL51kKGDB4BC8VJ5wa7dbygb7IcdDRSIx4Vy9CcP0kUyfH4rO8QHevqVPTTOw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehfedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtleekjeeiudefvdfhieffteelhfeivdeliefgieeugffhvdelieffjeei
-    geetjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:4xLlYyKw2vOyn-pfg4DktORrG7k9aD9Flf_JYst5HewfOdoojmhhQw>
-    <xmx:4xLlY9JO92VMzfVKmOCMXDsssqqCq0InDg_PtAFwTbr8c5LSZlDcrQ>
-    <xmx:4xLlY7zXm-Gk_i6RZwU_Roir9RqftsluF5mdnyYWmVpClezo8dRFrw>
-    <xmx:4xLlY_jWf1nVq4HCD6aZWu1AspPIA0Hp3UJvYUy1uxboGhNXrBvm1Q>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Feb 2023 10:36:02 -0500 (EST)
-Date:   Thu, 9 Feb 2023 16:36:00 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Darrell Kavanagh <darrell.kavanagh@gmail.com>
-Cc:     maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
-        airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: drm: panel-orientation-quirks: Add quirk for Lenovo IdeaPad Duet
- 3 10IGL5
-Message-ID: <20230209153600.jtj6deqhgfocvwgc@houat>
-References: <CAMxBKG1RwbRJMG0cKcnbyKgznXeZLL+Zp1zXeOnxpYU0NkOO8A@mail.gmail.com>
- <CAMxBKG3o_6R7M0gaUHXA5yGgSe6HBWYK25fwF=8mN+JTno9t7Q@mail.gmail.com>
- <CAMxBKG0wDi-XwMZwMHq_DbFXt3pgK-CV-G7iT9BNftiXBoUHzQ@mail.gmail.com>
+        Thu, 9 Feb 2023 10:36:58 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDED63134
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:36:29 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso4152967wmp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 07:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M5iTn5qHICfiqsqpN93+glR9L8WT+oZVNTGa3s9jneQ=;
+        b=V6pxhFNcWiY6mQbH5NekoKlp+dqbovfjIGFV8l+kROcxRDUZaJsEDDWIcdAC7W9/kk
+         sZ21StiNutAsgGazHGsI662OnXW/i7wj2Alb8WjipjIeOjNgDCYCa79z0C/IAc4aRe0U
+         hUR5MDdDm3C4mZXs37j6dYBlffdXCrsEImUsHZpAD5rqYyl6XoiylpDLMZpmvN/sRWlZ
+         Wy1bajfh/Af0leXOvVpEscESFtM4l3UybtwS9woafTliRr2Zd/bwbs0j0wY8B9ksZNlE
+         RV9sx0u4O1Ozxox6akiFHhLPYQxwN1/x66PNG45NRygf8Ah4b3RjxcwoCCWpGYf0MAFY
+         fM0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M5iTn5qHICfiqsqpN93+glR9L8WT+oZVNTGa3s9jneQ=;
+        b=ZUW0Xm+K7nzYA2EF4sWZtql904RyMVNfmSUJIQgXhEKTaRIvs3F4mf4IhG8zlNzpYB
+         GcsgdF2HnvMU5oPj9apND+gmnNJDN/vo5QUP/8LOV3jIlDIwz9cw1SMSLW/mFEYwrNnX
+         OB3nJAZGo3noHJISd86WoYKJvgGuO9+WGkCDRm+kY/zmZbvYazNmDxT9Pv4NlLDU/B/S
+         SgKVkRf26RST01QHf6Ea5QhzWGoGI+2ggnlndpKJYtTBqr6oM+3UskBnFlHnL0ShKUil
+         rILGsQdt8aN/N/aZ9Ml2KA8u7M7InyF9xIzbOxrp1Euh9bLYHk4xUGl9May7MZj8hW3d
+         cPFg==
+X-Gm-Message-State: AO0yUKX9+40cXPtQOns7O+5JxYkyfA6CmWv5fOZYI6oXdh8NADwsUVwJ
+        BB9CQkV6CPm7H8qlNnu/aNUgeQ==
+X-Google-Smtp-Source: AK7set+j3J7QEIYeKrfO0e2DuDvHdVBcKUSH+28YT1lZlaJ4hA645APpgWyq/dludToICms8VZ1ndQ==
+X-Received: by 2002:a05:600c:4a9a:b0:3dc:46f6:e607 with SMTP id b26-20020a05600c4a9a00b003dc46f6e607mr10495670wmp.3.1675956980059;
+        Thu, 09 Feb 2023 07:36:20 -0800 (PST)
+Received: from [172.17.49.168] (wifi-eduroam-trans.univ-tlse3.fr. [195.220.58.237])
+        by smtp.googlemail.com with ESMTPSA id o19-20020a05600c379300b003b47b80cec3sm5162406wmr.42.2023.02.09.07.36.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 07:36:19 -0800 (PST)
+Message-ID: <fdcea75c-1ddf-c4f4-5d46-f32a6619b66d@linaro.org>
+Date:   Thu, 9 Feb 2023 16:36:18 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mb2aakgz4b3qr3md"
-Content-Disposition: inline
-In-Reply-To: <CAMxBKG0wDi-XwMZwMHq_DbFXt3pgK-CV-G7iT9BNftiXBoUHzQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/3] Support timer drivers as loadable modules
+Content-Language: en-US
+To:     walter.chang@mediatek.com, Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230208094813.20874-1-walter.chang@mediatek.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230208094813.20874-1-walter.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/02/2023 10:48, walter.chang@mediatek.com wrote:
+> From: Walter Chang <walter.chang@mediatek.com>
+> 
+> This patch exports functions in kernel so that timer drivers,
+> such as timer-mediatek.c can become loadable modules in GKI.
 
---mb2aakgz4b3qr3md
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What for ?
 
-Hi,
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-On Wed, Feb 08, 2023 at 07:04:58PM +0000, Darrell Kavanagh wrote:
-> I've resolved this by adding a matching quirk in
-> drivers/firmware/efi/sysfb_efi.c - see below.
->=20
-> Are you the right people to be notifying about this?
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-Yes, we are.
-
-Howewer, please follow
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-
-In particular, a proper commit log and your Signed-off-By tag is missing.
-
-Maxime
-
---mb2aakgz4b3qr3md
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY+US4AAKCRDj7w1vZxhR
-xZYxAQDWx9+OsPXROJlK4kwZ7VvjR90RYD1U5wlnbqo3KClEjwEA6ZWt/AG/1Ikl
-tU+/xEtvn23WhTgq/5BLVE2XqxykAwE=
-=0o85
------END PGP SIGNATURE-----
-
---mb2aakgz4b3qr3md--
