@@ -2,158 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D28690434
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B21269043D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjBIJvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:51:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S230376AbjBIJyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjBIJvb (ORCPT
+        with ESMTP id S230300AbjBIJyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:51:31 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC0345BED
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:51:27 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pQ3aH-0005eV-N9; Thu, 09 Feb 2023 10:51:17 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pQ3aF-003i85-G2; Thu, 09 Feb 2023 10:51:16 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pQ3aF-001Wrn-5a; Thu, 09 Feb 2023 10:51:15 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: [PATCH net-next v7 9/9] net: phy: start using genphy_c45_ethtool_get/set_eee()
-Date:   Thu,  9 Feb 2023 10:51:13 +0100
-Message-Id: <20230209095113.364524-10-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230209095113.364524-1-o.rempel@pengutronix.de>
-References: <20230209095113.364524-1-o.rempel@pengutronix.de>
+        Thu, 9 Feb 2023 04:54:13 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6885FFF2D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:53:53 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EF8CB1EC06BD;
+        Thu,  9 Feb 2023 10:53:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675936431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4LXgg6eGQ1qH1srtU+U2fOYiBbnpfa32IaXXFfMKKgI=;
+        b=WzVRQzzokNidD+nWlWipMdvljGa9V5i9uJOvMmjVVUSBWh4jSmnuwP3o/YefOtSXiXrKDt
+        jYAYv5U6TP2I2GgV8Gmc6lUSLlcNVp+WlkSMz2s0C7To7OOV809gs2695SRNcLThthjfLF
+        t+NePYOESA7Iqn3LbXqX4RJFnNY46oo=
+Date:   Thu, 9 Feb 2023 10:53:47 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Philip Li <philip.li@intel.com>
+Cc:     kernel test robot <lkp@intel.com>, Babu Moger <babu.moger@amd.com>,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [tip:x86/cache 9/13]
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c:1456:6: warning: variable 'h' set but
+ not used
+Message-ID: <Y+TCq4k+0AhfjZkL@zn.tnic>
+References: <202301242015.kbzkVteJ-lkp@intel.com>
+ <Y8/XoT23HVXHSY73@zn.tnic>
+ <Y+RjOpXP1Bbv268n@rli9-mobl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y+RjOpXP1Bbv268n@rli9-mobl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All preparations are done. Now we can start using new functions and remove
-the old code.
+On Thu, Feb 09, 2023 at 11:06:34AM +0800, Philip Li wrote:
+> Thanks a lot for the suggestions, we will think of this to continuously optimize the
+> service. Right now, we try to build-test the patches that we can find a suitable base
+> to apply the patches successfully, some of effort could fail. Then we only test them
+> when they appears on repo. We will keep monitoring the patch testing status to see
+> anything we can fix as well.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/net/phy/phy.c | 60 ++-----------------------------------------
- 1 file changed, 2 insertions(+), 58 deletions(-)
+Cool, thanks.
 
-diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
-index 36533746630e..2f1041a7211e 100644
---- a/drivers/net/phy/phy.c
-+++ b/drivers/net/phy/phy.c
-@@ -1517,33 +1517,10 @@ EXPORT_SYMBOL(phy_get_eee_err);
-  */
- int phy_ethtool_get_eee(struct phy_device *phydev, struct ethtool_eee *data)
- {
--	int val;
--
- 	if (!phydev->drv)
- 		return -EIO;
- 
--	/* Get Supported EEE */
--	val = phy_read_mmd(phydev, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
--	if (val < 0)
--		return val;
--	data->supported = mmd_eee_cap_to_ethtool_sup_t(val);
--
--	/* Get advertisement EEE */
--	val = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_ADV);
--	if (val < 0)
--		return val;
--	data->advertised = mmd_eee_adv_to_ethtool_adv_t(val);
--	data->eee_enabled = !!data->advertised;
--
--	/* Get LP advertisement EEE */
--	val = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_LPABLE);
--	if (val < 0)
--		return val;
--	data->lp_advertised = mmd_eee_adv_to_ethtool_adv_t(val);
--
--	data->eee_active = !!(data->advertised & data->lp_advertised);
--
--	return 0;
-+	return genphy_c45_ethtool_get_eee(phydev, data);
- }
- EXPORT_SYMBOL(phy_ethtool_get_eee);
- 
-@@ -1556,43 +1533,10 @@ EXPORT_SYMBOL(phy_ethtool_get_eee);
-  */
- int phy_ethtool_set_eee(struct phy_device *phydev, struct ethtool_eee *data)
- {
--	int cap, old_adv, adv = 0, ret;
--
- 	if (!phydev->drv)
- 		return -EIO;
- 
--	/* Get Supported EEE */
--	cap = phy_read_mmd(phydev, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
--	if (cap < 0)
--		return cap;
--
--	old_adv = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_ADV);
--	if (old_adv < 0)
--		return old_adv;
--
--	if (data->eee_enabled) {
--		adv = !data->advertised ? cap :
--		      ethtool_adv_to_mmd_eee_adv_t(data->advertised) & cap;
--		/* Mask prohibited EEE modes */
--		adv &= ~phydev->eee_broken_modes;
--	}
--
--	if (old_adv != adv) {
--		ret = phy_write_mmd(phydev, MDIO_MMD_AN, MDIO_AN_EEE_ADV, adv);
--		if (ret < 0)
--			return ret;
--
--		/* Restart autonegotiation so the new modes get sent to the
--		 * link partner.
--		 */
--		if (phydev->autoneg == AUTONEG_ENABLE) {
--			ret = phy_restart_aneg(phydev);
--			if (ret < 0)
--				return ret;
--		}
--	}
--
--	return 0;
-+	return genphy_c45_ethtool_set_eee(phydev, data);
- }
- EXPORT_SYMBOL(phy_ethtool_set_eee);
- 
+I see you've started doing silly tests like subdirectory builds for W=
+warnings, picking one such report at random from lkml:
+
+https://lore.kernel.org/r/202302091432.VgittDjI-lkp@intel.com
+
+COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
+
+and then it says
+
+drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
+
+Yes, this is all fine and dandy but such tests should be the lowest prio
+eva! If you have a way to schedule by prio, those should wait until all
+the other build tests have happened.
+
+I don't know how your resources are spread out and whether you even can
+do as many so I'm only reporting from my experience, in case you were
+wondering what you could improve:
+
+People push branches to their trees and wait for the robot to test them.
+And they wait and wait. But instead, such silly warnings come.
+
+So it would be a lot better if you could expedite such pushed branches'
+build tests first and then the rest.
+
+And then if there are no branches, submitted patchsets on the ML.
+
+If you're trying to figure out what base to use, you can put a doc
+somewhere telling people how to specify the base for you and they will
+start doing it, you will parse the 0th message for that info and use the
+base.
+
+And the long-standing feature request we have: a simple web page
+somewhere which says how far is it with testing. So that people can go
+and look at it and know whether to wait for test results before sending.
+
+The web page doesn't have to be anything special - just a table of
+branches being tested at the moment.
+
+Anyway, I thought I should give you some suggestions if you were looking
+for some. :-)
+
+Thanks for the testing work - it is appreciated!
+
 -- 
-2.30.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
