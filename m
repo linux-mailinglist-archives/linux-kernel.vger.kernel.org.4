@@ -2,93 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30721690116
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F0669014E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjBIHSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 02:18:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S229891AbjBIHks convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 02:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjBIHSB (ORCPT
+        with ESMTP id S229879AbjBIHkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 02:18:01 -0500
-Received: from out-68.mta1.migadu.com (out-68.mta1.migadu.com [IPv6:2001:41d0:203:375::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8DE4B778
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:17:14 -0800 (PST)
-Date:   Thu, 9 Feb 2023 08:14:37 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1675926881;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aDefePb9DzE68gMvRuH6VgPExZBXi4eiCm1B5eLWrq4=;
-        b=HmcDohBMTsSZToZvxKzDdIAGZRS9A7jNchA6rtcqby/5wjGIifQzTcJ1VkifmfF9E5Pnc5
-        pJdn94Xd0Q50BGvPXnGofxexQeIdDD38C0HwrFUFIev+pWBPvFGgjLR0I+J+gH1EH7bHsq
-        EZ8Mfx1DgYeRmEv8d1aHfUCUFVysdUE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        replicant@osuosl.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Martin =?iso-8859-1?Q?J=FCcker?= <martin.juecker@gmail.com>
-Subject: Re: [RFT PATCH 1/3] ARM: dts: exynos: add "gpios" suffix to
- wlf,ldo1ena on Midas
-Message-ID: <Y+SdXZpJbm+7+SPp@L14.lan>
-References: <20230208172634.404452-1-krzysztof.kozlowski@linaro.org>
+        Thu, 9 Feb 2023 02:40:43 -0500
+X-Greylist: delayed 720 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Feb 2023 23:40:41 PST
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55C70402DA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:40:41 -0800 (PST)
+HMM_SOURCE_IP: 172.18.0.188:33460.1299675246
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-10.133.8.199 (unknown [172.18.0.188])
+        by chinatelecom.cn (HERMES) with SMTP id 68AA52800BD;
+        Thu,  9 Feb 2023 15:14:56 +0800 (CST)
+X-189-SAVE-TO-SEND: huyd12@chinatelecom.cn
+Received: from  ([10.133.8.199])
+        by app0023 with ESMTP id 79a6d3fc04714ff6ba7bdd059d93cc5d for agruenba@redhat.com;
+        Thu, 09 Feb 2023 15:15:12 CST
+X-Transaction-ID: 79a6d3fc04714ff6ba7bdd059d93cc5d
+X-Real-From: huyd12@chinatelecom.cn
+X-Receive-IP: 10.133.8.199
+X-MEDUSA-Status: 0
+Sender: huyd12@chinatelecom.cn
+From:   <huyd12@chinatelecom.cn>
+To:     <liuq131@chinatelecom.cn>, <akpm@linux-foundation.org>,
+        <agruenba@redhat.com>,
+        "'Christian Brauner'" <christian@brauner.io>,
+        "'Michal Hocko'" <mhocko@kernel.org>,
+        "'Andrew Morton'" <akpm@linux-foundation.org>
+Cc:     <agruenba@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230208094905.373-1-liuq131@chinatelecom.cn>
+In-Reply-To: <20230208094905.373-1-liuq131@chinatelecom.cn>
+Subject: =?gb2312?B?u9i4tDogW1BBVENIXSBwaWQ6IGFkZCBoYW5kbGluZyBvZiB0b28gbQ==?=
+        =?gb2312?B?YW55IHpvbWJpZSBwcm9jZXNzZXM=?=
+Date:   Thu, 9 Feb 2023 15:14:57 +0800
+Message-ID: <000e01d93c56$3a4bcb00$aee36100$@chinatelecom.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208172634.404452-1-krzysztof.kozlowski@linaro.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="gb2312"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQDiPQqBEqp6eGY2GPbOHeYBBQy2tLC0MRXw
+Content-Language: zh-cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 06:26:32PM +0100, Krzysztof Kozlowski wrote:
-> The GPIOs properties should end with "gpios" suffix and Linux gpiolib
-> already handles both names, so switch to preferred one.
-> 
-> While touching the lines, replace open-coded GPIO_ACTIVE_HIGH flag.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Tested-by: Henrik Grimler <henrik@grimler.se>
+Any comments will be appreciated.
 
-Audio still works fine on i9300, and there are no new warnings/errors
-in dmesg.
 
-Best regards,
-Henrik Grimler
 
-> ---
->  arch/arm/boot/dts/exynos4412-midas.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
-> index d5074fa57142..525f945c4b91 100644
-> --- a/arch/arm/boot/dts/exynos4412-midas.dtsi
-> +++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
-> @@ -653,8 +653,8 @@ wm1811: audio-codec@1a {
->  		CPVDD-supply = <&vbatt_reg>;
->  		SPKVDD1-supply = <&vbatt_reg>;
->  		SPKVDD2-supply = <&vbatt_reg>;
-> -		wlf,ldo1ena = <&gpj0 4 0>;
-> -		wlf,ldo2ena = <&gpj0 4 0>;
-> +		wlf,ldo1ena-gpios = <&gpj0 4 GPIO_ACTIVE_HIGH>;
-> +		wlf,ldo2ena-gpios = <&gpj0 4 GPIO_ACTIVE_HIGH>;
->  	};
->  };
->  
-> -- 
-> 2.34.1
-> 
+-----邮件原件-----
+发件人: liuq131@chinatelecom.cn <liuq131@chinatelecom.cn> 
+发送时间: 2023年2月8日 17:49
+收件人: akpm@linux-foundation.org
+抄送: agruenba@redhat.com; linux-mm@kvack.org; linux-kernel@vger.kernel.org;
+huyd12@chinatelecom.cn; liuq <liuq131@chinatelecom.cn>
+主题: [PATCH] pid: add handling of too many zombie processes
+
+There is a common situation that a parent process forks many child processes
+to execute tasks, but the parent process does not execute wait/waitpid when
+the child process exits, resulting in a large number of child processes
+becoming zombie processes.
+
+At this time, if the number of processes in the system out of
+kernel.pid_max, the new fork syscall will fail, and the system will not be
+able to execute any command at this time (unless an old process exits)
+
+eg:
+[root@lq-workstation ~]# ls
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: Resource temporarily unavailable [root@lq-workstation ~]#
+reboot
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: retry: Resource temporarily unavailable
+-bash: fork: Resource temporarily unavailable
+
+I dealt with this situation in the alloc_pid function, and found a process
+with the most zombie subprocesses, and more than 10(or other reasonable
+values?) zombie subprocesses, so I tried to kill this process to release the
+pid resources.
+
+Signed-off-by: liuq <liuq131@chinatelecom.cn>
+---
+ include/linux/mm.h |  2 ++
+ kernel/pid.c       |  6 +++-
+ mm/oom_kill.c      | 70 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 77 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h index
+8f857163ac89..afcff08a3878 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1940,6 +1940,8 @@ static inline void clear_page_pfmemalloc(struct page
+*page)
+  * Can be called by the pagefault handler when it gets a VM_FAULT_OOM.
+  */
+ extern void pagefault_out_of_memory(void);
++extern void pid_max_oom_check(struct pid_namespace *ns);
++
+ 
+ #define offset_in_page(p)	((unsigned long)(p) & ~PAGE_MASK)
+ #define offset_in_thp(page, p)	((unsigned long)(p) & (thp_size(page) - 1))
+diff --git a/kernel/pid.c b/kernel/pid.c index 3fbc5e46b721..1a9a60e19ab6
+100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -237,7 +237,11 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t
+*set_tid,
+ 		idr_preload_end();
+ 
+ 		if (nr < 0) {
+-			retval = (nr == -ENOSPC) ? -EAGAIN : nr;
++			retval = nr;
++			if (nr == -ENOSPC) {
++				retval = -EAGAIN;
++				pid_max_oom_check(tmp);
++			}
+ 			goto out_free;
+ 		}
+ 
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c index 1276e49b31b0..18d05d706f48
+100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -1260,3 +1260,73 @@ SYSCALL_DEFINE2(process_mrelease, int, pidfd,
+unsigned int, flags)
+ 	return -ENOSYS;
+ #endif /* CONFIG_MMU */
+ }
++
++static void oom_pid_evaluate_task(struct task_struct *p,
++	struct task_struct **max_zombie_task, int *max_zombie_num) {
++	struct task_struct *child;
++	int zombie_num = 0;
++
++	list_for_each_entry(child, &p->children, sibling) {
++		if (child->exit_state == EXIT_ZOMBIE)
++			zombie_num++;
++	}
++	if (zombie_num > *max_zombie_num) {
++		*max_zombie_num = zombie_num;
++		*max_zombie_task = p;
++	}
++}
++#define MAX_ZOMBIE_NUM 10
++struct task_struct *pid_max_bad_process(struct pid_namespace *ns) {
++	int max_zombie_num = 0;
++	struct task_struct *max_zombie_task = &init_task;
++	struct task_struct *p;
++
++	rcu_read_lock();
++	for_each_process(p)
++		oom_pid_evaluate_task(p, &max_zombie_task, &max_zombie_num);
++	rcu_read_unlock();
++
++	if (max_zombie_num > MAX_ZOMBIE_NUM) {
++		pr_info("process %d has %d zombie child\n",
++			task_pid_nr_ns(max_zombie_task, ns),
+max_zombie_num);
++		return max_zombie_task;
++	}
++
++	return NULL;
++}
++
++void pid_max_oom_kill_process(struct task_struct *task) {
++	struct oom_control oc = {
++		.zonelist = NULL,
++		.nodemask = NULL,
++		.memcg = NULL,
++		.gfp_mask = 0,
++		.order = 0,
++	};
++
++	get_task_struct(task);
++	oc.chosen = task;
++
++	if (mem_cgroup_oom_synchronize(true))
++		return;
++
++	if (!mutex_trylock(&oom_lock))
++		return;
++
++	oom_kill_process(&oc, "Out of pid max(oom_kill_allocating_task)");
++	mutex_unlock(&oom_lock);
++}
++
++void pid_max_oom_check(struct pid_namespace *ns) {
++	struct task_struct *p;
++
++	p = pid_max_bad_process(ns);
++	if (p) {
++		pr_info("oom_kill process %d\n", task_pid_nr_ns(p, ns));
++		pid_max_oom_kill_process(p);
++	}
++}
+--
+2.27.0
+
+
