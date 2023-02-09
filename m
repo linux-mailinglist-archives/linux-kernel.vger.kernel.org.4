@@ -2,143 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53563690D1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD6D690CF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjBIPfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S231145AbjBIP2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjBIPf3 (ORCPT
+        with ESMTP id S230023AbjBIP2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:35:29 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8A564664
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:35:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675956906; x=1707492906;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DBmQQVUz0xBm9mAUPi6p/C1WlTafVt50h5IaYJ0eVDA=;
-  b=KgLntQYyAzzQ+ky5kZKZJxBjd+kRa3+1tGIelntXZnkWpcC9hkci0raC
-   mgFnMUm5eYfRqugJrJ6ajiyDypf2gCTqWAn+oUAIiQWArnKpY2i8Vp93z
-   UPoUQnR00zL1UWoLqdXIJ7aUSjLg8gNH0Gsv0xaLbaebuPV4pK/25ryq0
-   /XGOzPnwrXIMNr6safyena24PkjwVl7KZb56YlzPsG9WR2tXRvVIAKo8J
-   PRCzSkEI40kN2/jaWF4dUaLeViTp9HP/tLRIuVD+j79GNhWq0lrpHIEjb
-   uhKb+8JLhFlu/Z8ZiHbeH+jALKSRr80jxjwkf9GDfVBWlKUYYoiCeuge1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="309782438"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="309782438"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:35:05 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="776528833"
-X-IronPort-AV: E=Sophos;i="5.97,284,1669104000"; 
-   d="scan'208";a="776528833"
-Received: from fpastor-mobl4.amr.corp.intel.com (HELO [10.212.74.130]) ([10.212.74.130])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 07:35:04 -0800
-Message-ID: <dbec6aab-6456-72b3-39b6-3490dfdf083c@linux.intel.com>
-Date:   Thu, 9 Feb 2023 09:23:46 -0600
+        Thu, 9 Feb 2023 10:28:12 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF9F38B55;
+        Thu,  9 Feb 2023 07:28:10 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.179.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E6F2766020B9;
+        Thu,  9 Feb 2023 15:28:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675956488;
+        bh=cVo2hwJA6ba+zxud5YmocaB8dvaCAIfmsd2BzN8RA7Y=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=SklvgmPzoikYluoyKD+usYENzjjeV8cXVAMyegngQGFdo8vYGHMhGAtc9g0sPwFVm
+         qdwkUAyCCJZlimtbYIKmGcc9y+g7Hdfdhay3/K+sjkynf9SZ15Usn5upd6ScJgwbVF
+         bdwKNx8K+4NUKkmv/ULlRig1TAMZKubdwBkf/rPkVM3HXq46LSV+Kl88Oa3MHsK4mP
+         WfEJnyD9NWdJJucrIeOw2ZTxlYbBxJAd5EYg9Ad7+bW6pY2W/wMvXedjWU6oNyh5JU
+         D0a+4G2OvcIihBvTMIqNXDsGtAM+IXztwbrpsd8XAPW6f7gGjrATBBlquvpI5Lcr9S
+         oWXwXk5kSmPbw==
+Message-ID: <eea000a2-b237-76f0-186c-6181762e34f1@collabora.com>
+Date:   Thu, 9 Feb 2023 20:27:58 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH 3/5] soundwire: qcom: wait for fifo to be empty before
- suspend
+ Thunderbird/102.6.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v10 1/6] userfaultfd: Add UFFD WP Async support
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        vkoul@kernel.org
-Cc:     yung-chuan.liao@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, steev@kali.org,
-        johan+linaro@kernel.org, quic_bjorande@quicinc.com
-References: <20230209131336.18252-1-srinivas.kandagatla@linaro.org>
- <20230209131336.18252-4-srinivas.kandagatla@linaro.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230209131336.18252-4-srinivas.kandagatla@linaro.org>
+To:     Peter Xu <peterx@redhat.com>
+References: <20230202112915.867409-1-usama.anjum@collabora.com>
+ <20230202112915.867409-2-usama.anjum@collabora.com> <Y+QQLNrhyiVwXI50@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <Y+QQLNrhyiVwXI50@x1n>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Peter,
 
+Thank you so much for reviewing!
 
-On 2/9/23 07:13, Srinivas Kandagatla wrote:
-> Wait for Fifo to be empty before going to suspend or before bank
-> switch happens. Just to make sure that all the reads/writes are done.
-
-For the suspend case that seems like a valid approach, but for bank
-switch don't we already have a bus->msg_lock mutex that will prevent the
-bank switch command from being sent before the other commands are handled?
-
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  drivers/soundwire/qcom.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
+On 2/9/23 2:12 AM, Peter Xu wrote:
+> On Thu, Feb 02, 2023 at 04:29:10PM +0500, Muhammad Usama Anjum wrote:
+>> Add new WP Async mode (UFFD_FEATURE_WP_ASYNC) which resolves the page
+>> faults on its own. It can be used to track that which pages have been
+>> written-to from the time the pages were write-protected. It is very
+>> efficient way to track the changes as uffd is by nature pte/pmd based.
+>>
+>> UFFD synchronous WP sends the page faults to the userspace where the
+>> pages which have been written-to can be tracked. But it is not efficient.
+>> This is why this asynchronous version is being added. After setting the
+>> WP Async, the pages which have been written to can be found in the pagemap
+>> file or information can be obtained from the PAGEMAP_IOCTL.
+>>
+>> Suggested-by: Peter Xu <peterx@redhat.com>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Changes in v10:
+>> - Build fix
+>> - Update comments and add error condition to return error from uffd
+>>   register if hugetlb pages are present when wp async flag is set
+>>
+>> Changes in v9:
+>> - Correct the fault resolution with code contributed by Peter
+>>
+>> Changes in v7:
+>> - Remove UFFDIO_WRITEPROTECT_MODE_ASYNC_WP and add UFFD_FEATURE_WP_ASYNC
+>> - Handle automatic page fault resolution in better way (thanks to Peter)
+>>
+>> update to wp async
+>>
+>> uffd wp async
+>> ---
+>>  fs/userfaultfd.c                 | 20 ++++++++++++++++++--
+>>  include/linux/userfaultfd_k.h    | 11 +++++++++++
+>>  include/uapi/linux/userfaultfd.h | 10 +++++++++-
+>>  mm/memory.c                      | 23 ++++++++++++++++++++---
+>>  4 files changed, 58 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+>> index 15a5bf765d43..422f2530c63e 100644
+>> --- a/fs/userfaultfd.c
+>> +++ b/fs/userfaultfd.c
+>> @@ -1422,10 +1422,15 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>>  			goto out_unlock;
+>>  
+>>  		/*
+>> -		 * Note vmas containing huge pages
+>> +		 * Note vmas containing huge pages. Hugetlb isn't supported
+>> +		 * with UFFD_FEATURE_WP_ASYNC.
+>>  		 */
 > 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index b2363839624c..465b2a2ef0d5 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -325,6 +325,32 @@ static int swrm_wait_for_wr_fifo_avail(struct qcom_swrm_ctrl *swrm)
->  	return 0;
->  }
->  
-> +static bool swrm_wait_for_wr_fifo_done(struct qcom_swrm_ctrl *swrm)
-> +{
-> +	u32 fifo_outstanding_cmds, value;
-> +	int fifo_retry_count = SWR_OVERFLOW_RETRY_COUNT;
-> +
-> +	/* Check for fifo overflow during write */
-> +	swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
-> +	fifo_outstanding_cmds = FIELD_GET(SWRM_WR_CMD_FIFO_CNT_MASK, value);
-> +
-> +	if (fifo_outstanding_cmds) {
-> +		while (fifo_retry_count) {
-> +			usleep_range(500, 510);
-> +			swrm->reg_read(swrm, SWRM_CMD_FIFO_STATUS, &value);
-> +			fifo_outstanding_cmds = FIELD_GET(SWRM_WR_CMD_FIFO_CNT_MASK, value);
-> +			fifo_retry_count--;
-> +			if (fifo_outstanding_cmds == 0)
-> +				return true;
-> +		}
-> +	} else {
-> +		return true;
-> +	}
-> +
-> +
-> +	return false;
-> +}
-> +
->  static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
->  				     u8 dev_addr, u16 reg_addr)
->  {
-> @@ -356,6 +382,7 @@ static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
->  		usleep_range(150, 155);
->  
->  	if (cmd_id == SWR_BROADCAST_CMD_ID) {
-> +		swrm_wait_for_wr_fifo_done(swrm);
->  		/*
->  		 * sleep for 10ms for MSM soundwire variant to allow broadcast
->  		 * command to complete.
-> @@ -1122,6 +1149,7 @@ static void qcom_swrm_shutdown(struct snd_pcm_substream *substream,
->  {
->  	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dai->dev);
->  
-> +	swrm_wait_for_wr_fifo_done(ctrl);
->  	sdw_release_stream(ctrl->sruntime[dai->id]);
->  	ctrl->sruntime[dai->id] = NULL;
->  	pm_runtime_mark_last_busy(ctrl->dev);
-> @@ -1558,6 +1586,7 @@ static int __maybe_unused swrm_runtime_suspend(struct device *dev)
->  	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
->  	int ret;
->  
-> +	swrm_wait_for_wr_fifo_done(ctrl);
->  	if (!ctrl->clock_stop_not_supported) {
->  		/* Mask bus clash interrupt */
->  		ctrl->intr_mask &= ~SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET;
+> Need to set "ret = -EINVAL;" here.  Or..
+Will fix in next version.
+
+> 
+>> -		if (is_vm_hugetlb_page(cur))
+>> +		if (is_vm_hugetlb_page(cur)) {
+>> +			if (ctx->features & UFFD_FEATURE_WP_ASYNC)
+>> +				goto out_unlock;
+> 
+> .. it'll return -EBUSY, which does not sound like the right errcode here.
+> 
+>> +
+> 
+> Drop this empty line?
+> 
+>>  			basic_ioctls = true;
+>> +		}
+>>  
+>>  		found = true;
+>>  	}
+> 
+> Other than that looks good, thanks.
+Thank you so much! This wouldn't have been possible without your help.
+
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
