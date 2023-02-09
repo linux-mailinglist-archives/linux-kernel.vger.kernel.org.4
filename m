@@ -2,79 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C025A6900BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 491626900BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 08:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjBIHMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 02:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        id S229696AbjBIHMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 02:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjBIHMm (ORCPT
+        with ESMTP id S229660AbjBIHMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 02:12:42 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F433C28
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:12:38 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4PC7Nj1rQNz501Qv;
-        Thu,  9 Feb 2023 15:12:37 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl2.zte.com.cn with SMTP id 3197CMbm099301;
-        Thu, 9 Feb 2023 15:12:22 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 9 Feb 2023 15:12:24 +0800 (CST)
-Date:   Thu, 9 Feb 2023 15:12:24 +0800 (CST)
-X-Zmail-TransId: 2af963e49cd815a63a84
-X-Mailer: Zmail v1.0
-Message-ID: <202302091512245950001@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <mingo@redhat.com>
-Cc:     <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBzY2hlZC90b3BvbG9neTogcmVtb3ZlIGR1cGxpY2F0ZSBpbmNsdWRlIGhlYWRlciBpbiB0b3BvbG9neS5j?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 3197CMbm099301
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63E49CE5.000/4PC7Nj1rQNz501Qv
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 9 Feb 2023 02:12:48 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19FF41B59
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 23:12:46 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id w5so1882823plg.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 23:12:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4WVs22Kg7Btgcs7NcU/V4V2lSD7tkAUiSfve9Y1LNwY=;
+        b=AoYrrJJs6k9GtmQ4jMGk0yXnsurRdiogv4N9KaUtAvk7czZiKUvynb//Bfa2EC5y3x
+         bThSbc2PuWdlSa6zqhkSM3mNpiJHJPK8QHZP0bb0ANnmBRq9y6M6tosCkqa0HtjZEr7m
+         pdZWvIjuSCgtmifIjb6P+QJwoD6nwQX/OA31bMpYqq3qigQS8QSqGSlSiq47cdl+XVQx
+         2JCuvOxpC3CK/kIQhAqtz+Zi7zTcsXfsqIKsjnrCzTvJoB5FP4M6IVUUoVQ4vN1tGuCr
+         X41zK9YDiG7cBtw8BW3R1Jb/SbukYgAhUI7qDCI7mUA4yRA0v5Gq7Ipcnhb/YmqWIm3T
+         qicw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4WVs22Kg7Btgcs7NcU/V4V2lSD7tkAUiSfve9Y1LNwY=;
+        b=kt/WeExLuTCxEnkX9Q0Sgp6JemYqGj5Hn7TiTB90il5upaIK5r4hZd1i+OTyIiAnLv
+         VUujzsLUWNwVGWfZVhvSYnvrgewtSrkXrGbh2w4jsCDT4xVFGD6ge2AiN9s/k04Vo624
+         9yORQTngsNyzPyOCI6t/2VYIGEP/yrF8qmqBDBVXQc8UNx6ZvstIZFHSDO7N5P4/k5x2
+         olKaXw61OjmbPCy4qJrRt1G0tqhizFfgfvgEtjrTSYiVKhSYyvS54BDAgIRXyXptW0Sj
+         L1CTEKazIWWSU0IzTlRRgTnowVGr678gvLALiQU0GLR0eBQyYqytz+JOEjLLqCMWj1OL
+         TP/A==
+X-Gm-Message-State: AO0yUKVnYnfLob+R7yD8nR0R3s085JOA4qkEhmm9vG+Kq5XobRvdbqpH
+        R0jlMZND68En0nulk/7tsTe9m94uqOVnKgwvYBfrlQ==
+X-Google-Smtp-Source: AK7set/JAGjMaYyKUc3wik1Zpc3z1fF27fTbmID4hmKb+mM1VoQt/VnzqKCHgPPcXP/4CDxya8Ss+VkiNAm6JDV2cqw=
+X-Received: by 2002:a17:902:b78a:b0:199:26df:77b6 with SMTP id
+ e10-20020a170902b78a00b0019926df77b6mr2518442pls.3.1675926766145; Wed, 08 Feb
+ 2023 23:12:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20230201135737.800527-1-jolsa@kernel.org> <Y9vSZhBBCbshI3eM@casper.infradead.org>
+ <Y9vX49CtDzyg3B/8@krava>
+In-Reply-To: <Y9vX49CtDzyg3B/8@krava>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 8 Feb 2023 23:12:34 -0800
+Message-ID: <CA+khW7juLEcrTOd7iKG3C_WY8L265XKNo0iLzV1fE=o-cyeHcQ@mail.gmail.com>
+Subject: Re: [RFC 0/5] mm/bpf/perf: Store build id in file object
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Xingchen <ye.xingchen@zte.com.cn>
+On Thu, Feb 2, 2023 at 7:33 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Thu, Feb 02, 2023 at 03:10:30PM +0000, Matthew Wilcox wrote:
+> > On Wed, Feb 01, 2023 at 02:57:32PM +0100, Jiri Olsa wrote:
+> > > hi,
+> > > we have a use cases for bpf programs to use binary file's build id.
+> >
+> > What is your use case?  Is it some hobbyist thing or is it something
+> > that distro kernels are all going to enable?
+> >
+>
+> our use case is for hubble/tetragon [1] and we are asked to report
+> buildid of executed binary.. but the monitoring process is running
+> in its own pod and can't access the the binaries outside of it, so
+> we need to be able to read it in kernel
+>
+> I understand Hao Luo has also use case for that [2]
+>
 
-linux/bsearch.h is included more than once.
+Sorry for the late reply.
 
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
----
- kernel/sched/topology.c | 1 -
- 1 file changed, 1 deletion(-)
+We use BPF to profile stacktraces and build id is more useful than
+instruction addresses. However, sometimes we need to record
+stacktraces from an atomic context. In that case, if the page that
+contains the build id string is not in the page cache, we would fail
+to get build id. Storing the build id in file object solves this
+problem and helps us get build id more reliably.
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index ebc8cbeb55dc..eb339751fe90 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -1766,7 +1766,6 @@ bool find_numa_distance(int distance)
-  *   there is an intermediary node C, which is < N hops away from both
-  *   nodes A and B, the system is a glueless mesh.
-  */
--#include <linux/bsearch.h>
-
- static void init_numa_topology_type(int offline_node)
- {
--- 
-2.25.1
+> jirka
+>
+>
+> [1] https://github.com/cilium/tetragon/
+> [2] https://lore.kernel.org/bpf/CA+khW7gAYHmoUkq0UqTiZjdOqARLG256USj3uFwi6z_FyZf31w@mail.gmail.com/
