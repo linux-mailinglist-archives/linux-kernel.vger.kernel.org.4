@@ -2,89 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E0C690229
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4611D690235
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBII3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 03:29:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S229664AbjBIIeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 03:34:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjBII3i (ORCPT
+        with ESMTP id S229537AbjBIIeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 03:29:38 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC804345A
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:29:36 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id r18so861225wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 00:29:36 -0800 (PST)
+        Thu, 9 Feb 2023 03:34:10 -0500
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C2947418
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:34:09 -0800 (PST)
+Received: by mail-vk1-xa2a.google.com with SMTP id l15so555900vkd.11
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 00:34:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ziWX5p/72UywAdxKA7LNDVxrSwnr4vdR8atBrdNzFXI=;
-        b=CWJOky25KIedq/9uyGXCkMRtXy/cA1pMTAhHgYHIbvrIoxGsi1FYT4UeeW7wd4J5t8
-         ve+Poz9HImIfylmFcNA00hITJie2JN6iHHg7qd6cvj2bWXbmrYEZmiltvKz/vj9twXMR
-         Tzak8SVDvXXxTCc6leh1xvgcJvpzll1xS82s6QKgn4GuITzx+hF4cdfH7TgCcSkdwtZG
-         V0PQJwCjBi2AwrvXvSc9dx0hyqW0+p4C7zuXnKPuM5Q+/HOnUiNgnABR3k2mUIV9Tvik
-         HugXpzoXqc4AObyGiKyqSyEgfQCxQdldHxkTwHfP40qV6/TnMr8r5vvllLhKh63kNMAX
-         rAEg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gWuuUdo7aS+R+xwyMPT4inxSLLiy9YRKAIGpnfs3mMw=;
+        b=mnc8Ifx6QnAPmYWW1FKA6DpGkfoRhUGOlwZyawmaWZUYXBRs3P3lMZ6UuiJN+OVnrP
+         JYO03+hkMmh17dEbozQueyLF/rseofZe1Ytt3Bf02eSA13fv7UUEzVDkYLMk6yry8LOM
+         c7xhnpHflipzPwMHeJMaqdWdhYrJCxv4p+PSc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ziWX5p/72UywAdxKA7LNDVxrSwnr4vdR8atBrdNzFXI=;
-        b=cYzNta/V2nglZ8IY83dTCwYuYZASQ8tVD79MRK3/kYywtIiR0OZw+t+tK12LZojKH1
-         pJW0/iriSSN5SvcJG/ca1iqmEExTfN1kRUP/NBGFsiYGGpsBMIen8kW1tpVBUm2TKBUx
-         CbVAWgIAva43WVNzUNuP7+ZbU8iSUilA/nSf+hw256x1Hk7m7VUTpVbkYTJPuPNyfXeE
-         CzJwQXzixFasPH5MuZmZJfqhAcyUtlkTRrq+G1iKF00euHqwVaEDKq8+inMjf/DzWuov
-         GRAEFxgMYIA9thXJOyHkd5KtxeU3u4T2u1akPxFgzcqoLP9RElaCrUtt9o9tAU0hSZ0A
-         BDEQ==
-X-Gm-Message-State: AO0yUKVzW6+Exsgq88m4McmVdpqpxkOZEeuAKvXS934hYqQPSxnc9bvM
-        IFbTmzdDhrQRL0kgy/VXkarY5Q==
-X-Google-Smtp-Source: AK7set80Xla51urku0oSo1PvVBBpHyge+nEKhUAH8UQFTzY+CAHZdNTYGErugAkfMC3jB4y9zo3Tfg==
-X-Received: by 2002:a05:600c:1d17:b0:3dd:1c45:fe3a with SMTP id l23-20020a05600c1d1700b003dd1c45fe3amr3586584wms.16.1675931374990;
-        Thu, 09 Feb 2023 00:29:34 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m24-20020a05600c3b1800b003dc41a9836esm1190012wms.43.2023.02.09.00.29.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 00:29:34 -0800 (PST)
-Message-ID: <59efb87b-5f97-a409-46ae-095ab03d01b9@linaro.org>
-Date:   Thu, 9 Feb 2023 09:29:32 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gWuuUdo7aS+R+xwyMPT4inxSLLiy9YRKAIGpnfs3mMw=;
+        b=W3w1lAXZx2P5YeDaBtD6gn/ltWjZR0YAXR1Oitb/cawfc2JztASkV6IG9uNa1WeJvh
+         th1Gzg+OwE1hJvsCzoNGiDZAFTdKbj/K54Z/5/PUc7BocSl1wmINHNVRBs0P7W9ZToom
+         zbo+PAodwlTb2HUeho6GTMromu6qrhp7SMbiZtYvxyqeYFW9egbUJkMPtPK2pyKS+6Dt
+         HrXbZJMhZyipt94gIxd1QwJtYFhvdkNYoKrdbO/TBQTEZB6bwyJopU0UDudeBibqxWGa
+         tWjb2tomCWU9tOAF9W2Jw9mPzNetDdiKtSYU3q2av4Nnb27VNdzKylfuKcrHqBC21EYB
+         6SVA==
+X-Gm-Message-State: AO0yUKX7knHIlhnHINi9pWfwe9uWS3r+Z6Sd1kQprwyGIk++YdJXo45R
+        Dgoc0WQy6Kmort4lpgXCc5HU7zoggDT/7vij4HWoFg==
+X-Google-Smtp-Source: AK7set8pBou1qM81NL3KNWeDM08Kg7jVEwCB11009P47SaV8veeMsx+j8GewJrleWgySAp8Llo1VSXqxEKvDZ4DLKFA=
+X-Received: by 2002:a1f:9493:0:b0:3ea:7394:e9ef with SMTP id
+ w141-20020a1f9493000000b003ea7394e9efmr2102117vkd.11.1675931648111; Thu, 09
+ Feb 2023 00:34:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] dt-bindings: gpio: nxp,pcf8575: add gpio-line-names
-To:     Trevor Woerner <twoerner@gmail.com>, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230209041752.35380-1-twoerner@gmail.com>
- <20230209043100.1508-1-twoerner@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230209043100.1508-1-twoerner@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230208103709.116896-1-angelogioacchino.delregno@collabora.com> <20230208103709.116896-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230208103709.116896-3-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 9 Feb 2023 16:33:57 +0800
+Message-ID: <CAGXv+5FXqEJaADrhgu-tPfEPPkP1B=bo_KytBH55xCRea4CmTQ@mail.gmail.com>
+Subject: Re: [PATCH 2/9] dt-bindings: gpu: mali-bifrost: Allow up to 5 power
+ domains for MT8192
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     airlied@gmail.com, tomeu.vizoso@collabora.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, steven.price@arm.com,
+        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
+        alyssa.rosenzweig@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 05:31, Trevor Woerner wrote:
-> The family of PCF857x-compatible chips describe 8-bit i2c i/o expanders.
-> Allow the user to specify names for the 8 gpio lines.
+On Wed, Feb 8, 2023 at 6:37 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> MediaTek MT8192 (and similar) needs five power domains for the
+> Mali GPU and no sram-supply: change the binding to allow so.
+>
 
-PCA9675 is 16-bit and has 16 outputs/
+mt8192 compatible was already added, so this should have:
 
-Best regards,
-Krzysztof
+Fixes: 5d82e74a97c2 ("dt-bindings: Add compatible for Mali Valhall (JM)")
 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/gpu/arm,mali-bifrost.yaml        | 34 +++++++++++++++++--
+>  1 file changed, 31 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> index 69212f3b1328..e7aba66ddb8f 100644
+> --- a/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> +++ b/Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml
+> @@ -61,7 +61,7 @@ properties:
+>
+>    power-domains:
+>      minItems: 1
+> -    maxItems: 3
+> +    maxItems: 5
+>
+>    resets:
+>      minItems: 1
+> @@ -141,6 +141,18 @@ allOf:
+>          - power-domains
+>          - resets
+>          - reset-names
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - mediatek,mt8183-mali
+> +                - mediatek,mt8192-mali
+> +    then:
+> +      properties:
+> +        power-domains:
+> +          maxItems: 1
+>    - if:
+>        properties:
+>          compatible:
+> @@ -161,10 +173,26 @@ allOf:
+>          - sram-supply
+>          - power-domains
+>          - power-domain-names
+> -    else:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: mediatek,mt8192-mali
+> +    then:
+>        properties:
+>          power-domains:
+> -          maxItems: 1
+> +          minItems: 5
+> +        power-domain-names:
+> +          items:
+> +            - const: core0
+> +            - const: core1
+> +            - const: core2
+> +            - const: core3
+> +            - const: core4
+> +
+> +      required:
+> +        - power-domains
+> +        - power-domain-names
+>    - if:
+>        properties:
+>          compatible:
+> --
+> 2.39.1
+>
