@@ -2,84 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A95C691073
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70020691077
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjBISjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48680 "EHLO
+        id S229818AbjBISjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbjBISjE (ORCPT
+        with ESMTP id S229851AbjBISjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:39:04 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45766C14A;
-        Thu,  9 Feb 2023 10:39:03 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id r8so3875061pls.2;
-        Thu, 09 Feb 2023 10:39:03 -0800 (PST)
+        Thu, 9 Feb 2023 13:39:19 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746B16590;
+        Thu,  9 Feb 2023 10:39:18 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id b5so3854740plz.5;
+        Thu, 09 Feb 2023 10:39:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RPKE8I74KmcfvbAB9W7wcXN11uCSFTgnE2Flitb62ZM=;
-        b=EOJs1kkhjifPhGnLGeOobPEF50YTsUIbfUyCEvT6q5WybmHNx53mRj9NV7Hb8wyQIp
-         8Ux8R4Pkd/DKkesH7aKzhRepBf8MF6lhlv6+tvw3dBiUd0AM1Bv0BJd+OUTP2wGtOpty
-         LpjTMt+YImz1r8e3kQdQ6LE98LcVG/b1lfhfNKixUET7ZJAj/oKuA7ZQbxNRh+Ds+Jt6
-         Z7QxKcC4QrWg7SgtIBxZV4eRiOA1LiiU9VvackYRKc3ec+RmdmszQQdNHALUHfuuVL5h
-         WTMklrpZnoLItrzphzGTsz5o96Y3PCGIo40mbB3MR3kucRL7FgrX5FCZipWvzneHrmxV
-         cfaQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MXrxNJPo4710vQXfLlUqnKiFqVdmV4GK7KJqHS2H9NA=;
+        b=ZSzYUSL+OaZ/dcA3qRT4wBFw3528/581THPDhVKDzi/JypnlDtTO/9WjzuL/SlvRu0
+         CGPtQRp1VI2R0lavWI3q3+csWqMgovF4e544eX8ag2PEXQZe6tjOOWjbQJloevPLNZAH
+         dXmEXmcQ74ZuUCPgCdOLcweb92Raoq2uZ8mA+gF0OibcsZUqzbXeLHaFH4rBDs4vcCsI
+         rU1Np0oo4swoES613OTmuO5Ki305GGaCqUfrWM/4pEXa//r0Q8lVYijLG9MzC76NTdfO
+         vaFOjPNohhywx42mLoVdr7lI1TQ0FxmVnEeODU5YHGsx+8TDhbze5RWPh0Uv+KC/P7mJ
+         nMNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RPKE8I74KmcfvbAB9W7wcXN11uCSFTgnE2Flitb62ZM=;
-        b=SmA6lq/Wok5wVm1OYIiGpprriAh4PQdmOVH7hrFNV49cLuDmJQxmPLYuWTdgLkY9Ll
-         wOWgj7GBKYbWlKdDULRuA1tH00R62Ih089LsUhMcA7pAUP91nX3GNGbqds/uZU1zZN0E
-         UFPs6sS0/yWechCc0L1Di3r6WRzVfs2a9StKzlbwNoo7EuElboLrBdDaVkP0gcgs/dWo
-         BMjkmUp7kuzss9K0ukDbzeVh4gbEoVt9yJmXv2GpSEAv3KjqxZk56rWdXXXU28wRqVdI
-         oHx98eMTycjW5ItxxHmAti5XZFZJqYYbdFA4/0cC4tO8V15UHdpC4nbwMSf/WchzmBvE
-         f2qg==
-X-Gm-Message-State: AO0yUKUK8ByAzldIw/bThgDCTaG8etZ6Pnwd5LdJb4pjCuhPlcRUf6hg
-        2wkHR2Bvjh+6ohvt7zqWmuY=
-X-Google-Smtp-Source: AK7set/LppshYG8y9o2egxkKV5W3fmYs5pnODYXv05PI+wMMKd/ps8kHMwJ6s2LjZuHkjxKLnGxg6g==
-X-Received: by 2002:a17:902:cf08:b0:194:a6e0:3ba with SMTP id i8-20020a170902cf0800b00194a6e003bamr2453021plg.54.1675967942712;
-        Thu, 09 Feb 2023 10:39:02 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l5-20020a170902d34500b00192cf87ed25sm1851177plk.35.2023.02.09.10.39.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 10:39:01 -0800 (PST)
-Message-ID: <df7d6a5c-796a-04cc-11b4-a37cee50a341@gmail.com>
-Date:   Thu, 9 Feb 2023 10:38:59 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 00/15] spi: bcm63xx-hsspi: driver and doc updates
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MXrxNJPo4710vQXfLlUqnKiFqVdmV4GK7KJqHS2H9NA=;
+        b=rX5dRDAsrhfW5iDwvF7oBEF5707odDR16s0DA3cYJSqxPnUBKzEvDmR+A0IxatfYQG
+         cCwTbniU65tTOSUZULKbDhyPv3IKFrlf6kC0SU5PclxVpdVz34v6zkpuyTmEbpi82vK5
+         1EtpP3jH7RdjlCmXaiEjfB86UY2tsnZfl6221DboMHuB4CuLKdErTiXWOKzaawvcTdox
+         lyO/m96ar7Q1Y/LFobjwkFqZBIuW0E5ydqdrP40wspjNQJQnL5trcCzXk6k/8QSt+o1N
+         saKHBpAbbxXh2wMnFuiv3ZNGx4zuHwjD9T+85KaDsro1/grf2A5zigB7YaVvbahbJZCO
+         dPcA==
+X-Gm-Message-State: AO0yUKVTJzYFqKP5LS0sEV61Rnbf2bprPr+a1RZHSPyf8g6Ofx+kAnlY
+        f+XlLz6XGyZ+ishHMTvilKNBCh78deo+NQ==
+X-Google-Smtp-Source: AK7set+KaXa4HvuatK30HE/98Z4oxO2W2R6X52b3BN6yHMAmMzCCHP5RiClDNS/WVP1AcwsRmx2jfA==
+X-Received: by 2002:a05:6a21:164b:b0:bc:f665:8653 with SMTP id no11-20020a056a21164b00b000bcf6658653mr9298603pzb.45.1675967957890;
+        Thu, 09 Feb 2023 10:39:17 -0800 (PST)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 2-20020aa79142000000b00575caf80d08sm1790144pfi.31.2023.02.09.10.39.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 10:39:17 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
-        kursad.oney@broadcom.com, anand.gore@broadcom.com,
+        Linux SPI List <linux-spi@vger.kernel.org>
+Cc:     kursad.oney@broadcom.com, anand.gore@broadcom.com,
         dan.beygelman@broadcom.com, dregan@mail.com,
         joel.peshkin@broadcom.com, jonas.gorski@gmail.com,
         tomer.yacoby@broadcom.com,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230207065826.285013-1-william.zhang@broadcom.com>
- <167596308461.673456.2324521897149973878.b4-ty@kernel.org>
- <ac6591f3-0420-3cd0-28b5-8b2ea333d723@gmail.com>
- <Y+U9PKGLXSYqnavN@sirena.org.uk>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <Y+U9PKGLXSYqnavN@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Subject: Re: [PATCH v3 04/15] arm64: dts: broadcom: bcmbca: Add spi controller node
+Date:   Thu,  9 Feb 2023 10:39:15 -0800
+Message-Id: <20230209183915.2317171-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230207065826.285013-5-william.zhang@broadcom.com>
+References: <20230207065826.285013-1-william.zhang@broadcom.com> <20230207065826.285013-5-william.zhang@broadcom.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,22 +80,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/9/23 10:36, Mark Brown wrote:
-> On Thu, Feb 09, 2023 at 10:34:34AM -0800, Florian Fainelli wrote:
->> On 2/9/23 09:18, Mark Brown wrote:
+On Mon,  6 Feb 2023 22:58:15 -0800, William Zhang <william.zhang@broadcom.com> wrote:
+> Add support for HSSPI controller in ARMv8 chip dts files.
 > 
->>> [03/15] ARM: dts: broadcom: bcmbca: Add spi controller node
->>>           (no commit info)
->>> [04/15] arm64: dts: broadcom: bcmbca: Add spi controller node
->>>           (no commit info)
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
 > 
->> Usually we have SoC maintainers pick up the DTS patches affecting the
->> platforms they cover to avoid conflicts... I suppose that is fine.
-> 
-> Hence the "no commit info" - there's no commit for those changes.
+> ---
 
-Did not I get tripped over this before, yes I did! OK, I will go hide in 
-that corner other there. Thanks!
--- 
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+--
 Florian
-
