@@ -2,122 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CF5690263
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF98690272
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjBIIpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 03:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S229548AbjBIIs1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 9 Feb 2023 03:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjBIIpI (ORCPT
+        with ESMTP id S229461AbjBIIsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 03:45:08 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E4A2C666;
-        Thu,  9 Feb 2023 00:45:06 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 118E6E000A;
-        Thu,  9 Feb 2023 08:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675932304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lsM5D50PzVIPFH+SjdumhMwvBSFWE+VCnF+/HwUWPF0=;
-        b=IYvEv71/5dXj2VmBueRtcbpUtatEwm5HrqsF+17xX6bIaYTkSXhGbI0rdMHd5cjwT4VFNP
-        jflYdhrAsaz7l5EDj5wNuC5DktevkaKfXgO4XOQ5/J6No93S7cldfJUkT/PvHxO0PVDrCY
-        1i4agU1AWG7Qe+Xifzg2+o3tsdOrbdNAcIh1WpKiYLVtChS7nL8DU4llKVUtTXo+phphl6
-        fHjrmsCe4amHu+t0ckdxXEbgiGOTFhV+bdYDE6EE+albI7reJ4+ovcQIN0iLIl7NeZujqa
-        zl4CWQC9igFUmA+OvgvvBjuMoUlV78ktjLjDtGcupP4Z97a7gqSb/edOfpr7iA==
-Date:   Thu, 9 Feb 2023 09:47:25 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Thu, 9 Feb 2023 03:48:25 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D2D47436;
+        Thu,  9 Feb 2023 00:48:23 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id w3so1145552qts.7;
+        Thu, 09 Feb 2023 00:48:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qRakTzAhZgdoRP04VGp/CF8zi2ym1rVkoURybx362LI=;
+        b=K89vUrlk8n3XLJHbZzwvoDX2m4Y635vA0qXgrNk4KvA0Bm85LpaAOEp6GD3AkVsWTK
+         j90KjWPVHWjDCsBaOZiGpFAMoJpMa6qiXYVfeifStJ3pWrIrLMes0/fxOy+iQHxH1jb9
+         lZkayRySfaJuCRFLchMmgFSGw9hfawzdtY7YzWgBtDPIezeLo0nOipK+4ZJeg/8o661t
+         kNU7Z94jr9wtNrEYbcgqBwpwmHXjL8T7XTe3YVTlsllN6Eml5ia+u5dPsJ1BUS8bDCus
+         QZDD+tyaQ82ERMY8UpEMD01MkRBfZbg0Teo/cuKYX2B/LwNsQzy8zKAxCC/5EHpM6nrY
+         qZeQ==
+X-Gm-Message-State: AO0yUKU3K5/t7A2XdghyIKgwXZ7xQSQt4VTKZchM1QQiIPhCSpBxe1nY
+        HQ6o5GeC16iyQKKGVa15aHt36zgofZVLBQ==
+X-Google-Smtp-Source: AK7set9dHhWZn0eA+TCM2kNsefSZOGTM50enzjkapGNVc/T8PrmmDUx4DvUAFi/W1o1ir27Q4jL8pg==
+X-Received: by 2002:ac8:5cce:0:b0:3b9:a777:3d9a with SMTP id s14-20020ac85cce000000b003b9a7773d9amr18616575qta.44.1675932502689;
+        Thu, 09 Feb 2023 00:48:22 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id m3-20020ac807c3000000b003b848759ed8sm854371qth.47.2023.02.09.00.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 00:48:22 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id 184so1499146ybw.5;
+        Thu, 09 Feb 2023 00:48:22 -0800 (PST)
+X-Received: by 2002:a05:6902:1c2:b0:89c:b633:73a6 with SMTP id
+ u2-20020a05690201c200b0089cb63373a6mr1044164ybh.365.1675932501823; Thu, 09
+ Feb 2023 00:48:21 -0800 (PST)
+MIME-Version: 1.0
+References: <20230207145444.166950-1-clement.leger@bootlin.com> <20230207145444.166950-2-clement.leger@bootlin.com>
+In-Reply-To: <20230207145444.166950-2-clement.leger@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 9 Feb 2023 09:48:09 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVL1YGnX4X2R_O1tMhRt07R8XUD2eWeFFgTcm7ShZrdcg@mail.gmail.com>
+Message-ID: <CAMuHMdVL1YGnX4X2R_O1tMhRt07R8XUD2eWeFFgTcm7ShZrdcg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: soc: renesas: renesas.yaml: add
+ renesas,rzn1d400-eb compatible
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
         Milan Stevanovic <milan.stevanovic@se.com>,
         Jimmy Lalande <jimmy.lalande@se.com>,
         Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 3/3] net: dsa: rzn1-a5psw: add vlan support
-Message-ID: <20230209094725.3ac772ff@fixe.home>
-In-Reply-To: <20230208220309.4ekk4xpmpx27rkt6@skbuf>
-References: <20230208161749.331965-1-clement.leger@bootlin.com>
-        <20230208161749.331965-1-clement.leger@bootlin.com>
-        <20230208161749.331965-4-clement.leger@bootlin.com>
-        <20230208161749.331965-4-clement.leger@bootlin.com>
-        <20230208220309.4ekk4xpmpx27rkt6@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, 9 Feb 2023 00:03:09 +0200,
-Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+Hi Clément,
 
-> On Wed, Feb 08, 2023 at 05:17:49PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > +static void a5psw_port_vlan_tagged_cfg(struct a5psw *a5psw, int vlan_r=
-es_id,
-> > +				       int port, bool set)
-> > +{
-> > +	u32 mask =3D A5PSW_VLAN_RES_WR_PORTMASK | A5PSW_VLAN_RES_RD_TAGMASK |
-> > +		   BIT(port);
-> > +	u32 vlan_res_off =3D A5PSW_VLAN_RES(vlan_res_id);
-> > +	u32 val =3D A5PSW_VLAN_RES_WR_TAGMASK, reg;
-> > +
-> > +	if (set)
-> > +		val |=3D BIT(port);
-> > +
-> > +	/* Toggle tag mask read */
-> > +	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK);
-> > +	reg =3D a5psw_reg_readl(a5psw, vlan_res_off);
-> > +	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK); =20
->=20
-> Is it intentional that this register is written twice?
+On Tue, Feb 7, 2023 at 3:52 PM Clément Léger <clement.leger@bootlin.com> wrote:
+> Add "renesas,rzn1d400-eb" which target the RZ/N1 EB board when a RZ/N1D-DB
+> daughter board is plugged on it.
+>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 
-Yes, the A5PSW_VLAN_RES_RD_TAGMASK bit is a toggle-bit (toggled
-by writing a 1 in it) and it allows to read the tagmask (for
-vlan tagging) instead of the portmask (for vlan membership):
+Thanks for your patch!
 
-"""
-b28 read_tagmask:
+> --- a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> @@ -431,6 +431,12 @@ properties:
+>                - renesas,rzn1d400-db # RZN1D-DB (RZ/N1D Demo Board for the RZ/N1D 400 pins package)
+>            - const: renesas,r9a06g032
+>
+> +      - description: RZ/N1{D,S} EB
+> +        items:
+> +          - enum:
+> +              - renesas,rzn1d400-eb # RZN1D-EB (Expansion Board when using a RZN1D-DB)
+> +          - const: renesas,r9a06g032
 
-Select contents of mask bits (4:0) when reading the
-register. If this bit is set during a write into the register, all
-other bits of the write are ignored (i.e. 30,29,16:0) and the bit 28 of
-the register toggles (1-> 0; 0-> 1). This is used only to allow
-changing the bit 28 without changing any table contents.
-"""
+Don't you want to have "renesas,rzn1d400-db", too, in between the two
+other values?
 
->=20
-> > +
-> > +	reg &=3D ~mask;
-> > +	reg |=3D val;
-> > +	a5psw_reg_writel(a5psw, vlan_res_off, reg);
-> > +} =20
+> +
+>        - description: RZ/Five and RZ/G2UL (R9A07G043)
+>          items:
+>            - enum:
 
+Gr{oetje,eeting}s,
 
+                        Geert
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
