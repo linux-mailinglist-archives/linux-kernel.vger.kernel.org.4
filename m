@@ -2,168 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1CA690483
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C71690485
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjBIKUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 05:20:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S229672AbjBIKUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 05:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjBIKUJ (ORCPT
+        with ESMTP id S229634AbjBIKUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:20:09 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DD3113F0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:19:41 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bu23so1230719wrb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 02:19:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o7nXjYUAJe0c4WLMHTFjnjlD4cocALBpSRZfaJQqgEk=;
-        b=e1fxAKvfXSrp1k9VGsl1QKST7yhBe0BNlLL/Iz+AVh4h+Tel0jfOeVumpH8Ivf4qiw
-         EzvQ+fcRqN2nuzeZosVgC85zw1vIebgFklkGPbIfpajb4GzXrxeA+4uHr2SeqvxSl4jT
-         9Jf3rU+Q8a1hcXd3olK59afiOJsdrs9mfa4cYndQWIDPb2rauyTdnWYk9SAgUz/GvDST
-         3OlfJjgNHgkufffvfHokPT8MpTbgKQZNfAzHo2bYr/4uyKDoD1dqcKyypcJyNLQemezp
-         L/rinS4bhOOIe6SgKocqsStaFjAvl3WwdeA1KyfrrWyvMf4HpHjm5fUV/penfPylkCRU
-         NyMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7nXjYUAJe0c4WLMHTFjnjlD4cocALBpSRZfaJQqgEk=;
-        b=T5n/4P8klOM4/NplHTBLxNMdIRTVLQTBVhWAl+JwDIwOezVB3cNO4qjXejh1Ihyl+s
-         mh9+RNbWfVsGG6VNK6ZiRABSn7KOJ8Po7lngH0xJC9uiNgM9TznCeLuik9UZAMh3nwgN
-         lc3VBuQBS/1JQ8fxP1joLDf+L3llUiMcaRkvU22HDirFwdymbjl16Mg2ngPWEg8lOBLI
-         1UN1FhZUbaD/r4EDGYLyMrF17D/2HrzUrEH4OE8iM3CEVu8l5QId2qDoMCvgIxFiTKMb
-         S5EOusqIaXJOmHewxCkrh7z1xO+0xZBngoX5amvlRR0yV0ZJsN55god3LvHNJWSovqrW
-         vVMg==
-X-Gm-Message-State: AO0yUKXzCiQfQyjPQBwTL2jFsBTISVriEmtSXbbfIiHq7L07X8Q7X9dN
-        JShTX3mjYFfDO94GTD8wM8QZ4g==
-X-Google-Smtp-Source: AK7set9kutQKT1vIzInVG0wk4AWlrSDOIpMvfWz3SWsDByS8nhiQWTEHU6AQLo/n+cdjjSxIRHJFvQ==
-X-Received: by 2002:a05:6000:12cb:b0:2c3:4ef0:343e with SMTP id l11-20020a05600012cb00b002c34ef0343emr10132679wrx.5.1675937980415;
-        Thu, 09 Feb 2023 02:19:40 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:8009:2525:9580:8db2? ([2a02:6b6a:b566:0:8009:2525:9580:8db2])
-        by smtp.gmail.com with ESMTPSA id y1-20020a5d6201000000b002c3ea5ebc73sm852467wru.101.2023.02.09.02.19.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 02:19:39 -0800 (PST)
-Message-ID: <4377e0bc-5954-c0c3-0daa-24a4427c144e@bytedance.com>
-Date:   Thu, 9 Feb 2023 10:19:38 +0000
+        Thu, 9 Feb 2023 05:20:12 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B07113F0;
+        Thu,  9 Feb 2023 02:20:11 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PCCSM11ZCz6J68f;
+        Thu,  9 Feb 2023 18:16:03 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Thu, 9 Feb
+ 2023 10:20:08 +0000
+Date:   Thu, 9 Feb 2023 10:20:07 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Gwendal Grignou <gwendal@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the iio tree
+Message-ID: <20230209102007.00002d07@Huawei.com>
+In-Reply-To: <20230209143821.7e6870e8@canb.auug.org.au>
+References: <20230209143821.7e6870e8@canb.auug.org.au>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v7 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>, paulmck@kernel.org,
-        tglx@linutronix.de
-Cc:     kim.phillips@amd.com, arjan@linux.intel.com, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        x86@kernel.org, pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230207230436.2690891-1-usama.arif@bytedance.com>
- <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
- <8e2f03e2-9517-aeb4-df60-b36ef3ff3a75@bytedance.com>
- <79fa4d65a0d906dd42c41324dfe065aa8ad06d6f.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <79fa4d65a0d906dd42c41324dfe065aa8ad06d6f.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 9 Feb 2023 14:38:21 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-
-On 09/02/2023 10:06, David Woodhouse wrote:
-> On Thu, 2023-02-09 at 09:49 +0000, Usama Arif wrote:
->>
->> --- a/arch/x86/kernel/smpboot.c
->> +++ b/arch/x86/kernel/smpboot.c
->> @@ -1080,6 +1080,7 @@ wakeup_cpu_via_init_nmi(int cpu, unsigned long
->> start_ip, int apicid,
->>                                             wakeup_cpu0_nmi, 0, "wake_cpu0");
->>
->>           if (!boot_error) {
->> +               initial_gs = per_cpu_offset(cpu);
+> Hi all,
 > 
-> That's for 64-bit.
+> After merging the iio tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 > 
->>                   enable_start_cpu0 = 1;
->>                   *cpu0_nmi_registered = 1;
->>                   id = apic->dest_mode_logical ? cpu0_logical_apicid :
->> apicid;
->> @@ -1188,10 +1189,14 @@ static int do_boot_cpu(int apicid, int cpu,
->> struct task_struct *idle,
->>                   boot_error = apic->wakeup_secondary_cpu_64(apicid,
->> start_ip);
->>           else if (apic->wakeup_secondary_cpu)
->>                   boot_error = apic->wakeup_secondary_cpu(apicid, start_ip);
->> -       else
->> +       else {
->> +               if(!cpu) {
->> +                       early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
->> +                       initial_stack  = idle->thread.sp;
->> +               }
+> drivers/iio/proximity/sx_common.c: In function 'sx_common_get_raw_register_config':
+> drivers/iio/proximity/sx_common.c:438:55: error: implicit declaration of function 'acpi_device_hid'; did you mean 'dmi_device_id'? [-Werror=implicit-function-declaration]
+>   438 |         snprintf(prop, ARRAY_SIZE(prop), "%s,reg_%s", acpi_device_hid(adev), reg_def->property);
+>       |                                                       ^~~~~~~~~~~~~~~
+>       |                                                       dmi_device_id
+> drivers/iio/proximity/sx_common.c:438:44: error: format '%s' expects argument of type 'char *', but argument 4 has type 'int' [-Werror=format=]
+>   438 |         snprintf(prop, ARRAY_SIZE(prop), "%s,reg_%s", acpi_device_hid(adev), reg_def->property);
+>       |                                           ~^          ~~~~~~~~~~~~~~~~~~~~~
+>       |                                            |          |
+>       |                                            char *     int
+>       |                                           %d
+> cc1: all warnings being treated as errors
 > 
-> And that's 32-bit.
+> Caused by commit
 > 
-> These were previously done in common_cpu_up() or do_boot_cpu(), which
-> means they were done not only for the wakeup_cpu_via_init_nmi() code
-> path, but also when we call apic->wakeup_secondary_cpu() (or _64()) for
-> the esoteric UV/NumaConnect machines.
+>   91af1d6c497b ("iio: proximity: sx_common: Add old register mapping")
 > 
-> Thanks for diagnosing it so quickly; I'll work up a subtly different
-> fix.
+> I have reverted that commit for today.
 > 
 
-Yeah, was just a hacky fix while I was trying to figure out the issue.
+Thanks,  I misdiagnosed the issue in previous attempt to fix this.
+Problem is lack of stub for that function in !CONFIG_ACPI
+(not as I thought a missing include - which was also the case).
 
-do_boot_cpu is only called in cpu0 in hotplug case, so I think this a 
-much better diff:
+As that will need an ACPI related header change to avoid ifdef nastiness
+in the driver I'll drop the patch from my tree and we can get back
+to this next cycle.
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 3ec5182d9698..f7ae82969ee4 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1136,13 +1136,16 @@ static int do_boot_cpu(int apicid, int cpu, 
-struct task_struct *idle,
-         idle->thread.sp = (unsigned long)task_pt_regs(idle);
-         initial_code = (unsigned long)start_secondary;
+Thanks again,
 
--       if (IS_ENABLED(CONFIG_X86_32)) {
-+       if (IS_ENABLED(CONFIG_X86_32) || !cpu) {
-                 early_gdt_descr.address = (unsigned 
-long)get_cpu_gdt_rw(cpu);
-                 initial_stack  = idle->thread.sp;
-         } else if (!do_parallel_bringup) {
-                 smpboot_control = STARTUP_SECONDARY | apicid;
-         }
-
-+       if (!cpu)
-+               initial_gs = per_cpu_offset(cpu);
-+
-         /* Enable the espfix hack for this CPU */
-         init_espfix_ap(cpu);
+Jonathan
+ 
 
 
-
->>                   boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
->>                                                        cpu0_nmi_registered);
->> -
->> +       }
->>           return boot_error;
->>    }
->>
-> 
