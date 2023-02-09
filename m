@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D69690768
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1769F69073F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbjBIL2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 06:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S231464AbjBIL0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 06:26:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjBIL1i (ORCPT
+        with ESMTP id S231618AbjBILZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:27:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25C35D1F8;
-        Thu,  9 Feb 2023 03:20:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C973561A22;
-        Thu,  9 Feb 2023 11:19:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED121C433A0;
-        Thu,  9 Feb 2023 11:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675941595;
-        bh=iRRaVW8waMS3swKNOM/fpWoKvde37F2jbZWpvCGZsz8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XgQZr8sChoLkaC/Ilp+nWF+tAxR9VEq5bWDawEfuW30aX/a3X/jl0N1ZeZuNVQ8eD
-         3g+hQb1xpuAuWG6UpiyUpPFUTjIrXZGxXhtpz5FnRW5TZ6fxV+uJZaRkHOUzxFuHYa
-         m8RHwVLReM4nNeIduQmN42IBTSmV7hOQYFonUHOvZjGxXZfaPsTn7gEf4v0kIpBRXr
-         dk+1yp+GADoXD8xtA5IJEKv7FopN9t1KhEde/AUKxgOdMQZ39TLQ4UNO+e9Vxq8OI4
-         45WL4riVR2g2F0tGZqkHL1o0lxIn9t+0zK+DL3+CBL8FfcBmgcjBxxvcJMKhuSDxxW
-         M3gpmy3yFRJIw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 08/10] net: sched: sch: Bounds check priority
-Date:   Thu,  9 Feb 2023 06:19:17 -0500
-Message-Id: <20230209111921.1893095-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230209111921.1893095-1-sashal@kernel.org>
-References: <20230209111921.1893095-1-sashal@kernel.org>
+        Thu, 9 Feb 2023 06:25:24 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F14A5D1C2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:19:58 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ud5so5334301ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 03:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nz56ImgJrv1CC3lx6MAOTCnqrbrf9AATvSrQft4alFo=;
+        b=bqSJjTGTuxIMIR4TEuGifUiSeNSVXHjZn6T82NW25CPqgM7Ws7Fj6QjXMocmNyF/2f
+         n2VKBj746pJRNvKAJ/SD1LtfTaGIKTXD+V9pD79k03qJwWEOU1TtOYPLiwDt9+54lfqb
+         E0T4Sn+NaDz0Vnlq5AuhGCSKFSdHHcqjKpDKY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nz56ImgJrv1CC3lx6MAOTCnqrbrf9AATvSrQft4alFo=;
+        b=Dk2lX2qp/brfWToVWbHmlerdSKbgZgzp3/lZauBig+y0FHYNbDFKMP2Y0rjuh5kQ3a
+         atNrkXjjaBT6Pg5qoZUPZ9e3xoOad3C3oN/HgKVm8XmEOGAnI5RHD5Tjf2ChKJefN4jF
+         N7kGavGE4mvYQ8x9ZFa2wXtQ/RHm5/D+qe+e+s8Z+LwUAo+OtIYGazWf/aZtVl8r4wr0
+         ZCGefNKYj1dO4zx32tQt74KwDomT2hqUWsXJiW6fuguDcohTP4uI6lxHO1Osq5jwIkeg
+         S+ev3he6Z0l98Uz0pz0yX6Yh87qnE8pq10rfKYB2JsvvMaEoEztCBcY1PCkRyR603W3q
+         qhZQ==
+X-Gm-Message-State: AO0yUKXOfMIbIerKHVL2su1flGgBfYAbIeUclkrwcstpdVG9VmaJKQ82
+        ySjcMyAgZU3tlkis+Uwxyq1fkRn2zwDATxhfJFKOCg6V1jAh6A==
+X-Google-Smtp-Source: AK7set8lh5QP9lwmqrh7PbHYgxC9D3m31I6V/lHZRre+hf+eSv2OnOz60v7CGC5f8+EUqeBIDpAxPCMJuoMiFiWX6sQ=
+X-Received: by 2002:a17:906:27c4:b0:888:7a3e:1d7f with SMTP id
+ k4-20020a17090627c400b008887a3e1d7fmr411199ejc.12.1675941568493; Thu, 09 Feb
+ 2023 03:19:28 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <S1728511AbfHaSEm/20190831180442Z+580@vger.kernel.org>
+ <08fbdf25-faa1-aa13-4f13-d30acbf27dda@mipisi.de> <20190902074917.GA21922@piout.net>
+ <alpine.DEB.2.21.1909021247250.3955@nanos.tec.linutronix.de>
+ <4fc3a016-ec2f-a15e-5fd1-6794a001e2d9@mipisi.de> <alpine.DEB.2.21.1909040047210.1902@nanos.tec.linutronix.de>
+ <Y+O+VBSNywC7LKhn@panicking> <87edr02fsc.ffs@tglx>
+In-Reply-To: <87edr02fsc.ffs@tglx>
+From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date:   Thu, 9 Feb 2023 12:19:17 +0100
+Message-ID: <CAOf5uwn1SKBR+pREZy9f-wnQf6Lw3epyHxiX_hjf_pOaiiSDWA@mail.gmail.com>
+Subject: Re: Problem when function alarmtimer_suspend returns 0 if time delta
+ is zero
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Michael <michael@mipisi.de>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,55 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+Hi Thomas
 
-[ Upstream commit de5ca4c3852f896cacac2bf259597aab5e17d9e3 ]
+On Wed, Feb 8, 2023 at 7:06 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Michael!
+>
+> On Wed, Feb 08 2023 at 16:23, Michael Trimarchi wrote:
+> > On Wed, Sep 04, 2019 at 12:49:21AM +0200, Thomas Gleixner wrote:
+> >> On Tue, 3 Sep 2019, Michael wrote:
+> >> >
+> >> > thank you very much for your patch. Unfortunately currently I can only test it
+> >> > with a kernel 4.1.52 but i've tried to patch
+> >> > your new logic into my older kernel version.
+> >>
+> > Is this patch valid on mainline too? because apply it was let rtc
+> > working 100% of the time
+>
+> I wrote that patch against the back then mainline code. No idea if it's
+> still applying, but the underlying issue is still the same AFAICT.
+>
+> It needs some polishing and a proper changelog.
+>
 
-Nothing was explicitly bounds checking the priority index used to access
-clpriop[]. WARN and bail out early if it's pathological. Seen with GCC 13:
+Ok, I will try to update it on some mainline kernel in my environment
+and test it back. I need
+a little information if it's possible. Consider that I have no
+experience in this area. I understand how
+code was designed in general but the part around the freezer and all
+those code you remove, what was the logic behind in the removed code?
 
-../net/sched/sch_htb.c: In function 'htb_activate_prios':
-../net/sched/sch_htb.c:437:44: warning: array subscript [0, 31] is outside array bounds of 'struct htb_prio[8]' [-Warray-bounds=]
-  437 |                         if (p->inner.clprio[prio].feed.rb_node)
-      |                             ~~~~~~~~~~~~~~~^~~~~~
-../net/sched/sch_htb.c:131:41: note: while referencing 'clprio'
-  131 |                         struct htb_prio clprio[TC_HTB_NUMPRIO];
-      |                                         ^~~~~~
+Michael
 
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>
-Link: https://lore.kernel.org/r/20230127224036.never.561-kees@kernel.org
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/sched/sch_htb.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+> Thanks,
+>
+>         tglx
+>
+>
 
-diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
-index 8184c87da8bec..e635713cb41dd 100644
---- a/net/sched/sch_htb.c
-+++ b/net/sched/sch_htb.c
-@@ -405,7 +405,10 @@ static void htb_activate_prios(struct htb_sched *q, struct htb_class *cl)
- 	while (cl->cmode == HTB_MAY_BORROW && p && mask) {
- 		m = mask;
- 		while (m) {
--			int prio = ffz(~m);
-+			unsigned int prio = ffz(~m);
-+
-+			if (WARN_ON_ONCE(prio > ARRAY_SIZE(p->inner.clprio)))
-+				break;
- 			m &= ~(1 << prio);
- 
- 			if (p->inner.clprio[prio].feed.rb_node)
--- 
-2.39.0
 
+
+--
+Michael Nazzareno Trimarchi
+Co-Founder & Chief Executive Officer
+M. +39 347 913 2170
+michael@amarulasolutions.com
+__________________________________
+
+Amarula Solutions BV
+Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
+T. +31 (0)85 111 9172
+info@amarulasolutions.com
+www.amarulasolutions.com
