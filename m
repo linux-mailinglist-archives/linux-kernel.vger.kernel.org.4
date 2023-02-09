@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39530690C5A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC2D690BBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbjBIPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S230437AbjBIO3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjBIPB5 (ORCPT
+        with ESMTP id S230431AbjBIO3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:01:57 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58439A0
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 07:01:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675954913; x=1707490913;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/+xWAVVPl6YOh/i5Jh/m3nRXHie4D7DLrU2F06Zxyyg=;
-  b=c5vAAKmufmBhEphQI3f/Z937JGRT3Ta6SMzzm5s1gZHTpPNbet9zhtjh
-   h9+37EVZ5y+M6ZBSObT8ACrTl077QAz2bdPvMV3P0Jgb72So7sOlKdr3k
-   nO0m3nmGsOuwUrVrH0gTXhF6sz5jArccqB8Ec3YEilNjs04huPdfae/va
-   1wHqXAv+0Bwt4/duB2qXtqMwdpEGS5ugeGEH0m83VoBpeSq7KOQFHZa3h
-   pHReLzjErjIzamRaK1BeMlTidcSbGFOcFmrzBGSZucxBxjpcF0/W45te1
-   AJa7UN7MprwQmkamyYMYrA25GwL10uxlCTaryCAsVTaX/qQZi+gy5FqIi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="331420885"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="331420885"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 06:28:10 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="791610358"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="791610358"
-Received: from davidsan-mobl3.amr.corp.intel.com (HELO [10.209.22.211]) ([10.209.22.211])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 06:28:09 -0800
-Message-ID: <9848226e-2574-b8e0-4fb4-316957f57fb5@intel.com>
-Date:   Thu, 9 Feb 2023 06:28:08 -0800
+        Thu, 9 Feb 2023 09:29:24 -0500
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7E15C89D;
+        Thu,  9 Feb 2023 06:29:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=3gvgtgLgSW3u20gNVHqhv6UVsa84fGHu0R5hZms47Ng=; b=vt61NckReEUeqnTpd0R9KxOLEI
+        x96E4ZkczjYB62LIb2qijmoleFW85rS+f/TyFBP9IuDVmEsOJ6Wzs6I/LHjM1JAdP/VAwbAfmukSZ
+        lM7jsILULSIb/mSCibXUvb+gYzr6jI1dpOVCCh2HR/bcbsqN72/kQi9eGjmSvgpaWAysHCarFnh0A
+        8KLbX+MaegIjPKT/hHUIUEJQWsoz551S8hSN3UrHjJ10L+O3XE0QZQOD9DRQMZkOfqAQqAnYoatrG
+        c3Sq8TT/f6koGta7FSjJTCllE3Ve3B00WnaUhP+g9O2mv1caY7u4X8Y9vzxcrmYVBbs7x7MRu3Ju0
+        ZJS1lIcYUPQRA0koYly5gfaZfB4fWqQZEBPUepvNUYB38lUvML9KPeT4t8bmhMP1hrFIfLaj4faUx
+        TMS8vgaMYOQgu6oZ92Xl24R9q+D6PhYKv628UvzYhZmOmGCFZfRfmgtepoqp9lsXZY1NkmjxbWiso
+        3FPnDhPXaIkuClZRWKcpnE/m;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1pQ7vM-00Cp9C-H8; Thu, 09 Feb 2023 14:29:20 +0000
+Message-ID: <8476eee4-6227-213f-c6ab-86768d0b58c8@samba.org>
+Date:   Thu, 9 Feb 2023 15:29:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
+ Thunderbird/102.7.1
+Subject: Re: copy on write for splice() from file to pipe?
 Content-Language: en-US
-To:     Bharata B Rao <bharata@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, akpm@linux-foundation.org, luto@kernel.org,
-        tglx@linutronix.de, yue.li@memverge.com,
-        Ravikumar.Bangoria@amd.com, ying.huang@intel.com
-References: <20230208073533.715-1-bharata@amd.com>
- <Y+Pj+9bbBbHpf6xM@hirez.programming.kicks-ass.net>
- <4808d3fa-bb68-d4c8-681f-0b2770d78041@intel.com>
- <369bef08-92cc-9b55-823f-1fe780532967@amd.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <369bef08-92cc-9b55-823f-1fe780532967@amd.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <Y+T/GE77AKzsPte9@casper.infradead.org>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <Y+T/GE77AKzsPte9@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/8/23 22:04, Bharata B Rao wrote:
->> First, IIRC, Intel PEBS at the time only gave guest virtual addresses in
->> the PEBS records.  They had to be translated back to host addresses to
->> be usable.  That was extra expensive.
-> Just to be clear, I am using IBS in host only and it can give both virtual
-> and physical address.
+Am 09.02.23 um 15:11 schrieb Matthew Wilcox:
+> On Thu, Feb 09, 2023 at 02:55:59PM +0100, Stefan Metzmacher wrote:
+>> Hi Linus and others,
+>>
+>> as written in a private mail before, I'm currently trying to
+>> make use of IORING_OP_SPLICE in order to get zero copy support
+>> in Samba.
+> 
+> I have to ask why.  In a modern network, isn't all data encrypted?
 
-Could you talk a little bit about how IBS might get used for NUMA
-balancing guest memory?
+No people use plain connections for performance sensitive
+workloads and have client and server in isolated vlans.
+
+> So you have to encrypt into a different buffer, and then you checksum
+> that buffer.  So it doesn't matter if writes can change the page cache
+> after you called splice(), you just need to have the data be consistent
+> so the checksum doesn't change.
+
+SMB offers checksuming (signing) only as well as authenticated
+encryption.
+
+For signing only I experimented with splice() in combination with
+tee(), so that I can checksum the data after reading from tee,
+while I can still splice() into the socket.
+
+For encryption the async_memcpy flag to preadv2 could be usefull
+if we keep using userspace encryption using gnutls.
+If using the kernel crypto socket, we could also use splice to
+add the file data into the crypto functions and the same problem
+can happen, because some algorithms may encrypt and sign the data
+in separate steps and it doesn't expect the data to be changed.
+
+metze
 
