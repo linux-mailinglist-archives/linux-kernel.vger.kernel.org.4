@@ -2,140 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3627A6907D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69026907DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjBILyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 06:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S229699AbjBIL4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 06:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjBILxi (ORCPT
+        with ESMTP id S229508AbjBILzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:53:38 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EBC68ACE
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:41:06 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pQ5IV-0005sb-MX; Thu, 09 Feb 2023 12:41:03 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1pQ5IV-0008Ep-Bi; Thu, 09 Feb 2023 12:41:03 +0100
-Date:   Thu, 9 Feb 2023 12:41:03 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
- net device
-Message-ID: <20230209114103.GQ10447@pengutronix.de>
-References: <20221104131031.850850-1-s.hauer@pengutronix.de>
- <20221104131031.850850-2-s.hauer@pengutronix.de>
- <f2a4f9847617a0929d62025748384092e5f35cce.camel@crapouillou.net>
- <20230209101807.GO10447@pengutronix.de>
- <6d618e518de06854727f26de950404f02ec61c64.camel@crapouillou.net>
+        Thu, 9 Feb 2023 06:55:47 -0500
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2524AD02
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:44:55 -0800 (PST)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230209114451euoutp01f924837d7444d3134db7ca804c65e569~CJVzRZP-p0485404854euoutp01t
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:44:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230209114451euoutp01f924837d7444d3134db7ca804c65e569~CJVzRZP-p0485404854euoutp01t
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1675943091;
+        bh=MaSLN/NNg2/noTq4bWBoUtrpGKTfjbHhpAaxxEMNSfQ=;
+        h=Date:Subject:To:From:In-Reply-To:References:From;
+        b=RLY/gqnaLAgXnGiVSbQiaFVPa4TpEem6jjBKDcoK74x78PpyMDY2Ce1UT6+duUXCk
+         313R+9rTBQBx67ys4wi+vhR3I7Jd/zKoia01pIuvyGniUTD3RphplMdea+mEYuVTiz
+         yxgRITorJycZyHYc1PD+Ir6ySGBCPx/036Zv6tfw=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230209114451eucas1p1dba9b4fdff6509e8bcc1d0a2fc6ae2ed~CJVy0RKsm0126101261eucas1p1M;
+        Thu,  9 Feb 2023 11:44:51 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 9B.1D.13597.3BCD4E36; Thu,  9
+        Feb 2023 11:44:51 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230209114451eucas1p2de6ec04f18cf81fe7722758676ee5fb8~CJVyii11V0449004490eucas1p2Q;
+        Thu,  9 Feb 2023 11:44:51 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230209114451eusmtrp1e3e79a4cfa4f3e31ff5a685a00ee92f6~CJVyhxGfv2212322123eusmtrp1B;
+        Thu,  9 Feb 2023 11:44:51 +0000 (GMT)
+X-AuditID: cbfec7f4-1f1ff7000000351d-7b-63e4dcb37003
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 70.EE.00518.2BCD4E36; Thu,  9
+        Feb 2023 11:44:50 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230209114450eusmtip16c66865c658c702409f400bba1d57c0c~CJVyBMipb0705507055eusmtip1U;
+        Thu,  9 Feb 2023 11:44:50 +0000 (GMT)
+Message-ID: <f5d314df-5e22-0df5-add7-d70c13116198@samsung.com>
+Date:   Thu, 9 Feb 2023 12:44:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6d618e518de06854727f26de950404f02ec61c64.camel@crapouillou.net>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] ARM: dts: exynos: correct max98090 DAI argument in Snow
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20230208160424.371678-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIKsWRmVeSWpSXmKPExsWy7djPc7qb7zxJNvj6VtTiwbxtbBbzj5xj
+        teh78ZDZYu/rrewWmx5fY7W4vGsOm8WM8/uYLFr3HmF34PDYtKqTzePOtT1sHpuX1Hv0bVnF
+        6PF5k1wAaxSXTUpqTmZZapG+XQJXxvpdH1kKNnNW7Jw4k7WBcR97FyMnh4SAicTvz9eZuxi5
+        OIQEVjBK7H72mhXC+cIocXfXDyYI5zOjxLF3Z1hhWk7+awOzhQSWM0pM+SwOUfSRUeLsxLmM
+        IAleATuJf9NPsoDYLAIqEvPmr2GDiAtKnJz5BCjOwSEqkCKx6U8ZSFhYwEdiz9wHYK3MAuIS
+        t57MB1ssInCUSWLpjJ9MIAk2AUOJrrddYHM4BVwljp6+zA7RIC+x/e0csB8kBG5wSFxZdIUd
+        ZIGEgIvEszUFEEcLS7w6vgXqZxmJ05N7WCDq2xklFvy+zwThTGCUaHh+ixGiylrizrlfbCCD
+        mAU0Jdbv0ocIO0q0ta5mhJjPJ3HjrSDEDXwSk7ZNZ4YI80p0tAlBVKtJzDq+Dm7twQuXmCFs
+        D4k/rxtYJjAqzkIKlVlI3p+F5LNZCDcsYGRZxSieWlqcm55abJSXWq5XnJhbXJqXrpecn7uJ
+        EZiKTv87/mUH4/JXH/UOMTJxMB5ilOBgVhLh/T7xcbIQb0piZVVqUX58UWlOavEhRmkOFiVx
+        Xm3bk8lCAumJJanZqakFqUUwWSYOTqkGpqX/OeJTRT99i7lY6p8QeklKV6V6y8qpyzovXxd8
+        GPhut8Q27iWZK2e5SXpO5j/JsKOE7+/ymA38N28smPh32p2WVre1YSuKJ/I+DOKSPi39edva
+        646KSg12Fz5nNXjteTkzJ25PZ7W9y89TMnXWb0W/3GXtc0u72fR3grwI2x9lppAIne3te+fv
+        D+jKjphiEubUUDbt9svVKlWSPKe1xTWb/OdxdKddrfvKPr0lNXD1q2LHQzf/u21tnriRr8wp
+        aa6j0gox4YAuvizjRzfnaYXoC1YsbX1T1lb9t/FwXllqTrRbsdzfBrk2k0sfTrfZHE/WiL5c
+        OuNDZxVbc9rUyP2n9k/V/+P4m4PxbOcBJZbijERDLeai4kQAneukkbQDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFIsWRmVeSWpSXmKPExsVy+t/xu7qb7jxJNvh11MbiwbxtbBbzj5xj
+        teh78ZDZYu/rrewWmx5fY7W4vGsOm8WM8/uYLFr3HmF34PDYtKqTzePOtT1sHpuX1Hv0bVnF
+        6PF5k1wAa5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+
+        XYJexvpdH1kKNnNW7Jw4k7WBcR97FyMnh4SAicTJf22sXYxcHEICSxklTv4/BJWQkTg5rYEV
+        whaW+HOtiw2i6D2jxI5di5lBErwCdhL/pp9kAbFZBFQk5s1fwwYRF5Q4OfMJWFxUIEWi+flJ
+        sEHCAj4Se+Y+YASxmQXEJW49mc8EMlRE4DiTxKdJC5ghNsxglLh47QnYBjYBQ4mut11gUzkF
+        XCWOnr7MDtFtJtG1tQtqkrzE9rdzmCcwCs5CsnwWkiWzkLTMQtKygJFlFaNIamlxbnpusZFe
+        cWJucWleul5yfu4mRmCkbTv2c8sOxpWvPuodYmTiYDzEKMHBrCTC+33i42Qh3pTEyqrUovz4
+        otKc1OJDjKbAEJjILCWanA+M9bySeEMzA1NDEzNLA1NLM2MlcV7Pgo5EIYH0xJLU7NTUgtQi
+        mD4mDk6pBqbyHaqvE8vXT/564WnNY+eNfRdDjjgHil2+feBeoPPyuIT/QW56ly947m/c+Fj1
+        dN6MhJTjjxY6Ox+fHKZ37Ofa1TKOSjX/27IkQ+QDF58o7bqt/9xqWX3e5sSt8xiFlgW9Pl/4
+        LfSn//9HLA5Hr6odrRCYYLhht6n69btTJNmkLbu/stmwq++ZfIftUBCnzLK7D9Ys1Kpe7z+p
+        gfndwQk5Wp8F++1DgrxTa0+mPFvvf93w9M513pMnbpt4i8/4X/KU5Gr/paJayz1sXI/nMR9n
+        Ngg8HP3WpC2qTpjncbxw/mGxB+EXdvA4GOj3MK0P8wywO1FR3WF0QM3w2z+Rv7uFsw6/y2v6
+        kNhWu3/vvnolluKMREMt5qLiRABIIrHTPQMAAA==
+X-CMS-MailID: 20230209114451eucas1p2de6ec04f18cf81fe7722758676ee5fb8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230208160502eucas1p1701d218cd13235cad7cbd6275ff18c26
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230208160502eucas1p1701d218cd13235cad7cbd6275ff18c26
+References: <CGME20230208160502eucas1p1701d218cd13235cad7cbd6275ff18c26@eucas1p1.samsung.com>
+        <20230208160424.371678-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 10:37:05AM +0000, Paul Cercueil wrote:
-> Hi Sascha,
-> 
-> Le jeudi 09 février 2023 à 11:18 +0100, Sascha Hauer a écrit :
-> > Hi Paul,
-> > 
-> > On Wed, Feb 01, 2023 at 01:32:51PM +0000, Paul Cercueil wrote:
-> > > Hi Sascha, Greg,
-> > > 
-> > > I have a breakage in 6.2-rc* that I eventually bisected to this
-> > > commit,
-> > > on a Ingenic SoC (using the jz4740 musb driver) with ECM or RNDIS
-> > > configured through gadgetfs.
-> > > 
-> > > When plugging the board to my PC, the USB network interface is
-> > > recognized, but 'ip link' sees it as 'NO-CARRIER'. With this commit
-> > > reverted on v6.2-rc5, everything works fine.
-> > 
-> > I don't have this hardware available. I just tried with a i.MX
-> > hardware
-> > and it works as expected. I have no idea where the jz4740 musb could
-> > behave differently.
-> > 
-> > Here's exactly what I did:
-> > 
-> > mkdir -p /sys/kernel/config/usb_gadget/mygadget
-> > cd /sys/kernel/config/usb_gadget/mygadget
-> > mkdir -p configs/c.1/strings/0x409
-> > echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
-> > mkdir -p functions/ecm.usb0
-> > ln -s functions/ecm.usb0 configs/c.1/
-> > echo "ci_hdrc.0" > UDC
-> > 
-> > Did you do something differently apart from the "ci_hdrc.0" of
-> > course?
-> 
-> Nothing very different, no.
-> 
-> I do:
-> 
-> cd /sys/kernel/config/usb_gadget
-> mkdir mtp \
->   mtp/strings/0x409 \
->   mtp/configs/c.1 \
->   mtp/configs/c.1/strings/0x409 \
->   mtp/functions/ffs.mtp \
->   mtp/functions/ecm.net \
->   mtp/functions/rndis.net
-> 
-> echo 0x80 > mtp/configs/c.1/bmAttributes
-> echo 500 > mtp/configs/c.1/MaxPower
-> 
-> echo 0x049f > mtp/idVendor
-> echo 0x505a > mtp/idProduct
-> echo cdc > mtp/configs/c.1/strings/0x409/configuration
-> ln -s mtp/functions/ecm.net mtp/configs/c.1/ecm.net
-> 
-> echo ci_hdrc.0 > mtp/UDC
-> 
-> > BTW when you say 'NO-CARRIER' is it on the PC side, board side, or
-> > both?
-> 
-> PC side. I don't know what it says on the board side, I can't
-> telnet/SSH.
+On 08.02.2023 17:04, Krzysztof Kozlowski wrote:
+> The max98090 has only one DAI and does not take argument to DAI
+> phandles:
+>
+>    exynos5250-snow-rev5.dtb: audio-codec@10: #sound-dai-cells:0:0: 0 was expected
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>   arch/arm/boot/dts/exynos5250-snow-rev5.dts | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/exynos5250-snow-rev5.dts b/arch/arm/boot/dts/exynos5250-snow-rev5.dts
+> index 0a47597d6f0d..3d32c3476e84 100644
+> --- a/arch/arm/boot/dts/exynos5250-snow-rev5.dts
+> +++ b/arch/arm/boot/dts/exynos5250-snow-rev5.dts
+> @@ -27,7 +27,7 @@ cpu {
+>   		};
+>   
+>   		codec {
+> -			sound-dai = <&max98090 0>, <&hdmi>;
+> +			sound-dai = <&max98090>, <&hdmi>;
+>   		};
+>   	};
+>   };
+> @@ -42,7 +42,7 @@ max98090: audio-codec@10 {
+>   		pinctrl-0 = <&max98090_irq>;
+>   		clocks = <&pmu_system_controller 0>;
+>   		clock-names = "mclk";
+> -		#sound-dai-cells = <1>;
+> +		#sound-dai-cells = <0>;
+>   	};
+>   };
+>   
 
-I just checked on the host side: With or without my patch I get
-NO-CARRIER on the host. I have to do a 'ip link set usb0 up' on
-the device side, with that I get a <BROADCAST,MULTICAST,UP,LOWER_UP>
-on the host side.
-
-Could it be that my patch breaks something on the device side that
-prevents the device from bringing the link up?
-
-Sascha
-
+Best regards
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
