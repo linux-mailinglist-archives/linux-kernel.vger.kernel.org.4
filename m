@@ -2,166 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD6D690CF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640F4690CFC
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 16:31:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjBIP2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 10:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
+        id S230401AbjBIPbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 10:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjBIP2M (ORCPT
+        with ESMTP id S231145AbjBIPbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 10:28:12 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF9F38B55;
-        Thu,  9 Feb 2023 07:28:10 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.179.179])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 9 Feb 2023 10:31:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFF75BA5D;
+        Thu,  9 Feb 2023 07:31:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E6F2766020B9;
-        Thu,  9 Feb 2023 15:28:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675956488;
-        bh=cVo2hwJA6ba+zxud5YmocaB8dvaCAIfmsd2BzN8RA7Y=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=SklvgmPzoikYluoyKD+usYENzjjeV8cXVAMyegngQGFdo8vYGHMhGAtc9g0sPwFVm
-         qdwkUAyCCJZlimtbYIKmGcc9y+g7Hdfdhay3/K+sjkynf9SZ15Usn5upd6ScJgwbVF
-         bdwKNx8K+4NUKkmv/ULlRig1TAMZKubdwBkf/rPkVM3HXq46LSV+Kl88Oa3MHsK4mP
-         WfEJnyD9NWdJJucrIeOw2ZTxlYbBxJAd5EYg9Ad7+bW6pY2W/wMvXedjWU6oNyh5JU
-         D0a+4G2OvcIihBvTMIqNXDsGtAM+IXztwbrpsd8XAPW6f7gGjrATBBlquvpI5Lcr9S
-         oWXwXk5kSmPbw==
-Message-ID: <eea000a2-b237-76f0-186c-6181762e34f1@collabora.com>
-Date:   Thu, 9 Feb 2023 20:27:58 +0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2363761B05;
+        Thu,  9 Feb 2023 15:31:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79205C4339B;
+        Thu,  9 Feb 2023 15:31:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675956671;
+        bh=BlKYvnz7WNXl24gbX594yEpSvAcoGuqkkt+WsLo2+r8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZkqDugMVdeJGituJmAuVVFVKfpU1yQDHxuK9EoLv8qPAJXLfIWX6OwKqoyn7QMe3v
+         XCSQbazMDJ+QW0jFw8Ff/+z7lo+LUA0FIjN8iRkiCiXYIiScfECGVSK129Bl8/QsIu
+         uilb2SaS+1HIdT20gq/sZTpUBhhm7cXdjsJyquf25wNm5JTn9IyhrLwSDPvc/NL44E
+         CJKEudKXMzz47JeChqn8pTruOF3huDljAFKTm7cdKgSvVWMV0XL1S3juDyqmagJsjP
+         Nw18bO5CQJH+TX0Fd+U71IJSCObzU5sb+lZLfcLDRhzGHTejAE/wyuZUH/6a8NiA+n
+         ZHMhhE11sb2SA==
+Received: by mail-lf1-f43.google.com with SMTP id cf42so3677463lfb.1;
+        Thu, 09 Feb 2023 07:31:11 -0800 (PST)
+X-Gm-Message-State: AO0yUKWMwG6Q7+APHTonruGHBwg+mVmVwXaoHY4jpLh6l/OLJja7pSJZ
+        55G1EDfvh3v8p8818kFo7jd2viJ6bAxJD+egwvM=
+X-Google-Smtp-Source: AK7set/y+U5Z0Ktk9pQgBwA8AKvQcpjCb37bBs8fDFcgJpM/Ys8SVs0RKypLaWQKAZjsIAEcUl1P5fxS3XqvppwkIMA=
+X-Received: by 2002:ac2:55ba:0:b0:4ca:f9e3:c324 with SMTP id
+ y26-20020ac255ba000000b004caf9e3c324mr1794776lfg.190.1675956669475; Thu, 09
+ Feb 2023 07:31:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v10 1/6] userfaultfd: Add UFFD WP Async support
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230202112915.867409-1-usama.anjum@collabora.com>
- <20230202112915.867409-2-usama.anjum@collabora.com> <Y+QQLNrhyiVwXI50@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <Y+QQLNrhyiVwXI50@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <2ab9645789707f31fd37c49435e476d4b5c38a0a.1675901828.git.darren@os.amperecomputing.com>
+ <DBBPR08MB4538C586B721C8209B03AEEEF7D99@DBBPR08MB4538.eurprd08.prod.outlook.com>
+In-Reply-To: <DBBPR08MB4538C586B721C8209B03AEEEF7D99@DBBPR08MB4538.eurprd08.prod.outlook.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 9 Feb 2023 16:30:57 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG8TY9eKJxtSWYPCu_8qs7W3FWwDSZ+teuwhHb1BHUf7g@mail.gmail.com>
+Message-ID: <CAMj1kXG8TY9eKJxtSWYPCu_8qs7W3FWwDSZ+teuwhHb1BHUf7g@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: efi: Force the use of SetVirtualAddressMap() on
+ eMAG and Altra Max machines
+To:     Justin He <Justin.He@arm.com>
+Cc:     Darren Hart <darren@os.amperecomputing.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        Alexandru Elisei <alexandru.elisei@gmail.com>, nd <nd@arm.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+(cc Nathan, another happy Ampere customer)
 
-Thank you so much for reviewing!
+On Thu, 9 Feb 2023 at 05:26, Justin He <Justin.He@arm.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From: Darren Hart <darren@os.amperecomputing.com>
+> > Sent: Thursday, February 9, 2023 8:28 AM
+> > To: LKML <linux-kernel@vger.kernel.org>
+> > Cc: stable@vger.kernel.org; linux-efi@vger.kernel.org; Alexandru Elisei
+> > <alexandru.elisei@gmail.com>; Justin He <Justin.He@arm.com>; Huacai Chen
+> > <chenhuacai@kernel.org>; Jason A. Donenfeld <Jason@zx2c4.com>; Ard
+> > Biesheuvel <ardb@kernel.org>
+> > Subject: [PATCH v2] arm64: efi: Force the use of SetVirtualAddressMap() on
+> > eMAG and Altra Max machines
+> >
+> > Commit 550b33cfd445 ("arm64: efi: Force the use of SetVirtualAddressMap()
+> > on Altra machines") identifies the Altra family via the family field in the type#1
+> > SMBIOS record. eMAG and Altra Max machines are similarly affected but not
+> > detected with the strict strcmp test.
+> >
+> > The type1_family smbios string is not an entirely reliable means of identifying
+> > systems with this issue as OEMs can, and do, use their own strings for these
+> > fields. However, until we have a better solution, capture the bulk of these
+> > systems by adding strcmp matching for "eMAG"
+> > and "Altra Max".
+> >
+> > Fixes: 550b33cfd445 ("arm64: efi: Force the use of SetVirtualAddressMap() on
+> > Altra machines")
+> > Cc: <stable@vger.kernel.org> # 6.1.x
+> > Cc: <linux-efi@vger.kernel.org>
+> > Cc: Alexandru Elisei <alexandru.elisei@gmail.com>
+> > Cc: Justin He <Justin.He@arm.com>
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+> Tested-by: justin.he@arm.com
+> > ---
+> > V1 -> V2: include eMAG
+> >
+> >  drivers/firmware/efi/libstub/arm64.c | 9 ++++++---
+> >  1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/firmware/efi/libstub/arm64.c
+> > b/drivers/firmware/efi/libstub/arm64.c
+> > index ff2d18c42ee7..4501652e11ab 100644
+> > --- a/drivers/firmware/efi/libstub/arm64.c
+> > +++ b/drivers/firmware/efi/libstub/arm64.c
+> > @@ -19,10 +19,13 @@ static bool system_needs_vamap(void)
+> >       const u8 *type1_family = efi_get_smbios_string(1, family);
+> >
+> >       /*
+> > -      * Ampere Altra machines crash in SetTime() if SetVirtualAddressMap()
+> > -      * has not been called prior.
+> > +      * Ampere eMAG, Altra, and Altra Max machines crash in SetTime() if
+> > +      * SetVirtualAddressMap() has not been called prior.
+> >        */
+> > -     if (!type1_family || strcmp(type1_family, "Altra"))
+> > +     if (!type1_family || (
+> > +         strcmp(type1_family, "eMAG") &&
+> > +         strcmp(type1_family, "Altra") &&
+> > +         strcmp(type1_family, "Altra Max")))
+> In terms of resolving the boot hang issue, it looks good to me. And I've verified the
+> "eMAG" part check.
+> So please feel free to add:
+> Tested-by: Justin He <justin.he@arm.com>
+>
 
-On 2/9/23 2:12 AM, Peter Xu wrote:
-> On Thu, Feb 02, 2023 at 04:29:10PM +0500, Muhammad Usama Anjum wrote:
->> Add new WP Async mode (UFFD_FEATURE_WP_ASYNC) which resolves the page
->> faults on its own. It can be used to track that which pages have been
->> written-to from the time the pages were write-protected. It is very
->> efficient way to track the changes as uffd is by nature pte/pmd based.
->>
->> UFFD synchronous WP sends the page faults to the userspace where the
->> pages which have been written-to can be tracked. But it is not efficient.
->> This is why this asynchronous version is being added. After setting the
->> WP Async, the pages which have been written to can be found in the pagemap
->> file or information can be obtained from the PAGEMAP_IOCTL.
->>
->> Suggested-by: Peter Xu <peterx@redhat.com>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> Changes in v10:
->> - Build fix
->> - Update comments and add error condition to return error from uffd
->>   register if hugetlb pages are present when wp async flag is set
->>
->> Changes in v9:
->> - Correct the fault resolution with code contributed by Peter
->>
->> Changes in v7:
->> - Remove UFFDIO_WRITEPROTECT_MODE_ASYNC_WP and add UFFD_FEATURE_WP_ASYNC
->> - Handle automatic page fault resolution in better way (thanks to Peter)
->>
->> update to wp async
->>
->> uffd wp async
->> ---
->>  fs/userfaultfd.c                 | 20 ++++++++++++++++++--
->>  include/linux/userfaultfd_k.h    | 11 +++++++++++
->>  include/uapi/linux/userfaultfd.h | 10 +++++++++-
->>  mm/memory.c                      | 23 ++++++++++++++++++++---
->>  4 files changed, 58 insertions(+), 6 deletions(-)
->>
->> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
->> index 15a5bf765d43..422f2530c63e 100644
->> --- a/fs/userfaultfd.c
->> +++ b/fs/userfaultfd.c
->> @@ -1422,10 +1422,15 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
->>  			goto out_unlock;
->>  
->>  		/*
->> -		 * Note vmas containing huge pages
->> +		 * Note vmas containing huge pages. Hugetlb isn't supported
->> +		 * with UFFD_FEATURE_WP_ASYNC.
->>  		 */
-> 
-> Need to set "ret = -EINVAL;" here.  Or..
-Will fix in next version.
+Thanks. I've queued this up now.
 
-> 
->> -		if (is_vm_hugetlb_page(cur))
->> +		if (is_vm_hugetlb_page(cur)) {
->> +			if (ctx->features & UFFD_FEATURE_WP_ASYNC)
->> +				goto out_unlock;
-> 
-> .. it'll return -EBUSY, which does not sound like the right errcode here.
-> 
->> +
-> 
-> Drop this empty line?
-> 
->>  			basic_ioctls = true;
->> +		}
->>  
->>  		found = true;
->>  	}
-> 
-> Other than that looks good, thanks.
-Thank you so much! This wouldn't have been possible without your help.
+> But I have some other concerns:
+> 1. On an Altra server, the type1_family returns "Server". I don't know whether it
+> is a smbios or server firmware bug.
 
-> 
+This is not really a bug. OEMs are free to put whatever they want into
+those fields, although that is a great example of a sloppy vendor that
+just puts random junk in there.
 
--- 
-BR,
-Muhammad Usama Anjum
+We could plumb in the type 4 smbios record too, and check the version
+for *Altra* - however, it would be nice to get an idea of how many
+more we will end up needing to handle here.
+
+Also, is anyone looking to get this fixed? There is Altra code in the
+public EDK2 repo, but it is very hard to get someone to care about
+these things, and fix their firmware.
+
+
+
+
+> 2. On an eMAG server, I once successfully run efibootmgr -t 10 to call the
+> Set_variable rts, but currently I always met the error, even with above patch:
+> # efibootmgr -t 9; efibootmgr -t 5;
+> Could not set Timeout: Input/output error
+> Could not set Timeout: Input/output error
+>
+
+Did this work before? Can you bisect?
+
+> Meanwhile, on the Altra server, it works:
+> # efibootmgr -t 9; efibootmgr -t 5;
+> BootCurrent: 0007
+> Timeout: 9 seconds
+> BootOrder: 0007,0005,0006,0001
+> Boot0001* UEFI: Built-in EFI Shell
+> Boot0005* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
+> Boot0006* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
+> Boot0007* ubuntu
+> BootCurrent: 0007
+> Timeout: 5 seconds
+> BootOrder: 0007,0005,0006,0001
+> Boot0001* UEFI: Built-in EFI Shell
+> Boot0005* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
+> Boot0006* UEFI: PXE IPv4 Intel(R) I350 Gigabit Network Connection
+> Boot0007* ubuntu
+>
+>
+>
+> --
+> Cheers,
+> Justin (Jia He)
+>
+>
