@@ -2,122 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDF56905C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDB26905C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjBIK4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 05:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S230019AbjBIK4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 05:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjBIK4Q (ORCPT
+        with ESMTP id S229727AbjBIK4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:56:16 -0500
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B5056EE7
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:56:08 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id ba1so1343132wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 02:56:07 -0800 (PST)
+        Thu, 9 Feb 2023 05:56:35 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978904941F
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:56:32 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id n13so1127931wmr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 02:56:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MnJlP6FIsmSatibefV/A+n1GcTw3yUSot7C1x8B79Wg=;
+        b=8CYR2izZzKIWxMMcI4QqNJOVocF01mhKauFQ3mKWR3Sdh5tRTyjEHaCsTAYHJXHrAe
+         AhPGYKXpVSVSfveCkvFBHGMbcCVjAQ2D16KXgWgEk5Sh1I7vVPCM9PJuVl9T9zwBm7J0
+         99pDBgUnSFDLwFkPCHdjoIOqQWLLWQEW9sU+jxxV/NyX/nkK2qkjNDzuup7EICvecPGG
+         yMY8189cnV+luki9d+PaIgfFxPqgt71dkFse9xaTFbBY4b7rM3Ot/wCsPOHrEBqdva/n
+         SvNpSJfJWjWiEMcY/rYOdQT3Uh8kdbupwnmwFurtomXNBOceEyZ6n23hJc3xmnIvq61i
+         7XFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:reply-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nI9T+AQz1+dV/jBLbAFGeWInH/0hQg7GP5KPwF46GRk=;
-        b=pnPZUClwtDny6T/4lCnAt059GMF3QNW2oa1xrmqBi6T+lXUqJH7Y1Z0yG9foYzvksl
-         XJxFTk+wm2hyKac62jv4cAaszCVifh3pljbC5B7IvSbxm7dpwik2AnHqhVeMNQRFCx56
-         LfT+4CYLeJX9t5CA8wcwXCd7DcKEC6VQlRM8SQwUPNMB3B8p6kzVf3YyYwAoPb8pum4N
-         xqMsH2T43MnjF9otsBTKw6G52ZVMbfC7qFib5i8ptQ6WZbNaHkKqgv1sRuDRkMhw+HDn
-         bRsC1V0Rr35eGHYXb63m3kS8DRAUDLmPVUWVyszaqTsQMyEN+nI+KbCTHDCBKRd/ltiQ
-         rNjg==
-X-Gm-Message-State: AO0yUKVW+VtcEhTGS25dFy2LCN7POdJ4524/mjiHwMd0JdhOrZbN7anm
-        fAJGwirSb8zy9zf4y/jJJ/Xz8w==
-X-Google-Smtp-Source: AK7set+YuRliv5UJGRVt0f4Ijeerjk2JVeEcRsrOXrC9bWzwyBPD881P5rCMJgwHAoBTX/HMIouT6Q==
-X-Received: by 2002:adf:f912:0:b0:2c3:db9e:4aff with SMTP id b18-20020adff912000000b002c3db9e4affmr9678292wrr.45.1675940166436;
-        Thu, 09 Feb 2023 02:56:06 -0800 (PST)
-Received: from fedora.fritz.box (p549440c4.dip0.t-ipconnect.de. [84.148.64.196])
-        by smtp.gmail.com with ESMTPSA id q7-20020adfdfc7000000b002c3daaef051sm933969wrn.82.2023.02.09.02.56.05
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MnJlP6FIsmSatibefV/A+n1GcTw3yUSot7C1x8B79Wg=;
+        b=bDbT7ZV0CwCsHBnVHKQUGedxHJAKCKy7EiqNhKlGfox2nFuSW0p1LtxaLeZhUr4aWp
+         LtLVA4cHlxKUnacdJgK/SYeA9K148JeF59couzAIY2a+Pj0dqpVB42J4IsuAxWKVq32m
+         VV1hLyXXxT7KAaIWpjlZms3Ql795elZPHj7KiXzEFAvbV/kAuzXn4MS64gO8mNHnd2MG
+         ShwgpdcCHUUjxNfluTGiVqw7bbc/LKDdQS1zZjyxZvWuhMSWQ3gVOO/lBM1NUGS03Nv3
+         R37FI4pOVHbnNkpEyVI+q7lLVPEvRJyEHWlTek2HsKikKCuuHQp+v3mWEj1V8KjxpnSt
+         WfvQ==
+X-Gm-Message-State: AO0yUKUsJJzcZnDoJOQkPbK8NN3PKXEfIX1fgvGngn6A80EJsubSjGNt
+        Ika6msQH6LL0YVSYLrt139cSOg==
+X-Google-Smtp-Source: AK7set8tOP9iTwEd+6cUk3vpT+CGnECqGIkgE7P8djG0ngexw+8xDH6nevDuggKs6lc7iefSLhmRPQ==
+X-Received: by 2002:a05:600c:996:b0:3df:f85a:4724 with SMTP id w22-20020a05600c099600b003dff85a4724mr9629994wmp.39.1675940191176;
+        Thu, 09 Feb 2023 02:56:31 -0800 (PST)
+Received: from t480-bl003.. (185.173.185.81.rev.sfr.net. [81.185.173.185])
+        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b003daf6e3bc2fsm9140466wms.1.2023.02.09.02.56.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 02:56:06 -0800 (PST)
-Date:   Thu, 9 Feb 2023 11:56:03 +0100
-From:   Damian Tometzki <dtometzki@fedoraproject.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, jpoimboe@redhat.com, linux@weissschuh.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] objtool: Honey, I shrunk the instruction
-Message-ID: <Y+TRQ862hrEokeqh@fedora.fritz.box>
-Reply-To: Damian Tometzki <dtometzki@fedoraproject.org>
-Mail-Followup-To: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        jpoimboe@redhat.com, linux@weissschuh.net,
-        linux-kernel@vger.kernel.org
-References: <20230208171756.898991570@infradead.org>
- <Y+QEak2HWlkNuJ3U@fedora.fritz.box>
- <Y+TJbNHT3jDF8wov@hirez.programming.kicks-ass.net>
+        Thu, 09 Feb 2023 02:56:30 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH v14 0/6] Add LVTS Thermal Architecture
+Date:   Thu,  9 Feb 2023 11:56:22 +0100
+Message-Id: <20230209105628.50294-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+TJbNHT3jDF8wov@hirez.programming.kicks-ass.net>
-User-Agent: Mutt
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09. Feb 11:22, Peter Zijlstra wrote:
-> On Wed, Feb 08, 2023 at 09:22:02PM +0100, Damian Tometzki wrote:
-> > On Wed, 08. Feb 18:17, Peter Zijlstra wrote:
-> > > Hi,
-> > > 
-> > > Boris complained he could no longer build allyesconfig on his 32G desktop
-> > > machine without having OOM terminate either objtool or chrome.
-> > > 
-> > > After talking about these patches on IRC, Nathan mentioned the linux-clang CI
-> > > was also having trouble of recent, and these patches appear to make it happy
-> > > again.
-> > > 
-> > > In total these patches shrink an allyesconfig run by about 6G:
-> > > 
-> > > pre:	5:58.22 real,   226.69 user,    131.22 sys,     26221520 mem
-> > > post:	5:03.34 real,   210.75 user,    88.80 sys,      20241232 mem
-> > > 
-> > > Also at:
-> > > 
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=objtool/core
-> > > 
-> > Hello Peter,
-> > 
-> > with clang-17 the build failed: 
-> > In file included from weak.c:10:
-> > In file included from /home/damian/kernel/linux/tools/objtool/include/objtool/objtool.h:13:
-> > /home/damian/kernel/linux/tools/objtool/include/objtool/elf.h:88:86: error: '_Static_assert' with no message is a C2x extension [-Werror,-Wc2x-extensions]
-> > static_assert(offsetof(struct reloc, rela.r_offset) == offsetof(struct reloc, offset));
-> 
-> Oh urgh. Apparently the kernel wrapper went missing in this userspace
-> project :-)
-> 
-> include/linux/build_bug.h:#define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-> 
-> Anyway, it's that last patch and I meant to do that in a slightly less
-> horrid way :-)
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Hello Peter,
+The LVTS (Low Voltage Thermal Sensor) driver is capable of monitoring
+multiple hot points. For that, it contains 7 thermal control blocks
+dedicated to specific devices on the die. Each control block can handle
+up to 4 sensors. 
 
-here a shortipossible fix: 
-Then the build with clang works. 
+The thermal controller supports several interrupts. One for the cold
+trip point, the hot trip point, the return to the normal trip point,
+and a specific programmable trip point to monitor the temperature
+dynamically.
 
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 83b100c1e7f6..b7c8b476db95 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -31,7 +31,7 @@ INCLUDES := -I$(srctree)/tools/include \
-            -I$(LIBSUBCMD_OUTPUT)/include
- # Note, EXTRA_WARNINGS here was determined for CC and not HOSTCC, it
- # is passed here to match a legacy behavior.
--WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs
-+WARNINGS := $(EXTRA_WARNINGS) -Wno-switch-default -Wno-switch-enum -Wno-packed -Wno-nested-externs -Wno-c2x-extensions
- OBJTOOL_CFLAGS := -Werror $(WARNINGS) $(KBUILD_HOSTCFLAGS) -g $(INCLUDES) $(LIBELF_FLAGS)
+The temperature measurement can be done in two ways, the immediate mode
+where the temperature read is instantaneous and the filtered mode where
+the controller uses, by configuration, an average of a set of values
+removing the minimum and the maximum.
+
+Finally, it is composed of 2 finite-state machines responsible for
+the state of the temperature (cold, hot, hot 2 normal, hot hot),
+the triggering of the interrupts, and the monitoring of the temperature.
+
+As requested, the thermal driver has been reworked to reduce
+the complexity of the code. At this time, the 4 little CPUs and
+the 4 big CPUs are supported by the thermal driver.They are described
+in a data structure and more devices can be added later.
+The calibration routine has been simplified also.
+
+The series provide the following changes:
+ - Move the Mediatek drivers inside a dedicated folder as their number
+   is increasing
+ - Add the DT bindings for the controller
+ - Add the efuse node for the mt8195
+ - The LVTS driver
+ - The thermal zones description in the DT
+
+Changelog:
+  v14:
+     - Fix dt-binding definition :
+       - Change "nvmem-cells" and "nvmem-cell-names" properties of
+         "mt8195" from "maxItems: 2" to  "minItems: 2"
+       - Fix "mediatek,lvts-thermal.h" indentation
+
+  v13:
+     - Rebase on top of "thermal/linux-next" :
+       base-commit: a2c81dc59d41e92362ab7d41d0c15471ea50637d
+     - Fix coding style issues
+       - Remove "__init" from all functions
+       - Remove "lvts_ctrl_enable" and "lvts_ctrl_disable" wrappers
+       - Use "dev_err_probe" instead of "dev_dbg" in "lvts_probe"
+     - Fix subject prefix
+     - Add "mt8192" to dt-binding definition
+     - Change dt-binding license to "GPL-2.0-only OR BSD-2-Clause"
+     - Fix debugfs mutli-instance support
+
+  v12:
+     - Fix subject prefix
+     - Add dual licenses to dt-binding
+     - Rename "include/dt-bindings/thermal/mediatek-lvts.h"
+       to "include/dt-bindings/thermal/mediatek,lvts-thermal.h"
+
+  v11:
+     - Rebase on top of "thermal/linux-next" :
+       base=0d568e144ead70189e7f16066dcb155b78ff9266
+     - Remove unsupported SoC (mt8192) from dt-binding definition
+     - Fix coding style issues :
+       - Move litterals to define
+       - Add interrupt macros
+       - Remove wildcard : only mt8195 is supported for now
+
+  v10:
+     - Rebase on top of "thermal/linux-next" : thermal-v6.3-rc1
+     - Rework the LVTS driver
+     - Add the thermal trip temperature and cooling devices
+       for the sensors supported by the driver
+
+  v9:
+     - Rebase on top of 6.0.0-rc1
+     - Fix coding style issues
+     - Fix commit titles and commit messages
+     - Update dt-bindings :
+     - Add "allOf:if:then:"
+     - Use mt8192 as example (instead of mt8195)
+     - Fix dt-binding errors
+     - Fix DTS errors
+
+  v8:
+     - Fix coding style issues
+     - Rebase on top of next-20220803
+     - Add multi-instance support :
+       - Rewrite DT-binding and DTS :
+         - Add DT-binding and DTS for LVTS_v4 (MT8192 and MT8195)
+           - One LVTS node for each HW Domain (AP and MCU)
+         - One SW Instance for each HW Domain
+         - Add a Kconfig sub-menu entry for LVTS and LVTS_v4 SoCs
+     - Replace platform_get_resource by platform_get_mem_or_io to get
+       Base Address
+     - Replace platform_get_resource by platform_get_irq to get
+       Interrupt Number
+     - Add "lvts_" prefix to functions and structs
+
+ v7:
+     - Fix coding style issues
+     - Rewrite dt bindings
+       - was not accurate
+       - Use mt8195 for example (instead of mt8192)
+       - Rename mt6873 to mt8192
+       - Remove clock name
+     - Rebased on top of to series:
+       - patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+       - patchwork.kernel.org/project/linux-pm/list/?series=639386
+
+ v6:
+     - Remove temperature aggregation (it will be added in another
+       series)
+     - Update the way to read the temperature (read one sensor
+       instead of all)
+     - Add support of mt8195
+
+  v5:
+     - Use 'git mv' for the relocated file.
+
+  v4:
+     - Rebase to kernel-v5.13-rc1
+
+  v3:
+     - change the expression in the lvts_temp_to_raw to dev_s64.
+
+  v2:
+     - Rebase to kernel-5.11-rc1.
+     - sort headers
+     - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+     - disconstruct the api of lvts_read_tc_msr_raw.
+     - add the initial value max_temp = 0 and compare e.q.
+       in the lvts_read_all_tc_temperature.
+     - add the return with an invalid number in the lvts_init.
+
+Balsam CHIHI (6):
+  thermal: drivers: mediatek: Relocate driver to mediatek folder
+  dt-bindings: thermal: mediatek: Add LVTS thermal controllers
+  arm64: dts: mt8195: Add efuse node to mt8195
+  thermal: drivers: mediatek: Add the Low Voltage Thermal Sensor driver
+  arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
+  arm64: dts: mediatek: mt8195: Add temperature mitigation threshold
+
+ .../thermal/mediatek,lvts-thermal.yaml        |  142 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  272 ++++
+ drivers/thermal/Kconfig                       |   14 +-
+ drivers/thermal/Makefile                      |    2 +-
+ drivers/thermal/mediatek/Kconfig              |   37 +
+ drivers/thermal/mediatek/Makefile             |    2 +
+ .../auxadc_thermal.c}                         |    2 +-
+ drivers/thermal/mediatek/lvts_thermal.c       | 1224 +++++++++++++++++
+ .../thermal/mediatek,lvts-thermal.h           |   19 +
+ 9 files changed, 1702 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ rename drivers/thermal/{mtk_thermal.c => mediatek/auxadc_thermal.c} (99%)
+ create mode 100644 drivers/thermal/mediatek/lvts_thermal.c
+ create mode 100644 include/dt-bindings/thermal/mediatek,lvts-thermal.h
+
+
+base-commit: a2c81dc59d41e92362ab7d41d0c15471ea50637d
+-- 
+2.34.1
 
