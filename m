@@ -2,81 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB766903E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1978A6903A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjBIJfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S230122AbjBIJ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjBIJfR (ORCPT
+        with ESMTP id S230044AbjBIJ3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:35:17 -0500
-X-Greylist: delayed 414 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Feb 2023 01:35:15 PST
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0CC35EFBE;
-        Thu,  9 Feb 2023 01:35:15 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowABHTs6vvORjDk40BA--.101S2;
-        Thu, 09 Feb 2023 17:28:15 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     s.shtylyov@omp.ru, damien.lemoal@opensource.wdc.com
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] ata: pata_pxa: Add missing check for devm_ioremap
-Date:   Thu,  9 Feb 2023 17:28:14 +0800
-Message-Id: <20230209092814.10847-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 9 Feb 2023 04:29:03 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A985EFA8
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:29:01 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id l12so1655665edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:29:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iLTALZ1oNGZ62291k/DnFlVymjqqmbMKSdTxFP2GIBk=;
+        b=lMuelBIsYDCyQ/RL1kGwChDTydCg2S1df4RiDZ/Eh6gJOrrz75QTjiW868FcbCsEz3
+         9rCt/ROlOZmdwkwlEMj8l97RJwP+NE60y/oiUO2bAwgyeJjHi+6i//EHNpYrczriqydX
+         RrRi4BzGU8MHBDVnD2b+GUe79XZNYn7sPGgD9cvL3Qg9Cwb9UoPPCkOwqtMDttQsp+nJ
+         g1Q9acBy1+f1s75ZLjRuVn+V86BAiyM5t4jyggcw0OhHlI6gyOar0xUT2wwB+BXIiFB1
+         o71Vm76cGHEHvlWbFBXzvptNMaEpGv0kG81Tl9KjqbZmVZUCPpcE/Wh07To6/oMoJK0b
+         nVsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iLTALZ1oNGZ62291k/DnFlVymjqqmbMKSdTxFP2GIBk=;
+        b=5akglQA+Azkaj0+CL4NLZ1umBrSct1fnyadvSJpXPh/fu1IGLIpXm+rYd1/ug++WPd
+         7fQkaf1zcaed8I6MXO7w1UCCy75XVeNPOqFtTVWdu+KKBPJGug5q6ChSzHF0w9w3KSVN
+         pwQQwW79mjsxEK9nYp7OPUjPUK/GbOtcZD66Lx7GDPrcLvT2gT1YSXx3tIcgmyO5sFbF
+         x5nwo3IM2zgR5J66ABZwnktWnstwsqKa1PAJ15bluAAVaZ5LMDqQZ8UXexT38/1RKTV5
+         AlUKGP0bkjVIDcTYZOOlX2pnTl0x4stROVNiM6zrqnsGNW91AUONCQvC2SK6hi1UT08T
+         Sezg==
+X-Gm-Message-State: AO0yUKWu1EurmxBtq0ZQtv0eOuAhPxM0XKOrTPCsY3oGgLicjgLUqJKe
+        yvt9yaPWB/MfxaQseKh6T0mVRg==
+X-Google-Smtp-Source: AK7set/96iErnptmg6+Is99No+/owz3vP8fKYml2hChGUoV9WKozzXvgBEwVPWl2hpJfJxEgqkLrqQ==
+X-Received: by 2002:a50:9b13:0:b0:4aa:a856:e2d6 with SMTP id o19-20020a509b13000000b004aaa856e2d6mr10912473edi.37.1675934940541;
+        Thu, 09 Feb 2023 01:29:00 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id d15-20020aa7ce0f000000b004aaa656887esm475865edv.96.2023.02.09.01.28.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 01:29:00 -0800 (PST)
+Date:   Thu, 9 Feb 2023 10:28:59 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        palmer@rivosinc.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, christoph.muellner@vrull.eu,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH 1/2] RISC-V: fix ordering of Zbb extension
+Message-ID: <20230209092859.5bewurwjsllmynd2@orel>
+References: <20230208225328.1636017-1-heiko@sntech.de>
+ <20230208225328.1636017-2-heiko@sntech.de>
+ <C32D5495-F772-4887-9CAD-66206ECCFC3F@kernel.org>
+ <20230209082520.solukez3jrshv3qo@orel>
+ <Y+S29qPN6jmMwvi3@wendy>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowABHTs6vvORjDk40BA--.101S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFWxuFW8CFW5Jw4ftr4xJFb_yoW3tFc_Ca
-        yxZFWrW3yjkFyIk3WUJr13ZrW2y3s5uFna9FyftF93JrW5Xr4xX345Zws8Z39ru3y8GFnx
-        Jw1UXFW5uF15CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb2AFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8uwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU4KZXUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+S29qPN6jmMwvi3@wendy>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the check for the return value of the devm_ioremap in order to avoid
-NULL pointer dereference.
+On Thu, Feb 09, 2023 at 09:03:50AM +0000, Conor Dooley wrote:
+> On Thu, Feb 09, 2023 at 09:25:20AM +0100, Andrew Jones wrote:
+> > On Wed, Feb 08, 2023 at 11:20:10PM +0000, Conor Dooley wrote:
+> > > Hey Heiko,
+> > > 
+> > > On 8 February 2023 22:53:27 GMT, Heiko Stuebner <heiko@sntech.de> wrote:
+> > > >From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> > > >
+> > > >As Andrew reported,
+> > > >    Zb* comes after Zi* according 27.11 "Subset Naming Convention"
+> > > >so fix the ordering accordingly.
+> > > >
+> > > >Reported-by: Andrew Jones <ajones@ventanamicro.com>
+> > > >Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> > > 
+> > > The whole "getting it wrong immediately after fixing it up" ;)
+> > 
+> > Hi Conor,
+> > 
+> > Do you know any patchwork savvy people that could whip up a check
+> > for this array? :-)
+> 
+> Maybe that is more of a checkpatch type thing?
 
-Fixes: 2dc6c6f15da9 ("[ARM] pata_pxa: DMA-capable PATA driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/ata/pata_pxa.c | 2 ++
- 1 file changed, 2 insertions(+)
+I think this is too specific for general checkpatch. I once proposed on
+the KVM mailing list that checkpatch should gain support for plugins,
+allowing specific directories to provide a .checkpatch script, or
+whatever, where it puts its own checks. I never followed-up by actually
+proposing that to checkpatch maintainers though.
 
-diff --git a/drivers/ata/pata_pxa.c b/drivers/ata/pata_pxa.c
-index 985f42c4fd70..a20bb0824573 100644
---- a/drivers/ata/pata_pxa.c
-+++ b/drivers/ata/pata_pxa.c
-@@ -227,6 +227,8 @@ static int pxa_ata_probe(struct platform_device *pdev)
- 						resource_size(ctl_res));
- 	ap->ioaddr.bmdma_addr	= devm_ioremap(&pdev->dev, dma_res->start,
- 						resource_size(dma_res));
-+	if (!ap->ioaddr.cmd_addr || !ap->ioaddr.ctl_addr || !ap->ioaddr.bmdma_addr)
-+		return -ENOMEM;
- 
- 	/*
- 	 * Adjust register offsets
--- 
-2.25.1
+> 
+> Either way, I'll put it on the todo list I suppose!
 
+In the absence of checkpatch plugins, I think subsystem-specific
+patch management tools, like patchwork, are the next best place
+to put specific checks. But, I agree it's a bit late. It'd be better
+if the developers could run the checks themselves before posting.
+
+Thanks,
+drew
