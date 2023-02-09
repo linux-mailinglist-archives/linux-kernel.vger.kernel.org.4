@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1704868FDE9
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D14C68FDEB
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 04:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232745AbjBIDZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 22:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S231649AbjBIDZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 22:25:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbjBIDYv (ORCPT
+        with ESMTP id S232744AbjBIDY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 22:24:51 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C68166C9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 19:24:37 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v18-20020a17090ae99200b00230f079dcd9so4868464pjy.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 19:24:37 -0800 (PST)
+        Wed, 8 Feb 2023 22:24:58 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3601714234
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 19:24:40 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id f15-20020a17090ac28f00b00230a32f0c9eso1009554pjt.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 19:24:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fq3h6NGHFAxHZ5DLcg6qPLA20/eRYQpYkN3wnk0IEiI=;
-        b=qKKR+nM2DTUL7pQBTtfyKhJ24S9DZe3DNHuR8Ij2bMaR9SuFBiFmkF6S7Hn64PYOz2
-         4Ct67ZxnBBtXAXD+aIWgUCDMMZr9Tt8e+b7tCep8lnGPvNOdMlVcBSUTdXI/FSWwV9vm
-         RJkuVkQyxsNyvPCh3XN8fhZvWkZ2hGMGl2BP8KMn9j/6hCiWTDUPikgNexGTbQ2CwAj+
-         8l4VQP+NhnDPAW8P0RMAdSIRMxctxxfw3EKhlH5rklcijobSfRSDl6xCKQ4tRJx+Sc8K
-         2pYNdO+CHXkc5YxF3W6MX2OioIrfRDQbxnVxFA+8STVbQkA65Ou4c1D4zFPW8Dylt5YF
-         86XA==
+        bh=WOMPizwvZIOCZuA+NM2fq3lJj7qsjRo1bnIWUyEuTFc=;
+        b=o1Uf3DsOGh6S5T1HAbrl3mkVjPE7Kw+LSrW0bJOrDNIDEIqSEmqugn1WJqRSA4KC7e
+         sqprHEDA8gjvoaGRJdgrMzv6gM80VOhmmCPDawO7h9uc79dtG2t1njmIB9JOhxZrICYT
+         O/tcYaCnKyj7Tw8IFpnMUUN+YFVh1V+6eI0QTKdwpNRNeB3zWH2t1LORLBxYoYqrKq4M
+         nacSpZcLuGTlCiyatI3sIDPeqfSs3sg0WVXQB5rfRwlObJgIw6z5AMrC22eVvx39F2gG
+         gSEzKtf1NtZbZJNs0xLZJo7CWlPovEjk1f1lXCGx3XhHEh8eAlXUrHzP0twstNbiiltE
+         2RZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fq3h6NGHFAxHZ5DLcg6qPLA20/eRYQpYkN3wnk0IEiI=;
-        b=obKRKSp0DihSrlFN55xCjSBePZSdsrs/o/zo3I7WglDdM5LyiJ7r+f2NT4fj2NFM+y
-         4rOx1CqNGOYA37mU1i7ZhmnsoAF3nOFhWVD5hbB+Kk0tcECQ2Huy0eUeygizZmea/si1
-         X63Po/MMpOZFOH+UtagxYev0YqMKrxotQAzWbZcBXqvSgcKgOBnqALz6N0fDbB7WqGim
-         K/ahKo8dpH/eq4l0wuMGZHc3qkhBvASOknOVVnBA3X0s2Am85JNbskCnTaxKz+aDFh/R
-         odcAw1TvPdQ4NUMcpBcWqws9Lyg+cfFfWYCc9Hd3bEzPKRT7oKNDSkCrWFeyyr9a6PXf
-         vJ0w==
-X-Gm-Message-State: AO0yUKX+kKg9zALukDrIp0InFolSE0X2dH5nN5aPr1z8hCCEz6IZVzov
-        BT/EbI9bTTrKewnR9BUuUSU=
-X-Google-Smtp-Source: AK7set/m+uaObsdqOItdbS8+U6+7ncZOtQaKpOmizfo0FxDkFaOYzS+LS5jKPGFYF4eF0G0XG/ITXw==
-X-Received: by 2002:a17:902:f20b:b0:199:aae:7569 with SMTP id m11-20020a170902f20b00b001990aae7569mr7344524plc.28.1675913076773;
-        Wed, 08 Feb 2023 19:24:36 -0800 (PST)
+        bh=WOMPizwvZIOCZuA+NM2fq3lJj7qsjRo1bnIWUyEuTFc=;
+        b=QFKs3ok0ivQQQvu56DbEnq7pO7sewKlmoVqxroZu3KCbtIXSXtZFOLfuYBt8Jwh9WO
+         P04eq7JX5vh/r1NJajCT0cEMWQlPxj7Cwhd0M7hENolNwDRMqtlEYPB+1vcsOUK6onck
+         Nsfd4rXGvr+d90Yf6jGpYjJwyDrn60jpXfDX0/plCv81W5ELLwSZdLycRHq1px+S+YpK
+         ZZKlsTCyR6BiK3zG394RG6tq9bqeCeD/OAP1tjJqWCP99eUqnsqZfgPqaMYNC4/lPI5E
+         A3vF1g6g+UMhNM2L+cKN5bqwccaKjr/pWbHQ2/Vw9AaIIVnAqaWxrt76jzlwJmVvk+lH
+         GGww==
+X-Gm-Message-State: AO0yUKVBLMTLs+36iMrA/Wh/vJ/PChKOo/WA6aOFvZPocnCCWbJ5LPmQ
+        +bvYe7UPzWa9mGb+b9sy1Qg=
+X-Google-Smtp-Source: AK7set9IW9dd0zqTW0WPNVAsRnNIusXUPZS6AKEuE7obiFC731NxJlbQIzdBGmcpaMK38sXh+pzZkw==
+X-Received: by 2002:a17:902:e1c1:b0:199:6abd:6a71 with SMTP id t1-20020a170902e1c100b001996abd6a71mr1405586pla.68.1675913079720;
+        Wed, 08 Feb 2023 19:24:39 -0800 (PST)
 Received: from localhost.localdomain ([112.20.108.204])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902eac500b00192820d00d0sm216086pld.120.2023.02.08.19.24.34
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902eac500b00192820d00d0sm216086pld.120.2023.02.08.19.24.37
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 08 Feb 2023 19:24:36 -0800 (PST)
+        Wed, 08 Feb 2023 19:24:39 -0800 (PST)
 From:   chris.chenfeiyang@gmail.com
 X-Google-Original-From: chenfeiyang@loongson.cn
 To:     w@1wt.eu, paulmck@kernel.org
@@ -57,9 +57,9 @@ Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, arnd@arndb.de,
         chenhuacai@kernel.org, jiaxun.yang@flygoat.com,
         chris.chenfeiyang@gmail.com, loongarch@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/5] selftests/nolibc: Add support for LoongArch
-Date:   Thu,  9 Feb 2023 11:24:15 +0800
-Message-Id: <f3745536049397cfac4cb28afb4d09785e771d52.1675907639.git.chenfeiyang@loongson.cn>
+Subject: [PATCH v3 5/5] selftests/nolibc: Adjust indentation for Makefile
+Date:   Thu,  9 Feb 2023 11:24:16 +0800
+Message-Id: <546afedaf92ad1ae95a79a99d15bdb359fd1410d.1675907639.git.chenfeiyang@loongson.cn>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1675907639.git.chenfeiyang@loongson.cn>
 References: <cover.1675907639.git.chenfeiyang@loongson.cn>
@@ -77,49 +77,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Feiyang Chen <chenfeiyang@loongson.cn>
 
-Add support for LoongArch (64 bit) to nolibc selftest.
+Reindent only, no functional changes.
 
 Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
 ---
- tools/testing/selftests/nolibc/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/nolibc/Makefile | 74 ++++++++++++-------------
+ 1 file changed, 37 insertions(+), 37 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 8fe61d3e3cce..e9c4a9d011a0 100644
+index e9c4a9d011a0..ea2b82a3cd86 100644
 --- a/tools/testing/selftests/nolibc/Makefile
 +++ b/tools/testing/selftests/nolibc/Makefile
-@@ -21,6 +21,7 @@ IMAGE_arm     = arch/arm/boot/zImage
- IMAGE_mips    = vmlinuz
- IMAGE_riscv   = arch/riscv/boot/Image
- IMAGE_s390    = arch/s390/boot/bzImage
-+IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
- IMAGE         = $(IMAGE_$(ARCH))
- IMAGE_NAME    = $(notdir $(IMAGE))
+@@ -13,56 +13,56 @@ ARCH = $(SUBARCH)
+ endif
  
-@@ -33,6 +34,7 @@ DEFCONFIG_arm     = multi_v7_defconfig
- DEFCONFIG_mips    = malta_defconfig
- DEFCONFIG_riscv   = defconfig
- DEFCONFIG_s390    = defconfig
-+DEFCONFIG_loongarch  = defconfig
- DEFCONFIG         = $(DEFCONFIG_$(ARCH))
+ # kernel image names by architecture
+-IMAGE_i386    = arch/x86/boot/bzImage
+-IMAGE_x86_64  = arch/x86/boot/bzImage
+-IMAGE_x86     = arch/x86/boot/bzImage
+-IMAGE_arm64   = arch/arm64/boot/Image
+-IMAGE_arm     = arch/arm/boot/zImage
+-IMAGE_mips    = vmlinuz
+-IMAGE_riscv   = arch/riscv/boot/Image
+-IMAGE_s390    = arch/s390/boot/bzImage
++IMAGE_i386       = arch/x86/boot/bzImage
++IMAGE_x86_64     = arch/x86/boot/bzImage
++IMAGE_x86        = arch/x86/boot/bzImage
++IMAGE_arm64      = arch/arm64/boot/Image
++IMAGE_arm        = arch/arm/boot/zImage
++IMAGE_mips       = vmlinuz
++IMAGE_riscv      = arch/riscv/boot/Image
++IMAGE_s390       = arch/s390/boot/bzImage
+ IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
+-IMAGE         = $(IMAGE_$(ARCH))
+-IMAGE_NAME    = $(notdir $(IMAGE))
++IMAGE            = $(IMAGE_$(ARCH))
++IMAGE_NAME       = $(notdir $(IMAGE))
+ 
+ # default kernel configurations that appear to be usable
+-DEFCONFIG_i386    = defconfig
+-DEFCONFIG_x86_64  = defconfig
+-DEFCONFIG_x86     = defconfig
+-DEFCONFIG_arm64   = defconfig
+-DEFCONFIG_arm     = multi_v7_defconfig
+-DEFCONFIG_mips    = malta_defconfig
+-DEFCONFIG_riscv   = defconfig
+-DEFCONFIG_s390    = defconfig
++DEFCONFIG_i386       = defconfig
++DEFCONFIG_x86_64     = defconfig
++DEFCONFIG_x86        = defconfig
++DEFCONFIG_arm64      = defconfig
++DEFCONFIG_arm        = multi_v7_defconfig
++DEFCONFIG_mips       = malta_defconfig
++DEFCONFIG_riscv      = defconfig
++DEFCONFIG_s390       = defconfig
+ DEFCONFIG_loongarch  = defconfig
+-DEFCONFIG         = $(DEFCONFIG_$(ARCH))
++DEFCONFIG            = $(DEFCONFIG_$(ARCH))
  
  # optional tests to run (default = all)
-@@ -47,6 +49,7 @@ QEMU_ARCH_arm     = arm
- QEMU_ARCH_mips    = mipsel  # works with malta_defconfig
- QEMU_ARCH_riscv   = riscv64
- QEMU_ARCH_s390    = s390x
-+QEMU_ARCH_loongarch  = loongarch64
- QEMU_ARCH         = $(QEMU_ARCH_$(ARCH))
+ TEST =
+ 
+ # QEMU_ARCH: arch names used by qemu
+-QEMU_ARCH_i386    = i386
+-QEMU_ARCH_x86_64  = x86_64
+-QEMU_ARCH_x86     = x86_64
+-QEMU_ARCH_arm64   = aarch64
+-QEMU_ARCH_arm     = arm
+-QEMU_ARCH_mips    = mipsel  # works with malta_defconfig
+-QEMU_ARCH_riscv   = riscv64
+-QEMU_ARCH_s390    = s390x
++QEMU_ARCH_i386       = i386
++QEMU_ARCH_x86_64     = x86_64
++QEMU_ARCH_x86        = x86_64
++QEMU_ARCH_arm64      = aarch64
++QEMU_ARCH_arm        = arm
++QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
++QEMU_ARCH_riscv      = riscv64
++QEMU_ARCH_s390       = s390x
+ QEMU_ARCH_loongarch  = loongarch64
+-QEMU_ARCH         = $(QEMU_ARCH_$(ARCH))
++QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
  
  # QEMU_ARGS : some arch-specific args to pass to qemu
-@@ -58,6 +61,7 @@ QEMU_ARGS_arm     = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips    = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_riscv   = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390    = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS         = $(QEMU_ARGS_$(ARCH))
+-QEMU_ARGS_i386    = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS_x86_64  = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS_x86     = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS_arm64   = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS_arm     = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS_mips    = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS_riscv   = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS_s390    = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_i386       = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_x86_64     = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_x86        = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
++QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS         = $(QEMU_ARGS_$(ARCH))
++QEMU_ARGS            = $(QEMU_ARGS_$(ARCH))
  
  # OUTPUT is only set when run from the main makefile, otherwise
+ # it defaults to this nolibc directory.
 -- 
 2.39.0
 
