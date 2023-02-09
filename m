@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BA769109A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635EF6910B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjBISr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S229759AbjBISt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBISr2 (ORCPT
+        with ESMTP id S229449AbjBISt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:47:28 -0500
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48052166D5;
-        Thu,  9 Feb 2023 10:47:27 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-16a7f5b6882so3726704fac.10;
-        Thu, 09 Feb 2023 10:47:27 -0800 (PST)
+        Thu, 9 Feb 2023 13:49:26 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5C35BA7F;
+        Thu,  9 Feb 2023 10:49:25 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id da9so2885210edb.12;
+        Thu, 09 Feb 2023 10:49:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qNaA54ncyf5PWWN1fTCkDz/pbo/DWHHSJveDPsBxHU4=;
-        b=RC5fDeLU4vuqW2lgOkZmG/ERSu/X56JhgOTDiJ33opR0qE6xsGWUSPAUbAI2+pN68J
-         BF+Or19LaJNlJtubikdVvwliG7A/L8GtfNeXunbOSL5d9MI1WdDapVqM1Df8PJKJtYED
-         e5n00a21wtPj5ZUaNl+1ruFP9svmvkggSpLlRGfTV5/MRsuLrn4YrTi044viEqhcNOlk
-         DHjCl/7UUU77jSz9tKqQ7Dr7a35LBhUHo6uVEnzuRw2b7cTjsK9z71ZORNJpkSvhwXrP
-         datW8n/N9EBpA+WBNSu0H8F2Bu/XWSYaN51laHBiHtB4Azs7LJZs5212/XVDavxkHUBD
-         r0eA==
-X-Gm-Message-State: AO0yUKXyEZfLNf0khnz3kTgc6ygOApyXTa9GK/wH78mz/znZy/lJKxVs
-        V+CoHgBpS+29/G3HU+RHNw==
-X-Google-Smtp-Source: AK7set+LpAAQrdDi21BmP35c4QuiXWbAckRokthyKVqKkwsAlsFerd9xp/Vfd28aqzRs2F+J01ZqkQ==
-X-Received: by 2002:a05:6870:428f:b0:163:3f73:b0fc with SMTP id y15-20020a056870428f00b001633f73b0fcmr6970166oah.18.1675968446460;
-        Thu, 09 Feb 2023 10:47:26 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u36-20020a056870b0e400b0014ff15936casm1008335oag.40.2023.02.09.10.47.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 10:47:26 -0800 (PST)
-Received: (nullmailer pid 622962 invoked by uid 1000);
-        Thu, 09 Feb 2023 18:47:25 -0000
-Date:   Thu, 9 Feb 2023 12:47:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, - <patches@opensource.cirrus.com>,
-        alsa-devel@alsa-project.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2] ASoC: dt-bindings: wlf,wm8994: Convert to dtschema
-Message-ID: <167596844504.622906.11149464288778013778.robh@kernel.org>
-References: <20230208195235.453774-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s0wOVGEIsqozoWOqa7C2Q6mCdmU8Ss82AAfVmyTj+0M=;
+        b=AJQRgYC+Ufj/JzrXmcq1Kwa8DyzvWsbASvzWWGXsKdPy1dIt1IRsv/m328NRPX2ejY
+         Ho8IPvZUrzLTZG6g9WfshNsxsskIPrz0+lz+tT/is34WoIvtjEjHKXWs7DKQ3yLoi6d6
+         5gCHw0QPtrHP8YqO7K56IMJre9dDEQUBqejIsfrtVEWIyDZTLkMV4Ph6dZDr7lMDNwc7
+         R2a1AdKJ/D6semWFMYcXRXMEd8bg3yfbBY9Q1lleALudt+2S3ov13T9j4nMpm/R9ANBQ
+         Ec0JN3UBnBurZe//cZCf0JMQNywtEHIUE956CvDPZXZtcjPbnF2beYbP+cmzr2uTFnhq
+         ed/w==
+X-Gm-Message-State: AO0yUKVCcz2cBafr41NzpJTb3MGe0Ak4Jv+3SP5n7rd9v/8+jF0HiqSf
+        TFIiBmCt/eZ6hHNY0M2GQWXTRnlIAHgKgUak/0wWWZOL2mo=
+X-Google-Smtp-Source: AK7set9ov9+rSfAaPORjLy/MeCU8pxpZbv3V2FAKicwYFX3a3irzKTKzTBYLwasFwCS6STBpJmcc+sUyKA/rsrq/WOA=
+X-Received: by 2002:a50:d0ce:0:b0:4ab:255e:5ada with SMTP id
+ g14-20020a50d0ce000000b004ab255e5adamr308135edf.6.1675968564039; Thu, 09 Feb
+ 2023 10:49:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230208195235.453774-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Feb 2023 19:49:12 +0100
+Message-ID: <CAJZ5v0iTBJNNxKs86LjTVfer6aqqPYhOuZP04FC-zcq3CWfv8Q@mail.gmail.com>
+Subject: [GIT PULL] Power management fix for v6.2-rc8
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
-On Wed, 08 Feb 2023 20:52:35 +0100, Krzysztof Kozlowski wrote:
-> Convert the Wolfson WM1811/WM8994/WM8958 audio codecs bindings to DT
-> schema.
-> 
-> Changes against original binding:
-> 1. Add missing LDO1VDD-supply and LDO2VDD-supply.
-> 2. Use "gpios" suffix for wlf,ldo1ena and wlf,ldo2ena (Linux kernel's
->    gpiolib already looks for both variants).
-> 3. Do not require AVDD1-supply and DCVDD-supply, because at least on
->    Arndale board with Exynos5250 these are being supplied by internal
->    LDOs.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Add LDO2VDD-supply.
-> 2. Do not require AVDD1-supply on WM8994.
-> 3. Move requiring of common supplies to top-level "required:".
-> 
-> DTS is being corrected here:
-> https://lore.kernel.org/linux-samsung-soc/20230208172634.404452-1-krzysztof.kozlowski@linaro.org/T/#t
-> ---
->  .../devicetree/bindings/sound/wlf,wm8994.yaml | 194 ++++++++++++++++++
->  .../devicetree/bindings/sound/wm8994.txt      | 112 ----------
->  2 files changed, 194 insertions(+), 112 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8994.yaml
->  delete mode 100644 Documentation/devicetree/bindings/sound/wm8994.txt
-> 
+Please pull from the tag
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.2-rc8
 
+with top-most commit 918c5765a15420ad60730fbe5b5b67beb74ca7b6
+
+ Merge tag 'cpufreq-arm-fixes-6.2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+
+on top of commit 4ec5183ec48656cec489c49f989c508b68b518e3
+
+ Linux 6.2-rc7
+
+to receive a power management fix for 6.2-rc8.
+
+Fix the incorrect value returned by cpufreq driver's ->get() callback
+for Qualcomm platforms (Douglas Anderson).
+
+Thanks!
+
+
+---------------
+
+Douglas Anderson (1):
+      cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH systems
+
+---------------
+
+ drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
