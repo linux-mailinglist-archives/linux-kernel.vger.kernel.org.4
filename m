@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761B0690828
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDEF69085E
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:12:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjBIMEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:04:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S230162AbjBIMMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjBIMDu (ORCPT
+        with ESMTP id S229612AbjBIMLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:03:50 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CEC5EA13
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:54:06 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id ud5so5589046ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 03:54:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QUdDWGSEIPNHTkY1nLcTe4MvFdzuflifAIW9LpHZTGM=;
-        b=ta2UpM5asl3Lm0W855qYewhrra7ru434Thf2k/DvVsxuPAXm8BGe+R1WPmsEC5MCK+
-         Z/jX2V7q/SUuYXinBJb8709z8pUl5u0uuceBEDKdnJz+jGqzaHMjPyIT9smK9omPqroQ
-         MqLmra1QwL/nVJlvYcHBfaumVfU+MkzA2qP74=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QUdDWGSEIPNHTkY1nLcTe4MvFdzuflifAIW9LpHZTGM=;
-        b=CebGXQupevTn3mNm3a9DWieRMXxt3I1xs6Ic2LfpIxLLLm7eAPVokxq//pG7iwp2Mj
-         C28zOINYVE4DuM6tjD1UjkvzibJv5LwqCe68nr2jnsg/Eu5QhAb2NbjCQInWWBWeaPqy
-         QUNqsoakR4r7LYigSATYI/4KP/a/7AE5wy46DHlth6fmRHE/Jy4Zfdm78SOZr8VdZQsx
-         eGmXSHDETIXYKWTjXYjsJgacYs+lFG2cq25Zb4qMmo1+w2iZ2ZqGXa1U1Zqcz0Z970mA
-         rAqQOrEhpzPN/l/sIlNIlC95nvAER6wJzgGn3/7SUlJ9jjD9GO4Isl+bi7+rZ4QsqpEO
-         J6oQ==
-X-Gm-Message-State: AO0yUKUPo/lfQPOJ17mlCxeMEVAMKOrPi/AzVF2tuWFOtzU8i7UE10Mh
-        AppGfJMS8r5cehUsQDF2lrrbS0+nX+sadPbzf9cpJA==
-X-Google-Smtp-Source: AK7set+N3QhY91uskzELT0cf+ZTUWUOYeughhVQDCr4yNOkf+25kcW5lGeKcAti7plBwPgpmGhsvh77FhmHiXClLh9M=
-X-Received: by 2002:a17:906:37c2:b0:878:7bc7:958a with SMTP id
- o2-20020a17090637c200b008787bc7958amr2481252ejc.220.1675943644878; Thu, 09
- Feb 2023 03:54:04 -0800 (PST)
+        Thu, 9 Feb 2023 07:11:55 -0500
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6A31E3A
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:09:17 -0800 (PST)
+Received: from droid01-xa.amlogic.com (10.88.11.200) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Thu, 9 Feb 2023
+ 19:54:11 +0800
+From:   Jiucheng Xu <jiucheng.xu@amlogic.com>
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Will Deacon <will@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     Jianxin Pan <jianxin.pan@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Chris Healy <healych@amazon.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/3] perf/amlogic: Fix config1/config2 parsing issue
+Date:   Thu, 9 Feb 2023 19:54:01 +0800
+Message-ID: <20230209115403.521868-1-jiucheng.xu@amlogic.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230208-sctp-filter-v1-1-84ae70d90091@diag.uniroma1.it> <CADvbK_ebZEmO_n9c3XDBF65W8AcXFXdUYjpsRDUin8T0devCYQ@mail.gmail.com>
-In-Reply-To: <CADvbK_ebZEmO_n9c3XDBF65W8AcXFXdUYjpsRDUin8T0devCYQ@mail.gmail.com>
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Thu, 9 Feb 2023 12:53:54 +0100
-Message-ID: <CAEih1qW6_YetJV4LB9=+P-TCd6Bw_YZ=cVaL+tOLxPk=qp1a6A@mail.gmail.com>
-Subject: Re: [PATCH net-next] sctp: check ep asocs list before access
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.88.11.200]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Feb 2023 at 20:21, Xin Long <lucien.xin@gmail.com> wrote:
->
-> [...]
-> > We suspect a race condition between a connecting sctp socket
-> > and the diag query.
-> As it commented in sctp_transport_traverse_process():
->
-> "asoc can be peeled off " before callinsctp_sock_filter(). Actually,
+The 3th argument of for_each_set_bit is incorrect, fix them.
 
-Ah, thank you for clarifying! I misunderstood the comment, and read it
-like "we hold the ep, otherwise ascoc can be peeled off".
+Fixes: 2016e2113d35 ("perf/amlogic: Add support for Amlogic meson G12 SoC DDR PMU driver")
+Signed-off-by: Jiucheng Xu <jiucheng.xu@amlogic.com>
+---
+ drivers/perf/amlogic/meson_ddr_pmu_core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> the asoc can be peeled off from the ep anytime during it by another
-> thread, and placing a list_empty(&ep->asocs) check and returning
-> won't avoid it completely, as peeling off the asoc can happen after
-> your check.
->
-> We actually don't care about the asoc peeling off during the dump,
-> as sctp diag can not work that accurately. There also shouldn't be
+diff --git a/drivers/perf/amlogic/meson_ddr_pmu_core.c b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+index b84346dbac2c..0b24dee1ed3c 100644
+--- a/drivers/perf/amlogic/meson_ddr_pmu_core.c
++++ b/drivers/perf/amlogic/meson_ddr_pmu_core.c
+@@ -156,10 +156,14 @@ static int meson_ddr_perf_event_add(struct perf_event *event, int flags)
+ 	u64 config2 = event->attr.config2;
+ 	int i;
+ 
+-	for_each_set_bit(i, (const unsigned long *)&config1, sizeof(config1))
++	for_each_set_bit(i,
++			 (const unsigned long *)&config1,
++			 BITS_PER_TYPE(config1))
+ 		meson_ddr_set_axi_filter(event, i);
+ 
+-	for_each_set_bit(i, (const unsigned long *)&config2, sizeof(config2))
++	for_each_set_bit(i,
++			 (const unsigned long *)&config2,
++			 BITS_PER_TYPE(config2))
+ 		meson_ddr_set_axi_filter(event, i + 64);
+ 
+ 	if (flags & PERF_EF_START)
 
-Agree. This makes a lot of sense.
+base-commit: e8a709dc2a9156f223ec953ae70a919e87ad7e9a
+-- 
+2.25.1
 
-> problems caused so far, as the "assoc" won't be used anywhere after
-> that check.
->
-> To avoid the "type confused pointer" thing,  maybe you can try to use
-> list_is_first() there:
->
-> -       struct sctp_association *assoc =
-> -               list_entry(ep->asocs.next, struct sctp_association, asocs);
->
->         /* find the ep only once through the transports by this condition */
-> -       if (tsp->asoc != assoc)
-> +       if (!list_is_first(&tsp->asoc->asocs, &ep->asocs))
->                 return 0;
->
-
-This is a very nice suggestion, which also avoids future issues in
-case assoc would be used. I'll do that in v2. Thank you!
-
-Best regards,
-Pietro
