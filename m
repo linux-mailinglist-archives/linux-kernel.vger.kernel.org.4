@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A647A690898
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203EB6908A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjBIMXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
+        id S229710AbjBIM03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBIMW7 (ORCPT
+        with ESMTP id S229457AbjBIM01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:22:59 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCDD125A8
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:22:58 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so1415493wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:22:58 -0800 (PST)
+        Thu, 9 Feb 2023 07:26:27 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7FC3AA2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:26:25 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id eq11so1963036edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 04:26:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LSnO37B34hy1pNZA6pCiDi9wzcXDsjOg5QyQA1q+Ms4=;
-        b=OuLFbs3kk5PBuZV1uVbAjaYQdXyT2NX7mXCS04oJUM7Xa2FHT/XMcyVHEp78GSXeqy
-         FrKWhvbBnZVt2Wbz+os/9+v8AieE0a8OwzrV318CBrG7YWWj949GfCH8ZbEae/HzQv4j
-         hRy3A5oS5i3zzcgb1I7FYbijRH/9TUOdZFVXA+6czIvZGXSqb2NDPuTEQiGiRaBx01M8
-         pYFvndv97Uce4pzf/VnPmRcNSk0qqFCbAEpRnjxgSQO7sb+IGlQ17fBxSoiM05f9Vufl
-         /n0gtyi71PEFKQ0uuyTf1TpHHon9AKiFLc+cKm2HB33p2rM/77l42dvdPoejKImyb8I8
-         3/sg==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5YFGvWHONsZaq676i+5BQUR6fT+K1OZMUM624Of9vyY=;
+        b=pn/bWfmDky37Tek+LVpF3BQm5uYd+ZMYBSTu7gxAOQHKC+48qei0gojpXl6X0visn3
+         rseGDFiMVjV5HYJ2ncTVUrYkiuMn15RFkqzzEw9bgLbl6txVoE15muyMMXr5j4wK2oWP
+         DrKqyortHFQqxwURAD5JAU8zwigRmHJu3NyLo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LSnO37B34hy1pNZA6pCiDi9wzcXDsjOg5QyQA1q+Ms4=;
-        b=ll/7jfLu1mu/rAejEFB1+81NT6JDlX8sg9YZcvWHoKGMxF0vtlQKyk460514Uba0MJ
-         +UdERSW+4lzYT5VyfZIkgg3gf0aLSEZYxmg4+XPB4kfoKDhwPo634uS0UmDEEyk6rNc+
-         uSUyJ4Rc4tol2X7toN0l7gJ84NpGBO3H9rlYZaGWBm6RMV07QQSDwyUK8yQS1rk8z9DS
-         +KwCRgkzzCTMzU3Z5+ch/vvdKUrGBRDDR6w4x7nPULorMjs67PutxU6KHqrozGQ6au9d
-         d8HSIbYLPJ4hbrYRdGde7+BMhoNQeiyuAIy0b3Y4xsx6GO8xtAHHkv6VJhPl+CktTumo
-         hrNw==
-X-Gm-Message-State: AO0yUKW97oLpxqplmxoY+bwjqfdYD4X2xSuBcQjN2OyH8ikZ1VKSOGWm
-        ZhHN3LvNt+9IkqfhQqJ+75uCRw==
-X-Google-Smtp-Source: AK7set8vBWfXVH0I3G7ClYmPs1n81MK1qNsDlSUnJEVAfy1Nyh+CRYkg6nzQx4o/eaCCvokyLt3ubw==
-X-Received: by 2002:a05:600c:130f:b0:3cf:7197:e68a with SMTP id j15-20020a05600c130f00b003cf7197e68amr9902039wmf.18.1675945377311;
-        Thu, 09 Feb 2023 04:22:57 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id t8-20020a7bc3c8000000b003e00c9888besm4850980wmj.30.2023.02.09.04.22.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 04:22:56 -0800 (PST)
-Message-ID: <027268b7-4b04-f52e-06a8-9d924dc6efe4@linaro.org>
-Date:   Thu, 9 Feb 2023 12:22:55 +0000
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5YFGvWHONsZaq676i+5BQUR6fT+K1OZMUM624Of9vyY=;
+        b=aJZTZiiok4+KoqfACjDW3HFQHtmh+LXwWQfZ/div3VkNcUZF5rASPC0atPjj6vyZAE
+         JpZI44u3+mA+CyAk+6ZsNXqLVFxsgBBeNe8MyGPk/MbmSPnJ9QEssPgG/JtWtM1MV4sH
+         i4bfkNinLh5MkA7GQljYKkPYXvZMIXeuPxBcpBEQgaugq5+Yo0CsIh4RsPQFXUzNAbm6
+         jf/pnTto6TJ4YEh8dqfNuKCMAOYIv7RpZRvFgwxsurrHdqmBJvX58POHuPfpUXuGAPoM
+         1T+Ai0luNZQyWP7BDIr9XmUCygjfyLfxwVT7SAIja4XU5W4OVf3T8Ulv+JeD9m2P1yck
+         8I9A==
+X-Gm-Message-State: AO0yUKXBdnNPZQfr3DZlco2YngcB45lJdgbV20BX8Y9N7k0puBGCJu/G
+        rXdrC+ip7nZ2S+lJ9yk2TasQ6w==
+X-Google-Smtp-Source: AK7set/ru8CUI8c6WpTA2FeFNHdHENt9JS4H+RebLU17rNnUCdDG5WDW1tuUdlAeWsMkdKQJtcqEew==
+X-Received: by 2002:a50:ce4d:0:b0:4ab:ed5:dd46 with SMTP id k13-20020a50ce4d000000b004ab0ed5dd46mr5558221edj.6.1675945584370;
+        Thu, 09 Feb 2023 04:26:24 -0800 (PST)
+Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
+        by smtp.gmail.com with ESMTPSA id la12-20020a170907780c00b008a7936de7b4sm802264ejc.119.2023.02.09.04.26.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 04:26:24 -0800 (PST)
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Thu, 09 Feb 2023 12:26:23 +0000
+Subject: [PATCH net-next] rds: rds_rm_zerocopy_callback() correct order for
+ list_add_tail()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Mark cont splash memory
- region as reserved
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20230124182857.1524912-1-amit.pundir@linaro.org>
- <39751511-3f06-7c39-9c21-208d4c272113@linaro.org>
- <CAA8EJppLBuA08hkqTrZx_wwbtCxK9sAjv48c9_DxgPENgo7a8Q@mail.gmail.com>
- <1a840d88-e5b1-711c-b980-f57620c54472@linaro.org>
- <8508e3d5-7468-0b2f-5a43-7c439ecf2d8b@linaro.org>
- <CAMi1Hd2UNxXHUVWO-=sWh=-bVnrqE3UdLguFOq+62SfvUiEs0A@mail.gmail.com>
- <b2307e91-3373-539a-ecfb-e2542b9f83db@linaro.org>
- <ed737e67-eabc-6f29-b734-f4698767ca8e@linaro.org>
- <fa2e0db7-5b27-5a41-920b-b786dc4e521c@linaro.org>
-In-Reply-To: <fa2e0db7-5b27-5a41-920b-b786dc4e521c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230209-rds-list-add-tail-v1-1-5f928eb81713@diag.uniroma1.it>
+X-B4-Tracking: v=1; b=H4sIAG7m5GMC/x2NSQrDMAwAvxJ0rsB2CV2+UnqQI6URpG6RTAiE/
+ L1Oj8MwzAYupuJw7zYwWdT1UxrEUwfDROUlqNwYUkjnkMINjR1n9YrEjJV0xhivHPpLjn0eoXW
+ ZXDAblWE6yjd5FTvE12TU9T97QJGKRdYKz33/AUPd74OGAAAA
+To:     Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Sowmini Varadhan <sowmini.varadhan@oracle.com>
+Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675945583; l=1189;
+ i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
+ bh=1+oqBi1a+MGySfKXgQ/C9VVxNB2UcZkL12bRQa+5lhw=;
+ b=z6C7Q3vCOIgmEb64xOGg1+IsHU2oCBwRfxtKTmN1eR6g2EzJ4zyCQVReXbLwTOxWSJkgxTfDoNyM
+ 6uuO8YZ7AtOdC3mPdar3mFuKm7lbppaa9vjdBBhaSVhuAdYsHesW
+X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
+ pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/02/2023 12:11, Bryan O'Donoghue wrote:
->> If the bootloader splash is enabled then this memory is used until the
->> DPU driver instructs MDP5 pipes to suck data from a newly assigned 
->> address,
->> so there's a short window where it is.
-> 
-> It seems a shame to reserve 30 something megabytes of memory for 
-> continuous splash unless we are actually using it is my point.
-> 
-> If I'm running headless its just wasted memory.
+rds_rm_zerocopy_callback() uses list_add_tail() with swapped
+arguments. This links the list head with the new entry, losing
+the references to the remaining part of the list.
 
-Couldn't we
+Fixes: 9426bbc6de99 ("rds: use list structure to track information for zerocopy completion notification")
+Suggested-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+---
+ net/rds/message.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-1. Find reserved continuous splash memory
-2. Fee it in the MDP when we make the transition
-
-It must be possible
+diff --git a/net/rds/message.c b/net/rds/message.c
+index b47e4f0a1639..ff10efa51632 100644
+--- a/net/rds/message.c
++++ b/net/rds/message.c
+@@ -118,7 +118,7 @@ static void rds_rm_zerocopy_callback(struct rds_sock *rs,
+ 	ck = &info->zcookies;
+ 	memset(ck, 0, sizeof(*ck));
+ 	WARN_ON(!rds_zcookie_add(info, cookie));
+-	list_add_tail(&q->zcookie_head, &info->rs_zcookie_next);
++	list_add_tail(&info->rs_zcookie_next, &q->zcookie_head);
+ 
+ 	spin_unlock_irqrestore(&q->lock, flags);
+ 	/* caller invokes rds_wake_sk_sleep() */
 
 ---
-bod
+base-commit: 4ec5183ec48656cec489c49f989c508b68b518e3
+change-id: 20230209-rds-list-add-tail-118d057b15bf
+
+Best regards,
+-- 
+Pietro Borrello <borrello@diag.uniroma1.it>
+
