@@ -2,146 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E1E690E98
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:47:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEAC690EA3
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 17:51:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjBIQq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 11:46:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S229854AbjBIQv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 11:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjBIQq4 (ORCPT
+        with ESMTP id S229655AbjBIQvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 11:46:56 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45754E078;
-        Thu,  9 Feb 2023 08:46:51 -0800 (PST)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1045ACE004;
-        Thu,  9 Feb 2023 16:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1675961210; bh=WzP22PkUOOEnYEsiechqbOaqD/J6AkmB473A99UfdqE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=noIvF3ES5jB7bjscHwRtjP6qOggwXUwlBBhYkn/6v85fSxTU5X2lstNdwG1Tn/5S7
-         EB2AnNp2c5TqTf7JfiSzg/Gj1iEFCXkgSQJ3dykyQTEbtmT/Qyh36thygHSVWof75g
-         dNNOmPF1jBlHFfyo6ouNIiPwQBCoiKzDUXLnRIME=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        phone-devel@vger.kernel.org,
-        Helen Koike <helen.koike@collabora.com>
-Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
-Date:   Thu, 09 Feb 2023 17:46:48 +0100
-Message-ID: <2665862.mvXUDI8C0e@z3ntu.xyz>
-In-Reply-To: <167572017056.1564123.13342855865502188090.robh@kernel.org>
-References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
- <167572017056.1564123.13342855865502188090.robh@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 9 Feb 2023 11:51:25 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE946310B
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 08:51:23 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id iz19so2108768plb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 08:51:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gFqj+biyDpY9pXqvmkLkzDhno/QTWqjT+mpxmEuFlIE=;
+        b=VDTA9tS4LubStVk5KAn8x5cPGoOp99eJz0Kygp3vdTQUGkoiRVuoIS7n9bY8qwL85b
+         rjwClE3hOwhV3Of1ekxPfOGBgY5HAqnTT+dM/8+tL0bXG6nJurzutM+JzB9Rn6VyUnEV
+         GwSFt5EGOT2WL6Ibb7gaLwB85VqyWQnig8hDaaeXqkLPTTwOmAdcXirHzFpYCrDxtz75
+         Bx0weyxL/oQVROo7My9Uxt8p7vvNM9uVFU2UVdz9cdJyTibKGf2ZvKkJiCtheffJdCMT
+         IC82A+fCcrwt85502UiQ+XNLw2e+eXNbVDC6A08p023lu6BAWviul2X62bRmJpnUNXM8
+         +pgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gFqj+biyDpY9pXqvmkLkzDhno/QTWqjT+mpxmEuFlIE=;
+        b=lgTcI2ISrhqX4qyqwluGQCDfq0MAgfSd505N5dr0qRAzgRG2FA9aB7DnL8G0maFvth
+         MGNLRMrSZx7tqclN+KD2pvfpO4U8jAAkb5MZrFtZvGle72UizPFQcv3T//JsoQrHquA+
+         VL7KG1O4uyTOgiYCwKCoxwFt8Qj2lw7eXcBlyNdEe+CTxCxUOOPTDnIwqIeJmvGCyjZ/
+         zevW+s9qPdesXSBLwo6GoNnWAz2Bdj6jiN0x7pMeB5fZiZNcq2mfwErho7zw3WhWJ0Nq
+         mNGPfe+3tMcdgYzb2V/HmoWUw+MurIFh5vrspyXZeEfcy9/M3EmudnrTzp9ooqC97yDg
+         /LBw==
+X-Gm-Message-State: AO0yUKV8JUn9zfGtU4RngMvAfScZwnVFovmuaT1I5iTMpG1gZbMQoBN7
+        qbAALBx/LPaiclWUwFiIl701Ig==
+X-Google-Smtp-Source: AK7set9dXtbFLqR0SLyd6Rfiqg0GWw0+da8IB1XBCGr+lJRziUoT47+K2T9x09vL9nopKJoJT5bMlA==
+X-Received: by 2002:a17:90b:1c86:b0:22c:792:d342 with SMTP id oo6-20020a17090b1c8600b0022c0792d342mr13638710pjb.26.1675961483220;
+        Thu, 09 Feb 2023 08:51:23 -0800 (PST)
+Received: from localhost ([135.180.226.51])
+        by smtp.gmail.com with ESMTPSA id jw14-20020a17090b464e00b002338ff973d4sm101213pjb.11.2023.02.09.08.51.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 08:51:22 -0800 (PST)
+Date:   Thu, 09 Feb 2023 08:51:22 -0800 (PST)
+X-Google-Original-Date: Thu, 09 Feb 2023 08:51:16 PST (-0800)
+Subject:     RE: [PATCH v2 4/6] dt-bindings: Add RISC-V misaligned access performance
+In-Reply-To: <4bd24def02014939a87eb8430ba0070d@AcuMS.aculab.com>
+CC:     robh@kernel.org, evan@rivosinc.com,
+        Conor Dooley <conor@kernel.org>,
+        Vineet Gupta <vineetg@rivosinc.com>, heiko@sntech.de,
+        slewis@rivosinc.com, aou@eecs.berkeley.edu,
+        krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     David.Laight@ACULAB.COM
+Message-ID: <mhng-8736b349-e27a-4372-81ca-3a25d2ec1e94@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC Helen Koike
+On Wed, 08 Feb 2023 04:45:10 PST (-0800), David.Laight@ACULAB.COM wrote:
+> From: Rob Herring
+>> Sent: 07 February 2023 17:06
+>>
+>> On Mon, Feb 06, 2023 at 12:14:53PM -0800, Evan Green wrote:
+>> > From: Palmer Dabbelt <palmer@rivosinc.com>
+>> >
+>> > This key allows device trees to specify the performance of misaligned
+>> > accesses to main memory regions from each CPU in the system.
+>> >
+>> > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> > Signed-off-by: Evan Green <evan@rivosinc.com>
+>> > ---
+>> >
+>> > (no changes since v1)
+>> >
+>> >  Documentation/devicetree/bindings/riscv/cpus.yaml | 15 +++++++++++++++
+>> >  1 file changed, 15 insertions(+)
+>> >
+>> > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml
+>> b/Documentation/devicetree/bindings/riscv/cpus.yaml
+>> > index c6720764e765..2c09bd6f2927 100644
+>> > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+>> > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+>> > @@ -85,6 +85,21 @@ properties:
+>> >      $ref: "/schemas/types.yaml#/definitions/string"
+>> >      pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:_[hsxz](?:[a-z])+)*$
+>> >
+>> > +  riscv,misaligned-access-performance:
+>> > +    description:
+>> > +      Identifies the performance of misaligned memory accesses to main memory
+>> > +      regions.  There are three flavors of unaligned access performance: "emulated"
+>> > +      means that misaligned accesses are emulated via software and thus
+>> > +      extremely slow, "slow" means that misaligned accesses are supported by
+>> > +      hardware but still slower that aligned accesses sequences, and "fast"
+>> > +      means that misaligned accesses are as fast or faster than the
+>> > +      cooresponding aligned accesses sequences.
+>> > +    $ref: "/schemas/types.yaml#/definitions/string"
+>> > +    enum:
+>> > +      - emulated
+>> > +      - slow
+>> > +      - fast
+>>
+>> I don't think this belongs in DT. (I'm not sure about a userspace
+>> interface either.)
 
-On Montag, 6. Februar 2023 22:50:08 CET Rob Herring wrote:
-> On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
-> > Convert the text-based dt-bindings to yaml.
-> > 
-> > Changes from original txt:
-> > * Take wording for various properties from other yaml bindings, this
-> > 
-> >   removes e.g. volt amount from schema since it isn't really relevant
-> >   and the datasheet is a better source.
-> > 
-> > * Don't make reset-gpios a required property since it can be tied to
-> > 
-> >   DOVDD instead.
-> > 
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > 
-> >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
-> >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
-> >  +++++++++++++++++++++ MAINTAINERS                                       
-> >  |   1 +
-> >  3 files changed, 102 insertions(+), 41 deletions(-)
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/medi
-> a/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required property From
-> schema:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/i2c/ovti,ov2685.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required
-> property From schema:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/i2c/ovti,ov2685.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required
-> property From schema:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/i2c/ovti,ov2685.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required
-> property From schema:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/i2c/ovti,ov2685.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required
-> property From schema:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
-> ia/i2c/ovti,ov2685.yaml
+[Kind of answered below.]
 
-Looks like rockchip-isp1.yaml uses very incomplete sensor examples in their 
-binding example, which sort of makes sense since those bindings are showing 
-the rockchip isp bindings and contain the bare minimum to show how a sensor is 
-connected in dt.
+>> Can't this be tested and determined at runtime? Do misaligned accesses
+>> and compare the performance. We already do this for things like memcpy
+>> or crypto implementation selection.
 
-Not sure how to solve this - ov2685 is also one of three sensors that are used 
-very abbreviated there.
+We've had a history of broken firmware emulation of misaligned accesses 
+wreaking havoc.  We don't run into concrete bugs there because we avoid 
+misaligned accesses as much as possible in the kernel, but I'd be 
+worried that we'd trigger a lot of these when probing for misaligned 
+accesses.
 
-Regards
-Luca
+> There is also an long discussion about misaligned accesses
+> for loooongarch.
+>
+> Basically if you want to run a common kernel (and userspace)
+> you have to default to compiling everything with -mno-stict-align
+> so that the compiler generates byte accesses for anything
+> marked 'packed' (etc).
+>
+> Run-time tests can optimise some hot-spots.
+>
+> In any case 'slow' is probably pointless - unless the accesses
+> take more than 1 or 2 extra cycles.
 
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See
-> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230206-ov2
-> 685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your
-> schema.
+[Also below.]
 
+> Oh, and you really never, ever want to emulate them.
 
+Unfortunately we're kind of stuck with this one: the specs used to 
+require that misaligned accesses were supported and thus there's a bunch 
+of firmwares that emulate them (and various misaligned accesses spread 
+around, though they're kind of a mess).  The specs no longer require 
+this support, but just dropping it from firmware will break binaries.
 
+There's been some vague plans to dig out of this, but it'd require some 
+sort of firmware interface additions in order to turn off the emulation 
+and that's going to take a while.  As it stands we've got a bunch of 
+users that just want to know when they can emit misaligned accesses.
 
+> Technically misaligned reads on (some) x86-64 cpu are slower
+> than aligned ones, but the difference is marginal.
+> I've measured two 64bit misaligned reads every clock.
+> But it is consistently slower by much less than one clock
+> per cache line.
+
+The "fast" case is explicitly written to catch that flavor of 
+implementation.
+
+The "slow" one is a bit vaguer, but the general idea is to catch 
+implementations that end up with some sort of pipeline flush on 
+misaligned accesses.  We've got a lot of very small in-order processors 
+in RISC-V land, and while I haven't gotten around to benchmarking them 
+all my guess is that the spec requirement for support ended up with some 
+simple implementations.
+
+FWIW: I checked the c906 RTL and it's setting some exception-related 
+info on misaligned accesses, but I'd need to actually benchmark on to 
+know for sure and they're kind of a headache to deal with.
+
+>
+> 	David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
