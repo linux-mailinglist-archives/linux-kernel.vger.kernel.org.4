@@ -2,112 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A2D68FCFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D0168FCFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 03:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjBICPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 21:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S231760AbjBICQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 21:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbjBICPG (ORCPT
+        with ESMTP id S231726AbjBICQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:15:06 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2185F273C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 18:15:04 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id h4so533513lja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 18:15:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZR54mJXwASvQGnAdij+ZNHiNC8eGa7TLZRG1R8sZ1FE=;
-        b=CGN/82Z0Rf2APBROkVXBhyeM/niTSI8x1hqX4A2fudHYjjDuyT2/rKROdDEYgYmFTI
-         Fw66UeDlGPJ1sOM+AaZtSJZuWBo3A5lcBYMDjQbQjMY6Z/1o6EUNPOYB7+asfROVfo8Z
-         32rGO9TlqQ03qZfuAhF9IPX0sWUwTYCnT1U03OCCsYVze0ZT2lCfN55VY2w69qManxY8
-         8GxP5U8z0TIZ6GFEBEyZfiVirNoKAV3u3wulYD/legsWhveNsCdF1pXutvrDIzgQ99pp
-         6Dc+1dglsYQpmxHcU4pigvLC7cCeK3LHq6IF3KYglPTZhdSmva3SXbd/bbmrVMmKn9FZ
-         p0VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZR54mJXwASvQGnAdij+ZNHiNC8eGa7TLZRG1R8sZ1FE=;
-        b=h3z28y9/Og/srqqWEwj/TQ0S3a45IWv5qlMF6nD48yciTiwQF7Df6+PPSJE0vXurxg
-         n14cFoTb7IbKOqVoZY6vw5bVE2I55yEnpFTnNtjs+6TqPS42x3RmwjqJye+shAuS3soZ
-         pco7QZS/qBaVAc2cx9dC6dK+JFhcz6pyCDG8bD6LMWXHOx3u8OHwtJ4pjWgii15VIxAW
-         rdWaWKlmgc9MkngpMvN8jDFhFJmUskurSKyjmAtFcvaIuU4s9ed4d9iN6UHiG+hKHRII
-         wtpJ1o5CerlU0Twlrs9O42U4+/eRh/mCOglOBb3lmZnkBKP7lkzmqF48A+R2R0rlvRub
-         p+aA==
-X-Gm-Message-State: AO0yUKVLu+SEHsVL7HaNTtsG9DpWP4O77puSqPlsj5AKZqoOBH3MiLRs
-        5sSAAVLnO/LqlVeSsJ+J1HlJlb4F3725RPNtpms=
-X-Google-Smtp-Source: AK7set+agdxY6pTTDEx797/vZ5UWomhA83EIT9xQ1l9iTwj7V4rHHdxzX0o/dedbejg+xZX2FUN6KBI/fg3c9kt1JUs=
-X-Received: by 2002:a2e:8e6c:0:b0:28e:bba7:22dc with SMTP id
- t12-20020a2e8e6c000000b0028ebba722dcmr1669351ljk.56.1675908902331; Wed, 08
- Feb 2023 18:15:02 -0800 (PST)
+        Wed, 8 Feb 2023 21:16:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E87273C;
+        Wed,  8 Feb 2023 18:16:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00E316181D;
+        Thu,  9 Feb 2023 02:16:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98292C433EF;
+        Thu,  9 Feb 2023 02:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675908992;
+        bh=zxuoxziI8jyG8v98JQH01KgPXTbx+A+CFTlPIEN0GQU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sm6TfzLOF0gZqsGaSMjp84t6qn5Of94Ig7kL6TWiZkCPPaGkgV1yw8cNw2+Dn/sTC
+         YcCkMCT2cafy6T3FwQakjS/o8MmYmG86ALCYSbqskN4S2yTIpEIoAWjNwHbvh4aztd
+         et1ANYNbJPyNYOsFs5awDf8GXvUfY2PcpbRUJLG5fC+oFU2Cg37K3QrGdjMBAw38vG
+         60kYVKZ4cOAgEtybsVOpvbutdzgky/m4h+phH2N9mNCP1CffDQ2qzVjXFWiFEuoaQF
+         6+pcx0WDlrMczyafXBtyAjPCjrnf6WCbzR+LFokGTEOxfHbDNvDbPwdhPErAzoRRWW
+         XUtOKTCpsOLzQ==
+Date:   Wed, 8 Feb 2023 19:16:29 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Patrisious Haddad <phaddad@nvidia.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?iso-8859-1?Q?H=E5kon?= Bugge <haakon.bugge@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] RDMA/cma: Distinguish between sockaddr_in and
+ sockaddr_in6 by size
+Message-ID: <Y+RXfXDDKxKHjLbh@dev-arch.thelio-3990X>
+References: <20230208232549.never.139-kees@kernel.org>
 MIME-Version: 1.0
-References: <cover.1675851111.git.chenfeiyang@loongson.cn> <b9bbf73286238bb4657d855c9d50983aa17953e2.1675851111.git.chenfeiyang@loongson.cn>
- <de9439e489684965989ac4e96b87de41@AcuMS.aculab.com>
-In-Reply-To: <de9439e489684965989ac4e96b87de41@AcuMS.aculab.com>
-From:   Feiyang Chen <chris.chenfeiyang@gmail.com>
-Date:   Thu, 9 Feb 2023 10:14:50 +0800
-Message-ID: <CACWXhK=VXaMixrDTdo-ydgGw64vemu9kNUws5ef-91TFf-GPGg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] tools/nolibc: Add statx() and make stat() rely on
- statx() when available
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "w@1wt.eu" <w@1wt.eu>, "paulmck@kernel.org" <paulmck@kernel.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "jiaxun.yang@flygoat.com" <jiaxun.yang@flygoat.com>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208232549.never.139-kees@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Feb 2023 at 06:39, David Laight <David.Laight@aculab.com> wrote:
->
-> From: chris.chenfeiyang@gmail.com
-> > Sent: 08 February 2023 10:18
-> >
-> > loongarch and riscv32 only have statx(). arc, hexagon, nios2 and
-> > openrisc have statx() and stat64() but not stat() or newstat().
-> > Add statx() and make stat() rely on statx() to make them happy.
-> >
-> ...
-> > +#ifdef __NR_statx
-> > +static __attribute__((unused))
-> > +int sys_stat(const char *path, struct stat *buf)
-> > +{
-> > +     struct statx stat;
->
-> If seems wrong that 'stat' has type 'struct statx'
-> and 'buf' type 'struct stat *'.
->
-> Maybe s/stat./statx./ and s/buf->/stat->/ ?
->
+On Wed, Feb 08, 2023 at 03:25:53PM -0800, Kees Cook wrote:
+> Clang can do some aggressive inlining, which provides it with greater
+> visibility into the sizes of various objects that are passed into
+> helpers. Specifically, compare_netdev_and_ip() can see through the type
+> given to the "sa" argument, which means it can generate code for "struct
+> sockaddr_in" that would have been passed to ipv6_addr_cmp() (that expects
+> to operate on the larger "struct sockaddr_in6"), which would result in a
+> compile-time buffer overflow condition detected by memcmp(). Logically,
+> this state isn't reachable due to the sa_family assignment two callers
+> above and the check in compare_netdev_and_ip(). Instead, provide a
+> compile-time check on sizes so the size-mismatched code will be elided
+> when inlining. Avoids the following warning from Clang:
+> 
+> ../include/linux/fortify-string.h:652:4: error: call to '__read_overflow' declared with 'error' attribute: detected read beyond size of object (1st parameter)
+>                         __read_overflow();
+>                         ^
+> note: In function 'cma_netevent_callback'
+> note:   which inlined function 'node_from_ndev_ip'
+> 1 error generated.
+> 
+> When the underlying object size is not known (e.g. with GCC and older
+> Clang), the result of __builtin_object_size() is SIZE_MAX, which
+> will also compile away, leaving the code as it was originally.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1687
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: Mark Zhang <markzhang@nvidia.com>
+> Cc: Patrisious Haddad <phaddad@nvidia.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: linux-rdma@vger.kernel.org
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Hi, David,
+Tested-by: Nathan Chancellor <nathan@kernel.org> # build
 
-Yes, it looks better to use 'struct statx statx'. Thank you!
-I'd like to keep 'buf' to be consistent with the stat() below.
-int stat(const char *path, struct stat *buf);
+Should this have a 'Cc: stable@vger.kernel.org', since we see this in
+6.1?
 
-Thanks,
-Feiyang
-
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
->
+> ---
+>  drivers/infiniband/core/cma.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+> index 1d2bff91d78b..308155937713 100644
+> --- a/drivers/infiniband/core/cma.c
+> +++ b/drivers/infiniband/core/cma.c
+> @@ -479,13 +479,20 @@ static int compare_netdev_and_ip(int ifindex_a, struct sockaddr *sa,
+>  	if (sa->sa_family != sb->sa_family)
+>  		return sa->sa_family - sb->sa_family;
+>  
+> -	if (sa->sa_family == AF_INET)
+> -		return memcmp((char *)&((struct sockaddr_in *)sa)->sin_addr,
+> -			      (char *)&((struct sockaddr_in *)sb)->sin_addr,
+> +	if (sa->sa_family == AF_INET &&
+> +	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in)) {
+> +		return memcmp(&((struct sockaddr_in *)sa)->sin_addr,
+> +			      &((struct sockaddr_in *)sb)->sin_addr,
+>  			      sizeof(((struct sockaddr_in *)sa)->sin_addr));
+> +	}
+> +
+> +	if (sa->sa_family == AF_INET6 &&
+> +	    __builtin_object_size(sa, 0) >= sizeof(struct sockaddr_in6)) {
+> +		return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
+> +				     &((struct sockaddr_in6 *)sb)->sin6_addr);
+> +	}
+>  
+> -	return ipv6_addr_cmp(&((struct sockaddr_in6 *)sa)->sin6_addr,
+> -			     &((struct sockaddr_in6 *)sb)->sin6_addr);
+> +	return -1;
+>  }
+>  
+>  static int cma_add_id_to_tree(struct rdma_id_private *node_id_priv)
+> -- 
+> 2.34.1
+> 
