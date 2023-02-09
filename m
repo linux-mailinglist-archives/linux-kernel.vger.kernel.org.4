@@ -2,200 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A3468FC3A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 01:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC0D68FC3F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 01:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjBIAyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 19:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S230406AbjBIAzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 19:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjBIAyS (ORCPT
+        with ESMTP id S229582AbjBIAzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 19:54:18 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC49222FF
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 16:54:16 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id q4so542368ybu.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 16:54:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HA3fnt3w/WkldBLqUixquvviOvTsBAQjIdHUUjb56M0=;
-        b=sBenSKQ7FVZf9KJQB47/1z3eFo5uPqCWNUETrOZxLzOJtcLUPNVIZaxX+GVCS8uFqv
-         iwRXjPWW2bB7JalEf8dr+4OdWdJW799KnVv5wR3Re1phRxVIyLFcHw8DCeqrZtz8wpVy
-         XIQufLeg9mKvB3udTuoMH/+0CfFZbJdy/ZyhssQ4fqr17mtOH/3uHYHZZM4TwzEBnk1c
-         ETarg2Djh7AnXFAKIXF7pYXNcN+vvceHsCfOFtij66RhDNrLMs1FODaLt+CFqesZPH49
-         wQnMqvfxtvRKT7lRAJvvjBs1NxndyUcfpXc7Mg5lNSVf9hg2QrUDTpTa+8R2UV3OhcvX
-         IYYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HA3fnt3w/WkldBLqUixquvviOvTsBAQjIdHUUjb56M0=;
-        b=rn6ia1s9B8r6VePoStOOJfmR4s+AlLYjwofBVtzHtwLioVEA/iHrZG0K2oTZbDDi0g
-         2MsLpMByrfSZcZWQ3/pr/MiPlxkvzYSzdPdyq+kYmJu/Qo1bQc1TkNxb7VODQIwRDEQc
-         ernHt9qgslZVTENL1QZ+AJqK5Kg4ka79vbzUnlZQf50lSpSZmDrEE9jNe0oq8WuUUP/3
-         Vt3EwXaVptk0TszuZedcLBrny6ITU1xnNWKhLSbYGhMx2vjhBanUd0JLiZb/BlJpzyLH
-         c3R98ZcmBoEpYjwQs8KblTPGLuT1Ly/A8nCpAGgGSAysCbUvUQTkQZsjK36RGJIJnNBC
-         62jA==
-X-Gm-Message-State: AO0yUKWqKFxkJZPyoVJXPSWP9ROre6iLZ6rYCJUNrTtrebFixsm8fIoQ
-        TDkwKbC6z2TT5AdNSfanvRlCed0/oHorQ7NosCha
-X-Google-Smtp-Source: AK7set9ZNH349+n5tqrkBZ3G/4EXSKW8hwOrbG7RXJtrVdxo+rv0LsXkOz6w3KeCd3ROkx+iQMrf5PG0n+BJqgs4m/M=
-X-Received: by 2002:a5b:b87:0:b0:8b6:6ae:3bbe with SMTP id l7-20020a5b0b87000000b008b606ae3bbemr1101327ybq.340.1675904055502;
- Wed, 08 Feb 2023 16:54:15 -0800 (PST)
+        Wed, 8 Feb 2023 19:55:46 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9129E12061;
+        Wed,  8 Feb 2023 16:55:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=0rx7+t7RyydnwPzM/awlKyITvtCRFlGUQ/cgZmAC0hg=; b=chpV883E07QArx4l/XJYALIjsH
+        n0YMK2nxrKP2b2wXBsH3Qx7bO3yKNHBhzsYu8rBP8Qe8zHpGT9jlvJ9Amx23awQTrjqYljU9XkfTp
+        iRao/YkLmMRZEo0Htir4l9rTUNfNTE0CyIfm/OxNkrkkXh3zuJ9clM6txyz/RX0J4if8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pPvDw-004S7u-So; Thu, 09 Feb 2023 01:55:40 +0100
+Date:   Thu, 9 Feb 2023 01:55:40 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc:     Wei Fang <wei.fang@nxp.com>, Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: fec: Defer probe if other FEC has deferred MDIO
+Message-ID: <Y+REjDdjHkv4g45o@lunn.ch>
+References: <20230208101821.871269-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-References: <20211120112738.45980-1-laoar.shao@gmail.com> <20211120112738.45980-8-laoar.shao@gmail.com>
- <Y+QaZtz55LIirsUO@google.com> <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+nf8MmRWP+naWwZEKBFOYr7QkZugETgAVfjKcEVxmOtg@mail.gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 8 Feb 2023 16:54:03 -0800
-Message-ID: <CANDhNCo_=Q3pWc7h=ruGyHdRVGpsMKRY=C2AtZgLDwtGzRz8Kw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded 16
- with TASK_COMM_LEN
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Qais Yousef <qyousef@google.com>,
-        Daniele Di Proietto <ddiproietto@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230208101821.871269-1-alexander.sverdlin@siemens.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 4:11 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Feb 8, 2023 at 2:01 PM John Stultz <jstultz@google.com> wrote:
-> >
-> > On Sat, Nov 20, 2021 at 11:27:38AM +0000, Yafang Shao wrote:
-> > > As the sched:sched_switch tracepoint args are derived from the kernel,
-> > > we'd better make it same with the kernel. So the macro TASK_COMM_LEN is
-> > > converted to type enum, then all the BPF programs can get it through BTF.
-> > >
-> > > The BPF program which wants to use TASK_COMM_LEN should include the header
-> > > vmlinux.h. Regarding the test_stacktrace_map and test_tracepoint, as the
-> > > type defined in linux/bpf.h are also defined in vmlinux.h, so we don't
-> > > need to include linux/bpf.h again.
-> > >
-> > > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Acked-by: David Hildenbrand <david@redhat.com>
-> > > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > > Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> > > Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > > Cc: Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > Cc: Matthew Wilcox <willy@infradead.org>
-> > > Cc: David Hildenbrand <david@redhat.com>
-> > > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > > Cc: Kees Cook <keescook@chromium.org>
-> > > Cc: Petr Mladek <pmladek@suse.com>
-> > > ---
-> > >  include/linux/sched.h                                   | 9 +++++++--
-> > >  tools/testing/selftests/bpf/progs/test_stacktrace_map.c | 6 +++---
-> > >  tools/testing/selftests/bpf/progs/test_tracepoint.c     | 6 +++---
-> > >  3 files changed, 13 insertions(+), 8 deletions(-)
-> >
-> > Hey all,
-> >   I know this is a little late, but I recently got a report that
-> > this change was causiing older versions of perfetto to stop
-> > working.
-> >
-> > Apparently newer versions of perfetto has worked around this
-> > via the following changes:
-> >   https://android.googlesource.com/platform/external/perfetto/+/c717c93131b1b6e3705a11092a70ac47c78b731d%5E%21/
-> >   https://android.googlesource.com/platform/external/perfetto/+/160a504ad5c91a227e55f84d3e5d3fe22af7c2bb%5E%21/
-> >
-> > But for older versions of perfetto, reverting upstream commit
-> > 3087c61ed2c4 ("tools/testing/selftests/bpf: replace open-coded 16
-> > with TASK_COMM_LEN") is necessary to get it back to working.
-> >
-> > I haven't dug very far into the details, and obviously this doesn't
-> > break with the updated perfetto, but from a high level this does
-> > seem to be a breaking-userland regression.
-> >
-> > So I wanted to reach out to see if there was more context for this
-> > breakage? I don't want to raise a unnecessary stink if this was
-> > an unfortuante but forced situation.
->
-> Let me understand what you're saying...
->
-> The commit 3087c61ed2c4 did
->
-> -/* Task command name length: */
-> -#define TASK_COMM_LEN                  16
-> +/*
-> + * Define the task command name length as enum, then it can be visible to
-> + * BPF programs.
-> + */
-> +enum {
-> +       TASK_COMM_LEN = 16,
-> +};
->
->
-> and that caused:
->
-> cat /sys/kernel/debug/tracing/events/task/task_newtask/format
->
-> to print
-> field:char comm[TASK_COMM_LEN];    offset:12;    size:16;    signed:0;
-> instead of
-> field:char comm[16];    offset:12;    size:16;    signed:0;
->
-> so the ftrace parsing android tracing tool had to do:
->
-> -  if (Match(type_and_name.c_str(), R"(char [a-zA-Z_]+\[[0-9]+\])")) {
-> +  if (Match(type_and_name.c_str(),
-> +            R"(char [a-zA-Z_][a-zA-Z_0-9]*\[[a-zA-Z_0-9]+\])")) {
->
-> to workaround this change.
-> Right?
+> -	if ((fep->quirks & FEC_QUIRK_SINGLE_MDIO) && fep->dev_id > 0) {
+> +	if (fep->quirks & FEC_QUIRK_SINGLE_MDIO) {
+>  		/* fec1 uses fec0 mii_bus */
+>  		if (mii_cnt && fec0_mii_bus) {
+>  			fep->mii_bus = fec0_mii_bus;
+>  			mii_cnt++;
+>  			return 0;
+>  		}
+> -		return -ENOENT;
 
-I believe so.
+Could you not add an else clause here? return -EPROBE_DEFFER?
 
-> And what are you proposing?
+Basically, if fec0 has not probed, deffer the probing of fec1?
 
-I'm not proposing anything. I was just wanting to understand more
-context around this, as it outwardly appears to be a user-breaking
-change, and that is usually not done, so I figured it was an issue
-worth raising.
-
-If the debug/tracing/*/format output is in the murky not-really-abi
-space, that's fine, but I wanted to know if this was understood as
-something that may require userland updates or if this was a
-unexpected side-effect.
-
-thanks
--john
+	   Andrew
