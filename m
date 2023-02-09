@@ -2,147 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406226904BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755286904BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 11:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjBIK0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 05:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S230168AbjBIK1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 05:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjBIK0C (ORCPT
+        with ESMTP id S230172AbjBIK1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 05:26:02 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7AE6813B
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 02:25:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675938340; x=1707474340;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=E/IG1pj67wfL2Tp862S2iUmP0nFCNZbLwNz0hzV5n8w=;
-  b=m/qk1gA1z4pENPPunt7glkZiui4SF/mMY2Lj6oFjI/zAhQXrmUeQ9vGd
-   AcKKhD/kjyabZPw96m1asP0mpRypQE6Am95rF369vmJ5AHJAgb/L4Pybp
-   MjcX7zobcnMzRHNnNqCQhH1BVqJfZBj8AEKsEPKA/mNOVoN7MvKtXkoU8
-   O9w4be/6WjXOG7x4wnk0zaSjh3nBEKBlLa75TKtBBrVWR2CLUkR2taly8
-   NgocJRAdyRYSMbUVuDj4bXSqh5MTrZAkdj1cvkc0SyLMa2hUgVAXMfYOn
-   It+6uMXoa/ogmvZlRlVP+OeP1wLpeqCINiSkynNdMT7OslI6qV6ho4F2B
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="318071726"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="318071726"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 02:25:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="996490068"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="996490068"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Feb 2023 02:25:37 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQ47U-000506-1m;
-        Thu, 09 Feb 2023 10:25:36 +0000
-Date:   Thu, 9 Feb 2023 18:25:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     kyrie wu <kyrie.wu@mediatek.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        irui wang <irui.wang@mediatek.com>
-Subject: drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1474:38:
- warning: unused variable 'mt8173_jpeg_drvdata'
-Message-ID: <202302091806.7NmqzYWj-lkp@intel.com>
+        Thu, 9 Feb 2023 05:27:35 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A59968132;
+        Thu,  9 Feb 2023 02:27:18 -0800 (PST)
+Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: tanureal)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B7A0A66020BA;
+        Thu,  9 Feb 2023 10:26:38 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675938399;
+        bh=eHmPGXHNcPrTmMdQR0QDsjblTVBOeO8w5mDS6XIEA3U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VuOEMjMfqMpDKVUM6/ks3zjKObkU0jXs2lXmRc3TeIVqVZeglz7WfHD4lD7cKTOg0
+         KAdg/X01ricApYBBMR6MxIGqM7pMDTxlY8hh2nCFXiPH/HHKzKRx1Iin1HBHZejmH1
+         v31bD+G2zX1AIsBZLvmUAAwhLWzbGC6P+YV5y/ow0V3MPbnCc/ha28N9egpUW0Ec4i
+         +SW3LTU8sIB/bHcjM4E4kpceaaK4R3lCJBm/o0W7UDky9z0gZsVl13lbydI1EWMfjF
+         3KHfJsH3WMBgvspGKYf/WmLmaLEDtC4qGM43ZeBDR4qFPYplxQQTR6QKXWNPJ9o1/P
+         PdMjR1aIdzZFw==
+Message-ID: <a6601fb7-284b-f51a-25a5-09b7733fd5f6@collabora.com>
+Date:   Thu, 9 Feb 2023 10:26:36 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH v4 4/4] ASoC: cs35l41: Document CS35l41 shared boost
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230209083726.1337150-1-lucas.tanure@collabora.com>
+ <20230209083726.1337150-5-lucas.tanure@collabora.com>
+ <9b20bdb2-64e0-4888-e8df-fdf1b021c445@linaro.org>
+Content-Language: en-US
+From:   Lucas Tanure <lucas.tanure@collabora.com>
+In-Reply-To: <9b20bdb2-64e0-4888-e8df-fdf1b021c445@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi kyrie,
+On 09-02-2023 08:53, Krzysztof Kozlowski wrote:
+> On 09/02/2023 09:37, Lucas Tanure wrote:
+>> Describe the properties used for shared boost configuration.
+>> Based on David Rhodes shared boost patches.
+> 
+> No improvements in subject, I asked twice for it. What does the command,
+> I gave you, print?
+> 
+Should be
+ASoC: dt-bindings: cirrus,cs35l41: Document CS35l41 shared boost
 
-FYI, the error/warning still remains.
+ok?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: 934e8bccac9542540493a4e5257d6b0db4162478 mtk-jpegenc: support jpegenc multi-hardware
-date:   4 months ago
-config: mips-randconfig-r005-20230209 (https://download.01.org/0day-ci/archive/20230209/202302091806.7NmqzYWj-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project db0e6591612b53910a1b366863348bdb9d7d2fb1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mipsel-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=934e8bccac9542540493a4e5257d6b0db4162478
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 934e8bccac9542540493a4e5257d6b0db4162478
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/platform/mediatek/jpeg/ drivers/soc/renesas/
+>>
+> With fixed subject:
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Best regards,
+> Krzysztof
+> 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302091806.7NmqzYWj-lkp@intel.com
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1474:38: warning: unused variable 'mt8173_jpeg_drvdata' [-Wunused-const-variable]
-   static const struct mtk_jpeg_variant mt8173_jpeg_drvdata = {
-                                        ^
->> drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c:1489:38: warning: unused variable 'mtk_jpeg_drvdata' [-Wunused-const-variable]
-   static const struct mtk_jpeg_variant mtk_jpeg_drvdata = {
-                                        ^
-   2 warnings generated.
-
-
-vim +/mt8173_jpeg_drvdata +1474 drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-
-b2f0d2724ba477 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Rick Chang 2016-12-14  1473  
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14 @1474  static const struct mtk_jpeg_variant mt8173_jpeg_drvdata = {
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1475  	.clks = mt8173_jpeg_dec_clocks,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1476  	.num_clks = ARRAY_SIZE(mt8173_jpeg_dec_clocks),
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1477  	.formats = mtk_jpeg_dec_formats,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1478  	.num_formats = MTK_JPEG_DEC_NUM_FORMATS,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1479  	.qops = &mtk_jpeg_dec_qops,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1480  	.irq_handler = mtk_jpeg_dec_irq,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1481  	.hw_reset = mtk_jpeg_dec_reset,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1482  	.m2m_ops = &mtk_jpeg_dec_m2m_ops,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1483  	.dev_name = "mtk-jpeg-dec",
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1484  	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1485  	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1486  	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1487  };
-b4a82f5d15102a drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1488  
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14 @1489  static const struct mtk_jpeg_variant mtk_jpeg_drvdata = {
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1490  	.clks = mtk_jpeg_clocks,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1491  	.num_clks = ARRAY_SIZE(mtk_jpeg_clocks),
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1492  	.formats = mtk_jpeg_enc_formats,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1493  	.num_formats = MTK_JPEG_ENC_NUM_FORMATS,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1494  	.qops = &mtk_jpeg_enc_qops,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1495  	.irq_handler = mtk_jpeg_enc_irq,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1496  	.hw_reset = mtk_jpeg_enc_reset,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1497  	.m2m_ops = &mtk_jpeg_enc_m2m_ops,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1498  	.dev_name = "mtk-jpeg-enc",
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1499  	.ioctl_ops = &mtk_jpeg_enc_ioctl_ops,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1500  	.out_q_default_fourcc = V4L2_PIX_FMT_YUYV,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1501  	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1502  };
-45f13a57d81344 drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c Xia Jiang  2020-08-14  1503  
-
-:::::: The code at line 1474 was first introduced by commit
-:::::: b4a82f5d15102ade6134c8cc4bbc8ccef1f4a7dc media: platform: Using the variant structure to contain the varability between dec and enc
-
-:::::: TO: Xia Jiang <xia.jiang@mediatek.com>
-:::::: CC: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
