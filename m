@@ -2,161 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4365F690F09
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 18:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6CB690F10
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 18:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjBIRSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 12:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S229635AbjBIRU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 12:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjBIRSR (ORCPT
+        with ESMTP id S229535AbjBIRUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 12:18:17 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3450866ED1
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 09:18:14 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id a8-20020a17090a6d8800b002336b48f653so920239pjk.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 09:18:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t4gplrw9K/LNmXo2eFqFFcRnUsvrIP0/iiac+RPCSgM=;
-        b=hsZBy6lYEKKD//uOR6CyCFawmqreCyDqxhsMHMz1/yUaWYmTCt8UpYki8WhS336Yb3
-         DRRF5Ze/OXRsVML7ObwhverPLTU1EOIZPSmixobKwRoXKu7y7pvLrADdRRJXDpoANsSU
-         j/cclOUaIP6RxVnn2zdiZzZo15G2UEvlL3uss14FrzB0xfCCW1oL8/QHt8xLXnfyjKUt
-         B+6FMENvmHHRxmDSkb4l3EJPZUF2f35PAKtXRFUVpwwviVP2bgborXWySxGNO5jTrSK2
-         7/HycEehBErYPuz+GuQo6WfUkxc4yxJgz81SizZEO1Z29RSCcLllwYHUoV4sdFfuTpRr
-         sHAw==
+        Thu, 9 Feb 2023 12:20:25 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEE266EE2;
+        Thu,  9 Feb 2023 09:20:22 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id jg8so8493773ejc.6;
+        Thu, 09 Feb 2023 09:20:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t4gplrw9K/LNmXo2eFqFFcRnUsvrIP0/iiac+RPCSgM=;
-        b=OWDG2KT9yxySqsVsxUd48+W7h03VtMuFewFf9PG5VCqiRsWBynAfBf8rk5+bJAyyMD
-         n6kILEzXoKBkw8D0gehe64gSjfM/Y/4cL9lwijBKl2hOOQyjO2y9QdiZzqUG6BfmX+af
-         olChsKlFSXNdDk3qKpoj8Y9OFxdJzBqQNz9Ejk38FdYYY0DUwyLfVKJKJF7tCb6GrhsB
-         7CrxweyJgE7SkrcZ/G2E9Vk22Id1VVtMeweNwnibMSno/B+1ycFpSqLb0rJpAvV3hx6u
-         RYCWV9XlaB17HiQHi5haszWh91wZrpsbWwpxgjusoM/mmnInwCq8me8n1Co7oe19zCM2
-         r9XQ==
-X-Gm-Message-State: AO0yUKU8E4VQ1UFh+evFOetAIGlcNi1/1HFPxMY7/WuqoXH5DDA4Dntb
-        UDz0IQL5WGy+Ykr6lT15KhHYXWY8FfLPojtIH3E=
-X-Google-Smtp-Source: AK7set/BAFjDMlvMSR9e+or/RlpSPnPCUcKSfPCphUxNYx8VpNpY2KlPcv6C6t1SbT8AJ53e39HlMw==
-X-Received: by 2002:a17:902:d58a:b0:192:8a1e:9bc7 with SMTP id k10-20020a170902d58a00b001928a1e9bc7mr197909plh.0.1675963093223;
-        Thu, 09 Feb 2023 09:18:13 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id gn24-20020a17090ac79800b0023114357761sm1613600pjb.40.2023.02.09.09.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 09:18:11 -0800 (PST)
-Date:   Thu, 9 Feb 2023 17:18:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Wang, Lei" <lei4.wang@intel.com>
-Cc:     Yian Chen <yian.chen@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ravi Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sohil Mehta <sohil.mehta@intel.com>,
-        Paul Lai <paul.c.lai@intel.com>
-Subject: Re: [PATCH 7/7] x86/kvm: Expose LASS feature to VM guest
-Message-ID: <Y+Uq0JOEmmdI0YwA@google.com>
-References: <20230110055204.3227669-1-yian.chen@intel.com>
- <20230110055204.3227669-8-yian.chen@intel.com>
- <faac69f3-3885-8cab-ea33-49922d7a6b6d@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SG57mmjbhYM9BoWm4xrmekyB95oyr1WzNADHth4u0ww=;
+        b=hy3E1ccZY+Es6JJlmSTJJY69CBsn21AsA6GXKACqh1Pp3PRtlvFNMfyUU0bepbc1l+
+         IrvNwWyTepiLerYFcfhjBW04e7kViyRJqDDJZqUfA2MqfJae80yXI3pgQUnMALnRSL1a
+         7ZxUZiRScM+oswVrhgYSeMt6RZlPgvWSu6G5CAGKSXb7G6NdgUu9uKj1jO/0RuCVaRDr
+         NY2UJsGMoecRp0/yEuI19YpAu3TPRFLIn+QtX0hpzGpi6y9zzj5o4gT4X/QYtZJuqUnm
+         YEODh5tcLtoj8xwVJNSDKsli2t6ItQfXbk1Ocea3X4JIAtvPTHDtXwJbHqQETY2XGt6O
+         nVFQ==
+X-Gm-Message-State: AO0yUKWGZ9z51ymmsCRdoKj6eHmW4cRKKxJhE74URJc1T0NB0kiewrYV
+        0mEtF/V+coUSLCabNJ9xT27pupWpOTGgSCQq/wbXXFSI
+X-Google-Smtp-Source: AK7set9/epi6aGjnzUjZBaflcdyFzbY1I678+DIpPRrxqACZtfk0BDo3xPUOCgcyTHrlYNPj4+/So2NAQebIe77PfAY=
+X-Received: by 2002:a17:906:ce2e:b0:87f:575a:9b67 with SMTP id
+ sd14-20020a170906ce2e00b0087f575a9b67mr2855368ejb.274.1675963220768; Thu, 09
+ Feb 2023 09:20:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <faac69f3-3885-8cab-ea33-49922d7a6b6d@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230131130041.629-1-petr.pavlu@suse.com>
+In-Reply-To: <20230131130041.629-1-petr.pavlu@suse.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Feb 2023 18:20:09 +0100
+Message-ID: <CAJZ5v0gptfbwPzXCosXKb3H3Hqu0p_PiPORA_RhGcJvteVBnYw@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: cpufreq: use a platform device to load ACPI PPC and
+ PCC drivers
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        pmladek@suse.com, mcgrof@kernel.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023, Wang, Lei wrote:
-> Could you also CC the KVM mailing list (kvm@vger.kernel.org) for KVM guys to review?
+On Tue, Jan 31, 2023 at 2:01 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>
+> The acpi-cpufreq and pcc-cpufreq drivers are loaded through per-CPU
+> module aliases. This can result in many unnecessary load requests during
+> boot if another frequency module, such as intel_pstate, is already
+> active. For instance, on a typical Intel system, one can observe that
+> udev makes 2x#CPUs attempts to insert acpi_cpufreq and 1x#CPUs attempts
+> for pcc_cpufreq. All these tries then fail if another frequency module
+> is already registered.
 
-As Sohil pointed out[*], use scripts/get_maintainer.pl.  Cc'ing kvm@ on random
-bits of the series isn't sufficient, e.g. I completely missed Sohil's Cc on the
-cover letter.  For me personally at least, if I'm Cc'd on one patch then I want
-to be Cc'd on all patches.
+Right, which is unnecessary overhead.
 
-That's somewhat of a moot point for the future of LASS enabling, because the KVM
-enabling needs to be a separate series.
+> Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
+> interface defined by ACPI. Allowed performance states and parameters
+> must be same for each CPU.
 
-[*] https://lore.kernel.org/all/66857084-fbed-3e9a-ed2c-7167010cbad9@intel.com
+This is an assumption made by the code in those drivers, the
+specification doesn't actually require this IIRC.
 
-> On 1/10/2023 1:52 PM, Yian Chen wrote:
-> > From: Paul Lai <paul.c.lai@intel.com>
-> > 
-> > Expose LASS feature which is defined in the CPUID.7.1.EAX
-> > bit and enabled via the CR4 bit for VM guest.
-> > 
-> > Signed-off-by: Paul Lai <paul.c.lai@intel.com>
-> > Signed-off-by: Yian Chen <yian.chen@intel.com>
-> > Reviewed-by: Tony Luck <tony.luck@intel.com>
+> This makes it possible to model these
+> interfaces as platform devices.
+>
+> The patch extends the ACPI parsing logic to check the ACPI namespace if
+> the PPC or PCC interface is present and creates a virtual platform
+> device for each if it is available. The acpi-cpufreq and pcc-cpufreq
+> drivers are then updated to map to these devices.
+>
+> This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
+> boot and only if a given interface is available in the firmware.
 
-So I'm pretty sure this "review" was to satisfy Intel's requirements to never post
-anything to x86@ that wasn't reviewed internally by one of a set of select
-individuals.  Please drop that requirement for KVM x86, I truly think it's doing
-more harm than good.
+This is clever, but will it always work?
 
-This is laughably inadqueate "enabling".  This has architecturally visible effects
-on _all_ guest virtual/linear accesses.  That statement alone should set off alarms
-left and right that simply advertising support via KVM_GET_SUPPORTED_CPUID and
-marking the CR4 bit as not unconditionally reserved is insufficient.
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>  drivers/acpi/Makefile          |  1 +
+>  drivers/acpi/acpi_cpufreq.c    | 49 ++++++++++++++++++++++++++++++++++
+>  drivers/acpi/bus.c             |  1 +
+>  drivers/acpi/internal.h        |  2 ++
+>  drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++++++++------------
+>  drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++++++++-------
+>  6 files changed, 99 insertions(+), 27 deletions(-)
+>  create mode 100644 drivers/acpi/acpi_cpufreq.c
+>
+> diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+> index feb36c0b9446..880db1082c3e 100644
+> --- a/drivers/acpi/Makefile
+> +++ b/drivers/acpi/Makefile
+> @@ -57,6 +57,7 @@ acpi-y                                += evged.o
+>  acpi-y                         += sysfs.o
+>  acpi-y                         += property.o
+>  acpi-$(CONFIG_X86)             += acpi_cmos_rtc.o
+> +acpi-$(CONFIG_X86)             += acpi_cpufreq.o
+>  acpi-$(CONFIG_X86)             += x86/apple.o
+>  acpi-$(CONFIG_X86)             += x86/utils.o
+>  acpi-$(CONFIG_X86)             += x86/s2idle.o
+> diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
+> new file mode 100644
+> index 000000000000..7cf243c67475
+> --- /dev/null
+> +++ b/drivers/acpi/acpi_cpufreq.c
+> @@ -0,0 +1,49 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Registration of platform devices for ACPI Processor Performance Control and
+> + * Processor Clocking Control.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "internal.h"
+> +
+> +static void __init cpufreq_add_device(const char *name)
+> +{
+> +       struct platform_device *pdev;
+> +
+> +       pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
+> +                                              0);
+> +       if (IS_ERR(pdev))
+> +               pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
+> +}
+> +
+> +static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
+> +                                        void *context, void **return_value)
+> +{
+> +       bool *pct = context;
+> +
+> +       /* Check if the first CPU has _PCT. The data must be same for all. */
+> +       *pct = acpi_has_method(handle, "_PCT");
+> +       return AE_CTRL_TERMINATE;
+> +}
+> +
+> +void __init acpi_cpufreq_init(void)
+> +{
+> +       acpi_status status;
+> +       acpi_handle handle;
+> +       bool pct = false;
+> +
+> +       status = acpi_get_handle(NULL, "\\_SB", &handle);
+> +       if (ACPI_FAILURE(status))
+> +               return;
+> +
+> +       acpi_walk_namespace(ACPI_TYPE_PROCESSOR, ACPI_ROOT_OBJECT,
+> +                           ACPI_UINT32_MAX, acpi_pct_match, NULL, &pct, NULL);
 
-My recommendation is to look at the touchpoints for X86_CR4_LA57 and follow the
-various breadcrumbs to identify what all needs to be done to properly support LASS.
+Well, one more full ACPI Namespace walk at init time.
 
-More importantly, I want tests.  There's _zero_ chance this was reasonably tested.
-E.g. the most basic negative testcase of attempting to set X86_CR4_LASS on a host
-without LASS is missed (see __cr4_reserved_bits()).
+Also, this only covers processor objects and what about processor
+device objects?
 
-I will not so much as glance at future versions of LASS enabling if there aren't
-testscases in KVM-unit-tests and/or selftests that give me a high level of confidence
-that KVM correctly handles the various edge cases, e.g. that KVM correctly handles
-an implicit supervisor access from user mode while in the emulator.
-
-That goes a for all new hardware enabling: no tests, no review.  Please relay that
-message to managers, leadership, and everyone working on KVM.  Ample warning has
-been given that new KVM features need to be accompanied by tests.
-
-> > ---
-> >  arch/x86/include/asm/kvm_host.h | 3 ++-
-> >  arch/x86/kvm/cpuid.c            | 2 +-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index f35f1ff4427b..bd39f45e9b5a 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -125,7 +125,8 @@
-> >  			  | X86_CR4_PGE | X86_CR4_PCE | X86_CR4_OSFXSR | X86_CR4_PCIDE \
-> >  			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_FSGSBASE \
-> >  			  | X86_CR4_OSXMMEXCPT | X86_CR4_LA57 | X86_CR4_VMXE \
-> > -			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP))
-> > +			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP \
-> > +			  | X86_CR4_LASS))
-> >  
-> >  #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
-> >  
-> > diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> > index b14653b61470..e0f53f85f5ae 100644
-> > --- a/arch/x86/kvm/cpuid.c
-> > +++ b/arch/x86/kvm/cpuid.c
-> > @@ -664,7 +664,7 @@ void kvm_set_cpu_caps(void)
-> >  
-> >  	kvm_cpu_cap_mask(CPUID_7_1_EAX,
-> >  		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) | F(AMX_FP16) |
-> > -		F(AVX_IFMA)
-> > +		F(AVX_IFMA) | F(LASS)
-> >  	);
-> >  
-> >  	kvm_cpu_cap_init_kvm_defined(CPUID_7_1_EDX,
+> +       if (pct)
+> +               cpufreq_add_device("acpi-cpufreq");
+> +
+> +       if (acpi_has_method(handle, "PCCH"))
+> +               cpufreq_add_device("pcc-cpufreq");
+> +}
+> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+> index 0c05ccde1f7a..f1559e26d5ff 100644
+> --- a/drivers/acpi/bus.c
+> +++ b/drivers/acpi/bus.c
+> @@ -1428,6 +1428,7 @@ static int __init acpi_init(void)
+>         acpi_viot_init();
+>         acpi_agdi_init();
+>         acpi_apmt_init();
+> +       acpi_cpufreq_init();
+>         return 0;
+>  }
+>
+> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+> index ec584442fb29..c9b1a5f689fa 100644
+> --- a/drivers/acpi/internal.h
+> +++ b/drivers/acpi/internal.h
+> @@ -157,8 +157,10 @@ static inline void acpi_early_processor_set_pdc(void) {}
+>
+>  #ifdef CONFIG_X86
+>  void acpi_early_processor_osc(void);
+> +void acpi_cpufreq_init(void);
+>  #else
+>  static inline void acpi_early_processor_osc(void) {}
+> +static inline void acpi_cpufreq_init(void) {}
+>  #endif
+>
+>  /* --------------------------------------------------------------------------
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index 78adfb2ffff6..e1a5384cf21c 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -965,7 +965,7 @@ static void __init acpi_cpufreq_boost_init(void)
+>         acpi_cpufreq_driver.boost_enabled = boost_state(0);
+>  }
+>
+> -static int __init acpi_cpufreq_init(void)
+> +static int __init acpi_cpufreq_probe(struct platform_device *pdev)
+>  {
+>         int ret;
+>
+> @@ -1010,13 +1010,32 @@ static int __init acpi_cpufreq_init(void)
+>         return ret;
+>  }
+>
+> -static void __exit acpi_cpufreq_exit(void)
+> +static int acpi_cpufreq_remove(struct platform_device *pdev)
+>  {
+>         pr_debug("%s\n", __func__);
+>
+>         cpufreq_unregister_driver(&acpi_cpufreq_driver);
+>
+>         free_acpi_perf_data();
+> +
+> +       return 0;
+> +}
+> +
+> +static struct platform_driver acpi_cpufreq_platdrv = {
+> +       .driver = {
+> +               .name   = "acpi-cpufreq",
+> +       },
+> +       .remove         = acpi_cpufreq_remove,
+> +};
+> +
+> +static int __init acpi_cpufreq_init(void)
+> +{
+> +       return platform_driver_probe(&acpi_cpufreq_platdrv, acpi_cpufreq_probe);
+> +}
+> +
+> +static void __exit acpi_cpufreq_exit(void)
+> +{
+> +       platform_driver_unregister(&acpi_cpufreq_platdrv);
+>  }
+>
+>  module_param(acpi_pstate_strict, uint, 0644);
+> @@ -1027,18 +1046,4 @@ MODULE_PARM_DESC(acpi_pstate_strict,
+>  late_initcall(acpi_cpufreq_init);
+>  module_exit(acpi_cpufreq_exit);
+>
+> -static const struct x86_cpu_id __maybe_unused acpi_cpufreq_ids[] = {
+> -       X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
+> -       X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
+> -       {}
+> -};
+> -MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
+> -
+> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
+> -       {ACPI_PROCESSOR_OBJECT_HID, },
+> -       {ACPI_PROCESSOR_DEVICE_HID, },
+> -       {},
+> -};
+> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
+> -
+> -MODULE_ALIAS("acpi");
+> +MODULE_ALIAS("platform:acpi-cpufreq");
+> diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
+> index 9f3fc7a073d0..0c362932ca60 100644
+> --- a/drivers/cpufreq/pcc-cpufreq.c
+> +++ b/drivers/cpufreq/pcc-cpufreq.c
+> @@ -384,7 +384,7 @@ static int __init pcc_cpufreq_do_osc(acpi_handle *handle)
+>         return ret;
+>  }
+>
+> -static int __init pcc_cpufreq_probe(void)
+> +static int __init pcc_cpufreq_evaluate(void)
+>  {
+>         acpi_status status;
+>         struct acpi_buffer output = {ACPI_ALLOCATE_BUFFER, NULL};
+> @@ -576,7 +576,7 @@ static struct cpufreq_driver pcc_cpufreq_driver = {
+>         .name = "pcc-cpufreq",
+>  };
+>
+> -static int __init pcc_cpufreq_init(void)
+> +static int __init pcc_cpufreq_probe(struct platform_device *pdev)
+>  {
+>         int ret;
+>
+> @@ -587,9 +587,9 @@ static int __init pcc_cpufreq_init(void)
+>         if (acpi_disabled)
+>                 return -ENODEV;
+>
+> -       ret = pcc_cpufreq_probe();
+> +       ret = pcc_cpufreq_evaluate();
+>         if (ret) {
+> -               pr_debug("pcc_cpufreq_init: PCCH evaluation failed\n");
+> +               pr_debug("pcc_cpufreq_probe: PCCH evaluation failed\n");
+>                 return ret;
+>         }
+>
+> @@ -607,21 +607,35 @@ static int __init pcc_cpufreq_init(void)
+>         return ret;
+>  }
+>
+> -static void __exit pcc_cpufreq_exit(void)
+> +static int pcc_cpufreq_remove(struct platform_device *pdev)
+>  {
+>         cpufreq_unregister_driver(&pcc_cpufreq_driver);
+>
+>         pcc_clear_mapping();
+>
+>         free_percpu(pcc_cpu_info);
+> +
+> +       return 0;
+>  }
+>
+> -static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
+> -       {ACPI_PROCESSOR_OBJECT_HID, },
+> -       {ACPI_PROCESSOR_DEVICE_HID, },
+> -       {},
+> +static struct platform_driver pcc_cpufreq_platdrv = {
+> +       .driver = {
+> +               .name   = "pcc-cpufreq",
+> +       },
+> +       .remove         = pcc_cpufreq_remove,
+>  };
+> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
+> +
+> +static int __init pcc_cpufreq_init(void)
+> +{
+> +       return platform_driver_probe(&pcc_cpufreq_platdrv, pcc_cpufreq_probe);
+> +}
+> +
+> +static void __exit pcc_cpufreq_exit(void)
+> +{
+> +       platform_driver_unregister(&pcc_cpufreq_platdrv);
+> +}
+> +
+> +MODULE_ALIAS("platform:pcc-cpufreq");
+>
+>  MODULE_AUTHOR("Matthew Garrett, Naga Chumbalkar");
+>  MODULE_VERSION(PCC_VERSION);
+> --
