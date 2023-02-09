@@ -2,66 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBD9690B46
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C98690B4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjBIOEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S230449AbjBIOE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjBIOEk (ORCPT
+        with ESMTP id S230407AbjBIOEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:04:40 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECAC2ED6E;
-        Thu,  9 Feb 2023 06:04:36 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id c26so1850701ejz.10;
-        Thu, 09 Feb 2023 06:04:36 -0800 (PST)
+        Thu, 9 Feb 2023 09:04:51 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20444B740;
+        Thu,  9 Feb 2023 06:04:49 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id o18so1884614wrj.3;
+        Thu, 09 Feb 2023 06:04:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uzW3nHnj5fnCOtN0H8my2p/N7+ndBtsZe+8QmFNNzxc=;
-        b=FjgF9QzbI9ls1j3RjwuZ3Eu7DLlUdjb0a1Ja5oiN2IZu3YRwoyPepCiWVDPUZ4mpkC
-         z1bdOCYN4zXLJkkR+yG/x/l6rrhec4TV0zHqZaAqC1uHYtPy9pXmLpyzUFkA9D05gmgU
-         HtGEiF7Ynp9iNThtr67gyBJlCOJ0aNeNHZicIvmUZZDvhMMbyzIPx1faQb+vfbeYXupV
-         e/7yQxEQq/nqSXtb6F0Pu8FeRTTKYmgRIt8hiRxZUx6vl93gwkIEDCIXqwOm7yLCxmZs
-         rNXVyjyyYjHAMZ4CmGy95Q+WBmNo+nFyL6iBEooD4dx0WWUNGsQ+8+x3aVcDgLX6YBXU
-         e/2Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=csJasq92cQmgdlmc30exQ4r04Rw6v9M4O3MDFtr27zU=;
+        b=h0abjL1+Fen4Sbn7cI38Zvq0+OE80BaF47mew5oxIgrZRQ8iAsOkgh9otxAMibYgEz
+         8u26U1vP7VQqtgvUCZEWWeGp8qRomJ1ChZjGmZH5gQuMOUN6Daiqd9Lqm53GXnihOPJV
+         lhTz6YhE5az1B3chsM3RNtqfFJCTNTF+zY2ZY5UeevQ4Bzg7C/Wi3wQYuJeoEZZ6ABjm
+         5eFaz6HXmGSZ8tieqbCPdOCOYWDBuOzxpU25ZOXMmPQCOgW7rTEvLGvFcY9oeFGI30B0
+         Tosn53R2OAEVjjkbwLQp5xhsl49dT8+3Hhl8/V9CzDYXG+09TYtOAaXiemsksIdwIukE
+         C0/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uzW3nHnj5fnCOtN0H8my2p/N7+ndBtsZe+8QmFNNzxc=;
-        b=u/sEGTANBSyB6kQ5LZE6JU35uPsUuhElkEBnlRS6ckaJ1OvzXa8WE/hd2TCMpval3b
-         0OY5R6yXqUMzYVfHypJpIxFzNuSeZcwcNQgqpBniJu/yJMypJeHChWAMxvnbZXPbprIE
-         lSAWuT4RXtuWX6FgWrASpIWSLmUIQVBvbK8h1NYaTXMTNssmcp2JwJe5eCFPflNWPxCh
-         D81cC1rMsKTcd7QxYFWGQvmTwNNOARQtsXuMkBAHSIR1Sh0vuV1idp1tsZMoX4aRErfV
-         5/gCv4jgEy5GVyLxK20X+Kp14r2ta2RRVC6Wh3RAtu117a2BrQq0xIKgw3bkG0EOYXaX
-         tKkg==
-X-Gm-Message-State: AO0yUKW8MS054ojQTJd6enJZLjDGpw4OF6Lsn4HzR1ndOSNpF0grSmNC
-        zWYsN2yXxH2F74w229QNcOdmmeZpLebPzT62mMo=
-X-Google-Smtp-Source: AK7set/PSdiSfBCDekP8ENL67NJDJ1IrBpGhWtaVGMJMrBob/HECbFNRvkTu4UlbkRUzt+8+CArqPrFy/+UGI25NkOc=
-X-Received: by 2002:a17:906:17d2:b0:889:dc4d:e637 with SMTP id
- u18-20020a17090617d200b00889dc4de637mr538111eje.6.1675951474566; Thu, 09 Feb
- 2023 06:04:34 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=csJasq92cQmgdlmc30exQ4r04Rw6v9M4O3MDFtr27zU=;
+        b=NiY+twv24xXZV9Mad7p2x8ojrI3lA0kQvXdG74BwOhszhvnz10wwsFI8ULmzaohiED
+         Wsp0982ScdK1QFU4NGYWNpIDcxnfR2clIAiZuUTbQSfhnx0oOCy9qWSvY6yIrN3fkId5
+         uOcypeb+7b/3lB+PZAAiRrCEBaE86FGBK60o1ewQOQylx4+5uJpPz11Jgg+SOMCAlKdb
+         XVs7OQNMo5ujBaBRBOYOF3QqK7uhN/vKI6rEZ8a81m4T89lKZqaHiY4mhsnOK7aow9ST
+         RJi3/rcQEp7c5zz8SMOgCM1jUxaP2gEByvHu8frGQPOj6ilOBng5TN9BIug21ImaNVJJ
+         6UJw==
+X-Gm-Message-State: AO0yUKXdz/DNV+KtCajObUnHYTzABeUd3AVI+2uFF/Fq74bCOBkz43mN
+        uxFHzrgHkQYB967JQJ1lXQE=
+X-Google-Smtp-Source: AK7set93VTtzQGNnswlfV0x9Tfe09Pc5BJ7Uwp3cFtmFXXGx8IEP5S/ev69y3JbXDBJj/rWyuaOyyQ==
+X-Received: by 2002:adf:f40a:0:b0:2bf:d937:3589 with SMTP id g10-20020adff40a000000b002bfd9373589mr1969372wro.14.1675951488305;
+        Thu, 09 Feb 2023 06:04:48 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id e1-20020a5d5941000000b002c54241b4fesm248687wri.80.2023.02.09.06.04.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 06:04:47 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 9 Feb 2023 15:04:45 +0100
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [PATCH RFC 4/5] selftests/bpf: Add file_build_id test
+Message-ID: <Y+T9fYbGcDDb2RFt@krava>
+References: <20230201135737.800527-1-jolsa@kernel.org>
+ <20230201135737.800527-5-jolsa@kernel.org>
+ <CAEf4BzZ6BVeLV5mG=nB88Ni_8WSYTG0xhFgn-OEM2s6dc14yVA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Thu, 9 Feb 2023 16:04:22 +0200
-Message-ID: <CAEnQRZBZ_GYK4_ZuEy2o++-hoaF4i=CjtRs8kEfhwuYGMCrr4Q@mail.gmail.com>
-Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     andersson@kernel.org, mathieu.poirier@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        arnaud.pouliquen@foss.st.com, daniel.baluta@nxp.com,
-        iuliana.prodan@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZ6BVeLV5mG=nB88Ni_8WSYTG0xhFgn-OEM2s6dc14yVA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,18 +88,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good to me.
+On Wed, Feb 08, 2023 at 03:58:06PM -0800, Andrii Nakryiko wrote:
 
-On Thu, Feb 9, 2023 at 9:09 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
+SNIP
 
-> Peng Fan (6):
->   remoteproc: imx_rproc: correct i.MX8MQ DDR Code alias mapping
->   remoteproc: elf_loader: introduce rproc_elf_find_shdr
->   remoteproc: imx_rproc: add devtype
->   remoteproc: imx_rproc: force pointer type
->   remoteproc: imx_rproc: set Cortex-M stack/pc to TCML
->   remoteproc: imx_rproc: set address of .interrupts section as bootaddr
+> > +
+> > +       /* parent, update child's pid and kick it */
+> > +       skel->bss->pid = child_pid;
+> > +
+> > +       err = file_build_id__attach(skel);
+> > +       if (!ASSERT_OK(err, "file_build_id__attach"))
+> > +               goto out;
+> > +
+> > +       err = write(go[1], &c, 1);
+> > +       if (!ASSERT_EQ(err, 1, "child_write_pipe"))
+> > +               goto out;
+> > +
+> > +       /* wait for child to exit */
+> > +       waitpid(child_pid, &child_status, 0);
+> > +       if (!ASSERT_EQ(WEXITSTATUS(child_status), 0, "child_exit_value"))
+> > +               goto out;
+> > +
+> > +       if (!ASSERT_OK(read_buildid("/bin/bash", &bid), "read_buildid"))
+> 
+> can we use urandom_read for build_id ? And it would also be nice to
+> check that build id fetching works for liburandom_read.so as well.
 
-Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+ok, will be better together with the shared library
+
+SNIP
+
+> > diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> > index 09a16a77bae4..f5557890e383 100644
+> > --- a/tools/testing/selftests/bpf/trace_helpers.c
+> > +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> > @@ -9,6 +9,7 @@
+> >  #include <poll.h>
+> >  #include <unistd.h>
+> >  #include <linux/perf_event.h>
+> > +#include <linux/limits.h>
+> >  #include <sys/mman.h>
+> >  #include "trace_helpers.h"
+> >
+> > @@ -230,3 +231,37 @@ ssize_t get_rel_offset(uintptr_t addr)
+> >         fclose(f);
+> >         return -EINVAL;
+> >  }
+> > +
+> > +int read_buildid(const char *path, char **build_id)
+> > +{
+> > +       char tmp[] = "/tmp/dataXXXXXX";
+> > +       char buf[PATH_MAX + 200];
+> > +       int err, fd;
+> > +       FILE *f;
+> > +
+> > +       fd = mkstemp(tmp);
+> > +       if (fd == -1)
+> > +               return -1;
+> > +       close(fd);
+> > +
+> > +       snprintf(buf, sizeof(buf),
+> > +               "readelf -n %s 2>/dev/null | grep 'Build ID' | awk '{print $3}' > %s",
+> > +               path, tmp);
+> > +
+> 
+> shelling out to readelf for this is unfortunate... maybe let's write a
+> libelf-based helper to fetch build ID from .note section?
+
+right, I was thinking of that, shouldn't be that hard
+and will speed things up
+
+thanks,
+jirka
