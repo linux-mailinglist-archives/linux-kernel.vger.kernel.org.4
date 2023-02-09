@@ -2,118 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1AE6913C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7F76913CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 23:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjBIWyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 17:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S230388AbjBIW4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 17:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjBIWyg (ORCPT
+        with ESMTP id S230310AbjBIW4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 17:54:36 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EC92E831
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 14:54:35 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so3772194pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 14:54:35 -0800 (PST)
+        Thu, 9 Feb 2023 17:56:01 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469865BA4C
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 14:55:59 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id d8so3910554ljq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 14:55:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jdJbx8cUbzo0up0IR5lEzRMt6aSIhKf92x7ZKJB7vEo=;
-        b=G/FznRNObgVkQXLBPohkbpuy+Vo3zgOTN1k9wT6w62lk4JC/1LrHh+T2XUb/NvZmH9
-         sDMIWW/wpMD0wG1f83vfj6CpRRoGaNbzw5buebe/e2B7EBdyQCChWA559Akzg2Kws4D3
-         h6HozfsFOX0WeDdPM0KgCsV5QxDIRIBtbITs5JE7N3MpY3NQOhnW6gfpQgBCeGAQ9ao/
-         35A19tpKtVrbHyiJFfcl9pJoV3bvvfbrGofBIoNpfqBi+ohkXfj/IQWOpXIJE636nsAF
-         iYG3KtVfhFvhiAy2+O41XpIYANOobom8/RI3HTyNMeyabHfgzYFmoW9BZ7HQVB8XulMw
-         ORoA==
+        d=chromium.org; s=google;
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+/3WdsTnQdOHde9msyQKMoio/ECH8a5tpAu+T/cYiEY=;
+        b=aRzGLdiNL3eF8phfIt/X7mZWoYj/8IzoLLTcAaXgn7QP0njSJYpssKCVpXQg9rIbDg
+         kk/kyO3fWq0ZDRcQmQGXPqMLHMkvxIP+PCrcQz5fxtiWTx3IQjcqBqCTK68551Dgyz88
+         Lww+qF8HyOkYhI4VNqfUUfdRZEZFaM0SFtpvU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jdJbx8cUbzo0up0IR5lEzRMt6aSIhKf92x7ZKJB7vEo=;
-        b=iWlvjMPg7zTsD15Nvoryk6Pha2e9VlGkF9Ei5lMNwA24Dvg+jZ6ElA1FZ3MNxWvrUI
-         qOCxVMkMarESTS4np6AK0cHwRCn0X33Y+KaKXq5OZD46Kq8pIqEXa/pisEPJGfFiMX53
-         BgKkq43AOjaEYgHts/oe4yxuCvwranb0TCc9y+DZInctQgatACSOlsVEn79T1Yi3tv1C
-         ZLjm5Avi2cVf4dBZQ7q9kMpNc5T5+b6Do4ca7APnnRr1mtDQCuk8yaLFVN0KSKR+hfyU
-         hvrJhbMAhuzOpgqiYtLcTCMvRa20rhItxSk55YiYS8HjRxGn+mfERoSHa0F38v90v2JT
-         3A+g==
-X-Gm-Message-State: AO0yUKXBDdfJntV3z/sZ+SLQYmBfba7o/uqTgm24diH9/D+/ZGkX2Yby
-        FEUd/phB3r+ZQGpPe2Td3/9s7WoMBsCeHupeQY8=
-X-Google-Smtp-Source: AK7set9BmOFXeMFgWuYqsMw64603eTyj8QckPEuvDG0+7W0AEhRV/p749AsDYf+uFJJ6rqHxdBb8BEMlTMnjg9BbfMM=
-X-Received: by 2002:a17:903:22c1:b0:196:6319:a029 with SMTP id
- y1-20020a17090322c100b001966319a029mr3302057plg.12.1675983275394; Thu, 09 Feb
- 2023 14:54:35 -0800 (PST)
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+/3WdsTnQdOHde9msyQKMoio/ECH8a5tpAu+T/cYiEY=;
+        b=vhgSU6wL00+Oax+54PWOesSe4q06eqBFu0qJPndKFpz3TBY8Or4bmxgLanp0CL86cw
+         fCqflLPTlWvEKH2xHuc+w6rp27bOkW8SjmfeWnt4+34LLZWq8dFm3zRNcYmcG8kZmRnI
+         SXZatdarPKqllVl+IywIz0i+VCH6YPUOUzTiLM6ifgET9iotj156q0lvhWn9w0PtpodF
+         SsebTMYOxdb4yr8/S09DH84O5ph2Fh/eQJ8pzFTBE2/ecJgPkq/HyUyNsuX8WXPfDPwM
+         cSDpL/n1H4K18xnYWLQ570efRusOcMHmqd6T++6qOPsPV6bWK8oNMtjUdec7BFvnT5FK
+         Coag==
+X-Gm-Message-State: AO0yUKUUjcRAzzpNPc680KiuR/RoTL8Qu3hNnsOpQ/Hc6026+nLlo3P9
+        0weAFs9uS7eqJ3ZVuLf5hw73GSOsOPa4TPsizSOlzw==
+X-Google-Smtp-Source: AK7set+i6F2muyublkl3zPHwaGKHmip/aE9IKN/2NWtEl3MCsCwksdVhnIOPhSnHD2GYLH1+A2DsbkPPT6t5/4vraiE=
+X-Received: by 2002:a2e:8206:0:b0:290:5b9d:e97 with SMTP id
+ w6-20020a2e8206000000b002905b9d0e97mr2076244ljg.187.1675983357541; Thu, 09
+ Feb 2023 14:55:57 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 9 Feb 2023 17:55:56 -0500
 MIME-Version: 1.0
-References: <20230209031159.2337445-1-ouyangweizhao@zeku.com>
- <CACT4Y+Zrz4KOU82jjEperYOM0sEp6TCmgse4XVMPkwAkS+dXrA@mail.gmail.com>
- <93b94f59016145adbb1e01311a1103f8@zeku.com> <CACT4Y+a=BaMNUf=_suQ5or9=ZksX2ht9gX8=XBSDEgHogyy3mg@mail.gmail.com>
-In-Reply-To: <CACT4Y+a=BaMNUf=_suQ5or9=ZksX2ht9gX8=XBSDEgHogyy3mg@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Thu, 9 Feb 2023 23:54:24 +0100
-Message-ID: <CA+fCnZf3k-rsaOeti0Q7rqkmvsqDb2XxgxOq6V5Gqp6FGLH7Yg@mail.gmail.com>
-Subject: Re: [PATCH v2] kasan: fix deadlock in start_report()
-To:     Dmitry Vyukov <dvyukov@google.com>,
-        =?UTF-8?B?6KKB5biFKFNodWFpIFl1YW4p?= <yuanshuai@zeku.com>
-Cc:     =?UTF-8?B?5qyn6Ziz54Kc6ZKKKFdlaXpoYW8gT3V5YW5nKQ==?= 
-        <ouyangweizhao@zeku.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Weizhao Ouyang <o451686892@gmail.com>,
-        =?UTF-8?B?5Lu756uL6bmPKFBlbmcgUmVuKQ==?= <renlipeng@zeku.com>
+In-Reply-To: <1675700201-12890-4-git-send-email-quic_srivasam@quicinc.com>
+References: <1675700201-12890-1-git-send-email-quic_srivasam@quicinc.com> <1675700201-12890-4-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 9 Feb 2023 17:55:56 -0500
+Message-ID: <CAE-0n53uReg41RrHrBDaNt+BgaPem_JO-2Wwq8e_g0NeNCvgXg@mail.gmail.com>
+Subject: Re: [PATCH v5 3/8] arm64: dts: qcom: sc7280: Add LPASS PIL node
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, alsa-devel@alsa-project.org,
+        andersson@kernel.org, broonie@kernel.org,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        judyhsiao@chromium.org, konrad.dybcio@somainline.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_mohs@quicinc.com, quic_rjendra@quicinc.com,
+        quic_rohkumar@quicinc.com, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org, vkoul@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 11:44 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+Quoting Srinivasa Rao Mandadapu (2023-02-06 08:16:36)
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> index 1810a36..5e99f49 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+> @@ -107,3 +107,7 @@
+>                 };
+>         };
+>  };
+> +
+> +&remoteproc_adsp {
+> +       status = "okay";
+> +};
+
+Sort this file by phandle alphabetically?
+
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 6908bca..27ab992 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -3439,6 +3441,97 @@
+>                         status = "disabled";
+>                 };
 >
->  On Thu, 9 Feb 2023 at 10:19, =E8=A2=81=E5=B8=85(Shuai Yuan) <yuanshuai@z=
-eku.com> wrote:
-> >
-> > Hi Dmitry Vyukov
-> >
-> > Thanks, I see that your means.
-> >
-> > Currently, report_suppressed() seem not work in Kasan-HW mode, it alway=
-s return false.
-> > Do you think should change the report_suppressed function?
-> > I don't know why CONFIG_KASAN_HW_TAGS was blocked separately before.
->
-> That logic was added by Andrey in:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3Dc068664c97c7cf
->
-> Andrey, can we make report_enabled() check current->kasan_depth and
-> remove report_suppressed()?
+> +               remoteproc_adsp: remoteproc@3000000 {
 
-I decided to not use kasan_depth for HW_TAGS, as we can always use a
-match-all tag to make "invalid" memory accesses.
+This should be sorted on physical address. I think the node above is
+spi@88dc000 so this is in the wrong place.
 
-I think we can fix the reporting code to do exactly that so that it
-doesn't cause MTE faults.
+> +                       compatible = "qcom,sc7280-adsp-pil";
+> +                       reg = <0 0x03000000 0 0x5000>, <0 0x0355b000 0 0x10>;
+> +                       reg-names = "qdsp6ss_base", "lpass_efuse";
+> +
+> +                       interrupts-extended = <&pdc 6 IRQ_TYPE_LEVEL_HIGH>,
+> +                                             <&adsp_smp2p_in 0 IRQ_TYPE_NONE>,
 
-Shuai, could you clarify, at which point due kasan_report_invalid_free
-an MTE exception is raised in your tests?
+Can these have proper irq flags? Doubtful they're IRQ_TYPE_NONE.
 
-> Then we can also remove the comment in kasan_report_invalid_free().
->
-> It looks like kasan_disable_current() in kmemleak needs to affect
-> HW_TAGS mode as well:
-> https://elixir.bootlin.com/linux/v6.2-rc7/source/mm/kmemleak.c#L301
+> +                                             <&adsp_smp2p_in 1 IRQ_TYPE_NONE>,
+> +                                             <&adsp_smp2p_in 2 IRQ_TYPE_NONE>,
+> +                                             <&adsp_smp2p_in 3 IRQ_TYPE_NONE>,
+> +                                             <&adsp_smp2p_in 7 IRQ_TYPE_NONE>;
+> +
+> +                       interrupt-names = "wdog", "fatal", "ready",
+> +                                         "handover", "stop-ack",
+> +                                         "shutdown-ack";
+> +
+> +                       qcom,qmp = <&aoss_qmp>;
+> +
+> +                       clocks = <&rpmhcc RPMH_CXO_CLK>,
+> +                                <&gcc GCC_CFG_NOC_LPASS_CLK>;
+> +
 
-It uses kasan_reset_tag, so it should work properly with HW_TAGS.
+Drop newline so clocks properties are together please.
+
+> +                       clock-names = "xo", "gcc_cfg_noc_lpass";
+> +
+> +                       iommus = <&apps_smmu 0x1800 0x0>;
+> +
+> +                       power-domains = <&rpmhpd SC7280_CX>;
+> +                       power-domain-names = "cx";
+> +
+> +                       required-opps = <&rpmhpd_opp_nom>;
+> +
+> +                       resets = <&pdc_reset PDC_AUDIO_SYNC_RESET>,
+> +                                <&aoss_reset AOSS_CC_LPASS_RESTART>;
+> +
+
+Drop newline so reset properties are together please.
+
+> +                       reset-names =  "pdc_sync", "cc_lpass";
+> +                       qcom,halt-regs = <&tcsr_1 0x3000 0x5000 0x8000 0x13000>;
+> +
+> +                       memory-region = <&adsp_mem>;
+> +
+> +                       qcom,smem-states = <&adsp_smp2p_out 0>;
+> +                       qcom,smem-state-names = "stop";
+> +
+> +                       status = "disabled";
+> +
+> +                       glink-edge {
+> +                               interrupts-extended = <&ipcc IPCC_CLIENT_LPASS
+> +                                                      IPCC_MPROC_SIGNAL_GLINK_QMP
+> +                                                      IRQ_TYPE_EDGE_RISING>;
+> +
+> +                               mboxes = <&ipcc IPCC_CLIENT_LPASS
+> +                                        IPCC_MPROC_SIGNAL_GLINK_QMP>;
+> +
+> +                               label = "lpass";
+> +                               qcom,remote-pid = <2>;
+> +
+> +                               gpr {
+
+This node name should be apr per the qcom,glink-edge.yaml binding?
+
+> +                                       compatible = "qcom,gpr";
+> +                                       qcom,glink-channels = "adsp_apps";
+> +                                       qcom,domain = <GPR_DOMAIN_ID_ADSP>;
+> +                                       qcom,intents = <512 20>;
+> +                                       #address-cells = <1>;
+> +                                       #size-cells = <0>;
+> +
+> +                                       q6apm: service@1 {
+> +                                               compatible = "qcom,q6apm";
+> +                                               reg = <GPR_APM_MODULE_IID>;
+> +                                               #sound-dai-cells = <0>;
+> +
+> +                                               q6apmdai: dais {
+> +                                                       compatible = "qcom,q6apm-dais";
+> +                                                       iommus = <&apps_smmu 0x1801 0x0>;
+> +                                               };
+> +
+> +                                               q6apmbedai: bedais {
+> +                                                       compatible = "qcom,q6apm-lpass-dais";
+> +                                                       #sound-dai-cells = <1>;
+> +                                               };
+> +                                       };
+> +
+> +                                       q6prm: service@2 {
+> +                                               compatible = "qcom,q6prm";
+> +                                               reg = <GPR_PRM_MODULE_IID>;
+> +
+> +                                               q6prmcc: clock-controller {
+> +                                                       compatible = "qcom,q6prm-lpass-clocks";
+
+This is clk binding but not a clk driver? I'll look away now.
+
+> +                                                       #clock-cells = <2>;
+> +                                               };
+> +                                       };
+> +                               };
+> +                       };
+> +               };
+> +
