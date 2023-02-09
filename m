@@ -2,66 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D35690B68
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6507F690B6F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjBIOLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S230362AbjBIOMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjBIOLt (ORCPT
+        with ESMTP id S230326AbjBIOMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:11:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAFC5D3D0;
-        Thu,  9 Feb 2023 06:11:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OLfeb/1peUB0Uk6OCxp5bH/mik1H6dPr8FEIIkuL/QU=; b=JbYEsNAVDN51UJgX9qx6k2eWsB
-        07OxOMxmQRAsKV4YCUUrdkihKeBBP+2v3yOzF5lMH2RU3uRzAPvxbFhjWsOGAZ5ej64w7YIiUOC/q
-        CyqW+bPeytq1LKDKZNG8kHZ40wiRBsT+vZm0yzikNRVt+PamelOijN2LOAX/972YiI2nU3VMfcBwy
-        DrNSYpn6HJBxJjd5YrKF++aI3VpeX5P/oiaE/kGnSypHx47JkJ7Bq57GujAobCyZgg+NWgy6XlEso
-        32JWzqTYOr8NbgJAitEXC8RG1uA55A7/Tr6RfZ0VXSM4B8rbIOvpQBD9K6YWMJ/c21YD+BkFx2Kif
-        EpsWohxw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pQ7eC-002Fh2-Uk; Thu, 09 Feb 2023 14:11:36 +0000
-Date:   Thu, 9 Feb 2023 14:11:36 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Stefan Metzmacher <metze@samba.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API Mailing List <linux-api@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Samba Technical <samba-technical@lists.samba.org>
-Subject: Re: copy on write for splice() from file to pipe?
-Message-ID: <Y+T/GE77AKzsPte9@casper.infradead.org>
-References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+        Thu, 9 Feb 2023 09:12:40 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D125B7A95
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:12:39 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id m14so1867584wrg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:12:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=su3TQDz5yXTmF+RZfbDiKjq2ZfrEp5aKu2QeW5sUFdk=;
+        b=ld4R5ktQZflVtgBBzpKMH0OzWbuGN45SzQrGVks1RKxCPOIVBpvh7kY4zrbu+7pVdz
+         cGBvFV4zH6KUkjTL6eDqzcQgUCppzvyjInzejUAvl5ZOQDeXyWF5MeX+4NdjHb7cmK8n
+         9MT7pzR3i7/lMgq+YeGtApWvBsapRPsjo3kv3aXYR4sSNt4u1MnkoExKEVDxOlFCKaEe
+         WJenb5rdez74rOV0mYwb7BDAEc3XEuWaczRzPDVLP56O5cRdP+3pRiINqFwOW7IcRK2x
+         n6xRMjSV6h5wk10RurXzcNgWBETokcmLqjTCQDfbc3mVOnAyyOL1d1Dfw5FBiQiAP6s1
+         OxaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=su3TQDz5yXTmF+RZfbDiKjq2ZfrEp5aKu2QeW5sUFdk=;
+        b=Dia3vCi5GXVp56yl864XuoSiYLZ4GaL66f7JsBB070kANGhCoKdo/PXgDZ94h80qPp
+         zo6/8mhdOO0nohYjb1IhzkfG4DLtm5mRwrFIYSnMvD4Adc9rTq7fciltRKc2R/k12bCd
+         jowcgfL5W5Mt3w6+UJ3mjUxenmAFAclolQyEE9gEM0NUK4WnP8CCKvTDUdVdNDnSt6oo
+         /AYicbXCwLoTjxmq3haGurrR7HZSkjbOPTibMQ4i5ZU/MCAx+bCTGQ07JgNyesNFRmrt
+         x3svYGZ5HMhOf+OwikDtZVi98ydmpS3YfWi0DY8yXDIkurfElGyXrxPLqbvCQG0JEyiI
+         0DZg==
+X-Gm-Message-State: AO0yUKW+d/ucBGk+koZrQhJomgAf9pcR/x0c+r2YkwkPTQiOD6EHg2Bv
+        vJIribCiNM9qDBTw1tijr+AdzFsM4TboLpbPX17NXA==
+X-Google-Smtp-Source: AK7set8G2aGfD230MGz2VhLMCgokNfco/vuVdLeUaR6D87k9Ih6xZya1aU75ZSxWIto6vtE5QwVkQS+ZUkeVh7eqmOg=
+X-Received: by 2002:adf:e64a:0:b0:2c0:8af7:8153 with SMTP id
+ b10-20020adfe64a000000b002c08af78153mr677353wrn.565.1675951958391; Thu, 09
+ Feb 2023 06:12:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123220500.21077-1-kirill.shutemov@linux.intel.com> <20230123220500.21077-9-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20230123220500.21077-9-kirill.shutemov@linux.intel.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 9 Feb 2023 15:12:01 +0100
+Message-ID: <CAG_fn=Wzs5341St=W+16OSaaZ711nymv2K+-C0fxqgOo45LwqQ@mail.gmail.com>
+Subject: Re: [PATCHv15 08/17] x86/mm: Provide arch_prctl() interface for LAM
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 02:55:59PM +0100, Stefan Metzmacher wrote:
-> Hi Linus and others,
-> 
-> as written in a private mail before, I'm currently trying to
-> make use of IORING_OP_SPLICE in order to get zero copy support
-> in Samba.
-
-I have to ask why.  In a modern network, isn't all data encrypted?
-So you have to encrypt into a different buffer, and then you checksum
-that buffer.  So it doesn't matter if writes can change the page cache
-after you called splice(), you just need to have the data be consistent
-so the checksum doesn't change.
+On Mon, Jan 23, 2023 at 11:05 PM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> Add a few of arch_prctl() handles:
+>
+>  - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+>    of tag bits. It is rounded up to the nearest LAM mode that can
+>    provide it. For now only LAM_U57 is supported, with 6 tag bits.
+>
+>  - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+>    bits located in the address.
+>
+>  - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can request.
+>    Zero if LAM is not supported.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Alexander Potapenko <glider@google.com>
