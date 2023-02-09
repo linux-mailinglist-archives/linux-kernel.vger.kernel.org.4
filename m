@@ -2,87 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635EF6910B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C766910B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjBISt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S229818AbjBISvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjBISt0 (ORCPT
+        with ESMTP id S229449AbjBISvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:49:26 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5C35BA7F;
-        Thu,  9 Feb 2023 10:49:25 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id da9so2885210edb.12;
-        Thu, 09 Feb 2023 10:49:25 -0800 (PST)
+        Thu, 9 Feb 2023 13:51:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5B4166D5
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 10:51:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675968664;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VbjcrGtpixp2VEv6gRdzWoExXFLvPWr891jvmI6pPAI=;
+        b=fAjZfwgazMR8iAmwwiPlXLlOt/6J0OlR/9tWtczbVXg4gJOQD2vg1sSJpDn9nfYa3LpVAr
+        R0mL5KzacjuRbMlM7EHp5LK6u270maDm0BevD+VdNTojGvQ74NVKACyGNDkZ/0Ebx8aI4V
+        j620fXsWtFLug+oZQts+xQeYsMjkc0o=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-524-zef1ajGcPmuG1c85ZQh7_g-1; Thu, 09 Feb 2023 13:51:03 -0500
+X-MC-Unique: zef1ajGcPmuG1c85ZQh7_g-1
+Received: by mail-qk1-f200.google.com with SMTP id u10-20020a05620a0c4a00b00705e77d6207so1806154qki.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 10:51:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s0wOVGEIsqozoWOqa7C2Q6mCdmU8Ss82AAfVmyTj+0M=;
-        b=AJQRgYC+Ufj/JzrXmcq1Kwa8DyzvWsbASvzWWGXsKdPy1dIt1IRsv/m328NRPX2ejY
-         Ho8IPvZUrzLTZG6g9WfshNsxsskIPrz0+lz+tT/is34WoIvtjEjHKXWs7DKQ3yLoi6d6
-         5gCHw0QPtrHP8YqO7K56IMJre9dDEQUBqejIsfrtVEWIyDZTLkMV4Ph6dZDr7lMDNwc7
-         R2a1AdKJ/D6semWFMYcXRXMEd8bg3yfbBY9Q1lleALudt+2S3ov13T9j4nMpm/R9ANBQ
-         Ec0JN3UBnBurZe//cZCf0JMQNywtEHIUE956CvDPZXZtcjPbnF2beYbP+cmzr2uTFnhq
-         ed/w==
-X-Gm-Message-State: AO0yUKVCcz2cBafr41NzpJTb3MGe0Ak4Jv+3SP5n7rd9v/8+jF0HiqSf
-        TFIiBmCt/eZ6hHNY0M2GQWXTRnlIAHgKgUak/0wWWZOL2mo=
-X-Google-Smtp-Source: AK7set9ov9+rSfAaPORjLy/MeCU8pxpZbv3V2FAKicwYFX3a3irzKTKzTBYLwasFwCS6STBpJmcc+sUyKA/rsrq/WOA=
-X-Received: by 2002:a50:d0ce:0:b0:4ab:255e:5ada with SMTP id
- g14-20020a50d0ce000000b004ab255e5adamr308135edf.6.1675968564039; Thu, 09 Feb
- 2023 10:49:24 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VbjcrGtpixp2VEv6gRdzWoExXFLvPWr891jvmI6pPAI=;
+        b=JaE+H5OX/UqfanhzwIElKgBc7ZP8wOKbI4+DUqdl6bJ1VUVTSwuCEn4NLn6yVQi7p7
+         dmdJ+exDO6aEgHbTnxTQpVp75asq47U5MJPQY/gkjjqE3KYymgdjvp8PagXMQNhMDdnD
+         dK2rX/cQRPWWpBF7IhCVf5rP3mEPi0zgUgaRr2nH840PTnYfLlGEh2NwHLLu1kLoX8M4
+         jtBv6FKb9uwax5eZJ4bthV2pJvi5wdQLuS5kp5BBAuoKTMCwdJwUG5/6zpc7Uop41lrH
+         Lpl9C/IpxhG0DygruKxWeNVFfyj2XGjF6lfCTRf3xVVqF3ONWJobaoT5NcXZ40gD0g2U
+         5mgg==
+X-Gm-Message-State: AO0yUKW6Xi7HOtzBmmRF+Zy2TMwodJu3rOauaiHpU4wGtHCZGGuucFcX
+        ZU3bB16v8qDRCWm9n7BKe1X/PklFWWzydjazlcu223bk/U50BcL/revxKOVNzNPvZFuPCM+y9Hc
+        UM5kB8zFxKsgyiYdxz0/WKw2X
+X-Received: by 2002:a0c:aad8:0:b0:56c:222d:427a with SMTP id g24-20020a0caad8000000b0056c222d427amr8145735qvb.1.1675968662330;
+        Thu, 09 Feb 2023 10:51:02 -0800 (PST)
+X-Google-Smtp-Source: AK7set+3PLLtv2MJurNkHfb/fSXzRDRZl1eWMOBj8tiy0yEb2Fl6gVPVq67AZ332tU5uuDqdYZL5fw==
+X-Received: by 2002:a0c:aad8:0:b0:56c:222d:427a with SMTP id g24-20020a0caad8000000b0056c222d427amr8145692qvb.1.1675968661879;
+        Thu, 09 Feb 2023 10:51:01 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id k9-20020ac84789000000b003b2d890752dsm1707390qtq.88.2023.02.09.10.51.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 10:51:01 -0800 (PST)
+Date:   Thu, 9 Feb 2023 13:50:59 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH v2] mm/khugepaged: skip shmem with userfaultfd
+Message-ID: <Y+VAkxVRZtOUELuP@x1n>
+References: <20230206112856.1802547-1-stevensd@google.com>
+ <Y+Fq8lwsl7RXwlNS@x1n>
+ <CAD=HUj67pC_0f8LwaD_bcYvtpZ1Wi8Hz2SpZD7eXpBVgmZ3p8g@mail.gmail.com>
+ <Y+J9jnhEC7xYoCCW@x1n>
+ <CAD=HUj6zhD6gVqG8VOJVmzXzzp5WC3QwP9wQ-Osk3MTsNSE3jQ@mail.gmail.com>
+ <Y+PauOuAO4nu6Q0k@x1n>
+ <CAD=HUj6Adtfthbj0i8QU6eY4oRRti-Sr39fCQcKyrAbCv28ZRQ@mail.gmail.com>
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Feb 2023 19:49:12 +0100
-Message-ID: <CAJZ5v0iTBJNNxKs86LjTVfer6aqqPYhOuZP04FC-zcq3CWfv8Q@mail.gmail.com>
-Subject: [GIT PULL] Power management fix for v6.2-rc8
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD=HUj6Adtfthbj0i8QU6eY4oRRti-Sr39fCQcKyrAbCv28ZRQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Feb 09, 2023 at 02:10:08PM +0900, David Stevens wrote:
+>  On Thu, Feb 9, 2023 at 2:24 AM Peter Xu <peterx@redhat.com> wrote:
+> > On Wed, Feb 08, 2023 at 11:42:22AM +0900, David Stevens wrote:
+> > > On Wed, Feb 8, 2023 at 1:34 AM Peter Xu <peterx@redhat.com> wrote:
+> > > > On Tue, Feb 07, 2023 at 12:56:56PM +0900, David Stevens wrote:
+> > > > > On Tue, Feb 7, 2023 at 6:02 AM Peter Xu <peterx@redhat.com> wrote:
+> > > > > > On Mon, Feb 06, 2023 at 08:28:56PM +0900, David Stevens wrote:
+> > > > > > > From: David Stevens <stevensd@chromium.org>
+> > > > > > > @@ -1802,13 +1810,12 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+> > > > > > >                                               result = SCAN_TRUNCATED;
+> > > > > > >                                               goto xa_locked;
+> > > > > > >                                       }
+> > > > > > > -                                     xas_set(&xas, index);
+> > > > > > > +                                     xas_set(&xas, index + 1);
+> > > > > >
+> > > > > > I failed to figure out why this index needs a shift here... It seems to me
+> > > > > > it'll ignore the initial empty page cache, is that what the patch wanted?
+> > > > >
+> > > > > This chunk is preceded by a call to xas_next_entry. Previously,
+> > > > > xas_store(hpage) would pair with xas_set(index) to walk the xarray and
+> > > > > prepare xas for the xas_next at the start of the next loop iteration.
+> > > > > Now that we're no longer calling xas_store, xas_set(index+1) is
+> > > > > necessary to prepare xas for the next iteration of the loop.
+> > > >
+> > > > If I'm not wrong, xas_store() doesn't move the niddle at all.  It's the
+> > > > xas_next() at the entry of the loop that does.
+> > >
+> > > xas_set(n) resets the cursor to the top of the tree. If the cursor is
+> > > at the top of the tree, then xas_next() walks to n instead of
+> > > advancing n to n+1. xas_store() on the other hand behaves the same
+> > > regardless of whether or not the cursor is at the top of the tree (it
+> > > starts by calling xas_create or xas_load, which will walk the tree if
+> > > necessary).
+> > >
+> > > Looking at it another way, if we're here, then start == index. So if
+> > > we were to call xas_set(&xas, index), xas at the start of the next
+> > > iteration would be in an identical state to when we entered the loop
+> > > the first time. So xas would be one value behind index, and we would
+> > > never actually examine the last entry in the range being collapsed.
+> >
+> > Are you suggesting that this is a bug in the existing code?
+> >
+> > My read on this whole chunk is: if this is the first page we're scanning
+> > and it's missing, let's have a look to make sure the whole THP isn't
+> > truncated.  If it is, we return SCAN_TRUNCATED.  Otherwise, we fill up the
+> > holes _starting from this index 0_.
+> 
+> This overlooks the fact that we've already processed index 0 during
+> this iteration. The last sentence should be along the lines of:
+> Otherwise, we continue examining subsequent pages in the chunk.
+> 
+> > AFAIU your change here will make that last sentence start from index 1.
+> 
+> The original code is correct. The important thing to keep in mind is
+> that xas_next() behaves differently depending on whether or not
+> xas_not_node(xa_node) is true. Stepping through the relevant lines of
+> the code and showing the relevant state after each xas call executes:
+> 
+> xas_set(&xas, start);
+>   (index == start, xa_index == start, xa_node == XAS_RESTART)
+> xas_next(&xas); -> returns entry at start
+>   (index == start, xa_index == start, xa_node == start)
+> xas_next_entry(&xas, end - 1);
+>   (index == start , xa_index == x, xa_node == x, where x > start)
+> 
+> From here, the original code has:
+> 
+> xas_set(&xas, start);
+>   (index == start, xa_index == start, xa_node == XAS_RESTART)
+> xas_store(&xas, hpage);
+>   (index == start, xa_index == start, xa_node == start)
+> xas_next(&xas); -> returns entry at start + 1
+>   (index == start + 1, xa_index == start + 1, xa_node == start + 1)
+> 
+> With my patch, we have:
+> 
+> xas_set(&xas, start + 1);
+>   (index == start, xa_index == start + 1, xa_node == XAS_RESTART)
+> xas_next(&xas); -> returns entry at start + 1
+>   (index == start + 1, xa_index == start + 1, xa_node == start + 1)
+> 
+> If instead we were to do as you suggest, we would have:
+> 
+> xas_set(&xas, start);
+>   (index == start, xa_index == start, xa_node == XAS_RESTART)
+> xas_next(&xas); -> returns entry at start
+>   (index == start + 1, xa_index == start, xa_node == start)
+> 
+> In this version, there is a mismatch between index and xa_index.
+> Because of this, we will end up breaking out of the loop before
+> xa_index is able to reach xa_index +  HPAGE_PMD_NR - 1, so we will
+> miss the last entry in the chunk.
 
-Please pull from the tag
+I see what I missed now, thanks.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.2-rc8
+> 
+> > > > > > > @@ -1967,6 +1974,46 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+> > > > > > >               put_page(page);
+> > > > > > >               goto xa_unlocked;
+> > > > > > >       }
+> > > > > > > +
+> > > > > > > +     if (nr_none) {
+> > > > > > > +             struct vm_area_struct *vma;
+> > > > > > > +             int nr_none_check = 0;
+> > > > > > > +
+> > > > > > > +             xas_unlock_irq(&xas);
+> > > > > > > +             i_mmap_lock_read(mapping);
+> > > > > > > +             i_mmap_locked = true;
+> > > > > > > +             xas_lock_irq(&xas);
+> > > > > > > +
+> > > > > > > +             xas_set(&xas, start);
+> > > > > > > +             for (index = start; index < end; index++) {
+> > > > > > > +                     if (!xas_next(&xas))
+> > > > > > > +                             nr_none_check++;
+> > > > > > > +             }
+> > > > > > > +
+> > > > > > > +             if (nr_none != nr_none_check) {
+> > > > > > > +                     result = SCAN_PAGE_FILLED;
+> > > > > > > +                     goto xa_locked;
+> > > > > > > +             }
+> > > > > > > +
+> > > > > > > +             /*
+> > > > > > > +              * If userspace observed a missing page in a VMA with an armed
+> > > > > > > +              * userfaultfd, then it might expect a UFFD_EVENT_PAGEFAULT for
+> > > > > > > +              * that page, so we need to roll back to avoid suppressing such
+> > > > > > > +              * an event. Any userfaultfds armed after this point will not be
+> > > > > > > +              * able to observe any missing pages, since the page cache is
+> > > > > > > +              * locked until after the collapse is completed.
+> > > > > > > +              *
+> > > > > > > +              * Pairs with smp_wmb() in userfaultfd_set_vm_flags().
+> > > > > > > +              */
+> > > > > > > +             smp_rmb();
+> > > > > > > +             vma_interval_tree_foreach(vma, &mapping->i_mmap, start, start) {
+> > > > > > > +                     if (userfaultfd_missing(vma)) {
+> > > > > > > +                             result = SCAN_EXCEED_NONE_PTE;
+> > > > > > > +                             goto xa_locked;
+> > > > > > > +                     }
+> > > > > > > +             }
+> > > > > > > +     }
+> > > > > >
+> > > > > > Thanks for writting the patch, but I am still confused why this can avoid
+> > > > > > race conditions of uffd missing mode.
+> > > > > >
+> > > > > > I assume UFFDIO_REGISTER is defined as: after UFFDIO_REGISTER ioctl
+> > > > > > succeeded on a specific shmem VMA, any page faults due to missing page
+> > > > > > cache on this vma should generate a page fault.  If not, it's violating the
+> > > > > > userfaultfd semantics.
+> > > > > >
+> > > > > > Here, I don't see what stops a new vma from registering MISSING mode right
+> > > > > > away in parallel of collapsing.
+> > > > > >
+> > > > > > When registration completes, it means we should report uffd missing
+> > > > > > messages on the holes that collapse_file() scanned previously.  However
+> > > > > > they'll be filled very possibly later with the thp which means the messages
+> > > > > > can be lost.  Then the issue can still happen, while this patch only makes
+> > > > > > it very unlikely to happen, or am I wrong?
+> > > > >
+> > > > > This race can still happen, but I don't think it's actually a problem.
+> > > > > In particular, I think the semantics you've given for UFFDIO_REGISTER
+> > > > > are overly restrictive on the kernel in a way that provides no
+> > > > > meaningful benefit to userspace.
+> > > > >
+> > > > > To simplify things a little bit, we only need to consider going from
+> > > > > zero to non-zero (i.e. one) userfaultfd. The case where a userfaultfd
+> > > > > is already registered isn't particularly interesting, since khugepaged
+> > > > > would have seen the existing userfaultfd and given up on the collapse.
+> > > >
+> > > > Could you point me which part of the code you're referencing here?
+> > >
+> > > I'm referencing the behavior with this patch. With my patch, all
+> > > khugepaged cares about is whether there exists an armed userfaultfd on
+> > > a given VMA. If there already exists an armed userfaultfd on a given
+> > > VMA, then with my patch, khugepaged will give up collapsing. So the
+> > > case where a second/third/etc userfaultfd is being armed isn't
+> > > interesting, because khugepaged will already not be doing anything, so
+> > > there cannot be any race condition.
+> > >
+> > > > Note that unlike anonymous thp collapsing scan (hpage_collapse_scan_pmd),
+> > > > hpage_collapse_scan_file works on page caches only.
+> > > >
+> > > > >
+> > > > > When userspace registers the first userfaultfd, it cannot rely on any
+> > > > > knowledge about the presence or absence of pages from before when
+> > > > > UFFDIO_REGISTER completes. This is because, as far as userspace is
+> > > > > concerned, khugepaged could have come along and collapsed every single
+> > > > > page in the shmem right after UFFDIO_REGISTER entered the kernel. So
+> > > > > to properly use the userfaultfd API, userspace must re-examine the
+> > > > > state of memory after UFFDIO_REGISTER completes. Because of that,
+> > > > > having UFFDIO_REGISTER be a complete barrier with regards to
+> > > > > khugepaged is essentially meaningless from the perspective of
+> > > > > userspace. The guarantee might slightly reduce the window for some
+> > > > > races in userspace programs, but there are no userspace races that it
+> > > > > can completely resolve.
+> > > > >
+> > > > > Given that, the kernel just needs to guarantee that no missing page
+> > > > > which userspace might have observed after registering a userfaultfd is
+> > > > > filled by khugepaged. This patch takes the page cache lock, checks
+> > > > > that there are no registered userfaultfds, fills the missing pages,
+> > > > > and then releases the page cache lock. That's sufficient to guarantee
+> > > > > that any UFFDIO_REGISTER which occurs after the userfaultfd check but
+> > > > > before we finish the collapse can't actually observe any missing
+> > > > > pages.
+> > > >
+> > > > I don't think your current patch guaranteed that?
+> > > >
+> > > > Now I'm confused why you removed population of the small pages using hpage,
+> > > > because that seems to support what you're doing here.  Note that your
+> > > > current code is added _before_ the replacement of the huge page here:
+> > > >
+> > > >         /* Join all the small entries into a single multi-index entry */
+> > > >         xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+> > > >         xas_store(&xas, hpage);
+> > > >
+> > > > So either the patch needs to keep the original logic to fill up the holes
+> > > > with hpage, or the vma checks needs to be done later, to achieve what you
+> > > > proposed to happen, IIUC.
+> > >
+> > > Maybe I'm fundamentally misunderstanding how locking for shmem works?
+> > > With my patch, we effectively have:
+> > >
+> > > xas_lock_irq(&xas);
+> > > <check that userfaultfd_missing(VMA) == false for all VMAs>
+> > > xas_set_order(&xas, start, HPAGE_PMD_ORDER);
+> > > xas_store(&xas, hpage);
+> > > xas_unlock_irq(&xas);
+> > >
+> > > Here's my understanding. If there are no armed userfaultfds during the
+> > > check, then userspace could not have made any observations of the
+> > > shmem with an armed userfaultfd before collapse_file locked xas. The
+> > > xas_store() is where missing pages become present pages. Since this
+> > > happens while xas is still locked, we know that no additional
+> > > observations of shmem could have occured since locking xas. So even if
+> > > registration of a new userfaultfd raced with the check, we know that
+> > > new userfaultfd couldn't have made any observations of shmem.
+> > >
+> > > Are you saying that it's possible for something to come in and observe
+> > > a missing page from the shmem between when we check the VMAs and when
+> > > we store hpage, even though xas is locked? Or that userspace can
+> > > observe shmem completely independently of the locking done by
+> > > xas_lock_irq(&xas)?
+> >
+> > AFAIU a pure lookup is done without xas lock but rcu read lock.  More
+> > below.
+> >
+> > >
+> > > > Besides, please imagine an uffd program that does this:
+> > > >
+> > > >   (1) ioctl(UFFDIO_REGISTER) upon the shmem vma
+> > > >   (2) lseek(SEEK_DATA) on one page P1 (which is part of THP range T1), it
+> > > >       noticed that it returns DATA, means this is not a hole.  So it's
+> > > >       expected that there will be no further message generated to this page.
+> > > >   (3) After a while, it received a missing fault on page P1
+> > > >
+> > > > My question is whether above is a problem or not?  Whether it violates the
+> > > > userfaultfd missing mode semantics?
+> > > >
+> > > > AFAICT, above can happen if some program accidentally registers UFFD
+> > > > missing mode during collapsing of the shmem thp P1 if with current logic
+> > > > applied.
+> > >
+> > > That's a bug that can occur with khugepaged as it exists before my
+> > > patch, if collapse_file fills a missing page but then needs to roll
+> > > back the collapse. With my patch, khugepaged doesn't fill any missing
+> > > pages until after it knows for sure the collapse will succeed, so I
+> > > don't see any way for collapse_file to cause a formerly present page
+> > > to become absent.
+> >
+> > Right, I should have reversed the conditions, sorry:
+> >
+> >   (1) ioctl(UFFDIO_REGISTER) upon the shmem vma
+> >   (2) lseek(SEEK_DATA) on one page P1 (which is part of THP range T1), it
+> >       noticed that it returns HOLE.
+> >   (3) The HOLE got collapsed into a THP
+> >
+> > I think it can still happen after the patch applied.  lseek has:
+> >
+> >   shmem_file_llseek -> mapping_seek_hole_data -> find_get_entry
+> >
+> > So I think it can happen concurrently, that one thread does (1+2) before
+> > your patch collapsed the thp in the page cache but after the vma checks.
+> 
+> Ah, I see what you're saying. I didn't fully understand the locking in
+> the page cache.
+> 
+> I think Matthew's suggestion earlier of using RETRY entries might
+> work. We would still need to consolidate the mark/check/collapse
+> sequence into a single xas_lock critical section, though, since things
+> will end up spinning on the RETRY within rcu critical sections.
 
-with top-most commit 918c5765a15420ad60730fbe5b5b67beb74ca7b6
+That seems to be challenging, though.
 
- Merge tag 'cpufreq-arm-fixes-6.2' of
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+I don't see what we can do in special paths like swapin as Matthew quoted
+in the other email, where the xa lock needs to be released for now.
 
-on top of commit 4ec5183ec48656cec489c49f989c508b68b518e3
+OTOH, if we want to have xas lock not released to cover the whole critical
+section, I think it also means the i_mmap_rwsem needs to be taken before
+hand, and not released after collapse happened.  That seems to be a major
+change too.
 
- Linux 6.2-rc7
+> 
+> That said, is using XA_RETRY_ENTRY a proper use of the xarray API? I
+> don't see anything in the kernel external to xarray using it. I would
+> think XA_ZERO_ENTRY would be more appropriate (i.e. what xa_reserve
+> uses), but the handling for that is inconsistent. XA_ZERO_ENTRY is
+> sufficient to cause mapping_get_entry to retry, but it looks like
+> everywhere else in filemap/shmem that directly iterates over the page
+> cache does if (xas_retry()) continue, which would end up not retrying
+> in the XA_ZERO_ENTRY case.
 
-to receive a power management fix for 6.2-rc8.
+I probably don't have much insight over xarray, just to mention after I
+read some more on xarray today: I saw xas_retry() covers both ZERO and
+RETRY entries; they all return true to me.  The only difference is an extra
+xas_reset() for RETRY entries only.
 
-Fix the incorrect value returned by cpufreq driver's ->get() callback
-for Qualcomm platforms (Douglas Anderson).
+It seems to me both entries will work with find_get_entry() which shmem
+uses.  I'm not sure whether that means it's okay in this specific case.
+Even if it works, I have no idea whether there's a graceful way we can
+maintain the critical section as you proposed above.
 
-Thanks!
+-- 
+Peter Xu
 
-
----------------
-
-Douglas Anderson (1):
-      cpufreq: qcom-hw: Fix cpufreq_driver->get() for non-LMH systems
-
----------------
-
- drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
