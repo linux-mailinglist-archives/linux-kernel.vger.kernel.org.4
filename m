@@ -2,171 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C96D69041B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C7369041D
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 10:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjBIJsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 04:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S229996AbjBIJte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 04:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBIJsx (ORCPT
+        with ESMTP id S229968AbjBIJtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 04:48:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA42532511
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:48:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675936087;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M/aR+B7oolKvJ6j1W4OUTMhGXXCQnfWS4jHDUmtjyXw=;
-        b=S0g/Yn6rl4tLP4yLAs6DWrxYX51ueWBNW5eT1YNh+l73loe9lYqwNdBSTCq7RoNmujlCw6
-        G/XIccUbDNVxx6LQ12D2zVwKQIQ93MQh3tqWeoCGE6jM1F0fexRpeALMPM37h2f6epazZ6
-        +NKvHpxZdTOcSNCZo3liqZJO1M1oknM=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-658-hW1PmH9SNvOp0pzE365SAw-1; Thu, 09 Feb 2023 04:48:05 -0500
-X-MC-Unique: hW1PmH9SNvOp0pzE365SAw-1
-Received: by mail-oo1-f69.google.com with SMTP id c187-20020a4a05c4000000b0051a455a5962so629543ooc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:48:05 -0800 (PST)
+        Thu, 9 Feb 2023 04:49:31 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6395732511
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 01:49:07 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id o18so1170806wrj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 01:49:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CTEOGPQnS0TIFLEvZd/nSW2p+ZjRxHWqIwAsKqfTz80=;
+        b=V0SzVGtWKLJJvy1I/BjOPA575rNIE4m6Km+ONa3qI2SCaak0FMA6FvxgHXMklDM7wO
+         pF6iG6q/zKW36VjoPOFaKba5yGdnzjSV+pwQBIm37wAnxVkbM+JekJCfSf1iVLstv1dQ
+         Y4lRPVVsF1E4AjIdZi0qAATZCol4XpBW0Rt1SRp1dx/Z0EUjt4d2Th6whIcvM2DIhdj6
+         gmtXzGOYRe0f2tAi+6cHRqwmhfOXcSUd4oiKTIj5FQpGu38Ed7qLLor7iqqBZVcQ9HF2
+         6qW4ssTi8i2ixrcBB9hCZwjd/sOWDsCbK4wkZWLm0/mVrktu6uIatpNKzY56PKJ4jABH
+         1s4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M/aR+B7oolKvJ6j1W4OUTMhGXXCQnfWS4jHDUmtjyXw=;
-        b=56EMGB/pMoQZpNVkvLI/WuRowHBcCHWlAKV/HZ1EVUGPC2qOcPYWwMpQNQ8+PfWylT
-         xfaOGac1CIUOAfSzMNXJr/UbSi+VK6SZpjZMqHXmCwdb6/Bs9lDJM/oL6tmXro7L2MNp
-         31mOdSDs6M9Ca7+1XM/S3h6EOqgGN/HWuPClwoopS/QL75nofhT3JhwJ8FlfGENsbZBS
-         E7j6nswCzncfFtpxL+3DqmLi6jyd0/tp7zRyo0SFFf7QNU+ZxGcwpi9Cy/gu2WF6QQQT
-         VlShgUhz0xupnAexFOjkT1TaNmr2GwaPeU/mGWwrBD/hqXIQgUJyPtekzuNjEM5aVfgm
-         dQMg==
-X-Gm-Message-State: AO0yUKVzhUzieQRbPnXy/2Qp9inV1bVrvXZ1s6x3t+T5oLhwp3omTdN6
-        1a8xxcKT0Vk8do+APtAC9N/2O7HuDwP3YFhVLvBfHacI5/LLDLXNP17ZEMxoX6c0RY7yTZiTAFv
-        /YKoiZLoCMcLtD2G85AHsNyOvRAWGcIcjRnP5TvWz
-X-Received: by 2002:a05:6808:2193:b0:364:5ff7:4e9f with SMTP id be19-20020a056808219300b003645ff74e9fmr546284oib.160.1675936084046;
-        Thu, 09 Feb 2023 01:48:04 -0800 (PST)
-X-Google-Smtp-Source: AK7set/NIGUjXEVX5ul6c7TTaeDxPC8/LZ4NHPhjLdDQs6Me664eATOE3viFfC6osIez0Ue4ZWvzxYEZgSoDpG7jisw=
-X-Received: by 2002:a05:6808:2193:b0:364:5ff7:4e9f with SMTP id
- be19-20020a056808219300b003645ff74e9fmr546281oib.160.1675936083657; Thu, 09
- Feb 2023 01:48:03 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CTEOGPQnS0TIFLEvZd/nSW2p+ZjRxHWqIwAsKqfTz80=;
+        b=2EHK2YuDmdZ7owDIXKl+fKDN2bqWcCUrztUQvC/KDTmVvDP/uSrx6n0Su8XSW6jSdo
+         L2I4rz79fdYKQ12q3zwIfrYKvOWCCcHQMQSk3acMeBVE3vHia4YTZR23OEGKA2A/vGE4
+         0wPpS4W0trnrE6VdeoSo/EVMub9pNnV5aKAC+4ShRaZ9faXGimPrsXjGjOP9VeXQ23J5
+         iJ1x5AB7J/NErHmxQY5ZruigGiddY8QZKuOUIBqmA2ODAoOua7/q/R/BmlBTamvbI9h/
+         qadLTmCiZYxtl3JDFqPke40iimL++ZHtYJDM7zVtxdfDEeP72c1e7buLahRVAt6irJsm
+         zFgg==
+X-Gm-Message-State: AO0yUKU3AV4pCl9yBsco0Oei424WWeF7guB7sdSDvZXspnRZPqKS6l6u
+        IfE7XkFRqifsLEAtyj73sYkIfw==
+X-Google-Smtp-Source: AK7set/zlo+mWdVn4nhTrjKjNcfLDl/mIAyWU45AYYryQiWv4XyrxL+O2BeGHVWc87DSQWF/4zhCVg==
+X-Received: by 2002:a5d:510a:0:b0:2c4:682:5639 with SMTP id s10-20020a5d510a000000b002c406825639mr4191498wrt.1.1675936146028;
+        Thu, 09 Feb 2023 01:49:06 -0800 (PST)
+Received: from ?IPV6:2a02:6b6a:b566:0:8009:2525:9580:8db2? ([2a02:6b6a:b566:0:8009:2525:9580:8db2])
+        by smtp.gmail.com with ESMTPSA id m3-20020adfe0c3000000b002c4084d3472sm809755wri.58.2023.02.09.01.49.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 01:49:05 -0800 (PST)
+Message-ID: <8e2f03e2-9517-aeb4-df60-b36ef3ff3a75@bytedance.com>
+Date:   Thu, 9 Feb 2023 09:49:04 +0000
 MIME-Version: 1.0
-References: <20230208113424.864881-1-mgamal@redhat.com> <SA1PR21MB1335F1074908B3E00DFA21BDBFD89@SA1PR21MB1335.namprd21.prod.outlook.com>
- <CAG-HVq8GYwCYBgiBnjO8ca5M27j6-MPK3e9H_c+EPmyotmOHxw@mail.gmail.com>
-In-Reply-To: <CAG-HVq8GYwCYBgiBnjO8ca5M27j6-MPK3e9H_c+EPmyotmOHxw@mail.gmail.com>
-From:   Mohammed Gamal <mgamal@redhat.com>
-Date:   Thu, 9 Feb 2023 11:47:52 +0200
-Message-ID: <CAG-HVq9KWPRhy3X1E8vs_0y7xeJFBA-hZ5u6Vxh7H9Tu=gV9WA@mail.gmail.com>
-Subject: Re: [PATCH] Drivers: vmbus: Check for channel allocation before
- looking up relids
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [External] Re: [PATCH v7 0/9] Parallel CPU bringup for x86_64
+Content-Language: en-US
+To:     paulmck@kernel.org, dwmw2@infradead.org, tglx@linutronix.de
+Cc:     kim.phillips@amd.com, arjan@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        x86@kernel.org, pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
+        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+References: <20230207230436.2690891-1-usama.arif@bytedance.com>
+ <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
+From:   Usama Arif <usama.arif@bytedance.com>
+In-Reply-To: <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 11:25 AM Mohammed Gamal <mgamal@redhat.com> wrote:
->
->
-> On Wed, Feb 8, 2023 at 9:03 PM Dexuan Cui <decui@microsoft.com> wrote:
-> >
-> > > From: Mohammed Gamal <mgamal@redhat.com>
-> > > Sent: Wednesday, February 8, 2023 3:34 AM
-> > >
-> > > relid2channel() assumes vmbus channel array to be allocated when called.
-> > > However, if the guest receives a vmbus interrupt during driver initialization
-> > > before vmbus_connect() is called or if vmbus_connect() fails, the vmbus
-> > > interrupt service routine is called which in turn calls relid2channel()
-> > > and can cause a null pointer dereference.
-> >
-> > Before vmbus_connect() is called or if vmbus_connect() fails, there should
-> > be no VMBus channel related interrupts at all, so relid2channel() can't be
-> > called.
-> >
-> > Can you please share the log or at least the crash call-stack?
-> > I'm curious how the crash can happen.
-> >
->
-> Hi Dexuan,
-> We saw this when triggering a crash with kdump enabled with
-> echo 'c' > /proc/sysrq-trigger
->
-> When the new kernel boots, we see this stack trace:
->
-> [   21.790653] BUG: kernel NULL pointer dereference, address: 0000000000000070
-> [   21.816550] #PF: supervisor read access in kernel mode
-> [   21.835697] #PF: error_code(0x0000) - not-present page
-> [   21.855499] PGD 0 P4D 0
-> [   21.865471] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [   21.881150] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.14.0-247.el9.x86_64 #       1
-> [   21.906679] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS 090007  05/18/2018
-> [   21.939413] RIP: 0010:relid2channel+0x1a/0x30 [hv_vmbus]
-> [   21.958240] Code: 00 00 00 e8 a8 01 db c0 e9 78 ff ff ff 0f 1f 00 0f 1f 44 00        00 81 ff ff 07 00 00 77 15 48 8b 05 ac 31 01 00 89 ff 48 8d 04 f8 <48> 8b 00 e9        de ef b2 c1 0f 0b 31 c0 e9 d5 ef b2 c1 0f 1f 44 00 00
-> [   22.022266] RSP: 0018:ffffc90000003f90 EFLAGS: 00010097
-> [   22.040588] RAX: 0000000000000070 RBX: ffff88807a4ef200 RCX: 0000000000000000
-> [   22.065670] RDX: ffffffff82a1a940 RSI: 0000000000000000 RDI: 000000000000000e
-> [   22.090778] RBP: 000000000000000e R08: 0000000000000000 R09: 0000000000000000
-> [   22.115947] R10: 000000000000000e R11: ffffc90000003ff8 R12: 0000000000000001
-> [   22.140901] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [   22.165344] FS:  0000000000000000(0000) GS:ffff88807e600000(0000) knlGS:00000       00000000000
-> [   22.192958] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   22.213376] CR2: 0000000000000070 CR3: 000000007ae40000 CR4: 00000000003506b0
-> [   22.238792] Call Trace:
-> [   22.248268]  <IRQ>
-> [   22.256236]  vmbus_chan_sched.isra.0+0x67/0x190 [hv_vmbus]
-> [   22.275822]  vmbus_isr+0x21/0xd0 [hv_vmbus]
-> [   22.290906]  __sysvec_hyperv_callback+0x2e/0x60
-> [   22.307021]  sysvec_hyperv_callback+0x6d/0x90
-> [   22.322530]  </IRQ>
-> [   22.330559]  <TASK>
-> [   22.338573]  asm_sysvec_hyperv_callback+0x16/0x20
-> [   22.355090] RIP: 0010:default_idle+0x10/0x20
-> [   22.370572] Code: 00 0f ae f0 0f ae 38 0f ae f0 eb b5 66 66 2e 0f 1f 84 00 00        00 00 00 0f 1f 00 0f 1f 44 00 00 eb 07 0f 00 2d 7e 6e 4d 00 fb f4 <e9> 4b dc 2c        00 cc cc cc cc cc cc cc cc cc cc cc 0f 1f 44 00 00 65
-> [   22.435289] RSP: 0018:ffffffff82a03ea8 EFLAGS: 00000202
-> [   22.453695] RAX: ffffffff81b33ea0 RBX: ffffffff82a1a940 RCX: 0000000000000000
-> [   22.478759] RDX: 00000000000000cd RSI: 0000000000000087 RDI: 00000000000000ce
-> [   22.503863] RBP: 0000000000000000 R08: 0138a8c77d17acc3 R09: 0000000000000001
-> [   22.528774] R10: 0000000000000400 R11: 00000000005d0eea R12: 0000000000000000
-> [   22.553857] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [   22.578981]  ? mwait_idle+0x80/0x80
-> [   22.591660]  ? mwait_idle+0x80/0x80
-> [   22.604332]  default_idle_call+0x33/0xe0
-> [   22.618343]  cpuidle_idle_call+0x15d/0x1c0
-> [   22.632969]  ? read_hv_sched_clock_tsc+0x5/0x20
-> [   22.649218]  do_idle+0x7b/0xe0
-> [   22.660741]  cpu_startup_entry+0x19/0x20
-> [   22.674964]  rest_init+0xca/0xd0
-> [   22.686907]  arch_call_rest_init+0xa/0x14
-> [   22.701272]  start_kernel+0x49e/0x4c0
-> [   22.714418]  secondary_startup_64_no_verify+0xe5/0xeb
-> [   22.732484]  </TASK>
-> [   22.740973] Modules linked in: hv_vmbus(+) serio_raw dm_mirror dm_region_hash        dm_log dm_mod fuse overlay squashfs loop
-> [   22.779694] CR2: 0000000000000070
-> [   22.792006] ---[ end trace 56dd24038e89124f ]---
-> [   22.808686] RIP: 0010:relid2channel+0x1a/0x30 [hv_vmbus]
-> [   22.827388] Code: 00 00 00 e8 a8 01 db c0 e9 78 ff ff ff 0f 1f 00 0f 1f 44 00        00 81 ff ff 07 00 00 77 15 48 8b 05 ac 31 01 00 89 ff 48 8d 04 f8 <48> 8b 00 e9        de ef b2 c1 0f 0b 31 c0 e9 d5 ef b2 c1 0f 1f 44 00 00
-> [   22.891669] RSP: 0018:ffffc90000003f90 EFLAGS: 00010097
-> [   22.910168] RAX: 0000000000000070 RBX: ffff88807a4ef200 RCX: 0000000000000000
-> [   22.935445] RDX: ffffffff82a1a940 RSI: 0000000000000000 RDI: 000000000000000e
-> [   22.958556] RBP: 000000000000000e R08: 0000000000000000 R09: 0000000000000000
-> [   22.979539] R10: 000000000000000e R11: ffffc90000003ff8 R12: 0000000000000001
-> [   23.004127] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [   23.027088] FS:  0000000000000000(0000) GS:ffff88807e600000(0000) knlGS:00000       00000000000
-> [   23.053341] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   23.074013] CR2: 0000000000000070 CR3: 000000007ae40000 CR4: 00000000003506b0
-> [   23.099322] Kernel panic - not syncing: Fatal exception in interrupt
-> [   23.121729] Kernel Offset: disabled
 
-Ugh, my mail client messed up the reply and it was marked as spam.
-Resending to the lists in plain text. See the reply above.
+
+On 09/02/2023 03:53, Paul E. McKenney wrote:
+> On Tue, Feb 07, 2023 at 11:04:27PM +0000, Usama Arif wrote:
+>> Tested on v7, doing INIT/SIPI/SIPI in parallel brings down the time for
+>> smpboot from ~700ms to 100ms (85% improvement) on a server with 128 CPUs
+>> split across 2 NUMA nodes.
+>>
+>> The major change over v6 is keeping parallel smp support enabled in AMD.
+>> APIC ID for parallel CPU bringup is now obtained from CPUID leaf 0x0B
+>> (for x2APIC mode) otherwise CPUID leaf 0x1 (8 bits).
+>>
+>> The patch for reusing timer calibration for secondary CPUs is also removed
+>> from the series as its not part of parallel smp bringup and needs to be
+>> further thought about.
+> 
+> Running rcutorture on this got me the following NULL pointer dereference
+> on scenario TREE01:
+> 
+> ------------------------------------------------------------------------
+> 
+> [   34.662066] smpboot: CPU 0 is now offline
+> [   34.674075] rcu: NOCB: Cannot CB-offload offline CPU 25
+> [   35.038003] rcu: De-offloading 5
+> [   35.112997] rcu: Offloading 12
+> [   35.716011] smpboot: Booting Node 0 Processor 0 APIC 0x0
+> [   35.762685] BUG: kernel NULL pointer dereference, address: 0000000000000001
+> [   35.764278] #PF: supervisor instruction fetch in kernel mode
+> [   35.765530] #PF: error_code(0x0010) - not-present page
+> [   35.766700] PGD 0 P4D 0
+> [   35.767278] Oops: 0010 [#1] PREEMPT SMP PTI
+> [   35.768223] CPU: 36 PID: 0 Comm: swapper/36 Not tainted 6.2.0-rc1-00206-g18a37610b632-dirty #3563
+> [   35.770201] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> 
+> ------------------------------------------------------------------------
+> 
+> Given an x86 system with KVM and qemu, this can be reproduced by running
+> the following from the top-level directory in the Linux-kernel source
+> tree:
+> 
+> 	tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --configs "TREE01 TINY01" --trust-make
+> 
+> Out of 15 runs, 14 blew up just after the first attempt to bring CPU
+> 0 back online.  The 15th run blew up just after the second attempt to
+> bring CPU 0 online, the first attempt having succeeded.
+> 
+> My guess is that the CONFIG_BOOTPARAM_HOTPLUG_CPU0=y Kconfig option is
+> tickling this bug.  This Kconfig option has been added to the TREE01
+> scenario in the -rcu tree's "dev" branch, which might mean that this test
+> would pass on mainline.  But CONFIG_BOOTPARAM_HOTPLUG_CPU0=y is not new,
+> only rcutorture's testing of it.
+> 
+> Thoughts?
+> 
+> 							Thanx, Paul
+
+It looks like its because of the initial_gs, initial_stack and
+early_gdt_descr not being setup properly for CPU0 hotplug, i.e. 
+init_cpu_data isnt called in cpu0 hotplug case.
+
+Its easy to test, just by doing
+echo 0 > /sys/devices/system/cpu/cpu0/online;
+echo 1 > /sys/devices/system/cpu/cpu0/online;
+
+As a quick check, if we do something like below (probably there is a 
+much better place to set these..), the above hotplug commands will work.
+
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 3ec5182d9698..184135c47ee5 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1080,6 +1080,7 @@ wakeup_cpu_via_init_nmi(int cpu, unsigned long 
+start_ip, int apicid,
+                                           wakeup_cpu0_nmi, 0, "wake_cpu0");
+
+         if (!boot_error) {
++               initial_gs = per_cpu_offset(cpu);
+                 enable_start_cpu0 = 1;
+                 *cpu0_nmi_registered = 1;
+                 id = apic->dest_mode_logical ? cpu0_logical_apicid : 
+apicid;
+@@ -1188,10 +1189,14 @@ static int do_boot_cpu(int apicid, int cpu, 
+struct task_struct *idle,
+                 boot_error = apic->wakeup_secondary_cpu_64(apicid, 
+start_ip);
+         else if (apic->wakeup_secondary_cpu)
+                 boot_error = apic->wakeup_secondary_cpu(apicid, start_ip);
+-       else
++       else {
++               if(!cpu) {
++                       early_gdt_descr.address = (unsigned 
+long)get_cpu_gdt_rw(cpu);
++                       initial_stack  = idle->thread.sp;
++               }
+                 boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
+                                                      cpu0_nmi_registered);
+-
++       }
+         return boot_error;
+  }
+
+
 
