@@ -2,135 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27316907E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6FF690815
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 12:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjBIL4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 06:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
+        id S230016AbjBIL6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 06:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjBILz6 (ORCPT
+        with ESMTP id S229592AbjBIL4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 06:55:58 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9975BA54
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 03:45:35 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id o18so1485373wrj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 03:45:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hu6GdqNd3zsA84btgPFw8USXgsViqaEjdbJQnrfaI4w=;
-        b=n1Ienk5lRO8cXWiArd74AhjKDLGYOjoSuLC0rRa/zikn36qgUP3ui7o/AwrN8hMBJX
-         Unk1ZpgBgrbfEPmhmnDsOuX8wI/DXel0M23Cv3AFj20qQtDxsqSdOtbZING9EmqacyF5
-         I0CYpWWOdPX0s4w/LtCTfnYqomtoRnUbIiyK6SnPXTJISnHBN1CKCPxrxUKbJBnqCm9h
-         5bCFrgasalLc0XAf3HlJpcuY+hQv9KNX0JXNQL9K1C2R64TDmFaeabXOkmj7HRVzHIwU
-         ohqxTol+g/Ulqc1WRLf2HQnSWR6kbjoIgFLp6LsthUfIK2kCmFi+jEma6CTxY9+FhmhK
-         YsSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hu6GdqNd3zsA84btgPFw8USXgsViqaEjdbJQnrfaI4w=;
-        b=uROe/KWnUQRexuj2HvV7wR/Pp+1L/hTBp8RFb57TOaOw8edo/DM6QpRrtva6dUzinT
-         vrQC0ErvEyyIRpuVhLSwY9qgD8igKr11pFIL6vGYZ5nJSP76QcbXB8GMwrOrWg8EvBor
-         l1PlAcYNmPYyS8cTn7qvePUV1RTlw3CkQWcwTsIMyAOlHr4oa/gxLK2DDafeDLhBaMfq
-         q2CsZl+mTKiNDDWhPlSyOsRFA2hDIpz0aEyZLv2TS9eQqAUEYYqXp8IqC5eg2OMpNxHT
-         iU9tLy6b5RM/Hv61aauvEsyQ/C8MrmP4PeC2l4Bs9U8+Jju8pVS37xih/lRzRXdtjgB1
-         7ulA==
-X-Gm-Message-State: AO0yUKU67+ce2Y78IN22hmY3+02BqaiwNAbtdB3iZa4B+zGTJSTGdbbo
-        W4WTUuQ4BdH7tvGtdKp6Vbd/Gw==
-X-Google-Smtp-Source: AK7set+SdD0YDgg4BCREGyg/o6ZuyXLyU0+ajza8lIhXN2idY2jcgPdHDEeeYVo1q6dNnVXyEeB29Q==
-X-Received: by 2002:a5d:6585:0:b0:2c3:c453:5dd3 with SMTP id q5-20020a5d6585000000b002c3c4535dd3mr10725274wru.36.1675943133621;
-        Thu, 09 Feb 2023 03:45:33 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:8009:2525:9580:8db2? ([2a02:6b6a:b566:0:8009:2525:9580:8db2])
-        by smtp.gmail.com with ESMTPSA id t2-20020adfe102000000b002c3f280bdc7sm1085376wrz.96.2023.02.09.03.45.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Feb 2023 03:45:33 -0800 (PST)
-Message-ID: <541a3e2a-d72e-98f7-bfc6-f64ef65f3043@bytedance.com>
-Date:   Thu, 9 Feb 2023 11:45:32 +0000
+        Thu, 9 Feb 2023 06:56:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6085D170F;
+        Thu,  9 Feb 2023 03:47:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DDA361A11;
+        Thu,  9 Feb 2023 11:47:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06194C433EF;
+        Thu,  9 Feb 2023 11:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675943225;
+        bh=/cmWTKP+ZzUuyI0iSgBBz7tpFTNu/+ueErc+Sk9xR1w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RMalBmRtOmbCtWIDvIP3YC/FYnD9v0SfWBhVdLZKngqRjqgOzusV+RRkRgBcsInK/
+         L9XGROLwtPYqP2R9hGa9yNVjKPKgLIg2wadGpvbpzZUIaNPdrSu/QIzPp7xTXffYVo
+         6+ctepGtM1QK7mOTsC+qA/wy6ylllYQfHiJB6Y+voR5YoxyRAoX1a8xmvFrla/NIRg
+         EjhP2ouWi6MJFHqwaaqB9pVUod8j4xSQg2dKcviUB8qDSaaYJxiO+4NcXmYnfIlybe
+         BANoUdWiac+B+BZnHf94/JWizWVP/4+NmiAfMZSRYUQiVa1+9y1ibtrIcznA6RHgTf
+         nRuhtg8ge29TA==
+Message-ID: <f51b1a5b-cb61-2ab8-7ca4-9b81a4f43fc6@kernel.org>
+Date:   Thu, 9 Feb 2023 12:46:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v7 0/9] Parallel CPU bringup for x86_64
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 21/24] Documentation: trace: correct spelling
 Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>, paulmck@kernel.org,
-        tglx@linutronix.de
-Cc:     kim.phillips@amd.com, arjan@linux.intel.com, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        x86@kernel.org, pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, rcu@vger.kernel.org, mimoja@mimoja.de,
-        hewenliang4@huawei.com, thomas.lendacky@amd.com, seanjc@google.com,
-        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230207230436.2690891-1-usama.arif@bytedance.com>
- <20230209035300.GA3216394@paulmck-ThinkPad-P17-Gen-1>
- <8e2f03e2-9517-aeb4-df60-b36ef3ff3a75@bytedance.com>
- <f07b371ae2eb11f541c665b488b3d4b6bf1a81b3.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <f07b371ae2eb11f541c665b488b3d4b6bf1a81b3.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+References: <20230209071400.31476-1-rdunlap@infradead.org>
+ <20230209071400.31476-22-rdunlap@infradead.org>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20230209071400.31476-22-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/9/23 08:13, Randy Dunlap wrote:
+> --- a/Documentation/trace/hwlat_detector.rst
+> +++ b/Documentation/trace/hwlat_detector.rst
+> @@ -14,7 +14,7 @@ originally written for use by the "RT" p
+>  kernel is highly latency sensitive.
+>  
+>  SMIs are not serviced by the Linux kernel, which means that it does not
+> -even know that they are occuring. SMIs are instead set up by BIOS code
+> +even know that they are occurring. SMIs are instead set up by BIOS code
+>  and are serviced by BIOS code, usually for "critical" events such as
+>  management of thermal sensors and fans. Sometimes though, SMIs are used for
+>  other tasks and those tasks can spend an inordinate amount of time in the
 
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-On 09/02/2023 11:03, David Woodhouse wrote:
-> On Thu, 2023-02-09 at 09:49 +0000, Usama Arif wrote:
->>
->> Its easy to test, just by doing
->> echo 0 > /sys/devices/system/cpu/cpu0/online;
->> echo 1 > /sys/devices/system/cpu/cpu0/online;
-> 
-> This one also fixes it for me. If we're happy with this approach, I'll
-> work it into Thomas's original patch (and hopefully eventually he'll be
-> happy enough with it and the commit message that he'll give us his
-> Signed-off-by for it.)
-> 
-
-Yes, I think its better!
-
-> 
-> I could probably add a Co-developed-by: tglx for that first x2apic
-> patch in the series too, but then it would *also* need his SoB and I
-> didn't want to be owed two, so I just pasted his suggested code and
-> didn't credit him.
-> 
-> 
-> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-> index 5462464fe3ef..ea6052a97619 100644
-> --- a/arch/x86/kernel/head_64.S
-> +++ b/arch/x86/kernel/head_64.S
-> @@ -450,7 +450,16 @@ SYM_CODE_END(secondary_startup_64)
->   SYM_CODE_START(start_cpu0)
->          ANNOTATE_NOENDBR
->          UNWIND_HINT_EMPTY
-> -       movq    initial_stack(%rip), %rsp
-> +       /* Load the per-cpu base for CPU#0 */
-> +       leaq    __per_cpu_offset(%rip), %rbx
-> +       movq    (%rbx), %rbx
-> +
-> +       /* Find the idle task stack */
-> +       movq    $idle_threads, %rcx
-> +       addq    %rbx, %rcx
-> +       movq    (%rcx), %rcx
-> +       movq    TASK_threadsp(%rcx), %rsp
-> +
->          jmp     .Ljump_to_C_code
->   SYM_CODE_END(start_cpu0)
->   #endif
-> 
-> I cut and pasted some of that, I'm not entirely sure why we have three
-> instructions to do the equivalent of 'movq idle_threads(%ebx), %ecx'
-> and may fix that in the original as I work this in.
+Thanks!
+-- Daniel
