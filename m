@@ -2,141 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E6769107B
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F54691081
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjBISmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 13:42:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S229766AbjBISny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjBISmb (ORCPT
+        with ESMTP id S229538AbjBISnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 13:42:31 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FA84DBD3
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 10:42:29 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id j17so4469253lfr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 10:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i0aEDE75N2SdBDGGPL2lgt++w/A4f2z3JZVFa7fsP6w=;
-        b=0sGaXDcbijcr7oYBBi4A/osUlPOLqpddmvr6yjcUghq8IMl4ZIdY6zKpopKJC9W6pV
-         AGLHN3sBHEWqECUOQcSLQuJaRQsqGw6B+NcJwVdtbQ/mER/2nlVYQrJU2YuCTjaL2O/K
-         ImF+MpptlhOrZxCBcvWTvrayzNUzK/SkWimx6fVKMhP8QIyMYlNAYyFUVWBg+XARH8bm
-         65NFolmnqRyUx8euHY3CRVmmLp7vWK9ebEhQxRy4H0UTo1kRSKkyJQbTyw+GKXUap1jR
-         xWoa0KMPh5Nw9oXdYTYbk6YGD0n3+b7jgsKk9MXrXTjwMPyq5xelyKlhVtgC2trJ0fSK
-         Bg2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i0aEDE75N2SdBDGGPL2lgt++w/A4f2z3JZVFa7fsP6w=;
-        b=uTOdn657uNTavowNj0+T6Sk7g2Cfb2YmaEAFC5/UJpCREKcK+pMFSXxUmPmJ7KgtR5
-         zG3OwVytdt4RC2xiEGROSs8vNssq1oudqCOWsgDAMeak7j0ToLNeAVSYzhEaUXp5ZemF
-         qSTmSemVetjy4aYshzc4zRMIyQGMk+U5FsysAEVPt1I2o4qCW7QKGH2+kxy5+1DtpGz4
-         F4V6Yi4ZeWWgfVkk7wTd36xXQjj/MzCi4jCJODv9miR+yRJRsA9ORnt97HtzIft4StOC
-         utL/YTtS50KtPh7/FdpXJsBbKob1qw1oVLfgvO54ILllMWW/R3A3qD4f0EUzhAFX1T03
-         JgsA==
-X-Gm-Message-State: AO0yUKV7Nkx3kdifB78aH9D6bqpoooYxwLZWqUsadoszONyokJzfeKPR
-        n/KioEoy0uMK0r4BMh0tx3YAnXNrLsO0UwSvhJilow==
-X-Google-Smtp-Source: AK7set8Xnf2aypJtFoPs/ialPERepYClud8fqjfrGasZLQIuYamcdQuwo/59VT5Flm2ac6uKIY2iXRlx6BJ+wdu8Hyg=
-X-Received: by 2002:a05:6512:218e:b0:4d7:2dc1:b7bc with SMTP id
- b14-20020a056512218e00b004d72dc1b7bcmr2133331lft.100.1675968147543; Thu, 09
- Feb 2023 10:42:27 -0800 (PST)
+        Thu, 9 Feb 2023 13:43:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4A84902D
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 10:43:51 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319IFItu027092;
+        Thu, 9 Feb 2023 18:43:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=CbeDSGRGITgYPWKV/a/L7ZMG0+7RL3Ck2IccPPZsZB4=;
+ b=bl5FUS17HBdsEsdeZDfCVoBMpOGH9rqS3EtjN0bEmFVHqPsqXhh8iZ0uLIzZNACCmqve
+ czuXlKLp987Um0DR4CeKvJKPW8eS9zKhEDjo0qF451ccV317VLzg3kh/Or37hvtzDu90
+ zaFGb8RFzSDgul+SA4LGoRycEplJNMuwHDsYADGzPJ4rnyCDBUfnbVYryVu+Yb+2OBGk
+ IbfwY9GylJockHQctgIObPn/LTQw4VCj8qjeN/v7sDmQd6hYXaytEmB42OEG5BClMRLo
+ uGv3p0ECEyKJSMhPhtg6x60ut9IZsZO4suPobqcjNmwKyqU2FJcfvLm8rLwuMxZkBzFq sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn5xtruxp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:43:13 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 319INVHl027357;
+        Thu, 9 Feb 2023 18:43:12 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn5xtrux4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:43:12 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319Hoe8U011173;
+        Thu, 9 Feb 2023 18:43:10 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3nhf06vns1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:43:09 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 319Ih7NW49938688
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Feb 2023 18:43:07 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6259D20040;
+        Thu,  9 Feb 2023 18:43:07 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F16620043;
+        Thu,  9 Feb 2023 18:43:02 +0000 (GMT)
+Received: from [9.43.118.216] (unknown [9.43.118.216])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Feb 2023 18:43:01 +0000 (GMT)
+Message-ID: <d465173e-a31a-c4d6-af51-59d9ff0c2edc@linux.ibm.com>
+Date:   Fri, 10 Feb 2023 00:13:00 +0530
 MIME-Version: 1.0
-References: <20230206201455.1790329-1-evan@rivosinc.com> <20230206201455.1790329-3-evan@rivosinc.com>
- <Y+HsE397cY4HF+5K@kroah.com> <C3C21677-5250-4120-9A4F-24945C1EE51B@kernel.org>
- <CALs-HsvuX-Uj5g9c6vvUp=MaUpdcPdpwwQCsxzjoXpqS+3LEsA@mail.gmail.com> <Y+UpqHstcMahbadE@kroah.com>
-In-Reply-To: <Y+UpqHstcMahbadE@kroah.com>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Thu, 9 Feb 2023 10:41:51 -0800
-Message-ID: <CALs-HssV0=fcDKtUN_3S8T+_Qtq+6qCiNbfQU9SXicsh2KFt4w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] RISC-V: Add a syscall for HW probing
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>, vineetg@rivosinc.com,
-        heiko@sntech.de, slewis@rivosinc.com,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@rivosinc.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>, Guo Ren <guoren@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ruizhe Pan <c141028@gmail.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v18 5/7] kexec: exclude hot remove cpu from elfcorehdr
+ notes
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20230131224236.122805-1-eric.devolder@oracle.com>
+ <20230131224236.122805-6-eric.devolder@oracle.com> <87sffpzkle.ffs@tglx>
+ <dd03f47a-0017-6239-04e9-e796dca03c0c@oracle.com> <87h6vw2rwf.ffs@tglx>
+ <7580421a-648a-2c4b-3c33-82e7622d9585@oracle.com>
+Content-Language: en-US
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <7580421a-648a-2c4b-3c33-82e7622d9585@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qdDpszezIS5EbmhA72goeZYtIaqtY0Q0
+X-Proofpoint-ORIG-GUID: IDLYTDlY6iOI64r9nJQL2lJoyqID8yCE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-09_15,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ spamscore=0 mlxlogscore=999 impostorscore=0 clxscore=1015 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090174
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 9:13 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+Hello Eric,
+
+On 09/02/23 23:01, Eric DeVolder wrote:
 >
-> On Thu, Feb 09, 2023 at 09:09:16AM -0800, Evan Green wrote:
-> > On Mon, Feb 6, 2023 at 10:32 PM Conor Dooley <conor@kernel.org> wrote:
-> > >
-> > > Hey Evan, Greg,
-> > >
-> > >
-> > > On 7 February 2023 06:13:39 GMT, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >On Mon, Feb 06, 2023 at 12:14:51PM -0800, Evan Green wrote:
-> > > >> We don't have enough space for these all in ELF_HWCAP{,2} and there's no
-> > > >> system call that quite does this, so let's just provide an arch-specific
-> > > >> one to probe for hardware capabilities.  This currently just provides
-> > > >> m{arch,imp,vendor}id, but with the key-value pairs we can pass more in
-> > > >> the future.
-> > > >
-> > > >Ick, this is exactly what sysfs is designed to export in a sane way.
-> > > >Why not just use that instead?  The "key" would be the filename, and the
-> > > >value the value read from the filename.  If the key is not present, the
-> > > >file is not present and it's obvious what is happening, no fancy parsing
-> > > >and ABI issues at all.
-> > >
-> > > https://lore.kernel.org/linux-riscv/20221201160614.xpomlqq2fzpzfmcm@kamzik/
-> > >
-> > > This is the sysfs interface that I mentioned drew
-> > > suggested on the v1.
-> > > I think it fits ~perfectly with what Greg is suggesting too.
-> >
-> > Whoops, I'll admit I missed that comment when I reviewed the feedback
-> > from v1. I spent some time thinking about sysfs. The problem is this
-> > interface will be needed in places like very early program startup. If
-> > we're trying to use this in places like the ifunc selector to decide
-> > which memcpy to use, having to go open and read a fistful of files is
-> > going to be complex that early, and rough on performance.
 >
-> How is it going to be any different on "performance" than a syscall?  Or
-> complex?  It should be almost identical overall as this is all in-ram
-> and not any real I/o is happening.  You are limited only by the speed of
-> your cpu.
+> On 2/8/23 07:44, Thomas Gleixner wrote:
+>> Eric!
+>>
+>> On Tue, Feb 07 2023 at 11:23, Eric DeVolder wrote:
+>>> On 2/1/23 05:33, Thomas Gleixner wrote:
+>>>
+>>> So my latest solution is introduce two new CPUHP states, 
+>>> CPUHP_AP_ELFCOREHDR_ONLINE
+>>> for onlining and CPUHP_BP_ELFCOREHDR_OFFLINE for offlining. I'm open 
+>>> to better names.
+>>>
+>>> The CPUHP_AP_ELFCOREHDR_ONLINE needs to be placed after 
+>>> CPUHP_BRINGUP_CPU. My
+>>> attempts at locating this state failed when inside the STARTING 
+>>> section, so I located
+>>> this just inside the ONLINE sectoin. The crash hotplug handler is 
+>>> registered on
+>>> this state as the callback for the .startup method.
+>>>
+>>> The CPUHP_BP_ELFCOREHDR_OFFLINE needs to be placed before 
+>>> CPUHP_TEARDOWN_CPU, and I
+>>> placed it at the end of the PREPARE section. This crash hotplug 
+>>> handler is also
+>>> registered on this state as the callback for the .teardown method.
+>>
+>> TBH, that's still overengineered. Something like this:
+>>
+>> bool cpu_is_alive(unsigned int cpu)
+>> {
+>>     struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+>>
+>>     return data_race(st->state) <= CPUHP_AP_IDLE_DEAD;
+>> }
+>>
+>> and use this to query the actual state at crash time. That spares all
+>> those callback heuristics.
+>>
+>>> I'm making my way though percpu crash_notes, elfcorehdr, vmcoreinfo,
+>>> makedumpfile and (the consumer of it all) the userspace crash utility,
+>>> in order to understand the impact of moving from for_each_present_cpu()
+>>> to for_each_online_cpu().
+>>
+>> Is the packing actually worth the trouble? What's the actual win?
+>>
+>> Thanks,
+>>
+>>          tglx
+>>
+>>
+>
+> Thomas,
+> I've investigated the passing of crash notes through the vmcore. What 
+> I've learned is that:
+>
+> - linux/fs/proc/vmcore.c (which makedumpfile references to do its job) 
+> does
+>   not care what the contents of cpu PT_NOTES are, but it does coalesce 
+> them together.
+>
+> - makedumpfile will count the number of cpu PT_NOTES in order to 
+> determine its
+>   nr_cpus variable, which is reported in a header, but otherwise 
+> unused (except
+>   for sadump method).
+>
+> - the crash utility, for the purposes of determining the cpus, does 
+> not appear to
+>   reference the elfcorehdr PT_NOTEs. Instead it locates the various
+>   cpu_[possible|present|online]_mask and computes nr_cpus from that, 
+> and also of
+>   course which are online. In addition, when crash does reference the 
+> cpu PT_NOTE,
+>   to get its prstatus, it does so by using a percpu technique directly 
+> in the vmcore
+>   image memory, not via the ELF structure. Said differently, it 
+> appears to me that
+>   crash utility doesn't rely on the ELF PT_NOTEs for cpus; rather it 
+> obtains them
+>   via kernel cpumasks and the memory within the vmcore.
+>
+> With this understanding, I did some testing. Perhaps the most telling 
+> test was that I
+> changed the number of cpu PT_NOTEs emitted in the 
+> crash_prepare_elf64_headers() to just 1,
+> hot plugged some cpus, then also took a few offline sparsely via 
+> chcpu, then generated a
+> vmcore. The crash utility had no problem loading the vmcore, it 
+> reported the proper number
+> of cpus and the number offline (despite only one cpu PT_NOTE), and 
+> changing to a different
+> cpu via 'set -c 30' and the backtrace was completely valid.
+>
+> My take away is that crash utility does not rely upon ELF cpu 
+> PT_NOTEs, it obtains the
+> cpu information directly from kernel data structures. Perhaps at one 
+> time crash relied
+> upon the ELF information, but no more. (Perhaps there are other crash 
+> dump analyzers
+> that might rely on the ELF info?)
+>
+> So, all this to say that I see no need to change 
+> crash_prepare_elf64_headers(). There
+> is no compelling reason to move away from for_each_present_cpu(), or 
+> modify the list for
+> online/offline.
+>
+> Which then leaves the topic of the cpuhp state on which to register. 
+> Perhaps reverting
+> back to the use of CPUHP_BP_PREPARE_DYN is the right answer. There 
+> does not appear to
+> be a compelling need to accurately track whether the cpu went 
+> online/offline for the
+> purposes of creating the elfcorehdr, as ultimately the crash utility 
+> pulls that from
+> kernel data structures, not the elfcorehdr.
+>
+> I think this is what Sourabh has known and has been advocating for an 
+> optimization
+> path that allows not regenerating the elfcorehdr on cpu changes 
+> (because all the percpu
+> structs are all laid out). I do think it best to leave that as an arch 
+> choice.
 
-At best sysfs is 1 syscall per key, whereas this version of the
-interface lets you query all the keys you're interested in with a
-single syscall. With the
-proposed vdso version, we'd be down to ~0 syscalls for most queries.
-The complexity aspect is mostly a reference to having to do a bunch of
-open/read/parse/close operations at a time when mem* operations are
-still being set up. Since this is something that may get run on every
-program invocation, it seems worth it to be able to get fast and
-simple queries even if it's a slightly separated interface.
+Since things are clear on how the PT_NOTES are consumed in kdump kernel 
+[fs/proc/vmcore.c],
+makedumpfile, and crash tool I need your opinion on this:
 
+Do we really need to regenerate elfcorehdr for CPU hotplug events?
+If yes, can you please list the elfcorehdr components that changes due 
+to CPU hotplug.
 
--Evan
+ From what I understood, crash notes are prepared for possible CPUs as 
+system boots and
+could be used to create a PT_NOTE section for each possible CPU while 
+generating the elfcorehdr
+during the kdump kernel load.
+
+Now once the elfcorehdr is loaded with PT_NOTEs for every possible CPU 
+there is no need to
+regenerate it for CPU hotplug events. Or do we?
+
+Thanks,
+Sourabh Jain
