@@ -2,129 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B541690FBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 18:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A10A690FC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 19:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjBIR7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 12:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S230198AbjBISAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 13:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjBIR7s (ORCPT
+        with ESMTP id S230174AbjBISAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 12:59:48 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93781677BB
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 09:59:36 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id m2-20020a17090a414200b00231173c006fso6320398pjg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 09:59:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r1sHi/E23a5yYsmSD28sY0fyQwDO0i2DVxMae0s0JJ4=;
-        b=o05haLPl9IFTnLiAg/ESlz8CztWBcdgK2wygltUQorSKpGgCzbiKdy/mr41/xzAshv
-         y0/21lFwlWTvjRcqF+IhmRJHDIUg8JZcVFNobJiaYDr31RUlao8fMn1NdfDlb7qOH7Jv
-         VlwAFW1ulaw/3IAJcEapTR2lFj6XfcAgdq8plHVMwsX3eN1JMcQ4k+WXW9MbykE/v9z8
-         2s18E6qy2xJrEtIxE69vdC3GxA8cwV4SltaGKf8T54eCbVLwhFgVXQcuhIlnT5GiS0Eo
-         gBESZZWoNL4WiwI1A+f3D48A3zVr627PHUVtxDBG2fypuK/dy/6BjRoXm4IBGnLkcCGb
-         3hAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r1sHi/E23a5yYsmSD28sY0fyQwDO0i2DVxMae0s0JJ4=;
-        b=bJo8/u46paOiVktGoYlSLwF47TkNbU8HPfpF3JYFMwvVgR+baxs16XziIQWPn0jprz
-         eLeuHTWt9zTbAoJCWeZoFTXVqRh2NEuYwp7nFrhdQRHMWEL+DWW78DqxxNGXsraWEY2B
-         iIfKmkrNAWw+gkTw1KIUQ35l0KqjQc3NPe4nqpkxgqfu66VZ9U8zxa77w/U3IDkISfJx
-         fRtrPLxpZkMUNIHgxCKChtGmDqTM03YD0JmSHmx7GW/ATZf4mJ+JW+3+HD+tHp9llGpZ
-         BEa8mDFF+N5r+G/E4LIVZTRYYHeebr2YtXNadeEOemlDm89yx/ExRl+r/Q0d8e/0966+
-         KXCQ==
-X-Gm-Message-State: AO0yUKWgQ773g+v3Of45iXrISKEAsUZaWi9emPh/Uqf3pHBsAViQ291C
-        EgsQH31cyJCcN8P6DCD82CRIHYLuoj7r2VDK5KU=
-X-Google-Smtp-Source: AK7set86anSvfiXLykDPIZ+7CAlxpnSljgTl7iyZJZnzmy9NbpgqfbpEahUyyxMd04RymwBlbI7P6pE5EGISxlAdHV4=
-X-Received: by 2002:a17:90a:7c44:b0:230:8f38:a4ab with SMTP id
- e4-20020a17090a7c4400b002308f38a4abmr1679601pjl.26.1675965567019; Thu, 09 Feb
- 2023 09:59:27 -0800 (PST)
+        Thu, 9 Feb 2023 13:00:36 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AB4C673;
+        Thu,  9 Feb 2023 10:00:36 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 319HqhcO028667;
+        Thu, 9 Feb 2023 18:00:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Lmhy+u3RejciIgY5dlsFnZKTfGQ59GI+TbEPRgXUduo=;
+ b=gbyB8ZHwDWOAyJOISirMI4aqDc2HttPQgQEl7uYXvVOJw1CPnekFMwaDEgM/0mUhgGPO
+ Kl7pxpdny3t/3kuSajqfZu9H012AaIVBOgYMCISvBB4z+cbCq0+qeQEWspW9g5FsSzVI
+ mj8qwCrMs0m0djve2NuDzsUZ4JNpkVvQI8+GKTtQxv1cVeQijXj9GRoZq0FmkJR1xwDH
+ 4poDXQ5zPecJHyS+sd6q08vFOyr/RR+4sPSS0uyW9MkU9Felh+riJC86xL6/FeKOZUJ+
+ xwwyIUU1oTEIeU1fb24ImyiDMH2Gk77pgZTo7tgIwTXqxBSKxYJs4kwH5zRA4+8k9izy DA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn5m9r5bk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:00:06 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 319HrLQh030488;
+        Thu, 9 Feb 2023 18:00:05 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nn5m9r5aq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:00:05 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 319GkF6t020070;
+        Thu, 9 Feb 2023 18:00:04 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3nhf07kfmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Feb 2023 18:00:04 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 319I02Eg47448480
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 9 Feb 2023 18:00:03 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD77058055;
+        Thu,  9 Feb 2023 18:00:02 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 22C125804B;
+        Thu,  9 Feb 2023 17:59:59 +0000 (GMT)
+Received: from [9.65.251.35] (unknown [9.65.251.35])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  9 Feb 2023 17:59:58 +0000 (GMT)
+Message-ID: <25102c92-1831-be52-677d-60bbf2e11772@linux.ibm.com>
+Date:   Thu, 9 Feb 2023 12:59:58 -0500
 MIME-Version: 1.0
-References: <CAMxBKG1RwbRJMG0cKcnbyKgznXeZLL+Zp1zXeOnxpYU0NkOO8A@mail.gmail.com>
- <CAMxBKG3o_6R7M0gaUHXA5yGgSe6HBWYK25fwF=8mN+JTno9t7Q@mail.gmail.com>
- <CAMxBKG0wDi-XwMZwMHq_DbFXt3pgK-CV-G7iT9BNftiXBoUHzQ@mail.gmail.com>
- <20230209153600.jtj6deqhgfocvwgc@houat> <cefe5482-f30f-e5cc-8722-1f60d610f059@redhat.com>
-In-Reply-To: <cefe5482-f30f-e5cc-8722-1f60d610f059@redhat.com>
-From:   Darrell Kavanagh <darrell.kavanagh@gmail.com>
-Date:   Thu, 9 Feb 2023 17:59:15 +0000
-Message-ID: <CAMxBKG2sFu_e4rQ_-ZyJN5+C6YDLMhSoCYgDpaFpBddHZjwwEw@mail.gmail.com>
-Subject: Re: drm: panel-orientation-quirks: Add quirk for Lenovo IdeaPad Duet
- 3 10IGL5
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
-        airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 06/17] iommufd/hw_pagetable: Use domain_alloc_user op for
+ domain allocation
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, chao.p.peng@linux.intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        baolu.lu@linux.intel.com
+References: <20230209043153.14964-1-yi.l.liu@intel.com>
+ <20230209043153.14964-7-yi.l.liu@intel.com>
+Content-Language: en-US
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20230209043153.14964-7-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MshAoLJBHiVQi2gxFXq8KhlzTdxvvaXT
+X-Proofpoint-GUID: Amz5GV-sdxrN2XmhGfjMFEdg5gLSMKzb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
+ definitions=2023-02-09_13,2023-02-09_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 adultscore=0 bulkscore=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 clxscore=1011 phishscore=0 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302090166
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It certainly is a learning process! Let me try to get things together
-properly myself, will be useful in the long run.
+On 2/8/23 11:31 PM, Yi Liu wrote:
+> This converts iommufd to use iommu_domain_alloc_user() for iommu_domain
+> creation.
+> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>  drivers/iommu/iommufd/hw_pagetable.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+> index 43d473989a06..08d963ee38c7 100644
+> --- a/drivers/iommu/iommufd/hw_pagetable.c
+> +++ b/drivers/iommu/iommufd/hw_pagetable.c
+> @@ -30,6 +30,7 @@ struct iommufd_hw_pagetable *
+>  iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+>  			   struct device *dev)
+>  {
+> +	const struct iommu_ops *ops;
+>  	struct iommufd_hw_pagetable *hwpt;
+>  	int rc;
+>  
+> @@ -37,7 +38,13 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+>  	if (IS_ERR(hwpt))
+>  		return hwpt;
+>  
+> -	hwpt->domain = iommu_domain_alloc(dev->bus);
+> +	ops = dev_iommu_ops(dev);
+> +	if (!ops || !ops->domain_alloc_user) {
+> +		rc = -EOPNOTSUPP;
+> +		goto out_abort;
+> +	}
 
-Darrell
+Hi Yi,
 
-On Thu, 9 Feb 2023 at 15:53, Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 2/9/23 16:36, Maxime Ripard wrote:
-> > Hi,
-> >
-> > On Wed, Feb 08, 2023 at 07:04:58PM +0000, Darrell Kavanagh wrote:
-> >> I've resolved this by adding a matching quirk in
-> >> drivers/firmware/efi/sysfb_efi.c - see below.
->
-> Right, this is a known issue on Lenovo 2-in-1s with
-> the panel mounted 90 degree rotated issue. For some reason
-> the efifb info still gives a landscape resolution even though
-> the actual resolution really is portrait. This also messes
-> up the pitch of the framebuffer leading to the weird corrupted
-> looking output you saw.
->
-> >> I've resolved this by adding a matching quirk in
-> >> drivers/firmware/efi/sysfb_efi.c - see below.
-> >>
-> >> Are you the right people to be notifying about this?
-> >
-> > Yes, we are.
-> >
-> > Howewer, please follow
-> > https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-> >
-> > In particular, a proper commit log and your Signed-off-By tag is missing.
->
-> Are we, do patches to that file go through drm-misc ?  :
->
-> [hans@shalem linux]$ scripts/get_maintainer.pl -f drivers/firmware/efi/sysfb_efi.c
-> Ard Biesheuvel <ardb@kernel.org> (maintainer:EXTENSIBLE FIRMWARE INTERFACE (EFI))
-> linux-efi@vger.kernel.org (open list:EXTENSIBLE FIRMWARE INTERFACE (EFI))
-> linux-kernel@vger.kernel.org (open list)
->
-> Either way this should be turned into a proper patch with a proper
-> Signed-off-By message as Maxime mentioned.
->
-> My offer for the drm_panel_orientation_quirks.c patch to turn it into
-> a proper patch for you also extends to this one. If you want that,
-> please let me know and again add your Signed-off-by as a standalone
-> separate line in your reply so that I can use it for the commit message.
->
-> Regards,
->
-> Hans
->
->
+This seems to break the iommufd vfio container support for any iommu that hasn't implemented domain_alloc_user yet.
+
+I noticed it using vfio-pci on s390 with
+
+CONFIG_IOMMUFD=m
+CONFIG_IOMMUFD_VFIO_CONTAINER=y
+CONFIG_VFIO_GROUP=y
+
+Not sure if the intent is to make domain_alloc_user a hard requirement for using iommufd (if so then the commit description really should highlight that).  Otherwise, conditionally calling iommu_domain_alloc(dev->bus) when !ops->domain_alloc_user (instead of returning -EOPNOTSUPP) seems to restore the prior functionality for me.
+
+Thanks,
+Matt
