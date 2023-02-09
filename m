@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223F0690209
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64ADA69020A
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 09:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjBIIVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 03:21:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S229605AbjBIIXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 03:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjBIIVf (ORCPT
+        with ESMTP id S229498AbjBIIXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 03:21:35 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165DD367E4
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:21:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675930894; x=1707466894;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qSNEuSjLMefwCLldzADS4ERa3/+8x0SMhJqpUi9xH9g=;
-  b=b/9aSPQR7GZOmxK36AauDLaRm3i/MXMeUeqA+3bMRfwMHwLglrh8+9ZM
-   ETNZOc5JAlDDRIq0moDqDg+O+tPDVXHQfqlReO+9pZeAwG9s/F+bvxsPj
-   /IqrfK0YQcWeYcCrN+55gBPbcxJ64iaQs52rshRlUUtGi2HR40uWCISLx
-   HhwQO0/E6MB7izo+fSZDa07idrZR+Cei0w6FAQ9mo5Pr/iEvEFcvH0HQE
-   OcdDEAz9AEI5n+knjs1olW/kjV1OlfLbbU3QBpn71ey1GKzrK6Hz63RYu
-   YSPGcAdnoUjIwUf3fpxk7zMrRj41goF55aR12fUcAb94nM46NxuJvmoKn
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="416272087"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="416272087"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2023 00:21:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="996452829"
-X-IronPort-AV: E=Sophos;i="5.97,283,1669104000"; 
-   d="scan'208";a="996452829"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 09 Feb 2023 00:21:32 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pQ2BP-0004w6-1i;
-        Thu, 09 Feb 2023 08:21:31 +0000
-Date:   Thu, 9 Feb 2023 16:21:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dave Wysochanski <dwysocha@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>
-Subject: fs/nfs/fscache.c:58:51: sparse: sparse: incorrect type in argument 3
- (different base types)
-Message-ID: <202302091643.bKacRPzV-lkp@intel.com>
+        Thu, 9 Feb 2023 03:23:14 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37085BB2
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 00:23:13 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id r3so1392186edq.13
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 00:23:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DERA6rZJqjWeH7DEhVRmhhsPITPHyc6ZUiK7R87w4Ak=;
+        b=bkeUeyi9xhUKUg70LQRIUCRAa1C0nf3xTOOpkxOAF8kea2cBXsC80xYMPQcar5o3m3
+         VcO2hSCWdniCKDwuP7vIVF0tYFDz5h829LcB0rU3OyPayiVGqUvQbEf/f2u6nkyc7mUc
+         q5DohMh9xaCiNRSE9MSkUPyAuwVgTuml0ywWQAMKwA8OgpCqiOxUVuIrrdvR2HRNnlgx
+         LCvYF4qZbDDPH2JreZLMaVuLvqGKp1wtNGxmIfLLPcE+792Ht764ihnU39UM8Ag4+Tf/
+         DyLhOxouk5+P5F2gNhAsH+8ntf5UzGlC8Igd0zTYyTaguI9K7Pm7nfJPgWBcQ1WEmoMe
+         KH0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DERA6rZJqjWeH7DEhVRmhhsPITPHyc6ZUiK7R87w4Ak=;
+        b=e1kPPybndHSNeArR1xT/FSvX2ObN0LplkzqKzj4vuWwHMss6YhZFATiQtoyI+YlWOR
+         Q/PVTa0/IahRtno3TgCmSMJPqTuaDoufzMcv3uG7EUfMXMVEOjmn46mhzS1rfOguEHL4
+         jgAaWAPMbtNzGZ+pmggTtU1fHf1coN4st/ll4LzAKi5eLc3yzgJHlAT73CHsocQsh/AJ
+         prZqFgmXI+iBMQfFid21bORCdy3HzZJs7ZVfwauupdeChAdH/oVV3pbJwQWykhAklXF9
+         nffwLbweCQVKEpSuBQq+vu2Gy9hJRe1BN0xu9KQYW5e5gLVXsMWnQ6kZTN2aq5J2mkpm
+         sf+A==
+X-Gm-Message-State: AO0yUKXhvdOg0CU4Vs2CEruO6N+qfeapLqTYhmje0+i+PAK19Tx4JnHT
+        1IYO5WSC59f9RcD7WH3YP91Kyw==
+X-Google-Smtp-Source: AK7set8jXgg1VDK2HzYMhcGyAX1CdYIy1E+euV0DjBqRFwDwWuFHD9A6MrwVc/mf/TDmCy8k5Z88Ng==
+X-Received: by 2002:a50:8d5b:0:b0:46b:19ab:68d8 with SMTP id t27-20020a508d5b000000b0046b19ab68d8mr10810492edt.40.1675930992606;
+        Thu, 09 Feb 2023 00:23:12 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004ab0e9e396bsm407314edj.87.2023.02.09.00.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Feb 2023 00:23:11 -0800 (PST)
+Date:   Thu, 9 Feb 2023 09:23:10 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@rivosinc.com, conor@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        christoph.muellner@vrull.eu,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>
+Subject: Re: [PATCH 1/2] RISC-V: fix ordering of Zbb extension
+Message-ID: <20230209082310.q7lkpnic5t5arq5a@orel>
+References: <20230208225328.1636017-1-heiko@sntech.de>
+ <20230208225328.1636017-2-heiko@sntech.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230208225328.1636017-2-heiko@sntech.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   0983f6bf2bfc0789b51ddf7315f644ff4da50acb
-commit: a6b5a28eb56c3f4988f7ff5290b954ba296e309a nfs: Convert to new fscache volume/cookie API
-date:   1 year, 1 month ago
-config: arm64-randconfig-s043-20230208 (https://download.01.org/0day-ci/archive/20230209/202302091643.bKacRPzV-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a6b5a28eb56c3f4988f7ff5290b954ba296e309a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a6b5a28eb56c3f4988f7ff5290b954ba296e309a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/infiniband/hw/hns/ drivers/remoteproc/ fs/nfs/
+On Wed, Feb 08, 2023 at 11:53:27PM +0100, Heiko Stuebner wrote:
+> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> 
+> As Andrew reported,
+>     Zb* comes after Zi* according 27.11 "Subset Naming Convention"
+> so fix the ordering accordingly.
+> 
+> Reported-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> ---
+>  arch/riscv/kernel/cpu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index 420228e219f7..8400f0cc9704 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -185,9 +185,9 @@ arch_initcall(riscv_cpuinfo_init);
+>   * New entries to this struct should follow the ordering rules described above.
+>   */
+>  static struct riscv_isa_ext_data isa_ext_arr[] = {
+> -	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
+>  	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+>  	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+> +	__RISCV_ISA_EXT_DATA(zbb, RISCV_ISA_EXT_ZBB),
+>  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+>  	__RISCV_ISA_EXT_DATA(sstc, RISCV_ISA_EXT_SSTC),
+>  	__RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> -- 
+> 2.39.0
+>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202302091643.bKacRPzV-lkp@intel.com
-
-sparse warnings: (new ones prefixed by >>)
->> fs/nfs/fscache.c:58:51: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long x @@     got restricted __be16 const [usertype] sin_port @@
-   fs/nfs/fscache.c:58:51: sparse:     expected unsigned long long x
-   fs/nfs/fscache.c:58:51: sparse:     got restricted __be16 const [usertype] sin_port
->> fs/nfs/fscache.c:59:61: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long x @@     got restricted __be32 const [usertype] s_addr @@
-   fs/nfs/fscache.c:59:61: sparse:     expected unsigned long long x
-   fs/nfs/fscache.c:59:61: sparse:     got restricted __be32 const [usertype] s_addr
->> fs/nfs/fscache.c:64:52: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long x @@     got restricted __be16 const [usertype] sin6_port @@
-   fs/nfs/fscache.c:64:52: sparse:     expected unsigned long long x
-   fs/nfs/fscache.c:64:52: sparse:     got restricted __be16 const [usertype] sin6_port
->> fs/nfs/fscache.c:65:73: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long x @@     got restricted __be32 const @@
-   fs/nfs/fscache.c:65:73: sparse:     expected unsigned long long x
-   fs/nfs/fscache.c:65:73: sparse:     got restricted __be32 const
-   fs/nfs/fscache.c:66:73: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long x @@     got restricted __be32 const @@
-   fs/nfs/fscache.c:66:73: sparse:     expected unsigned long long x
-   fs/nfs/fscache.c:66:73: sparse:     got restricted __be32 const
-   fs/nfs/fscache.c:67:73: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long x @@     got restricted __be32 const @@
-   fs/nfs/fscache.c:67:73: sparse:     expected unsigned long long x
-   fs/nfs/fscache.c:67:73: sparse:     got restricted __be32 const
-   fs/nfs/fscache.c:68:73: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned long long x @@     got restricted __be32 const @@
-   fs/nfs/fscache.c:68:73: sparse:     expected unsigned long long x
-   fs/nfs/fscache.c:68:73: sparse:     got restricted __be32 const
-
-vim +58 fs/nfs/fscache.c
-
-    37	
-    38	/*
-    39	 * Get the per-client index cookie for an NFS client if the appropriate mount
-    40	 * flag was set
-    41	 * - We always try and get an index cookie for the client, but get filehandle
-    42	 *   cookies on a per-superblock basis, depending on the mount flags
-    43	 */
-    44	static bool nfs_fscache_get_client_key(struct nfs_client *clp,
-    45					       char *key, int *_len)
-    46	{
-    47		const struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *) &clp->cl_addr;
-    48		const struct sockaddr_in *sin = (struct sockaddr_in *) &clp->cl_addr;
-    49	
-    50		*_len += snprintf(key + *_len, NFS_MAX_KEY_LEN - *_len,
-    51				  ",%u.%u,%x",
-    52				  clp->rpc_ops->version,
-    53				  clp->cl_minorversion,
-    54				  clp->cl_addr.ss_family);
-    55	
-    56		switch (clp->cl_addr.ss_family) {
-    57		case AF_INET:
-  > 58			if (!nfs_append_int(key, _len, sin->sin_port) ||
-  > 59			    !nfs_append_int(key, _len, sin->sin_addr.s_addr))
-    60				return false;
-    61			return true;
-    62	
-    63		case AF_INET6:
-  > 64			if (!nfs_append_int(key, _len, sin6->sin6_port) ||
-  > 65			    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[0]) ||
-    66			    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[1]) ||
-    67			    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[2]) ||
-    68			    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[3]))
-    69				return false;
-    70			return true;
-    71	
-    72		default:
-    73			printk(KERN_WARNING "NFS: Unknown network family '%d'\n",
-    74			       clp->cl_addr.ss_family);
-    75			return false;
-    76		}
-    77	}
-    78	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
