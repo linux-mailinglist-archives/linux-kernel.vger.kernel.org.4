@@ -2,111 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B4569094D
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD1F690959
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjBIMxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        id S229814AbjBIM4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjBIMxe (ORCPT
+        with ESMTP id S229526AbjBIM4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:53:34 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6B5E387;
-        Thu,  9 Feb 2023 04:53:33 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id n13so1344747wmr.4;
-        Thu, 09 Feb 2023 04:53:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0h7PVwX7xOWVpu8EJbubLGeuc2859Qjp2vbcmTCnktc=;
-        b=fbnHjjgQI3X7zo0eXFOg5iKisI9B4oh8x8/1bKMPzb8ZMzuB3Mj6Hzyc8BxBl2sThs
-         BcZM8fyPY0WexE7gv/xmhq+ltHvewwaZNonHfp4NdDRRZDZfzHhSaqWMI7FmJ31mzSQ0
-         3W724Yt0qFOA+KgHgrujZvpA0/U3vUMYzEmkYhqLsEXOdHW/Xj0kkVcPOs1/Bczf5ZX/
-         5DC9wLJv5BvfP45faMQ+/jBHfeEdJNxiHLZMt7MP5CCxNzE25yiZ18Nxnl5AAzSkWtoM
-         pVJnuIp8bI+8Diot6gTt1nbAUp6dLqsfkHyw2rHC7VsxcEJsd81YezxgnkdvsktZN68n
-         081A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0h7PVwX7xOWVpu8EJbubLGeuc2859Qjp2vbcmTCnktc=;
-        b=JZsC/AacNYxwH8iL3oeAMoc+Dw1qwP9RHfparBbMhmm3llf1fPK4ssl2GMnrDbltv+
-         m/Evzroz0M+bAN83cVab8Pdo8oXykZzdcS9TgZLWKBCClUTiDBAaT0nz6PUNfvQkfDOG
-         kPgOuNvQSspghYM+9Zjg4QC4UM2FOPe/C+gLkUf3jKREnN9PxObb3A0CRoA52TZao034
-         hv0TuCGQq4Jz3YbE/d3s3tD606tyRiGb7HVVz/10CJh3+GlaPu6bykvAAq+VLasgOFTO
-         cJX6hykVGXao2a/xBimZrbPbKkZp+p5M4kES8bWpjPNqqYh1Pi5D5q1HMfYZiy4r8QAW
-         ru6w==
-X-Gm-Message-State: AO0yUKWdseBg6FRH01Q21zZ3Y7vY8zsU+1t1uAOxC9KJHoGnIjkM7Nul
-        U19pbC1d6ZVLPahN5xCMJ5s=
-X-Google-Smtp-Source: AK7set/e2dVQryskil9JvOXwCVkJylpvCnVrdI6FrmQzPl4/BLKQd9oGbNtLBKUjWNQWYnRrE1z8IQ==
-X-Received: by 2002:a05:600c:164a:b0:3df:1673:90b6 with SMTP id o10-20020a05600c164a00b003df167390b6mr9442829wmn.39.1675947211990;
-        Thu, 09 Feb 2023 04:53:31 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003e01493b136sm5128690wms.43.2023.02.09.04.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 04:53:31 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Xinhui.Pan@amd.com, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] drm/amd/display: Fix spelling mistakes of function name in error message
-Date:   Thu,  9 Feb 2023 12:53:30 +0000
-Message-Id: <20230209125330.1433481-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 9 Feb 2023 07:56:52 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A653CA08;
+        Thu,  9 Feb 2023 04:56:51 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B4E7766020C1;
+        Thu,  9 Feb 2023 12:56:48 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675947410;
+        bh=B5hP3G6FgIwkwEQg0vRoKUhdtFs0lIrWXYoejF8e8E8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DpNy81Y8cZBUImPcWpwdydIZDClrhB11oZkdB51NOK1gdJxTSZKa17INB6Y1qOA/e
+         1aBmlAIARNWb05savxMJ34bL1fEHn13Xxc2YLaIrQK8HWlxrjKDZij9GO45nzBQhjn
+         YuxI0QTVwSzZKW62zvUvRnd5b1OwwIaIQd1LXWLo9UqM6F2Dg7DC1x4ApKe9+oBk4i
+         loSoUCPgPnZO/w/0yMqrEpm7uOa3/TKrOhHzgLVSznM7Y8xdZqd9UvMzpOEZwyxxKg
+         /YA1Dvjh27HhPl18JDBra/T38K5VUZLdfPcVnwlcnllMegylMsh3zyO8az1Q3genrP
+         LELxvgOf5mSQA==
+Message-ID: <28f167b7-c468-8752-29d1-2a122e8142dd@collabora.com>
+Date:   Thu, 9 Feb 2023 13:56:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] media: mediatek: vcodec: Force capture queue format to
+ MM21
+Content-Language: en-US
+To:     Tommaso Merciai <tomm.merciai@gmail.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230209074025.1816-1-yunfei.dong@mediatek.com>
+ <Y+S1cA4PXT1MVJm8@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <Y+S1cA4PXT1MVJm8@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function name is being reported as dc_link_contruct when it is
-actually dc_link_construct_phy. Fix this by using %s and the __func__
-for the function name.
+Il 09/02/23 09:57, Tommaso Merciai ha scritto:
+> Hi Yunfei Dong,
+> 
+> On Thu, Feb 09, 2023 at 03:40:25PM +0800, Yunfei Dong wrote:
+>> In order to conver the format of capture queue from mediatek MM21 to
+>> standard yuv420 with Libyuv, need to force capture queue format to
+>> MM21 for Libyuv can't covert mediatek MT21 format.
+> 
+> Sorry, just some clarifications on my side, just to understand :)
+> The problem is that libyuv can't convert mm21 format into yuv420
+> than you need to use mm21 (forcing this).
+> Did I understand correctly?
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/gpu/drm/amd/display/dc/link/link_factory.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+vcodec can output either MM21 or MT21C; libyuv can't handle the MT21C format,
+at least for now, hence he is forcing vcodec to always give MM21 for things
+to actually work... at a later time, I hope and suppose that this driver will
+change to not force anything anymore.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/link/link_factory.c b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
-index 13a766273755..3fc93fc593fb 100644
---- a/drivers/gpu/drm/amd/display/dc/link/link_factory.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/link_factory.c
-@@ -452,7 +452,7 @@ static bool dc_link_construct_phy(struct dc_link *link,
- 	link->psr_settings.psr_vtotal_control_support = false;
- 	link->psr_settings.psr_version = DC_PSR_VERSION_UNSUPPORTED;
- 
--	DC_LOG_DC("BIOS object table - dc_link_contruct finished successfully.\n");
-+	DC_LOG_DC("BIOS object table - %s finished successfully.\n", __func__);
- 	return true;
- device_tag_fail:
- 	link->link_enc->funcs->destroy(&link->link_enc);
-@@ -469,7 +469,7 @@ static bool dc_link_construct_phy(struct dc_link *link,
- 		link->hpd_gpio = NULL;
- 	}
- 
--	DC_LOG_DC("BIOS object table - dc_link_contruct failed.\n");
-+	DC_LOG_DC("BIOS object table - %s failed.\n", __func__);
- 	return false;
- }
- 
--- 
-2.30.2
+> Thanks in advance,
+> Tommaso
+> 
+
+Yunfei, since this is required to get "basic" functionality, this commit needs
+a Fixes tag: can you please add the right one?
+
+Thanks!
+Angelo
+
 
