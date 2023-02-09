@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49110690925
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0398690927
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 13:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjBIMoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 07:44:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S229852AbjBIMpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 07:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjBIMom (ORCPT
+        with ESMTP id S229457AbjBIMpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 07:44:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D15C25AB08;
-        Thu,  9 Feb 2023 04:44:41 -0800 (PST)
+        Thu, 9 Feb 2023 07:45:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8619A5AB08
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 04:45:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7410461A3D;
-        Thu,  9 Feb 2023 12:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6827C433D2;
-        Thu,  9 Feb 2023 12:44:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40835B82126
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 12:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA601C433EF;
+        Thu,  9 Feb 2023 12:45:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675946680;
-        bh=mpk6/sW48WtpnWNSsmwhCzd9speTfJtkyUBZqRHxCtE=;
+        s=k20201202; t=1675946717;
+        bh=Q8Fs1hhzx5yW8jDp0z06JUZNBw9/Yhiv31VTrLxhk+I=;
         h=From:To:Cc:Subject:Date:From;
-        b=PteE3i9ZTFUZfoqp9ayBaNKGkrSUS8+elnSt1QS0B0un+GnMItb/DJOFIFw7F3NBh
-         6gZT2WtkfeLFaGouS0LJsPEmxzmIGcwP7eTLt6k77stH6kylmaNnoSERt5czdFT70N
-         oUGw8HIJYIp3xKWdtLYEzHJmo/9nTJofQWAKSZdb+pzIggYQOwhoXKnuV4RTx8TO4a
-         Vl+evP4lVYusixIeSRW7e0um8/SUeDCxsGSv/sM9vo7qzSewUMzc3Og12nBt+IoI5y
-         fXewZQ94oa4QL7jCeoXpL1FDKvRtBbSZLHTg7D+B7Hxqss9Pfmb8FRCZ6sNDIkJmvZ
-         H9SlZMnPFWctQ==
+        b=RRJ0na7po8V+zfKZ36Chtjh+XkJ1NIq1DbPWpjVh5qhDa64EDy+8bX2EK9EyYAjlx
+         P4Z1MvQ2l9Hx/aUYzQQmkImGSN8T874/QERNRl2/ynLTJwiC12wOrI0RuucLFjaqYU
+         6/2/LSIDUVF72fNgSDk2iCHQFxRJCMsiMi3BAmvQ2GbfeUCddEY9dzPbY3yh68lZBq
+         cBZxbQbhIY6KV2AyIE7bwys0K+ksAenAbBHmBPIiVdaHpf70SJ/T3yo9Gco378WWGp
+         e9JDovC3HZovVmQfQEOqtxiHSg/Mpg4rGcS3yhAJJxBpIdZVkOa97tjIA4eMKG3pyb
+         ofv0qV8Uy4Fhw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: dsa: ocelot: add PTP dependency for NET_DSA_MSCC_OCELOT_EXT
-Date:   Thu,  9 Feb 2023 13:44:17 +0100
-Message-Id: <20230209124435.1317781-1-arnd@kernel.org>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        George Shen <George.Shen@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amd/display: fix link_validation build failure
+Date:   Thu,  9 Feb 2023 13:45:03 +0100
+Message-Id: <20230209124513.1341645-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,54 +64,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-A new user of MSCC_OCELOT_SWITCH_LIB was added, bringing back an old
-link failure that was fixed with e5f31552674e ("ethernet: fix
-PTP_1588_CLOCK dependencies"):
+When CONFIG_DRM_AMD_DC_DCN is disabled, the is_frl member
+is not defined:
 
-x86_64-linux-ld: drivers/net/ethernet/mscc/ocelot_ptp.o: in function `ocelot_ptp_enable':
-ocelot_ptp.c:(.text+0x8ee): undefined reference to `ptp_find_pin'
-x86_64-linux-ld: drivers/net/ethernet/mscc/ocelot_ptp.o: in function `ocelot_get_ts_info':
-ocelot_ptp.c:(.text+0xd5d): undefined reference to `ptp_clock_index'
-x86_64-linux-ld: drivers/net/ethernet/mscc/ocelot_ptp.o: in function `ocelot_init_timestamp':
-ocelot_ptp.c:(.text+0x15ca): undefined reference to `ptp_clock_register'
-x86_64-linux-ld: drivers/net/ethernet/mscc/ocelot_ptp.o: in function `ocelot_deinit_timestamp':
-ocelot_ptp.c:(.text+0x16b7): undefined reference to `ptp_clock_unregister'
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c: In function 'dp_active_dongle_validate_timing':
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c:126:66: error: 'const struct dc_dsc_config' has no member named 'is_frl'
+  126 |                         if (timing->flags.DSC && !timing->dsc_cfg.is_frl)
+      |                                                                  ^
 
-Add the same PTP dependency here, as well as in the MSCC_OCELOT_SWITCH_LIB
-symbol itself to make it more obvious what is going on when the next
-driver selects it.
+Use the same #ifdef as the other references to this.
 
-Fixes: 3d7316ac81ac ("net: dsa: ocelot: add external ocelot switch control")
+Fixes: 54618888d1ea ("drm/amd/display: break down dc_link.c")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/net/dsa/ocelot/Kconfig    | 1 +
- drivers/net/ethernet/mscc/Kconfig | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/gpu/drm/amd/display/dc/link/link_validation.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/dsa/ocelot/Kconfig b/drivers/net/dsa/ocelot/Kconfig
-index 640725524d0c..eff0a7dfcd21 100644
---- a/drivers/net/dsa/ocelot/Kconfig
-+++ b/drivers/net/dsa/ocelot/Kconfig
-@@ -12,6 +12,7 @@ config NET_DSA_MSCC_OCELOT_EXT
- 	tristate "Ocelot External Ethernet switch support"
- 	depends on NET_DSA && SPI
- 	depends on NET_VENDOR_MICROSEMI
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	select MDIO_MSCC_MIIM
- 	select MFD_OCELOT_CORE
- 	select MSCC_OCELOT_SWITCH_LIB
-diff --git a/drivers/net/ethernet/mscc/Kconfig b/drivers/net/ethernet/mscc/Kconfig
-index 8dd8c7f425d2..81e605691bb8 100644
---- a/drivers/net/ethernet/mscc/Kconfig
-+++ b/drivers/net/ethernet/mscc/Kconfig
-@@ -13,6 +13,7 @@ if NET_VENDOR_MICROSEMI
+diff --git a/drivers/gpu/drm/amd/display/dc/link/link_validation.c b/drivers/gpu/drm/amd/display/dc/link/link_validation.c
+index cd821d077d73..8ddebf3bdd46 100644
+--- a/drivers/gpu/drm/amd/display/dc/link/link_validation.c
++++ b/drivers/gpu/drm/amd/display/dc/link/link_validation.c
+@@ -123,9 +123,11 @@ static bool dp_active_dongle_validate_timing(
+ 		if (dongle_caps->dp_hdmi_frl_max_link_bw_in_kbps > 0) { // DP to HDMI FRL converter
+ 			struct dc_crtc_timing outputTiming = *timing;
  
- # Users should depend on NET_SWITCHDEV, HAS_IOMEM, BRIDGE
- config MSCC_OCELOT_SWITCH_LIB
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	select NET_DEVLINK
- 	select REGMAP_MMIO
- 	select PACKING
++#if defined(CONFIG_DRM_AMD_DC_DCN)
+ 			if (timing->flags.DSC && !timing->dsc_cfg.is_frl)
+ 				/* DP input has DSC, HDMI FRL output doesn't have DSC, remove DSC from output timing */
+ 				outputTiming.flags.DSC = 0;
++#endif
+ 			if (dc_bandwidth_in_kbps_from_timing(&outputTiming) > dongle_caps->dp_hdmi_frl_max_link_bw_in_kbps)
+ 				return false;
+ 		} else { // DP to HDMI TMDS converter
 -- 
 2.39.1
 
