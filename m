@@ -2,56 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD152690B51
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F714690B54
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 15:07:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjBIOGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 09:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
+        id S230145AbjBIOHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 09:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjBIOGW (ORCPT
+        with ESMTP id S229759AbjBIOHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 09:06:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E038B74F;
-        Thu,  9 Feb 2023 06:06:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6CF661AA3;
-        Thu,  9 Feb 2023 14:06:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BB1C433EF;
-        Thu,  9 Feb 2023 14:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675951580;
-        bh=cT3CWSl1cLZnecvxHmHoVJTw89O6CRj75VeHnkmHI2g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JS60OnUwhCON7W/N1V9swwpyQiSlS1bavgZA0Br1P3y3lIrq/nm9Hx8z0xU7xNA/9
-         1DWI7G6WSrvu/wSctLBfaFgL/wDCL9qvCW2Y1hl4lYUNQAlZ5ks0TjTCnXkCo4Yayn
-         /M493sr9kdUhJkwHtwCFsYl8L18G5WtSu67WBIhIpw/dyXiAjn9zH84gxdHr285Sf+
-         x4OH7we1TScDYUNzPeiDSZatGVyUqjLAyQ03l3LH7F1vLNzCjyivP7T6G+OwY432GN
-         CbZfJD2TJRRRdZf6i3gfb/1QAx+IqoPzucVzYOn/+/dRYvIkkqA0QejG2wiVYnV6N/
-         ySTe/Vix5onuQ==
-Date:   Thu, 9 Feb 2023 23:06:16 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] tracing/selftests: Ignore __pfx_ symbols in kprobe test
-Message-Id: <20230209230616.3a731914b271ebaca8877a89@kernel.org>
-In-Reply-To: <20230207135147.5ce618d6@gandalf.local.home>
-References: <20230207135147.5ce618d6@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Thu, 9 Feb 2023 09:07:36 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E699A5D1F7
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 06:07:34 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id n13so1493122wmr.4
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 06:07:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/fZEZ23GYCuEsYGekWai0lOlR8LMbc3z0Q5wLhY0DnY=;
+        b=jkPObI5+N3I6WTrzoz8PySJW2OXbWE7M/TaX5gSBNfdEe2PKbUmzKHInXXTxQuv3no
+         G6azc3jC2HqqwU409T31LoBrUiJdzxK29obgs14LShAz/g2+oRv9KXAeXjl7H2Nkapam
+         PtK3N5gHfgf5ef1xXbQHDPaxs2yIXHpOy3uZ3iCgRFb+BFbtvsLfdJcXNcgsxYojQTnX
+         i6d/F75LAN0ifHAa5TO1Wt5PQmMbhjcFamqOZlPH9DqHiuIQO+UEfKFGCds6mbMeoKqk
+         Q2UgdcwhVWHgUHBQZ8bt9nSNxSR5kq6ZoVF8x2rNiDsRulyteh+oWIOF7iQLd6e3vLPP
+         PZDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/fZEZ23GYCuEsYGekWai0lOlR8LMbc3z0Q5wLhY0DnY=;
+        b=0idOacLXF1NIaPylkeF96vcsbgxwnOuqomNdf9YJpzie2xuKwSDYSRjKpVf5qW+o6x
+         BlSyhYTZXUado9KxFAL+CbL7Wl9Gt68RyTzZ7KakHE1DWYh+g58mWjha65Y9gv0EwD7x
+         NKgBgYRRQP+T43pNIOGM+mAeULgsuNL4Mjx4SP74UYuBFOCK38CgTVS6vtRZT0BZ7//q
+         zKI/o8ghFXhIDOPLJOIqBPXEKfCYDhuii3tNtk/Q8YNjOUTSWwelzyygqEY9lpX4DtE8
+         QF7+0DXNCgAHFgDnran2VlBa3hAuzl11YFEoYBpDx8oxKqn687O9NDbss6H13MNTaMzJ
+         mF1w==
+X-Gm-Message-State: AO0yUKWlpl916HUVjZ9sBfPXI7tCyvzU3SfpWhtHEzrkS6j9csOmjDJg
+        sRLCtH+4vjo0yZ9c48qQJgNRYVQQo6dWmSsYNIUz8A==
+X-Google-Smtp-Source: AK7set/URjElet4XCI6w57NojAjes/SdyT2eO9gZZEVC0ptDvfP2FrrjoKMVkjbQZ58kwzqB57ZB/jquHBcfJDWNlz0=
+X-Received: by 2002:a05:600c:29ca:b0:3dd:67c6:8c58 with SMTP id
+ s10-20020a05600c29ca00b003dd67c68c58mr701410wmd.51.1675951653421; Thu, 09 Feb
+ 2023 06:07:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20230123220500.21077-1-kirill.shutemov@linux.intel.com> <20230123220500.21077-3-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20230123220500.21077-3-kirill.shutemov@linux.intel.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 9 Feb 2023 15:06:56 +0100
+Message-ID: <CAG_fn=Uozzi7xuA7KYYGg5qvKgnDOtdHrb7832XP2-3nky3_Cw@mail.gmail.com>
+Subject: Re: [PATCHv15 02/17] x86: Allow atomic MM_CONTEXT flags setting
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,49 +82,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023 13:51:47 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> The kprobe probepoint.tc test started failing because of the added __pfx_
-> symbols that were added because of -fpatchable-function-entry=X,Y causing
-> unwinders to see them as part of the previous functions. But kprobes can
-> not be added on top of them. The selftest looks for tracefs_create_dir and
-> picks it and the previous and following functions to add at their address.
-> This caused it to include __pfx_tracefs_create_dir which is invalid to
-> attach a kprobe to and caused the test to fail.
-> 
-> Fixes: 9f2899fe36a62 ("objtool: Add option to generate prefix symbols")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-This looks good to me. 
-
-Acked-by: 
-
-Thanks,
-
-> ---
->  tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc b/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
-> index 624269c8d534..e1b7506c1b11 100644
-> --- a/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/probepoint.tc
-> @@ -21,7 +21,7 @@ set_offs() { # prev target next
->  
->  # We have to decode symbol addresses to get correct offsets.
->  # If the offset is not an instruction boundary, it cause -EILSEQ.
-> -set_offs `grep -A1 -B1 ${TARGET_FUNC} /proc/kallsyms | cut -f 1 -d " " | xargs`
-> +set_offs `grep -v __pfx_ /proc/kallsyms | grep -A1 -B1 ${TARGET_FUNC} |  cut -f 1 -d " " | xargs`
->  
->  UINT_TEST=no
->  # printf "%x" -1 returns (unsigned long)-1.
-> -- 
-> 2.39.0
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, Jan 23, 2023 at 11:05 PM Kirill A. Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> So far there's no need in atomic setting of MM context flags in
+> mm_context_t::flags. The flags set early in exec and never change
+> after that.
+>
+> LAM enabling requires atomic flag setting. The upcoming flag
+> MM_CONTEXT_FORCE_TAGGED_SVA can be set much later in the process
+> lifetime where multiple threads exist.
+>
+> Convert the field to unsigned long and do MM_CONTEXT_* accesses with
+> __set_bit() and test_bit().
+>
+> No functional changes.
+>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Alexander Potapenko <glider@google.com>
