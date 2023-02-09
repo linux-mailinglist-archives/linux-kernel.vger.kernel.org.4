@@ -2,108 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097AC69118E
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710A469118F
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 20:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjBITs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 14:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S230195AbjBITtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 14:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjBITs4 (ORCPT
+        with ESMTP id S230171AbjBITs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 14:48:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947A323671
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:48:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675972093;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JLB/j3TkDxPe2Ifjg9f2yoKGkddHFcQGKgP3GFg7Ob0=;
-        b=iQIrJAPEFSzAlu1GTgOmGl6QyfTiKXhyr/nwXx+5LzAXgsIUJWnC6Pl1lxE8kI2bmBRZCU
-        c6UkEu1SiJb0ZVUPq3DRorkxfNORmPSB4BAZJXlXNR3wDEc0o49qdM3M9icg4z2LCL1U8z
-        nD0I6zkyO4116xnCMxwk4OBq2hhnCys=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-182-h5gsowieNomj9nDUIJz0kA-1; Thu, 09 Feb 2023 14:48:12 -0500
-X-MC-Unique: h5gsowieNomj9nDUIJz0kA-1
-Received: by mail-wr1-f70.google.com with SMTP id v5-20020adf8b45000000b002bde0366b11so807302wra.7
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 11:48:12 -0800 (PST)
+        Thu, 9 Feb 2023 14:48:57 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2594F67798
+        for <linux-kernel@vger.kernel.org>; Thu,  9 Feb 2023 11:48:55 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id cq19so349515edb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 11:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uyyumaK9xIPRojo79Q77XEBPKCDiPO3uA+JJHpfAEgA=;
+        b=AZFy9HZ53vfM3YDTX4dK7I32YlhT5/F/iQr2XxE+3tLHv580MbFNKnKBzBpuoX/slw
+         PjfvwT6grUZ3pOe8wLygEzYEtv1brf6zchhh0beA9epwiFJouS5D4FAEx9mHBiCSfa2n
+         6Hcp/yvPEzTW8cxxyAYGalExsZQLzgObV3DpQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JLB/j3TkDxPe2Ifjg9f2yoKGkddHFcQGKgP3GFg7Ob0=;
-        b=vvYZ/Sl8seLID8nIbnq118k2eZnYLua9wFpoeqCXizOetphnrmlAdHLet3CLhQpynG
-         hjqsdVFMEHSzUYZ/qqEsC/zWwN8JO6RcvTa0xP0WscUhEHs0HSuko09xFL0UkH9uLum9
-         Z0MhFjnF4SV98I7x0ESlL3moidNJRDdUZ9tM9hKxegSYL9GMJ8NfX0gPyF1hELFg190E
-         UAQ2BP73o9HXtvqtkSPosJjIZxTe8XbguvhaHaQzhDZNtdChW8TFyzuEXasjxOm68fiV
-         9RKukS0Dl74Y9KxMoNDsw7fB4v91blL11gj9PtQKYag4SS/Aq3WoThla3mS6TtK10094
-         nevQ==
-X-Gm-Message-State: AO0yUKXtCGv5WhFk0ZTYOLpr7mbw1wFY1ijHJsApr80f7mquz4s+Xg0f
-        sh11lS+xwN+kXtYTwXJlx4cgHbCk4VYBRmHgtdtcMupG1+beHLR81ECqBx373ji0Ve0K3EcC6wj
-        WdyiKZHkxbm2eB3p5gAIH+YS+
-X-Received: by 2002:a5d:67c6:0:b0:2c5:3fcb:6830 with SMTP id n6-20020a5d67c6000000b002c53fcb6830mr1864369wrw.47.1675972091368;
-        Thu, 09 Feb 2023 11:48:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set+aKA0QFjwLg+f0HQfDEKr3EdsNsL3InfWZ+QlzyoWSFZjoaZBLuxj82eEY7MzaXa5mi/1g3Q==
-X-Received: by 2002:a5d:67c6:0:b0:2c5:3fcb:6830 with SMTP id n6-20020a5d67c6000000b002c53fcb6830mr1864345wrw.47.1675972091202;
-        Thu, 09 Feb 2023 11:48:11 -0800 (PST)
-Received: from work-vm (ward-16-b2-v4wan-166627-cust863.vm18.cable.virginm.net. [81.97.203.96])
-        by smtp.gmail.com with ESMTPSA id t2-20020adfe102000000b002c3f280bdc7sm1988622wrz.96.2023.02.09.11.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Feb 2023 11:48:10 -0800 (PST)
-Date:   Thu, 9 Feb 2023 19:48:08 +0000
-From:   "Dr. David Alan Gilbert" <dgilbert@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <Y+VN+DnL4XQhGKhv@work-vm>
-References: <Y+HpmIesY96cYcWQ@kroah.com>
- <20044cae-4fab-7ef6-02a0-5955a56e5767@amd.com>
- <Y+MAPHZNLeBY13Pj@mit.edu>
- <20230208041913-mutt-send-email-mst@kernel.org>
- <DM8PR11MB5750D93CD9481F6AB78F1FB4E7D89@DM8PR11MB5750.namprd11.prod.outlook.com>
- <Y+OAZTljX1I6ZvR/@kroah.com>
- <m2edr03xh4.fsf@redhat.com>
- <Y+Pb4Ood56Wxn4sj@kroah.com>
- <Y+Pjv8CeDiLRxqP/@work-vm>
- <87bkm42dcs.ffs@tglx>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uyyumaK9xIPRojo79Q77XEBPKCDiPO3uA+JJHpfAEgA=;
+        b=QIaJENynpvQm4p9VJ7RBLnTte1m4vibYMZbUC988IaQQiVkqLFALEoDSAYy6jTfx7b
+         LxZy70/9ZAPac1qlo0wEQJdciUiG22+SW6EUiWHJsUuP4q3+KJRk+mdGXukEjABt3eiW
+         HCL16ErtWSW4EoLah9CrNrkcWs+lvXARd5r834VuEDDclhKMYQVzMa+KzjpwjKKQQhvx
+         +mi1wsf6JG3tYbx7wN+LRWoFPwb9e2QKMW5MqCBjd70k18bXhoMpMLWiSuqKS1TVyMvL
+         pkBFnNCKpkQB49ctyMsQ8lUFrHpAUK9ngKEnKtKq77sxQNs08FmbJYebiScmj/Z3iOpH
+         azdA==
+X-Gm-Message-State: AO0yUKVreDdTz7M/MNDAkFZGOmJGOYg59OtxFilmWaXfPhi3MLa1v1kA
+        EAbcQVxXNdgv/PZDVJu2HH8erDEfP+CDpNiqA0A=
+X-Google-Smtp-Source: AK7set9Veah4kzXbWOzQAT1r4N6N57hobqWZfb3925CiCijzsVjg9KOPRxgtzlKCvRFDDXEyOMQr1g==
+X-Received: by 2002:a50:d61d:0:b0:4ab:161b:66be with SMTP id x29-20020a50d61d000000b004ab161b66bemr7565108edi.0.1675972133160;
+        Thu, 09 Feb 2023 11:48:53 -0800 (PST)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id t27-20020a508d5b000000b004a20fa37286sm1223021edt.85.2023.02.09.11.48.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 11:48:52 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id qb15so7670922ejc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 09 Feb 2023 11:48:52 -0800 (PST)
+X-Received: by 2002:a17:906:4e46:b0:87a:7098:ca09 with SMTP id
+ g6-20020a1709064e4600b0087a7098ca09mr2452063ejw.78.1675972132059; Thu, 09 Feb
+ 2023 11:48:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkm42dcs.ffs@tglx>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <0cfd9f02-dea7-90e2-e932-c8129b6013c7@samba.org>
+ <CAHk-=wj8rthcQ9gQbvkMzeFt0iymq+CuOzmidx3Pm29Lg+W0gg@mail.gmail.com>
+ <f6c6d42e-337a-bbab-0d36-cfcc915d26c6@samba.org> <CAHk-=widtNT9y-9uGMnAgyR0kzyo0XjTkExSMoGpbZgeU=+vng@mail.gmail.com>
+In-Reply-To: <CAHk-=widtNT9y-9uGMnAgyR0kzyo0XjTkExSMoGpbZgeU=+vng@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 9 Feb 2023 11:48:35 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whprvcY=KRh15uqtmVqR2rL-H1yN6RaswHiWPsGHDqsSQ@mail.gmail.com>
+Message-ID: <CAHk-=whprvcY=KRh15uqtmVqR2rL-H1yN6RaswHiWPsGHDqsSQ@mail.gmail.com>
+Subject: Re: copy on write for splice() from file to pipe?
+To:     Stefan Metzmacher <metze@samba.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API Mailing List <linux-api@vger.kernel.org>,
+        io-uring <io-uring@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Samba Technical <samba-technical@lists.samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,53 +81,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Thomas Gleixner (tglx@linutronix.de) wrote:
-> On Wed, Feb 08 2023 at 18:02, David Alan Gilbert wrote:
-> > * Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
-> >> Anyway, you all are just spinning in circles now.  I'll just mute this
-> >> thread until I see an actual code change as it seems to be full of
-> >> people not actually sending anything we can actually do anything with.
-> 
-> There have been random patchs posted which finally caused this
-> discussion to start. Wrong order obviously :)
-> 
-> > I think the challenge will be to come up with non-intrusive, minimal
-> > changes;  obviously you don't want stuff shutgunned everywhere.
-> 
-> That has been tried by doing random surgery, e.g. caching some
-> particular PCI config value. While that might not look intrusive on the
-> first glance, these kind of punctual changes are the begin of a whack a
-> mole game and will end up in an uncoordinated maze of tiny mitigations
-> which make the code harder to maintain.
-> 
-> The real challenge is to come up with threat classes and mechanisms
-> which squash the whole class. Done right, e.g. caching a range of config
-> space values (or all of it) might give a benefit even for the bare metal
-> or general virtualization case.
+On Thu, Feb 9, 2023 at 11:36 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I guarantee that you will only slow things down with some odd async_memcpy.
 
-Yeh, reasonable.
+Extended note: even if the copies themselves would then be done
+concurrently with other work (so "not faster, but more parallel"), the
+synchronization required at the end would then end up being costly
+enough to eat up any possible win. Plus  you'd still end up with a
+fundamental problem of "what if the data changes in the meantime".
 
-> That's quite some work, but its much more palatable than a trickle of
-> "fixes" when yet another source of trouble has been detected by a tool
-> or human inspection.
-> 
-> It's also more future proof because with the current approach of
-> scratching the itch of the day the probability that the just "mitigated"
-> issue comes back due to unrelated changes is very close to 100%.
-> 
-> It's not any different than any other threat class problem.
+And that's ignoring all the practical problems of actually starting
+the async copy, which traditionally requires virtual to physical
+translations (where "physical" is whatever the DMA address space is).
 
-I wonder if  trying to group/categorise the output of Intel's
-tool would allow common problematic patterns to be found to then
-try and come up with more concrete fixes for whole classes of issues.
+So I don't think there are any actual real cases of async memory copy
+engines being even _remotely_ better than memcpy outside of
+microcontrollers (and historical computers before caches - people may
+still remember things like the Amiga blitter fondly).
 
-Dave
+Again, the exception ends up being if you can actually use real DMA to
+not do a memory copy, but to transfer data directly to or from the
+device. That's in some way what 'splice()' is designed to allow you to
+do, but exactly by the pipe part ending up being the "conceptual
+buffer" for the zero-copy pages.
 
-> Thanks,
-> 
->         tglx
-> 
-> 
--- 
-Dr. David Alan Gilbert / dgilbert@redhat.com / Manchester, UK
+So this is exactly *why* splicing from a file all the way to the
+network will then show any file changes that have happened in between
+that "splice started" and "network card got the data". You're supposed
+to use splice only when you can guarantee the data stability (or,
+alternatively, when you simply don't care about the data stability,
+and getting the changed data is perfectly fine).
 
+            Linus
