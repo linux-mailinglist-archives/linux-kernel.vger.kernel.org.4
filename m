@@ -2,116 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D3668FFE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB1F68FFEE
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 06:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjBIFcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Feb 2023 00:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
+        id S229793AbjBIFjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Feb 2023 00:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjBIFcT (ORCPT
+        with ESMTP id S229460AbjBIFjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Feb 2023 00:32:19 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D04301B5
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Feb 2023 21:32:18 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id r2so615597wrv.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Feb 2023 21:32:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6z3lxwnln7Ypie34pRxdCgfXQDUlJU7iUw2s4xeNCQ=;
-        b=hbv+iUmy8sb7UTevXZXSzxz4aaIUDG/plNczLQrgAbId4wPVrQ+MkUcq3aY+CY5S+3
-         rjawt/atll9AOMzPTfCwmorE8mJ0IW4ExC+pOffnmttwon2NgCXsQXAHNH70+CqH4Yet
-         b6oLh+gnKxDrXWJ+sVkEhlEAuMsgo82g7kQbD0bRtom8ONxlwBf6CsHrI8kEQQPSr8cE
-         02FslNpxxsQJnKXlRV77g9pOv1nepBqVy0+lQY1q5jHCyV3MZ1/poYrNBSof/aw2ifvB
-         XBsmv3sQsOevFgU/eI4a8Lch+EluHrUqqffry2uORieqI42qXv+KNAZGRuXumHYaK8Mh
-         FeiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w6z3lxwnln7Ypie34pRxdCgfXQDUlJU7iUw2s4xeNCQ=;
-        b=qCwSorlHd7zBXEmQ9X9s0yUpoDCQ2iW0qTJSgVP4/o7JdCKVICY8ogd3rDzeffvteU
-         9Yq0qh0BGH644vlHU85tf8V1fXNy0d1tg6wIJaRAWuNPZM/Q+xaQmBElihOprlBI7mP2
-         eHT3rWSr5jVXuPKIyTrm0V8fyw3sGZIIGE0jiUlrgpbmUMC7N6ufT+1M8PBApeoVfNMu
-         MYK+QKcdp70u1jD1WB6P9t+ofkO+vxHuwBd/HdvWJIRHE/W/N7ZPBC9irx9bNXKbNsOx
-         8YC550KrrGNaVOZDl/2rAZNusFl1iR4t2aNxIQ2ms2xAtbY1e1cM7LEHDoN78zN7XGg1
-         fXSw==
-X-Gm-Message-State: AO0yUKVFYdKEkkB536HAT4hECzyXBt1ZlVYjmBDcFdioQj7si5AMzgeX
-        EZm6WYNU/0tJMwIQdRPyNaw/eppi1Wi3/ks/7PHuIg==
-X-Google-Smtp-Source: AK7set9YGa7NCNq2wHzwRqe7rRW1StB4rmp4kgxLGJELsL8k4ez/VaGVQujKbNDfKlqQkG5awGCGVr1ELO1GQ8rpFMA=
-X-Received: by 2002:a5d:4247:0:b0:2bf:b264:6bf7 with SMTP id
- s7-20020a5d4247000000b002bfb2646bf7mr251486wrr.427.1675920736829; Wed, 08 Feb
- 2023 21:32:16 -0800 (PST)
+        Thu, 9 Feb 2023 00:39:08 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF1331E34;
+        Wed,  8 Feb 2023 21:39:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675921147; x=1707457147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XNzVc05Fuzc2StlWmbJqDQ2OQF9U1yLDx5zjdvbyMOw=;
+  b=TfDlAsmFyS4mvJZyKdU/pydy+7KN982rFWmoTWWmXXg03Xg/e6P5iAWb
+   Id18xZVLXt/akxPvaXMluhjKLZmDBE2SsnLJenve5imncCgXQu7yCkjEI
+   15n1ze4t6FdF4ESKof1lG5t8LSi8mSTkWARmH7fgodkkPbdsEMZYV6n13
+   yTtjt201r9QV2j5kwQAFLaryYVz8V0jO5hrQ1LG0N2UD9f2sXC/LXiJqO
+   JqoavyXrIwojWk4HTYEGppR/YhfopdFd3AI5Q9by5nLjlz1NTIK27p5bc
+   NJNs4yIUG1cGUBBRa5gvqfHOv8MKpxpWnitcF7XJbo2kumxHTzlbnJsEN
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="392407198"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="392407198"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 21:39:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="736187333"
+X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
+   d="scan'208";a="736187333"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Feb 2023 21:39:05 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id EE28A1A6; Thu,  9 Feb 2023 07:39:43 +0200 (EET)
+Date:   Thu, 9 Feb 2023 07:39:43 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mauro Lima <mauro.lima@eclypsium.com>
+Cc:     broonie@kernel.org, michael@walle.cc, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: intel: Update help text of PCI driver
+Message-ID: <Y+SHH2+VqLoQ+6Ss@black.fi.intel.com>
+References: <20230208175253.117714-1-mauro.lima@eclypsium.com>
 MIME-Version: 1.0
-References: <20221219055431.22596-1-ashimida.1990@gmail.com>
-In-Reply-To: <20221219055431.22596-1-ashimida.1990@gmail.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Wed, 8 Feb 2023 21:32:03 -0800
-Message-ID: <CAMn1gO6hwaSDCqigwoH981ffVbU8OvgJhrGh997kGseCSbpAJA@mail.gmail.com>
-Subject: Re: [RFC/RFT 0/3] Add compiler support for Control Flow Integrity
-To:     Dan Li <ashimida.1990@gmail.com>
-Cc:     gcc-patches@gcc.gnu.org,
-        Richard Sandiford <richard.sandiford@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Marco Elver <elver@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Juergen Gross <jgross@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Yuntao Wang <ytcoode@gmail.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230208175253.117714-1-mauro.lima@eclypsium.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 18, 2022 at 10:06 PM Dan Li <ashimida.1990@gmail.com> wrote:
->
-> This series of patches is mainly used to support the control flow
-> integrity protection of the linux kernel [1], which is similar to
-> -fsanitize=kcfi in clang 16.0 [2,3].
->
-> I hope that this feature will also support user-mode CFI in the
-> future (at least for developers who can recompile the runtime),
-> so I use -fsanitize=cfi as a compilation option here.
+Hi,
 
-Please don't. The various CFI-related build flags are confusing enough
-without also having this inconsistency between Clang and GCC.
+On Wed, Feb 08, 2023 at 02:52:53PM -0300, Mauro Lima wrote:
+> Modern intel hardware uses controllers that work in hardware
+> sequencing mode. In this mode, the controller exposes a subset
+> of operations, like read, write and erase, making it easier
+> and less error-prone for use.
+> On the other hand, most of the controllers handled by the
+> platform driver use software sequencing that exposes the
+> entire set of opcodes i.e. include the low-level operations
+> available from the controller.
+> 
+> Since the PCI driver works with modern controllers, remove the
+> DANGEROUS tag from it.
+> Update the driver's help text and leave the DANGEROUS tag of
+> the platform driver.
 
-Peter
+This is not done in this commit. You just update the help texts, right?
+
+> Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
+> ---
+>  For the record of the base commit:
+> 
+>  Given that the PCI driver handles controllers that only work with
+>  hardware sequencing, we can remove the dangerous tag.
+>  This patch is the second part of Mika's suggestion [1].
+>  The first part was accepted in [2].
+> 
+>  [1] https://lore.kernel.org/r/Y1d9glOgHsQlZe2L@black.fi.intel.com/
+>  [2] https://lore.kernel.org/linux-spi/20230201205455.550308-1-mauro.lima@eclypsium.com/
+> 
+>  This patch continues the work addressing the comments in the previous
+>  patch adding information about hardware and software sequencing.
+>  Discussion: https://lore.kernel.org/r/20230206183143.75274-1-mauro.lima@eclypsium.com/
+> 
+>  drivers/spi/Kconfig | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> index 3a362c450cb6..9eb3c72d7cd8 100644
+> --- a/drivers/spi/Kconfig
+> +++ b/drivers/spi/Kconfig
+> @@ -454,13 +454,16 @@ config SPI_INTEL_PCI
+>  	select SPI_INTEL
+>  	help
+>  	  This enables PCI support for the Intel PCH/PCU SPI controller in
+> -	  master mode. This controller is present in modern Intel hardware
+> -	  and is used to hold BIOS and other persistent settings. This
+> -	  driver only supports hardware sequencing mode. Using this
+> -	  driver it is possible to upgrade BIOS directly from Linux.
+> +	  master mode. This controller is used to hold BIOS and other
+> +	  persistent settings. Controllers present in modern Intel hardware
+> +	  only work in hardware sequencing mode, this means that the
+> +	  controller exposes a subset of operations that makes it easier
+> +	  and safer to use. Using this driver it is possible to upgrade BIOS
+
+I would remove the "easier" part because from user perspective there is
+really no difference.
+
+> +	  directly from Linux.
+>  
+> -	  Say N here unless you know what you are doing. Overwriting the
+> -	  SPI flash may render the system unbootable.
+> +	  Say N here unless you want to overwrite the flash memory and
+
+Putting it like this surely scares all distro folks from ever enabling
+this ;-)
+
+  "Say N here unless you want to overwrite the flash memory.."
+
+At least to me this means that if you enable this option your flash
+memory will be overwritten.
+
+> +	  know what you are doing or you want to read the memory's content.
+> +	  Overwriting the SPI flash may render the system unbootable.
+>  
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called spi-intel-pci.
+> @@ -473,8 +476,10 @@ config SPI_INTEL_PLATFORM
+>  	help
+>  	  This enables platform support for the Intel PCH/PCU SPI
+>  	  controller in master mode that is used to hold BIOS and other
+> -	  persistent settings. Most of these controllers are using
+> -	  software sequencing mode. Using this driver it is possible to
+> +	  persistent settings. Most of these controllers work in
+> +	  software sequencing mode, which means that the controller
+> +	  exposes the full set of operations that supports, making it
+> +	  more complex for use. Using this driver it is possible to
+
+Here,
+
+exposes the low level SPI-NOR opcodes to the software
+
+I think is better. Also here too drop the "complex" as it looks similar
+from user perspective.
+
+>  	  upgrade BIOS directly from Linux.
+>  
+>  	  Say N here unless you know what you are doing. Overwriting the
+> 
+> base-commit: 7db738b5fea4533fa217dfb05c506c15bd0964d9
+> -- 
+> 2.39.1
