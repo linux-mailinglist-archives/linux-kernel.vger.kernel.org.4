@@ -2,124 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C42368FC66
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B49A68FC67
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Feb 2023 02:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjBIBIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Feb 2023 20:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S231138AbjBIBIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Feb 2023 20:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjBIBIF (ORCPT
+        with ESMTP id S230487AbjBIBIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Feb 2023 20:08:05 -0500
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24DA89ED6;
-        Wed,  8 Feb 2023 17:08:02 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowAA3PUlmR+RjBNAoBA--.28180S2;
-        Thu, 09 Feb 2023 09:07:51 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     stf_xl@wp.pl
-Cc:     kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH 1/2 v2] iwl4965: Add missing check for create_singlethread_workqueue
-Date:   Thu,  9 Feb 2023 09:07:48 +0800
-Message-Id: <20230209010748.45454-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 8 Feb 2023 20:08:30 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC07D35B4;
+        Wed,  8 Feb 2023 17:08:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=5K1CVLOH6vblYnAX1/k8Qvq/szlxJFbUumk2+BfdvHs=; b=dfD3o+D1JCPzQt0XL96idc7cXk
+        2fS2uWx4eav8Drq5bwvnilPuN3/E4+bW/c2/gdCgoQm541ldHyVFjJRC+j83QlT/MifRG4P0t3tFa
+        doArJxcOAN2Y4eYz5DFNIZBlGxnRLgrfUxrKMJgYM5GsYmzyMoBzHtXYCRaPFXlQhMXxC2AlYqn/H
+        axF7BvVPQ9ZSY5F+x8KeGHUm8Yu3Un+DutTFxl+th0MDybKwHqN6xX2hWCWC9CQhKaIPTP4DmzmFr
+        TaFAVyA3Nf92HHlH/XnXaw6QJPgS2zWnnkm3cyjPYqRNeTOoU88imZ4OjFxcvWx4Tpt03uNU0ZFUx
+        k4rfVnHQ==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPvQI-00HMlO-Ib; Thu, 09 Feb 2023 01:08:26 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, uclinux-dev@uclinux.org
+Subject: [PATCH] m68k: /proc/hardware depends on PROC_FS
+Date:   Wed,  8 Feb 2023 17:08:25 -0800
+Message-Id: <20230209010825.24136-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAA3PUlmR+RjBNAoBA--.28180S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1kKw1kuF1DJr4xGw1DAwb_yoW8ZrW8pF
-        sxAry7ta1rXr4UWayDAanFvF15Wws2q397G393Kw1Yv3ZYvw1rXa4IgFy2v3yrKryvqF13
-        AF4DtrWfur1UJFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the check for the return value of the create_singlethread_workqueue
-in order to avoid NULL pointer dereference.
+When CONFIG_PROC_FS is not set, there is a build error for an unused
+function. Make PROC_HARDWARE depend on PROC_FS to prevent this error.
 
-Fixes: b481de9ca074 ("[IWLWIFI]: add iwlwifi wireless drivers")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+In file included from ../arch/m68k/kernel/setup.c:3:
+../arch/m68k/kernel/setup_mm.c:477:12: error: 'hardware_proc_show' defined but not used [-Werror=unused-function]
+  477 | static int hardware_proc_show(struct seq_file *m, void *v)
+      |            ^~~~~~~~~~~~~~~~~~
+
+Fixes: 66d857b08b8c ("m68k: merge m68k and m68knommu arch directories") # v3.0
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: uclinux-dev@uclinux.org
 ---
-Changelog:
+ arch/m68k/Kconfig.devices |    1 +
+ 1 file changed, 1 insertion(+)
 
-v1 -> v2:
-
-1. Remove redundant "{}".
----
- drivers/net/wireless/intel/iwlegacy/4965-mac.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlegacy/4965-mac.c b/drivers/net/wireless/intel/iwlegacy/4965-mac.c
-index 721b4042b4bf..4d3c544ff2e6 100644
---- a/drivers/net/wireless/intel/iwlegacy/4965-mac.c
-+++ b/drivers/net/wireless/intel/iwlegacy/4965-mac.c
-@@ -6211,10 +6211,12 @@ il4965_bg_txpower_work(struct work_struct *work)
- 	mutex_unlock(&il->mutex);
- }
+diff -- a/arch/m68k/Kconfig.devices b/arch/m68k/Kconfig.devices
+--- a/arch/m68k/Kconfig.devices
++++ b/arch/m68k/Kconfig.devices
+@@ -18,6 +18,7 @@ config HEARTBEAT
  
--static void
-+static int
- il4965_setup_deferred_work(struct il_priv *il)
- {
- 	il->workqueue = create_singlethread_workqueue(DRV_NAME);
-+	if (!il->workqueue)
-+		return -ENOMEM;
- 
- 	init_waitqueue_head(&il->wait_command_queue);
- 
-@@ -6233,6 +6235,8 @@ il4965_setup_deferred_work(struct il_priv *il)
- 	timer_setup(&il->watchdog, il_bg_watchdog, 0);
- 
- 	tasklet_setup(&il->irq_tasklet, il4965_irq_tasklet);
-+
-+	return 0;
- }
- 
- static void
-@@ -6618,7 +6622,10 @@ il4965_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		goto out_disable_msi;
- 	}
- 
--	il4965_setup_deferred_work(il);
-+	err = il4965_setup_deferred_work(il);
-+	if (err)
-+		goto out_free_irq;
-+
- 	il4965_setup_handlers(il);
- 
- 	/*********************************************
-@@ -6656,6 +6663,7 @@ il4965_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- out_destroy_workqueue:
- 	destroy_workqueue(il->workqueue);
- 	il->workqueue = NULL;
-+out_free_irq:
- 	free_irq(il->pci_dev->irq, il);
- out_disable_msi:
- 	pci_disable_msi(il->pci_dev);
--- 
-2.25.1
-
+ # We have a dedicated heartbeat LED. :-)
+ config PROC_HARDWARE
++	depends on PROC_FS
+ 	bool "/proc/hardware support"
+ 	help
+ 	  Say Y here to support the /proc/hardware file, which gives you
